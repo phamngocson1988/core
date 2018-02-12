@@ -10,6 +10,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'layout' => 'main.tpl',
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
@@ -37,14 +38,33 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    'js' => [
+                        'vendor/assets/global/plugins/jquery.min.js',
+                    ]
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'sourcePath' => null,
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    'css' => [
+                        'vendor/assets/global/plugins/bootstrap/css/bootstrap.min.css',
+                    ],
+                    'js' => [
+                        'vendor/assets/global/plugins/bootstrap/js/bootstrap.min.js'
+                    ],
+                    'depends' => ['yii\web\YiiAsset']
+                ],
             ],
         ],
-        */
+
+        'urlManager' => require('router.php'),
+        'urlManagerFrontend' => require('../../frontend/config/router.php'),
     ],
     'params' => $params,
 ];

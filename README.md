@@ -58,3 +58,11 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+composer install
+composer update
+composer require --prefer-dist yiisoft/yii2-smarty "*"
+composer require --prefer-dist yii2mod/yii2-settings "*"
+composer require --prefer-dist yiisoft/yii2-imagine "*"
+yii migrate
+yii migrate --migrationPath=@yii/rbac/migrations
+yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations

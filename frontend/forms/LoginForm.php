@@ -1,8 +1,9 @@
 <?php
-namespace common\models;
+namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
+use common\models\Customer;
 
 /**
  * Login form
@@ -57,20 +58,20 @@ class LoginForm extends Model
     {
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        } else {
+            return false;
         }
-        
-        return false;
     }
 
     /**
      * Finds user by [[username]]
      *
-     * @return User|null
+     * @return Customer|null
      */
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = Customer::findByUsername($this->username);
         }
 
         return $this->_user;
