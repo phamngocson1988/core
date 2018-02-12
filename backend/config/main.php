@@ -12,7 +12,9 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'product' => 'backend\modules\product\Module',
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
