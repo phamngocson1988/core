@@ -144,7 +144,7 @@ class EditPostForm extends Model
         if (!$this->hasErrors()) {
             $post = $this->getPost();
             if (!$post) {
-                $this->addError($attribute, 'Invalid post.');
+                $this->addError($attribute, Yii::t('app', 'invalid_post'));
             }
         }
     }

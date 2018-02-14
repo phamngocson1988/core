@@ -22,20 +22,6 @@ class RbacController extends Controller
         $auth->add($admin);
     }
 
-    public function actionAssignAdmin($id)
-    {
-        $auth = Yii::$app->authManager;
-        $admin = $auth->getRole('admin');
-        $auth->assign($admin, $id);
-    }
-
-    public function actionAssignSale($id)
-    {
-        $auth = Yii::$app->authManager;
-        $sale = $auth->getRole('sale');
-        $auth->assign($sale, $id);
-    }
-
     public function actionCreateRole()
     {
         $this->view->params['main_menu_active'] = 'rbac.create-role';
@@ -72,24 +58,6 @@ class RbacController extends Controller
         return $this->render('assign-role.tpl', [
             'model' => $model,
             'links' => $links
-        ]);
-        
-    }
-
-    public function actionChangeRole($userId)
-    {
-        $model = new AssignRoleForm(['user_id' => $userId]);
-        $model->scenario = AssignRoleForm::SCENARIO_EDIT;
-        if (Yii::$app->request->isPost) {
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->goBack();
-            } else {
-                Yii::$app->session->setFlash('error', $model->getErrors());
-            }    
-        }
-
-        return $this->render('change-role.tpl', [
-            'model' => $model,
         ]);
         
     }

@@ -13,6 +13,8 @@ return [
     'layout' => 'main.tpl',
     'bootstrap' => ['log'],
     'modules' => [],
+    'language' => 'vi',
+    'sourceLanguage' => 'en-US',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -65,6 +67,19 @@ return [
 
         'urlManager' => require('router.php'),
         'urlManagerFrontend' => require('../../frontend/config/router.php'),
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@backend/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];

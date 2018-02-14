@@ -27,7 +27,7 @@
   <div class="content">
     {$content}
   </div>
-  <div class="copyright"> 2014 © Metronic. Admin Dashboard Template. </div>
+  <div class="copyright"> {Yii::t('app', 'copyright')} </div>
 	{$this->endBody()}
 </body>
 </html>

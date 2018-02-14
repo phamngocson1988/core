@@ -61,7 +61,7 @@ class LoginForm extends Model
             $allowedRoles = $this->_roles;
             $matches = array_intersect($roleNames, $allowedRoles);
             if (count($matches) < 1) {
-                $this->addError($attribute, 'You are not allowed to login.');
+                $this->addError($attribute, Yii::t('app', 'you_are_not_allowed_to_login'));
                 return false;
             }
         }

@@ -54,7 +54,7 @@ class ChangeUserStatusForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user) {
-                $this->addError($attribute, 'User is not exist.');
+                $this->addError($attribute, Yii::t('app', 'user_not_exist'));
             }
         }
     }

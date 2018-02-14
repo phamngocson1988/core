@@ -7,17 +7,17 @@
     <div class="page-bar">
       <ul class="page-breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="/">{Yii::t('app', 'home')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <span>User</span>
+          <span>{Yii::t('app', 'user')}</span>
         </li>
       </ul>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title"> User Profile</h1>
+    <h1 class="page-title"> {Yii::t('app', 'user_profile')}</h1>
     {$user = $model->getUser()}
     <!-- END PAGE TITLE-->
     <!-- END PAGE HEADER-->
@@ -32,7 +32,7 @@
               <img global="avatar_{$user->id}" src="{$user->getAvatarUrl('100x100')}" class="img-responsive" alt=""> 
             </div>
             <div class="profile-userbuttons">
-              <a class="btn btn-circle red btn-sm" action='change-avatar'>Change Avatar</a>
+              <a class="btn btn-circle red btn-sm" action='change-avatar'>{Yii::t('app', 'change_avatar')}</a>
             </div>
             <!-- END SIDEBAR BUTTONS -->
             <!-- SIDEBAR MENU -->
@@ -51,14 +51,14 @@
                 <div class="portlet-title tabbable-line">
                   <div class="caption caption-md">
                     <i class="icon-globe theme-font hide"></i>
-                    <span class="caption-subject font-blue-madison bold uppercase">Profile Account</span>
+                    <span class="caption-subject font-blue-madison bold uppercase">{Yii::t('app', 'profile_account')}</span>
                   </div>
                   <ul class="nav nav-tabs">
                     <li class="active">
-                      <a href="#tab_1_1">Personal Info</a>
+                      <a href="#tab_1_1">{Yii::t('app', 'personal_info')}</a>
                     </li>
                     <li>
-                      <a href="{$links.password}">Change Password</a>
+                      <a href="{$links.password}">{Yii::t('app', 'change_password')}</a>
                     </li>
                   </ul>
                 </div>
@@ -69,8 +69,8 @@
                       {ActiveForm assign='form'}
                         {$form->field($model, 'name')->textInput()}
                         <div class="margiv-top-10">
-                          <button type="submit" class="btn green"> Save Changes </button>
-                          <a href="javascript:;" class="btn default"> Cancel </a>
+                          <button type="submit" class="btn green"> {Yii::t('app', 'save_changes')} </button>
+                          <a href="javascript:;" class="btn default"> {Yii::t('app', 'cancel')} </a>
                         </div>
                       {/ActiveForm}
                     </div>

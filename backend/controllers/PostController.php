@@ -91,7 +91,7 @@ class PostController extends Controller
         $model = new EditPostForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 $ref = $request->get('ref', Url::to(['post/index']));
                 return $this->redirect($ref);
             }
@@ -113,7 +113,7 @@ class PostController extends Controller
         if (!$form->delete()) {
             Yii::$app->session->setFlash('error', $form->getErrors('id'));
         }
-        Yii::$app->session->setFlash('success', 'Success!');
+        Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         $ref = $request->get('ref', Url::to(['post/index']));
         return $this->redirect($ref);
     }
@@ -137,7 +137,7 @@ class PostController extends Controller
         $model = new CreateCategoryForm(['type' => 'post']);
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 $ref = $request->get('ref', Url::to(['post/category']));
                 return $this->redirect($ref);
             }
@@ -155,7 +155,7 @@ class PostController extends Controller
         $model = new EditCategoryForm(['type' => 'post']);
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 $ref = $request->get('ref', Url::to(['post/category']));
                 return $this->redirect($ref);
             }
@@ -177,7 +177,7 @@ class PostController extends Controller
         if (!$form->delete()) {
             Yii::$app->session->setFlash('error', $form->getErrors('id'));
         }
-        Yii::$app->session->setFlash('success', 'Success!');
+        Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         $ref = $request->get('ref', Url::to(['post/category']));
         return $this->redirect($ref);
     }
@@ -188,9 +188,9 @@ class PostController extends Controller
         $direction = $request->get('direct');
         $form = new ChangePostPositionForm(['id' => $id, 'direction' => $direction]);
         if (!$form->process()) {
-            Yii::$app->session->setFlash('error', 'Error');
+            Yii::$app->session->setFlash('error', Yii::t('app/error', 'error'));
         }
-        Yii::$app->session->setFlash('success', 'Success!');
+        Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         $ref = $request->get('ref', Url::to(['post/index']));
         return $this->redirect($ref);
     }

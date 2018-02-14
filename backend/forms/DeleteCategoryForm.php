@@ -45,7 +45,7 @@ class DeleteCategoryForm extends Model
         if (!$this->hasErrors()) {
             $category = $this->getCategory();
             if (!$category) {
-                $this->addError($attribute, 'Invalid category.');
+                $this->addError($attribute, Yii::t('app', 'invalid_category'));
             }
         }
     }

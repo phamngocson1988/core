@@ -17,39 +17,39 @@
       <li class="nav-item start active open">
         <a href="javascript:;" class="nav-link nav-toggle" code='dashboard'>
         <i class="icon-home"></i>
-        <span class="title">Dashboard</span>
+        <span class="title">{Yii::t('app', 'dashboard')}</span>
         <span class="selected"></span>
         <span class="arrow open"></span>
         </a>
       </li>
       <li class="heading">
-        <h3 class="uppercase">Features</h3>
+        <h3 class="uppercase">{Yii::t('app', 'features')}</h3>
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user"></i>
-        <span class="title">User</span>
+        <span class="title">{Yii::t('app', 'user')}</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
             <a href="{url route='user/index'}" class="nav-link " code='user.index'>
-            <span class="title">Users</span>
+            <span class="title">{Yii::t('app', 'users')}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='rbac/create-role'}" class="nav-link ">
-            <span class="title">Create Role</span>
+            <a href="{url route='rbac/create-role'}" class="nav-link" code='rbac.create-role'>
+            <span class="title">{Yii::t('app', 'create_role')}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='rbac/assign-role'}" class="nav-link " code='rbac.assign-role'>
-            <span class="title">Role/Permission</span>
+            <span class="title">{Yii::t('app', 'role_permission')}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='customer/index'}" class="nav-link " code='customer.index'>
-            <span class="title">Customers</span>
+            <span class="title">{Yii::t('app', 'customers')}</span>
             </a>
           </li>
         </ul>
@@ -57,18 +57,18 @@
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
-        <span class="title">Posts</span>
+        <span class="title">{Yii::t('app', 'posts')}</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
             <a href="{url route='post/index'}" class="nav-link " code='post.index'>
-            <span class="title">Posts</span>
+            <span class="title">{Yii::t('app', 'posts')}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='post/category'}" class="nav-link " code='post.category'>
-            <span class="title">Categories</span>
+            <span class="title">{Yii::t('app', 'categories')}</span>
             </a>
           </li>
         </ul>
@@ -76,23 +76,23 @@
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
-        <span class="title">Settings</span>
+        <span class="title">{Yii::t('app', 'settings')}</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
             <a href="{url route='setting/application'}" class="nav-link " code='setting.application'>
-            <span class="title">Application</span>
+            <span class="title">{Yii::t('app', 'application')}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='setting/social'}" class="nav-link " code='setting.social'>
-            <span class="title">Social Networks</span>
+            <span class="title">{Yii::t('app', 'social_networks')}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='setting/script'}" class="nav-link " code='setting.script'>
-            <span class="title">Header Scripts</span>
+            <span class="title">{Yii::t('app', 'header_scripts')}</span>
             </a>
           </li>
         </ul>

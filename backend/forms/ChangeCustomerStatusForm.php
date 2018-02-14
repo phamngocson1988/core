@@ -54,7 +54,7 @@ class ChangeCustomerStatusForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user) {
-                $this->addError($attribute, 'Customer is not exist.');
+                $this->addError($attribute, Yii::t('app', 'customer_not_exist'));
             }
         }
     }

@@ -49,7 +49,7 @@ class ProfileController extends Controller
         $model = new EditProfileForm();
         if ($model->load($request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrors());
             }

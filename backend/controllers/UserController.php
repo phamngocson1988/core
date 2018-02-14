@@ -70,7 +70,7 @@ class UserController extends Controller
         $model = new SignupForm();
         if ($model->load($request->post())) {
             if ($user = $model->signup()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['user/index']);
             }
         }

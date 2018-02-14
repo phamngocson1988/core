@@ -39,7 +39,7 @@ class CreateRoleForm extends Model
             $auth = Yii::$app->authManager;
             $role = $auth->getRole($this->name);
             if ($role) {
-                $this->addError($attribute, "$this->name is exist");
+                $this->addError($attribute, Yii::t('app', 'role_exist', ['role' => $this->name]));
             }
         }
     }

@@ -7,17 +7,17 @@
     <div class="page-bar">
       <ul class="page-breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="/">{Yii::t('app', 'home')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <span>Manage Post Categories</span>
+          <span>{Yii::t('app', 'manage_post_categories')}</span>
         </li>
       </ul>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title">Manage Post Categories</h1>
+    <h1 class="page-title">{Yii::t('app', 'manage_post_categories')}</h1>
     <!-- END PAGE TITLE-->
     <div class="row">
       <div class="col-md-12">
@@ -26,11 +26,11 @@
           <div class="portlet-title">
             <div class="caption font-dark">
               <i class="icon-settings font-dark"></i>
-              <span class="caption-subject bold uppercase"> Manage Post Categories</span>
+              <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_post_categories')}</span>
             </div>
             <div class="actions">
               <div class="btn-group btn-group-devided">
-                <a class="btn green" href="{url route='post/create-category' ref=$ref}">Add new</a>
+                <a class="btn green" href="{url route='post/create-category' ref=$ref}">{Yii::t('app', 'add_new')}</a>
               </div>
             </div>
           </div>
@@ -39,12 +39,12 @@
             <table class="table table-striped table-bordered table-hover table-checkable">
               <thead>
                 <tr>
-                  <th style="width: 5%;"> No </th>
-                  <th style="width: 20%;"> Image </th>
-                  <th style="width: 25%;"> Title </th>
-                  <th style="width: 25%;"> Parent </th>
-                  <th style="width: 10%;"> Status </th>
-                  <th style="width: 15%;" class="dt-center"> Actions </th>
+                  <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
+                  <th style="width: 20%;"> {Yii::t('app', 'image')} </th>
+                  <th style="width: 25%;"> {Yii::t('app', 'title')} </th>
+                  <th style="width: 25%;"> {Yii::t('app', 'category_parent')} </th>
+                  <th style="width: 10%;"> {Yii::t('app', 'status')} </th>
+                  <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
                 </tr>
               </thead>
               <tbody>
@@ -80,7 +80,7 @@
 {literal}
 $(".delete-action").ajax_action({
   confirm: true,
-  confirm_text: 'Do you want to delete this category?',
+  confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_category')}{literal}',
   callback: function(eletement, data) {
     location.reload();
   }

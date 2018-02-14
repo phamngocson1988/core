@@ -65,11 +65,11 @@ class CreateCategoryForm extends Model
         if (!$this->hasErrors()) {
             $slug = $this->$attribute;
             if (!preg_match('/^[a-z][-a-z0-9]*$/', $slug)) {
-                $this->addError($attribute, "$slug does not match slug format!");
+                $this->addError($attribute, Yii::t('app', 'slug_not_match', ['slug' => $slug]));
             }
 
             if (Category::find()->where(['slug' => $slug])->count() > 0) {
-                $this->addError($attribute, "$slug already existed!");
+                $this->addError($attribute, Yii::t('app', 'slug_not_exist', ['slug' => $slug]));
             }
         }
     }

@@ -57,7 +57,7 @@ class AssignRoleForm extends Model
             $auth = Yii::$app->authManager;
             $role = $auth->getRole($this->role);
             if (!$role) {
-                $this->addError($attribute, "$this->role is not exist");
+                $this->addError($attribute, Yii::t('app', 'role_not_exist', ['role' => $role]));
             }
         }
     }
@@ -67,7 +67,7 @@ class AssignRoleForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user) {
-                $this->addError($attribute, "$this->user_id is not exist");
+                $this->addError($attribute, Yii::t('app', 'user_not_exist', ['user' => $user]));
             }
         }
     }

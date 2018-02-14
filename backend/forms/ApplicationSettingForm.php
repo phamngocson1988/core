@@ -33,9 +33,9 @@ class ApplicationSettingForm extends Model
     public function attributeLabels()
     {
         return [
-            'contact_phone' => Yii::t('app', 'Contact Phone'),
-            'contact_email' => Yii::t('app', 'Contact Email'),
-            'admin_email' => Yii::t('app', 'Admin Email'),
+            'contact_phone' => Yii::t('app', 'contact_phone'),
+            'contact_email' => Yii::t('app', 'contact_email'),
+            'admin_email' => Yii::t('app', 'admin_email'),
             'enable_subscribe' => 'Show subscribe Popup'
         ];
     }

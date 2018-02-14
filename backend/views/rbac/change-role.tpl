@@ -5,33 +5,33 @@
     <div class="page-bar">
       <ul class="page-breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="/">{Yii::t('app', 'home')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <a href="{url route='rbac/roles'}">Manage roles</a>
+          <a href="{url route='rbac/roles'}">{Yii::t('app', 'manage_roles')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <span>Change role</span>
+          <span>{Yii::t('app', 'change_role')}</span>
         </li>
       </ul>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title">Change role</h1>
+    <h1 class="page-title">{Yii::t('app', 'change_role')}</h1>
     <!-- END PAGE TITLE-->
     <div class="row">
       <div class="col-md-12">
         {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
         <div class="portlet">
           <div class="portlet-title">
-            <div class="caption">Change role</div>
+            <div class="caption">{Yii::t('app', 'change_role')}</div>
             <div class="actions btn-set">
               <a href="/" class="btn default">
-              <i class="fa fa-angle-left"></i> Back</a>
+              <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
               <button type="submit" class="btn btn-success">
-              <i class="fa fa-check"></i> Save
+              <i class="fa fa-check"></i> {Yii::t('app', 'save')}
               </button>
             </div>
           </div>
@@ -39,7 +39,7 @@
             <div class="tabbable-bordered">
               <ul class="nav nav-tabs">
                 <li class="active">
-                  <a href="#tab_general" data-toggle="tab"> Main content </a>
+                  <a href="#tab_general" data-toggle="tab"> {Yii::t('app', 'main_content')} </a>
                 </li>
               </ul>
               <div class="tab-content">
@@ -49,12 +49,12 @@
                       'labelOptions' => ['class' => 'col-md-2 control-label'],
                       'inputOptions' => ['class' => 'form-control find-user', 'disabled' => true],
                       'template' => '{label}<div class="col-md-6">{input}{hint}</div>'
-                    ])->textbox([])->label('User')}
+                    ])->textbox([])->label(Yii::t('app', 'user'))}
 
                     {$form->field($model, 'role', [
                       'labelOptions' => ['class' => 'col-md-2 control-label'],
                       'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                    ])->dropDownList($model->getRoles(), ['prompt' => 'Choose'])}
+                    ])->dropDownList($model->getRoles(), ['prompt' => Yii::t('app', 'choose')])}
                   </div>
                 </div>
               </div>
