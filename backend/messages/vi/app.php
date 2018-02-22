@@ -60,6 +60,7 @@ return [
     'save_changes' => 'Lưu những thay đổi',
     'cancel' => 'Hủy bỏ',
     'username' => 'Tên người dùng',
+    'password' => 'Mật khẩu',
     'email' => 'Hộp thư',
     'role' => 'Vai trò',
     'manage_users' => 'Quản lý người dùng',

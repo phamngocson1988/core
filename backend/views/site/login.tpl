@@ -8,11 +8,11 @@
   </div>
   {$form->field($model, 'username', [
     'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
-    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'autofocus' => true, 'placeholder' => 'Yii::t('app', 'username')']
+    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'autofocus' => true, 'placeholder' => Yii::t('app', 'username')]
   ])->textInput()}
   {$form->field($model, 'password', [
     'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
-    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => 'Yii::t('app', 'password')']
+    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => Yii::t('app', 'password')]
   ])->passwordInput()}
   
   <div class="form-actions">
@@ -20,7 +20,7 @@
     {$form->field($model, 'rememberMe', [
       'options' => ['tag' => false]
     ])->checkbox([
-      'label' => 'Yii::t('app', 'remember')<span></span>',
+      'label' => {Yii::t('app', 'remember')|cat:' <span></span>'},
       'labelOptions' => ['class' => 'rememberme check mt-checkbox mt-checkbox-outline']
     ])}
   </div>

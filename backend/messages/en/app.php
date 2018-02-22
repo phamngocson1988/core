@@ -61,6 +61,7 @@ return [
     'save_changes' => 'Save changes',
     'cancel' => 'Cancel',
     'username' => 'Username',
+    'password' => 'Password',
     'email' => 'Email',
     'role' => 'Role',
     'manage_users' => 'Manage users',
