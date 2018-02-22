@@ -6,6 +6,11 @@ return [
     ],
     'name' => 'Core Functions',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    // 'modules' => [
+    //     'common-product' => [
+    //         'class' => 'common\modules\product\Module',
+    //     ],
+    // ],
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',

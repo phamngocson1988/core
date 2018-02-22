@@ -1,5 +1,5 @@
 <?php
-namespace backend\modules\forum;
+namespace backend\modules\product;
 
 class Module extends \yii\base\Module
 {

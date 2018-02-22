@@ -14,7 +14,7 @@ use backend\forms\CreateCategoryForm;
 use backend\forms\EditCategoryForm;
 use backend\forms\DeleteCategoryForm;
 use yii\helpers\Url;
-use common\models\Product;
+use common\modules\product\models\Product;
 
 class ProductController extends Controller
 {

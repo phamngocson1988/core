@@ -33,7 +33,7 @@
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='user/index'}" class="nav-link " code='user.index'>
+            <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
             <span class="title">{Yii::t('app', 'users')}</span>
             </a>
           </li>

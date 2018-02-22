@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\forms;
+namespace backend\modules\product\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Product;
-use common\models\ProductImage;
-use common\models\ProductCategory;
+use common\modules\product\models\Product;
+use common\modules\product\models\ProductImage;
+use common\modules\product\models\ProductCategory;
 use common\models\Category;
 use backend\forms\FetchCategoryForm;
 use yii\helpers\ArrayHelper;
@@ -73,15 +73,15 @@ class EditProductForm extends Model
                 $result = $product->save();
 
                 // categories
-                // ProductCategory::deleteAll(['product_id' => $product->id]);
-                // $categories = array_filter((array)$this->categories);
-                // foreach ($categories as $key => $categoryId) {
-                //     $productCategory = new ProductCategory();
-                //     $productCategory->product_id = $product->id;
-                //     $productCategory->category_id = $categoryId;
-                //     $productCategory->is_main = (!$key) ? ProductCategory::MAIN_Y : ProductCategory::MAIN_N;
-                //     $productCategory->save();
-                // }
+                ProductCategory::deleteAll(['product_id' => $product->id]);
+                $categories = array_filter((array)$this->categories);
+                foreach ($categories as $key => $categoryId) {
+                    $productCategory = new ProductCategory();
+                    $productCategory->product_id = $product->id;
+                    $productCategory->category_id = $categoryId;
+                    $productCategory->is_main = (!$key) ? ProductCategory::MAIN_Y : ProductCategory::MAIN_N;
+                    $productCategory->save();
+                }
 
                 // ProductImage::DeleteAll(['product_id' => $product->id]);
                 // foreach ($this->getGallery() as $key => $imageId) {
