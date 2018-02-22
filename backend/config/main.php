@@ -12,7 +12,11 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'product' => [
+            'class' => 'backend\modules\product\Module',
+        ],
+    ],
     'language' => 'vi',
     'sourceLanguage' => 'en-US',
     'components' => [
