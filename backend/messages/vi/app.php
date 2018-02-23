@@ -85,4 +85,5 @@ return [
     'role_exist' => 'Vai trò {role} đã tồn tại',
     'invalid_category' => 'Danh mục không hợp lệ',
     'you_are_not_allowed_to_login' => 'Bạn không được phép đăng nhập',
+    'choose_image' => 'Chọn hình ảnh',
 ];
