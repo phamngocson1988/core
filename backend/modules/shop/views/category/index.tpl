@@ -7,17 +7,17 @@
     <div class="page-bar">
       <ul class="page-breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="/">{Yii::t('module.shop', 'home')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <span>Manage Product Categories</span>
+          <span>{Yii::t('module.shop', 'manage_product_categories')}</span>
         </li>
       </ul>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title">Manage Product Categories</h1>
+    <h1 class="page-title">{Yii::t('module.shop', 'manage_product_categories')}</h1>
     <!-- END PAGE TITLE-->
     <div class="row">
       <div class="col-md-12">
@@ -26,11 +26,11 @@
           <div class="portlet-title">
             <div class="caption font-dark">
               <i class="icon-settings font-dark"></i>
-              <span class="caption-subject bold uppercase"> Manage Product Categories</span>
+              <span class="caption-subject bold uppercase"> {Yii::t('module.shop', 'manage_product_categories')}</span>
             </div>
             <div class="actions">
               <div class="btn-group btn-group-devided">
-                <a class="btn green" href="{url route='product/create-category' ref=$ref}">Add new</a>
+                <a class="btn green" href="{url route='category/create' ref=$ref}">{Yii::t('module.shop', 'add_new')}</a>
               </div>
             </div>
           </div>
@@ -39,17 +39,17 @@
             <table class="table table-striped table-bordered table-hover table-checkable">
               <thead>
                 <tr>
-                  <th style="width: 5%;"> No </th>
-                  <th style="width: 20%;"> Image </th>
-                  <th style="width: 25%;"> Title </th>
-                  <th style="width: 25%;"> Parent </th>
-                  <th style="width: 10%;"> Status </th>
-                  <th style="width: 15%;" class="dt-center"> Actions </th>
+                  <th style="width: 5%;"> {Yii::t('module.shop', 'no')} </th>
+                  <th style="width: 20%;"> {Yii::t('module.shop', 'image')} </th>
+                  <th style="width: 25%;"> {Yii::t('module.shop', 'title')} </th>
+                  <th style="width: 25%;"> {Yii::t('module.shop', 'category_parent')} </th>
+                  <th style="width: 10%;"> {Yii::t('module.shop', 'status')} </th>
+                  <th style="width: 15%;" class="dt-center"> {Yii::t('module.shop', 'actions')} </th>
                 </tr>
               </thead>
               <tbody>
                   {if (!$models) }
-                  <tr><td colspan="6">No data found</td></tr>
+                  <tr><td colspan="6">{Yii::t('module.shop', 'no_data_found')}</td></tr>
                   {/if}
                   {foreach $models as $key => $model}
                   <tr>
@@ -59,8 +59,8 @@
                     <td style="vertical-align: middle;">{$model->getParentName()}</td>
                     <td style="vertical-align: middle;">{$model->getVisibleLable()}</td>
                     <td style="vertical-align: middle;">
-                        <a href='{url route="product/edit-category" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
-                        <a href='{url route="product/delete-category" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action"><i class="fa fa-trash-o"></i></a>
+                        <a href='{url route="category/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
+                        <a href='{url route="category/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action"><i class="fa fa-trash-o"></i></a>
                         <a href="javascript:;" target="_blank" class="btn btn-xs grey-salsa"><i class="fa fa-eye"></i></a>
                     </td>
                   </tr>
@@ -80,7 +80,7 @@
 {literal}
 $(".delete-action").ajax_action({
   confirm: true,
-  confirm_text: 'Do you want to delete this category?',
+  confirm_text: '{/literal}{Yii::t('module.shop', 'confirm_delete_category')}{literal}',
   callback: function(eletement, data) {
     location.reload();
   }

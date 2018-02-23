@@ -86,5 +86,5 @@ return [
     'role_exist' => '{role} is exist',
     'invalid_category' => 'Invalid category',
     'you_are_not_allowed_to_login' => 'You are not allowed to login.',
-
+    'choose_image' => 'Choose image',
 ];

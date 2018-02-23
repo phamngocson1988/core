@@ -28,7 +28,7 @@
     <div class="page-container">
       {include file='./parts/sidebar.tpl'}
       {$content}
-      {include file='./parts/quick-sidebar.tpl'}
+      {*include file='./parts/quick-sidebar.tpl'*}
     </div>
     {include file='./parts/footer.tpl'}
   </div>

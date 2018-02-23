@@ -1,5 +1,5 @@
 <?php
-namespace common\modules\product\models;
+namespace common\modules\shop\models;
 
 use Yii;
 use yii\db\ActiveRecord;

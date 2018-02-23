@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\modules\product\forms;
+namespace backend\modules\shop\forms;
 
 use Yii;
 use yii\base\Model;
-use common\modules\product\models\Product;
-use common\modules\product\models\ProductImage;
-use common\modules\product\models\ProductCategory;
+use common\modules\shop\models\Product;
+use common\modules\shop\models\ProductImage;
+use common\modules\shop\models\ProductCategory;
 use common\models\Category;
 use backend\forms\FetchCategoryForm;
 use yii\helpers\ArrayHelper;

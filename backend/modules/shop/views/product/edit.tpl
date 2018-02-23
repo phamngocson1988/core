@@ -7,21 +7,21 @@
     <div class="page-bar">
       <ul class="page-breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="/">{Yii::t('module.shop', 'home')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <a href="{url route='product/index'}">Manage Products</a>
+          <a href="{url route='product/index'}">{Yii::t('module.shop', 'manage_products')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <span>Edit Product</span>
+          <span>{Yii::t('module.shop', 'edit_product')}</span>
         </li>
       </ul>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title">Edit Product</h1>
+    <h1 class="page-title">{Yii::t('module.shop', 'edit_product')}</h1>
     <!-- END PAGE TITLE-->
     <div class="row">
       <div class="col-md-12">
@@ -31,12 +31,12 @@
           ])->hiddenInput()}
           <div class="portlet">
             <div class="portlet-title">
-              <div class="caption">Edit Product</div>
+              <div class="caption">{Yii::t('module.shop', 'edit_product')}</div>
               <div class="actions btn-set">
                 <a href="{$back}" class="btn default">
-                <i class="fa fa-angle-left"></i> Back</a>
+                <i class="fa fa-angle-left"></i> {Yii::t('module.shop', 'back')}</a>
                 <button type="submit" class="btn btn-success">
-                <i class="fa fa-check"></i> Save
+                <i class="fa fa-check"></i> {Yii::t('module.shop', 'save')}
                 </button>
               </div>
             </div>
@@ -44,16 +44,16 @@
               <div class="tabbable-bordered">
                 <ul class="nav nav-tabs">
                   <li class="active">
-                    <a href="#tab_general" data-toggle="tab"> Main content</a>
+                    <a href="#tab_general" data-toggle="tab"> {Yii::t('module.shop', 'main_content')}</a>
                   </li>
                   <li>
-                    <a href="#tab_price" data-toggle="tab"> Prices </a>
+                    <a href="#tab_price" data-toggle="tab"> {Yii::t('module.shop', 'prices')} </a>
                   </li>
                   <li>
-                    <a href="#tab_category" data-toggle="tab"> Categories </a>
+                    <a href="#tab_category" data-toggle="tab"> {Yii::t('module.shop', 'product_categories')} </a>
                   </li>
                   <li>
-                    <a href="#tab_meta" data-toggle="tab"> Meta </a>
+                    <a href="#tab_meta" data-toggle="tab"> {Yii::t('module.shop', 'meta')} </a>
                   </li>
                   <li>
                     <a href="#tab_gallery" data-toggle="tab"> Gallery </a>
@@ -82,14 +82,14 @@
                         'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                       ])->textarea()}
                       <div class="form-group">
-                        <label class="control-label col-md-2">Image</label>
+                        <label class="control-label col-md-2">{Yii::t('module.shop', 'image')}</label>
                         <div class="col-md-10">
                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                 <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
                                     <img src="{$model->getImageUrl('150x150')}" id="image" />
                                 </div>
                                 <div>
-                                  <span class="help-block"> Image size is at least 940x630 </span>
+                                  <span class="help-block"> {Yii::t('module.shop', 'image_size_at_least', ['size' => '940x630'])} </span>
                                   <span class="btn default btn-file">
                                     <span class="fileinput-new" id="upload-image"> Choose image </span>
                                     {$form->field($model, 'image_id', [
@@ -98,7 +98,7 @@
                                       'options' => ['tag' => null]
                                     ])->hiddenInput()->label(false)}
                                   </span>
-                                  <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                  <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('module.shop', 'remove')} </a>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                     <table class="table table-bordered table-hover">
                       <thead>
                         <tr role="row" class="heading">
-                          <th width="20%"> Image </th>
+                          <th width="20%"> {Yii::t('module.shop', 'image')}</th>
                           <th width="40%"> Order</th>
                           <th width="40%"> Action</th>
                         </tr>
@@ -173,7 +173,7 @@
                           </td>
                           <td>
                             <a href="javascript:;" class="btn btn-default btn-sm remove">
-                            <i class="fa fa-times"></i> Remove </a>
+                            <i class="fa fa-times"></i> {Yii::t('module.shop', 'remove')} </a>
                           </td>
                         </tr>
                         {/foreach}

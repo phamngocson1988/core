@@ -7,33 +7,34 @@
     <div class="page-bar">
       <ul class="page-breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="/">{Yii::t('module.shop', 'home')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <a href="{url route='product/index'}">Manage Product Categories</a>
+          <a href="{url route='product/index'}">{Yii::t('module.shop', 'manage_product_categories')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <span>Create Product Category</span>
+          <span>{Yii::t('module.shop', 'create_product_category')}</span>
         </li>
       </ul>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title">Create Product Category</h1>
+    <h1 class="page-title">{Yii::t('module.shop', 'create_product_category')}</h1>
     <!-- END PAGE TITLE-->
     <div class="row">
       <div class="col-md-12">
         {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
+          {$form->field($model, 'id')->hiddenInput()->label(false)}
           <div class="portlet">
             <div class="portlet-title">
-              <div class="caption">Create Product Category</div>
+              <div class="caption">{Yii::t('module.shop', 'create_product_category')}</div>
               <div class="actions btn-set">
                 <a href="{$back}" class="btn default">
-                <i class="fa fa-angle-left"></i> Back</a>
+                <i class="fa fa-angle-left"></i> {Yii::t('module.shop', 'back')}</a>
                 <button type="submit" class="btn btn-success">
-                <i class="fa fa-check"></i> Save
+                <i class="fa fa-check"></i> {Yii::t('module.shop', 'save')}
                 </button>
               </div>
             </div>
@@ -41,10 +42,10 @@
               <div class="tabbable-bordered">
                 <ul class="nav nav-tabs">
                   <li class="active">
-                    <a href="#tab_general" data-toggle="tab"> Main content</a>
+                    <a href="#tab_general" data-toggle="tab"> {Yii::t('module.shop', 'main_content')}</a>
                   </li>
                   <li>
-                    <a href="#tab_meta" data-toggle="tab"> Meta </a>
+                    <a href="#tab_meta" data-toggle="tab"> {Yii::t('module.shop', 'meta')} </a>
                   </li>
                 </ul>
                 <div class="tab-content">
@@ -64,7 +65,6 @@
                         'labelOptions' => ['class' => 'col-md-2 control-label'],
                         'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                       ])->dropDownList($model->getAvailableParent(), ['prompt' => 'Choose parent'])}
-
                       {$form->field($model, 'visible', [
                         'labelOptions' => ['class' => 'col-md-2 control-label'],
                         'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
@@ -75,23 +75,23 @@
                       ])}
 
                       <div class="form-group">
-                        <label class="control-label col-md-2">Image</label>
+                        <label class="control-label col-md-2">{Yii::t('module.shop', 'image')}</label>
                         <div class="col-md-10">
                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                 <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                    <img src="" id="image" />
+                                    <img src="{$model->getImageUrl('150x150')}" id="image" />
                                 </div>
                                 <div>
-                                  <span class="help-block"> Image size is at least 940x630 </span>
+                                  <span class="help-block"> {Yii::t('module.shop', 'image_size_at_least', ['size' => '940x630'])} </span>
                                   <span class="btn default btn-file">
-                                    <span class="fileinput-new" id="upload-image"> Choose image </span>
+                                    <span class="fileinput-new" id="upload-image"> {Yii::t('module.shop', 'choose_image')} </span>
                                     {$form->field($model, 'image_id', [
                                       'inputOptions' => ['id' => 'image_id'], 
                                       'template' => '{input}', 
                                       'options' => ['tag' => null]
                                     ])->hiddenInput()->label(false)}
                                   </span>
-                                  <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                  <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('module.shop', 'remove')} </a>
                                 </div>
                             </div>
                         </div>

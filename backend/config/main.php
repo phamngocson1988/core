@@ -13,8 +13,8 @@ return [
     'layout' => 'main.tpl',
     'bootstrap' => ['log'],
     'modules' => [
-        'product' => [
-            'class' => 'backend\modules\product\Module',
+        'shop' => [
+            'class' => 'backend\modules\shop\Module',
         ],
     ],
     'language' => 'vi',
