@@ -9,10 +9,6 @@ use backend\forms\CreatePostForm;
 use backend\forms\EditPostForm;
 use backend\forms\DeletePostForm;
 use yii\data\Pagination;
-use backend\forms\FetchCategoryForm;
-use backend\forms\CreateCategoryForm;
-use backend\forms\EditCategoryForm;
-use backend\forms\DeleteCategoryForm;
 use backend\forms\ChangePostPositionForm;
 use yii\helpers\Url;
 use common\models\Post;
@@ -118,77 +114,13 @@ class PostController extends Controller
         return $this->redirect($ref);
     }
 
-    public function actionCategory()
-    {
-        $this->view->params['main_menu_active'] = 'post.category';
-        $request = Yii::$app->request;
-        $form = new FetchCategoryForm(['type' => 'post']);
-        $models = $form->fetch();
-        return $this->render('category.tpl', [
-            'models' => $models,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
-    public function actionCreateCategory()
-    {
-        $this->view->params['main_menu_active'] = 'post.category';
-        $request = Yii::$app->request;
-        $model = new CreateCategoryForm(['type' => 'post']);
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['post/category']));
-                return $this->redirect($ref);
-            }
-        }
-        return $this->render('create-category.tpl', [
-            'model' => $model,
-            'back' => $request->get('ref', Url::to(['post/category']))
-        ]);
-    }
-
-    public function actionEditCategory($id)
-    {
-        $this->view->params['main_menu_active'] = 'post.category';
-        $request = Yii::$app->request;
-        $model = new EditCategoryForm(['type' => 'post']);
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['post/category']));
-                return $this->redirect($ref);
-            }
-        } else {
-            $model->loadData($id);
-        }
-
-        return $this->render('edit-category.tpl', [
-            'model' => $model,
-            'back' => $request->get('ref', Url::to(['post/category']))
-        ]);
-
-    }
-
-    public function actionDeleteCategory($id)
-    {
-        $request = Yii::$app->request;
-        $form = new DeleteCategoryForm(['id' => $id]);
-        if (!$form->delete()) {
-            Yii::$app->session->setFlash('error', $form->getErrors('id'));
-        }
-        Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-        $ref = $request->get('ref', Url::to(['post/category']));
-        return $this->redirect($ref);
-    }
-    
     public function actionChangePosition($id)
     {
         $request = Yii::$app->request;
         $direction = $request->get('direct');
         $form = new ChangePostPositionForm(['id' => $id, 'direction' => $direction]);
         if (!$form->process()) {
-            Yii::$app->session->setFlash('error', Yii::t('app/error', 'error'));
+            Yii::$app->session->setFlash('error', Yii::t('app', 'error'));
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         $ref = $request->get('ref', Url::to(['post/index']));

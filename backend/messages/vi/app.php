@@ -85,4 +85,6 @@ return [
     'role_exist' => 'Vai trò {role} đã tồn tại',
     'invalid_category' => 'Danh mục không hợp lệ',
     'you_are_not_allowed_to_login' => 'Bạn không được phép đăng nhập',
+    'image_size_at_least' => 'Kích thước ảnh tối thiểu là {size}.',
+    'error' => 'Lỗi',
 ];

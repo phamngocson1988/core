@@ -33,22 +33,22 @@
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='user/index'}" class="nav-link " code='user.index'>
+            <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
             <span class="title">{Yii::t('app', 'users')}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='rbac/create-role'}" class="nav-link" code='rbac.create-role'>
+            <a href="{url route='/rbac/create-role'}" class="nav-link" code='rbac.create-role'>
             <span class="title">{Yii::t('app', 'create_role')}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='rbac/assign-role'}" class="nav-link " code='rbac.assign-role'>
+            <a href="{url route='/rbac/assign-role'}" class="nav-link " code='rbac.assign-role'>
             <span class="title">{Yii::t('app', 'role_permission')}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='customer/index'}" class="nav-link " code='customer.index'>
+            <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
             <span class="title">{Yii::t('app', 'customers')}</span>
             </a>
           </li>
@@ -62,12 +62,12 @@
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='post/index'}" class="nav-link " code='post.index'>
+            <a href="{url route='/post/index'}" class="nav-link " code='post.index'>
             <span class="title">{Yii::t('app', 'posts')}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='post/category'}" class="nav-link " code='post.category'>
+            <a href="{url route='/category/index'}" class="nav-link " code='category.index'>
             <span class="title">{Yii::t('app', 'categories')}</span>
             </a>
           </li>
@@ -81,17 +81,17 @@
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='setting/application'}" class="nav-link " code='setting.application'>
+            <a href="{url route='/setting/application'}" class="nav-link " code='setting.application'>
             <span class="title">{Yii::t('app', 'application')}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='setting/social'}" class="nav-link " code='setting.social'>
+            <a href="{url route='/setting/social'}" class="nav-link " code='setting.social'>
             <span class="title">{Yii::t('app', 'social_networks')}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='setting/script'}" class="nav-link " code='setting.script'>
+            <a href="{url route='/setting/script'}" class="nav-link " code='setting.script'>
             <span class="title">{Yii::t('app', 'header_scripts')}</span>
             </a>
           </li>

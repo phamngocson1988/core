@@ -91,7 +91,7 @@
                                     <img src="{$model->getImageUrl('150x150')}" id="image" />
                                 </div>
                                 <div>
-                                  <span class="help-block"> {Yii::t('app/error', 'image_size_at_least', ['size' => '940x630'])}</span>
+                                  <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])}</span>
                                   <span class="btn default btn-file">
                                     <span class="fileinput-new" id="upload-image"> {Yii::t('app', 'choose_image')} </span>
                                     {$form->field($model, 'image_id', [

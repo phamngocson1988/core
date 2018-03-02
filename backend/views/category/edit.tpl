@@ -11,24 +11,25 @@
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <a href="{url route='post/index'}">{Yii::t('app', 'manage_post_categories')}</a>
+          <a href="{url route='category/index'}">{Yii::t('app', 'manage_post_categories')}</a>
           <i class="fa fa-circle"></i>
         </li>
         <li>
-          <span>{Yii::t('app', 'create_post_category')}</span>
+          <span>{Yii::t('app', 'edit_post_category')}</span>
         </li>
       </ul>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title">{Yii::t('app', 'create_post_category')}</h1>
+    <h1 class="page-title">{Yii::t('app', 'edit_post_category')}</h1>
     <!-- END PAGE TITLE-->
     <div class="row">
       <div class="col-md-12">
         {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
+          {$form->field($model, 'id')->hiddenInput()->label(false)}
           <div class="portlet">
             <div class="portlet-title">
-              <div class="caption">{Yii::t('app', 'create_post_category')}</div>
+              <div class="caption">{Yii::t('app', 'edit_post_category')}</div>
               <div class="actions btn-set">
                 <a href="{$back}" class="btn default">
                 <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
@@ -64,7 +65,6 @@
                         'labelOptions' => ['class' => 'col-md-2 control-label'],
                         'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                       ])->dropDownList($model->getAvailableParent(), ['prompt' => 'Choose parent'])}
-
                       {$form->field($model, 'visible', [
                         'labelOptions' => ['class' => 'col-md-2 control-label'],
                         'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
@@ -79,10 +79,10 @@
                         <div class="col-md-10">
                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                 <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                    <img src="" id="image" />
+                                    <img src="{$model->getImageUrl('150x150')}" id="image" />
                                 </div>
                                 <div>
-                                  <span class="help-block"> {Yii::t('app/error', 'image_size_at_least', ['size' => '940x630'])} </span>
+                                  <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])}</span>
                                   <span class="btn default btn-file">
                                     <span class="fileinput-new" id="upload-image"> {Yii::t('app', 'choose_image')} </span>
                                     {$form->field($model, 'image_id', [

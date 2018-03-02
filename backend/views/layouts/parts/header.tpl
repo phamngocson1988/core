@@ -28,15 +28,15 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-default">
             <li>
-              <a href="{url route='profile/index'}">
+              <a href="{url route='/profile/index'}">
               <i class="icon-user"></i> {Yii::t('app', 'my_profile')} </a>
             </li>
             <li>
-              <a href="{url route='profile/password'}">
+              <a href="{url route='/profile/password'}">
               <i class="icon-key"></i> {Yii::t('app', 'change_password')} </a>
             </li>
             <li>
-              <a href="{url route='site/logout'}">
+              <a href="{url route='/site/logout'}">
               <i class="icon-logout"></i> {Yii::t('app', 'logout')} </a>
             </li>
           </ul>

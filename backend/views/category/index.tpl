@@ -30,7 +30,7 @@
             </div>
             <div class="actions">
               <div class="btn-group btn-group-devided">
-                <a class="btn green" href="{url route='post/create-category' ref=$ref}">{Yii::t('app', 'add_new')}</a>
+                <a class="btn green" href="{url route='category/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
               </div>
             </div>
           </div>
@@ -59,8 +59,8 @@
                     <td style="vertical-align: middle;">{$model->getParentName()}</td>
                     <td style="vertical-align: middle;">{$model->getVisibleLable()}</td>
                     <td style="vertical-align: middle;">
-                        <a href='{url route="post/edit-category" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
-                        <a href='{url route="post/delete-category" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action"><i class="fa fa-trash-o"></i></a>
+                        <a href='{url route="category/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
+                        <a href='{url route="category/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action"><i class="fa fa-trash-o"></i></a>
                         <a href="javascript:;" target="_blank" class="btn btn-xs grey-salsa"><i class="fa fa-eye"></i></a>
                     </td>
                   </tr>
