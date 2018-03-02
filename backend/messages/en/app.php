@@ -88,4 +88,5 @@ return [
     'you_are_not_allowed_to_login' => 'You are not allowed to login.',
     'image_size_at_least' => 'Image size is at least {size}.',
     'error' => 'Error',
+    'choose_image' => 'Choose image',
 ];

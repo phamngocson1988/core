@@ -87,4 +87,5 @@ return [
     'you_are_not_allowed_to_login' => 'Bạn không được phép đăng nhập',
     'image_size_at_least' => 'Kích thước ảnh tối thiểu là {size}.',
     'error' => 'Lỗi',
+    'choose_image' => 'Chọn hình ảnh',
 ];
