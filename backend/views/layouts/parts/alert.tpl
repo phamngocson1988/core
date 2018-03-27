@@ -2,7 +2,7 @@
 <div class="alert alert-danger" role="alert">
   <ul>
   {foreach $app->session->getFlash('error') as $errors}
-      {foreach $$errors as $error}
+      {foreach $errors as $error}
           <li>{$error}</li>
       {/foreach}
   {/foreach}

@@ -1,6 +1,7 @@
 {use class='yii\helpers\Html'}
 {use class='yii\helpers\Url'}
 {use class='backend\assets\AppAsset'}
+{use class='common\widgets\Alert'}
 {AppAsset::register($this)|void}
 {$this->beginPage()}
 <!DOCTYPE html>
@@ -27,8 +28,15 @@
     <div class="clearfix"></div>
     <div class="page-container">
       {include file='./parts/sidebar.tpl'}
-      {$content}
-      {*include file='./parts/quick-sidebar.tpl'*}
+      <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+        {*include file='./parts/alert.tpl'*}
+        {Alert::widget()}
+        {$content}
+        </div>
+        <!-- END CONTENT BODY -->
+      </div>
     </div>
     {include file='./parts/footer.tpl'}
   </div>
