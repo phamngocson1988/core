@@ -73,7 +73,6 @@ class PostController extends Controller
             }
         }
 
-        $this->view->registerJsFile('@web/js/ckeditor/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
         return $this->render('create.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['post/index']))
@@ -94,7 +93,6 @@ class PostController extends Controller
         } else {
             $model->loadData($id);
         }
-        $this->view->registerJsFile('@web/js/ckeditor/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
         return $this->render('edit.tpl', [
             'model' => $model,

@@ -1,5 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='common\widgets\TinyMce' type='block'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -71,7 +72,9 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->textarea()}
+                  ])->widget(TinyMce::className(), [
+                    'options' => ['rows' => 10]
+                  ])}
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
@@ -152,11 +155,6 @@ function removeMainImage() {
 {literal}
 // slug
 $('#title').slug();
-
-//editor
-editor = CKEDITOR.replace('content');
-//editor.config.allowedContent = true;
-editor.on('change', function() {editor.updateElement()});
 
 // image
 var manager = new ImageManager();

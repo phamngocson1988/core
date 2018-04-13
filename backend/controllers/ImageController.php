@@ -152,7 +152,7 @@ class ImageController extends Controller
 
             // Generate new random name.
             $name = sha1(microtime()) . "." . $extension;
-            $fullNamePath = $fileRoute . $name;
+            $fullNamePath = $fileRoute . "/" . $name;
 
             // Check server protocol and load resources accordingly.
             if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") {
