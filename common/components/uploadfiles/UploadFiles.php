@@ -16,9 +16,12 @@ class UploadFiles extends Model
 	public $file_path = 'C:/xampp/htdocs/core/common/uploads/files';
 	public $thumbnails = ['100x100'];
 	public $image_class = \common\models\Image::class;
-	public $file_class \common\models\Image::class;
+	public $file_class = \common\models\Image::class;
 
-	public function uploadFileFromForm(UploadedFile $uploadedFile)
+    /**
+     * @param array UploadedFile
+     */
+	public function uploadFileFromForm($uploadedFiles)
 	{
 		if (!$this->validate()) { 
             return false;
@@ -27,7 +30,7 @@ class UploadFiles extends Model
         try {
             $transaction = Yii::$app->db->beginTransaction();
             $thumbnails = self::getThumbnails();
-            foreach ($this->imageFiles as $file) {
+            foreach ($uploadedFiles as $file) {
                 // Save database.
                 $fileModel = new TImage();
                 $fileModel->name = $file->baseName;
@@ -99,18 +102,18 @@ class UploadFiles extends Model
 		return Yii::createObject($this->file_class);
 	}
 
-	protected function getAbsolutePath($term = '')
-	{
-		return sprintf("%s/%s", $this->image_path, $this->getRelativePath($term));
-	}
-
-	protected function getRelativePath($term = '')
+    protected function getRelativePath($id)
     {
-        return $term;
+        $directory = [];
+        $separator = DIRECTORY_SEPARATOR;
+        while ($id) {
+            $directory[] = substr($id, -3);
+            if (strlen($id) - 3 < 0) {
+                $id = 0;
+            } else {
+                $id = substr($id, 0, strlen($id) - 3);
+            }
+        }
+        return implode($separator, $directory);
     }
-
-    protected function getPath($fileModel) {
-		$format = "%s/%s.%s";
-		return sprintf($format, $this->getAbsolutePath(), $fileModel->getName(), $fileModel->getExtension());
-	}
 }
