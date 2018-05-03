@@ -7,7 +7,6 @@ use yii\filters\AccessControl;
 use backend\forms\FetchImageForm;
 use yii\helpers\Url;
 use backend\forms\UploadImageForm;
-use yii\web\UploadedFile;
 use backend\forms\DeleteImageForm;
 
 /**
@@ -18,14 +17,14 @@ class TestController extends Controller
 
 	public function actionIndex()
 	{
+		// $file = \common\models\Image::findOne(15);
+		// echo Yii::$app->image->get($file);die;
 		return $this->render('index.tpl');
 	}
 
 	public function actionAjaxUpload()
 	{
-        $model = new \common\components\uploadfiles\standard\Standard();
-        $files = UploadedFile::getInstancesByName('imageFiles');
-        $data = $model->uploadFileFromForm($files);
+        $data = Yii::$app->image->upload('imageFiles');
         return $this->redirect('index');
 	}
 }

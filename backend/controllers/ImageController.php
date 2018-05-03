@@ -65,16 +65,17 @@ class ImageController extends Controller
         if (!$request->isAjax) {
             return;
         }
-        $model = new UploadImageForm();
+        // $model = new UploadImageForm();
         $attribute = $request->post('name', 'imageFiles');
-        $model->imageFiles = UploadedFile::getInstancesByName($attribute);
+        // $model->imageFiles = UploadedFile::getInstancesByName($attribute);
+        $images = Yii::$app->image->upload($attribute);
         $result = false;
         $data = [];
         $errors = [];
-        if ($model->validate() && $model->upload()) {
+        // if ($model->validate() && $model->upload()) {
             $result = true;
             if ($request->post('review_width') && $request->post('review_height')) {
-                $images = $model->getImages();
+                // $images = $model->getImages();
                 $size = sprintf("%sx%s", $request->post('review_width'), $request->post('review_height'));
 
                 $imageArray = [];
@@ -91,9 +92,9 @@ class ImageController extends Controller
 
                 $data = $imageArray;
             }
-        } else {
-            $errors = $model->getErrors();
-        }
+        // } else {
+        //     $errors = $model->getErrors();
+        // }
         
         return $this->renderJson($result, $data, $errors);
     }

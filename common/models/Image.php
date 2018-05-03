@@ -52,13 +52,14 @@ class Image extends ActiveRecord
 
 	public function getUrl($size = null)
 	{
-		if (!$size) {
-			$format = "%s/%s.%s";
-			return sprintf($format, $this->getAbsoluteUrl(), $this->getName(), $this->getExtension());
-		} else {
-			$format = "%s/%s/%s.%s";
-			return sprintf($format, $this->getAbsoluteUrl(), $size, $this->getName(), $this->getExtension());
-		}
+		// if (!$size) {
+		// 	$format = "%s/%s.%s";
+		// 	return sprintf($format, $this->getAbsoluteUrl(), $this->getName(), $this->getExtension());
+		// } else {
+		// 	$format = "%s/%s/%s.%s";
+		// 	return sprintf($format, $this->getAbsoluteUrl(), $size, $this->getName(), $this->getExtension());
+		// }
+		return Yii::$app->image->get($this, $size);
 	}
 
 	public function getPath($size = null) {

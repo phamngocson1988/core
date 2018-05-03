@@ -80,6 +80,13 @@ return [
                 ],
             ],
         ],
+        'image' => [
+            'class' => 'common\components\uploadfiles\standard\Standard',
+            'image_path' => '@common/uploads/images',
+            'image_url' => 'http://image.core.com',
+            'file_path' => '@common/uploads/files',
+            'file_url' => 'http://file.chuchu.com',
+        ],
     ],
     'params' => $params,
 ];
