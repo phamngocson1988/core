@@ -338,7 +338,7 @@ function AjaxUploadImage(opts) {
             data: this.form,
             success: function (result, textStatus, jqXHR) {
                 if (result.status == false) {
-                    alert('false');
+                    alert(result.errors.join("\n"));
                     return false;
                 } else {
                     that.callback(result.data);

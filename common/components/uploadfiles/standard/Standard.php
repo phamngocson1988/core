@@ -12,8 +12,8 @@ class Standard extends UploadFiles
 {
     public $image_path = 'C:/xampp/htdocs/core/common/uploads/images';
     public $image_url = 'http://image.core.com';
-    public $file_path = 'C:/xampp/htdocs/core/common/uploads/files';
-    public $file_url = 'http://file.chuchu.com';
+    // public $file_path = 'C:/xampp/htdocs/core/common/uploads/files';
+    // public $file_url = 'http://file.chuchu.com';
 
 	/**
      * @param string $name file element name
@@ -23,6 +23,10 @@ class Standard extends UploadFiles
         $files = [];
         try {
             $uploadedFiles = UploadedFile::getInstancesByName($name);
+            $this->defineAttribute($name, $uploadedFiles);
+            if (!$this->validate()) { 
+                return false;
+            }
             $transaction = Yii::$app->db->beginTransaction();
             foreach ($uploadedFiles as $file) {
                 $fileModel = $this->saveToDatabase($file);
@@ -33,6 +37,7 @@ class Standard extends UploadFiles
                 $files[] = $fileModel;
             }
             $transaction->commit();
+            $this->undefineAttribute($name);
             return $files;
         } catch (Exception $e) {
             $transaction->rollBack();

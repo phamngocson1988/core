@@ -6,7 +6,6 @@ use common\components\Controller;
 use yii\filters\AccessControl;
 use backend\forms\FetchImageForm;
 use yii\helpers\Url;
-use backend\forms\UploadImageForm;
 use yii\web\UploadedFile;
 use backend\forms\DeleteImageForm;
 
@@ -65,17 +64,14 @@ class ImageController extends Controller
         if (!$request->isAjax) {
             return;
         }
-        // $model = new UploadImageForm();
         $attribute = $request->post('name', 'imageFiles');
-        // $model->imageFiles = UploadedFile::getInstancesByName($attribute);
         $images = Yii::$app->image->upload($attribute);
         $result = false;
         $data = [];
         $errors = [];
-        // if ($model->validate() && $model->upload()) {
+        if ($images !== false) {
             $result = true;
             if ($request->post('review_width') && $request->post('review_height')) {
-                // $images = $model->getImages();
                 $size = sprintf("%sx%s", $request->post('review_width'), $request->post('review_height'));
 
                 $imageArray = [];
@@ -92,9 +88,9 @@ class ImageController extends Controller
 
                 $data = $imageArray;
             }
-        // } else {
-        //     $errors = $model->getErrors();
-        // }
+        } else {
+            $errors = Yii::$app->image->getErrors($attribute);
+        }
         
         return $this->renderJson($result, $data, $errors);
     }
