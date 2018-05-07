@@ -52,7 +52,8 @@ class ImageController extends Controller
             }
             $data = [
                 'items' => $html,
-                'total' => $total
+                'total' => $total,
+                'load_more' => $total > ($offset + $limit)
             ];
             return $this->renderJson(true, $data);
         }
@@ -117,8 +118,8 @@ class ImageController extends Controller
     {
         try {
             // File Route.
-            $fileRoute = Yii::$app->params['image_path'];
-            $fileUrl = Yii::$app->params['image_url'];
+            $fileRoute = Yii::$app->image->image_path;
+            $fileUrl = Yii::$app->image->image_url;
             $fieldname = "file";
             // Get filename.
             $filename = explode(".", $_FILES[$fieldname]["name"]);
@@ -137,10 +138,10 @@ class ImageController extends Controller
             $extension = end($filename);
 
             // Allowed extensions.
-            $allowedExts = array("gif", "jpeg", "jpg", "png", "svg", "blob");
+            $allowedExts = Yii::$app->image->extensions;
 
             // Allowed mime types.
-            $allowedMimeTypes = array("image/gif", "image/jpeg", "image/pjpeg", "image/x-png", "image/png", "image/svg+xml");
+            $allowedMimeTypes = Yii::$app->image->mimeTypes;
 
             // Validate image.
             if (!in_array(strtolower($mimeType), $allowedMimeTypes) || !in_array(strtolower($extension), $allowedExts)) {

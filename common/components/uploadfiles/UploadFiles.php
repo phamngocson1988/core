@@ -12,7 +12,8 @@ use Yii;
 class UploadFiles extends DynamicModel
 {
     public $thumbnails = ['50x50', '100x100', '150x150', '300x300', '500x500', '940x630', '800x800', '1000x1000'];
-    public $extensions = ['png', 'jpg'];
+    public $extensions = ["gif", "jpeg", "jpg", "png", "svg", "blob"];
+    public $mimeTypes = ["image/gif", "image/jpeg", "image/pjpeg", "image/x-png", "image/png", "image/svg+xml"];
     public $maxFiles = 4;
     public $maxSize; //bytes
     public $default_image;
@@ -50,7 +51,13 @@ class UploadFiles extends DynamicModel
         if (!$attributes) {
             return true;
         }
-        $this->addRule($attributes, 'file', ['skipOnEmpty' => false, 'extensions' => $this->extensions, 'maxFiles' => $this->maxFiles, 'maxSize' => $this->maxSize]);
+        $this->addRule($attributes, 'file', [
+            'skipOnEmpty' => false, 
+            'extensions' => $this->extensions, 
+            'maxFiles' => $this->maxFiles, 
+            'maxSize' => $this->maxSize,
+            'mimeTypes' => $this->mimeTypes,
+        ]);
         return parent::validate($attributeNames, $clearErrors);
     }
 }

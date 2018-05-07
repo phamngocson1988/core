@@ -46,7 +46,7 @@
           </thead>
           <tbody>
               {if (!$models) }
-              <tr><td colspan="6">No data found</td></tr>
+              <tr><td colspan="6">{Yii::t('app', 'no_data_found')}</td></tr>
               {/if}
               {foreach $models as $key => $model}
               <tr>

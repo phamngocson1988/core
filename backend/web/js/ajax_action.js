@@ -419,8 +419,12 @@ function ImageManager(opts) {
             request_url: this.links.load,
             container: '#image-popup-form #popup-items',
             condition: {template: '_popup_item'},
-            limit: 12
+            limit: 12,
         });
+        paging.callback = function(result) {
+            if (result.load_more) $(that.options.id + ' #load_more_popup').css('display', 'block');
+            else $(that.options.id + ' #load_more_popup').css('display', 'none');
+        };
 
         $(this.options.id + ' #load_more_popup').on('click', function(){
             paging.load();
