@@ -1,0 +1,17 @@
+.view-first .mask {
+	background-color: rgba(0,0,0,0);
+}
+
+.view .tools {
+    margin: 0;
+}
+
+#image-popup-form li a .fa {
+  visibility:hidden;
+}
+#image-popup-form li a.selected .fa{
+    visibility:visible;
+}
+#image-popup-form .thumbnail.selected {
+	border: solid 1px #000;
+}
