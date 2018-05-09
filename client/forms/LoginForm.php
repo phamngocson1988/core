@@ -1,9 +1,9 @@
 <?php
-namespace clientforms;
+namespace client\forms;
 
 use Yii;
 use yii\base\Model;
-use clientmodels\User;
+use client\models\User;
 
 /**
  * Login form
