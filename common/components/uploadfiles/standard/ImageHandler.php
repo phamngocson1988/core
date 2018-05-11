@@ -8,9 +8,9 @@ use yii\imagine\Image;
 use yii\web\UploadedFile;
 use Yii;
 
-class Standard extends UploadFiles
+class ImageHandler extends UploadFiles
 {
-    public $image_path = 'C:/xampp/htdocs/core/common/uploads/images';
+    public $image_path = '@common/uploads/images';
     public $image_url = 'http://image.core.com';
     // public $file_path = 'C:/xampp/htdocs/core/common/uploads/files';
     // public $file_url = 'http://file.chuchu.com';

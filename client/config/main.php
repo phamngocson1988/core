@@ -81,7 +81,7 @@ return [
             ],
         ],
         'image' => [
-            'class' => 'common\components\uploadfiles\standard\Standard',
+            'class' => 'common\components\uploadfiles\standard\ImageHandler',
             'image_path' => '@common/uploads/images',
             'image_url' => 'http://image.core.com',
             // 'file_path' => '@common/uploads/files',
