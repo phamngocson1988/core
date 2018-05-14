@@ -5,6 +5,11 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'name' => 'Core Functions',
+    'modules' => [
+        'shop' => [
+            'class' => 'common\modules\shop\Module',
+        ],
+    ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [

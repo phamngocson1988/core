@@ -11,8 +11,12 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
-    'bootstrap' => ['log'],
-    'modules' => [],
+    'bootstrap' => ['log', 'shop'],
+    'modules' => [
+        'shop' => [
+            'class' => 'backend\modules\shop\Module',
+        ],
+    ],
     'language' => 'vi',
     'sourceLanguage' => 'en-US',
     'components' => [
