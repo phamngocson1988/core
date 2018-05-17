@@ -88,4 +88,9 @@ return [
     'image_size_at_least' => 'Kích thước ảnh tối thiểu là {size}.',
     'error' => 'Lỗi',
     'choose_image' => 'Chọn hình ảnh',
+    'manage_system_logs' => 'Quản lý log hệ thống',
+    'created_time' => 'Thời gian tạo',
+    'action' => 'Tác vụ',
+    'description' => 'Mô tả',
+    'data' => 'Dữ liệu'
 ];

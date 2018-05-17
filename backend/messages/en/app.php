@@ -89,4 +89,9 @@ return [
     'image_size_at_least' => 'Image size is at least {size}.',
     'error' => 'Error',
     'choose_image' => 'Choose image',
+    'manage_system_logs' => 'Manage system logs',
+    'created_time' => 'Created time',
+    'action' => 'Action',
+    'description' => 'Description',
+    'data' => 'Data'
 ];
