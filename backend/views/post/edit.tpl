@@ -29,7 +29,6 @@
       ])->hiddenInput()}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">{Yii::t('app', 'edit_post')}</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>

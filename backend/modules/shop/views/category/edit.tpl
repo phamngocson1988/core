@@ -26,7 +26,6 @@
       {$form->field($model, 'id')->hiddenInput()->label(false)}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">{Yii::t('module.shop', 'create_product_category')}</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('module.shop', 'back')}</a>

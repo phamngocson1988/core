@@ -70,6 +70,8 @@ composer require --prefer-dist yii2mod/yii2-settings "*"
 
 composer require --prefer-dist yiisoft/yii2-imagine "*"
 
+composer require --prefer-dist 2amigos/yii2-tinymce-widget "~1.1"
+
 yii migrate
 
 yii migrate --migrationPath=@yii/rbac/migrations

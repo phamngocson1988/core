@@ -26,10 +26,9 @@
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">{Yii::t('module.shop', 'create_product')}</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
-            <i class="fa fa-angle-left"></i> {Yii::t('module.shop', 'back')}/a>
+            <i class="fa fa-angle-left"></i> {Yii::t('module.shop', 'back')}</a>
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> {Yii::t('module.shop', 'save')}
             </button>
