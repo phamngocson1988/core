@@ -59,10 +59,11 @@ class m180517_025826_create_product_schema extends Migration
 
         /* Product category table */
         $this->createTable('{{%product_category}}', [
-            'product_id' => $this->primaryKey(),
-            'category_id' => $this->primaryKey(),
+            'product_id' => $this->integer()->notNull(),
+            'category_id' => $this->integer()->notNull(),
             'is_main' => $this->string(1)->comment('Enum: Y,N')->defaultValue('N')->notNull(),
         ], $tableOptions);
+        $this->addPrimaryKey('product_category_pk', '{{%product_category}}', ['product_id', 'category_id']);
 
         /* Product image table */
         $this->createTable('{{%product_image}}', [

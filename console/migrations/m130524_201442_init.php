@@ -56,7 +56,7 @@ class m130524_201442_init extends Migration
             'excerpt' => $this->string(100),
             'content' => $this->text()->notNull(),
             'image_id' => $this->integer(),
-            'type' => $this->string()->defaultValue('post')->commnet('enum: post,product')->notNull(),
+            'type' => $this->string()->defaultValue('post')->comment('enum: post,product')->notNull(),
             'meta_title' => $this->string(160),
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),
@@ -78,15 +78,16 @@ class m130524_201442_init extends Migration
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),
             'icon' => $this->string(50),
-            'visible' => $this->string(1)->commnet('enum: Y,N')->defaultValue('Y'),
+            'visible' => $this->string(1)->comment('enum: Y,N')->defaultValue('Y'),
         ], $tableOptions);
 
         /* Post Category table */
         $this->createTable('{{%post_category}}', [
-            'post_id' => $this->primaryKey(),
-            'category_id' => $this->primaryKey(),
+            'post_id' => $this->integer()->notNull(),
+            'category_id' => $this->integer()->notNull(),
             'is_main' => $this->string(1)->comment('Enum: Y,N')->defaultValue('N')->notNull(),
         ], $tableOptions);
+        $this->addPrimaryKey('post_category_pk', '{{%post_category}}', ['post_id', 'category_id']);
 
         /* Image table */
         $this->createTable('{{%image}}', [
