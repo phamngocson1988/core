@@ -25,11 +25,36 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
+            // customer need to be active
+            ['username', 'validateStatus'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
+    }
+
+    /**
+     * Validates the password.
+     * This method serves as the inline validation for password.
+     *
+     * @param string $attribute the attribute currently being validated
+     * @param array $params the additional name-value pairs given in the rule
+     */
+    public function validateStatus($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            if ($user) {
+                if ($user->status == Customer::STATUS_INACTIVE) {
+                    $this->addError('username', Yii::t('frontend', 'customer_is_not_active'));
+                    return false;    
+                } elseif ($user->status == Customer::STATUS_DELETED) {
+                    $this->addError('username', Yii::t('frontend', 'customer_is_deleted'));
+                    return false;    
+                }
+            }
+        }
     }
 
     /**

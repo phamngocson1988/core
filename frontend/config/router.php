@@ -15,6 +15,7 @@ return [
         'dang-xuat' => 'site/logout',
         'captcha' => 'site/captcha',
         'dang-ky' => 'site/signup',
+        'kich-hoat-tai-khoan' => 'site/confirm',
         'cau-hoi-thuong-gap' => 'site/faq',
         'yeu-cau-cap-lai-mat-khau' => 'site/request-password-reset',
         'cap-lai-mat-khau' => 'site/reset-password',

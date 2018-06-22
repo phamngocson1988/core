@@ -30,6 +30,16 @@ class ChangeCustomerStatusForm extends Model
         return false;
     }
 
+    public function inactive()
+    {
+        if ($this->validate()) {
+            $user = $this->getUser();
+            $user->status = User::STATUS_INACTIVE;
+            return $user->save();
+        }
+        return false;
+    }
+
     public function delete()
     {
         if ($this->validate()) {

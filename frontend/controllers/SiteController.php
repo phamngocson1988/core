@@ -7,11 +7,15 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
+
+
+use frontend\forms\LoginForm;
+use frontend\forms\PasswordResetRequestForm;
+use frontend\forms\ResetPasswordForm;
+use frontend\forms\SignupForm;
+use frontend\forms\ActiveCustomerForm;
+use frontend\forms\ContactForm;
+
 
 /**
  * Site controller
@@ -88,6 +92,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            print_r(Yii::$user);die;
             return $this->goBack();
         } else {
             return $this->render('login', [
@@ -149,17 +154,50 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
+        $model->setNeedConfirm(true);
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+                // If need to confirm, send mail to customer
+                if ($model->isNeedConfirm()) {
+                    $email = \Yii::$app->mailer->compose()
+                        ->setTo($user->email)
+                        ->setFrom([\Yii::$app->params['email_admin'] => \Yii::$app->name . ' robot'])
+                        ->setSubject('Signup Confirmation')
+                        ->setTextBody("Click this link " . \yii\helpers\Html::a('confirm', Yii::$app->urlManager->createAbsoluteUrl(['site/confirm', 'id' => $user->id, 'key' => $user->auth_key])))
+                        ->send();
+                    if ($email) {
+                        Yii::$app->getSession()->setFlash('success','Check Your email!');
+                    } else {
+                    Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
+                    }
+                } else { // If no need to confirm, log user in
+                    Yii::$app->getUser()->login($user);
                 }
+                
+                return $this->goHome();
             }
         }
 
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionConfirm($id, $key)
+    {
+        $confirmForm = new ActiveCustomerForm([
+            'id'=>$id,
+            'auth_key'=>$key,
+        ]);
+
+        if ($user = $confirmForm->confirm()) {
+            Yii::$app->getSession()->setFlash('success','Success!');
+            Yii::$app->getUser()->login($user);
+        } else{
+            Yii::$app->getSession()->setFlash('warning','Failed!');
+        }
+        
+        return $this->goHome();
     }
 
     /**

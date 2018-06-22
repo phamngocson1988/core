@@ -12,6 +12,12 @@ class SignupForm extends Model
     public $email;
     public $password;
 
+    /**
+     * @param boolean $is_active
+     * If false, the customer will be actived after signup
+     * If true, the customer will receive an activation email
+     */
+    protected $need_confirm = false;
 
     /**
      * @inheritdoc
@@ -46,7 +52,33 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
+
+        if ($this->isNeedConfirm()) {
+            $user->status = Customer::STATUS_INACTIVE;
+        } else {
+            $user->status = Customer::STATUS_ACTIVE;
+        }
         
         return $user->save() ? $user : null;
+    }
+
+    /**
+     * Set need_confirm flag
+     * 
+     * @param boolean $needConfirm
+     */
+    public function setNeedConfirm($needConfirm)
+    {
+        $this->need_confirm = (boolean)$needConfirm;
+    }
+
+    /**
+     * Get need_confirm flag
+     * 
+     * @return boolean
+     */
+    public function isNeedConfirm()
+    {
+        return (boolean)$this->need_confirm;
     }
 }
