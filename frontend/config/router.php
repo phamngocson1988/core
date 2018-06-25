@@ -31,6 +31,14 @@ return [
         'khuyen-mai' => 'promotion/index',
         'khuyen-mai/<slug>' => 'promotion/read/<slug:\w+>',
 
+        // notifications
+        'notifications/default/index' => 'notifications/default/index',
+        'notifications/default/list' => 'notifications/default/list',
+        'notifications/default/count' => 'notifications/default/count',
+        'notifications/default/read' => 'notifications/default/read',
+        'notifications/default/read-all' => 'notifications/default/read-all',
+        'notifications/default/delete-all' => 'notifications/default/delete-all',
+
         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
     ],
 ];

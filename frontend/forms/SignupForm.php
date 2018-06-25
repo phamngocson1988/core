@@ -3,6 +3,7 @@ namespace frontend\forms;
 
 use yii\base\Model;
 use common\models\Customer;
+use frontend\components\notifications\AccountNotification;
 
 /**
  * Signup form
@@ -59,7 +60,9 @@ class SignupForm extends Model
             $user->status = Customer::STATUS_ACTIVE;
         }
         
-        return $user->save() ? $user : null;
+        $user = $user->save() ? $user : null;
+
+        AccountNotification::create(AccountNotification::KEY_NEW_ACCOUNT, ['user' => $user])->send();
     }
 
     /**

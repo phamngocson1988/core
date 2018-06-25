@@ -92,7 +92,6 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            print_r(Yii::$user);die;
             return $this->goBack();
         } else {
             return $this->render('login', [
@@ -168,7 +167,7 @@ class SiteController extends Controller
                     if ($email) {
                         Yii::$app->getSession()->setFlash('success','Check Your email!');
                     } else {
-                    Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
+                        Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
                     }
                 } else { // If no need to confirm, log user in
                     Yii::$app->getUser()->login($user);

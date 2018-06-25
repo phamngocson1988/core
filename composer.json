@@ -22,7 +22,8 @@
         "yiisoft/yii2-imagine": "~2.1.0",
         "yii2mod/yii2-settings": "*",
         "2amigos/yii2-tinymce-widget" : "~1.1",
-        "cloudinary/cloudinary_php": "dev-master"
+        "cloudinary/cloudinary_php": "dev-master",
+        "webzop/yii2-notifications": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

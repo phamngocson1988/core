@@ -77,3 +77,5 @@ yii migrate
 yii migrate --migrationPath=@yii/rbac/migrations
 
 yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
+
+yii migrate/up --migrationPath=vendor/webzop/yii2-notifications/migrations
