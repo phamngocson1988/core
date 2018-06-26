@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a24c45ec2cbbde1d41102ee21eea71f",
+    "content-hash": "c37ea99f42c67fcece794c8f0a9e9c61",
     "packages": [
         {
             "name": "2amigos/yii2-tinymce-widget",
@@ -252,12 +252,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cloudinary/cloudinary_php.git",
-                "reference": "724eb4cc488c7b532af056dd165b6633b74b682c"
+                "reference": "46546ac08d121ae1a4fee8fde46d386998927326"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/724eb4cc488c7b532af056dd165b6633b74b682c",
-                "reference": "724eb4cc488c7b532af056dd165b6633b74b682c",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/46546ac08d121ae1a4fee8fde46d386998927326",
+                "reference": "46546ac08d121ae1a4fee8fde46d386998927326",
                 "shasum": ""
             },
             "require": {
@@ -296,7 +296,7 @@
                 "image management",
                 "sdk"
             ],
-            "time": "2018-06-11T17:07:23+00:00"
+            "time": "2018-06-26T08:59:35+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -712,6 +712,49 @@
                 "yii2-notifications-module"
             ],
             "time": "2018-02-04T09:23:12+00:00"
+        },
+        {
+            "name": "yii2mod/yii2-cart",
+            "version": "1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yii2mod/yii2-cart.git",
+                "reference": "58b88f5047c7d6e0bc7ad7753f19cf45c3636111"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yii2mod/yii2-cart/zipball/58b88f5047c7d6e0bc7ad7753f19cf45c3636111",
+                "reference": "58b88f5047c7d6e0bc7ad7753f19cf45c3636111",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~1.7"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "yii2mod\\cart\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Semenov",
+                    "email": "disemx@gmail.com"
+                },
+                {
+                    "name": "Igor Chepurnoy",
+                    "email": "igorzfort@gmail.com"
+                }
+            ],
+            "description": "Yii2 Shopping cart",
+            "time": "2016-11-22T12:20:39+00:00"
         },
         {
             "name": "yii2mod/yii2-editable",
@@ -3069,16 +3112,16 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "16355a5d0f1499c77efee5ff68d8ea61624d4da1"
+                "reference": "ff9ac5d5808a530b2e7f6abcf3a2412d4f9bcd62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/16355a5d0f1499c77efee5ff68d8ea61624d4da1",
-                "reference": "16355a5d0f1499c77efee5ff68d8ea61624d4da1",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/ff9ac5d5808a530b2e7f6abcf3a2412d4f9bcd62",
+                "reference": "ff9ac5d5808a530b2e7f6abcf3a2412d4f9bcd62",
                 "shasum": ""
             },
             "require": {
@@ -3122,20 +3165,20 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-06T10:52:03+00:00"
+            "time": "2018-06-04T17:31:56+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "2d5d973bf9933d46802b01010bd25c800c87c242"
+                "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/2d5d973bf9933d46802b01010bd25c800c87c242",
-                "reference": "2d5d973bf9933d46802b01010bd25c800c87c242",
+                "url": "https://api.github.com/repos/symfony/console/zipball/70591cda56b4b47c55776ac78e157c4bb6c8b43f",
+                "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f",
                 "shasum": ""
             },
             "require": {
@@ -3190,11 +3233,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-30T07:26:09+00:00"
+            "time": "2018-05-31T10:17:53+00:00"
         },
         {
             "name": "symfony/css-selector",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
@@ -3247,7 +3290,7 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
@@ -3304,7 +3347,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -3367,16 +3410,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "087e2ee0d74464a4c6baac4e90417db7477dc238"
+                "reference": "84714b8417d19e4ba02ea78a41a975b3efaafddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/087e2ee0d74464a4c6baac4e90417db7477dc238",
-                "reference": "087e2ee0d74464a4c6baac4e90417db7477dc238",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/84714b8417d19e4ba02ea78a41a975b3efaafddb",
+                "reference": "84714b8417d19e4ba02ea78a41a975b3efaafddb",
                 "shasum": ""
             },
             "require": {
@@ -3412,7 +3455,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-16T14:33:22+00:00"
+            "time": "2018-06-19T21:38:16+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -3530,7 +3573,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",

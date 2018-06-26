@@ -9,7 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'shop'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
@@ -37,6 +37,7 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => require('router.php'),
+        
     ],
     'modules' => [
         'notifications' => [
@@ -52,6 +53,9 @@ return [
                 //     ],
                 // ],
             ],
+        ],
+        'shop' => [
+            'class' => 'frontend\modules\shop\Module',
         ],
     ],
     'params' => $params,

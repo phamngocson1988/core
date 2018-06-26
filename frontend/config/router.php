@@ -21,15 +21,11 @@ return [
         'cap-lai-mat-khau' => 'site/reset-password',
         'dang-ky-nhan-tin' => 'subscriber/create',
 
-        'danh-muc-bai-viet/<slug>' => 'post/index',
-        'danh-muc-bai-viet' => 'post/index',
-        'bai-viet/<slug>' => 'post/read',
 
-        'san-pham' => 'product/index',
-        'san-pham/<slug>' => 'product/read/<slug:\w+>',
+        // module product
+        // 'san-pham' => 'shop/product/index',
+        'san-pham/<id:\d+>-<slug:\w+>' => 'shop/product/index',
 
-        'khuyen-mai' => 'promotion/index',
-        'khuyen-mai/<slug>' => 'promotion/read/<slug:\w+>',
 
         // notifications
         'notifications/default/index' => 'notifications/default/index',

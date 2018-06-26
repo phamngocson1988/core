@@ -34,7 +34,7 @@ class CategoryController extends Controller
 
     public function actionIndex()
     {
-        $this->view->params['main_menu_active'] = 'product.category';
+        $this->view->params['main_menu_active'] = 'product.category.index';
         $request = Yii::$app->request;
         $form = new FetchCategoryForm(['type' => 'product']);
         $models = $form->fetch();
@@ -46,7 +46,7 @@ class CategoryController extends Controller
 
     public function actionCreate()
     {
-        $this->view->params['main_menu_active'] = 'product.category';
+        $this->view->params['main_menu_active'] = 'product.category.index';
         $request = Yii::$app->request;
         $model = new CreateCategoryForm(['type' => 'product']);
         if ($model->load(Yii::$app->request->post())) {
@@ -64,7 +64,7 @@ class CategoryController extends Controller
 
     public function actionEdit($id)
     {
-        $this->view->params['main_menu_active'] = 'product.category';
+        $this->view->params['main_menu_active'] = 'product.category.index';
         $request = Yii::$app->request;
         $model = new EditCategoryForm(['type' => 'product']);
         if ($model->load(Yii::$app->request->post())) {
