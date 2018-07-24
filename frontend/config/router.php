@@ -23,9 +23,8 @@ return [
 
 
         // module product
-        // 'san-pham' => 'shop/product/index',
-        'san-pham/<id:\d+>-<slug:\w+>' => 'shop/product/index',
-
+        'san-pham/<id:\d+>-<slug:[\w\-?]+>' => '/shop/product/index',
+        'danh-muc-san-pham/<id:\d+>-<slug:[\w\-?]+>' => '/shop/category/index',
 
         // notifications
         'notifications/default/index' => 'notifications/default/index',

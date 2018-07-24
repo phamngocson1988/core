@@ -37,7 +37,15 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => require('router.php'),
-        
+        'cart' => [
+            'class' => 'yii2mod\cart\Cart',
+            // you can change default storage class as following:
+            'storageClass' => [
+                'class' => 'yii2mod\cart\storage\DatabaseStorage',
+                // you can also override some properties 
+                'deleteIfEmpty' => true
+            ]
+        ],
     ],
     'modules' => [
         'notifications' => [
