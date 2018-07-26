@@ -28,11 +28,20 @@ class SignupForm extends BaseSignupForm
 	
 	public function signup()
 	{
-		$user = parent::signup();
-		if ($this->role && ($user instanceof \common\models\User)) {
-			$form = new AssignRoleForm(['user_id' => $user->id, 'role' => $this->role]);
-			$form->save();
+		$connection = Yii::$app->db;
+		$transaction = $connection->beginTransaction();
+		try {
+			$user = parent::signup();
+			if ($this->role && ($user instanceof \common\models\User)) {
+				$form = new AssignRoleForm(['user_id' => $user->id, 'role' => $this->role, 'scenario' => AssignRoleForm::SCENARIO_ADD]);
+				$form->save();
+			}	
+			$transaction->commit();
+			return $user;
+		} catch (\Exception $e) {
+			$transaction->rollBack();
+			$this->addError('username', $e->getMessage());
+			return false;
 		}
-		return $user;
 	}
 }

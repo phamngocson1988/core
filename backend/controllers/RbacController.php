@@ -7,7 +7,9 @@ use common\models\User;
 use yii\base\InvalidParamException;
 use backend\forms\CreateRoleForm;
 use backend\forms\AssignRoleForm;
+use backend\forms\FetchUserByRoleForm;
 use yii\helpers\Url;
+use yii\data\Pagination;
 
 class RbacController extends Controller
 {
@@ -34,6 +36,38 @@ class RbacController extends Controller
         $auth = Yii::$app->authManager;
         $sale = $auth->getRole('sale');
         $auth->assign($sale, $id);
+    }
+
+    //=============== ROLE ===============
+    public function actionRole()
+    {
+        $this->view->params['main_menu_active'] = 'rbac.role';
+        $roles = Yii::$app->authManager->getRoles();
+        return $this->render('role.tpl', [
+            'models' => $roles,
+            'ref' => Url::to(Yii::$app->request->getUrl(), true),
+        ]);
+        
+    }
+
+    public function actionUserRole()
+    {
+        $this->view->params['main_menu_active'] = 'rbac.role';
+        $name = Yii::$app->request->get('name');
+        $role = Yii::$app->authManager->getRole($name);
+
+        $form = new FetchUserByRoleForm(['role' => $name]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('user-role.tpl', [
+            'role' => $role,
+            'models' => $models,
+            'pages' => $pages,
+            'ref' => Url::to(Yii::$app->request->getUrl(), true),
+        ]);
+        
     }
 
     public function actionCreateRole()

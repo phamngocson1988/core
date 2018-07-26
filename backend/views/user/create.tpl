@@ -44,6 +44,10 @@
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
+                  {$form->field($model, 'name', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()}
                   {$form->field($model, 'username', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

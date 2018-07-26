@@ -25,6 +25,7 @@
       <li class="heading">
         <h3 class="uppercase">{Yii::t('app', 'features')}</h3>
       </li>
+      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user"></i>
@@ -47,6 +48,16 @@
             <span class="title">{Yii::t('app', 'role_permission')}</span>
             </a>
           </li>
+        </ul>
+      </li>
+      {/if}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user"></i>
+        <span class="title">{Yii::t('app', 'customers')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
           <li class="nav-item  ">
             <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
             <span class="title">{Yii::t('app', 'customers')}</span>

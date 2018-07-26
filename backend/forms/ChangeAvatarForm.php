@@ -47,8 +47,8 @@ class ChangeAvatarForm extends Model
             $user = $this->getUser();
             if (!$image) {
                 $this->addError($attribute, Yii::t('app', 'invalid_image'));
-            } elseif ($image->created_by != $user->getId()) {
-                $this->addError($attribute, Yii::t('app', 'invalid_image'));
+            // } elseif ($image->created_by != $user->getId()) {
+            //     $this->addError($attribute, Yii::t('app', 'invalid_image'));
             }
         }
     }

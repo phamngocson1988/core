@@ -93,5 +93,7 @@ return [
     'created_time' => 'Created time',
     'action' => 'Action',
     'description' => 'Description',
-    'data' => 'Data'
+    'data' => 'Data',
+    'create_user' => 'Create user',
+    'name' => 'Name',
 ];

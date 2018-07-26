@@ -41,8 +41,8 @@ return [
     'logout' => 'Đăng xuất',
     'dashboard' => 'Bảng điều khiển',
     'features' => 'Đặc điểm',
-    'user' => 'Người dùng',
-    'users' => 'Người dùng',
+    'user' => 'Ban quản trị',
+    'users' => 'Ban quản trị',
     'create_role' => 'Tạo vai trò người dùng',
     'role_permission' => 'Vai trò / Quyền hạn',
     'customers' => 'Khách hàng',
@@ -92,5 +92,7 @@ return [
     'created_time' => 'Thời gian tạo',
     'action' => 'Tác vụ',
     'description' => 'Mô tả',
-    'data' => 'Dữ liệu'
+    'data' => 'Dữ liệu',
+    'create_user' => 'Tạo thành viên ban quản trị',
+    'name' => 'Tên',
 ];

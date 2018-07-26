@@ -32,30 +32,6 @@
         </div>
       </div>
       <div class="portlet-body">
-        <div class="row margin-bottom-10">
-          <form method="GET">
-            <div class="form-group col-md-3">
-              <label>{Yii::t('app', 'status')}: </label>
-              <select class="form-control" name="status">
-                <option value="">All</option>
-                {foreach $form->getUserStatus() as $statusKey => $statusLabel}
-                <option value="{$statusKey}" {if (string)$statusKey === $form->status} selected {/if}>{$statusLabel}</option>
-                {/foreach}
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
-                placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->q}">
-            </div>
-            <div class="form-group col-md-3">
-              <button type="submit" class="btn btn-success table-group-action-submit"
-                style="margin-top:
-                25px;">
-              <i class="fa fa-check"></i> {Yii::t('app', 'search')}
-              </button>
-            </div>
-          </form>
-        </div>
         {Pjax}
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
@@ -84,12 +60,7 @@
               </td>
               <td>{$model->getStatusLabel()}</td>
               <td>
-                {if $model->isActive()}
                 <a class="btn btn-xs grey-salsa delete-user" href="{url route='user/change-status' id=$model->id status='delete'}"><i class="fa fa-trash"></i></a>
-                {else}
-                <a class="btn btn-xs grey-salsa active-user" href="{url route='user/change-status' id=$model->id status='active'}"><i class="fa-check-square"></i></a>
-                {/if}
-                
               </td>
             </tr>
             {/foreach}

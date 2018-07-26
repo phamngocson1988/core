@@ -23,12 +23,12 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'change-status'],
+                        'actions' => ['index', 'create', 'change-status'],
                         'roles' => ['admin'],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'suggestion'],
+                        'actions' => ['suggestion'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -72,6 +72,8 @@ class UserController extends Controller
             if ($user = $model->signup()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['user/index']);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getFirstErrors());
             }
         }
 
