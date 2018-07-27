@@ -23,21 +23,7 @@ class FetchUserByRoleForm extends Model
 
     public function fetch()
     {
-        $command = $this->getCommand();
-        return $command->all();
-    }
-
-    protected function createCommand()
-    {
-        $command = User::find();
-        $this->_command = $command;
-    }
-
-    public function getCommand()
-    {
-        if (!$this->_command) {
-            $this->createCommand();
-        }
-        return $this->_command;
+        $userIds = Yii::$app->authManager->getUserIdsByRole($this->role);
+        return User::findAll($userIds);
     }
 }

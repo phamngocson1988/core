@@ -25,6 +25,11 @@
           <i class="icon-settings font-dark"></i>
           <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_customers')}</span>
         </div>
+        <div class="actions">
+          <div class="btn-group btn-group-devided">
+            <a class="btn green" href="{url route='customer/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
+          </div>
+        </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">

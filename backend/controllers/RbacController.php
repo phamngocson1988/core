@@ -2,17 +2,34 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\web\Controller;
+use common\components\Controller;
 use common\models\User;
 use yii\base\InvalidParamException;
 use backend\forms\CreateRoleForm;
 use backend\forms\AssignRoleForm;
+use backend\forms\RevokeRoleForm;
 use backend\forms\FetchUserByRoleForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
 
 class RbacController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionInitRole()
     {
         $auth = Yii::$app->authManager;
@@ -57,22 +74,59 @@ class RbacController extends Controller
         $role = Yii::$app->authManager->getRole($name);
 
         $form = new FetchUserByRoleForm(['role' => $name]);
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        $models = $form->fetch();
 
         return $this->render('user-role.tpl', [
             'role' => $role,
             'models' => $models,
-            'pages' => $pages,
             'ref' => Url::to(Yii::$app->request->getUrl(), true),
         ]);
         
     }
 
+    public function actionRevokeRole()
+    {
+        $this->view->params['main_menu_active'] = 'rbac.role';
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user_id = $request->get('user_id');
+            $role = $request->get('role');
+            $form = new RevokeRoleForm(['user_id' => $user_id, 'role' => $role, 'scenario' => RevokeRoleForm::SCENARIO_REVOKE]);
+            $result = $form->revoke();
+            return $this->renderJson($result, null, $form->getErrors());
+        }
+    }
+
+    public function actionAssignRole()
+    {
+        $this->view->params['main_menu_active'] = 'rbac.assign-role';
+        $request = Yii::$app->request;
+        $model = new AssignRoleForm();
+        $model->scenario = AssignRoleForm::SCENARIO_ADD;
+        if (Yii::$app->request->isPost) {
+            if ($model->load($request->post()) && $model->save()) {
+                $ref = $request->get('ref', Url::to(['user/index']));
+                return $this->redirect($ref);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrors());
+            }    
+        } else {
+            $role = $request->get('role');
+            $model->role = $role;
+        }
+
+        $links = [
+            'user_suggestion' => Url::to(['user/suggestion'])
+        ];
+        return $this->render('assign-role.tpl', [
+            'model' => $model,
+            'links' => $links
+        ]);        
+    }
+
     public function actionCreateRole()
     {
-        $this->view->params['main_menu_active'] = 'rbac.create-role';
+        $this->view->params['main_menu_active'] = 'rbac.role';
         $model = new CreateRoleForm();
         if (Yii::$app->request->isPost) {
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -83,29 +137,6 @@ class RbacController extends Controller
         }
         return $this->render('create-role.tpl', [
             'model' => $model,
-        ]);
-        
-    }
-
-    public function actionAssignRole()
-    {
-        $this->view->params['main_menu_active'] = 'rbac.assign-role';
-        $model = new AssignRoleForm();
-        $model->scenario = AssignRoleForm::SCENARIO_ADD;
-        if (Yii::$app->request->isPost) {
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->goBack();
-            } else {
-                Yii::$app->session->setFlash('error', $model->getErrors());
-            }    
-        }
-
-        $links = [
-            'user_suggestion' => Url::to(['user/suggestion'])
-        ];
-        return $this->render('assign-role.tpl', [
-            'model' => $model,
-            'links' => $links
         ]);
         
     }

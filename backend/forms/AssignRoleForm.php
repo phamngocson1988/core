@@ -42,7 +42,6 @@ class AssignRoleForm extends Model
         if ($this->validate()) {
             $auth = Yii::$app->authManager;
             $role = $auth->getRole($this->role);
-            $auth->revokeAll($this->user_id);
             if ($role) {
                 $auth->assign($role, $this->user_id);
             }

@@ -23,18 +23,19 @@
           <i class="icon-settings font-dark"></i>
           <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_roles')}</span>
         </div>
-        <div class="actions">
+        <!-- <div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="{url route='rbac/create-role' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="portlet-body">
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
               <th style="width: 30%;"> {Yii::t('app', 'role')} </th>
-              <th style="width: 50%;"> {Yii::t('app', 'description')} </th>
+              <th style="width: 30%;"> {Yii::t('app', 'description')} </th>
+              <th style="width: 20%;"> {Yii::t('app', 'count')} </th>
               <th style="width: 20%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -44,6 +45,7 @@
             <tr>
               <td>{$model->name}</td>
               <td>{$model->description}</td>
+              <td>{count(Yii::$app->authManager->getUserIdsByRole($model->name))}</td>
               <td>
                 <a class="btn btn-xs grey-salsa" href="{url route='rbac/user-role' name=$model->name}"><i class="fa fa-edit"></i></a>
               </td>

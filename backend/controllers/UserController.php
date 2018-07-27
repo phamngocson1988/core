@@ -82,7 +82,6 @@ class UserController extends Controller
             'roles' => $roles,
             'back' => $request->get('ref', Url::to(['user/index']))
         ]);
-
     }
 
     public function actionSuggestion()
@@ -110,7 +109,7 @@ class UserController extends Controller
     public function actionChangeStatus()
     {
         $request = Yii::$app->request;
-        // if( $request->isAjax) {
+        if( $request->isAjax) {
             $id = $request->get('id');
             $status = $request->get('status');
             $form = new ChangeUserStatusForm(['id' => $id]);
@@ -126,6 +125,6 @@ class UserController extends Controller
                     break;
             }
             return $this->renderJson($result, null, $form->getErrors());
-        // }
+        }
     }
 }

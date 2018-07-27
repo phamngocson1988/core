@@ -39,13 +39,8 @@
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='/rbac/create-role'}" class="nav-link" code='rbac.create-role'>
-            <span class="title">{Yii::t('app', 'create_role')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/rbac/assign-role'}" class="nav-link " code='rbac.assign-role'>
-            <span class="title">{Yii::t('app', 'role_permission')}</span>
+            <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
+            <span class="title">{Yii::t('app', 'role')}</span>
             </a>
           </li>
         </ul>

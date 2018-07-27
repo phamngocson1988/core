@@ -203,6 +203,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     {
         return [
             self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',            
             self::STATUS_DELETED => 'Deleted',
         ];
     }
