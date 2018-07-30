@@ -62,6 +62,20 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user"></i>
+        <span class="title">{Yii::t('app', 'staffs')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/staff/index'}" class="nav-link " code='staff.index'>
+            <span class="title">{Yii::t('app', 'staffs')}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
         <span class="title">{Yii::t('app', 'posts')}</span>
         <span class="arrow"></span>

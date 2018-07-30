@@ -99,7 +99,7 @@ class RbacController extends Controller
 
     public function actionAssignRole()
     {
-        $this->view->params['main_menu_active'] = 'rbac.assign-role';
+        $this->view->params['main_menu_active'] = 'rbac.role';
         $request = Yii::$app->request;
         $model = new AssignRoleForm();
         $model->scenario = AssignRoleForm::SCENARIO_ADD;

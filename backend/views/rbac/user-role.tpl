@@ -62,7 +62,9 @@
               </td>
               <td>{$model->getStatusLabel()}</td>
               <td>
-                <a class="btn btn-xs grey-salsa revoke-user" href="{url route='/rbac/revoke-role' user_id=$model->id role=$role->name}"><i class="fa fa-ban"></i></a>
+                {if $app->user->id != $model->id}
+                <a class="btn btn-xs grey-salsa revoke-user popovers" href="{url route='/rbac/revoke-role' user_id=$model->id role=$role->name}" data-container="body" data-trigger="hover" data-content="Remove '{$role->name}' role from {$model->name}"><i class="fa fa-ban"></i></a>
+                {/if}
               </td>
             </tr>
             {/foreach}

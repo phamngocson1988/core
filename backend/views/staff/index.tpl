@@ -8,13 +8,13 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'manage_customers')}</span>
+      <span>{Yii::t('app', 'manage_staffs')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'manage_customers')}</h1>
+<h1 class="page-title">{Yii::t('app', 'manage_staffs')}</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -23,11 +23,11 @@
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_customers')}</span>
+          <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_staffs')}</span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="{url route='customer/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
+            <a class="btn green" href="{url route='staff/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
         </div>
       </div>
@@ -35,11 +35,11 @@
         <div class="row margin-bottom-10">
           <form method="GET">
             <div class="form-group col-md-3">
-              <label>{Yii::t('app', 'status')}: </label>
-              <select class="form-control" name="status">
+              <label>{Yii::t('app', 'gender')}: </label>
+              <select class="form-control" name="gender">
                 <option value="">{Yii::t('app', 'all')}</option>
-                {foreach $form->getUserStatus() as $statusKey => $statusLabel}
-                <option value="{$statusKey}" {if (string)$statusKey === $form->status} selected {/if}>{$statusLabel}</option>
+                {foreach $form->getStaffGenders() as $statusKey => $statusLabel}
+                <option value="{$statusKey}" {if (string)$statusKey === $form->gender} selected {/if}>{$statusLabel}</option>
                 {/foreach}
               </select>
             </div>
@@ -61,8 +61,9 @@
           <thead>
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 25%;"> Username </th>
-              <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
+              <th style="width: 25%;"> {Yii::t('app', 'name')} </th>
+              <th style="width: 25%;"> {Yii::t('app', 'email')} </th>
+              <th style="width: 20%;"> {Yii::t('app', 'phone')} </th>
               <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -71,22 +72,17 @@
             {foreach $models as $key => $model}
             <tr>
               <td>{$key + $pages->offset + 1}</td>
-              <td>{$model->username}</td>
-              <td>{$model->getStatusLabel()}</td>
+              <td>{$model->name}</td>
+              <td>{$model->email}</td>
+              <td>{$model->phone}</td>
               <td>
-                {if $model->isActive()}
-                <a class="btn btn-xs grey-salsa delete-customer popovers" href="{url route='customer/change-status' id=$model->id status='inactive'}" data-container="body" data-trigger="hover" data-content="Disable this customer"><i class="fa fa-minus-circle"></i></a>
-                {else}
-                <a class="btn btn-xs grey-salsa active-customer popovers" href="{url route='customer/change-status' id=$model->id status='active'}" data-container="body" data-trigger="hover" data-content="Enable this customer"><i class="fa fa-check-square"></i></a>
-                {/if}
-                <a href='{url route="customer/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="Edit customer"><i class="fa fa-pencil"></i></a>
-                
+                <a href='{url route="staff/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="Edit staff"><i class="fa fa-pencil"></i></a>
               </td>
             </tr>
             {/foreach}
             {else}
             <tr>
-              <td colspan="4">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="5">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>
@@ -98,21 +94,3 @@
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-{registerJs}
-{literal}
-$(".delete-customer").ajax_action({
-  confirm: true,
-  confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_customer')}{literal}',
-  callback: function(eletement, data) {
-    location.reload();
-  }
-});
-$(".active-customer").ajax_action({
-  confirm: true,
-  confirm_text: '{/literal}{Yii::t('app', 'confirm_enable_customer')}{literal}',
-  callback: function(eletement, data) {
-    location.reload();
-  }
-});
-{/literal}
-{/registerJs}

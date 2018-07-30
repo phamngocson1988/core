@@ -18,6 +18,12 @@ use yii\helpers\ArrayHelper;
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
+ * @property string $phone
+ * @property string $address
+ * @property string $birthday
+ * @property string $social_line
+ * @property string $social_zalo
+ * @property string $social_facebook
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at

@@ -4,15 +4,15 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Customer as User;
+use common\models\Staff;
 
 /**
- * FetchCustomerForm
+ * FetchStaffForm
  */
-class FetchCustomerForm extends Model
+class FetchStaffForm extends Model
 {
     public $q;
-    public $status;
+    public $gender;
     private $_command;
 
     public function rules()
@@ -30,16 +30,17 @@ class FetchCustomerForm extends Model
 
     protected function createCommand()
     {
-        $command = User::find();
+        $command = Staff::find();
 
         if ($this->q) {
-            $command->orWhere(['like', 'username', $this->q]);
+            $command->orWhere(['like', 'name', $this->q]);
             $command->orWhere(['like', 'email', $this->q]);
             $command->orWhere(['like', 'phone', $this->q]);
             $command->orWhere(['like', 'address', $this->q]);
+            $command->orWhere(['like', 'department', $this->q]);
         }
-        if ((string)$this->status !== "") {
-            $command->andWhere(['status' => $this->status]);
+        if ((string)$this->gender !== "") {
+            $command->andWhere(['gender' => $this->gender]);
         }
         $this->_command = $command;
     }
@@ -52,8 +53,8 @@ class FetchCustomerForm extends Model
         return $this->_command;
     }
 
-    public function getUserStatus()
+    public function getStaffGenders()
     {
-        return User::getUserStatus();
+        return Staff::getStaffGenders();
     }
 }

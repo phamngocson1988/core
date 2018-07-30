@@ -6,7 +6,7 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='rbac/roles'}">{Yii::t('app', 'manage_roles')}</a>
+      <a href="{url route='rbac/role'}">{Yii::t('app', 'manage_roles')}</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>

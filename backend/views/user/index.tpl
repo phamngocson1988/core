@@ -85,9 +85,9 @@
               <td>{$model->getStatusLabel()}</td>
               <td>
                 {if $model->isActive()}
-                <a class="btn btn-xs grey-salsa delete-user" href="{url route='user/change-status' id=$model->id status='delete'}"><i class="fa fa-minus-circle"></i></a>
+                <a class="btn btn-xs grey-salsa delete-user popovers" href="{url route='user/change-status' id=$model->id status='delete'}" data-container="body" data-trigger="hover" data-content="Disable this user"><i class="fa fa-minus-circle"></i></a>
                 {else}
-                <a class="btn btn-xs grey-salsa active-user" href="{url route='user/change-status' id=$model->id status='active'}"><i class="fa fa-check-square"></i></a>
+                <a class="btn btn-xs grey-salsa active-user popovers" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-trigger="hover" data-content="Enable this user"><i class="fa fa-check-square"></i></a>
                 {/if}
                 
               </td>

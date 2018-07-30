@@ -5,10 +5,11 @@ use yii\base\Model;
 use backend\models\Customer;
 
 /**
- * CreateCustomerForm
+ * EditCustomerForm
  */
-class CreateCustomerForm extends Model
+class EditCustomerForm extends Model
 {
+    public $id;
     public $name;
     public $username;
     public $email;
@@ -18,8 +19,9 @@ class CreateCustomerForm extends Model
     public $social_line;
     public $social_zalo;
     public $social_facebook;
-    public $password;
     public $status;
+
+    protected $_customer;
 
 
     /**
@@ -28,20 +30,12 @@ class CreateCustomerForm extends Model
     public function rules()
     {
         return [
+            ['id', 'trim'],
+            ['id', 'required'],
+            ['id', 'validateCustomer'],
+
             ['name', 'trim'],
             ['name', 'required'],
-
-            ['username', 'trim'],
-            ['username', 'required'],
-
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\backend\models\Customer', 'message' => 'This email address has already been taken.'],
-
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
 
             ['status', 'in', 'range' => array_keys(Customer::getUserStatus())],
 
@@ -54,16 +48,14 @@ class CreateCustomerForm extends Model
      *
      * @return Customer|null the saved model or null if saving fails
      */
-    public function create()
+    public function save()
     {
         if (!$this->validate()) {
             return null;
         }
         
-        $user = new Customer();
+        $user = $this->getCustomer();
         $user->name = $this->name;
-        $user->username = $this->username;
-        $user->email = $this->email;
         $user->phone = $this->phone;
         $user->address = $this->address;
         $user->birthday = $this->birthday;
@@ -71,13 +63,46 @@ class CreateCustomerForm extends Model
         $user->social_zalo = $this->social_zalo;
         $user->social_facebook = $this->social_facebook;
         $user->status = $this->status;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
         return $user->save() ? $user : null;
     }
 
     public function getUserStatus()
     {
         return Customer::getUserStatus();
+    }
+
+    public function validateCustomer($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $customer = $this->getCustomer();
+            if (!$customer) {
+                $this->addError($attribute, Yii::t('app', 'invalid_customer'));
+            }
+        }
+    }
+
+    protected function getCustomer()
+    {
+        if ($this->_customer === null) {
+            $this->_customer = Customer::findOne($this->id);
+        }
+
+        return $this->_customer;
+    }
+
+    public function loadData($id)
+    {
+        $this->id = $id;
+        $customer = $this->getCustomer();
+        $this->name = $customer->name;
+        $this->username = $customer->username;
+        $this->email = $customer->email;
+        $this->phone = $customer->phone;
+        $this->address = $customer->address;
+        $this->birthday = $customer->birthday;
+        $this->social_line = $customer->social_line;
+        $this->social_zalo = $customer->social_zalo;
+        $this->social_facebook = $customer->social_facebook;
+        $this->status = $customer->status;
     }
 }

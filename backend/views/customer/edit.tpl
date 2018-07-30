@@ -22,7 +22,10 @@
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
-    {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='signup-form'}
+    {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='edit-customer'}
+      {$form->field($model, 'id', [
+        'template' => '{input}'
+      ])->hiddenInput()}
       <div class="portlet">
         <div class="portlet-title">
           <div class="caption">{Yii::t('app', 'manage_customer')}</div>
@@ -51,11 +54,11 @@
                   {$form->field($model, 'username', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->textInput(['disabled' => true])}
                   {$form->field($model, 'email', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->textInput(['disabled' => true])}
                   {$form->field($model, 'phone', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -80,10 +83,6 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'password', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->passwordInput()}
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
