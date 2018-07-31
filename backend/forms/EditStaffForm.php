@@ -6,10 +6,11 @@ use yii\base\Model;
 use backend\models\Staff;
 
 /**
- * CreateStaffForm
+ * EditStaffForm
  */
-class CreateStaffForm extends Model
+class EditStaffForm extends Model
 {
+    public $id;
     public $name;
     public $avatar;
     public $email;
@@ -22,6 +23,8 @@ class CreateStaffForm extends Model
     public $start_date;
     public $end_date;
 
+    protected $_staff;
+
 
     /**
      * @inheritdoc
@@ -29,16 +32,18 @@ class CreateStaffForm extends Model
     public function rules()
     {
         return [
+            ['id', 'trim'],
+            ['id', 'required'],
+            ['id', 'validateStaff'],
+
             [['name', 'avatar', 'email', 'phone', 'address', 'birthday', 'gender', 'description', 'department', 'start_date', 'end_date'], 'trim'],
             [['name', 'email', 'phone'], 'required'],
 
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\backend\models\Staff', 'message' => Yii::t('app', 'email_exist')],
+            // ['email', 'unique', 'targetClass' => '\backend\models\Staff', 'message' => Yii::t('app', 'email_exist'), 'filter' => "id <> '$this->id'"],
 
             ['gender', 'in', 'range' => array_keys(Staff::getStaffGenders())],
-
-            
         ];
     }
 
@@ -64,13 +69,13 @@ class CreateStaffForm extends Model
      *
      * @return Staff|null the saved model or null if saving fails
      */
-    public function create()
+    public function save()
     {
         if (!$this->validate()) {
             return null;
         }
         
-        $user = new Staff();
+        $user = $this->getStaff();
         $user->name = $this->name;
         $user->avatar = $this->avatar;
         $user->email = $this->email;
@@ -88,5 +93,42 @@ class CreateStaffForm extends Model
     public function getStaffGenders()
     {
         return Staff::getStaffGenders();
+    }
+
+    public function validateStaff($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $staff = $this->getStaff();
+            if (!$staff) {
+                $this->addError($attribute, Yii::t('app', 'invalid_staff'));
+            }
+        }
+    }
+
+    protected function getStaff()
+    {
+        if ($this->_staff === null) {
+            $this->_staff = Staff::findOne($this->id);
+        }
+
+        return $this->_staff;
+    }
+
+    public function loadData($id)
+    {
+        $this->id = $id;
+        $staff = $this->getStaff();
+
+        $this->name = $staff->name;
+        $this->avatar = $staff->avatar;
+        $this->email = $staff->email;
+        $this->phone = $staff->phone;
+        $this->address = $staff->address;
+        $this->birthday = $staff->birthday;
+        $this->gender = $staff->gender;
+        $this->description = $staff->description;
+        $this->department = $staff->department;
+        $this->start_date = $staff->start_date;
+        $this->end_date = $staff->end_date;
     }
 }

@@ -96,4 +96,15 @@ return [
     'data' => 'Data',
     'create_user' => 'Create user',
     'name' => 'Name',
+    'staffs' => 'Staffs',
+    'staff' => 'Staff',
+    'manage_staffs' => 'Manage staffs',
+    'edit_staff' => 'Edit staff',
+    'create_staff' => 'Create staff',
+    'address' => 'Address',
+    'gender' => 'Gender',
+    'birthday' => 'Birthday',
+    'department' => 'Department',
+    'start_date' => 'Start date',
+    'end_date' => 'End date'
 ];

@@ -76,9 +76,11 @@ class AppAsset extends AssetBundle
 
         //BEGIN THEME GLOBAL SCRIPTS
         'vendor/assets/global/scripts/app.min.js',
-
+        
         //BEGIN PAGE LEVEL SCRIPTS
         'vendor/assets/pages/scripts/dashboard.min.js',
+        // 'vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+        // 'vendor/assets/pages/scripts/components-date-time-pickers.min.js',
 
         //BEGIN THEME LAYOUT SCRIPTS
         'vendor/assets/layouts/layout/scripts/layout.min.js',

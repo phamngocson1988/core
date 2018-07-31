@@ -24,7 +24,8 @@
         "2amigos/yii2-tinymce-widget" : "~1.1",
         "cloudinary/cloudinary_php": "dev-master",
         "webzop/yii2-notifications": "*",
-        "yii2mod/yii2-cart": "*"
+        "yii2mod/yii2-cart": "*",
+        "yiisoft/yii2-jui": "~2.0.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

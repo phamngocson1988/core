@@ -73,6 +73,8 @@ class StaffController extends Controller
         } else {
             $model->loadData($id);
         }
+        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
         return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['staff/index']))
@@ -92,7 +94,8 @@ class StaffController extends Controller
                 Yii::$app->session->setFlash('error', $model->getFirstErrors());
             }
         }
-
+        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
         return $this->render('create.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['staff/index']))

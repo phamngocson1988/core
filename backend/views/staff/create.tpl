@@ -67,7 +67,7 @@
                   {$form->field($model, 'birthday', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}
                   {$form->field($model, 'department', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -79,12 +79,11 @@
                   {$form->field($model, 'start_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}
                   {$form->field($model, 'end_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  
+                  ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}
                 </div>
               </div>
             </div>

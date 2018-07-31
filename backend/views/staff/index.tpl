@@ -63,7 +63,7 @@
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 25%;"> {Yii::t('app', 'name')} </th>
               <th style="width: 25%;"> {Yii::t('app', 'email')} </th>
-              <th style="width: 20%;"> {Yii::t('app', 'phone')} </th>
+              <th style="width: 20%;"> {Yii::t('app', 'contact_phone')} </th>
               <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -76,7 +76,7 @@
               <td>{$model->email}</td>
               <td>{$model->phone}</td>
               <td>
-                <a href='{url route="staff/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="Edit staff"><i class="fa fa-pencil"></i></a>
+                <a href='{url route="staff/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', 'edit_staff')}"><i class="fa fa-pencil"></i></a>
               </td>
             </tr>
             {/foreach}

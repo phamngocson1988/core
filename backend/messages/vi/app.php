@@ -95,4 +95,15 @@ return [
     'data' => 'Dữ liệu',
     'create_user' => 'Tạo thành viên ban quản trị',
     'name' => 'Tên',
+    'staffs' => 'Nhân viên',
+    'staff' => 'Nhân viên',
+    'manage_staffs' => 'Quản lý nhân viên',
+    'edit_staff' => 'Chỉnh sửa nhân viên',
+    'create_staff' => 'Tạo nhân viên',
+    'address' => 'Địa chỉ',
+    'gender' => 'Giới tính',
+    'birthday' => 'Ngày sinh',
+    'department' => 'Phòng ban',
+    'start_date' => 'Ngày bắt đầu',
+    'end_date' => 'Ngày kết thúc'
 ];

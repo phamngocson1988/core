@@ -28,7 +28,7 @@
       {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user"></i>
+        <i class="icon-lock"></i>
         <span class="title">{Yii::t('app', 'user')}</span>
         <span class="arrow"></span>
         </a>
@@ -62,7 +62,7 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user"></i>
+        <i class="icon-user-following"></i>
         <span class="title">{Yii::t('app', 'staffs')}</span>
         <span class="arrow"></span>
         </a>
