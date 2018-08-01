@@ -4,7 +4,9 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Staff;
+use backend\models\Department;
 use common\components\helpers\FormatConverter;
+use yii\helpers\ArrayHelper;
 
 /**
  * CreateStaffForm
@@ -19,7 +21,7 @@ class CreateStaffForm extends Model
     public $birthday;
     public $gender;
     public $description;
-    public $department;
+    public $department_id;
     public $start_date;
     public $end_date;
 
@@ -30,7 +32,7 @@ class CreateStaffForm extends Model
     public function rules()
     {
         return [
-            [['name', 'avatar', 'email', 'phone', 'address', 'birthday', 'gender', 'description', 'department', 'start_date', 'end_date'], 'trim'],
+            [['name', 'avatar', 'email', 'phone', 'address', 'birthday', 'gender', 'description', 'department_id', 'start_date', 'end_date'], 'trim'],
             [['name', 'email', 'phone'], 'required'],
 
             ['email', 'email'],
@@ -54,7 +56,7 @@ class CreateStaffForm extends Model
             'birthday' => Yii::t('app', 'birthday'),
             'gender' => Yii::t('app', 'gender'),
             'description' => Yii::t('app', 'description'),
-            'department' => Yii::t('app', 'department'),
+            'department_id' => Yii::t('app', 'department'),
             'start_date' => Yii::t('app', 'start_date'),
             'end_date' => Yii::t('app', 'end_date'),
         ];
@@ -80,7 +82,7 @@ class CreateStaffForm extends Model
         $user->birthday = FormatConverter::convertToTimeStamp($this->birthday);
         $user->gender = $this->gender;
         $user->description = $this->description;
-        $user->department = $this->department;
+        $user->department_id = $this->department_id;
         $user->start_date = FormatConverter::convertToTimeStamp($this->start_date);
         $user->end_date = FormatConverter::convertToTimeStamp($this->end_date);
         return $user->save() ? $user : null;
@@ -89,5 +91,12 @@ class CreateStaffForm extends Model
     public function getStaffGenders()
     {
         return Staff::getStaffGenders();
+    }
+
+    public function getDepartments()
+    {
+        $departments = Department::find()->all();
+        $departments = ArrayHelper::map($departments, 'id', 'name');
+        return $departments;
     }
 }

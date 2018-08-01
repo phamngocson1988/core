@@ -110,4 +110,10 @@ return [
     'social_line' => 'Tài khoản Line',
     'social_zalo' => 'Tài khoản Zalo',
     'social_facebook' => 'Tài khoản Facebook',
+    'type_branch' => 'Công ty/Chi nhánh',
+    'type_department' => 'Phòng ban',
+    'type' => 'Loại',
+    'manage_departments' => 'Quản lý chi nhánh',
+    'manage_department' => 'Quản lý chi nhánh',
+    'department_parent' => 'Phòng trực thuộc',
 ];

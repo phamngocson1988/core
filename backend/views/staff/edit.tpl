@@ -71,10 +71,10 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}
-                  {$form->field($model, 'department', [
+                  {$form->field($model, 'department_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->dropDownList($model->getDepartments(), ['prompt' => Yii::t('app', 'choose')])}      
                   {$form->field($model, 'description', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

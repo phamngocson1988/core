@@ -111,5 +111,10 @@ return [
     'social_line' => 'Line account',
     'social_zalo' => 'Zalo account',
     'social_facebook' => 'Facebook account',
-
+    'type_branch' => 'Company/Branch',
+    'type_department' => 'Department Type',
+    'type' => 'Type',
+    'manage_departments' => 'Manage departments',
+    'manage_department' => 'Manage department',
+    'department_parent' => 'Parent',
 ];

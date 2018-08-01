@@ -4,7 +4,9 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Staff;
+use backend\models\Department;
 use common\components\helpers\FormatConverter;
+use yii\helpers\ArrayHelper;
 
 /**
  * EditStaffForm
@@ -20,7 +22,7 @@ class EditStaffForm extends Model
     public $birthday;
     public $gender;
     public $description;
-    public $department;
+    public $department_id;
     public $start_date;
     public $end_date;
 
@@ -37,7 +39,7 @@ class EditStaffForm extends Model
             ['id', 'required'],
             ['id', 'validateStaff'],
 
-            [['name', 'avatar', 'email', 'phone', 'address', 'birthday', 'gender', 'description', 'department', 'start_date', 'end_date'], 'trim'],
+            [['name', 'avatar', 'email', 'phone', 'address', 'birthday', 'gender', 'description', 'department_id', 'start_date', 'end_date'], 'trim'],
             [['name', 'email', 'phone'], 'required'],
 
             ['email', 'email'],
@@ -59,7 +61,7 @@ class EditStaffForm extends Model
             'birthday' => Yii::t('app', 'birthday'),
             'gender' => Yii::t('app', 'gender'),
             'description' => Yii::t('app', 'description'),
-            'department' => Yii::t('app', 'department'),
+            'department_id' => Yii::t('app', 'department'),
             'start_date' => Yii::t('app', 'start_date'),
             'end_date' => Yii::t('app', 'end_date'),
         ];
@@ -85,7 +87,7 @@ class EditStaffForm extends Model
         $user->birthday = FormatConverter::convertToTimeStamp($this->birthday);
         $user->gender = $this->gender;
         $user->description = $this->description;
-        $user->department = $this->department;
+        $user->department_id = $this->department_id;
         $user->start_date = FormatConverter::convertToTimeStamp($this->start_date);
         $user->end_date = FormatConverter::convertToTimeStamp($this->end_date);
         return $user->save() ? $user : null;
@@ -128,8 +130,15 @@ class EditStaffForm extends Model
         $this->birthday = FormatConverter::convertToDate($staff->birthday);
         $this->gender = $staff->gender;
         $this->description = $staff->description;
-        $this->department = $staff->department;
+        $this->department_id = $staff->department_id;
         $this->start_date = FormatConverter::convertToDate($staff->start_date);
         $this->end_date = FormatConverter::convertToDate($staff->end_date);
+    }
+
+    public function getDepartments()
+    {
+        $departments = Department::find()->all();
+        $departments = ArrayHelper::map($departments, 'id', 'name');
+        return $departments;
     }
 }
