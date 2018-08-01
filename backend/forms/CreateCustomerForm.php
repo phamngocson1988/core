@@ -1,8 +1,10 @@
 <?php
 namespace backend\forms;
 
+use Yii;
 use yii\base\Model;
 use backend\models\Customer;
+use common\components\helpers\FormatConverter;
 
 /**
  * CreateCustomerForm
@@ -49,6 +51,23 @@ class CreateCustomerForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'name' => Yii::t('app', 'name'),
+            'username' => Yii::t('app', 'username'),
+            'email' => Yii::t('app', 'email'),
+            'phone' => Yii::t('app', 'contact_phone'),
+            'address' => Yii::t('app', 'address'),
+            'birthday' => Yii::t('app', 'birthday'),
+            'social_line' => Yii::t('app', 'social_line'),
+            'social_zalo' => Yii::t('app', 'social_zalo'),
+            'social_facebook' => Yii::t('app', 'social_facebook'),
+            'password' => Yii::t('app', 'password'),
+            'status' => Yii::t('app', 'status'),
+        ];
+    }
+
     /**
      * Signs user up.
      *
@@ -66,7 +85,7 @@ class CreateCustomerForm extends Model
         $user->email = $this->email;
         $user->phone = $this->phone;
         $user->address = $this->address;
-        $user->birthday = $this->birthday;
+        $user->birthday = FormatConverter::convertToTimeStamp($this->birthday);
         $user->social_line = $this->social_line;
         $user->social_zalo = $this->social_zalo;
         $user->social_facebook = $this->social_facebook;

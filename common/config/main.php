@@ -5,6 +5,7 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'name' => 'Core Functions',
+    'timeZone' => 'Asia/Bangkok',
     'modules' => [
         'shop' => [
             'class' => 'common\modules\shop\Module',

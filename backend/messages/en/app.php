@@ -106,5 +106,10 @@ return [
     'birthday' => 'Birthday',
     'department' => 'Department',
     'start_date' => 'Start date',
-    'end_date' => 'End date'
+    'end_date' => 'End date',
+    'manage_customer' => 'Manage customer',
+    'social_line' => 'Line account',
+    'social_zalo' => 'Zalo account',
+    'social_facebook' => 'Facebook account',
+
 ];

@@ -4,6 +4,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Staff;
+use common\components\helpers\FormatConverter;
 
 /**
  * CreateStaffForm
@@ -76,12 +77,12 @@ class CreateStaffForm extends Model
         $user->email = $this->email;
         $user->phone = $this->phone;
         $user->address = $this->address;
-        $user->birthday = $this->birthday;
+        $user->birthday = FormatConverter::convertToTimeStamp($this->birthday);
         $user->gender = $this->gender;
         $user->description = $this->description;
         $user->department = $this->department;
-        $user->start_date = $this->start_date;
-        $user->end_date = $this->end_date;
+        $user->start_date = FormatConverter::convertToTimeStamp($this->start_date);
+        $user->end_date = FormatConverter::convertToTimeStamp($this->end_date);
         return $user->save() ? $user : null;
     }
 

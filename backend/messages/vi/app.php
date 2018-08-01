@@ -105,5 +105,9 @@ return [
     'birthday' => 'Ngày sinh',
     'department' => 'Phòng ban',
     'start_date' => 'Ngày bắt đầu',
-    'end_date' => 'Ngày kết thúc'
+    'end_date' => 'Ngày kết thúc',
+    'manage_customer' => 'Quản lý khách hàng',
+    'social_line' => 'Tài khoản Line',
+    'social_zalo' => 'Tài khoản Zalo',
+    'social_facebook' => 'Tài khoản Facebook',
 ];

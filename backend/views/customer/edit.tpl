@@ -70,7 +70,7 @@
                   {$form->field($model, 'birthday', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}
                   {$form->field($model, 'social_line', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
