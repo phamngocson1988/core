@@ -13,7 +13,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
 
     public $css = [
-        'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
+        'https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
         'vendor/assets/global/plugins/font-awesome/css/font-awesome.min.css',
         'vendor/assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
         'vendor/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',

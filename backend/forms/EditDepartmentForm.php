@@ -32,6 +32,7 @@ class EditDepartmentForm extends Model
 
             [['name', 'branch', 'phone', 'parent_id'], 'trim'],
             ['name', 'required'],
+            ['branch', 'required'],
         ];
     }
 

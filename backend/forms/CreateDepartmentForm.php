@@ -22,6 +22,7 @@ class CreateDepartmentForm extends Model
         return [
             [['name', 'branch', 'phone', 'parent_id'], 'trim'],
             ['name', 'required'],
+            ['branch', 'required'],
             ['parent_id', 'default', 'value' => '0',],
         ];
     }
