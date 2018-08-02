@@ -42,8 +42,15 @@ class StaffController extends Controller
         $this->view->params['main_menu_active'] = 'staff.index';
         $request = Yii::$app->request;
         $q = $request->get('q');
+        $branch = $request->get('branch');
+        $department = $request->get('department');
         $gender = $request->get('gender', '');
-        $form = new FetchStaffForm(['q' => $q, 'gender' => $gender]);
+        $form = new FetchStaffForm([
+            'q' => $q, 
+            'gender' => $gender,
+            'branch' => $branch,
+            'department' => $department,
+        ]);
 
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

@@ -4,7 +4,9 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Staff;
+use backend\models\Staff;
+use backend\models\Department;
+use yii\helpers\ArrayHelper;
 
 /**
  * FetchStaffForm
@@ -13,12 +15,14 @@ class FetchStaffForm extends Model
 {
     public $q;
     public $gender;
+    public $branch;
+    public $department;
     private $_command;
 
     public function rules()
     {
         return [
-            [['q', 'status'], 'trim'],
+            [['q', 'gender', 'branch', 'department'], 'trim'],
         ];
     }
 
@@ -30,17 +34,24 @@ class FetchStaffForm extends Model
 
     protected function createCommand()
     {
-        $command = Staff::find();
+        $command = Staff::find()->select('staff.*');
+        $command->with('department');
 
         if ($this->q) {
             $command->orWhere(['like', 'name', $this->q]);
             $command->orWhere(['like', 'email', $this->q]);
             $command->orWhere(['like', 'phone', $this->q]);
             $command->orWhere(['like', 'address', $this->q]);
-            $command->orWhere(['like', 'department', $this->q]);
         }
         if ((string)$this->gender !== "") {
             $command->andWhere(['gender' => $this->gender]);
+        }
+        if ((string)$this->department !== "") {
+            $command->andWhere(['department_id' => $this->department]);
+        }
+        if ((string)$this->branch !== "") {
+            $command->joinWith('department')
+                    ->andWhere(['department.branch' => $this->branch]);
         }
         $this->_command = $command;
     }
@@ -56,5 +67,16 @@ class FetchStaffForm extends Model
     public function getStaffGenders()
     {
         return Staff::getStaffGenders();
+    }
+
+    public function getDepartments()
+    {
+        $departments = Department::find()->all();
+        return ArrayHelper::map($departments, 'id', 'name');
+    }
+
+    public function getBranches()
+    {
+        return Department::getBranches();
     }
 }

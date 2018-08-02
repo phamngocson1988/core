@@ -13,14 +13,14 @@ use yii\helpers\ArrayHelper;
 class CreateDepartmentForm extends Model
 {
     public $name;
-    public $address;
+    public $branch;
     public $phone;
     public $parent_id;
 
     public function rules()
     {
         return [
-            [['name', 'address', 'phone', 'parent_id'], 'trim'],
+            [['name', 'branch', 'phone', 'parent_id'], 'trim'],
             ['name', 'required'],
             ['parent_id', 'default', 'value' => '0',],
         ];
@@ -31,7 +31,7 @@ class CreateDepartmentForm extends Model
         return [
             'name' => Yii::t('app', 'name'),
             'phone' => Yii::t('app', 'contact_phone'),
-            'address' => Yii::t('app', 'address'),
+            'branch' => Yii::t('app', 'branch'),
             'parent_id' => Yii::t('app', 'department_parent'),
         ];
     }
@@ -41,7 +41,7 @@ class CreateDepartmentForm extends Model
         if ($this->validate()) {
             $department = new Department();
             $department->name = $this->name;
-            $department->address = $this->address;
+            $department->branch = $this->branch;
             $department->phone = $this->phone;
             $department->parent_id = (int)$this->parent_id;
             return $department->save();
@@ -51,8 +51,13 @@ class CreateDepartmentForm extends Model
 
     public function fetchParents()
     {
-        $departments = Department::find()->where(['parent_id' => 0])->all();
+        $departments = Department::find()->all();
         $departments = ArrayHelper::map($departments, 'id', 'name');
         return $departments;
+    }
+
+    public function fetchBranches()
+    {
+        return Department::getBranches();
     }
 }

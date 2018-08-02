@@ -3,18 +3,21 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * Department model
  *
  * @property integer $id
  * @property string $name
- * @property string $address
+ * @property string $branch
  * @property string $phone
  * @property integer $parent_id
  */
 class Department extends ActiveRecord
 {
+    const BRANCH_HOCHIMINH = 'hochiminh';
+    const BRANCH_PHANRANG = 'phanrang';
     /**
      * @inheritdoc
      */
@@ -36,8 +39,17 @@ class Department extends ActiveRecord
         }
     }
 
-    public function getDepartmentType()
+    public static function getBranches()
     {
-    	return (!$this->parent_id) ? Yii::t('app', 'type_branch') : Yii::t('app', 'type_department');
+        return [
+            self::BRANCH_HOCHIMINH => 'Hồ Chí Minh',
+            self::BRANCH_PHANRANG => 'Phan Rang',            
+        ];
+    }
+
+    public function getBranchLabel()
+    {
+        $labels = self::getBranches();
+        return ArrayHelper::getValue($labels, $this->branch);
     }
 }

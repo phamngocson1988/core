@@ -4,6 +4,7 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use common\models\Department;
 
 /**
  * Customer model
@@ -17,7 +18,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $birthday
  * @property string $gender
  * @property string $description
- * @property string $department
+ * @property integer $department_id
  * @property integer $start_date
  * @property integer $end_date
  * @property integer $created_at
@@ -49,5 +50,20 @@ class Staff extends ActiveRecord
     {
         $labels = self::getStaffGenders();
         return ArrayHelper::getValue($labels, $this->gender);
+    }
+
+    public function getDepartment()
+    {
+        return $this->hasOne(Department::className(), ['id' => 'department_id']);
+    }
+
+    public function getDepartmentName()
+    {
+        return ($this->department) ? $this->department->name : '';
+    }
+
+    public function getBranchName()
+    {
+        return ($this->department) ? $this->department->getBranchLabel() : '';
     }
 }

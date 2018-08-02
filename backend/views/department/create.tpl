@@ -52,10 +52,10 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'address', [
+                  {$form->field($model, 'branch', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->dropDownList($model->fetchBranches(), ['prompt' => Yii::t('app', 'choose')])}
                   {$form->field($model, 'parent_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

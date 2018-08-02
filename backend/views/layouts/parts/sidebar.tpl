@@ -72,6 +72,11 @@
             <span class="title">{Yii::t('app', 'staffs')}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/department/index'}" class="nav-link " code='department.index'>
+            <span class="title">{Yii::t('app', 'department')}</span>
+            </a>
+          </li>
         </ul>
       </li>
       <li class="nav-item  ">

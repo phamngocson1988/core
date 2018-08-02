@@ -34,7 +34,7 @@
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <form method="GET">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
               <label>{Yii::t('app', 'gender')}: </label>
               <select class="form-control" name="gender">
                 <option value="">{Yii::t('app', 'all')}</option>
@@ -43,11 +43,29 @@
                 {/foreach}
               </select>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
+              <label>{Yii::t('app', 'branch')}: </label>
+              <select class="form-control" name="branch">
+                <option value="">{Yii::t('app', 'all')}</option>
+                {foreach $form->getBranches() as $branchKey => $branchLabel}
+                <option value="{$branchKey}" {if (string)$branchKey === $form->branch} selected {/if}>{$branchLabel}</option>
+                {/foreach}
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label>{Yii::t('app', 'department')}: </label>
+              <select class="form-control" name="department">
+                <option value="">{Yii::t('app', 'all')}</option>
+                {foreach $form->getDepartments() as $departmentKey => $departmentLabel}
+                <option value="{$departmentKey}" {if (string)$departmentKey === $form->department} selected {/if}>{$departmentLabel}</option>
+                {/foreach}
+              </select>
+            </div>
+            <div class="form-group col-md-3">
               <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
                 placeholder="Keyword" name="q" value="{$form->q}">
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
                 25px;">
@@ -61,10 +79,12 @@
           <thead>
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 25%;"> {Yii::t('app', 'name')} </th>
-              <th style="width: 25%;"> {Yii::t('app', 'email')} </th>
+              <th style="width: 20%;"> {Yii::t('app', 'name')} </th>
+              <th style="width: 20%;"> {Yii::t('app', 'email')} </th>
               <th style="width: 20%;"> {Yii::t('app', 'contact_phone')} </th>
-              <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'branch')} </th>
+              <th style="width: 20%;"> {Yii::t('app', 'department')} </th>
+              <th style="width: 5%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
           <tbody>
@@ -75,6 +95,8 @@
               <td>{$model->name}</td>
               <td>{$model->email}</td>
               <td>{$model->phone}</td>
+              <td>{$model->getBranchName()}</td>
+              <td>{$model->getDepartmentName()}</td>
               <td>
                 <a href='{url route="staff/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', 'edit_staff')}"><i class="fa fa-pencil"></i></a>
               </td>
@@ -82,7 +104,7 @@
             {/foreach}
             {else}
             <tr>
-              <td colspan="5">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="7">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>

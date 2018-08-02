@@ -38,10 +38,9 @@
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 25%;"> {Yii::t('app', 'name')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'address')} </th>
+              <th style="width: 15%;"> {Yii::t('app', 'branch')} </th>
               <th style="width: 15%;"> {Yii::t('app', 'contact_phone')} </th>
               <th style="width: 15%;"> {Yii::t('app', 'department_parent')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'type')} </th>
               <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -51,10 +50,9 @@
             <tr>
               <td>{$key + $pages->offset + 1}</td>
               <td>{$model->name}</td>
-              <td>{$model->address}</td>
+              <td>{$model->getBranchLabel()}</td>
               <td>{$model->phone}</td>
               <td>{$model->getParentName()}</td>
-              <td>{$model->getDepartmentType()}</td>
               <td>
                 <a href='{url route="department/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', 'edit_department')}"><i class="fa fa-pencil"></i></a>                
               </td>
@@ -62,7 +60,7 @@
             {/foreach}
             {else}
             <tr>
-              <td colspan="7">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="6">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>

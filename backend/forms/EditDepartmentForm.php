@@ -13,7 +13,7 @@ class EditDepartmentForm extends Model
 {
     public $id;
     public $name;
-    public $address;
+    public $branch;
     public $phone;
     public $parent_id;
 
@@ -30,7 +30,7 @@ class EditDepartmentForm extends Model
             ['id', 'required'],
             ['id', 'validateDepartment'],
 
-            [['name', 'address', 'phone', 'parent_id'], 'trim'],
+            [['name', 'branch', 'phone', 'parent_id'], 'trim'],
             ['name', 'required'],
         ];
     }
@@ -40,7 +40,7 @@ class EditDepartmentForm extends Model
         return [
             'name' => Yii::t('app', 'name'),
             'phone' => Yii::t('app', 'contact_phone'),
-            'address' => Yii::t('app', 'address'),
+            'branch' => Yii::t('app', 'branch'),
             'parent_id' => Yii::t('app', 'department_parent'),
         ];
     }
@@ -58,7 +58,7 @@ class EditDepartmentForm extends Model
         
         $department = $this->getDepartment();
         $department->name = $this->name;
-        $department->address = $this->address;
+        $department->branch = $this->branch;
         $department->phone = $this->phone;
         $department->parent_id = (int)$this->parent_id;
         return $department->save() ? $department : null;
@@ -88,15 +88,20 @@ class EditDepartmentForm extends Model
         $this->id = $id;
         $department = $this->getDepartment();
         $this->name = $department->name;
-        $this->address = $department->address;
+        $this->branch = $department->branch;
         $this->phone = $department->phone;
         $this->parent_id = (int)$department->parent_id;
     }
 
     public function fetchParents()
     {
-        $departments = Department::find()->where(['parent_id' => 0])->all();
+        $departments = Department::find()->all();
         $departments = ArrayHelper::map($departments, 'id', 'name');
         return $departments;
+    }
+
+    public function fetchBranches()
+    {
+        return Department::getBranches();
     }
 }
