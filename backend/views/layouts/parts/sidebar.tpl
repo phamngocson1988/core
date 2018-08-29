@@ -79,6 +79,22 @@
           </li>
         </ul>
       </li>
+      {if Yii::$app->user->can('admin')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-clock"></i>
+        <span class="title">{Yii::t('app', 'tasks')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/task/index'}" class="nav-link " code='task.index'>
+            <span class="title">{Yii::t('app', 'tasks')}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {/if}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
