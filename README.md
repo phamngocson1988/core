@@ -62,22 +62,12 @@ Rename common\config\sample-main-local.php to main-local.php, common\config\samp
 
 composer install
 
-composer update
+php yii migrate --migrationPath=@yii/rbac/migrations
 
-composer require --prefer-dist yiisoft/yii2-smarty "*"
+php yii migrate
 
-composer require --prefer-dist yii2mod/yii2-settings "*"
+php yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
 
-composer require --prefer-dist yiisoft/yii2-imagine "*"
+php yii migrate/up --migrationPath=vendor/webzop/yii2-notifications/migrations
 
-composer require --prefer-dist 2amigos/yii2-tinymce-widget "~1.1"
-
-yii migrate
-
-yii migrate --migrationPath=@yii/rbac/migrations
-
-yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
-
-yii migrate/up --migrationPath=vendor/webzop/yii2-notifications/migrations
-
-yii migrate --migrationPath=@vendor/yii2mod/yii2-cart/migrations
+php yii migrate --migrationPath=@vendor/yii2mod/yii2-cart/migrations

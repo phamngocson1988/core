@@ -52,7 +52,14 @@ class m130524_201442_init extends Migration
             'email' => 'phamngocson1988@gmail.com',
             'password' => '123456'
         ]);
-        $form->signup();
+        $user = $form->signup();
+        
+        $auth = Yii::$app->authManager;
+        $auth->removeAll();
+        $admin = $auth->createRole('admin');
+        $admin->description = 'Admin';
+        $auth->add($admin);
+        $auth->assign($admin, $user->id);
 
         /* Post table */
         $this->createTable('{{%post}}', [

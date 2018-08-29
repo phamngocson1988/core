@@ -1,9 +1,9 @@
 <?php
 $params = array_merge(
-    require __DIR__ . '/../../common/config/params.php',
-    require __DIR__ . '/../../common/config/params-local.php',
-    require __DIR__ . '/params.php',
-    require __DIR__ . '/params-local.php'
+    require(__DIR__ . '/../../common/config/params.php'),
+    require(__DIR__ . '/../../common/config/params-local.php'),
+    require(__DIR__ . '/params.php'),
+    require(__DIR__ . '/params-local.php')
 );
 
 return [
@@ -17,11 +17,11 @@ return [
             'class' => 'backend\modules\shop\Module',
         ],
     ],
-    'language' => 'vi',
-    'sourceLanguage' => 'en-US',
+	'language' => 'vi',
+	'sourceLanguage' => 'en-US',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-backend',
+            'csrfParam' => '_csrf-backend',            
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -87,7 +87,7 @@ return [
         'image' => [
             'class' => 'common\components\uploadfiles\standard\ImageHandler',
             'image_path' => '@common/uploads/images',
-            'image_url' => 'http://image.chuchu.com',
+            'image_url' => 'https://image.global-prepaidcard.com',
             // 'file_path' => '@common/uploads/files',
             // 'file_url' => 'http://file.chuchu.com',
         ],
