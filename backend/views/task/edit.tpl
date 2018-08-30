@@ -1,6 +1,5 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
-{use class='common\widgets\TinyMce' type='block'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -9,17 +8,17 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='post/index'}">{Yii::t('app', 'manage_posts')}</a>
+      <a href="{url route='task/index'}">{Yii::t('app', 'manage_tasks')}</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'edit_post')}</span>
+      <span>{Yii::t('app', 'edit_task')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Edit Post</h1>
+<h1 class="page-title">{Yii::t('app', 'edit_task')}</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -43,95 +42,48 @@
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> {Yii::t('app', 'main_content')}</a>
               </li>
-              <li>
-                <a href="#tab_category" data-toggle="tab"> {Yii::t('app', 'categories')} </a>
-              </li>
-              <li>
-                <a href="#tab_meta" data-toggle="tab"> {Yii::t('app', 'meta')} </a>
-              </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
+                  {$assignee = $model->getAssignee()}
+                  {$listAssignee = ($assignee) ? [$assignee->id => $assignee->username|cat:" - "|cat:$assignee->email] : []}
                   {$form->field($model, 'title', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'title', 'class' => 'form-control'],
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'slug', [
+                  {$form->field($model, 'description', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->textArea()}
+                  {$form->field($model, 'start_date', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd'],
+                    'template' => '{label}<div class="col-md-5"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
                   ])->textInput()}
-                  {$form->field($model, 'excerpt', [
+                  {$form->field($model, 'due_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->textarea()}
-                  {$form->field($model, 'content', [
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd'],
+                    'template' => '{label}<div class="col-md-5"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
+                  ])->textInput()}
+                  {$form->field($model, 'assignee', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(TinyMce::className(), [
-                    'options' => ['rows' => 10]
-                  ])}
+                    'inputOptions' => ['class' => 'form-control find-user', 'data-allow-clear' => 'true', 'data-placeholder' => Yii::t('app', 'select')],
+                    'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+                  ])->dropDownList($listAssignee)->label(Yii::t('app', 'assignee'))}
+                  {$form->field($model, 'percent', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+                  ])->textInput()}
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->radioList($model->getStatusList('%s<span></span>'), [
-                    'class' => 'md-radio-list', 
-                    'encode' => false , 
-                    'itemOptions' => ['labelOptions' => ['class'=>'mt-radio', 'style' => 'display: block']]
-                  ])->label('Status')}
-                  <div class="form-group">
-                    <label class="control-label col-md-2">{Yii::t('app', 'image')}</label>
-                    <div class="col-md-10">
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                <img src="{$model->getImageUrl('150x150')}" id="image" />
-                            </div>
-                            <div>
-                              <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])}</span>
-                              <span class="btn default btn-file">
-                                <span class="fileinput-new" id="upload-image"> {Yii::t('app', 'choose_image')} </span>
-                                {$form->field($model, 'image_id', [
-                                  'inputOptions' => ['id' => 'image_id'], 
-                                  'template' => '{input}', 
-                                  'options' => ['tag' => null]
-                                ])->hiddenInput()->label(false)}
-                              </span>
-                              <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="tab_category">
-                <div class="form-body">
-                  {$form->field($model, 'categories', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->checkboxList($model->getCategories('%s<span></span>'), [
-                    'class' => 'md-checkbox-list', 
-                    'encode' => false , 
-                    'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
-                  ])->label('Categories')}
-                </div>
-              </div>
-              <div class="tab-pane" id="tab_meta">
-                <div class="form-body">
-                  {$form->field($model, 'meta_title', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'meta_keyword', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'meta_description', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+                  ])->dropDownList($model->getStatusList())->label(Yii::t('app', 'status'))}
+
                 </div>
               </div>
             </div>
@@ -152,17 +104,18 @@ function removeMainImage() {
 
 {registerJs}
 {literal}
-// slug
-$('#title').slug();
-
-// image
-var manager = new ImageManager();
-$("#upload-image").selectImage(manager, {
-  callback: function(img) {
-    var thumb = img.src;
-    var id = img.id;
-    $("#image").attr('src', thumb).removeClass('hide');
-    $("#image_id").val(id);
+$('.find-user').select2({
+  ajax: {
+    delay: 500,
+    url: '{/literal}{$links.user_suggestion}{literal}',
+    type: "GET",
+    dataType: 'json',
+    processResults: function (data) {
+      // Tranforms the top-level key of the response object from 'items' to 'results'
+      return {
+        results: data.data.items
+      };
+    }
   }
 });
 {/literal}

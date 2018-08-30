@@ -32,7 +32,7 @@ class TaskController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionIndex()//app_todo_2.html
     {
         $this->view->params['main_menu_active'] = 'task.index';
         $request = Yii::$app->request;
@@ -80,7 +80,7 @@ class TaskController extends Controller
     {
         $this->view->params['main_menu_active'] = 'task.index';
         $request = Yii::$app->request;
-        $model = new CreateTaskForm(['type' => 'post']);
+        $model = new CreateTaskForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
@@ -88,9 +88,17 @@ class TaskController extends Controller
                 return $this->redirect($ref);
             }
         }
+        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $links = [
+            'user_suggestion' => Url::to(['user/suggestion'])
+        ];
         return $this->render('create.tpl', [
             'model' => $model,
-            'back' => $request->get('ref', Url::to(['task/index']))
+            'back' => $request->get('ref', Url::to(['task/index'])),
+            'links' => $links
         ]);
     }
 
@@ -98,22 +106,30 @@ class TaskController extends Controller
     {
         $this->view->params['main_menu_active'] = 'task.index';
         $request = Yii::$app->request;
-        $model = new EditTaskForm(['type' => 'post']);
+        $model = new EditTaskForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 $ref = $request->get('ref', Url::to(['task/index']));
                 return $this->redirect($ref);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getFirstErrors());
             }
         } else {
             $model->loadData($id);
         }
-
+        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $links = [
+            'user_suggestion' => Url::to(['user/suggestion'])
+        ];
         return $this->render('edit.tpl', [
             'model' => $model,
-            'back' => $request->get('ref', Url::to(['task/index']))
+            'back' => $request->get('ref', Url::to(['task/index'])),
+            'links' => $links
         ]);
-
     }
 
     public function actionDelete($id)

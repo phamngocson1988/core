@@ -74,7 +74,7 @@
               <th style="width: 10%;"> {Yii::t('app', 'title')} </th>
               <th style="width: 25%;"> {Yii::t('app', 'description')} </th>
               <th style="width: 15%;"> {Yii::t('app', 'due_date')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'creator')} </th>
+              <th style="width: 15%;"> {Yii::t('app', 'assignee')} </th>
               <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -87,10 +87,10 @@
                 <td style="vertical-align: middle;">{$pages->offset + 1 + $key}</td>
                 <td style="vertical-align: middle;">{$model->title}</td>
                 <td style="vertical-align: middle;">{$model->description}</td>
-                <td style="vertical-align: middle;">{$model->getDueDate(true)}</td>
-                <td style="vertical-align: middle;">{$model->getCreatorName()}</td>
+                <td style="vertical-align: middle;">{$model->getDueDate(true, 'Y-m-d')}</td>
+                <td style="vertical-align: middle;">{$model->getReceiverName()}</td>
                 <td style="vertical-align: middle;">
-                    
+                  <a href='{url route="task/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
                 </td>
               </tr>
               {/foreach}

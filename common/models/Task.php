@@ -13,13 +13,13 @@ use common\models\User;
  * @property string $title
  * @property string $description
  * @property integer $created_by
- * @property integer $created_at
- * @property integer $updated_at
- * @property integer $start_date
- * @property integer $due_date
+ * @property datetime $created_at
+ * @property datetime $updated_at
+ * @property datetime $start_date
+ * @property datetime $due_date
  * @property integer $assignee
  * @property integer $percent
- * @property string $status
+ * @property enum $status
  */
 class Task extends ActiveRecord
 {
@@ -39,9 +39,11 @@ class Task extends ActiveRecord
 
     public function rules()
     {
+        $statusList = self::getStatusList();
+        $statusKeys = array_keys($statusList);
         return [
             ['status', 'default', 'value' => self::STATUS_NEW],
-            ['status', 'in', 'range' => [self::STATUS_NEW, self::STATUS_INPROGRESS, self::STATUS_DONE, self::STATUS_INVALID]],
+            ['status', 'in', 'range' => $statusKeys],
         ];
     }
 
@@ -75,25 +77,16 @@ class Task extends ActiveRecord
 
     public function getCreatedAt($format = false, $default = 'F j, Y, g:i a')
     {
-        if ($format == true) {
-            return date($default, $this->created_at);
-        }
         return $this->created_at;
     }
 
     public function getStartDate($format = false, $default = 'F j, Y, g:i a')
     {
-        if ($format == true) {
-            return date($default, $this->start_date);
-        }
         return $this->start_date;
     }
 
     public function getDueDate($format = false, $default = 'F j, Y, g:i a')
     {
-        if ($format == true) {
-            return date($default, $this->due_date);
-        }
         return $this->due_date;
     }
 

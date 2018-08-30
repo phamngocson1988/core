@@ -39,14 +39,20 @@ class m180829_105657_task extends Migration
             'title' => $this->string(100)->notNull(),
             'descripition' => $this->text(),
             'created_by' => $this->integer()->notNull(),  
-            'created_at' => $this->integer()->notNull(),            
-            'updated_at' => $this->integer()->notNull(),            
-            'start_date' => $this->integer()->notNull(),            
-            'due_date' => $this->integer()->notNull(),            
-            'assignee' => $this->integer()->notNull(),            
-            'percent' => $this->integer()->notNull(),            
+            'created_at' => $this->dateTime()->notNull(),            
+            'updated_at' => $this->dateTime()->notNull(),            
+            'start_date' => $this->dateTime(),            
+            'due_date' => $this->dateTime(),            
+            'assignee' => $this->integer(),            
+            'percent' => $this->integer()->notNull()->defaultValue(0),            
             'status' => $this->string()->comment('Enum: new,inprogress,done,invalid')->defaultValue('new')->notNull(),
         ], $tableOptions);
+
+        if ($this->db->driverName === 'mysql') {
+            $alter = "ALTER TABLE {{%task}} MODIFY `status` ENUM('new', 'inprogress', 'done', 'invalid') NOT NULL DEFAULT 'new'";
+            $command = $this->db->createCommand($alter);
+            $command->execute();
+        }
     }
 
     public function down()
