@@ -99,4 +99,19 @@ class Task extends ActiveRecord
             self::STATUS_INVALID => 'Invalid',            
         ]; 
     }
+
+    public function getStatusLabel()
+    {
+        $list = self::getStatusList();
+        return ArrayHelper::getValue($list, $this->status);
+    }
+
+    public function isDelay()
+    {
+        if (strtotime($this->due_date) >= strtotime('now')) {
+            return false;
+        } else {
+            return !in_array($this->status, [self::STATUS_DONE, self::STATUS_INVALID]);
+        }
+    }
 }

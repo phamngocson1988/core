@@ -10,6 +10,7 @@ use backend\forms\FetchTaskForm;
 use backend\forms\CreateTaskForm;
 use backend\forms\EditTaskForm;
 use backend\forms\DeleteTaskForm;
+use backend\forms\UpdateTaskStatusForm;
 use yii\helpers\Url;
 
 class TaskController extends Controller
@@ -137,6 +138,33 @@ class TaskController extends Controller
         $request = Yii::$app->request;
         $form = new DeleteTaskForm(['id' => $id]);
         if (!$form->delete()) {
+            Yii::$app->session->setFlash('error', $form->getErrors('id'));
+        }
+        Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+        $ref = $request->get('ref', Url::to(['task/index']));
+        return $this->redirect($ref);
+    }
+
+    public function actionUpdateStatus($id)
+    {
+        $request = Yii::$app->request;
+        $form = new UpdateTaskStatusForm(['id' => $id]);
+        $status = $request->get('status');
+        $result = false;
+        switch ($status) {
+            case 'inprogress':
+                $result = $form->inprogress();
+                break;
+            case 'done':
+                $result = $form->done();
+                break;
+            case 'invalid':
+                $result = $form->invalid();
+                break;
+            default:
+                break;
+        }
+        if (!$result) {
             Yii::$app->session->setFlash('error', $form->getErrors('id'));
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

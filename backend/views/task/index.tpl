@@ -27,6 +27,9 @@
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
+            <a class="btn purple" href="{url route='task/index' assignee=$app->user->id}">{Yii::t('app', 'my_task')}</a>
+          </div>
+          <div class="btn-group btn-group-devided">
             <a class="btn green" href="{url route='task/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
         </div>
@@ -71,16 +74,18 @@
           <thead>
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 10%;"> {Yii::t('app', 'title')} </th>
-              <th style="width: 25%;"> {Yii::t('app', 'description')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'due_date')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'assignee')} </th>
+              <th style="width: 15%;"> {Yii::t('app', 'title')} </th>
+              <th style="width: 30%;"> {Yii::t('app', 'description')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'due_date')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'assignee')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'percent')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'status')} </th>
               <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
           <tbody>
               {if (!$models) }
-              <tr><td colspan="6">{Yii::t('app', 'no_data_found')}</td></tr>
+              <tr><td colspan="8">{Yii::t('app', 'no_data_found')}</td></tr>
               {/if}
               {foreach $models as $key => $model}
               <tr>
@@ -89,8 +94,25 @@
                 <td style="vertical-align: middle;">{$model->description}</td>
                 <td style="vertical-align: middle;">{$model->getDueDate(true, 'Y-m-d')}</td>
                 <td style="vertical-align: middle;">{$model->getReceiverName()}</td>
+                <td style="vertical-align: middle; text-align: center;">
+                  {$model->percent} %
+                  <div class="progress progress-striped active">
+                      <div class="progress-bar {if $model->isDelay()}progress-bar-danger{else}progress-bar-success{/if}" role="progressbar" aria-valuenow="{$model->percent}" aria-valuemin="0" aria-valuemax="100" style="width: {$model->percent}%">
+                          <span class="sr-only"> {$model->percent}% Complete (success) </span>
+                      </div>
+                  </div>
+                </td>
                 <td style="vertical-align: middle;">
-                  <a href='{url route="task/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
+                  {$labelClasses = ['new' => 'label-primary', 'inprogress' => 'label-info', 'done' => 'label-success', 'invalid' => 'label-default']}
+                  {$labelClass = $labelClasses[$model->status]}
+                  <span class="label {$labelClass}">{$model->getStatusLabel()}</span>
+                  
+                </td>
+                <td style="vertical-align: middle;">
+                  <a href='{url route="task/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', 'edit_task')}"><i class="fa fa-pencil"></i></a>
+                  <a href='{url route="task/update-status" id=$model->id status="inprogress" ref=$ref}' class="btn btn-xs grey-salsa change-status popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', change_to_inprogress)}"><i class="fa fa-play-circle"></i></a>
+                  <a href='{url route="task/update-status" id=$model->id status="done" ref=$ref}' class="btn btn-xs grey-salsa change-status popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', change_to_done)}"><i class="fa fa-check"></i></a>
+                  <a href='{url route="task/update-status" id=$model->id status="invalid" ref=$ref}' class="btn btn-xs grey-salsa change-status popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', change_to_invalid)}"><i class="fa fa-ban"></i></a>
                 </td>
               </tr>
               {/foreach}
@@ -118,6 +140,11 @@ $('.find-user').select2({
         results: data.data.items
       };
     }
+  }
+});
+$(".change-status").ajax_action({
+  callback: function(eletement, data) {
+    location.reload();
   }
 });
 {/literal}
