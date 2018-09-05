@@ -116,4 +116,11 @@ return [
     'manage_department' => 'Manage department',
     'department_parent' => 'Parent',
     'branch' => 'Branch',
+    'tasks' => 'Tasks',
+    'manage_tasks' => 'Manage tasks',
+    'assignee' => 'Assignee',
+    'due_date' => 'Due date',
+    'create_task' => 'Create task',
+    'edit_task' => 'Edit task',
+    'percent' => 'Percent',
 ];

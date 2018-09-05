@@ -115,4 +115,11 @@ return [
     'manage_department' => 'Quản lý chi nhánh',
     'department_parent' => 'Phòng trực thuộc',
     'branch' => 'Chi nhánh',
+    'tasks' => 'Công việc',
+    'manage_tasks' => 'Quản lý công việc',
+    'assignee' => 'Người nhận nhiệm vụ',
+    'due_date' => 'Hạn hoàn tất công việc',
+    'create_task' => 'Tạo công việc',
+    'edit_task' => 'Chỉnh sửa công việc',
+    'percent' => 'Phần trăm',
 ];
