@@ -122,4 +122,8 @@ return [
     'create_task' => 'Tạo công việc',
     'edit_task' => 'Chỉnh sửa công việc',
     'percent' => 'Phần trăm',
+    'change_to_inprogress' => 'Đang thực hiện',
+    'change_to_done' => 'Hoàn thành',
+    'change_to_invalid' => 'Không hợp lệ',
+    'my_open_tasks' => 'Những nhiệm vụ đang thực hiện của tôi',
 ];

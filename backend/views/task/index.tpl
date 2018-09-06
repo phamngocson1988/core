@@ -27,7 +27,7 @@
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn purple" href="{url route='task/index' assignee=$app->user->id}">{Yii::t('app', 'my_task')}</a>
+            <a class="btn purple" href="{url route='task/index' assignee=$app->user->id status=['new', 'inprogress']}">{Yii::t('app', 'my_open_tasks')}</a>
           </div>
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="{url route='task/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
@@ -55,12 +55,12 @@
             </div>
             <div class="form-group col-md-3">
               <label>{Yii::t('app', 'status')}: </label> 
-              <select class="form-control" name="status">
-                <option value="">{Yii::t('app', 'all')}</option>
+              <select class="bs-select form-control" name="status[]" multiple="true" >
                 {foreach $form->getStatus() as $statusKey => $statusLabel}
-                <option value="{$statusKey}" {if (string)$statusKey === $form->status} selected {/if}>{$statusLabel}</option>
+                <option value="{$statusKey}" {if in_array($statusKey, $form->status)} selected {/if}>{$statusLabel}</option>
                 {/foreach}
               </select>
+
             </div>
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -109,10 +109,11 @@
                   
                 </td>
                 <td style="vertical-align: middle;">
-                  <a href='{url route="task/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', 'edit_task')}"><i class="fa fa-pencil"></i></a>
-                  <a href='{url route="task/update-status" id=$model->id status="inprogress" ref=$ref}' class="btn btn-xs grey-salsa change-status popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', change_to_inprogress)}"><i class="fa fa-play-circle"></i></a>
-                  <a href='{url route="task/update-status" id=$model->id status="done" ref=$ref}' class="btn btn-xs grey-salsa change-status popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', change_to_done)}"><i class="fa fa-check"></i></a>
-                  <a href='{url route="task/update-status" id=$model->id status="invalid" ref=$ref}' class="btn btn-xs grey-salsa change-status popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', change_to_invalid)}"><i class="fa fa-ban"></i></a>
+                  <a href='{url route="task/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit_task')}"><i class="fa fa-pencil"></i></a>
+                  <a class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'view')}" data-toggle="modal" href="#todo-task-modal" data-object='{['id'=>$model->id, 'title'=>$model->title, 'description'=>$model->description, 'due_date'=>$model->due_date, 'assignee_name'=>$model->getReceiverName(), 'status'=>$model->status]|@json_encode nofilter}'><i class="fa fa-eye"></i></a>
+                  <a href='{url route="task/update-status" id=$model->id status="inprogress" ref=$ref}' class="btn btn-xs grey-salsa change-status tooltips" data-container="body" data-original-title="{Yii::t('app', change_to_inprogress)}"><i class="fa fa-play-circle"></i></a>
+                  <a href='{url route="task/update-status" id=$model->id status="done" ref=$ref}' class="btn btn-xs grey-salsa change-status tooltips" data-container="body" data-original-title="{Yii::t('app', change_to_done)}"><i class="fa fa-check"></i></a>
+                  <a href='{url route="task/update-status" id=$model->id status="invalid" ref=$ref}' class="btn btn-xs grey-salsa change-status tooltips" data-container="body" data-original-title="{Yii::t('app', change_to_invalid)}"><i class="fa fa-ban"></i></a>
                 </td>
               </tr>
               {/foreach}
@@ -123,6 +124,34 @@
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
+  </div>
+</div>
+<div id="todo-task-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel10" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content scroller" style="height: 100%;bottom: auto;" data-always-visible="1" data-rail-visible="0">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <button class="btn btn-square btn-sm green todo-bold todo-inline" id="modal-status-done">{Yii::t('app', 'change_to_done')}</button>
+              <button class="btn btn-square btn-sm blue todo-bold todo-inline" id="modal-status-inprogress">{Yii::t('app', 'change_to_inprogress')}</button>
+              <button class="btn btn-square btn-sm yellow todo-bold todo-inline" id="modal-status-invalid">{Yii::t('app', 'change_to_invalid')}</button>
+              <p class="todo-task-modal-title todo-inline">{Yii::t('app', 'due_date')}:
+                  <input class="form-control input-inline input-medium date-picker todo-task-due todo-inline" size="16" type="text" value="10/01/2015" id="modal-due_date"/>
+              </p>
+              <p class="todo-task-modal-title todo-inline">{Yii::t('app', 'assignee')}:
+                  <a class="todo-inline todo-task-assign" href="#todo-members-modal" data-toggle="modal" id="modal-assignee">Luke</a>
+              </p>
+          </div>
+          <div class="modal-body todo-task-modal-body">
+              <h3 class="todo-task-modal-bg" id="modal-title">Title</h3>
+              <p class="todo-task-modal-bg" id="modal-content">Content</p>
+              
+          </div>
+          <!-- BEGIN PORTLET-->
+          <!-- END PORTLET-->
+          <div class="modal-footer">
+              <button class="btn default" data-dismiss="modal" aria-hidden="true">Close</button>
+          </div>
+      </div>
   </div>
 </div>
 {registerJs}
@@ -147,5 +176,18 @@ $(".change-status").ajax_action({
     location.reload();
   }
 });
+$('#todo-task-modal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var object = button.data('object') // Extract info from data-* attributes
+  
+  var modal = $(this)
+  modal.find('#modal-title').text(object.title);
+  modal.find('#modal-content').html(object.description);
+  modal.find('#modal-due_date').val(object.due_date);
+  modal.find('#modal-assignee').html(object.assignee_name);
+  var statusClass, statusLabel;
+  modal.find('[id^="modal-status-"]').hide();
+  modal.find('#modal-status-' + object.status).show();
+})
 {/literal}
 {/registerJs}

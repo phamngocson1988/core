@@ -66,6 +66,11 @@ class TaskController extends Controller
         } else {
             $creator = $assignee = Yii::$app->user->getIdentity();
         }
+
+        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerCssFile('vendor/assets/apps/css/todo.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
         return $this->render('index.tpl', [
             'models' => $models,
             'pages' => $pages,

@@ -123,4 +123,8 @@ return [
     'create_task' => 'Create task',
     'edit_task' => 'Edit task',
     'percent' => 'Percent',
+    'change_to_inprogress' => 'In progress',
+    'change_to_done' => 'Complete',
+    'change_to_invalid' => 'Invalid',
+    'my_open_tasks' => 'My open tasks',
 ];

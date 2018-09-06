@@ -16,6 +16,11 @@ class FetchTaskForm extends Model
 
     private $_command;
 
+    public function init()
+    {
+        $this->status = (array)$this->status;
+    }
+
     public function rules()
     {
         return [
@@ -42,8 +47,8 @@ class FetchTaskForm extends Model
         if ($this->assignee) {
             $command->orWhere(['assignee' => $this->assignee]);
         }
-        if ($this->status) {
-            $command->andWhere(['status' => $this->status]);
+        if (!empty($this->status)) {
+            $command->andWhere(['in', 'status', $this->status]);
         }
 
         if ($this->order_by) {
