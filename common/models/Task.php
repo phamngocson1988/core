@@ -87,6 +87,9 @@ class Task extends ActiveRecord
 
     public function getDueDate($format = false, $default = 'F j, Y, g:i a')
     {
+        if ($format == true) {
+            return date($default, strtotime($this->due_date));
+        }
         return $this->due_date;
     }
 
