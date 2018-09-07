@@ -37,6 +37,7 @@ class SignupForm extends BaseSignupForm
 				$form->save();
 			}	
 			$transaction->commit();
+			$this->sendEmail();
 			return $user;
 		} catch (\Exception $e) {
 			$transaction->rollBack();
@@ -44,4 +45,17 @@ class SignupForm extends BaseSignupForm
 			return false;
 		}
 	}
+
+	public function sendEmail()
+    {
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        $email = $this->email;
+        return Yii::$app->mailer->compose('invite_user', ['mail' => $this])
+            ->setTo($email)
+            ->setFrom([$adminEmail => Yii::$app->name])
+            ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)
+            ->setTextBody('Bạn nhận được lời mời làm thành viên quản trị từ kinggems.us')
+            ->send();
+    }
 }
