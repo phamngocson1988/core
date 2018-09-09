@@ -87,7 +87,7 @@ return [
         'image' => [
             'class' => 'common\components\uploadfiles\standard\ImageHandler',
             'image_path' => '@common/uploads/images',
-            'image_url' => 'http://image.chuchu.com',
+            'image_url' => 'http://image.chuchu.com:8080',
             // 'file_path' => '@common/uploads/files',
             // 'file_url' => 'http://file.chuchu.com',
         ],

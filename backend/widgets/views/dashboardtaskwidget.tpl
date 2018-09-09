@@ -4,7 +4,7 @@
       <div class="portlet-title tabbable-line">
         <div class="caption">
           <i class="icon-bubbles font-dark hide"></i>
-          <span class="caption-subject font-dark bold uppercase">Comments</span>
+          <span class="caption-subject font-dark bold uppercase">{Yii::t('app', 'tasks')}</span>
         </div>
         <ul class="nav nav-tabs">
           <li class="active">
@@ -42,7 +42,7 @@
                         <a href='{url route="task/edit" id=$model->id ref=$ref}'>{Yii::t('app', 'edit')}</a>
                       </li>
                       <li>
-                        <a data-toggle="modal" href="#todo-task-modal" data-object="{['id'=>$model->id, 'title'=>$model->title, 'description'=>$model->description, 'due_date'=>$model->due_date, 'assignee_name'=>$model->getReceiverName(), 'status'=>$model->status]|@json_encode nofilter}">{Yii::t('app', 'view')}</a>
+                        <a data-toggle="modal" href="#todo-task-modal" data-object='{['id'=>$model->id, 'title'=>$model->title, 'description'=>$model->description, 'due_date'=>$model->due_date, 'assignee_name'=>$model->getReceiverName(), 'status'=>$model->status]|@json_encode nofilter}'>{Yii::t('app', 'view')}</a>
                       </li>
                       <li>
                         <a class='task-change-status' href='{url route="task/update-status" id=$model->id status="inprogress" ref=$ref}'>{Yii::t('app', 'change_to_inprogress')}</a>
@@ -466,7 +466,7 @@ $('#dashboardtaskwidget').find(".task-change-status").ajax_action({
 $('#todo-task-modal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var object = button.data('object') // Extract info from data-* attributes
-  
+  console.log(object);
   var modal = $(this)
   modal.find('#modal-title').text(object.title);
   modal.find('#modal-content').html(object.description);

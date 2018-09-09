@@ -15,7 +15,7 @@
       <li class="sidebar-search-wrapper">
       </li>
       <li class="nav-item start active open">
-        <a href="javascript:;" class="nav-link nav-toggle" code='dashboard'>
+        <a href="{url route='/site/index'}" class="nav-link nav-toggle" code='dashboard'>
         <i class="icon-home"></i>
         <span class="title">{Yii::t('app', 'dashboard')}</span>
         <span class="selected"></span>
