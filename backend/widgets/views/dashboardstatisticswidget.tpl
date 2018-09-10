@@ -20,7 +20,7 @@
             <div class="details">
                 <div class="number">
                     <span data-counter="counterup" data-value="{$countProduct}">0</span></div>
-                <div class="desc"> {Yii::t('app', 'products')} </div>
+                <div class="desc"> {Yii::t('module.shop', 'products')} </div>
             </div>
         </a>
     </div>

@@ -173,6 +173,9 @@ class TaskController extends Controller
             Yii::$app->session->setFlash('error', $form->getErrors('id'));
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+        if ($request->isAjax) {
+            return $this->renderJson((boolean)$result, $form->getTask(), $form->getErrors('id'));
+        }
         $ref = $request->get('ref', Url::to(['task/index']));
         return $this->redirect($ref);
     }

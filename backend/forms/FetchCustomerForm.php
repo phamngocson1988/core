@@ -13,8 +13,6 @@ class FetchCustomerForm extends Model
 {
     public $q;
     public $status;
-    public $birthday_from;
-    public $birthday_to;
     private $_command;
 
     public function rules()

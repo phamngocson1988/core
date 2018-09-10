@@ -74,7 +74,8 @@
           <thead>
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'title')} </th>
+              <th style="width: 5%;"> {Yii::t('app', 'avatar')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'title')} </th>
               <th style="width: 30%;"> {Yii::t('app', 'description')} </th>
               <th style="width: 10%;"> {Yii::t('app', 'due_date')} </th>
               <th style="width: 10%;"> {Yii::t('app', 'assignee')} </th>
@@ -90,6 +91,13 @@
               {foreach $models as $key => $model}
               <tr>
                 <td style="vertical-align: middle;">{$pages->offset + 1 + $key}</td>
+                <td style="vertical-align: middle;">
+                  {if ($model->receiver)}
+                  <img class="img-circle" src="{$model->receiver->getAvatarUrl('50x50')}" /> 
+                  {else}
+                  <img class="img-circle" src="../vendor/assets/pages/media/profile/profile_user.jpg" width="50" height="50" /> 
+                  {/if}
+                </td>
                 <td style="vertical-align: middle;">{$model->title}</td>
                 <td style="vertical-align: middle;">{$model->description}</td>
                 <td style="vertical-align: middle;">{$model->getDueDate(true, 'Y-m-d')}</td>

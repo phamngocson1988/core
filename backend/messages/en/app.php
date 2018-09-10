@@ -127,4 +127,7 @@ return [
     'change_to_done' => 'Complete',
     'change_to_invalid' => 'Invalid',
     'my_open_tasks' => 'My open tasks',
+    'see_all_records' => 'See all records',
+    'incomming_staff_birthday' => 'Incomming Staff Birthday',
+    '{n}_day_left' => '{n} {n,plural,=1{day} other{days}}',
 ];

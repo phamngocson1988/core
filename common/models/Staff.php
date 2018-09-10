@@ -15,12 +15,12 @@ use common\models\Department;
  * @property string $email
  * @property string $phone
  * @property string $address
- * @property integer $birthday
+ * @property date $birthday
  * @property string $gender
  * @property string $description
  * @property integer $department_id
- * @property integer $start_date
- * @property integer $end_date
+ * @property date $start_date
+ * @property date $end_date
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -65,5 +65,15 @@ class Staff extends ActiveRecord
     public function getBranchName()
     {
         return ($this->department) ? $this->department->getBranchLabel() : '';
+    }
+
+    public function getBirthdayLeft($differenceFormat = '%a')
+    {
+        if (!$this->birthday || $this->birthday == '0000-00-00') return '';
+        $birthdayThisYear = date('Y') . "-" . date('m-d', strtotime($this->birthday));
+        $datetime1 = date_create($birthdayThisYear);
+        $datetime2 = date_create(date('Y-m-d'));
+        $interval = date_diff($datetime1, $datetime2);
+        return $interval->format($differenceFormat);
     }
 }

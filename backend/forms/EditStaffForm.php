@@ -84,12 +84,12 @@ class EditStaffForm extends Model
         $user->email = $this->email;
         $user->phone = $this->phone;
         $user->address = $this->address;
-        $user->birthday = FormatConverter::convertToTimeStamp($this->birthday);
+        $user->birthday = $this->birthday;
         $user->gender = $this->gender;
         $user->description = $this->description;
         $user->department_id = $this->department_id;
-        $user->start_date = FormatConverter::convertToTimeStamp($this->start_date);
-        $user->end_date = FormatConverter::convertToTimeStamp($this->end_date);
+        $user->start_date = $this->start_date;
+        $user->end_date = $this->end_date;
         return $user->save() ? $user : null;
     }
 
@@ -127,12 +127,12 @@ class EditStaffForm extends Model
         $this->email = $staff->email;
         $this->phone = $staff->phone;
         $this->address = $staff->address;
-        $this->birthday = FormatConverter::convertToDate($staff->birthday);
+        $this->birthday = $staff->birthday;
         $this->gender = $staff->gender;
         $this->description = $staff->description;
         $this->department_id = $staff->department_id;
-        $this->start_date = FormatConverter::convertToDate($staff->start_date);
-        $this->end_date = FormatConverter::convertToDate($staff->end_date);
+        $this->start_date = $staff->start_date;
+        $this->end_date = $staff->end_date;
     }
 
     public function getDepartments()

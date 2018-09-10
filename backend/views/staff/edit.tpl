@@ -69,8 +69,9 @@
                   ])->textInput()}
                   {$form->field($model, 'birthday', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd', 'onkeydown' => "return false"],
+                    'template' => '{label}<div class="col-md-2"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
+                  ])->textInput()}
                   {$form->field($model, 'department_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -81,12 +82,15 @@
                   ])->textarea()}
                   {$form->field($model, 'start_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd', 'onkeydown' => "return false"],
+                    'template' => '{label}<div class="col-md-2"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
+                  ])->textInput()}
                   {$form->field($model, 'end_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput(['class' => 'form-control date-picker', 'data-date-format' => "dd-mm-yyyy", 'onkeydown' => "return false"])}                  
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd', 'onkeydown' => "return false"],
+                    'template' => '{label}<div class="col-md-2"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
+                  ])->textInput()}
+
                 </div>
               </div>
             </div>

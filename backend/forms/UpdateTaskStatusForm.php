@@ -33,6 +33,7 @@ class UpdateTaskStatusForm extends Model
                 $task = $this->getTask();
                 $task->updated_at = $now;
                 $task->status = $this->status;
+                $this->_task = $task;
                 return $task->save();
             } catch (Exception $e) {
                 return false;
@@ -51,6 +52,7 @@ class UpdateTaskStatusForm extends Model
                 $task->updated_at = $now;
                 $task->percent = 100;
                 $task->status = $this->status;
+                $this->_task = $task;
                 return $task->save();
             } catch (Exception $e) {
                 return false;
@@ -68,6 +70,7 @@ class UpdateTaskStatusForm extends Model
                 $task = $this->getTask();
                 $task->updated_at = $now;
                 $task->status = $this->status;
+                $this->_task = $task;
                 return $task->save();
             } catch (Exception $e) {
                 return false;
@@ -76,7 +79,7 @@ class UpdateTaskStatusForm extends Model
         return false;
     }
 
-    protected function getTask()
+    public function getTask()
     {
         if ($this->_task === null) {
             $this->_task = Task::findOne($this->id);

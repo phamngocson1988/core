@@ -79,12 +79,12 @@ class CreateStaffForm extends Model
         $user->email = $this->email;
         $user->phone = $this->phone;
         $user->address = $this->address;
-        $user->birthday = FormatConverter::convertToTimeStamp($this->birthday);
+        $user->birthday = $this->birthday;
         $user->gender = $this->gender;
         $user->description = $this->description;
         $user->department_id = $this->department_id;
-        $user->start_date = FormatConverter::convertToTimeStamp($this->start_date);
-        $user->end_date = FormatConverter::convertToTimeStamp($this->end_date);
+        $user->start_date = $this->start_date;
+        $user->end_date = $this->end_date;
         return $user->save() ? $user : null;
     }
 

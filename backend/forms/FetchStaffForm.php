@@ -17,6 +17,8 @@ class FetchStaffForm extends Model
     public $gender;
     public $branch;
     public $department;
+    public $birthday_from;
+    public $birthday_to;
     private $_command;
 
     public function rules()
@@ -53,6 +55,13 @@ class FetchStaffForm extends Model
             $command->joinWith('department')
                     ->andWhere(['department.branch' => $this->branch]);
         }
+        if ($this->birthday_from) {
+            $command->andWhere(['>=', 'birthday', $this->birthday_from]);
+        }
+        if ($this->birthday_to) {
+            $command->andWhere(['<=', 'birthday', $this->birthday_to]);
+        }
+        
         $this->_command = $command;
     }
 
