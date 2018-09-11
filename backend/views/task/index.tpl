@@ -1,5 +1,14 @@
 {use class='yii\widgets\LinkPager'}
 {use class='yii\widgets\Pjax' type='block'}
+<style>
+.hide-text {
+    white-space: nowrap;
+    width: 100%;
+    max-width: 500px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+</style>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -99,7 +108,7 @@
                   {/if}
                 </td>
                 <td style="vertical-align: middle;">{$model->title}</td>
-                <td style="vertical-align: middle;">{$model->description}</td>
+                <td style="vertical-align: middle;"><div class="hide-text">{$model->description}</div></td>
                 <td style="vertical-align: middle;">{$model->getDueDate(true, 'Y-m-d')}</td>
                 <td style="vertical-align: middle;">{$model->getReceiverName()}</td>
                 <td style="vertical-align: middle; text-align: center;">

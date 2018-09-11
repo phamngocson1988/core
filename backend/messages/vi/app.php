@@ -129,4 +129,5 @@ return [
     'see_all_records' => 'Xem tất cả',
     'incomming_staff_birthday' => 'Những nhân viên sắp có sinh nhật',
     '{n}_day_left' => '{n} {n,plural,=1{ngày} other{ngày}}',
+    'avatar' => 'Ảnh đại diện',
 ];

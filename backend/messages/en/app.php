@@ -130,4 +130,5 @@ return [
     'see_all_records' => 'See all records',
     'incomming_staff_birthday' => 'Incomming Staff Birthday',
     '{n}_day_left' => '{n} {n,plural,=1{day} other{days}}',
+    'avatar' => 'Avatar',
 ];
