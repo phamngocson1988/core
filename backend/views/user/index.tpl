@@ -85,9 +85,9 @@
               <td>{$model->getStatusLabel()}</td>
               <td>
                 {if $model->isActive()}
-                <a class="btn btn-xs grey-salsa delete-user popovers" href="{url route='user/change-status' id=$model->id status='delete'}" data-container="body" data-trigger="hover" data-content="Disable this user"><i class="fa fa-minus-circle"></i></a>
+                <a class="btn btn-xs grey-salsa delete-user tooltips" href="{url route='user/change-status' id=$model->id status='delete'}" data-container="body" data-original-title="{Yii::t('app', 'disable_user')}"><i class="fa fa-minus-circle"></i></a>
                 {else}
-                <a class="btn btn-xs grey-salsa active-user popovers" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-trigger="hover" data-content="Enable this user"><i class="fa fa-check-square"></i></a>
+                <a class="btn btn-xs grey-salsa active-user tooltips" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-original-title="{Yii::t('app', 'enable_user')}"><i class="fa fa-check-square"></i></a>
                 {/if}
                 
               </td>
@@ -111,7 +111,7 @@
 {literal}
 $(".delete-user").ajax_action({
   confirm: true,
-  confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_user')}{literal}',
+  confirm_text: '{/literal}{Yii::t('app', 'confirm_disable_user')}{literal}',
   callback: function(eletement, data) {
     location.reload();
   }
