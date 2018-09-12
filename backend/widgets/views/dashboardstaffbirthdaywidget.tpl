@@ -8,6 +8,9 @@
         </div>
         <div class="portlet-body">
             <div class="scroller" style="height: auto; max-height: 300px" data-always-visible="1" data-rail-visible="0">
+                {if !$models}
+                    <div style="text-align: center;">{Yii::t('app', 'no_data_found')}</div>
+                {else}
                 <ul class="feeds">
                 	{foreach $models as $model}
                     <li>
@@ -31,6 +34,7 @@
                     </li>
                    {/foreach}
                 </ul>
+                {/if}
             </div>
         </div>
     </div>

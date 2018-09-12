@@ -19,6 +19,7 @@
         <div class="tab-pane active" id="system_tasks">
           <!-- BEGIN: Comments -->
           <div class="mt-comments">
+            {if !$models}<div style="text-align: center;">{Yii::t('app', 'no_data_found')}</div>{/if}
             {foreach $models as $model}
             <div class="mt-comment">
               <div class="mt-comment-img">
@@ -78,6 +79,7 @@
         <div class="tab-pane" id="my_tasks">
           <!-- BEGIN: Comments -->
           <div class="mt-comments">
+            {if !$models}<div style="text-align: center;">{Yii::t('app', 'no_data_found')}</div>{/if}
             {foreach $myTaskModels as $model}
             <div class="mt-comment">
               <div class="mt-comment-img">
