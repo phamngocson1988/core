@@ -7,6 +7,7 @@ use yii\base\Model;
 use backend\models\Staff;
 use backend\models\Department;
 use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
 
 /**
  * FetchStaffForm
@@ -87,5 +88,10 @@ class FetchStaffForm extends Model
     public function getBranches()
     {
         return Department::getBranches();
+    }
+
+    public function getDataProvider()
+    {
+        return new ActiveDataProvider(['query' => $this->getCommand()]);
     }
 }
