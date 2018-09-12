@@ -94,4 +94,22 @@ class FetchStaffForm extends Model
     {
         return new ActiveDataProvider(['query' => $this->getCommand()]);
     }
+
+    public function renderTable()
+    {
+        return \yii\grid\GridView::widget([
+            'dataProvider' => $this->getDataProvider(),
+            'filterModel' => $this,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'class' => 'yii\grid\DataColumn',
+                    'attribute' => 'department',
+                    'label' => 'Phòng ban',
+                    'value' => function($model) { return $model->getDepartmentName(); }
+                ],
+                ['class' => 'yii\grid\ActionColumn']
+            ]
+        ]);
+    }
 }

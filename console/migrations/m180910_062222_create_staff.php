@@ -33,6 +33,14 @@ class m180910_062222_create_staff extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
+        $this->createTable('{{%department}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(255),
+            'branch' => $this->string(),//enum (hochiminh, phanrang)
+            'phone' => $this->string(50),
+            'parent_id' => $this->integer(11),
+        ], $tableOptions);
+
         $this->createTable('{{%staff}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(255),
@@ -54,5 +62,6 @@ class m180910_062222_create_staff extends Migration
     public function down()
     {
         $this->dropTable('{{%staff}}');
+        $this->dropTable('{{%department}}');
     }
 }

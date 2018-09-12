@@ -98,7 +98,7 @@
               <td>{$model->getBranchName()}</td>
               <td>{$model->getDepartmentName()}</td>
               <td>
-                <a href='{url route="staff/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="{Yii::t('app', 'edit_staff')}"><i class="fa fa-pencil"></i></a>
+                <a href='{url route="staff/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit_staff')}"><i class="fa fa-pencil"></i></a>
               </td>
             </tr>
             {/foreach}

@@ -64,33 +64,6 @@ class StaffController extends Controller
         ]);
     }
 
-    public function actionIndex1()
-    {
-        $this->view->params['main_menu_active'] = 'staff.index';
-        $request = Yii::$app->request;
-        $q = $request->get('q');
-        $branch = $request->get('branch');
-        $department = $request->get('department');
-        $gender = $request->get('gender', '');
-        $form = new FetchStaffForm([
-            'q' => $q, 
-            'gender' => $gender,
-            'branch' => $branch,
-            'department' => $department,
-        ]);
-
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
-
-        return $this->render('index1.tpl', [
-            'models' => $models,
-            'pages' => $pages,
-            'form' => $form,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
     public function actionEdit($id)
     {
         $this->view->params['main_menu_active'] = 'staff.index';
