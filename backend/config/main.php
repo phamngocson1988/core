@@ -16,6 +16,14 @@ return [
         'shop' => [
             'class' => 'backend\modules\shop\Module',
         ],
+        'notifications' => [
+            'class' => 'webzop\notifications\Module',
+            'channels' => [
+                'screen' => [
+                    'class' => 'webzop\notifications\channels\ScreenChannel',
+                ],
+            ],
+        ],
     ],
 	'language' => 'vi',
 	'sourceLanguage' => 'en-US',

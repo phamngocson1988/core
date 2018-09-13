@@ -144,4 +144,5 @@ return [
     'task_statistics' => 'Thống kê về công việc',
     'active' => 'Kích hoạt',
     'disable' => 'Vô hiệu',
+    'task_{title}_just_assign_to_you' => "Công việc '{title}' vừa được gửi đến bạn.",
 ];

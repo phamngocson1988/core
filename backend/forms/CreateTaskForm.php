@@ -38,7 +38,10 @@ class CreateTaskForm extends Model
                 $task->updated_at = $now;
                 $task->percent = 0;
                 $task->status = Task::STATUS_NEW;
-                return $task->save();
+                if ($task->save()) {
+                    return $task;
+                }
+                return false;
             } catch (Exception $e) {
                 return false;
             }

@@ -145,4 +145,5 @@ return [
     'task_statistics' => 'Task statistics',
     'active' => 'Active',
     'disable' => 'Disable',
+    'task_{title}_just_assign_to_you' => "Task '{title}' has just assigned to you.",
 ];

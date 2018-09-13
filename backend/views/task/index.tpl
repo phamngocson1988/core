@@ -102,7 +102,7 @@
                 <td style="vertical-align: middle;">{$pages->offset + 1 + $key}</td>
                 <td style="vertical-align: middle;">
                   {if ($model->receiver)}
-                  <img class="img-circle" src="{$model->receiver->getAvatarUrl('50x50')}" /> 
+                  <img class="img-circle" src="{$model->receiver->getAvatarUrl('50x50')}" width="50" height="50"/> 
                   {else}
                   <img class="img-circle" src="../vendor/assets/pages/media/profile/profile_user.jpg" width="50" height="50" /> 
                   {/if}
