@@ -39,9 +39,9 @@ class m180517_043102_create_systemlog_schema extends Migration
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(),
             'action' => $this->string(50)->notNull(),
-            'descripition' => $this->string(200),
+            'description' => $this->string(200),
             'data' => $this->text(),
-            'created_at' => $this->integer()->notNull(),            
+            'created_at' => $this->dateTime()->notNull(),           
         ], $tableOptions);
     }
 

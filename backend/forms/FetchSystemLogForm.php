@@ -10,6 +10,7 @@ class FetchSystemLogForm extends Model
 {
     public $user_id;
     public $action;
+    public $description;
     public $from_date;
     public $to_date;
 
@@ -36,6 +37,9 @@ class FetchSystemLogForm extends Model
         }
         if ($this->to_date) {
             $command->andWhere(['<=', 'created_at', $this->to_date]);
+        }
+        if ($this->description) {
+            $command->andWhere(['like', 'description', $this->description]);
         }
         $this->_command = $command;
     }

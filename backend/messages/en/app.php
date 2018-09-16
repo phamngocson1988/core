@@ -26,6 +26,7 @@ return [
     'create_post_category' => 'Create post category',
     'create_post' => 'Create post',
     'confirm_delete_customer' => 'Do you want to delete this customer?',
+    'confirm_disable_customer' => 'Do you want to disable this customer?',
     'confirm_enable_customer' => 'Do you want to enable this customer?',
     'manage_customers' => 'Manage customers',
     'all' => 'All',
@@ -146,4 +147,10 @@ return [
     'active' => 'Active',
     'disable' => 'Disable',
     'task_{title}_just_assign_to_you' => "Task '{title}' has just assigned to you.",
+    'disable_customer' => 'Disable this customer',
+    'enable_customer' => 'Enable this customer',
+    'edit_customer' => 'Edit this customer',
+    'boolean_no' => 'No',
+    'boolean_yes' => 'Yes',
+    'send_mail_to_customer' => 'Send mail to customer',
 ];

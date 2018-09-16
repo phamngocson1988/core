@@ -31,7 +31,7 @@
           <form method="GET">
             <div class="form-group col-md-4">
               <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
-                placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->q}">
+                placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->description}">
             </div>
             <div class="form-group col-md-3">
               <button type="submit" class="btn btn-success table-group-action-submit"

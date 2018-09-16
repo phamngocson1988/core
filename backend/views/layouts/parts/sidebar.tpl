@@ -133,6 +133,7 @@
           </li>
         </ul>
       </li>
+      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
@@ -157,6 +158,23 @@
           </li>
         </ul>
       </li>
+      {/if}
+      {if Yii::$app->user->can('admin')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-settings"></i>
+        <span class="title">{Yii::t('app', 'logs')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/system-log/index'}" class="nav-link " code='system-log.index'>
+            <span class="title">{Yii::t('app', 'logs')}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {/if}
     </ul>
   </div>
 </div>

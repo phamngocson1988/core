@@ -8,6 +8,4 @@ use webzop\notifications\controllers\DefaultController;
 class NotificationController extends DefaultController
 {
     public $layout = "main.tpl";
-
-   
 }

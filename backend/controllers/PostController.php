@@ -105,7 +105,7 @@ class PostController extends Controller
         $request = Yii::$app->request;
         $form = new DeletePostForm(['id' => $id]);
         if (!$form->delete()) {
-            Yii::$app->session->setFlash('error', $form->getErrors('id'));
+            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         $ref = $request->get('ref', Url::to(['post/index']));
@@ -118,7 +118,7 @@ class PostController extends Controller
         $direction = $request->get('direct');
         $form = new ChangePostPositionForm(['id' => $id, 'direction' => $direction]);
         if (!$form->process()) {
-            Yii::$app->session->setFlash('error', Yii::t('app', 'error'));
+            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         $ref = $request->get('ref', Url::to(['post/index']));

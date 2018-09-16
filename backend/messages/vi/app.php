@@ -26,6 +26,7 @@ return [
     'create_post_category' => 'Tạo danh mục bài viết',
     'create_post' => 'Tạo bài viết',
     'confirm_delete_customer' => 'Bạn có muốn xóa khách hàng này?',
+    'confirm_disable_customer' => 'Bạn có muốn vô hiệu khách hàng này?',
     'confirm_enable_customer' => 'Bạn có muốn kích hoạt khách hàng này?',
     'manage_customers' => 'Quản lý khách hàng',
     'all' => 'Tất cả',
@@ -145,4 +146,10 @@ return [
     'active' => 'Kích hoạt',
     'disable' => 'Vô hiệu',
     'task_{title}_just_assign_to_you' => "Công việc '{title}' vừa được gửi đến bạn.",
+    'disable_customer' => 'Vô hiệu khách hàng này',
+    'enable_customer' => 'Kích hoạt khách hàng này',
+    'edit_customer' => 'Chỉnh sửa khách hàng',
+    'boolean_no' => 'Không',
+    'boolean_yes' => 'Có',
+    'send_mail_to_customer' => 'Gửi mail tới khách hàng',
 ];

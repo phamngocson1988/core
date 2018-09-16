@@ -21,6 +21,7 @@ class Notifications extends BaseNotifications
 
     protected function renderNavbarItem()
     {
+        // Start notifications
         $html  = Html::beginTag('li', $this->options);
         $html .= Html::beginTag('a', [
             'href' => 'javascript:;', 
@@ -42,8 +43,9 @@ class Notifications extends BaseNotifications
         }
         $countTag = ArrayHelper::remove($countOptions, 'tag', 'span');
         $html .= Html::tag($countTag, $count, $countOptions);
-
         $html .= Html::endTag('a');
+        
+        // Dropdown
         $html .= Html::begintag('div', ['class' => 'dropdown-menu']);
         $header = Html::a(Yii::t('modules/notifications', 'Mark all as read'), '#', ['class' => 'read-all pull-right']);
         $header .= Yii::t('modules/notifications', 'Notifications');
@@ -54,9 +56,29 @@ class Notifications extends BaseNotifications
         $html .= Html::tag('div', Html::tag('span', Yii::t('modules/notifications', 'There are no notifications to show'), ['style' => 'display: none;']), ['class' => 'empty-row']);
         $html .= Html::endTag('div');
 
-        $footer = Html::a(Yii::t('modules/notifications', 'View all'), ['/notifications/default/index']);
+        $footer = Html::a(Yii::t('modules/notifications', 'View all'), ['/notification/index']);
         $html .= Html::tag('div', $footer, ['class' => 'footer']);
         $html .= Html::endTag('div');
+
+
+        // new dropdown
+        // $html .= Html::begintag('ul', ['class' => 'dropdown-menu']);
+
+        // // header 
+        // $markAllLink = Html::a(Yii::t('modules/notifications', 'Mark all as read'), 'javascript:;', ['class' => 'read-all']);
+        // $markAll = Html::tag('h3', Html::tag('span', $markAllLink, ['class' => 'bold']));
+        // $viewAll = Html::a(Yii::t('modules/notifications', 'View all'), ['/notification/index']);
+        // $headerContainer = Html::tag('li', $markAll . $viewAll, ['class' => 'external']);
+        // $html .= $headerContainer;
+
+        // // list notifications
+        // $html .= Html::begintag('li');
+        // $html .= Html::tag('ul', '', ['class' => 'dropdown-menu-list scroller notifications-list', 'style' => 'height: 250px', 'data-handle-color' => '#637283']);
+        // $html .= Html::endTag('li');
+
+
+        // $html .= Html::endTag('ul');
+        // End notifications
         $html .= Html::endTag('li');
 
         return $html;

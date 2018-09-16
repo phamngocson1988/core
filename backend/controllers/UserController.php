@@ -74,7 +74,7 @@ class UserController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['user/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         }
 

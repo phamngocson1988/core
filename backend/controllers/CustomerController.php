@@ -74,13 +74,15 @@ class CustomerController extends Controller
                 $ref = $request->get('ref', Url::to(['customer/index']));
                 return $this->redirect($ref);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         } else {
             $model->loadData($id);
         }
+        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
         $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-        $this->view->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
         return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['customer/index']))
@@ -99,11 +101,13 @@ class CustomerController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['customer/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         }
+        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
         $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-        $this->view->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
         return $this->render('create.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['customer/index']))

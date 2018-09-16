@@ -65,7 +65,7 @@ class DepartmentController extends Controller
                 $ref = $request->get('ref', Url::to(['department/index']));
                 return $this->redirect($ref);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         } else {
             $model->loadData($id);
@@ -88,7 +88,7 @@ class DepartmentController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['department/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         }
         return $this->render('create.tpl', [

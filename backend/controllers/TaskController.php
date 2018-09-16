@@ -123,7 +123,7 @@ class TaskController extends Controller
                 $ref = $request->get('ref', Url::to(['task/index']));
                 return $this->redirect($ref);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         } else {
             $model->loadData($id);
@@ -147,7 +147,7 @@ class TaskController extends Controller
         $request = Yii::$app->request;
         $form = new DeleteTaskForm(['id' => $id]);
         if (!$form->delete()) {
-            Yii::$app->session->setFlash('error', $form->getErrors('id'));
+            Yii::$app->session->setFlash('error', $form->getErrorSummary());
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         $ref = $request->get('ref', Url::to(['task/index']));
@@ -174,7 +174,7 @@ class TaskController extends Controller
                 break;
         }
         if (!$result) {
-            Yii::$app->session->setFlash('error', $form->getErrors('id'));
+            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
         if ($request->isAjax) {

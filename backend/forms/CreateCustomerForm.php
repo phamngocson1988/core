@@ -22,7 +22,7 @@ class CreateCustomerForm extends Model
     public $social_facebook;
     public $password;
     public $status;
-
+    public $send_mail = false;
 
     /**
      * @inheritdoc
@@ -47,7 +47,7 @@ class CreateCustomerForm extends Model
 
             ['status', 'in', 'range' => array_keys(Customer::getUserStatus())],
 
-            [['phone', 'address', 'birthday', 'social_line', 'social_zalo', 'social_facebook'], 'trim']
+            [['phone', 'address', 'birthday', 'social_line', 'social_zalo', 'social_facebook', 'send_mail'], 'trim']
         ];
     }
 
@@ -65,6 +65,7 @@ class CreateCustomerForm extends Model
             'social_facebook' => Yii::t('app', 'social_facebook'),
             'password' => Yii::t('app', 'password'),
             'status' => Yii::t('app', 'status'),
+            'send_mail' => Yii::t('app', 'send_mail_to_customer'),
         ];
     }
 
@@ -92,11 +93,30 @@ class CreateCustomerForm extends Model
         $user->status = $this->status;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        return $user->save() ? $user : null;
+        if ($user->save()) {
+            if ($this->send_mail === true) {
+                $this->sendEmail();
+            }
+            return $user;
+        }
+        return false;
     }
 
     public function getUserStatus()
     {
         return Customer::getUserStatus();
+    }
+
+    public function sendEmail()
+    {
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        $email = $this->email;
+        return Yii::$app->mailer->compose('invite_customer', ['mail' => $this])
+            ->setTo($email)
+            ->setFrom([$adminEmail => Yii::$app->name])
+            ->setSubject("[Kinggems][Notification email] Bạn nhận được thông báo từ " . Yii::$app->name)
+            ->setTextBody('Bạn nhận được thông báo về thông tin tài khoản từ kinggems.us')
+            ->send();
     }
 }

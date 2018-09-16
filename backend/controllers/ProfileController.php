@@ -51,7 +51,7 @@ class ProfileController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         } else {
             $model->loadData();

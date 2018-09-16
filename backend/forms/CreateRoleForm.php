@@ -28,6 +28,7 @@ class CreateRoleForm extends Model
             $role = $auth->createRole($this->name);
             $role->description = $this->description;
             $auth->add($role);
+            Yii::$app->syslog->log('create_role', 'create new role', $role);
             return true;
         }
         return false;

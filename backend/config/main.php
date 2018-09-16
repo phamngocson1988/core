@@ -99,6 +99,9 @@ return [
             // 'file_path' => '@common/uploads/files',
             // 'file_url' => 'http://file.chuchu.com',
         ],
+        'syslog' => [
+            'class' => 'backend\components\logs\SystemLog',
+        ],
     ],
     'params' => $params,
 ];

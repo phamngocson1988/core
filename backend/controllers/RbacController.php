@@ -108,7 +108,7 @@ class RbacController extends Controller
                 $ref = $request->get('ref', Url::to(['user/index']));
                 return $this->redirect($ref);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }    
         } else {
             $role = $request->get('role');
@@ -130,9 +130,10 @@ class RbacController extends Controller
         $model = new CreateRoleForm();
         if (Yii::$app->request->isPost) {
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->goBack();
+                $ref = Yii::$app->request->get('ref', Url::to(['rabc/role']));
+                return $this->redirect($ref);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }    
         }
         return $this->render('create-role.tpl', [
@@ -149,7 +150,7 @@ class RbacController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->goBack();
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }    
         }
 

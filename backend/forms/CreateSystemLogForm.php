@@ -33,8 +33,8 @@ class CreateSystemLogForm extends Model
             $log = new SystemLog();
             $log->user_id = $this->user_id;
             $log->action = $this->action;
-            $log->data = $this->data;
-            $log->created_at = strtotime('now');
+            $log->setData($this->data);
+            $log->created_at = date('Y-m-d H:i:s');
             $log->save();
         }
     }

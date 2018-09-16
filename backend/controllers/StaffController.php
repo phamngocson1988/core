@@ -75,7 +75,7 @@ class StaffController extends Controller
                 $ref = $request->get('ref', Url::to(['staff/index']));
                 return $this->redirect($ref);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         } else {
             $model->loadData($id);
@@ -100,7 +100,7 @@ class StaffController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['staff/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getFirstErrors());
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         }
         $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);

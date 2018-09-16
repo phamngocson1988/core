@@ -45,7 +45,7 @@
             </div>
             <div class="form-group col-md-4">
               <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
-                placeholder="Keyword" name="q" value="{$form->q}">
+                placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->q}">
             </div>
             <div class="form-group col-md-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
@@ -75,11 +75,11 @@
               <td>{$model->getStatusLabel()}</td>
               <td>
                 {if $model->isActive()}
-                <a class="btn btn-xs grey-salsa delete-customer popovers" href="{url route='customer/change-status' id=$model->id status='inactive'}" data-container="body" data-trigger="hover" data-content="Disable this customer"><i class="fa fa-minus-circle"></i></a>
+                <a class="btn btn-xs grey-salsa delete-customer tooltips" href="{url route='customer/change-status' id=$model->id status='inactive'}" data-container="body" data-original-title="{Yii::t('app', 'disable_customer')}"><i class="fa fa-minus-circle"></i></a>
                 {else}
-                <a class="btn btn-xs grey-salsa active-customer popovers" href="{url route='customer/change-status' id=$model->id status='active'}" data-container="body" data-trigger="hover" data-content="Enable this customer"><i class="fa fa-check-square"></i></a>
+                <a class="btn btn-xs grey-salsa active-customer tooltips" href="{url route='customer/change-status' id=$model->id status='active'}" data-container="body" data-original-title="{Yii::t('app', 'enable_customer')}"><i class="fa fa-check-square"></i></a>
                 {/if}
-                <a href='{url route="customer/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa popovers" data-container="body" data-trigger="hover" data-content="Edit customer"><i class="fa fa-pencil"></i></a>
+                <a href='{url route="customer/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit_customer')}"><i class="fa fa-pencil"></i></a>
                 
               </td>
             </tr>
@@ -102,7 +102,7 @@
 {literal}
 $(".delete-customer").ajax_action({
   confirm: true,
-  confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_customer')}{literal}',
+  confirm_text: '{/literal}{Yii::t('app', 'confirm_disable_customer')}{literal}',
   callback: function(eletement, data) {
     location.reload();
   }
