@@ -27,4 +27,12 @@ class TestController extends Controller
         $data = Yii::$app->image->upload('imageFiles');
         return $this->redirect('index');
 	}
+
+	public function actionTree()
+	{
+		$this->view->registerCssFile('vendor/assets/global/plugins/jstree/dist/themes/default/style.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerJsFile('vendor/assets/global/plugins/jstree/dist/jstree.min.js', ['depends' => '\backend\assets\AppAsset']);
+        $this->view->registerJsFile('vendor/assets/pages/scripts/ui-tree.min.js', ['depends' => '\backend\assets\AppAsset']);
+		return $this->render('tree.tpl');
+	}
 }

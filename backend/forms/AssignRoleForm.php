@@ -15,6 +15,7 @@ class AssignRoleForm extends Model
     public $user_id;
 
     private $_user;
+    private $_role;
 
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
@@ -40,10 +41,15 @@ class AssignRoleForm extends Model
     public function save()
     {
         if ($this->validate()) {
-            $auth = Yii::$app->authManager;
-            $role = $auth->getRole($this->role);
-            if ($role) {
-                $auth->assign($role, $this->user_id);
+            $role = $this->getRole();
+            $user = $this->getUser();
+            if ($auth->assign($role, $this->user_id)) {
+                Yii::$app->syslog->log('assign_role', 'assign role to user', [
+                    'user_id' => $user->id,
+                    'username' => $user->username,
+                    'role' => $role->name
+                ]);
+                return true;
             }
             return true;
         }
@@ -53,8 +59,7 @@ class AssignRoleForm extends Model
     public function validateRole($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $auth = Yii::$app->authManager;
-            $role = $auth->getRole($this->role);
+            $role = $this->getRole();
             if (!$role) {
                 $this->addError($attribute, Yii::t('app', 'role_not_exist', ['role' => $role]));
             }
@@ -86,5 +91,14 @@ class AssignRoleForm extends Model
         }
 
         return $this->_user;
+    }
+
+    public function getRole()
+    {
+        if (!$this->_role) {
+            $auth = Yii::$app->authManager;
+            $this->_role = $auth->getRole($this->role);
+        }
+        return $this->_role;
     }
 }

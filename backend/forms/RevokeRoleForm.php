@@ -34,7 +34,15 @@ class RevokeRoleForm extends Model
         if ($this->validate()) {
             $role = $this->getRole();
             $auth = Yii::$app->authManager;
-            return $auth->revoke($role, $this->user_id);
+            if ($auth->revoke($role, $this->user_id)) {
+                $user = $this->getUser();
+                Yii::$app->syslog->log('revoke_user_role', 'revoke user role', [
+                    'user_id' => $user->id,
+                    'username' => $user->username,
+                    'role' => $role->name
+                ]);
+                return true;
+            }
         }
         return false;
     }
@@ -43,7 +51,14 @@ class RevokeRoleForm extends Model
     {
         if ($this->validate()) {
             $auth = Yii::$app->authManager;
-            return $auth->revokeAll($this->user_id);
+            if ($auth->revokeAll($this->user_id)) {
+                $user = $this->getUser();
+                Yii::$app->syslog->log('revoke_all_user_role', 'revoke all user role', [
+                    'user_id' => $user->id,
+                    'username' => $user->username,
+                ]);
+                return true;
+            }
         }
         return false;
     }

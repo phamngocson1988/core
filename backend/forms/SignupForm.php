@@ -38,6 +38,7 @@ class SignupForm extends BaseSignupForm
 			}	
 			$transaction->commit();
 			$this->sendEmail();
+            Yii::$app->syslog->log('create_user', 'create new user', $user);
 			return $user;
 		} catch (\Exception $e) {
 			$transaction->rollBack();

@@ -159,4 +159,56 @@ class RbacController extends Controller
         ]);
         
     }
+
+    public function actionActionList()
+    {
+        // list all modules
+        $controllerlist = [];
+        $modules = Yii::$app->modules;
+        $controllerDirs[Yii::$app->id] = Yii::$app->controllerPath;
+        foreach ($modules as $key => $module) { 
+            if (is_object($module)) {
+                $controllerDirs[$key] = $module->controllerPath;
+            } elseif (is_array($module) && array_key_exists('class', $module)) {
+                $moduleObj = Yii::createObject($module, [$key]);
+                $controllerDirs[$key] = $moduleObj->controllerPath;
+            }
+        }
+
+        // list all controllers
+        foreach ($controllerDirs as $key => $dir) {
+            if ($handle = opendir($dir)) {
+                while (false !== ($file = readdir($handle))) {
+                    if ($file != "." && $file != ".." && substr($file, strrpos($file, '.') - 10) == 'Controller.php') {
+                        $controllerId = substr($file, 0, strrpos($file, '.') - 10);
+                        $controllerId = strtolower($controllerId);
+                        $controllerlist[$key][$controllerId] = $dir . DIRECTORY_SEPARATOR . $file;
+                    }
+                }
+                closedir($handle);
+            }    
+        }
+        asort($controllerlist);
+
+        // list all actions
+        $fulllist = [];
+        foreach ($controllerlist as $moduleName => $controllers) {
+            foreach ($controllers as $name => $controller) {
+                $handle = fopen($controller, "r");
+                if ($handle) {
+                    while (($line = fgets($handle)) !== false) {
+                        if (preg_match('/public function action(.*?)\(/', $line, $display)) {
+                            if (strlen($display[1]) > 2) {
+                                $fulllist[$moduleName][$name][] = strtolower($display[1]);
+                            }
+                        }
+                    }
+                }
+                fclose($handle);
+            }
+        }
+        echo '<pre>';
+        print_r($fulllist);die;
+        return $fulllist;
+    }
 }

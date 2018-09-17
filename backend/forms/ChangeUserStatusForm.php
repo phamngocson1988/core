@@ -25,7 +25,10 @@ class ChangeUserStatusForm extends Model
         if ($this->validate()) {
             $user = $this->getUser();
             $user->status = User::STATUS_ACTIVE;
-            return $user->save();
+            if ($user->save()) {
+                Yii::$app->syslog->log('active_user', 'active user', $user);
+                return true;
+            }
         }
         return false;
     }
@@ -35,7 +38,10 @@ class ChangeUserStatusForm extends Model
         if ($this->validate()) {
             $user = $this->getUser();
             $user->status = User::STATUS_DELETED;
-            return $user->save();
+            if ($user->save()) {
+                Yii::$app->syslog->log('delete_user', 'delete user', $user);
+                return true;
+            }
         }
         return false;
     }
