@@ -102,4 +102,9 @@ class ImageHandler extends UploadFiles
         $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
         return $filePath;
     }
+
+    public function getImagePath()
+    {
+        return Yii::getAlias($this->image_path);
+    }
 }

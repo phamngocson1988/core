@@ -51,6 +51,11 @@
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput()}
+
+                {$form->field($model, 'parent_role', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->dropDownList($model->getAvailableParent(), ['prompt' => 'Choose parent'])}
               </div>
             </div>
           </div>

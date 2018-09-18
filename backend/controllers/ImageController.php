@@ -8,6 +8,7 @@ use backend\forms\FetchImageForm;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 use backend\forms\DeleteImageForm;
+use yii\helpers\ArrayHelper;
 
 /**
  * ImageController
@@ -118,18 +119,18 @@ class ImageController extends Controller
     {
         try {
             // File Route.
-            $fileRoute = Yii::$app->image->image_path;
+            $fileRoute = Yii::$app->image->getImagePath();
             $fileUrl = Yii::$app->image->image_url;
             $fieldname = "file";
+            $fileData = ArrayHelper::getValue($_FILES, $fieldname);
+            $name = ArrayHelper::getValue($fileData, "name");
+            $tmpName = ArrayHelper::getValue($fileData, "tmp_name");
             // Get filename.
-            $filename = explode(".", $_FILES[$fieldname]["name"]);
+            $filename = explode(".", $name);
 
             // Validate uploaded files.
             // Do not use $_FILES["file"]["type"] as it can be easily forged.
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-
-            // Get temp file name.
-            $tmpName = $_FILES[$fieldname]["tmp_name"];
 
             // Get mime type.
             $mimeType = finfo_file($finfo, $tmpName);
