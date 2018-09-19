@@ -1,6 +1,15 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='common\widgets\TinyMce' type='block'}
+
+{$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
+{$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
+
+{$this->registerJsFile('@web/vendor/assets/global/scripts/datatable.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+{$this->registerJsFile('@web/vendor/assets/global/plugins/datatables/datatables.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+{$this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+{$this->registerJsFile('@web/vendor/assets/pages/scripts/table-datatables-editable.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -46,14 +55,17 @@
               <li>
                 <a href="#tab_price" data-toggle="tab"> {Yii::t('module.shop', 'prices')} </a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="#tab_category" data-toggle="tab"> {Yii::t('module.shop', 'product_categories')} </a>
-              </li>
+              </li> -->
               <li>
                 <a href="#tab_meta" data-toggle="tab"> {Yii::t('module.shop', 'meta')} </a>
               </li>
               <li>
                 <a href="#tab_gallery" data-toggle="tab"> Gallery </a>
+              </li>
+              <li>
+                <a href="#tab_package" data-toggle="tab"> {Yii::t('module.shop', 'product_packages')} </a>
               </li>
             </ul>
             <div class="tab-content">
@@ -118,7 +130,7 @@
                   ])->textInput()}
                 </div>
               </div>
-              <div class="tab-pane" id="tab_category">
+              <!-- <div class="tab-pane" id="tab_category">
                 <div class="form-body">
                   {$form->field($model, 'categories', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -129,7 +141,7 @@
                     'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
                   ])->label('Categories')}
                 </div>
-              </div>
+              </div> -->
               <div class="tab-pane" id="tab_meta">
                 <div class="form-body">
                   {$form->field($model, 'meta_title', [
@@ -178,6 +190,47 @@
                     {/foreach}
                   </tbody>
                 </table>
+              </div>
+              <div class="tab-pane" id="tab_package">
+                <div class="portlet-body">
+                  <div class="table-toolbar">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="btn-group">
+                          <button id="sample_editable_1_new" class="btn green"> Add New
+                          <i class="fa fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <table class="table table-striped table-hover table-bordered" id="sample_editable_1222">
+                    <thead>
+                      <tr>
+                        <th> Username </th>
+                        <th> Full Name </th>
+                        <th> Points </th>
+                        <th> Notes </th>
+                        <th> Edit </th>
+                        <th> Delete </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td> alex </td>
+                        <td> Alex Nilson </td>
+                        <td> 1234 </td>
+                        <td class="center"> power user </td>
+                        <td>
+                          <a class="edit" href="javascript:;"> Edit </a>
+                        </td>
+                        <td>
+                          <a class="delete" href="javascript:;"> Delete </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -239,6 +292,12 @@ $("#upload-gallery").selectImage(manager, {
 });
 $("#tab_gallery").on('click', '.remove', function() {
   $(this).closest('tr').fadeOut(300, function(){ $(this).remove();});
-})
+});
+
+var table = $('#sample_editable_1222');
+
+  var oTable = table.dataTable({
+
+  });
 {/literal}
 {/registerJs}

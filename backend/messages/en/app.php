@@ -153,4 +153,5 @@ return [
     'boolean_no' => 'No',
     'boolean_yes' => 'Yes',
     'send_mail_to_customer' => 'Send mail to customer',
+    'system_logs' => 'System Logs',
 ];

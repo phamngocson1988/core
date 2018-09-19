@@ -90,7 +90,7 @@ return [
     'image_size_at_least' => 'Kích thước ảnh tối thiểu là {size}.',
     'error' => 'Lỗi',
     'choose_image' => 'Chọn hình ảnh',
-    'manage_system_logs' => 'Quản lý log hệ thống',
+    'manage_system_logs' => 'Quản lý nhật ký hệ thống',
     'created_time' => 'Thời gian tạo',
     'action' => 'Tác vụ',
     'description' => 'Mô tả',
@@ -152,4 +152,5 @@ return [
     'boolean_no' => 'Không',
     'boolean_yes' => 'Có',
     'send_mail_to_customer' => 'Gửi mail tới khách hàng',
+    'system_logs' => 'Nhật ký hệ thống',
 ];

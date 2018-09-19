@@ -48,7 +48,7 @@
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 10%;"> {Yii::t('app', 'created_time')} </th>
-              <th style="width: 25%;"> {Yii::t('app', 'user')} </th>
+              <th style="width: 25%;"> {Yii::t('app', 'creator')} </th>
               <th style="width: 15%;"> {Yii::t('app', 'action')} </th>
               <th style="width: 15%;"> {Yii::t('app', 'description')} </th>
               <th style="width: 10%;"> {Yii::t('app', 'data')} </th>

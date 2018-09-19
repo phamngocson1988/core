@@ -7,7 +7,7 @@
 <div class="page-bar">
   <ul class="page-breadcrumb">
     <li>
-      <span>{Yii::t('app', 'dashboard')}</span>
+      <span>{Yii::t('app', 'home')}</span>
     </li>
   </ul>
   <div class="page-toolbar">

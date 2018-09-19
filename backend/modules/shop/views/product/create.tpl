@@ -43,9 +43,9 @@
               <li>
                 <a href="#tab_price" data-toggle="tab"> {Yii::t('module.shop', 'prices')} </a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="#tab_category" data-toggle="tab"> {Yii::t('module.shop', 'product_categories')} </a>
-              </li>
+              </li> -->
               <li>
                 <a href="#tab_meta" data-toggle="tab"> {Yii::t('module.shop', 'meta')} </a>
               </li>
@@ -115,7 +115,7 @@
                   ])->textInput()}
                 </div>
               </div>
-              <div class="tab-pane" id="tab_category">
+              <!-- <div class="tab-pane" id="tab_category">
                 <div class="form-body">
                   {$form->field($model, 'categories', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -126,7 +126,7 @@
                     'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
                   ])->label('Categories')}
                 </div>
-              </div>
+              </div> -->
               <div class="tab-pane" id="tab_meta">
                 <div class="form-body">
                   {$form->field($model, 'meta_title', [
