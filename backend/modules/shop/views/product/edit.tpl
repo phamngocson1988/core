@@ -5,10 +5,9 @@
 {$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
 {$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
 
-{$this->registerJsFile('@web/vendor/assets/global/scripts/datatable.js', ['depends' => [\backend\assets\AppAsset::className()]])}
-{$this->registerJsFile('@web/vendor/assets/global/plugins/datatables/datatables.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
-{$this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js', ['depends' => [\backend\assets\AppAsset::className()]])}
-{$this->registerJsFile('@web/vendor/assets/pages/scripts/table-datatables-editable.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+
+
+{$this->registerJsFile('@web/js/jquery.tabledit.js', ['depends' => [\backend\assets\AppAsset::className()]])}
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -294,10 +293,12 @@ $("#tab_gallery").on('click', '.remove', function() {
   $(this).closest('tr').fadeOut(300, function(){ $(this).remove();});
 });
 
-var table = $('#sample_editable_1222');
-
-  var oTable = table.dataTable({
-
-  });
+$('#sample_editable_1222').Tabledit({
+    url: 'example.php',
+    columns: {
+        identifier: [0, 'id'],
+        editable: [[1, 'nickname'], [2, 'firstname'], [3, 'lastname']]
+    }
+});
 {/literal}
 {/registerJs}
