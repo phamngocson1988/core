@@ -9,6 +9,19 @@
 
 {$this->registerJsFile('@web/js/jquery.tabledit.js', ['depends' => [\backend\assets\AppAsset::className()]])}
 
+// repeater
+{$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
+
+{$this->registerJsFile('@web/vendor/assets/global/plugins/jquery-repeater/jquery.repeater.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+{$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+{$this->registerJsFile('@web/vendor/assets/pages/scripts/form-repeater.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+{$this->registerJsFile('@web/vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+
+
+
+
+
+
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -191,6 +204,42 @@
                 </table>
               </div>
               <div class="tab-pane" id="tab_package">
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="mt-repeater">
+                      <div data-repeater-list="CreatePackageForm">
+                        <div data-repeater-item class="row">
+                          
+                          {$form->field($package, 'title', [
+                            'options' => ['class' => 'col-md-2']
+                          ])->textInput()}
+
+                          {$form->field($package, 'price', [
+                            'options' => ['class' => 'col-md-2']
+                          ])->textInput()}
+
+                          {$form->field($package, 'gems', [
+                            'options' => ['class' => 'col-md-2']
+                          ])->textInput()}
+                        
+                          <div class="col-md-1">
+                            <label class="control-label">&nbsp;</label>
+                            <a href="javascript:;" data-repeater-delete class="btn btn-danger">
+                            <i class="fa fa-close"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <a href="javascript:;" data-repeater-create class="btn btn-info mt-repeater-add">
+                      <i class="fa fa-plus"></i> {Yii::t('module.shop', 'add_package')}</a>
+                      <br>
+                      <br> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="tab_package1">
                 <div class="portlet-body">
                   <div class="table-toolbar">
                     <div class="row">

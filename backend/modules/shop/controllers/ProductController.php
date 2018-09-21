@@ -11,6 +11,7 @@ use backend\modules\shop\forms\DeleteProductForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use common\modules\shop\models\Product;
+use backend\modules\shop\forms\CreatePackageForm;
 
 class ProductController extends Controller
 {
@@ -93,13 +94,16 @@ class ProductController extends Controller
         } else {
             $model->loadData($id);
         }
+
+        $packageForm = new CreatePackageForm();
         $this->view->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
         $this->view->registerCssFile('@web/vendor/assets/global/plugins/fancybox/source/jquery.fancybox.css', ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
         $this->view->registerJsFile('@web/vendor/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
         return $this->render('edit.tpl', [
             'model' => $model,
-            'back' => $request->get('ref', Url::to(['product/index']))
+            'back' => $request->get('ref', Url::to(['product/index'])),
+            'package' => $packageForm
         ]);
     }
 
