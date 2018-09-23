@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use backend\forms\SignupForm;
+use backend\forms\CreateUserForm;
 use backend\forms\FetchUserForm;
 use backend\forms\ChangeUserStatusForm;
 
@@ -68,7 +69,7 @@ class UserController extends Controller
         $request = Yii::$app->request;
         $auth = Yii::$app->authManager;
         $roles = $auth->getRoles();
-        $model = new SignupForm();
+        $model = new CreateUserForm();
         if ($model->load($request->post())) {
             if ($user = $model->signup()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
