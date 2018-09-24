@@ -45,11 +45,11 @@ class m180923_171102_create_game_table extends Migration
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
-            'created_at' => $this->integer(),            
+            'created_at' => $this->dateTime(),            
             'created_by' => $this->integer(),
-            'updated_at' => $this->integer(),
+            'updated_at' => $this->dateTime(),
             'updated_by' => $this->integer(),
-            'deleted_at' => $this->integer(),
+            'deleted_at' => $this->dateTime(),
             'deleted_by' => $this->integer(),
         ], $tableOptions);
 
@@ -69,7 +69,7 @@ class m180923_171102_create_game_table extends Migration
         $this->createTable('{{%product}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(100)->notNull(),
-            'game_id' => $this->integer(),
+            'game_id' => $this->integer()->notNull(),
             'image_id' => $this->integer(),
             'price' => $this->integer(),
             'gems' => $this->integer(),
@@ -79,11 +79,11 @@ class m180923_171102_create_game_table extends Migration
             'sale_off_to' => $this->dateTime(),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
             'position' => $this->integer(),            
-            'created_at' => $this->integer(),            
+            'created_at' => $this->dateTime(),            
             'created_by' => $this->integer(),
-            'updated_at' => $this->integer(),
+            'updated_at' => $this->dateTime(),
             'updated_by' => $this->integer(),
-            'deleted_at' => $this->integer(),
+            'deleted_at' => $this->dateTime(),
             'deleted_by' => $this->integer(),
         ], $tableOptions);
 

@@ -456,7 +456,7 @@ function ImageManager(opts) {
                         data[index] = item;
                     });
                 }
-                that.observer.callback(data);
+                that.observer.callback(data, that.observer.element);
             }
             $(that.options.id).modal('hide');
         });
@@ -524,15 +524,17 @@ $.fn.selectImage = function(manager, opts) {
     if (!manager) {
         return false;
     }
+
     var options = {
         type: 'single', //single | multiple
-        callback: function(objs) {
+        callback: function(objs, e) {
             
         }
     };
     options = $.extend(options, opts);
 
-    $(this).on('click', function() {
+    $(this).on('click', function(e) {
+        options.element = $(e.target);
         manager.attach(options);
         manager.open_popup();
     });

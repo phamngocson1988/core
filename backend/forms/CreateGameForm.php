@@ -44,6 +44,7 @@ class CreateGameForm extends Model
         if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
+                $now = date('Y-m-d H:i:s');
                 $game = new Game();
                 $game->title = $this->title;
                 $game->slug = $this->slug;
@@ -54,14 +55,24 @@ class CreateGameForm extends Model
                 $game->meta_keyword = $this->meta_keyword;
                 $game->meta_description = $this->meta_description;
                 $game->created_by = Yii::$app->user->id;
-                $game->created_at = strtotime('now');
-                $game->updated_at = strtotime('now');
+                $game->created_at = $now;
+                $game->updated_at = $now;
                 $game->status = $this->status;
                 $game->save();
                 $newId = $game->id;
 
+                // Galleries
+                if ($newId) {
+                    foreach ($this->getGallery() as $imageId) {
+                        $productImage = new GameImage();
+                        $productImage->image_id = $imageId;
+                        $productImage->product_id = $newId;
+                        $productImage->save();
+                    }    
+                }
+
                 $transaction->commit();
-                return $newId;
+                return $game;
             } catch (Exception $e) {
                 $transaction->rollBack();                
                 throw $e;
@@ -70,6 +81,7 @@ class CreateGameForm extends Model
                 throw $e;
             }
         }
+        return false;
     }
 
     public function getGallery()

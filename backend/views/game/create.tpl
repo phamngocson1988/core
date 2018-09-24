@@ -41,7 +41,7 @@
                 <a href="#tab_general" data-toggle="tab"> {Yii::t('app', 'main_content')}</a>
               </li>
               <li>
-                <a href="#tab_meta" data-toggle="tab"> {Yii::t('app', 'meta')} </a>
+                <a href="#tab_gallery" data-toggle="tab"> {Yii::t('app', 'gallery')} </a>
               </li>
             </ul>
             <div class="tab-content">
@@ -90,10 +90,6 @@
                         </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="tab_meta">
-                <div class="form-body">
                   {$form->field($model, 'meta_title', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'

@@ -122,7 +122,7 @@
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='/shop/game'}" class="nav-link " code='game.index'>
+            <a href="{url route='/game'}" class="nav-link " code='game.index'>
             <span class="title">{Yii::t('app', 'games')}</span>
             </a>
           </li>

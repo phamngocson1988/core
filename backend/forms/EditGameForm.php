@@ -47,6 +47,7 @@ class EditGameForm extends Model
         if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
+                $now = date('Y-m-d H:i:s');
                 $game = $this->getGame();
                 $game->title = $this->title;
                 $game->slug = $this->slug;
@@ -56,12 +57,32 @@ class EditGameForm extends Model
                 $game->meta_title = $this->meta_title;
                 $game->meta_keyword = $this->meta_keyword;
                 $game->meta_description = $this->meta_description;
-                $game->updated_at = strtotime('now');
+                $game->updated_at = $now;
                 $game->status = $this->status;
                 $result = $game->save();
 
+                if ($result) {
+                    // Delete old images
+                    $oldImages = $game->gallery;
+                    $oldImageIds = [];
+                    $newImages = $this->getGallery(); // list ids of new images
+                    foreach ($oldImages as $oldImage) {
+                        $oldImageIds[] = $oldImage->id;
+                        if (!in_array($oldImage->id, $newImages)) {
+                            $oldImage->delete();
+                        }
+                    }
+                    $newImageIds = array_diff($newImages, $oldImageIds);
+                    foreach ($newImageIds as $imageId) {
+                        $gameImage = new GameImage();
+                        $gameImage->image_id = $imageId;
+                        $gameImage->game_id = $this->id;
+                        $gameImage->save();
+                    }
+                }
+
                 $transaction->commit();
-                return $result;
+                return $game;
             } catch (Exception $e) {
                 $transaction->rollBack();                
                 throw $e;
@@ -70,6 +91,7 @@ class EditGameForm extends Model
                 throw $e;
             }
         }
+        return false;
     }
 
     protected function getGame()

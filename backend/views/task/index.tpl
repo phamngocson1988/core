@@ -95,7 +95,7 @@
           </thead>
           <tbody>
               {if (!$models) }
-              <tr><td colspan="8">{Yii::t('app', 'no_data_found')}</td></tr>
+              <tr><td colspan="9">{Yii::t('app', 'no_data_found')}</td></tr>
               {/if}
               {foreach $models as $key => $model}
               <tr>

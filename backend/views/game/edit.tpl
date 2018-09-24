@@ -65,9 +65,6 @@
                 <a href="#tab_general" data-toggle="tab"> {Yii::t('app', 'main_content')}</a>
               </li>
               <li>
-                <a href="#tab_meta" data-toggle="tab"> {Yii::t('app', 'meta')} </a>
-              </li>
-              <li>
                 <a href="#tab_gallery" data-toggle="tab"> Gallery </a>
               </li>
               <li>
@@ -120,10 +117,6 @@
                         </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="tab_meta">
-                <div class="form-body">
                   {$form->field($model, 'meta_title', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
@@ -171,81 +164,61 @@
                   </tbody>
                 </table>
               </div>
+              
               <div class="tab-pane" id="tab_package">
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="mt-repeater">
-                      <div data-repeater-list="CreatePackageForm">
-                        <div data-repeater-item class="row">
-                          {$form->field($package, 'title', [
-                            'options' => ['class' => 'col-md-2']
-                          ])->textInput()}
-
-                          {$form->field($package, 'price', [
-                            'options' => ['class' => 'col-md-2']
-                          ])->textInput()}
-
-                          {$form->field($package, 'gems', [
-                            'options' => ['class' => 'col-md-2']
-                          ])->textInput()}
-                        
-                          <div class="col-md-1">
-                            <label class="control-label">&nbsp;</label>
-                            <a href="javascript:;" data-repeater-delete class="btn btn-danger">
-                            <i class="fa fa-close"></i>
-                            </a>
+                <div class="portlet box blue-hoki">
+                  <div class="portlet-title">
+                    <div class="caption">
+                      <i class="fa fa-gift"></i>Form Actions On Top 
+                    </div>
+                    <div class="tools">
+                      <a href="javascript:;" class="collapse"> </a>
+                    </div>
+                  </div>
+                  <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <form action="#" class="form-horizontal">
+                      <div class="form-body">
+                        <div class="row">
+                          <div class="form-group col-md-3">
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
+                                    <img src="{$model->getImageUrl('150x150')}" />
+                                </div>
+                                <div>
+                                  <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
+                                  <span class="btn default btn-file">
+                                    <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
+                                    {$form->field($model, 'image_id', [
+                                      'template' => '{input}', 
+                                      'options' => ['tag' => null]
+                                    ])->hiddenInput()->label(false)}
+                                  </span>
+                                  <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="form-group col-md-9">
+                            <label class="col-md-3 control-label">Text</label>
+                            <div class="col-md-9">
+                              <input type="text" class="form-control" placeholder="Enter text">
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <hr>
-                      <a href="javascript:;" data-repeater-create class="btn btn-info mt-repeater-add">
-                      <i class="fa fa-plus"></i> {Yii::t('app', 'add_package')}</a>
-                      <br>
-                      <br> 
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="tab_package1">
-                <div class="portlet-body">
-                  <div class="table-toolbar">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="btn-group">
-                          <button id="sample_editable_1_new" class="btn green"> Add New
-                          <i class="fa fa-plus"></i>
-                          </button>
+                      <div class="form-actions">
+                        <div class="row">
+                          <div class="col-md-offset-3 col-md-9">
+                            <button type="submit" class="btn green">Submit</button>
+                            <button type="button" class="btn default">Cancel</button>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </form>
+                    <!-- END FORM-->
                   </div>
-                  <table class="table table-striped table-hover table-bordered" id="sample_editable_1222">
-                    <thead>
-                      <tr>
-                        <th> Username </th>
-                        <th> Full Name </th>
-                        <th> Points </th>
-                        <th> Notes </th>
-                        <th> Edit </th>
-                        <th> Delete </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td> alex </td>
-                        <td> Alex Nilson </td>
-                        <td> 1234 </td>
-                        <td class="center"> power user </td>
-                        <td>
-                          <a class="edit" href="javascript:;"> Edit </a>
-                        </td>
-                        <td>
-                          <a class="delete" href="javascript:;"> Delete </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
+                
               </div>
             </div>
           </div>
@@ -281,6 +254,17 @@ $("#upload-image").selectImage(manager, {
   }
 });
 
+$(".product-image").selectImage(manager, {
+  callback: function(img, e) {
+    var thumb = img.src;
+    var id = img.id;
+    var image = e.closest('.form-group').find('img');
+    var input = e.closest('.form-group').find('[type=hidden]');
+    image.attr('src', thumb).removeClass('hide');
+    input.val(id);    
+  }
+});
+
 // gallery
 $("#upload-gallery").selectImage(manager, {
   type: 'multiple',
@@ -309,12 +293,5 @@ $("#tab_gallery").on('click', '.remove', function() {
   $(this).closest('tr').fadeOut(300, function(){ $(this).remove();});
 });
 
-$('#sample_editable_1222').Tabledit({
-    url: 'example.php',
-    columns: {
-        identifier: [0, 'id'],
-        editable: [[1, 'nickname'], [2, 'firstname'], [3, 'lastname']]
-    }
-});
 {/literal}
 {/registerJs}

@@ -7,9 +7,9 @@ return [
     'name' => 'Core Functions',
     'timeZone' => 'Asia/Bangkok',
     'modules' => [
-        'shop' => [
-            'class' => 'common\modules\shop\Module',
-        ],
+        // 'shop' => [
+        //     'class' => 'common\modules\shop\Module',
+        // ],
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
