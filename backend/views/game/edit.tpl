@@ -2,13 +2,6 @@
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='common\widgets\TinyMce' type='block'}
 
-{$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
-{$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
-
-
-
-{$this->registerJsFile('@web/js/jquery.tabledit.js', ['depends' => [\backend\assets\AppAsset::className()]])}
-
 // repeater
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
 
@@ -16,11 +9,6 @@
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/form-repeater.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
-
-
-
-
-
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -105,7 +93,7 @@
                             <div>
                               <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
                               <span class="btn default btn-file">
-                                <span class="fileinput-new" id="upload-image"> Choose image </span>
+                                <span class="fileinput-new" id="upload-image"> {Yii::t('app', 'choose_image')} </span>
                                 {$form->field($model, 'image_id', [
                                   'inputOptions' => ['id' => 'image_id'], 
                                   'template' => '{input}', 
@@ -133,7 +121,7 @@
               </div>
               <div class="tab-pane" id="tab_gallery">
                 <div id="tab_images_uploader_container" class="text-align-reverse margin-bottom-10">
-                    <a class="btn btn-success" id="upload-gallery"><i class="fa fa-plus"></i> Select Files </a>
+                    <a class="btn btn-success" id="upload-gallery"><i class="fa fa-plus"></i> {Yii::t('app', 'choose_image')} </a>
                 </div>
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -164,61 +152,79 @@
                   </tbody>
                 </table>
               </div>
-              
-              <div class="tab-pane" id="tab_package">
-                <div class="portlet box blue-hoki">
-                  <div class="portlet-title">
-                    <div class="caption">
-                      <i class="fa fa-gift"></i>Form Actions On Top 
+              <div class="tab-pane mt-repeater" id="tab_package">
+                <div data-repeater-list="CreateProductForm">
+                  <div data-repeater-item class="portlet box blue-hoki mt-repeater-item">
+                    <div class="portlet-title">
+                      <div class="caption">
+                        <i class="fa fa-gift"></i>Form Actions On Top 
+                      </div>
+                      <div class="tools">
+                        <a href="javascript:;" class="collapse"> </a>
+                      </div>
                     </div>
-                    <div class="tools">
-                      <a href="javascript:;" class="collapse"> </a>
-                    </div>
-                  </div>
-                  <div class="portlet-body form">
-                    <!-- BEGIN FORM-->
-                    <form action="#" class="form-horizontal">
-                      <div class="form-body">
-                        <div class="row">
-                          <div class="form-group col-md-3">
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                    <img src="{$model->getImageUrl('150x150')}" />
+                    <div class="portlet-body form">
+                      <!-- BEGIN FORM-->
+                        {$form->field($package, 'game_id', ['template' => '{input}'])->hiddenInput(['value' => $model->id])}
+                        <div class="form-body">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
+                                        <img src="{$model->getImageUrl('150x150')}" />
+                                    </div>
+                                    <div>
+                                      <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
+                                      <span class="btn default btn-file">
+                                        <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
+                                        {$form->field($package, 'image_id', [
+                                          'template' => '{input}', 
+                                          'options' => ['tag' => null]
+                                        ])->hiddenInput()->label(false)}
+                                      </span>
+                                      <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
+                                    </div>
                                 </div>
-                                <div>
-                                  <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
-                                  <span class="btn default btn-file">
-                                    <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
-                                    {$form->field($model, 'image_id', [
-                                      'template' => '{input}', 
-                                      'options' => ['tag' => null]
-                                    ])->hiddenInput()->label(false)}
-                                  </span>
-                                  <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                                </div>
+                              </div>
                             </div>
-                          </div>
-                          <div class="form-group col-md-9">
-                            <label class="col-md-3 control-label">Text</label>
                             <div class="col-md-9">
-                              <input type="text" class="form-control" placeholder="Enter text">
+                              {$form->field($package, 'title', [
+                                'options' => ['class' => 'form-group col-md-6'],
+                                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+                              ])->textInput()}
+                              {$form->field($package, 'status', [
+                                'options' => ['class' => 'form-group col-md-6'],
+                                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+                              ])->dropDownList($package->getStatusList())}
+                              {$form->field($package, 'price', [
+                                'options' => ['class' => 'form-group col-md-6'],
+                                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+                              ])->textInput()}
+                              {$form->field($package, 'gems', [
+                                'options' => ['class' => 'form-group col-md-6'],
+                                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+                              ])->textInput()}
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn green">Submit</button>
-                            <button type="button" class="btn default">Cancel</button>
+                        <div class="form-actions">
+                          <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                              <button type="submit" class="btn green">Submit</button>
+                              <button type="button" class="btn default">Cancel</button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </form>
-                    <!-- END FORM-->
+                      <!-- END FORM-->
+                    </div>
                   </div>
                 </div>
-                
+                <a href="javascript:;" data-repeater-create class="btn btn-success mt-repeater-add"><i class="fa fa-plus"></i> Add</a>
               </div>
             </div>
           </div>

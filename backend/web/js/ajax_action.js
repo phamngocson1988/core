@@ -532,8 +532,8 @@ $.fn.selectImage = function(manager, opts) {
         }
     };
     options = $.extend(options, opts);
-
-    $(this).on('click', function(e) {
+    var selector = $(this).selector;
+    $(document).on('click', selector, function(e) {
         options.element = $(e.target);
         manager.attach(options);
         manager.open_popup();

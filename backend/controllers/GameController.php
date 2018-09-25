@@ -87,6 +87,9 @@ class GameController extends Controller
         $model = new EditGameForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
+                foreach ($request->get('CreateProductForm') as $packageKey => $packageData) {
+                    # code...
+                }
                 Yii::$app->session->setFlash('success', 'Success!');
                 $ref = $request->get('ref', Url::to(['game/index']));
                 return $this->redirect($ref);

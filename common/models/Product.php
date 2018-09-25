@@ -26,11 +26,14 @@ use yii\db\ActiveRecord;
  * @property integer $deleted_at
  * @property integer $deleted_by
  */
-class ProductPackage extends ActiveRecord
+class Product extends ActiveRecord
 {
 	const STATUS_INVISIBLE = 'N';
     const STATUS_VISIBLE = 'Y';
     const STATUS_DELETE = 'D';
+
+    const SALE_TYPE = 'fix';
+    const SALE_PERCENT = 'percent';
 
 	public static function tableName()
     {
@@ -40,9 +43,17 @@ class ProductPackage extends ActiveRecord
     public static function getStatusList()
     {
         return [
-            self::STATUS_INVISIBLE => 'Invisible',
             self::STATUS_VISIBLE => 'Visible',
+            self::STATUS_INVISIBLE => 'Invisible',
             self::STATUS_DELETE => 'Deleted'
+        ];
+    }
+
+    public static function getSaleTypeList()
+    {
+        return [
+            self::SALE_TYPE => 'Fix',
+            self::SALE_PERCENT => 'Percent',
         ];
     }
 }
