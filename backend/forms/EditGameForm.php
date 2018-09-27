@@ -94,7 +94,7 @@ class EditGameForm extends Model
         return false;
     }
 
-    protected function getGame()
+    public function getGame()
     {
         if ($this->_game === null) {
             $this->_game = Game::findOne($this->id);

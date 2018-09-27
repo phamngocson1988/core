@@ -2,6 +2,10 @@
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='common\widgets\TinyMce' type='block'}
 
+{$this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
+{$this->registerCssFile('@web/vendor/assets/global/plugins/fancybox/source/jquery.fancybox.css', ['depends' => [\yii\bootstrap\BootstrapAsset::className()]])}
+{$this->registerJsFile('@web/vendor/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
+
 // repeater
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
 
@@ -9,6 +13,9 @@
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/form-repeater.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
+
+
+
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -32,16 +39,14 @@
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
-    {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
-      {$form->field($model, 'id', [
-        'template' => '{input}'
-      ])->hiddenInput()}
+      {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated', 'id' => 'create-game-form']}
+      {$form->field($model, 'id', ['template' => '{input}'])->hiddenInput()}
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" id='create-game-button'>
             <i class="fa fa-check"></i> {Yii::t('app', 'save')}
             </button>
           </div>
@@ -53,13 +58,14 @@
                 <a href="#tab_general" data-toggle="tab"> {Yii::t('app', 'main_content')}</a>
               </li>
               <li>
-                <a href="#tab_gallery" data-toggle="tab"> Gallery </a>
+                <a href="#tab_gallery" data-toggle="tab"> {Yii::t('app', 'gallery')} </a>
               </li>
               <li>
                 <a href="#tab_package" data-toggle="tab"> {Yii::t('app', 'game_packages')} </a>
               </li>
             </ul>
             <div class="tab-content">
+              
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
                   {$form->field($model, 'title', [
@@ -154,7 +160,7 @@
               </div>
               <div class="tab-pane mt-repeater" id="tab_package">
                 <div data-repeater-list="CreateProductForm">
-                  <div data-repeater-item class="portlet box blue-hoki mt-repeater-item">
+                  <div data-repeater-item class="portlet box blue-hoki mt-repeater-item create-product-form">
                     <div class="portlet-title">
                       <div class="caption">
                         <i class="fa fa-gift"></i>Form Actions On Top 
@@ -165,7 +171,7 @@
                     </div>
                     <div class="portlet-body form">
                       <!-- BEGIN FORM-->
-                        {$form->field($package, 'game_id', ['template' => '{input}'])->hiddenInput(['value' => $model->id])}
+                        {$form->field($newPackageForm, 'game_id', ['template' => '{input}'])->hiddenInput(['value' => $model->id])}
                         <div class="form-body">
                           <div class="row">
                             <div class="col-md-3">
@@ -178,9 +184,10 @@
                                       <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
                                       <span class="btn default btn-file">
                                         <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
-                                        {$form->field($package, 'image_id', [
+                                        {$form->field($newPackageForm, 'image_id', [
                                           'template' => '{input}', 
-                                          'options' => ['tag' => null]
+                                          'options' => ['tag' => null],
+                                          'inputOptions' => ['class' => 'product-image_id']
                                         ])->hiddenInput()->label(false)}
                                       </span>
                                       <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
@@ -189,34 +196,42 @@
                               </div>
                             </div>
                             <div class="col-md-9">
-                              {$form->field($package, 'title', [
+                              <div class="row">
+                              {$form->field($newPackageForm, 'title', [
                                 'options' => ['class' => 'form-group col-md-6'],
                                 'labelOptions' => ['class' => 'col-md-4 control-label'],
-                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
+                                'inputOptions' => ['class' => 'form-control product-title']
                               ])->textInput()}
-                              {$form->field($package, 'status', [
+                              {$form->field($newPackageForm, 'status', [
                                 'options' => ['class' => 'form-group col-md-6'],
                                 'labelOptions' => ['class' => 'col-md-4 control-label'],
-                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
-                              ])->dropDownList($package->getStatusList())}
-                              {$form->field($package, 'price', [
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
+                                'inputOptions' => ['class' => 'form-control product-status']
+                              ])->dropDownList($newPackageForm->getStatusList())}
+                              </div>
+                              <div class="row">
+                              {$form->field($newPackageForm, 'price', [
                                 'options' => ['class' => 'form-group col-md-6'],
                                 'labelOptions' => ['class' => 'col-md-4 control-label'],
-                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',                                
+                                'inputOptions' => ['class' => 'form-control product-price']
                               ])->textInput()}
-                              {$form->field($package, 'gems', [
+                              {$form->field($newPackageForm, 'gems', [
                                 'options' => ['class' => 'form-group col-md-6'],
                                 'labelOptions' => ['class' => 'col-md-4 control-label'],
-                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+                                'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
+                                'inputOptions' => ['class' => 'form-control product-gems']
                               ])->textInput()}
+                              </div>
                             </div>
                           </div>
                         </div>
                         <div class="form-actions">
                           <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                              <button type="submit" class="btn green">Submit</button>
-                              <button type="button" class="btn default">Cancel</button>
+                              <button type="submit" class="btn green create-product-button">{Yii::t('app', 'submit')}</button>
+                              <button type="button" class="btn default">{Yii::t('app', 'cancel')}</button>
                             </div>
                           </div>
                         </div>
@@ -233,6 +248,7 @@
       {/ActiveForm}
   </div>
 </div>
+<div id="modal"></div>
 <script type="text/javascript">
   // Remove main image
 function removeMainImage() {
@@ -297,6 +313,36 @@ $("#upload-gallery").selectImage(manager, {
 });
 $("#tab_gallery").on('click', '.remove', function() {
   $(this).closest('tr').fadeOut(300, function(){ $(this).remove();});
+});
+
+$("#tab_package").on("click", ".create-product-button", function(e){
+  e.preventDefault();
+  var _container = $(this).closest(".create-product-form");
+  var _img = _container.find(".product-image_id");
+  var _title = _container.find(".product-title");
+  var _status = _container.find(".product-status");
+  var _price = _container.find(".product-price");
+  var _gems = _container.find(".product-gems");
+
+
+  var form_data = new FormData();
+  form_data.append('CreateProductForm[game_id]', 1);
+  form_data.append('CreateProductForm[title]', _title.val());
+  form_data.append('CreateProductForm[price]', _price.val());
+  form_data.append('CreateProductForm[gems]', _gems.val());
+  form_data.append('CreateProductForm[status]', _status.val());
+  form_data.append('CreateProductForm[image_id]', _img.val());
+
+  $.ajax({
+      url         : '{/literal}{url route='product/create'}{literal}',
+      data        : form_data,
+      processData : false,
+      contentType : false,
+      type        : 'POST'
+  }).success(function(data){
+      console.log(data);
+  });
+  
 });
 
 {/literal}

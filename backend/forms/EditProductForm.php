@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use common\models\Product;
 
-class CreateProductForm extends Model
+class EditProductForm extends Model
 {
     public $game_id;
     public $title;
@@ -36,8 +36,6 @@ class CreateProductForm extends Model
                 $product->title = $this->title;
                 $product->price = $this->price;
                 $product->gems = $this->gems;
-                $product->game_id = $this->game_id;
-                $product->image_id = $this->image_id;
                 $product->sale_off_type = Product::SALE_TYPE;
                 $product->status = Product::STATUS_VISIBLE;
                 return $product->save();

@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use common\models\User;
 use common\models\Image;
+use common\models\Product;
 
 /**
  * Game model
@@ -61,6 +62,11 @@ class Game extends ActiveRecord
             return $image->getUrl($size);
         }
         return $default;
+    }
+
+    public function getProducts() 
+    {
+        return $this->hasMany(Product::className(), ['game_id' => 'id']);
     }
 
     public function getCreatedAt($format = false)
