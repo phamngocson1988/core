@@ -51,4 +51,13 @@ class FetchSystemLogForm extends Model
         }
         return $this->_command;
     }
+
+    public function getDataProvider()
+    {
+        $command = $this->getCommand();
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $command,
+        ]);
+        return $provider;
+    }
 }

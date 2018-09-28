@@ -36,11 +36,13 @@ class SystemLogController extends Controller
         $action = $request->get('action');
         $from_date = $request->get('from_date');
         $to_date = $request->get('to_date');
+        $description = $request->get('description');
         $condition = [
             'user_id' => $user_id,
             'action' => $action,
             'from_date' => strtotime($from_date),
-            'to_date' => strtotime($to_date)
+            'to_date' => strtotime($to_date),
+            'description' => $description
         ];
         $form = new FetchSystemLogForm($condition);
         $command = $form->getCommand();
@@ -57,4 +59,32 @@ class SystemLogController extends Controller
         ]);
     }
 
+    public function actionIndex1()
+    {
+        $this->view->params['main_menu_active'] = 'system-log.index';
+        $request = Yii::$app->request;
+        $user_id = $request->get('user_id');
+        $action = $request->get('action');
+        $from_date = $request->get('from_date');
+        $to_date = $request->get('to_date');
+        $condition = [
+            'user_id' => $user_id,
+            'action' => $action,
+            'from_date' => strtotime($from_date),
+            'to_date' => strtotime($to_date)
+        ];
+        $form = new FetchSystemLogForm($condition);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+
+        return $this->render('index1.tpl', [
+            'models' => $models,
+            'pages' => $pages,
+            'form' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
 }
