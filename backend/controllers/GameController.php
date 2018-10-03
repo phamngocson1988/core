@@ -12,6 +12,7 @@ use yii\data\Pagination;
 use yii\helpers\Url;
 use common\models\Game;
 use backend\forms\CreateProductForm;
+use backend\forms\EditProductForm;
 
 class GameController extends Controller
 {
@@ -93,21 +94,24 @@ class GameController extends Controller
             }
         } else {
             $model->loadData($id);
+            $game = $model->getGame();
+            $editProductForms = [];
+            foreach ($game->products as $product) {
+                $form = new EditProductForm();
+                $form->setProduct($product);
+                $form->loadData($product->id);
+                $editProductForms[] = $form;
+            }
+            $newProductForm = new CreateProductForm();
         }
 
-        $newPackageForm = new CreateProductForm();
-        $game = $model->getGame();
-        $products = $game->products;
-        $editPackageForms = [];
-        // foreach ($products as $product) {
-        //     $editPackageForm = new EditProductForm();
 
-        // }
 
         return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['game/index'])),
-            'newPackageForm' => $newPackageForm
+            'editProductForms' => $editProductForms,
+            'newProductForm' => $newProductForm
         ]);
     }
 

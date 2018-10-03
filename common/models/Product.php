@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use common\models\Image;
 
 /**
  * Product model
@@ -55,5 +56,19 @@ class Product extends ActiveRecord
             self::SALE_TYPE => 'Fix',
             self::SALE_PERCENT => 'Percent',
         ];
+    }
+
+    public function getImage() 
+    {
+        return $this->hasOne(Image::className(), ['id' => 'image_id']);
+    }
+
+    public function getImageUrl($size = null, $default = '/images/noimage.png')
+    {
+        $image = $this->image;
+        if ($image) {
+            return $image->getUrl($size);
+        }
+        return $default;
     }
 }

@@ -40,7 +40,7 @@ class CreateProductForm extends Model
                 $product->image_id = $this->image_id;
                 $product->sale_off_type = Product::SALE_TYPE;
                 $product->status = Product::STATUS_VISIBLE;
-                return $product->save();
+                return $product->save() ? $product : null;
             } catch (Exception $e) {
                 return false;
             }

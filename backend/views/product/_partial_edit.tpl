@@ -1,3 +1,4 @@
+{use class='yii\widgets\ActiveForm' type='block'}
 <div class="portlet box blue-hoki edit-product-form" id="edit-product-form-{$editProductForm->id}" data-id="{$editProductForm->id}" data-url="{url route='product/edit' id=$editProductForm->id}">
   {$form->field($editProductForm, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput(['value' => $editProductForm->game_id])}
   {$form->field($editProductForm, 'id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput(['value' => $editProductForm->id])}
@@ -7,7 +8,7 @@
     </div>
     <div class="tools">
       <a href="" class="collapse" data-original-title="" title=""> </a>
-      <a href="{url route='product/delete' id=$editProductForm->id}" class="remove" data-original-title="" title=""> </a>
+      <a href="" class="remove" data-original-title="" title=""> </a>
     </div>
   </div>
   <div class="portlet-body form">

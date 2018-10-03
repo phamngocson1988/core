@@ -110,11 +110,16 @@ function AjaxFormSubmit(opts) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var form = $(this);
+            if (!that.validate(form)) {
+                that.invalid(form);
+                return false;
+            }
             $.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
                 dataType : 'json',
                 data: form.serialize(),
+                beforeSend: that.beforeSend(form),
                 success: function (result, textStatus, jqXHR) {
                     if (result.status == false) {
                         that.error(result.errors);
@@ -123,6 +128,7 @@ function AjaxFormSubmit(opts) {
                         that.success(result.data);
                     }
                 },
+                complete: that.complete(form)
             });
             return false;
         });
@@ -139,7 +145,24 @@ function AjaxFormSubmit(opts) {
         console.log(data);
         return false;
     }
+
+    this.beforeSend = function (element) {
+        App.blockUI({target: 'body', animate: true});
+    }
+
+    this.complete = function(element) {
+        App.unblockUI('body');
+    }
+
+    this.validate = function(form) {
+        return true;
+    }
+
+    this.invalid = function(form) {
+
+    }
     this.init(opts);
+    return this;
 }
 
 
