@@ -55,9 +55,11 @@ class ProductController extends Controller
         }, $products);
         $game = $form->getGame();
 
+        $newProductForm = new CreateProductForm(['game_id' => $gameId]);
+
         return $this->render('index.tpl', [
-            'products' => $products,
             'editProductForms' => $editProductForms,
+            'newProductForm' => $newProductForm,
             'game' => $game,
             'ref' => $ref
         ]);
@@ -69,20 +71,10 @@ class ProductController extends Controller
         $model = new CreateProductForm();
         if ($request->getIsAjax()) {
             if ($model->load($request->post())) {
-                if ($product = $model->save()) {
-                    $editProductForm = new EditProductForm();
-                    $editProductForm->load($product->id);
-                    return $this->renderJson(true, [
-                        'model' => $product,
-                        'html' => $this->renderPartial('_partial_create.tpl', ['editProductForm' => $editProductForm, 'form' => new \yii\widgets\ActiveForm()])
-                    ]);
-                }
+                $result = $model->save();
+                return $this->renderJson($result !== false, ['model' => $model], $model->getErrorSummary(true));
             }    
-            return $this->renderJson(true, ['model' => $model], $model->getErrors());
         }
-        return $this->renderPartial('_partial_create.tpl', [
-            'editProductForm' => $model
-        ]);
     }
 
     public function actionEdit($id)
@@ -92,15 +84,18 @@ class ProductController extends Controller
         $model = new EditProductForm();
         if ($request->getIsAjax()) {
             $model->load($request->post());
-            return $this->renderJson($model->save(), ['model' => $model], $model->getErrors());
+            return $this->renderJson($model->save(), ['model' => $model], $model->getErrorSummary(true));
         }
     }
 
     public function actionDelete($id)
     {
         $request = Yii::$app->request;
-        $form = new DeleteProductForm(['id' => $id]);
-        return $this->renderJson($form->delete(), [], $model->getErrors());
+        if ($request->getIsAjax()) {
+            $form = new DeleteProductForm(['id' => $id]);
+            return $this->renderJson($form->delete(), [], $form->getErrorSummary(true));
+        }
+        return $this->redirectNotFound();
     }
     
 }

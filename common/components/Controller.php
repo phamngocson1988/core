@@ -21,4 +21,9 @@ class Controller extends BaseController
 		Yii::$app->response->format = Response::FORMAT_JSON;
 		return $response;
 	}
+
+	public function redirectNotFound()
+	{
+		return $this->redirect(['site/index'], '404');
+	}
 }

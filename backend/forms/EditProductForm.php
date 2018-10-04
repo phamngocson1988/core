@@ -38,6 +38,7 @@ class EditProductForm extends Model
             try {
                 $product = $this->getProduct();
                 $product->title = $this->title;
+                $product->image_id = $this->image_id;
                 $product->price = $this->price;
                 $product->gems = $this->gems;
                 $product->sale_off_type = Product::SALE_TYPE;

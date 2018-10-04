@@ -125,7 +125,7 @@ function AjaxFormSubmit(opts) {
                         that.error(result.errors);
                         return false;
                     } else {
-                        that.success(result.data);
+                        that.success(result.data, form);
                     }
                 },
                 complete: that.complete(form)
@@ -140,7 +140,7 @@ function AjaxFormSubmit(opts) {
         return false;
     }
 
-    this.success = function (data) {
+    this.success = function (data, form) {
         alert('Success');
         console.log(data);
         return false;

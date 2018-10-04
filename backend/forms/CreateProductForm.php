@@ -57,4 +57,10 @@ class CreateProductForm extends Model
     {
         return Product::getSaleTypeList();
     }
+
+    public function getImageUrl($size)
+    {
+        $product = new Product();
+        return $product->getImageUrl($size);
+    }
 }
