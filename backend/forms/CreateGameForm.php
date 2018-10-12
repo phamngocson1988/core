@@ -66,7 +66,7 @@ class CreateGameForm extends Model
                     foreach ($this->getGallery() as $imageId) {
                         $productImage = new GameImage();
                         $productImage->image_id = $imageId;
-                        $productImage->product_id = $newId;
+                        $productImage->game_id = $newId;
                         $productImage->save();
                     }    
                 }

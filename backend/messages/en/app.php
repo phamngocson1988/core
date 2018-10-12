@@ -154,4 +154,11 @@ return [
     'boolean_yes' => 'Yes',
     'send_mail_to_customer' => 'Send mail to customer',
     'system_logs' => 'System Logs',
+    'games' => 'Games',
+    'manage_games' => 'Manage game',
+    'confirm_delete_game' => 'Do you want to delete this game?',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'create_game' => 'Create game',
+    'add_product_game' => 'Add product game',
 ];

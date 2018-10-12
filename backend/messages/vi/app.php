@@ -153,4 +153,11 @@ return [
     'boolean_yes' => 'Có',
     'send_mail_to_customer' => 'Gửi mail tới khách hàng',
     'system_logs' => 'Nhật ký hệ thống',
+    'games' => 'Games',
+    'manage_games' => 'Quản lý game',
+    'confirm_delete_game' => 'Bạn có muốn xóa game này?',
+    'edit' => 'Chỉnh sửa',
+    'delete' => 'Xóa',
+    'create_game' => 'Tạo mới game',
+    'add_product_game' => 'Thêm gói game',
 ];

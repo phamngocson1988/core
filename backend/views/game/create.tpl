@@ -106,14 +106,14 @@
               </div>
               <div class="tab-pane" id="tab_gallery">
                 <div id="tab_images_uploader_container" class="text-align-reverse margin-bottom-10">
-                    <a class="btn btn-success" id="upload-gallery"><i class="fa fa-plus"></i> Select Files </a>
+                    <a class="btn btn-success" id="upload-gallery"><i class="fa fa-plus"></i> {Yii::t('app', 'choose_image')} </a>
                 </div>
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr role="row" class="heading">
                       <th width="20%"> {Yii::t('app', 'image')} </th>
-                      <th width="40%"> Order</th>
-                      <th width="40%"> Action</th>
+                      <th width="40%"> {Yii::t('app', 'no')}</th>
+                      <th width="40%"> {Yii::t('app', 'action')}</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -44,7 +44,7 @@
             <button type="submit" class="btn btn-success" id='create-game-button'>
             <i class="fa fa-check"></i> {Yii::t('app', 'save')}
             </button>
-            <a href="{url route='product/index' game_id=$model->id ref=$app->request->url}" class="btn default">{Yii::t('app', 'add_product')} <i class="fa fa-angle-right"></i></a>
+            <a href="{url route='product/index' game_id=$model->id ref=$app->request->url}" class="btn default">{Yii::t('app', 'add_product_game')} <i class="fa fa-angle-right"></i></a>
           </div>
         </div>
         <div class="portlet-body">
@@ -56,12 +56,8 @@
               <li>
                 <a href="#tab_gallery" data-toggle="tab"> {Yii::t('app', 'gallery')} </a>
               </li>
-              <li>
-                <a href="#tab_package" data-toggle="tab"> {Yii::t('app', 'game_packages')} </a>
-              </li>
             </ul>
             <div class="tab-content">
-              
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
                   {$form->field($model, 'title', [
@@ -128,9 +124,9 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr role="row" class="heading">
-                      <th width="20%"> {Yii::t('app', 'image')}</th>
-                      <th width="40%"> Order</th>
-                      <th width="40%"> Action</th>
+                      <th width="20%"> {Yii::t('app', 'image')} </th>
+                      <th width="40%"> {Yii::t('app', 'no')}</th>
+                      <th width="40%"> {Yii::t('app', 'action')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -154,169 +150,6 @@
                   </tbody>
                 </table>
               </div>
-              <div class="tab-pane mt-repeater" id="tab_package">
-                {foreach $editProductForms as $editProductForm}
-                <div class="portlet box blue-hoki edit-product-form" id="edit-product-form-{$editProductForm->id}" data-id="{$editProductForm->id}" data-url="{url route='product/edit' id=$editProductForm->id}">
-                  {$form->field($editProductForm, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput(['value' => $editProductForm->game_id])}
-                  {$form->field($editProductForm, 'id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput(['value' => $editProductForm->id])}
-                  <div class="portlet-title">
-                    <div class="caption">
-                      <i class="fa fa-gift"></i>{$editProductForm->title}
-                    </div>
-                    <div class="tools">
-                      <a href="" class="collapse" data-original-title="" title=""> </a>
-                      <a href="{url route='product/delete' id=$editProductForm->id}" class="remove" data-original-title="" title=""> </a>
-                    </div>
-                  </div>
-                  <div class="portlet-body form">
-                    <div class="form-body">
-                      <div class="row">
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                              <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                <img src="{$editProductForm->getImageUrl('150x150')}" />
-                              </div>
-                              <div>
-                                <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
-                                <span class="btn default btn-file">
-                                  <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
-                                  {$form->field($editProductForm, 'image_id', [
-                                    'template' => '{input}', 
-                                    'options' => ['tag' => null],
-                                    'inputOptions' => ['class' => 'product-image_id']
-                                  ])->hiddenInput()->label(false)}
-                                </span>
-                                <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-9">
-                          <div class="row">
-                          {$form->field($editProductForm, 'title', [
-                            'options' => ['class' => 'form-group col-md-6'],
-                            'labelOptions' => ['class' => 'col-md-4 control-label'],
-                            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                            'inputOptions' => ['class' => 'form-control product-title']
-                          ])->textInput()}
-                          {$form->field($editProductForm, 'status', [
-                            'options' => ['class' => 'form-group col-md-6'],
-                            'labelOptions' => ['class' => 'col-md-4 control-label'],
-                            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                            'inputOptions' => ['class' => 'form-control product-status']
-                          ])->dropDownList($editProductForm->getStatusList())}
-                          </div>
-                          <div class="row">
-                          {$form->field($editProductForm, 'price', [
-                            'options' => ['class' => 'form-group col-md-6'],
-                            'labelOptions' => ['class' => 'col-md-4 control-label'],
-                            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',                                
-                            'inputOptions' => ['class' => 'form-control product-price']
-                          ])->textInput()}
-                          {$form->field($editProductForm, 'gems', [
-                            'options' => ['class' => 'form-group col-md-6'],
-                            'labelOptions' => ['class' => 'col-md-4 control-label'],
-                            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                            'inputOptions' => ['class' => 'form-control product-gems']
-                          ])->textInput()}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-actions">
-                      <div class="row">
-                        <div class="col-md-offset-3 col-md-9">
-                          <button type="submit" class="btn green">{Yii::t('app', 'submit')}</button>
-                          <button type="button" class="btn default">{Yii::t('app', 'cancel')}</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/foreach}
-                <div data-repeater-list="CreateProductForm">
-                  <div data-repeater-item class="portlet box blue-hoki mt-repeater-item create-product-form">
-                    <div class="portlet-title">
-                      <div class="caption">
-                        <i class="fa fa-gift"></i>Form Actions On Top 
-                      </div>
-                      <div class="tools">
-                        <a href="javascript:;" class="collapse"> </a>
-                      </div>
-                    </div>
-                    <div class="portlet-body form">
-                      <!-- BEGIN FORM-->
-                      {$form->field($newProductForm, 'game_id', ['template' => '{input}'])->hiddenInput(['value' => $model->id])}
-                      <div class="form-body">
-                        <div class="row">
-                          <div class="col-md-3">
-                            <div class="form-group">
-                              <div class="fileinput fileinput-new" data-provides="fileinput">
-                                  <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                      <img src="{$model->getImageUrl('150x150')}" />
-                                  </div>
-                                  <div>
-                                    <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
-                                    <span class="btn default btn-file">
-                                      <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
-                                      {$form->field($newProductForm, 'image_id', [
-                                        'template' => '{input}', 
-                                        'options' => ['tag' => null],
-                                        'inputOptions' => ['class' => 'product-image_id']
-                                      ])->hiddenInput()->label(false)}
-                                    </span>
-                                    <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                                  </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-9">
-                            <div class="row">
-                            {$form->field($newProductForm, 'title', [
-                              'options' => ['class' => 'form-group col-md-6'],
-                              'labelOptions' => ['class' => 'col-md-4 control-label'],
-                              'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                              'inputOptions' => ['class' => 'form-control product-title']
-                            ])->textInput()}
-                            {$form->field($newProductForm, 'status', [
-                              'options' => ['class' => 'form-group col-md-6'],
-                              'labelOptions' => ['class' => 'col-md-4 control-label'],
-                              'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                              'inputOptions' => ['class' => 'form-control product-status']
-                            ])->dropDownList($newProductForm->getStatusList())}
-                            </div>
-                            <div class="row">
-                            {$form->field($newProductForm, 'price', [
-                              'options' => ['class' => 'form-group col-md-6'],
-                              'labelOptions' => ['class' => 'col-md-4 control-label'],
-                              'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',                                
-                              'inputOptions' => ['class' => 'form-control product-price']
-                            ])->textInput()}
-                            {$form->field($newProductForm, 'gems', [
-                              'options' => ['class' => 'form-group col-md-6'],
-                              'labelOptions' => ['class' => 'col-md-4 control-label'],
-                              'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                              'inputOptions' => ['class' => 'form-control product-gems']
-                            ])->textInput()}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn green create-product-button">{Yii::t('app', 'submit')}</button>
-                            <button type="button" class="btn default">{Yii::t('app', 'cancel')}</button>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- END FORM-->
-                    </div>
-                  </div>
-                </div>
-                <a href="javascript:;" data-repeater-create class="btn btn-success mt-repeater-add"><i class="fa fa-plus"></i> Add</a>
-              </div>
             </div>
           </div>
         </div>
@@ -339,9 +172,6 @@ function removeMainImage() {
 // slug
 $('#title').slug();
 
-// number format
-$('input.number').number(true, 0);
-
 // image
 var manager = new ImageManager();
 $("#upload-image").selectImage(manager, {
@@ -350,17 +180,6 @@ $("#upload-image").selectImage(manager, {
     var id = img.id;
     $("#image").attr('src', thumb).removeClass('hide');
     $("#image_id").val(id);
-  }
-});
-
-$(".product-image").selectImage(manager, {
-  callback: function(img, e) {
-    var thumb = img.src;
-    var id = img.id;
-    var image = e.closest('.form-group').find('img');
-    var input = e.closest('.form-group').find('[type=hidden]');
-    image.attr('src', thumb).removeClass('hide');
-    input.val(id);    
   }
 });
 
@@ -391,81 +210,5 @@ $("#upload-gallery").selectImage(manager, {
 $("#tab_gallery").on('click', '.remove', function() {
   $(this).closest('tr').fadeOut(300, function(){ $(this).remove();});
 });
-
-$("#tab_package").on("click", ".create-product-button", function(e){
-  e.preventDefault();
-  var _container = $(this).closest(".create-product-form");
-  var _img = _container.find(".product-image_id");
-  var _title = _container.find(".product-title");
-  var _status = _container.find(".product-status");
-  var _price = _container.find(".product-price");
-  var _gems = _container.find(".product-gems");
-
-
-  var form_data = new FormData();
-  form_data.append('CreateProductForm[game_id]', 1);
-  form_data.append('CreateProductForm[title]', _title.val());
-  form_data.append('CreateProductForm[price]', _price.val());
-  form_data.append('CreateProductForm[gems]', _gems.val());
-  form_data.append('CreateProductForm[status]', _status.val());
-  form_data.append('CreateProductForm[image_id]', _img.val());
-
-  $.ajax({
-    url         : '{/literal}{url route='product/create'}{literal}',
-    data        : form_data,
-    processData : false,
-    contentType : false,
-    type        : 'POST'
-  }).success(function(data){
-    console.log(data);
-  });
-  
-});
-
-// Edit package
-$("#tab_package").on("click", "div[id^='edit-product-form-'] [type='submit']", function(e){
-  e.preventDefault();
-  var that = $(this).closest("div[id^='edit-product-form-']");
-  var _url = that.data('url');
-  var form_data = new FormData();
-  $.each(that.find("[name^='EditProductForm']"), function( i, e ) {
-    form_data.append($(e).attr('name'), $(e).val());
-  });
-  $.ajax({
-  url         : _url,
-  data        : form_data,
-  processData : false,
-  contentType : false,
-  type        : 'POST',
-  beforeSend  : function(){
-                  App.blockUI({target: that, animate: true});
-                },
-  }).success(function(data){
-    if (data.status == true) {
-      that.find(".caption").html('<i class="fa fa-gift"></i>' + data.data.model.title);
-    }      
-  }).complete(function(data){
-    App.unblockUI(that);
-    if (data.status == false) {
-      $.blockUI({ message: "Errors occurred." }); 
-    }
-  });
-});
-
-// Delete package
-$("#tab_package").on("click", "div[id^='edit-product-form-'] .remove", function(e){
-  e.preventDefault();
-  var that = this;
-  $(this).ajax_action({
-    confirm: true,
-    confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_product')}{literal}',
-    callback: function(eletement, data) {
-      if (data.status == true) {
-        $(that).closest("div[id^='edit-product-form-']").remove();
-      }
-    }
-  });
-});
-
 {/literal}
 {/registerJs}
