@@ -16,7 +16,7 @@ class UploadFiles extends DynamicModel
     public $mimeTypes = ["image/gif", "image/jpeg", "image/pjpeg", "image/x-png", "image/png", "image/svg+xml"];
     public $maxFiles = 4;
     public $maxSize; //bytes
-    public $default_image;
+    public $default_image = '/images/noimage.png';
 	public $image_class = \common\models\Image::class;
 	public $file_class = \common\models\Image::class;
 
@@ -59,5 +59,10 @@ class UploadFiles extends DynamicModel
             'mimeTypes' => $this->mimeTypes,
         ]);
         return parent::validate($attributeNames, $clearErrors);
+    }
+
+    public function getDefaultImageUrl($url = null)
+    {
+        return ($url) ? $url : $this->default_image;
     }
 }

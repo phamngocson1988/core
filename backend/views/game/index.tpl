@@ -62,7 +62,7 @@
               {foreach $models as $key => $model}
               <tr>
                 <td style="vertical-align: middle;">{$pages->offset + 1 + $key}</td>
-                <td style="vertical-align: middle;"><img src="{$model->getImageUrl('100x100')}" width="120px;" /></td>
+                <td style="vertical-align: middle;"><img src="{$model->getImageUrl('50x50')}" width="50px;" /></td>
                 <td style="vertical-align: middle;">{$model->title}</td>
                 <td style="vertical-align: middle;">{$model->getCreatorName()}</td>
                 <td style="vertical-align: middle;">

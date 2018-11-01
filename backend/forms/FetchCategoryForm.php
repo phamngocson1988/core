@@ -62,4 +62,51 @@ class FetchCategoryForm extends Model
         }
         return $this->_command;
     }
+
+    public function getProvider()
+    {
+        $command = $this->getCommand();
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $command,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'name' => SORT_DESC,
+                    'slug' => SORT_ASC, 
+                ]
+            ],
+        ]);
+        return $provider;
+    }
+
+    public function getGridView()
+    {
+        return \backend\components\gridview\GridView::widget([
+            'dataProvider' => $this->getProvider(),
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'label' => Yii::t('app', 'image'),
+                    'format' => 'html',
+                    'attribute' => 'image_id',
+                    'value' => function($model) {
+                        return \yii\helpers\Html::img($model->getImageUrl('50x50'), ['width' => '50px', 'height' => '50px']);
+                    }
+                ],
+                [
+                    'label' => Yii::t('app', 'name'),
+                    'format' => 'text',
+                    'attribute' => 'name'
+                ],
+                [
+                    'label' => Yii::t('app', 'slug'),
+                    'format' => 'text',
+                    'attribute' => 'slug'
+                ],
+                ['class' => 'yii\grid\ActionColumn']
+            ]
+        ]);
+    }
 }

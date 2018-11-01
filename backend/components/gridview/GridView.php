@@ -13,6 +13,7 @@ class GridView extends BaseGridView
 		$default = ['class' => 'btn btn-xs grey-salsa'];
 		$options = array_merge($default, $options);
 		return Html::a('<i class="fa fa-eye">', $url, $options);
+		// <a href="http://admin.chuchu.com/post/edit?id=1&amp;ref=http%3A%2F%2Fadmin.chuchu.com%2Fpost%2Findex" class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
 	}
 
 	public function editButton($url, $options = [])
