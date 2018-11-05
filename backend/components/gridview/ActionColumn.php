@@ -3,6 +3,7 @@ namespace backend\components\gridview;
 
 use Yii;
 use yii\grid\ActionColumn as BaseActionColumn;
+use yii\grid\Column;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -26,8 +27,16 @@ use yii\helpers\Url;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ActionColumn extends BaseActionColumn
+class ActionColumn extends Column
 {
+    /**
+     * {@inheritdoc}
+     */
+    public $headerOptions = ['class' => 'action-column'];
+    public $buttons = [];
+    public $visibleButtons = [];
+    public $buttonOptions = [];
+    public $separate = "";
 	// <a href="/category/view?id=1" title="Xem" aria-label="Xem" data-pjax="0"><span class="glyphicon glyphicon-eye-open"></span></a>
 	// <a href="http://admin.chuchu.com:8080/game/edit?id=1&amp;ref=http%3A%2F%2Fadmin.chuchu.com%3A8080%2Fgame" class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
 
@@ -50,40 +59,32 @@ class ActionColumn extends BaseActionColumn
  //    	}
  //    }
 
-	protected function initDefaultButton($name, $iconName, $additionalOptions = [])
+
+    protected function renderDataCellContent($model, $key, $index)
     {
-        if (!isset($this->buttons[$name]) && strpos($this->template, '{' . $name . '}') !== false) {
-            $this->buttons[$name] = function ($url, $model, $key) use ($name, $iconName, $additionalOptions) {
-                switch ($name) {
-                    case 'view':
-                        $title = Yii::t('yii', 'View');
-                        $iconClass = "fa fa-eye";
-                        break;
-                    case 'update':
-                        $title = Yii::t('yii', 'Update');
-                        $iconClass = "fa fa-pencil";
-                        break;
-                    case 'delete':
-                        $title = Yii::t('yii', 'Delete');
-                        $iconClass = "fa fa-trash-o";
-                        break;
-                    default:
-                        $title = ucfirst($name);
-                        $iconClass = "";
-                }
-                $additionalOptions = [
-                	'class' => 'btn btn-xs grey-salsa tooltips', 
-                	'data-container' => 'body', 
-                	'data-original-title' => $title
-                ];
-                $options = array_merge([
-                    'title' => $title,
-                    'aria-label' => $title,
-                    'data-pjax' => '0',
-                ], $additionalOptions, $this->buttonOptions);
-                $icon = Html::tag('i', '', ['class' => $iconClass]);
-                return Html::a($icon, $url, $options);
-            };
+        $templates = [];
+        foreach ($this->buttons as $button => $settings) {
+            if (isset($this->visibleButtons[$button]) && !$this->visibleButtons[$button]) {
+                continue;
+            }
+            $templates[] = $this->renderButton($settings, $model, $key);
         }
+        return implode($this->separate, $templates);
+    }
+
+    protected function renderButton($settings, $model, $key)
+    {
+        $title = ArrayHelper::getValue($settings, 'title', '');
+        $iconClass = ArrayHelper::getValue($settings, 'icon_class', '');
+        $url = ArrayHelper::getValue($settings, 'url', '#');
+        $options = ArrayHelper::getValue($settings, 'options', []);\
+        $options = array_merge([
+            'title' => $title,
+            'aria-label' => $title,
+            'data-pjax' => '0',
+        ], $options);
+
+        $icon = Html::tag('i', $title, ['class' => $iconClass]);
+        return Html::a($icon, '#', $options);
     }
 }

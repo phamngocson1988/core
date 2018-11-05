@@ -58,7 +58,14 @@
                     'filterInputOptions' => ['prompt' => 'All educations', 'class' => 'form-control', 'id' => null]
                 ],
                 [
-                  'class' => 'backend\components\gridview\ActionColumn'
+                  'class' => 'backend\components\gridview\ActionColumn',
+                  'buttons' => [
+                    'edit' => ['name' => 'Edit'],
+                    'new' => ['name' => 'New']
+                  ],
+                  'visibleButtons' => [
+                    'new' => false
+                  ]
                 ]
             ]
         ])}
