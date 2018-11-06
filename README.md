@@ -60,24 +60,22 @@ environments/            contains environment-based overrides
 ```
 Rename common\config\sample-main-local.php to main-local.php, common\config\sample-params-local.php to params-local.php. Edit to proper information.
 
-composer install
-
 composer update
 
-composer require --prefer-dist yiisoft/yii2-smarty "*"
-
-composer require --prefer-dist yii2mod/yii2-settings "*"
-
-composer require --prefer-dist yiisoft/yii2-imagine "*"
-
-composer require --prefer-dist 2amigos/yii2-tinymce-widget "~1.1"
+yii migrate --migrationPath=@yii/rbac/migrations
 
 yii migrate
-
-yii migrate --migrationPath=@yii/rbac/migrations
 
 yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
 
 yii migrate/up --migrationPath=vendor/webzop/yii2-notifications/migrations
 
 yii migrate --migrationPath=@vendor/yii2mod/yii2-cart/migrations
+
+Copy content of environments\dev (or prod) and paste to root folder of the project.
+
+Edit database information at common\config\main-local.php
+
+Add new cookieValidationKey to backend/frontend config (file config\main-local.php for each template)
+
+Config host and enjoy.

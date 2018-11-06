@@ -49,13 +49,18 @@ class m180517_025826_create_product_schema extends Migration
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
-            'created_at' => $this->integer(),            
+            'created_at' => $this->dateTime()->notNull(),            
             'created_by' => $this->integer(),
-            'updated_at' => $this->integer(),
+            'updated_at' => $this->dateTime(),
             'updated_by' => $this->integer(),
-            'deleted_at' => $this->integer(),
+            'deleted_at' => $this->dateTime(),
             'deleted_by' => $this->integer(),
         ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterStatus = "ALTER TABLE {{%product}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+            $command = $this->db->createCommand($alterStatus);
+            $command->execute();
+        }
 
         /* Product category table */
         $this->createTable('{{%product_category}}', [
@@ -63,7 +68,12 @@ class m180517_025826_create_product_schema extends Migration
             'category_id' => $this->integer()->notNull(),
             'is_main' => $this->string(1)->comment('Enum: Y,N')->defaultValue('N')->notNull(),
         ], $tableOptions);
-        $this->addPrimaryKey('product_category_pk', '{{%product_category}}', ['product_id', 'category_id']);
+        if ($this->db->driverName === 'mysql') {
+            $alterMain = "ALTER TABLE {{%product_category}} MODIFY `is_main` ENUM('Y', 'N') NOT NULL DEFAULT 'N'";
+            $command = $this->db->createCommand($alterMain);
+            $command->execute();
+        }
+        // $this->addPrimaryKey('product_category_pk', '{{%product_category}}', ['product_id', 'category_id']);
 
         /* Product image table */
         $this->createTable('{{%product_image}}', [
