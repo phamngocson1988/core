@@ -22,7 +22,7 @@ class m181106_163033_create_reservation_system extends Migration
         $this->createTable('{{%room}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(50)->notNull(),
-            'descripition' => $this->string(200),
+            'description' => $this->string(200),
             'image_id' => $this->integer(),
             'price' => $this->integer(),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),

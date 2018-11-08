@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\forms\CreateRoomForm;
 
 /**
  * RoomController implements the CRUD actions for Room model.
@@ -64,10 +65,12 @@ class RoomController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Room();
+        $model = new CreateRoomForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
+        } else {
+            print_r($model->getErrors());
         }
 
         return $this->render('create', [

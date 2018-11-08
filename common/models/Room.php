@@ -10,7 +10,7 @@ use common\components\helpers\DateHelper;
  *
  * @property int $id
  * @property string $title
- * @property string $descripition
+ * @property string $description
  * @property int $image_id
  * @property int $price
  * @property string $status
@@ -38,7 +38,7 @@ class Room extends \yii\db\ActiveRecord
             [['status'], 'string'],
             [['created_at'], 'safe'],
             [['title'], 'string', 'max' => 50],
-            [['descripition'], 'string', 'max' => 200],
+            [['description'], 'string', 'max' => 200],
         ];
     }
 
@@ -50,7 +50,7 @@ class Room extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'title' => Yii::t('app', 'Title'),
-            'descripition' => Yii::t('app', 'Descripition'),
+            'description' => Yii::t('app', 'Descripition'),
             'image_id' => Yii::t('app', 'Image ID'),
             'price' => Yii::t('app', 'Price'),
             'status' => Yii::t('app', 'Status'),

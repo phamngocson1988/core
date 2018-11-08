@@ -97,7 +97,8 @@ class SeasonRange extends \yii\db\ActiveRecord
      */
     public function isInRange($date)
     {
-        return true;
+        $hander = $this->getHandler();
+        return $hander->isInRange($date);
     }
 }
 
