@@ -91,7 +91,7 @@ class m181106_163033_create_reservation_system extends Migration
         $this->createTable('{{%season_range}}', [
             'id' => $this->primaryKey(),
             'season_id' => $this->integer()->notNull(),
-            'range_type' => $this->string(10)->comment('Enum: every_week, every_month, every_year, specified_date, special_date')->defaultValue('every_week')->notNull(),
+            'range_type' => $this->string(10)->comment('Enum: weekly, monthly, yearly, specified_date, special_date')->defaultValue('weekly')->notNull(),
             'range_data' => $this->text(),
             'prev_date' => $this->integer(),
             'next_date' => $this->integer(),
@@ -109,7 +109,7 @@ class m181106_163033_create_reservation_system extends Migration
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
             $alterSeasonStatus = "ALTER TABLE {{%season}} MODIFY `status` ENUM('Y', 'N') NOT NULL DEFAULT 'Y'";
-            $alterSeasonRangeType = "ALTER TABLE {{%season_range}} MODIFY `range_type` ENUM('every_week', 'every_month', 'every_year', 'specified_date', 'special_date') NOT NULL DEFAULT 'every_week'";
+            $alterSeasonRangeType = "ALTER TABLE {{%season_range}} MODIFY `range_type` ENUM('weekly', 'monthly', 'yearly', 'specified_date', 'special_date') NOT NULL DEFAULT 'weekly'";
             $alterSeasonRangeStatus = "ALTER TABLE {{%season_range}} MODIFY `status` ENUM('Y', 'N') NOT NULL DEFAULT 'Y'";
             $command = $this->db->createCommand($alterSeasonStatus);
             $command->execute();

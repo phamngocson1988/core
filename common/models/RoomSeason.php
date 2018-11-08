@@ -51,4 +51,14 @@ class RoomSeason extends \yii\db\ActiveRecord
             'note' => Yii::t('app', 'Note'),
         ];
     }
+
+    public function getSeason()
+    {
+        return $this->hasOne(Season::className(), ['id' => 'season_id']);
+    }
+
+    public function isInRange($date)
+    {
+        return $this->season->isInRange($date);
+    }
 }

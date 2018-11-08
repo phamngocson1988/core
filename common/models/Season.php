@@ -54,4 +54,17 @@ class Season extends \yii\db\ActiveRecord
             'created_by' => Yii::t('app', 'Created By'),
         ];
     }
+
+    public function getRanges()
+    {
+        return $this->hasMany(SeasonRange::className(), ['season_id' => 'id']);
+    }
+
+    public function isInRange($date)
+    {
+        foreach ($this->ranges as $range) {
+            if ($range->isInRange($date)) return true;
+        }
+        return false;
+    }
 }

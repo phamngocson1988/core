@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\components\helpers\DateHelper;
 
 /**
  * This is the model class for table "room".
@@ -68,4 +69,26 @@ class Room extends \yii\db\ActiveRecord
         return $this->hasMany(RoomSeason::className(), ['room_id' => 'id']);
     }
 
+    public function getPrice($date = null)
+    {
+        $price = $this->price;
+        if ($date == null) $date = date('Y-m-d');
+        foreach ((array)$this->seasons as $season) {
+            if ($season->isInRange($date)) {
+                $price = $season->price;
+                break;
+            }
+        }
+        return (int)$price;
+    }
+
+    public function getPriceInRange($from, $to)
+    {
+        $ranges = DateHelper::ranges($from, $to);
+        $prices = [];
+        foreach ($ranges as $date) {
+            $prices[$date] = $this->getPrice($date);
+        }
+        return $price;
+    }
 }
