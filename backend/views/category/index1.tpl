@@ -36,7 +36,9 @@
         {Pjax}
         {GridView::widget([
             'dataProvider' => $form->getProvider(),
+            'filterModel' => $searchModel,
             'columns' => [
+                ['class' => 'yii\grid\CheckboxColumn'],
                 ['class' => 'yii\grid\SerialColumn'],
                 [
                     'class' => 'backend\components\gridview\ImageColumn',
@@ -47,9 +49,24 @@
                 [
                     'label' => Yii::t('app', 'name'),
                     'format' => 'text',
-                    'attribute' => 'name'
+                    'attribute' => 'name',
+                    'filter' => '<input>'
                 ],
-                ['class' => 'backend\components\gridview\ActionColumn']
+                [
+                    'attribute' => 'visible',
+                    'filter' => ['Y' => 'Yes', 'N' => 'No'],
+                    'filterInputOptions' => ['prompt' => 'All educations', 'class' => 'form-control', 'id' => null]
+                ],
+                [
+                  'class' => 'backend\components\gridview\ActionColumn',
+                  'buttons' => [
+                    'edit' => ['name' => 'Edit'],
+                    'new' => ['name' => 'New']
+                  ],
+                  'visibleButtons' => [
+                    'new' => false
+                  ]
+                ]
             ]
         ])}
         {/Pjax}

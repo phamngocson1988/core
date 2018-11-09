@@ -52,6 +52,7 @@ class CategoryController extends Controller
         return $this->render('index1.tpl', [
             'models' => $models,
             'form' => $form,
+            'searchModel' => new \common\models\Category(),
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
