@@ -63,9 +63,21 @@ class GameController extends Controller
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
         $model = new CreateGameForm();
+        $packages = [new CreateProductForm];
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+            if ($game = $model->save()) {
+                $packages = [];
+                $message = "Game is saved successfully.";
+                $packageData = $request->post('packages', []);
+                foreach ($packageData as $package) {
+                    $packageModel = new CreateProductForm($package);
+                    $packageModel->game_id = $game->id;
+                    if (!$packageModel->save()) {
+                        $message = "Package is not saved";
+                    }
+                    $packages[] = $packageModel;
+                }
+                Yii::$app->session->setFlash('success', $message);
                 $ref = $request->get('ref', Url::to(['game/index']));
                 return $this->redirect($ref);
             }
@@ -77,6 +89,7 @@ class GameController extends Controller
 
         return $this->render('create.tpl', [
             'model' => $model,
+            'packages' => $packages,
             'back' => $request->get('ref', Url::to(['game/index']))
         ]);
     }
