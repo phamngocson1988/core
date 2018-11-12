@@ -15,12 +15,33 @@ use backend\forms\DeleteImageForm;
 class TestController extends Controller
 {
 
+	public function actions()
+	{
+		return [
+			'autocomplete' => [
+				'class' => 'backend\controllers\actions\AutocompleteAction',
+				'tableName' => \common\models\Game::tableName(),
+				'field' => 'title'
+			]
+		];
+	}
+
 	public function actionIndex()
 	{
 		// $file = \common\models\Image::findOne(15);
 		// echo Yii::$app->image->get($file);die;
-		return $this->render('index.tpl');
+		$model = new \common\models\Game();
+		return $this->render('index', ['model' => $model]);
 	}
+
+	public function actionSearch()
+	{
+		// $file = \common\models\Image::findOne(15);
+		// echo Yii::$app->image->get($file);die;
+		$model = new \common\models\Game();
+		return $this->render('search', ['model' => $model]);
+	}
+
 
 	public function actionAjaxUpload()
 	{
