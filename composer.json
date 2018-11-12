@@ -24,7 +24,13 @@
         "2amigos/yii2-tinymce-widget" : "~1.1",
         "cloudinary/cloudinary_php": "dev-master",
         "webzop/yii2-notifications": "*",
-        "yii2mod/yii2-cart": "*"
+        "yii2mod/yii2-cart": "*",
+		"2amigos/yii2-gallery-widget": "~1.0",
+        "2amigos/yii2-file-input-widget" : "~1.0",
+        "2amigos/yii2-date-time-picker-widget" : "~1.0",
+        "2amigos/yii2-date-picker-widget" : "~1.0",
+		"2amigos/yii2-editable-widget" : "0.1.*",
+        "2amigos/yii2-type-ahead-widget": "~1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
