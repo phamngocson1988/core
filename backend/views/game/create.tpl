@@ -42,6 +42,7 @@
         {$form->field($model, 'meta_description')->textInput()}
       </div>
     </div>
+
     <div class="portlet light bordered">
       <div class="portlet-title">
         <div class="caption">
@@ -49,11 +50,11 @@
         </div>
       </div>
       <div class="portlet-body">
-        <div class="form-group">
+        <div class="row">
           <div class="col-md-12">
             <div class="mt-repeater">
               <div data-repeater-list="packages">
-                {foreach $packages as $package}
+                {foreach $packages as $key => $package}
                 <div data-repeater-item class="row">
                   {$form->field($package, 'title', [
                     'options' => ['class' => 'col-md-6']
@@ -113,9 +114,9 @@
             </div>
           </div>
         </div>
+        <hr>
         <div class="margin-top-10">
-          <button class="btn green">Save Changes </button>
-          <button class="btn default">Cancel </button>
+          <button class="btn green">{Yii::t('app', 'save')} </button>
         </div>
       </div>
     </div>

@@ -66,20 +66,23 @@ class GameController extends Controller
         $packages = [new CreateProductForm];
         if ($model->load(Yii::$app->request->post())) {
             if ($game = $model->save()) {
-                $packages = [];
+                
                 $message = "Game is saved successfully.";
-                $packageData = $request->post('packages', []);
-                foreach ($packageData as $package) {
-                    $packageModel = new CreateProductForm($package);
-                    $packageModel->game_id = $game->id;
-                    if (!$packageModel->save()) {
-                        $message = "Package is not saved";
-                    }
-                    $packages[] = $packageModel;
-                }
+                // $packageData = $request->post('packages', []);
+                // foreach ($packageData as $package) {
+                //     $packageModel = new CreateProductForm($package);
+                //     $packageModel->game_id = $game->id;
+                //     if (!$packageModel->save()) {
+                //         $message = "Package is not saved";
+                //     }
+                //     $packages[] = $packageModel;
+                // }
                 Yii::$app->session->setFlash('success', $message);
                 $ref = $request->get('ref', Url::to(['game/index']));
                 return $this->redirect($ref);
+            } else {
+                Yii::$app->session->setFlash('success', $message);
+                $packages = $model->packages;
             }
         }
 

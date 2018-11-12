@@ -22,8 +22,8 @@ class CreateProductForm extends Model
     public function rules()
     {
         return [
-            [['game_id', 'title', 'price', 'gems'], 'required'],
-            [['image_id', 'status'], 'trim'],
+            [['title', 'price', 'gems'], 'required'],
+            [['image_id', 'status'], 'safe'],
             ['status', 'default', 'value' => Product::STATUS_VISIBLE]
         ];
     }

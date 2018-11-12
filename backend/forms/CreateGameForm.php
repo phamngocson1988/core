@@ -20,7 +20,15 @@ class CreateGameForm extends Model
     public $meta_description;
     public $status = Game::STATUS_VISIBLE;
     public $gallery = [];
+    public $packages = []; // CreateProductForm[]
 
+    public function init()
+    {
+        parent::init();
+        foreach ($this->packages as $key => $data) {
+            $this->packages[$key] = new CreateProductForm($data);
+        }
+    }
     /**
      * @inheritdoc
      */
@@ -29,14 +37,20 @@ class CreateGameForm extends Model
         return [
             [['title', 'content', 'slug'], 'required'],
             ['status', 'default', 'value' => Game::STATUS_VISIBLE],
+            ['packages', 'validatePackages'],
+            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
         ];
     }
 
-    public function scenarios()
+    public function validatePackages($attribute, $params)
     {
-        $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['title', 'slug', 'content', 'excerpt', 'image_id', 'status', 'gallery', 'meta_title', 'meta_keyword', 'meta_description'];
-        return $scenarios;
+        $flash = true;
+        foreach ($this->packages as $key => $product) {
+            $flash = $flash && $product->validate();
+        }
+        if (!$flash) {
+            $this->addError('*', Yii::t('package_error'));
+        }
     }
 
     public function save()
@@ -63,6 +77,10 @@ class CreateGameForm extends Model
 
                 // Galleries
                 if ($newId) {
+                    foreach ($this->packages as $product) {
+                        $product->game_id = $newId;
+                        $product->save();
+                    }
                     foreach ($this->getGallery() as $imageId) {
                         $productImage = new GameImage();
                         $productImage->image_id = $imageId;
