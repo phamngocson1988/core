@@ -40,7 +40,7 @@ class EditGameForm extends Model
     public function validateProducts($attribute, $params)
     {
         foreach ($this->products as $key => $data) {
-            $product = $this->bindProduct($data);print_r($product);
+            $product = $this->bindProduct($data);
             if (!$product->validate()) {
                 foreach ($product->getErrors() as $errKey => $errors) {
                     $this->addError("products[$key][$errKey]", reset($errors));
@@ -187,16 +187,8 @@ class EditGameForm extends Model
     {
         $game = $this->getGame();
 
-        // Create new products added to the game
-        foreach ($this->products as $data) {
-            $product = $this->bindProduct($data);
-            $product->save();
-        }
-
         // Remove products removed from the game
         $oldProducts = $game->products;
-        $oldProductIds = ArrayHelper::getColumn($oldProducts, 'id');
-
         $formProductIds = ArrayHelper::getColumn($this->products, 'id');
         $formProductIds = array_filter($formProductIds);
 
@@ -205,5 +197,13 @@ class EditGameForm extends Model
                 $oldProduct->delete();
             }
         }
+
+        // Create new products added to the game
+        foreach ($this->products as $data) {
+            $product = $this->bindProduct($data);
+            $product->save();
+        }
+
+        
     }
 }

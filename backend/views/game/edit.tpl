@@ -52,7 +52,6 @@
         <div class="row">
           <div class="col-md-12">
             {$form->field($model, 'products')->widget(MultipleInput::className(), [
-              'max' => 4,
               'columns' => [
                 [
                     'name'  => 'id',
