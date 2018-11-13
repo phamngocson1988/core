@@ -11,7 +11,6 @@ use yii\helpers\ArrayHelper;
 class CreateGameForm extends Model
 {
     public $title;
-    public $slug;
     public $content;
     public $excerpt;
     public $image_id;
@@ -20,36 +19,30 @@ class CreateGameForm extends Model
     public $meta_description;
     public $status = Game::STATUS_VISIBLE;
     public $gallery = [];
-    public $packages = []; // CreateProductForm[]
+    public $products = [];
 
-    public function init()
-    {
-        parent::init();
-        foreach ($this->packages as $key => $data) {
-            $this->packages[$key] = new CreateProductForm($data);
-        }
-    }
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['title', 'content', 'slug'], 'required'],
+            [['title', 'content'], 'required'],
             ['status', 'default', 'value' => Game::STATUS_VISIBLE],
-            ['packages', 'validatePackages'],
+            ['products', 'validateProducts'],
             [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
         ];
     }
 
-    public function validatePackages($attribute, $params)
+    public function validateProducts($attribute, $params)
     {
-        $flash = true;
-        foreach ($this->packages as $key => $product) {
-            $flash = $flash && $product->validate();
-        }
-        if (!$flash) {
-            $this->addError('*', Yii::t('package_error'));
+        foreach ($this->products as $key => $data) {
+            $product = new CreateProductForm($data);
+            if (!$product->validate()) {
+                foreach ($product->getErrors() as $errKey => $errors) {
+                    $this->addError("products[$key][$errKey]", reset($errors));
+                }
+            }
         }
     }
 
@@ -61,7 +54,6 @@ class CreateGameForm extends Model
                 $now = date('Y-m-d H:i:s');
                 $game = new Game();
                 $game->title = $this->title;
-                $game->slug = $this->slug;
                 $game->content = $this->content;
                 $game->excerpt = $this->excerpt;
                 $game->image_id = $this->image_id;
@@ -77,7 +69,8 @@ class CreateGameForm extends Model
 
                 // Galleries
                 if ($newId) {
-                    foreach ($this->packages as $product) {
+                    foreach ($this->products as $data) {
+                        $product = new CreateProductForm($data);
                         $product->game_id = $newId;
                         $product->save();
                     }

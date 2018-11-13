@@ -26,7 +26,9 @@
         "webzop/yii2-notifications": "*",
         "yii2mod/yii2-cart": "*",
         "yiisoft/yii2-jui": "~2.0.0",
-        "2amigos/yii2-type-ahead-widget": "~1.0"
+        "2amigos/yii2-type-ahead-widget": "~1.0",
+        "2amigos/yii2-gallery-widget": "~1.0",
+        "unclead/yii2-multiple-input": "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

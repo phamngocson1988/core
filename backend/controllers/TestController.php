@@ -56,4 +56,10 @@ class TestController extends Controller
         $this->view->registerJsFile('vendor/assets/pages/scripts/ui-tree.min.js', ['depends' => '\backend\assets\AppAsset']);
 		return $this->render('tree.tpl');
 	}
+
+	public function actionMultiple()
+	{
+		$model = new \common\models\Game();
+		return $this->render('multiple', ['model' => $model]);
+	}
 }

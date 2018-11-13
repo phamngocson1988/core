@@ -1,8 +1,7 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='common\widgets\TinyMce' type='block'}
-{$this->registerJsFile('vendor/assets/global/plugins/jquery-repeater/jquery.repeater.js', ['depends' => '\backend\assets\AppAsset'])}
-{$this->registerJsFile('vendor/assets/pages/scripts/form-repeater.min.js', ['depends' => '\backend\assets\AppAsset'])}
+{use class='unclead\multipleinput\MultipleInput'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -33,8 +32,7 @@
         </div>
       </div>
       <div class="portlet-body">
-        {$form->field($model, 'title')->textInput(['id' => title])}
-        {$form->field($model, 'slug')->textInput(['readonly' => 'true', 'class' => 'slug form-control'])}
+        {$form->field($model, 'title')->textInput()}
         {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
         <h3 class="form-section">{Yii::t('app', 'meta')}</h3>
         {$form->field($model, 'meta_title')->textInput()}
@@ -46,34 +44,35 @@
     <div class="portlet light bordered">
       <div class="portlet-title">
         <div class="caption">
-          <span class="caption-subject bold font-green uppercase">{Yii::t('app', 'packages')}</span>
+          <span class="caption-subject bold font-green uppercase">{Yii::t('app', 'products')}</span>
         </div>
       </div>
       <div class="portlet-body">
         <div class="row">
           <div class="col-md-12">
-            <div class="mt-repeater">
-              <div data-repeater-list="packages">
-                {foreach $packages as $key => $package}
-                <div data-repeater-item class="row">
-                  {$form->field($package, 'title', [
-                    'options' => ['class' => 'col-md-6']
-                  ])->textInput()}
-                  {$form->field($package, 'gems', [
-                    'options' => ['class' => 'col-md-2']
-                  ])->textInput()}
-                  {$form->field($package, 'price', [
-                    'options' => ['class' => 'col-md-2']
-                  ])->textInput()}
-                </div>
-                {/foreach}
-              </div>
-              <hr>
-              <a href="javascript:;" data-repeater-create class="btn btn-info mt-repeater-add">
-              <i class="fa fa-plus"></i> Add Variation</a>
-              <br>
-              <br> 
-            </div>
+            {$form->field($model, 'products')->widget(MultipleInput::className(), [
+              'max' => 4,
+              'columns' => [
+                  [
+                      'name'  => 'title',
+                      'title' => 'Title',
+                      'enableError' => true,
+                      'headerOptions' => [
+                        'style' => 'width: 50%'
+                      ]
+                  ],
+                  [
+                      'name'  => 'price',
+                      'title' => 'Price',
+                      'enableError' => true
+                  ],
+                  [
+                      'name'  => 'gems',
+                      'title' => 'Gems',
+                      'enableError' => true
+                  ]
+              ]
+           ])->label(false)}
           </div>
         </div>
       </div>
@@ -133,9 +132,6 @@ function removeMainImage() {
 
 {registerJs}
 {literal}
-// slug
-$('#title').slug();
-
 // number format
 $('input.number').number(true, 0);
 

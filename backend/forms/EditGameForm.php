@@ -11,7 +11,6 @@ class EditGameForm extends Model
 {
     public $id;
     public $title;
-    public $slug;
     public $content;
     public $excerpt;
     public $image_id;
@@ -20,6 +19,7 @@ class EditGameForm extends Model
     public $meta_description;
     public $status = Game::STATUS_VISIBLE;
     public $gallery = [];
+    public $products = [];
 
     private $_game;
 
@@ -29,17 +29,37 @@ class EditGameForm extends Model
     public function rules()
     {
         return [
-            [['id', 'title', 'content', 'slug'], 'required'],
+            [['id', 'title', 'content'], 'required'],
             ['id', 'validateGame'],
+            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe'],
+            ['products', 'validateProducts'],
             ['status', 'default', 'value' => Game::STATUS_VISIBLE],
         ];
     }
 
-    public function scenarios()
+    public function validateProducts($attribute, $params)
     {
-        $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['id', 'title', 'slug', 'content', 'excerpt', 'image_id', 'status', 'gallery', 'meta_title', 'meta_keyword', 'meta_description'];
-        return $scenarios;
+        foreach ($this->products as $key => $data) {
+            $product = $this->bindProduct($data);print_r($product);
+            if (!$product->validate()) {
+                foreach ($product->getErrors() as $errKey => $errors) {
+                    $this->addError("products[$key][$errKey]", reset($errors));
+                }
+            }
+        }
+    }
+
+    protected function bindProduct($data)
+    {
+        if (ArrayHelper::getValue($data, 'id')) {
+            return new EditProductForm($data);
+        } else {
+            $data = array_filter($data);
+            $game = $this->getGame();
+            $product = new CreateProductForm($data);
+            $product->game_id = $game->id;
+            return $product;
+        }
     }
 
     public function save()
@@ -50,7 +70,6 @@ class EditGameForm extends Model
                 $now = date('Y-m-d H:i:s');
                 $game = $this->getGame();
                 $game->title = $this->title;
-                $game->slug = $this->slug;
                 $game->content = $this->content;
                 $game->excerpt = $this->excerpt;
                 $game->image_id = $this->image_id;
@@ -79,6 +98,9 @@ class EditGameForm extends Model
                         $gameImage->game_id = $this->id;
                         $gameImage->save();
                     }
+
+                    $this->updateProducts();
+
                 }
 
                 $transaction->commit();
@@ -108,7 +130,6 @@ class EditGameForm extends Model
         $this->id = $id;
         $game = $this->getGame();
         $this->title = $game->title;
-        $this->slug = $game->slug;
         $this->content = $game->content;
         $this->excerpt = $game->excerpt;
         $this->image_id = $game->image_id;
@@ -116,6 +137,16 @@ class EditGameForm extends Model
         $this->meta_keyword = $game->meta_keyword;
         $this->meta_description = $game->meta_description;
         $this->status = $game->status;
+
+        foreach ($game->products as $product) {
+            $data = [];
+            $data['id'] = $product->id;
+            $data['game_id'] = $product->game_id;
+            $data['title'] = $product->title;
+            $data['price'] = $product->price;
+            $data['gems'] = $product->gems;
+            $this->products[] = $data;
+        }
     }
 
     public function validateGame($attribute, $params)
@@ -149,5 +180,30 @@ class EditGameForm extends Model
     {
         $game = $this->getGame();
         return $game->gallery;
+    }
+
+    //============== Update relevants ==============
+    protected function updateProducts()
+    {
+        $game = $this->getGame();
+
+        // Create new products added to the game
+        foreach ($this->products as $data) {
+            $product = $this->bindProduct($data);
+            $product->save();
+        }
+
+        // Remove products removed from the game
+        $oldProducts = $game->products;
+        $oldProductIds = ArrayHelper::getColumn($oldProducts, 'id');
+
+        $formProductIds = ArrayHelper::getColumn($this->products, 'id');
+        $formProductIds = array_filter($formProductIds);
+
+        foreach ($oldProducts as $oldProduct) {
+            if (!in_array($oldProduct->id, $formProductIds)) {
+                $oldProduct->delete();
+            }
+        }
     }
 }

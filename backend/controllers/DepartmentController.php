@@ -61,7 +61,7 @@ class DepartmentController extends Controller
         $model = new EditDepartmentForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 $ref = $request->get('ref', Url::to(['department/index']));
                 return $this->redirect($ref);
             } else {

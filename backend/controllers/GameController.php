@@ -63,27 +63,10 @@ class GameController extends Controller
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
         $model = new CreateGameForm();
-        $packages = [new CreateProductForm];
-        if ($model->load(Yii::$app->request->post())) {
-            if ($game = $model->save()) {
-                
-                $message = "Game is saved successfully.";
-                // $packageData = $request->post('packages', []);
-                // foreach ($packageData as $package) {
-                //     $packageModel = new CreateProductForm($package);
-                //     $packageModel->game_id = $game->id;
-                //     if (!$packageModel->save()) {
-                //         $message = "Package is not saved";
-                //     }
-                //     $packages[] = $packageModel;
-                // }
-                Yii::$app->session->setFlash('success', $message);
-                $ref = $request->get('ref', Url::to(['game/index']));
-                return $this->redirect($ref);
-            } else {
-                Yii::$app->session->setFlash('success', $message);
-                $packages = $model->packages;
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = $request->get('ref', Url::to(['game/index']));
+            return $this->redirect($ref);
         }
 
         $this->view->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
@@ -92,7 +75,6 @@ class GameController extends Controller
 
         return $this->render('create.tpl', [
             'model' => $model,
-            'packages' => $packages,
             'back' => $request->get('ref', Url::to(['game/index']))
         ]);
     }
@@ -104,30 +86,20 @@ class GameController extends Controller
         $model = new EditGameForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 $ref = $request->get('ref', Url::to(['game/index']));
-                return $this->redirect($ref);
+                return $this->redirect($ref);    
+            } else {
+                print_r($model->getErrors());
             }
+            
         } else {
             $model->loadData($id);
-            $game = $model->getGame();
-            $editProductForms = [];
-            foreach ($game->products as $product) {
-                $form = new EditProductForm();
-                $form->setProduct($product);
-                $form->loadData($product->id);
-                $editProductForms[] = $form;
-            }
-            $newProductForm = new CreateProductForm();
         }
-
-
 
         return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['game/index'])),
-            'editProductForms' => $editProductForms,
-            'newProductForm' => $newProductForm
         ]);
     }
 

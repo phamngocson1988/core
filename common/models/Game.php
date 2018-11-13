@@ -6,7 +6,7 @@ use yii\db\ActiveRecord;
 use common\models\User;
 use common\models\Image;
 use common\models\Product;
-
+use yii\behaviors\SluggableBehavior;
 /**
  * Game model
  *
@@ -38,6 +38,19 @@ class Game extends ActiveRecord
     public static function tableName()
     {
         return '{{%game}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'slugAttribute' => 'slug',
+                'immutable' => true,
+                'ensureUnique'=>true,
+            ],
+        ];
     }
 
     public static function getStatusList()
