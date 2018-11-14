@@ -107,7 +107,7 @@
           <label class="control-label">{Yii::t('app', 'image')}</label>
           <div class="fileinput fileinput-new" data-provides="fileinput">
             <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                <img src="" id="image" />
+                <img src="{$model->getImageUrl('150x150')}" id="image" />
             </div>
             <div>
               <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>

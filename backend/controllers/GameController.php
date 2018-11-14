@@ -96,7 +96,7 @@ class GameController extends Controller
         } else {
             $model->loadData($id);
         }
-
+        $this->view->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
         return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['game/index'])),

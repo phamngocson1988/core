@@ -49,6 +49,16 @@ class EditGameForm extends Model
         }
     }
 
+    public function validateGame($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $game = $this->getGame();
+            if (!$game) {
+                $this->addError($attribute, 'Invalid game.');
+            }
+        }
+    }
+
     protected function bindProduct($data)
     {
         if (ArrayHelper::getValue($data, 'id')) {
@@ -146,16 +156,6 @@ class EditGameForm extends Model
             $data['price'] = $product->price;
             $data['gems'] = $product->gems;
             $this->products[] = $data;
-        }
-    }
-
-    public function validateGame($attribute, $params)
-    {
-        if (!$this->hasErrors()) {
-            $game = $this->getGame();
-            if (!$game) {
-                $this->addError($attribute, 'Invalid game.');
-            }
         }
     }
 
