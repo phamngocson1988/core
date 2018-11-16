@@ -38,6 +38,11 @@ class EditPostForm extends Model
         ];
     }
 
+    public function attributeHints()
+    {
+        return ['image_id' => Yii::t('app', 'image_size_at_least', ['size' => '940x630'])];
+    }
+
     public function scenarios()
     {
         $scenarios = parent::scenarios();

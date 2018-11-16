@@ -79,6 +79,7 @@
                     'encode' => false , 
                     'itemOptions' => ['labelOptions' => ['class'=>'mt-radio', 'style' => 'display: block']]
                   ])->label('Status')}
+
                   <div class="form-group">
                     <label class="control-label col-md-2">{Yii::t('app', 'image')}</label>
                     <div class="col-md-10">

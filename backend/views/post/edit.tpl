@@ -82,6 +82,15 @@
                     'encode' => false , 
                     'itemOptions' => ['labelOptions' => ['class'=>'mt-radio', 'style' => 'display: block']]
                   ])->label('Status')}
+
+                  {$form->field($model, 'image_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(common\widgets\ImageInputWidget::className(), [
+                    'template' => '<div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">{image}{input}</div>{buttons}',
+                    'imageSrc' => $model->getImageUrl('150x150')
+                  ])->label('Hình ảnh')}
+
                   <div class="form-group">
                     <label class="control-label col-md-2">{Yii::t('app', 'image')}</label>
                     <div class="col-md-10">
