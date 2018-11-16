@@ -55,11 +55,6 @@
                     'inputOptions' => ['id' => 'title', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'slug', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'slug form-control'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->textInput()}
                   {$form->field($model, 'excerpt', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
@@ -80,28 +75,13 @@
                     'itemOptions' => ['labelOptions' => ['class'=>'mt-radio', 'style' => 'display: block']]
                   ])->label('Status')}
 
-                  <div class="form-group">
-                    <label class="control-label col-md-2">{Yii::t('app', 'image')}</label>
-                    <div class="col-md-10">
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                <img src="" id="image" />
-                            </div>
-                            <div>
-                              <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
-                              <span class="btn default btn-file">
-                                <span class="fileinput-new" id="upload-image"> {Yii::t('app', 'choose_image')} </span>
-                                {$form->field($model, 'image_id', [
-                                  'inputOptions' => ['id' => 'image_id'], 
-                                  'template' => '{input}', 
-                                  'options' => ['tag' => null]
-                                ])->hiddenInput()->label(false)}
-                              </span>
-                              <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
+                  {$form->field($model, 'image_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(common\widgets\ImageInputWidget::className(), [
+                    'template' => '<div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">{image}{input}</div>{buttons}',
+                    'imageOptions' => ['width' => 150, 'height' => 150]
+                  ])->label('Hình ảnh')}
                 </div>
               </div>
               <div class="tab-pane" id="tab_category">
@@ -139,29 +119,3 @@
       {/ActiveForm}
   </div>
 </div>
-
-<script type="text/javascript">
-  // Remove main image
-function removeMainImage() {
-  $("#image").attr('src', '');
-  $("#image_id").val('');
-}
-</script>
-
-{registerJs}
-{literal}
-// slug
-$('#title').slug();
-
-// image
-var manager = new ImageManager();
-$("#upload-image").selectImage(manager, {
-  callback: function(img) {
-    var thumb = img.src;
-    var id = img.id;
-    $("#image").attr('src', thumb).removeClass('hide');
-    $("#image_id").val(id);
-  }
-});
-{/literal}
-{/registerJs}

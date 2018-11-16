@@ -61,6 +61,7 @@ class GameController extends Controller
     public function actionCreate()
     {
         $this->view->params['main_menu_active'] = 'game.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new CreateGameForm();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -68,12 +69,7 @@ class GameController extends Controller
             $ref = $request->get('ref', Url::to(['game/index']));
             return $this->redirect($ref);
         }
-
-        $this->view->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-        $this->view->registerCssFile('@web/vendor/assets/global/plugins/fancybox/source/jquery.fancybox.css', ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
-        $this->view->registerJsFile('@web/vendor/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
-        return $this->render('create.tpl', [
+        return $this->render('create_new.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['game/index']))
         ]);

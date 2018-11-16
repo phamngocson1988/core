@@ -16,7 +16,6 @@ use yii\helpers\ArrayHelper;
 class CreatePostForm extends Model
 {
     public $title;
-    public $slug;
     public $excerpt;
     public $content;
     public $image_id;
@@ -33,14 +32,14 @@ class CreatePostForm extends Model
     public function rules()
     {
         return [
-            [['title', 'content', 'slug'], 'required'],
+            [['title', 'content'], 'required'],
         ];
     }
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['title', 'content', 'excerpt', 'slug', 'categories', 'image_id', 'type', 'meta_title', 'meta_keyword', 'meta_description', 'status'];
+        $scenarios[self::SCENARIO_DEFAULT] = ['title', 'content', 'excerpt', 'categories', 'image_id', 'type', 'meta_title', 'meta_keyword', 'meta_description', 'status'];
         return $scenarios;
     }
 
@@ -84,7 +83,6 @@ class CreatePostForm extends Model
         $post->title = $this->title;
         $post->content = $this->content;
         $post->excerpt = $this->excerpt;
-        $post->slug = $this->slug;
         $post->type = $this->type;
         $post->image_id = $this->image_id;
         $post->meta_title = $this->meta_title;
