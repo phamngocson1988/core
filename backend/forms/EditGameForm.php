@@ -37,6 +37,22 @@ class EditGameForm extends Model
         ];
     }
 
+    public function attributeLabels() { 
+
+        return  [
+            'title' => Yii::t('app', 'title'),
+            'content' => Yii::t('app', 'description'),
+            'status' => Yii::t('app', 'status'),
+            'products' => Yii::t('app', 'products'),
+            'excerpt' => Yii::t('app', 'excerpt'),
+            'image_id' => Yii::t('app', 'image'),
+            'meta_title' => Yii::t('app', 'meta_title'),
+            'meta_keyword' => Yii::t('app', 'meta_keyword'),
+            'meta_description' => Yii::t('app', 'meta_description'),
+            'gallery' => Yii::t('app', 'gallery'),
+        ];
+    }
+
     public function validateProducts($attribute, $params)
     {
         foreach ($this->products as $key => $data) {
@@ -180,6 +196,11 @@ class EditGameForm extends Model
     {
         $game = $this->getGame();
         return $game->gallery;
+    }
+
+    public function getStatusList()
+    {
+        return Game::getStatusList();
     }
 
     //============== Update relevants ==============

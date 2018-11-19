@@ -71,4 +71,12 @@ class Product extends ActiveRecord
         }
         return $default;
     }
+
+    public function delete()
+    {
+        $this->status = self::STATUS_DELETE;
+        $this->deleted_by = Yii::$app->user->id;
+        $this->deleted_at = date('Y-m-d H:i:s');
+        return $this->save();
+    }
 }

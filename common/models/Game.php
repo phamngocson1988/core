@@ -79,7 +79,8 @@ class Game extends ActiveRecord
 
     public function getProducts() 
     {
-        return $this->hasMany(Product::className(), ['game_id' => 'id']);
+        return $this->hasMany(Product::className(), ['game_id' => 'id'])
+        ->where('status = :status', [':status' => Product::STATUS_VISIBLE]);
     }
 
     public function getCreatedAt($format = false)

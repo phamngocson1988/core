@@ -160,5 +160,12 @@ return [
     'edit' => 'Edit',
     'delete' => 'Delete',
     'create_game' => 'Create game',
+    'edit_game' => 'Edit game',
     'add_product_game' => 'Add product game',
+    'products' => 'Products',
+    'cancel_image' => 'Cancel Image',
+    'meta_title' => 'Meta title',
+    'meta_keyword' => 'Meta keyword',
+    'meta_description' => 'Meta description',
+    'price' => 'Price',
 ];

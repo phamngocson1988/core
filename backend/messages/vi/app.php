@@ -159,5 +159,12 @@ return [
     'edit' => 'Chỉnh sửa',
     'delete' => 'Xóa',
     'create_game' => 'Tạo mới game',
+    'edit_game' => 'Chỉnh sửa game',
     'add_product_game' => 'Thêm gói game',
+    'products' => 'Các sản phẩm',
+    'cancel_image' => 'Loại bỏ ảnh',
+    'meta_title' => 'Tiêu đề SEO',
+    'meta_keyword' => 'Từ khóa SEO',
+    'meta_description' => 'Nội dung SEO',
+    'price' => 'Giá',
 ];

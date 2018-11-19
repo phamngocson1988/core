@@ -78,21 +78,17 @@ class GameController extends Controller
     public function actionEdit($id)
     {
         $this->view->params['main_menu_active'] = 'game.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new EditGameForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['game/index']));
-                return $this->redirect($ref);    
-            } else {
-                print_r($model->getErrors());
-            }
-            
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = $request->get('ref', Url::to(['game/index']));
+            return $this->redirect($ref);
         } else {
-            $model->loadData($id);
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
-        $this->view->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+        $model->loadData($id);
         return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['game/index'])),
