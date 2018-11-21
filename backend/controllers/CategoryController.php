@@ -31,6 +31,21 @@ class CategoryController extends Controller
         ];
     }
 
+    public function actions()
+    {
+        return [
+            // ...
+            'toggle' => [
+                'class' => \dosamigos\grid\actions\ToggleAction::className(),
+                'modelClass' => \common\models\Category::className(),
+                'onValue' => \common\models\Category::VISIBLE,
+                'offValue' => \common\models\Category::INVISIBLE
+            ],
+            // ...
+        ];
+    }
+
+
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'category.index';

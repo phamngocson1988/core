@@ -66,6 +66,19 @@
                   'visibleButtons' => [
                     'new' => false
                   ]
+                ],
+                [
+                  'class' => dosamigos\grid\columns\ToggleColumn::className(),
+                  'attribute' => 'visible',
+                  'onValue' => common\models\Category::VISIBLE,
+                  'onLabel' => 'Active',
+                  'offLabel' => 'Not active',
+                  'contentOptions' => ['class' => 'text-center'],
+                  'afterToggle' => 'function(r, data){if(r){console.log("done", data)};}',
+                  'filter' => [
+                    common\models\Category::VISIBLE => common\models\Category::VISIBLE,
+                    common\models\Category::INVISIBLE => common\models\Category::INVISIBLE
+                  ]
                 ]
             ]
         ])}

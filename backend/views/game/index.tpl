@@ -72,7 +72,7 @@
               </tr>
               {/foreach}
           </tbody>
-      </table>
+        </table>
         {LinkPager::widget(['pagination' => $pages])}
         {/Pjax}
       </div>

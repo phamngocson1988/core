@@ -33,7 +33,7 @@ class GameController extends Controller
             ],
         ];
     }
-
+    
     /**
      * Show the list of games
      */

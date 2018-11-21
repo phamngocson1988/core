@@ -1,11 +1,54 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5c4886789849325407faef4c122eee2",
+    "content-hash": "ea912031ad2ecdcc97b16fd35f9dcb3b",
     "packages": [
+        {
+            "name": "2amigos/yii2-dosamigos-asset-bundle",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-dosamigos-asset-bundle.git",
+                "reference": "39316c82cf25a884b9037e758968e1323b4add33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-dosamigos-asset-bundle/zipball/39316c82cf25a884b9037e758968e1323b4add33",
+                "reference": "39316c82cf25a884b9037e758968e1323b4add33",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\assets\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio Ramirez",
+                    "email": "ramirez.cobos@gmail.com",
+                    "homepage": "http://2amigos.us"
+                }
+            ],
+            "description": "2amigOS! Asset Bundle for Yii2.",
+            "keywords": [
+                "asset",
+                "component",
+                "extension",
+                "yii"
+            ],
+            "time": "2014-09-01T13:43:36+00:00"
+        },
         {
             "name": "2amigos/yii2-gallery-widget",
             "version": "1.1.0",
@@ -66,6 +109,67 @@
                 "yii2"
             ],
             "time": "2017-09-09T16:01:44+00:00"
+        },
+        {
+            "name": "2amigos/yii2-grid-view-library",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-grid-view-library.git",
+                "reference": "feabd590e7e97fb9b205c9a1506c8ec1ca40a0fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-grid-view-library/zipball/feabd590e7e97fb9b205c9a1506c8ec1ca40a0fe",
+                "reference": "feabd590e7e97fb9b205c9a1506c8ec1ca40a0fe",
+                "shasum": ""
+            },
+            "require": {
+                "2amigos/yii2-dosamigos-asset-bundle": "0.1.*",
+                "bower-asset/jquery.floatthead": "^2.0",
+                "bower-asset/store.js": "~1.3",
+                "yiisoft/yii2": "~2.0.5"
+            },
+            "require-dev": {
+                "2amigos/yii2-editable-widget": "~1.0",
+                "friendsofphp/php-cs-fixer": "^2.0",
+                "phpmd/phpmd": "@stable",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "suggest": {
+                "2amigos/yii2-editable-widget": "Required for the EditableColumn"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\grid\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio Ramirez",
+                    "email": "hola@2amigos.us",
+                    "homepage": "http://2amigos.us"
+                }
+            ],
+            "description": "GridView Widget Extensions for Yii2.",
+            "keywords": [
+                "extension",
+                "grid",
+                "widget",
+                "yii"
+            ],
+            "time": "2017-07-27T13:03:45+00:00"
         },
         {
             "name": "2amigos/yii2-tinymce-widget",
@@ -258,7 +362,7 @@
             "version": "3.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
             },
             "dist": {
@@ -295,6 +399,28 @@
             ]
         },
         {
+            "name": "bower-asset/jquery.floatthead",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mkoryak/floatThead.git",
+                "reference": "b1201f702994277b6b7a692692ffccad813cb26a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mkoryak/floatThead/zipball/b1201f702994277b6b7a692692ffccad813cb26a",
+                "reference": "b1201f702994277b6b7a692692ffccad813cb26a",
+                "shasum": null
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.8.0"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "bower-asset/punycode",
             "version": "v1.3.2",
             "source": {
@@ -306,6 +432,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
+                "shasum": null
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/store.js",
+            "version": "v1.3.20",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:marcuswestin/store.js.git",
+                "reference": "15b925d60f817b359d2373b2331333d74ae7d97f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marcuswestin/store.js/zipball/15b925d60f817b359d2373b2331333d74ae7d97f",
+                "reference": "15b925d60f817b359d2373b2331333d74ae7d97f",
                 "shasum": null
             },
             "type": "bower-asset"
@@ -436,12 +578,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cloudinary/cloudinary_php.git",
-                "reference": "e4596232b457d24a92c9edc925a5bcfc541409f4"
+                "reference": "5b174e3d54f7a29881855779ab4e39cde63415d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/e4596232b457d24a92c9edc925a5bcfc541409f4",
-                "reference": "e4596232b457d24a92c9edc925a5bcfc541409f4",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/5b174e3d54f7a29881855779ab4e39cde63415d0",
+                "reference": "5b174e3d54f7a29881855779ab4e39cde63415d0",
                 "shasum": ""
             },
             "require": {
@@ -480,7 +622,7 @@
                 "image management",
                 "sdk"
             ],
-            "time": "2018-11-13T12:07:07+00:00"
+            "time": "2018-11-19T14:43:35+00:00"
         },
         {
             "name": "doctrine/lexer",

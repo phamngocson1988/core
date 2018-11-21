@@ -6,6 +6,7 @@ use yii\grid\ActionColumn as BaseActionColumn;
 use yii\grid\Column;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 /**
  * ActionColumn is a column for the [[GridView]] widget that displays buttons for viewing and manipulating the items.
@@ -77,7 +78,7 @@ class ActionColumn extends Column
         $title = ArrayHelper::getValue($settings, 'title', '');
         $iconClass = ArrayHelper::getValue($settings, 'icon_class', '');
         $url = ArrayHelper::getValue($settings, 'url', '#');
-        $options = ArrayHelper::getValue($settings, 'options', []);\
+        $options = ArrayHelper::getValue($settings, 'options', []);
         $options = array_merge([
             'title' => $title,
             'aria-label' => $title,
