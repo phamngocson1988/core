@@ -4,8 +4,131 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea912031ad2ecdcc97b16fd35f9dcb3b",
+    "content-hash": "5bdad7a16d9422e9ddaa75357e80e790",
     "packages": [
+        {
+            "name": "2amigos/yii2-date-picker-widget",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-date-picker-widget.git",
+                "reference": "d09c2444e8c2329e38528bba77002dd65186c1ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-date-picker-widget/zipball/d09c2444e8c2329e38528bba77002dd65186c1ff",
+                "reference": "d09c2444e8c2329e38528bba77002dd65186c1ff",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/bootstrap-datepicker": "1.7.0",
+                "yiisoft/yii2": ">=2.0.9",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "asset-installer-paths": {
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\datepicker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "2amigOS! Consulting Group",
+                    "email": "hola@2amigos.us",
+                    "homepage": "http://2amigos.us",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Bootstrap DatePicker widget for Yii2.",
+            "homepage": "http://yiiwheels.com/extension/bootstrap-datepicker",
+            "keywords": [
+                "2amigos",
+                "datepicker",
+                "extension",
+                "widget",
+                "yii",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2017-07-05T05:52:03+00:00"
+        },
+        {
+            "name": "2amigos/yii2-date-time-picker-widget",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-date-time-picker-widget.git",
+                "reference": "721a23e245b3b2a5ca2669e9a35a4ebdab321c8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-date-time-picker-widget/zipball/721a23e245b3b2a5ca2669e9a35a4ebdab321c8c",
+                "reference": "721a23e245b3b2a5ca2669e9a35a4ebdab321c8c",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/smalot-bootstrap-datetimepicker": "2.4.4",
+                "yiisoft/yii2": "~2.0",
+                "yiisoft/yii2-bootstrap": "~2.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "asset-installer-paths": {
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\datetimepicker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "2amigOS! Consulting Group",
+                    "email": "hola@2amigos.us",
+                    "homepage": "http://2amigos.us",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Bootstrap DateTimePicker widget for Yii2.",
+            "homepage": "http://yiiwheels.com/extension/bootstrap-datetimepicker",
+            "keywords": [
+                "2amigos",
+                "DateTimePicker",
+                "extension",
+                "widget",
+                "yii",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2017-07-05T05:38:36+00:00"
+        },
         {
             "name": "2amigos/yii2-dosamigos-asset-bundle",
             "version": "0.1.0",
@@ -48,6 +171,68 @@
                 "yii"
             ],
             "time": "2014-09-01T13:43:36+00:00"
+        },
+        {
+            "name": "2amigos/yii2-file-input-widget",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-file-input-widget.git",
+                "reference": "a9e2b70d2f214bc5906f808902fb1a15311511da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-file-input-widget/zipball/a9e2b70d2f214bc5906f808902fb1a15311511da",
+                "reference": "a9e2b70d2f214bc5906f808902fb1a15311511da",
+                "shasum": ""
+            },
+            "require": {
+                "jasny/bootstrap": "~3.1.0",
+                "kartik-v/bootstrap-fileinput": "~4.1.0",
+                "yiisoft/yii2": "~2.0.0",
+                "yiisoft/yii2-bootstrap": "~2.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\fileinput\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "2amigOS! Consulting Group",
+                    "email": "hola@2amigos.us",
+                    "homepage": "http://2amigos.us",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Jasny file input widget for the Yii framework",
+            "homepage": "https://github.com/2amigos//yii2-file-input-widget",
+            "keywords": [
+                "2amigos",
+                "file input",
+                "widget",
+                "yii",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2016-02-13T06:44:10+00:00"
         },
         {
             "name": "2amigos/yii2-gallery-widget",
@@ -336,6 +521,28 @@
             ]
         },
         {
+            "name": "bower-asset/bootstrap-datepicker",
+            "version": "v1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uxsolutions/bootstrap-datepicker.git",
+                "reference": "d364be5b066b38f3675a5a1dc174ce1ab1f3360e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uxsolutions/bootstrap-datepicker/zipball/d364be5b066b38f3675a5a1dc174ce1ab1f3360e",
+                "reference": "d364be5b066b38f3675a5a1dc174ce1ab1f3360e",
+                "shasum": null
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.7.1,<4.0.0"
+            },
+            "type": "bower-asset",
+            "license": [
+                "Apache-2.0"
+            ]
+        },
+        {
             "name": "bower-asset/inputmask",
             "version": "3.3.11",
             "source": {
@@ -362,7 +569,7 @@
             "version": "3.2.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
             },
             "dist": {
@@ -432,6 +639,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
+                "shasum": null
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/smalot-bootstrap-datetimepicker",
+            "version": "2.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smalot/bootstrap-datetimepicker.git",
+                "reference": "32143c8b45575e51c92a8e29997cbe556d1bbba3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smalot/bootstrap-datetimepicker/zipball/32143c8b45575e51c92a8e29997cbe556d1bbba3",
+                "reference": "32143c8b45575e51c92a8e29997cbe556d1bbba3",
                 "shasum": null
             },
             "type": "bower-asset"
@@ -578,12 +801,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cloudinary/cloudinary_php.git",
-                "reference": "5b174e3d54f7a29881855779ab4e39cde63415d0"
+                "reference": "85e5de56b3c02ee83d357d3098caa9e529c6d460"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/5b174e3d54f7a29881855779ab4e39cde63415d0",
-                "reference": "5b174e3d54f7a29881855779ab4e39cde63415d0",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/85e5de56b3c02ee83d357d3098caa9e529c6d460",
+                "reference": "85e5de56b3c02ee83d357d3098caa9e529c6d460",
                 "shasum": ""
             },
             "require": {
@@ -622,7 +845,7 @@
                 "image management",
                 "sdk"
             ],
-            "time": "2018-11-19T14:43:35+00:00"
+            "time": "2018-11-21T09:15:59+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -841,6 +1064,91 @@
             "time": "2017-05-16T10:31:22+00:00"
         },
         {
+            "name": "jasny/bootstrap",
+            "version": "v3.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jasny/bootstrap.git",
+                "reference": "f4705f17fcae6eff441f8b582d6eb72ce9109fc6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jasny/bootstrap/zipball/f4705f17fcae6eff441f8b582d6eb72ce9109fc6",
+                "reference": "f4705f17fcae6eff441f8b582d6eb72ce9109fc6",
+                "shasum": ""
+            },
+            "require": {
+                "twitter/bootstrap": ">=3.1.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Arnold Daniels",
+                    "email": "arnold@jasny.net",
+                    "homepage": "http://www.jasny.net"
+                }
+            ],
+            "description": "The missing bootstrap components",
+            "homepage": "http://jasny.github.io/bootstrap",
+            "keywords": [
+                "bootstrap",
+                "css"
+            ],
+            "time": "2014-05-06T03:57:04+00:00"
+        },
+        {
+            "name": "kartik-v/bootstrap-fileinput",
+            "version": "v4.1.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
+                "reference": "00bf2212c4c005850267dd27803dba350e90a5be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/00bf2212c4c005850267dd27803dba350e90a5be",
+                "reference": "00bf2212c4c005850267dd27803dba350e90a5be",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\plugins\\fileinput\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An enhanced HTML 5 file input for Bootstrap 3.x with features for file preview for many file types, multiple selection, ajax uploads, and more.",
+            "homepage": "https://github.com/kartik-v/bootstrap-fileinput",
+            "keywords": [
+                "ajax",
+                "bootstrap",
+                "delete",
+                "file",
+                "image",
+                "input",
+                "jquery",
+                "multiple",
+                "preview",
+                "progress",
+                "upload"
+            ],
+            "time": "2015-05-02T11:29:22+00:00"
+        },
+        {
             "name": "smarty/smarty",
             "version": "v3.1.33",
             "source": {
@@ -997,6 +1305,57 @@
                 "wysiwyg"
             ],
             "time": "2018-10-31T07:57:27+00:00"
+        },
+        {
+            "name": "twitter/bootstrap",
+            "version": "v4.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "3b558734382ce58b51e5fc676453bfd53bba9201"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/3b558734382ce58b51e5fc676453bfd53bba9201",
+                "reference": "3b558734382ce58b51e5fc676453bfd53bba9201",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "https://getbootstrap.com/",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "mobile-first",
+                "responsive",
+                "sass",
+                "web"
+            ],
+            "time": "2018-07-24T15:54:34+00:00"
         },
         {
             "name": "unclead/yii2-multiple-input",

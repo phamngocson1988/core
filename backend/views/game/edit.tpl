@@ -80,6 +80,9 @@
                 <li>
                   <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'products')}</a>
                 </li>
+                <li>
+                  <a href="#tab_1_4" data-toggle="tab">{Yii::t('app', 'products')}</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -134,6 +137,61 @@
                         ]
                     ]
                   ])->label(false)}
+                </div>
+                <div class="tab-pane" id="tab_1_4">
+                  <div class="form-group">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                      <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
+                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> 
+                        <div class="multiple-input-list__btn js-input-remove btn btn-danger"><i class="glyphicon glyphicon-remove"></i></div>
+                      </div>
+                      <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
+                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> 
+                      </div>
+                      <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
+                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> 
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="thumbnail">
+                        <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Lights" style="width:100%">
+                        <i class="glyphicon glyphicon-remove" style="position: absolute; top:0;right:15px"></i>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="thumbnail">
+                        <a href="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png">
+                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Nature" style="width:100%">
+                          <div class="caption">
+                            <p>Lorem ipsum...</p>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="thumbnail">
+                        <a href="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png">
+                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Fjords" style="width:100%">
+                          <div class="caption">
+                            <p>Lorem ipsum...</p>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="thumbnail">
+                        <a href="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png">
+                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Fjords" style="width:100%">
+                          <div class="caption">
+                            <p>Lorem ipsum...</p>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

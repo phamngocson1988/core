@@ -69,7 +69,7 @@ class GameController extends Controller
             $ref = $request->get('ref', Url::to(['game/index']));
             return $this->redirect($ref);
         }
-        return $this->render('create_new.tpl', [
+        return $this->render('create.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['game/index']))
         ]);
@@ -100,7 +100,7 @@ class GameController extends Controller
         $request = Yii::$app->request;
         $form = new DeleteGameForm(['id' => $id]);
         if (!$form->delete()) {
-            Yii::$app->session->setFlash('error', $form->getErrors('id'));
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
         Yii::$app->session->setFlash('success', 'Success!');
         $ref = $request->get('ref', Url::to(['game/index']));
