@@ -163,6 +163,8 @@ class EditGameForm extends Model
         $this->meta_keyword = $game->meta_keyword;
         $this->meta_description = $game->meta_description;
         $this->status = $game->status;
+        $gallery = $game->gallery;
+        $this->gallery = ArrayHelper::getColumn($gallery, 'id');
 
         foreach ($game->products as $product) {
             $data = [];
