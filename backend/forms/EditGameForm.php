@@ -107,26 +107,8 @@ class EditGameForm extends Model
                 $result = $game->save();
 
                 if ($result) {
-                    // Delete old images
-                    $oldImages = $game->gallery;
-                    $oldImageIds = [];
-                    $newImages = $this->getGallery(); // list ids of new images
-                    foreach ($oldImages as $oldImage) {
-                        $oldImageIds[] = $oldImage->id;
-                        if (!in_array($oldImage->id, $newImages)) {
-                            $oldImage->delete();
-                        }
-                    }
-                    $newImageIds = array_diff($newImages, $oldImageIds);
-                    foreach ($newImageIds as $imageId) {
-                        $gameImage = new GameImage();
-                        $gameImage->image_id = $imageId;
-                        $gameImage->game_id = $this->id;
-                        $gameImage->save();
-                    }
-
+                    $this->updateGallery();
                     $this->updateProducts();
-
                 }
 
                 $transaction->commit();
@@ -191,7 +173,9 @@ class EditGameForm extends Model
     public function getGallery()
     {
         $gallery = (array)$this->gallery;
-        return array_filter($gallery);
+        $gallery = array_filter($gallery);
+        $gallery = array_unique($gallery);
+        return $gallery;
     }
 
     public function getGalleryImages()
@@ -226,7 +210,23 @@ class EditGameForm extends Model
             $product = $this->bindProduct($data);
             $product->save();
         }
+    }
 
-        
+    protected function updateGallery()
+    {
+        $game = $this->getGame();
+
+        $oldImages = GameImage::findAll(['game_id' => $game->id]);
+        foreach ($oldImages as $oldImage) {
+            $oldImage->delete();
+        }
+
+        $newImages = $this->getGallery(); // list ids of new images
+        foreach ($newImages as $newImage) {
+            $gameImage = new GameImage();
+            $gameImage->game_id = $game->id;
+            $gameImage->image_id = $newImage;
+            $gameImage->save();
+        }
     }
 }

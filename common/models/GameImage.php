@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 /**
  * Game model
  *
+ * @property integer $id
  * @property integer $game_id
  * @property integer $image_id
  */

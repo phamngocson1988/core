@@ -82,7 +82,7 @@
                   <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'products')}</a>
                 </li>
                 <li>
-                  <a href="#tab_1_4" data-toggle="tab">{Yii::t('app', 'products')}</a>
+                  <a href="#tab_1_4" data-toggle="tab">{Yii::t('app', 'gallery')}</a>
                 </li>
               </ul>
             </div>
@@ -140,47 +140,10 @@
                   ])->label(false)}
                 </div>
                 <div class="tab-pane" id="tab_1_4">
-                  <!-- <div class="form-group">
-                    <div class="row">
-                      <div class="col-md-2">
-                        <div class="thumbnail">
-                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Lights" style="width:100%">
-                          <i class="glyphicon glyphicon-remove" style="position: absolute; top:0;right:15px"></i>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="thumbnail">
-                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Lights" style="width:100%">
-                          <i class="glyphicon glyphicon-remove" style="position: absolute; top:0;right:15px"></i>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="thumbnail">
-                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Lights" style="width:100%">
-                          <i class="glyphicon glyphicon-remove" style="position: absolute; top:0;right:15px"></i>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="thumbnail">
-                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Lights" style="width:100%">
-                          <i class="glyphicon glyphicon-remove" style="position: absolute; top:0;right:15px"></i>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="thumbnail">
-                          <img src="http://image.chuchu.com/4/150x150/hacker_hacker_human_-512.png" alt="Lights" style="width:100%">
-                          <i class="glyphicon glyphicon-remove" style="position: absolute; top:0;right:15px"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
                   {$form->field($model, 'gallery', [
-                    'options' => ['tag' => false, 'class' => 'profile-userpic'],
                     'template' => '{input}{hint}{error}'
                   ])->widget(MultipleImageInputWidget::className(), [
-                    
                   ])->label(false)}
-                  
                 </div>
               </div>
             </div>

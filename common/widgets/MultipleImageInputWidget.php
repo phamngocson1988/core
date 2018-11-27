@@ -11,24 +11,77 @@ class MultipleImageInputWidget extends InputWidget
 {
     public $handler = 'manager';
     
-    public $itemOptions = [];
-    public $itemSize = '300x300';
-    public $item_template = "<div class='col-md-2 image-item'><div class='thumbnail'>{image}{input}{close}</div></div>";
+    // Items
+    public $itemOptions = [
+        'size' => '300x300',
+        'tag' => 'div',
+        'options' => ['class' => 'col-md-2']
+    ];
+    public $item_template = "<div class='thumbnail'>{image}{input}{close}</div>";
 
-    public $template = "<div class='row multiple-image-container'>{items}</div><div>{choose_button}</div>";
-    public $chooseButtonOptions = ['tag' => 'span', 'options' => ['class' => 'btn default']];
+    // Container
+    public $containerOptions = [
+        'tag' => 'div',
+        'options' => ['class' => 'row']
+    ];
+    public $template = "{items}{choose_button}";
+
+    // Buttons
+    public $chooseButtonOptions = [
+        'tag' => 'span', 
+        'options' => ['class' => 'btn default']
+    ];
     public $parts = [
         '{items}' => '',
         '{choose_button}' => '',
     ];
-    public $clientOptions = [];
+
+    protected $_hash = '';
+
+    public function init()
+    {
+        $this->generateHash();
+        // Init item
+        $itemOptions = (array)$this->itemOptions;
+        $options = ArrayHelper::getValue($this->itemOptions, 'options', []);
+        $itemClass = ArrayHelper::getValue($options, 'class', '');
+        $itemIdentifier = $this->getItemIdentifier();
+        $itemClass .= " $itemIdentifier";
+        $this->itemOptions['options']['class'] = $itemClass;
+        $itemTag = ArrayHelper::getValue($this->itemOptions, 'tag', 'div');
+        $this->itemOptions['tag'] = $itemTag;
+        $size = ArrayHelper::getValue($this->itemOptions, 'size', '300x300');
+        $this->itemOptions['size'] = $size;
+
+        // Init container
+        $containerTag = ArrayHelper::getValue($this->containerOptions, 'tag', 'div');
+        $this->containerOptions['tag'] = $containerTag;
+        $conOptions = ArrayHelper::getValue($this->containerOptions, 'options', []);
+        $containerClass = ArrayHelper::getValue($conOptions, 'class', '');
+        $containerIdentifier = $this->getContainerIdentifier();
+        $containerClass .= " $containerIdentifier";
+        $this->containerOptions['options']['class'] = $containerClass;
+
+        parent::init();
+    }
+
+    protected function generateHash()
+    {
+        if (!$this->_hash) {
+            $this->_hash = Yii::$app->security->generateRandomString();
+        }
+        return $this->_hash;
+    }
 
     public function run()
     {
         $id = $this->options['id'];
         $items = $this->generateItems();
+        $containerTag = ArrayHelper::getValue($this->containerOptions, 'tag', 'div');
+        $conOptions = ArrayHelper::getValue($this->containerOptions, 'options', []);
+        $container = Html::tag($containerTag, $items, $conOptions);        
         $chooseButton = $this->generateChooseButton();
-        $elements = ['{items}' => $items, '{choose_button}' => $chooseButton];
+        $elements = ['{items}' => $container, '{choose_button}' => $chooseButton];
         echo strtr($this->template, $elements);
         $this->registerClientScript();
     }
@@ -40,15 +93,37 @@ class MultipleImageInputWidget extends InputWidget
         $attribute = $this->attribute;
         $elements = '';
         $items = (array)$model->$attribute;
+        $size = $this->getItemSize();
+
+        $itemOptions = (array)$this->itemOptions;
+        $tag = ArrayHelper::remove($itemOptions, 'tag', 'div');
+        $options = ArrayHelper::remove($itemOptions, 'options', []);
+
         foreach ($items as $no => $item) {
             $obj = Image::findOne($item);
-            $url = $obj->getUrl($this->itemSize);
-            $image = Html::img($url, $this->itemOptions);
+            $url = $obj->getUrl($size);
+            $image = Html::img($url, []);
             $input = $this->generateInput($no);
             $close = $this->generateCloseButton();
-            $elements .= strtr($this->item_template, ['{image}' => $image, '{input}' => $input, '{close}' => $close]);
+            $item = strtr($this->item_template, ['{image}' => $image, '{input}' => $input, '{close}' => $close]);
+            $elements .= Html::tag($tag, $item, $options);
         }
         return $elements;
+    }
+
+    protected function getItemSize()
+    {
+        return ArrayHelper::getValue($this->itemOptions, 'size', '300x300');
+    }
+
+    protected function getItemIdentifier()
+    {
+        return sprintf("%s-%s", 'item', $this->generateHash());
+    }
+
+    protected function getContainerIdentifier()
+    {
+        return sprintf("%s-%s", 'container', $this->generateHash());
     }
 
     protected function generateInput($no = 0)
@@ -86,38 +161,45 @@ class MultipleImageInputWidget extends InputWidget
         $chooseButtonId = "choose_$id";
         $removeButtonClass = "remove-button";
         $manager = $this->handler;
-        $clientOptions = (array)$this->clientOptions;
-        $clientOptions = json_encode($clientOptions);
-        $item_template = addslashes($this->item_template);
+
+        // Item
+        $size = $this->getItemSize();
+        $itemIdentifier = $this->getItemIdentifier();
+        $itemTag = ArrayHelper::getValue($this->itemOptions, 'tag', 'div');
+        $options = ArrayHelper::getValue($this->itemOptions, 'options', []);
+        $item_template = addslashes(Html::tag($itemTag, $this->item_template, $options));
+
+        // Container
+        $containerIdentifier = $this->getContainerIdentifier();
+
         $close = addslashes($this->generateCloseButton());
         $input = addslashes($this->generateInput());
-        $image = addslashes(Html::img("", $this->itemOptions));
+        $image = addslashes(Html::img("", []));
         return "
 if (!{$manager}) {
-    var {$manager} = new ImageManager({$clientOptions});
+    var {$manager} = new ImageManager();
 }
 $('#{$chooseButtonId}').selectImage({$manager}, {
   type: 'multiple',
+  size: '{$size}',
   callback: function(imgs) {
-    var elements = '';
     $.each(imgs, function( index, img ) {
         var str = '{$item_template}';
-        var image = '{$image}';
-        $(image).attr('src', img.src);
+        var image = $('<div/>').append('{$image}');
+        image.find('img').attr('src', img.src);
         var close = '{$close}';
-        var input = '{$input}';
-        $(input).attr('value', img.id);
-        str = str.replace('{image}', image);
-        str = str.replace('{input}', input);
+        var input = $('<div/>').append('{$input}');
+        input.find('input').val(img.id);
+        str = str.replace('{image}', image.html());
+        str = str.replace('{input}', input.html());
         str = str.replace('{close}', close);
-        elements += str;
+        $('.{$containerIdentifier}').append(str);
     });
-    $('.multiple-image-container').append(elements);
   }
 });
-$('.{$removeButtonClass}').on('click', function(e){
+$('.{$containerIdentifier}').on('click', '.{$removeButtonClass}', function(e){
   e.preventDefault();
-  $(this).closest('.image-item').fadeOut(300, function(){ $(this).remove(); });
+  $(this).closest('.{$itemIdentifier}').fadeOut(300, function(){ $(this).remove(); });
   return false;
 })";
     }
@@ -127,7 +209,6 @@ $('.{$removeButtonClass}').on('click', function(e){
         $js = [];
         $view = $this->getView();
         $js[] = $this->getScriptCode();
-        // $js[] = "tinymce.init($options);";
         $view->registerJs(implode("\n", $js));
     }
 

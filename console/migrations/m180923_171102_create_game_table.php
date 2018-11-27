@@ -55,6 +55,7 @@ class m180923_171102_create_game_table extends Migration
 
         /* Game image table */
         $this->createTable('{{%game_image}}', [
+            'id' => $this->primaryKey(),
             'game_id' => $this->integer(),
             'image_id' => $this->integer(),
         ], $tableOptions);

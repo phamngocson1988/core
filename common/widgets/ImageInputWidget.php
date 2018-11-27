@@ -38,7 +38,6 @@ class ImageInputWidget extends InputWidget
         $cancelButton = $this->generateCancelButton();
         $terms = ["{image}", "{input}", "{choose_button}", "{cancel_button}"];
         $elements   = [$image, $input, $chooseButton, $cancelButton];
-        // echo str_replace($terms, $elements, $this->template);
         echo strtr($this->template, $this->parts);
         $this->registerClientScript();
     }

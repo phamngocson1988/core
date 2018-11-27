@@ -532,6 +532,9 @@ function ImageManager(opts) {
 
     this.attach = function(observer) {
         this.observer = observer;
+        if (observer.size) {
+            $(this.options.id).find("[role='size'] a[value='"+observer.size+"']").trigger('click');
+        }
     }
 
     this.init(opts);
@@ -550,6 +553,7 @@ $.fn.selectImage = function(manager, opts) {
 
     var options = {
         type: 'single', //single | multiple
+        size: null,
         callback: function(objs, e) {
             
         }
