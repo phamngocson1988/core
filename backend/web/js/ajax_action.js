@@ -110,19 +110,25 @@ function AjaxFormSubmit(opts) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var form = $(this);
+            if (!that.validate(form)) {
+                that.invalid(form);
+                return false;
+            }
             $.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
                 dataType : 'json',
                 data: form.serialize(),
+                beforeSend: that.beforeSend(form),
                 success: function (result, textStatus, jqXHR) {
                     if (result.status == false) {
                         that.error(result.errors);
                         return false;
                     } else {
-                        that.success(result.data);
+                        that.success(result.data, form);
                     }
                 },
+                complete: that.complete(form)
             });
             return false;
         });
@@ -134,12 +140,29 @@ function AjaxFormSubmit(opts) {
         return false;
     }
 
-    this.success = function (data) {
+    this.success = function (data, form) {
         alert('Success');
         console.log(data);
         return false;
     }
+
+    this.beforeSend = function (element) {
+        App.blockUI({target: 'body', animate: true});
+    }
+
+    this.complete = function(element) {
+        App.unblockUI('body');
+    }
+
+    this.validate = function(form) {
+        return true;
+    }
+
+    this.invalid = function(form) {
+
+    }
     this.init(opts);
+    return this;
 }
 
 
@@ -456,7 +479,7 @@ function ImageManager(opts) {
                         data[index] = item;
                     });
                 }
-                that.observer.callback(data);
+                that.observer.callback(data, that.observer.element);
             }
             $(that.options.id).modal('hide');
         });
@@ -509,6 +532,9 @@ function ImageManager(opts) {
 
     this.attach = function(observer) {
         this.observer = observer;
+        if (observer.size) {
+            $(this.options.id).find("[role='size'] a[value='"+observer.size+"']").trigger('click');
+        }
     }
 
     this.init(opts);
@@ -524,15 +550,18 @@ $.fn.selectImage = function(manager, opts) {
     if (!manager) {
         return false;
     }
+
     var options = {
         type: 'single', //single | multiple
-        callback: function(objs) {
+        size: null,
+        callback: function(objs, e) {
             
         }
     };
     options = $.extend(options, opts);
-
-    $(this).on('click', function() {
+    var selector = $(this).selector;
+    $(document).on('click', selector, function(e) {
+        options.element = $(e.target);
         manager.attach(options);
         manager.open_popup();
     });
