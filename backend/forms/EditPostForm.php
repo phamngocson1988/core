@@ -16,7 +16,6 @@ class EditPostForm extends Model
 {
     public $id;
     public $title;
-    public $slug;
     public $excerpt;
     public $content;
     public $image_id;
@@ -33,7 +32,7 @@ class EditPostForm extends Model
     public function rules()
     {
         return [
-            [['id', 'title', 'content', 'slug'], 'required'],
+            [['id', 'title', 'content'], 'required'],
             ['id', 'validatePost'],
         ];
     }
@@ -41,7 +40,7 @@ class EditPostForm extends Model
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['id', 'title', 'content', 'excerpt', 'slug', 'categories', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'status'];
+        $scenarios[self::SCENARIO_DEFAULT] = ['id', 'title', 'content', 'excerpt', 'categories', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'status'];
         return $scenarios;
     }
 
@@ -54,7 +53,6 @@ class EditPostForm extends Model
                 $post->title = $this->title;
                 $post->content = $this->content;
                 $post->excerpt = $this->excerpt;
-                $post->slug = $this->slug;
                 $post->image_id = $this->image_id;
                 $post->meta_title = $this->meta_title;
                 $post->meta_keyword = $this->meta_keyword;
@@ -101,7 +99,6 @@ class EditPostForm extends Model
         $categories = $post->categories;
         $categories = ArrayHelper::map($categories, 'id', 'id');
         $this->title = $post->title;
-        $this->slug = $post->slug;
         $this->content = $post->content;
         $this->excerpt = $post->excerpt;
         $this->categories = $categories;

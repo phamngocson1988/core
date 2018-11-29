@@ -7,6 +7,7 @@ use common\models\Image;
 use common\models\Category;
 use common\models\PostCategory;
 use common\models\User;
+use yii\behaviors\SluggableBehavior;
 
 /**
  * Post model
@@ -29,7 +30,6 @@ use common\models\User;
 class Post extends ActiveRecord
 {
 
-    const POST_TYPE_POST = 'post';
     const POST_TYPE_PAGE = 'page';
 
     const STATUS_INVISIBLE = 'N';
@@ -42,6 +42,19 @@ class Post extends ActiveRecord
     public static function tableName()
     {
         return '{{%post}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'slugAttribute' => 'slug',
+                'immutable' => true,
+                'ensureUnique'=>true,
+            ],
+        ];
     }
 
     public static function getStatusList()

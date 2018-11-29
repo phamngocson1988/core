@@ -62,6 +62,12 @@ Rename common\config\sample-main-local.php to main-local.php, common\config\samp
 
 composer update
 
+Copy content of environments\dev (or prod) and paste to root folder of the project.
+
+Edit database information at common\config\main-local.php
+
+Add new cookieValidationKey to backend/frontend config (file config\main-local.php for each template)
+
 yii migrate --migrationPath=@yii/rbac/migrations
 
 yii migrate
@@ -71,11 +77,5 @@ yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
 yii migrate/up --migrationPath=vendor/webzop/yii2-notifications/migrations
 
 yii migrate --migrationPath=@vendor/yii2mod/yii2-cart/migrations
-
-Copy content of environments\dev (or prod) and paste to root folder of the project.
-
-Edit database information at common\config\main-local.php
-
-Add new cookieValidationKey to backend/frontend config (file config\main-local.php for each template)
 
 Config host and enjoy.
