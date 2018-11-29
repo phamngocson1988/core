@@ -101,6 +101,7 @@ class MultipleImageInputWidget extends InputWidget
 
         foreach ($items as $no => $item) {
             $obj = Image::findOne($item);
+            if (!$obj) continue;
             $url = $obj->getUrl($size);
             $image = Html::img($url, []);
             $input = $this->generateInput($no);
@@ -126,10 +127,10 @@ class MultipleImageInputWidget extends InputWidget
         return sprintf("%s-%s", 'container', $this->generateHash());
     }
 
-    protected function generateInput($no = 0)
+    protected function generateInput($no = null)
     {
         if ($this->hasModel()) {
-            $attribute = "$this->attribute[]";
+            $attribute = "$this->attribute[$no]";
             return Html::activeHiddenInput($this->model, $attribute, $this->options);
         } else {
             return Html::hiddenInput($this->name, $this->value, $this->options);

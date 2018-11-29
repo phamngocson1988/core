@@ -2,11 +2,13 @@
 
 namespace backend\controllers;
 
+use Yii;
 use yii\web\Controller;
 use backend\components\actions\SettingsAction;
 use backend\forms\ApplicationSettingForm;
 use backend\forms\SocialSettingForm;
 use backend\forms\HeaderScriptSettingForm;
+use backend\forms\GallerySettingForm;
 
 /**
  * Class SettingController
@@ -38,6 +40,26 @@ class SettingController extends Controller
                 'modelClass' => HeaderScriptSettingForm::class,
                 'view' => 'script.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.script']
+            ],
+            'gallery' => [
+                'class' => SettingsAction::class,
+                'modelClass' => GallerySettingForm::class,
+                'view' => 'gallery.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.gallery'],
+                'prepareModel' => function($model) {
+                    foreach ($model->attributes() as $attribute) {
+                        $value = Yii::$app->settings->get('GallerySettingForm', $attribute);
+
+                        if (!is_null($value)) {
+                            $model->{$attribute} = json_decode($value, true);
+                        }
+                    }
+                }, 
+                'saveSettings' => function($model) {
+                    foreach ($model->toArray() as $key => $value) {
+                        Yii::$app->settings->set('GallerySettingForm', $key, json_encode($value));
+                    }
+                }
             ],
         ];
     }
