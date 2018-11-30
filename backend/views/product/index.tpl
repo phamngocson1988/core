@@ -1,16 +1,10 @@
-{use class='yii\widgets\ActiveForm' type='block'}
+{use class='yii\widgets\LinkPager'}
 {use class='yii\widgets\Pjax' type='block'}
-{$this->registerJsFile('@web/vendor/assets/global/plugins/jquery-repeater/jquery.repeater.js', ['depends' => [\backend\assets\AppAsset::className()]])}
-{$this->registerJsFile('@web/vendor/assets/pages/scripts/form-repeater.min.js', ['depends' => [\backend\assets\AppAsset::className()]])}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
     <li>
       <a href="/">{Yii::t('app', 'home')}</a>
-      <i class="fa fa-circle"></i>
-    </li>
-    <li>
-      <a href="{$ref}">{Yii::t('app', 'game')}: {$game->title}</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
@@ -25,244 +19,75 @@
 <div class="row">
   <div class="col-md-12">
     <!-- BEGIN EXAMPLE TABLE PORTLET-->
-    {foreach $editProductForms as $editProductForm}
-    {ActiveForm assign='form' action=['product/edit', 'id' => $editProductForm->id] options=['class' => 'form-horizontal form-row-seperated edit-product']}
-      {$form->field($editProductForm, 'id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput(['value' => $editProductForm->id])}
-      {$form->field($editProductForm, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput(['value' => $editProductForm->game_id])}
-      <div class="portlet box blue-hoki">
-        <div class="portlet-title">
-          <div class="caption">
-            <i class="fa fa-gift"></i>{$editProductForm->title}
-          </div>
-          <div class="tools">
-            <a href="" class="collapse" data-original-title="" title=""> </a>
-            <a href="{url route='product/delete' id=$editProductForm->id}" class="remove delete-action" data-original-title="" title=""> </a>
-          </div>
+    <div class="portlet light bordered">
+      <div class="portlet-title">
+        <div class="caption font-dark">
+          <i class="icon-settings font-dark"></i>
+          <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_products')}</span>
         </div>
-        <div class="portlet-body form"">
-          <div class="form-body">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <div class="fileinput fileinput-new" data-provides="fileinput">
-                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                      <img src="{$editProductForm->getImageUrl('150x150')}" width="150" height="150" />
-                    </div>
-                    <div>
-                      <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
-                      <span class="btn default btn-file">
-                        <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
-                        {$form->field($editProductForm, 'image_id', [
-                          'template' => '{input}', 
-                          'options' => ['tag' => null],
-                          'inputOptions' => ['class' => 'product-image_id']
-                        ])->hiddenInput()->label(false)}
-                      </span>
-                      <a href="javascript:void(0)" class="btn red fileinput-exists remove-image" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-9">
-                <div class="row">
-                {$form->field($editProductForm, 'title', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                  'inputOptions' => ['class' => 'form-control product-title']
-                ])->textInput()}
-                {$form->field($editProductForm, 'status', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                  'inputOptions' => ['class' => 'form-control product-status']
-                ])->dropDownList($editProductForm->getStatusList())}
-                </div>
-                <div class="row">
-                {$form->field($editProductForm, 'price', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',                                
-                  'inputOptions' => ['class' => 'form-control product-price']
-                ])->textInput()}
-                {$form->field($editProductForm, 'gems', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                  'inputOptions' => ['class' => 'form-control product-gems']
-                ])->textInput()}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <div class="row">
-              <div class="col-md-offset-3 col-md-9">
-                <button type="submit" class="btn green">{Yii::t('app', 'submit')}</button>
-                <button type="button" class="btn default">{Yii::t('app', 'cancel')}</button>
-              </div>
-            </div>
+        <div class="actions">
+          <div class="btn-group btn-group-devided">
+            <a class="btn green" href="{url route='product/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
         </div>
       </div>
-    {/ActiveForm}
-    {/foreach}
+      <div class="portlet-body">
+        <div class="row margin-bottom-10">
+          <form method="GET">
+            <div class="form-group col-md-4">
+              <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control" placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->q}">
+            </div>
+            <div class="form-group col-md-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> {Yii::t('app', 'search')}
+              </button>
+            </div>
+          </form>
+        </div>
+        {Pjax}
+        <table class="table table-striped table-bordered table-hover table-checkable">
+          <thead>
+            <tr>
+              <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'image')} </th>
+              <th style="width: 25%;"> {Yii::t('app', 'title')} </th>
+              <th style="width: 15%;"> {Yii::t('app', 'creator')} </th>
+              <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+            </tr>
+          </thead>
+          <tbody>
+              {if (!$models) }
+              <tr><td colspan="6">{Yii::t('app', 'no_data_found')}</td></tr>
+              {/if}
+              {foreach $models as $key => $model}
+              <tr>
+                <td style="vertical-align: middle;">{$pages->offset + 1 + $key}</td>
+                <td style="vertical-align: middle;"><img src="{$model->getImageUrl('50x50')}" width="50px;" /></td>
+                <td style="vertical-align: middle;">{$model->title}</td>
+                <td style="vertical-align: middle;">{$model->getCreatorName()}</td>
+                <td style="vertical-align: middle;">
+                    <a href='{url route="product/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}"><i class="fa fa-pencil"></i></a>
+                    <a href='{url route="product/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}"><i class="fa fa-trash-o"></i></a>
+                </td>
+              </tr>
+              {/foreach}
+          </tbody>
+        </table>
+        {LinkPager::widget(['pagination' => $pages])}
+        {/Pjax}
+      </div>
+    </div>
     <!-- END EXAMPLE TABLE PORTLET-->
-
-    {ActiveForm assign='form' action=['product/create'] options=['class' => 'form-horizontal form-row-seperated new-product']}
-      {$form->field($newProductForm, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput(['value' => $newProductForm->game_id])}
-      <div class="portlet box blue-hoki">
-        <div class="portlet-title">
-          <div class="caption">
-            <i class="fa fa-gift"></i>{Yii::t('app', 'new_product')}
-          </div>
-          <div class="tools">
-            <a href="" class="collapse" data-original-title="" title=""> </a>
-          </div>
-        </div>
-        <div class="portlet-body form">
-          <div class="form-body">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <div class="fileinput fileinput-new" data-provides="fileinput">
-                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                      <img src="{$newProductForm->getImageUrl('150x150')}" width="150" height="150" />
-                    </div>
-                    <div>
-                      <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
-                      <span class="btn default btn-file">
-                        <span class="fileinput-new product-image"> {Yii::t('app', 'choose_image')} </span>
-                        {$form->field($newProductForm, 'image_id', [
-                          'template' => '{input}', 
-                          'options' => ['tag' => null],
-                          'inputOptions' => ['class' => 'product-image_id']
-                        ])->hiddenInput()->label(false)}
-                      </span>
-                      <a href="javascript:void(0)" class="btn red fileinput-exists remove-image" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-9">
-                <div class="row">
-                {$form->field($newProductForm, 'title', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                  'inputOptions' => ['class' => 'form-control product-title']
-                ])->textInput()}
-                {$form->field($newProductForm, 'status', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                  'inputOptions' => ['class' => 'form-control product-status']
-                ])->dropDownList($newProductForm->getStatusList())}
-                </div>
-                <div class="row">
-                {$form->field($newProductForm, 'price', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',                                
-                  'inputOptions' => ['class' => 'form-control product-price']
-                ])->textInput()}
-                {$form->field($newProductForm, 'gems', [
-                  'options' => ['class' => 'form-group col-md-6'],
-                  'labelOptions' => ['class' => 'col-md-4 control-label'],
-                  'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>',
-                  'inputOptions' => ['class' => 'form-control product-gems']
-                ])->textInput()}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <div class="row">
-              <div class="col-md-offset-3 col-md-9">
-                <button type="submit" class="btn green">{Yii::t('app', 'submit')}</button>
-                <button type="button" class="btn default">{Yii::t('app', 'cancel')}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    {/ActiveForm}
   </div>
 </div>
-
-
 {registerJs}
 {literal}
-
-// image
-var manager = new ImageManager();
-$(".product-image").selectImage(manager, {
-  callback: function(img, e) {
-    var thumb = img.src;
-    var id = img.id;
-    var image = e.closest('.form-group').find('img');
-    var input = e.closest('.form-group').find('[type=hidden]');
-    image.attr('src', thumb).removeClass('hide');
-    input.val(id);    
-  }
-});
-$(".remove-image").on('click', function(e){
-  e.preventDefault();
-  $(this).closest('form').find('img').attr('src', '');
-  $(this).closest('form').find('input[type="hidden"]').val('');
-})
-
-// New package
-var newForm = new AjaxFormSubmit({element:'form.new-product'});
-newForm.validate = function(form) {
-  if (form.find('.has-error').length) {
-    return false;
-  }
-  return true;
-}
-newForm.error = function (errors) {
-  $.blockUI({ message: "Errors occurred." }); 
-}
-newForm.success = function (data, form) {
-  location.reload();
-  console.log('succes');
-}
-newForm.beforeSend = function (element) {
-  App.blockUI({target: element, animate: true});
-}
-newForm.complete = function(element) {
-  App.unblockUI(element);
-}
-
-// Edit package
-var editForm = new AjaxFormSubmit({element:'form.edit-product'});
-editForm.validate = function(form) {
-  if (form.find('.has-error').length) {
-    return false;
-  }
-  return true;
-}
-editForm.error = function (errors) {
-  $.blockUI({ message: "Errors occurred." }); 
-}
-editForm.success = function (data, form) {
-  form.find(".caption").html('<i class="fa fa-gift"></i>' + data.model.title);
-}
-editForm.beforeSend = function (element) {
-  App.blockUI({target: element, animate: true});
-}
-editForm.complete = function(element) {
-  App.unblockUI(element);
-}
-
-//delete
 $(".delete-action").ajax_action({
   confirm: true,
   confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_product')}{literal}',
   callback: function(eletement, data) {
-    $(eletement).closest('form').fadeOut(300, function(){ $(this).remove();});
+    location.reload();
   }
 });
-
 {/literal}
 {/registerJs}

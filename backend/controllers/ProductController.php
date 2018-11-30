@@ -9,6 +9,7 @@ use backend\forms\CreateProductForm;
 use backend\forms\EditProductForm;
 use backend\forms\DeleteProductForm;
 use yii\helpers\Url;
+use yii\data\Pagination;
 
 class ProductController extends Controller
 {
@@ -34,47 +35,38 @@ class ProductController extends Controller
     {
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
-        $gameId = $request->get('game_id', null);
-        $ref = $request->get('ref', Url::to(['game/index']));
 
-        if (!$gameId) {
-            return $this->redirect($ref);
-        }
-
-        $form = new FetchProductForm(['game_id' => $gameId]);
+        $form = new FetchProductForm();
         if (!$form->validate()) {
             Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
             return $this->redirect($ref);
         }
-        $products = $form->fetch();
-        $editProductForms = array_map(function($product){
-            $editForm = new EditProductForm();
-            $editForm->setProduct($product);
-            $editForm->loadData($product->id);
-            return $editForm;
-        }, $products);
-        $game = $form->getGame();
-
-        $newProductForm = new CreateProductForm(['game_id' => $gameId]);
-
+        $models = $form->fetch();
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
         return $this->render('index.tpl', [
-            'editProductForms' => $editProductForms,
-            'newProductForm' => $newProductForm,
-            'game' => $game,
-            'ref' => $ref
+            'models' => $models,
+            'pages' => $pages,
+            'form' => $form,
+            'ref' => Url::to($request->getUrl(), true),
         ]);
     }
 
     public function actionCreate()
     {
+        $this->view->params['main_menu_active'] = 'game.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new CreateProductForm();
-        if ($request->getIsAjax()) {
-            if ($model->load($request->post())) {
-                $result = $model->save();
-                return $this->renderJson($result !== false, ['model' => $model], $model->getErrorSummary(true));
-            }    
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = $request->get('ref', Url::to(['game/index']));
+            return $this->redirect($ref);
         }
+        return $this->render('create.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['game/index']))
+        ]);
     }
 
     public function actionEdit($id)

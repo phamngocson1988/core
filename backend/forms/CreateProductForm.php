@@ -5,47 +5,104 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\Product;
+use common\models\ProductImage;
+use yii\helpers\ArrayHelper;
 
 class CreateProductForm extends Model
 {
-    public $game_id;
     public $title;
-    public $price;
-    public $sale_price;
-    public $sale_off_type;
-    public $sale_off_from;
-    public $sale_off_to;
-    public $gems;
+    public $content;
+    public $excerpt;
     public $image_id;
-    public $status;
+    public $meta_title;
+    public $meta_keyword;
+    public $meta_description;
+    public $status = Product::STATUS_VISIBLE;
+    public $gallery = [];
+    public $options = [];
 
+    protected $id;
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['title', 'price', 'gems'], 'required'],
-            [['image_id', 'status'], 'safe'],
-            ['status', 'default', 'value' => Product::STATUS_VISIBLE]
+            [['title', 'content'], 'required'],
+            ['status', 'default', 'value' => Product::STATUS_VISIBLE],
+            ['options', 'safe'],
+            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
         ];
+    }
+
+    public function attributeLabels() { 
+
+        return  [
+            'title' => Yii::t('app', 'title'),
+            'content' => Yii::t('app', 'description'),
+            'status' => Yii::t('app', 'status'),
+            'options' => Yii::t('app', 'product_options'),
+            'excerpt' => Yii::t('app', 'excerpt'),
+            'image_id' => Yii::t('app', 'image'),
+            'meta_title' => Yii::t('app', 'meta_title'),
+            'meta_keyword' => Yii::t('app', 'meta_keyword'),
+            'meta_description' => Yii::t('app', 'meta_description'),
+            'gallery' => Yii::t('app', 'gallery'),
+        ];
+    }
+
+    public function validateOptions($attribute, $params)
+    {
+        foreach ($this->options as $key => $option) {
+            $option = new CreateProductOptionForm($data);
+            if (!$option->validate()) {
+                foreach ($option->getErrors() as $errKey => $errors) {
+                    $this->addError("products[$key][$errKey]", reset($errors));
+                }
+            }
+        }
     }
 
     public function save()
     {
         if ($this->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
             try {
                 $product = new Product();
                 $product->title = $this->title;
-                $product->price = $this->price;
-                $product->gems = $this->gems;
-                $product->game_id = $this->game_id;
+                $product->content = $this->content;
+                $product->excerpt = $this->excerpt;
                 $product->image_id = $this->image_id;
-                $product->sale_off_type = Product::SALE_TYPE;
-                $product->status = Product::STATUS_VISIBLE;
-                return $product->save() ? $product : null;
+                $product->meta_title = $this->meta_title;
+                $product->meta_keyword = $this->meta_keyword;
+                $product->meta_description = $this->meta_description;
+                $product->created_by = Yii::$app->user->id;
+                $product->status = $this->status;
+                $product->save();
+                $this->id = $product->id;
+
+                $this->addGallery();
+                $this->addOptions();
+
+                $transaction->commit();
+                return $product;
             } catch (Exception $e) {
-                return false;
+                $transaction->rollBack();                
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
             }
         }
         return false;
+    }
+
+    protected function getGallery()
+    {
+        $gallery = (array)$this->gallery;
+        $gallery = array_filter($gallery);
+        $gallery = array_unique($gallery);
+        return $gallery;
     }
 
     public function getStatusList()
@@ -53,14 +110,24 @@ class CreateProductForm extends Model
         return Product::getStatusList();
     }
 
-    public function getSaleTypeList()
+    protected function addGallery()
     {
-        return Product::getSaleTypeList();
+        if(!$this->id) return;
+        foreach ($this->getGallery() as $imageId) {
+            $productImage = new ProductImage();
+            $productImage->image_id = $imageId;
+            $productImage->product_id = $newId;
+            $productImage->save();
+        }    
     }
 
-    public function getImageUrl($size)
+    protected function addOptions()
     {
-        $product = new Product();
-        return $product->getImageUrl($size);
+        if(!$this->id) return;
+        foreach ($this->options as $data) {
+            $option = new CreateProductOptionForm($data);
+            $option->product_id = $this->id;
+            $option->save();
+        }
     }
 }
