@@ -10,6 +10,7 @@ use backend\forms\FetchCustomerForm;
 use backend\forms\CreateCustomerForm;
 use backend\forms\EditCustomerForm;
 use backend\forms\ChangeCustomerStatusForm;
+use backend\forms\GenerateCustomerPasswordForm;
 
 /**
  * CustomerController
@@ -24,7 +25,7 @@ class CustomerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['change-status', 'create', 'edit'],
+                        'actions' => ['change-status', 'create', 'edit', 'generate-password'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -79,10 +80,6 @@ class CustomerController extends Controller
         } else {
             $model->loadData($id);
         }
-        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
         return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['customer/index']))
@@ -93,8 +90,6 @@ class CustomerController extends Controller
     {
         $this->view->params['main_menu_active'] = 'customer.index';
         $request = Yii::$app->request;
-        $auth = Yii::$app->authManager;
-        $roles = $auth->getRoles();
         $model = new CreateCustomerForm();
         if ($model->load($request->post())) {
             if ($user = $model->create()) {
@@ -104,10 +99,6 @@ class CustomerController extends Controller
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         }
-        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
         return $this->render('create.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['customer/index']))
@@ -158,6 +149,23 @@ class CustomerController extends Controller
                     break;
             }
             return $this->renderJson($result, null, $form->getErrors());
+        }
+    }
+
+    public function actionGeneratePassword()
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $id = $request->get('id');
+            $sendMail = $request->get('send_mail', false);var_dump($sendMail);die;
+            $password = $request->get('password');
+            $model = new GenerateCustomerPasswordForm([
+                'id' => $id,
+                'password' => $password,
+                'autoGenerate' => $password ? false : true,
+                'sendMail' => $sendMail
+            ]);
+            return $this->renderJson($model->generate(), ['password' => $model->password], $model->getErrors());
         }
     }
 }

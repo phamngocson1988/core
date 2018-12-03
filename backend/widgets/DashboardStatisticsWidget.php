@@ -3,7 +3,7 @@ namespace backend\widgets;
 
 use yii\base\Widget;
 use backend\forms\FetchCustomerForm;
-use backend\forms\FetchGameForm;
+use backend\forms\FetchProductForm;
 
 class DashboardStatisticsWidget extends Widget
 {
@@ -13,7 +13,7 @@ class DashboardStatisticsWidget extends Widget
         $fetchCustomerCommand = $fetchCustomerForm->getCommand();
         $countCustomer = $fetchCustomerCommand->count();
 
-        $fetchProductForm = new FetchGameForm();
+        $fetchProductForm = new FetchProductForm();
         $fetchProductCommand = $fetchProductForm->getCommand();
         $countProduct = $fetchProductCommand->count();
 

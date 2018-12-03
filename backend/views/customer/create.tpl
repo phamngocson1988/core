@@ -1,5 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='dosamigos\datepicker\DatePicker'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -66,9 +67,15 @@
                   ])->textInput()}
                   {$form->field($model, 'birthday', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd', 'onkeydown' => "return false"],
-                    'template' => '{label}<div class="col-md-2"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
-                  ])->textInput()}
+                    'template' => '{label}<div class="col-md-2">{input}{hint}{error}</div>'
+                  ])->widget(DatePicker::className(), [
+                    'inline' => false, 
+                    'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd'
+                    ]
+                  ])}
                   {$form->field($model, 'social_line', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

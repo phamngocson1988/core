@@ -4,7 +4,6 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Customer;
-use common\components\helpers\FormatConverter;
 
 /**
  * CreateCustomerForm
@@ -86,7 +85,7 @@ class CreateCustomerForm extends Model
         $user->email = $this->email;
         $user->phone = $this->phone;
         $user->address = $this->address;
-        $user->birthday = FormatConverter::convertToTimeStamp($this->birthday);
+        $user->birthday = $this->birthday;
         $user->social_line = $this->social_line;
         $user->social_zalo = $this->social_zalo;
         $user->social_facebook = $this->social_facebook;
