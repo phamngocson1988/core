@@ -58,10 +58,14 @@ class ProductController extends Controller
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new CreateProductForm();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-            $ref = $request->get('ref', Url::to(['game/index']));
-            return $this->redirect($ref);
+        if ($model->load(Yii::$app->request->post())) {
+            if (!$model->save()) {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            } else {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                $ref = $request->get('ref', Url::to(['game/index']));
+                return $this->redirect($ref);    
+            }
         }
         return $this->render('create.tpl', [
             'model' => $model,

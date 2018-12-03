@@ -4,14 +4,25 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\CreateProductOptionForm;
+use common\models\ProductOption;
 
 class CreateProductOptionForm extends Model
 {
+    const SCENARIO_NEW_PRODUCT = 'new_product';
+    const SCENARIO_EDIT_PRODUCT = 'edit_product';
+
     public $title;
     public $product_id;
     public $price;
     public $gems;
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_NEW_PRODUCT => ['title', 'price', 'gems'],
+            self::SCENARIO_EDIT_PRODUCT => ['title', 'product_id', 'price', 'gems'],
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -19,8 +30,9 @@ class CreateProductOptionForm extends Model
     public function rules()
     {
         return [
-            [['title', 'product_id'], 'required'],
-            ['price', 'gems', 'value' => 0],
+            [['product_id'], 'required', 'on' => self::SCENARIO_EDIT_PRODUCT],
+            [['title'], 'required'],
+            [['price', 'gems'], 'default', 'value' => 0],
         ];
     }
 
