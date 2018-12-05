@@ -172,6 +172,7 @@ return [
     'price' => 'Price',
     'validate_alphanumeric' => 'Field can contain only alphanumeric characters.',
     'validate_email_unique' => 'This email address has already been taken.',
+    'validate_username_unique' => 'This username has already been taken.',
     'date_to' => 'to',
     'male' => 'Male',
     'female' => 'Female',

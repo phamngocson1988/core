@@ -22,8 +22,8 @@ class m130524_201442_init extends Migration
             'password_reset_token' => $this->string()->unique(),
             'email' => $this->string()->notNull()->unique(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
         $this->createTable('{{%customer}}', [
@@ -42,8 +42,8 @@ class m130524_201442_init extends Migration
             'social_zalo' => $this->string(200),
             'social_facebook' => $this->string(200),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
         $form = new \backend\forms\SignupForm([

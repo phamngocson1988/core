@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use common\models\Department;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * Customer model
@@ -36,6 +37,18 @@ class Staff extends ActiveRecord
     public static function tableName()
     {
         return '{{%staff}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => date('Y-m-d H:i:s')
+            ],
+        ];
     }
 
     public static function getStaffGenders()

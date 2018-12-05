@@ -171,6 +171,7 @@ return [
     'price' => 'Giá',
     'validate_alphanumeric' => 'Trường này chỉ chứa ký tự chữ và số.',
     'validate_email_unique' => 'Email này đã được sử dụng.',
+    'validate_username_unique' => 'Username này đã được sử dụng.',
     'date_to' => 'đến ngày',
     'male' => 'Nam',
     'female' => 'Nữ',

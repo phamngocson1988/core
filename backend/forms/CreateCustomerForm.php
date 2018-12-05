@@ -35,6 +35,7 @@ class CreateCustomerForm extends Model
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('app', 'validate_alphanumeric')],
+            ['username', 'unique', 'targetClass' => '\backend\models\Customer', 'message' => Yii::t('app', 'validate_username_unique')],
 
 
             ['email', 'trim'],

@@ -54,8 +54,8 @@ class m180910_062222_create_staff extends Migration
             'department_id' => $this->integer(11),
             'start_date' => $this->date(),
             'end_date' => $this->date(),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
         if ($this->db->driverName === 'mysql') {
