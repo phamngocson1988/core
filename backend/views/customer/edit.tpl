@@ -96,6 +96,7 @@
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList($model->getUserStatus(), ['prompt' => Yii::t('app', 'choose')])}
 
+
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="generate-password-checkbox">{Yii::t('app', 'generate_password')}</label>
                     <div class="col-md-6">
@@ -103,12 +104,14 @@
                         'name' => 'send_mail',
                         'checked' => false,
                         'clientOptions' => [
-                          'size' => 'large',
+                          'size' => 'medium',
                           'onColor' => 'success',
-                          'offColor' => 'danger'
+                          'offColor' => 'danger',
+                          'onText' => "{Yii::t('app', 'send_mail')}",
+                          'offText' => "{Yii::t('app', 'not_send_mail')}"
                         ]
                       ])} <a href="{url route='customer/generate-password' id=$model->id}" class="btn btn-warning generate-password"><i class="fa fa-key"></i> {Yii::t('app', 'generate_password')}</a>
-                    </div>
+                    </div> 
                   </div>
                 </div>
               </div>
@@ -122,8 +125,13 @@
 
 {registerJs}
 {literal}
+var _csrf = "{/literal}{$app->request->getCsrfToken()}{literal}";
 $("a.generate-password").ajax_action({
-  data: {send_mail: $('input[name=send_mail]').closest('.bootstrap-switch').hasClass('bootstrap-switch-on')},
+  data: {_csrf: _csrf},
+  method: 'POST',
+  collectData: function() {
+    return {send_mail: $('input[name=send_mail]:checked').val()};
+  },
   confirm: true,
   confirm_text: '{/literal}{Yii::t('app', 'confirm_generate_customer_password')}{literal}',
   callback: function(eletement, data) {

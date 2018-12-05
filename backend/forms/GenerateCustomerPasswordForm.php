@@ -86,7 +86,7 @@ class GenerateCustomerPasswordForm extends Model
         $settings = Yii::$app->settings;
         $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
         $email = $customer->email;
-        return Yii::$app->mailer->compose('invite_customer', ['mail' => $this])
+        return Yii::$app->mailer->compose('change_customer_password', ['mail' => $this])
             ->setTo($email)
             ->setFrom([$adminEmail => Yii::$app->name])
             ->setSubject("[Kinggems][Notification email] Bạn nhận được thông báo từ " . Yii::$app->name)

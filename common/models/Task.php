@@ -96,10 +96,10 @@ class Task extends ActiveRecord
     public static function getStatusList()
     {
         return [
-            self::STATUS_NEW => 'New',
-            self::STATUS_INPROGRESS => 'Inprogress',            
-            self::STATUS_DONE => 'Done',            
-            self::STATUS_INVALID => 'Invalid',            
+            self::STATUS_NEW => Yii::t('app', 'task_status_new'),//'New',
+            self::STATUS_INPROGRESS => Yii::t('app', 'task_status_inprogress'),//'Inprogress',            
+            self::STATUS_DONE => Yii::t('app', 'task_status_done'),//'Done',            
+            self::STATUS_INVALID => Yii::t('app', 'task_status_invalid'),//'Invalid',            
         ]; 
     }
 

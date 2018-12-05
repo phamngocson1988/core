@@ -39,6 +39,8 @@ class CreateStaffForm extends Model
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\backend\models\Staff', 'message' => Yii::t('app', 'email_exist')],
 
+            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
+
             ['gender', 'in', 'range' => array_keys(Staff::getStaffGenders())],
 
             

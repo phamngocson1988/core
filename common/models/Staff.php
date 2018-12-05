@@ -41,8 +41,8 @@ class Staff extends ActiveRecord
     public static function getStaffGenders()
     {
         return [
-            self::GENDER_M => 'Male',
-            self::GENDER_F => 'Female',            
+            self::GENDER_M => Yii::t('app', 'male'),
+            self::GENDER_F => Yii::t('app', 'female'),            
         ];
     }
 

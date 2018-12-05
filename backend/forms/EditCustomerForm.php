@@ -40,7 +40,8 @@ class EditCustomerForm extends Model
 
             ['status', 'in', 'range' => array_keys(Customer::getUserStatus())],
 
-            [['phone', 'address', 'birthday', 'social_line', 'social_zalo', 'social_facebook'], 'trim']
+            [['phone', 'address', 'birthday', 'social_line', 'social_zalo', 'social_facebook'], 'trim'],
+            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
         ];
     }
 

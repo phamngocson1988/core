@@ -55,6 +55,7 @@ $.fn.ajax_action = function(opts) {
         data: {},
         confirm: false,
         confirm_text: 'Do you want to continue this action?',
+        collectData: function(){},
         loading: function(){},
         complete: function(){},
         callback: function(data) {},
@@ -73,12 +74,14 @@ $.fn.ajax_action = function(opts) {
             }
         }
         var element = this;
+        var exData = options.collectData();
+        var data = $.extend(data, exData);
         $.ajax({
             url: $(this).attr('href'),
             type: options.method,
             beforeSend: options.loading,
             dataType : options.dataType,
-            data: options.data,
+            data: data,
             success: function (result, textStatus, jqXHR) {
                 if (result.status == false) {
                     options.error(element, result.errors);

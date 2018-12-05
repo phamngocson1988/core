@@ -7,26 +7,6 @@ use yii\db\Migration;
  */
 class m180517_025826_create_product_schema extends Migration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function safeUp()
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function safeDown()
-    {
-        echo "m180517_025826_create_product_schema cannot be reverted.\n";
-
-        return false;
-    }
-
-    
-    // Use up()/down() to run migration code without a transaction.
     public function up()
     {
         $tableOptions = null;
@@ -35,7 +15,7 @@ class m180517_025826_create_product_schema extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        /* Product table */
+        /* Game table */
         $this->createTable('{{%product}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(100)->notNull(),
@@ -43,39 +23,58 @@ class m180517_025826_create_product_schema extends Migration
             'excerpt' => $this->string(200),
             'content' => $this->text()->notNull(),
             'image_id' => $this->integer(),
-            'price' => $this->integer(),
-            'sale_price' => $this->integer(),
             'meta_title' => $this->string(160),
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
-            'created_at' => $this->integer(),            
+            'created_at' => $this->dateTime(),            
             'created_by' => $this->integer(),
-            'updated_at' => $this->integer(),
+            'updated_at' => $this->dateTime(),
             'updated_by' => $this->integer(),
-            'deleted_at' => $this->integer(),
+            'deleted_at' => $this->dateTime(),
             'deleted_by' => $this->integer(),
         ], $tableOptions);
 
-        /* Product category table */
-        $this->createTable('{{%product_category}}', [
-            'product_id' => $this->integer()->notNull(),
-            'category_id' => $this->integer()->notNull(),
-            'is_main' => $this->string(1)->comment('Enum: Y,N')->defaultValue('N')->notNull(),
-        ], $tableOptions);
-        $this->addPrimaryKey('product_category_pk', '{{%product_category}}', ['product_id', 'category_id']);
-
-        /* Product image table */
+        /* Game image table */
         $this->createTable('{{%product_image}}', [
+            'id' => $this->primaryKey(),
             'product_id' => $this->integer(),
             'image_id' => $this->integer(),
         ], $tableOptions);
+
+        if ($this->db->driverName === 'mysql') {
+            $alter = "ALTER TABLE {{%product}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+            $command = $this->db->createCommand($alter);
+            $command->execute();
+        }
+
+        $this->createTable('{{%product_option}}', [
+            'id' => $this->primaryKey(),
+            'title' => $this->string(100)->notNull(),
+            'product_id' => $this->integer()->notNull(),
+            'price' => $this->integer(),
+            'gems' => $this->integer(),
+            'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
+            'position' => $this->integer(),            
+            'created_at' => $this->dateTime(),            
+            'created_by' => $this->integer(),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(),
+            'deleted_at' => $this->dateTime(),
+            'deleted_by' => $this->integer(),
+        ], $tableOptions);
+
+        if ($this->db->driverName === 'mysql') {
+            $alter = "ALTER TABLE {{%product_option}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+            $command = $this->db->createCommand($alter);
+            $command->execute();
+        }
     }
 
     public function down()
     {
         $this->dropTable('{{%product}}');
-        $this->dropTable('{{%product_category}}');
         $this->dropTable('{{%product_image}}');
+        $this->dropTable('{{%product_option}}');
     }
 }

@@ -52,7 +52,7 @@
                   {$form->field($model, 'username', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->textInput(['autocomplete' => 'off'])}
                   {$form->field($model, 'email', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -91,7 +91,7 @@
                   {$form->field($model, 'password', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->passwordInput()}
+                  ])->passwordInput(['autocomplete' => 'off'])}
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -99,9 +99,14 @@
                   {$form->field($model, 'send_mail', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList([
-                    '0' => Yii::t('app', 'boolean_no'),
-                    '1' => Yii::t('app', 'boolean_yes')
+                  ])->widget(dosamigos\switchinput\SwitchBox::className(),[
+                    'clientOptions' => [
+                      'size' => 'medium',
+                      'onColor' => 'success',
+                      'offColor' => 'danger',
+                      'onText' => "{Yii::t('app', 'boolean_yes')}",
+                      'offText' => "{Yii::t('app', 'boolean_no')}"
+                    ]
                   ])}
                 </div>
               </div>

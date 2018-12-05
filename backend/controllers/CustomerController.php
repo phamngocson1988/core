@@ -155,10 +155,10 @@ class CustomerController extends Controller
     public function actionGeneratePassword()
     {
         $request = Yii::$app->request;
-        if( $request->isAjax) {
+        if ($request->isAjax) {
             $id = $request->get('id');
-            $sendMail = $request->get('send_mail', false);var_dump($sendMail);die;
-            $password = $request->get('password');
+            $sendMail = $request->post('send_mail', false);
+            $password = $request->post('password');
             $model = new GenerateCustomerPasswordForm([
                 'id' => $id,
                 'password' => $password,

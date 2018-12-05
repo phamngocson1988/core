@@ -12,13 +12,13 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'manage_department')}</span>
+      <span>{Yii::t('app', 'edit_department')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'manage_department')}</h1>
+<h1 class="page-title">{Yii::t('app', 'edit_department')}</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -28,7 +28,7 @@
       ])->hiddenInput()}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">{Yii::t('app', 'manage_department')}</div>
+          <div class="caption">{Yii::t('app', 'edit_department')}</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>

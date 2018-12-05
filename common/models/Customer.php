@@ -208,9 +208,9 @@ class Customer extends ActiveRecord implements IdentityInterface
     public static function getUserStatus()
     {
         return [
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',            
-            self::STATUS_DELETED => 'Deleted',
+            self::STATUS_ACTIVE => Yii::t('app', 'active'),//'Active',
+            self::STATUS_INACTIVE => Yii::t('app', 'inactive'),//'Inactive',            
+            self::STATUS_DELETED => Yii::t('app', 'deleted'),//'Deleted',
         ];
     }
 

@@ -34,19 +34,22 @@ class CreateCustomerForm extends Model
 
             ['username', 'trim'],
             ['username', 'required'],
+            ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('app', 'validate_alphanumeric')],
+
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\backend\models\Customer', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\backend\models\Customer', 'message' => Yii::t('app', 'validate_email_unique')],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
             ['status', 'in', 'range' => array_keys(Customer::getUserStatus())],
 
-            [['phone', 'address', 'birthday', 'social_line', 'social_zalo', 'social_facebook', 'send_mail'], 'trim']
+            [['phone', 'address', 'birthday', 'social_line', 'social_zalo', 'social_facebook', 'send_mail'], 'trim'],
+            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
         ];
     }
 
@@ -93,7 +96,7 @@ class CreateCustomerForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         if ($user->save()) {
-            if ($this->send_mail === true) {
+            if ($this->send_mail == true) {
                 $this->sendEmail();
             }
             return $user;

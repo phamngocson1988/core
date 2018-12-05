@@ -59,7 +59,7 @@ class m130524_201442_init extends Migration
         $admin = $auth->createRole('admin');
         $admin->description = 'Admin';
         $auth->add($admin);
-        $auth->assign($admin, $user->id);
+        $auth->assign($admin, 1);
 
         /* Post table */
         $this->createTable('{{%post}}', [

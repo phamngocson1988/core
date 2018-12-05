@@ -23,6 +23,7 @@ class CreateDepartmentForm extends Model
             [['name', 'branch', 'phone', 'parent_id'], 'trim'],
             ['name', 'required'],
             ['branch', 'required'],
+            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
             ['parent_id', 'default', 'value' => '0',],
         ];
     }

@@ -1,5 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='dosamigos\datepicker\DatePicker'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -46,28 +47,49 @@
                   {$form->field($model, 'title', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
                   {$form->field($model, 'description', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textArea()}
                   {$form->field($model, 'start_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd'],
-                    'template' => '{label}<div class="col-md-5"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
-                  ])->textInput()}
+                    'template' => '{label}<div class="col-md-2">{input}{hint}{error}</div>'
+                  ])->widget(DatePicker::className(), [
+                    'inline' => false, 
+                    'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd'
+                    ]
+                  ])}
                   {$form->field($model, 'due_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control todo-taskbody-due', 'data-date-format' => 'yyyy-mm-dd'],
-                    'template' => '{label}<div class="col-md-5"><div class="input-icon"><i class="fa fa-calendar"></i>{input}{hint}{error}</div></div>'
-                  ])->textInput()}
+                    'template' => '{label}<div class="col-md-2">{input}{hint}{error}</div>'
+                  ])->widget(DatePicker::className(), [
+                    'inline' => false, 
+                    'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd'
+                    ]
+                  ])}
                   {$form->field($model, 'assignee', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control find-user'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList([])->label(Yii::t('app', 'assignee'))}
+
+                  {$form->field($model, 'assignee', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control find-user'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(dosamigos\selectize\SelectizeDropDownList::className(), [
+                    'queryParam' => 'q',
+                    'items' => ['love', 'this', 'game']
+                  ])}
                 </div>
               </div>
             </div>
