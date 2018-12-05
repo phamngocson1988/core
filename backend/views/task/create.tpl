@@ -1,6 +1,8 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='dosamigos\datepicker\DatePicker'}
+{use class='dosamigos\datepicker\DateRangePicker'}
+{use class='yii\web\JsExpression'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -54,42 +56,46 @@
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textArea()}
+
                   {$form->field($model, 'start_date', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-2">{input}{hint}{error}</div>'
-                  ])->widget(DatePicker::className(), [
-                    'inline' => false, 
-                    'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
+                    'template' => '{label}<div class="col-md-4">{input}{hint}{error}</div>'
+                  ])->widget(DateRangePicker::className(), [
+                    'attributeTo' => 'due_date', 
+                    'labelTo' => Yii::t('app', 'due_date'),
+                    'form' => $form,
                     'clientOptions' => [
                         'autoclose' => true,
-                        'format' => 'yyyy-mm-dd'
+                        'format' => 'yyyy-mm-dd',
+                        'keepEmptyValues' => true,
+                        'todayHighlight' => true
                     ]
                   ])}
-                  {$form->field($model, 'due_date', [
+
+                  {*$form->field($model, 'assignee', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-2">{input}{hint}{error}</div>'
-                  ])->widget(DatePicker::className(), [
-                    'inline' => false, 
-                    'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
-                    'clientOptions' => [
-                        'autoclose' => true,
-                        'format' => 'yyyy-mm-dd'
-                    ]
-                  ])}
-                  {$form->field($model, 'assignee', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control find-user'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList([])->label(Yii::t('app', 'assignee'))}
+                  ])->widget(common\widgets\Select2Input::classname(), [
+                    'options' => ['class' => 'form-control'],
+                    'items' => [],
+                    'loadUrl' => $links.user_suggestion,
+                    'clientOptions' => ['placeholder' => 'Search for a repository']                    
+                  ])->label(Yii::t('app', 'assignee'))*}
 
                   {$form->field($model, 'assignee', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control find-user'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->widget(dosamigos\selectize\SelectizeDropDownList::className(), [
-                    'queryParam' => 'q',
-                    'items' => ['love', 'this', 'game']
-                  ])}
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'options' => ['class' => 'form-control'],
+                    'pluginOptions' => [
+                      'allowClear' => true,
+                      'minimumInputLength' => 3,
+                      'ajax' => [
+                          'url' => $links.user_suggestion,
+                          'dataType' => 'json'
+                      ]
+                    ]
+                  ])->label(Yii::t('app', 'assignee'))}
                 </div>
               </div>
             </div>
@@ -99,32 +105,3 @@
       {/ActiveForm}
   </div>
 </div>
-
-<script type="text/javascript">
-  // Remove main image
-function removeMainImage() {
-  $("#image").attr('src', '');
-  $("#image_id").val('');
-}
-</script>
-
-{registerJs}
-{literal}
-
-$('.find-user').select2({
-  ajax: {
-    delay: 500,
-    allowClear: true,
-    url: '{/literal}{$links.user_suggestion}{literal}',
-    type: "GET",
-    dataType: 'json',
-    processResults: function (data) {
-      // Tranforms the top-level key of the response object from 'items' to 'results'
-      return {
-        results: data.data.items
-      };
-    }
-  }
-});
-{/literal}
-{/registerJs}

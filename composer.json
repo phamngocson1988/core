@@ -31,9 +31,10 @@
         "2amigos/yii2-grid-view-library": "~1.0",
         "unclead/yii2-multiple-input": "~2.0",
         "2amigos/yii2-date-time-picker-widget" : "~1.0",
-        "2amigos/yii2-date-picker-widget" : "~1.0",
-        "2amigos/yii2-file-input-widget" : "~1.0",
-        "2amigos/yii2-switch-widget" : "~1.0"
+        "2amigos/yii2-date-picker-widget": "~1.0",
+        "2amigos/yii2-file-input-widget": "~1.0",
+        "2amigos/yii2-switch-widget": "~1.0",
+        "kartik-v/yii2-widget-select2": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -95,7 +95,8 @@
                     'form' => $form,
                     'clientOptions' => [
                         'autoclose' => true,
-                        'format' => 'yyyy-mm-dd'
+                        'format' => 'yyyy-mm-dd',
+                        'keepEmptyValues' => true
                     ]
                   ])}
                   

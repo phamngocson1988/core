@@ -37,7 +37,7 @@ class m180829_105657_task extends Migration
         $this->createTable('{{%task}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(100)->notNull(),
-            'descripition' => $this->text(),
+            'description' => $this->text(),
             'created_by' => $this->integer()->notNull(),  
             'created_at' => $this->dateTime()->notNull(),            
             'updated_at' => $this->dateTime()->notNull(),            

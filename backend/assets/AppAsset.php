@@ -21,8 +21,8 @@ class AppAsset extends AssetBundle
         'vendor/assets/global/plugins/morris/morris.css',
         'vendor/assets/global/plugins/fullcalendar/fullcalendar.min.css',
         'vendor/assets/global/plugins/jqvmap/jqvmap/jqvmap.css',
-        'vendor/assets/global/plugins/select2/css/select2.min.css',
-        'vendor/assets/global/plugins/select2/css/select2-bootstrap.min.css',
+        // 'vendor/assets/global/plugins/select2/css/select2.min.css',
+        // 'vendor/assets/global/plugins/select2/css/select2-bootstrap.min.css',
         ['vendor/assets/global/css/components.min.css', 'id' => 'style_components'],
         'vendor/assets/global/css/plugins.min.css',
         'vendor/assets/layouts/layout/css/layout.min.css',
@@ -73,7 +73,7 @@ class AppAsset extends AssetBundle
         'vendor/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js',
         'vendor/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js',
         'vendor/assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js',
-        'vendor/assets/global/plugins/select2/js/select2.full.min.js',
+        // 'vendor/assets/global/plugins/select2/js/select2.full.min.js',
         'vendor/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js',
 
         //BEGIN THEME GLOBAL SCRIPTS
