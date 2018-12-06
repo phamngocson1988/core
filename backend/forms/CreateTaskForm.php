@@ -5,6 +5,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\Task;
+use common\models\User;
 
 class CreateTaskForm extends Model
 {
@@ -14,19 +15,40 @@ class CreateTaskForm extends Model
     public $due_date;
     public $assignee;
 
+    /** @var User **/
+    protected $_assignee;
+
     public function rules()
     {
         return [
             [['title'], 'required'],
+            ['assignee', 'validateAssignee'],
             [['description', 'start_date', 'due_date', 'assignee'], 'safe']
         ];
+    }
+
+    public function validateAssignee($attribute, $params)
+    {
+        if (!$this->assignee) return null;
+        $assignee = $this->getAssignee();
+        if (!$assignee) {
+            $this->addError($attribute, Yii::t('app', 'invalid_user'));
+        }
+    }
+
+    public function getAssignee()
+    {
+        if (!$this->assignee) return null;
+        if (!$this->_assignee) {
+            $this->_assignee = User::findOne($this->assignee);
+        }
+        return $this->_assignee;
     }
 
     public function save()
     {
         if ($this->validate()) {
             try {
-                $now = date('Y-m-d H:i:s');
                 $task = new Task();
                 $task->title = $this->title;
                 $task->description = $this->description;
@@ -34,8 +56,6 @@ class CreateTaskForm extends Model
                 $task->due_date = $this->due_date;
                 $task->assignee = $this->assignee;
                 $task->created_by = Yii::$app->user->id;
-                $task->created_at = $now;
-                $task->updated_at = $now;
                 $task->percent = 0;
                 $task->status = Task::STATUS_NEW;
                 if ($task->save()) {

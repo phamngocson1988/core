@@ -120,6 +120,7 @@ return [
     'tasks' => 'Công việc',
     'manage_tasks' => 'Quản lý công việc',
     'assignee' => 'Người nhận nhiệm vụ',
+    'select_assignee' => 'Chọn người đảm nhận nhiệm vụ',
     'due_date' => 'Hạn hoàn tất công việc',
     'create_task' => 'Tạo công việc',
     'edit_task' => 'Chỉnh sửa công việc',

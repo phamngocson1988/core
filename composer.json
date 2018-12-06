@@ -25,6 +25,7 @@
         "cloudinary/cloudinary_php": "dev-master",
         "webzop/yii2-notifications": "*",
         "yii2mod/yii2-cart": "*",
+        "yii2mod/yii2-ion-slider": "*",
         "yiisoft/yii2-jui": "~2.0.0",
         "2amigos/yii2-type-ahead-widget": "~1.0",
         "2amigos/yii2-gallery-widget": "~1.0",

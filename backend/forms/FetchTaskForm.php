@@ -10,24 +10,29 @@ class FetchTaskForm extends Model
 {
     public $created_by;
     public $assignee;
-    public $status;
+    public $status = [];
 
     public $order_by;
 
     private $_command;
 
-    public function init()
-    {
-        $this->status = (array)$this->status;
-    }
-
     public function rules()
     {
         return [
-            [['created_by', 'assignee', 'status', 'order_by'], 'trim']
+            [['created_by', 'assignee', 'order_by'], 'trim'],
+            ['status', 'filter', 'filter' => 'array_filter'],
         ];
     }
     
+    public function attributeLabels()
+    {
+        return [
+            'created_by' => Yii::t('app', 'creator'),
+            'assignee' => Yii::t('app', 'assignee'),
+            'status' => Yii::t('app', 'status'),
+        ];
+    }
+
     public function fetch()
     {
         if ($this->validate()) {

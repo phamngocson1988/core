@@ -77,6 +77,13 @@ return [
                     ],
                     'depends' => ['yii\web\YiiAsset']
                 ],
+                'yii2mod\slider\IonSliderAsset' => [
+                    'css' => [
+                        'css/normalize.css',
+                        'css/ion.rangeSlider.css',
+                        'css/ion.rangeSlider.skinFlat.css'
+                     ]
+                ],
             ],
         ],
 

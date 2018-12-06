@@ -50,7 +50,7 @@ class TaskController extends Controller
             $condition['created_by'] = Yii::$app->user->id;            
         }
 
-        $form = new FetchTaskForm($condition);
+        $form = new FetchTaskForm($condition);//echo '<pre>'; print_r($form);
         $command = $form->getCommand();
 
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -61,25 +61,17 @@ class TaskController extends Controller
         $links = [
             'user_suggestion' => Url::to(['user/suggestion'])
         ];
-        if (Yii::$app->user->can('admin')) {
-            $creator = $form->getCreator();
-            $assignee = $form->getAssignee();
-        } else {
-            $creator = $assignee = Yii::$app->user->getIdentity();
-        }
 
         $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
         $this->view->registerCssFile('vendor/assets/apps/css/todo.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
         $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
         $this->view->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-        return $this->render('index.tpl', [
+        return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
-            'form' => $form,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
             'links' => $links,
-            'creator' => $creator,
-            'assignee' => $assignee
         ]);
     }
 
@@ -98,14 +90,10 @@ class TaskController extends Controller
                 return $this->redirect($ref);
             }
         }
-        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
         $links = [
             'user_suggestion' => Url::to(['user/suggestion'])
         ];
-        return $this->render('create.tpl', [
+        return $this->render('create', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['task/index'])),
             'links' => $links
@@ -128,14 +116,10 @@ class TaskController extends Controller
         } else {
             $model->loadData($id);
         }
-        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerCssFile('vendor/assets/apps/css/todo-2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-        $this->view->registerJsFile('vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-        $this->view->registerJsFile('vendor/assets/apps/scripts/todo-2.min.js', ['depends' => '\backend\assets\AppAsset']);
         $links = [
             'user_suggestion' => Url::to(['user/suggestion'])
         ];
-        return $this->render('edit.tpl', [
+        return $this->render('edit', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['task/index'])),
             'links' => $links

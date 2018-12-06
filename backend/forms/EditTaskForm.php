@@ -18,24 +18,45 @@ class EditTaskForm extends Model
     public $percent;
     public $status;
     
-    private $_task;
 
+    /** @var Task **/
+    private $_task;
+    /** @var User **/
+    protected $_assignee;
     public function rules()
     {
         $statusList = $this->getStatusList();
         $statusKeys = array_keys($statusList);
         return [
             [['id', 'title'], 'required'],
+            ['assignee', 'validateAssignee'],
             [['description', 'start_date', 'due_date', 'assignee', 'percent'], 'safe'],
             ['status', 'in', 'range' => $statusKeys],
         ];
+    }
+
+    public function validateAssignee($attribute, $params)
+    {
+        if (!$this->assignee) return null;
+        $assignee = $this->getAssignee();
+        if (!$assignee) {
+            $this->addError($attribute, Yii::t('app', 'invalid_user'));
+        }
+    }
+
+    public function getAssignee()
+    {
+        if (!$this->assignee) return null;
+        if (!$this->_assignee) {
+            $this->_assignee = User::findOne($this->assignee);
+        }
+        return $this->_assignee;
     }
 
     public function save()
     {
         if ($this->validate()) {
             try {
-                $now = date('Y-m-d H:i:s');
                 $task = $this->getTask();
                 $task->title = $this->title;
                 $task->description = $this->description;
@@ -43,7 +64,6 @@ class EditTaskForm extends Model
                 $task->due_date = $this->due_date;
                 $task->assignee = $this->assignee;
                 $task->created_by = Yii::$app->user->id;
-                $task->updated_at = $now;
                 $task->percent = (int)$this->percent;
                 $task->status = $this->status;
                 return $task->save();
@@ -78,10 +98,5 @@ class EditTaskForm extends Model
     public function getStatusList()
     {
         return Task::getStatusList();
-    }
-
-    public function getAssignee()
-    {
-        return User::findOne($this->assignee);
     }
 }

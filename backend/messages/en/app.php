@@ -121,6 +121,7 @@ return [
     'tasks' => 'Tasks',
     'manage_tasks' => 'Manage tasks',
     'assignee' => 'Assignee',
+    'select_assignee' => 'Select assignee',
     'due_date' => 'Due date',
     'create_task' => 'Create task',
     'edit_task' => 'Edit task',
