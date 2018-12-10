@@ -67,7 +67,7 @@ use yii\web\JsExpression;
                     'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
                 ]
               ]
-            ])->label(Yii::t('app', 'created_by'))?>
+            ])?>
 
             <?php $assignee = $search->getAssignee();?>
             <?=$form->field($search, 'assignee', [

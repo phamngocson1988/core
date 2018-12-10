@@ -27,6 +27,7 @@ use yii\helpers\ArrayHelper;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
+    const STATUS_INACTIVE = 1;
     const STATUS_ACTIVE = 10;
 
 
@@ -60,7 +61,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED, self::STATUS_INACTIVE]],
         ];
     }
 
@@ -207,6 +208,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             self::STATUS_ACTIVE => Yii::t('app', 'active'),
+            self::STATUS_INACTIVE => Yii::t('app', 'inactive'),
             self::STATUS_DELETED => Yii::t('app', 'disable'),
         ];
     }
@@ -239,5 +241,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function isActive()
     {
         return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function isInactive()
+    {
+        return $this->status === self::STATUS_INACTIVE;
+    }
+
+    public function isDeleted()
+    {
+        return $this->status === self::STATUS_DELETED;
     }
 }
