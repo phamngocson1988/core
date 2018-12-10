@@ -14,8 +14,6 @@ class InviteUserForm extends Model
     public $email;
 	public $role;
 
-    protected $_auth_key = '';
-
 	public function rules()
     {
         return [
@@ -66,9 +64,8 @@ class InviteUserForm extends Model
 	        $user->username = $this->username;
 	        $user->email = $this->email;
 	        $user->generateAuthKey();
-            $user->setPassword($user->auth_key);
+            $user->setPassword(Yii::$app->security->generateRandomString());
             $user->status = User::STATUS_INACTIVE;
-            $this->_auth_key = $user->auth_key;
 	        if (!$user->save()) {
                 throw new Exception("Error Processing Request", 1);
             }
@@ -78,7 +75,7 @@ class InviteUserForm extends Model
 				$form->save();
 			}	
 			$transaction->commit();
-			$this->sendEmail();
+			$this->sendEmail($user);
             Yii::$app->syslog->log('invite_user', 'invite user', $user);
 			return $user;
 		} catch (\Exception $e) {
@@ -88,12 +85,12 @@ class InviteUserForm extends Model
 		}
 	}
 
-	public function sendEmail()
+	protected function sendEmail($user)
     {
         $settings = Yii::$app->settings;
         $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
         $email = $this->email;
-        return Yii::$app->mailer->compose('invite_user', ['mail' => $this, 'activate_link' => Url::to(['site/active-user', 'activation_key' => $this->_auth_key])])
+        return Yii::$app->mailer->compose('invite_user', ['mail' => $this, 'activate_link' => Url::to(['site/active-user', 'activation_key' => $user->auth_key, 'id' => $user->id])])
             ->setTo($email)
             ->setFrom([$adminEmail => Yii::$app->name])
             ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)

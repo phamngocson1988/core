@@ -6,82 +6,106 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\forms\AssignRoleForm;
+use backend\models\User;
 
 class ActivateUserForm extends Model
 {
+    public $id;
 	public $password;
-    public $auth_key;
+    public $activation_key;
+
+    protected $_user;
+
+    const SCENARIO_CHECK_KEY = 'check_key';
+    const SCENARIO_CREATE_PASS = 'create_pass';
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_CHECK_KEY => ['activation_key'],
+            self::SCENARIO_CREATE_PASS => ['activation_key', 'password'],
+        ];
+    }
+
 
 	public function rules()
     {
         return [
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
-
+            ['password', 'required', 'on' => self::SCENARIO_CREATE_PASS],
+            ['password', 'string', 'min' => 6, 'on' => self::SCENARIO_CREATE_PASS],
             [['password'], function ($attribute, $params) {
                 if (preg_match('/\s+/',$this->$attribute)) {
                      $this->addError($attribute, Yii::t('app', 'no_white_space_allowed')); //No white spaces allowed!
                 }
-            }],
+            }, 'on' => self::SCENARIO_CREATE_PASS],
 
-            ['role', 'trim']
+            [['id', 'activation_key'], 'required'],
+            ['id', 'validateUser'],
+            ['id', 'validateStatus'],
+            ['activation_key', 'trim'],
+            ['activation_key', 'validateActivationKey']
         ];
     }
 
-	public function getRoles()
+    public function validateUser($attribute, $params)
     {
-        $auth = Yii::$app->authManager;
-        $roles = $auth->getRoles();
-        $names = ArrayHelper::map($roles, 'name', 'description');
-        return $names;
-    }
-	
-	public function invite()
-	{
-		$connection = Yii::$app->db;
-		$transaction = $connection->beginTransaction();
-		try {
-			if (!$this->validate()) {
-	            return false;
-	        }
-	        
-	        $user = new User();
-	        $user->name = $this->name;        
-	        $user->username = $this->username;
-	        $user->email = $this->email;
-	        $user->generateAuthKey();
-            $user->setPassword($user->auth_key);
-            $user->status = User::STATUS_INACTIVE;
-            $this->_auth_key = $user->auth_key;
-	        if (!$user->save()) {
-                throw new Exception("Error Processing Request", 1);
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            if (!$user) {
+                $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
+                return false;    
             }
-	        
-			if ($this->role && ($user instanceof \common\models\User)) {
-				$form = new AssignRoleForm(['user_id' => $user->id, 'role' => $this->role, 'scenario' => AssignRoleForm::SCENARIO_ADD]);
-				$form->save();
-			}	
-			$transaction->commit();
-			$this->sendEmail();
-            Yii::$app->syslog->log('invite_user', 'invite user', $user);
-			return $user;
-		} catch (\Exception $e) {
-			$transaction->rollBack();
-			$this->addError('username', $e->getMessage());
-			return false;
-		}
-	}
+        }
+    }
 
-	public function sendEmail()
+    public function validateStatus($attribute, $params)
     {
-        $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        $email = $this->email;
-        return Yii::$app->mailer->compose('invite_user', ['mail' => $this, 'activate_link' => Url::to(['site/active-user', 'activation_key' => $this->_auth_key])])
-            ->setTo($email)
-            ->setFrom([$adminEmail => Yii::$app->name])
-            ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)
-            ->setTextBody('Bạn nhận được lời mời làm thành viên quản trị từ kinggems.us')
-            ->send();
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            if ($user) {
+                if ($user->isActive()) {
+                    $this->addError($attribute, Yii::t('app', 'user_is_activated'));
+                    return false;    
+                } elseif ($user->isDeleted()) {
+                    $this->addError($attribute, Yii::t('frontend', 'user_is_deleted'));
+                    return false;    
+                }
+            }
+        }
+    }
+
+    public function validateActivationKey($attribute, $params) 
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            if ($user->auth_key != $this->$attribute) {
+                $this->addError($attribute, Yii::t('app', 'activation_key_is_invalid'));
+                return false;    
+            }
+        }
+    }
+
+    /**
+     * Main function
+     */
+    public function activate()
+    {
+        if (!$this->validate()) {
+            return false;
+        }
+        $user = $this->getUser();
+        $user->generateAuthKey();
+        $user->setPassword($this->password);
+        $user->status = User::STATUS_ACTIVE;
+        return $user->save() ? $user : false;
+    }
+
+    protected function getUser()
+    {
+        if ($this->_user === null) {
+            $this->_user = User::findOne($this->id);
+        }
+
+        return $this->_user;
     }
 }
