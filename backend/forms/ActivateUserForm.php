@@ -22,8 +22,8 @@ class ActivateUserForm extends Model
     public function scenarios()
     {
         return [
-            self::SCENARIO_CHECK_KEY => ['activation_key'],
-            self::SCENARIO_CREATE_PASS => ['activation_key', 'password'],
+            self::SCENARIO_CHECK_KEY => ['id', 'activation_key'],
+            self::SCENARIO_CREATE_PASS => ['id', 'activation_key', 'password'],
         ];
     }
 
@@ -31,6 +31,12 @@ class ActivateUserForm extends Model
 	public function rules()
     {
         return [
+            [['id', 'activation_key'], 'required'],
+            ['id', 'validateUser'],
+            ['id', 'validateStatus'],
+            ['activation_key', 'trim'],
+            ['activation_key', 'validateActivationKey'],
+
             ['password', 'required', 'on' => self::SCENARIO_CREATE_PASS],
             ['password', 'string', 'min' => 6, 'on' => self::SCENARIO_CREATE_PASS],
             [['password'], function ($attribute, $params) {
@@ -38,12 +44,6 @@ class ActivateUserForm extends Model
                      $this->addError($attribute, Yii::t('app', 'no_white_space_allowed')); //No white spaces allowed!
                 }
             }, 'on' => self::SCENARIO_CREATE_PASS],
-
-            [['id', 'activation_key'], 'required'],
-            ['id', 'validateUser'],
-            ['id', 'validateStatus'],
-            ['activation_key', 'trim'],
-            ['activation_key', 'validateActivationKey']
         ];
     }
 
@@ -52,7 +52,7 @@ class ActivateUserForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user) {
-                $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
+                $this->addError($attribute, Yii::t('app', 'user_not_exist', ['user' => '#' . $this->id]));
                 return false;    
             }
         }
@@ -62,15 +62,18 @@ class ActivateUserForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if ($user) {
-                if ($user->isActive()) {
-                    $this->addError($attribute, Yii::t('app', 'user_is_activated'));
-                    return false;    
-                } elseif ($user->isDeleted()) {
-                    $this->addError($attribute, Yii::t('frontend', 'user_is_deleted'));
-                    return false;    
-                }
+            if (!$user) return;
+            if (!array_key_exists($user->status, User::getUserStatus())) {
+                $this->addError($attribute, Yii::t('app', 'cannot_detach_user_status'));
+                return false;    
+            } elseif ($user->isActive()) {
+                $this->addError($attribute, Yii::t('app', 'user_is_activated'));
+                return false;    
+            } elseif ($user->isDeleted()) {
+                $this->addError($attribute, Yii::t('app', 'user_is_deleted'));
+                return false;    
             }
+
         }
     }
 
@@ -78,6 +81,7 @@ class ActivateUserForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
+            if (!$user) return;
             if ($user->auth_key != $this->$attribute) {
                 $this->addError($attribute, Yii::t('app', 'activation_key_is_invalid'));
                 return false;    

@@ -1,5 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\helpers\Url'}
+{use class='common\widgets\Alert'}
 {use class='backend\assets\LoginAsset'}
 {LoginAsset::register($this)|void}
 {$this->beginPage()}
@@ -25,6 +26,7 @@
   <!-- END LOGO -->
   <!-- BEGIN LOGIN -->
   <div class="content">
+    {Alert::widget()}
     {$content}
   </div>
   <div class="copyright"> {Yii::t('app', 'copyright')} </div>

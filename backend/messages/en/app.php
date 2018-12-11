@@ -183,4 +183,12 @@ return [
     'task_status_inprogress' => 'In progress',
     'task_status_done' => 'Done',
     'task_status_invalid' => 'Invalid',
+    'activate_user' => 'Activate user',
+    'activation_key_is_invalid' => 'Activation key is invalid',
+    'activate' => 'Activate',
+    'user_is_activated' => 'This user is activated',
+    'user_is_deleted' => 'This user is deleted',
+    'cannot_detach_user_status' => 'Cannot detach user status',
+    'go_login' => 'Go to login',
+    'login' => 'Login',
 ];

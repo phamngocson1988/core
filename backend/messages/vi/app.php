@@ -182,4 +182,12 @@ return [
     'task_status_inprogress' => 'Đang thực hiện',
     'task_status_done' => 'Hoàn thành',
     'task_status_invalid' => 'Không hợp lệ',
+    'activate_user' => 'Kích hoạt người dùng',
+    'activation_key_is_invalid' => 'Mã kích hoạt không hợp lệ',
+    'activate' => 'Kích hoạt',
+    'user_is_activated' => 'Người dùng này đã được kích hoạt',
+    'user_is_deleted' => 'Người dùng này đã bị xóa',
+    'cannot_detach_user_status' => 'Không thể tìm ra trạng thái của người dùng',
+    'go_login' => 'Đến trang đăng nhập',
+    'login' => 'Đăng nhập',
 ];

@@ -10,6 +10,7 @@ use backend\forms\SignupForm;
 use backend\forms\CreateUserForm;
 use backend\forms\FetchUserForm;
 use backend\forms\ChangeUserStatusForm;
+use backend\forms\InviteUserForm;
 
 /**
  * UserController
@@ -24,7 +25,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'change-status'],
+                        'actions' => ['index', 'create', 'invite', 'change-status'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -85,6 +86,30 @@ class UserController extends Controller
             'back' => $request->get('ref', Url::to(['user/index']))
         ]);
     }
+
+    public function actionInvite()
+    {
+        $this->view->params['main_menu_active'] = 'user.invite';        
+        $request = Yii::$app->request;
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRoles();
+        $model = new InviteUserForm();
+        if ($model->load($request->post())) {
+            if ($user = $model->invite()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['user/index']);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            }
+        }
+
+        return $this->render('invite.tpl', [
+            'model' => $model,
+            'roles' => $roles,
+            'back' => $request->get('ref', Url::to(['user/index']))
+        ]);
+    }
+
 
     public function actionSuggestion()
     {

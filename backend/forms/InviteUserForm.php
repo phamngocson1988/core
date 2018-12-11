@@ -5,7 +5,9 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use backend\forms\AssignRoleForm;
+use backend\models\User;
 
 class InviteUserForm extends Model
 {
@@ -90,7 +92,7 @@ class InviteUserForm extends Model
         $settings = Yii::$app->settings;
         $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
         $email = $this->email;
-        return Yii::$app->mailer->compose('invite_user', ['mail' => $this, 'activate_link' => Url::to(['site/active-user', 'activation_key' => $user->auth_key, 'id' => $user->id])])
+        return Yii::$app->mailer->compose('invite_user', ['mail' => $this, 'activate_link' => Url::to(['site/activate', 'activation_key' => $user->auth_key, 'id' => $user->id])])
             ->setTo($email)
             ->setFrom([$adminEmail => Yii::$app->name])
             ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)

@@ -240,16 +240,16 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function isActive()
     {
-        return $this->status === self::STATUS_ACTIVE;
+        return $this->status == self::STATUS_ACTIVE;
     }
 
     public function isInactive()
     {
-        return $this->status === self::STATUS_INACTIVE;
+        return $this->status == self::STATUS_INACTIVE;
     }
 
     public function isDeleted()
     {
-        return $this->status === self::STATUS_DELETED;
+        return $this->status == self::STATUS_DELETED;
     }
 }
