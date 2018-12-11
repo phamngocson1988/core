@@ -64,9 +64,9 @@ class Product extends ActiveRecord
     public static function getStatusList()
     {
         return [
-            self::STATUS_INVISIBLE => 'Invisible',
-            self::STATUS_VISIBLE => 'Visible',
-            self::STATUS_DELETE => 'Deleted'
+            self::STATUS_INVISIBLE => Yii::t('app', 'inactive'),
+            self::STATUS_VISIBLE => Yii::t('app', 'active'),
+            self::STATUS_DELETE => Yii::t('app', 'deleted'),
         ];
     }
 

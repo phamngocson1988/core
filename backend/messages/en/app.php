@@ -191,4 +191,9 @@ return [
     'cannot_detach_user_status' => 'Cannot detach user status',
     'go_login' => 'Go to login',
     'login' => 'Login',
+    'invite_user' => 'Invite user',
+    'excerpt' => 'Excerpt',
+    'create_product' => 'Create product',
+    'manage_products' => 'Manage product',
+    'edit_product' => 'Edit product',
 ];

@@ -33,7 +33,7 @@ class ProductController extends Controller
 
     public function actionIndex()
     {
-        $this->view->params['main_menu_active'] = 'game.index';
+        $this->view->params['main_menu_active'] = 'product.index';
         $request = Yii::$app->request;
 
         $form = new FetchProductForm();
@@ -54,7 +54,7 @@ class ProductController extends Controller
 
     public function actionCreate()
     {
-        $this->view->params['main_menu_active'] = 'game.index';
+        $this->view->params['main_menu_active'] = 'product.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new CreateProductForm();
@@ -63,25 +63,35 @@ class ProductController extends Controller
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             } else {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['game/index']));
+                $ref = $request->get('ref', Url::to(['product/index']));
                 return $this->redirect($ref);    
             }
         }
         return $this->render('create.tpl', [
             'model' => $model,
-            'back' => $request->get('ref', Url::to(['game/index']))
+            'back' => $request->get('ref', Url::to(['product/index']))
         ]);
     }
 
     public function actionEdit($id)
     {
-        $this->view->params['main_menu_active'] = 'game.index';
+        $this->view->params['main_menu_active'] = 'product.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new EditProductForm();
-        if ($request->getIsAjax()) {
-            $model->load($request->post());
-            return $this->renderJson($model->save(), ['model' => $model], $model->getErrorSummary(true));
+        if ($model->load(Yii::$app->request->post())) {
+            if (!$model->save()) {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            } else {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                $ref = $request->get('ref', Url::to(['product/index']));
+                return $this->redirect($ref);    
+            }
         }
+        return $this->render('edit.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['product/index']))
+        ]);
     }
 
     public function actionDelete($id)

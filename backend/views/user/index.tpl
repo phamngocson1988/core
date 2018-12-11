@@ -27,7 +27,7 @@
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="{url route='user/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
+            <a class="btn green" href="{url route='user/invite' ref=$ref}">{Yii::t('app', 'invite_user')}</a>
           </div>
         </div>
       </div>

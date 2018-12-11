@@ -190,4 +190,9 @@ return [
     'cannot_detach_user_status' => 'Không thể tìm ra trạng thái của người dùng',
     'go_login' => 'Đến trang đăng nhập',
     'login' => 'Đăng nhập',
+    'invite_user' => 'Mời thành viên',
+    'excerpt' => 'Mô tả ngắn',
+    'create_product' => 'Tạo sản phẩm',
+    'manage_products' => 'Quản lý sản phẩm',
+    'edit_product' => 'Chỉnh sửa sản phẩm',
 ];

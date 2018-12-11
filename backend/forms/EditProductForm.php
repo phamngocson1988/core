@@ -9,16 +9,16 @@ use common\models\Product;
 class EditProductForm extends Model
 {
     public $id;
-    public $game_id;
     public $title;
-    public $price;
-    public $sale_price;
-    public $sale_off_type;
-    public $sale_off_from;
-    public $sale_off_to;
-    public $gems;
+    public $content;
+    public $excerpt;
     public $image_id;
-    public $status;
+    public $meta_title;
+    public $meta_keyword;
+    public $meta_description;
+    public $status = Product::STATUS_VISIBLE;
+    public $gallery = [];
+    public $options = [];
 
     protected $_product;
 
@@ -38,13 +38,13 @@ class EditProductForm extends Model
             try {
                 $product = $this->getProduct();
                 $product->title = $this->title;
+                $product->content = $this->content;
+                $product->excerpt = $this->excerpt;
                 $product->image_id = $this->image_id;
-                $product->price = $this->price;
-                $product->gems = $this->gems;
-                $product->sale_off_type = Product::SALE_TYPE;
-                $product->status = Product::STATUS_VISIBLE;
-                $product->updated_at = date('Y-m-d H:i:s');
-                $product->updated_by = Yii::$app->user->id;
+                $product->meta_title = $this->meta_title;
+                $product->meta_keyword = $this->meta_keyword;
+                $product->meta_description = $this->meta_description;
+                $product->status = $this->status;
                 return $product->save();
             } catch (Exception $e) {
                 return false;
@@ -93,15 +93,13 @@ class EditProductForm extends Model
     {
         $this->id = $id;
         $product = $this->getProduct();
-        $this->title = $product->title;
-        $this->game_id = $product->game_id;
-        $this->price = $product->price;
-        $this->sale_price = $product->sale_price;
-        $this->sale_off_type = $product->sale_off_type;
-        $this->sale_off_from = $product->sale_off_from;
-        $this->sale_off_to = $product->sale_off_to;
-        $this->gems = $product->gems;
+        $this->title = $this->title;
+        $this->content = $product->content;
+        $this->excerpt = $product->excerpt;
         $this->image_id = $product->image_id;
+        $this->meta_title = $product->meta_title;
+        $this->meta_keyword = $product->meta_keyword;
+        $this->meta_description = $product->meta_description;
         $this->status = $product->status;
     }
 

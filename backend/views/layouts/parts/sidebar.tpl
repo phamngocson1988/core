@@ -39,11 +39,6 @@
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='/user/invite'}" class="nav-link " code='user.invite'>
-            <span class="title">{Yii::t('app', 'invite_user')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
             <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
             <span class="title">{Yii::t('app', 'role')}</span>
             </a>

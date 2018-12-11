@@ -89,7 +89,7 @@ class UserController extends Controller
 
     public function actionInvite()
     {
-        $this->view->params['main_menu_active'] = 'user.invite';        
+        $this->view->params['main_menu_active'] = 'user.index';        
         $request = Yii::$app->request;
         $auth = Yii::$app->authManager;
         $roles = $auth->getRoles();
