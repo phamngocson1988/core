@@ -4,6 +4,7 @@ namespace common\widgets;
 use yii\widgets\InputWidget;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use common\models\Image;
 use Yii;
 
 class ImageInputWidget extends InputWidget
@@ -47,8 +48,22 @@ class ImageInputWidget extends InputWidget
         $id = $this->options['id'];
         $imageOptions = (array)$this->imageOptions;
         $imageOptions['id'] = isset($imageOptions['id']) ? $imageOptions['id'] : 'image_' . $id;
-        $imageOptions['alter-src'] = isset($imageOptions['alter-src']) ? $imageOptions['alter-src'] : Yii::$app->image->default_image;
-        $this->imageSrc = ($this->imageSrc) ? $this->imageSrc : $imageOptions['alter-src'];
+        $size = ArrayHelper::getValue($imageOptions, 'size');
+
+        $images = [];
+        $images[] = $this->imageSrc;
+        $model = $this->model; 
+        $attribute = $this->attribute;
+        $value = $model->$attribute;
+        $imageObject = Image::findOne($value);
+        $images[] = ($imageObject) ? $imageObject->getUrl($size) : null;
+
+        $imageOptions['alter-src'] = isset($imageOptions['alter-src']) ? $imageOptions['alter-src'] : Yii::$app->image->default_image;    
+        $images[] = $imageOptions['alter-src'];
+        $images = array_filter($images);
+
+        $mainImage = reset($images);
+        $this->imageSrc = $mainImage;
         $this->imageOptions = $imageOptions;
         $this->parts['{image}'] = Html::img($this->imageSrc, $this->imageOptions);
         return $this->parts['{image}'];

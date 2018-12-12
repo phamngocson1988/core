@@ -93,7 +93,7 @@
                   {$form->field($model, 'meta_description')->textarea(['rows' => '5'])}
                 </div>
                 <div class="tab-pane" id="tab_1_3">
-                  {$form->field($model, 'products')->widget(MultipleInput::className(), [
+                  {$form->field($model, 'options')->widget(MultipleInput::className(), [
                     'columns' => [
                         [
                             'name'  => 'title',

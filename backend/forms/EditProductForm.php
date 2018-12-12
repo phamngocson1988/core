@@ -32,6 +32,22 @@ class EditProductForm extends Model
         ];
     }
 
+    public function attributeLabels() { 
+
+        return  [
+            'title' => Yii::t('app', 'title'),
+            'content' => Yii::t('app', 'description'),
+            'status' => Yii::t('app', 'status'),
+            'options' => Yii::t('app', 'product_options'),
+            'excerpt' => Yii::t('app', 'excerpt'),
+            'image_id' => Yii::t('app', 'image'),
+            'meta_title' => Yii::t('app', 'meta_title'),
+            'meta_keyword' => Yii::t('app', 'meta_keyword'),
+            'meta_description' => Yii::t('app', 'meta_description'),
+            'gallery' => Yii::t('app', 'gallery'),
+        ];
+    }
+
     public function save()
     {
         if ($this->validate()) {
@@ -93,7 +109,7 @@ class EditProductForm extends Model
     {
         $this->id = $id;
         $product = $this->getProduct();
-        $this->title = $this->title;
+        $this->title = $product->title;
         $this->content = $product->content;
         $this->excerpt = $product->excerpt;
         $this->image_id = $product->image_id;

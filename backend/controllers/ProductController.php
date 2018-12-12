@@ -87,6 +87,8 @@ class ProductController extends Controller
                 $ref = $request->get('ref', Url::to(['product/index']));
                 return $this->redirect($ref);    
             }
+        } else {
+            $model->loadData($id);
         }
         return $this->render('edit.tpl', [
             'model' => $model,

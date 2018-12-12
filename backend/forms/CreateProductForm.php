@@ -30,7 +30,7 @@ class CreateProductForm extends Model
         return [
             [['title', 'content'], 'required'],
             ['status', 'default', 'value' => Product::STATUS_VISIBLE],
-            ['options', 'safe'],
+            ['options', 'validateOptions'],
             [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
         ];
     }
@@ -53,11 +53,12 @@ class CreateProductForm extends Model
 
     public function validateOptions($attribute, $params)
     {
-        foreach ($this->options as $key => $option) {
+        foreach ($this->options as $key => $data) {
             $option = new CreateProductOptionForm($data);
+            $option->setScenario(CreateProductOptionForm::SCENARIO_CREATE_PRODUCT);
             if (!$option->validate()) {
                 foreach ($option->getErrors() as $errKey => $errors) {
-                    $this->addError("products[$key][$errKey]", reset($errors));
+                    $this->addError("options[$key][$errKey]", reset($errors));
                 }
             }
         }
@@ -126,6 +127,7 @@ class CreateProductForm extends Model
         if(!$this->id) return;
         foreach ($this->options as $data) {
             $option = new CreateProductOptionForm($data);
+            $option->setScenario(CreateProductOptionForm::SCENARIO_CREATE_PRODUCT);
             $option->product_id = $this->id;
             $option->save();
         }
