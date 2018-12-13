@@ -5,6 +5,8 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\Product;
+use common\models\ProductImage;
+use yii\helpers\ArrayHelper;
 
 class EditProductForm extends Model
 {
@@ -25,16 +27,18 @@ class EditProductForm extends Model
     public function rules()
     {
         return [
-            [['id', 'game_id', 'title', 'price', 'gems'], 'required'],
+            [['id', 'title', 'content'], 'required'],
+            ['status', 'default', 'value' => Product::STATUS_VISIBLE],
             ['id', 'validateProduct'],
-            [['image_id', 'status', 'title'], 'trim'],
-            ['status', 'default', 'value' => Product::STATUS_VISIBLE]
+            ['options', 'validateOptions'],
+            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
         ];
     }
 
     public function attributeLabels() { 
 
         return  [
+            'id' => Yii::t('app', 'id'),
             'title' => Yii::t('app', 'title'),
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
@@ -48,9 +52,28 @@ class EditProductForm extends Model
         ];
     }
 
+    public function validateOptions($attribute, $params)
+    {
+        foreach ($this->options as $key => $data) {
+            $data = array_filter($data);
+            if (ArrayHelper::getValue($data, 'id')) { // edit
+                $option = new EditProductOptionForm($data);
+            } else { // new
+                $option = new CreateProductOptionForm($data);
+                $option->setScenario(CreateProductOptionForm::SCENARIO_EDIT_PRODUCT);
+            }
+            if (!$option->validate()) {
+                foreach ($option->getErrors() as $errKey => $errors) {
+                    $this->addError("options[$key][$errKey]", reset($errors));
+                }
+            }   
+        }
+    }
+
     public function save()
     {
         if ($this->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
             try {
                 $product = $this->getProduct();
                 $product->title = $this->title;
@@ -61,9 +84,19 @@ class EditProductForm extends Model
                 $product->meta_keyword = $this->meta_keyword;
                 $product->meta_description = $this->meta_description;
                 $product->status = $this->status;
-                return $product->save();
+                if (!$product->save()) {
+                    throw new Exception("Error Processing Request", 1);
+                }
+                $this->addGallery();
+                $this->addOptions();
+                $transaction->commit();
+                return $product;
             } catch (Exception $e) {
-                return false;
+                $transaction->rollBack();                
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
             }
         }
         return false;
@@ -72,11 +105,6 @@ class EditProductForm extends Model
     public function getStatusList()
     {
         return Product::getStatusList();
-    }
-
-    public function getSaleTypeList()
-    {
-        return Product::getSaleTypeList();
     }
 
     public function validateProduct($attribute, $params)
@@ -102,6 +130,7 @@ class EditProductForm extends Model
     {
         if ($product instanceof Product) {
             $this->_product = $product;
+            $this->id = $product->id;
         }
     }
 
@@ -117,11 +146,65 @@ class EditProductForm extends Model
         $this->meta_keyword = $product->meta_keyword;
         $this->meta_description = $product->meta_description;
         $this->status = $product->status;
+
+        // gallery
+        $gallery = $product->gallery;
+        $this->gallery = ArrayHelper::getColumn($gallery, 'id');
+
+        // options
+        $options = $product->options;
+        $this->options = ArrayHelper::toArray($options, ['id', 'product_id', 'title', 'price', 'gems']);
     }
 
-    public function getImageUrl($size)
+    protected function getGallery()
     {
+        $gallery = (array)$this->gallery;
+        $gallery = array_filter($gallery);
+        $gallery = array_unique($gallery);
+        return $gallery;
+    }
+
+    protected function addGallery()
+    {
+        if(!$this->id) return;
+        $oldProductImages = ProductImage::findAll(['product_id' => $this->id]);
+        foreach ($oldProductImages as $oldImage) {
+            $oldImage->delete();
+        }
+
+        foreach ($this->getGallery() as $imageId) {
+            $productImage = new ProductImage();
+            $productImage->image_id = $imageId;
+            $productImage->product_id = $this->id;
+            $productImage->save();
+        }    
+    }
+
+    protected function addOptions()
+    {
+        if(!$this->id) return;
         $product = $this->getProduct();
-        return $product->getImageUrl($size);
+        $options = $product->options;
+        $oldOptionIds = ArrayHelper::getColumn($options, 'id');
+
+        $newOptionIds = ArrayHelper::getColumn($this->options, 'id');
+        $removedIds = array_diff($oldOptionIds, $newOptionIds);
+
+        // Remove 
+        foreach ($options as $option) {
+            if (in_array($option->id, $removedIds)) {
+                $option->delete();
+            }
+        }
+        foreach ($this->options as $data) {
+            $data = array_filter($data);
+            if (ArrayHelper::getValue($data, 'id')) { // edit
+                $option = new EditProductOptionForm($data);
+            } else { // new
+                $option = new CreateProductOptionForm($data);
+                $option->setScenario(CreateProductOptionForm::SCENARIO_EDIT_PRODUCT);
+            }
+            $option->save();  
+        }
     }
 }

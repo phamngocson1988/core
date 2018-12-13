@@ -19,6 +19,7 @@ class RadioListInput extends InputWidget
             $label = $encode ? Html::encode($label) : $label;
             $opts['labelOptions'] = ['class' => 'mt-radio'];
             $opts['label'] = $label . '<span></span>';
+            $opts['value'] = $value;
             return Html::radio($name, $checked, $opts);
         };
         return Html::activeRadioList($this->model, $this->attribute, $items, $options);

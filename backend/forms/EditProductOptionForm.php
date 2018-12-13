@@ -4,7 +4,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\CreateProductOptionForm;
+use common\models\ProductOption;
 
 class EditProductOptionForm extends Model
 {
@@ -23,8 +23,8 @@ class EditProductOptionForm extends Model
     {
         return [
             [['id', 'title', 'product_id'], 'required'],
-            ['id', 'validateProductOption']
-            ['price', 'gems', 'value' => 0],
+            ['id', 'validateProductOption'],
+            [['price', 'gems'], 'default', 'value' => 0],
         ];
     }
 
@@ -52,7 +52,7 @@ class EditProductOptionForm extends Model
             $this->_option = ProductOption::findOne($this->id);
         }
 
-        return $this->_category;
+        return $this->_option;
     }
 
     public function save()

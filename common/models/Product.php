@@ -87,8 +87,8 @@ class Product extends ActiveRecord
 
     public function getOptions() 
     {
-        return $this->hasMany(Option::className(), ['product_id' => 'id'])
-        ->where('status = :status', [':status' => Option::STATUS_VISIBLE]);
+        return $this->hasMany(ProductOption::className(), ['product_id' => 'id'])
+        ->where('status = :status', [':status' => ProductOption::STATUS_VISIBLE]);
     }
 
     public function getCreatedAt($format = false)

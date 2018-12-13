@@ -79,7 +79,10 @@ class CreateProductForm extends Model
                 $product->meta_description = $this->meta_description;
                 $product->created_by = Yii::$app->user->id;
                 $product->status = $this->status;
-                $product->save();
+                if (!$product->save()) {
+                    throw new Exception("Error Processing Request", 1);
+                }
+                
                 $this->id = $product->id;
 
                 $this->addGallery();
@@ -117,7 +120,7 @@ class CreateProductForm extends Model
         foreach ($this->getGallery() as $imageId) {
             $productImage = new ProductImage();
             $productImage->image_id = $imageId;
-            $productImage->product_id = $newId;
+            $productImage->product_id = $this->id;
             $productImage->save();
         }    
     }

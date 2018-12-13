@@ -45,4 +45,10 @@ class ProductOption extends ActiveRecord
     {
         return '{{%product_option}}';
     }
+
+    public function delete()
+    {
+        $this->status = self::STATUS_DELETE;
+        $this->save();
+    }
 }

@@ -13,12 +13,8 @@ return [
     'layout' => 'main.tpl',
     'bootstrap' => [
         'log', 
-        // 'shop'
     ],
     'modules' => [
-        // 'shop' => [
-        //     'class' => 'backend\modules\shop\Module',
-        // ],
         'notifications' => [
             'class' => 'webzop\notifications\Module',
             'channels' => [
