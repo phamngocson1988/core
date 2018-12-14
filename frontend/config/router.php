@@ -21,11 +21,6 @@ return [
         'cap-lai-mat-khau' => 'site/reset-password',
         'dang-ky-nhan-tin' => 'subscriber/create',
 
-
-        // module product
-        'san-pham/<id:\d+>-<slug:[\w\-?]+>' => '/shop/product/index',
-        'danh-muc-san-pham/<id:\d+>-<slug:[\w\-?]+>' => '/shop/category/index',
-
         // notifications
         'notifications/default/index' => 'notifications/default/index',
         'notifications/default/list' => 'notifications/default/list',

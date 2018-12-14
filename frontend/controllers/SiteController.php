@@ -247,14 +247,4 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-
-    public function actionProducts()
-    {
-        $id = 1;
-        $optionId = 
-        $products = \common\models\Product::find()->all();
-        print_r($products);die;
-    }
-
-    public function action
 }
