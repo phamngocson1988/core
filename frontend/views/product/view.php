@@ -15,9 +15,26 @@ use yii\bootstrap\ActiveForm;
             <td><?=$option->title;?></td>    
             <td><?=$option->gems;?></td>    
             <td><?=$option->price;?></td>    
-            <td><?=Html::a('Add to cart', Url::to(['product/add', 'id' => $option->id]), ['class' => 'btn btn-success']);?>
+            <td>
+                <?php
+                echo Html::beginForm(['cart/add'], 'post', ['class' => 'ajax-form-submit']);
+                echo Html::hiddenInput('id', $option->id);
+                echo Html::submitButton('Add to cart', ['class' => 'btn btn-link']);
+                echo Html::endForm();
+                ?>
             </td>    
         </tr>
         <?php endforeach;?>
     </table>
 </div>
+
+<?php
+$script = <<< JS
+var f = AjaxFormSubmit();
+f.success = function(data, form) {
+    alert('success');
+    console.log(data);
+};
+JS;
+$this->registerJs($script);
+?>

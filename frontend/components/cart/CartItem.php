@@ -3,6 +3,8 @@ namespace frontend\components\cart;
 
 use yii\base\Model;
 use yii2mod\cart\models\CartItemInterface;
+use frontend\models\ProductOption;
+use frontend\models\Product;
 
 class CartItem extends Model implements CartItemInterface
 {
@@ -10,10 +12,19 @@ class CartItem extends Model implements CartItemInterface
 
     public $quantity = 1;
 
+    public $account_username;
+
+    public $account_password;
+
+    public $account_note;
+
     /** @var ProductOption **/
     protected $_option;
     /** @var Product **/
     protected $_product;
+
+    const SCENARIO_ADD_ITEM = 'add_item';
+    const SCENARIO_ADD_INFOR = 'add_infor';
 
     public function init()
     {
@@ -22,12 +33,22 @@ class CartItem extends Model implements CartItemInterface
         $this->getProduct();
     }
 
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_ADD_ITEM => ['id', 'quantity'],
+            self::SCENARIO_ADD_INFOR => ['id', 'quantity', 'account_username', 'account_password', 'account_note'],
+        ];
+    }
+
     public function rules()
     {
         return [
-            ['id', 'required'],
-            ['id', 'validateOption'],
-            ['id', 'validateProduct']
+            ['id', 'required', 'on' => self::SCENARIO_ADD_ITEM],
+            ['id', 'validateOption', 'on' => self::SCENARIO_ADD_ITEM],
+            ['id', 'validateProduct', 'on' => self::SCENARIO_ADD_ITEM],
+            [['account_username', 'account_password', 'account_note'], 'trim', 'on' => self::SCENARIO_ADD_INFOR],
+            [['account_username', 'account_password'], 'required', 'on' => self::SCENARIO_ADD_INFOR],
         ];
     }
 

@@ -32,8 +32,10 @@ class CartController extends Controller
     	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
 
     	// Add to cart
-    	$id = $request->post('id');
+        $id = $request->post('id');
+    	// $id = $request->get('id');
     	$item = new CartItem(['id' => $id]);
+        $item->setScenario(CartItem::SCENARIO_ADD_ITEM);
     	if (!$item->validate()) {
     		die('invalid');
     	}
