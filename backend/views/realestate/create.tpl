@@ -96,16 +96,39 @@
                   <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'address')->textInput()}
+                    </div>
+                      
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'province_id')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'district_id')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'ward_id')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'direction')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'area')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'price')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'google_map')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'num_bed')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'num_toilet')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'deposit')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'deposit_duration')->textInput()}
                     </div>
                   </div>

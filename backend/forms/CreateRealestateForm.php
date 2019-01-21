@@ -120,7 +120,7 @@ class CreateRealestateForm extends Model
                 $this->id = $realestate->id;
 
                 $this->addGallery();
-                $this->addOptions();
+                // $this->addOptions();
 
                 $transaction->commit();
                 return $realestate;

@@ -46,4 +46,32 @@ class Realestate extends \yii\db\ActiveRecord
             self::STATUS_SOLDOUT => Yii::t('app', 'soldout'),
         ];
     }
+
+    public function getImage() 
+    {
+        return $this->hasOne(Image::className(), ['id' => 'image_id']);
+    }
+
+    public function getImageUrl($size = null, $default = '/images/noimage.png')
+    {
+        $image = $this->image;
+        if ($image) {
+            return $image->getUrl($size);
+        }
+        return $default;
+    }
+
+    public function getCreator()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    public function getCreatorName()
+    {
+        $user = $this->creator;
+        if ($user) {
+            return $user->name;
+        }
+        return '';
+    }
 }
