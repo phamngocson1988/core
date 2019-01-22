@@ -36,7 +36,8 @@
         "2amigos/yii2-file-input-widget": "~1.0",
         "2amigos/yii2-switch-widget": "~1.0",
         "kartik-v/yii2-widget-select2": "@dev",
-        "yiiviet/yii2-payment": "*"
+        "yiiviet/yii2-payment": "*",
+        "2amigos/yii2-google-maps-library" : "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

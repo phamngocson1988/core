@@ -4,12 +4,18 @@
 {use class='unclead\multipleinput\MultipleInput'}
 {use class='common\widgets\ImageInputWidget'}
 {use class='common\widgets\RadioListInput'}
+
+
+{use class='dosamigos\google\maps\LatLng'}
+{use class='dosamigos\google\maps\Map'}
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
 {$this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
+{*$this->registerJsFile('https://maps.googleapis.com/maps/api/js?key=AIzaSyBvjcUxsOXGfHILYnBs0PeqYWmTtvlF7g4&callback=initMap', ['depends' => [\yii\web\JqueryAsset::className()], 'async' => true, 'defer' => true])*}
+
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -78,6 +84,9 @@
                 <li>
                   <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'feature')}</a>
                 </li>
+                <li>
+                  <a href="#tab_1_4" data-toggle="tab">{Yii::t('app', 'address')}</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -95,29 +104,13 @@
                 <div class="tab-pane" id="tab_1_3">
                   <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      {$form->field($model, 'address')->textInput()}
-                    </div>
-                      
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      {$form->field($model, 'province_id')->textInput()}
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      {$form->field($model, 'district_id')->textInput()}
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      {$form->field($model, 'ward_id')->textInput()}
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      {$form->field($model, 'direction')->textInput()}
+                      {$form->field($model, 'direction')->dropDownList($model->getDirectionList(), ['prompt' => Yii::t('app', 'choose')])}
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'area')->textInput()}
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'price')->textInput()}
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      {$form->field($model, 'google_map')->textInput()}
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       {$form->field($model, 'num_bed')->textInput()}
@@ -134,6 +127,29 @@
                   </div>
 
                 </div>
+                <div class="tab-pane" id="tab_1_4">
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'address')->textInput()}
+                  </div>
+                  {*<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'province_id')->textInput()}
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'district_id')->textInput()}
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'ward_id')->textInput()}
+                  </div>*}
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                  {$form->field($model, 'latitude')->textInput(['id' => 'latitude', 'readonly' => true])}
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                  {$form->field($model, 'longitude')->textInput(['id' => 'longitude', 'readonly' => true])}
+                  </div>
+                  <!-- <div id="googleMap" style="width:100%;height:400px;"></div> -->
+                  {assign "coord" new LatLng(['lat' => 39.720089311812094, 'lng' => 2.91165944519042])} 
+                  {$map->display()}
+                </div>
               </div>
             </div>
           </div>
@@ -149,5 +165,6 @@
 {literal}
 // number format
 $('input.number').number(true, 0);
+
 {/literal}
 {/registerJs}

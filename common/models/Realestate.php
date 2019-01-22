@@ -11,6 +11,11 @@ class Realestate extends \yii\db\ActiveRecord
 	const STATUS_INCOMING = 'incoming';
     const STATUS_SELLING = 'selling';
     const STATUS_SOLDOUT = 'soldout';
+
+    const DIRECTION_D = 'D';
+    const DIRECTION_T = 'T';
+    const DIRECTION_N = 'N';
+    const DIRECTION_B = 'B';
     /**
      * {@inheritdoc}
      */
@@ -47,6 +52,15 @@ class Realestate extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getDirectionList()
+    {
+        return [
+            self::DIRECTION_D => Yii::t('app', 'east'),
+            self::DIRECTION_T => Yii::t('app', 'west'),
+            self::DIRECTION_N => Yii::t('app', 'south'),
+            self::DIRECTION_B => Yii::t('app', 'north'),
+        ];
+    }
     public function getImage() 
     {
         return $this->hasOne(Image::className(), ['id' => 'image_id']);

@@ -22,7 +22,8 @@ class CreateRealestateForm extends Model
     public $direction;
     public $area;
     public $price;
-    public $google_map;
+    public $latitude;
+    public $longitude;
     public $num_bed;
     public $num_toilet;
     public $deposit;
@@ -49,7 +50,7 @@ class CreateRealestateForm extends Model
         return [
             [['title'], 'required'],
             ['status', 'default', 'value' => Realestate::STATUS_SELLING],
-            [['excerpt', 'content', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery', 'address', 'province_id', 'district_id', 'ward_id', 'direction', 'area', 'price', 'google_map', 'num_bed', 'num_toilet', 'deposit', 'deposit_duration', 'open_at', 'close_at'], 'safe']
+            [['excerpt', 'content', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery', 'address', 'province_id', 'district_id', 'ward_id', 'direction', 'area', 'price', 'latitude', 'longitude', 'num_bed', 'num_toilet', 'deposit', 'deposit_duration', 'open_at', 'close_at'], 'safe']
         ];
     }
 
@@ -103,7 +104,8 @@ class CreateRealestateForm extends Model
                 $realestate->direction = $this->direction;
                 $realestate->area = $this->area;
                 $realestate->price = $this->price;
-                $realestate->google_map = $this->google_map;
+                $realestate->latitude = $this->latitude;
+                $realestate->longitude = $this->longitude;
                 $realestate->num_bed = $this->num_bed;
                 $realestate->num_toilet = $this->num_toilet;
                 $realestate->deposit = $this->deposit;
@@ -146,6 +148,11 @@ class CreateRealestateForm extends Model
     public function getStatusList()
     {
         return Realestate::getStatusList();
+    }
+
+    public function getDirectionList()
+    {
+        return Realestate::getDirectionList();
     }
 
     protected function addGallery()

@@ -11,6 +11,10 @@ use backend\forms\DeleteRealestateForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
 
+
+use dosamigos\google\maps\LatLng;
+use dosamigos\google\maps\Map;
+
 class RealestateController extends Controller
 {
     /**
@@ -67,7 +71,17 @@ class RealestateController extends Controller
                 return $this->redirect($ref);    
             }
         }
+
+
+        $coord = new LatLng(['lat' => 39.720089311812094, 'lng' => 2.91165944519042]);
+                    $map = new Map([
+                        'center' => $coord,
+                        'zoom' => 14,
+                    ]);
+
+
         return $this->render('create.tpl', [
+            'map' => $map,
             'model' => $model,
             'back' => $request->get('ref', Url::to(['realestate/index']))
         ]);

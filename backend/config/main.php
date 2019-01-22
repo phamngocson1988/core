@@ -80,6 +80,13 @@ return [
                         'css/ion.rangeSlider.skinFlat.css'
                      ]
                 ],
+                'dosamigos\google\maps\MapAsset' => [
+                    'options' => [
+                        'key' => 'AIzaSyBvjcUxsOXGfHILYnBs0PeqYWmTtvlF7g4',
+                        'language' => 'vi',
+                        'version' => '3.1.18'
+                    ]
+                ]
             ],
         ],
 

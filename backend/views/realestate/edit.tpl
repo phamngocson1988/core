@@ -10,6 +10,8 @@
 {$this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
 {$this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
+{$this->registerJsFile('https://maps.googleapis.com/maps/api/js?key=AIzaSyBvjcUxsOXGfHILYnBs0PeqYWmTtvlF7g4&callback=initMap', ['depends' => [\yii\web\JqueryAsset::className()], 'async' => true, 'defer' => true])}
+
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -18,20 +20,19 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='product/index'}">{Yii::t('app', 'manage_products')}</a>
+      <a href="{url route='realestate/index'}">{Yii::t('app', 'manage_realestates')}</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'create_product')}</span>
+      <span>{Yii::t('app', 'create_realestate')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title"> {Yii::t('app', 'create_product')} </h1>
+<h1 class="page-title"> {Yii::t('app', 'create_realestate')} </h1>
 <!-- END PAGE TITLE-->
 {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated form']}
-{$form->field($model, 'id', ['template' => '{input}'])->hiddenInput()}
 <div class="row">
   <div class="col-md-12">
     <!-- BEGIN PROFILE SIDEBAR -->
@@ -44,7 +45,7 @@
           'template' => '{input}{hint}{error}'
         ])->widget(ImageInputWidget::className(), [
           'template' => '<div class="profile-userpic">{image}{input}</div><div class="profile-userbuttons list-separated profile-stat">{choose_button}{cancel_button}</div>',
-          'imageOptions' => ['class' => 'img-responsive', 'size' => '300x300'],
+          'imageOptions' => ['class' => 'img-responsive'],
           'chooseButtonOptions' => ['tag' => 'span', 'options' => ['class' => 'btn btn-circle green btn-sm']],
           'cancelButtonOptions' => ['tag' => 'button', 'options' => ['class' => 'btn btn-circle red btn-sm']]
         ])->label(false)}
@@ -77,7 +78,10 @@
                   <a href="#tab_1_2" data-toggle="tab">{Yii::t('app', 'meta')}</a>
                 </li>
                 <li>
-                  <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'products')}</a>
+                  <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'feature')}</a>
+                </li>
+                <li>
+                  <a href="#tab_1_4" data-toggle="tab">{Yii::t('app', 'address')}</a>
                 </li>
               </ul>
             </div>
@@ -94,45 +98,51 @@
                   {$form->field($model, 'meta_description')->textarea(['rows' => '5'])}
                 </div>
                 <div class="tab-pane" id="tab_1_3">
-                  {$form->field($model, 'options')->widget(MultipleInput::className(), [
-                    'columns' => [
-                        [
-                          'name' => 'id',
-                          'type' => 'hiddenInput'
-                        ],
-                        [
-                          'name' => 'product_id',
-                          'type' => 'hiddenInput',
-                          'defaultValue' => $model->id
-                        ],
-                        [
-                            'name'  => 'title',
-                            'title' => Yii::t('app', 'title'),
-                            'enableError' => true,
-                            'headerOptions' => [
-                              'style' => 'width: 50%'
-                            ]
-                        ],
-                        [
-                            'name'  => 'price',
-                            'title' => Yii::t('app', 'price'),
-                            'enableError' => true,
-                            'options' => [
-                              'type' => 'number',
-                              'class' => 'number'
-                            ]
-                        ],
-                        [
-                            'name'  => 'gems',
-                            'title' => Yii::t('app', 'gems'),
-                            'enableError' => true,
-                            'options' => [
-                              'type' => 'number',
-                              'class' => 'number'
-                            ]
-                        ]
-                    ]
-                  ])->label(false)}
+                  <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                      {$form->field($model, 'direction')->dropDownList($model->getDirectionList(), ['prompt' => Yii::t('app', 'choose')])}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                      {$form->field($model, 'area')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                      {$form->field($model, 'price')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                      {$form->field($model, 'num_bed')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                      {$form->field($model, 'num_toilet')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                      {$form->field($model, 'deposit')->textInput()}
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                      {$form->field($model, 'deposit_duration')->textInput()}
+                    </div>
+                  </div>
+
+                </div>
+                <div class="tab-pane" id="tab_1_4">
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'address')->textInput()}
+                  </div>
+                  {*<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'province_id')->textInput()}
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'district_id')->textInput()}
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    {$form->field($model, 'ward_id')->textInput()}
+                  </div>*}
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                  {$form->field($model, 'latitude')->textInput(['id' => 'latitude', 'readonly' => true])}
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                  {$form->field($model, 'longitude')->textInput(['id' => 'longitude', 'readonly' => true])}
+                  </div>
+                  <div id="googleMap" style="width:100%;height:400px;"></div>
                 </div>
               </div>
             </div>
@@ -144,10 +154,39 @@
   </div>
 </div>
 {/ActiveForm}
-
+<script type="text/javascript">
+  var map;
+  var markers = [];
+  var marker;
+  function initMap() {
+    var mapProp= {
+      center:new google.maps.LatLng(10.68505923117582,106.74833041116096),
+      zoom:15,
+    };
+    map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    map.addListener('click', function(event) {
+      addMarker(event.latLng);
+      catchLocation(event.latLng);
+    });
+  }
+  function addMarker(location) {
+    if (!marker) {
+      marker = new google.maps.Marker({
+        // position: location,
+        map: map
+      });
+    }
+    marker.setPosition(location);
+  }
+  function catchLocation(location) {
+    $('#latitude').val(location.lat());
+    $('#longitude').val(location.lng());
+  }
+</script>
 {registerJs}
 {literal}
 // number format
 $('input.number').number(true, 0);
+
 {/literal}
 {/registerJs}
