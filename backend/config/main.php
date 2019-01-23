@@ -105,13 +105,13 @@ return [
                 ],
             ],
         ],
-        'image' => [
-            'class' => 'common\components\uploadfiles\standard\ImageHandler',
-            'image_path' => '@common/uploads/images',
-            'image_url' => 'http://image.kinggerm.com',
+        // 'image' => [
+            // 'class' => 'common\components\uploadfiles\standard\ImageHandler',
+            // 'image_path' => '@common/uploads/images',
+            // 'image_url' => 'http://image.kinggerm.com',
             // 'file_path' => '@common/uploads/files',
             // 'file_url' => 'http://file.chuchu.com',
-        ],
+        // ],
         'syslog' => [
             'class' => 'backend\components\logs\SystemLog',
         ],

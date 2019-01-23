@@ -108,7 +108,7 @@ class m130524_201442_init extends Migration
             'name' => $this->string(100)->notNull(),
             'extension' => $this->string(10)->notNull(),
             'size' => $this->string(20)->notNull(),
-            'created_at' => $this->integer(),
+            'created_at' => $this->dateTime(),
             'created_by' => $this->integer(),
         ], $tableOptions);
     }

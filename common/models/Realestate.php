@@ -88,4 +88,34 @@ class Realestate extends \yii\db\ActiveRecord
         }
         return '';
     }
+
+    public function getGallery()
+    {
+        return $this->hasMany(Image::className(), ['id' => 'image_id'])
+            ->viaTable(RealestateImage::tableName(), ['realestate_id' => 'id']);
+    }
+
+    public function getMetaTitle()
+    {
+        return ($this->meta_title) ? $this->meta_title : $this->title;
+    }
+
+    public function getMetaDescription()
+    {
+        return ($this->meta_description) ? $this->meta_description : $this->title;
+    }
+
+    public function getMetaKeyword()
+    {
+        return $this->meta_keyword;
+    }    
+
+    public function getExcerpt($number = null) 
+    {
+        $excerpt = ($this->excerpt) ? $this->excerpt : strip_tags($this->content);
+        if ($number && !$this->excerpt) {
+            return substr($excerpt, 0, $number);
+        }
+        return $excerpt;
+    }  
 }

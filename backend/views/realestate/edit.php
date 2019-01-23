@@ -11,6 +11,7 @@ use dosamigos\google\maps\Map;
 use dosamigos\google\maps\overlays\InfoWindow;
 use dosamigos\google\maps\overlays\Marker;
 use dosamigos\google\maps\Event;
+use common\widgets\MultipleImageInputWidget;
 
 $this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]]);
 $this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
@@ -86,10 +87,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   <a href="#tab_1_2" data-toggle="tab"><?= Yii::t('app', 'meta');?></a>
                 </li>
                 <li>
-                  <a href="#tab_1_3" data-toggle="tab"><?= Yii::t('app', 'feature');?></a>
-                </li>
-                <li>
-                  <a href="#tab_1_4" data-toggle="tab"><?= Yii::t('app', 'address');?></a>
+                  <a href="#tab_1_3" data-toggle="tab"><?= Yii::t('app', 'gallery');?></a>
                 </li>
               </ul>
             </div>
@@ -99,13 +97,46 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   <?=$form->field($model, 'title')->textInput();?>
                   <?=$form->field($model, 'excerpt')->textarea();?>
                   <?=$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]]);?>
-                </div>
-                <div class="tab-pane" id="tab_1_2">
-                  <?=$form->field($model, 'meta_title')->textInput();?>
-                  <?=$form->field($model, 'meta_keyword')->textInput();?>
-                  <?=$form->field($model, 'meta_description')->textarea(['rows' => '5']);?>
-                </div>
-                <div class="tab-pane" id="tab_1_3">
+
+                  <hr/>
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <?=$form->field($model, 'address')->textInput();?>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <?=$form->field($model, 'latitude')->textInput(['id' => 'latitude', 'readonly' => true]);?>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <?=$form->field($model, 'longitude')->textInput(['id' => 'longitude', 'readonly' => true]);?>
+                    </div>
+                  </div>
+
+                  <?php 
+                  $coord = new LatLng(['lat' => $model->latitude, 'lng' => $model->longitude]);
+                  $marker = new Marker(['position' => $coord]);
+                  $marker->setName('marker');
+
+                  $event = new Event([
+                    'trigger' => 'click',
+                    'js' => "$('#latitude').val(event.latLng.lat());
+                      $('#longitude').val(event.latLng.lng());
+                      marker.setPosition({lat: event.latLng.lat(), lng: event.latLng.lng()})
+                    ",
+                  ]);
+
+                  $map = new Map([
+                      'center' => $coord,
+                      'zoom' => 14,
+                      'width' => '100%',
+                      'containerOptions' => ['id' => 'google-map']
+                  ]);
+                  $map->setName('map');
+                  $map->addOverlay($marker);
+                  $map->addEvent($event);
+                  echo $map->display();
+                  ?>
+
+                  <hr/>
                   <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                       <?=$form->field($model, 'direction')->dropDownList($model->getDirectionList(), ['prompt' => Yii::t('app', 'choose')]);?>
@@ -129,41 +160,18 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                       <?=$form->field($model, 'deposit_duration')->textInput();?>
                     </div>
                   </div>
-
                 </div>
-                <div class="tab-pane" id="tab_1_4">
-                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                    <?=$form->field($model, 'address')->textInput();?>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <?=$form->field($model, 'latitude')->textInput(['id' => 'latitude', 'readonly' => true]);?>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <?=$form->field($model, 'longitude')->textInput(['id' => 'longitude', 'readonly' => true]);?>
-                  </div>
-                  <?php 
-                  $coord = new LatLng(['lat' => $model->latitude, 'lng' => $model->longitude]);
-                  $marker = new Marker(['position' => $coord]);
-                  $marker->setName('marker');
+                <div class="tab-pane" id="tab_1_2">
+                  <?=$form->field($model, 'meta_title')->textInput();?>
+                  <?=$form->field($model, 'meta_keyword')->textInput();?>
+                  <?=$form->field($model, 'meta_description')->textarea(['rows' => '5']);?>
+                </div>
+                <div class="tab-pane" id="tab_1_3">
+                  <?=$form->field($model, 'gallery', [
+                    'template' => '{input}{hint}{error}'
+                  ])->widget(MultipleImageInputWidget::className(), [
+                  ])->label(false);?>
 
-                  $event = new dosamigos\google\maps\Event([
-                    'trigger' => 'click',
-                    'js' => "$('#latitude').val(event.latLng.lat());
-                      $('#longitude').val(event.latLng.lng());
-                      marker.setPosition({lat: event.latLng.lat(), lng: event.latLng.lng()})
-                    ",
-                  ]);
-
-                  $map = new Map([
-                      'center' => $coord,
-                      'zoom' => 14,
-                      'width' => '100%',
-                      'containerOptions' => ['id' => 'google-map']
-                  ]);
-                  $map->addOverlay($marker);
-                  $map->addEvent($event);
-                  echo $map->display();
-                  ?>
                 </div>
               </div>
             </div>

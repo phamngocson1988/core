@@ -35,7 +35,6 @@ class EditRealestateForm extends Model
     public $meta_description;
     public $status = Realestate::STATUS_SELLING;
     public $gallery = [];
-    public $options = [];
 
     protected $_realestate;
     /**
@@ -56,7 +55,6 @@ class EditRealestateForm extends Model
             'title' => Yii::t('app', 'title'),
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
-            'options' => Yii::t('app', 'realestate_options'),
             'excerpt' => Yii::t('app', 'excerpt'),
             'image_id' => Yii::t('app', 'image'),
             'meta_title' => Yii::t('app', 'meta_title'),
@@ -101,7 +99,6 @@ class EditRealestateForm extends Model
                 }
                 
                 $this->addGallery();
-
                 $transaction->commit();
                 return $realestate;
             } catch (Exception $e) {
@@ -113,14 +110,6 @@ class EditRealestateForm extends Model
             }
         }
         return false;
-    }
-
-    protected function getGallery()
-    {
-        $gallery = (array)$this->gallery;
-        $gallery = array_filter($gallery);
-        $gallery = array_unique($gallery);
-        return $gallery;
     }
 
     public function getStatusList()
@@ -135,8 +124,16 @@ class EditRealestateForm extends Model
 
     protected function addGallery()
     {
-        if(!$this->id) return;
-        foreach ($this->getGallery() as $imageId) {
+        if (!$this->id) return;
+        $oldRealestateImages = RealestateImage::findAll(['realestate_id' => $this->id]);
+        foreach ($oldRealestateImages as $oldImage) {
+            $oldImage->delete();
+        }
+
+        $gallery = (array)$this->gallery;
+        $gallery = array_filter($gallery);
+        $gallery = array_unique($gallery);
+        foreach ($gallery as $imageId) {
             $realestateImage = new RealestateImage();
             $realestateImage->image_id = $imageId;
             $realestateImage->realestate_id = $this->id;
@@ -171,6 +168,9 @@ class EditRealestateForm extends Model
         $this->open_at = $realestate->open_at;
         $this->close_at = $realestate->close_at;
         $this->status = $realestate->status;
+        // gallery
+        $gallery = $realestate->gallery;
+        $this->gallery = ArrayHelper::getColumn($gallery, 'id');
 
         
     }

@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 use common\components\helpers\FileHelper;
 use yii\imagine\Image as ImageHandler;
 use yii\helpers\ArrayHelper;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * Image model
@@ -25,6 +26,18 @@ class Image extends ActiveRecord
     public static function tableName()
     {
         return '{{%image}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => false,
+                'value' => date('Y-m-d H:i:s')
+            ],
+        ];
     }
 
     public function getId()

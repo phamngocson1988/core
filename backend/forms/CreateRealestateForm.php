@@ -39,7 +39,6 @@ class CreateRealestateForm extends Model
     public $meta_description;
     public $status = Realestate::STATUS_SELLING;
     public $gallery = [];
-    public $options = [];
 
     protected $id;
     /**
@@ -60,7 +59,6 @@ class CreateRealestateForm extends Model
             'title' => Yii::t('app', 'title'),
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
-            'options' => Yii::t('app', 'realestate_options'),
             'excerpt' => Yii::t('app', 'excerpt'),
             'image_id' => Yii::t('app', 'image'),
             'meta_title' => Yii::t('app', 'meta_title'),
@@ -69,19 +67,6 @@ class CreateRealestateForm extends Model
             'gallery' => Yii::t('app', 'gallery'),
         ];
     }
-
-    // public function validateOptions($attribute, $params)
-    // {
-    //     foreach ($this->options as $key => $data) {
-    //         $option = new CreateRealestateOptionForm($data);
-    //         $option->setScenario(CreateRealestateOptionForm::SCENARIO_CREATE_PRODUCT);
-    //         if (!$option->validate()) {
-    //             foreach ($option->getErrors() as $errKey => $errors) {
-    //                 $this->addError("options[$key][$errKey]", reset($errors));
-    //             }
-    //         }
-    //     }
-    // }
 
     public function save()
     {
@@ -96,7 +81,6 @@ class CreateRealestateForm extends Model
                 $realestate->meta_title = $this->meta_title;
                 $realestate->meta_keyword = $this->meta_keyword;
                 $realestate->meta_description = $this->meta_description;
-
                 $realestate->address = $this->address;
                 $realestate->province_id = $this->province_id;
                 $realestate->district_id = $this->district_id;
@@ -112,7 +96,6 @@ class CreateRealestateForm extends Model
                 $realestate->deposit_duration = $this->deposit_duration;
                 $realestate->open_at = $this->open_at;
                 $realestate->close_at = $this->close_at;
-
                 $realestate->created_by = Yii::$app->user->id;
                 $realestate->status = $this->status;
                 if (!$realestate->save()) {
@@ -122,8 +105,6 @@ class CreateRealestateForm extends Model
                 $this->id = $realestate->id;
 
                 $this->addGallery();
-                // $this->addOptions();
-
                 $transaction->commit();
                 return $realestate;
             } catch (Exception $e) {
@@ -135,14 +116,6 @@ class CreateRealestateForm extends Model
             }
         }
         return false;
-    }
-
-    protected function getGallery()
-    {
-        $gallery = (array)$this->gallery;
-        $gallery = array_filter($gallery);
-        $gallery = array_unique($gallery);
-        return $gallery;
     }
 
     public function getStatusList()
@@ -158,7 +131,10 @@ class CreateRealestateForm extends Model
     protected function addGallery()
     {
         if(!$this->id) return;
-        foreach ($this->getGallery() as $imageId) {
+        $gallery = (array)$this->gallery;
+        $gallery = array_filter($gallery);
+        $gallery = array_unique($gallery);
+        foreach ($gallery as $imageId) {
             $realestateImage = new RealestateImage();
             $realestateImage->image_id = $imageId;
             $realestateImage->realestate_id = $this->id;
@@ -166,14 +142,4 @@ class CreateRealestateForm extends Model
         }    
     }
 
-    // protected function addOptions()
-    // {
-    //     if(!$this->id) return;
-    //     foreach ($this->options as $data) {
-    //         $option = new CreateRealestateOptionForm($data);
-    //         $option->setScenario(CreateRealestateOptionForm::SCENARIO_CREATE_PRODUCT);
-    //         $option->realestate_id = $this->id;
-    //         $option->save();
-    //     }
-    // }
 }
