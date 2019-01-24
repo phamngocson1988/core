@@ -20,7 +20,7 @@
         <div class="btn-group">
           <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false">{Yii::t('app', 'size')} <span class="caret"></span></button>
           <ul role="size" class="dropdown-menu">
-            {foreach $app->params['thumbnails'] as $thumbnail}
+            {foreach $app->image->thumbnails as $thumbnail}
             <li><a href="javascript:void(0)" {if $default_thumbnail eq $thumbnail}class="selected"{/if} value="{$thumbnail}"><i class="fa fa-check "></i> <span class="search-option">{$thumbnail}</span></a></li>
             {/foreach}
           </ul>

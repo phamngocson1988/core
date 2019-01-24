@@ -2,17 +2,18 @@
 namespace common\components\filesystem\local;
 
 use Yii;
-use common\components\filesystem\FileSystemService;
+use yii\base\Model;
+use common\components\filesystem\FileSystemInterface;
 use yii\helpers\FileHelper;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
 
-class LocalFileSystem extends FileSystemService
+class LocalFileSystem extends Model implements FileSystemInterface
 {
     public $image_path = '@common/uploads/images';
     public $image_url = 'http://image.core.com';
 
-    public function saveToDisk($file, $fileModel)
+    public function saveImage($file, $fileModel)
     {
         $filePath = $this->getFilePath($fileModel);
         $fileDir = dirname($filePath);

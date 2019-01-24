@@ -17,10 +17,9 @@ class FileSystemManager extends DynamicModel
     public $maxFiles = 4;
     public $maxSize; //bytes
     public $default_image = '/images/noimage.png';
-    public $generate_thumbnail = false;
+    public $generate_thumbnail = true;
 
 	public $image_class = \common\models\Image::class;
-	public $file_class = \common\models\Image::class;
     public $dependency; // instance of FileSystemService;
 
 	protected function instanceImageClass()
@@ -74,7 +73,7 @@ class FileSystemManager extends DynamicModel
             $dependency = $this->instanceDependency();
             foreach ($uploadedFiles as $file) {
                 $fileModel = $this->saveToDatabase($file);
-                $dependency->saveToDisk($file, $fileModel);
+                $dependency->saveImage($file, $fileModel);
                 if (!$this->generate_thumbnail) continue;
                 foreach ($this->thumbnails as $thumbnail) {
                     $dependency->saveThumbnail($fileModel, $thumbnail);
