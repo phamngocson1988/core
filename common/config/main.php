@@ -6,6 +6,9 @@ return [
     ],
     'name' => 'Core Functions',
     'timeZone' => 'Asia/Bangkok',
+    'bootstrap' => [
+        'queue', // The component registers its own console commands
+    ],
     'modules' => [
         // 'shop' => [
         //     'class' => 'common\modules\shop\Module',
@@ -42,6 +45,13 @@ return [
                     'basePath' => '@yii2mod/settings/messages',
                 ],
             ],
+        ],
+        'queue' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db', // DB connection component or its config 
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'default', // Queue channel key
+            'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
         ],
     ],
 ];
