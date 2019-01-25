@@ -1,9 +1,12 @@
 <?php
 namespace api\controllers;
 
-use yii\rest\ActiveController;
+use Yii;
 
 class UserController extends ActiveController
 {
-    public $modelClass = 'api\models\User';
+	public function actionCurrent()
+	{
+		return $this->asJson(['user' => Yii::$app->user->getIdentity()]);
+	}
 }

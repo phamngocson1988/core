@@ -22,11 +22,8 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
             'enableSession' => false,
-            'loginUrl' => null
-        ],
-        'session' => [
-            // this is the name of the session cookie used for login on the api
-            'name' => 'advanced-api',
+            'loginUrl' => null,
+            // 'on afterLogin' => ['api\events\AfterLoginEvent', 'handleNewUser'],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -36,9 +33,6 @@ return [
                     'levels' => ['error', 'warning'],
                 ],
             ],
-        ],
-        'errorHandler' => [
-            'errorAction' => 'site/error',
         ],
         'urlManager' => require('router.php'),
     ],

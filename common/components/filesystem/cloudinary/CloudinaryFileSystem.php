@@ -15,6 +15,7 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
     public $cloud_name;
     public $api_key;
     public $api_secret;
+    public $folder;
 
     public function init()
     {
@@ -28,7 +29,7 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
     public function saveImage($file, $fileModel)
     {
         $option = [
-            "public_id" => $fileModel->id
+            "public_id" => $this->getPublicId($fileModel)
         ];
 
         return \Cloudinary\Uploader::upload($file->tempName, $option);
@@ -46,7 +47,12 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
             list ($width, $height) = explode("x", $thumbnail);
             $options = ["width" => $width, "height" => $height, "crop" => "fill"];
         }
+        $id = $this->getPublicId($fileModel);
+        return cloudinary_url($id, $options);
+    }
 
-        return cloudinary_url($fileModel->id, $options);
+    protected function getPublicId($fileModel)
+    {
+        return implode("/", array_filter([$this->folder, $fileModel->id]));
     }
 }

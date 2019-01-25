@@ -110,8 +110,8 @@ return [
             'generate_thumbnail' => true,
             'dependency' => [
                 'class' => 'common\components\filesystem\local\LocalFileSystem',
-                'image_path' => '@common/uploads/images',
-                'image_url' => $_SERVER['HTTP_HOST'],
+                // 'image_path' => '@common/uploads/images',
+                // 'image_url' => $_SERVER['HTTP_HOST'],
             ]
         ],
         'syslog' => [
