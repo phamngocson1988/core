@@ -1,16 +1,11 @@
 <?php
 namespace api\models;
 
-use common\models\User as CommonUser;
+use common\models\Customer as BaseCustomer;
 
-class User extends CommonUser
+class Customer extends BaseCustomer
 {
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return static::findOne(['auth_key' => $token]);
-    }
-
-    public function exportData()
+	public function exportData()
     {
     	$data = [
     		'id' => $this->id,
