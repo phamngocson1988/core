@@ -9,13 +9,6 @@ use api\forms\LoginForm;
  */
 class SiteController extends ActiveController
 {
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        unset($behaviors['authenticator']);
-        return $behaviors;
-    }
-
     public function actionLogin()
     {
         $post = Yii::$app->request->post();

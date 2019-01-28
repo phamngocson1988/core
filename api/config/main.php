@@ -23,7 +23,6 @@ return [
             'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
             'enableSession' => false,
             'loginUrl' => null,
-            // 'on afterLogin' => ['api\events\AfterLoginEvent', 'handleNewUser'],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
