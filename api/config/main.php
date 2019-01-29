@@ -18,7 +18,7 @@ return [
             ]
         ],
         'user' => [
-            'identityClass' => 'api\models\User',
+            'identityClass' => 'api\models\Customer',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
             'enableSession' => false,

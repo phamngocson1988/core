@@ -23,6 +23,6 @@ class UserController extends ActiveController
 
 	public function actionCurrent()
 	{
-		return $this->asJson(['user' => Yii::$app->user->getIdentity()]);
+		return ['user' => Yii::$app->user->getIdentity()];
 	}
 }

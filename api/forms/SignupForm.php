@@ -29,7 +29,7 @@ class SignupForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\Customer', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => Customer::className(), 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
@@ -48,6 +48,7 @@ class SignupForm extends Model
         }
         
         $user = new Customer();
+        $user->name = $this->email;
         $user->username = $this->email;
         $user->email = $this->email;
         $user->setPassword($this->password);
@@ -58,7 +59,7 @@ class SignupForm extends Model
         } else {
             $user->status = Customer::STATUS_ACTIVE;
         }
-        $user = $user->save() ? $user : null;
+        return $user->save() ? $user : null;
     }
 
     /**
