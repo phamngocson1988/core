@@ -12,26 +12,21 @@ class EditProductForm extends Model
 {
     public $id;
     public $title;
-    public $content;
-    public $excerpt;
+    public $game_id;
     public $image_id;
-    public $meta_title;
-    public $meta_keyword;
-    public $meta_description;
+    public $price;
+    public $gems;
     public $status = Product::STATUS_VISIBLE;
-    public $gallery = [];
-    public $options = [];
 
     protected $_product;
 
     public function rules()
     {
         return [
-            [['id', 'title', 'content'], 'required'],
+            [['id', 'title', 'game_id', 'price', 'gems'], 'required'],
             ['status', 'default', 'value' => Product::STATUS_VISIBLE],
             ['id', 'validateProduct'],
-            ['options', 'validateOptions'],
-            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
+            [['image_id'], 'safe']
         ];
     }
 
@@ -40,34 +35,12 @@ class EditProductForm extends Model
         return  [
             'id' => Yii::t('app', 'id'),
             'title' => Yii::t('app', 'title'),
-            'content' => Yii::t('app', 'description'),
+            'game_id' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
-            'options' => Yii::t('app', 'product_options'),
-            'excerpt' => Yii::t('app', 'excerpt'),
+            'price' => Yii::t('app', 'product_options'),
+            'gems' => Yii::t('app', 'excerpt'),
             'image_id' => Yii::t('app', 'image'),
-            'meta_title' => Yii::t('app', 'meta_title'),
-            'meta_keyword' => Yii::t('app', 'meta_keyword'),
-            'meta_description' => Yii::t('app', 'meta_description'),
-            'gallery' => Yii::t('app', 'gallery'),
         ];
-    }
-
-    public function validateOptions($attribute, $params)
-    {
-        foreach ($this->options as $key => $data) {
-            $data = array_filter($data);
-            if (ArrayHelper::getValue($data, 'id')) { // edit
-                $option = new EditProductOptionForm($data);
-            } else { // new
-                $option = new CreateProductOptionForm($data);
-                $option->setScenario(CreateProductOptionForm::SCENARIO_EDIT_PRODUCT);
-            }
-            if (!$option->validate()) {
-                foreach ($option->getErrors() as $errKey => $errors) {
-                    $this->addError("options[$key][$errKey]", reset($errors));
-                }
-            }   
-        }
     }
 
     public function save()
@@ -77,18 +50,14 @@ class EditProductForm extends Model
             try {
                 $product = $this->getProduct();
                 $product->title = $this->title;
-                $product->content = $this->content;
-                $product->excerpt = $this->excerpt;
+                $product->game_id = $this->game_id;
+                $product->price = $this->price;
                 $product->image_id = $this->image_id;
-                $product->meta_title = $this->meta_title;
-                $product->meta_keyword = $this->meta_keyword;
-                $product->meta_description = $this->meta_description;
+                $product->gems = $this->gems;
                 $product->status = $this->status;
                 if (!$product->save()) {
                     throw new Exception("Error Processing Request", 1);
                 }
-                $this->addGallery();
-                $this->addOptions();
                 $transaction->commit();
                 return $product;
             } catch (Exception $e) {
@@ -139,72 +108,10 @@ class EditProductForm extends Model
         $this->id = $id;
         $product = $this->getProduct();
         $this->title = $product->title;
-        $this->content = $product->content;
-        $this->excerpt = $product->excerpt;
+        $this->game_id = $product->game_id;
+        $this->price = $product->price;
         $this->image_id = $product->image_id;
-        $this->meta_title = $product->meta_title;
-        $this->meta_keyword = $product->meta_keyword;
-        $this->meta_description = $product->meta_description;
+        $this->gems = $product->gems;
         $this->status = $product->status;
-
-        // gallery
-        $gallery = $product->gallery;
-        $this->gallery = ArrayHelper::getColumn($gallery, 'id');
-
-        // options
-        $options = $product->options;
-        $this->options = ArrayHelper::toArray($options, ['id', 'product_id', 'title', 'price', 'gems']);
-    }
-
-    protected function getGallery()
-    {
-        $gallery = (array)$this->gallery;
-        $gallery = array_filter($gallery);
-        $gallery = array_unique($gallery);
-        return $gallery;
-    }
-
-    protected function addGallery()
-    {
-        if(!$this->id) return;
-        $oldProductImages = ProductImage::findAll(['product_id' => $this->id]);
-        foreach ($oldProductImages as $oldImage) {
-            $oldImage->delete();
-        }
-
-        foreach ($this->getGallery() as $imageId) {
-            $productImage = new ProductImage();
-            $productImage->image_id = $imageId;
-            $productImage->product_id = $this->id;
-            $productImage->save();
-        }    
-    }
-
-    protected function addOptions()
-    {
-        if(!$this->id) return;
-        $product = $this->getProduct();
-        $options = $product->options;
-        $oldOptionIds = ArrayHelper::getColumn($options, 'id');
-
-        $newOptionIds = ArrayHelper::getColumn($this->options, 'id');
-        $removedIds = array_diff($oldOptionIds, $newOptionIds);
-
-        // Remove 
-        foreach ($options as $option) {
-            if (in_array($option->id, $removedIds)) {
-                $option->delete();
-            }
-        }
-        foreach ($this->options as $data) {
-            $data = array_filter($data);
-            if (ArrayHelper::getValue($data, 'id')) { // edit
-                $option = new EditProductOptionForm($data);
-            } else { // new
-                $option = new CreateProductOptionForm($data);
-                $option->setScenario(CreateProductOptionForm::SCENARIO_EDIT_PRODUCT);
-            }
-            $option->save();  
-        }
     }
 }

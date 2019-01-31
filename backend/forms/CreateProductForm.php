@@ -5,33 +5,25 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\Product;
-use common\models\ProductImage;
-use yii\helpers\ArrayHelper;
 
 class CreateProductForm extends Model
 {
     public $title;
-    public $content;
-    public $excerpt;
+    public $game_id;
     public $image_id;
-    public $meta_title;
-    public $meta_keyword;
-    public $meta_description;
+    public $price;
+    public $gems;
     public $status = Product::STATUS_VISIBLE;
-    public $gallery = [];
-    public $options = [];
 
-    protected $id;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['title', 'content'], 'required'],
+            [['title', 'game_id', 'price', 'gems'], 'required'],
             ['status', 'default', 'value' => Product::STATUS_VISIBLE],
-            ['options', 'validateOptions'],
-            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
+            [['image_id'], 'safe']
         ];
     }
 
@@ -39,29 +31,12 @@ class CreateProductForm extends Model
 
         return  [
             'title' => Yii::t('app', 'title'),
-            'content' => Yii::t('app', 'description'),
-            'status' => Yii::t('app', 'status'),
-            'options' => Yii::t('app', 'product_options'),
-            'excerpt' => Yii::t('app', 'excerpt'),
+            'game_id' => Yii::t('app', 'game_id'),
             'image_id' => Yii::t('app', 'image'),
-            'meta_title' => Yii::t('app', 'meta_title'),
-            'meta_keyword' => Yii::t('app', 'meta_keyword'),
-            'meta_description' => Yii::t('app', 'meta_description'),
-            'gallery' => Yii::t('app', 'gallery'),
+            'price' => Yii::t('app', 'price'),
+            'gems' => Yii::t('app', 'gems'),
+            'status' => Yii::t('app', 'status'),
         ];
-    }
-
-    public function validateOptions($attribute, $params)
-    {
-        foreach ($this->options as $key => $data) {
-            $option = new CreateProductOptionForm($data);
-            $option->setScenario(CreateProductOptionForm::SCENARIO_CREATE_PRODUCT);
-            if (!$option->validate()) {
-                foreach ($option->getErrors() as $errKey => $errors) {
-                    $this->addError("options[$key][$errKey]", reset($errors));
-                }
-            }
-        }
     }
 
     public function save()
@@ -71,23 +46,16 @@ class CreateProductForm extends Model
             try {
                 $product = new Product();
                 $product->title = $this->title;
-                $product->content = $this->content;
-                $product->excerpt = $this->excerpt;
+                $product->game_id = $this->image_id;
                 $product->image_id = $this->image_id;
-                $product->meta_title = $this->meta_title;
-                $product->meta_keyword = $this->meta_keyword;
-                $product->meta_description = $this->meta_description;
+                $product->price = $this->price;
+                $product->gems = $this->gems;
                 $product->created_by = Yii::$app->user->id;
                 $product->status = $this->status;
                 if (!$product->save()) {
                     throw new Exception("Error Processing Request", 1);
                 }
                 
-                $this->id = $product->id;
-
-                $this->addGallery();
-                $this->addOptions();
-
                 $transaction->commit();
                 return $product;
             } catch (Exception $e) {
@@ -101,38 +69,8 @@ class CreateProductForm extends Model
         return false;
     }
 
-    protected function getGallery()
-    {
-        $gallery = (array)$this->gallery;
-        $gallery = array_filter($gallery);
-        $gallery = array_unique($gallery);
-        return $gallery;
-    }
-
     public function getStatusList()
     {
         return Product::getStatusList();
-    }
-
-    protected function addGallery()
-    {
-        if(!$this->id) return;
-        foreach ($this->getGallery() as $imageId) {
-            $productImage = new ProductImage();
-            $productImage->image_id = $imageId;
-            $productImage->product_id = $this->id;
-            $productImage->save();
-        }    
-    }
-
-    protected function addOptions()
-    {
-        if(!$this->id) return;
-        foreach ($this->options as $data) {
-            $option = new CreateProductOptionForm($data);
-            $option->setScenario(CreateProductOptionForm::SCENARIO_CREATE_PRODUCT);
-            $option->product_id = $this->id;
-            $option->save();
-        }
     }
 }

@@ -92,5 +92,6 @@ class m181217_033141_create_order_table extends Migration
         $this->dropTable('{{%order}}');
         $this->dropTable('{{%order_items}}');
         $this->dropTable('{{%order_comments}}');
+        $this->dropTable('{{%customer_product_account}}');
     }
 }

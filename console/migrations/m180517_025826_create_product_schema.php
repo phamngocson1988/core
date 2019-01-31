@@ -16,7 +16,7 @@ class m180517_025826_create_product_schema extends Migration
         }
 
         /* Game table */
-        $this->createTable('{{%product}}', [
+        $this->createTable('{{%game}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(100)->notNull(),
             'slug' => $this->string(100)->notNull()->unique(),
@@ -35,23 +35,17 @@ class m180517_025826_create_product_schema extends Migration
             'deleted_by' => $this->integer(),
         ], $tableOptions);
 
-        /* Game image table */
-        $this->createTable('{{%product_image}}', [
-            'id' => $this->primaryKey(),
-            'product_id' => $this->integer(),
-            'image_id' => $this->integer(),
-        ], $tableOptions);
-
         if ($this->db->driverName === 'mysql') {
-            $alter = "ALTER TABLE {{%product}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+            $alter = "ALTER TABLE {{%game}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
             $command = $this->db->createCommand($alter);
             $command->execute();
         }
 
-        $this->createTable('{{%product_option}}', [
+        $this->createTable('{{%product}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(100)->notNull(),
-            'product_id' => $this->integer()->notNull(),
+            'game_id' => $this->integer()->notNull(),
+            'image_id' => $this->integer(),
             'price' => $this->integer(),
             'gems' => $this->integer(),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
@@ -65,7 +59,7 @@ class m180517_025826_create_product_schema extends Migration
         ], $tableOptions);
 
         if ($this->db->driverName === 'mysql') {
-            $alter = "ALTER TABLE {{%product_option}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+            $alter = "ALTER TABLE {{%product}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
             $command = $this->db->createCommand($alter);
             $command->execute();
         }
@@ -73,8 +67,7 @@ class m180517_025826_create_product_schema extends Migration
 
     public function down()
     {
+        $this->dropTable('{{%game}}');
         $this->dropTable('{{%product}}');
-        $this->dropTable('{{%product_image}}');
-        $this->dropTable('{{%product_option}}');
     }
 }

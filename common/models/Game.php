@@ -7,6 +7,7 @@ use common\models\User;
 use common\models\Image;
 use common\models\Product;
 use yii\behaviors\SluggableBehavior;
+use yii\behaviors\TimestampBehavior;
 /**
  * Game model
  *
@@ -50,6 +51,12 @@ class Game extends ActiveRecord
                 'immutable' => true,
                 'ensureUnique'=>true,
             ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => date('Y-m-d H:i:s')
+            ]
         ];
     }
 
@@ -83,22 +90,6 @@ class Game extends ActiveRecord
         ->where('status = :status', [':status' => Product::STATUS_VISIBLE]);
     }
 
-    public function getCreatedAt($format = false)
-    {
-        if ($format == true) {
-            return date(Yii::$app->params['date_format'], $this->created_at);
-        }
-        return $this->created_at;
-    }
-
-    public function getUpdatedAt($format = false)
-    {
-        if ($format == true) {
-            return date(Yii::$app->params['date_format'], $this->updated_at);
-        }
-        return $this->updated_at;
-    }
-
     public function getCreator()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
@@ -111,12 +102,6 @@ class Game extends ActiveRecord
             return $user->name;
         }
         return '';
-    }
-
-    public function getGallery()
-    {
-        return $this->hasMany(Image::className(), ['id' => 'image_id'])
-            ->viaTable(GameImage::tableName(), ['game_id' => 'id']);
     }
 
     public function getMetaTitle()
