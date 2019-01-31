@@ -99,11 +99,13 @@ return [
             ],
         ],
         'image' => [
-            'class' => 'common\components\uploadfiles\standard\ImageHandler',
-            'image_path' => '@common/uploads/images',
-            'image_url' => 'http://image.kinggerm.com',
-            // 'file_path' => '@common/uploads/files',
-            // 'file_url' => 'http://file.chuchu.com',
+            'class' => 'common\components\filesystem\FileSystemManager',
+            'generate_thumbnail' => true,
+            'dependency' => [
+                'class' => 'common\components\filesystem\local\LocalFileSystem',
+                // 'image_path' => '@common/uploads/images',
+                // 'image_url' => $_SERVER['HTTP_HOST'],
+            ]
         ],
         'syslog' => [
             'class' => 'backend\components\logs\SystemLog',

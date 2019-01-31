@@ -73,23 +73,23 @@ class ImageController extends Controller
         $errors = [];
         if ($images !== false) {
             $result = true;
+            $size = null;
             if ($request->post('review_width') && $request->post('review_height')) {
                 $size = sprintf("%sx%s", $request->post('review_width'), $request->post('review_height'));
-
-                $imageArray = [];
-                foreach ($images as  $image) {
-                    $info = [];
-                    $info['id'] = $imageId = $image->getId();
-                    $info['thumb'] = $image->getUrl($size);
-                    $info['src'] = $image->getUrl();
-                    foreach (Yii::$app->params['thumbnails'] as $thumbnail) {
-                        $info['size'][$thumbnail] = $image->getUrl($thumbnail);
-                    }
-                    $imageArray[$imageId] = $info;
-                }
-
-                $data = $imageArray;
             }
+            $imageArray = [];
+            foreach ($images as  $image) {
+                $info = [];
+                $info['id'] = $imageId = $image->getId();
+                $info['thumb'] = $image->getUrl($size);
+                $info['src'] = $image->getUrl();
+                foreach (Yii::$app->image->thumbnails as $thumbnail) {
+                    $info['size'][$thumbnail] = $image->getUrl($thumbnail);
+                }
+                $imageArray[$imageId] = $info;
+            }
+
+            $data = $imageArray;
         } else {
             $errors = Yii::$app->image->getErrors($attribute);
         }
@@ -118,57 +118,18 @@ class ImageController extends Controller
     public function actionEditor()
     {
         try {
-            // File Route.
-            $fileRoute = Yii::$app->image->getImagePath();
-            $fileUrl = Yii::$app->image->image_url;
-            $fieldname = "file";
-            $fileData = ArrayHelper::getValue($_FILES, $fieldname);
-            $name = ArrayHelper::getValue($fileData, "name");
-            $tmpName = ArrayHelper::getValue($fileData, "tmp_name");
-            // Get filename.
-            $filename = explode(".", $name);
-
-            // Validate uploaded files.
-            // Do not use $_FILES["file"]["type"] as it can be easily forged.
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-
-            // Get mime type.
-            $mimeType = finfo_file($finfo, $tmpName);
-
-            // Get extension. You must include fileinfo PHP extension.
-            $extension = end($filename);
-
-            // Allowed extensions.
-            $allowedExts = Yii::$app->image->extensions;
-
-            // Allowed mime types.
-            $allowedMimeTypes = Yii::$app->image->mimeTypes;
-
-            // Validate image.
-            if (!in_array(strtolower($mimeType), $allowedMimeTypes) || !in_array(strtolower($extension), $allowedExts)) {
-                throw new \Exception("File does not meet the validation.");
-            }
-
-            // Generate new random name.
-            $name = sha1(microtime()) . "." . $extension;
-            $fullNamePath = $fileRoute . "/" . $name;
-
-            // Check server protocol and load resources accordingly.
-            if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") {
-                $protocol = "https://";
+            $attribute = "file";
+            $images = Yii::$app->image->upload($attribute);
+            if ($images !== false) {
+                $image = reset($images);
+                // Generate response.
+                $response = new \StdClass;
+                $response->location = $image->getUrl();
+                // Send response.
+                echo stripslashes(json_encode($response));
             } else {
-                $protocol = "http://";
+                throw new Exception("Error Processing Request", 1);
             }
-
-            // Save file in the uploads folder.
-            move_uploaded_file($tmpName, $fullNamePath);
-
-            // Generate response.
-            $response = new \StdClass;
-            $response->location = $fileUrl . '/' . $name;
-
-            // Send response.
-            echo stripslashes(json_encode($response));
         } catch (Exception $e) {
             // Send error response.
             echo $e->getMessage();
