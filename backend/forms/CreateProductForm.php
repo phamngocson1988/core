@@ -46,7 +46,7 @@ class CreateProductForm extends Model
             try {
                 $product = new Product();
                 $product->title = $this->title;
-                $product->game_id = $this->image_id;
+                $product->game_id = $this->game_id;
                 $product->image_id = $this->image_id;
                 $product->price = $this->price;
                 $product->gems = $this->gems;

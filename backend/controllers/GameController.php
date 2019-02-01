@@ -6,7 +6,9 @@ use common\components\Controller;
 use yii\filters\AccessControl;
 use backend\forms\FetchGameForm;
 use backend\forms\CreateGameForm;
+use backend\forms\CreateProductForm;
 use backend\forms\EditGameForm;
+use backend\forms\EditProductForm;
 use backend\forms\DeleteGameForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
@@ -59,11 +61,12 @@ class GameController extends Controller
         $request = Yii::$app->request;
         $model = new CreateGameForm();
         if ($model->load(Yii::$app->request->post())) {
-            if (!$model->save()) {
+            $game = $model->save();
+            if (!$game) {
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             } else {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['game/index']));
+                $ref = Url::to(['game/edit', 'id' => $game->id]);
                 return $this->redirect($ref);    
             }
         }
@@ -90,8 +93,12 @@ class GameController extends Controller
         } else {
             $model->loadData($id);
         }
+        $newProductModel = new CreateProductForm(['game_id' => $id]);
+        $editProductModel = new EditProductForm(['game_id' => $id]);
         return $this->render('edit.tpl', [
             'model' => $model,
+            'newProductModel' => $newProductModel,
+            'editProductModel' => $editProductModel,
             'back' => $request->get('ref', Url::to(['game/index']))
         ]);
     }

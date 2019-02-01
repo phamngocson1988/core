@@ -59,18 +59,16 @@ class ProductController extends Controller
         $request = Yii::$app->request;
         $model = new CreateProductForm();
         if ($model->load(Yii::$app->request->post())) {
-            if (!$model->save()) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            $product = $model->save();
+            if (!$product) {
+                // Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                return json_encode(['status' => false, 'errors' => $model->getErrors()]);
             } else {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['product/index']));
-                return $this->redirect($ref);    
+                // Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return json_encode(['status' => true, 'data' => $product]);
             }
         }
-        return $this->render('create.tpl', [
-            'model' => $model,
-            'back' => $request->get('ref', Url::to(['product/index']))
-        ]);
+        // return $this->renderPartial('_partial_create.tpl', ['model' => $model]);
     }
 
     public function actionEdit($id)

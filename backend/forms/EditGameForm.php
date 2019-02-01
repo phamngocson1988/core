@@ -59,7 +59,7 @@ class EditGameForm extends Model
                 $game->meta_keyword = $this->meta_keyword;
                 $game->meta_description = $this->meta_description;
                 $game->status = $this->status;
-                $game->save()
+                $game->save();
                 $transaction->commit();
                 return $game;
             } catch (Exception $e) {
@@ -88,7 +88,7 @@ class EditGameForm extends Model
         }
     }
 
-    protected function getGame()
+    public function getGame()
     {
         if ($this->_game === null) {
             $this->_game = Game::findOne($this->id);
