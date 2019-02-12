@@ -3,7 +3,6 @@ namespace common\components\filesystem;
 
 interface FileSystemInterface
 {
-	public function saveImage($file, $fileModel);
-	public function saveThumbnail($fileModel, $thumbnail) ;
-	public function get($fileModel, $thumbnail = null);
+	public function save($file, $fileModel);
+	public function get($fileModel);
 }
