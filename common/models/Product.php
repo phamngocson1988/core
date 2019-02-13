@@ -57,6 +57,10 @@ class Product extends ActiveRecord
         ];
     }
 
+    public function getGame() 
+    {
+        return $this->hasOne(Game::className(), ['id' => 'game_id']);
+    }
 
     public function getImage() 
     {
@@ -66,6 +70,9 @@ class Product extends ActiveRecord
     public function getImageUrl($size = null, $default = '/images/noimage.png')
     {
         $image = $this->image;
+        if (!$image) {
+            $image = $this->game->image;
+        }
         if ($image) {
             return $image->getUrl($size);
         }

@@ -6,14 +6,13 @@ use yii\base\Model;
 use common\components\filesystem\FileSystemInterface;
 use yii\helpers\FileHelper;
 use yii\helpers\ArrayHelper;
-use yii\imagine\Image;
 
 class LocalFileSystem extends Model implements FileSystemInterface
 {
-    public $image_path = '@common/uploads/images';
-    public $image_url = 'http://image.core.com';
+    public $file_path = '@common/uploads/files';
+    public $file_url = 'http://file.core.com';
 
-    public function saveImage($file, $fileModel)
+    public function save($file, $fileModel)
     {
         $filePath = $this->getFilePath($fileModel);
         $fileDir = dirname($filePath);
@@ -22,41 +21,18 @@ class LocalFileSystem extends Model implements FileSystemInterface
         return $filePath;
     }
 
-    public function saveThumbnail($fileModel, $thumbnail) 
+    public function get($fileModel)
     {
-        $sizes = explode("x", $thumbnail);
-        if (count($sizes) < 2) {
-            return;
-        }
-     
-        $filePath = $this->getFilePath($fileModel);        
-        $thumbPath = $this->getFilePath($fileModel, $thumbnail);
-        $thumbDir = dirname($thumbPath);
-        FileHelper::createDirectory($thumbDir);
-        $thumbWidth = ArrayHelper::getValue($sizes, 0);
-        $thumbHeight = ArrayHelper::getValue($sizes, 1);
-        $thumb = Image::thumbnail($filePath, $thumbWidth, $thumbHeight);
-        $thumb->save($thumbPath);
-    }    
-
-    public function get($fileModel, $thumbnail = null)
-    {
-        $fileDir = sprintf("%s/%s", $this->image_url, $this->getRelativePath($fileModel->id));
-        if ($thumbnail) {
-            $fileDir = sprintf("%s/%s", $fileDir, $thumbnail);
-        }
+        $fileDir = sprintf("%s/%s", $this->file_url, $this->getRelativePath($fileModel->id));
         $fileUrl = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
         return $fileUrl;
     }
     
    
 
-    protected function getFilePath($fileModel, $thumbnail = null)
+    protected function getFilePath($fileModel)
     {
-        $fileDir = sprintf("%s/%s", Yii::getAlias($this->image_path), $this->getRelativePath($fileModel->id));
-        if ($thumbnail) {
-            $fileDir = sprintf("%s/%s", $fileDir, $thumbnail);
-        }
+        $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
         $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
         return $filePath;
     }

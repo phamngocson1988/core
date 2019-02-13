@@ -66,8 +66,8 @@
                 <td style="vertical-align: middle;">{$model->title}</td>
                 <td style="vertical-align: middle;">{$model->getCreatorName()}</td>
                 <td style="vertical-align: middle;">
-                    <a href='{url route="game/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}"><i class="fa fa-pencil"></i></a>
-                    <a href='{url route="game/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}"><i class="fa fa-trash-o"></i></a>
+                    <a href='{url route="game/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-pjax="0"><i class="fa fa-pencil"></i></a>
+                    <a href='{url route="game/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}" data-pjax="0"><i class="fa fa-trash-o"></i></a>
                 </td>
               </tr>
               {/foreach}

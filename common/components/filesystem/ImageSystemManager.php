@@ -5,21 +5,28 @@ use yii\base\DynamicModel;
 use yii\web\UploadedFile;
 use Yii;
 
-class FileSystemManager extends DynamicModel
+class ImageSystemManager extends DynamicModel
 {
-    public $extensions = null;
-    public $mimeTypes = null;
+    public $thumbnails = ['50x50', '100x100', '150x150', '300x300', '500x500', '940x630', '800x800', '1000x1000'];
+    public $extensions = ["gif", "jpeg", "jpg", "png", "svg", "blob"];
+    public $mimeTypes = ["image/gif", "image/jpeg", "image/pjpeg", "image/x-png", "image/png", "image/svg+xml"];
     public $maxFiles = 4;
     public $maxSize; //bytes
     public $default_image = '/images/noimage.png';
+    public $generate_thumbnail = true;
 
-	public $file_class = \common\models\File::class;
+    public $image_class = \common\models\Image::class;
     public $dependency; // instance of FileSystemService;
 
-	protected function instanceFileClass()
-	{
-		return Yii::createObject($this->file_class);
-	}
+    protected function instanceImageClass()
+    {
+        return Yii::createObject($this->image_class);
+    }
+
+    protected function instanceFileClass()
+    {
+        return Yii::createObject($this->file_class);
+    }
 
     protected function instanceDependency()
     {
@@ -62,8 +69,12 @@ class FileSystemManager extends DynamicModel
             $dependency = $this->instanceDependency();
             foreach ($uploadedFiles as $file) {
                 $fileModel = $this->saveToDatabase($file);
-                $dependency->save($file, $fileModel);
+                $dependency->saveImage($file, $fileModel);
                 $files[] = $fileModel;
+                if (!$this->generate_thumbnail) continue;
+                foreach ($this->thumbnails as $thumbnail) {
+                    $dependency->saveThumbnail($fileModel, $thumbnail);
+                }
             }
             $transaction->commit();
             $this->undefineAttribute($name);
@@ -77,13 +88,14 @@ class FileSystemManager extends DynamicModel
     public function get($fileModel, $thumbnail = null)
     {
         $dependency = $this->instanceDependency();
-        $fileUrl = $dependency->get($fileModel);
+        if (!$this->generate_thumbnail) $thumbnail = null;
+        $fileUrl = $dependency->get($fileModel, $thumbnail);
         return $fileUrl;
     }
 
     protected function saveToDatabase($file)
     {
-        $fileModel = $this->instanceFileClass();
+        $fileModel = $this->instanceImageClass();
         $fileModel->name = $file->baseName;
         $fileModel->extension = $file->extension;
         $fileModel->size = $file->size;

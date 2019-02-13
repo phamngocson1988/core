@@ -1,6 +1,7 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='common\widgets\TinyMce' type='block'}
+{use class='yii\widgets\Pjax' type='block'}
 {use class='unclead\multipleinput\MultipleInput'}
 {use class='common\widgets\ImageInputWidget'}
 {use class='common\widgets\RadioListInput'}
@@ -86,6 +87,8 @@
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
                 <div class="tab-pane" id="tab_1_3">
+                  {Pjax}
+                  <a class="btn btn-link" id="refresh_package_list" href="">{Yii::t('app', 'refresh')}</a>
                   <a data-toggle="modal" class="btn btn-link" id="add_packages" href="#new-product-modal">{Yii::t('app', 'add_package')}</a>
                   <table class="table table-striped table-bordered table-hover table-checkable">
                     <thead>
@@ -103,20 +106,23 @@
                         <tr><td colspan="6">{Yii::t('app', 'no_data_found')}</td></tr>
                         {/if}
                         {foreach $model->getGame()->products as $key => $product}
-                        <tr>
-                          <td style="vertical-align: middle;"><img src="{$product->getImageUrl('50x50')}" width="50px;" /></td>
-                          <td style="vertical-align: middle;">{$product->title}</td>
-                          <td style="vertical-align: middle;">{$product->price}</td>
-                          <td style="vertical-align: middle;">{$product->gems}</td>
-                          <td style="vertical-align: middle;">{$product->status}</td>
+                        <tr id="product-row-{$product->id}" row-data='{$product->id}'>
                           <td style="vertical-align: middle;">
-                              <a href='{url route="product/edit" id=$product->id}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}"><i class="fa fa-pencil"></i></a>
+                            <img src="{$product->getImageUrl('50x50')}" width="50px;" />
+                          </td>
+                          <td style="vertical-align: middle;" row-data='title'>{$product->title}</td>
+                          <td style="vertical-align: middle;" row-data='price'>{$product->price}</td>
+                          <td style="vertical-align: middle;" row-data='gems'>{$product->gems}</td>
+                          <td style="vertical-align: middle;" row-data='status'>{$product->status}</td>
+                          <td style="vertical-align: middle;">
+                              <a href="#edit-product-modal-{$product->id}" class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-toggle="modal"><i class="fa fa-pencil"></i></a>
                               <a href='{url route="product/delete" id=$product->id}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}"><i class="fa fa-trash-o"></i></a>
                           </td>
                         </tr>
                         {/foreach}
                     </tbody>
                   </table>
+                  {/Pjax}
                 </div>
               </div>
             </div>
@@ -137,7 +143,7 @@
         <h4 class="modal-title">{Yii::t('app', 'create_package')}</h4>
       </div>
       {ActiveForm assign='newform' options=['id' => 'add-product-form'] action='/product/create'}
-      <div class="modal-body" id="create_product">
+      <div class="modal-body">
       {$newform->field($newProductModel, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
         <div class="row">
           <div class="col-md-12">
@@ -152,27 +158,6 @@
             {$newform->field($newProductModel, 'gems')}
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            {$newform->field($newProductModel, 'image_id', [
-              'options' => ['tag' => false, 'class' => 'profile-userpic'],
-              'template' => '{input}{hint}{error}'
-            ])->widget(ImageInputWidget::className(), [
-              'template' => '<div class="profile-userpic">{image}{input}</div><div class="profile-userbuttons list-separated profile-stat">{choose_button}{cancel_button}</div>',
-              'imageOptions' => ['class' => 'img-responsive', 'size' => '300x300'],
-              'chooseButtonOptions' => ['tag' => 'span', 'options' => ['class' => 'btn btn-circle green btn-sm']],
-              'cancelButtonOptions' => ['tag' => 'button', 'options' => ['class' => 'btn btn-circle red btn-sm']]
-            ])->label(false)}
-          </div>
-          <div class="col-md-6">
-            {$newform->field($newProductModel, 'status', [
-              'options' => ['class' => 'list-separated profile-stat']
-            ])->widget(RadioListInput::className(), [
-              'items' => $newProductModel->getStatusList(),
-              'options' => ['class' => 'mt-radio-list']
-            ])}
-          </div>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">{Yii::t('app', 'cancel')}</button>
@@ -182,50 +167,29 @@
     </div>
   </div>
 </div>
-
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="edit-product-modal">
+{foreach $model->getGame()->products as $key => $product}
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="edit-product-modal-{$product->id}">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">{Yii::t('app', 'edit_package')}</h4>
       </div>
-      {ActiveForm assign='editform' options=['id' => 'edit-product-form'] action='/product/edit'}
-      <div class="modal-body" id="create_product">
-      {$editform->field($editProductModel, 'id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
-      {$editform->field($editProductModel, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
+      {ActiveForm assign='editform' options=['class' => 'edit-product-form'] action={url route="product/edit" id=$product->id}}
+      <div class="modal-body">
+        {$editform->field($product, 'id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
+        {$editform->field($product, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
         <div class="row">
           <div class="col-md-12">
-            {$editform->field($editProductModel, 'title')}
+            {$editform->field($product, 'title')}
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            {$editform->field($editProductModel, 'price')}
+            {$editform->field($product, 'price')}
           </div>
           <div class="col-md-6">
-            {$editform->field($editProductModel, 'gems')}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            {$editform->field($editProductModel, 'image_id', [
-              'options' => ['tag' => false, 'class' => 'profile-userpic'],
-              'template' => '{input}{hint}{error}'
-            ])->widget(ImageInputWidget::className(), [
-              'template' => '<div class="profile-userpic">{image}{input}</div><div class="profile-userbuttons list-separated profile-stat">{choose_button}{cancel_button}</div>',
-              'imageOptions' => ['class' => 'img-responsive', 'size' => '300x300'],
-              'chooseButtonOptions' => ['tag' => 'span', 'options' => ['class' => 'btn btn-circle green btn-sm']],
-              'cancelButtonOptions' => ['tag' => 'button', 'options' => ['class' => 'btn btn-circle red btn-sm']]
-            ])->label(false)}
-          </div>
-          <div class="col-md-6">
-            {$editform->field($editProductModel, 'status', [
-              'options' => ['class' => 'list-separated profile-stat']
-            ])->widget(RadioListInput::className(), [
-              'items' => $editProductModel->getStatusList(),
-              'options' => ['class' => 'mt-radio-list']
-            ])}
+            {$editform->field($product, 'gems')}
           </div>
         </div>
       </div>
@@ -237,18 +201,30 @@
     </div>
   </div>
 </div>
+{/foreach}
 <!-- Modal -->
 
 {registerJs}
 {literal}
-// number format
-$('input.number').number(true, 0);
 var newform = new AjaxFormSubmit({element: '#add-product-form'});
 newform.success = function(data, form) {
   $(form)[0].reset();
+  $('#new-product-modal').modal('hide');
+  $('#refresh_package_list').click();
 }
 newform.error = function(errors) {
   console.log(errors);
 }
+
+var editform = new AjaxFormSubmit({element: '.edit-product-form'});
+editform.success = function(data, form) {
+  $(form).closest('.modal').modal('hide');
+  var id = 'product-row-' + data.id;
+  $('#refresh_package_list').click();
+}
+editform.error = function(errors) {
+  console.log(errors);
+}
+
 {/literal}
 {/registerJs}

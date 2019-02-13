@@ -117,13 +117,13 @@
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
-        <span class="title">{Yii::t('app', 'products')}</span>
+        <span class="title">{Yii::t('app', 'games')}</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='/product'}" class="nav-link " code='product.index'>
-            <span class="title">{Yii::t('app', 'products')}</span>
+            <a href="{url route='/game'}" class="nav-link " code='game.index'>
+            <span class="title">{Yii::t('app', 'games')}</span>
             </a>
           </li>
         </ul>

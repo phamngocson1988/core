@@ -67,8 +67,9 @@ class ProductController extends Controller
                 // Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return json_encode(['status' => true, 'data' => $product]);
             }
+        } else {
+            return $this->renderPartial('_partial_create.tpl', ['model' => $model]);
         }
-        // return $this->renderPartial('_partial_create.tpl', ['model' => $model]);
     }
 
     public function actionEdit($id)
@@ -77,21 +78,17 @@ class ProductController extends Controller
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new EditProductForm();
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post(), 'Product')) {
             if (!$model->save()) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                return json_encode(['status' => false, 'errors' => $model->getErrors()]);
             } else {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['product/index']));
-                return $this->redirect($ref);    
+                $product = $model->getProduct();
+                return json_encode(['status' => true, 'data' => $product]);
             }
         } else {
             $model->loadData($id);
         }
-        return $this->render('edit.tpl', [
-            'model' => $model,
-            'back' => $request->get('ref', Url::to(['product/index']))
-        ]);
     }
 
     public function actionDelete($id)

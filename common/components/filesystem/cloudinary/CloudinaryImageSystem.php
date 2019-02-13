@@ -3,14 +3,14 @@ namespace common\components\filesystem\cloudinary;
 
 use Yii;
 use yii\base\Model;
-use common\components\filesystem\FileSystemInterface;
+use common\components\filesystem\ImageSystemInterface;
 
 /**
  * Adapter to integrate Cloudinary functions to Yii
  *
  * @link https://cloudinary.com/documentation/php_integration
  */
-class CloudinaryFileSystem extends Model implements FileSystemInterface
+class CloudinaryImageSystem extends Model implements ImageSystemInterface
 {
     public $cloud_name;
     public $api_key;
@@ -26,7 +26,7 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
         ));
     }
 
-    public function saveFile($file, $fileModel)
+    public function saveImage($file, $fileModel)
     {
         $option = [
             "public_id" => $this->getPublicId($fileModel)
@@ -35,9 +35,18 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
         return \Cloudinary\Uploader::upload($file->tempName, $option);
     }
 
-    public function get($fileModel)
+    public function saveThumbnail($fileModel, $thumbnail) 
+    {
+        return;
+    }    
+
+    public function get($fileModel, $thumbnail = null)
     {
         $options = [];
+        if ($thumbnail) {
+            list ($width, $height) = explode("x", $thumbnail);
+            $options = ["width" => $width, "height" => $height, "crop" => "fill"];
+        }
         $id = $this->getPublicId($fileModel);
         return cloudinary_url($id, $options);
     }

@@ -59,6 +59,7 @@ class EditProductForm extends Model
                     throw new Exception("Error Processing Request", 1);
                 }
                 $transaction->commit();
+                $this->_product = $product;
                 return $product;
             } catch (Exception $e) {
                 $transaction->rollBack();                
@@ -86,7 +87,7 @@ class EditProductForm extends Model
         }
     }
 
-    protected function getProduct()
+    public function getProduct()
     {
         if ($this->_product === null) {
             $this->_product = Product::findOne($this->id);
