@@ -11,6 +11,15 @@
 {$this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
 {$this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
+
+{registerCss}
+{literal}
+.product-filter.active {
+  color: #32c5d2;
+}
+{/literal}
+{/registerCss}
+
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -88,9 +97,17 @@
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
                 <div class="tab-pane" id="tab_1_3">
-                  <a class="btn btn-link hide" id="refresh_package_list" href="{url route='product/index' game_id=$model->id}">{Yii::t('app', 'refresh')}</a>
-                  <a data-toggle="modal" class="btn btn-link" id="add_packages" href="#new-product-modal">{Yii::t('app', 'add_package')}</a>
-                  {Pjax enablePushState=false enableReplaceState=false linkSelector='#refresh_package_list'}
+                  <div style="margin-bottom: 10px;">
+                    <a class="btn green" data-toggle="modal" id="add_packages" href="#new-product-modal">{Yii::t('app', 'add_new')}</a>
+                    <a class="btn btn-link product-filter active" id="refresh_package_list" href="{url route='product/index' game_id=$model->id}">{Yii::t('app', 'all')}</a>
+                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=Y}">{Yii::t('app', 'visible')}</a>
+                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=N}">{Yii::t('app', 'disable')}</a>
+                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=D}">{Yii::t('app', 'delete')}</a>
+
+                  </div>
+
+
+                  {Pjax enablePushState=false enableReplaceState=false linkSelector='.product-filter'}
                   
                   {/Pjax}
                 </div>
@@ -143,13 +160,13 @@
 
 {registerJs}
 {literal}
-$('#refresh_package_list').click();
+$('.product-filter.active').click();
 
 var newform = new AjaxFormSubmit({element: '#add-product-form'});
 newform.success = function(data, form) {
   $(form)[0].reset();
   $('#new-product-modal').modal('hide');
-  $('#refresh_package_list').click();
+  $('.product-filter.active').click();
 }
 newform.error = function(errors) {
   console.log(errors);
@@ -175,13 +192,16 @@ $('body').on('submit', '.edit-product-form', function(e) {
           console.log(result);
           if (result.status == true) {
             $('#edit-product-modal').modal('hide');
-            $('#refresh_package_list').click();
+            $('.product-filter.active').click();
           }
         },
     });
     return false;
 });
 
-
+$('.product-filter').on('click', function(e){
+  $('.product-filter').removeClass('active');
+  $(this).addClass('active');
+})
 {/literal}
 {/registerJs}
