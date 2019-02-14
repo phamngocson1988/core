@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use common\models\Product;
 
-class DeleteProductForm extends Model
+class ChangeProductStatusForm extends Model
 {
     public $id;
 
@@ -23,19 +23,29 @@ class DeleteProductForm extends Model
     public function delete()
     {
     	if ($this->validate()) {
-            $transaction = Yii::$app->db->beginTransaction();
             $product = $this->getProduct();
-            try {
-            	$result = $product->delete();
-                $transaction->commit();
-                return $result;
-            } catch (Exception $e) {
-                $transaction->rollBack();                
-                throw $e;
-            } catch (\Throwable $e) {
-                $transaction->rollBack();
-                throw $e;
-            }
+            $product->status = Product::STATUS_DELETE;
+            return $product->save();
+        }
+        return false;
+    }
+
+    public function enable()
+    {
+        if ($this->validate()) {
+            $product = $this->getProduct();
+            $product->status = Product::STATUS_VISIBLE;
+            return $product->save();
+        }
+        return false;
+    }
+
+    public function disable()
+    {
+        if ($this->validate()) {
+            $product = $this->getProduct();
+            $product->status = Product::STATUS_INVISIBLE;
+            return $product->save();
         }
         return false;
     }

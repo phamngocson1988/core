@@ -12,6 +12,7 @@ class EditGameForm extends Model
     public $title;
     public $content;
     public $excerpt;
+    public $unit_name;
     public $image_id;
     public $meta_title;
     public $meta_keyword;
@@ -23,7 +24,7 @@ class EditGameForm extends Model
     public function rules()
     {
         return [
-            [['id', 'title', 'content'], 'required'],
+            [['id', 'title', 'content', 'unit_name'], 'required'],
             ['status', 'default', 'value' => Game::STATUS_VISIBLE],
             ['id', 'validateGame'],
             [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description'], 'safe']
@@ -38,6 +39,7 @@ class EditGameForm extends Model
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
             'excerpt' => Yii::t('app', 'excerpt'),
+            'unit_name' => Yii::t('app', 'unit_name'),
             'image_id' => Yii::t('app', 'image'),
             'meta_title' => Yii::t('app', 'meta_title'),
             'meta_keyword' => Yii::t('app', 'meta_keyword'),
@@ -54,6 +56,7 @@ class EditGameForm extends Model
                 $game->title = $this->title;
                 $game->content = $this->content;
                 $game->excerpt = $this->excerpt;
+                $game->unit_name = $this->unit_name;
                 $game->image_id = $this->image_id;
                 $game->meta_title = $this->meta_title;
                 $game->meta_keyword = $this->meta_keyword;
@@ -112,6 +115,7 @@ class EditGameForm extends Model
         $this->title = $game->title;
         $this->content = $game->content;
         $this->excerpt = $game->excerpt;
+        $this->unit_name = $game->unit_name;
         $this->image_id = $game->image_id;
         $this->meta_title = $game->meta_title;
         $this->meta_keyword = $game->meta_keyword;

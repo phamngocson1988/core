@@ -48,6 +48,19 @@ class Product extends ActiveRecord
         ];
     }
 
+    public function attributeLabels() 
+    { 
+        return  [
+            'id' => Yii::t('app', 'id'),
+            'title' => Yii::t('app', 'title'),
+            'game_id' => Yii::t('app', 'game_id'),
+            'status' => Yii::t('app', 'status'),
+            'price' => Yii::t('app', 'price'),
+            'unit' => $this->getUnitName(),
+            'image_id' => Yii::t('app', 'image'),
+        ];
+    }
+
     public static function getStatusList()
     {
         return [
@@ -91,5 +104,26 @@ class Product extends ActiveRecord
             return $user->name;
         }
         return '';
+    }
+
+    public function getUnitName()
+    {
+        $game = $this->game;
+        return $game->unit_name;
+    }
+
+    public function isVisible()
+    {
+        return $this->status === self::STATUS_VISIBLE;
+    }
+
+    public function isDisable()
+    {
+        return $this->status === self::STATUS_INVISIBLE;
+    }
+
+    public function isDeleted()
+    {
+        return $this->status === self::STATUS_DELETE;
     }
 }

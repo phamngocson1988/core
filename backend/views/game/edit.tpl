@@ -84,44 +84,14 @@
                 <div class="tab-pane active" id="tab_1_1">
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'excerpt')->textarea()}
+                  {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
                 <div class="tab-pane" id="tab_1_3">
-                  {Pjax}
-                  <a class="btn btn-link" id="refresh_package_list" href="">{Yii::t('app', 'refresh')}</a>
+                  <a class="btn btn-link hide" id="refresh_package_list" href="{url route='product/index' game_id=$model->id}">{Yii::t('app', 'refresh')}</a>
                   <a data-toggle="modal" class="btn btn-link" id="add_packages" href="#new-product-modal">{Yii::t('app', 'add_package')}</a>
-                  <table class="table table-striped table-bordered table-hover table-checkable">
-                    <thead>
-                      <tr>
-                        <th style="width: 10%;"> {Yii::t('app', 'image')} </th>
-                        <th style="width: 20%;"> {Yii::t('app', 'title')} </th>
-                        <th style="width: 10%;"> {Yii::t('app', 'price')} </th>
-                        <th style="width: 10%;"> {Yii::t('app', 'gems')} </th>
-                        <th style="width: 10%;"> {Yii::t('app', 'status')} </th>
-                        <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        {if (!$model->getGame()->products) }
-                        <tr><td colspan="6">{Yii::t('app', 'no_data_found')}</td></tr>
-                        {/if}
-                        {foreach $model->getGame()->products as $key => $product}
-                        <tr id="product-row-{$product->id}" row-data='{$product->id}'>
-                          <td style="vertical-align: middle;">
-                            <img src="{$product->getImageUrl('50x50')}" width="50px;" />
-                          </td>
-                          <td style="vertical-align: middle;" row-data='title'>{$product->title}</td>
-                          <td style="vertical-align: middle;" row-data='price'>{$product->price}</td>
-                          <td style="vertical-align: middle;" row-data='gems'>{$product->gems}</td>
-                          <td style="vertical-align: middle;" row-data='status'>{$product->status}</td>
-                          <td style="vertical-align: middle;">
-                              <a href="#edit-product-modal-{$product->id}" class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-toggle="modal"><i class="fa fa-pencil"></i></a>
-                              <a href='{url route="product/delete" id=$product->id}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}"><i class="fa fa-trash-o"></i></a>
-                          </td>
-                        </tr>
-                        {/foreach}
-                    </tbody>
-                  </table>
+                  {Pjax enablePushState=false enableReplaceState=false linkSelector='#refresh_package_list'}
+                  
                   {/Pjax}
                 </div>
               </div>
@@ -155,7 +125,7 @@
             {$newform->field($newProductModel, 'price')}
           </div>
           <div class="col-md-6">
-            {$newform->field($newProductModel, 'gems')}
+            {$newform->field($newProductModel, 'unit')}
           </div>
         </div>
       </div>
@@ -167,45 +137,14 @@
     </div>
   </div>
 </div>
-{foreach $model->getGame()->products as $key => $product}
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="edit-product-modal-{$product->id}">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{Yii::t('app', 'edit_package')}</h4>
-      </div>
-      {ActiveForm assign='editform' options=['class' => 'edit-product-form'] action={url route="product/edit" id=$product->id}}
-      <div class="modal-body">
-        {$editform->field($product, 'id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
-        {$editform->field($product, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
-        <div class="row">
-          <div class="col-md-12">
-            {$editform->field($product, 'title')}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            {$editform->field($product, 'price')}
-          </div>
-          <div class="col-md-6">
-            {$editform->field($product, 'gems')}
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">{Yii::t('app', 'cancel')}</button>
-        <button type="submit" class="btn btn-primary">{Yii::t('app', 'submit')}</button>
-      </div>
-      {/ActiveForm}
-    </div>
-  </div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="edit-product-modal">
 </div>
-{/foreach}
 <!-- Modal -->
 
 {registerJs}
 {literal}
+$('#refresh_package_list').click();
+
 var newform = new AjaxFormSubmit({element: '#add-product-form'});
 newform.success = function(data, form) {
   $(form)[0].reset();
@@ -216,15 +155,33 @@ newform.error = function(errors) {
   console.log(errors);
 }
 
-var editform = new AjaxFormSubmit({element: '.edit-product-form'});
-editform.success = function(data, form) {
-  $(form).closest('.modal').modal('hide');
-  var id = 'product-row-' + data.id;
-  $('#refresh_package_list').click();
-}
-editform.error = function(errors) {
-  console.log(errors);
-}
+// Edit product form
+$('body').on('click', '.edit-product', function(e) {
+  e.preventDefault();
+  $('#edit-product-modal').load( $(this).attr('href') );
+  $('#edit-product-modal').modal('show');
+});
+
+$('body').on('submit', '.edit-product-form', function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var form = $(this);
+    $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        dataType : 'json',
+        data: form.serialize(),
+        success: function (result, textStatus, jqXHR) {
+          console.log(result);
+          if (result.status == true) {
+            $('#edit-product-modal').modal('hide');
+            $('#refresh_package_list').click();
+          }
+        },
+    });
+    return false;
+});
+
 
 {/literal}
 {/registerJs}

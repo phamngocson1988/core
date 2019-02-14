@@ -5,6 +5,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\Product;
+use common\models\Game;
 
 class CreateProductForm extends Model
 {
@@ -12,8 +13,10 @@ class CreateProductForm extends Model
     public $game_id;
     public $image_id;
     public $price;
-    public $gems;
+    public $unit;
     public $status = Product::STATUS_VISIBLE;
+
+    protected $_game;
 
     /**
      * @inheritdoc
@@ -21,20 +24,22 @@ class CreateProductForm extends Model
     public function rules()
     {
         return [
-            [['title', 'game_id', 'price', 'gems'], 'required'],
+            [['title', 'game_id', 'price', 'unit'], 'required'],
             ['status', 'default', 'value' => Product::STATUS_VISIBLE],
-            [['image_id'], 'safe']
+            [['image_id'], 'safe'],
+            ['game_id', 'validateGame'],
         ];
     }
 
-    public function attributeLabels() { 
-
+    public function attributeLabels() 
+    { 
+        $game = $this->getGame();
         return  [
             'title' => Yii::t('app', 'title'),
             'game_id' => Yii::t('app', 'game_id'),
             'image_id' => Yii::t('app', 'image'),
             'price' => Yii::t('app', 'price'),
-            'gems' => Yii::t('app', 'gems'),
+            'unit' => $game->unit_name,
             'status' => Yii::t('app', 'status'),
         ];
     }
@@ -49,7 +54,7 @@ class CreateProductForm extends Model
                 $product->game_id = $this->game_id;
                 $product->image_id = $this->image_id;
                 $product->price = $this->price;
-                $product->gems = $this->gems;
+                $product->unit = $this->unit;
                 $product->created_by = Yii::$app->user->id;
                 $product->status = $this->status;
                 if (!$product->save()) {
@@ -72,5 +77,24 @@ class CreateProductForm extends Model
     public function getStatusList()
     {
         return Product::getStatusList();
+    }
+
+    public function validateGame($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $game = $this->getGame();
+            if (!$game) {
+                $this->addError($attribute, 'Invalid game.');
+            }
+        }
+    }
+
+    public function getGame()
+    {
+        if ($this->_game === null) {
+            $this->_game = Game::findOne($this->game_id);
+        }
+
+        return $this->_game;
     }
 }

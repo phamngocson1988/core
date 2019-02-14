@@ -7,7 +7,7 @@ use yii\filters\AccessControl;
 use backend\forms\FetchProductForm;
 use backend\forms\CreateProductForm;
 use backend\forms\EditProductForm;
-use backend\forms\DeleteProductForm;
+use backend\forms\ChangeProductStatusForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
 
@@ -33,22 +33,21 @@ class ProductController extends Controller
 
     public function actionIndex()
     {
-        $this->view->params['main_menu_active'] = 'product.index';
         $request = Yii::$app->request;
-
-        $form = new FetchProductForm();
+        $game_id = $request->get('game_id');
+        $status = $request->get('status');
+        $form = new FetchProductForm(['game_id' => $game_id, 'status' => $status]);
         if (!$form->validate()) {
-            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
-            return $this->redirect($ref);
+            $models = [];  
+        } else {
+            $models = $form->fetch();
         }
-        $models = $form->fetch();
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        return $this->render('index.tpl', [
+        
+        return $this->renderPartial('index.tpl', [
             'models' => $models,
-            'pages' => $pages,
+            'game_id' => $game_id,
+            'status' => $status,
             'form' => $form,
-            'ref' => Url::to($request->getUrl(), true),
         ]);
     }
 
@@ -68,14 +67,12 @@ class ProductController extends Controller
                 return json_encode(['status' => true, 'data' => $product]);
             }
         } else {
-            return $this->renderPartial('_partial_create.tpl', ['model' => $model]);
+            return $this->renderPartial('create.tpl', ['model' => $model]);
         }
     }
 
     public function actionEdit($id)
     {
-        $this->view->params['main_menu_active'] = 'product.index';
-        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new EditProductForm();
         if ($model->load(Yii::$app->request->post(), 'Product')) {
@@ -87,7 +84,9 @@ class ProductController extends Controller
                 return json_encode(['status' => true, 'data' => $product]);
             }
         } else {
-            $model->loadData($id);
+            // $model->loadData($id);
+            $product = \common\models\Product::findOne($id);
+            return $this->renderPartial('edit.tpl', ['product' => $product]);
         }
     }
 
@@ -95,8 +94,28 @@ class ProductController extends Controller
     {
         $request = Yii::$app->request;
         if ($request->getIsAjax()) {
-            $form = new DeleteProductForm(['id' => $id]);
+            $form = new ChangeProductStatusForm(['id' => $id]);
             return $this->renderJson($form->delete(), [], $form->getErrorSummary(true));
+        }
+        return $this->redirectNotFound();
+    }
+
+    public function actionEnable($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->getIsAjax()) {
+            $form = new ChangeProductStatusForm(['id' => $id]);
+            return $this->renderJson($form->enable(), [], $form->getErrorSummary(true));
+        }
+        return $this->redirectNotFound();
+    }
+
+    public function actionDisable($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->getIsAjax()) {
+            $form = new ChangeProductStatusForm(['id' => $id]);
+            return $this->renderJson($form->disable(), [], $form->getErrorSummary(true));
         }
         return $this->redirectNotFound();
     }

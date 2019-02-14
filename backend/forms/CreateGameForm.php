@@ -10,6 +10,7 @@ class CreateGameForm extends Model
 {
     public $title;
     public $content;
+    public $unit_name;
     public $excerpt;
     public $image_id;
     public $meta_title;
@@ -23,7 +24,7 @@ class CreateGameForm extends Model
     public function rules()
     {
         return [
-            [['title', 'content'], 'required'],
+            [['title', 'content', 'unit_name'], 'required'],
             ['status', 'default', 'value' => Game::STATUS_VISIBLE],
             [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
         ];
@@ -36,6 +37,7 @@ class CreateGameForm extends Model
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
             'excerpt' => Yii::t('app', 'excerpt'),
+            'unit_name' => Yii::t('app', 'unit_name'),
             'image_id' => Yii::t('app', 'image'),
             'meta_title' => Yii::t('app', 'meta_title'),
             'meta_keyword' => Yii::t('app', 'meta_keyword'),
@@ -52,6 +54,7 @@ class CreateGameForm extends Model
                 $game->title = $this->title;
                 $game->content = $this->content;
                 $game->excerpt = $this->excerpt;
+                $game->unit_name = $this->unit_name;
                 $game->image_id = $this->image_id;
                 $game->meta_title = $this->meta_title;
                 $game->meta_keyword = $this->meta_keyword;

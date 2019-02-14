@@ -15,7 +15,7 @@ class EditProductForm extends Model
     public $game_id;
     public $image_id;
     public $price;
-    public $gems;
+    public $unit;
     public $status = Product::STATUS_VISIBLE;
 
     protected $_product;
@@ -23,22 +23,23 @@ class EditProductForm extends Model
     public function rules()
     {
         return [
-            [['id', 'title', 'game_id', 'price', 'gems'], 'required'],
+            [['id', 'title', 'game_id', 'price', 'unit'], 'required'],
             ['status', 'default', 'value' => Product::STATUS_VISIBLE],
             ['id', 'validateProduct'],
             [['image_id'], 'safe']
         ];
     }
 
-    public function attributeLabels() { 
-
+    public function attributeLabels() 
+    { 
+        $product = $this->getProduct();
         return  [
             'id' => Yii::t('app', 'id'),
             'title' => Yii::t('app', 'title'),
-            'game_id' => Yii::t('app', 'description'),
+            'game_id' => Yii::t('app', 'game_id'),
             'status' => Yii::t('app', 'status'),
             'price' => Yii::t('app', 'product_options'),
-            'gems' => Yii::t('app', 'excerpt'),
+            'unit' => $product->unit_name,
             'image_id' => Yii::t('app', 'image'),
         ];
     }
@@ -50,10 +51,9 @@ class EditProductForm extends Model
             try {
                 $product = $this->getProduct();
                 $product->title = $this->title;
-                $product->game_id = $this->game_id;
                 $product->price = $this->price;
                 $product->image_id = $this->image_id;
-                $product->gems = $this->gems;
+                $product->unit = $this->unit;
                 $product->status = $this->status;
                 if (!$product->save()) {
                     throw new Exception("Error Processing Request", 1);
@@ -112,7 +112,7 @@ class EditProductForm extends Model
         $this->game_id = $product->game_id;
         $this->price = $product->price;
         $this->image_id = $product->image_id;
-        $this->gems = $product->gems;
+        $this->unit = $product->unit;
         $this->status = $product->status;
     }
 }

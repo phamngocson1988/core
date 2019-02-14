@@ -10,12 +10,14 @@ use yii\helpers\ArrayHelper;
 class FetchProductForm extends Model
 {
     public $q;
+    public $game_id;
     public $status;
     protected $_command;
 
     public function rules()
     {
         return [
+            ['game_id', 'required'],
             [['q', 'status'], 'trim'],
         ];
     }
@@ -29,8 +31,8 @@ class FetchProductForm extends Model
     protected function createCommand()
     {
         $command = Product::find();
-        $command->with('image');
-
+        $command->andWhere(['game_id' => $this->game_id]);
+        
         if ($this->status) {
             $command->andWhere(['status' => $this->status]);
         }
