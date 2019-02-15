@@ -33,16 +33,18 @@
           {/if}
         </td>
         <td style="vertical-align: middle;" class='actions'>
-            <a href="{url route='product/edit' id=$product->id}" class="btn btn-xs grey-salsa tooltips edit-product" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-toggle="modal" data-pjax="0"><i class="fa fa-pencil"></i></a>
-            {if $product->isVisible()} 
-            <a href='{url route="product/disable" id=$product->id}' class="btn btn-xs grey-salsa disable-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'disable')}" data-pjax="0"><i class="fa fa-eye-slash"></i></a>
-            {elseif $product->isDisable()}
-            <a href='{url route="product/enable" id=$product->id}' class="btn btn-xs grey-salsa enable-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'enable')}" data-pjax="0"><i class="fa fa-eye"></i></a>
-            {/if}
+          {if !$product->isDeleted()}
+          <a href="{url route='product/edit' id=$product->id}" class="btn btn-xs grey-salsa tooltips edit-product" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-toggle="modal" data-pjax="0"><i class="fa fa-pencil"></i></a>
+          {/if}
+          {if $product->isVisible()} 
+          <a href='{url route="product/disable" id=$product->id}' class="btn btn-xs grey-salsa disable-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'disable')}" data-pjax="0"><i class="fa fa-eye-slash"></i></a>
+          {elseif $product->isDisable()}
+          <a href='{url route="product/enable" id=$product->id}' class="btn btn-xs grey-salsa enable-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'enable')}" data-pjax="0"><i class="fa fa-eye"></i></a>
+          {/if}
 
-            {if !$product->isDeleted()}
-            <a href='{url route="product/delete" id=$product->id}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}" data-pjax="0"><i class="fa fa-trash-o"></i></a>
-            {/if}
+          {if !$product->isDeleted()}
+          <a href='{url route="product/delete" id=$product->id}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}" data-pjax="0"><i class="fa fa-trash-o"></i></a>
+          {/if}
         </td>
       </tr>
       {/foreach}
@@ -53,14 +55,14 @@
 $('.actions>a.disable-action,.actions>a.enable-action').ajax_action({
   confirm: true, 
   callback: function(data) {
-    $('#refresh_package_list').click();
+    $('.product-filter.active').click();
   }
 });
 $('.actions>a.delete-action').ajax_action({
   confirm: true, 
   confirm_text: 'Do you want to continue this action? This action can not be reverted.',
   callback: function(data) {
-    $('#refresh_package_list').click();
+    $('.product-filter.active').click();
   }
 });
 {/literal}
