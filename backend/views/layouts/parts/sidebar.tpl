@@ -126,6 +126,11 @@
             <span class="title">{Yii::t('app', 'games')}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/promotion'}" class="nav-link " code='promotion.index'>
+            <span class="title">{Yii::t('app', 'promotions')}</span>
+            </a>
+          </li>
         </ul>
       </li>
       {if Yii::$app->user->can('admin')}
