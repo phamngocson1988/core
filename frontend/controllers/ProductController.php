@@ -18,6 +18,7 @@ use frontend\components\cart\CartItem;
  */
 class ProductController extends Controller
 {
+    public $layout = 'product';
     public function actionIndex()
     {
         $form = new FetchProductForm();
@@ -26,10 +27,10 @@ class ProductController extends Controller
     }
 
     public function actionView($id)
-    {
-    	$product = Product::findOne($id);
-    	if (!$product) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
-    	return $this->render('view', ['product' => $product]);
+    {return $this->render('view');
+    	// $product = Product::findOne($id);
+    	// if (!$product) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
+    	// return $this->render('view', ['product' => $product]);
     }
 
     public function actionAddCart()

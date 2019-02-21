@@ -12,10 +12,14 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        // '//fonts.googleapis.com/css?family=Oswald:200,400%7CLato:300,400,300italic,700%7CMontserrat:900',
+        'css/style.css',
+        'css/mdi.css',
+        'css/fl-bigmug-line.css',
+
     ];
     public $js = [
-        'js/ajax_action.js',
+        'js/script.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
