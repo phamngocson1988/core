@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle
         'css/style.css',
         'css/mdi.css',
         'css/fl-bigmug-line.css',
+        'css/custom.css',
 
     ];
     public $js = [

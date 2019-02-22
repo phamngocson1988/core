@@ -53,6 +53,7 @@ class Product extends ActiveRecord
         return  [
             'id' => Yii::t('app', 'id'),
             'title' => Yii::t('app', 'title'),
+            'excerpt' => Yii::t('app', 'excerpt'),
             'game_id' => Yii::t('app', 'game_id'),
             'status' => Yii::t('app', 'status'),
             'price' => Yii::t('app', 'price'),

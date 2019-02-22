@@ -98,15 +98,7 @@ return [
                 ],
             ],
         ],
-        'image' => [
-            'class' => 'common\components\filesystem\ImageSystemManager',
-            'generate_thumbnail' => true,
-            'dependency' => [
-                'class' => 'common\components\filesystem\local\LocalImageSystem',
-                // 'image_path' => '@common/uploads/images',
-                // 'image_url' => $_SERVER['HTTP_HOST'],
-            ]
-        ],
+        
         'syslog' => [
             'class' => 'backend\components\logs\SystemLog',
         ],

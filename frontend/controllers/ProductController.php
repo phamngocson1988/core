@@ -27,10 +27,10 @@ class ProductController extends Controller
     }
 
     public function actionView($id)
-    {return $this->render('view');
-    	// $product = Product::findOne($id);
-    	// if (!$product) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
-    	// return $this->render('view', ['product' => $product]);
+    {
+    	$model = Product::findOne($id);
+    	if (!$model) throw new BadRequestHttpException('Không tìm thấy sản phẩm');print_r($model);
+    	return $this->render('view', ['model' => $model]);
     }
 
     public function actionAddCart()

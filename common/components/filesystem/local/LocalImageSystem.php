@@ -12,6 +12,7 @@ class LocalImageSystem extends Model implements ImageSystemInterface
 {
     public $image_path = '@common/uploads/images';
     public $image_url = 'http://image.core.com';
+    public $auto_generate_thumb = false;
 
     public function saveImage($file, $fileModel)
     {
@@ -37,6 +38,7 @@ class LocalImageSystem extends Model implements ImageSystemInterface
         $thumbHeight = ArrayHelper::getValue($sizes, 1);
         $thumb = Image::thumbnail($filePath, $thumbWidth, $thumbHeight);
         $thumb->save($thumbPath);
+        return $this->get($fileModel, $thumbnail);
     }    
 
     public function get($fileModel, $thumbnail = null)
@@ -46,6 +48,14 @@ class LocalImageSystem extends Model implements ImageSystemInterface
             $fileDir = sprintf("%s/%s", $fileDir, $thumbnail);
         }
         $fileUrl = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+
+        if ($this->auto_generate_thumb === true) { // check if the resource is not exist. system will generate it
+            $file_headers = @get_headers($fileUrl);
+            if (!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') { // not exist
+                $fileUrl = $this->saveThumbnail($fileModel, $thumbnail);
+            }    
+        }
+        
         return $fileUrl;
     }
     
