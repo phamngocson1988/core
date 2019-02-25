@@ -21,6 +21,7 @@ use yii\helpers\ArrayHelper;
  * @property string $phone
  * @property string $address
  * @property string $birthday
+ * @property integer $favorite
  * @property string $social_line
  * @property string $social_zalo
  * @property string $social_facebook

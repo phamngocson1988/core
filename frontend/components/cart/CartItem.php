@@ -12,14 +12,6 @@ class CartItem extends Model implements CartItemInterface
 
     public $quantity = 1;
 
-    public $account_username;
-
-    public $account_password;
-
-    public $account_note;
-
-    /** @var ProductOption **/
-    protected $_option;
     /** @var Product **/
     protected $_product;
 
@@ -29,7 +21,6 @@ class CartItem extends Model implements CartItemInterface
     public function init()
     {
         parent::init();
-        $this->getOption();
         $this->getProduct();
     }
 
@@ -37,7 +28,7 @@ class CartItem extends Model implements CartItemInterface
     {
         return [
             self::SCENARIO_ADD_ITEM => ['id', 'quantity'],
-            self::SCENARIO_ADD_INFOR => ['id', 'quantity', 'account_username', 'account_password', 'account_note'],
+            self::SCENARIO_ADD_INFOR => ['id', 'quantity'],
         ];
     }
 
@@ -45,28 +36,8 @@ class CartItem extends Model implements CartItemInterface
     {
         return [
             ['id', 'required', 'on' => self::SCENARIO_ADD_ITEM],
-            ['id', 'validateOption', 'on' => self::SCENARIO_ADD_ITEM],
             ['id', 'validateProduct', 'on' => self::SCENARIO_ADD_ITEM],
-            [['account_username', 'account_password', 'account_note'], 'trim', 'on' => self::SCENARIO_ADD_INFOR],
-            [['account_username', 'account_password'], 'required', 'on' => self::SCENARIO_ADD_INFOR],
         ];
-    }
-
-    public function validateOption($attribute, $params)
-    {
-        $option = $this->getOption();
-        if (!$option) {
-            $this->addError($attribute, 'Gói sản phẩm này không khả dụng');
-            return false;
-        }
-    }
-
-    protected function getOption()
-    {
-        if (!$this->_option) {
-            $this->_option = ProductOption::findOne($this->id);
-        }
-        return $this->_option;
     }
 
     public function validateProduct($attribute, $params)
@@ -81,9 +52,7 @@ class CartItem extends Model implements CartItemInterface
     protected function getProduct()
     {
         if (!$this->_product) {
-            $option = $this->getOption();
-            if (!$option) return null;
-            $this->_product = Product::findOne($option->product_id);
+            $this->_product = Product::findOne($this->id);
         }
         return $this->_product;
     }
@@ -103,19 +72,24 @@ class CartItem extends Model implements CartItemInterface
         $this->setQuantity($this->quantity--);
     }
 
+    public function getGame()
+    {
+        return $this->getProduct()->game;
+    }
+
     // ============== implement interface ===========//
     public function getPrice() : int
     {
-        return (int)$this->getOption()->price;
+        return (int)$this->getProduct()->price;
     }
 
     public function getLabel()
     {
-        return sprintf('%s - %s', $this->getProduct()->title, $this->getOption()->title);
+        return sprintf('%s', $this->getProduct()->title);
     }
 
     public function getUniqueId()
     {
-        return sprintf('%d_%d', $this->getProduct()->id, $this->getOption()->id);
+        return sprintf('%d', $this->getProduct()->id);
     }
 }

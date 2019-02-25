@@ -75,12 +75,15 @@ class m181217_033141_create_order_table extends Migration
         ]);
 
         // same idea as customer address
-        $this->createTable('{{%customer_product_account}}', [
+        $this->createTable('{{%customer_game_account}}', [
             'id' => $this->primaryKey(),
             'customer_id' => $this->integer(11)->notNull(),
-            'accout_title' => $this->string(255)->notNull(),
-            'accout_username' => $this->string(255)->notNull(),
-            'accout_password' => $this->dateTime()->notNull(),
+            'username' => $this->string(255)->notNull(),
+            'password' => $this->string(255)->notNull(),
+            'character' => $this->string(255)->notNull(),
+            'recover_code' => $this->string(255),
+            'server' => $this->string(255)->notNull(),
+            'note' => $this->string(255),
         ]);
     }
 
@@ -92,6 +95,6 @@ class m181217_033141_create_order_table extends Migration
         $this->dropTable('{{%order}}');
         $this->dropTable('{{%order_items}}');
         $this->dropTable('{{%order_comments}}');
-        $this->dropTable('{{%customer_product_account}}');
+        $this->dropTable('{{%customer_game_account}}');
     }
 }

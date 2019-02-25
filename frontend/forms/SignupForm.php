@@ -3,6 +3,8 @@ namespace frontend\forms;
 
 use yii\base\Model;
 use common\models\Customer;
+use frontend\models\Game;
+use yii\helpers\ArrayHelper;
 use frontend\components\notifications\AccountNotification;
 
 /**
@@ -12,6 +14,9 @@ class SignupForm extends Model
 {
     public $email;
     public $password;
+    public $name;
+    public $phone;
+    public $favorite;
 
     /**
      * @param boolean $is_active
@@ -34,6 +39,16 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+            ['name', 'trim'],
+            ['name', 'required'],
+            ['name', 'string', 'max' => 255],
+
+            ['phone', 'trim'],
+            ['phone', 'required'],
+            ['phone', 'string', 'max' => 20],
+
+            ['favorite', 'safe'],
         ];
     }
 
@@ -51,6 +66,9 @@ class SignupForm extends Model
         $user = new Customer();
         $user->username = $this->email;
         $user->email = $this->email;
+        $user->name = $this->name;
+        $user->phone = $this->phone;
+        $user->favorite = $this->favorite;
         $user->setPassword($this->password);
         $user->generateAuthKey();
 
@@ -60,9 +78,9 @@ class SignupForm extends Model
             $user->status = Customer::STATUS_ACTIVE;
         }
         
-        $user = $user->save() ? $user : null;
+        return $user->save() ? $user : null;
 
-        AccountNotification::create(AccountNotification::KEY_NEW_ACCOUNT, ['user' => $user])->send();
+        // AccountNotification::create(AccountNotification::KEY_NEW_ACCOUNT, ['user' => $user])->send();
     }
 
     /**
@@ -83,5 +101,11 @@ class SignupForm extends Model
     public function isNeedConfirm()
     {
         return (boolean)$this->need_confirm;
+    }
+
+    public function fetchGames()
+    {
+        $games = Game::find()->all();
+        return ArrayHelper::map($games, 'id', 'title');
     }
 }

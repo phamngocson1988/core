@@ -38,6 +38,7 @@ class m130524_201442_init extends Migration
             'phone' => $this->string(50),
             'address' => $this->string(200),
             'birthday' => $this->date(),
+            'favorite' => $this->integer(),
             'social_line' => $this->string(200),
             'social_zalo' => $this->string(200),
             'social_facebook' => $this->string(200),

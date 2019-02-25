@@ -33,14 +33,19 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 <!-- Page preloader-->
 <?php require_once(Yii::$app->basePath . '/views/layouts/_page_loader.php');?>
-
 <div class="page">
   <!-- Page Header-->
-  <header class="section page-header breadcrumbs-custom-wrap bg-gradient bg-secondary-2 novi-background bg-cover">
+  <header class="section page-header">
     <!-- RD Navbar-->
-    <div class="rd-navbar-wrap rd-navbar-default">
-      <nav class="rd-navbar" data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fixed" data-md-layout="rd-navbar-fixed" data-md-device-layout="rd-navbar-fixed" data-lg-layout="rd-navbar-fullwidth" data-xl-layout="rd-navbar-static" data-lg-device-layout="rd-navbar-fixed" data-xl-device-layout="rd-navbar-static" data-md-stick-up-offset="2px" data-lg-stick-up-offset="2px" data-stick-up="true" data-sm-stick-up="true" data-md-stick-up="true" data-lg-stick-up="true" data-xl-stick-up="true">
-        <div class="rd-navbar-inner"> 
+    <div class="rd-navbar-wrap rd-navbar-shop-header">
+      <nav class="rd-navbar" data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fixed" data-md-layout="rd-navbar-fixed" data-md-device-layout="rd-navbar-fixed" data-lg-layout="rd-navbar-fullwidth" data-xl-layout="rd-navbar-static" data-lg-device-layout="rd-navbar-fixed" data-xl-device-layout="rd-navbar-static" data-md-stick-up-offset="100px" data-lg-stick-up-offset="150px" data-stick-up="true" data-sm-stick-up="true" data-md-stick-up="true" data-lg-stick-up="true" data-xl-stick-up="true">
+        <div class="rd-navbar-top-panel novi-background">
+          <div class="rd-navbar-nav-wrap">
+            <!-- RD Navbar Nav-->
+            <?php echo $this->render('_menu'); ?>
+          </div>
+        </div>
+        <div class="rd-navbar-inner">
           <!-- RD Navbar Panel-->
           <div class="rd-navbar-panel">
             <!-- RD Navbar Toggle-->
@@ -48,30 +53,32 @@ AppAsset::register($this);
             <!-- RD Navbar Brand-->
             <div class="rd-navbar-brand"><a class="brand-name" href="index.html"><img class="logo-default" src="/images/logo-default-128x52.png" alt="" width="128" height="52"/><img class="logo-inverse" src="/images/logo-inverse-128x52.png" alt="" width="128" height="52"/></a></div>
           </div>
-          <div class="rd-navbar-aside-right">
-            <div class="rd-navbar-nav-wrap">
-              <!-- RD Navbar Nav-->
-              <?php echo $this->render('_menu'); ?>
-            </div>
-            <div class="rd-navbar-aside-right-inner">
-              <!-- RD Navbar Search-->
-              <div class="rd-navbar-search"><a class="rd-navbar-search-toggle" data-rd-navbar-toggle=".rd-navbar-search" href="#"><span></span></a>
-                <form class="rd-search" action="search-results.html" data-search-live="rd-search-results-live" method="GET">
-                  <div class="form-wrap">
-                    <label class="form-label form-label" for="rd-navbar-search-form-input">Search...</label>
-                    <input class="rd-navbar-search-form-input form-input" id="rd-navbar-search-form-input" type="text" name="s" autocomplete="off"/>
-                    <div class="rd-search-results-live" id="rd-search-results-live"></div>
+          <div class="rd-navbar-aside-center">
+            <!-- RD Navbar Search-->
+            <div class="rd-navbar-search"><a class="rd-navbar-search-toggle" data-rd-navbar-toggle=".rd-navbar-search" href="#"><span></span></a>
+              <form class="rd-search" action="search-results.html" data-search-live="rd-search-results-live" method="GET">
+                <div class="rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
+                  <div class="rd-mailform-inline-inner">
+                    <div class="form-wrap form-wrap-icon mdi-magnify">
+                      <label class="form-label form-label" for="rd-navbar-search-form-input">Search...</label>
+                      <input class="rd-navbar-search-form-input form-input" id="rd-navbar-search-form-input" type="text" name="s" autocomplete="off">
+                      <div class="rd-search-results-live"></div>
+                    </div>
+                    <button class="rd-search-form-submit rd-search-form-submit-icon mdi mdi-magnify"></button>
+                    <button class="rd-search-form-submit button form-button button-sm button-secondary button-nina">search</button>
                   </div>
-                  <button class="rd-search-form-submit mdi mdi-magnify"></button>
-                </form>
-              </div>
-              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-cart" href="shopping-cart.html"><span>2</span></a></div>
+                </div>
+              </form>
             </div>
+          </div>
+          <div class="rd-navbar-aside-right">
+            <?php if (Yii::$app->user->isGuest) :?>
+            <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-login" href="login-page.html"><span class="d-none d-xl-inline">Login </span></a></div>
+            <?php endif;?>
           </div>
         </div>
       </nav>
     </div>
-
   </header>
 
   <?= $content ?>

@@ -33,14 +33,16 @@ class CartController extends Controller
 
     	// Add to cart
         $id = $request->post('id');
-    	// $id = $request->get('id');
-    	$item = new CartItem(['id' => $id]);
+        $quantity = $request->post('quantity', 1);
+        $item = new CartItem(['id' => $id, 'quantity' => $quantity]);
         $item->setScenario(CartItem::SCENARIO_ADD_ITEM);
     	if (!$item->validate()) {
     		die('invalid');
     	}
 
     	Yii::$app->cart->add($item);    	
+        return $this->redirect('index');
+        die;
     }
 
     public function actionQuantity()

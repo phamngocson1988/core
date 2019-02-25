@@ -10,30 +10,36 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="section-lg text-center">
+  <div class="container">
+    <h3>Đăng nhập</h3>
+    <div class="row row-fix justify-content-sm-center">
+      <div class="col-md-8 col-lg-6 col-xl-4">
+        <!-- RD Mailform-->
+        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix']); ?>
+          <?= $form->field($model, 'username', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input'],
+            'labelOptions' => ['class' => 'form-label'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{label}{hint}{error}'
+          ])->textInput(['autofocus' => true]) ?>
 
-    <p>Please fill out the following fields to login:</p>
+          <?= $form->field($model, 'password', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input'],
+            'labelOptions' => ['class' => 'form-label'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{label}{hint}{error}'
+          ])->passwordInput() ?>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div style="color:#999;margin:1em 0">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                </div>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
+          <div class="form-button">
+            <?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Đăng ký']) ?>
+          </div>
+        <?php ActiveForm::end(); ?>
+      </div>
     </div>
+    <p class="offset-custom-1 text-gray-light">Ghé thăm chúng tôi</p>
+    <div class="group-xs group-middle"><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-facebook" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-twitter" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-google" href="#"></a></div>
+  </div>
 </div>

@@ -1,3 +1,7 @@
 .breadcrumbs-custom-wrap .rd-navbar-default .rd-navbar, .fullwidth-page .rd-navbar-default .rd-navbar {
 	background-color: #6d0eb1
 }
+
+.has-error input {
+	background-color: #fbe0e0;
+}

@@ -76,6 +76,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'home';
         return $this->render('index');
     }
 
@@ -86,6 +87,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->layout = 'signup';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -152,33 +154,45 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        $this->layout = 'signup';
         $model = new SignupForm();
-        $model->setNeedConfirm(true);
+        // $model->setNeedConfirm(true);
         if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+            if ($model->signup()) {
                 // If need to confirm, send mail to customer
-                if ($model->isNeedConfirm()) {
-                    $email = \Yii::$app->mailer->compose()
-                        ->setTo($user->email)
-                        ->setFrom([\Yii::$app->params['email_admin'] => \Yii::$app->name . ' robot'])
-                        ->setSubject('Signup Confirmation')
-                        ->setTextBody("Click this link " . \yii\helpers\Html::a('confirm', Yii::$app->urlManager->createAbsoluteUrl(['site/confirm', 'id' => $user->id, 'key' => $user->auth_key])))
-                        ->send();
-                    if ($email) {
-                        Yii::$app->getSession()->setFlash('success','Check Your email!');
-                    } else {
-                        Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
-                    }
-                } else { // If no need to confirm, log user in
-                    Yii::$app->getUser()->login($user);
-                }
+                // if ($model->isNeedConfirm()) {
+                //     $email = \Yii::$app->mailer->compose()
+                //         ->setTo($user->email)
+                //         ->setFrom([\Yii::$app->params['email_admin'] => \Yii::$app->name . ' robot'])
+                //         ->setSubject('Signup Confirmation')
+                //         ->setTextBody("Click this link " . \yii\helpers\Html::a('confirm', Yii::$app->urlManager->createAbsoluteUrl(['site/confirm', 'id' => $user->id, 'key' => $user->auth_key])))
+                //         ->send();
+                //     if ($email) {
+                //         Yii::$app->getSession()->setFlash('success','Check Your email!');
+                //     } else {
+                //         Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
+                //     }
+                // } else { // If no need to confirm, log user in
+                //     Yii::$app->getUser()->login($user);
+                // }
                 
-                return $this->goHome();
+                return $this->redirect(['site/success']);
+                die;
             }
         }
 
         return $this->render('signup', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionSuccess()
+    {
+        $this->layout = 'notice';
+
+        return $this->render('notice', [
+            'title' => 'Đăng ký thành công',
+            'content' => 'Chúc mừng bạn đã đăng ký tài khoản thành công'
         ]);
     }
 

@@ -8,28 +8,25 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
-use frontend\forms\FetchProductForm;
-use frontend\models\AddCartForm;
-use frontend\models\Product;
-use frontend\components\cart\CartItem;
+use frontend\models\Game;
 
 /**
- * ProductController
+ * GameController
  */
-class ProductController extends Controller
+class GameController extends Controller
 {
-    public $layout = 'product';
     public function actionIndex()
     {
-        $form = new FetchProductForm();
-        $products = $form->fetch();
-        return $this->render('index', ['products' => $products]);
+        $form = new FetchGameForm();
+        $games = $form->fetch();
+        return $this->render('index', ['games' => $games]);
     }
 
     public function actionView($id)
     {
-    	$model = Product::findOne($id);
-    	if (!$model) throw new BadRequestHttpException('Không tìm thấy sản phẩm');print_r($model);
+    	$model = Game::findOne($id);
+    	if (!$model) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
+        $item;
     	return $this->render('view', ['model' => $model]);
     }
 
