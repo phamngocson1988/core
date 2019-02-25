@@ -82,7 +82,7 @@ class m181217_033141_create_order_table extends Migration
             'password' => $this->string(255)->notNull(),
             'character' => $this->string(255)->notNull(),
             'recover_code' => $this->string(255),
-            'server' => $this->string(255)->notNull(),
+            'server' => $this->string(255),
             'note' => $this->string(255),
         ]);
     }

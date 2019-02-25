@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -73,7 +74,7 @@ AppAsset::register($this);
           </div>
           <div class="rd-navbar-aside-right">
             <?php if (Yii::$app->user->isGuest) :?>
-            <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-login" href="login-page.html"><span class="d-none d-xl-inline">Login </span></a></div>
+            <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-login" href="<?=Url::to(['site/login']);?>"><span class="d-none d-xl-inline">Login </span></a></div>
             <?php endif;?>
           </div>
         </div>

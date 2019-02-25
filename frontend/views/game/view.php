@@ -1,10 +1,10 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 ?>
 <!-- Product Page-->
-<?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix', 'action' => ['cart/add']]); ?>
 <section class="section section-lg bg-default">
   <!-- section wave-->
   <div class="container container-bigger product-single">
@@ -27,6 +27,7 @@ use yii\bootstrap\ActiveForm;
         </div>
       </div>
       <div class="col-lg-7 col-xl-6 col-xxl-6 text-center text-lg-left">
+        <?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix ajax-form-submit', 'action' => ['cart/add']]); ?>
         <!-- <div class="heading-5">Joanne Schultz</div> -->
         <h3><?=$model->title;?></h3>
         <div class="divider divider-default"></div>
@@ -44,32 +45,48 @@ use yii\bootstrap\ActiveForm;
             <h6 id="price"></h6>
           </li>
           <li class="text-middle">
-            <select class="form-input select-filter" data-placeholder="All" data-minimum-results-for-search="Infinity" data-constraints="@Selected" name="id" id="products">
-              <?php foreach ($model->products as $product) :?>
-                <option value="<?=$product->id;?>" data-price="<?=$product->price;?>"><?=$product->title;?></option>
-              <?php endforeach;?>
-            </select>
+            <?php 
+            $metaData = [];
+            foreach ($model->products as $product) {
+              $metaData[$product->id] = ['data-price' => $product->price];
+            }?>
+
+            <?= $form->field($item, 'id', [
+              'options' => ['tag' => false],
+              'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
+              'template' => '{input}'
+            ])->dropDownList(ArrayHelper::map($model->products, 'id', 'title'), ['options' => $metaData]) ?>
           </li>
           <li class="text-middle">
-            <div class="form-wrap box-width-1 shop-input">
-              <input class="form-input input-append" id="quantity" type="number" min="1" max="300" value="1" name="quantity">
-            </div>
+            <?= $form->field($item, 'quantity', [
+              'options' => ['class' => 'form-wrap box-width-1 shop-input'],
+              'inputOptions' => ['class' => 'form-input input-append',
+                'id' => 'quantity', 
+                'type' => 'number', 
+                'min' => '1', 
+                'max' => '300', 
+                'value' => '1'
+              ],
+              'template' => '{input}'
+            ])->textInput() ?>
           </li>
           <li class="text-middle">
             <?= Html::submitButton('Add to cart', ['class' => 'button button-sm button-secondary button-nina']) ?>
           </li>
           <!-- <li class="text-middle"><a class="button button-sm button-default-outline button-nina" href="#">add to wishlist</a></li> -->
         </ul>
+        <?php ActiveForm::end(); ?>
       </div>
     </div>
   </div>
 </section>
-<?php ActiveForm::end(); ?>
 
 <?php
 $script = <<< JS
-//var f = AjaxFormSubmit();
-
+var f = AjaxFormSubmit();
+f.success = function(data, form) {
+  console.log(data);
+}
 $("#products, #quantity").on('change', function(){
   updatePrice();
 });

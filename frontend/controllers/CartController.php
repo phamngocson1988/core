@@ -51,9 +51,16 @@ class CartController extends Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        $id = $request->post('id');
-        $quantity = $request->post('quantity');
-        $cart = Yii::$app->cart;
+        // $id = $request->post('id');
+        // $quantity = $request->post('quantity');
+        $item = new CartItem();
+        $item->setScenario(CartItem::SCENARIO_ADD_ITEM);
+        if ($item->load($request->post) && $item->validate()) {
+            $cart = Yii::$app->cart;
+            $cart->addItem($item);
+            return json_encode(['status' => true]);die;
+        }
+
 
     }
 }
