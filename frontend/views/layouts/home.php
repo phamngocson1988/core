@@ -52,7 +52,7 @@ AppAsset::register($this);
             <!-- RD Navbar Toggle-->
             <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
             <!-- RD Navbar Brand-->
-            <div class="rd-navbar-brand"><a class="brand-name" href="index.html"><img class="logo-default" src="/images/logo-default-128x52.png" alt="" width="128" height="52"/><img class="logo-inverse" src="/images/logo-inverse-128x52.png" alt="" width="128" height="52"/></a></div>
+            <div class="rd-navbar-brand"><a class="brand-name" href="/"><img class="logo-default" src="/images/logo-default-128x52.png" alt="" width="128" height="52"/><img class="logo-inverse" src="/images/logo-inverse-128x52.png" alt="" width="128" height="52"/></a></div>
           </div>
           <div class="rd-navbar-aside-center">
             <!-- RD Navbar Search-->
@@ -75,6 +75,8 @@ AppAsset::register($this);
           <div class="rd-navbar-aside-right">
             <?php if (Yii::$app->user->isGuest) :?>
             <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-login" href="<?=Url::to(['site/login']);?>"><span class="d-none d-xl-inline">Login </span></a></div>
+            <?php else :?>
+            <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-logout" href="<?=Url::to(['site/logout']);?>"><span class="d-none d-xl-inline">Logout </span></a></div>
             <?php endif;?>
           </div>
         </div>

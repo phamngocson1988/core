@@ -28,48 +28,31 @@ use frontend\widgets\LoginPopupWidget;
         </div>
       </div>
       <div class="col-lg-7 col-xl-6 col-xxl-6 text-center text-lg-left">
-        <?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix ajax-form-submit', 'action' => ['cart/add']]); ?>
+        <?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix', 'action' => ['cart/index'], 'method' => 'GET']); ?>
         <!-- <div class="heading-5">Joanne Schultz</div> -->
         <h3><?=$model->title;?></h3>
         <div class="divider divider-default"></div>
         <p class="text-spacing-sm"><?=$model->excerpt;?></p>
         <ul class="inline-list">
-          <li class="text-center"><span class="icon novi-icon icon-md mdi mdi-star text-secondary-3"></span>
-            <p class="text-spacing-sm offset-0">Bestseller<br>2016</p>
+          <li class="text-center"><span class="icon novi-icon icon-md mdi mdi-currency-usd text-secondary-3"></span>
+            <p class="text-spacing-sm offset-0">Price<br><h4 id="price">0</h4></p>
           </li>
           <li class="text-center"><span class="icon novi-icon icon-md mdi mdi-trophy text-secondary-3"></span>
-            <p class="text-spacing-sm offset-0">Bestseller<br>2016</p>
+            <p class="text-spacing-sm offset-0"><?=ucfirst($model->unit_name);?><br><h4 id="unit">0</h4></p>
           </li>
         </ul>
         <ul class="inline-list">
           <li class="text-middle">
-            <h6 id="price"></h6>
+            <select class="form-input select-filter" name="pid" id="products">
+              <?php foreach ($model->products as $product) {?>
+              <option value="<?=$product->id;?>" data-price="<?=$product->price;?>" data-unit='<?=$product->unit;?>'><?=$product->title;?></option>
+              <?php }?>
+            </select>
           </li>
           <li class="text-middle">
-            <?php 
-            $metaData = [];
-            foreach ($model->products as $product) {
-              $metaData[$product->id] = ['data-price' => $product->price];
-            }?>
-
-            <?= $form->field($item, 'id', [
-              'options' => ['tag' => false],
-              'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
-              'template' => '{input}'
-            ])->dropDownList(ArrayHelper::map($model->products, 'id', 'title'), ['options' => $metaData]) ?>
-          </li>
-          <li class="text-middle">
-            <?= $form->field($item, 'quantity', [
-              'options' => ['class' => 'form-wrap box-width-1 shop-input'],
-              'inputOptions' => ['class' => 'form-input input-append',
-                'id' => 'quantity', 
-                'type' => 'number', 
-                'min' => '1', 
-                'max' => '300', 
-                'value' => '1'
-              ],
-              'template' => '{input}'
-            ])->textInput() ?>
+            <div class="form-wrap box-width-1 shop-input">
+              <input class="form-input input-append" id="quantity" type="number" min="1" max="300" value="1" name="qt">
+            </div>
           </li>
           <li class="text-middle">
             <?= Html::submitButton('Add to cart', ['class' => 'button button-sm button-secondary button-nina']) ?>
@@ -86,30 +69,6 @@ use frontend\widgets\LoginPopupWidget;
 
 <?php
 $script = <<< JS
-$('form#add-to-cart').on('submit', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        console.log(result);
-        if (!result.status) {
-          if (!result.user_id) { // Not login
-            $('#account-modal').modal('show');
-          } else if (result.errors) {
-            alert(result.errors);
-          }
-        } else {
-          window.location.href = "[:cart_url]";
-        }
-      },
-  });
-  return false;
-});
 
 $("#products, #quantity").on('change', function(){
   updatePrice();
@@ -117,9 +76,12 @@ $("#products, #quantity").on('change', function(){
 
 function updatePrice() {
   var price = $("#products").find("option:selected").data('price');
+  var unit = $("#products").find("option:selected").data('unit');
   var quantity = $("#quantity").val();
-  var total = price * quantity;
-  $("#price").html(total);
+  var totalPrice = price * quantity;
+  var totalUnit = unit * quantity;
+  $("#price").html(totalPrice);
+  $("#unit").html(totalUnit);
 }
 
 $("#products").trigger('change');

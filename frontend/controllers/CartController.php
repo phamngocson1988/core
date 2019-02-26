@@ -26,6 +26,7 @@ class CartController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['index', 'add'],
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -50,9 +51,22 @@ class CartController extends Controller
 
     public function actionIndex()
     {
-        $cart = Yii::$app->cart;
-        $items = $cart->getItems();
-        return $this->render('index', ['items' => $items]);
+        $request = Yii::$app->request;
+        $id = $request->get('pid');
+        $quantity = $request->get('qt', 1);
+        $product = Product::findOne($id);
+        if (!$product) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
+        $game = $product->game;
+
+        $item = new CartItem([
+            'id' => $id,
+            'quantity' => $quantity
+        ]);
+        return $this->render('index', [
+            'game' => $game,
+            'item' => $item,
+            'quantity' => $quantity
+        ]);
     }
 
     public function actionAdd()
@@ -65,7 +79,6 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $cart->clear();
         $item = new CartItem();
-        $item->setScenario(CartItem::SCENARIO_ADD_ITEM);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
@@ -75,22 +88,9 @@ class CartController extends Controller
 
     }
 
-    public function actionQuantity()
-    {
-        $request = Yii::$app->request;
-        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-
-        // $id = $request->post('id');
-        // $quantity = $request->post('quantity');
-        $item = new CartItem();
-        $item->setScenario(CartItem::SCENARIO_ADD_ITEM);
-        if ($item->load($request->post) && $item->validate()) {
-            $cart = Yii::$app->cart;
-            $cart->addItem($item);
-            return json_encode(['status' => true]);die;
-        }
-
-
+    public function actionCheckout()
+    {print_r(Yii::$app->cart);
+        $model = new CartItem();
+        return $this->render('checkout', ['model' => $model]);
     }
 }

@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -46,7 +47,7 @@ AppAsset::register($this);
             <!-- RD Navbar Toggle-->
             <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
             <!-- RD Navbar Brand-->
-            <div class="rd-navbar-brand"><a class="brand-name" href="index.html"><img class="logo-default" src="/images/logo-default-128x52.png" alt="" width="128" height="52"/><img class="logo-inverse" src="/images/logo-inverse-128x52.png" alt="" width="128" height="52"/></a></div>
+            <div class="rd-navbar-brand"><a class="brand-name" href="/"><img class="logo-default" src="/images/logo-default-128x52.png" alt="" width="128" height="52"/><img class="logo-inverse" src="/images/logo-inverse-128x52.png" alt="" width="128" height="52"/></a></div>
           </div>
           <div class="rd-navbar-aside-right">
             <div class="rd-navbar-nav-wrap">
@@ -65,7 +66,11 @@ AppAsset::register($this);
                   <button class="rd-search-form-submit mdi mdi-magnify"></button>
                 </form>
               </div>
-              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-cart" href="shopping-cart.html"><span>2</span></a></div>
+              <?php if (Yii::$app->user->isGuest) :?>
+              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-login" href="<?=Url::to(['site/login']);?>"></a></div>
+              <?php else :?>
+              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-logout" href="<?=Url::to(['site/logout']);?>"></a></div>
+              <?php endif;?>
             </div>
           </div>
         </div>

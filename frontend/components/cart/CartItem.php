@@ -10,13 +10,16 @@ class CartItem extends Model implements CartItemInterface
 {
     public $id;
 
-    public $quantity = 1;
+    public $quantity;
 
+    public $username;
+    public $password;
+    public $character_name;
+    public $recover_code;
+    public $server;
+    public $note;
     /** @var Product **/
     protected $_product;
-
-    const SCENARIO_ADD_ITEM = 'add_item';
-    const SCENARIO_ADD_INFOR = 'add_infor';
 
     public function init()
     {
@@ -24,19 +27,12 @@ class CartItem extends Model implements CartItemInterface
         $this->getProduct();
     }
 
-    public function scenarios()
-    {
-        return [
-            self::SCENARIO_ADD_ITEM => ['id', 'quantity'],
-            self::SCENARIO_ADD_INFOR => ['id', 'quantity'],
-        ];
-    }
-
     public function rules()
     {
         return [
-            ['id', 'required', 'on' => self::SCENARIO_ADD_ITEM],
-            ['id', 'validateProduct', 'on' => self::SCENARIO_ADD_ITEM],
+            [['id', 'quantity', 'username', 'password', 'character_name'], 'required'],
+            ['id', 'validateProduct'],
+            [['server', 'recover_code', 'note'], 'trim']
         ];
     }
 

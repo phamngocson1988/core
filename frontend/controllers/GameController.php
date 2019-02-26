@@ -20,12 +20,8 @@ class GameController extends Controller
     {
     	$model = Game::findOne($id);
     	if (!$model) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
-        $item = new CartItem([
-            'scenario' => CartItem::SCENARIO_ADD_ITEM,
-        ]);
     	return $this->render('view', [
             'model' => $model,
-            'item' => $item
         ]);
     }
 }
