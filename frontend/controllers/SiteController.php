@@ -48,6 +48,7 @@ class SiteController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
+                    'ajax-login' => ['post'],
                 ],
             ],
         ];
@@ -99,6 +100,21 @@ class SiteController extends Controller
             return $this->render('login', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    public function actionAjaxLogin()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id]);
+        } else {
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $model->getErrors()]);
         }
     }
 

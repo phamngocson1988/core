@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use frontend\widgets\LoginPopupWidget;
 ?>
 <!-- Product Page-->
 <section class="section section-lg bg-default">
@@ -81,12 +82,35 @@ use yii\bootstrap\ActiveForm;
   </div>
 </section>
 
+<?=LoginPopupWidget::widget(['popup_id' => 'account-modal']);?>
+
 <?php
 $script = <<< JS
-var f = AjaxFormSubmit();
-f.success = function(data, form) {
-  console.log(data);
-}
+$('form#add-to-cart').on('submit', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      dataType : 'json',
+      data: form.serialize(),
+      success: function (result, textStatus, jqXHR) {
+        console.log(result);
+        if (!result.status) {
+          if (!result.user_id) { // Not login
+            $('#account-modal').modal('show');
+          } else if (result.errors) {
+            alert(result.errors);
+          }
+        } else {
+          window.location.href = "[:cart_url]";
+        }
+      },
+  });
+  return false;
+});
+
 $("#products, #quantity").on('change', function(){
   updatePrice();
 });
@@ -96,10 +120,10 @@ function updatePrice() {
   var quantity = $("#quantity").val();
   var total = price * quantity;
   $("#price").html(total);
-  console.log(price);
 }
 
 $("#products").trigger('change');
 JS;
+$script = str_replace("[:cart_url]", Url::to(['cart/index']), $script);
 $this->registerJs($script);
 ?>

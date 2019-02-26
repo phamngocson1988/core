@@ -18,6 +18,36 @@ use frontend\components\cart\CartItem;
  */
 class CartController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['add'],
+                        'allow' => true,
+                        'roles' => ['@', '?'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'add' => ['post'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $cart = Yii::$app->cart;
@@ -30,19 +60,19 @@ class CartController extends Controller
     	$request = Yii::$app->request;
     	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
     	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
 
-    	// Add to cart
-        $id = $request->post('id');
-        $quantity = $request->post('quantity', 1);
-        $item = new CartItem(['id' => $id, 'quantity' => $quantity]);
+        $cart = Yii::$app->cart;
+        $cart->clear();
+        $item = new CartItem();
         $item->setScenario(CartItem::SCENARIO_ADD_ITEM);
-    	if (!$item->validate()) {
-    		die('invalid');
-    	}
+        if ($item->load($request->post()) && $item->validate()) {
+            $cart->add($item);
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
+        } else {
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $model->getErrors()]);
+        }
 
-    	Yii::$app->cart->add($item);    	
-        return $this->redirect('index');
-        die;
     }
 
     public function actionQuantity()
