@@ -60,7 +60,7 @@ return [
         ],
         'urlManager' => require('router.php'),
         'cart' => [
-            'class' => 'yii2mod\cart\Cart',
+            'class' => 'frontend\components\cart\Cart',
             // you can change default storage class as following:
             'storageClass' => [
                 'class' => 'yii2mod\cart\storage\DatabaseStorage',

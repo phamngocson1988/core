@@ -25,7 +25,7 @@ use yii\bootstrap\ActiveForm;
               <tr>
                 <td>
                   <div class="unit flex-row align-items-center">
-                    <div class="unit-left"><a href="product-page.html"><img src="/images/book-01-54x71.jpg" alt="" width="54" height="71"/></a></div>
+                    <div class="unit-left"><a href="<?=Url::to(['game/view', 'id' => $game->id]);?>"><img src="<?=$game->getImageUrl('71x71');?>" alt="" width="54" height="71"/></a></div>
                     <div class="unit-body"><a class="text-gray-darker" style="white-space: normal;" href="javascript:;"><?=$game->title;?></a></div>
                   </div>
                 </td>

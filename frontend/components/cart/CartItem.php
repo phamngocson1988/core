@@ -73,10 +73,17 @@ class CartItem extends Model implements CartItemInterface
         return $this->getProduct()->game;
     }
 
+    public function getTotalPrice()
+    {
+        return $this->getPrice() * $this->quantity;
+    }
+
     // ============== implement interface ===========//
     public function getPrice() : int
     {
-        return (int)$this->getProduct()->price;
+        $product = $this->getProduct();
+        if (!$product) return 0;
+        return (int)$product->price;
     }
 
     public function getLabel()

@@ -7,7 +7,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
+use yii\helpers\Url;
 use frontend\forms\FetchProductForm;
 use frontend\models\AddCartForm;
 use frontend\models\Product;
@@ -26,7 +26,7 @@ class CartController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'add'],
+                'only' => ['index', 'add', 'checkout', 'purchase'],
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -38,12 +38,18 @@ class CartController extends Controller
                         'allow' => true,
                         'roles' => ['@', '?'],
                     ],
+                    [
+                        'actions' => ['checkout', 'purchase'],
+                        'allow' => true,
+                        'roles' => ['?']
+                    ]
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'add' => ['post'],
+                    'purchase' => ['post'],
                 ],
             ],
         ];
@@ -89,8 +95,58 @@ class CartController extends Controller
     }
 
     public function actionCheckout()
-    {print_r(Yii::$app->cart);
+    {
         $model = new CartItem();
         return $this->render('checkout', ['model' => $model]);
+    }
+
+    public function actionPurchase()
+    {
+        // Create order
+
+        // Send to paypal
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
+                'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
+            )
+        );
+
+        $apiContext->setConfig(
+            array(
+              'log.LogEnabled' => true,
+              'log.FileName' => 'PayPal.log',
+              'log.LogLevel' => 'DEBUG'
+            )
+        );
+
+        $payer = new \PayPal\Api\Payer();
+        $payer->setPaymentMethod('paypal');
+
+        $amount = new \PayPal\Api\Amount();
+        $amount->setTotal('123');
+        $amount->setCurrency('USD');
+
+        $transaction = new \PayPal\Api\Transaction();
+        $transaction->setAmount($amount);
+
+        $redirectUrls = new \PayPal\Api\RedirectUrls();
+        $redirectUrls->setReturnUrl(Url::to(['site/success'], true))
+            ->setCancelUrl(Url::to(['site/error'], true));
+
+        $payment = new \PayPal\Api\Payment();
+        $payment->setIntent('sale')
+            ->setPayer($payer)
+            ->setTransactions(array($transaction))
+            ->setRedirectUrls($redirectUrls);
+
+        // 4. Make a Create Call and print the values
+        try {
+            $payment->create($apiContext);
+            return $this->redirect($payment->getApprovalLink());
+        }
+        catch (\PayPal\Exception\PayPalConnectionException $ex) {
+            echo $ex->getData();
+        }
     }
 }
