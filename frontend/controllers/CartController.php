@@ -11,7 +11,7 @@ use yii\helpers\Url;
 use frontend\forms\FetchProductForm;
 use frontend\models\AddCartForm;
 use frontend\models\Product;
-use frontend\models\Order;
+use common\models\Order;
 use frontend\components\cart\CartItem;
 
 /**
@@ -104,17 +104,17 @@ class CartController extends Controller
     public function actionPurchase()
     {
         // Create order
-        $order = new Order();
-        $order->setScenario(Order::SCENARIO_CREATE);
         $user = Yii::$app->user->getIdentity();
         $totalPrice = Yii::$app->cart->getTotalPrice();
-        $order->load([
-            'total_price' => $totalPrice, 
-            'customer_id' => $user->id, 
-            'customer_name' => $user->name, 
-            'customer_email' => $user->email, 
-            'customer_phone' => $user->phone, 
-        ], '');
+
+        $order = new Order();
+        $order->total_price = $totalPrice;
+        $order->customer_id = $user->id;
+        $order->customer_name = $user->name;
+        $order->customer_email = $user->email;
+        $order->customer_phone = $user->phone;
+        $order->generateAuthKey();
+
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
         // Send to paypal
         $apiContext = new \PayPal\Rest\ApiContext(
@@ -143,8 +143,8 @@ class CartController extends Controller
         $transaction->setAmount($amount);
 
         $redirectUrls = new \PayPal\Api\RedirectUrls();
-        $redirectUrls->setReturnUrl(Url::to(['site/success'], true))
-            ->setCancelUrl(Url::to(['site/error'], true));
+        $redirectUrls->setReturnUrl(Url::to(['cart/success'], true))
+            ->setCancelUrl(Url::to(['cart/error'], true));
 
         $payment = new \PayPal\Api\Payment();
         $payment->setIntent('sale')
@@ -155,10 +155,35 @@ class CartController extends Controller
         // 4. Make a Create Call and print the values
         try {
             $payment->create($apiContext);
-            return $this->redirect($payment->getApprovalLink());
+            if ($payment->state == 'created') {// order was created
+                $order->payment_id = $payment->id;
+                $order->paygate = 'paypal';
+                $order->save();
+                return $this->redirect($payment->getApprovalLink());
+            }  
         }
         catch (\PayPal\Exception\PayPalConnectionException $ex) {
             echo $ex->getData();
         }
+    }
+
+    public function actionSuccess()
+    {
+        $request = Yii::$app->request;
+        print_r($request->post());
+        print_r($request->get());
+        $paymentId = $request->get('paymentId');
+        $order = Order::findOne(['payment_id' => $paymentId]);
+        $paymentData = json_encode($request->get());
+        $order->payment_data = $paymentData;
+        $order->payment_at = date('Y-m-d H:i:s');
+        $order->status = Order::STATUS_PROCESSING;
+        $order->save();
+        die;
+    }
+
+    public function actionError()
+    {
+        die;
     }
 }

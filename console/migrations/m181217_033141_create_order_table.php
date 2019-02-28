@@ -20,9 +20,10 @@ class m181217_033141_create_order_table extends Migration
 
         $this->createTable('{{%order}}', [
             'id' => $this->primaryKey(),
-            'auth_code' => $this->string(10), // used for non-login user
+            'auth_key' => $this->string(10), // used for non-login user
             'payment_id' => $this->string(50),
             'paygate' => $this->string(50),
+            'payment_data' => $this->text(),
             'total_price' => $this->integer(11)->defaultValue(0),
             'customer_id' => $this->integer(11)->notNull(),
             'customer_name' => $this->string(255)->notNull(),
