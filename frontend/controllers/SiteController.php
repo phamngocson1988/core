@@ -280,6 +280,9 @@ class SiteController extends Controller
 
     public function actionTest()
     {
+        Yii::$app->paypal->payDemo();
+        die;
+        // $order = new Order(['customer_id' => 1, 'customer_name'])
         // 2. Provide your Secret Key. Replace the given one with your app clientId, and Secret
         // https://developer.paypal.com/webapps/developer/applications/myapps
         $apiContext = new \PayPal\Rest\ApiContext(

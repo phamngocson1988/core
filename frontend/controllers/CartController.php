@@ -11,6 +11,7 @@ use yii\helpers\Url;
 use frontend\forms\FetchProductForm;
 use frontend\models\AddCartForm;
 use frontend\models\Product;
+use frontend\models\Order;
 use frontend\components\cart\CartItem;
 
 /**
@@ -41,7 +42,7 @@ class CartController extends Controller
                     [
                         'actions' => ['checkout', 'purchase'],
                         'allow' => true,
-                        'roles' => ['?']
+                        'roles' => ['@']
                     ]
                 ],
             ],
@@ -103,7 +104,18 @@ class CartController extends Controller
     public function actionPurchase()
     {
         // Create order
-
+        $order = new Order();
+        $order->setScenario(Order::SCENARIO_CREATE);
+        $user = Yii::$app->user->getIdentity();
+        $totalPrice = Yii::$app->cart->getTotalPrice();
+        $order->load([
+            'total_price' => $totalPrice, 
+            'customer_id' => $user->id, 
+            'customer_name' => $user->name, 
+            'customer_email' => $user->email, 
+            'customer_phone' => $user->phone, 
+        ], '');
+        if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
         // Send to paypal
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
@@ -124,7 +136,7 @@ class CartController extends Controller
         $payer->setPaymentMethod('paypal');
 
         $amount = new \PayPal\Api\Amount();
-        $amount->setTotal('123');
+        $amount->setTotal($totalPrice);
         $amount->setCurrency('USD');
 
         $transaction = new \PayPal\Api\Transaction();
