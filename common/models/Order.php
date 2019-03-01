@@ -94,4 +94,25 @@ class Order extends ActiveRecord
     {
         $this->auth_key = Yii::$app->security->generateRandomString(10);
     }
+
+    public function isTempOrder()
+    {
+        return $this->status === self::STATUS_TEMP;
+    }
+
+    /**
+     * check if the order is in temporary status or not. The system only allow to delete temporary order
+     * If not, just move it to 'deleted' status.
+     * Before deleting the order, delete all its order items
+     */
+    public function beforeDelete()
+    {
+        if (!$this->isTempOrder()) return false;
+        if (parent::beforeDelete()) {
+            $items = $this->items;
+            foreach ($this->items as $item) {
+                $item->delete();
+            }
+        }
+    }
 }

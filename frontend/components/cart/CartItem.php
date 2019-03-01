@@ -18,13 +18,17 @@ class CartItem extends Model implements CartItemInterface
     public $recover_code;
     public $server;
     public $note;
+
     /** @var Product **/
     protected $_product;
+
+    protected $_game;
 
     public function init()
     {
         parent::init();
         $this->getProduct();
+        $this->getGame();
     }
 
     public function rules()
@@ -53,6 +57,15 @@ class CartItem extends Model implements CartItemInterface
         return $this->_product;
     }
 
+    protected function getGame()
+    {
+        if (!$this->_product) return;
+        if (!$this->_game) {
+            $this->_game = $this->_product->game;    
+        }
+        return $this->_game;
+    }
+
     public function setQuantity($num)
     {
         $this->quantity = max(0, (int)$num);
@@ -68,14 +81,25 @@ class CartItem extends Model implements CartItemInterface
         $this->setQuantity($this->quantity--);
     }
 
-    public function getGame()
-    {
-        return $this->getProduct()->game;
-    }
-
     public function getTotalPrice()
     {
         return $this->getPrice() * $this->quantity;
+    }
+
+    public function getUnitName()
+    {
+        $game = $this->getGame();
+        return $game->unit_name;
+    }
+
+    public function getUnitGame()
+    {
+        return $this->_product->unit;
+    }
+
+    public function getTotalUnitGame()
+    {
+        return $this->_product->unit * $this->quantity;
     }
 
     // ============== implement interface ===========//

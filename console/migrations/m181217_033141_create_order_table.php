@@ -22,9 +22,10 @@ class m181217_033141_create_order_table extends Migration
             'id' => $this->primaryKey(),
             'auth_key' => $this->string(10), // used for non-login user
             'payment_id' => $this->string(50),
-            'paygate' => $this->string(50),
+            'payment_method' => $this->string(50),
             'payment_data' => $this->text(),
             'total_price' => $this->integer(11)->defaultValue(0),
+            
             'customer_id' => $this->integer(11)->notNull(),
             'customer_name' => $this->string(255)->notNull(),
             'customer_email' => $this->string(255)->notNull(),
@@ -53,7 +54,9 @@ class m181217_033141_create_order_table extends Migration
             'price' => $this->integer(11)->notNull(),
             'quantity' => $this->integer(11)->notNull(),
             'total' => $this->integer(11)->notNull(),
+            'unit_name' => $this->string(50)->notNull(),
             'unit' => $this->integer(11),
+            'total_unit' => $this->integer(11)->defaultValue(0),
             'username' => $this->string(255),
             'password' => $this->string(255),
             'character_name' => $this->string(255),

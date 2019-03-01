@@ -12,7 +12,17 @@ use frontend\forms\FetchProductForm;
 use frontend\models\AddCartForm;
 use frontend\models\Product;
 use common\models\Order;
+use common\models\OrderItems;
 use frontend\components\cart\CartItem;
+
+
+
+use PayPal\Api\Amount;
+use PayPal\Api\Details;
+use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\Transaction;
+use PayPal\Api\ItemList;
 
 /**
  * CartController
@@ -105,7 +115,8 @@ class CartController extends Controller
     {
         // Create order
         $user = Yii::$app->user->getIdentity();
-        $totalPrice = Yii::$app->cart->getTotalPrice();
+        $cart = Yii::$app->cart;
+        $totalPrice = $cart->getTotalPrice();
 
         $order = new Order();
         $order->total_price = $totalPrice;
@@ -116,19 +127,42 @@ class CartController extends Controller
         $order->generateAuthKey();
 
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        // Create order item
+        $itemList = [];
+        foreach ($cart->getItems() as $cartItem) {
+            $item = new OrderItems();
+            $item->item_title = $cartItem->getLabel();
+            $item->type = OrderItems::TYPE_PRODUCT;
+            $item->order_id = $order->id;
+            $item->product_id = $cartItem->getUniqueId();
+            $item->price = $cartItem->getPrice();
+            $item->quantity = $cartItem->quantity;
+            $item->total = $cartItem->getTotalPrice();
+            $item->unit_name = $cartItem->getUnitName();
+            $item->unit = $cartItem->getUnitGame();
+            $item->total_unit = $cartItem->getTotalUnitGame();
+            $item->username = $cartItem->username;
+            $item->password = $cartItem->password;
+            $item->character_name = $cartItem->character_name;
+            $item->recover_code = $cartItem->recover_code;
+            $item->server = $cartItem->server;
+            $item->note = $cartItem->note;
+
+            // Config item list for paypal
+            $itemList[] = [
+                'name' => $cartItem->getLabel(),
+                'quantity' => $cartItem->quantity,
+                'price' => $cartItem->getPrice(),
+                'currency' => 'USD'
+            ];
+        }
+
         // Send to paypal
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
                 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
-            )
-        );
-
-        $apiContext->setConfig(
-            array(
-              'log.LogEnabled' => true,
-              'log.FileName' => 'PayPal.log',
-              'log.LogLevel' => 'DEBUG'
             )
         );
 
@@ -138,9 +172,15 @@ class CartController extends Controller
         $amount = new \PayPal\Api\Amount();
         $amount->setTotal($totalPrice);
         $amount->setCurrency('USD');
+        $ppItemList = new ItemList($itemList);
 
         $transaction = new \PayPal\Api\Transaction();
         $transaction->setAmount($amount);
+        $transaction->setDescription("Pay for order " . $order->id);
+        $transaction->setInvoiceNumber($order->id);
+        $transaction->setCustom($order->auth_key);
+
+        $transaction->setItemList($ppItemList);
 
         $redirectUrls = new \PayPal\Api\RedirectUrls();
         $redirectUrls->setReturnUrl(Url::to(['cart/success'], true))
@@ -155,14 +195,15 @@ class CartController extends Controller
         // 4. Make a Create Call and print the values
         try {
             $payment->create($apiContext);
-            if ($payment->state == 'created') {// order was created
+            if ('created' == strtolower($payment->state)) {// order was created
                 $order->payment_id = $payment->id;
-                $order->paygate = 'paypal';
+                $order->payment_method = $payer->getPaymentMethod();
                 $order->save();
+                $cart->clear();
                 return $this->redirect($payment->getApprovalLink());
             }  
-        }
-        catch (\PayPal\Exception\PayPalConnectionException $ex) {
+        } catch (\PayPal\Exception\PayPalConnectionException $ex) {
+            $order->delete();
             echo $ex->getData();
         }
     }
@@ -170,11 +211,55 @@ class CartController extends Controller
     public function actionSuccess()
     {
         $request = Yii::$app->request;
-        print_r($request->post());
-        print_r($request->get());
         $paymentId = $request->get('paymentId');
         $order = Order::findOne(['payment_id' => $paymentId]);
-        $paymentData = json_encode($request->get());
+
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
+                'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
+            )
+        );
+        $payment = Payment::get($paymentId, $apiContext);
+        $execution = new PaymentExecution();
+        $execution->setPayerId($_GET['PayerID']);
+
+        $transaction = new Transaction();
+        $amount = new Amount();
+        $details = new Details();
+
+        $details->setShipping(0)->setTax(0)->setSubtotal(0);
+
+        $amount->setCurrency('USD');
+        $amount->setTotal($order->total_price);
+        $amount->setDetails($details);
+        $transaction->setAmount($amount);
+
+        // $execution->addTransaction($transaction);
+
+        try {
+            $result = $payment->execute($execution, $apiContext);
+
+            try {
+                $payment = Payment::get($paymentId, $apiContext);
+            } catch (Exception $ex) {
+                $order->delete();
+                exit(1);
+            }
+        } catch (Exception $ex) {
+            exit(1);
+        }
+
+
+
+
+
+
+
+echo '</pre>';
+
+        $order = Order::findOne(['payment_id' => $paymentId]);
+        $paymentData = json_encode($payment);
         $order->payment_data = $paymentData;
         $order->payment_at = date('Y-m-d H:i:s');
         $order->status = Order::STATUS_PROCESSING;
