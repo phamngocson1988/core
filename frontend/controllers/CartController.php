@@ -19,11 +19,13 @@ use frontend\components\cart\CartItem;
 
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
-use PayPal\Api\Payment;
-use PayPal\Api\PaymentExecution;
-use PayPal\Api\Transaction;
+use PayPal\Api\Item;
 use PayPal\Api\ItemList;
-
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Api\PaymentExecution;
 /**
  * CartController
  */
@@ -150,12 +152,13 @@ class CartController extends Controller
             $item->note = $cartItem->note;
 
             // Config item list for paypal
-            $itemList[] = [
-                'name' => $cartItem->getLabel(),
-                'quantity' => $cartItem->quantity,
-                'price' => $cartItem->getPrice(),
-                'currency' => 'USD'
-            ];
+            $ppItem = new Item();
+            $ppItem->setName($cartItem->getLabel())
+            ->setCurrency('USD')
+            ->setQuantity($cartItem->quantity)
+            ->setSku($cartItem->getUniqueId()) // Similar to `item_number` in Classic API
+            ->setPrice($cartItem->getPrice());
+            $itemList[] = $ppItem;
         }
 
         // Send to paypal
@@ -166,33 +169,38 @@ class CartController extends Controller
             )
         );
 
-        $payer = new \PayPal\Api\Payer();
-        $payer->setPaymentMethod('paypal');
+        $ppitemList = new ItemList();
+        $ppitemList->setItems($itemList);
 
-        $amount = new \PayPal\Api\Amount();
-        $amount->setTotal($totalPrice);
-        $amount->setCurrency('USD');
-        $ppItemList = new ItemList($itemList);
+        $details = new Details();
+        $details->setShipping(0)
+            ->setTax(0)
+            ->setSubtotal($cart->getTotalPrice());
+        // ### Amount
+        $amount = new Amount();
+        $amount->setCurrency("USD")
+            ->setTotal($cart->getTotalPrice())
+            ->setDetails($details);
 
-        $transaction = new \PayPal\Api\Transaction();
-        $transaction->setAmount($amount);
-        $transaction->setDescription("Pay for order " . $order->id);
-        $transaction->setInvoiceNumber($order->id);
-        $transaction->setCustom($order->auth_key);
+        $transaction = new Transaction();
+        $transaction->setAmount($amount)
+            ->setItemList($ppitemList)
+            ->setDescription("Pay for order #" . $order->id)
+            ->setInvoiceNumber(uniqid());
 
-        $transaction->setItemList($ppItemList);
-
-        $redirectUrls = new \PayPal\Api\RedirectUrls();
+        $redirectUrls = new RedirectUrls();
         $redirectUrls->setReturnUrl(Url::to(['cart/success'], true))
             ->setCancelUrl(Url::to(['cart/error'], true));
 
-        $payment = new \PayPal\Api\Payment();
-        $payment->setIntent('sale')
-            ->setPayer($payer)
-            ->setTransactions(array($transaction))
-            ->setRedirectUrls($redirectUrls);
+        $payer = new Payer();
+        $payer->setPaymentMethod("paypal");
 
-        // 4. Make a Create Call and print the values
+        $payment = new Payment();
+        $payment->setIntent("sale")
+            ->setPayer($payer)
+            ->setRedirectUrls($redirectUrls)
+            ->setTransactions(array($transaction));
+
         try {
             $payment->create($apiContext);
             if ('created' == strtolower($payment->state)) {// order was created
@@ -212,7 +220,11 @@ class CartController extends Controller
     {
         $request = Yii::$app->request;
         $paymentId = $request->get('paymentId');
+        $payerId = $request->get('PayerID');
+        $token = $request->get('token');
+        if (!$paymentId || !$payerId) die('Yêu cầu không hợp lệ');
         $order = Order::findOne(['payment_id' => $paymentId]);
+        if (!$order) die('Đơn hàng không hợp lệ');
 
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
@@ -220,55 +232,33 @@ class CartController extends Controller
                 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
             )
         );
-        $payment = Payment::get($paymentId, $apiContext);
+        $payment = Payment::get($paymentId, $apiContext);dd(\yii\helpers\Json::encode($payment));
+        if ('created' != strtolower($payment->state)) die('Trạng thái đơn hàng không hợp lệ.');
+
         $execution = new PaymentExecution();
-        $execution->setPayerId($_GET['PayerID']);
-
-        $transaction = new Transaction();
-        $amount = new Amount();
-        $details = new Details();
-
-        $details->setShipping(0)->setTax(0)->setSubtotal(0);
-
-        $amount->setCurrency('USD');
-        $amount->setTotal($order->total_price);
-        $amount->setDetails($details);
-        $transaction->setAmount($amount);
-
-        // $execution->addTransaction($transaction);
+        $execution->setPayerId($payerId);
+        $transactions = $payment->getTransactions();
+        $transaction = reset($transactions);
+        $execution->addTransaction($transaction);
 
         try {
-            $result = $payment->execute($execution, $apiContext);
-
-            try {
-                $payment = Payment::get($paymentId, $apiContext);
-            } catch (Exception $ex) {
-                $order->delete();
-                exit(1);
+            $payment->execute($execution, $apiContext);
+            if ('approved' == strtolower($payment->state)) {// order was created
+                $paymentData = json_encode($payment);
+                $order->payment_data = $paymentData;
+                $order->payment_at = date('Y-m-d H:i:s');
+                $order->status = Order::STATUS_PROCESSING;
+                $order->save();
             }
         } catch (Exception $ex) {
+            $order->delete();
             exit(1);
-        }
-
-
-
-
-
-
-
-echo '</pre>';
-
-        $order = Order::findOne(['payment_id' => $paymentId]);
-        $paymentData = json_encode($payment);
-        $order->payment_data = $paymentData;
-        $order->payment_at = date('Y-m-d H:i:s');
-        $order->status = Order::STATUS_PROCESSING;
-        $order->save();
-        die;
+        }die($paymentData);
+        die ('Success');
     }
 
     public function actionError()
     {
-        die;
+        die ('Error');
     }
 }

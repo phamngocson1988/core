@@ -112,7 +112,7 @@ class CartItem extends Model implements CartItemInterface
 
     public function getLabel()
     {
-        return sprintf('%s', $this->getProduct()->title);
+        return sprintf('%s - %s', $this->getGame()->title, $this->getProduct()->title);
     }
 
     public function getUniqueId()
