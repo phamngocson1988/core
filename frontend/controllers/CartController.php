@@ -222,9 +222,9 @@ class CartController extends Controller
         $paymentId = $request->get('paymentId');
         $payerId = $request->get('PayerID');
         $token = $request->get('token');
-        if (!$paymentId || !$payerId) die('Yêu cầu không hợp lệ');
+        if (!$paymentId || !$payerId || !$token) throw new BadRequestHttpException("The request is invalid", 1);
         $order = Order::findOne(['payment_id' => $paymentId]);
-        if (!$order) die('Đơn hàng không hợp lệ');
+        if (!$order) throw new BadRequestHttpException("The order # $paymentId is invalid", 1);
 
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
@@ -232,8 +232,8 @@ class CartController extends Controller
                 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
             )
         );
-        $payment = Payment::get($paymentId, $apiContext);dd(\yii\helpers\Json::encode($payment));
-        if ('created' != strtolower($payment->state)) die('Trạng thái đơn hàng không hợp lệ.');
+        $payment = Payment::get($paymentId, $apiContext);
+        if ('created' != strtolower($payment->state)) throw new BadRequestHttpException("Order #$paymentId : status is invalid", 1);
 
         $execution = new PaymentExecution();
         $execution->setPayerId($payerId);
@@ -253,12 +253,19 @@ class CartController extends Controller
         } catch (Exception $ex) {
             $order->delete();
             exit(1);
-        }die($paymentData);
-        die ('Success');
+        }
+
+        $this->layout = 'notice';
+        return $this->render('/site/notice', [
+            'title' => 'Đặt hàng thành công',
+            'content' => 'Xin chúc mừng bạn đã đặt hàng thành công'
+        ]);
     }
 
     public function actionError()
     {
-        die ('Error');
+        $request = Yii::$app->request;
+        $token = $request->get('token');
+        throw new BadRequestHttpException("You have just cancelled the order", 1);
     }
 }

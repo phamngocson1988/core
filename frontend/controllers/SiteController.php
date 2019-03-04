@@ -71,10 +71,7 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                'layout' => 'notice'
             ],
         ];
     }
@@ -211,16 +208,6 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionSuccess()
-    {
-        $this->layout = 'notice';
-
-        return $this->render('notice', [
-            'title' => 'Đăng ký thành công',
-            'content' => 'Chúc mừng bạn đã đăng ký tài khoản thành công'
-        ]);
-    }
-
     public function actionConfirm($id, $key)
     {
         $confirmForm = new ActiveCustomerForm([
@@ -287,89 +274,13 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionTest()
+    public function actionSuccess()
     {
-        $apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
-                'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
-            )
-        );
-        
-        $payer = new Payer();
-        $payer->setPaymentMethod("paypal");
+        $this->layout = 'notice';
 
-        $item1 = new Item();
-        $item1->setName('Ground Coffee 40 oz')
-            ->setCurrency('USD')
-            ->setQuantity(1)
-            ->setSku("123123") // Similar to `item_number` in Classic API
-            ->setPrice(7.5);
-        $item2 = new Item();
-        $item2->setName('Granola bars')
-            ->setCurrency('USD')
-            ->setQuantity(5)
-            ->setSku("321321") // Similar to `item_number` in Classic API
-            ->setPrice(2);
-        $itemList = new ItemList();
-        $itemList->setItems(array($item1, $item2));
-
-        $details = new Details();
-        $details->setShipping(1.2)
-            ->setTax(1.3)
-            ->setSubtotal(17.50);
-        // ### Amount
-        $amount = new Amount();
-        $amount->setCurrency("USD")
-            ->setTotal(20)
-            ->setDetails($details);
-        // ### Transaction
-        // A transaction defines the contract of a
-        // payment - what is the payment for and who
-        // is fulfilling it. 
-        $transaction = new Transaction();
-        $transaction->setAmount($amount)
-            ->setItemList($itemList)
-            ->setDescription("Payment description")
-            ->setInvoiceNumber(uniqid());
-        // ### Redirect urls
-        // Set the urls that the buyer must be redirected to after 
-        // payment approval/ cancellation.
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(Url::to(['site/success'], true))
-            ->setCancelUrl(Url::to(['site/error'], true));
-        // ### Payment
-        // A Payment Resource; create one using
-        // the above types and intent set to 'sale'
-        $payment = new Payment();
-        $payment->setIntent("sale")
-            ->setPayer($payer)
-            ->setRedirectUrls($redirectUrls)
-            ->setTransactions(array($transaction));
-        // For Sample Purposes Only.
-        $request = clone $payment;
-        // ### Create Payment
-        // Create a payment by calling the 'create' method
-        // passing it a valid apiContext.
-        // (See bootstrap.php for more on `ApiContext`)
-        // The return object contains the state and the
-        // url to which the buyer must be redirected to
-        // for payment approval
-        try {
-            $payment->create($apiContext);
-        } catch (Exception $ex) {
-            // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
-            dd(["Created Payment Using PayPal. Please visit the URL to Approve.", "Payment", null, $request, $ex]);
-            exit(1);
-        }
-        // ### Get redirect url
-        // The API response provides the url that you must redirect
-        // the buyer to. Retrieve the url from the $payment->getApprovalLink()
-        // method
-        // $approvalUrl = $payment->getApprovalLink();
-        return $this->redirect($payment->getApprovalLink());
-        // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
-        dd(["Created Payment Using PayPal. Please visit the URL to Approve.", "Payment", "<a href='$approvalUrl' >$approvalUrl</a>", $request, $payment]);
-        return $payment;
+        return $this->render('notice', [
+            'title' => 'Đăng ký thành công',
+            'content' => 'Chúc mừng bạn đã đăng ký tài khoản thành công'
+        ]);
     }
 }
