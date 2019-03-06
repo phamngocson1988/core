@@ -21,6 +21,8 @@ return [
         'cap-lai-mat-khau' => 'site/reset-password',
         'dang-ky-nhan-tin' => 'subscriber/create',
 
+        // game
+        'game/<id:\d+>_<slug:\w+>' => 'game/view',
         // notifications
         'notifications/default/index' => 'notifications/default/index',
         'notifications/default/list' => 'notifications/default/list',

@@ -150,7 +150,8 @@ class CartController extends Controller
             $item->recover_code = $cartItem->recover_code;
             $item->server = $cartItem->server;
             $item->note = $cartItem->note;
-
+            $item->save();
+            
             // Config item list for paypal
             $ppItem = new Item();
             $ppItem->setName($cartItem->getLabel())
