@@ -21,8 +21,15 @@ return [
         'cap-lai-mat-khau' => 'site/reset-password',
         'dang-ky-nhan-tin' => 'subscriber/create',
 
+        'game/<id:\d+>-<slug:[\w\-]+>' => 'game/view',
         // game
-        'game/<id:\d+>_<slug:\w+>' => 'game/view',
+
+        // cart
+        'shopping-cart' => 'cart/index',
+        'checkout' => 'cart/checkout',
+        'purchase' => 'cart/purchase',
+        'purchase-success' => 'cart/success',
+        'purchase-cancel' => 'cart/error',
         // notifications
         'notifications/default/index' => 'notifications/default/index',
         'notifications/default/list' => 'notifications/default/list',

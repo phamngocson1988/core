@@ -90,6 +90,20 @@ class Game extends ActiveRecord
         ->where('status = :status', [':status' => Product::STATUS_VISIBLE]);
     }
 
+    public function getPrice()
+    {
+        $products = $this->products;
+        $product = reset($products);
+        return $product->price;
+    }
+
+    public function getUnit()
+    {
+        $products = $this->products;
+        $product = reset($products);
+        return $product->unit;   
+    }
+
     public function getCreator()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);

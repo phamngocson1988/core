@@ -13,12 +13,11 @@ use yii\bootstrap\ActiveForm;
           <table class="table-custom table-shop table">
             <thead>
               <tr>
-                <th>Game</th>
-                <th>Package</th>
-                <th>Price</th>
-                <th><?=ucfirst($game->unit_name);?></th>
-                <th>Quantity</th>
-                <th></th>
+                <th style="width: 30%;">Game</th>
+                <th style="width: 30%;">Package</th>
+                <th style="width: 10%;">Price</th>
+                <th style="width: 10%;"><?=ucfirst($game->unit_name);?></th>
+                <th style="width: 20%;">Quantity</th>
               </tr>
             </thead>
             <tbody>
@@ -56,7 +55,6 @@ use yii\bootstrap\ActiveForm;
                     'template' => '{input}'
                   ])->textInput() ?>
                 </td>
-                <td> <a class="icon mdi mdi-close icon-md-middle icon-gray-1" href="#"></a></td>
               </tr>
             </tbody>
           </table>
@@ -176,8 +174,8 @@ function updatePrice() {
   var quantity = $("#quantity").val();
   var totalPrice = price * quantity;
   var totalUnit = unit * quantity;
-  $("#price").html(totalPrice);
-  $("#unit").html(totalUnit);
+  $("#price").html('$' + formatMoney(totalPrice, 0));
+  $("#unit").html(formatMoney(totalUnit, 0));
 }
 
 $("#products").trigger('change');

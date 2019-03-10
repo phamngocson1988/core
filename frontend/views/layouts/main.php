@@ -69,6 +69,7 @@ AppAsset::register($this);
               <?php if (Yii::$app->user->isGuest) :?>
               <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-login" href="<?=Url::to(['site/login']);?>"></a></div>
               <?php else :?>
+              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-account-outline" href="<?=Url::to(['user/index']);?>"></a></div>
               <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-logout" href="<?=Url::to(['site/logout']);?>"></a></div>
               <?php endif;?>
             </div>

@@ -2,35 +2,7 @@
 use yii\helpers\Url;
 ?>
 <ul class="rd-navbar-nav">
-  <li class="active"><a href="index.html">Home</a>
-    <!-- RD Navbar Dropdown-->
-    <ul class="rd-navbar-dropdown">
-      <li><a href="landing-default.html">Landing Default</a>
-      </li>
-      <li><a href="landing-auction.html">Landing Auction</a>
-      </li>
-      <li><a href="landing-environmental.html">Landing Environmental</a>
-      </li>
-      <li><a href="landing-it-company.html">Landing IT Company</a>
-      </li>
-      <li><a href="landing-maritime.html">Landing Maritime</a>
-      </li>
-      <li><a href="landing-museum.html">Landing Museum</a>
-      </li>
-      <li><a href="landing-private-airlines.html">Landing Private Airlines</a>
-      </li>
-      <li><a href="landing-taxi.html">Landing Taxi</a>
-      </li>
-      <li><a href="landing-trucking.html">Landing Trucking</a>
-      </li>
-      <li><a href="landing-theatre.html">Landing Theatre</a>
-      </li>
-      <li><a href="landing-movie.html">Landing Movie</a>
-      </li>
-      <li><a href="landing-seo.html">Landing SEO</a>
-      </li>
-    </ul>
-  </li>
+  <li class="active"><a href="/">Home</a></li>
   <li><a href="#">Elements</a>
     <!-- RD Navbar Megamenu-->
     <ul class="rd-navbar-megamenu">

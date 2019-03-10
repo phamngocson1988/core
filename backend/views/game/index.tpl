@@ -51,7 +51,7 @@
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 10%;"> {Yii::t('app', 'image')} </th>
               <th style="width: 25%;"> {Yii::t('app', 'title')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'creator')} </th>
+              <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
               <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -64,7 +64,16 @@
                 <td style="vertical-align: middle;">{$pages->offset + 1 + $key}</td>
                 <td style="vertical-align: middle;"><img src="{$model->getImageUrl('50x50')}" width="50px;" /></td>
                 <td style="vertical-align: middle;">{$model->title}</td>
-                <td style="vertical-align: middle;">{$model->getCreatorName()}</td>
+                <td style="vertical-align: middle;">
+                  {if $model->status == 'Y'}
+                  <span class="label label-success">{Yii::t('app', 'visible')}</span>
+                  {elseif $model->status == 'N'}
+                  <span class="label label-warning">{Yii::t('app', 'disable')}</span>
+                  {elseif $model->status == 'D'}
+                  <span class="label label-default">{Yii::t('app', 'deleted')}</span>
+                  {/if}
+                  
+                </td>
                 <td style="vertical-align: middle;">
                     <a href='{url route="game/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-pjax="0"><i class="fa fa-pencil"></i></a>
                     <a href='{url route="game/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}" data-pjax="0"><i class="fa fa-trash-o"></i></a>

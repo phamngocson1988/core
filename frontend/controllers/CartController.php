@@ -102,7 +102,7 @@ class CartController extends Controller
             $cart->add($item);
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
         } else {
-            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $model->getErrors()]);
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
         }
 
     }
@@ -250,6 +250,18 @@ class CartController extends Controller
                 $order->payment_at = date('Y-m-d H:i:s');
                 $order->status = Order::STATUS_PROCESSING;
                 $order->save();
+                // Send mail to customer
+                $settings = Yii::$app->settings;
+                $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+                if ($adminEmail) {
+                    $user = Yii::$app->user->getIdentity();
+                    $email = Yii::$app->mailer->compose()
+                    ->setTo($user->email)
+                    ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+                    ->setSubject('Order Confirmation')
+                    ->setTextBody("Thanks for your order")
+                    ->send();
+                }
             }
         } catch (Exception $ex) {
             $order->delete();

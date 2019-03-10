@@ -39,6 +39,8 @@ class FetchGameForm extends Model
             $command->andWhere(['like', 'title', $this->q]);
         }
 
+        $command->orderBy(['id' => SORT_DESC]);
+
         $this->_command = $command;
     }
 

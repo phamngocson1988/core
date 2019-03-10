@@ -12,6 +12,7 @@ use backend\forms\EditProductForm;
 use backend\forms\DeleteGameForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
+use backend\models\Game;
 
 class GameController extends Controller
 {
@@ -66,7 +67,7 @@ class GameController extends Controller
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             } else {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = Url::to(['game/edit', 'id' => $game->id]);
+                $ref = Url::to(['game/index']);
                 return $this->redirect($ref);    
             }
         }
@@ -107,8 +108,8 @@ class GameController extends Controller
     {
         $request = Yii::$app->request;
         if ($request->getIsAjax()) {
-            $form = new DeleteGameForm(['id' => $id]);
-            return $this->renderJson($form->delete(), [], $form->getErrorSummary(true));
+            $game = Game::findOne($id);
+            return $this->renderJson($game->delete());
         }
         return $this->redirectNotFound();
     }

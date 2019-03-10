@@ -15,9 +15,7 @@ use frontend\widgets\LoginPopupWidget;
           <div class="unit flex-column flex-md-row align-items-md-center unit-spacing-md-midle unit--inverse unit-sm">
             <div class="unit-body">
               <ul class="product-thumbnails">
-                <!-- <li class="active" data-large-image="<?=$model->getImageUrl('420x550');?>"><img src="<?=$model->getImageUrl('54x71');?>" alt="" width="54" height="71"></li> -->
-                <li class="active" data-large-image="/images/shop-01-420x550.png"><img src="/images/shop-01-54x71.png" alt="" width="54" height="71"></li>
-                <li data-large-image="/images/shop-02-420x550.png"><img src="/images/shop-02-10x71.png" alt="" width="10" height="71"></li>
+                <li class="active" data-large-image="<?=$model->getImageUrl('420x550');?>"><img src="<?=$model->getImageUrl('100x100');?>" alt="" width="95" height="95"></li>
               </ul>
             </div>
             <div class="unit-right product-single-image">
@@ -80,8 +78,8 @@ function updatePrice() {
   var quantity = $("#quantity").val();
   var totalPrice = price * quantity;
   var totalUnit = unit * quantity;
-  $("#price").html(totalPrice);
-  $("#unit").html(totalUnit);
+  $("#price").html(formatMoney(totalPrice, 0));
+  $("#unit").html(formatMoney(totalUnit, 0));
 }
 
 $("#products").trigger('change');

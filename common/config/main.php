@@ -4,7 +4,7 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'name' => 'Core Functions',
+    'name' => 'Kinggems',
     'timeZone' => 'Asia/Bangkok',
     'modules' => [
         // 'shop' => [

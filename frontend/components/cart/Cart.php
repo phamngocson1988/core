@@ -12,7 +12,7 @@ use Yii;
  */
 class Cart extends \yii2mod\cart\Cart
 {
-	public function getTotalPrice()
+	public function getSubTotalPrice()
 	{
 		$items = $this->getItems();
 		$sum = 0;
@@ -20,5 +20,18 @@ class Cart extends \yii2mod\cart\Cart
 			$sum += $item->getTotalPrice();
 		}
 		return $sum;
+	}
+
+	public function getTotalPrice()
+	{
+		$subTotal = $this->getSubTotalPrice();
+		$fee = $this->getTotalFee();
+		$sum = $subTotal + $fee;
+		return $sum;
+	}
+
+	public function getTotalFee()
+	{
+		return 0;
 	}
 }

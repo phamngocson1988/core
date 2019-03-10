@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 $this->title = 'Đăng ký';
 $this->params['breadcrumbs'][] = $this->title;
@@ -63,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php ActiveForm::end(); ?>
       </div>
     </div>
-    <p class="offset-custom-1 text-gray-light">or enter with</p>
+    <p class="offset-custom-1 text-gray-light"><a href="<?=Url::to(['site/login']);?>" style="color:white">Signin now</a></p>
     <div class="group-xs group-middle"><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-facebook" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-twitter" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-google" href="#"></a></div>
   </div>
 </div>
