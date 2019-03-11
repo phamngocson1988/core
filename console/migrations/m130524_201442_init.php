@@ -21,31 +21,45 @@ class m130524_201442_init extends Migration
             'password_hash' => $this->string()->notNull(),
             'password_reset_token' => $this->string()->unique(),
             'email' => $this->string()->notNull()->unique(),
+            'country_code' => $this->string(10),
+            'phone' => $this->string(50),
+            'address' => $this->string(200),
+            'birthday' => $this->integer(),
+            'favorite' => $this->integer(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
+            'affiliate_code' => $this->string(10),
+            'saler_id' => $this->integer(),
+            'marketing_id' => $this->integer(),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
-        $this->createTable('{{%customer}}', [
+        $this->createTable('{{%user_favorite}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(),
-            'username' => $this->string()->notNull()->unique(),
-            'avatar' => $this->integer(),
-            'auth_key' => $this->string(32)->notNull(),
-            'password_hash' => $this->string()->notNull(),
-            'password_reset_token' => $this->string()->unique(),
-            'email' => $this->string()->notNull()->unique(),
-            'phone' => $this->string(50),
-            'address' => $this->string(200),
-            'birthday' => $this->date(),
-            'favorite' => $this->integer(),
-            'social_line' => $this->string(200),
-            'social_zalo' => $this->string(200),
-            'social_facebook' => $this->string(200),
-            'status' => $this->smallInteger()->notNull()->defaultValue(10),
-            'created_at' => $this->dateTime(),
-            'updated_at' => $this->dateTime(),
+            'user_id' => $this->integer()->notNull(),
+            'favorite_game_id' => $this->integer()->notNull()
         ], $tableOptions);
+
+        // $this->createTable('{{%customer}}', [
+        //     'id' => $this->primaryKey(),
+        //     'name' => $this->string(),
+        //     'username' => $this->string()->notNull()->unique(),
+        //     'avatar' => $this->integer(),
+        //     'auth_key' => $this->string(32)->notNull(),
+        //     'password_hash' => $this->string()->notNull(),
+        //     'password_reset_token' => $this->string()->unique(),
+        //     'email' => $this->string()->notNull()->unique(),
+        //     'phone' => $this->string(50),
+        //     'address' => $this->string(200),
+        //     'birthday' => $this->date(),
+        //     'favorite' => $this->integer(),
+        //     'social_line' => $this->string(200),
+        //     'social_zalo' => $this->string(200),
+        //     'social_facebook' => $this->string(200),
+        //     'status' => $this->smallInteger()->notNull()->defaultValue(10),
+        //     'created_at' => $this->dateTime(),
+        //     'updated_at' => $this->dateTime(),
+        // ], $tableOptions);
 
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
@@ -117,7 +131,7 @@ class m130524_201442_init extends Migration
     public function down()
     {
         $this->dropTable('{{%user}}');
-        $this->dropTable('{{%customer}}');
+        $this->dropTable('{{%user_favorite}}');
         $this->dropTable('{{%post_category}}');
         $this->dropTable('{{%post}}');
         $this->dropTable('{{%category}}');

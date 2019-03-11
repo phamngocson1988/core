@@ -35,7 +35,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{input}{label}{hint}{error}'
           ])->textInput() ?>
 
+          <?= $form->field($model, 'country_code', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Chọn game yêu thích'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{hint}{error}'
+          ])->dropDownList(Yii::$app->params['country_code']) ?>
+
           <?= $form->field($model, 'phone', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input'],
+            'labelOptions' => ['class' => 'form-label'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{label}{hint}{error}'
+          ])->textInput() ?>
+
+          <?= $form->field($model, 'birthday', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],
             'inputOptions' => ['class' => 'form-input'],
             'labelOptions' => ['class' => 'form-label'],
@@ -57,6 +72,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
             'template' => '{input}{hint}{error}'
           ])->dropDownList($model->fetchGames()) ?>
+
+          <?= $form->field($model, 'invite_code', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input'],
+            'labelOptions' => ['class' => 'form-label'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{label}{hint}{error}'
+          ])->textInput() ?>
 
           <div class="form-button">
             <?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Đăng ký']) ?>

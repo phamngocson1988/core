@@ -73,6 +73,10 @@ class SiteController extends Controller
                 'class' => 'yii\web\ErrorAction',
                 'layout' => 'notice'
             ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
         ];
     }
 
@@ -182,28 +186,26 @@ class SiteController extends Controller
     {
         $this->layout = 'signup';
         $model = new SignupForm();
-        // $model->setNeedConfirm(true);
+        $model->setNeedConfirm(true);
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->signup()) {
+            if ($user = $model->signup()) {
                 // If need to confirm, send mail to customer
-                // if ($model->isNeedConfirm()) {
-                //     $email = \Yii::$app->mailer->compose()
-                //         ->setTo($user->email)
-                //         ->setFrom([\Yii::$app->params['email_admin'] => \Yii::$app->name . ' robot'])
-                //         ->setSubject('Signup Confirmation')
-                //         ->setTextBody("Click this link " . \yii\helpers\Html::a('confirm', Yii::$app->urlManager->createAbsoluteUrl(['site/confirm', 'id' => $user->id, 'key' => $user->auth_key])))
-                //         ->send();
-                //     if ($email) {
-                //         Yii::$app->getSession()->setFlash('success','Check Your email!');
-                //     } else {
-                //         Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
-                //     }
-                // } else { // If no need to confirm, log user in
-                //     Yii::$app->getUser()->login($user);
-                // }
-                
+                if ($model->isNeedConfirm()) {
+                    $email = \Yii::$app->mailer->compose()
+                        ->setTo($user->email)
+                        ->setFrom([\Yii::$app->params['email_admin'] => \Yii::$app->name . ' robot'])
+                        ->setSubject('Signup Confirmation')
+                        ->setTextBody("Click this link " . \yii\helpers\Html::a('confirm', Yii::$app->urlManager->createAbsoluteUrl(['site/activate', 'id' => $user->id, 'key' => $user->auth_key])))
+                        ->send();
+                    if ($email) {
+                        Yii::$app->getSession()->setFlash('success','Check Your email!');
+                    } else {
+                        Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
+                    }
+                } else { // If no need to confirm, log user in
+                    Yii::$app->getUser()->login($user);
+                }
                 return $this->redirect(['site/success']);
-                die;
             }
         }
 
@@ -212,8 +214,11 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionConfirm($id, $key)
+    public function actionActivate()
     {
+        $request = Yii::$app->request;
+        $id = $request->get('id');
+        $key = $request->get('key');
         $confirmForm = new ActiveCustomerForm([
             'id'=>$id,
             'auth_key'=>$key,
@@ -236,6 +241,7 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+        $this->layout = 'signup';
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
@@ -261,6 +267,7 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
+        $this->layout = 'signup';
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {

@@ -2,7 +2,7 @@
 namespace frontend\forms;
 
 use yii\base\Model;
-use common\models\Customer;
+use common\models\User;
 use frontend\models\Game;
 use yii\helpers\ArrayHelper;
 use frontend\components\notifications\AccountNotification;
@@ -15,8 +15,11 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $name;
+    public $country_code;
     public $phone;
+    public $birthday;
     public $favorite;
+    public $invite_code;
 
     /**
      * @param boolean $is_active
@@ -35,7 +38,7 @@ class SignupForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\Customer', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => User::className(), 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
@@ -48,14 +51,14 @@ class SignupForm extends Model
             ['phone', 'required'],
             ['phone', 'string', 'max' => 20],
 
-            ['favorite', 'safe'],
+            [['favorite', 'country_code', 'birthday', 'invite_code'], 'safe'],
         ];
     }
 
     /**
      * Signs user up.
      *
-     * @return Customer|null the saved model or null if saving fails
+     * @return User|null the saved model or null if saving fails
      */
     public function signup()
     {
@@ -63,24 +66,28 @@ class SignupForm extends Model
             return null;
         }
         
-        $user = new Customer();
+        $user = new User();
         $user->username = $this->email;
         $user->email = $this->email;
         $user->name = $this->name;
         $user->phone = $this->phone;
         $user->favorite = $this->favorite;
+        $user->country_code = $this->country_code;
+        $user->birthday = $this->birthday;
         $user->setPassword($this->password);
         $user->generateAuthKey();
 
-        if ($this->isNeedConfirm()) {
-            $user->status = Customer::STATUS_INACTIVE;
-        } else {
-            $user->status = Customer::STATUS_ACTIVE;
+        if ($this->invite_code) {
+            $affiliateUser = User::findOne(['affiliate_code' => $this->invite_code]);
+            $user->saler_id = $affiliateUser->id;
         }
-        
-        return $user->save() ? $user : null;
 
-        // AccountNotification::create(AccountNotification::KEY_NEW_ACCOUNT, ['user' => $user])->send();
+        if ($this->isNeedConfirm()) {
+            $user->status = User::STATUS_INACTIVE;
+        } else {
+            $user->status = User::STATUS_ACTIVE;
+        }
+        return $user->save() ? $user : null;
     }
 
     /**

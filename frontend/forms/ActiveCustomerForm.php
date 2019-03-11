@@ -2,7 +2,7 @@
 namespace frontend\forms;
 
 use yii\base\Model;
-use common\models\Customer;
+use common\models\User;
 
 /**
  * ActiveCustomerForm form
@@ -27,7 +27,7 @@ class ActiveCustomerForm extends Model
      * Find user base on given id and auth_key
      * If user is exist, update its status to "active"
      *
-     * @return <false|Customer>
+     * @return <false|User>
      */
     public function confirm()
     {
@@ -35,14 +35,14 @@ class ActiveCustomerForm extends Model
             return false;
         }
 
-    	$user = Customer::find()->where([
+    	$user = User::find()->where([
             'id' => $this->id,
             'auth_key' => $this->auth_key,
-            'status' => Customer::STATUS_INACTIVE,
+            'status' => User::STATUS_INACTIVE,
         ])->one();
 
         if (!empty($user)) {
-            $user->status = Customer::STATUS_ACTIVE;
+            $user->status = User::STATUS_ACTIVE;
             $user->save();
             return $user;
         }

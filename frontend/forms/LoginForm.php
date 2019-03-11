@@ -3,7 +3,7 @@ namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Customer;
+use common\models\User;
 
 /**
  * Login form
@@ -13,7 +13,7 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
-
+    public $captcha;
     private $_user;
 
 
@@ -46,10 +46,10 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if ($user) {
-                if ($user->status == Customer::STATUS_INACTIVE) {
+                if ($user->status == User::STATUS_INACTIVE) {
                     $this->addError('username', Yii::t('frontend', 'customer_is_not_active'));
                     return false;    
-                } elseif ($user->status == Customer::STATUS_DELETED) {
+                } elseif ($user->status == User::STATUS_DELETED) {
                     $this->addError('username', Yii::t('frontend', 'customer_is_deleted'));
                     return false;    
                 }
@@ -91,12 +91,12 @@ class LoginForm extends Model
     /**
      * Finds user by [[username]]
      *
-     * @return Customer|null
+     * @return User|null
      */
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = Customer::findByUsername($this->username);
+            $this->_user = User::findByUsername($this->username);
         }
 
         return $this->_user;

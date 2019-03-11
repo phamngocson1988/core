@@ -2,30 +2,37 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\PasswordResetRequestForm */
+/* @var $model \common\models\LoginForm */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
-$this->title = 'Request password reset';
+$this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-request-password-reset">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="section-lg text-center">
+  <div class="container">
+    <h3>Forgot password</h3>
+    <div class="row row-fix justify-content-sm-center">
+      <div class="col-md-8 col-lg-6 col-xl-4">
+        <!-- RD Mailform-->
+        <?php $form = ActiveForm::begin(['id' => 'form-reset-password', 'class' => 'rd-mailform form-fix']); ?>
+          <?= $form->field($model, 'email', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input'],
+            'labelOptions' => ['class' => 'form-label'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{label}{hint}{error}'
+          ])->textInput(['autofocus' => true]) ?>
 
-    <p>Please fill out your email. A link to reset password will be sent there.</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
-
-                <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Send', ['class' => 'btn btn-primary']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
+          <div class="form-button">
+            <?= Html::submitButton('Send', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Send']) ?>
+          </div>
+        <?php ActiveForm::end(); ?>
+      </div>
     </div>
+    <p class="offset-custom-1 text-gray-light"><a href="<?=Url::to(['site/login']);?>" style="color: white">Login</a> | <a href="<?=Url::to(['site/signup']);?>" style="color: white">Register now</a></p>
+    <div class="group-xs group-middle"><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-facebook" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-twitter" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-google" href="#"></a></div>
+  </div>
 </div>

@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="section-lg text-center">
   <div class="container">
-    <h3>Đăng nhập</h3>
+    <h3>Login</h3>
     <div class="row row-fix justify-content-sm-center">
       <div class="col-md-8 col-lg-6 col-xl-4">
         <!-- RD Mailform-->
@@ -34,13 +34,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{input}{label}{hint}{error}'
           ])->passwordInput() ?>
 
+          <?= $form->field($model, 'captcha', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input'],
+            'labelOptions' => ['class' => 'form-label'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{error}'
+          ])->widget(\yii\captcha\Captcha::classname(), [
+              'options' => ['class' => 'form-wrap form-wrap-validation'],
+          ]) ?>
+
           <div class="form-button">
-            <?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Đăng ký']) ?>
+            <?= Html::submitButton('Signin', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Signin']) ?>
           </div>
         <?php ActiveForm::end(); ?>
       </div>
     </div>
-    <p class="offset-custom-1 text-gray-light"><a href="<?=Url::to(['site/signup']);?>" style="color: white">Register now</a></p>
+    <p class="offset-custom-1 text-gray-light"><a href="<?=Url::to(['site/request-password-reset']);?>" style="color: white">Forgot password</a> | <a href="<?=Url::to(['site/signup']);?>" style="color: white">Register now</a></p>
     <div class="group-xs group-middle"><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-facebook" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-twitter" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-google" href="#"></a></div>
   </div>
 </div>
