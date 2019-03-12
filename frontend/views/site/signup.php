@@ -7,6 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use common\models\User;
 
 $this->title = 'Đăng ký';
 $this->params['breadcrumbs'][] = $this->title;
@@ -80,6 +81,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
             'template' => '{input}{label}{hint}{error}'
           ])->textInput() ?>
+
+          <?= $form->field($model, 'is_reseller', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Chọn game yêu thích'],
+            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+            'template' => '{input}{hint}{error}'
+          ])->dropDownList(User::getResellerStatus()) ?>
 
           <div class="form-button">
             <?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Đăng ký']) ?>

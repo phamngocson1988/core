@@ -30,6 +30,9 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 1;
     const STATUS_ACTIVE = 10;
 
+    CONST IS_NOT_RESELLER = 1;
+    const IS_RESELLER = 2;
+
 
     /**
      * @inheritdoc
@@ -210,6 +213,14 @@ class User extends ActiveRecord implements IdentityInterface
             self::STATUS_ACTIVE => Yii::t('app', 'active'),
             self::STATUS_INACTIVE => Yii::t('app', 'inactive'),
             self::STATUS_DELETED => Yii::t('app', 'disable'),
+        ];
+    }
+
+    public static function getResellerStatus()
+    {
+        return [
+            self::IS_NOT_RESELLER => Yii::t('app', 'individual'),
+            self::IS_RESELLER => Yii::t('app', 'reseller'),
         ];
     }
 

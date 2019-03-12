@@ -1,6 +1,7 @@
 <?php
 namespace frontend\forms;
 
+use Yii;
 use yii\base\Model;
 use common\models\User;
 use frontend\models\Game;
@@ -19,6 +20,7 @@ class SignupForm extends Model
     public $phone;
     public $birthday;
     public $favorite;
+    public $is_reseller;
     public $invite_code;
 
     /**
@@ -51,7 +53,9 @@ class SignupForm extends Model
             ['phone', 'required'],
             ['phone', 'string', 'max' => 20],
 
-            [['favorite', 'country_code', 'birthday', 'invite_code'], 'safe'],
+            [['favorite', 'country_code', 'birthday', 'invite_code'], 'trim'],
+            ['is_reseller', 'default', 'value' => User::IS_NOT_RESELLER],
+            ['is_reseller', 'in', 'range' => array_keys(User::getResellerStatus())],
         ];
     }
 
@@ -70,10 +74,12 @@ class SignupForm extends Model
         $user->username = $this->email;
         $user->email = $this->email;
         $user->name = $this->name;
+        $user->country_code = $this->country_code;
         $user->phone = $this->phone;
         $user->favorite = $this->favorite;
-        $user->country_code = $this->country_code;
         $user->birthday = $this->birthday;
+        $user->affiliate_code = Yii::$app->security->generateRandomString(6);
+        $user->is_reseller = $this->is_reseller;
         $user->setPassword($this->password);
         $user->generateAuthKey();
 

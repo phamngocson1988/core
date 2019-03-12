@@ -290,8 +290,8 @@ class SiteController extends Controller
         $this->layout = 'notice';
 
         return $this->render('notice', [
-            'title' => 'Đăng ký thành công',
-            'content' => 'Chúc mừng bạn đã đăng ký tài khoản thành công'
+            'title' => 'You have registered successfully.',
+            'content' => 'Check your email for activation link'
         ]);
     }
 }
