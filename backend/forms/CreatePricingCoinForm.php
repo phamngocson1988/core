@@ -17,7 +17,7 @@ class CreatePricingCoinForm extends PricingCoin
     {
         return [
             [['title', 'description'], 'trim'],
-            [['title', 'num_of_coin', 'amount_usd'], 'required'],
+            [['title', 'num_of_coin', 'amount'], 'required'],
 
             ['status', 'in', 'range' => array_keys(PricingCoin::getStatusList())],
         ];

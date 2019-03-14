@@ -36,7 +36,7 @@ class m190313_163324_create_wallet extends Migration
             'slug' => $this->string(100)->notNull(),
             'description' => $this->string(500),
             'num_of_coin' => $this->integer(11)->notNull(),
-            'amount_usd' => $this->integer(11)->notNull()->defaultValue(0),
+            'amount' => $this->integer(11)->notNull()->defaultValue(0),
             'is_best' => $this->string(1)->notNull()->defaultValue('Y'),
             'status' => $this->string(1)->notNull()->defaultValue('Y'),
         ]);

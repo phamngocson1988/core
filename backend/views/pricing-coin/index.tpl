@@ -10,186 +10,68 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'manage_coins')}</span>
+      <span>{Yii::t('app', 'pricing_coin')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'pricing_package')}</h1>
+<h1 class="page-title">{Yii::t('app', 'pricing_coin')}</h1>
 <!-- END PAGE TITLE-->
 <div class="pricing-content-2">
   <div class="pricing-table-container">
     <div class="row">
+      {foreach $models as $model}
       <div class="col-md-3">
-        <div class="price-column-container border-left border-top border-right">
+        <div class="price-column-container border-left border-top border-right {if $model->isBest()}featured-price{/if}">
+          {if $model->isBest()}
+          <div class="price-feature-label uppercase bg-red">Best choice</div>
+          {/if}
           <div class="price-table-head price-1">
-            <h2 class="uppercase bg-blue font-grey-cararra opt-pricing-5">Budget</h2>
+            <h2 class="uppercase bg-blue-ebonyclay font-grey-cararra opt-pricing-5">{$model->title}</h2>
           </div>
           <div class="price-table-pricing">
             <h3>
-              <span class="price-sign">$</span>24
+              <span class="price-sign">$</span>{$model->amount}
             </h3>
-            <p class="uppercase">per month</p>
+            <p class="uppercase">per {$model->num_of_coin} King Coin</p>
           </div>
           <div class="price-table-content">
             <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-user"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">3 Members</div>
+              <div class="col-xs-12 text-left uppercase">{$model->description}</div>
             </div>
             <div class="row no-margin">
               <div class="col-xs-3 text-right">
-                <i class="icon-drawer"></i>
+                <i class="fa fa-credit-card"></i>
               </div>
-              <div class="col-xs-9 text-left uppercase">50GB Storage</div>
+              <div class="col-xs-9 text-left uppercase">{$model->num_of_coin} King Coin</div>
             </div>
             <div class="row no-margin">
               <div class="col-xs-3 text-right">
-                <i class="icon-screen-smartphone"></i>
+                {if $model->isVisible()}
+                <i class="fa fa-eye"></i>
+                {else}
+                <i class="fa fa-eye-slash"></i>
+                {/if}
               </div>
-              <div class="col-xs-9 text-left uppercase">Single Device</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-refresh"></i>
+              <div class="col-xs-9 text-left uppercase">
+                {if $model->isVisible()}
+                <span class="label label-sm label-success">{Yii::t('app', 'visible')}</span>
+                {else}
+                <span class="label label-sm label-default">{Yii::t('app', 'invisible')}</span>
+                {/if}
               </div>
-              <div class="col-xs-9 text-left uppercase">Monthly Backups</div>
             </div>
           </div>
           <div class="price-table-footer">
-            <button type="button" class="btn grey uppercase bold">Sign Up</button>
+            {if !$model->isBest()}
+            <a href="{url route='pricing-coin/set-best' id=$model->id}" class="btn red">{Yii::t('app', 'set_best')}</a>
+            {/if}
+            <a href="{url route='pricing-coin/edit' id=$model->id}" class="btn green">{Yii::t('app', 'edit')}</a>
           </div>
         </div>
       </div>
-      <div class="col-md-3">
-        <div class="price-column-container border-left border-top border-right">
-          <div class="price-table-head price-1">
-            <h2 class="uppercase bg-blue-steel font-grey-cararra opt-pricing-5">Solo</h2>
-          </div>
-          <div class="price-table-pricing">
-            <h3>
-              <span class="price-sign">$</span>39
-            </h3>
-            <p class="uppercase">per month</p>
-          </div>
-          <div class="price-table-content">
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-user"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">5 Members</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-drawer"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">100GB Storage</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-screen-smartphone"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">Single Device</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-refresh"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">Weekly Backups</div>
-            </div>
-          </div>
-          <div class="price-table-footer">
-            <button type="button" class="btn grey uppercase bold">Sign Up</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="price-column-container featured-price">
-          <div class="price-feature-label uppercase bg-red">Best Value</div>
-          <div class="price-table-head price-2">
-            <h2 class="uppercase bg-green-jungle font-grey-cararra opt-pricing-5">Start up</h2>
-          </div>
-          <div class="price-table-pricing">
-            <h3>
-              <span class="price-sign">$</span>59
-            </h3>
-            <p class="uppercase">per month</p>
-          </div>
-          <div class="price-table-content">
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-user-follow"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">20 Members</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-drawer"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">500GB Storage</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-cloud-download"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase font-green sbold">Cloud Syncing</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-refresh"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase font-green sbold">Daily Backups</div>
-            </div>
-          </div>
-          <div class="price-table-footer">
-            <button type="button" class="btn green featured-price uppercase">Get it now!</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="price-column-container border-left border-top border-right">
-          <div class="price-table-head price-3">
-            <h2 class="uppercase bg-blue-ebonyclay font-grey-cararra opt-pricing-5">enterprise</h2>
-          </div>
-          <div class="price-table-pricing">
-            <h3>
-              <span class="price-sign">$</span>128
-            </h3>
-            <p class="uppercase">per month</p>
-          </div>
-          <div class="price-table-content">
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-users"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">100 Members</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-drawer"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase font-green sbold">2TB Storage</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-cloud-download"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">Cloud Syncing</div>
-            </div>
-            <div class="row no-margin">
-              <div class="col-xs-3 text-right">
-                <i class="icon-refresh"></i>
-              </div>
-              <div class="col-xs-9 text-left uppercase">Weekly Backups</div>
-            </div>
-          </div>
-          <div class="price-table-footer">
-            <button type="button" class="btn grey uppercase bold">Sign Up</button>
-          </div>
-        </div>
-      </div>
+      {/foreach}
     </div>
   </div>
 </div>

@@ -135,6 +135,25 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
+          <i class="icon-tag"></i>
+          <span class="title">{Yii::t('app', 'pricing_coin')}</span>
+          <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/pricing-coin'}" class="nav-link " code='coin.index'>
+            <span class="title">{Yii::t('app', 'pricing_coin')}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/pricing-coin/create'}" class="nav-link " code='coin.create'>
+            <span class="title">{Yii::t('app', 'add_new')}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
         <span class="title">{Yii::t('app', 'shop')}</span>
         <span class="arrow"></span>

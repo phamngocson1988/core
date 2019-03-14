@@ -7,7 +7,10 @@ use yii\filters\AccessControl;
 use backend\forms\FetchImageForm;
 use yii\helpers\Url;
 use backend\forms\CreatePricingCoinForm;
-
+use backend\forms\EditPricingCoinForm;
+use common\models\PricingCoin;
+use yii\web\NotFoundHttpException;
+use backend\forms\SetPricingCoinBest;
 /**
  * PricingCoinController
  */
@@ -21,7 +24,7 @@ class PricingCoinController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'delete'],
+                        'actions' => ['index', 'create', 'edit', 'set-best'],
                         'roles' => ['admin'],
                     ],
                 ],
@@ -33,26 +36,15 @@ class PricingCoinController extends Controller
     {
         $this->view->params['main_menu_active'] = 'coin.index';
         $request = Yii::$app->request;
-        return $this->render('index.tpl');
-        // $form = new FetchCoinForm();
-        // if (!$form->validate()) {
-        //     Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
-        //     return $this->redirect($ref);
-        // }
-        // $models = $form->fetch();
-        // $command = $form->getCommand();
-        // $pages = new Pagination(['totalCount' => $command->count()]);
-        // return $this->render('index.tpl', [
-        //     'models' => $models,
-        //     'pages' => $pages,
-        //     'form' => $form,
-        //     'ref' => Url::to($request->getUrl(), true),
-        // ]);
+        $models = PricingCoin::find()->all();
+        return $this->render('index.tpl', [
+            'models' => $models,
+        ]);
     }
 
     public function actionCreate()
     {
-        $this->view->params['main_menu_active'] = 'coin.index';
+        $this->view->params['main_menu_active'] = 'coin.create';
         $request = Yii::$app->request;
         $model = new CreatePricingCoinForm();
         if ($model->load(Yii::$app->request->post())) {
@@ -74,38 +66,31 @@ class PricingCoinController extends Controller
     public function actionEdit($id)
     {
         $this->view->params['main_menu_active'] = 'coin.index';
-        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new EditCoinForm();
+        $model = EditPricingCoinForm::findOne($id);
+        if (!$model) throw new NotFoundHttpException('Not found');
+        
         if ($model->load(Yii::$app->request->post())) {
             if (!$model->save()) {
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             } else {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['coin/index']));
+                $ref = $request->get('ref', Url::to(['pricing-coin/index']));
                 return $this->redirect($ref);    
             }
-        } else {
-            $model->loadData($id);
         }
-        $newProductModel = new CreateProductForm(['coin_id' => $id]);
-        $editProductModel = new EditProductForm(['coin_id' => $id]);
         return $this->render('edit.tpl', [
             'model' => $model,
-            'newProductModel' => $newProductModel,
-            'editProductModel' => $editProductModel,
-            'back' => $request->get('ref', Url::to(['coin/index']))
+            'back' => $request->get('ref', Url::to(['pricing-coin/index']))
         ]);
     }
 
-    public function actionDelete($id)
+    public function actionSetBest($id)
     {
         $request = Yii::$app->request;
-        if ($request->getIsAjax()) {
-            $coin = Coin::findOne($id);
-            return $this->renderJson($coin->delete());
-        }
-        return $this->redirectNotFound();
+        $model = SetPricingCoinBest::findOne($id);
+        $result = $model->setBest();
+        return $this->redirect(Url::to(['pricing-coin/index'])); 
     }
 
 }
