@@ -20,13 +20,30 @@ class m190313_163324_create_wallet extends Migration
 
         $this->createTable('{{%user_wallet}}', [
             'id' => $this->primaryKey(),
-            'amount' => $this->integer(11)->notNull()->defaultValue(0),
             'type' => $this->string(1)->notNull(),
+            'user_id' => $this->integer(11)->notNull(),
+            'coin' => $this->integer(11)->notNull()->defaultValue(0),
             'description' => $this->string(100), 
+            'created_by' => $this->integer(11),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime(),
-            'created_user_id' => $this->integer(11),
-            'customer_id' => $this->integer(11)->notNull(),
+            'payment_at' => $this->dateTime(),
+            'status' => $this->string(10)->notNull()->defaultValue('pending'),
+        ]);
+
+        $this->createTable('{{%transaction}}', [
+            'id' => $this->primaryKey(),
+            'auth_key' => $this->string(50)->notNull(),
+            'user_id' => $this->integer(11)->notNull(),
+            'payment_method' => $this->string(10)->notNull(),
+            'payment_id' => $this->string(50)->notNull(),
+            'payment_data' => $this->string(100),
+            'amount' => $this->integer(11)->notNull()->defaultValue(0),
+            'description' => $this->string(100), 
+            'created_by' => $this->integer(11),
+            'created_at' => $this->dateTime()->notNull(),
+            'updated_at' => $this->dateTime(),
+            'payment_at' => $this->dateTime(),
             'status' => $this->string(10)->notNull()->defaultValue('pending'),
         ]);
 
@@ -46,16 +63,16 @@ class m190313_163324_create_wallet extends Migration
             $command = $this->db->createCommand($alter);
             $command->execute();
 
-            $alter = "ALTER TABLE {{%user_wallet}} MODIFY `status` ENUM('pending', 'completed') NOT NULL";
-            $command = $this->db->createCommand($alter);
-            $command->execute();
+            $alter1 = "ALTER TABLE {{%user_wallet}} MODIFY `status` ENUM('pending', 'completed') NOT NULL";
+            $command1 = $this->db->createCommand($alter1);
+            $command1->execute();
 
-            $alter = "ALTER TABLE {{%pricing_coin}} MODIFY `is_best` ENUM('Y', 'N') NOT NULL";
-            $command = $this->db->createCommand($alter);
-            $command->execute();
-            $alter = "ALTER TABLE {{%pricing_coin}} MODIFY `status` ENUM('Y', 'N') NOT NULL";
-            $command = $this->db->createCommand($alter);
-            $command->execute();
+            $alter2 = "ALTER TABLE {{%pricing_coin}} MODIFY `is_best` ENUM('Y', 'N') NOT NULL";
+            $command2 = $this->db->createCommand($alter2);
+            $command2->execute();
+            $alter3 = "ALTER TABLE {{%pricing_coin}} MODIFY `status` ENUM('Y', 'N') NOT NULL";
+            $command3 = $this->db->createCommand($alter3);
+            $command3->execute();
         }
     }
 

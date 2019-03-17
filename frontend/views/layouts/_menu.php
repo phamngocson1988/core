@@ -3,55 +3,7 @@ use yii\helpers\Url;
 ?>
 <ul class="rd-navbar-nav">
   <li class="active"><a href="/">Home</a></li>
-  <li><a href="#">Elements</a>
-    <!-- RD Navbar Megamenu-->
-    <ul class="rd-navbar-megamenu">
-      <li>
-        <ul class="rd-megamenu-list">
-          <li><a href="accordions.html">Accordions</a></li>
-          <li><a href="backgrounds-video.html">Backgrounds Video</a></li>
-          <li><a href="boxes.html">Boxes</a></li>
-          <li><a href="buttons.html">Buttons</a></li>
-          <li><a href="colors.html">Colors</a></li>
-          <li><a href="countdown.html">Countdown</a></li>
-          <li><a href="flickr.html">Flickr</a></li>
-        </ul>
-      </li>
-      <li>
-        <ul class="rd-megamenu-list">
-          <li><a href="forms.html">Forms</a></li>
-          <li><a href="gradient-backgrounds.html">Gradient Backgrounds</a></li>
-          <li><a href="grid-system.html">Grid System</a></li>
-          <li><a href="image-backgrounds.html">Image Backgrounds</a></li>
-          <li><a href="inline-video.html">Inline video</a></li>
-          <li><a href="in-page-navigation.html">In-Page Navigation</a></li>
-          <li><a href="lightboxes.html">Lightboxes</a></li>
-        </ul>
-      </li>
-      <li>
-        <ul class="rd-megamenu-list">
-          <li><a href="maps.html">Maps</a></li>
-          <li><a href="modals.html">Modals</a></li>
-          <li><a href="notifications.html">Notifications</a></li>
-          <li><a href="parallax.html">Parallax</a></li>
-          <li><a href="pricing.html">Pricing</a></li>
-          <li><a href="radials.html">Radials</a></li>
-          <li><a href="scrims-and-overlays.html">Scrims and Overlays</a></li>
-          <li><a href="isotope.html">Isotope</a></li>
-        </ul>
-      </li>
-      <li>
-        <ul class="rd-megamenu-list">
-          <li><a href="sliders.html">Sliders</a></li>
-          <li><a href="tables.html">Tables</a></li>
-          <li><a href="tabs.html">Tabs</a></li>
-          <li><a href="tooltips.html">Tooltips</a></li>
-          <li><a href="typed-text.html">Typed Text</a></li>
-          <li><a href="typography.html">Typography</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+  <li><a href="<?=Url::to(['pricing/index']);?>">Pricing</a></li>
   <li><a href="#">Blocks</a>
     <!-- RD Navbar Megamenu-->
     <ul class="rd-navbar-megamenu">

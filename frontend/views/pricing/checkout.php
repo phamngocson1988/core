@@ -21,16 +21,20 @@ $cart = Yii::$app->cart;
                     <small>Quantity <?=$item->quantity;?></small>
                     <small><?=$item->getUnitName();?> <?=number_format($item->getTotalUnitGame());?></small>
                   </td>
-                  <td>(K)<?=$item->getTotalPrice();?></td>
+                  <td>$<?=$item->getTotalPrice();?></td>
                 </tr>
                 <?php endforeach;?>
                 <tr>
                   <td>Sub total</td>
-                  <td>(K)<?=$cart->getSubTotalPrice();?></td>
+                  <td>$<?=$cart->getSubTotalPrice();?></td>
+                </tr>
+                <tr>
+                  <td>Tax/Fee</td>
+                  <td>$<?=$cart->getTotalFee();?></td>
                 </tr>
                 <tr>
                   <td>Total</td>
-                  <td>(K)<?=$cart->getTotalPrice();?></td>
+                  <td>$<?=$cart->getTotalPrice();?></td>
                 </tr>
               </tbody>
             </table>
@@ -80,32 +84,21 @@ $cart = Yii::$app->cart;
         </div>
       </div>
     </div>
-    <?php if ($can_place_order) :?>
     <div class="row">
       <div class="col-12">
         <div class="form-wrap">
           <ul class="radio-group">
             <li>
               <label class="radio-inline">
-              <input type="radio" name="radio-group" checked="checked">Pay by King Coin
+              <input type="radio" name="radio-group" checked="checked">Paypal
               </label>
             </li>
           </ul>
-        </div>
-        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix', 'action' => Url::to(['cart/purchase'])]); ?>
-        <?= Html::submitButton('place order', ['class' => 'button button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
-        <?php ActiveForm::end();?>
+          </div>
+          <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix', 'action' => Url::to(['cart/purchase'])]); ?>
+          <?= Html::submitButton('place order', ['class' => 'button button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
+          <?php ActiveForm::end();?>
       </div>
     </div>
-    <?php else: ?>
-    <div class="row">
-      <div class="col-12">
-        <div class="form-wrap">
-          <h5>Your wallet is not enough King Coin</h5>
-        </div>
-        <?= Html::a('go to topup', Url::to(['pricing/index']), ['class' => 'button button-secondary button-nina']) ?>
-      </div>
-    </div>
-    <?php endif;?>
   </div>
 </section>

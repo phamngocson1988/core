@@ -15,7 +15,7 @@ use yii\bootstrap\ActiveForm;
               <tr>
                 <th style="width: 30%;">Game</th>
                 <th style="width: 30%;">Package</th>
-                <th style="width: 10%;">Price</th>
+                <th style="width: 10%;">King Coin</th>
                 <th style="width: 10%;"><?=ucfirst($game->unit_name);?></th>
                 <th style="width: 20%;">Quantity</th>
               </tr>
@@ -174,7 +174,7 @@ function updatePrice() {
   var quantity = $("#quantity").val();
   var totalPrice = price * quantity;
   var totalUnit = unit * quantity;
-  $("#price").html('$' + formatMoney(totalPrice, 0));
+  $("#price").html('(K) ' + formatMoney(totalPrice, 0));
   $("#unit").html(formatMoney(totalUnit, 0));
 }
 

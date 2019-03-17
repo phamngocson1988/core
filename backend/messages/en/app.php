@@ -196,4 +196,15 @@ return [
     'create_product' => 'Create product',
     'manage_products' => 'Manage product',
     'edit_product' => 'Edit product',
+
+    'pricing_coin' => 'Pricing Coin',
+    'best_choice' => 'Best choice',
+    'set_best' => 'Set the best',
+    'num_of_coin' => 'Number of coins',
+    'manage_pricing_coin' => 'Manage Pricing Coin',
+    'create_coin' => 'Create Coin',
+    'edit_coin' => 'Edit Coin',
+    'amount' => 'Amount',
+    'visible' => 'Visible',
+    'invisible' => 'Invisible',
 ];

@@ -195,4 +195,15 @@ return [
     'create_product' => 'Tạo sản phẩm',
     'manage_products' => 'Quản lý sản phẩm',
     'edit_product' => 'Chỉnh sửa sản phẩm',
+
+    'pricing_coin' => 'King coin',
+    'best_choice' => 'Lựa chọn tốt nhất',
+    'set_best' => 'Thiết lập lựa chọn tốt nhất',
+    'num_of_coin' => 'Số lượng coin',
+    'manage_pricing_coin' => 'Quản lý King coin',
+    'create_coin' => 'Tạo coin',
+    'edit_coin' => 'Chỉnh sửa coin',
+    'amount' => 'Số tiền',
+    'visible' => 'Hiển thị',
+    'invisible' => 'Tạm ẩn',
 ];

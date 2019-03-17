@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
+use common\models\UserWallet;
 
 /**
  * User model
@@ -262,5 +263,19 @@ class User extends ActiveRecord implements IdentityInterface
     public function isDeleted()
     {
         return $this->status == self::STATUS_DELETED;
+    }
+
+    public function getWallet()
+    {
+        return $this->hasMany(UserWallet::className(), ['user_id' => 'id'])->where('status = :status', [':status' => UserWallet::STATUS_COMPLETED]);
+    }
+
+    public function getWalletAmount()
+    {
+        $wallets = $this->wallet;
+        $arr = array_map(function($item) {
+            return ($item->type == UserWallet::TYPE_INPUT) ? $item->coin : (-1) * $item->coin;
+        }, $wallets);
+        return array_sum($arr);
     }
 }

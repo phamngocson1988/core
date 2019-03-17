@@ -49,11 +49,11 @@ class PricingCoin extends ActiveRecord
 
     public function isBest()
     {
-        return $this->is_best === self::IS_BEST;
+        return $this->is_best == self::IS_BEST;
     }
 
     public function isVisible()
     {
-        return $this->status === self::STATUS_VISIBLE;
+        return $this->status == self::STATUS_VISIBLE;
     }
 }

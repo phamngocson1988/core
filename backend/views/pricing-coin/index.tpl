@@ -10,13 +10,13 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'pricing_coin')}</span>
+      <span>{Yii::t('app', 'manage_pricing_coin')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'pricing_coin')}</h1>
+<h1 class="page-title">{Yii::t('app', 'manage_pricing_coin')}</h1>
 <!-- END PAGE TITLE-->
 <div class="pricing-content-2">
   <div class="pricing-table-container">
@@ -25,16 +25,16 @@
       <div class="col-md-3">
         <div class="price-column-container border-left border-top border-right {if $model->isBest()}featured-price{/if}">
           {if $model->isBest()}
-          <div class="price-feature-label uppercase bg-red">Best choice</div>
+          <div class="price-feature-label uppercase bg-red">{Yii::t('app', 'best_choice')}</div>
           {/if}
           <div class="price-table-head price-1">
             <h2 class="uppercase bg-blue-ebonyclay font-grey-cararra opt-pricing-5">{$model->title}</h2>
           </div>
           <div class="price-table-pricing">
             <h3>
-              <span class="price-sign">$</span>{$model->amount}
+              <span class="price-sign">$</span>{number_format($model->amount)}
             </h3>
-            <p class="uppercase">per {$model->num_of_coin} King Coin</p>
+            <p class="uppercase">per {number_format($model->num_of_coin)} King Coin</p>
           </div>
           <div class="price-table-content">
             <div class="row no-margin">
@@ -44,7 +44,7 @@
               <div class="col-xs-3 text-right">
                 <i class="fa fa-credit-card"></i>
               </div>
-              <div class="col-xs-9 text-left uppercase">{$model->num_of_coin} King Coin</div>
+              <div class="col-xs-9 text-left uppercase">{number_format($model->num_of_coin)} King Coin</div>
             </div>
             <div class="row no-margin">
               <div class="col-xs-3 text-right">

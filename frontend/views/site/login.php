@@ -34,16 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{input}{label}{hint}{error}'
           ])->passwordInput() ?>
 
-          <?= $form->field($model, 'captcha', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{error}'
-          ])->widget(\yii\captcha\Captcha::classname(), [
-              'options' => ['class' => 'form-wrap form-wrap-validation'],
-          ]) ?>
-
           <div class="form-button">
             <?= Html::submitButton('Signin', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Signin']) ?>
           </div>

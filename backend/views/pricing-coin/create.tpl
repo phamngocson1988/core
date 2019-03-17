@@ -8,24 +8,24 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='pricing_package/index'}">{Yii::t('app', 'manage_pricing_packages')}</a>
+      <a href="{url route='pricing_package/index'}">{Yii::t('app', 'manage_pricing_coin')}</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'manage_pricing_package')}</span>
+      <span>{Yii::t('app', 'create_coin')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'manage_pricing_package')}</h1>
+<h1 class="page-title">{Yii::t('app', 'manage_pricing_coin')}</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='signup-form'}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">{Yii::t('app', 'manage_pricing_package')}</div>
+          <div class="caption">{Yii::t('app', 'manage_pricing_coin')}</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>

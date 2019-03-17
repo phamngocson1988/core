@@ -14,18 +14,8 @@ use frontend\models\Product;
 use common\models\Order;
 use common\models\OrderItems;
 use frontend\components\cart\CartItem;
+use common\models\UserWallet;
 
-
-
-use PayPal\Api\Amount;
-use PayPal\Api\Details;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Transaction;
-use PayPal\Api\PaymentExecution;
 /**
  * CartController
  */
@@ -110,7 +100,10 @@ class CartController extends Controller
     public function actionCheckout()
     {
         $model = new CartItem();
-        return $this->render('checkout', ['model' => $model]);
+        $user = Yii::$app->user->getIdentity();
+        $cart = Yii::$app->cart;
+        $canPlaceOrder = $user->getWalletAmount() > $cart->getTotalPrice();
+        return $this->render('checkout', ['model' => $model, 'can_place_order' => $canPlaceOrder]);
     }
 
     public function actionPurchase()
@@ -126,12 +119,10 @@ class CartController extends Controller
         $order->customer_name = $user->name;
         $order->customer_email = $user->email;
         $order->customer_phone = $user->phone;
+        $order->status = Order::STATUS_PROCESSING;
         $order->generateAuthKey();
-
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        // Create order item
-        $itemList = [];
         foreach ($cart->getItems() as $cartItem) {
             $item = new OrderItems();
             $item->item_title = $cartItem->getLabel();
@@ -151,70 +142,34 @@ class CartController extends Controller
             $item->server = $cartItem->server;
             $item->note = $cartItem->note;
             $item->save();
-            
-            // Config item list for paypal
-            $ppItem = new Item();
-            $ppItem->setName($cartItem->getLabel())
-            ->setCurrency('USD')
-            ->setQuantity($cartItem->quantity)
-            ->setSku($cartItem->getUniqueId()) // Similar to `item_number` in Classic API
-            ->setPrice($cartItem->getPrice());
-            $itemList[] = $ppItem;
         }
 
-        // Send to paypal
-        $apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
-                'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
-            )
-        );
+        $wallet = new UserWallet();
+        $wallet->coin = $totalPrice;
+        $wallet->type = UserWallet::TYPE_OUTPUT;
+        $wallet->description = "Pay for order #$order->auth_key";
+        $wallet->created_by = $user->id;
+        $wallet->user_id = $user->id;
+        $wallet->status = UserWallet::STATUS_COMPLETED;
+        $wallet->payment_at = date('Y-m-d H:i:s');
+        $wallet->save();
 
-        $ppitemList = new ItemList();
-        $ppitemList->setItems($itemList);
-
-        $details = new Details();
-        $details->setShipping(0)
-            ->setTax(0)
-            ->setSubtotal($cart->getTotalPrice());
-        // ### Amount
-        $amount = new Amount();
-        $amount->setCurrency("USD")
-            ->setTotal($cart->getTotalPrice())
-            ->setDetails($details);
-
-        $transaction = new Transaction();
-        $transaction->setAmount($amount)
-            ->setItemList($ppitemList)
-            ->setDescription("Pay for order #" . $order->id)
-            ->setInvoiceNumber(uniqid());
-
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(Url::to(['cart/success'], true))
-            ->setCancelUrl(Url::to(['cart/error'], true));
-
-        $payer = new Payer();
-        $payer->setPaymentMethod("paypal");
-
-        $payment = new Payment();
-        $payment->setIntent("sale")
-            ->setPayer($payer)
-            ->setRedirectUrls($redirectUrls)
-            ->setTransactions(array($transaction));
-
-        try {
-            $payment->create($apiContext);
-            if ('created' == strtolower($payment->state)) {// order was created
-                $order->payment_id = $payment->id;
-                $order->payment_method = $payer->getPaymentMethod();
-                $order->save();
-                $cart->clear();
-                return $this->redirect($payment->getApprovalLink());
-            }  
-        } catch (\PayPal\Exception\PayPalConnectionException $ex) {
-            $order->delete();
-            echo $ex->getData();
+        // Send mail to customer
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        if ($adminEmail) {
+            $email = Yii::$app->mailer->compose()
+            ->setTo($user->email)
+            ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+            ->setSubject("Order #$order->id Confirmation")
+            ->setTextBody("Thanks for your order")
+            ->send();
         }
+        $this->layout = 'notice';
+        return $this->render('/site/notice', 
+[            'title' => 'Đặt hàng thành công',
+            'content' => 'Xin chúc mừng bạn đã đặt hàng thành công'
+        ]);
     }
 
     public function actionSuccess()

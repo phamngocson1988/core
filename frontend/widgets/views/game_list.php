@@ -13,7 +13,7 @@ use yii\helpers\Url;
               <!-- Thumbnail simple-->
               <div class="thumbnail-simple"><a class="thumbnail-simple-image-wrap" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>"><img class="thumbnail-simple-image" src="<?=$model->getImageUrl('270x400');?>" alt="" width="270" height="400"/></a>
                 <p class="thumbnail-simple-title"><a href="<?=Url::to(['game/view', 'id' => $model->id]);?>"><?=$model->title;?></a></p>
-                <p class="thumbnail-simple-subtitle">$ <?=number_format($model->getPrice());?> / <?=number_format($model->getUnit());?> <?=$model->unit_name;?></p>
+                <p class="thumbnail-simple-subtitle">(K) <?=number_format($model->getPrice());?> / <?=number_format($model->getUnit());?> <?=$model->unit_name;?></p>
               </div>
             </div>
             <?php endforeach;?>

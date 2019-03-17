@@ -23,6 +23,18 @@ class CreatePricingCoinForm extends PricingCoin
         ];
     }
 
+    public function attributeLabels() { 
+
+        return  [
+            'title' => Yii::t('app', 'title'),
+            'description' => Yii::t('app', 'description'),
+            'status' => Yii::t('app', 'status'),
+            'num_of_coin' => Yii::t('app', 'num_of_coin'),
+            'unit_name' => Yii::t('app', 'unit_name'),
+            'amount' => Yii::t('app', 'amount'),
+        ];
+    }
+
     /**
      * Signs user up.
      *
