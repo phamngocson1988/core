@@ -11,6 +11,7 @@ use yii\filters\AccessControl;
 use frontend\models\PricingCoin;
 use common\models\UserWallet;
 use common\models\Transaction;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
@@ -27,15 +28,17 @@ use PayPal\Api\PaymentExecution;
  */
 class PricingController extends Controller
 {
+    const PRICING_CART = 'pricing_cart';
+
 	public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['purchase', 'success'],
+                'only' => ['purchase', 'success', 'store'],
                 'rules' => [
                     [
-                        'actions' => ['purchase', 'success'],
+                        'actions' => ['purchase', 'success', 'store'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,6 +47,7 @@ class PricingController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
+                    'store' => ['post'],
                     'purchase' => ['post'],
                 ],
             ],
@@ -52,19 +56,52 @@ class PricingController extends Controller
 
     public function actionIndex()
     {
+        $session = Yii::$app->session;
+        $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
+        $chosenId = ArrayHelper::getValue($cart, 'id');
+        $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
     	$models = PricingCoin::find()->all();
     	return $this->render('index', [
-    		'models' => $models
+    		'models' => $models,
+            'chosen_id' => $chosenId,
+            'chosen_quantity' => $chosenQuantity
     	]);
+    }
+
+    public function actionStore()
+    {
+        $request = Yii::$app->request;
+        $session = Yii::$app->session;
+        $id = $request->post('id');
+        $qt = $request->post('qt');
+        $session->set(self::PRICING_CART, ['id' => $id, 'quantity' => $qt]);
+        return json_encode(['status' => true]);
+    }
+
+    public function actionConfirm()
+    {
+        $session = Yii::$app->session;
+        $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
+        $chosenId = ArrayHelper::getValue($cart, 'id');
+        $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
+        if (!$chosenId) throw new NotFoundHttpException("You have not added any pricing package", 1);
+        $pricing = PricingCoin::findOne($chosenId); 
+        if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
+        return $this->render('confirm', [
+            'model' => $pricing,
+            'quantity' => $chosenQuantity
+        ]);
     }
 
     public function actionPurchase()
     {
-    	$request = Yii::$app->request;
-    	$id = $request->post('id');
-    	$pricing = PricingCoin::findOne($id); 
-    	if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
-
+        $session = Yii::$app->session;
+        $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
+        $chosenId = ArrayHelper::getValue($cart, 'id');
+        $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
+        if (!$chosenId) throw new NotFoundHttpException("You have not added any pricing package", 1);
+        $pricing = PricingCoin::findOne($chosenId); 
+        if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
 
         // Send to paypal
         $apiContext = new \PayPal\Rest\ApiContext(
@@ -73,10 +110,11 @@ class PricingController extends Controller
                 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
             )
         );
+        $totalPrice = $subTotalPrice = $pricing->amount * $chosenQuantity;
         $ppItem = new Item();
         $ppItem->setName($pricing->title)
         ->setCurrency('USD')
-        ->setQuantity(1)
+        ->setQuantity($chosenQuantity)
         ->setSku($pricing->id) // Similar to `item_number` in Classic API
         ->setPrice($pricing->amount);
         $itemList[] = $ppItem;
@@ -86,17 +124,17 @@ class PricingController extends Controller
         $details = new Details();
         $details->setShipping(0)
             ->setTax(0)
-            ->setSubtotal($pricing->amount);
+            ->setSubtotal($subTotalPrice);
         // ### Amount
         $amount = new Amount();
         $amount->setCurrency("USD")
-            ->setTotal($pricing->amount)
+            ->setTotal($totalPrice)
             ->setDetails($details);
 
         $transaction = new PaypalTransaction();
         $transaction->setAmount($amount)
             ->setItemList($ppitemList)
-            ->setDescription("Pay for package of coins #" . $pricing->id)
+            ->setDescription("Pay for package of coins #" . $pricing->id . " " . $pricing->title)
             ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
@@ -118,7 +156,8 @@ class PricingController extends Controller
             	$session = Yii::$app->session;
             	$session->set('payment_method', 'paypal');
             	$session->set('payment_id', $payment->id);
-            	$session->set('package_id', $id);
+                $session->set('package_id', $pricing->id);
+            	$session->set('package_quantity', $chosenQuantity);
                 return $this->redirect($payment->getApprovalLink());
             }  
         } catch (\PayPal\Exception\PayPalConnectionException $ex) {
@@ -139,6 +178,7 @@ class PricingController extends Controller
         $currentPaymentMethod = $session->get('payment_method');
         $currentPaymentId = $session->get('payment_id');
         $packageId = $session->get('package_id');
+        $quantity = $session->get('package_quantity');
 
         $pricing = PricingCoin::findOne($packageId);
         if (!$pricing) throw new BadRequestHttpException("Some error occured with the package you have chosen.", 1);
@@ -178,7 +218,7 @@ class PricingController extends Controller
                 $trn->save();
 
                 $wallet = new UserWallet();
-                $wallet->coin = $pricing->num_of_coin;
+                $wallet->coin = $pricing->num_of_coin * $quantity;
                 $wallet->type = UserWallet::TYPE_INPUT;
                 $wallet->description = "Transaction #$trn->auth_key";
                 $wallet->created_by = $user->id;
@@ -190,17 +230,19 @@ class PricingController extends Controller
         } catch (Exception $ex) {
         	$session->remove('payment_method');
 	        $session->remove('payment_id');
-	        $session->remove('payment_token');
+            $session->remove('package_id');
+	        $session->remove('package_quantity');
             exit(1);
         }
 
         $session->remove('payment_method');
         $session->remove('payment_id');
-        $session->remove('payment_token');
+        $session->remove('package_id');
+        $session->remove('package_quantity');
         $this->layout = 'notice';
         return $this->render('/site/notice', [
-            'title' => 'Đặt hàng thành công',
-            'content' => 'Xin chúc mừng bạn đã đặt hàng thành công'
+            'title' => 'You have just bought a pricing successfully.',
+            'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
         ]);
     }
 

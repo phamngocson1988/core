@@ -16,28 +16,39 @@ use yii\bootstrap\ActiveForm;
           <div class="row row-50 justify-content-sm-center">
             <!-- Pricing Box XL-->
             <?php foreach ($models as $model) :?>
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-6 col-xl-3" class="pricing-package">
               <div class="pricing-box pricing-box-xl pricing-box-novi">
                 <div class="pricing-box-header">
                   <h4><?=$model->title;?></h4>
                 </div>
+                <?php $form = ActiveForm::begin([
+                  'action' => Url::to(['pricing/store']),
+                  'options' => ['class' => 'add-to-cart']
+                ]); ?>
                 <div class="pricing-box-price">
-                  <div class="heading-2"><sup>$</sup><?=number_format($model->amount);?></div>
+                  <div class="heading-2"><sup>$</sup><span id="price-<?=$model->id;?>"><?=number_format($model->amount);?></span></div>
                 </div>
-                <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix', 'action' => Url::to(['pricing/purchase'])]); ?>
                 <?= $form->field($model, 'id', ['template' => '{input}', 'inputOptions' => ['name' => 'id']])->hiddenInput() ?>
-                <?= Html::submitButton('Pay by Paypal', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
-                <?php ActiveForm::end();?>
+                <?= Html::submitButton('Buy now', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
                 <div class="pricing-box-body">
                   <ul class="pricing-box-list">
                     <li>
                       <div class="unit unit-spacing-sm flex-row align-items-center">
                         <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-database"></span></div>
-                        <div class="unit-body"><span><?=number_format($model->num_of_coin);?> King Coins</span></div>
+                        <div class="unit-body"><span id="coin-<?=$model->id;?>"><?=number_format($model->num_of_coin);?></span> King Coins</div>
+                      </div>
+                      <div class="unit unit-spacing-sm flex-row align-items-center">
+                        <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-cart-outline"></span></div>
+                        <div class="unit-body">
+                          <div class="form-wrap box-width-1 shop-input">
+                            <input class="form-input input-append quantity-control" data-id="<?=$model->id;?>" data-price="<?=$model->amount;?>" data-coin="<?=$model->num_of_coin;?>" type="number" min="1" max="300" value="1" name="qt">
+                          </div>
+                        </div>
                       </div>
                     </li>
                   </ul>
                 </div>
+                <?php ActiveForm::end();?>
               </div>
             </div>
             <?php endforeach;?>
@@ -47,3 +58,35 @@ use yii\bootstrap\ActiveForm;
     </div>
   </div>
 </section>
+<?php
+$script = <<< JS
+$('form.add-to-cart').on('submit', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      dataType : 'json',
+      data: form.serialize(),
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == true) {
+          window.location.href = "[:checkout_url]";
+        }
+      },
+  });
+  return false;
+});
+
+$(".quantity-control").on("change", function(){
+  var id = $(this).data("id");
+  var price = $(this).data("price");
+  var coin = $(this).data("coin");
+  var qt = $(this).val();
+  $(this).closest("form").find("#price-" + id).html(formatMoney(price * qt, 0));
+  $(this).closest("form").find("#coin-" + id).html(formatMoney(coin * qt, 0));
+});
+JS;
+$script = str_replace("[:checkout_url]", Url::to(['pricing/confirm']), $script);
+$this->registerJs($script);
+?>
