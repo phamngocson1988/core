@@ -30,6 +30,8 @@ return [
         'purchase' => 'cart/purchase',
         'purchase-success' => 'cart/success',
         'purchase-cancel' => 'cart/error',
+        //user
+        'user/dashboard' => 'user/index',
         // notifications
         'notifications/default/index' => 'notifications/default/index',
         'notifications/default/list' => 'notifications/default/list',

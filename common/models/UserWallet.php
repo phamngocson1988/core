@@ -5,6 +5,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
+use yii\helpers\ArrayHelper;
 
 class UserWallet extends ActiveRecord
 {
@@ -45,5 +46,11 @@ class UserWallet extends ActiveRecord
             self::TYPE_INPUT => Yii::t('app', 'topup'),
             self::TYPE_OUTPUT => Yii::t('app', 'withdraw'),
         ];
+    }
+
+    public function getTypeLabel()
+    {
+        $types = self::getWalletType();
+        return ArrayHelper::getValue($types, $this->type, 'Error');
     }
 }

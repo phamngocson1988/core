@@ -15,28 +15,34 @@ use yii\helpers\Url;
         <div class="container">
           <div class="row row-50 justify-content-sm-center">
             <div class="col-sm-10 col-md-6 col-xl-4">
-              <article class="box-minimal box-minimal-border">
-                <div class="box-minimal-icon novi-icon mdi mdi-thumb-up-outline"></div>
-                <p class="big box-minimal-title">Basic Profile</p>
-                <hr>
-                <div class="box-minimal-text">We use an individual approach to each client and we never offer you a set of standard decisions for your business.</div>
-              </article>
+              <a href="<?=Url::to(['user/profile']);?>">
+                <article class="box-minimal box-minimal-border">
+                  <div class="box-minimal-icon novi-icon mdi mdi-thumb-up-outline"></div>
+                  <p class="big box-minimal-title">Basic Profile</p>
+                  <hr>
+                  <div class="box-minimal-text">Edit your basic inforamtion and password</div>
+                </article>
+              </a>
             </div>
             <div class="col-sm-10 col-md-6 col-xl-4">
-              <article class="box-minimal box-minimal-border">
-                <div class="box-minimal-icon novi-icon mdi mdi-account-multiple"></div>
-                <p class="big box-minimal-title">My Orders</p>
-                <hr>
-                <div class="box-minimal-text">Brave is a team of designers, developers, marketing experts and managers who are ready to work on a personalized web solution.</div>
-              </article>
+              <a href="<?=Url::to(['user/orders']);?>">
+                <article class="box-minimal box-minimal-border">
+                  <div class="box-minimal-icon novi-icon mdi mdi-account-multiple"></div>
+                  <p class="big box-minimal-title">My Orders</p>
+                  <hr>
+                  <div class="box-minimal-text">List history of orders and their status</div>
+                </article>
+              </a>
             </div>
             <div class="col-sm-10 col-md-6 col-xl-4">
-              <article class="box-minimal box-minimal-border">
-                <div class="box-minimal-icon novi-icon mdi mdi-headset"></div>
-                <p class="big box-minimal-title">My Wallet</p>
-                <hr>
-                <div class="box-minimal-text">Our online support is available 24 hours a day to answer your every question and help you solve any issue you may have with Brave.</div>
-              </article>
+              <a href="<?=Url::to(['user/wallet']);?>">
+                <article class="box-minimal box-minimal-border">
+                  <div class="box-minimal-icon novi-icon mdi mdi-headset"></div>
+                  <p class="big box-minimal-title">My Wallet</p>
+                  <hr>
+                  <div class="box-minimal-text">List all your transactions and the total of King Coins</div>
+                </article>
+              </a>
             </div>
           </div>
         </div>
