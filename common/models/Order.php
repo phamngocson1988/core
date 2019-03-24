@@ -15,9 +15,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class Order extends ActiveRecord
 {
-    const STATUS_TEMP = 'temp';
-    const STATUS_PROCESSING = 'processing';
-    const STATUS_DONE = 'done';
+    const STATUS_TEMP = 'verifying';
+    const STATUS_PROCESSING = 'pending';
+    const STATUS_DONE = 'processing';
     const STATUS_COMPLETED = 'completed';
     const STATUS_DELETED = 'deleted';
 
@@ -52,9 +52,9 @@ class Order extends ActiveRecord
     public static function getStatusList()
     {
         return [
-            self::STATUS_TEMP => 'Temporary',
-            self::STATUS_PROCESSING => 'Processing',
-            self::STATUS_DONE => 'Done',
+            self::STATUS_TEMP => 'Verifying',
+            self::STATUS_PROCESSING => 'Pending',
+            self::STATUS_DONE => 'Processing',
             self::STATUS_COMPLETED => 'Completed',
             self::STATUS_DELETED => 'Deleted'
         ];

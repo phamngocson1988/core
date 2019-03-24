@@ -102,6 +102,11 @@ class CartItem extends Model implements CartItemInterface
         return $this->_product->unit * $this->quantity;
     }
 
+    public function getGameId()
+    {
+        return $this->getGame()->id;
+    }
+
     // ============== implement interface ===========//
     public function getPrice() : int
     {

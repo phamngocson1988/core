@@ -4,10 +4,25 @@ namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\UserWallet as Wallet;
+use common\models\UserWallet;
 
 class FetchHistoryWalletForm extends Model
 {
+    public $user_id;
+    public $type;
+    public $start_date;
+    public $end_date;
+
+    public function rules()
+    {
+        return [
+            ['user_id', 'required'],
+            ['start_date', 'default', 'value' => date('Y-m-01')],
+            ['end_date', 'default', 'value' => date('Y-m-d')],
+            ['type', 'trim']
+        ];
+    }
+
     private $_command;
     
     public function fetch()
@@ -18,8 +33,18 @@ class FetchHistoryWalletForm extends Model
 
     protected function createCommand()
     {
-        $command = Wallet::find();
-
+        $command = UserWallet::find();
+        $command->where(['user_id' => $this->user_id]);
+        if ($this->type) {
+            $command->andWhere(['type' => $this->type]);
+        }
+        if ($this->start_date) {
+            $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
+        }
+        if ($this->end_date) {
+            $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
+        }
+        $command->orderBy(['created_at' => SORT_DESC]);
         $this->_command = $command;
     }
 
@@ -29,5 +54,12 @@ class FetchHistoryWalletForm extends Model
             $this->createCommand();
         }
         return $this->_command;
+    }
+
+    public function getWalletType()
+    {
+        $type = UserWallet::getWalletType();
+        array_unshift($type, "Select one");
+        return $type;
     }
 }

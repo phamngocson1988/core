@@ -25,7 +25,6 @@ class m181217_033141_create_order_table extends Migration
             'payment_method' => $this->string(50),
             'payment_data' => $this->text(),
             'total_price' => $this->integer(11)->defaultValue(0),
-            
             'customer_id' => $this->integer(11)->notNull(),
             'customer_name' => $this->string(255)->notNull(),
             'customer_email' => $this->string(255)->notNull(),
@@ -39,7 +38,7 @@ class m181217_033141_create_order_table extends Migration
         ]);
 
         if ($this->db->driverName === 'mysql') {
-            $status = "ALTER TABLE {{%order}} MODIFY `status` ENUM('temp','processing','done','completed','deleted') NOT NULL DEFAULT 'temp'";
+            $status = "ALTER TABLE {{%order}} MODIFY `status` ENUM('verifying','pending','processing','completed','deleted') NOT NULL DEFAULT 'temp'";
             $command = $this->db->createCommand($status);
             $command->execute();
         }
@@ -51,6 +50,7 @@ class m181217_033141_create_order_table extends Migration
             'order_id' => $this->integer(11)->notNull(),
             'type' => $this->integer(11)->notNull(),
             'product_id' => $this->integer(11),
+            'game_id' => $this->integer(11),
             'price' => $this->integer(11)->notNull(),
             'quantity' => $this->integer(11)->notNull(),
             'total' => $this->integer(11)->notNull(),

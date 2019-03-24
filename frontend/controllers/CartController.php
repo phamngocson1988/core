@@ -119,7 +119,7 @@ class CartController extends Controller
         $order->customer_name = $user->name;
         $order->customer_email = $user->email;
         $order->customer_phone = $user->phone;
-        $order->status = Order::STATUS_PROCESSING;
+        // $order->status = Order::STATUS_PROCESSING;
         $order->generateAuthKey();
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
@@ -128,6 +128,7 @@ class CartController extends Controller
             $item->item_title = $cartItem->getLabel();
             $item->type = OrderItems::TYPE_PRODUCT;
             $item->order_id = $order->id;
+            $item->game_id = $cartItem->getGameId();
             $item->product_id = $cartItem->getUniqueId();
             $item->price = $cartItem->getPrice();
             $item->quantity = $cartItem->quantity;

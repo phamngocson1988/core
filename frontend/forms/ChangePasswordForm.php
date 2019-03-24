@@ -29,6 +29,7 @@ class ChangePasswordForm extends User
     public function change()
     {
         $this->setPassword($this->new_password);
+        $this->removePasswordResetToken();
         return $this->save();
     }
 }
