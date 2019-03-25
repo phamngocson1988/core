@@ -5,9 +5,9 @@ return [
     'date_format' => 'd-m-Y',
     'email_admin' => 'phamngocson1988@gmail.com',
     'country_code' => [
-    	'84' => 'Vietnam',
-    	'1' => 'United States',
-    	'33' => 'France',
-    	'43' => 'Austria'
+    	'+84' => '(+84) Vietnam',
+    	'+1' => '(+1) United States',
+    	'+33' => '(+33) France',
+    	'+43' => '(+43) Austria'
     ]
 ];

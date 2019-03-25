@@ -30,7 +30,7 @@ class CreateOrderForm extends Model
         $order->customer_name = $this->customer_name;
         $order->customer_email = $this->customer_email;
         $order->customer_phone = $this->customer_phone;
-        $order->status = Order::STATUS_TEMP;
+        $order->status = Order::STATUS_VERIFYING;
         return $order->save();
     }
 }

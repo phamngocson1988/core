@@ -62,7 +62,7 @@ use common\models\User;
             <div class="col-md-6">
               <?= $form->field($model, 'birthday', [
                 'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input'],
+                'inputOptions' => ['class' => 'form-input date-picker'],
                 'labelOptions' => ['class' => 'form-label-outside'],
                 'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                 'template' => '{label}{input}{hint}{error}'
@@ -88,3 +88,15 @@ use common\models\User;
     </div>
   </div>
 </section>
+<?php
+$script = <<< JS
+var cur= new Date();
+$('.date-picker').bootstrapMaterialDatePicker({
+  format: 'YYYY-MM-DD',
+  maxDate: cur,
+  time: false,
+  year: false
+});
+JS;
+$this->registerJs($script);
+?>

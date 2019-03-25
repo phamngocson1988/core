@@ -55,6 +55,14 @@ $cart = Yii::$app->cart;
                   <td>Character name</td>
                   <td><?=$item->character_name;?></td>
                 </tr>
+                <tr>
+                  <td>Platform</td>
+                  <td><?=$item->platform;?></td>
+                </tr>
+                <tr>
+                  <td>Login method</td>
+                  <td><?=$item->login_method;?></td>
+                </tr>
                 <?php if ($item->recover_code):?>
                 <tr>
                   <td>Recover Code</td>

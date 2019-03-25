@@ -125,6 +125,31 @@ use yii\bootstrap\ActiveForm;
               'template' => '{label}{input}{error}'
             ])->textInput() ?>
           </div>
+          <div class="col-md-6">
+            <?= $form->field($item, 'platform', [
+              'options' => ['class' => 'form-wrap form-wrap-validation'],
+              'inputOptions' => ['class' => 'form-input-outside select-filter'],
+              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+              'labelOptions' => ['class' => 'form-label-outside'],
+              'template' => '{label}{input}{hint}{error}'
+            ])->dropDownList(['android' => 'Android', 'ios' => 'Ios']) ?>
+          </div>
+          <div class="col-md-6">
+            <?= $form->field($item, 'login_method', [
+              'options' => ['class' => 'form-wrap form-wrap-validation'],
+              'inputOptions' => ['class' => 'form-input-outside select-filter'],
+              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+              'labelOptions' => ['class' => 'form-label-outside'],
+              'template' => '{label}{input}{hint}{error}'
+            ])->dropDownList(['facebook' => 'Facebook', 'google' => 'Google']) ?>
+          </div>
+          <div class="col-md-12">
+            <article class="inline-message">
+              <p><strong style="color: red">*** Important Notes:</strong></p>
+              <p>For the fastest process, kindly double check the provided details,ensure that: <strong>"Server"</strong>, <strong>"Login method"</strong> & <strong>"Recovery code"</strong> are provided.</p>
+              <p>Thanks for your cooperation!</p>
+            </article>
+          </div>
           <div class="col-lg-12 offset-custom-1">
             <div class="form-button text-md-right">
               <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina', 'name' => 'checkout']) ?>
@@ -153,8 +178,6 @@ $('form#add-to-cart').on('submit', function(e) {
         if (!result.status) {
           if (!result.user_id) { // Not login
             $('#account-modal').modal('show');
-          } else if (result.errors) {
-            alert(result.errors);
           }
         } else {
           window.location.href = "[:checkout_url]";

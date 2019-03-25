@@ -59,6 +59,8 @@ class m181217_033141_create_order_table extends Migration
             'total_unit' => $this->integer(11)->defaultValue(0),
             'username' => $this->string(255),
             'password' => $this->string(255),
+            'platform' => $this->string(20),
+            'login_method' => $this->string(20),
             'character_name' => $this->string(255),
             'recover_code' => $this->string(255),
             'server' => $this->string(255),

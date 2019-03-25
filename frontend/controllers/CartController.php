@@ -119,7 +119,7 @@ class CartController extends Controller
         $order->customer_name = $user->name;
         $order->customer_email = $user->email;
         $order->customer_phone = $user->phone;
-        // $order->status = Order::STATUS_PROCESSING;
+        $order->status = Order::STATUS_PENDING;
         $order->generateAuthKey();
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
@@ -138,6 +138,8 @@ class CartController extends Controller
             $item->total_unit = $cartItem->getTotalUnitGame();
             $item->username = $cartItem->username;
             $item->password = $cartItem->password;
+            $item->platform = $cartItem->platform;
+            $item->login_method = $cartItem->login_method;
             $item->character_name = $cartItem->character_name;
             $item->recover_code = $cartItem->recover_code;
             $item->server = $cartItem->server;
@@ -167,74 +169,9 @@ class CartController extends Controller
             ->send();
         }
         $this->layout = 'notice';
-        return $this->render('/site/notice', 
-[            'title' => 'Đặt hàng thành công',
-            'content' => 'Xin chúc mừng bạn đã đặt hàng thành công'
-        ]);
-    }
-
-    public function actionSuccess()
-    {
-        $request = Yii::$app->request;
-        $paymentId = $request->get('paymentId');
-        $payerId = $request->get('PayerID');
-        $token = $request->get('token');
-        if (!$paymentId || !$payerId || !$token) throw new BadRequestHttpException("The request is invalid", 1);
-        $order = Order::findOne(['payment_id' => $paymentId]);
-        if (!$order) throw new BadRequestHttpException("The order # $paymentId is invalid", 1);
-
-        $apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
-                'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
-            )
-        );
-        $payment = Payment::get($paymentId, $apiContext);
-        if ('created' != strtolower($payment->state)) throw new BadRequestHttpException("Order #$paymentId : status is invalid", 1);
-
-        $execution = new PaymentExecution();
-        $execution->setPayerId($payerId);
-        $transactions = $payment->getTransactions();
-        $transaction = reset($transactions);
-        $execution->addTransaction($transaction);
-
-        try {
-            $payment->execute($execution, $apiContext);
-            if ('approved' == strtolower($payment->state)) {// order was created
-                $paymentData = json_encode($payment);
-                $order->payment_data = $paymentData;
-                $order->payment_at = date('Y-m-d H:i:s');
-                $order->status = Order::STATUS_PROCESSING;
-                $order->save();
-                // Send mail to customer
-                $settings = Yii::$app->settings;
-                $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-                if ($adminEmail) {
-                    $user = Yii::$app->user->getIdentity();
-                    $email = Yii::$app->mailer->compose()
-                    ->setTo($user->email)
-                    ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
-                    ->setSubject('Order Confirmation')
-                    ->setTextBody("Thanks for your order")
-                    ->send();
-                }
-            }
-        } catch (Exception $ex) {
-            $order->delete();
-            exit(1);
-        }
-
-        $this->layout = 'notice';
-        return $this->render('/site/notice', [
+        return $this->render('/site/notice', [           
             'title' => 'Đặt hàng thành công',
             'content' => 'Xin chúc mừng bạn đã đặt hàng thành công'
         ]);
-    }
-
-    public function actionError()
-    {
-        $request = Yii::$app->request;
-        $token = $request->get('token');
-        throw new BadRequestHttpException("You have just cancelled the order", 1);
     }
 }

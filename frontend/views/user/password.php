@@ -27,7 +27,7 @@ use yii\bootstrap\ActiveForm;
                 'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                 'template' => '{label}{input}{hint}{error}'
               ])->passwordInput() ?>
-              <?= $form->field($model, 'repeat_password', [
+              <?= $form->field($model, 're_password', [
                 'options' => ['class' => 'form-wrap form-wrap-validation'],
                 'inputOptions' => ['class' => 'form-input'],
                 'labelOptions' => ['class' => 'form-label-outside'],

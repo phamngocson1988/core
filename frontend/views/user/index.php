@@ -21,7 +21,7 @@ use yii\helpers\Url;
                 <hr>
                 <div class="box-minimal-text">
                   Edit your basic inforamtion and password. <br/>
-                  <!-- Or change passowrd <a href="<?=Url::to(['user/password']);?>">here</a> -->
+                  Or change passowrd <a href="<?=Url::to(['user/password']);?>">here</a>
                 </div>
               </article>
             </div>
@@ -32,7 +32,11 @@ use yii\helpers\Url;
                 <hr>
                 <div class="box-minimal-text">
                 List history of orders and their status.<br/>
+                <?php if ($order) :?>
                 Your last order: <a href="<?=Url::to(['user/detail', 'key' => $order->auth_key]);?>">#<?=$order->auth_key;?></a>
+                <?php else :?>
+                You have no orders.  <a href="<?=Url::to(['site/index']);?>">Shop now</a>
+                <?php endif;?>
                 </div>
               </article>
             </div>
@@ -43,22 +47,30 @@ use yii\helpers\Url;
                 <hr>
                 <div class="box-minimal-text">
                   List all your actions on the wallet<br/>
+                  <?php if ($wallet) :?>
                   The last change in your wallet: <a href="<?=Url::to(['user/wallet']);?>"><?=sprintf("%s %s King Coin", $wallet->getTypeLabel(), number_format($wallet->coin));?></a>
+                  <?php else :?>
+                  You have no any King Coin.  <a href="<?=Url::to(['pricing/index']);?>">Buy now</a>
+                  <?php endif;?>
                 </div>
               </article>
             </div>
-            <div class="col-sm-10 col-md-6 col-xl-4">
+            <!--<div class="col-sm-10 col-md-6 col-xl-4">
               <article class="box-minimal box-minimal-border">
                 <div class="box-minimal-icon novi-icon mdi mdi-bank"></div>
                 <p class="big box-minimal-title"><a href="<?=Url::to(['user/transaction']);?>" style="color:white">Transactions</a></p>
                 <hr>
                 <div class="box-minimal-text">
                   List all your transactions of your payments.<br/>
+                  <?php if ($transaction) :?>
                   Last transaction: <?=$transaction->created_at;?><br/>
                   Total: $<?=number_format($transaction->amount);?>
+                  <?php else :?>
+                  You have no any transactions.  <a href="<?=Url::to(['pricing/index']);?>">Buy now</a>
+                  <?php endif;?>
                 </div>
               </article>
-            </div>
+            </div>-->
           </div>
         </div>
       </section>

@@ -9,15 +9,15 @@ use frontend\models\Product;
 class CartItem extends Model implements CartItemInterface
 {
     public $id;
-
     public $quantity;
-
     public $username;
     public $password;
     public $character_name;
     public $recover_code;
     public $server;
     public $note;
+    public $platform;
+    public $login_method;
 
     /** @var Product **/
     protected $_product;
@@ -34,7 +34,7 @@ class CartItem extends Model implements CartItemInterface
     public function rules()
     {
         return [
-            [['id', 'quantity', 'username', 'password', 'character_name'], 'required'],
+            [['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method'], 'required'],
             ['id', 'validateProduct'],
             [['server', 'recover_code', 'note'], 'trim']
         ];
@@ -44,7 +44,7 @@ class CartItem extends Model implements CartItemInterface
     {
         $product = $this->getProduct();
         if (!$product) {
-            $this->addError($attribute, 'Sản phẩm này không khả dụng');
+            $this->addError($attribute, 'This product is not available');
             return false;
         }
     }

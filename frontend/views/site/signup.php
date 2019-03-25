@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
           <?= $form->field($model, 'birthday', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input'],
+            'inputOptions' => ['class' => 'form-input date-picker'],
             'labelOptions' => ['class' => 'form-label'],
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
             'template' => '{input}{label}{hint}{error}'
@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
           ])->dropDownList(User::getResellerStatus()) ?>
 
           <div class="form-button">
-            <?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Đăng ký']) ?>
+            <?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Signup']) ?>
           </div>
         <?php ActiveForm::end(); ?>
       </div>
@@ -99,3 +99,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="group-xs group-middle"><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-facebook" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-twitter" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-google" href="#"></a></div>
   </div>
 </div>
+<?php
+$script = <<< JS
+var cur= new Date();
+$('.date-picker').bootstrapMaterialDatePicker({
+  format: 'YYYY-MM-DD',
+  maxDate: cur,
+  time: false,
+  year: false
+});
+JS;
+$this->registerJs($script);
+?>

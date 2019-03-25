@@ -15,9 +15,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class Order extends ActiveRecord
 {
-    const STATUS_TEMP = 'verifying';
-    const STATUS_PROCESSING = 'pending';
-    const STATUS_DONE = 'processing';
+    const STATUS_VERIFYING = 'verifying';
+    const STATUS_PENDING = 'pending';
+    const STATUS_PROCESSING = 'processing';
     const STATUS_COMPLETED = 'completed';
     const STATUS_DELETED = 'deleted';
 
@@ -41,20 +41,12 @@ class Order extends ActiveRecord
         ];
     }
 
-    // public function rules()
-    // {
-    //     return [
-    //         [['customer_id', 'customer_name', 'customer_email', 'customer_phone', 'status'], 'required'],
-    //         ['status', 'default', 'value' => self::STATUS_TEMP],
-    //     ];
-    // }
-
     public static function getStatusList()
     {
         return [
-            self::STATUS_TEMP => 'Verifying',
-            self::STATUS_PROCESSING => 'Pending',
-            self::STATUS_DONE => 'Processing',
+            self::STATUS_VERIFYING => 'Verifying',
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_PROCESSING => 'Processing',
             self::STATUS_COMPLETED => 'Completed',
             self::STATUS_DELETED => 'Deleted'
         ];
@@ -97,7 +89,7 @@ class Order extends ActiveRecord
 
     public function isTempOrder()
     {
-        return $this->status === self::STATUS_TEMP;
+        return $this->status === self::STATUS_VERIFYING;
     }
 
     /**

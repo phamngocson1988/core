@@ -43,9 +43,9 @@ class UserController extends Controller
     {
         $userId = Yii::$app->user->id;
         $user = Yii::$app->user->getIdentity();
-        $order = Order::find(['customer_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
-        $wallet = UserWallet::find(['user_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
-        $transaction = Transaction::find(['user_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
+        $order = Order::find()->where(['customer_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
+        $wallet = UserWallet::find()->where(['user_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
+        $transaction = Transaction::find()->where(['user_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
     	return $this->render('index', [
             'order' => $order,
             'wallet' => $wallet,
@@ -71,18 +71,19 @@ class UserController extends Controller
 
     public function actionPassword()
     {
-    	$request = Yii::$app->request;
-    	$model = ChangePasswordForm::findOne(Yii::$app->user->id);
-    	if ($request->isPost) {
-    		if ($model->load($request->post()) && $model->validate() && $model->change()) {
-                Yii::$app->session->setFlash('success', 'You have updated successfully.');
-                $this->redirect(['user/index']);
-    		} else {
-                Yii::$app->session->setFlash('error', 'There are something wrong!');
-    		}
-    		unset($_POST);
-    	}
-    	return $this->render('password', ['model' => $model]);
+        $request = Yii::$app->request;
+        $post = $request->post();
+        $model = new ChangePasswordForm();
+        
+        if ($model->load($post) && $model->change()) {
+            $model = new ChangePasswordForm();
+            return $this->redirect(['user/index']);
+        }
+
+        return $this->render('password', [
+            'model' => $model,
+            'user' => Yii::$app->user->getIdentity(),
+        ]);
     }
 
     public function actionOrders()

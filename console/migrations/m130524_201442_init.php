@@ -24,7 +24,7 @@ class m130524_201442_init extends Migration
             'country_code' => $this->string(10),
             'phone' => $this->string(50),
             'address' => $this->string(200),
-            'birthday' => $this->integer(),
+            'birthday' => $this->date(),
             'favorite' => $this->integer(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'affiliate_code' => $this->string(10),
