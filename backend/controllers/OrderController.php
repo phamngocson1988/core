@@ -26,7 +26,7 @@ class OrderController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admin'],
                     ],
                 ],
             ],
@@ -40,8 +40,13 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $form = new FetchOrderForm();
-
+        $form = new FetchOrderForm([
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+        ]);
         $command = $form->getCommand();
 
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -50,10 +55,10 @@ class OrderController extends Controller
                             ->orderBy(['id' => SORT_DESC])
                             ->all();
 
-        return $this->render('index.tpl', [
+        return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
-            'form' => $form,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }

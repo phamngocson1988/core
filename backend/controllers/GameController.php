@@ -27,6 +27,11 @@ class GameController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['suggestion'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -112,5 +117,27 @@ class GameController extends Controller
             return $this->renderJson($game->delete());
         }
         return $this->redirectNotFound();
+    }
+
+    public function actionSuggestion()
+    {
+        $request = Yii::$app->request;
+
+        if( $request->isAjax) {
+            $keyword = $request->get('q');
+            $items = [];
+            if ($keyword) {
+                $form = new FetchGameForm(['q' => $keyword]);
+                $command = $form->getCommand();
+                $games = $command->offset(0)->limit(20)->all();
+                foreach ($games as $game) {
+                    $item = [];
+                    $item['id'] = $game->id;
+                    $item['text'] = $game->title;
+                    $items[] = $item;
+                }
+            }
+            return $this->renderJson(true, ['items' => $items]);
+        }
     }
 }
