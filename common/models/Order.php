@@ -57,9 +57,9 @@ class Order extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'saler_id']);
     }
 
-    public function getMarketing()
+    public function getHandler()
     {
-        return $this->hasOne(User::className(), ['id' => 'marketing_id']);
+        return $this->hasOne(User::className(), ['id' => 'handler_id']);
     }
 
     public function getCustomer()

@@ -15,6 +15,9 @@ class FetchOrderForm extends Model
     public $game_id;
     public $start_date;
     public $end_date;
+    public $saler_id;
+    public $handler_id;
+    public $status;
 
     private $_command;
     
@@ -27,8 +30,13 @@ class FetchOrderForm extends Model
     protected function createCommand()
     {
         $command = Order::find();
+        $command->where(["<>", "status", Order::STATUS_DELETED]);
 
         $this->_command = $command;
+        if ($this->status) {
+
+            
+        }
     }
 
     public function getCommand()
@@ -46,6 +54,20 @@ class FetchOrderForm extends Model
         }
     }
 
+    public function getSaler()
+    {
+        if ($this->saler_id) {
+            return User::findOne($this->saler_id);
+        }
+    }
+
+    public function getHandler()
+    {
+        if ($this->handler_id) {
+            return User::findOne($this->handler_id);
+        }
+    }
+
     public function getGame()
     {
         if ($this->game_id) {
@@ -55,6 +77,8 @@ class FetchOrderForm extends Model
 
     public function getStatus()
     {
-        return Order::getStatusList();
+        $list = Order::getStatusList();
+        unset($list[Order::STATUS_DELETED]);
+        return $list;
     }
 }

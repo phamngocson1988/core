@@ -30,7 +30,7 @@ class m181217_033141_create_order_table extends Migration
             'customer_email' => $this->string(255)->notNull(),
             'customer_phone' => $this->string(20)->notNull(),
             'saler_id' => $this->integer(11),
-            'marketing_id' => $this->integer(11),
+            'handler_id' => $this->integer(11),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),

@@ -47,6 +47,16 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
+            <?php if (Yii::$app->user->can('admin')):?>
+            <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => 'not', 'status' => Order::STATUS_PENDING])?>">Chưa có người quản lý</a>
+            <?php elseif (Yii::$app->user->can('handle')):?>
+            <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => 'not', 'status' => Order::STATUS_PENDING])?>">Chưa có người quản lý</a>
+            <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => Yii::$app->user->id])?>">Những đơn hàng của tôi</a>
+            <?php elseif (Yii::$app->user->can('sale')):?>
+            <a class="btn purple" href="<?=Url::to(['order/index', 'saler_id' => Yii::$app->user->id])?>">Những đơn hàng của tôi</a>
+            <?php endif;?>
+          </div>
+          <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['order/create', 'ref' => $ref])?>"><?=Yii::t('app', 'add_new')?></a>
           </div>
         </div>
