@@ -8,7 +8,7 @@ use yii\data\Pagination;
 use yii\helpers\Url;
 use backend\forms\FetchCustomerForm;
 use backend\forms\ChangeCustomerStatusForm;
-
+use backend\forms\CreateCustomerForm;
 /**
  * CustomerController
  */
@@ -22,7 +22,7 @@ class CustomerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['change-status'],
+                        'actions' => ['change-status', 'create'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -58,6 +58,23 @@ class CustomerController extends Controller
             'form' => $form,
             'ref' => Url::to($request->getUrl(), true),
             'links' => $links
+        ]);
+    }
+
+    public function actionCreate()
+    {
+        $request = Yii::$app->request;
+        $model = new CreateCustomerForm();
+        if ($model->load($request->post())) {
+            if ($user = $model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['customer/index']);
+            }
+        }
+
+        return $this->render('create.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
     }
 

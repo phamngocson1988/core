@@ -22,9 +22,6 @@
         <span class="arrow open"></span>
         </a>
       </li>
-      <li class="heading">
-        <h3 class="uppercase">{Yii::t('app', 'features')}</h3>
-      </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user"></i>
@@ -50,44 +47,6 @@
           <li class="nav-item  ">
             <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
             <span class="title">{Yii::t('app', 'customers')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-note"></i>
-        <span class="title">{Yii::t('app', 'posts')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/post/index'}" class="nav-link " code='post.index'>
-            <span class="title">{Yii::t('app', 'posts')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/category/index'}" class="nav-link " code='category.index'>
-            <span class="title">{Yii::t('app', 'categories')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-note"></i>
-        <span class="title">{Yii::t('module.shop', 'products')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/shop/product'}" class="nav-link " code='product.index'>
-            <span class="title">{Yii::t('module.shop', 'products')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/shop/category/index'}" class="nav-link " code='product.category.index'>
-            <span class="title">{Yii::t('module.shop', 'categories')}</span>
             </a>
           </li>
         </ul>

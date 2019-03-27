@@ -25,6 +25,11 @@
           <i class="icon-settings font-dark"></i>
           <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_customers')}</span>
         </div>
+        <div class="actions">
+          <div class="btn-group btn-group-devided">
+            <a class="btn green" href="{url route='customer/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
+          </div>
+        </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
@@ -56,7 +61,9 @@
           <thead>
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 25%;"> Username </th>
+              <th style="width: 25%;"> Công ty </th>
+              <th style="width: 25%;"> Người đại diện </th>
+              <th style="width: 15%;"> Số điện thoại </th>
               <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
               <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
@@ -66,21 +73,22 @@
             {foreach $models as $key => $model}
             <tr>
               <td>{$key + $pages->offset + 1}</td>
-              <td>{$model->username}</td>
+              <td>{$model->company}</td>
+              <td>{$model->name}</td>
+              <td>{$model->phone}</td>
               <td>{$model->getStatusLabel()}</td>
               <td>
                 {if $model->isActive()}
-                <a class="btn btn-xs grey-salsa delete-customer" href="{url route='customer/change-status' id=$model->id status='delete'}"><i class="fa fa-toggle-off"></i></a>
+                <a class="btn btn-xs grey-salsa delete-user" href="{url route='customer/change-status' id=$model->id status='delete'}"><i class="fa fa-trash"></i></a>
                 {else}
-                <a class="btn btn-xs grey-salsa active-customer" href="{url route='customer/change-status' id=$model->id status='active'}"><i class="fa fa-toggle-on"></i></a>
+                <a class="btn btn-xs grey-salsa active-user" href="{url route='customer/change-status' id=$model->id status='active'}"><i class="fa-check-square"></i></a>
                 {/if}
-                
               </td>
             </tr>
             {/foreach}
             {else}
             <tr>
-              <td colspan="4">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="6">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>

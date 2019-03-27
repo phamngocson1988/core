@@ -45,7 +45,12 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => date('Y-m-d H:i:s')
+            ],
         ];
     }
 
@@ -189,14 +194,6 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
-    }
-
-    public function getRoles()
-    {
-        $auth = Yii::$app->authManager;
-        $roles = $auth->getRolesByUser($this->id);
-        $roleNames = ArrayHelper::map($roles, 'name', 'description');
-        return $roleNames;
     }
 
     public static function getUserStatus()

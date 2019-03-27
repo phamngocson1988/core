@@ -9,14 +9,10 @@ $params = array_merge(
 return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
+    'defaultRoute' => 'customer',
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
-    'bootstrap' => ['log', 'shop'],
-    'modules' => [
-        'shop' => [
-            'class' => 'backend\modules\shop\Module',
-        ],
-    ],
+    'bootstrap' => ['log'],
     'language' => 'vi',
     'sourceLanguage' => 'en-US',
     'components' => [
@@ -70,7 +66,6 @@ return [
         ],
 
         'urlManager' => require('router.php'),
-        'urlManagerFrontend' => require('../../frontend/config/router.php'),
         'i18n' => [
             'translations' => [
                 'app*' => [
