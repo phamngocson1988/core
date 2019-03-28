@@ -6,12 +6,14 @@ use common\components\Controller;
 use yii\filters\AccessControl;
 use backend\forms\FetchOrderForm;
 use backend\forms\CreateOrderForm;
+use backend\forms\CreateOrderItemForm;
 use backend\forms\EditOrderForm;
 use backend\forms\DeleteOrderForm;
 use yii\data\Pagination;
 use backend\forms\ChangeOrderPositionForm;
 use yii\helpers\Url;
 use common\models\Order;
+use common\models\OrderItems;
 
 class OrderController extends Controller
 {
@@ -67,18 +69,24 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $model = new CreateOrderForm();
-        $model->type = Order::ORDER_TYPE_ORDER;
-        if ($model->load(Yii::$app->request->order())) {
-            if ($model->save()) {
+        $order = new CreateOrderForm();
+        $item = new CreateOrderItemForm();
+        $post = $request->post();
+        if ($order->load($post) && $order->save()) {
+            if ($item->load($post)) {
+                $item->order_id = $order->id;
+                $item->save();
+                $order->total_price = $item->getTotalPrice();
+                $order->save();
                 Yii::$app->session->setFlash('success', 'Success!');
                 $ref = $request->get('ref', Url::to(['order/index']));
                 return $this->redirect($ref);
             }
         }
 
-        return $this->render('create.tpl', [
-            'model' => $model,
+        return $this->render('create', [
+            'order' => $order,
+            'item' => $item,
             'back' => $request->get('ref', Url::to(['order/index']))
         ]);
     }
