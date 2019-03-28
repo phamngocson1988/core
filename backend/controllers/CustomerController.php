@@ -78,6 +78,23 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function actionCreateProfile($id)
+    {
+        $request = Yii::$app->request;
+        $model = new CreateProfileForm();
+        if ($model->load($request->post())) {
+            if ($user = $model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['customer/index']);
+            }
+        }
+
+        return $this->render('create-profile.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
     public function actionSuggestion()
     {
         $request = Yii::$app->request;

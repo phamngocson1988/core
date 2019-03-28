@@ -44,6 +44,16 @@ class m130524_201442_init extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
+        $this->createTable('{{%profile}}', [
+            'id' => $this->primaryKey(),
+            'customer_id' => $this->integer()->notNull(),
+            'prefix' => $this->string(50)->notNull(),
+            'port' => $this->integer()->notNull(),
+            'action' => $this->string('10')->notNull(),
+            'price' => $this->integer()->notNull(),
+            'api' => $this->string(200)
+        ], $tableOptions);
+
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
             'username' => 'admin',
