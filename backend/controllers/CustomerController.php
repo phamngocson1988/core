@@ -9,6 +9,9 @@ use yii\helpers\Url;
 use backend\forms\FetchCustomerForm;
 use backend\forms\ChangeCustomerStatusForm;
 use backend\forms\CreateCustomerForm;
+use backend\forms\EditCustomerForm;
+use backend\forms\CreateCustomerProfileForm;
+use backend\forms\EditCustomerProfileForm;
 /**
  * CustomerController
  */
@@ -22,7 +25,7 @@ class CustomerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['change-status', 'create'],
+                        'actions' => ['change-status', 'create', 'edit', 'create-profile', 'edit-profile'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -78,10 +81,10 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function actionCreateProfile($id)
+    public function actionEdit($id)
     {
         $request = Yii::$app->request;
-        $model = new CreateProfileForm();
+        $model = EditCustomerForm::findOne($id);
         if ($model->load($request->post())) {
             if ($user = $model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
@@ -89,7 +92,39 @@ class CustomerController extends Controller
             }
         }
 
+        return $this->render('create.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
+    public function actionCreateProfile($id)
+    {
+        $request = Yii::$app->request;
+        $model = new CreateCustomerProfileForm(['customer_id' => $id]);
+        if ($model->load($request->post())) {
+            if ($user = $model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['customer/index']);
+            }
+        }
         return $this->render('create-profile.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
+    public function actionEditProfile($id)
+    {
+        $request = Yii::$app->request;
+        $model = EditCustomerProfileForm::findOne($id);
+        if ($model->load($request->post())) {
+            if ($user = $model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['customer/index']);
+            }
+        }
+        return $this->render('edit-profile.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
@@ -114,28 +149,6 @@ class CustomerController extends Controller
                 }
             }
             return $this->renderJson(true, ['items' => $items]);
-        }
-    }
-
-    public function actionChangeStatus()
-    {
-        $request = Yii::$app->request;
-        if( $request->isAjax) {
-            $id = $request->get('id');
-            $status = $request->get('status');
-            $form = new ChangeCustomerStatusForm(['id' => $id]);
-            switch ($status) {
-                case 'active':
-                    $result = $form->active();
-                    break;
-                case 'delete':
-                    $result = $form->delete();
-                    break;                
-                default:
-                    $result = false;
-                    break;
-            }
-            return $this->renderJson($result, null, $form->getErrors());
         }
     }
 }

@@ -233,4 +233,15 @@ class Customer extends ActiveRecord implements IdentityInterface
     {
         return $this->status === self::STATUS_ACTIVE;
     }
+
+    public function getProfiles() 
+    {
+        return $this->hasMany(Profile::className(), ['customer_id' => 'id']);
+    }
+
+    public function countProfiles()
+    {
+        $command = $this->getProfiles();
+        return $command->count();
+    }
 }

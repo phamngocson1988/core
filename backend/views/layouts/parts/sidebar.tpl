@@ -30,47 +30,8 @@
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
-            <span class="title">{Yii::t('app', 'users')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/rbac/create-role'}" class="nav-link" code='rbac.create-role'>
-            <span class="title">{Yii::t('app', 'create_role')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/rbac/assign-role'}" class="nav-link " code='rbac.assign-role'>
-            <span class="title">{Yii::t('app', 'role_permission')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
             <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
             <span class="title">{Yii::t('app', 'customers')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-settings"></i>
-        <span class="title">{Yii::t('app', 'settings')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/setting/application'}" class="nav-link " code='setting.application'>
-            <span class="title">{Yii::t('app', 'application')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/setting/social'}" class="nav-link " code='setting.social'>
-            <span class="title">{Yii::t('app', 'social_networks')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/setting/script'}" class="nav-link " code='setting.script'>
-            <span class="title">{Yii::t('app', 'header_scripts')}</span>
             </a>
           </li>
         </ul>

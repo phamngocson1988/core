@@ -8,7 +8,7 @@ use common\models\Customer;
 /**
  * CreateProfileForm
  */
-class CreateProfileForm extends Profile
+class CreateCustomerProfileForm extends Profile
 {
     protected $_customer;
     /**

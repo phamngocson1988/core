@@ -34,15 +34,6 @@
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <form method="GET">
-            <div class="form-group col-md-3">
-              <label>{Yii::t('app', 'status')}: </label>
-              <select class="form-control" name="status">
-                <option value="">{Yii::t('app', 'all')}</option>
-                {foreach $form->getUserStatus() as $statusKey => $statusLabel}
-                <option value="{$statusKey}" {if (string)$statusKey === $form->status} selected {/if}>{$statusLabel}</option>
-                {/foreach}
-              </select>
-            </div>
             <div class="form-group col-md-4">
               <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
                 placeholder="Keyword" name="q" value="{$form->q}">
@@ -62,8 +53,9 @@
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 25%;"> Công ty </th>
-              <th style="width: 25%;"> Người đại diện </th>
+              <th style="width: 15%;"> Người đại diện </th>
               <th style="width: 15%;"> Số điện thoại </th>
+              <th style="width: 10%;"> Số profile </th>
               <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
               <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
@@ -76,19 +68,62 @@
               <td>{$model->company}</td>
               <td>{$model->name}</td>
               <td>{$model->phone}</td>
+              <td>
+                <a class="btn purple btn-outline sbold" data-toggle="modal" href="#profiles{$model->id}">{$model->countProfiles()}</a>
+                <div class="modal fade bs-modal-lg" id="profiles{$model->id}" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Profiles - {$model->company}</h4>
+                      </div>
+                      <div class="modal-body">
+                      <table class="table table-striped table-bordered table-hover table-checkable">
+                        <thead>
+                          <tr>
+                            <th style="width: 10%;"> Số đầu </th>
+                            <th style="width: 10%;"> Cổng </th>
+                            <th style="width: 10%;"> Loại </th>
+                            <th style="width: 20%;"> Giá tiền </th>
+                            <th style="width: 40%;"> API </th>
+                            <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {foreach $model->profiles as $profile}
+                          <tr>
+                            <td>{$profile->prefix}</td>
+                            <td>{$profile->port}</td>
+                            <td>{$profile->action}</td>
+                            <td>{$profile->price}</td>
+                            <td>{$profile->api}</td>
+                            <td>
+                              <a class="btn btn-xs grey-salsa" href="{url route='customer/edit-profile' id=$profile->id}"><i class="fa fa-edit"></i></a>
+                            </td>
+                          </tr>
+                          {/foreach}
+                        </tbody>
+                      </table>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                    <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+                </div>
+              </td>
               <td>{$model->getStatusLabel()}</td>
               <td>
-                {if $model->isActive()}
-                <a class="btn btn-xs grey-salsa delete-user" href="{url route='customer/change-status' id=$model->id status='delete'}"><i class="fa fa-trash"></i></a>
-                {else}
-                <a class="btn btn-xs grey-salsa active-user" href="{url route='customer/change-status' id=$model->id status='active'}"><i class="fa-check-square"></i></a>
-                {/if}
+                <a class="btn btn-xs grey-salsa" href="{url route='customer/edit' id=$model->id}"><i class="fa fa-edit"></i></i></a>
+                <a class="btn btn-xs grey-salsa" href="{url route='customer/create-profile' id=$model->id}"><i class="fa fa-plus"></i></i></a>
               </td>
             </tr>
             {/foreach}
             {else}
             <tr>
-              <td colspan="6">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="7">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>
