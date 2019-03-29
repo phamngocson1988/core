@@ -8,24 +8,24 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='customer/index'}">{Yii::t('app', 'manage_customers')}</a>
+      <a href="{url route='customer/index'}">Quản lý khách hàng</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'topup')}</span>
+      <span>Nạp tiền</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'topup')}</h1>
+<h1 class="page-title">Nạp tiền</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='signup-form'}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">{Yii::t('app', 'topup')}</div>
+          <div class="caption">Nạp tiền</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>

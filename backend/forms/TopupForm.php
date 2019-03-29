@@ -63,6 +63,7 @@ class TopupForm extends Model
             $customer->balance = $customer->reCountingBalance();
             $customer->save();
             $transaction->commit();
+            return true;
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw $e;
