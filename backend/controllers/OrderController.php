@@ -71,17 +71,24 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $order = new CreateOrderForm();
         $item = new CreateOrderItemForm();
-        $post = $request->post();
-        if ($order->load($post) && $order->save()) {
-            if ($item->load($post)) {
-                $item->order_id = $order->id;
-                $item->save();
-                $order->total_price = $item->getTotalPrice();
-                $order->save();
-                Yii::$app->session->setFlash('success', 'Success!');
-                $ref = $request->get('ref', Url::to(['order/index']));
-                return $this->redirect($ref);
+        if ($request->isPost) {
+            $post = $request->post();
+            if (!$order->load($post)) Yii::$app->session->setFlash('error', 'Order Error!');
+            elseif (!$item->load($post)) {
+                print_r($item->getErrors());die;
+                Yii::$app->session->setFlash('error', 'Item Error!');
             }
+            elseif (!$order->save()) Yii::$app->session->setFlash('error', 'Order Error!');
+            $item->order_id = $order->id;
+            if (!$item->save()) {
+                print_r($item->getErrors());die;
+                Yii::$app->session->setFlash('error', 'Item Error!');
+            }
+            $order->total_price = $item->getTotalPrice();
+            $order->save();
+            Yii::$app->session->setFlash('success', 'Success!');
+            $ref = $request->get('ref', Url::to(['order/index']));
+            return $this->redirect($ref);
         }
 
         return $this->render('create', [

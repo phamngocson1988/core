@@ -78,6 +78,11 @@ use yii\web\JsExpression;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList([1 => 'ádf', 2 => 'adfadsf'], ['prompt' => Yii::t('app', 'choose')]);?>
+                  <?=$form->field($item, 'quantity', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
 
                   <?=$form->field($item, 'username', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
