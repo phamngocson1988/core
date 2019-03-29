@@ -12,20 +12,20 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo profile</span>
+      <span>{Yii::t('app', 'topup')}</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Tạo profile</h1>
+<h1 class="page-title">{Yii::t('app', 'topup')}</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='signup-form'}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">Tạo profile</div>
+          <div class="caption">{Yii::t('app', 'topup')}</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
@@ -50,20 +50,11 @@
                       <input type="text" class="form-control" value="{$model->getCustomer()->name}" disabled>
                     </div>
                   </div>
-
-                  {$form->field($model, 'prefix', [
+                  {$form->field($model, 'amount', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'port', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'action', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList(['sms' => 'SMS', 'call' => 'Call'])}
-                  {$form->field($model, 'price', [
+                  {$form->field($model, 'description', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
