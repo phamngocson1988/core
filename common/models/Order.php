@@ -87,7 +87,7 @@ class Order extends ActiveRecord
         $this->auth_key = Yii::$app->security->generateRandomString(10);
     }
 
-    public function isTempOrder()
+    public function isVerifyingOrder()
     {
         return $this->status === self::STATUS_VERIFYING;
     }
@@ -99,7 +99,7 @@ class Order extends ActiveRecord
      */
     public function beforeDelete()
     {
-        if (!$this->isTempOrder()) return false;
+        if (!$this->isVerifyingOrder()) return false;
         if (parent::beforeDelete()) {
             $items = $this->items;
             foreach ($this->items as $item) {

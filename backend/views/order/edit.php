@@ -17,17 +17,17 @@ use common\models\Product;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['task/index'])?>">Quản lý đơn hàng</a>
+      <a href="<?=Url::to(['task/index'])?>"><?=Yii::t('app', 'manage_tasks')?></a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo đơn hàng</span>
+      <span><?=Yii::t('app', 'create_task')?></span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Tạo đơn hàng</h1>
+<h1 class="page-title"><?=Yii::t('app', 'create_task')?></h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -40,6 +40,8 @@ use common\models\Product;
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
             </button>
+            <a class="btn red btn-outline sbold" data-toggle="modal" href="#next">
+            <i class="fa fa-angle-right"></i> <?=Yii::t('app', 'pending')?></a>
           </div>
         </div>
         <div class="portlet-body">
@@ -150,19 +152,54 @@ use common\models\Product;
           </div>
         </div>
       </div>
-    <?php ActiveForm::end()?>
+      <?php ActiveForm::end()?>
   </div>
+</div>
+<div class="modal fade" id="next" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Move the order to pending</h4>
+      </div>
+      <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated', 'id' => 'next-form'], 'action' => Url::to(['order/move-to-pending'])]);?>
+      <?=$nextForm->field($updateStatusForm, 'id')->hiddenInput(['value' => $order->id]);?>
+      <div class="modal-body"> 
+          <p>Mô tả quá trình thanh toán của khách hàng cho đơn hàng này.</p>
+          <?=$nextForm->field($updateStatusForm, 'description', [
+            'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
+            'template' => '<div class="col-md-12">{input}{hint}{error}</div>'
+          ])->textarea()?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn green">Save changes</button>
+      </div>
+      <?php ActiveForm::end();?>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
 <?php
 $script = <<< JS
-$('#product>option').hide();
 $('#game').on('change', function(){
   $('#product').val('');
-  $('#product>option').hide();
-  $('#product>option[game_id='+$(this).val()+']').show();
+  changeGame($(this).val());
   // $('#product').val($('#product>option[game_id='+$(this).val()+']:first-child').attr('value'));
 });
-$('#game').trigger('change');
+function changeGame(id) {
+  $('#product>option').hide();
+  $('#product>option[game_id='+id+']').show();
+}
+changeGame($('#game').val());
+
+var nextForm = new AjaxFormSubmit({element: '#next-form'});
+nextForm.success = function (data, form) {
+  window.location.href = "###REDIRECT###";
+}
 JS;
+$redirect = Url::to(['order/index']);
+$script = str_replace('###REDIRECT###', $redirect, $script);
 $this->registerJs($script);
 ?>

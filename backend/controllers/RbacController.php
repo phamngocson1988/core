@@ -118,7 +118,7 @@ class RbacController extends Controller
         $links = [
             'user_suggestion' => Url::to(['user/suggestion'])
         ];
-        return $this->render('assign-role.tpl', [
+        return $this->render('assign-role', [
             'model' => $model,
             'links' => $links
         ]);        

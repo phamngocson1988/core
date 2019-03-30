@@ -158,8 +158,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;">$<?=$model->total_price;?></td>
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
                 <td style="vertical-align: middle;">
-                    <a href="javascript:;" target="_blank" class="btn btn-xs grey-salsa"><i class="fa fa-eye"></i></a>
-                    <a href='<?=Url::to(['order/delete', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa delete-action"><i class="fa fa-trash-o"></i></a>
+                  <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>

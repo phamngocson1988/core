@@ -5,6 +5,7 @@ use Yii;
 use common\models\OrderItems;
 use common\models\Game;
 use common\models\Product;
+use yii\helpers\ArrayHelper;
 
 class CreateOrderItemForm extends OrderItems
 {

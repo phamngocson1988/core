@@ -40,4 +40,14 @@ class CreateOrderForm extends Order
         $this->customer_phone = $customer->phone;
         return true;
     }
+
+    // public function afterSave()
+    // {
+
+    //     Yii::$app->syslog->log('assign_role', 'assign role to user', [
+    //         'user_id' => $user->id,
+    //         'username' => $user->username,
+    //         'role' => $role->name
+    //     ]);
+    // }
 }
