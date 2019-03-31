@@ -33,11 +33,11 @@
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          <li class="nav-item  ">
+          <!-- <li class="nav-item  ">
             <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
             <span class="title">{Yii::t('app', 'users')}</span>
             </a>
-          </li>
+          </li>-->
           <li class="nav-item  ">
             <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
             <span class="title">{Yii::t('app', 'role')}</span>
@@ -45,7 +45,6 @@
           </li>
         </ul>
       </li>
-      {/if}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user"></i>
@@ -79,7 +78,6 @@
           </li>
         </ul>
       </li>
-      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-clock"></i>
@@ -94,7 +92,6 @@
           </li>
         </ul>
       </li>
-      {/if}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
@@ -154,19 +151,18 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-basket"></i>
-        <span class="title">{Yii::t('app', 'shop')}</span>
+        <i class="icon-settings"></i>
+        <span class="title">{Yii::t('app', 'system_logs')}</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='/order'}" class="nav-link " code='order.index'>
-            <span class="title">{Yii::t('app', 'orders')}</span>
+            <a href="{url route='/system-log/index'}" class="nav-link " code='system-log.index'>
+            <span class="title">{Yii::t('app', 'system_logs')}</span>
             </a>
           </li>
         </ul>
       </li>
-      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
@@ -192,22 +188,23 @@
         </ul>
       </li>
       {/if}
-      {if Yii::$app->user->can('admin')}
+      {if Yii::$app->user->can('saler') || Yii::$app->user->can('handler')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-settings"></i>
-        <span class="title">{Yii::t('app', 'system_logs')}</span>
+        <i class="icon-basket"></i>
+        <span class="title">{Yii::t('app', 'shop')}</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='/system-log/index'}" class="nav-link " code='system-log.index'>
-            <span class="title">{Yii::t('app', 'system_logs')}</span>
+            <a href="{url route='/order'}" class="nav-link " code='order.index'>
+            <span class="title">{Yii::t('app', 'orders')}</span>
             </a>
           </li>
         </ul>
       </li>
       {/if}
+
     </ul>
   </div>
 </div>

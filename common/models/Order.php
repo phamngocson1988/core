@@ -92,6 +92,11 @@ class Order extends ActiveRecord
         return $this->status === self::STATUS_VERIFYING;
     }
 
+    public function isPendingOrder()
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
+
     /**
      * check if the order is in temporary status or not. The system only allow to delete temporary order
      * If not, just move it to 'deleted' status.

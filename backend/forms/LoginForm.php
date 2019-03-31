@@ -15,7 +15,7 @@ class LoginForm extends Model
     public $rememberMe = true;
 
     private $_user;
-    private $_roles = ['admin'];
+    private $_roles = ['admin', 'saler', 'handler'];
 
     /**
      * @inheritdoc
@@ -26,7 +26,7 @@ class LoginForm extends Model
             // username and password are both required
             [['username', 'password'], 'required'],
             // user must be a staff
-            // ['username', 'isStaff', 'message' => 'You are not allowed to login'],
+            ['username', 'isStaff', 'message' => 'You are not allowed to login'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()

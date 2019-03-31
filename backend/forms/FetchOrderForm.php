@@ -19,6 +19,13 @@ class FetchOrderForm extends Model
     public $handler_id;
     public $status;
 
+    public function rules()
+    {
+        return [
+            [['customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe']
+        ];
+    }
+
     private $_command;
     
     public function fetch()
@@ -33,9 +40,32 @@ class FetchOrderForm extends Model
         $command->where(["<>", "status", Order::STATUS_DELETED]);
 
         $this->_command = $command;
+        if ($this->customer_id) {
+            $command->andWhere(['customer_id' => $this->customer_id]);
+        }
+        if ($this->saler_id) {
+            $command->andWhere(['saler_id' => $this->saler_id]);
+        }
+        if ($this->handler_id) {
+            if ($this->handler_id == -1) {
+                $command->andWhere(['handler_id' => null]);
+                $this->handler_id = '';
+            } else {
+                $command->andWhere(['handler_id' => $this->handler_id]);
+            }
+        }
+        if ($this->start_date) {
+            $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
+        }
+        if ($this->end_date) {
+            $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
+        }
         if ($this->status) {
-
-            
+            if (is_array($this->status)) {
+                $command->andWhere(['IN', 'status', $this->status]);
+            } else {
+                $command->andWhere(['status' => $this->status]);
+            }
         }
     }
 

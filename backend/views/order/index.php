@@ -49,17 +49,19 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         <div class="actions">
           <div class="btn-group btn-group-devided">
             <?php if (Yii::$app->user->can('admin')):?>
-            <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => 'not', 'status' => Order::STATUS_PENDING])?>">Chưa có người quản lý</a>
-            <?php elseif (Yii::$app->user->can('handle')):?>
-            <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => 'not', 'status' => Order::STATUS_PENDING])?>">Chưa có người quản lý</a>
+            <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => '-1', 'status' => Order::STATUS_PENDING])?>">Chưa có người quản lý</a>
+            <?php elseif (Yii::$app->user->can('handler')):?>
+            <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => '-1', 'status' => Order::STATUS_PENDING])?>">Chưa có người quản lý</a>
             <a class="btn purple" href="<?=Url::to(['order/index', 'handler_id' => Yii::$app->user->id])?>">Những đơn hàng của tôi</a>
-            <?php elseif (Yii::$app->user->can('sale')):?>
+            <?php elseif (Yii::$app->user->can('saler')):?>
             <a class="btn purple" href="<?=Url::to(['order/index', 'saler_id' => Yii::$app->user->id])?>">Những đơn hàng của tôi</a>
             <?php endif;?>
           </div>
+          <?php if (Yii::$app->user->can('saler')) :?>
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['order/create', 'ref' => $ref])?>"><?=Yii::t('app', 'add_new')?></a>
           </div>
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
@@ -72,7 +74,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'customer_id'],
               'pluginOptions' => [
-                'placeholder' => Yii::t('app', 'select_customer'),
+                'placeholder' => 'Chọn khách hàng',
                 'allowClear' => true,
                 'minimumInputLength' => 3,
                 'ajax' => [
@@ -83,23 +85,55 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ])->label('Khách hàng')?>
 
-            <?php $game = $search->getGame();?>
-            <?=$form->field($search, 'game_id', [
+            <?php if (Yii::$app->user->can('admin')) :?>
+            <?php $saler = $search->getSaler();?>
+            <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-2'],
             ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->game_id) ? $game->title : '',
-              'options' => ['class' => 'form-control', 'name' => 'game_id'],
+              'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
               'pluginOptions' => [
-                'placeholder' => Yii::t('app', 'select_game'),
+                'placeholder' => 'Chọn nhân viên sale',
                 'allowClear' => true,
                 'minimumInputLength' => 3,
                 'ajax' => [
-                    'url' => Url::to(['game/suggestion']),
+                    'url' => Url::to(['user/suggestion']),
                     'dataType' => 'json',
                     'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
                 ]
               ]
-            ])->label('Game')?>
+            ])->label('Nhân viên sale')?>
+
+            <?php $handler = $search->getHandler();?>
+            <?=$form->field($search, 'handler_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'handler_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn nhân viên đơn hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Nhân viên đơn hàng')?>
+            <?php elseif (Yii::$app->user->can('saler')):?>
+              <?=$form->field($search, 'saler_id', [
+                'template' => '{input}', 
+                'options' => ['container' => false],
+                'inputOptions' => ['name' => 'saler_id']
+              ])->hiddenInput()->label(false);?>
+            <?php elseif (Yii::$app->user->can('handler')):?>
+              <?=$form->field($search, 'handler_id', [
+                'template' => '{input}', 
+                'options' => ['container' => false],
+                'inputOptions' => ['name' => 'handler_id']
+              ])->hiddenInput()->label(false);?>
+            <?php endif;?>
 
             <?=$form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-2'],
@@ -107,6 +141,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               'attributeTo' => 'end_date', 
               'labelTo' => '-',
               'form' => $form,
+              'optionsTo' => ['name' => 'end_date', 'class' => 'form-control'],
+              'options' => ['name' => 'start_date', 'class' => 'form-control'],
               'clientOptions' => [
                   'autoclose' => true,
                   'format' => 'yyyy-mm-dd',
@@ -139,16 +175,18 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <thead>
             <tr>
               <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 10%;"> <?=Yii::t('app', 'title');?> </th>
-              <th style="width: 10%;"> <?=Yii::t('app', 'created_date');?> </th>
-              <th style="width: 5%;"> <?=Yii::t('app', 'total');?> </th>
+              <th style="width: 20%;"> Tên khách hàng </th>
+              <th style="width: 20%;"> Ngày tạo </th>
+              <th style="width: 5%;"> Tổng Coin </th>
+              <th style="width: 15%;"> Saler </th>
+              <th style="width: 15%;"> Order Team </th>
               <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
               <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
@@ -156,6 +194,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><?=$model->customer_name;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;">$<?=$model->total_price;?></td>
+                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
+                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>

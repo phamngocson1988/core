@@ -4,7 +4,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Customer as User;
+use common\models\User;
 
 /**
  * FetchCustomerForm

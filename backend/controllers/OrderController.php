@@ -12,6 +12,7 @@ use yii\helpers\Url;
 use common\models\Order;
 use common\models\OrderItems;
 use backend\forms\UpdateOrderStatusPending;
+use backend\forms\UpdateOrderStatusProcessing;
 
 class OrderController extends Controller
 {
@@ -26,7 +27,29 @@ class OrderController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'actions' => ['index'],
+                        'roles' => ['saler', 'handler', 'admin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['saler'],
+                    ],
+                    
+                    [
+                        'allow' => true,
+                        'actions' => ['edit'],
+                        'roles' => ['saler', 'handler'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['move-to-pending'],
+                        'roles' => ['saler'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['move-to-processing'],
+                        'roles' => ['handler'],
                     ],
                 ],
             ],
@@ -40,19 +63,24 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $form = new FetchOrderForm([
+        $data = [
             'q' => $request->get('q'),
             'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'handler_id' => $request->get('handler_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
-        ]);
+            'status' => $request->get('status'),
+        ];
+        $form = new FetchOrderForm($data);
+        // print_r($data);die;
         $command = $form->getCommand();
 
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
+                            ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
 
         return $this->render('index', [
@@ -114,11 +142,33 @@ class OrderController extends Controller
             $ref = $request->get('ref', Url::to(['order/index']));
             return $this->redirect($ref);
         }
-
-        return $this->render('edit', [
+        switch ($order->status) {
+            case CreateOrderForm::STATUS_VERIFYING:
+                $template = 'verifying';
+                $updateStatusForm = new UpdateOrderStatusPending();
+                break;
+            case CreateOrderForm::STATUS_PENDING:
+                $template = 'pending';
+                $updateStatusForm = new UpdateOrderStatusProcessing();
+                break;
+            case CreateOrderForm::STATUS_PROCESSING:
+                $template = 'processing';
+                $updateStatusForm = new UpdateOrderStatusProcessing();
+                break;
+            case CreateOrderForm::STATUS_COMPLETED:
+                $template = 'completed';
+                $updateStatusForm = new UpdateOrderStatusProcessing();
+                break;
+            
+            default:
+                $template = 'completed';
+                $updateStatusForm = null;
+                break;
+        }
+        return $this->render($template, [
             'order' => $order,
             'item' => $item,
-            'updateStatusForm' => new UpdateOrderStatusPending(),
+            'updateStatusForm' => $updateStatusForm,
             'back' => $request->get('ref', Url::to(['order/index']))
         ]);
     }
@@ -128,6 +178,19 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         if ($request->isPost && $request->isAjax) {
             $form = new UpdateOrderStatusPending();
+            if ($form->load($request->post()) && $form->save()) {
+                return $this->renderJson(true, []);
+            } else {
+                return $this->renderJson(false, [], $form->getErrorSummary(true));
+            }
+        }
+    }
+
+    public function actionMoveToProcessing()
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost && $request->isAjax) {
+            $form = new UpdateOrderStatusProcessing();
             if ($form->load($request->post()) && $form->save()) {
                 return $this->renderJson(true, []);
             } else {

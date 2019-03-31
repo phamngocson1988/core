@@ -33,6 +33,7 @@ class FetchUserForm extends Model
         $command = User::find();
 
         if ($this->q) {
+            $command->orWhere(['like', 'name', $this->q]);
             $command->orWhere(['like', 'username', $this->q]);
             $command->orWhere(['like', 'email', $this->q]);
         }

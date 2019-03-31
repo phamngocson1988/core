@@ -24,11 +24,11 @@
           <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_roles')}</span>
         </div>
         {if $app->user->can('admin')}
-        <div class="actions">
+        <!--<div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="{url route='rbac/create-role' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
-        </div>
+        </div>-->
         {/if}
       </div>
       <div class="portlet-body">
