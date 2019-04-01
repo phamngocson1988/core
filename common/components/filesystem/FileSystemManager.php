@@ -74,7 +74,7 @@ class FileSystemManager extends DynamicModel
         }
     }   
 
-    public function get($fileModel, $thumbnail = null)
+    public function get($fileModel)
     {
         $dependency = $this->instanceDependency();
         $fileUrl = $dependency->get($fileModel);

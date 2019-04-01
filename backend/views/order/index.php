@@ -199,6 +199,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
+                  <?php if ($can_taken) :?>
+                  <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-hand-paper"></i></a>
+                  <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>

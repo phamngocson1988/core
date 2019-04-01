@@ -1,45 +1,14 @@
 <?php 
 use yii\widgets\ActiveForm;
-use dosamigos\typeahead\Bloodhound;
-use dosamigos\typeahead\TypeAhead;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 ?>
+<input type="file" name="upload_file" id="file"/>
+<button id='button'>Submit</button>
 <?php
-    $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'options' => ['class' => 'form-horizontal'],
-    ]);
+$script = <<< JS
+var form = AjaxUploadFile({trigger_element: '#button', file_element: '#file'});
 
-    $engine = new Bloodhound([
-        'name' => 'countriesEngine',
-        'clientOptions' => [
-            'datumTokenizer' => new JsExpression("Bloodhound.tokenizers.obj.whitespace('name')"),
-            'queryTokenizer' => new JsExpression("Bloodhound.tokenizers.whitespace"),
-            'remote' => [
-                'url' => Url::to(['test/autocomplete', 'query'=>'QRY']),
-                'wildcard' => 'QRY'
-            ]
-        ]
-    ]);
-?>
-<?= $form->field($model, 'title')->widget(
-    TypeAhead::className(),
-    [
-        'options' => ['class' => 'form-control'],
-        'engines' => [ $engine ],
-        'clientOptions' => [
-            'highlight' => true,
-            'minLength' => 3
-        ],
-        'dataSets' => [
-            [
-                'name' => 'countries',
-                'displayKey' => 'value',
-                'source' => $engine->getAdapterScript()
-            ]
-        ]
-    ]
-);
-ActiveForm::end()
+JS;
+$this->registerJs($script);
 ?>

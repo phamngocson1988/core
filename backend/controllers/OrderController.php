@@ -6,7 +6,9 @@ use common\components\Controller;
 use yii\filters\AccessControl;
 use backend\forms\FetchOrderForm;
 use backend\forms\CreateOrderForm;
+use backend\forms\EditOrderForm;
 use backend\forms\CreateOrderItemForm;
+use backend\forms\EditOrderItemForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use common\models\Order;
@@ -74,7 +76,6 @@ class OrderController extends Controller
             'status' => $request->get('status'),
         ];
         $form = new FetchOrderForm($data);
-        // print_r($data);die;
         $command = $form->getCommand();
 
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -82,12 +83,22 @@ class OrderController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
+        $canTaken = false;
+        if (Yii::$app->user->can('handler')) {
+            $checkTaken = new FetchOrderForm([
+                'handler_id' => Yii::$app->user->id,
+                'status' => Order::STATUS_PENDING
+            ]);
+            $checkTakenCommand = $checkTaken->getCommand();
+            $canTaken = $checkTakenCommand->count();print_r($canTaken);die;
+        }
 
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
+            'can_taken' => $canTaken,
         ]);
     }
 
@@ -128,34 +139,25 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $order = CreateOrderForm::findOne($id);
-        $item = CreateOrderItemForm::find()->where(['order_id' => $id])->one();
-        if ($request->isPost) {
-            $post = $request->post();
-            if (!$order->load($post)) Yii::$app->session->setFlash('error', 'Order Error!');
-            elseif (!$item->load($post)) Yii::$app->session->setFlash('error', 'Item Error!');
-            elseif (!$order->save()) Yii::$app->session->setFlash('error', 'Order Error!');
-            if (!$item->save()) Yii::$app->session->setFlash('error', 'Item Error!');
-            $order->total_price = $item->getTotalPrice();
-            $order->save();
-            Yii::$app->session->setFlash('success', 'Success!');
-            $ref = $request->get('ref', Url::to(['order/index']));
-            return $this->redirect($ref);
-        }
+        $order = EditOrderForm::findOne($id);
+        $item = EditOrderItemForm::find()->where(['order_id' => $id])->one();
         switch ($order->status) {
-            case CreateOrderForm::STATUS_VERIFYING:
+            case EditOrderForm::STATUS_VERIFYING:
                 $template = 'verifying';
                 $updateStatusForm = new UpdateOrderStatusPending();
+                $item->scenario = EditOrderItemForm::SCENARIO_VERIFYING;
                 break;
-            case CreateOrderForm::STATUS_PENDING:
+            case EditOrderForm::STATUS_PENDING:
                 $template = 'pending';
                 $updateStatusForm = new UpdateOrderStatusProcessing();
+                $item->scenario = EditOrderItemForm::SCENARIO_PENDING;
                 break;
-            case CreateOrderForm::STATUS_PROCESSING:
+            case EditOrderForm::STATUS_PROCESSING:
                 $template = 'processing';
                 $updateStatusForm = new UpdateOrderStatusProcessing();
+                $item->scenario = EditOrderItemForm::SCENARIO_PROCESSING;
                 break;
-            case CreateOrderForm::STATUS_COMPLETED:
+            case EditOrderForm::STATUS_COMPLETED:
                 $template = 'completed';
                 $updateStatusForm = new UpdateOrderStatusProcessing();
                 break;
@@ -165,6 +167,20 @@ class OrderController extends Controller
                 $updateStatusForm = null;
                 break;
         }
+
+        if ($request->isPost) {
+            $post = $request->post();
+            if ($order->isVerifyingOrder()) {
+                if (!$order->load($post)) Yii::$app->session->setFlash('error', 'Load Order Error!');
+                elseif (!$order->save()) Yii::$app->session->setFlash('error', 'Save Order Error!');
+            }
+            if (!$item->load($post)) Yii::$app->session->setFlash('error', 'Load Item Error!');
+            if (!$item->save()) Yii::$app->session->setFlash('error', 'Save Item Error!');
+            Yii::$app->session->setFlash('success', 'Success!');
+            $ref = $request->get('ref', Url::to(['order/index']));
+            return $this->redirect($ref);
+        }
+        
         return $this->render($template, [
             'order' => $order,
             'item' => $item,

@@ -58,9 +58,47 @@ use common\models\Product;
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
+              <li>
+                <a href="#images" data-toggle="tab"> Hình ảnh</a>
+              </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12">
+                    <div class="portlet grey-cascade box">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="fa fa-cogs"></i>Game
+                        </div>
+                      </div>
+                      <div class="portlet-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                              <tr>
+                                <th> Tên game </th>
+                                <th> Số đơn vị </th>
+                                <th> Tên đơn vị </th>
+                                <th> Số lượng </th>
+                                <th> Tổng số </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><?=$item->item_title;?></td>
+                                <td><?=$item->unit_name;?></td>
+                                <td><?=$item->unit;?></td>
+                                <td><?=$item->quantity;?></td>
+                                <td><?=$item->total_unit;?></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-4 col-sm-12">
                     <div class="portlet blue-hoki box">
@@ -125,80 +163,114 @@ use common\models\Product;
                         <div class="caption">
                           <i class="fa fa-cogs"></i>Thông tin nạp game
                         </div>
+                        <?php if (Yii::$app->user->can('handler')) :?>
+                        <div class="actions">
+                          <a href="javascript:;" id="edit_game_account" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                        </div>
+                        <?php endif;?>
                       </div>
-                      <div class="portlet-body">
+                      <div class="portlet-body" id="game_account">
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Username: </div>
-                          <div class="col-md-7 value"> <?=$item->username;?> </div>
+                          <div class="col-md-5"> Username: </div>
+                          <div class="col-md-7"> 
+                            <?=$form->field($item, 'username', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Password: </div>
-                          <div class="col-md-7 value"> <?=$item->password;?> </div>
+                          <div class="col-md-5"> Password: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($item, 'password', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Tên nhân vật: </div>
-                          <div class="col-md-7 value"> <?=$item->character_name;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'character_name', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Platform: </div>
-                          <div class="col-md-7 value"> <?=$item->platform;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'platform', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5 name"> Login method: </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'login_method', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->dropDownList(['google' => 'Google', 'facebook' => 'Facebook'])->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Recover Code: </div>
-                          <div class="col-md-7 value"> <?=$item->recover_code;?> </div>
+                          <div class="col-md-7 value"> 
+                            <?=$form->field($item, 'recover_code', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Server: </div>
-                          <div class="col-md-7 value"> <?=$item->server;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'server', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Ghi chú: </div>
-                          <div class="col-md-7 value"> <?=$item->note;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'note', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                
+              </div>
+              <div class="tab-pane" id="images">
                 <div class="row">
-                  <div class="col-md-12 col-sm-12">
-                    <div class="portlet grey-cascade box">
-                      <div class="portlet-title">
-                        <div class="caption">
-                          <i class="fa fa-cogs"></i>Game
-                        </div>
-                      </div>
-                      <div class="portlet-body">
-                        <div class="table-responsive">
-                          <table class="table table-hover table-bordered table-striped">
-                            <thead>
-                              <tr>
-                                <th> Tên game </th>
-                                <th> Số đơn vị </th>
-                                <th> Tên đơn vị </th>
-                                <th> Số lượng </th>
-                                <th> Tổng số </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td><?=$item->item_title;?></td>
-                                <td><?=$item->unit_name;?></td>
-                                <td><?=$item->unit;?></td>
-                                <td><?=$item->quantity;?></td>
-                                <td><?=$item->total_unit;?></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
+                    <input type="file" id="file_before_image" name="before_image" style="display: none" />
+                    <img src="<?=$item->getImageBefore();?>" id="show_before_image">
+                    <?=$form->field($item, 'image_before_payment', [
+                      'template' => '{input}', 
+                      'options' => ['container' => false],
+                      'inputOptions' => ['id' => 'input_before_image']
+                    ])->hiddenInput()->label(false);?>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
+                    <input type="file" id="file_after_image" name="after_image" style="display: none" />
+                    <img src="<?=$item->getImageAfter();?>" id="show_after_image">
+                    <?=$form->field($item, 'image_after_payment', [
+                      'template' => '{input}', 
+                      'options' => ['container' => false],
+                      'inputOptions' => ['id' => 'input_after_image']
+                    ])->hiddenInput()->label(false);?>
                   </div>
                 </div>
-                <!-- <div class="row">
-                  <div class="form-body">
-
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -232,3 +304,24 @@ use common\models\Product;
   </div>
   <!-- /.modal-dialog -->
 </div>
+<?php
+$script = <<< JS
+$('#edit_game_account').on('click', function(){
+  $('#game_account').find('input, select').prop('disabled', false);
+});
+var beforeImage = new AjaxUploadFile({trigger_element: '#before_image', file_element: '#file_before_image'});
+beforeImage.callback = function(result) {
+  console.log(typeof result);
+  console.log(result);
+  $('#show_before_image').attr('src', result[0].src);
+  $('#input_before_image').val(result[0].id)
+}
+var afterImage = new AjaxUploadFile({trigger_element: '#after_image', file_element: '#file_after_image'});
+afterImage.callback = function(result) {
+  console.log(result);
+  $('#show_after_image').attr('src', result[0].src);
+  $('#input_after_image').val(result[0].id)
+}
+JS;
+$this->registerJs($script);
+?>

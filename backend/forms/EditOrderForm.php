@@ -5,14 +5,13 @@ use Yii;
 use common\models\Order;
 use common\models\User;
 
-class CreateOrderForm extends Order
+class EditOrderForm extends Order
 {
     public function rules()
     {
         return [
             [['customer_id'], 'required'],
             ['customer_id', 'validateCustomer'],
-            ['saler_id', 'trim'],
         ];
     }
 
@@ -31,9 +30,6 @@ class CreateOrderForm extends Order
         if (!parent::beforeSave($insert)) {
             return false;
         }
-        $this->generateAuthKey();
-        $this->status = self::STATUS_VERIFYING;
-        $this->saler_id = ($this->saler_id) ? $this->saler_id : Yii::$app->user->id;
         $customer = $this->customer;
         $this->customer_name = $customer->name;
         $this->customer_email = $customer->email;

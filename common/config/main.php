@@ -53,5 +53,19 @@ return [
                 // 'image_url' => $_SERVER['HTTP_HOST'],
             ]
         ],
+        'file' => [
+            'class' => 'common\components\filesystem\FileSystemManager',
+            'dependency' => [
+                // 'class' => 'common\components\filesystem\cloudinary\CloudinaryFileSystem',
+                // 'cloud_name' => 'sonpham',
+                // 'api_key' => '365324843952423',
+                // 'api_secret' => 'kvaLj2sSrKLJvYkrR4xo_2bq2F4',
+                // 'folder' => 'eagleland'
+
+                'class' => 'common\components\filesystem\local\LocalFileSystem',
+                'file_path' => '@common/uploads/files',
+                // 'file_url' => 'http://file.kinggerm.com',
+            ]
+        ],
     ],
 ];

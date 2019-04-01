@@ -9,13 +9,13 @@ use yii\helpers\ArrayHelper;
 
 class CreateOrderItemForm extends OrderItems
 {
-
     public function rules()
     {
         return [
-            [['game_id', 'product_id', 'quantity', 'username', 'password', 'platform', 'login_method', 'character_name'], 'required'],
+            [['game_id', 'product_id', 'quantity'], 'required'],
             ['game_id', 'validateGame'],
             ['product_id', 'validateProduct'],
+            [['username', 'password', 'platform', 'login_method', 'character_name'], 'required'],
             [['recover_code', 'server', 'note'], 'trim'],
         ];
     }
