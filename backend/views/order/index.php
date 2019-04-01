@@ -8,10 +8,18 @@ use dosamigos\datepicker\DateRangePicker;
 use common\models\Order;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerCssFile('vendor/assets/apps/css/todo.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+
+
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+
+
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
 ?>
+
 <style>
 .hide-text {
     white-space: nowrap;
@@ -135,7 +143,12 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ])->hiddenInput()->label(false);?>
             <?php endif;?>
 
-            <?=$form->field($search, 'start_date', [
+            <?=$form->field($search, 'status', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
+            ])->dropDownList($search->getStatus())->label('Trạng thái');?>
+
+            <?php /*$form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-2'],
             ])->widget(DateRangePicker::className(), [
               'attributeTo' => 'end_date', 
@@ -149,18 +162,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   'keepEmptyValues' => true,
                   'todayHighlight' => true
               ]
-            ])->label('Ngày tạo')?>
-
-            <div class="form-group col-md-2">
-              <label><?=Yii::t('app', 'status')?>: </label> 
-              <select class="bs-select form-control" name="status[]" multiple="true" >
-                <?php foreach ($search->getStatus() as $statusKey => $statusLabel) :?>
-                <option value="<?=$statusKey?>" <?= in_array($statusKey, (array)$search->status) ? "selected" : ''?> ><?=$statusLabel?></option>
-                <?php endforeach;?>
-              </select>
-            </div>
-
-
+            ])->label('Ngày tạo'); */?>
 
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -198,9 +200,22 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
                 <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
-                  <?php if ($can_taken) :?>
-                  <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-hand-paper"></i></a>
+                  <?php
+                  $canEdit = false;
+                  if (Yii::$app->user->can('admin')) :
+                    $canEdit = true;
+                  elseif ($model->isVerifyingOrder()) :
+                    $canEdit = Yii::$app->user->can('saler') && ($model->saler_id == Yii::$app->user->id);
+                  elseif ($model->isPendingOrder()) :
+                    $canEdit = Yii::$app->user->can('handler') && ($model->handler_id == Yii::$app->user->id);
+                  endif; 
+                  ?>
+                  <a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem"><i class="fa fa-eye"></i></a>
+                  <?php if ($canEdit) :?>
+                  <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php endif;?>
+                  <?php if ($can_taken && !$model->handler_id) :?>
+                  <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>
                   <?php endif;?>
                 </td>
               </tr>
@@ -216,11 +231,22 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
 </div>
 <?php
 $script = <<< JS
-$(".delete-action").ajax_action({
-  confirm: true,
-  confirm_text: 'Do you want to delete this order?',
+$(".ajax-link").ajax_action({
+  method: 'POST',
   callback: function(eletement, data) {
     location.reload();
+  },
+  error: function(element, errors) {
+    console.log(errors);
+    alert(errors);
+  }
+});
+
+
+$("#aaa").daterangepicker({
+  minDate: moment().subtract(2, 'years'),
+  callback: function (startDate, endDate, period) {
+    $(this).val(startDate.format('L') + ' – ' + endDate.format('L'));
   }
 });
 JS;

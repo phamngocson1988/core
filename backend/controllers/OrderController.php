@@ -15,6 +15,7 @@ use common\models\Order;
 use common\models\OrderItems;
 use backend\forms\UpdateOrderStatusPending;
 use backend\forms\UpdateOrderStatusProcessing;
+use backend\forms\TakenOrderForm;
 
 class OrderController extends Controller
 {
@@ -27,6 +28,11 @@ class OrderController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['@'],
+                    ],
                     [
                         'allow' => true,
                         'actions' => ['index'],
@@ -50,7 +56,7 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['move-to-processing'],
+                        'actions' => ['move-to-processing', 'taken'],
                         'roles' => ['handler'],
                     ],
                 ],
@@ -90,7 +96,7 @@ class OrderController extends Controller
                 'status' => Order::STATUS_PENDING
             ]);
             $checkTakenCommand = $checkTaken->getCommand();
-            $canTaken = $checkTakenCommand->count();print_r($canTaken);die;
+            $canTaken = !$checkTakenCommand->count();
         }
 
         return $this->render('index', [
@@ -99,6 +105,20 @@ class OrderController extends Controller
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
             'can_taken' => $canTaken,
+        ]);
+    }
+
+    public function actionView($id)
+    {
+        $this->view->params['main_menu_active'] = 'order.index';
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        $items = $order->items;
+        $item = reset($items);
+        return $this->render('view', [
+            'order' => $order,
+            'item' => $item,
+            'back' => $request->get('ref', Url::to(['order/index']))
         ]);
     }
 
@@ -208,6 +228,22 @@ class OrderController extends Controller
         if ($request->isPost && $request->isAjax) {
             $form = new UpdateOrderStatusProcessing();
             if ($form->load($request->post()) && $form->save()) {
+                return $this->renderJson(true, []);
+            } else {
+                return $this->renderJson(false, [], $form->getErrorSummary(true));
+            }
+        }
+    }
+
+    public function actionTaken($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost && $request->isAjax) {
+            $form = new TakenOrderForm([
+                'user_id' => Yii::$app->user->id,
+                'order_id' => $id,
+            ]);
+            if ($form->validate() && $form->taken()) {
                 return $this->renderJson(true, []);
             } else {
                 return $this->renderJson(false, [], $form->getErrorSummary(true));

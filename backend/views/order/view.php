@@ -8,6 +8,7 @@ use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\models\Game;
 use common\models\Product;
+use common\models\File;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -21,17 +22,16 @@ use common\models\Product;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Chỉnh sửa đơn hàng</span>
+      <span>Xem đơn hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Chỉnh sửa đơn hàng</h1>
+<h1 class="page-title">Xem đơn hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
-    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
       <div class="portlet">
         <div class="portlet-title">
           <div class="caption">
@@ -43,13 +43,6 @@ use common\models\Product;
           <div class="actions btn-set">
             <a href="<?=$back;?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-            <?php if (Yii::$app->user->can('handler')) :?>
-            <button type="submit" class="btn btn-success">
-            <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
-            </button>
-            <a class="btn red btn-outline sbold" data-toggle="modal" href="#next">
-            <i class="fa fa-angle-right"></i> <?=Yii::t('app', 'processing')?></a>
-            <?php endif?>
           </div>
         </div>
         <div class="portlet-body">
@@ -163,84 +156,39 @@ use common\models\Product;
                         <div class="caption">
                           <i class="fa fa-cogs"></i>Thông tin nạp game
                         </div>
-                        <?php if (Yii::$app->user->can('handler')) :?>
-                        <div class="actions">
-                          <a href="javascript:;" id="edit_game_account" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-                        </div>
-                        <?php endif;?>
                       </div>
                       <div class="portlet-body" id="game_account">
                         <div class="row static-info">
                           <div class="col-md-5"> Username: </div>
-                          <div class="col-md-7"> 
-                            <?=$form->field($item, 'username', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7"> <?=$item->username;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5"> Password: </div>
-                          <div class="col-md-7">
-                            <?=$form->field($item, 'password', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7"> <?=$item->password;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Tên nhân vật: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'character_name', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7 value"><?=$item->character_name;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Platform: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'platform', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])->label(false);?>
-                          </div>
+                          <div class="col-md-7 value"> <?=$item->platform;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Login method: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'login_method', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->dropDownList(['google' => 'Google', 'facebook' => 'Facebook'])->label(false);?>
-                          </div>
+                          <div class="col-md-7 value"> <?=$item->login_method;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Recover Code: </div>
-                          <div class="col-md-7 value"> 
-                            <?=$form->field($item, 'recover_code', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7 value"> <?=$item->recover_code;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Server: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'server', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7 value"> <?=$item->server;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Ghi chú: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'note', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7 value"> <?=$item->note;?></div>
                         </div>
                       </div>
                     </div>
@@ -252,23 +200,17 @@ use common\models\Product;
                 <div class="row">
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
-                    <input type="file" id="file_before_image" name="before_image" style="display: none" />
-                    <img src="<?=$item->getImageBefore();?>" id="show_before_image">
-                    <?=$form->field($item, 'image_before_payment', [
-                      'template' => '{input}', 
-                      'options' => ['container' => false],
-                      'inputOptions' => ['id' => 'input_before_image']
-                    ])->hiddenInput()->label(false);?>
+                    <?php
+                      $before = File::findOne($item->image_before_payment);
+                      $beforeUrl = ($before) ? $before->getUrl() : '';
+                      $after = File::findOne($item->image_after_payment);
+                      $afterUrl = ($after) ? $after->getUrl() : '';
+                    ?>
+                    <img src="<?=$beforeUrl;?>" id="show_before_image">
                   </div>
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
-                    <input type="file" id="file_after_image" name="after_image" style="display: none" />
-                    <img src="<?=$item->getImageAfter();?>" id="show_after_image">
-                    <?=$form->field($item, 'image_after_payment', [
-                      'template' => '{input}', 
-                      'options' => ['container' => false],
-                      'inputOptions' => ['id' => 'input_after_image']
-                    ])->hiddenInput()->label(false);?>
+                    <img src="<?=$afterUrl;?>" id="show_after_image">
                   </div>
                 </div>
               </div>
@@ -276,57 +218,5 @@ use common\models\Product;
           </div>
         </div>
       </div>
-      <?php ActiveForm::end()?>
   </div>
 </div>
-<div class="modal fade" id="next" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Move the order to processing</h4>
-      </div>
-      <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated', 'id' => 'next-form'], 'action' => Url::to(['order/move-to-processing'])]);?>
-      <?=$nextForm->field($updateStatusForm, 'id', [
-        'template' => '{input}', 
-        'options' => ['container' => false]
-      ])->hiddenInput(['value' => $order->id])->label(false);?>
-      <div class="modal-body"> 
-          <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn green">Save changes</button>
-      </div>
-      <?php ActiveForm::end();?>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-<?php
-$script = <<< JS
-$('#edit_game_account').on('click', function(){
-  $('#game_account').find('input, select').prop('disabled', false);
-});
-var beforeImage = new AjaxUploadFile({trigger_element: '#before_image', file_element: '#file_before_image'});
-beforeImage.callback = function(result) {
-  console.log(typeof result);
-  console.log(result);
-  $('#show_before_image').attr('src', result[0].src);
-  $('#input_before_image').val(result[0].id)
-}
-var afterImage = new AjaxUploadFile({trigger_element: '#after_image', file_element: '#file_after_image'});
-afterImage.callback = function(result) {
-  console.log(result);
-  $('#show_after_image').attr('src', result[0].src);
-  $('#input_after_image').val(result[0].id)
-};
-
-var nextForm = new AjaxFormSubmit({element: '#next-form'});
-nextForm.success = function (data, form) {
-  location.reload();
-}
-JS;
-$this->registerJs($script);
-?>
