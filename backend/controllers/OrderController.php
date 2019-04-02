@@ -4,6 +4,7 @@ namespace backend\controllers;
 use Yii;
 use common\components\Controller;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use backend\forms\FetchOrderForm;
 use backend\forms\CreateOrderForm;
 use backend\forms\EditOrderForm;
@@ -42,7 +43,7 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create'],
+                        'actions' => ['create', 'move-to-pending', 'delete'],
                         'roles' => ['saler'],
                     ],
                     
@@ -53,14 +54,15 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['move-to-pending'],
-                        'roles' => ['saler'],
-                    ],
-                    [
-                        'allow' => true,
                         'actions' => ['move-to-processing', 'taken'],
                         'roles' => ['handler'],
                     ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['delete'],
                 ],
             ],
         ];
@@ -79,13 +81,12 @@ class OrderController extends Controller
             'saler_id' => $request->get('saler_id'),
             'handler_id' => $request->get('handler_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
             'status' => $request->get('status'),
         ];
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();
-
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -270,6 +271,17 @@ class OrderController extends Controller
             } else {
                 return $this->renderJson(false, [], $form->getErrorSummary(true));
             }
+        }
+    }
+
+    public function actionDelete($id)
+    {
+        $request = Yii::$app->request;
+        $model = Order::findOne($id);
+        if ($model && $model->delete()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
     }
 }

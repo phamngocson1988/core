@@ -22,7 +22,9 @@ class FetchOrderForm extends Model
     public function rules()
     {
         return [
-            [['customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe']
+            [['customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe'],
+            ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
+            ['end_date', 'default', 'value' => date('Y-m-d')],
         ];
     }
 

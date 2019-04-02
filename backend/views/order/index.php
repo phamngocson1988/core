@@ -17,7 +17,7 @@ $this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/d
 
 
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
+// $this->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
 ?>
 
 <style>
@@ -148,21 +148,26 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.
               'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
             ])->dropDownList($search->getStatus())->label('Trạng thái');?>
 
-            <?php /*$form->field($search, 'start_date', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(DateRangePicker::className(), [
-              'attributeTo' => 'end_date', 
-              'labelTo' => '-',
-              'form' => $form,
-              'optionsTo' => ['name' => 'end_date', 'class' => 'form-control'],
-              'options' => ['name' => 'start_date', 'class' => 'form-control'],
-              'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd',
-                  'keepEmptyValues' => true,
-                  'todayHighlight' => true
-              ]
-            ])->label('Ngày tạo'); */?>
+            <div class="form-group col-md-2">
+              <label class="control-label">Ngày tạo</label>
+              <div class="form-control" style="border: none; padding: 0">
+                  <div id="reportrange" class="btn default">
+                      <i class="fa fa-calendar"></i> &nbsp;
+                      <span> </span>
+                      <b class="fa fa-angle-down"></b>
+                  </div>
+              </div>
+              <?=$form->field($search, 'start_date', [
+                'template' => '{input}',
+                'options' => ['tag' => false],
+                'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
+              ])->hiddenInput()->label(false);?>
+              <?=$form->field($search, 'end_date', [
+                'template' => '{input}',
+                'options' => ['tag' => false],
+                'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
+              ])->hiddenInput()->label(false);?>
+            </div>
 
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -214,8 +219,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.
                   <?php if ($canEdit) :?>
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php endif;?>
-                  <?php if ($can_taken && !$model->handler_id) :?>
+                  <?php if ($can_taken && !$model->handler_id && $model->isPendingOrder()) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>
+                  <?php endif;?>
+                  <?php if ($model->isVerifyingOrder() && Yii::$app->user->can('saler')) :?>
+                  <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
                 </td>
               </tr>
@@ -242,13 +250,59 @@ $(".ajax-link").ajax_action({
   }
 });
 
-
-$("#aaa").daterangepicker({
-  minDate: moment().subtract(2, 'years'),
-  callback: function (startDate, endDate, period) {
-    $(this).val(startDate.format('L') + ' – ' + endDate.format('L'));
-  }
+// delete
+$('.delete').ajax_action({
+  method: 'DELETE',
+  confirm: true,
+  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
+  callback: function(data) {
+    location.reload();
+  },
 });
+
+var dateFormat = 'YYYY/MM/DD';//MMMM D, YYYY
+$('#reportrange').daterangepicker({
+    opens: (App.isRTL() ? 'left' : 'right'),
+    startDate: moment($('#start_date').val()),
+    endDate: moment($('#end_date').val()),
+    dateLimit: {
+        days: 90
+    },
+    showDropdowns: true,
+    showWeekNumbers: true,
+    timePicker: false,
+    timePickerIncrement: 1,
+    timePicker12Hour: true,
+    ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+        'Last 7 Days': [moment().subtract('days', 6), moment()],
+        'Last 30 Days': [moment().subtract('days', 29), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+    },
+    buttonClasses: ['btn'],
+    applyClass: 'green',
+    cancelClass: 'default',
+    format: 'MM/DD/YYYY',
+    separator: ' to ',
+    locale: {
+        applyLabel: 'Apply',
+        fromLabel: 'From',
+        toLabel: 'To',
+        customRangeLabel: 'Custom Range',
+        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        firstDay: 1
+    }
+  },
+  function (start, end) {
+      $('#reportrange span').html(start.format(dateFormat) + ' - ' + end.format(dateFormat));
+      $('#start_date').val(start.format('YYYY-MM-DD'));
+      $('#end_date').val(end.format('YYYY-MM-DD'));
+  }
+);
+$('#reportrange span').html(moment($('#start_date').val()).format(dateFormat) + ' - ' + moment($('#end_date').val()).format(dateFormat));
 JS;
 $this->registerJs($script);
 ?>

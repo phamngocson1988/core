@@ -57,36 +57,36 @@ use common\models\Product;
             <div class="form-body">
               <ul class="nav nav-pills nav-justified steps">
                 <li class="active">
-                  <a href="javasciprt:;" data-toggle="tab" class="step">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 1 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Account Setup </span>
+                  <i class="fa fa-check"></i> Verifying </span>
                   </a>
                 </li>
                 <li class="active">
-                  <a href="#tab2" data-toggle="tab" class="step">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 2 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Profile Setup </span>
+                  <i class="fa fa-check"></i> Pending </span>
                   </a>
                 </li>
                 <li>
-                  <a href="#tab3" data-toggle="tab" class="step active">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 3 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Billing Setup </span>
+                  <i class="fa fa-check"></i> Processing </span>
                   </a>
                 </li>
                 <li>
-                  <a href="#tab4" data-toggle="tab" class="step">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 4 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Confirm </span>
+                  <i class="fa fa-check"></i> Completed </span>
                   </a>
                 </li>
               </ul>
               <div id="bar" class="progress progress-striped" role="progressbar">
-                <div class="progress-bar progress-bar-success" style="width: 25%"> </div>
+                <div class="progress-bar progress-bar-success" style="width: 50%"> </div>
               </div>
             </div>
           </div>
@@ -292,22 +292,22 @@ use common\models\Product;
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
                     <input type="file" id="file_before_image" name="before_image" style="display: none" />
-                    <img src="<?=$item->getImageBefore();?>" id="show_before_image" class="img-responsive">
                     <?=$form->field($item, 'image_before_payment', [
                       'template' => '{input}', 
-                      'options' => ['container' => false],
+                      'options' => ['tag' => false],
                       'inputOptions' => ['id' => 'input_before_image']
                     ])->hiddenInput()->label(false);?>
+                    <img src="<?=$item->getImageBeforeUrl();?>" id="show_before_image" class="img-responsive">
                   </div>
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
                     <input type="file" id="file_after_image" name="after_image" style="display: none" />
-                    <img src="<?=$item->getImageAfter();?>" id="show_after_image" class="img-responsive">
                     <?=$form->field($item, 'image_after_payment', [
                       'template' => '{input}', 
                       'options' => ['container' => false],
                       'inputOptions' => ['id' => 'input_after_image']
                     ])->hiddenInput()->label(false);?>
+                    <img src="<?=$item->getImageAfterUrl();?>" id="show_after_image" class="img-responsive">
                   </div>
                 </div>
               </div>

@@ -70,20 +70,4 @@ class EditOrderItemForm extends OrderItems
         }
         return true;
     }
-
-    public function getImageBefore()
-    {
-        if (!$this->image_before_payment) return '';
-        $file = File::findOne($this->image_before_payment);
-        if (!$file) return '';
-        return $file->getUrl();
-    }
-
-    public function getImageAfter()
-    {
-        if (!$this->image_after_payment) return '';
-        $file = File::findOne($this->image_after_payment);
-        if (!$file) return '';
-        return $file->getUrl();
-    }
 }

@@ -47,8 +47,6 @@ use common\models\Product;
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
             </button>
-            <a class="btn red btn-outline sbold" data-toggle="modal" href="#next">
-            <i class="fa fa-angle-right"></i> <?=Yii::t('app', 'processing')?></a>
             <?php endif?>
           </div>
         </div>
@@ -56,37 +54,37 @@ use common\models\Product;
           <div class="form-wizard">
             <div class="form-body">
               <ul class="nav nav-pills nav-justified steps">
-                <li>
-                  <a href="#tab1" data-toggle="tab" class="step">
+                <li class="active">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 1 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Account Setup </span>
+                  <i class="fa fa-check"></i> Verifying </span>
                   </a>
                 </li>
-                <li>
-                  <a href="#tab2" data-toggle="tab" class="step">
+                <li class="active">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 2 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Profile Setup </span>
+                  <i class="fa fa-check"></i> Pending </span>
                   </a>
                 </li>
-                <li>
-                  <a href="#tab3" data-toggle="tab" class="step active">
+                <li class="active">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 3 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Billing Setup </span>
+                  <i class="fa fa-check"></i> Processing </span>
                   </a>
                 </li>
                 <li>
-                  <a href="#tab4" data-toggle="tab" class="step">
+                  <a href="javasciprt:;" class="step">
                   <span class="number"> 4 </span>
                   <span class="desc">
-                  <i class="fa fa-check"></i> Confirm </span>
+                  <i class="fa fa-check"></i> Completed </span>
                   </a>
                 </li>
               </ul>
               <div id="bar" class="progress progress-striped" role="progressbar">
-                <div class="progress-bar progress-bar-success"> </div>
+                <div class="progress-bar progress-bar-success" style="width: 75%"> </div>
               </div>
             </div>
           </div>
@@ -203,84 +201,39 @@ use common\models\Product;
                         <div class="caption">
                           <i class="fa fa-cogs"></i>Thông tin nạp game
                         </div>
-                        <?php if (Yii::$app->user->can('handler')) :?>
-                        <div class="actions">
-                          <a href="javascript:;" id="edit_game_account" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-                        </div>
-                        <?php endif;?>
                       </div>
                       <div class="portlet-body" id="game_account">
                         <div class="row static-info">
                           <div class="col-md-5"> Username: </div>
-                          <div class="col-md-7"> 
-                            <?=$form->field($item, 'username', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7"> <?=$item->username;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5"> Password: </div>
-                          <div class="col-md-7">
-                            <?=$form->field($item, 'password', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-7"> <?=$item->password;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Tên nhân vật: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'character_name', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-5"> Tên nhân vật: </div>
+                          <div class="col-md-7"> <?=$item->character_name;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Platform: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'platform', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])->label(false);?>
-                          </div>
+                          <div class="col-md-5"> Platform: </div>
+                          <div class="col-md-7"> <?=$item->platform;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Login method: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'login_method', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->dropDownList(['google' => 'Google', 'facebook' => 'Facebook'])->label(false);?>
-                          </div>
+                          <div class="col-md-5"> Login method: </div>
+                          <div class="col-md-7"> <?=$item->login_method;?> </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Recover Code: </div>
-                          <div class="col-md-7 value"> 
-                            <?=$form->field($item, 'recover_code', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-5"> Recover Code: </div>
+                          <div class="col-md-7"> <?=$item->recover_code;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Server: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'server', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-5"> Server: </div>
+                          <div class="col-md-7"> <?=$item->server;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Ghi chú: </div>
-                          <div class="col-md-7 value">
-                            <?=$form->field($item, 'note', [
-                              'options' => ['class' => ''],
-                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                            ])->textInput()->label(false);?>
-                          </div>
+                          <div class="col-md-5"> Ghi chú: </div>
+                          <div class="col-md-7"> <?=$item->note;?></div>
                         </div>
                       </div>
                     </div>
@@ -292,7 +245,7 @@ use common\models\Product;
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
                     <input type="file" id="file_before_image" name="before_image" style="display: none" />
-                    <img src="<?=$item->getImageBefore();?>" id="show_before_image" class="img-responsive">
+                    <img src="<?=$item->getImageBeforeUrl();?>" id="show_before_image" class="img-responsive">
                     <?=$form->field($item, 'image_before_payment', [
                       'template' => '{input}', 
                       'options' => ['container' => false],
@@ -302,7 +255,7 @@ use common\models\Product;
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
                     <input type="file" id="file_after_image" name="after_image" style="display: none" />
-                    <img src="<?=$item->getImageAfter();?>" id="show_after_image" class="img-responsive">
+                    <img src="<?=$item->getImageAfterUrl();?>" id="show_after_image" class="img-responsive">
                     <?=$form->field($item, 'image_after_payment', [
                       'template' => '{input}', 
                       'options' => ['container' => false],

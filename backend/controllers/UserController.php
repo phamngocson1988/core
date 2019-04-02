@@ -125,7 +125,7 @@ class UserController extends Controller
                 foreach ($users as $user) {
                     $item = [];
                     $item['id'] = $user->id;
-                    $item['text'] = sprintf("%s - %s", $user->username, $user->email);
+                    $item['text'] = sprintf("%s - %s", $user->name, $user->email);
                     $items[] = $item;
                 }
             }

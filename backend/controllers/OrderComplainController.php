@@ -38,6 +38,7 @@ class OrderComplainController extends Controller
 
     public function actionIndex()
     {
+        $this->view->params['main_menu_active'] = 'ordercomplain.index';
         $command = OrderComplainTemplate::find()->orderBy(['id' => SORT_ASC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();

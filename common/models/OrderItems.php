@@ -46,4 +46,32 @@ class OrderItems extends ActiveRecord
     {
         return $this->unit * $this->quantity;
     }
+
+    public function getImageBefore() 
+    {
+        return $this->hasOne(File::className(), ['id' => 'image_before_payment']);
+    }
+
+    public function getImageBeforeUrl($default = '/images/noimage.png')
+    {
+        $image = $this->imageBefore;
+        if ($image) {
+            return $image->getUrl();
+        }
+        return $default;
+    }
+
+    public function getImageAfter() 
+    {
+        return $this->hasOne(File::className(), ['id' => 'image_after_payment']);
+    }
+
+    public function getImageAfterUrl($default = '/images/noimage.png')
+    {
+        $image = $this->imageAfter;
+        if ($image) {
+            return $image->getUrl();
+        }
+        return $default;
+    }
 }

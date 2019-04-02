@@ -105,11 +105,13 @@ class Order extends ActiveRecord
     public function beforeDelete()
     {
         if (!$this->isVerifyingOrder()) return false;
-        if (parent::beforeDelete()) {
+        $flat = parent::beforeDelete();
+        if ($flat) {
             $items = $this->items;
             foreach ($this->items as $item) {
                 $item->delete();
             }
         }
+        return $flat;
     }
 }

@@ -198,9 +198,16 @@
         <ul class="sub-menu">
           <li class="nav-item  ">
             <a href="{url route='/order'}" class="nav-link " code='order.index'>
-            <span class="title">{Yii::t('app', 'orders')}</span>
+            <span class="title">Đơn hàng</span>
             </a>
           </li>
+          {if (Yii::$app->user->can('admin'))}
+          <li class="nav-item  ">
+            <a href="{url route='/order-complain'}" class="nav-link " code='ordercomplain.index'>
+            <span class="title">Mẫu phản hồi</span>
+            </a>
+          </li>
+          {/if}
         </ul>
       </li>
       {/if}

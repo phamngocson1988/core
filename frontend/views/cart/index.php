@@ -160,7 +160,7 @@ use yii\bootstrap\ActiveForm;
     </div>
   </div>
 </section>
-        <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 
 <?php
 $script = <<< JS

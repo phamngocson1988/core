@@ -4,7 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
+use common\components\Controller;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -16,6 +16,7 @@ use frontend\forms\FetchHistoryWalletForm;
 use common\models\Order;
 use common\models\UserWallet;
 use common\models\Transaction;
+use common\models\OrderComplains;
 
 /**
  * UserController
@@ -116,9 +117,25 @@ class UserController extends Controller
     {
         $order = Order::findOne(['auth_key' => $key]);
         if (!$order) throw new NotFoundHttpException("The order not found", 1);
-        
-        return $this->render('detail', ['model' => $order]);
-        // print_r($order);
+        $complainModel = new OrderComplains();
+        return $this->render('detail', [
+            'model' => $order,
+            'complainModel' => $complainModel
+        ]);
+    }
+
+    public function actionSendComplain()
+    {
+        $request = Yii::$app->request;
+        $model = new OrderComplains();
+        $model->order_id = $request->post('order_id');
+        $model->content = $request->post('content');
+        $model->created_by = Yii::$app->user->id;
+        if ($model->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $form->getErrorSummary(true));
+        }
     }
 
     public function actionTransaction()

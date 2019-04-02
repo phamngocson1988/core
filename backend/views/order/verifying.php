@@ -47,6 +47,43 @@ use common\models\Product;
           </div>
         </div>
         <div class="portlet-body">
+          <div class="form-wizard">
+            <div class="form-body">
+              <ul class="nav nav-pills nav-justified steps">
+                <li class="active">
+                  <a href="javasciprt:;" class="step">
+                  <span class="number"> 1 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Verifying </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="javasciprt:;" class="step">
+                  <span class="number"> 2 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Pending </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="javasciprt:;" class="step">
+                  <span class="number"> 3 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Processing </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="javasciprt:;" class="step">
+                  <span class="number"> 4 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Completed </span>
+                  </a>
+                </li>
+              </ul>
+              <div id="bar" class="progress progress-striped" role="progressbar">
+                <div class="progress-bar progress-bar-success" style="width: 25%"> </div>
+              </div>
+            </div>
+          </div>
           <div class="tabbable-bordered">
             <ul class="nav nav-tabs">
               <li class="active">

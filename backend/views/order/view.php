@@ -54,6 +54,9 @@ use common\models\File;
               <li>
                 <a href="#images" data-toggle="tab"> Hình ảnh</a>
               </li>
+              <li>
+                <a href="#complain" data-toggle="tab"> Phản hồi</a>
+              </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
@@ -200,19 +203,58 @@ use common\models\File;
                 <div class="row">
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
-                    <?php
-                      $before = File::findOne($item->image_before_payment);
-                      $beforeUrl = ($before) ? $before->getUrl() : '';
-                      $after = File::findOne($item->image_after_payment);
-                      $afterUrl = ($after) ? $after->getUrl() : '';
-                    ?>
-                    <img src="<?=$beforeUrl;?>" id="show_before_image">
+                    <img src="<?=$item->getImageBeforeUrl();?>" id="show_before_image" class="img-responsive">
                   </div>
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
-                    <img src="<?=$afterUrl;?>" id="show_after_image">
+                    <img src="<?=$item->getImageAfterUrl();?>" id="show_after_image" class="img-responsive">
                   </div>
                 </div>
+              </div>
+              <div class="tab-pane" id="complain">
+                <!-- Start -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="portlet light portlet-fit bordered">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="icon-microphone font-green"></i>
+                          <span class="caption-subject bold font-green uppercase"> Phản hồi từ khách hàng </span>
+                        </div>
+                      </div>
+                      <div class="portlet-body">
+                        <div class="timeline">
+                          <?php foreach ($order->complains as $complain):?>
+                          <div class="timeline-item">
+                            <div class="timeline-badge">
+                              <?php if ($complain->sender->avatarImage) :?>
+                              <img class="timeline-badge-userpic" src="<?=$complain->sender->getAvatarUrl();?>"> 
+                              <?php else : ?>
+                                <div class="timeline-icon">
+                                  <i class="icon-user-following font-green-haze"></i>
+                                </div>
+                              <?php endif; ?>
+                            </div>
+                            <div class="timeline-body">
+                              <div class="timeline-body-arrow"> </div>
+                              <div class="timeline-body-head">
+                                <div class="timeline-body-head-caption">
+                                  <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->sender->name;?></a>
+                                  <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
+                                </div>
+                              </div>
+                              <div class="timeline-body-content">
+                                <span class="font-grey-cascade"><?=$complain->content;?></span>
+                              </div>
+                            </div>
+                          </div>
+                          <?php endforeach;?>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End -->
               </div>
             </div>
           </div>
