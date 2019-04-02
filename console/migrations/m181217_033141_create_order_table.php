@@ -83,20 +83,19 @@ class m181217_033141_create_order_table extends Migration
             'created_by' => $this->integer(11)->notNull(),
         ]);
 
+        $this->createTable('{{%order_complain_template}}', [
+            'id' => $this->primaryKey(),
+            'content' => $this->string(500)->notNull(),
+        ]);
+
         $this->createTable('{{%order_complains}}', [
             'id' => $this->primaryKey(),
             'order_id' => $this->integer(11)->notNull(),
-            'description' => $this->string(500)->notNull(),
-            'attachment_id' => $this->integer(11),
-            'status' => $this->integer(11)->notNull(),
-            'created_at' => $this->dateTime(),
+            'content' => $this->string(500)->notNull(),
+            'is_read' => $this->integer(1)->defaultValue(0),
+            'created_at' => $this->dateTime()->notNull(),
+            'created_by' => $this->integer(11)->notNull(),
         ]);
-
-        if ($this->db->driverName === 'mysql') {
-            $status = "ALTER TABLE {{%order_complains}} MODIFY `status` ENUM('new','processing','done') NOT NULL DEFAULT 'new'";
-            $command = $this->db->createCommand($status);
-            $command->execute();
-        }
     }
 
     /**

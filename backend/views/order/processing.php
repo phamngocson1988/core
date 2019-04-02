@@ -53,14 +53,92 @@ use common\models\Product;
           </div>
         </div>
         <div class="portlet-body">
+          <div class="form-wizard">
+            <div class="form-body">
+              <ul class="nav nav-pills nav-justified steps">
+                <li>
+                  <a href="#tab1" data-toggle="tab" class="step">
+                  <span class="number"> 1 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Account Setup </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#tab2" data-toggle="tab" class="step">
+                  <span class="number"> 2 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Profile Setup </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#tab3" data-toggle="tab" class="step active">
+                  <span class="number"> 3 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Billing Setup </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#tab4" data-toggle="tab" class="step">
+                  <span class="number"> 4 </span>
+                  <span class="desc">
+                  <i class="fa fa-check"></i> Confirm </span>
+                  </a>
+                </li>
+              </ul>
+              <div id="bar" class="progress progress-striped" role="progressbar">
+                <div class="progress-bar progress-bar-success"> </div>
+              </div>
+            </div>
+          </div>
           <div class="tabbable-bordered">
             <ul class="nav nav-tabs">
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
+              <li>
+                <a href="#images" data-toggle="tab"> Hình ảnh</a>
+              </li>
+              <li>
+                <a href="#complain" data-toggle="tab"> Phản hồi</a>
+              </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12">
+                    <div class="portlet grey-cascade box">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="fa fa-cogs"></i>Game
+                        </div>
+                      </div>
+                      <div class="portlet-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                              <tr>
+                                <th> Tên game </th>
+                                <th> Số đơn vị </th>
+                                <th> Tên đơn vị </th>
+                                <th> Số lượng </th>
+                                <th> Tổng số </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><?=$item->item_title;?></td>
+                                <td><?=$item->unit_name;?></td>
+                                <td><?=$item->unit;?></td>
+                                <td><?=$item->quantity;?></td>
+                                <td><?=$item->total_unit;?></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-4 col-sm-12">
                     <div class="portlet blue-hoki box">
@@ -125,80 +203,161 @@ use common\models\Product;
                         <div class="caption">
                           <i class="fa fa-cogs"></i>Thông tin nạp game
                         </div>
+                        <?php if (Yii::$app->user->can('handler')) :?>
+                        <div class="actions">
+                          <a href="javascript:;" id="edit_game_account" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                        </div>
+                        <?php endif;?>
                       </div>
-                      <div class="portlet-body">
+                      <div class="portlet-body" id="game_account">
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Username: </div>
-                          <div class="col-md-7 value"> <?=$item->username;?> </div>
+                          <div class="col-md-5"> Username: </div>
+                          <div class="col-md-7"> 
+                            <?=$form->field($item, 'username', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Password: </div>
-                          <div class="col-md-7 value"> <?=$item->password;?> </div>
+                          <div class="col-md-5"> Password: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($item, 'password', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Tên nhân vật: </div>
-                          <div class="col-md-7 value"> <?=$item->character_name;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'character_name', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Platform: </div>
-                          <div class="col-md-7 value"> <?=$item->platform;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'platform', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5 name"> Login method: </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'login_method', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->dropDownList(['google' => 'Google', 'facebook' => 'Facebook'])->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Recover Code: </div>
-                          <div class="col-md-7 value"> <?=$item->recover_code;?> </div>
+                          <div class="col-md-7 value"> 
+                            <?=$form->field($item, 'recover_code', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Server: </div>
-                          <div class="col-md-7 value"> <?=$item->server;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'server', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Ghi chú: </div>
-                          <div class="col-md-7 value"> <?=$item->note;?> </div>
+                          <div class="col-md-7 value">
+                            <?=$form->field($item, 'note', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="tab-pane" id="images">
                 <div class="row">
-                  <div class="col-md-12 col-sm-12">
-                    <div class="portlet grey-cascade box">
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
+                    <input type="file" id="file_before_image" name="before_image" style="display: none" />
+                    <img src="<?=$item->getImageBefore();?>" id="show_before_image" class="img-responsive">
+                    <?=$form->field($item, 'image_before_payment', [
+                      'template' => '{input}', 
+                      'options' => ['container' => false],
+                      'inputOptions' => ['id' => 'input_before_image']
+                    ])->hiddenInput()->label(false);?>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
+                    <input type="file" id="file_after_image" name="after_image" style="display: none" />
+                    <img src="<?=$item->getImageAfter();?>" id="show_after_image" class="img-responsive">
+                    <?=$form->field($item, 'image_after_payment', [
+                      'template' => '{input}', 
+                      'options' => ['container' => false],
+                      'inputOptions' => ['id' => 'input_after_image']
+                    ])->hiddenInput()->label(false);?>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="complain">
+                <!-- Start -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="portlet light portlet-fit bordered">
                       <div class="portlet-title">
                         <div class="caption">
-                          <i class="fa fa-cogs"></i>Game
+                          <i class="icon-microphone font-green"></i>
+                          <span class="caption-subject bold font-green uppercase"> Phản hồi từ khách hàng </span>
+                        </div>
+                        <div class="actions">
+                          <a href="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi</a>
                         </div>
                       </div>
                       <div class="portlet-body">
-                        <div class="table-responsive">
-                          <table class="table table-hover table-bordered table-striped">
-                            <thead>
-                              <tr>
-                                <th> Tên game </th>
-                                <th> Số đơn vị </th>
-                                <th> Tên đơn vị </th>
-                                <th> Số lượng </th>
-                                <th> Tổng số </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td><?=$item->item_title;?></td>
-                                <td><?=$item->unit_name;?></td>
-                                <td><?=$item->unit;?></td>
-                                <td><?=$item->quantity;?></td>
-                                <td><?=$item->total_unit;?></td>
-                              </tr>
-                            </tbody>
-                          </table>
+                        <div class="timeline">
+                          <?php foreach ($order->complains as $complain):?>
+                          <div class="timeline-item">
+                            <div class="timeline-badge">
+                              <?php if ($complain->sender->avatarImage) :?>
+                              <img class="timeline-badge-userpic" src="<?=$complain->sender->getAvatarUrl();?>"> 
+                              <?php else : ?>
+                                <div class="timeline-icon">
+                                  <i class="icon-user-following font-green-haze"></i>
+                                </div>
+                              <?php endif; ?>
+                            </div>
+                            <div class="timeline-body">
+                              <div class="timeline-body-arrow"> </div>
+                              <div class="timeline-body-head">
+                                <div class="timeline-body-head-caption">
+                                  <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->sender->name;?></a>
+                                  <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
+                                </div>
+                              </div>
+                              <div class="timeline-body-content">
+                                <span class="font-grey-cascade"><?=$complain->content;?></span>
+                              </div>
+                            </div>
+                          </div>
+                          <?php endforeach;?>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- <div class="row">
-                  <div class="form-body">
-
-                  </div>
-                </div> -->
+                <!-- End -->
               </div>
             </div>
           </div>
@@ -232,3 +391,76 @@ use common\models\Product;
   </div>
   <!-- /.modal-dialog -->
 </div>
+<div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Chọn một câu trả lời để phản hồi đến khách hàng</h4>
+      </div>
+      <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" width="5%">#</th>
+              <th scope="col" width="90%">Nội dung</th>
+              <th scope="col" width="5%">Chọn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($template_list as $template_item) :;?>
+            <tr>
+              <td><?=$template_item->id;?></td>
+              <td><?=$template_item->content;?></td>
+              <td>
+                <?= Html::beginForm(['order/send-complain'], 'POST', ['class' => 'send-form']); ?>
+                  <?= Html::hiddenInput('order_id', $order->id); ?>
+                  <?= Html::hiddenInput('template_id', $template_item->id); ?>
+                  <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
+                <?= Html::endForm(); ?>
+              </td>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<?php
+$script = <<< JS
+$('#edit_game_account').on('click', function(){
+  $('#game_account').find('input, select').prop('disabled', false);
+});
+var beforeImage = new AjaxUploadFile({trigger_element: '#before_image', file_element: '#file_before_image'});
+beforeImage.callback = function(result) {
+  console.log(typeof result);
+  console.log(result);
+  $('#show_before_image').attr('src', result[0].src);
+  $('#input_before_image').val(result[0].id)
+}
+var afterImage = new AjaxUploadFile({trigger_element: '#after_image', file_element: '#file_after_image'});
+afterImage.callback = function(result) {
+  console.log(result);
+  $('#show_after_image').attr('src', result[0].src);
+  $('#input_after_image').val(result[0].id)
+};
+
+var nextForm = new AjaxFormSubmit({element: '#next-form'});
+nextForm.success = function (data, form) {
+  location.reload();
+}
+
+var sendForm = new AjaxFormSubmit({element: '.send-form'});
+sendForm.success = function (data, form) {
+  location.reload();
+}
+JS;
+$this->registerJs($script);
+?>

@@ -173,12 +173,12 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.
         </div>
         
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
+        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
               <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
               <th style="width: 20%;"> Tên khách hàng </th>
-              <th style="width: 20%;"> Ngày tạo </th>
+              <th style="width: 20%;" data-field="created_at" data-sortable="true" data-sort-name="created_at"> Ngày tạo </th>
               <th style="width: 5%;"> Tổng Coin </th>
               <th style="width: 15%;"> Saler </th>
               <th style="width: 15%;"> Order Team </th>

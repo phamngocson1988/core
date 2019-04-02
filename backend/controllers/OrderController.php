@@ -16,6 +16,8 @@ use common\models\OrderItems;
 use backend\forms\UpdateOrderStatusPending;
 use backend\forms\UpdateOrderStatusProcessing;
 use backend\forms\TakenOrderForm;
+use backend\forms\SendComplainForm;
+use common\models\OrderComplainTemplate;
 
 class OrderController extends Controller
 {
@@ -35,7 +37,7 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index'],
+                        'actions' => ['index', 'send-complain'],
                         'roles' => ['saler', 'handler', 'admin'],
                     ],
                     [
@@ -89,6 +91,7 @@ class OrderController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
+        // Check the current user can take any order in the list
         $canTaken = false;
         if (Yii::$app->user->can('handler')) {
             $checkTaken = new FetchOrderForm([
@@ -200,12 +203,15 @@ class OrderController extends Controller
             $ref = $request->get('ref', Url::to(['order/index']));
             return $this->redirect($ref);
         }
-        
+
+        // template of complain
+        $templateList = OrderComplainTemplate::find()->all();
         return $this->render($template, [
             'order' => $order,
             'item' => $item,
             'updateStatusForm' => $updateStatusForm,
-            'back' => $request->get('ref', Url::to(['order/index']))
+            'back' => $request->get('ref', Url::to(['order/index'])),
+            'template_list' => $templateList,
         ]);
     }
 
@@ -244,6 +250,22 @@ class OrderController extends Controller
                 'order_id' => $id,
             ]);
             if ($form->validate() && $form->taken()) {
+                return $this->renderJson(true, []);
+            } else {
+                return $this->renderJson(false, [], $form->getErrorSummary(true));
+            }
+        }
+    }
+
+    public function actionSendComplain()
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost && $request->isAjax) {
+            $form = new SendComplainForm([
+                'order_id' => $request->post('order_id'),
+                'template_id' => $request->post('template_id')
+            ]);
+            if ($form->send()) {
                 return $this->renderJson(true, []);
             } else {
                 return $this->renderJson(false, [], $form->getErrorSummary(true));
