@@ -211,7 +211,22 @@
         </ul>
       </li>
       {/if}
-
+      {if Yii::$app->user->can('accounting')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-line-chart"></i>
+        <span class="title">Báo cáo</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/report'}" class="nav-link " code='report.index'>
+            <span class="title">Đơn hàng</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {/if}
     </ul>
   </div>
 </div>

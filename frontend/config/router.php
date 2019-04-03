@@ -40,6 +40,6 @@ return [
         'notifications/default/read-all' => 'notifications/default/read-all',
         'notifications/default/delete-all' => 'notifications/default/delete-all',
 
-        '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+        '<controller>/<action>' => '<controller>/<action>',
     ],
 ];
