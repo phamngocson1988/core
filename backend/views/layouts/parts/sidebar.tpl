@@ -224,6 +224,16 @@
             <span class="title">Đơn hàng</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/report/game'}" class="nav-link " code='report.game'>
+            <span class="title">Báo cáo theo game</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/report/user'}" class="nav-link " code='report.user'>
+            <span class="title">Báo cáo theo nhân viên</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

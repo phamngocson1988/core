@@ -31,13 +31,13 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê theo đơn hàng</span>
+      <span>Thống kê theo nhân viên</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê theo đơn hàng</h1>
+<h1 class="page-title">Thống kê theo nhân viên</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -46,86 +46,18 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase">Thống kê theo đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Thống kê theo nhân viên</span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/index']]);?>     
-            <?php $customer = $search->getCustomer();?>
-            <?=$form->field($search, 'customer_id', [
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/user']]);?>
+            <?=$form->field($search, 'type', [
               'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn khách hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Khách hàng')?>
-
-            <?php if (Yii::$app->user->can('admin')) :?>
-            <?php $saler = $search->getSaler();?>
-            <?=$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhân viên sale',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhân viên sale')?>
-
-            <?php $handler = $search->getHandler();?>
-            <?=$form->field($search, 'handler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'handler_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhân viên đơn hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhân viên đơn hàng')?>
-            <?php elseif (Yii::$app->user->can('saler')):?>
-              <?=$form->field($search, 'saler_id', [
-                'template' => '{input}', 
-                'options' => ['container' => false],
-                'inputOptions' => ['name' => 'saler_id']
-              ])->hiddenInput()->label(false);?>
-            <?php elseif (Yii::$app->user->can('handler')):?>
-              <?=$form->field($search, 'handler_id', [
-                'template' => '{input}', 
-                'options' => ['container' => false],
-                'inputOptions' => ['name' => 'handler_id']
-              ])->hiddenInput()->label(false);?>
-            <?php endif;?>
-
-            <?=$form->field($search, 'status', [
-              'options' => ['class' => 'form-group col-md-2'],
-              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
-            ])->dropDownList($search->getStatus())->label('Trạng thái');?>
+              'inputOptions' => ['name' => 'type', 'class' => 'form-control']
+            ])->dropDownList(['handler' => 'Quản lý đơn hàng', 'saler' => 'Bán hàng'])->label('Loại nhân viên');?>
 
             <div class="form-group col-md-2">
               <label class="control-label">Ngày tạo</label>
@@ -147,7 +79,6 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
               ])->hiddenInput()->label(false);?>
             </div>
-
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -160,38 +91,37 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 20%;"> Tên khách hàng </th>
-              <th style="width: 20%;" data-field="created_at" data-sortable="true" data-sort-name="created_at"> Ngày tạo </th>
-              <th style="width: 5%;"> Tổng Coin </th>
-              <th style="width: 15%;"> Saler </th>
-              <th style="width: 15%;"> Order Team </th>
-              <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th style="width: 10%;"> <?=Yii::t('app', 'no');?> </th>
+              <th style="width: 50%;"> Tên nhân viên </th>
+              <th style="width: 20%;"> Số đơn hàng</th>
+              <th style="width: 20%;"> Số lượng King Coin </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
-              <?php foreach ($models as $model) :?>
+              <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;">Order #<?=$model->id;?></td>
-                <td style="vertical-align: middle;"><?=$model->customer_name;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;">$<?=$model->total_price;?></td>
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=$model->status;?></td>
+                <td>#<?=($pages->offset + $no + 1)?></td>
                 <td style="vertical-align: middle;">
+                  <?php 
+                  if ($search->type == 'handler') {
+                    echo $model->handler->name;
+                  } else {
+                    echo $model->saler->name;
+                  }
+                  ?>
                 </td>
+                <td style="vertical-align: middle;"><?=number_format($model->count_order);?></td>
+                <td style="vertical-align: middle;">(K)<?=number_format($model->total_price);?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
           <tfoot>
             <tr>
-              <td style="vertical-align: middle;" colspan="3">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></td>
-              <td style="vertical-align: middle;" colspan="5">Tổng King Coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
+              <td style="vertical-align: middle;" colspan="2">Tổng King Coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
+              <td style="vertical-align: middle;" colspan="2">Tổng số đơn hàng: <?=number_format($search->getCommand()->sum('count_order'));?></td>
               </td>
             </tr>
           </tfoot>
