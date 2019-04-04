@@ -4,7 +4,7 @@ use yii\helpers\Url;
 ?>
 <section class="section-lg bg-default">
   <div class="container text-center">
-    <h3 class="text-gray-4">User Profile</h3>
+    <h3 class="text-gray-4">User dashboard</h3>
   </div>
   <!-- Style switcher-->
   <div class="style-switcher hide" data-container="">

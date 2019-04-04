@@ -35,11 +35,8 @@ use yii\bootstrap\ActiveForm;
                 'template' => '{label}{input}{hint}{error}'
               ])->passwordInput() ?>
             </div>
-            <div class="col-lg-12 offset-custom-1">
-              <div class="form-button">
-                <?= Html::submitButton('Update', ['class' => 'button button-secondary button-nina']) ?>
-              </div>
-            </div>
+            <?= Html::a('Go back', Url::to(['user/index']), ['class' => 'button button-primary button-nina']) ?>
+            <?= Html::submitButton('Update', ['class' => 'button button-secondary button-nina']) ?>
           </div>
         <?php ActiveForm::end();?>
       </div>

@@ -59,6 +59,7 @@ use common\models\Product;
                   <span class="number"> 1 </span>
                   <span class="desc">
                   <i class="fa fa-check"></i> Verifying </span>
+                  <p style="color: #CCC">Đơn hàng chưa thanh toán</p> 
                   </a>
                 </li>
                 <li class="active">
@@ -66,6 +67,7 @@ use common\models\Product;
                   <span class="number"> 2 </span>
                   <span class="desc">
                   <i class="fa fa-check"></i> Pending </span>
+                  <p style="color: #CCC">Đơn hàng đã thanh toán</p> 
                   </a>
                 </li>
                 <li class="active">
@@ -73,6 +75,7 @@ use common\models\Product;
                   <span class="number"> 3 </span>
                   <span class="desc">
                   <i class="fa fa-check"></i> Processing </span>
+                  <p style="color: #CCC">Đơn hàng đã thực hiện xong</p> 
                   </a>
                 </li>
                 <li>
@@ -80,6 +83,7 @@ use common\models\Product;
                   <span class="number"> 4 </span>
                   <span class="desc">
                   <i class="fa fa-check"></i> Completed </span>
+                  <p style="color: #CCC">Đơn hàng đã hoàn tất</p> 
                   </a>
                 </li>
               </ul>

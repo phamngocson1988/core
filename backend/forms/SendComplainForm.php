@@ -80,10 +80,12 @@ class SendComplainForm extends Model
             $customer = $order->customer;
             $settings = Yii::$app->settings;
             $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+            Yii::$app->urlManagerFrontend->setHostInfo('https://kinggems.us');
             Yii::$app->mailer->compose('admin_send_complain', [
                 'mail' => $this, 
                 'template' => $this->getTemplate(), 
-                'order' => $this->getOrder()
+                'order' => $this->getOrder(),
+                'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'key' => $order->auth_key], true),
             ])
             ->setTo($customer->email)
             ->setFrom([$adminEmail => Yii::$app->name])

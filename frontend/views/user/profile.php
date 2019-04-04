@@ -44,11 +44,11 @@ use common\models\User;
             <div class="col-md-6">
               <?= $form->field($model, 'country_code', [
                 'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input'],
+                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Choose a country'],
                 'labelOptions' => ['class' => 'form-label-outside'],
                 'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                 'template' => '{label}{input}{hint}{error}'
-              ])->textInput() ?>
+              ])->dropDownList(Yii::$app->params['country_code']) ?>
             </div>
             <div class="col-md-6">
               <?= $form->field($model, 'phone', [
@@ -71,17 +71,14 @@ use common\models\User;
             <div class="col-md-6">
               <?= $form->field($model, 'favorite', [
                 'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Chọn game yêu thích'],
+                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Choose favorite game'],
                 'labelOptions' => ['class' => 'form-label-outside'],
                 'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                 'template' => '{label}{input}{hint}{error}'
               ])->dropDownList($model->fetchGames()) ?>
             </div>
-            <div class="col-lg-12 offset-custom-1">
-              <div class="form-button">
-                <?= Html::submitButton('Update', ['class' => 'button button-secondary button-nina']) ?>
-              </div>
-            </div>
+            <?= Html::a('Go back', Url::to(['user/index']), ['class' => 'button button-primary button-nina']) ?>
+            <?= Html::submitButton('Update', ['class' => 'button button-secondary button-nina']) ?>
           </div>
         <?php ActiveForm::end();?>
       </div>

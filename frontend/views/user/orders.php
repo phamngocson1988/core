@@ -87,7 +87,7 @@ use yii\helpers\Url;
         <?php Pjax::end();?>
       </div>
       <div class="form-button">
-        <a href="<?=Url::to(['user/index']);?>" class="button button-secondary button-nina">Back</a>
+        <a href="<?=Url::to(['user/index']);?>" class="button button-primary button-nina">Back</a>
       </div>
     </div>
   </div>
