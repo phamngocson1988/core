@@ -31,13 +31,13 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê theo game</span>
+      <span>Thống kê theo giao dịch</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê theo game</h1>
+<h1 class="page-title">Thống kê theo giao dịch</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -46,14 +46,14 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Thống kê theo game</span>
+          <span class="caption-subject bold uppercase"> Thống kê theo giao dịch</span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/game']]);?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/transaction']]);?>
             <div class="form-group col-md-2">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
@@ -83,32 +83,36 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
         </div>
         
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+        <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
               <th style="width: 10%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 50%;"> Tên game </th>
-              <th style="width: 20%;"> King coin</th>
-              <th style="width: 20%;"> Số lượng </th>
+              <th style="width: 20%;"> Khách hàng </th>
+              <th style="width: 20%;"> Mã giao dịch </th>
+              <th style="width: 20%;"> Phương thức thanh toán</th>
+              <th style="width: 10%;"> Số tiền </th>
+              <th style="width: 20%;"> Ngày thực hiện </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td>#<?=($pages->offset + $no + 1)?></td>
-                <td style="vertical-align: middle;"><?=$model->game->title;?></td>
-                <td style="vertical-align: middle;">$<?=$model->total;?></td>
-                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
+                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
+                <td style="vertical-align: middle;"><?=$model->auth_key;?></td>
+                <td style="vertical-align: middle;"><?=$model->payment_method;?></td>
+                <td style="vertical-align: middle;">$<?=number_format($model->amount);?></td>
+                <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
           <tfoot>
             <tr>
-              <td style="vertical-align: middle;" colspan="2">Tổng số lượng: <?=number_format($search->getCommand()->sum('quantity'));?></td>
-              <td style="vertical-align: middle;" colspan="2">Tổng King Coin: <?=number_format($search->getCommand()->sum('total'));?></td>
+              <td style="vertical-align: middle;" colspan="3">Tổng giao dịch: <?=number_format($search->getCommand()->count());?></td>
+              <td style="vertical-align: middle;" colspan="3">Tổng giá trị: $ <?=number_format($search->getCommand()->sum('amount'));?></td>
               </td>
             </tr>
           </tfoot>

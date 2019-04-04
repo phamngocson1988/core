@@ -246,6 +246,11 @@
             <span class="title">Báo cáo theo nhân viên</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/report/transaction'}" class="nav-link " code='report.transaction'>
+            <span class="title">Báo cáo theo giao dịch</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

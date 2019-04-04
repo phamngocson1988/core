@@ -40,4 +40,9 @@ class Transaction extends ActiveRecord
             self::STATUS_COMPLETED => Yii::t('app', 'completed'),
         ];
     }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
 }

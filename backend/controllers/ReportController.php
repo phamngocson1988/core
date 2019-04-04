@@ -8,6 +8,7 @@ use yii\filters\VerbFilter;
 use backend\forms\FetchOrderForm;
 use backend\forms\ReportByGameForm;
 use backend\forms\ReportByUserForm;
+use backend\forms\ReportByTransactionForm;
 use yii\data\Pagination;
 use common\models\Order;
 use yii\helpers\Url;
@@ -45,8 +46,8 @@ class ReportController extends Controller
             'saler_id' => $request->get('saler_id'),
             'handler_id' => $request->get('handler_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date', date('Y-m-01')),
+            'end_date' => $request->get('end_date', date('Y-m-t')),
             'status' => $request->get('status'),
         ];
         $form = new FetchOrderForm($data);
@@ -82,8 +83,8 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.game';
         $request = Yii::$app->request;
         $data = [
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date', date('Y-m-01')),
+            'end_date' => $request->get('end_date', date('Y-m-t')),
         ];
         $form = new ReportByGameForm($data);
         $command = $form->getCommand();
@@ -105,8 +106,8 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $data = [
             'type' => $request->get('type', 'handler'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date', date('Y-m-01')),
+            'end_date' => $request->get('end_date', date('Y-m-t')),
         ];
         $form = new ReportByUserForm($data);
         $command = $form->getCommand();
@@ -116,6 +117,27 @@ class ReportController extends Controller
                             ->orderBy(['total_price' => SORT_DESC])
                             ->all();
         return $this->render('user', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+        ]);
+    }
+    public function actionTransaction()
+    {
+        $this->view->params['main_menu_active'] = 'report.transaction';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date', date('Y-m-01')),
+            'end_date' => $request->get('end_date', date('Y-m-t')),
+        ];
+        $form = new ReportByTransactionForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('transaction', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,

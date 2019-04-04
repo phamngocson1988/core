@@ -167,12 +167,11 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               <th style="width: 15%;"> Saler </th>
               <th style="width: 15%;"> Order Team </th>
               <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
@@ -183,15 +182,13 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
-                <td style="vertical-align: middle;">
-                </td>
               </tr>
               <?php endforeach;?>
           </tbody>
           <tfoot>
             <tr>
               <td style="vertical-align: middle;" colspan="3">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></td>
-              <td style="vertical-align: middle;" colspan="5">Tổng King Coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
+              <td style="vertical-align: middle;" colspan="4">Tổng King Coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
               </td>
             </tr>
           </tfoot>
@@ -205,27 +202,6 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
 </div>
 <?php
 $script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-});
-
 var dateFormat = 'YYYY/MM/DD';//MMMM D, YYYY
 $('#reportrange').daterangepicker({
     opens: (App.isRTL() ? 'left' : 'right'),

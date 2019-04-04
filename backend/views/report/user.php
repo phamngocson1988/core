@@ -120,8 +120,8 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           </tbody>
           <tfoot>
             <tr>
-              <td style="vertical-align: middle;" colspan="2">Tổng King Coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
               <td style="vertical-align: middle;" colspan="2">Tổng số đơn hàng: <?=number_format($search->getCommand()->sum('count_order'));?></td>
+              <td style="vertical-align: middle;" colspan="2">Tổng King Coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
               </td>
             </tr>
           </tfoot>
@@ -135,27 +135,6 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
 </div>
 <?php
 $script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-});
-
 var dateFormat = 'YYYY/MM/DD';//MMMM D, YYYY
 $('#reportrange').daterangepicker({
     opens: (App.isRTL() ? 'left' : 'right'),

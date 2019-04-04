@@ -19,8 +19,8 @@ class ReportByGameForm extends Model
     {
         return [
             [['game_id'], 'safe'],
-            ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
-            ['end_date', 'default', 'value' => date('Y-m-d')],
+            ['start_date', 'default', 'value' => date('Y-m-01')],
+            ['end_date', 'default', 'value' => date('Y-m-t')],
         ];
     }
 
