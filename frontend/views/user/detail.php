@@ -230,7 +230,7 @@ complainForm.success = function (data, form) {
   location.reload();
 }
 complainForm.error = function (errors) {
-  console.log(result);
+  console.log(errors);
 }
 JS;
 $this->registerJs($script);

@@ -60,23 +60,10 @@ use yii\bootstrap\ActiveForm;
 </section>
 <?php
 $script = <<< JS
-$('form.add-to-cart').on('submit', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        if (result.status == true) {
-          window.location.href = "[:checkout_url]";
-        }
-      },
-  });
-  return false;
-});
+var complainForm = new AjaxFormSubmit({element: 'form.add-to-cart'});
+complainForm.success = function (data, form) {
+  window.location.href = "[:checkout_url]";
+}
 
 $(".quantity-control").on("change", function(){
   var id = $(this).data("id");

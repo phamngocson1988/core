@@ -100,7 +100,12 @@ $cart = Yii::$app->cart;
             </li>
           </ul>
         </div>
-        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix', 'action' => Url::to(['cart/purchase'])]); ?>
+        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'action' => Url::to(['cart/purchase'])]); ?>
+        <?php 
+        $items = $cart->getItems();
+        $item = reset($items);
+        ?>
+        <?= Html::a('Go back', Url::to(['cart/index', 'pid' => $item->getUniqueId(), 'qt' => $item->quantity]), ['class' => 'button button-primary button-nina']) ?>
         <?= Html::submitButton('place order', ['class' => 'button button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
         <?php ActiveForm::end();?>
       </div>

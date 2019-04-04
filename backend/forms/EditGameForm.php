@@ -135,5 +135,6 @@ class EditGameForm extends Model
         $this->meta_keyword = $game->meta_keyword;
         $this->meta_description = $game->meta_description;
         $this->status = $game->status;
+        $this->gallery = array_column($game->images, 'image_id');
     }
 }

@@ -75,6 +75,23 @@ class SendComplainForm extends Model
         $complain->content = $template->content;
         $complain->is_read = 0;
         $complain->created_by = Yii::$app->user->id;
-        return $complain->save();
+        if ($complain->save()) {
+            $order = $this->getOrder();
+            $customer = $order->customer;
+            $settings = Yii::$app->settings;
+            $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+            Yii::$app->mailer->compose('admin_send_complain', [
+                'mail' => $this, 
+                'template' => $this->getTemplate(), 
+                'order' => $this->getOrder()
+            ])
+            ->setTo($customer->email)
+            ->setFrom([$adminEmail => Yii::$app->name])
+            ->setSubject("[Kinggems][Order #$this->order_id] Order notification")
+            ->setTextBody($template->content)
+            ->send();
+            return true;
+        }
+        return false;
     }
 }

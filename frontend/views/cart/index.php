@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 ?>
-<?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix ajax-form-submit', 'action' => ['cart/add']]); ?>
+<?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'action' => ['cart/add']]); ?>
 <section class="section section-lg bg-default">
   <div class="container container-wide">
     <div class="row row-fix justify-content-lg-center">
@@ -152,7 +152,7 @@ use yii\bootstrap\ActiveForm;
           </div>
           <div class="col-lg-12 offset-custom-1">
             <div class="form-button text-md-right">
-              <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina', 'name' => 'checkout']) ?>
+              <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina']) ?>
             </div>
           </div>
         </div>
@@ -164,28 +164,13 @@ use yii\bootstrap\ActiveForm;
 
 <?php
 $script = <<< JS
-$('form#add-to-cart').on('submit', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        console.log(result);
-        if (!result.status) {
-          if (!result.user_id) { // Not login
-            $('#account-modal').modal('show');
-          }
-        } else {
-          window.location.href = "[:checkout_url]";
-        }
-      },
-  });
-  return false;
-});
+var complainForm = new AjaxFormSubmit({element: 'form#add-to-cart'});
+complainForm.success = function (data, form) {
+  window.location.href = "[:checkout_url]";
+}
+complainForm.error = function (errors) {
+  console.log(errors);
+}
 
 $("#products, #quantity").on('change', function(){
   updatePrice();
