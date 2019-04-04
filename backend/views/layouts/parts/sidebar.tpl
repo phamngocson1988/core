@@ -185,6 +185,18 @@
             <span class="title">{Yii::t('app', 'header_scripts')}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="javascript:;" class="nav-link nav-toggle">
+            <span class="title">Cổng thanh toán</span><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+              <li class="nav-item">
+                <a href="{url route='setting/paypal'}" class="nav-link" code='setting.paypal'>
+                  <i class="cc-paypal"></i> Paypal
+                </a>
+              </li>
+            </ul
+          </li>
         </ul>
       </li>
       {/if}

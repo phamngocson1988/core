@@ -150,11 +150,11 @@ function AjaxFormSubmit(opts) {
     }
 
     this.beforeSend = function (element) {
-        App.blockUI({target: 'body', animate: true});
+        // App.blockUI({target: 'body', animate: true});
     }
 
     this.complete = function(element) {
-        App.unblockUI('body');
+        // App.unblockUI('body');
     }
 
     this.validate = function(form) {

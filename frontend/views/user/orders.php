@@ -70,6 +70,13 @@ use yii\helpers\Url;
             </tr>
             <?php endforeach;?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td style="vertical-align: middle; backgroun-color: #CCC" colspan="2"><strong>Tổng đơn hàng: <?=number_format($filterForm->getCommand()->count());?></strong></td>
+              <td style="vertical-align: middle; backgroun-color: #CCC" colspan="3"><strong>Tổng King Coin: <?=number_format($filterForm->getCommand()->sum('total_price'));?></strong></td>
+              </td>
+            </tr>
+          </tfoot>
         </table>
         <?=LinkPager::widget([
           'pagination' => $pages,

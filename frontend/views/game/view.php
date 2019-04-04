@@ -16,10 +16,12 @@ use frontend\widgets\LoginPopupWidget;
             <div class="unit-body">
               <ul class="product-thumbnails">
                 <li class="active" data-large-image="<?=$model->getImageUrl('420x550');?>"><img src="<?=$model->getImageUrl('100x100');?>" alt="" width="95" height="95"></li>
+                <?php foreach ($model->images as $image) :?>
+                <li class="active" data-large-image="<?=$image->getImageUrl('420x550');?>"><img src="<?=$image->getImageUrl('100x100');?>" alt="" width="95" height="95"></li>
+                <?php endforeach ;?>
               </ul>
             </div>
             <div class="unit-right product-single-image">
-                    <!-- <div class="product-single-image-element"><img class="product-image-area animateImageIn" src="/images/shop-01-420x550.png" alt=""></div> -->
               <div class="product-single-image-element"><img class="product-image-area animateImageIn" src="<?=$model->getImageUrl('420x550');?>" alt=""></div>
             </div>
           </div>

@@ -5,6 +5,8 @@
 {use class='unclead\multipleinput\MultipleInput'}
 {use class='common\widgets\ImageInputWidget'}
 {use class='common\widgets\RadioListInput'}
+{use class='common\widgets\MultipleImageInputWidget'}
+
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
@@ -86,6 +88,9 @@
                 <li>
                   <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'packages')}</a>
                 </li>
+                <li>
+                  <a href="#images" data-toggle="tab">Hình ảnh</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -110,6 +115,12 @@
                   {Pjax enablePushState=false enableReplaceState=false linkSelector='.product-filter'}
                   
                   {/Pjax}
+                </div>
+                <div class="tab-pane" id="images">
+                  {$form->field($model, 'gallery', [
+                    'template' => '{input}{hint}{error}'
+                  ])->widget(MultipleImageInputWidget::className(), [
+                  ])->label(false)}
                 </div>
               </div>
             </div>

@@ -9,6 +9,7 @@ use backend\forms\ApplicationSettingForm;
 use backend\forms\SocialSettingForm;
 use backend\forms\HeaderScriptSettingForm;
 use backend\forms\GallerySettingForm;
+use backend\forms\PaypalSettingForm;
 
 /**
  * Class SettingController
@@ -40,6 +41,12 @@ class SettingController extends Controller
                 'modelClass' => HeaderScriptSettingForm::class,
                 'view' => 'script.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.script']
+            ],
+            'paypal' => [
+                'class' => SettingsAction::class,
+                'modelClass' => PaypalSettingForm::class,
+                'view' => 'paypal.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.paypal']
             ],
             'gallery' => [
                 'class' => SettingsAction::class,

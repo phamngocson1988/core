@@ -141,4 +141,9 @@ class Game extends ActiveRecord
         }
         return $excerpt;
     }   
+
+    public function getImages()
+    {
+        return $this->hasMany(GameImage::className(), ['game_id' => 'id']);
+    }
 }

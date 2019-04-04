@@ -85,7 +85,7 @@ class SignupForm extends Model
 
         if ($this->invite_code) {
             $affiliateUser = User::findOne(['affiliate_code' => $this->invite_code]);
-            $user->saler_id = $affiliateUser->id;
+            $user->invited_by = $affiliateUser->id;
         }
 
         if ($this->isNeedConfirm()) {

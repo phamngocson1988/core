@@ -42,6 +42,12 @@ class m180517_025826_create_product_schema extends Migration
             $command->execute();
         }
 
+        $this->createTable('{{%game_image}}', [
+            'id' => $this->primaryKey(),
+            'game_id' => $this->integer()->notNull(),
+            'image_id' => $this->integer()->notNull()
+        ], $tableOptions);
+
         $this->createTable('{{%product}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(100)->notNull(),
@@ -69,6 +75,7 @@ class m180517_025826_create_product_schema extends Migration
     public function down()
     {
         $this->dropTable('{{%game}}');
+        $this->dropTable('{{%game_image}}');
         $this->dropTable('{{%product}}');
     }
 }

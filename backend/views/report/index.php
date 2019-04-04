@@ -176,7 +176,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td style="vertical-align: middle;">Order #<?=$model->id;?></td>
+                <td style="vertical-align: middle;"><a href="<?=Url::to(['report/view', 'id' => $model->id]);?>">Order #<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->customer_name;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;">$<?=$model->total_price;?></td>

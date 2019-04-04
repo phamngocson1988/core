@@ -5,6 +5,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\Game;
+use common\models\GameImage;
 
 class EditGameForm extends Model
 {
@@ -17,6 +18,7 @@ class EditGameForm extends Model
     public $meta_title;
     public $meta_keyword;
     public $meta_description;
+    public $gallery = [];
     public $status = Game::STATUS_VISIBLE;
 
     protected $_game;
@@ -27,7 +29,7 @@ class EditGameForm extends Model
             [['id', 'title', 'content', 'unit_name'], 'required'],
             ['status', 'default', 'value' => Game::STATUS_VISIBLE],
             ['id', 'validateGame'],
-            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description'], 'safe']
+            [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
         ];
     }
 
@@ -63,6 +65,18 @@ class EditGameForm extends Model
                 $game->meta_description = $this->meta_description;
                 $game->status = $this->status;
                 $game->save();
+
+                if ($this->gallery) {
+                    foreach ($game->images as $image) {
+                        $image->delete();
+                    }
+                    foreach ((array)$this->gallery as $imageId) {
+                        $gameImage = new GameImage();
+                        $gameImage->game_id = $this->id;
+                        $gameImage->image_id = $imageId;
+                        $gameImage->save();
+                    }
+                }
                 $transaction->commit();
                 return $game;
             } catch (Exception $e) {

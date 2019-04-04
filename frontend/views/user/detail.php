@@ -201,7 +201,7 @@ $game = Game::findOne($item->game_id);
     </div>
   </div>
   <?php endif;?>
-  <?= Html::beginForm(['user/send-complain'], 'POST', ['id' => 'send-complain', 'class' => 'rd-mailform form-fix ajax-form-submit']); ?>
+  <?= Html::beginForm(['user/send-complain'], 'POST', ['id' => 'send-complain']); ?>
   <div class="container">
     <div class="row row-fix justify-content-sm-center">
       <div class="row row-fix row-20">
@@ -214,7 +214,7 @@ $game = Game::findOne($item->game_id);
         </div>
         <div class="col-lg-12 offset-custom-1">
           <div class="form-button text-md-right">
-            <?= Html::submitButton('Send complain', ['class' => 'button button-secondary button-nina']) ?>
+            <?= Html::submitButton('Send complain', ['class' => 'button button-secondary button-nina', 'id' => 'send-form']) ?>
           </div>
         </div>
       </div>
@@ -225,25 +225,13 @@ $game = Game::findOne($item->game_id);
 
 <?php
 $script = <<< JS
-$('form#send-complain').on('submit', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        if (!result.status) {
-          console.log(result);
-        } else {
-          location.reload();
-        }
-      },
-  });
-  return false;
-});
+var complainForm = new AjaxFormSubmit({element: 'form#send-complain'});
+complainForm.success = function (data, form) {
+  location.reload();
+}
+complainForm.error = function (errors) {
+  console.log(result);
+}
 JS;
 $this->registerJs($script);
 ?>

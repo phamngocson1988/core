@@ -9,7 +9,8 @@ use backend\forms\FetchOrderForm;
 use backend\forms\ReportByGameForm;
 use backend\forms\ReportByUserForm;
 use yii\data\Pagination;
-
+use common\models\Order;
+use yii\helpers\Url;
 
 class ReportController extends Controller
 {
@@ -59,6 +60,20 @@ class ReportController extends Controller
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
+        ]);
+    }
+
+    public function actionView($id)
+    {
+        $this->view->params['main_menu_active'] = 'report.index';
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        $items = $order->items;
+        $item = reset($items);
+        return $this->render('view', [
+            'order' => $order,
+            'item' => $item,
+            'back' => $request->get('ref', Url::to(['report/index']))
         ]);
     }
 

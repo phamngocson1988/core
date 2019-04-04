@@ -8,7 +8,6 @@ use yii\base\Model;
 class GallerySettingForm extends Model
 {
     public $main_gallery = [];
-    public $gallery1 = [];
 
     public function init()
     {
@@ -19,7 +18,7 @@ class GallerySettingForm extends Model
     public function rules()
     {
         return [
-            [['main_gallery', 'gallery1'], 'trim'],
+            [['main_gallery'], 'trim'],
         ];
     }
 
@@ -30,7 +29,7 @@ class GallerySettingForm extends Model
     {
         return [
             'main_gallery' => Yii::t('app', 'main_gallery'),
-            'gallery1' => Yii::t('app', 'gallery1'),
+            // 'gallery1' => Yii::t('app', 'gallery1'),
         ];
     }
 }
