@@ -286,6 +286,15 @@ use common\models\Product;
                             ])->textInput()->label(false);?>
                           </div>
                         </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Đã nạp: </div>
+                          <div class="col-md-7 form-inline">
+                            <div class="form-group mx-sm-3 mb-2">
+                              <input type="number" id="doing_unit" class="form-control" id="inputPassword2" placeholder="Password">
+                            </div>
+                            <button type="button" id="update_unit" class="btn btn-primary mb-2">Update</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -465,6 +474,30 @@ var sendForm = new AjaxFormSubmit({element: '.send-form'});
 sendForm.success = function (data, form) {
   location.reload();
 }
+
+// Update doing unit
+$('#update_unit').on('click', function(e) {
+  console.log($('#doing_unit').val());
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  $.ajax({
+    url: '###UPDATE_UNIT###',
+    type: 'POST',
+    dataType : 'json',
+    data: {doing_unit: $('#doing_unit').val()},
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          alert(result.errors);
+          return false;
+      } else {
+          alert(result.data);
+      }
+    },
+  });
+  return false;
+});
 JS;
+$redirect = Url::to(['order/add-unit', 'id' => $item->id]);
+$script = str_replace('###UPDATE_UNIT###', $redirect, $script);
 $this->registerJs($script);
 ?>

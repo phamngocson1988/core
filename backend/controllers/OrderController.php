@@ -54,7 +54,7 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['move-to-processing', 'taken'],
+                        'actions' => ['move-to-processing', 'taken', 'add-unit'],
                         'roles' => ['handler'],
                     ],
                 ],
@@ -182,12 +182,12 @@ class OrderController extends Controller
                 $item->scenario = EditOrderItemForm::SCENARIO_PROCESSING;
                 break;
             case EditOrderForm::STATUS_COMPLETED:
-                $template = 'completed';
+                $template = 'view';
                 $updateStatusForm = new UpdateOrderStatusProcessing();
                 break;
             
             default:
-                $template = 'completed';
+                $template = 'view';
                 $updateStatusForm = null;
                 break;
         }
@@ -282,6 +282,20 @@ class OrderController extends Controller
             return $this->renderJson(true, []);
         } else {
             return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
+
+    public function actionAddUnit($id)
+    {
+        $request = Yii::$app->request;
+        $model = OrderItems::findOne($id);
+        if ($model) {
+            $unit = $request->post('doing_unit', 0);
+            $model->doing_unit += $unit;
+            $model->save();
+            return $this->renderJson(true, ['total' => $model->doing_unit]);
+        } else {
+            return $this->renderJson(false, [], 'Error');
         }
     }
 }
