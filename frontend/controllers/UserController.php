@@ -14,6 +14,7 @@ use frontend\forms\FetchHistoryOrderForm;
 use frontend\forms\FetchHistoryTransactionForm;
 use frontend\forms\FetchHistoryWalletForm;
 use frontend\forms\CompleteOrderForm;
+use frontend\forms\RatingOrderForm;
 use common\models\Order;
 use common\models\UserWallet;
 use common\models\Transaction;
@@ -36,6 +37,14 @@ class UserController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'confirm' => ['post'],
+                    'like' => ['post'],
+                    'dislike' => ['post'],
                 ],
             ],
         ];
@@ -127,7 +136,38 @@ class UserController extends Controller
 
     public function actionConfirm($key)
     {
-        $model = new CompleteOrderForm(['auth_key' => $key]);
+        $model = new CompleteOrderForm([
+            'auth_key' => $key,
+            'user_id' => Yii::$app->user->id,
+        ]);
+        if ($model->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
+
+    public function actionLike($key)
+    {
+        $model = new RatingOrderForm([
+            'auth_key' => $key,
+            'user_id' => Yii::$app->user->id,
+            'value' => 1
+        ]);
+        if ($model->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
+
+    public function actionDislike($key)
+    {
+        $model = new RatingOrderForm([
+            'auth_key' => $key,
+            'user_id' => Yii::$app->user->id,
+            'value' => -1
+        ]);
         if ($model->save()) {
             return $this->renderJson(true, []);
         } else {

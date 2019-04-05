@@ -112,6 +112,11 @@ class Order extends ActiveRecord
         return $this->status === self::STATUS_DELETED;
     }
 
+    public function isRating()
+    {
+        return $this->rating;
+    }
+
     /**
      * check if the order is in temporary status or not. The system only allow to delete temporary order
      * If not, just move it to 'deleted' status.

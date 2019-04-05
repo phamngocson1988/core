@@ -5,16 +5,17 @@ use Yii;
 use yii\base\Model;
 use common\models\Order;
 
-class CompleteOrderForm extends Model
+class RatingOrderForm extends Model
 {
     public $auth_key;
     public $user_id;
+    public $value;
     private $_order;
 
     public function rules()
     {
         return [
-            [['auth_key', 'user_id'], 'required'],
+            [['auth_key', 'user_id', 'value'], 'required'],
             ['auth_key', 'validateOrder']
         ];
     }
@@ -23,9 +24,7 @@ class CompleteOrderForm extends Model
     {
         $order = $this->getOrder();
         if (!$order) {
-            $this->addError($attribute, 'Đơn hàng không tồn tại');
-        } elseif (!$order->isProcessingOrder()) {
-            $this->addError($attribute, 'Không thể chuyển trạng thái của đơn hàng hiện tại');
+            $this->addError($attribute, 'Order is not exist');
         } elseif ($order->customer_id != $this->user_id) {
             $this->addError($attribute, 'You cannot vote this order');
         }
@@ -35,7 +34,7 @@ class CompleteOrderForm extends Model
     {
         if (!$this->validate()) return false;
         $order = $this->getOrder();
-        $order->status = Order::STATUS_COMPLETED;
+        $order->rating = $this->value;
         return $order->save();
     }
 

@@ -81,7 +81,17 @@ $game = Game::findOne($item->game_id);
                 <tr>
                   <td colspan="2" style="align:center">
                     <div style="align:center">
-                      <a href="<?=Url::to(['user/confirm', 'key' => $model->auth_key]);?>" id="complete" class="button button-primary button-nina">Confirm</a>
+                      <a href="<?=Url::to(['user/confirm', 'key' => $model->auth_key]);?>" id="complete" class="button button-default-outline button-nina button-block button-blog">Confirm Delivery</a>
+                    </div>
+                  </td>
+                </tr>
+                <?php endif;?>
+                <?php if (!$model->isRating()) :?>
+                <tr id="rating">
+                  <td colspan="2">
+                    <div class="group-md button-group">
+                      <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-secondary button-shadow" id='like'><span class="icon novi-icon mdi mdi-thumb-up-outline"></span>Like</a>
+                      <a href="<?=Url::to(['user/dislike', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='dislike'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Dislike</a>
                     </div>
                   </td>
                 </tr>
@@ -247,6 +257,13 @@ $('#complete').ajax_action({
   method: 'POST',
   callback: function(data) {
     location.reload();
+  },
+});
+$('#like,#dislike').ajax_action({
+  method: 'POST',
+  callback: function(data) {
+    $('#rating').remove();
+    alert('Thank for your rating');
   },
 });
 JS;
