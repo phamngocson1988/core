@@ -43,7 +43,7 @@ $game = Game::findOne($item->game_id);
   </div>
 </section>
 
-<section class="section section-lg bg-default novi-background bg-cover">
+<section class="section section-lg bg-default novi-background bg-cover" id="content">
   <!-- section wave-->
   <div class="container grid-demonstration">
     <h4 class="text-center">Order Information</h3>
@@ -77,6 +77,15 @@ $game = Game::findOne($item->game_id);
                   <td>Order status:</td>
                   <td><?=$model->status;?></td>
                 </tr>
+                <?php if ($model->isProcessingOrder()) :?>
+                <tr>
+                  <td colspan="2" style="align:center">
+                    <div style="align:center">
+                      <a href="<?=Url::to(['user/confirm', 'key' => $model->auth_key]);?>" id="complete" class="button button-primary button-nina">Confirm</a>
+                    </div>
+                  </td>
+                </tr>
+                <?php endif;?>
               </tbody>
             </table>
           </div>
@@ -201,6 +210,7 @@ $game = Game::findOne($item->game_id);
     </div>
   </div>
   <?php endif;?>
+  <?php if (!$model->isCompletedOrder() && !$model->isDeletedOrder()) :?>
   <?= Html::beginForm(['user/send-complain'], 'POST', ['id' => 'send-complain']); ?>
   <div class="container">
     <div class="row row-fix justify-content-sm-center">
@@ -221,6 +231,7 @@ $game = Game::findOne($item->game_id);
     </div>
   </div>
   <?= Html::endForm(); ?>
+  <?php endif;?>
 </section>
 
 <?php
@@ -232,6 +243,12 @@ complainForm.success = function (data, form) {
 complainForm.error = function (errors) {
   console.log(errors);
 }
+$('#complete').ajax_action({
+  method: 'POST',
+  callback: function(data) {
+    location.reload();
+  },
+});
 JS;
 $this->registerJs($script);
 ?>

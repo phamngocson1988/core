@@ -13,6 +13,7 @@ use frontend\forms\ChangePasswordForm;
 use frontend\forms\FetchHistoryOrderForm;
 use frontend\forms\FetchHistoryTransactionForm;
 use frontend\forms\FetchHistoryWalletForm;
+use frontend\forms\CompleteOrderForm;
 use common\models\Order;
 use common\models\UserWallet;
 use common\models\Transaction;
@@ -124,6 +125,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionConfirm($key)
+    {
+        $model = new CompleteOrderForm(['auth_key' => $key]);
+        if ($model->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
+
     public function actionSendComplain()
     {
         $request = Yii::$app->request;
@@ -134,7 +145,7 @@ class UserController extends Controller
         if ($model->save()) {
             return $this->renderJson(true, []);
         } else {
-            return $this->renderJson(false, [], $form->getErrorSummary(true));
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
     }
 

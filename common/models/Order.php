@@ -97,6 +97,21 @@ class Order extends ActiveRecord
         return $this->status === self::STATUS_PENDING;
     }
 
+    public function isProcessingOrder()
+    {
+        return $this->status === self::STATUS_PROCESSING;
+    }
+
+    public function isCompletedOrder()
+    {
+        return $this->status === self::STATUS_COMPLETED;
+    }
+
+    public function isDeletedOrder()
+    {
+        return $this->status === self::STATUS_DELETED;
+    }
+
     /**
      * check if the order is in temporary status or not. The system only allow to delete temporary order
      * If not, just move it to 'deleted' status.

@@ -35,9 +35,24 @@ class UpdateOrderStatusProcessing extends Model
         if (!$this->validate()) return false;
         $order = $this->getOrder();
         $order->status = Order::STATUS_PROCESSING;
-        return $order->save();
-
-        // write to the log
+        if ($order->save()) {
+            $customer = $order->customer;
+            $settings = Yii::$app->settings;
+            $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+            Yii::$app->urlManagerFrontend->setHostInfo('https://kinggems.us');
+            Yii::$app->mailer->compose('admin_send_complete_order', [
+                'mail' => $this, 
+                'order' => $this->getOrder(),
+                'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'key' => $order->auth_key], true),
+            ])
+            ->setTo($customer->email)
+            ->setFrom([$adminEmail => Yii::$app->name])
+            ->setSubject("[Kinggems][Order #$this->id] Order Completed Notification")
+            ->setTextBody("Your order #<?=$this->id;?> has been completed now. Please review it")
+            ->send();
+            return true;
+        }
+        return false;
     }
 
     public function getOrder()
