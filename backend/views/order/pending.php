@@ -503,7 +503,7 @@ $('#update_unit').on('click', function(e) {
         var newpc = (result.data.total / cur) * 100;
         $('#doing_unit_progress').css('width', newpc + '%');
         $('#doing_unit_progress span').html(result.data.total + '(Complete)');
-        $('#current_doing_unit').val(result.data.total);
+        $('#current_doing_unit').html(result.data.total);
         $('#doing_unit').val('');
       }
     },

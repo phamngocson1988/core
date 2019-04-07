@@ -75,6 +75,11 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>     
             <?php $customer = $search->getCustomer();?>
+            <?=$form->field($search, 'q', [
+              'options' => ['class' => 'form-group col-md-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+            ])->textInput()->label('Từ khóa');?>
+
             <?=$form->field($search, 'customer_id', [
               'options' => ['class' => 'form-group col-md-2'],
             ])->widget(kartik\select2\Select2::classname(), [

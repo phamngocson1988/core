@@ -22,7 +22,7 @@ class FetchOrderForm extends Model
     public function rules()
     {
         return [
-            [['customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe'],
+            [['q', 'customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe'],
             ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d')],
         ];
@@ -42,6 +42,10 @@ class FetchOrderForm extends Model
         $command->where(["<>", "status", Order::STATUS_DELETED]);
 
         $this->_command = $command;
+        if ($this->q) {
+            $command->orWhere(['like', 'id', $this->q]);
+            $command->orWhere(['like', 'auth_key', $this->q]);
+        }
         if ($this->customer_id) {
             $command->andWhere(['customer_id' => $this->customer_id]);
         }
