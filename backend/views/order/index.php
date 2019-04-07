@@ -17,7 +17,6 @@ $this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/d
 
 
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-// $this->registerJsFile('vendor/assets/pages/scripts/components-date-time-pickers.min.js', ['depends' => '\backend\assets\AppAsset']);
 ?>
 
 <style>

@@ -16,6 +16,7 @@ use common\models\Order;
 use common\models\OrderItems;
 use backend\forms\UpdateOrderStatusPending;
 use backend\forms\UpdateOrderStatusProcessing;
+use backend\forms\AssignManageOrder;
 use backend\forms\TakenOrderForm;
 use backend\forms\SendComplainForm;
 use common\models\OrderComplainTemplate;
@@ -56,6 +57,11 @@ class OrderController extends Controller
                         'allow' => true,
                         'actions' => ['move-to-processing', 'taken', 'add-unit'],
                         'roles' => ['handler'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['assign'],
+                        'roles' => ['adimin'],
                     ],
                 ],
             ],
@@ -296,6 +302,21 @@ class OrderController extends Controller
             return $this->renderJson(true, ['total' => $model->doing_unit]);
         } else {
             return $this->renderJson(false, [], 'Error');
+        }
+    }
+
+    public function actionAssign($id)
+    {
+        $request = Yii::$app->request;
+        $userId = $request->post('assignee_id');
+        $assignForm = new AssignManageOrder([
+            'user_id' => $user_id,
+            'order_id' => $id
+        ]);
+        if ($assignForm->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $assignForm->getErrorSummary(true));
         }
     }
 }

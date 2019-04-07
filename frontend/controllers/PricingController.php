@@ -113,7 +113,8 @@ class PricingController extends Controller
             $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
             $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
         }
-
+        $clientId = 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF';
+        $clientSecret = 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx';
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 // 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
@@ -206,6 +207,8 @@ class PricingController extends Controller
             $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
             $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
         }
+        $clientId = 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF';
+        $clientSecret = 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx';
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential($clientId, $clientSecret)
         );

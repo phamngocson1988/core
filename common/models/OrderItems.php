@@ -74,4 +74,10 @@ class OrderItems extends ActiveRecord
         }
         return $default;
     }
+
+    public function getPercent()
+    {
+        if (!$this->total_unit) return 0;
+        return floor(min(1, $this->doing_unit / $this->total_unit) * 100);
+    }
 }

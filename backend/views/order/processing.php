@@ -239,6 +239,16 @@ use common\models\Product;
                           <div class="col-md-5"> Ghi chú: </div>
                           <div class="col-md-7"> <?=$item->note;?></div>
                         </div>
+                        <div class="row static-info">
+                          <div class="col-md-12">
+                            <center id='current_doing_unit'>Đã nạp: <?=$item->doing_unit;?></center>
+                            <div class="progress progress-striped active">
+                              <div id="doing_unit_progress" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$item->doing_unit;?>" aria-valuemin="0" aria-valuemax="<?=$item->total_unit;?>" style="width: <?=$item->getPercent();?>%">
+                                  <span class="sr-only"> <?=$item->doing_unit;?> </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

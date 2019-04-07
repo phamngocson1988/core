@@ -122,8 +122,8 @@ use common\models\Product;
                             <thead>
                               <tr>
                                 <th> Tên game </th>
-                                <th> Số đơn vị </th>
                                 <th> Tên đơn vị </th>
+                                <th> Số đơn vị </th>
                                 <th> Số lượng </th>
                                 <th> Tổng số </th>
                               </tr>
@@ -287,12 +287,20 @@ use common\models\Product;
                           </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5"> Đã nạp: </div>
+                          <div class="col-md-5"> Đã nạp thêm: </div>
                           <div class="col-md-7 form-inline">
-                            <div class="form-group mx-sm-3 mb-2">
-                              <input type="number" id="doing_unit" class="form-control" id="inputPassword2" placeholder="Password">
+                            <div class=" field-doing_unit">
+                              <input type="number" id="doing_unit" class="form-control">
+                              <button type="button" id="update_unit" class="btn btn-primary mb-2">Update</button>
                             </div>
-                            <button type="button" id="update_unit" class="btn btn-primary mb-2">Update</button>
+                          </div>
+                          <div class="col-md-12">
+                            <center id='current_doing_unit'><?=$item->doing_unit;?></center>
+                            <div class="progress progress-striped active">
+                              <div id="doing_unit_progress" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$item->doing_unit;?>" aria-valuemin="0" aria-valuemax="<?=$item->total_unit;?>" style="width: <?=$item->getPercent();?>%">
+                                  <span class="sr-only"> <?=$item->doing_unit;?> </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -393,6 +401,7 @@ use common\models\Product;
       ])->hiddenInput(['value' => $order->id])->label(false);?>
       <div class="modal-body"> 
           <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
+          <p id="doing_unit_notice" style="display: none">Số đơn vị game của bạn vẫn chưa được cập nhật đủ, nếu chuyển qua trạng thái "Processing", toàn bộ số đơn vị game đang thực hiện sẽ được cập nhật đúng bằng số đơn vị game cần nhập của đơn hàng.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
@@ -490,12 +499,20 @@ $('#update_unit').on('click', function(e) {
           alert(result.errors);
           return false;
       } else {
-          alert(result.data);
+        var cur = $('#doing_unit_progress').attr('aria-valuemax');
+        var newpc = (result.data.total / cur) * 100;
+        $('#doing_unit_progress').css('width', newpc + '%');
+        $('#doing_unit_progress span').html(result.data.total + '(Complete)');
+        $('#current_doing_unit').val(result.data.total);
+        $('#doing_unit').val('');
       }
     },
   });
   return false;
 });
+
+
+
 JS;
 $redirect = Url::to(['order/add-unit', 'id' => $item->id]);
 $script = str_replace('###UPDATE_UNIT###', $redirect, $script);

@@ -36,6 +36,11 @@ class UpdateOrderStatusProcessing extends Model
         $order = $this->getOrder();
         $order->status = Order::STATUS_PROCESSING;
         if ($order->save()) {
+            $items = $order->items;
+            $item = reset($items);
+            $item->doing_unit = $item->total_unit;
+            $item->save();
+            
             $customer = $order->customer;
             $settings = Yii::$app->settings;
             $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);

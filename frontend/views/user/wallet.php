@@ -9,49 +9,56 @@ use yii\helpers\Url;
   <div class="container">
     <div class="row justify-content-sm-center">
       <div class="col-md-12 col-xl-12">
-        <h3>Wallet</h3>
+        <div class="row">
+          <div class="col-md-8">
+            <h3>Transaction history</h3>
+          </div>
+          <div class="col-md-4">
+            <p class="big"><span class="label-cta label-cta-primary">Account balance: <?=number_format($coin);?></span><br/><a class="link-bold" href="<?=Url::to(['pricing/index']);?>">Buy more!</a></p>
+          </div>
+        </div>
         <?php Pjax::begin();?>
         <?php $form = ActiveForm::begin(['method' => 'get', 'action' => Url::to(['user/wallet']), 'options' => ['class' => 'text-left']]); ?>
-          <div class="row">
-            <div class="col-md-3">
-              <?= $form->field($filterForm, 'start_date', [
-                'options' => ['class' => 'form-wrap'],
-                'inputOptions' => ['class' => 'form-input date-picker'],
-                'labelOptions' => ['class' => 'form-label'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{input}{label}{hint}{error}'
-              ])->textInput(['name' => 'start_date']) ?>
-            </div>
-            <div class="col-md-3">
-              <?= $form->field($filterForm, 'end_date', [
-                'options' => ['class' => 'form-wrap'],
-                'inputOptions' => ['class' => 'form-input date-picker'],
-                'labelOptions' => ['class' => 'form-label'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{input}{label}{hint}{error}'
-              ])->textInput(['name' => 'end_date']) ?>
-            </div>
-            <div class="col-md-3">
-              <?= $form->field($filterForm, 'type', [
-                'options' => ['class' => 'form-wrap'],
-                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'choose all', 'name' => 'type'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{input}{hint}{error}'
-              ])->dropDownList($filterForm->getWalletType()) ?>
-            </div>
-            <div class="col-md-3">
-              <div class="form-button">
-                <button class="button button-secondary button-nina" type="submit">Filter</button>
-              </div>
+        <div class="row" style="margin-top: 50px">
+          <div class="col-md-3">
+            <?= $form->field($filterForm, 'start_date', [
+              'options' => ['class' => 'form-wrap'],
+              'inputOptions' => ['class' => 'form-input date-picker'],
+              'labelOptions' => ['class' => 'form-label'],
+              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+              'template' => '{input}{label}{hint}{error}'
+            ])->textInput(['name' => 'start_date']) ?>
+          </div>
+          <div class="col-md-3">
+            <?= $form->field($filterForm, 'end_date', [
+              'options' => ['class' => 'form-wrap'],
+              'inputOptions' => ['class' => 'form-input date-picker'],
+              'labelOptions' => ['class' => 'form-label'],
+              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+              'template' => '{input}{label}{hint}{error}'
+            ])->textInput(['name' => 'end_date']) ?>
+          </div>
+          <div class="col-md-3">
+            <?= $form->field($filterForm, 'type', [
+              'options' => ['class' => 'form-wrap'],
+              'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'choose all', 'name' => 'type'],
+              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+              'template' => '{input}{hint}{error}'
+            ])->dropDownList($filterForm->getWalletType()) ?>
+          </div>
+          <div class="col-md-3">
+            <div class="form-button">
+              <button class="button button-secondary button-nina" type="submit">Filter</button>
             </div>
           </div>
+        </div>
         <?php ActiveForm::end(); ?>
         <table class="table-custom table-hover">
           <thead>
             <tr>
               <th>#</th>
               <th>Date</th>
-              <th>In/Out</th>
+              <th>Type</th>
               <th>Coin</th>
               <th>Description</th>
               <th>Status</th>
@@ -63,10 +70,10 @@ use yii\helpers\Url;
             <?php endif;?>
             <?php foreach ($models as $no => $model) :?>
             <tr>
-              <td>#<?=($pages->offset + $no + 1)?></td>
+              <td>#<?=$model->id?></td>
               <td><?=$model->payment_at;?></td>
               <td><?=$model->getTypeLabel();?></td>
-              <td>(K)<?=number_format($model->coin);?></td>
+              <td><?=number_format($model->coin);?></td>
               <td><?=$model->description;?></td>
               <td><?=$model->status;?></td>
             </tr>
@@ -81,13 +88,13 @@ use yii\helpers\Url;
         ]);?>
         <?php Pjax::end();?>
       </div>
-      <section class="section section-xs novi-background bg-cover text-center">
+      <!-- <section class="section section-xs novi-background bg-cover text-center">
         <div class="container container-wide">
           <div class="box-cta-thin">
             <p class="big"><span class="label-cta label-cta-primary">Hot!</span><span>The number of your King Coin now is: </span><strong><?=number_format($coin);?></strong>&nbsp;&nbsp;<a class="link-bold" href="<?=Url::to(['pricing/index']);?>">Buy more!</a></p>
           </div>
         </div>
-      </section>
+      </section> -->
     </div>
     <div class="form-button">
       <a href="<?=Url::to(['user/index']);?>" class="button button-primary button-nina">Back</a>
