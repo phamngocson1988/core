@@ -2,11 +2,13 @@
 namespace frontend\components\cart;
 
 use yii2mod\cart\models\CartItemInterface;
+use yii\base\Model;
 use common\models\Game;
 use common\models\Product;
 
-class CartItem extends Game implements CartItemInterface
+class CartItem extends Model implements CartItemInterface
 {
+    public $game_id;
     public $product_id;
     public $quantity;
     public $username;
@@ -23,11 +25,13 @@ class CartItem extends Game implements CartItemInterface
 
     /** @var Product **/
     protected $_product;
+    /** @var Game **/
+    protected $_game;
 
     public function scenarios()
     {
         return [
-            self::SCENARIO_ADD => ['id', 'product_id', 'quantity'],
+            self::SCENARIO_ADD => ['game_id', 'product_id', 'quantity'],
             self::SCENARIO_EDIT => ['product_id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
         ];
     }
@@ -35,9 +39,10 @@ class CartItem extends Game implements CartItemInterface
     public function rules()
     {
         return [
-            [['id', 'product_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
+            [['game_id', 'product_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
             [['product_id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_EDIT],
             [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_EDIT],
+            ['game_id', 'validateGame'],
             ['product_id', 'validateProduct'],
         ];
     }
@@ -56,6 +61,22 @@ class CartItem extends Game implements CartItemInterface
             $this->_product = Product::findOne($this->product_id);
         }
         return $this->_product;
+    }
+
+    public function validateGame($attribute, $params)
+    {
+        $game = $this->getGame();
+        if (!$game) {
+            $this->addError($attribute, 'Không tìm thấy game');
+        }
+    }
+
+    public function getGame()
+    {
+        if (!$this->_game) {
+            $this->_game = Game::findOne($this->game_id);
+        }
+        return $this->_game;
     }
 
     public function setQuantity($num)
@@ -80,7 +101,7 @@ class CartItem extends Game implements CartItemInterface
 
     public function getUnitName()
     {
-        return $this->unit_name;
+        return $this->getGame()->unit_name;
     }
 
     public function getUnitGame()
@@ -95,7 +116,7 @@ class CartItem extends Game implements CartItemInterface
 
     public function getGameId()
     {
-        return $this->id;
+        return $this->game_id;
     }
 
     // ============== implement interface ===========//
@@ -108,11 +129,11 @@ class CartItem extends Game implements CartItemInterface
 
     public function getLabel()
     {
-        return $this->title;
+        return $this->getGame()->title;
     }
 
     public function getUniqueId()
     {
-        return $this->id;
+        return $this->game_id;
     }
 }

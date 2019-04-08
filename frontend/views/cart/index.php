@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 ?>
+
 <?php $form = ActiveForm::begin(['id' => 'update-cart', 'action' => ['cart/update']]); ?>
 <?= $form->field($item, 'scenario', [
   'options' => ['tag' => false],
@@ -20,7 +21,7 @@ use yii\bootstrap\ActiveForm;
                 <th style="width: 30%;">Game</th>
                 <th style="width: 30%;">Package</th>
                 <th style="width: 10%;">King Coin</th>
-                <th style="width: 10%;"><?=ucfirst($item->unit_name);?></th>
+                <th style="width: 10%;"><?=ucfirst($item->getGame()->unit_name);?></th>
                 <th style="width: 20%;">Quantity</th>
               </tr>
             </thead>
@@ -28,14 +29,14 @@ use yii\bootstrap\ActiveForm;
               <tr>
                 <td>
                   <div class="unit flex-row align-items-center">
-                    <div class="unit-left"><a href="<?=Url::to(['game/view', 'id' => $item->id]);?>"><img src="<?=$item->getImageUrl('71x71');?>" alt="" width="54" height="71"/></a></div>
+                    <div class="unit-left"><a href="<?=Url::to(['game/view', 'id' => $item->game_id]);?>"><img src="<?=$item->getGame()->getImageUrl('71x71');?>" alt="" width="54" height="71"/></a></div>
                     <div class="unit-body"><a class="text-gray-darker" style="white-space: normal;" href="javascript:;"><?=$item->getLabel();?></a></div>
                   </div>
                 </td>
                 <td>
                   <?php 
                   $metaData = [];
-                  foreach ($item->products as $product) {
+                  foreach ($item->getGame()->products as $product) {
                     $metaData[$product->id] = ['data-price' => $product->price, 'data-unit' => $product->unit];
                   }?>
 
@@ -43,7 +44,7 @@ use yii\bootstrap\ActiveForm;
                     'options' => ['tag' => false],
                     'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
                     'template' => '{input}'
-                  ])->dropDownList(ArrayHelper::map($item->products, 'id', 'title'), ['options' => $metaData]) ?>
+                  ])->dropDownList(ArrayHelper::map($item->getGame()->products, 'id', 'title'), ['options' => $metaData]) ?>
                 </td>
                 <td id="price">0</td>
                 <td id="unit">0</td>
@@ -61,6 +62,26 @@ use yii\bootstrap\ActiveForm;
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="row row-fix justify-content-between align-items-md-center text-center">
+          <div class="col-md-7 col-xl-6 cell-xxl-5">
+            <!-- RD Mailform: Subscribe-->
+            <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
+              <div class="rd-mailform-inline-inner">
+                <div class="form-wrap">
+                  <input class="form-input" type="text" name="voucher" id="voucher"/>
+                  <label class="form-label" for="voucher">Enter your voucher</label>
+                </div>
+                <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
+              </div>
+            </div>
+          </div>
+          <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
+            <div class="heading-5 text-regular">Total: $<span>58.00</span></div>
+          </div>
+          <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
+            <div class="heading-5 text-regular">Total: $<span>58.00</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -164,7 +185,6 @@ use yii\bootstrap\ActiveForm;
   </div>
 </section>
 <?php ActiveForm::end(); ?>
-
 <?php
 $script = <<< JS
 var complainForm = new AjaxFormSubmit({element: 'form#update-cart'});

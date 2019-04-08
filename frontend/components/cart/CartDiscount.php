@@ -9,9 +9,7 @@ class CartDiscount extends Promotion implements CartItemInterface
     // ============== implement interface ===========//
     public function getPrice() : int
     {
-        $product = $this->getProduct();
-        if (!$product) return 0;
-        return (int)$product->price;
+        return $this->value;
     }
 
     public function getLabel()

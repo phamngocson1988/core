@@ -29,7 +29,7 @@ use frontend\widgets\LoginPopupWidget;
       </div>
       <div class="col-lg-7 col-xl-6 col-xxl-6 text-center text-lg-left">
         <?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix', 'action' => ['cart/add']]); ?>
-        <?= $form->field($item, 'id', [
+        <?= $form->field($item, 'game_id', [
           'options' => ['tag' => false],
           'template' => '{input}'
         ])->hiddenInput()->label(false) ?>
@@ -53,7 +53,7 @@ use frontend\widgets\LoginPopupWidget;
           <li class="text-middle">
             <?php 
             $metaData = [];
-            foreach ($item->products as $product) {
+            foreach ($item->getGame()->products as $product) {
               $metaData[$product->id] = ['data-price' => $product->price, 'data-unit' => $product->unit];
             }
             ?>
@@ -61,7 +61,7 @@ use frontend\widgets\LoginPopupWidget;
               'options' => ['tag' => false],
               'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
               'template' => '{input}'
-            ])->dropDownList(ArrayHelper::map($item->products, 'id', 'title'), ['options' => $metaData]); ?>
+            ])->dropDownList(ArrayHelper::map($item->getGame()->products, 'id', 'title'), ['options' => $metaData]); ?>
           </li>
           <li class="text-middle">
             <?= $form->field($item, 'quantity', [

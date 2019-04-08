@@ -32,6 +32,9 @@ class Cart extends \yii2mod\cart\Cart
 		return $item;
 	}
 
+	/**
+	 * The total of products only
+	 */
 	public function getSubTotalPrice()
 	{
 		$items = $this->getItems(self::ITEM_PRODUCT);
@@ -46,12 +49,23 @@ class Cart extends \yii2mod\cart\Cart
 	{
 		$subTotal = $this->getSubTotalPrice();
 		$fee = $this->getTotalFee();
-		$sum = $subTotal + $fee;
+		$discount = $this->getTotalDiscount();
+		$sum = $subTotal + $fee - $discount;
 		return $sum;
 	}
 
 	public function getTotalFee()
 	{
 		return 0;
+	}
+
+	public function getTotalDiscount()
+	{
+		$items = $this->getItems(self::ITEM_DISCOUNT);
+		$sum = 0;
+		foreach ($items as $item) {
+			$sum += $item->getPrice();
+		}
+		return $sum;
 	}
 }

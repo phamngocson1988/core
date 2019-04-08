@@ -7,7 +7,6 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
 use frontend\models\Game;
 use frontend\components\cart\CartItem;
 
@@ -20,7 +19,8 @@ class GameController extends Controller
     {
     	$model = Game::findOne($id);
         if (!$model) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
-        $item = CartItem::findOne($id);
+        $item = new CartItem(['game_id' => $id]);
+        $item->setScenario(CartItem::SCENARIO_ADD);
     	return $this->render('view', [
             'model' => $model,
             'item' => $item

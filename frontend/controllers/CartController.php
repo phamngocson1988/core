@@ -98,7 +98,9 @@ class CartController extends Controller
         if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
 
         $cart = Yii::$app->cart;
-        $item = $cart->getItem();
+        $items = $cart->getItems($cart->getItemType('product'));
+        $item = reset($items);
+        $item->setScenario(CartItem::SCENARIO_EDIT);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
@@ -133,13 +135,13 @@ class CartController extends Controller
         $order->generateAuthKey();
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        foreach ($cart->getItems() as $cartItem) {
+        foreach ($cart->getItems($cart->getItemType('product')) as $cartItem) {
             $item = new OrderItems();
             $item->item_title = $cartItem->getLabel();
             $item->type = OrderItems::TYPE_PRODUCT;
             $item->order_id = $order->id;
-            $item->game_id = $cartItem->getGameId();
-            $item->product_id = $cartItem->getUniqueId();
+            $item->game_id = $cartItem->getUniqueId();
+            // $item->product_id = $cartItem->getUniqueId();
             $item->price = $cartItem->getPrice();
             $item->quantity = $cartItem->quantity;
             $item->total = $cartItem->getTotalPrice();
@@ -154,6 +156,18 @@ class CartController extends Controller
             $item->recover_code = $cartItem->recover_code;
             $item->server = $cartItem->server;
             $item->note = $cartItem->note;
+            $item->save();
+        }
+
+        foreach ($cart->getItems($cart->getItemType('discount')) as $cartItem) {
+            $item = new OrderItems();
+            $item->item_title = $cartItem->getLabel();
+            $item->type = OrderItems::TYPE_DISCOUNT;
+            $item->order_id = $order->id;
+            $item->game_id = $cartItem->getUniqueId();
+            $item->price = $cartItem->getPrice();
+            $item->quantity = 1;
+            $item->total = $cartItem->getPrice();
             $item->save();
         }
 

@@ -13,6 +13,7 @@ use common\models\Product;
 class OrderItems extends ActiveRecord
 {
     const TYPE_PRODUCT = 'product';
+    const TYPE_DISCOUNT = 'discount';
 
     /**
      * @inheritdoc
