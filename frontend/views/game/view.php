@@ -28,7 +28,15 @@ use frontend\widgets\LoginPopupWidget;
         </div>
       </div>
       <div class="col-lg-7 col-xl-6 col-xxl-6 text-center text-lg-left">
-        <?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix', 'action' => ['cart/index'], 'method' => 'GET']); ?>
+        <?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix', 'action' => ['cart/add']]); ?>
+        <?= $form->field($item, 'id', [
+          'options' => ['tag' => false],
+          'template' => '{input}'
+        ])->hiddenInput()->label(false) ?>
+        <?= $form->field($item, 'scenario', [
+          'options' => ['tag' => false],
+          'template' => '{input}'
+        ])->hiddenInput()->label(false) ?>
         <!-- <div class="heading-5">Joanne Schultz</div> -->
         <h3><?=$model->title;?></h3>
         <div class="divider divider-default"></div>
@@ -43,16 +51,25 @@ use frontend\widgets\LoginPopupWidget;
         </ul>
         <ul class="inline-list">
           <li class="text-middle">
-            <select class="form-input select-filter" name="pid" id="products">
-              <?php foreach ($model->products as $product) {?>
-              <option value="<?=$product->id;?>" data-price="<?=$product->price;?>" data-unit='<?=$product->unit;?>'><?=$product->title;?></option>
-              <?php }?>
-            </select>
+            <?php 
+            $metaData = [];
+            foreach ($item->products as $product) {
+              $metaData[$product->id] = ['data-price' => $product->price, 'data-unit' => $product->unit];
+            }
+            ?>
+            <?= $form->field($item, 'product_id', [
+              'options' => ['tag' => false],
+              'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
+              'template' => '{input}'
+            ])->dropDownList(ArrayHelper::map($item->products, 'id', 'title'), ['options' => $metaData]); ?>
           </li>
           <li class="text-middle">
-            <div class="form-wrap box-width-1 shop-input">
-              <input class="form-input input-append" id="quantity" type="number" min="1" max="300" value="1" name="qt">
-            </div>
+            <?= $form->field($item, 'quantity', [
+              'options' => ['class' => 'form-wrap box-width-1 shop-input'],
+              'inputOptions' => ['class' => 'form-input input-append', 'type' => 'number', 'min' => 1, 'value' => 1, 'id' => 'quantity'],
+              'template' => '{input}'
+            ])->textInput() ?>
+
           </li>
           <li class="text-middle">
             <?= Html::submitButton('Add to cart', ['class' => 'button button-sm button-secondary button-nina']) ?>
@@ -85,6 +102,16 @@ function updatePrice() {
 }
 
 $("#products").trigger('change');
+
+// add to cart
+var cartForm = new AjaxFormSubmit({element: 'form#add-to-cart'});
+cartForm.success = function (data, form) {
+  window.location.href = "[:cart_url]";
+}
+cartForm.error = function (errors) {
+  console.log(errors);
+}
+
 JS;
 $script = str_replace("[:cart_url]", Url::to(['cart/index']), $script);
 $this->registerJs($script);

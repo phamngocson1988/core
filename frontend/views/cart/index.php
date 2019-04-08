@@ -4,7 +4,11 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 ?>
-<?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'action' => ['cart/add']]); ?>
+<?php $form = ActiveForm::begin(['id' => 'update-cart', 'action' => ['cart/update']]); ?>
+<?= $form->field($item, 'scenario', [
+  'options' => ['tag' => false],
+  'template' => '{input}'
+])->hiddenInput()->label(false) ?>
 <section class="section section-lg bg-default">
   <div class="container container-wide">
     <div class="row row-fix justify-content-lg-center">
@@ -16,7 +20,7 @@ use yii\bootstrap\ActiveForm;
                 <th style="width: 30%;">Game</th>
                 <th style="width: 30%;">Package</th>
                 <th style="width: 10%;">King Coin</th>
-                <th style="width: 10%;"><?=ucfirst($game->unit_name);?></th>
+                <th style="width: 10%;"><?=ucfirst($item->unit_name);?></th>
                 <th style="width: 20%;">Quantity</th>
               </tr>
             </thead>
@@ -24,22 +28,22 @@ use yii\bootstrap\ActiveForm;
               <tr>
                 <td>
                   <div class="unit flex-row align-items-center">
-                    <div class="unit-left"><a href="<?=Url::to(['game/view', 'id' => $game->id]);?>"><img src="<?=$game->getImageUrl('71x71');?>" alt="" width="54" height="71"/></a></div>
-                    <div class="unit-body"><a class="text-gray-darker" style="white-space: normal;" href="javascript:;"><?=$game->title;?></a></div>
+                    <div class="unit-left"><a href="<?=Url::to(['game/view', 'id' => $item->id]);?>"><img src="<?=$item->getImageUrl('71x71');?>" alt="" width="54" height="71"/></a></div>
+                    <div class="unit-body"><a class="text-gray-darker" style="white-space: normal;" href="javascript:;"><?=$item->getLabel();?></a></div>
                   </div>
                 </td>
                 <td>
                   <?php 
                   $metaData = [];
-                  foreach ($game->products as $product) {
+                  foreach ($item->products as $product) {
                     $metaData[$product->id] = ['data-price' => $product->price, 'data-unit' => $product->unit];
                   }?>
 
-                  <?= $form->field($item, 'id', [
+                  <?= $form->field($item, 'product_id', [
                     'options' => ['tag' => false],
                     'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
                     'template' => '{input}'
-                  ])->dropDownList(ArrayHelper::map($game->products, 'id', 'title'), ['options' => $metaData]) ?>
+                  ])->dropDownList(ArrayHelper::map($item->products, 'id', 'title'), ['options' => $metaData]) ?>
                 </td>
                 <td id="price">0</td>
                 <td id="unit">0</td>
@@ -50,7 +54,6 @@ use yii\bootstrap\ActiveForm;
                       'id' => 'quantity', 
                       'type' => 'number', 
                       'min' => '1', 
-                      'max' => '300', 
                     ],
                     'template' => '{input}'
                   ])->textInput() ?>
@@ -164,7 +167,7 @@ use yii\bootstrap\ActiveForm;
 
 <?php
 $script = <<< JS
-var complainForm = new AjaxFormSubmit({element: 'form#add-to-cart'});
+var complainForm = new AjaxFormSubmit({element: 'form#update-cart'});
 complainForm.success = function (data, form) {
   window.location.href = "[:checkout_url]";
 }

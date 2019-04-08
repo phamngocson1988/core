@@ -29,7 +29,7 @@ class CartController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'add', 'checkout', 'purchase'],
+                'only' => ['index', 'add', 'update', 'checkout', 'purchase'],
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -37,7 +37,7 @@ class CartController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['add'],
+                        'actions' => ['add', 'update'],
                         'allow' => true,
                         'roles' => ['@', '?'],
                     ],
@@ -52,6 +52,7 @@ class CartController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'add' => ['post'],
+                    'update' => ['post'],
                     'purchase' => ['post'],
                 ],
             ],
@@ -61,20 +62,12 @@ class CartController extends Controller
     public function actionIndex()
     {
         $request = Yii::$app->request;
-        $id = $request->get('pid');
-        $quantity = $request->get('qt', 1);
-        $product = Product::findOne($id);
-        if (!$product) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
-        $game = $product->game;
-
-        $item = new CartItem([
-            'id' => $id,
-            'quantity' => $quantity
-        ]);
+        $cart = Yii::$app->cart;
+        $items = $cart->getItems($cart->getItemType('product'));
+        $item = reset($items);
+        $item->setScenario(CartItem::SCENARIO_EDIT);
         return $this->render('index', [
-            'game' => $game,
             'item' => $item,
-            'quantity' => $quantity
         ]);
     }
 
@@ -87,7 +80,7 @@ class CartController extends Controller
 
         $cart = Yii::$app->cart;
         $cart->clear();
-        $item = new CartItem();
+        $item = new CartItem(['scenario' => CartItem::SCENARIO_ADD]);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
@@ -95,6 +88,23 @@ class CartController extends Controller
             return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
         }
 
+    }
+
+    public function actionUpdate()
+    {
+    	$request = Yii::$app->request;
+    	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+    	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
+
+        $cart = Yii::$app->cart;
+        $item = $cart->getItem();
+        if ($item->load($request->post()) && $item->validate()) {
+            $cart->add($item);
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
+        } else {
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
+        }
     }
 
     public function actionCheckout()

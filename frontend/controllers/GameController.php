@@ -19,9 +19,11 @@ class GameController extends Controller
     public function actionView($id)
     {
     	$model = Game::findOne($id);
-    	if (!$model) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
+        if (!$model) throw new BadRequestHttpException('Không tìm thấy sản phẩm');
+        $item = CartItem::findOne($id);
     	return $this->render('view', [
             'model' => $model,
+            'item' => $item
         ]);
     }
 }

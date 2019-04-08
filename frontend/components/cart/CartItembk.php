@@ -1,13 +1,14 @@
 <?php
 namespace frontend\components\cart;
 
+use yii\base\Model;
 use yii2mod\cart\models\CartItemInterface;
-use common\models\Game;
-use common\models\Product;
+use frontend\models\ProductOption;
+use frontend\models\Product;
 
-class CartItem extends Game implements CartItemInterface
+class CartItem extends Model implements CartItemInterface
 {
-    public $product_id;
+    public $id;
     public $quantity;
     public $username;
     public $password;
@@ -18,27 +19,24 @@ class CartItem extends Game implements CartItemInterface
     public $platform;
     public $login_method;
 
-    const SCENARIO_ADD = 'add';
-    const SCENARIO_EDIT = 'edit';
-
     /** @var Product **/
     protected $_product;
 
-    public function scenarios()
+    protected $_game;
+
+    public function init()
     {
-        return [
-            self::SCENARIO_ADD => ['id', 'product_id', 'quantity'],
-            self::SCENARIO_EDIT => ['product_id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
-        ];
+        parent::init();
+        $this->getProduct();
+        $this->getGame();
     }
 
     public function rules()
     {
         return [
-            [['id', 'product_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
-            [['product_id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_EDIT],
-            ['product_id', 'validateProduct'],
+            [['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method'], 'required'],
+            ['id', 'validateProduct'],
+            [['server', 'recover_code', 'note'], 'trim']
         ];
     }
 
@@ -46,16 +44,26 @@ class CartItem extends Game implements CartItemInterface
     {
         $product = $this->getProduct();
         if (!$product) {
-            $this->addError($attribute, 'Không tìm thấy gói sản phẩm');
+            $this->addError($attribute, 'This product is not available');
+            return false;
         }
     }
 
-    public function getProduct()
+    protected function getProduct()
     {
         if (!$this->_product) {
-            $this->_product = Product::findOne($this->product_id);
+            $this->_product = Product::findOne($this->id);
         }
         return $this->_product;
+    }
+
+    protected function getGame()
+    {
+        if (!$this->_product) return;
+        if (!$this->_game) {
+            $this->_game = $this->_product->game;    
+        }
+        return $this->_game;
     }
 
     public function setQuantity($num)
@@ -80,7 +88,8 @@ class CartItem extends Game implements CartItemInterface
 
     public function getUnitName()
     {
-        return $this->unit_name;
+        $game = $this->getGame();
+        return $game->unit_name;
     }
 
     public function getUnitGame()
@@ -95,7 +104,7 @@ class CartItem extends Game implements CartItemInterface
 
     public function getGameId()
     {
-        return $this->id;
+        return $this->getGame()->id;
     }
 
     // ============== implement interface ===========//
@@ -108,11 +117,11 @@ class CartItem extends Game implements CartItemInterface
 
     public function getLabel()
     {
-        return $this->title;
+        return sprintf('%s - %s', $this->getGame()->title, $this->getProduct()->title);
     }
 
     public function getUniqueId()
     {
-        return $this->id;
+        return sprintf('%d', $this->getProduct()->id);
     }
 }

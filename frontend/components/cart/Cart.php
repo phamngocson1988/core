@@ -12,9 +12,29 @@ use Yii;
  */
 class Cart extends \yii2mod\cart\Cart
 {
+	const ITEM_PRODUCT = '\frontend\components\cart\CartItem';
+	const ITEM_DISCOUNT = '\frontend\components\cart\CartDiscount';
+
+	public function getItemType($type)
+	{
+		switch ($type) {
+			case 'discount':
+				return self::ITEM_DISCOUNT;
+			default:
+				return self::ITEM_PRODUCT;
+		}
+	}
+
+	public function getItem($type = null) 
+	{
+		$items = $this->getItems($type);
+		$item = reset($items);
+		return $item;
+	}
+
 	public function getSubTotalPrice()
 	{
-		$items = $this->getItems();
+		$items = $this->getItems(self::ITEM_PRODUCT);
 		$sum = 0;
 		foreach ($items as $item) {
 			$sum += $item->getTotalPrice();
