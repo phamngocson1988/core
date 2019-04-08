@@ -125,7 +125,7 @@
           </li>
           <li class="nav-item  ">
             <a href="{url route='/promotion'}" class="nav-link " code='promotion.index'>
-            <span class="title">{Yii::t('app', 'promotions')}</span>
+            <span class="title">Khuyến mãi</span>
             </a>
           </li>
         </ul>
@@ -211,6 +211,16 @@
           <li class="nav-item  ">
             <a href="{url route='/order'}" class="nav-link " code='order.index'>
             <span class="title">Đơn hàng</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/my-order'}" class="nav-link " code='order.mine'>
+            <span class="title">Đơn hàng của tôi</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.pending'>
+            <span class="title">Đơn hàng mới</span>
             </a>
           </li>
           {if (Yii::$app->user->can('admin'))}

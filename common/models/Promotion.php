@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 use common\models\Image;
 use common\models\User;
 use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * Promotion model
@@ -14,7 +15,10 @@ class Promotion extends ActiveRecord
 {
     const STATUS_INVISIBLE = 'N';
     const STATUS_VISIBLE = 'Y';
-    const STATUS_DELETE = 'D';
+    // const STATUS_DELETE = 'D';
+
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_EDIT = 'edit';
 
     /**
      * @inheritdoc
@@ -30,10 +34,32 @@ class Promotion extends ActiveRecord
             [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_at',
+                'updatedAtAttribute' => false,
                 'value' => date('Y-m-d H:i:s')
             ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => false,
+            ],
         ];
+    }
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_CREATE => ['title', 'code', 'value_type', 'value', 'object_type', 'number_of_use', 'from_date', 'to_date', 'status'],
+            self::SCENARIO_EDIT => ['id', 'title', 'code', 'value_type', 'value', 'object_type', 'number_of_use', 'from_date', 'to_date', 'status'],
+        ];
+    }
+
+    public function rules()
+    {
+    	return [
+    		[['title', 'code', 'value_type', 'value', 'object_type', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['id', 'title', 'code', 'value_type', 'value', 'object_type', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
+            [['number_of_use', 'from_date', 'to_date'], 'safe']
+    	];
     }
 
     public static function getStatusList()
@@ -41,35 +67,7 @@ class Promotion extends ActiveRecord
         return [
             self::STATUS_INVISIBLE => 'Invisible',
             self::STATUS_VISIBLE => 'Visible',
-            self::STATUS_DELETE => 'Deleted'
+            // self::STATUS_DELETE => 'Deleted'
         ];
-    }
-
-    public function getImage() 
-    {
-        return $this->hasOne(Image::className(), ['id' => 'image_id']);
-    }
-
-    public function getImageUrl($size = null, $default = '/images/noimage.png')
-    {
-        $image = $this->image;
-        if ($image) {
-            return $image->getUrl($size);
-        }
-        return $default;
-    }
-
-    public function getCreator()
-    {
-        return $this->hasOne(User::className(), ['id' => 'created_by']);
-    }
-
-    public function getCreatorName()
-    {
-        $creator = $this->creator;
-        if ($creator) {
-            return $creator->username;
-        }
-        return '';
     }
 }

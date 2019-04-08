@@ -21,26 +21,30 @@ class m190218_154112_create_promotion extends Migration
         $this->createTable('{{%promotion}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(500)->notNull(),
-            'image_id' => $this->integer(11),
             'code' => $this->string(50), 
-            'user_type' => $this->integer(11),
-            'value_type' => $this->integer(11),
+            'value_type' => $this->string(10),//fix,percent
             'value' => $this->integer(11),
-            'available' => $this->integer(11)->defaultValue(null), // the number of using this promotion
-            'combination' => $this->boolean()->defaultValue(false), // whether allowing combine with other promotions
-            'from_date' => $this->dateTime(),
-            'to_date' => $this->dateTime(),
+            'object_type' => $this->string(10),//coin,money
+            'number_of_use' => $this->integer(11),
+            'from_date' => $this->date(),
+            'to_date' => $this->date(),
             'created_by' => $this->integer(11),
             'created_at' => $this->dateTime(),
-            'updated_by' => $this->integer(11),
-            'updated_at' => $this->dateTime(),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
         ]);
 
         if ($this->db->driverName === 'mysql') {
-            $alter = "ALTER TABLE {{%promotion}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+            $alter = "ALTER TABLE {{%promotion}} MODIFY `status` ENUM('Y', 'N') NOT NULL DEFAULT 'Y'";
             $command = $this->db->createCommand($alter);
             $command->execute();
+
+            $alterValueType = "ALTER TABLE {{%promotion}} MODIFY `value_type` ENUM('fix', 'percent') NOT NULL DEFAULT 'percent'";
+            $commandValueType = $this->db->createCommand($alterValueType);
+            $commandValueType->execute();
+
+            $alterObjectType = "ALTER TABLE {{%promotion}} MODIFY `object_type` ENUM('coin', 'money') NOT NULL DEFAULT 'money'";
+            $commandObjectType = $this->db->createCommand($alterObjectType);
+            $commandObjectType->execute();
         }
     }
 

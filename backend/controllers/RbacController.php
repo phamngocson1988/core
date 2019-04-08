@@ -48,11 +48,90 @@ class RbacController extends Controller
         $auth->assign($admin, $id);
     }
 
-    public function actionAssignSale($id)
+    public function actionAssignSaler($id)
     {
         $auth = Yii::$app->authManager;
-        $sale = $auth->getRole('sale');
+        $sale = $auth->getRole('saler');
         $auth->assign($sale, $id);
+    }
+
+    public function actionAssignHandler($id)
+    {
+        $auth = Yii::$app->authManager;
+        $sale = $auth->getRole('handler');
+        $auth->assign($sale, $id);
+    }
+
+    public function actionCreateEditOrderPermission()
+    {
+        $auth = Yii::$app->authManager;
+        $rule = new \backend\rbac\EditOrderRule;
+        $auth->add($rule);
+
+        $permission = $auth->createPermission('edit_order');
+        $permission->description = 'Edit order';
+        $permission->ruleName = $rule->name;
+        $auth->add($permission);
+
+        $saler = $auth->getRole('saler');
+        $auth->addChild($saler, $permission);
+
+        $handler = $auth->getRole('handler');
+        $auth->addChild($handler, $permission);
+    }
+
+    public function actionCreateTakenOrderPermission()
+    {
+        $auth = Yii::$app->authManager;
+        $rule = new \backend\rbac\TakenOrderRule;
+        $auth->add($rule);
+
+        $permission = $auth->createPermission('taken_order');
+        $permission->description = 'Taken order';
+        $permission->ruleName = $rule->name;
+        $auth->add($permission);
+
+        $saler = $auth->getRole('saler');
+        $auth->addChild($saler, $permission);
+
+        $handler = $auth->getRole('handler');
+        $auth->addChild($handler, $permission);
+    }
+
+    public function actionCreateDeleteOrderPermission()
+    {
+        $auth = Yii::$app->authManager;
+        $rule = new \backend\rbac\DeleteOrderRule;
+        $auth->add($rule);
+
+        $permission = $auth->createPermission('delete_order');
+        $permission->description = 'Delete order';
+        $permission->ruleName = $rule->name;
+        $auth->add($permission);
+
+        $saler = $auth->getRole('saler');
+        $auth->addChild($saler, $permission);
+
+        $handler = $auth->getRole('handler');
+        $auth->addChild($handler, $permission);
+    }
+
+    public function actionCreateCancelOrderPermission()
+    {
+        $auth = Yii::$app->authManager;
+        $rule = new \backend\rbac\CancelOrderRule;
+        $auth->add($rule);
+
+        $permission = $auth->createPermission('cancel_order');
+        $permission->description = 'Cancel order';
+        $permission->ruleName = $rule->name;
+        $auth->add($permission);
+
+        $saler = $auth->getRole('saler');
+        $auth->addChild($saler, $permission);
+
+        $handler = $auth->getRole('handler');
+        $auth->addChild($handler, $permission);
     }
 
     //=============== ROLE ===============

@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
+use common\models\Promotion;
+use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PromotionSearch */
@@ -19,13 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span><?=Yii::t('app', 'manage_promotions')?></span>
+      <span>Quản lý khuyến mãi</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title"><?=Yii::t('app', 'manage_promotions')?></h1>
+<h1 class="page-title">Quản lý khuyến mãi</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -34,45 +37,54 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> <?=Yii::t('app', 'manage_promotions')?></span>
+          <span class="caption-subject bold uppercase"> Quản lý khuyến mãi</span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <?= Html::a(Yii::t('app', 'add_new'), ['game/create'], ['class' => 'btn green']) ?>
+            <?= Html::a(Yii::t('app', 'add_new'), ['promotion/create'], ['class' => 'btn green']) ?>
           </div>
         </div>
       </div>
 
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <form method="GET">
-            <div class="form-group col-md-4">
-              <label><?=Yii::t('app', 'keyword')?>: </label> <input type="search" class="form-control" placeholder="<?=Yii::t('app', 'keyword')?>" name="q" value="">
-            </div>
-            <div class="form-group col-md-3">
-              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
-                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
-              </button>
-            </div>
-          </form>
         </div>
-        <?= GridView::widget([
-          'dataProvider' => $dataProvider,
-          'filterModel' => $searchModel,
-          'columns' => [
-            'title',
-            'value',
-            [
-              'class' => 'yii\grid\ActionColumn',
-              'template' => '{view} {update} {images} {delete}',
-              'buttons' => [
-                'images' => function ($url, $model, $key) {
-                     return Html::a('<span class="glyphicon glyphicon glyphicon-picture" aria-label="Image"></span>', Url::to(['image/index', 'id' => $model->id]));
-                }
-              ],
-            ],
-          ],
-        ]); ?>
+        <?php Pjax::begin(); ?>
+        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+          <thead>
+            <tr>
+              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
+              <th style="width: 20%;"> Tiêu đề </th>
+              <th style="width: 10%;"> Mã khuyến mãi </th>
+              <th style="width: 20%;"> Ngày áp dụng </th>
+              <th style="width: 10%;"> Loại giảm giá </th>
+              <th style="width: 20%;"> Ngữ cảnh áp dụng </th>
+              <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
+              <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+            </tr>
+          </thead>
+          <tbody>
+              <?php if (!$models) :?>
+              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <?php endif;?>
+              <?php foreach ($models as $model) :?>
+              <tr>
+                <td style="vertical-align: middle;">#<?=$model->id;?></td>
+                <td style="vertical-align: middle;"><?=$model->title;?></td>
+                <td style="vertical-align: middle;"><?=$model->code;?></td>
+                <td style="vertical-align: middle;"><?=sprintf("%s - %s", $model->from_date, $model->to_date);?></td>
+                <td style="vertical-align: middle;"><?=sprintf("%s (%s)", $model->value, $model->value_type);?></td>
+                <td style="vertical-align: middle;"><?=$model->object_type;?></td>
+                <td style="vertical-align: middle;"><?=$model->status;?></td>
+                <td style="vertical-align: middle;">
+                  <a href='<?=Url::to(['promotion/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                </td>
+              </tr>
+              <?php endforeach;?>
+          </tbody>
+        </table>
+        <?=LinkPager::widget(['pagination' => $pages])?>
+        <?php Pjax::end(); ?>
       </div>
     </div>
   </div>

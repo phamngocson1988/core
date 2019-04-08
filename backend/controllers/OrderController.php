@@ -6,6 +6,8 @@ use common\components\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use backend\forms\FetchOrderForm;
+use backend\forms\FetchMyOrderForm;
+use backend\forms\FetchNewPendingOrderForm;
 use backend\forms\CreateOrderForm;
 use backend\forms\EditOrderForm;
 use backend\forms\CreateOrderItemForm;
@@ -50,18 +52,18 @@ class OrderController extends Controller
                     
                     [
                         'allow' => true,
-                        'actions' => ['edit'],
+                        'actions' => ['edit', 'my-order'],
                         'roles' => ['saler', 'handler'],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['move-to-processing', 'taken', 'add-unit'],
+                        'actions' => ['move-to-processing', 'taken', 'add-unit', 'new-pending-order'],
                         'roles' => ['handler'],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['assign'],
-                        'roles' => ['adimin'],
+                        'roles' => ['admin'],
                     ],
                 ],
             ],
@@ -98,23 +100,57 @@ class OrderController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
-        // Check the current user can take any order in the list
-        $canTaken = false;
-        if (Yii::$app->user->can('handler')) {
-            $checkTaken = new FetchOrderForm([
-                'handler_id' => Yii::$app->user->id,
-                'status' => Order::STATUS_PENDING
-            ]);
-            $checkTakenCommand = $checkTaken->getCommand();
-            $canTaken = !$checkTakenCommand->count();
-        }
 
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
-            'can_taken' => $canTaken,
+        ]);
+    }
+
+    public function actionMyOrder()
+    {
+        $this->view->params['main_menu_active'] = 'order.mine';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'status' => $request->get('status'),
+        ];
+        $form = new FetchMyOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('my-order', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionNewPendingOrder()
+    {
+        $this->view->params['main_menu_active'] = 'order.pending';
+        $request = Yii::$app->request;
+        $form = new FetchNewPendingOrderForm();
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->all();
+
+        return $this->render('new-pending-order', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
         ]);
     }
 
@@ -253,7 +289,6 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         if ($request->isPost && $request->isAjax) {
             $form = new TakenOrderForm([
-                'user_id' => Yii::$app->user->id,
                 'order_id' => $id,
             ]);
             if ($form->validate() && $form->taken()) {

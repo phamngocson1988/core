@@ -31,13 +31,13 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Quản lý đơn hàng</span>
+      <span>Đơn hàng của tôi</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Quản lý đơn hàng</h1>
+<h1 class="page-title">Đơn hàng của tôi</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -46,92 +46,14 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Quản lý đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng của tôi</span>
         </div>
         <div class="actions">
-          <?php if (Yii::$app->user->can('saler')) :?>
-          <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['order/create', 'ref' => $ref])?>"><?=Yii::t('app', 'add_new')?></a>
-          </div>
-          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>     
-            <?php $customer = $search->getCustomer();?>
-            <?=$form->field($search, 'q', [
-              'options' => ['class' => 'form-group col-md-1'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
-            ])->textInput()->label('Order ID/Key');?>
-
-            <?=$form->field($search, 'customer_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn khách hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Khách hàng')?>
-
-            <?php if (Yii::$app->user->can('admin')) :?>
-            <?php $saler = $search->getSaler();?>
-            <?=$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhân viên sale',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhân viên sale')?>
-
-            <?php $handler = $search->getHandler();?>
-            <?=$form->field($search, 'handler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'handler_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhân viên đơn hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhân viên đơn hàng')?>
-            <?php elseif (Yii::$app->user->can('saler')):?>
-              <?=$form->field($search, 'saler_id', [
-                'template' => '{input}', 
-                'options' => ['container' => false],
-                'inputOptions' => ['name' => 'saler_id']
-              ])->hiddenInput()->label(false);?>
-            <?php elseif (Yii::$app->user->can('handler')):?>
-              <?=$form->field($search, 'handler_id', [
-                'template' => '{input}', 
-                'options' => ['container' => false],
-                'inputOptions' => ['name' => 'handler_id']
-              ])->hiddenInput()->label(false);?>
-            <?php endif;?>
-
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/my-order']]);?>     
             <?=$form->field($search, 'status', [
               'options' => ['class' => 'form-group col-md-2'],
               'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
@@ -208,6 +130,13 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               </tr>
               <?php endforeach;?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td style="vertical-align: middle;" colspan="4">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></td>
+              <td style="vertical-align: middle;" colspan="4">Tổng King Coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
+              </td>
+            </tr>
+          </tfoot>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
