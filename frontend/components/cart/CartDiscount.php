@@ -15,7 +15,8 @@ class CartDiscount extends Model implements CartItemInterface
     {
         return [
             [['code'], 'trim'],
-            ['code', 'validateCode']
+            ['code', 'validateCode'],
+            ['code' => 'checkNumberUsing']
         ];
     }
 
@@ -30,6 +31,13 @@ class CartDiscount extends Model implements CartItemInterface
         } elseif (!$promotion->isValid()) {
             $this->addError($attribute, 'This voucher code is expired');
         }
+    }
+
+    public function checkNumberUsing($attribute, $params)
+    {
+        $promotion = $this->getPromotion();
+        if (!$promotion) return;
+        if (!$promotion->number_of_use) return;
     }
 
     public function getPromotion()

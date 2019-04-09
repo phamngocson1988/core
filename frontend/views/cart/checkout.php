@@ -29,6 +29,10 @@ $cart = Yii::$app->cart;
                   <td>(K)<?=$cart->getSubTotalPrice();?></td>
                 </tr>
                 <tr>
+                  <td>Discount</td>
+                  <td>(K)<?=$cart->getTotalDiscount();?></td>
+                </tr>
+                <tr>
                   <td>Total</td>
                   <td>(K)<?=$cart->getTotalPrice();?></td>
                 </tr>

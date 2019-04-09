@@ -164,10 +164,16 @@ use common\models\Product;
                             <span class="label label-success"> <?=$order->status;?> </span>
                           </div>
                         </div>
+                        <?php if ($order->total_discount) :?>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Sub total: </div>
                           <div class="col-md-7 value"> (K) <?=number_format($order->sub_total_price);?> </div>
                         </div>
+                        <div class="row static-info">
+                          <div class="col-md-5 name"> Discount: </div>
+                          <div class="col-md-7 value"> (K) <?=number_format($order->total_discount);?> </div>
+                        </div>
+                        <?php endif;?>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Total: </div>
                           <div class="col-md-7 value"> (K) <?=number_format($order->total_price);?> </div>

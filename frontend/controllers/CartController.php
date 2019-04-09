@@ -144,9 +144,11 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $totalPrice = $cart->getTotalPrice();
         $subTotalPrice = $cart->getSubTotalPrice();
+        $discount = $cart->getTotalDiscount();
 
         $order = new Order();
         $order->sub_total_price = $subTotalPrice;
+        $order->total_discount = $discount;
         $order->total_price = $totalPrice;
         $order->customer_id = $user->id;
         $order->customer_name = $user->name;

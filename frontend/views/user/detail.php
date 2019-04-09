@@ -19,10 +19,8 @@ $game = Game::findOne($item->game_id);
             <tr>
               <th>#</th>
               <th>Game</th>
-              <th>Quantity</th>
-              <th>Amount</th>
-              <th>Total</th>
               <th>Unit</th>
+              <th>Quantity</th>
               <th>Unit Total</th>
             </tr>
           </thead>
@@ -30,10 +28,8 @@ $game = Game::findOne($item->game_id);
             <tr>
               <td><img src="<?=$game->getImageUrl('100x100');?>" class="img-responsive" /></td>
               <td><?=$item->item_title;?></td>
-              <td><?=$item->quantity;?></td>
-              <td>(K) <?=number_format($item->price);?></td>
-              <td>(K) <?=number_format($item->total);?></td>
               <td><?=number_format($item->unit);?> (<?=$item->unit_name;?>)</td>
+              <td><?=$item->quantity;?></td>
               <td><?=number_format($item->total_unit);?> (<?=$item->unit_name;?>)</td>
             </tr>
           </tbody>
@@ -72,6 +68,20 @@ $game = Game::findOne($item->game_id);
                 <tr>
                   <td>Payment method:</td>
                   <td>King Payment Gateway</td>
+                </tr>
+                <?php if ($model->total_discount):?>
+                <tr>
+                  <td>Sub total:</td>
+                  <td><?=number_format($model->sub_total_price);?></td>
+                </tr>
+                <tr>
+                  <td>Discount:</td>
+                  <td><?=number_format($model->total_discount);?></td>
+                </tr>
+                <?php endif;?>
+                <tr>
+                  <td>Total:</td>
+                  <td><?=number_format($model->total_price);?></td>
                 </tr>
                 <tr>
                   <td>Order status:</td>
