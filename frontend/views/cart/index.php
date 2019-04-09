@@ -1,11 +1,13 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 ?>
 
-<?php $form = ActiveForm::begin(['id' => 'update-cart', 'action' => ['cart/update']]); ?>
+<?php Pjax::begin(); ?>
+<?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
 <?= $form->field($item, 'scenario', [
   'options' => ['tag' => false],
   'template' => '{input}'
@@ -34,20 +36,14 @@ use yii\bootstrap\ActiveForm;
                   </div>
                 </td>
                 <td>
-                  <?php 
-                  $metaData = [];
-                  foreach ($item->getGame()->products as $product) {
-                    $metaData[$product->id] = ['data-price' => $product->price, 'data-unit' => $product->unit];
-                  }?>
-
                   <?= $form->field($item, 'product_id', [
                     'options' => ['tag' => false],
                     'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
                     'template' => '{input}'
-                  ])->dropDownList(ArrayHelper::map($item->getGame()->products, 'id', 'title'), ['options' => $metaData]) ?>
+                  ])->dropDownList(ArrayHelper::map($item->getGame()->products, 'id', 'title')) ?>
                 </td>
-                <td id="price">0</td>
-                <td id="unit">0</td>
+                <td id="price"><?=number_format($item->getTotalPrice());?></td>
+                <td id="unit"><?=number_format($item->getTotalUnitGame());?></td>
                 <td>
                   <?= $form->field($item, 'quantity', [
                     'options' => ['class' => 'form-wrap box-width-1 shop-input'],
@@ -68,26 +64,43 @@ use yii\bootstrap\ActiveForm;
             <!-- RD Mailform: Subscribe-->
             <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
               <div class="rd-mailform-inline-inner">
-                <div class="form-wrap">
-                  <input class="form-input" type="text" name="voucher" id="voucher"/>
-                  <label class="form-label" for="voucher">Enter your voucher</label>
-                </div>
+                <?php if (!$discount->code) : ?>
+                <?= $form->field($discount, 'code', [
+                  'options' => ['class' => 'form-wrap'],
+                  'inputOptions' => ['class' => 'form-input', 'id' => 'voucher'],
+                  'labelOptions' => ['class' => 'form-label'],
+                  'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+                  'template' => '{input}{error}{label}'
+                ])->textInput()->label('Enter your voucher'); ?>
                 <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
+                <?php else :?>
+                <?= $form->field($discount, 'code', [
+                  'options' => ['class' => 'form-wrap'],
+                  'inputOptions' => ['class' => 'form-input', 'disabled' => true, 'id' => 'voucher'],
+                  'labelOptions' => ['class' => 'form-label'],
+                  'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+                  'template' => '{input}{error}{label}'
+                ])->textInput()->label('Enter your voucher'); ?>
+                <button id="remove_voucher" class="button form-button button-sm button-secondary button-nina">Remove</button>
+                <?php endif;?>
               </div>
             </div>
           </div>
           <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
-            <div class="heading-5 text-regular">Total: $<span>58.00</span></div>
+            <div class="heading-5 text-regular">Sub total: <span><?=number_format(Yii::$app->cart->getSubTotalPrice());?></span></div>
           </div>
           <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
-            <div class="heading-5 text-regular">Total: $<span>58.00</span></div>
+            <div class="heading-5 text-regular">Total: <span><?=number_format(Yii::$app->cart->getTotalPrice());?></span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+<?php ActiveForm::end(); ?>
+<?php Pjax::end(); ?>
 
+<?php $form = ActiveForm::begin(['id' => 'update-cart', 'action' => ['cart/update']]); ?>
 <section class="section section-lg bg-default novi-background bg-cover text-center">
   <!-- section wave-->
   <div class="container">
@@ -195,21 +208,24 @@ complainForm.error = function (errors) {
   console.log(errors);
 }
 
-$("#products, #quantity").on('change', function(){
-  updatePrice();
+$('body').on('change', "#products, #quantity", function(){
+  $(this).closest('form').submit();
 });
+$('body').on('click', '#apply_voucher', function(e){
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  if ($('#voucher').val()) $(this).closest('form').submit();
+  return false;
+});
+$('body').on('click', '#remove_voucher', function(e){
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  $('#voucher').val('').prop('disabled', false);
+  $(this).closest('form').submit();
+  return false;
 
-function updatePrice() {
-  var price = $("#products").find("option:selected").data('price');
-  var unit = $("#products").find("option:selected").data('unit');
-  var quantity = $("#quantity").val();
-  var totalPrice = price * quantity;
-  var totalUnit = unit * quantity;
-  $("#price").html('(K) ' + formatMoney(totalPrice, 0));
-  $("#unit").html(formatMoney(totalUnit, 0));
-}
+})
 
-$("#products").trigger('change');
 JS;
 $script = str_replace("[:checkout_url]", Url::to(['cart/checkout']), $script);
 $this->registerJs($script);

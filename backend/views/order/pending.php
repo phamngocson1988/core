@@ -123,9 +123,9 @@ use common\models\Product;
                               <tr>
                                 <th> Tên game </th>
                                 <th> Tên đơn vị </th>
-                                <th> Số đơn vị </th>
+                                <th> Số game </th>
                                 <th> Số lượng </th>
-                                <th> Tổng số </th>
+                                <th> Tổng số game </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -165,6 +165,10 @@ use common\models\Product;
                           <div class="col-md-7 value">
                             <span class="label label-success"> <?=$order->status;?> </span>
                           </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5 name"> Sub total: </div>
+                          <div class="col-md-7 value"> (K) <?=number_format($order->sub_total_price);?> </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Total: </div>

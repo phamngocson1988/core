@@ -16,8 +16,14 @@ var userAgent = navigator.userAgent.toLowerCase(),
 	isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
 	isTouch = "ontouchstart" in window,
 	onloadCaptchaCallback,
-	detailsBlock = document.getElementsByClassName('block-with-details'),
-	plugins = {
+	detailsBlock = document.getElementsByClassName('block-with-details');
+
+	/**
+ * Initialize All Scripts
+ */
+// $document.ready(function () {
+$document.on('ready pjax:success', function() {
+	var plugins = {
 		bootstrapDateTimePicker: $("[data-time-picker]"),
 		bootstrapModalDialog: $('.modal'),
 		bootstrapModalNotification: $('.notification'),
@@ -76,12 +82,6 @@ var userAgent = navigator.userAgent.toLowerCase(),
 		layoutPanel: $('.layout-panel'),
 		maps: $(".google-map-container")
 	};
-
-
-/**
- * Initialize All Scripts
- */
-$document.ready(function () {
 	var isNoviBuilder = window.xMode;
 
 	/**

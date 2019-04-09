@@ -13,7 +13,9 @@ use frontend\models\AddCartForm;
 use frontend\models\Product;
 use common\models\Order;
 use common\models\OrderItems;
+use common\models\OrderFee;
 use frontend\components\cart\CartItem;
+use frontend\components\cart\CartDiscount;
 use common\models\UserWallet;
 
 /**
@@ -63,10 +65,27 @@ class CartController extends Controller
     {
         $request = Yii::$app->request;
         $cart = Yii::$app->cart;
-        $items = $cart->getItems($cart->getItemType('product'));
-        $item = reset($items);
+        $item = $cart->getItem($cart->getItemType('product'));
+        if (!$item) return $this->redirect(['site/index']);
+
         $item->setScenario(CartItem::SCENARIO_EDIT);
+        $discount = $cart->getItem($cart->getItemType('discount'));
+
+        if ($request->isPost) {
+            if ($item->load($request->post()) && $item->validate()) {
+                $cart->add($item);
+            }
+            
+            if ($discount) $cart->remove($discount->getUniqueId());
+            $discount = new CartDiscount();
+            if ($discount->load($request->post()) && $discount->validate()) {
+                $cart->add($discount);
+            }
+        }
+        if (!$discount) $discount = new CartDiscount();
+
         return $this->render('index', [
+            'discount' => $discount,
             'item' => $item,
         ]);
     }
@@ -100,7 +119,7 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $items = $cart->getItems($cart->getItemType('product'));
         $item = reset($items);
-        $item->setScenario(CartItem::SCENARIO_EDIT);
+        $item->setScenario(CartItem::SCENARIO_INFO);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
@@ -124,8 +143,10 @@ class CartController extends Controller
         $user = Yii::$app->user->getIdentity();
         $cart = Yii::$app->cart;
         $totalPrice = $cart->getTotalPrice();
+        $subTotalPrice = $cart->getSubTotalPrice();
 
         $order = new Order();
+        $order->sub_total_price = $subTotalPrice;
         $order->total_price = $totalPrice;
         $order->customer_id = $user->id;
         $order->customer_name = $user->name;
@@ -140,8 +161,8 @@ class CartController extends Controller
             $item->item_title = $cartItem->getLabel();
             $item->type = OrderItems::TYPE_PRODUCT;
             $item->order_id = $order->id;
-            $item->game_id = $cartItem->getUniqueId();
-            // $item->product_id = $cartItem->getUniqueId();
+            $item->game_id = $cartItem->getGame()->id;
+            $item->product_id = $cartItem->getUniqueId();
             $item->price = $cartItem->getPrice();
             $item->quantity = $cartItem->quantity;
             $item->total = $cartItem->getTotalPrice();
@@ -160,14 +181,12 @@ class CartController extends Controller
         }
 
         foreach ($cart->getItems($cart->getItemType('discount')) as $cartItem) {
-            $item = new OrderItems();
-            $item->item_title = $cartItem->getLabel();
-            $item->type = OrderItems::TYPE_DISCOUNT;
+            $item = new OrderFee();
             $item->order_id = $order->id;
-            $item->game_id = $cartItem->getUniqueId();
-            $item->price = $cartItem->getPrice();
-            $item->quantity = 1;
-            $item->total = $cartItem->getPrice();
+            $item->type = OrderFee::TYPE_DISCOUNT;
+            $item->description = $cartItem->code;
+            $item->reference = $cartItem->getPromotion()->id;
+            $item->amount = $cartItem->getPrice();
             $item->save();
         }
 
@@ -182,16 +201,16 @@ class CartController extends Controller
         $wallet->save();
 
         // Send mail to customer
-        $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        if ($adminEmail) {
-            $email = Yii::$app->mailer->compose()
-            ->setTo($user->email)
-            ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
-            ->setSubject("Order #$order->id Confirmation")
-            ->setTextBody("Thanks for your order")
-            ->send();
-        }
+        // $settings = Yii::$app->settings;
+        // $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        // if ($adminEmail) {
+        //     $email = Yii::$app->mailer->compose()
+        //     ->setTo($user->email)
+        //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+        //     ->setSubject("Order #$order->id Confirmation")
+        //     ->setTextBody("Thanks for your order")
+        //     ->send();
+        // }
         $this->layout = 'notice';
         return $this->render('/site/notice', [           
             'title' => 'Đặt hàng thành công',

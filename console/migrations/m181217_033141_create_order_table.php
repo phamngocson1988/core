@@ -24,6 +24,7 @@ class m181217_033141_create_order_table extends Migration
             'payment_id' => $this->string(50),
             'payment_method' => $this->string(50),
             'payment_data' => $this->text(),
+            'sub_total_price' => $this->integer(11)->defaultValue(0),
             'total_price' => $this->integer(11)->defaultValue(0),
             'customer_id' => $this->integer(11)->notNull(),
             'customer_name' => $this->string(255),
@@ -99,6 +100,21 @@ class m181217_033141_create_order_table extends Migration
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer(11)->notNull(),
         ]);
+
+        $this->createTable('{{%order_fee}}', [
+            'id' => $this->primaryKey(),
+            'order_id' => $this->integer(11)->notNull(),
+            'type' => $this->string(50)->notNull(),
+            'description' => $this->string(100),
+            'reference' => $this->string(50),
+            'amount' => $this->integer(11)->notNull()->defaultValue(0),
+        ]);
+
+        if ($this->db->driverName === 'mysql') {
+            $type = "ALTER TABLE {{%order_fee}} MODIFY `type` ENUM('discount','fee','tax') NOT NULL";
+            $command = $this->db->createCommand($type);
+            $command->execute();
+        }
     }
 
     /**
@@ -109,5 +125,6 @@ class m181217_033141_create_order_table extends Migration
         $this->dropTable('{{%order}}');
         $this->dropTable('{{%order_items}}');
         $this->dropTable('{{%order_comments}}');
+        $this->dropTable('{{%order_fee}}');
     }
 }

@@ -20,6 +20,12 @@ class Promotion extends ActiveRecord
     const SCENARIO_CREATE = 'create';
     const SCENARIO_EDIT = 'edit';
 
+    const TYPE_FIX = 'fix';
+    const TYPE_PERCENT = 'percent';
+
+    const OBJECT_COIN = 'coin';
+    const OBJECT_MONEY = 'money';
+
     /**
      * @inheritdoc
      */
@@ -69,5 +75,29 @@ class Promotion extends ActiveRecord
             self::STATUS_VISIBLE => 'Visible',
             // self::STATUS_DELETE => 'Deleted'
         ];
+    }
+
+    public function calculateDiscount($amount)
+    {
+        if ($this->value_type == self::TYPE_FIX) {
+            return min($amount, $this->value);
+        } elseif ($this->value_type == self::TYPE_PERCENT) {
+            return ceil(($this->value * $amount) / 100);
+        }
+    }
+
+    public function isValid($time = 'now')
+    {
+        $now = strtotime($time);
+        if (!$this->from_date && !$this->to_date) return true;
+        elseif ($this->from_date && $this->to_date) return ($now >= strtotime($this->from_date) && ($now <= strtotime($this->to_date)));
+        elseif ($this->from_date) return ($now >= strtotime($this->from_date));
+        elseif ($this->to_date) return ($now <= strtotime($this->to_date));
+        return false;
+    }
+
+    public function isEnable()
+    {
+        return $this->status == self::STATUS_VISIBLE;
     }
 }

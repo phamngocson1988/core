@@ -14,7 +14,7 @@ $cart = Yii::$app->cart;
           <div class="box-classic-content">
             <table class="table-custom table-hover">
               <tbody>
-                <?php foreach ($cart->getItems() as $item) :?>
+                <?php foreach ($cart->getItems($cart->getItemType('product')) as $item) :?>
                 <tr>
                   <td>
                     <?=$item->getLabel();?><br/>
@@ -42,7 +42,7 @@ $cart = Yii::$app->cart;
           <div class="box-classic-content">
             <table class="table-custom table-hover">
               <tbody>
-                <?php foreach ($cart->getItems() as $item) :?>
+                <?php foreach ($cart->getItems($cart->getItemType('product')) as $item) :?>
                 <tr>
                   <td>Username</td>
                   <td><?=$item->username;?></td>
@@ -105,7 +105,7 @@ $cart = Yii::$app->cart;
         $items = $cart->getItems();
         $item = reset($items);
         ?>
-        <?= Html::a('Go back', Url::to(['cart/index', 'pid' => $item->getUniqueId(), 'qt' => $item->quantity]), ['class' => 'button button-primary button-nina']) ?>
+        <?= Html::a('Go back', Url::to(['cart/index']), ['class' => 'button button-primary button-nina']) ?>
         <?= Html::submitButton('place order', ['class' => 'button button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
         <?php ActiveForm::end();?>
       </div>

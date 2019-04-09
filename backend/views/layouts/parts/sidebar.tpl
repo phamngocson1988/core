@@ -200,7 +200,7 @@
         </ul>
       </li>
       {/if}
-      {if Yii::$app->user->can('saler') || Yii::$app->user->can('handler')}
+      
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
@@ -213,6 +213,7 @@
             <span class="title">Đơn hàng</span>
             </a>
           </li>
+          {if Yii::$app->user->can('saler') || Yii::$app->user->can('handler')}
           <li class="nav-item  ">
             <a href="{url route='/order/my-order'}" class="nav-link " code='order.mine'>
             <span class="title">Đơn hàng của tôi</span>
@@ -223,6 +224,7 @@
             <span class="title">Đơn hàng mới</span>
             </a>
           </li>
+          {/if}
           {if (Yii::$app->user->can('admin'))}
           <li class="nav-item  ">
             <a href="{url route='/order-complain'}" class="nav-link " code='ordercomplain.index'>
@@ -232,7 +234,7 @@
           {/if}
         </ul>
       </li>
-      {/if}
+      
       {if Yii::$app->user->can('accounting')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">

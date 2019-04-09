@@ -42,7 +42,7 @@ class OrderController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index', 'send-complain'],
-                        'roles' => ['saler', 'handler', 'admin'],
+                        'roles' => ['saler', 'handler', 'admin', 'accounting'],
                     ],
                     [
                         'allow' => true,

@@ -22,6 +22,7 @@ class CartItem extends Model implements CartItemInterface
 
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
+    const SCENARIO_INFO = 'info';
 
     /** @var Product **/
     protected $_product;
@@ -32,7 +33,8 @@ class CartItem extends Model implements CartItemInterface
     {
         return [
             self::SCENARIO_ADD => ['game_id', 'product_id', 'quantity'],
-            self::SCENARIO_EDIT => ['product_id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
+            self::SCENARIO_EDIT => ['product_id', 'quantity'],
+            self::SCENARIO_INFO => ['username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
         ];
     }
 
@@ -40,8 +42,9 @@ class CartItem extends Model implements CartItemInterface
     {
         return [
             [['game_id', 'product_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
-            [['product_id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_EDIT],
+            [['product_id', 'quantity'], 'required', 'on' => self::SCENARIO_EDIT],
+            [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_INFO],
+            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_INFO],
             ['game_id', 'validateGame'],
             ['product_id', 'validateProduct'],
         ];
@@ -134,6 +137,6 @@ class CartItem extends Model implements CartItemInterface
 
     public function getUniqueId()
     {
-        return $this->game_id;
+        return 'game_' . $this->game_id;
     }
 }

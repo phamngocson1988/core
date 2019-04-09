@@ -8,6 +8,7 @@ use common\models\Customer;
 use common\models\OrderItems;
 use common\models\OrderComments;
 use common\models\OrderComplains;
+use common\models\OrderFee;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -80,6 +81,21 @@ class Order extends ActiveRecord
     public function getComplains() 
     {
         return $this->hasMany(OrderComplains::className(), ['order_id' => 'id']);
+    }
+
+    public function getDiscounts() 
+    {
+        return $this->hasMany(OrderFee::className(), ['order_id' => 'id', 'type' => OrderFee::TYPE_DISCOUNT]);
+    }
+
+    public function getFees() 
+    {
+        return $this->hasMany(OrderFee::className(), ['order_id' => 'id', 'type' => OrderFee::TYPE_FEE]);
+    }
+
+    public function getTaxes() 
+    {
+        return $this->hasMany(OrderFee::className(), ['order_id' => 'id', 'type' => OrderFee::TYPE_TAX]);
     }
 
     public function generateAuthKey()
