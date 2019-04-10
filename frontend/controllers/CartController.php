@@ -203,16 +203,16 @@ class CartController extends Controller
         $wallet->save();
 
         // Send mail to customer
-        // $settings = Yii::$app->settings;
-        // $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        // if ($adminEmail) {
-        //     $email = Yii::$app->mailer->compose()
-        //     ->setTo($user->email)
-        //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
-        //     ->setSubject("Order #$order->id Confirmation")
-        //     ->setTextBody("Thanks for your order")
-        //     ->send();
-        // }
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        if ($adminEmail) {
+            $email = Yii::$app->mailer->compose()
+            ->setTo($user->email)
+            ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+            ->setSubject("Order #$order->id Confirmation")
+            ->setTextBody("Thanks for your order")
+            ->send();
+        }
         $this->layout = 'notice';
         return $this->render('/site/notice', [           
             'title' => 'Đặt hàng thành công',

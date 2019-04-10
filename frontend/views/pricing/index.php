@@ -12,7 +12,7 @@ use yii\bootstrap\ActiveForm;
       </div>
       <section class="section section-lg bg-default novi-background bg-cover text-center bg-gray-darker">
         <div class="container container-wide">
-          <h3>pricing</h3>
+          <h3>pricing packages</h3>
           <div class="row row-50 justify-content-sm-center">
             <!-- Pricing Box XL-->
             <?php foreach ($models as $model) :?>
@@ -22,7 +22,7 @@ use yii\bootstrap\ActiveForm;
                   <h4><?=$model->title;?></h4>
                 </div>
                 <?php $form = ActiveForm::begin([
-                  'action' => Url::to(['pricing/store']),
+                  'action' => Url::to(['pricing/add']),
                   'options' => ['class' => 'add-to-cart']
                 ]); ?>
                 <div class="pricing-box-price">
@@ -42,6 +42,20 @@ use yii\bootstrap\ActiveForm;
                         <div class="unit-body">
                           <div class="form-wrap box-width-1 shop-input">
                             <input class="form-input input-append quantity-control" data-id="<?=$model->id;?>" data-price="<?=$model->amount;?>" data-coin="<?=$model->num_of_coin;?>" type="number" min="1" max="300" value="1" name="qt">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="unit unit-spacing-sm flex-row align-items-center">
+                        <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
+                          <div class="rd-mailform-inline-inner">
+                            <?= $form->field($discount, 'code', [
+                              'options' => ['class' => 'form-wrap'],
+                              'inputOptions' => ['class' => 'form-input voucher'],
+                              'labelOptions' => ['class' => 'form-label'],
+                              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+                              'template' => '{input}{error}{label}'
+                            ])->textInput()->label('voucher'); ?>
+                            <button class="button form-button button-sm button-secondary button-nina apply_voucher">Apply</button>
                           </div>
                         </div>
                       </div>

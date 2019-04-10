@@ -13,6 +13,8 @@ use common\models\UserWallet;
 use common\models\Transaction;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use frontend\components\cart\CartDiscount;
+use frontend\components\cart\CartPricingItem;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\Item;
@@ -38,7 +40,7 @@ class PricingController extends Controller
                 'only' => ['purchase', 'success', 'store'],
                 'rules' => [
                     [
-                        'actions' => ['purchase', 'success', 'store'],
+                        'actions' => ['purchase', 'success', 'store', 'add'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -56,16 +58,29 @@ class PricingController extends Controller
 
     public function actionIndex()
     {
-        $session = Yii::$app->session;
-        $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
-        $chosenId = ArrayHelper::getValue($cart, 'id');
-        $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
     	$models = PricingCoin::find()->all();
     	return $this->render('index', [
     		'models' => $models,
-            'chosen_id' => $chosenId,
-            'chosen_quantity' => $chosenQuantity
     	]);
+    }
+
+    public function actionAdd()
+    {
+    	$request = Yii::$app->request;
+    	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+    	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
+
+        $cart = Yii::$app->cart;
+        $cart->clear();
+        $item = new CartPricingItem(['scenario' => CartPricingItem::SCENARIO_ADD]);
+        if ($item->load($request->post()) && $item->validate()) {
+            $cart->add($item);
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
+        } else {
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
+        }
+
     }
 
     public function actionStore()
@@ -80,6 +95,35 @@ class PricingController extends Controller
 
     public function actionConfirm()
     {
+        $request = Yii::$app->request;
+        $cart = Yii::$app->cart;
+        $item = $cart->getItem($cart->getItemType('pricing'));
+        if (!$item) return $this->redirect(['site/index']);
+
+        $item->setScenario(CartPricingItem::SCENARIO_EDIT);
+        $discount = $cart->getItem($cart->getItemType('discount'));
+
+        if ($request->isPost) {
+            if ($item->load($request->post()) && $item->validate()) {
+                $cart->add($item);
+            }
+            
+            if ($discount) $cart->remove($discount->getUniqueId());
+            $discount = new CartDiscount();
+            if ($discount->load($request->post()) && $discount->validate()) {
+                $cart->add($discount);
+            }
+        }
+        if (!$discount) $discount = new CartDiscount();
+
+        return $this->render('index', [
+            'discount' => $discount,
+            'item' => $item,
+        ]);
+    }
+
+    public function actionCheckout()
+    {
         $session = Yii::$app->session;
         $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
         $chosenId = ArrayHelper::getValue($cart, 'id');
@@ -87,9 +131,9 @@ class PricingController extends Controller
         if (!$chosenId) throw new NotFoundHttpException("You have not added any pricing package", 1);
         $pricing = PricingCoin::findOne($chosenId); 
         if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
-        return $this->render('confirm', [
+        return $this->render('checkout', [
             'model' => $pricing,
-            'quantity' => $chosenQuantity
+            'quantity' => $chosenQuantity,            
         ]);
     }
 

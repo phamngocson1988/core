@@ -13,6 +13,7 @@ use Yii;
 class Cart extends \yii2mod\cart\Cart
 {
 	const ITEM_PRODUCT = '\frontend\components\cart\CartItem';
+	const ITEM_PRICING = '\frontend\components\cart\CartPricingItem';
 	const ITEM_DISCOUNT = '\frontend\components\cart\CartDiscount';
 
 	public function getItemType($type)
@@ -20,6 +21,10 @@ class Cart extends \yii2mod\cart\Cart
 		switch ($type) {
 			case 'discount':
 				return self::ITEM_DISCOUNT;
+			case 'pricing': 
+				return self::ITEM_PRICING;
+			case 'product':
+				return self::ITEM_PRODUCT;
 			default:
 				return self::ITEM_PRODUCT;
 		}

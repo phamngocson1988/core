@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use common\models\Promotion;
 use yii2mod\cart\models\CartItemInterface;
+use common\models\Order;
 
 class CartDiscount extends Model implements CartItemInterface
 {
@@ -16,7 +17,7 @@ class CartDiscount extends Model implements CartItemInterface
         return [
             [['code'], 'trim'],
             ['code', 'validateCode'],
-            ['code' => 'checkNumberUsing']
+            ['code', 'checkNumberUsing']
         ];
     }
 
@@ -38,6 +39,20 @@ class CartDiscount extends Model implements CartItemInterface
         $promotion = $this->getPromotion();
         if (!$promotion) return;
         if (!$promotion->number_of_use) return;
+        $command = Order::find();
+        $command->joinWith('discounts');
+        $command->where(["<>", "order.status", Order::STATUS_DELETED]);
+        $command->andWhere(["order_fee.reference" => $promotion->id]);
+        $command->andWhere(["order.customer_id" => Yii::$app->user->id]);
+        if ($promotion->from_date) {
+            $command->andWhere([">=", "order.created_at", $promotion->from_date]);
+        }
+        if ($promotion->to_date) {
+            $command->andWhere(["<=", "order.created_at", $promotion->to_date]);
+        }
+        if ((int)$promotion->number_of_use <= $command->count()) {
+            $this->addError($attribute, 'This voucher code has applied before');
+        }
     }
 
     public function getPromotion()

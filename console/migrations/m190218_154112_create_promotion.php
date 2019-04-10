@@ -33,6 +33,8 @@ class m190218_154112_create_promotion extends Migration
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
         ]);
 
+        $this->createIndex('idx_unique_code', '{{%promotion}}', 'code', true); // unique index
+        
         if ($this->db->driverName === 'mysql') {
             $alter = "ALTER TABLE {{%promotion}} MODIFY `status` ENUM('Y', 'N') NOT NULL DEFAULT 'Y'";
             $command = $this->db->createCommand($alter);
@@ -54,7 +56,7 @@ class m190218_154112_create_promotion extends Migration
     public function safeDown()
     {
         echo "m190218_154112_create_promotion cannot be reverted.\n";
-
+        $this->dropIndex('idx_unique_code', '{{%promotion}}');
         $this->dropTable('{{%promotion}}');
     }
 

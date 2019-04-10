@@ -85,17 +85,17 @@ class Order extends ActiveRecord
 
     public function getDiscounts() 
     {
-        return $this->hasMany(OrderFee::className(), ['order_id' => 'id', 'type' => OrderFee::TYPE_DISCOUNT]);
+        return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_DISCOUNT]);
     }
 
     public function getFees() 
     {
-        return $this->hasMany(OrderFee::className(), ['order_id' => 'id', 'type' => OrderFee::TYPE_FEE]);
+        return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_FEE]);
     }
 
     public function getTaxes() 
     {
-        return $this->hasMany(OrderFee::className(), ['order_id' => 'id', 'type' => OrderFee::TYPE_TAX]);
+        return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_TAX]);
     }
 
     public function generateAuthKey()

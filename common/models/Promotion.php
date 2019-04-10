@@ -64,7 +64,8 @@ class Promotion extends ActiveRecord
     	return [
     		[['title', 'code', 'value_type', 'value', 'object_type', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
             [['id', 'title', 'code', 'value_type', 'value', 'object_type', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['number_of_use', 'from_date', 'to_date'], 'safe']
+            [['number_of_use', 'from_date', 'to_date'], 'safe'],
+            ['code', 'unique', 'targetClass' => '\common\models\Promotion', 'message' => 'Voucher code is duplicated'],
     	];
     }
 
