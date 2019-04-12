@@ -22,15 +22,13 @@ use yii\bootstrap\ActiveForm;
               <tr>
                 <th style="width: 30%;">Pricing Package</th>
                 <th style="width: 10%;">Price</th>
-                <th style="width: 10%;">Number Of Coins</th>
                 <th style="width: 20%;">Quantity</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><?=$item->title;?></td>
+                <td><?=$item->getPricing()->title;?></td>
                 <td id="price"><?=number_format($item->getTotalPrice());?></td>
-                <td id="unit"><?=number_format($item->getTotalUnitGame());?></td>
                 <td>
                   <?= $form->field($item, 'quantity', [
                     'options' => ['class' => 'form-wrap box-width-1 shop-input'],

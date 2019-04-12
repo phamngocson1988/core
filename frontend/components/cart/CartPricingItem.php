@@ -49,6 +49,11 @@ class CartPricingItem extends Model implements CartItemInterface
         return $this->_pricing;
     }
 
+    public function getTotalPrice()
+    {
+        return $this->getPrice() * $this->quantity;
+    }
+
     // ============== implement interface ===========//
     public function getPrice() : int
     {

@@ -58,9 +58,12 @@ class PricingController extends Controller
 
     public function actionIndex()
     {
-    	$models = PricingCoin::find()->all();
+        $models = PricingCoin::find()->select('id')->all();
+        $items = array_map(function($model){
+            return new CartPricingItem(['pricing_id' => $model->id, 'quantity' => 1]);
+        }, $models);
     	return $this->render('index', [
-    		'models' => $models,
+            'items' => $items,
     	]);
     }
 
@@ -116,7 +119,7 @@ class PricingController extends Controller
         }
         if (!$discount) $discount = new CartDiscount();
 
-        return $this->render('index', [
+        return $this->render('confirm', [
             'discount' => $discount,
             'item' => $item,
         ]);

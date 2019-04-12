@@ -15,48 +15,36 @@ use yii\bootstrap\ActiveForm;
           <h3>pricing packages</h3>
           <div class="row row-50 justify-content-sm-center">
             <!-- Pricing Box XL-->
-            <?php foreach ($models as $model) :?>
+            <?php foreach ($items as $item) :?>
             <div class="col-md-6 col-xl-3" class="pricing-package">
               <div class="pricing-box pricing-box-xl pricing-box-novi">
                 <div class="pricing-box-header">
-                  <h4><?=$model->title;?></h4>
+                  <h4><?=$item->getPricing()->title;?></h4>
                 </div>
                 <?php $form = ActiveForm::begin([
                   'action' => Url::to(['pricing/add']),
                   'options' => ['class' => 'add-to-cart']
                 ]); ?>
                 <div class="pricing-box-price">
-                  <div class="heading-2"><sup>$</sup><span id="price-<?=$model->id;?>"><?=number_format($model->amount);?></span></div>
+                  <div class="heading-2"><sup>$</sup><span id="price-<?=$item->getPricing()->id;?>"><?=number_format($item->getPricing()->amount);?></span></div>
                 </div>
-                <?= $form->field($model, 'id', ['template' => '{input}', 'inputOptions' => ['name' => 'id']])->hiddenInput() ?>
+                <?= $form->field($item, 'pricing_id', ['template' => '{input}'])->hiddenInput() ?>
                 <?= Html::submitButton('Buy now', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
                 <div class="pricing-box-body">
                   <ul class="pricing-box-list">
                     <li>
                       <div class="unit unit-spacing-sm flex-row align-items-center">
                         <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-database"></span></div>
-                        <div class="unit-body"><span id="coin-<?=$model->id;?>"><?=number_format($model->num_of_coin);?></span> King Coins</div>
+                        <div class="unit-body"><span id="coin-<?=$item->getPricing()->id;?>"><?=number_format($item->getPricing()->num_of_coin);?></span> King Coins</div>
                       </div>
                       <div class="unit unit-spacing-sm flex-row align-items-center">
                         <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-cart-outline"></span></div>
                         <div class="unit-body">
-                          <div class="form-wrap box-width-1 shop-input">
-                            <input class="form-input input-append quantity-control" data-id="<?=$model->id;?>" data-price="<?=$model->amount;?>" data-coin="<?=$model->num_of_coin;?>" type="number" min="1" max="300" value="1" name="qt">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="unit unit-spacing-sm flex-row align-items-center">
-                        <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
-                          <div class="rd-mailform-inline-inner">
-                            <?= $form->field($discount, 'code', [
-                              'options' => ['class' => 'form-wrap'],
-                              'inputOptions' => ['class' => 'form-input voucher'],
-                              'labelOptions' => ['class' => 'form-label'],
-                              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                              'template' => '{input}{error}{label}'
-                            ])->textInput()->label('voucher'); ?>
-                            <button class="button form-button button-sm button-secondary button-nina apply_voucher">Apply</button>
-                          </div>
+                          <?= $form->field($item, 'quantity', [
+                          'options' => ['class' => 'form-wrap box-width-1 shop-input'],
+                          'inputOptions' => ['class' => 'form-input input-append', 'type' => 'number', 'min' => 1, 'value' => 1, 'id' => 'quantity'],
+                          'template' => '{input}'
+                        ])->textInput() ?>
                         </div>
                       </div>
                     </li>
