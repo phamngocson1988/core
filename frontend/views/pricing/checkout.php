@@ -3,6 +3,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+
+$cart = Yii::$app->cart->setMode('pricing');
+$item = $cart->getItem();
 ?>
 <section class="section-xl text-center bg-default">
   <div class="container">
@@ -19,20 +22,29 @@ use yii\bootstrap\ActiveForm;
             <div class="col-md-8 col-xl-6">
               <div class="pricing-box pricing-box-lg pricing-box-novi">
                 <div class="pricing-box-header text-sm-left">
-                  <h4><?=$model->title;?></h4>
+                  <h4><?=$item->getPricing()->title;?></h4>
                 </div>
                 <div class="pricing-box-body">
                   <div class="row row-fix align-items-sm-center">
                     <div class="col-sm-6 text-sm-left">
                       <ul class="pricing-box-list list-marked">
-                        <li>Quantity: <?=$quantity;?></li>
-                        <li>King Coins: <?=($model->num_of_coin * $quantity);?></li>
+                        <li>Quantity: <?=$item->quantity;?></li>
+                        <li>King Coins: <?=($item->getPricing()->num_of_coin * $item->quantity);?></li>
                       </ul>
                     </div>
                     <div class="col-sm-6 text-sm-right">
                       <div class="pricing-box-price">
+                        <?php
+                        $sub = $cart->getSubTotalPrice();
+                        $total = $cart->getTotalPrice(); 
+                        ?>
+                        <?php if ($sub != $total) :?>
+                        <div class="pricing-box-price-old">
+                          <div class="heading-5">$<?=($sub);?></div>
+                        </div>
+                        <?php endif;?>
                         <div class="pricing-box-price-new">
-                          <div class="heading-2">$<?=($model->amount * $quantity);?></div>
+                          <div class="heading-2">$<?=($total);?></div>
                         </div>
                       </div>
                       <?php $form = ActiveForm::begin([

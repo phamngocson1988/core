@@ -74,8 +74,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td style="vertical-align: middle;"><?=$model->code;?></td>
                 <td style="vertical-align: middle;"><?=sprintf("%s - %s", $model->from_date, $model->to_date);?></td>
                 <td style="vertical-align: middle;"><?=sprintf("%s (%s)", $model->value, $model->value_type);?></td>
-                <td style="vertical-align: middle;"><?=$model->object_type;?></td>
-                <td style="vertical-align: middle;"><?=$model->status;?></td>
+                <td style="vertical-align: middle;"><?php
+                if ($model->object_type == 'coin') :
+                  echo 'Giảm khi mua game';
+                elseif ($model->object_type == 'money') :
+                  echo 'Giảm khi mua coin';
+                endif;
+                ?></td>
+                <td style="vertical-align: middle;"><?php
+                if ($model->status == 'Y') :
+                  echo 'Đã kích hoạt';
+                elseif ($model->status == 'N') :
+                  echo 'Chưa kích hoạt';
+                endif;
+                ?></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['promotion/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                 </td>

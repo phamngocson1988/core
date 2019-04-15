@@ -2,7 +2,9 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-$cart = Yii::$app->cart;
+$cart = Yii::$app->cart->setMode('product');
+$item = $cart->getItem();
+// print_r($item);die;
 ?>
 <section class="section section-lg bg-default novi-background bg-cover">
   <!-- section wave-->
@@ -14,7 +16,6 @@ $cart = Yii::$app->cart;
           <div class="box-classic-content">
             <table class="table-custom table-hover">
               <tbody>
-                <?php foreach ($cart->getItems($cart->getItemType('product')) as $item) :?>
                 <tr>
                   <td>
                     <?=$item->getLabel();?><br/>
@@ -23,7 +24,6 @@ $cart = Yii::$app->cart;
                   </td>
                   <td>(K)<?=$item->getTotalPrice();?></td>
                 </tr>
-                <?php endforeach;?>
                 <tr>
                   <td>Sub total</td>
                   <td>(K)<?=$cart->getSubTotalPrice();?></td>
@@ -46,7 +46,6 @@ $cart = Yii::$app->cart;
           <div class="box-classic-content">
             <table class="table-custom table-hover">
               <tbody>
-                <?php foreach ($cart->getItems($cart->getItemType('product')) as $item) :?>
                 <tr>
                   <td>Username</td>
                   <td><?=$item->username;?></td>
@@ -85,7 +84,6 @@ $cart = Yii::$app->cart;
                   <td><?=$item->note;?></td>
                 </tr>
                 <?php endif;?>
-                <?php endforeach;?>
               </tbody>
             </table>
           </div>
@@ -105,10 +103,6 @@ $cart = Yii::$app->cart;
           </ul>
         </div>
         <?php $form = ActiveForm::begin(['id' => 'form-signup', 'action' => Url::to(['cart/purchase'])]); ?>
-        <?php 
-        $items = $cart->getItems();
-        $item = reset($items);
-        ?>
         <?= Html::a('Go back', Url::to(['cart/index']), ['class' => 'button button-primary button-nina']) ?>
         <?= Html::submitButton('place order', ['class' => 'button button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
         <?php ActiveForm::end();?>

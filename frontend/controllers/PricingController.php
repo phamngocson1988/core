@@ -74,7 +74,7 @@ class PricingController extends Controller
     	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
 
-        $cart = Yii::$app->cart;
+        $cart = Yii::$app->cart->setMode('pricing');
         $cart->clear();
         $item = new CartPricingItem(['scenario' => CartPricingItem::SCENARIO_ADD]);
         if ($item->load($request->post()) && $item->validate()) {
@@ -86,25 +86,15 @@ class PricingController extends Controller
 
     }
 
-    public function actionStore()
-    {
-        $request = Yii::$app->request;
-        $session = Yii::$app->session;
-        $id = $request->post('id');
-        $qt = $request->post('qt');
-        $session->set(self::PRICING_CART, ['id' => $id, 'quantity' => $qt]);
-        return json_encode(['status' => true]);
-    }
-
     public function actionConfirm()
     {
         $request = Yii::$app->request;
-        $cart = Yii::$app->cart;
-        $item = $cart->getItem($cart->getItemType('pricing'));
+        $cart = Yii::$app->cart->setMode('pricing');
+        $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
 
         $item->setScenario(CartPricingItem::SCENARIO_EDIT);
-        $discount = $cart->getItem($cart->getItemType('discount'));
+        $discount = $cart->getDiscount();
 
         if ($request->isPost) {
             if ($item->load($request->post()) && $item->validate()) {
@@ -113,6 +103,7 @@ class PricingController extends Controller
             
             if ($discount) $cart->remove($discount->getUniqueId());
             $discount = new CartDiscount();
+            $discount->setCart($cart);
             if ($discount->load($request->post()) && $discount->validate()) {
                 $cart->add($discount);
             }
@@ -127,28 +118,21 @@ class PricingController extends Controller
 
     public function actionCheckout()
     {
-        $session = Yii::$app->session;
-        $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
-        $chosenId = ArrayHelper::getValue($cart, 'id');
-        $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
-        if (!$chosenId) throw new NotFoundHttpException("You have not added any pricing package", 1);
-        $pricing = PricingCoin::findOne($chosenId); 
-        if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
-        return $this->render('checkout', [
-            'model' => $pricing,
-            'quantity' => $chosenQuantity,            
-        ]);
+
+        $cart = Yii::$app->cart->setMode('pricing');
+        if (!$cart->getItem()) throw new NotFoundHttpException("You have not added any pricing package", 1);
+        return $this->render('checkout');
     }
 
     public function actionPurchase()
     {
-        $session = Yii::$app->session;
-        $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
-        $chosenId = ArrayHelper::getValue($cart, 'id');
-        $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
-        if (!$chosenId) throw new NotFoundHttpException("You have not added any pricing package", 1);
-        $pricing = PricingCoin::findOne($chosenId); 
-        if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
+        // $session = Yii::$app->session;
+        // $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
+        // $chosenId = ArrayHelper::getValue($cart, 'id');
+        // $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
+        // if (!$chosenId) throw new NotFoundHttpException("You have not added any pricing package", 1);
+        // $pricing = PricingCoin::findOne($chosenId); 
+        // if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
 
         // Send to paypal
         $settings = Yii::$app->settings;
@@ -170,21 +154,39 @@ class PricingController extends Controller
                 $clientSecret
             )
         );
-        $totalPrice = $subTotalPrice = $pricing->amount * $chosenQuantity;
+
+        $cart = Yii::$app->cart->setMode('pricing');
+        $totalPrice = $cart->getTotalPrice();
+        $subTotalPrice = $cart->getSubTotalPrice();
+        $cartItem = $cart->getItem();
+
         $ppItem = new Item();
-        $ppItem->setName($pricing->title)
+        $ppItem->setName($cartItem->getPricing()->title)
         ->setCurrency('USD')
-        ->setQuantity($chosenQuantity)
-        ->setSku($pricing->id) // Similar to `item_number` in Classic API
-        ->setPrice($pricing->amount);
+        ->setQuantity($cartItem->quantity)
+        ->setSku($cartItem->getUniqueId())
+        ->setPrice($cartItem->getPrice());
         $itemList[] = $ppItem;
+
+        // For discount
+        if ($cart->getTotalDiscount()) {
+            $discount = $cart->getDiscount();
+            $discountItem = new Item();
+            $discountItem->setName($discount->getPromotion()->title)
+            ->setCurrency('USD')
+            ->setQuantity(1)
+            ->setSku($discount->code)
+            ->setPrice(($cart->getTotalDiscount()) * (-1));
+            $itemList[] = $discountItem;
+        }
+
         $ppitemList = new ItemList();
         $ppitemList->setItems($itemList);
 
         $details = new Details();
         $details->setShipping(0)
             ->setTax(0)
-            ->setSubtotal($subTotalPrice);
+            ->setSubtotal($totalPrice);
         // ### Amount
         $amount = new Amount();
         $amount->setCurrency("USD")
@@ -194,7 +196,7 @@ class PricingController extends Controller
         $transaction = new PaypalTransaction();
         $transaction->setAmount($amount)
             ->setItemList($ppitemList)
-            ->setDescription("Pay for package of coins #" . $pricing->id . " " . $pricing->title)
+            ->setDescription("Pay for package of coins #" . $cartItem->getUniqueId() . " " . $cartItem->getPricing()->title)
             ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
@@ -213,11 +215,11 @@ class PricingController extends Controller
         try {
             $payment->create($apiContext);
             if ('created' == strtolower($payment->state)) {// order was created
-            	$session = Yii::$app->session;
-            	$session->set('payment_method', 'paypal');
-            	$session->set('payment_id', $payment->id);
-                $session->set('package_id', $pricing->id);
-            	$session->set('package_quantity', $chosenQuantity);
+            	// $session = Yii::$app->session;
+            	// $session->set('payment_method', 'paypal');
+            	// $session->set('payment_id', $payment->id);
+             //    $session->set('package_id', $cartItem->getUniqueId());
+            	// $session->set('package_quantity', $cartItem->quantity);
                 return $this->redirect($payment->getApprovalLink());
             }  
         } catch (\PayPal\Exception\PayPalConnectionException $ex) {
@@ -228,32 +230,24 @@ class PricingController extends Controller
     public function actionSuccess()
     {
         $request = Yii::$app->request;
-        $session = Yii::$app->session;
+        $cart = Yii::$app->cart->setMode('pricing');
+        $cartItem = $cart->getItem();
         $user = Yii::$app->user->getIdentity();
-
         $paymentId = $request->get('paymentId');
         $payerId = $request->get('PayerID');
         $token = $request->get('token');
 
-        $currentPaymentMethod = $session->get('payment_method');
-        $currentPaymentId = $session->get('payment_id');
-        $packageId = $session->get('package_id');
-        $quantity = $session->get('package_quantity');
-
-        $pricing = PricingCoin::findOne($packageId);
-        if (!$pricing) throw new BadRequestHttpException("Some error occured with the package you have chosen.", 1);
         if (!$paymentId || !$payerId || !$token) throw new BadRequestHttpException("The request is invalid", 1);
-        if ($paymentId != $currentPaymentId) throw new BadRequestHttpException("The transaction # $paymentId is invalid", 1);
 
-        $settings = Yii::$app->settings;
-        $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
-        if ($paypalMode == 'live') {
-            $clientId = $settings->get('PaypalSettingForm', 'client_id');
-            $clientSecret = $settings->get('PaypalSettingForm', 'client_secret');
-        } else {
-            $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
-            $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
-        }
+        // $settings = Yii::$app->settings;
+        // $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
+        // if ($paypalMode == 'live') {
+        //     $clientId = $settings->get('PaypalSettingForm', 'client_id');
+        //     $clientSecret = $settings->get('PaypalSettingForm', 'client_secret');
+        // } else {
+        //     $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
+        //     $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
+        // }
         $clientId = 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF';
         $clientSecret = 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx';
         $apiContext = new \PayPal\Rest\ApiContext(
@@ -261,21 +255,19 @@ class PricingController extends Controller
         );
         $payment = Payment::get($paymentId, $apiContext);
         if ('created' != strtolower($payment->state)) throw new BadRequestHttpException("Transaction #$paymentId : status is invalid", 1);
-
         $execution = new PaymentExecution();
         $execution->setPayerId($payerId);
         $transactions = $payment->getTransactions();
         $transaction = reset($transactions);
         $execution->addTransaction($transaction);
-
         try {
             $payment->execute($execution, $apiContext);
             if ('approved' == strtolower($payment->state)) {// order was created
             	// Create transaction
             	$trn = new Transaction();
                 $trn->user_id = $user->id;
-                $trn->payment_method = $currentPaymentMethod;
-                $trn->payment_id = $currentPaymentId;
+                $trn->payment_method = 'paypal';
+                $trn->payment_id = $paymentId;
                 $trn->payment_data = $token;
                 $trn->amount = $transaction->getAmount()->getTotal();
                 $trn->description = "Paypal #$paymentId";
@@ -286,7 +278,7 @@ class PricingController extends Controller
                 $trn->save();
 
                 $wallet = new UserWallet();
-                $wallet->coin = $pricing->num_of_coin * $quantity;
+                $wallet->coin = $cartItem->getPricing()->num_of_coin * $cartItem->quantity;
                 $wallet->type = UserWallet::TYPE_INPUT;
                 $wallet->description = "Transaction #$trn->auth_key";
                 $wallet->created_by = $user->id;
@@ -296,17 +288,17 @@ class PricingController extends Controller
                 $wallet->save();
             }
         } catch (Exception $ex) {
-        	$session->remove('payment_method');
-	        $session->remove('payment_id');
-            $session->remove('package_id');
-	        $session->remove('package_quantity');
+        	// $session->remove('payment_method');
+	        // $session->remove('payment_id');
+         //    $session->remove('package_id');
+	        // $session->remove('package_quantity');
             exit(1);
         }
 
-        $session->remove('payment_method');
-        $session->remove('payment_id');
-        $session->remove('package_id');
-        $session->remove('package_quantity');
+        // $session->remove('payment_method');
+        // $session->remove('payment_id');
+        // $session->remove('package_id');
+        // $session->remove('package_quantity');
         $this->layout = 'notice';
         return $this->render('/site/notice', [
             'title' => 'You have just bought a pricing successfully.',

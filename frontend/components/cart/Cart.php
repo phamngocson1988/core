@@ -16,33 +16,72 @@ class Cart extends \yii2mod\cart\Cart
 	const ITEM_PRICING = '\frontend\components\cart\CartPricingItem';
 	const ITEM_DISCOUNT = '\frontend\components\cart\CartDiscount';
 
-	public function getItemType($type)
+	private $mode;
+
+	public function setMode($type)
 	{
 		switch ($type) {
-			case 'discount':
-				return self::ITEM_DISCOUNT;
 			case 'pricing': 
-				return self::ITEM_PRICING;
+				$this->mode = self::ITEM_PRICING;
+				break;
 			case 'product':
-				return self::ITEM_PRODUCT;
+				$this->mode = self::ITEM_PRODUCT;
+				break;
 			default:
-				return self::ITEM_PRODUCT;
+				die('Not support');
+				break;
 		}
+		return $this;
 	}
 
-	public function getItem($type = null) 
+	public function isModeProduct()
 	{
-		$items = $this->getItems($type);
+		return $this->mode == self::ITEM_PRODUCT;
+	}
+
+	public function isModePricing()
+	{
+		return $this->mode == self::ITEM_PRICING;
+	}
+
+	// public function getItemType($type)
+	// {
+	// 	switch ($type) {
+	// 		case 'discount':
+	// 			return self::ITEM_DISCOUNT;
+	// 		case 'pricing': 
+	// 			return self::ITEM_PRICING;
+	// 		case 'product':
+	// 			return self::ITEM_PRODUCT;
+	// 		default:
+	// 			return self::ITEM_PRODUCT;
+	// 	}
+	// }
+
+	public function getItem() 
+	{
+		if (!$this->mode) die('You have not set mode for cart');
+		$items = $this->getItems($this->mode);
 		$item = reset($items);
 		return $item;
 	}
 
+	// public function getItems($mode = null): array
+	// {
+	// 	// if ($mode) $this->setMode($mode);
+	// 	if (!$this->mode && !$mode) die('You have not set mode for cart');
+	// 	$mode = ($mode) ? $mode : $this->mode;
+	// 	return parent::getItems($mode);
+	// }
+
+	
 	/**
 	 * The total of products only
 	 */
 	public function getSubTotalPrice()
 	{
-		$items = $this->getItems(self::ITEM_PRODUCT);
+		if (!$this->mode) die('You have not set mode for cart');
+		$items = $this->getItems($this->mode);
 		$sum = 0;
 		foreach ($items as $item) {
 			$sum += $item->getTotalPrice();
@@ -52,7 +91,8 @@ class Cart extends \yii2mod\cart\Cart
 
 	public function getTotalPrice()
 	{
-		$subTotal = $this->getSubTotalPrice();
+		if (!$this->mode) die('You have not set mode for cart');
+		$subTotal = $this->getSubTotalPrice($this->mode);
 		$fee = $this->getTotalFee();
 		$discount = $this->getTotalDiscount();
 		$sum = $subTotal + $fee - $discount;
@@ -66,11 +106,26 @@ class Cart extends \yii2mod\cart\Cart
 
 	public function getTotalDiscount()
 	{
-		$items = $this->getItems(self::ITEM_DISCOUNT);
+		$items = $this->getDiscounts();
 		$sum = 0;
 		foreach ($items as $item) {
+			$item->setCart($this);
 			$sum += $item->getPrice();
 		}
 		return $sum;
 	}
+
+	public function getDiscount() 
+	{
+		$items = $this->getDiscounts();
+		$item = reset($items);
+		return $item;
+	}
+
+	public function getDiscounts()
+	{
+		$items = $this->getItems(self::ITEM_DISCOUNT);
+		return $items;
+	}
+
 }

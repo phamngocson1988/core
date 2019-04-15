@@ -76,7 +76,7 @@ use yii\bootstrap\ActiveForm;
                 <?php else :?>
                 <?= $form->field($discount, 'code', [
                   'options' => ['class' => 'form-wrap'],
-                  'inputOptions' => ['class' => 'form-input', 'disabled' => true, 'id' => 'voucher'],
+                  'inputOptions' => ['class' => 'form-input', 'readonly' => true, 'id' => 'voucher'],
                   'labelOptions' => ['class' => 'form-label'],
                   'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                   'template' => '{input}{error}{label}'
@@ -87,10 +87,10 @@ use yii\bootstrap\ActiveForm;
             </div>
           </div>
           <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
-            <div class="heading-5 text-regular">Sub total: <span><?=number_format(Yii::$app->cart->getSubTotalPrice());?></span></div>
+            <div class="heading-5 text-regular">Sub total: <span><?=number_format($cart->getSubTotalPrice());?></span></div>
           </div>
           <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
-            <div class="heading-5 text-regular">Total: <span><?=number_format(Yii::$app->cart->getTotalPrice());?></span></div>
+            <div class="heading-5 text-regular">Total: <span><?=number_format($cart->getTotalPrice());?></span></div>
           </div>
         </div>
       </div>

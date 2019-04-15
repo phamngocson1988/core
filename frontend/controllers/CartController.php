@@ -64,13 +64,14 @@ class CartController extends Controller
     public function actionIndex()
     {
         $request = Yii::$app->request;
-        $cart = Yii::$app->cart;
-        $item = $cart->getItem($cart->getItemType('product'));
+        $cart = Yii::$app->cart->setMode('product');
+        // $item = $cart->getItem($cart->getItemType('product'));
+        $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
 
         $item->setScenario(CartItem::SCENARIO_EDIT);
-        $discount = $cart->getItem($cart->getItemType('discount'));
-
+        // $discount = $cart->getItem($cart->getItemType('discount'));
+        $discount = $cart->getDiscount();
         if ($request->isPost) {
             if ($item->load($request->post()) && $item->validate()) {
                 $cart->add($item);
@@ -78,6 +79,7 @@ class CartController extends Controller
             
             if ($discount) $cart->remove($discount->getUniqueId());
             $discount = new CartDiscount();
+            $discount->setCart($cart);
             if ($discount->load($request->post()) && $discount->validate()) {
                 $cart->add($discount);
             }
@@ -85,6 +87,7 @@ class CartController extends Controller
         if (!$discount) $discount = new CartDiscount();
 
         return $this->render('index', [
+            'cart' => $cart,
             'discount' => $discount,
             'item' => $item,
         ]);
@@ -97,7 +100,7 @@ class CartController extends Controller
     	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
 
-        $cart = Yii::$app->cart;
+        $cart = Yii::$app->cart->setMode('product');
         $cart->clear();
         $item = new CartItem(['scenario' => CartItem::SCENARIO_ADD]);
         if ($item->load($request->post()) && $item->validate()) {
@@ -116,9 +119,10 @@ class CartController extends Controller
     	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
 
-        $cart = Yii::$app->cart;
-        $items = $cart->getItems($cart->getItemType('product'));
-        $item = reset($items);
+        $cart = Yii::$app->cart->setMode('product');
+        // $items = $cart->getItems($cart->getItemType('product'));
+        // $item = reset($items);
+        $item = $cart->getItem();
         $item->setScenario(CartItem::SCENARIO_INFO);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
@@ -132,7 +136,7 @@ class CartController extends Controller
     {
         $model = new CartItem();
         $user = Yii::$app->user->getIdentity();
-        $cart = Yii::$app->cart;
+        $cart = Yii::$app->cart->setMode('product');
         $canPlaceOrder = $user->getWalletAmount() > $cart->getTotalPrice();
         return $this->render('checkout', ['model' => $model, 'can_place_order' => $canPlaceOrder]);
     }
@@ -141,10 +145,12 @@ class CartController extends Controller
     {
         // Create order
         $user = Yii::$app->user->getIdentity();
-        $cart = Yii::$app->cart;
+        $cart = Yii::$app->cart->setMode('product');
         $totalPrice = $cart->getTotalPrice();
         $subTotalPrice = $cart->getSubTotalPrice();
         $discount = $cart->getTotalDiscount();
+        $cartItem = $cart->getItem();
+        $discountItem = $cart->getDiscount();
 
         $order = new Order();
         $order->sub_total_price = $subTotalPrice;
@@ -158,39 +164,35 @@ class CartController extends Controller
         $order->generateAuthKey();
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        foreach ($cart->getItems($cart->getItemType('product')) as $cartItem) {
-            $item = new OrderItems();
-            $item->item_title = $cartItem->getLabel();
-            $item->type = OrderItems::TYPE_PRODUCT;
-            $item->order_id = $order->id;
-            $item->game_id = $cartItem->getGame()->id;
-            $item->product_id = $cartItem->getUniqueId();
-            $item->price = $cartItem->getPrice();
-            $item->quantity = $cartItem->quantity;
-            $item->total = $cartItem->getTotalPrice();
-            $item->unit_name = $cartItem->getUnitName();
-            $item->unit = $cartItem->getUnitGame();
-            $item->total_unit = $cartItem->getTotalUnitGame();
-            $item->username = $cartItem->username;
-            $item->password = $cartItem->password;
-            $item->platform = $cartItem->platform;
-            $item->login_method = $cartItem->login_method;
-            $item->character_name = $cartItem->character_name;
-            $item->recover_code = $cartItem->recover_code;
-            $item->server = $cartItem->server;
-            $item->note = $cartItem->note;
-            $item->save();
-        }
+        $item = new OrderItems();
+        $item->item_title = $cartItem->getLabel();
+        $item->type = OrderItems::TYPE_PRODUCT;
+        $item->order_id = $order->id;
+        $item->game_id = $cartItem->getGame()->id;
+        $item->product_id = $cartItem->getUniqueId();
+        $item->price = $cartItem->getPrice();
+        $item->quantity = $cartItem->quantity;
+        $item->total = $cartItem->getTotalPrice();
+        $item->unit_name = $cartItem->getUnitName();
+        $item->unit = $cartItem->getUnitGame();
+        $item->total_unit = $cartItem->getTotalUnitGame();
+        $item->username = $cartItem->username;
+        $item->password = $cartItem->password;
+        $item->platform = $cartItem->platform;
+        $item->login_method = $cartItem->login_method;
+        $item->character_name = $cartItem->character_name;
+        $item->recover_code = $cartItem->recover_code;
+        $item->server = $cartItem->server;
+        $item->note = $cartItem->note;
+        $item->save();
 
-        foreach ($cart->getItems($cart->getItemType('discount')) as $cartItem) {
-            $item = new OrderFee();
-            $item->order_id = $order->id;
-            $item->type = OrderFee::TYPE_DISCOUNT;
-            $item->description = $cartItem->code;
-            $item->reference = $cartItem->getPromotion()->id;
-            $item->amount = $cartItem->getPrice();
-            $item->save();
-        }
+        $itemFee = new OrderFee();
+        $itemFee->order_id = $order->id;
+        $itemFee->type = OrderFee::TYPE_DISCOUNT;
+        $itemFee->description = $discountItem->code;
+        $itemFee->reference = $discountItem->getPromotion()->id;
+        $itemFee->amount = $discountItem->getPrice();
+        $itemFee->save();
 
         $wallet = new UserWallet();
         $wallet->coin = $totalPrice;

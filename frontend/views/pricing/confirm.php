@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+$cart = Yii::$app->cart->setMode('pricing');
 ?>
 
 <?php Pjax::begin(); ?>
@@ -22,13 +23,19 @@ use yii\bootstrap\ActiveForm;
               <tr>
                 <th style="width: 30%;">Pricing Package</th>
                 <th style="width: 10%;">Price</th>
+                <th style="width: 10%;">Total Price</th>
+                <th style="width: 10%;">Coins</th>
+                <th style="width: 10%;">Total Coins</th>
                 <th style="width: 20%;">Quantity</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><?=$item->getPricing()->title;?></td>
-                <td id="price"><?=number_format($item->getTotalPrice());?></td>
+                <td>$<?=number_format($item->getPrice());?></td>
+                <td>$<?=number_format($item->getTotalPrice());?></td>
+                <td><?=number_format($item->getPricing()->num_of_coin);?></td>
+                <td><?=number_format($item->getPricing()->num_of_coin * $item->quantity);?></td>
                 <td>
                   <?= $form->field($item, 'quantity', [
                     'options' => ['class' => 'form-wrap box-width-1 shop-input'],
@@ -61,7 +68,7 @@ use yii\bootstrap\ActiveForm;
                 <?php else :?>
                 <?= $form->field($discount, 'code', [
                   'options' => ['class' => 'form-wrap'],
-                  'inputOptions' => ['class' => 'form-input', 'disabled' => true, 'id' => 'voucher'],
+                  'inputOptions' => ['class' => 'form-input', 'readonly' => true, 'id' => 'voucher'],
                   'labelOptions' => ['class' => 'form-label'],
                   'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                   'template' => '{input}{error}{label}'
@@ -71,11 +78,13 @@ use yii\bootstrap\ActiveForm;
               </div>
             </div>
           </div>
-          <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
-            <div class="heading-5 text-regular">Sub total: <span><?=number_format(Yii::$app->cart->getSubTotalPrice());?></span></div>
-          </div>
-          <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
-            <div class="heading-5 text-regular">Total: <span><?=number_format(Yii::$app->cart->getTotalPrice());?></span></div>
+          <div class="cells-sm-5 col-xl-6 col-xxl-5 text-md-right">
+            <ul class="inline-list">
+              <li class="text-middle">
+                <div class="heading-5 text-regular">$<?=number_format($cart->getTotalPrice());?></div>
+              </li>
+              <li class="text-middle"><a class="button button-secondary button-nina" href="<?=Url::to(['pricing/checkout']);?>">checkout</a></li>
+            </ul>
           </div>
         </div>
       </div>

@@ -12,6 +12,9 @@ class CartDiscount extends Model implements CartItemInterface
     public $code;
     /** @var Promotion */
     protected $_promotion;
+    /** @car Cart */
+    protected $_cart;
+
     public function rules()
     {
         return [
@@ -58,9 +61,16 @@ class CartDiscount extends Model implements CartItemInterface
     public function getPromotion()
     {
         if (!$this->_promotion) {
-            $this->_promotion = Promotion::findOne(['code' => $this->code, 'object_type' => Promotion::OBJECT_COIN]);
+            $type = $this->_cart->isModeProduct() ? Promotion::OBJECT_COIN : Promotion::OBJECT_MONEY;
+            $this->_promotion = Promotion::findOne(['code' => $this->code, 'object_type' => $type]);
         }
         return $this->_promotion;
+    }
+
+    public function setCart($cart)
+    {
+        $this->_cart = $cart;
+        return $this;
     }
 
     // ============== implement interface ===========//
@@ -68,7 +78,7 @@ class CartDiscount extends Model implements CartItemInterface
     {
         $promotion = $this->getPromotion();
         if (!$promotion) return 0;
-        return $promotion->calculateDiscount(Yii::$app->cart->getSubTotalPrice());
+        return $promotion->calculateDiscount($this->_cart->getSubTotalPrice());
     }
 
     public function getLabel()
