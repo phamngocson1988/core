@@ -19,7 +19,7 @@ class AssignManageOrder extends Model
     {
         return [
             [['user_id', 'order_id'], 'required'],
-            ['user_id', 'validateUser']
+            ['user_id', 'validateUser'],
             ['order_id', 'validateOrder']
         ];
     }
@@ -29,6 +29,8 @@ class AssignManageOrder extends Model
         $order = $this->getOrder();
         if (!$order) {
             $this->addError($attribute, 'Đơn hàng không tồn tại');
+        } elseif ($order->isVerifyingOrder()) {
+            $this->addError($attribute, 'Đơn hàng chưa sẵn sàng');
         }
     }
 
@@ -37,8 +39,8 @@ class AssignManageOrder extends Model
         $user = $this->getUser();
         if (!$user) {
             $this->addError($attribute, 'Nhân viên không tồn tại');
-        } elseif (!$user->can('saler') || !$user->can('handler')) {
-            $this->addError($attribute, 'Nhân viên không có đủ quyền hạn để quản lý đơn hàng');
+        // } elseif (!in_array('handler', $this->getUserRoles())) {
+        //     $this->addError($attribute, 'Nhân viên không có đủ quyền hạn để quản lý đơn hàng');
         }
     }
 
@@ -46,11 +48,7 @@ class AssignManageOrder extends Model
     {
         if (!$this->validate()) return false;
         $order = $this->getOrder();
-        if ($order->isVerifyingOrder()) {
-            $order->saler_id = $this->user_id;
-        } else {
-            $order->handler_id = $this->user_id
-        }
+        $order->handler_id = $this->user_id;
         return $order->save();
     }
 
@@ -68,5 +66,10 @@ class AssignManageOrder extends Model
             $this->_user = User::findOne($this->user_id);
         }
         return $this->_user;
+    }
+
+    public function getUserRoles()
+    {
+        return Yii::$app->authManager->getRolesByUser($this->user_id);
     }
 }

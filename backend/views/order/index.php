@@ -2,16 +2,27 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use dosamigos\datepicker\DateRangePicker;
 use common\models\Order;
+use common\models\User;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
+$adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
+$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
+$orderTeamIds = array_unique($orderTeamIds);
+$orderTeamObjects = User::findAll($orderTeamIds);
+$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
+
 ?>
 
 <style>
@@ -205,62 +216,39 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                   <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
                   <?php if (Yii::$app->user->can('admin')) :?>
-                  <a href='javascript:;' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý"><i class="fa fa-exchange"></i></a>
-                  <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
+                  <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                  
+
+
+                  <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h4 class="modal-title">Chọn một câu trả lời để phản hồi đến khách hàng</h4>
+                          <h4 class="modal-title">Gửi đơn hàng cho nhân viên xử lý</h4>
                         </div>
-                        <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col" width="5%">#</th>
-                                <th scope="col" width="90%">Nội dung</th>
-                                <th scope="col" width="5%">Chọn</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <?= Html::beginForm(['order/assign'], 'POST', ['class' => 'assign-form']); ?>
-                                    <?= Html::hiddenInput('order_id', $model->id); ?>
-                                    <?= kartik\select2\Select2::widget([
-                                      'name' => 'user_id',
-                                      'value' => '',
-                                      'data' => ['1' => 'adsfasdf'],
-                                      'options' => ['placeholder' => 'Select user ...']
-                                    ]); ?>
-                                    <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
-                                  <?= Html::endForm(); ?>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                        <?= Html::beginForm(['order/assign', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
+                        <div class="modal-body"> 
+                          <div class="row">
+                            <div class="col-md-12">
+                              <?= kartik\select2\Select2::widget([
+                                'name' => 'user_id',
+                                'data' => $orderTeam,
+                                'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
+                              ]); ?>
+                            </div>
+                          </div>
                         </div>
                         <div class="modal-footer">
+                          <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Gửi</button>
                           <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
                         </div>
+                        <?= Html::endForm(); ?>
                       </div>
                       <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
                   </div>
-
-
-
-                  <?= Html::beginForm(['order/assign'], 'POST', ['class' => 'assign-form']); ?>
-                  <?= Html::hiddenInput('order_id', $model->id); ?>
-                  <?= kartik\select2\Select2::widget([
-                      'name' => 'user_id',
-                      'value' => '',
-                      'data' => ['1' => 'adsfasdf'],
-                      'options' => ['placeholder' => 'Select user ...']
-                  ]); ?>
-                  <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
-                  <?= Html::endForm() ?>
                   <?php endif;?>
                 </td>
               </tr>

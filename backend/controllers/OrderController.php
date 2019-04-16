@@ -343,9 +343,9 @@ class OrderController extends Controller
     public function actionAssign($id)
     {
         $request = Yii::$app->request;
-        $userId = $request->post('assignee_id');
+        $userId = $request->post('user_id');
         $assignForm = new AssignManageOrder([
-            'user_id' => $user_id,
+            'user_id' => $userId,
             'order_id' => $id
         ]);
         if ($assignForm->save()) {
