@@ -204,6 +204,64 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                   <?php if (Yii::$app->user->can('delete_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
+                  <?php if (Yii::$app->user->can('admin')) :?>
+                  <a href='javascript:;' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý"><i class="fa fa-exchange"></i></a>
+                  <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                          <h4 class="modal-title">Chọn một câu trả lời để phản hồi đến khách hàng</h4>
+                        </div>
+                        <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col" width="5%">#</th>
+                                <th scope="col" width="90%">Nội dung</th>
+                                <th scope="col" width="5%">Chọn</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <?= Html::beginForm(['order/assign'], 'POST', ['class' => 'assign-form']); ?>
+                                    <?= Html::hiddenInput('order_id', $model->id); ?>
+                                    <?= kartik\select2\Select2::widget([
+                                      'name' => 'user_id',
+                                      'value' => '',
+                                      'data' => ['1' => 'adsfasdf'],
+                                      'options' => ['placeholder' => 'Select user ...']
+                                    ]); ?>
+                                    <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
+                                  <?= Html::endForm(); ?>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                      <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
+
+
+
+                  <?= Html::beginForm(['order/assign'], 'POST', ['class' => 'assign-form']); ?>
+                  <?= Html::hiddenInput('order_id', $model->id); ?>
+                  <?= kartik\select2\Select2::widget([
+                      'name' => 'user_id',
+                      'value' => '',
+                      'data' => ['1' => 'adsfasdf'],
+                      'options' => ['placeholder' => 'Select user ...']
+                  ]); ?>
+                  <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
+                  <?= Html::endForm() ?>
+                  <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -282,6 +340,11 @@ $('#reportrange').daterangepicker({
   }
 );
 $('#reportrange span').html(moment($('#start_date').val()).format(dateFormat) + ' - ' + moment($('#end_date').val()).format(dateFormat));
+
+var sendForm = new AjaxFormSubmit({element: '.assign-form'});
+sendForm.success = function (data, form) {
+  location.reload();
+}
 JS;
 $this->registerJs($script);
 ?>

@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use common\models\User;
+use yii\captcha\Captcha;
 
 $this->title = 'Đăng ký';
 $this->params['breadcrumbs'][] = $this->title;
@@ -88,6 +89,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
             'template' => '{input}{hint}{error}'
           ])->dropDownList(User::getResellerStatus()) ?>
+
+          <?= $form->field($model, 'verifyCode', [
+            'options' => ['class' => 'form-wrap form-wrap-validation'],
+            'inputOptions' => ['class' => 'form-input'],
+            'labelOptions' => ['class' => 'form-label'],
+            'template' => '{input}{label}{hint}'
+          ])->widget(Captcha::className(), [
+            'template' => '<div class="row"><div class="col-md-7">{input}</div><div class="col-md-5">{image}</div></div>',
+            'imageOptions' => ['class' => 'img-responsive', 'width' => '100%', 'height' => '100%']
+          ])->label('Captcha') ?>
+
 
           <div class="form-button">
             <?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Signup']) ?>

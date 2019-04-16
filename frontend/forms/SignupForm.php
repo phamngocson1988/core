@@ -22,6 +22,8 @@ class SignupForm extends Model
     public $favorite;
     public $is_reseller;
     public $invite_code;
+    public $verifyCode;
+    
 
     /**
      * @param boolean $is_active
@@ -56,6 +58,9 @@ class SignupForm extends Model
             [['favorite', 'country_code', 'birthday', 'invite_code'], 'trim'],
             ['is_reseller', 'default', 'value' => User::IS_NOT_RESELLER],
             ['is_reseller', 'in', 'range' => array_keys(User::getResellerStatus())],
+
+            ['verifyCode', 'required'],
+            ['verifyCode', 'captcha'],
         ];
     }
 
