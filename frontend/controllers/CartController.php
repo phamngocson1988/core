@@ -161,6 +161,7 @@ class CartController extends Controller
         $order->customer_email = $user->email;
         $order->customer_phone = $user->phone;
         $order->status = Order::STATUS_PENDING;
+        $order->saler_id = $user->invited_by;
         $order->generateAuthKey();
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 

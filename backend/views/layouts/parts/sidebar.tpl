@@ -220,6 +220,11 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='/order/my-customer-report'}" class="nav-link " code='order.report'>
+            <span class="title">Báo cáo của tôi</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.pending'>
             <span class="title">Đơn hàng mới</span>
             </a>

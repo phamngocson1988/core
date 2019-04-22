@@ -21,7 +21,7 @@ class CaptchaAction extends \yii\captcha\CaptchaAction
         $letters = '0123456789';
         $code = '';
         for ($i = 0; $i < $length; ++$i) {
-            $code .= $letters[mt_rand(0, 10)];
+            $code .= $letters[mt_rand(0, 9)];
         }
 
         return $code;

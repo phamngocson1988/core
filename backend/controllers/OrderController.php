@@ -22,6 +22,7 @@ use backend\forms\AssignManageOrder;
 use backend\forms\TakenOrderForm;
 use backend\forms\SendComplainForm;
 use common\models\OrderComplainTemplate;
+use backend\forms\MyCustomerReportForm;
 
 class OrderController extends Controller
 {
@@ -36,7 +37,7 @@ class OrderController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['view'],
+                        'actions' => ['view', 'my-customer-report', 'my-customer-orders'],
                         'roles' => ['@'],
                     ],
                     [
@@ -132,6 +133,50 @@ class OrderController extends Controller
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
+    }
+
+    public function actionMyCustomerReport()
+    {
+        $this->view->params['main_menu_active'] = 'order.report';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date', date('Y-m-01')),
+            'end_date' => $request->get('end_date', date('Y-m-t')),
+            'user_id' => Yii::$app->user->id,
+        ];
+        $form = new MyCustomerReportForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('my-customer-report', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionMyCustomerOrders()
+    {
+        $request = Yii::$app->request;
+        if ($request->isAjax) {
+            $data = [
+                'customer_id' => $request->get('customer_id'),
+                'start_date' => $request->get('start_date'),
+                'end_date' => $request->get('end_date'),
+                'status' => $request->get('status'),
+            ];
+            $form = new FetchOrderForm($data);
+            $command = $form->getCommand();
+            $models = $command->all();
+            return $this->renderPartial('my-customer-orders', [
+                'models' => $models,
+            ]);
+        }
     }
 
     public function actionNewPendingOrder()
