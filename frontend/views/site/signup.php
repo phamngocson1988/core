@@ -54,11 +54,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
           <?= $form->field($model, 'birthday', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input date-picker'],
+            'inputOptions' => ['class' => 'form-input', 'readonly' => true],
             'labelOptions' => ['class' => 'form-label'],
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
             'template' => '{input}{label}{hint}{error}'
-          ])->textInput() ?>
+          ])->widget(\yii\jui\DatePicker::className(),['clientOptions' => ['changeMonth' => true, 'changeYear' => true], "dateFormat" => "yyyy-MM-dd"]) ?>
 
           <?= $form->field($model, 'password', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],

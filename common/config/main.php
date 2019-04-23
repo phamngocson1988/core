@@ -32,7 +32,7 @@ return [
             'class' => 'yii2mod\settings\components\Settings',
             'cache' => [
                 'class' => 'yii\caching\FileCache',
-                // 'cachePath' => '@backend/runtime/cache'
+                'cachePath' => '@common/runtime/cache'
             ]
         ],
         'i18n' => [

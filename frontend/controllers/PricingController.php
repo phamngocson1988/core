@@ -144,15 +144,10 @@ class PricingController extends Controller
             $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
             $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
         }
-        $clientId = 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF';
-        $clientSecret = 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx';
+        // $clientId = 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF';
+        // $clientSecret = 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx';
         $apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                // 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF',     // ClientID
-                // 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx'      // ClientSecret
-                $clientId,
-                $clientSecret
-            )
+            new \PayPal\Auth\OAuthTokenCredential($clientId, $clientSecret)
         );
 
         $cart = Yii::$app->cart->setMode('pricing');
@@ -239,17 +234,17 @@ class PricingController extends Controller
 
         if (!$paymentId || !$payerId || !$token) throw new BadRequestHttpException("The request is invalid", 1);
 
-        // $settings = Yii::$app->settings;
-        // $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
-        // if ($paypalMode == 'live') {
-        //     $clientId = $settings->get('PaypalSettingForm', 'client_id');
-        //     $clientSecret = $settings->get('PaypalSettingForm', 'client_secret');
-        // } else {
-        //     $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
-        //     $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
-        // }
-        $clientId = 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF';
-        $clientSecret = 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx';
+        $settings = Yii::$app->settings;
+        $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
+        if ($paypalMode == 'live') {
+            $clientId = $settings->get('PaypalSettingForm', 'client_id');
+            $clientSecret = $settings->get('PaypalSettingForm', 'client_secret');
+        } else {
+            $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
+            $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
+        }
+        // $clientId = 'AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF';
+        // $clientSecret = 'EBmAgMX7piQWJu1gkuCbmIRW3MJ1pv-cdYbsxmKj6-esCGhGwCoQ4e-eoQu0d7MCHJxrMKSlY81RFvjx';
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential($clientId, $clientSecret)
         );

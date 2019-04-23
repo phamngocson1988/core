@@ -62,11 +62,11 @@ use common\models\User;
             <div class="col-md-6">
               <?= $form->field($model, 'birthday', [
                 'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input date-picker'],
+                'inputOptions' => ['class' => 'form-input', 'autocomplete' => false, 'readonly' => true],
                 'labelOptions' => ['class' => 'form-label-outside'],
                 'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                 'template' => '{label}{input}{hint}{error}'
-              ])->textInput() ?>
+              ])->widget(\yii\jui\DatePicker::className(),['clientOptions' => ['changeMonth' => true, 'changeYear' => true], "dateFormat" => "yyyy-MM-dd"]) ?>
             </div>
             <div class="col-md-6">
               <?= $form->field($model, 'favorite', [

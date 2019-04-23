@@ -68,6 +68,10 @@ return [
                 'deleteIfEmpty' => true
             ]
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@frontend/mail',
+        ],
     ],
     'modules' => [
         'notifications' => [

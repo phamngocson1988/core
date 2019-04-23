@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 use frontend\forms\LoginForm;
 use frontend\forms\PasswordResetRequestForm;
@@ -191,34 +192,27 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 // Send mail notify admin if this user register to become reseller
-                // if ($model->is_reseller == User::IS_RESELLER) {
-                //     $mail = new SendmailForm([
-                //         'subject' => '[Kinggems Notification] An user has just registered as reseller',
-                //         'body' => sprintf('User %s has just registered as reseller', $model->email),
-                //         'params' => ['user' => $user],
-                //         'template' => 'notify_reseller_register'
-                //     ]);
-                //     $mail->send('customerservice.kinggems@gmail.com');
-                // }
+                if ($model->is_reseller == User::IS_RESELLER) {
+                    $settings = Yii::$app->settings;
+                    $adminEmail =  $settings->get('ApplicationSettingForm', 'admin_email', null);
+                    if ($adminEmail) {
+                        $notifyMail = new SendmailForm();
+                        $notifyMail->subject = '[Notification] New reseller have just registered';
+                        $notifyMail->body = 'New reseller have just registered: #' . $user->id;
+                        $notifyMail->template = 'notify_reseller_mail';
+                        $notifyMail->params = ['user' => $user];
+                        $notifyMail->send($adminEmail);
+                    }
+                }
                 // If need to confirm, send mail to customer
                 if ($model->isNeedConfirm()) {
-                    // $settings = Yii::$app->settings;
-                    // $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-                    // $email = Yii::$app->mailer->compose()
-                    //     ->setTo($user->email)
-                    //     ->setFrom([$adminEmail => Yii::$app->name])
-                    //     ->setSubject('Signup Confirmation')
-                    //     ->setTextBody("Click this link " . \yii\helpers\Html::a('confirm', Yii::$app->urlManager->createAbsoluteUrl(['site/activate', 'id' => $user->id, 'key' => $user->auth_key])))
-                    //     ->send();
-                    $email = new SendmailForm();
-                    $email->subject = 'Signup Confirmation';
-                    $email->body = 'Click this link';
-                    $email->send($user->email);
-                    // if ($email) {
-                    //     Yii::$app->getSession()->setFlash('success','Check Your email!');
-                    // } else {
-                    //     Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
-                    // }
+                    $activeLink = Yii::$app->urlManager->createAbsoluteUrl(['site/activate', 'id' => $user->id, 'key' => $user->auth_key]);
+                    $signupMail = new SendmailForm();
+                    $signupMail->subject = 'Signup Confirmation';
+                    $signupMail->body = 'Click this link ' . Html::a('confirm', $activeLink);
+                    $signupMail->template = 'signup_mail';
+                    $signupMail->params = ['user' => $user, 'link' => $activeLink];
+                    $signupMail->send($user->email);
                 } else { // If no need to confirm, log user in
                     Yii::$app->getUser()->login($user);
                 }                
