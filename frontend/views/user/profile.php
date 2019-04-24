@@ -71,7 +71,7 @@ use common\models\User;
             <div class="col-md-6">
               <?= $form->field($model, 'favorite', [
                 'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Choose favorite game'],
+                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Choose favorite game', 'multiple' => true],
                 'labelOptions' => ['class' => 'form-label-outside'],
                 'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                 'template' => '{label}{input}{hint}{error}'
