@@ -36,6 +36,20 @@
           </li>
         </ul>
       </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-settings"></i>
+        <span class="title">Quản lý bộ số</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/dialer/index'}" class="nav-link " code='dialer.index'>
+            <span class="title">Bộ số</span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>

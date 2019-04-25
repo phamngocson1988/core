@@ -54,6 +54,27 @@ class m130524_201442_init extends Migration
             'api' => $this->string(200)
         ], $tableOptions);
 
+        $this->createTable('{{%dialer}}', [
+            'id' => $this->primaryKey(),
+            'number' => $this->string(20)->notNull(),
+            'extend' => $this->string(10)->notNull(),
+            'domain' => $this->string(100)->notNull(),
+            'action' => $this->string('10')->notNull(),
+        ], $tableOptions);
+
+        $this->createTable('{{%profile_dialer}}', [
+            'id' => $this->primaryKey(),
+            'profile_id' => $this->integer()->notNull(),
+            'dialer_id' => $this->integer()->notNull(),
+            'call' => $this->integer()->defaultValue(null),
+            'viettel' => $this->integer()->defaultValue(null),
+            'mobifone' => $this->integer()->defaultValue(null),
+            'vinaphone' => $this->integer()->defaultValue(null),
+            'vinamobile' => $this->integer()->defaultValue(null),
+            'gmobile' => $this->integer()->defaultValue(null),
+            'other' => $this->integer()->defaultValue(null),
+        ], $tableOptions);
+
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
             'username' => 'admin',
