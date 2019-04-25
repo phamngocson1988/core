@@ -12,6 +12,9 @@ use backend\forms\CreateCustomerForm;
 use backend\forms\EditCustomerForm;
 use backend\forms\CreateCustomerProfileForm;
 use backend\forms\EditCustomerProfileForm;
+use backend\forms\TopupForm;
+use backend\forms\FetchTransactionHistoryForm;
+
 /**
  * CustomerController
  */
@@ -25,7 +28,7 @@ class CustomerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['change-status', 'create', 'edit', 'create-profile', 'edit-profile'],
+                        'actions' => ['change-status', 'create', 'edit', 'create-profile', 'edit-profile', 'topup', 'history'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -127,6 +130,39 @@ class CustomerController extends Controller
         return $this->render('edit-profile.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
+    public function actionTopup($id)
+    {
+        $request = Yii::$app->request;
+        $model = new TopupForm(['customer_id' => $id]);
+        if ($model->load($request->post()) && $model->topup()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            return $this->redirect(['customer/index']);
+        }
+        return $this->render('topup.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
+    public function actionHistory($id)
+    {
+        $this->view->params['main_menu_active'] = 'customer.index';
+        $request = Yii::$app->request;
+        $get = $request->get();
+        $search = new FetchTransactionHistoryForm();
+        $search->load($get, '');
+        $command = $search->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('history', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $search,
+            'customer_id' => $id
         ]);
     }
 

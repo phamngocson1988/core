@@ -62,7 +62,7 @@
                   {$form->field($model, 'action', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->dropDownList(['sms' => 'SMS', 'call' => 'Call'])}
                   {$form->field($model, 'price', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

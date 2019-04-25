@@ -39,6 +39,7 @@ class m130524_201442_init extends Migration
             'address' => $this->string(200),
             'company' => $this->string(200)->notNull(),
             'tax_code' => $this->string(20)->notNull(),
+            'balance' => $this->integer()->notNull()->defaultValue(0),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime(),
@@ -49,7 +50,7 @@ class m130524_201442_init extends Migration
             'customer_id' => $this->integer()->notNull(),
             'prefix' => $this->string(50)->notNull(),
             'port' => $this->integer()->notNull(),
-            'action' => $this->string('10')->notNull(),
+            'action' => $this->string(10)->notNull(),
             'price' => $this->integer()->notNull(),
             'api' => $this->string(200)
         ], $tableOptions);
@@ -59,7 +60,7 @@ class m130524_201442_init extends Migration
             'number' => $this->string(20)->notNull(),
             'extend' => $this->string(10)->notNull(),
             'domain' => $this->string(100)->notNull(),
-            'action' => $this->string('10')->notNull(),
+            'action' => $this->string(10)->notNull(),
         ], $tableOptions);
 
         $this->createTable('{{%profile_dialer}}', [
@@ -73,6 +74,15 @@ class m130524_201442_init extends Migration
             'vinamobile' => $this->integer()->defaultValue(null),
             'gmobile' => $this->integer()->defaultValue(null),
             'other' => $this->integer()->defaultValue(null),
+
+        $this->createTable('{{%transaction_history}}', [
+            'id' => $this->primaryKey(),
+            'customer_id' => $this->integer()->notNull(),
+            'amount' => $this->integer()->notNull(),
+            'description' => $this->string(200)->notNull(),
+            'transaction_type' => $this->string(1)->notNull(),
+            'created_at' => $this->dateTime()->notNull(),
+            'created_by' => $this->integer()->notNull()
         ], $tableOptions);
 
         $form = new \backend\forms\SignupForm([
@@ -106,5 +116,7 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%customer}}');
         $this->dropTable('{{%image}}');
+        $this->dropTable('{{%profile}}');
+        $this->dropTable('{{%transaction_history}}');
     }
 }

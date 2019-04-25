@@ -54,10 +54,11 @@
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 25%;"> Công ty </th>
               <th style="width: 15%;"> Người đại diện </th>
+              <th style="width: 10%;"> Số dư </th>
               <th style="width: 15%;"> Số điện thoại </th>
               <th style="width: 10%;"> Số profile </th>
-              <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
-              <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'status')} </th>
+              <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +68,7 @@
               <td>{$key + $pages->offset + 1}</td>
               <td>{$model->company}</td>
               <td>{$model->name}</td>
+              <td>{$model->balance} VNĐ</td>
               <td>{$model->phone}</td>
               <td>
                 <a class="btn purple btn-outline sbold" data-toggle="modal" href="#profiles{$model->id}">{$model->countProfiles()}</a>
@@ -116,14 +118,16 @@
               </td>
               <td>{$model->getStatusLabel()}</td>
               <td>
-                <a class="btn btn-xs grey-salsa" href="{url route='customer/edit' id=$model->id}"><i class="fa fa-edit"></i></i></a>
-                <a class="btn btn-xs grey-salsa" href="{url route='customer/create-profile' id=$model->id}"><i class="fa fa-plus"></i></i></a>
+                <a class="btn btn-xs grey-salsa" href="{url route='customer/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-xs grey-salsa" href="{url route='customer/create-profile' id=$model->id}"><i class="fa fa-plus"></i></a>
+                <a class="btn btn-xs grey-salsa" href="{url route='customer/topup' id=$model->id}"><i class="fa fa-arrow-up"></i></a>
+                <a class="btn btn-xs grey-salsa" href="{url route='customer/history' id=$model->id}"><i class="fa fa-list"></i></a>
               </td>
             </tr>
             {/foreach}
             {else}
             <tr>
-              <td colspan="7">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="8">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>

@@ -244,4 +244,17 @@ class Customer extends ActiveRecord implements IdentityInterface
         $command = $this->getProfiles();
         return $command->count();
     }
+
+    public function getTransactions()
+    {
+        return $this->hasMany(TransactionHistory::className(), ['customer_id' => 'id']);
+    }
+
+    public function reCountingBalance()
+    {
+        $amounts = array_map(function($transaction) {
+            return ($transaction->transaction_type == TransactionHistory::TYPE_INPUT) ? $transaction->amount : (-1) * $transaction->amount;
+        }, $this->transactions);
+        return array_sum($amounts);
+    }
 }
