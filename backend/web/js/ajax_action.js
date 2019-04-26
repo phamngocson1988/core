@@ -108,8 +108,8 @@ function AjaxFormSubmit(opts) {
     this.init = function (opts) {
         var that = this;
         this.options = $.extend(this.options, opts);
-        $(this.options.element).unbind('submit');
-        $(this.options.element).on('submit', function(e) {
+        $(document).find(this.options.element).unbind('submit');
+        $(document).find(this.options.element).on('submit', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var form = $(this);

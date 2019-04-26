@@ -69,7 +69,21 @@ class Game extends ActiveRecord
         ];
     }
 
+    public function attributeLabels() { 
 
+        return  [
+            'title' => Yii::t('app', 'title'),
+            'content' => Yii::t('app', 'description'),
+            'status' => Yii::t('app', 'status'),
+            'excerpt' => Yii::t('app', 'excerpt'),
+            'unit_name' => Yii::t('app', 'unit_name'),
+            'image_id' => Yii::t('app', 'image'),
+            'meta_title' => Yii::t('app', 'meta_title'),
+            'meta_keyword' => Yii::t('app', 'meta_keyword'),
+            'meta_description' => Yii::t('app', 'meta_description'),
+        ];
+    }
+    
     public function getImage() 
     {
         return $this->hasOne(Image::className(), ['id' => 'image_id']);

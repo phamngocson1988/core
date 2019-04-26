@@ -114,10 +114,12 @@
                   {/Pjax}
                 </div>
                 <div class="tab-pane" id="images">
-                  {$form->field($model, 'gallery', [
-                    'template' => '{input}{hint}{error}'
-                  ])->widget(MultipleImageInputWidget::className(), [
-                  ])->label(false)}
+                  {MultipleImageInputWidget::widget([
+                    'name' => 'test', 
+                    'items' => array_column($model->images, 'image_id'),
+                    'ajax_add_url' => "{url route='game1/add-gallery' id=$model->id}",
+                    'ajax_remove_url' => "{url route='game1/remove-gallery' id=$model->id}"
+                  ])}
                 </div>
               </div>
             </div>
@@ -137,7 +139,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">{Yii::t('app', 'create_package')}</h4>
       </div>
-      {ActiveForm assign='newform' options=['id' => 'add-product-form'] action='/product/create'}
+      {ActiveForm assign='newform' options=['id' => 'add-product-form'] action={url route='game1/add-product'}}
       <div class="modal-body">
       {$newform->field($newProductModel, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
         <div class="row">
@@ -162,14 +164,10 @@
     </div>
   </div>
 </div>
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="edit-product-modal">
-</div>
 <!-- Modal -->
 
 {registerJs}
 {literal}
-//$('.product-filter.active').click();
-
 var newform = new AjaxFormSubmit({element: '#add-product-form'});
 newform.success = function(data, form) {
   $(form)[0].reset();

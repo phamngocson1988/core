@@ -17,7 +17,7 @@ use yii\helpers\Url;
             <div class="col-sm-10 col-md-6 col-xl-4">
               <article class="box-minimal box-minimal-border">
                 <div class="box-minimal-icon novi-icon mdi mdi-account-outline"></div>
-                <p class="big box-minimal-title"><a href="<?=Url::to(['user/profile']);?>" style="color:white">Basic Profile</a></p>
+                <p class="big box-minimal-title"><a href="<?=Url::to(['user/profile']);?>" style="color:white">My Profile</a></p>
                 <hr>
                 <div class="box-minimal-text">
                   Edit your basic inforamtion and password. <br/>

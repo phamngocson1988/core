@@ -10,6 +10,7 @@ use Yii;
 class MultipleImageInputWidget extends InputWidget
 {
     public $handler = 'manager';
+    public $items = [];
     
     // Items
     public $itemOptions = [
@@ -35,6 +36,12 @@ class MultipleImageInputWidget extends InputWidget
         '{items}' => '',
         '{choose_button}' => '',
     ];
+
+    public $ajax_add_url = null;
+    public $ajax_add_params = [];
+
+    public $ajax_remove_url = null;
+    public $ajax_remove_params = [];
 
     protected $_hash = '';
 
@@ -89,12 +96,15 @@ class MultipleImageInputWidget extends InputWidget
     protected function generateItems()
     {
         $id = $this->options['id'];
-        $model = $this->model;
-        $attribute = $this->attribute;
         $elements = '';
-        $items = (array)$model->$attribute;
+        if ($this->hasModel()) {
+            $model = $this->model;
+            $attribute = $this->attribute;
+            $items = (array)$model->$attribute;
+        } else {
+            $items = $this->items;
+        }
         $size = $this->getItemSize();
-
         $itemOptions = (array)$this->itemOptions;
         $tag = ArrayHelper::remove($itemOptions, 'tag', 'div');
         $options = ArrayHelper::remove($itemOptions, 'options', []);
@@ -105,9 +115,9 @@ class MultipleImageInputWidget extends InputWidget
             $url = $obj->getUrl($size);
             $image = Html::img($url, []);
             $input = $this->generateInput($no);
-            $close = $this->generateCloseButton();
-            $item = strtr($this->item_template, ['{image}' => $image, '{input}' => $input, '{close}' => $close]);
-            $elements .= Html::tag($tag, $item, $options);
+            $close = $this->generateCloseButton($item);
+            $html = strtr($this->item_template, ['{image}' => $image, '{input}' => $input, '{close}' => $close]);
+            $elements .= Html::tag($tag, $html, $options);
         }
         return $elements;
     }
@@ -138,9 +148,9 @@ class MultipleImageInputWidget extends InputWidget
         return '';
     }
 
-    protected function generateCloseButton()
+    protected function generateCloseButton($id = null)
     {
-        return "<i class='glyphicon glyphicon-remove remove-button' style='position: absolute; top:0;right:15px'></i>";
+        return "<i class='glyphicon glyphicon-remove remove-button' data-id='$id' style='position: absolute; top:0;right:15px'></i>";
     }
 
     protected function generateChooseButton()
@@ -176,6 +186,12 @@ class MultipleImageInputWidget extends InputWidget
         $close = addslashes($this->generateCloseButton());
         $input = addslashes($this->generateInput());
         $image = addslashes(Html::img("", []));
+
+        // ajax
+        $add_link = $this->ajax_add_url . '';
+        $add_params = json_encode($this->ajax_add_params, JSON_FORCE_OBJECT);
+        $remove_link = $this->ajax_remove_url . '';
+        $remove_params = json_encode($this->ajax_remove_params, JSON_FORCE_OBJECT);
         return "
 if (!{$manager}) {
     var {$manager} = new ImageManager();
@@ -195,14 +211,45 @@ $('#{$chooseButtonId}').selectImage({$manager}, {
         str = str.replace('{input}', input.html());
         str = str.replace('{close}', close);
         $('.{$containerIdentifier}').append(str);
+        var link = '{$add_link}';
+        if (link) {
+            var params = {$add_params};
+            params.image_id = img.id;
+            $.ajax({
+                url: link,
+                type: 'POST',
+                dataType: 'json',
+                data: params,
+                success: function (result, textStatus, jqXHR) {
+                    console.log(result);
+                },
+            });
+        }
     });
   }
 });
 $('.{$containerIdentifier}').on('click', '.{$removeButtonClass}', function(e){
   e.preventDefault();
   $(this).closest('.{$itemIdentifier}').fadeOut(300, function(){ $(this).remove(); });
+  var link = '{$remove_link}';
+    if (link) {
+        var params = {$remove_params};
+        var id =$(this).data('id');
+        params.image_id = id;
+        $.ajax({
+            url: link,
+            type: 'DELETE',
+            dataType: 'json',
+            data: params,
+            success: function (result, textStatus, jqXHR) {
+                console.log(result);
+            },
+        });
+    }
+
   return false;
-})";
+});
+";
     }
 
     protected function registerClientScript()
