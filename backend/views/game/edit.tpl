@@ -99,6 +99,7 @@
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'excerpt')->textarea()}
                   {$form->field($model, 'unit_name')->textInput()}
+                  {$form->field($model, 'price')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
                 <div class="tab-pane" id="tab_1_3">

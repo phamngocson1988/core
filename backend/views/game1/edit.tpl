@@ -86,7 +86,7 @@
                   <a href="#tab_1_1" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
                 <li>
-                  <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'packages')}</a>
+                  <a href="#tab_1_3" data-toggle="tab">Gói bán game</a>
                 </li>
                 <li>
                   <a href="#images" data-toggle="tab">Hình ảnh</a>
@@ -102,16 +102,19 @@
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
                 <div class="tab-pane" id="tab_1_3">
-                  <div style="margin-bottom: 10px;">
-                    <a class="btn green" data-toggle="modal" id="add_packages" href="#new-product-modal">{Yii::t('app', 'add_new')}</a>
-                    <a class="btn btn-link product-filter active" id="refresh_package_list" href="{url route='product/index' game_id=$model->id}">{Yii::t('app', 'all')}</a>
-                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=Y}">{Yii::t('app', 'visible')}</a>
-                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=N}">{Yii::t('app', 'disable')}</a>
-                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=D}">{Yii::t('app', 'delete')}</a>
+                  {foreach $model->products as $product}
+                  <div class="row">
+                    <div class="col-md-4">
+                    <input name="product[][title]" value="{$product->title}"/>
+                    </div>
+                    <div class="col-md-4">
+                    <input name="product[][price]" value="{$product->price}"/>
+                    </div>
+                    <div class="col-md-4">
+                    <input name="product[][unit]" value="{$product->unit}"/>
+                    </div>
                   </div>
-                  {Pjax enablePushState=false enableReplaceState=false linkSelector='.product-filter'}
-                  
-                  {/Pjax}
+                  {/foreach}
                 </div>
                 <div class="tab-pane" id="images">
                   {MultipleImageInputWidget::widget([
@@ -131,43 +134,10 @@
   </div>
 </div>
 {/ActiveForm}
-<!-- Modal -->
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="new-product-modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{Yii::t('app', 'create_package')}</h4>
-      </div>
-      {ActiveForm assign='newform' options=['id' => 'add-product-form'] action={url route='game1/add-product'}}
-      <div class="modal-body">
-      {$newform->field($newProductModel, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
-        <div class="row">
-          <div class="col-md-12">
-            {$newform->field($newProductModel, 'title')}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            {$newform->field($newProductModel, 'price')}
-          </div>
-          <div class="col-md-6">
-            {$newform->field($newProductModel, 'unit')}
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">{Yii::t('app', 'cancel')}</button>
-        <button type="submit" class="btn btn-primary">{Yii::t('app', 'submit')}</button>
-      </div>
-      {/ActiveForm}
-    </div>
-  </div>
-</div>
-<!-- Modal -->
-
 {registerJs}
 {literal}
+
+
 var newform = new AjaxFormSubmit({element: '#add-product-form'});
 newform.success = function(data, form) {
   $(form)[0].reset();

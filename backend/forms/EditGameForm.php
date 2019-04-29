@@ -15,6 +15,7 @@ class EditGameForm extends Model
     public $excerpt;
     public $unit_name;
     public $image_id;
+    public $price;
     public $meta_title;
     public $meta_keyword;
     public $meta_description;
@@ -26,7 +27,7 @@ class EditGameForm extends Model
     public function rules()
     {
         return [
-            [['id', 'title', 'content', 'unit_name'], 'required'],
+            [['id', 'title', 'content', 'unit_name', 'price'], 'required'],
             ['status', 'default', 'value' => Game::STATUS_VISIBLE],
             ['id', 'validateGame'],
             [['excerpt', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery'], 'safe']
@@ -60,6 +61,7 @@ class EditGameForm extends Model
                 $game->excerpt = $this->excerpt;
                 $game->unit_name = $this->unit_name;
                 $game->image_id = $this->image_id;
+                $game->price = $this->price;
                 $game->meta_title = $this->meta_title;
                 $game->meta_keyword = $this->meta_keyword;
                 $game->meta_description = $this->meta_description;
@@ -131,6 +133,7 @@ class EditGameForm extends Model
         $this->excerpt = $game->excerpt;
         $this->unit_name = $game->unit_name;
         $this->image_id = $game->image_id;
+        $this->price = $game->price;
         $this->meta_title = $game->meta_title;
         $this->meta_keyword = $game->meta_keyword;
         $this->meta_description = $game->meta_description;
