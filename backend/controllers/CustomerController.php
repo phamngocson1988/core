@@ -14,6 +14,8 @@ use backend\forms\CreateCustomerProfileForm;
 use backend\forms\EditCustomerProfileForm;
 use backend\forms\TopupForm;
 use backend\forms\FetchTransactionHistoryForm;
+use common\models\CustomerDialer;
+use common\models\Dialer;
 
 /**
  * CustomerController
@@ -28,7 +30,7 @@ class CustomerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['change-status', 'create', 'edit', 'create-profile', 'edit-profile', 'topup', 'history'],
+                        'actions' => ['change-status', 'create', 'edit', 'create-profile', 'edit-profile', 'topup', 'history', 'create-dialer', 'edit-dialer'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -129,6 +131,59 @@ class CustomerController extends Controller
         }
         return $this->render('edit-profile.tpl', [
             'model' => $model,
+            'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
+    public function actionCreateDialer($id)
+    {
+        $request = Yii::$app->request;
+        $type = $request->get('type');
+        $model = new CustomerDialer();
+        $model->setScenario($type);
+        $model->customer_id = $id;
+        $dialerModels = Dialer::findAll(['action' => $type]);
+        $dialers = [];
+        foreach ($dialerModels as $dialerModel) {
+            $dialers[$dialerModel->id] = sprintf("%s - %s - %s", $dialerModel->number, $dialerModel->extend, $dialerModel->domain);
+        }
+
+        if ($model->load($request->post())) {
+            if ($user = $model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['customer/index']);
+            }
+        }
+
+        return $this->render('create-dialer.tpl', [
+            'model' => $model,
+            'dialers' => $dialers,
+            'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
+    public function actionEditDialer($id)
+    {
+        $request = Yii::$app->request;
+        $model = CustomerDialer::findOne($id);
+        $type = $model->dialer->action;
+        $model->setScenario($type);
+        $dialerModels = Dialer::findAll(['action' => $type]);
+        $dialers = [];
+        foreach ($dialerModels as $dialerModel) {
+            $dialers[$dialerModel->id] = sprintf("%s - %s - %s", $dialerModel->number, $dialerModel->extend, $dialerModel->domain);
+        }
+
+        if ($model->load($request->post())) {
+            if ($user = $model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['customer/index']);
+            }
+        }
+
+        return $this->render('edit-dialer.tpl', [
+            'model' => $model,
+            'dialers' => $dialers,
             'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
     }

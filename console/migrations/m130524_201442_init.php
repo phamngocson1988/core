@@ -63,7 +63,7 @@ class m130524_201442_init extends Migration
             'action' => $this->string(10)->notNull(),
         ], $tableOptions);
 
-        $this->createTable('{{%profile_dialer}}', [
+        $this->createTable('{{%customer_dialer}}', [
             'id' => $this->primaryKey(),
             'profile_id' => $this->integer()->notNull(),
             'dialer_id' => $this->integer()->notNull(),
@@ -118,5 +118,7 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%image}}');
         $this->dropTable('{{%profile}}');
         $this->dropTable('{{%transaction_history}}');
+        $this->dropTable('{{%dailer}}');
+        $this->dropTable('{{%customer_dailer}}');
     }
 }

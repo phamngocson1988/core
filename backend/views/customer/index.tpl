@@ -71,7 +71,7 @@
               <td>{$model->balance} VNĐ</td>
               <td>{$model->phone}</td>
               <td>
-                <a class="btn purple btn-outline sbold" data-toggle="modal" href="#profiles{$model->id}">{$model->countProfiles()}</a>
+                <a class="btn purple btn-outline sbold" data-toggle="modal" href="#profiles{$model->id}">{$model->countDialers()}</a>
                 <div class="modal fade bs-modal-lg" id="profiles{$model->id}" tabindex="-1" role="dialog" aria-hidden="true">
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -83,24 +83,35 @@
                       <table class="table table-striped table-bordered table-hover table-checkable">
                         <thead>
                           <tr>
-                            <th style="width: 10%;"> Số đầu </th>
-                            <th style="width: 10%;"> Cổng </th>
-                            <th style="width: 10%;"> Loại </th>
-                            <th style="width: 20%;"> Giá tiền </th>
-                            <th style="width: 40%;"> API </th>
+                            <th style="width: 10%;"> Số </th>
+                            <th style="width: 10%;"> Phần mở rộng </th>
+                            <th style="width: 10%;"> Domain </th>
+                            <th style="width: 20%;"> Loại </th>
+                            <th style="width: 40%;"> Chi phí </th>
                             <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {foreach $model->profiles as $profile}
+                          {foreach $model->dialers as $customerDialer}
                           <tr>
-                            <td>{$profile->prefix}</td>
-                            <td>{$profile->port}</td>
-                            <td>{$profile->action}</td>
-                            <td>{$profile->price}</td>
-                            <td>{$profile->api}</td>
+                            <td>{$customerDialer->dialer->number}</td>
+                            <td>{$customerDialer->dialer->extend}</td>
+                            <td>{$customerDialer->dialer->domain}</td>
+                            <td>{$customerDialer->dialer->action}</td>
                             <td>
-                              <a class="btn btn-xs grey-salsa" href="{url route='customer/edit-profile' id=$profile->id}"><i class="fa fa-edit"></i></a>
+                            {if ($customerDialer->dialer->action == 'call')}
+                            Call: {$customerDialer->call}
+                            {else}
+                            viettel: {$customerDialer->viettel},
+                            mobifone: {$customerDialer->mobifone},
+                            vinaphone: {$customerDialer->vinaphone},
+                            vinamobile: {$customerDialer->vinamobile},
+                            gmobile: {$customerDialer->gmobile},
+                            other: {$customerDialer->other}
+                            {/if}
+                            </td>
+                            <td>
+                              <a class="btn btn-xs grey-salsa" href="{url route='customer/edit-dialer' id=$customerDialer->id}"><i class="fa fa-edit"></i></a>
                             </td>
                           </tr>
                           {/foreach}
@@ -119,9 +130,45 @@
               <td>{$model->getStatusLabel()}</td>
               <td>
                 <a class="btn btn-xs grey-salsa" href="{url route='customer/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
-                <a class="btn btn-xs grey-salsa" href="{url route='customer/create-profile' id=$model->id}"><i class="fa fa-plus"></i></a>
+                <!--<a class="btn btn-xs grey-salsa" href="{url route='customer/create-profile' id=$model->id}"><i class="fa fa-plus"></i></a>-->
+                <a class="btn btn-xs grey-salsa" data-toggle="modal" href="#dialer{$model->id}"><i class="fa fa-plus"></i></a>
                 <a class="btn btn-xs grey-salsa" href="{url route='customer/topup' id=$model->id}"><i class="fa fa-arrow-up"></i></a>
                 <a class="btn btn-xs grey-salsa" href="{url route='customer/history' id=$model->id}"><i class="fa fa-list"></i></a>
+
+                <div class="modal fade bs-modal-lg" id="dialer{$model->id}" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Profiles - {$model->company}</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row margin-bottom-10">
+                          <form method="GET" action="{url route='customer/create-dialer' id=$model->id}">
+                            <input type="hidden" name="id" value="{$model->id}"/>
+                            <div class="form-group col-md-6">
+                              <label>Loại bộ số: </label> 
+                              <select class="form-control" name="type" aria-required="true" aria-invalid="false">
+                                <option value="sms">SMS</option>
+                                <option value="call">Call</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;"><i class="fa fa-forward"></i> Liên kết bộ số</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                    <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+                </div>
+
+
               </td>
             </tr>
             {/foreach}

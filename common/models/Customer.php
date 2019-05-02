@@ -245,6 +245,17 @@ class Customer extends ActiveRecord implements IdentityInterface
         return $command->count();
     }
 
+    public function getDialers() 
+    {
+        return $this->hasMany(CustomerDialer::className(), ['customer_id' => 'id']);
+    }
+
+    public function countDialers()
+    {
+        $command = $this->getDialers();
+        return $command->count();
+    }
+
     public function getTransactions()
     {
         return $this->hasMany(TransactionHistory::className(), ['customer_id' => 'id']);
