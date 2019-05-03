@@ -53,4 +53,31 @@ class StringHelper extends BaseStringHelper
 
         return $text;
     }
+
+    public static function telecomProviderDetector($phone)
+    {
+        $providers = [
+            'viettel' => ['0162', '0163', '0164', '0165', '0166', '0167', '0168', '0169', '086', '096', '097', '098'],
+            'mobifone' => ['0120', '0121', '0122', '0126', '0128', '090', '093', '089'],
+            'vinaphone' => ['0123', '0124', '0125', '0127', '0129', '091', '094', '088'],
+            'vinamobile' => ['0186', '0188', '092'],
+            'gmobile' => ['0199', '099'],
+        ];
+
+        foreach ($providers as $provider => $exts) {
+            foreach ($exts as $ext) {
+                if (preg_match('/^(' . $ext . ')+/', $phone, $matches)) return $provider;
+            }
+        }
+        return 'other';
+    }
+
+    public static function separateMessage($message) 
+    {
+        $len = strlen($message);
+        if ($len <=160) return 1;
+        if ($len <=306) return 2;
+        if ($len <=459) return 3;
+        return false;
+    }
 }
