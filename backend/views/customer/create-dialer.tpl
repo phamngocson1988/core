@@ -47,7 +47,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Khách hàng</label>
                     <div class="col-md-6">
-                      <input type="text" class="form-control" value="{$model->customer->name}" disabled>
+                      <input type="text" class="form-control" value="{$model->user->name}" disabled>
                     </div>
                   </div>
 

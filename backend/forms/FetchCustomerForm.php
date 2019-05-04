@@ -4,7 +4,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Customer;
+use common\models\User;
 
 /**
  * FetchCustomerForm
@@ -12,7 +12,7 @@ use common\models\Customer;
 class FetchCustomerForm extends Model
 {
     public $q;
-    public $status = Customer::STATUS_ACTIVE;
+    public $status = User::STATUS_ACTIVE;
     private $_command;
 
     public function rules()
@@ -30,7 +30,7 @@ class FetchCustomerForm extends Model
 
     protected function createCommand()
     {
-        $command = Customer::find();
+        $command = User::find();
 
         if ($this->q) {
             $command->orWhere(['like', 'company', $this->q]);

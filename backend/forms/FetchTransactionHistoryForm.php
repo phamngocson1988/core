@@ -36,7 +36,7 @@ class FetchTransactionHistoryForm extends Model
     {
         $command = TransactionHistory::find();
         if ($this->customer_id) {
-            $command->andWhere(['customer_id' => $this->customer_id]);
+            $command->andWhere(['user_id' => $this->customer_id]);
         }
 
         if ($this->q) {

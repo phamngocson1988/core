@@ -21,20 +21,6 @@ class m130524_201442_init extends Migration
             'password_hash' => $this->string()->notNull(),
             'password_reset_token' => $this->string()->unique(),
             'email' => $this->string()->notNull()->unique(),
-            'status' => $this->smallInteger()->notNull()->defaultValue(10),
-            'created_at' => $this->dateTime()->notNull(),
-            'updated_at' => $this->dateTime(),
-        ], $tableOptions);
-
-        $this->createTable('{{%customer}}', [
-            'id' => $this->primaryKey(),
-            'name' => $this->string()->notNull(),
-            'username' => $this->string()->notNull()->unique(),
-            'avatar' => $this->integer(),
-            'auth_key' => $this->string(32)->notNull(),
-            'password_hash' => $this->string()->notNull(),
-            'password_reset_token' => $this->string()->unique(),
-            'email' => $this->string()->unique(),
             'phone' => $this->string(50),
             'address' => $this->string(200),
             'company' => $this->string(200)->notNull(),
@@ -45,14 +31,31 @@ class m130524_201442_init extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
-        $this->createTable('{{%profile}}', [
+        // $this->createTable('{{%customer}}', [
+        //     'user_id' => $this->integer()->notNull(),
+        //     'phone' => $this->string(50),
+        //     'address' => $this->string(200),
+        //     'company' => $this->string(200)->notNull(),
+        //     'tax_code' => $this->string(20)->notNull(),
+        //     'balance' => $this->integer()->notNull()->defaultValue(0),
+        // ], $tableOptions);
+
+        // $this->createTable('{{%profile}}', [
+        //     'id' => $this->primaryKey(),
+        //     'customer_id' => $this->integer()->notNull(),
+        //     'prefix' => $this->string(50)->notNull(),
+        //     'port' => $this->integer()->notNull(),
+        //     'action' => $this->string(10)->notNull(),
+        //     'price' => $this->integer()->notNull(),
+        //     'api' => $this->string(200)
+        // ], $tableOptions);
+
+        $this->createTable('{{%contact}}', [
             'id' => $this->primaryKey(),
-            'customer_id' => $this->integer()->notNull(),
-            'prefix' => $this->string(50)->notNull(),
-            'port' => $this->integer()->notNull(),
-            'action' => $this->string(10)->notNull(),
-            'price' => $this->integer()->notNull(),
-            'api' => $this->string(200)
+            'user_id' => $this->integer()->notNull(),
+            'phone' => $this->string(20)->notNull(),
+            'name' => $this->string(255)->notNull(),
+            'description' => $this->string(255),
         ], $tableOptions);
 
         $this->createTable('{{%dialer}}', [
@@ -65,7 +68,7 @@ class m130524_201442_init extends Migration
 
         $this->createTable('{{%customer_dialer}}', [
             'id' => $this->primaryKey(),
-            'profile_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
             'dialer_id' => $this->integer()->notNull(),
             'call' => $this->integer()->defaultValue(null),
             'viettel' => $this->integer()->defaultValue(null),
@@ -77,7 +80,7 @@ class m130524_201442_init extends Migration
 
         $this->createTable('{{%transaction_history}}', [
             'id' => $this->primaryKey(),
-            'customer_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
             'amount' => $this->integer()->notNull(),
             'description' => $this->string(200)->notNull(),
             'transaction_type' => $this->string(1)->notNull(),
@@ -114,9 +117,9 @@ class m130524_201442_init extends Migration
     public function down()
     {
         $this->dropTable('{{%user}}');
-        $this->dropTable('{{%customer}}');
+        // $this->dropTable('{{%customer}}');
         $this->dropTable('{{%image}}');
-        $this->dropTable('{{%profile}}');
+        // $this->dropTable('{{%profile}}');
         $this->dropTable('{{%transaction_history}}');
         $this->dropTable('{{%dailer}}');
         $this->dropTable('{{%customer_dailer}}');

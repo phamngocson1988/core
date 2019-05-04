@@ -16,23 +16,23 @@ class CustomerDialer extends ActiveRecord
     public function scenarios()
     {
         return [
-            self::SCENARIO_CALL => ['customer_id', 'dialer_id', 'call'],
-            self::SCENARIO_SMS => ['customer_id', 'dialer_id', 'viettel', 'mobifone', 'vinaphone', 'vinamobile', 'gmobile', 'other'],
+            self::SCENARIO_CALL => ['user_id', 'dialer_id', 'call'],
+            self::SCENARIO_SMS => ['user_id', 'dialer_id', 'viettel', 'mobifone', 'vinaphone', 'vinamobile', 'gmobile', 'other'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['customer_id', 'dialer_id'], 'required'],
+            [['user_id', 'dialer_id'], 'required'],
             ['call', 'required', 'on' => self::SCENARIO_CALL],
         	[['viettel', 'mobifone', 'vinaphone', 'vinamobile', 'gmobile', 'other'], 'required', 'on' => self::SCENARIO_SMS],
         ];
     }
 
-    public function getCustomer()
+    public function getUser()
     {
-        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     public function getDialer()

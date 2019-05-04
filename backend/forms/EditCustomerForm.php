@@ -2,12 +2,12 @@
 namespace backend\forms;
 
 use Yii;
-use common\models\Customer;
+use common\models\User;
 
 /**
  * EditCustomerForm
  */
-class EditCustomerForm extends Customer
+class EditCustomerForm extends User
 {
     /**
      * @inheritdoc

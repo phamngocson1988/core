@@ -44,7 +44,12 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => date('Y-m-d H:i:s')
+            ],
         ];
     }
 
@@ -234,5 +239,29 @@ class User extends ActiveRecord implements IdentityInterface
     public function isActive()
     {
         return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function getDialers() 
+    {
+        return $this->hasMany(CustomerDialer::className(), ['user_id' => 'id']);
+    }
+
+    public function countDialers()
+    {
+        $command = $this->getDialers();
+        return $command->count();
+    }
+
+    public function getTransactions()
+    {
+        return $this->hasMany(TransactionHistory::className(), ['user_id' => 'id']);
+    }
+
+    public function reCountingBalance()
+    {
+        $amounts = array_map(function($transaction) {
+            return ($transaction->transaction_type == TransactionHistory::TYPE_INPUT) ? $transaction->amount : (-1) * $transaction->amount;
+        }, $this->transactions);
+        return array_sum($amounts);
     }
 }

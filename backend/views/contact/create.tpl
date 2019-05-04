@@ -8,24 +8,24 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='customer/index'}">Quản lý khách hàng</a>
+      <a href="{url route='customer/index'}">Quản lý danh bạ</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo khách hàng</span>
+      <span>Tạo danh bạ</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Tạo khách hàng</h1>
+<h1 class="page-title">Tạo danh bạ</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='signup-form'}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">Tạo khách hàng</div>
+          <div class="caption">Tạo danh bạ</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
@@ -44,19 +44,7 @@
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
-                  {$form->field($model, 'email', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'password', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->passwordInput()}
-                  {$form->field($model, 'company', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'tax_code', [
+                  {$form->field($model, 'phone', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
@@ -64,11 +52,7 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'phone', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'address', [
+                  {$form->field($model, 'description', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}

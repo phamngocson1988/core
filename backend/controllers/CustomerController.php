@@ -97,43 +97,43 @@ class CustomerController extends Controller
             }
         }
 
-        return $this->render('create.tpl', [
+        return $this->render('edit.tpl', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
     }
 
-    public function actionCreateProfile($id)
-    {
-        $request = Yii::$app->request;
-        $model = new CreateCustomerProfileForm(['customer_id' => $id]);
-        if ($model->load($request->post())) {
-            if ($user = $model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                return $this->redirect(['customer/index']);
-            }
-        }
-        return $this->render('create-profile.tpl', [
-            'model' => $model,
-            'back' => $request->get('ref', Url::to(['customer/index']))
-        ]);
-    }
+    // public function actionCreateProfile($id)
+    // {
+    //     $request = Yii::$app->request;
+    //     $model = new CreateCustomerProfileForm(['customer_id' => $id]);
+    //     if ($model->load($request->post())) {
+    //         if ($user = $model->save()) {
+    //             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+    //             return $this->redirect(['customer/index']);
+    //         }
+    //     }
+    //     return $this->render('create-profile.tpl', [
+    //         'model' => $model,
+    //         'back' => $request->get('ref', Url::to(['customer/index']))
+    //     ]);
+    // }
 
-    public function actionEditProfile($id)
-    {
-        $request = Yii::$app->request;
-        $model = EditCustomerProfileForm::findOne($id);
-        if ($model->load($request->post())) {
-            if ($user = $model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                return $this->redirect(['customer/index']);
-            }
-        }
-        return $this->render('edit-profile.tpl', [
-            'model' => $model,
-            'back' => $request->get('ref', Url::to(['customer/index']))
-        ]);
-    }
+    // public function actionEditProfile($id)
+    // {
+    //     $request = Yii::$app->request;
+    //     $model = EditCustomerProfileForm::findOne($id);
+    //     if ($model->load($request->post())) {
+    //         if ($user = $model->save()) {
+    //             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+    //             return $this->redirect(['customer/index']);
+    //         }
+    //     }
+    //     return $this->render('edit-profile.tpl', [
+    //         'model' => $model,
+    //         'back' => $request->get('ref', Url::to(['customer/index']))
+    //     ]);
+    // }
 
     public function actionCreateDialer($id)
     {
@@ -141,7 +141,7 @@ class CustomerController extends Controller
         $type = $request->get('type');
         $model = new CustomerDialer();
         $model->setScenario($type);
-        $model->customer_id = $id;
+        $model->user_id = $id;
         $dialerModels = Dialer::findAll(['action' => $type]);
         $dialers = [];
         foreach ($dialerModels as $dialerModel) {

@@ -34,9 +34,9 @@ class TransactionHistory extends ActiveRecord
         ];
     }
 
-    public function getCustomer()
+    public function getUser()
     {
-        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     public static function getTypeList()

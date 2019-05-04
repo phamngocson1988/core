@@ -2,7 +2,7 @@
 namespace backend\forms;
 
 use Yii;
-use common\models\Customer;
+use common\models\User as Customer;
 use common\models\TransactionHistory;
 use yii\base\Model;
 
@@ -52,7 +52,7 @@ class TopupForm extends Model
         try {
             // Add a row to history table
             $history = new TransactionHistory();
-            $history->customer_id = $this->customer_id;
+            $history->user_id = $this->customer_id;
             $history->amount = $this->amount;
             $history->description = $this->description;
             $history->transaction_type = TransactionHistory::TYPE_INPUT;

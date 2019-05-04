@@ -103,7 +103,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             <?php foreach ($models as $key => $model): ?>
             <tr>
               <td><?=$key + $pages->offset + 1;?></td>
-              <td><?=$model->customer->company;?> - <?=$model->customer->name;?></td>
+              <td><?=$model->user->company;?> - <?=$model->user->name;?></td>
               <td><?=$model->getTypeLabel();?></td>
               <td><?=$model->amount;?> VNĐ</td>
               <td><?=$model->description;?></td>

@@ -34,6 +34,11 @@
             <span class="title">{Yii::t('app', 'customers')}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/contact/index'}" class="nav-link " code='contact.index'>
+            <span class="title">Danh bạ</span>
+            </a>
+          </li>
         </ul>
       </li>
       <li class="nav-item  ">
