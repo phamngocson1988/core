@@ -43,10 +43,10 @@ use frontend\widgets\LoginPopupWidget;
         <p class="text-spacing-sm"><?=$model->excerpt;?></p>
         <ul class="inline-list">
           <li class="text-center"><span class="icon novi-icon icon-md mdi mdi-coin text-secondary-3"></span>
-            <p class="text-spacing-sm offset-0">Price<br><h4 id="price">0</h4></p>
+            <p class="text-spacing-sm offset-0">Price<br><h4 id="price"><?=$model->price;?></h4></p>
           </li>
           <li class="text-center"><span class="icon novi-icon icon-md mdi mdi-trophy text-secondary-3"></span>
-            <p class="text-spacing-sm offset-0"><?=ucfirst($model->unit_name);?><br><h4 id="unit">0</h4></p>
+            <p class="text-spacing-sm offset-0"><?=ucfirst($model->unit_name);?><br><h4 id="unit">1</h4></p>
           </li>
         </ul>
         <ul class="inline-list">

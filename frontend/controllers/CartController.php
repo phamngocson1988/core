@@ -187,13 +187,15 @@ class CartController extends Controller
         $item->note = $cartItem->note;
         $item->save();
 
-        $itemFee = new OrderFee();
-        $itemFee->order_id = $order->id;
-        $itemFee->type = OrderFee::TYPE_DISCOUNT;
-        $itemFee->description = $discountItem->code;
-        $itemFee->reference = $discountItem->getPromotion()->id;
-        $itemFee->amount = $discountItem->getPrice();
-        $itemFee->save();
+        if ($discountItem) {
+            $itemFee = new OrderFee();
+            $itemFee->order_id = $order->id;
+            $itemFee->type = OrderFee::TYPE_DISCOUNT;
+            $itemFee->description = $discountItem->code;
+            $itemFee->reference = $discountItem->getPromotion()->id;
+            $itemFee->amount = $discountItem->getPrice();
+            $itemFee->save();
+        }
 
         $wallet = new UserWallet();
         $wallet->coin = $totalPrice;

@@ -49,7 +49,7 @@
               <td>{$model->description}</td>
               <td>{count(Yii::$app->authManager->getUserIdsByRole($model->name))}</td>
               <td>
-                <a class="btn btn-xs grey-salsa tooltips" href="{url route='rbac/user-role' name=$model->name}" data-container="body" data-original-title="{Yii::t('app', 'edit')}"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='rbac/user-role' name=$model->name}" data-container="body" data-original-title="Danh sách"><i class="fa fa-list"></i></a>
               </td>
             </tr>
             {/foreach}

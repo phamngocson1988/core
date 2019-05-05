@@ -79,24 +79,16 @@
                         'format' => 'yyyy-mm-dd'
                     ]
                   ])}
-                  {$form->field($model, 'social_line', [
+                  {$form->field($model, 'country_code', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'social_zalo', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'social_facebook', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                  ])->dropDownList(Yii::$app->params['country_code'])}
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList($model->getUserStatus(), ['prompt' => Yii::t('app', 'choose')])}
 
-
+                  <!--
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="generate-password-checkbox">{Yii::t('app', 'generate_password')}</label>
                     <div class="col-md-6">
@@ -113,6 +105,7 @@
                       ])} <a href="{url route='customer/generate-password' id=$model->id}" class="btn btn-warning generate-password"><i class="fa fa-key"></i> {Yii::t('app', 'generate_password')}</a>
                     </div> 
                   </div>
+                  -->
                 </div>
               </div>
             </div>

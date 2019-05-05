@@ -12,6 +12,9 @@ use backend\forms\EditCustomerForm;
 use backend\forms\ChangeCustomerStatusForm;
 use backend\forms\GenerateCustomerPasswordForm;
 
+
+use backend\models\User;
+
 /**
  * CustomerController
  */
@@ -45,7 +48,6 @@ class CustomerController extends Controller
         $q = $request->get('q');
         $status = $request->get('status', '');
         $form = new FetchCustomerForm(['q' => $q, 'status' => $status]);
-
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
@@ -61,28 +63,6 @@ class CustomerController extends Controller
             'form' => $form,
             'ref' => Url::to($request->getUrl(), true),
             'links' => $links
-        ]);
-    }
-
-    public function actionEdit($id)
-    {
-        $this->view->params['main_menu_active'] = 'customer.index';
-        $request = Yii::$app->request;
-        $model = new EditCustomerForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Success!');
-                $ref = $request->get('ref', Url::to(['customer/index']));
-                return $this->redirect($ref);
-            } else {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            }
-        } else {
-            $model->loadData($id);
-        }
-        return $this->render('edit.tpl', [
-            'model' => $model,
-            'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
     }
 
@@ -104,6 +84,27 @@ class CustomerController extends Controller
             'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
     }
+
+    public function actionEdit($id)
+    {
+        $this->view->params['main_menu_active'] = 'customer.index';
+        $request = Yii::$app->request;
+        $model = User::findOne($id);
+        $model->setScenario(User::SCENARIO_EDIT);
+        if ($model->load($request->post()) && $model->save()) {
+                Yii::$app->session->setFlash('success', 'Success!');
+                $ref = $request->get('ref', Url::to(['customer/index']));
+                return $this->redirect($ref);
+        } else {
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+        }
+        return $this->render('edit.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['customer/index']))
+        ]);
+    }
+
+    
 
     public function actionSuggestion()
     {

@@ -76,18 +76,6 @@
                         'format' => 'yyyy-mm-dd'
                     ]
                   ])}
-                  {$form->field($model, 'social_line', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'social_zalo', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'social_facebook', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
                   {$form->field($model, 'password', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -96,7 +84,7 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList($model->getUserStatus(), ['prompt' => Yii::t('app', 'choose')])}
-                  {$form->field($model, 'send_mail', [
+                  {*$form->field($model, 'send_mail', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->widget(dosamigos\switchinput\SwitchBox::className(),[
@@ -107,7 +95,7 @@
                       'onText' => "{Yii::t('app', 'boolean_yes')}",
                       'offText' => "{Yii::t('app', 'boolean_no')}"
                     ]
-                  ])}
+                  ])*}
                 </div>
               </div>
             </div>
