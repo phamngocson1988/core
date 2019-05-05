@@ -79,8 +79,8 @@
                 <div class="tab-pane active" id="tab_1_1">
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'excerpt')->textarea()}
-                  {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'price')->textInput()}
+                  {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
               </div>

@@ -78,6 +78,7 @@ class Game extends ActiveRecord
             'excerpt' => Yii::t('app', 'excerpt'),
             'unit_name' => Yii::t('app', 'unit_name'),
             'image_id' => Yii::t('app', 'image'),
+            'price' => 'Giá bán',
             'meta_title' => Yii::t('app', 'meta_title'),
             'meta_keyword' => Yii::t('app', 'meta_keyword'),
             'meta_description' => Yii::t('app', 'meta_description'),
@@ -104,19 +105,21 @@ class Game extends ActiveRecord
         ->where('status = :status', [':status' => Product::STATUS_VISIBLE]);
     }
 
-    public function getPrice()
-    {
-        $products = $this->products;
-        $product = reset($products);
-        return $product->price;
-    }
+    // public function getPrice()
+    // {
+        // $products = $this->products;
+        // $product = reset($products);
+        // if ($product) return $product->price;
+        // return $this->price;
+    // }
 
-    public function getUnit()
-    {
-        $products = $this->products;
-        $product = reset($products);
-        return $product->unit;   
-    }
+    // public function getUnit()
+    // {
+    //     $products = $this->products;
+    //     $product = reset($products);
+    //     if ($product) return $product->unit;   
+    //     return 1;
+    // }
 
     public function getCreator()
     {

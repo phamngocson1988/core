@@ -11,8 +11,8 @@ class Game extends \common\models\Game
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id'],
+            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price'],
         ];
     }
 
@@ -20,7 +20,7 @@ class Game extends \common\models\Game
     {
         return [
             ['id', 'required', 'on' => self::SCENARIO_EDIT],
-            [['title', 'content', 'unit_name'], 'required'],
+            [['title', 'content', 'unit_name', 'price'], 'required'],
             ['status', 'default', 'value' => self::STATUS_VISIBLE],
             [['image_id', 'excerpt'], 'safe']
         ];

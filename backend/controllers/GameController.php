@@ -4,15 +4,11 @@ namespace backend\controllers;
 use Yii;
 use common\components\Controller;
 use yii\filters\AccessControl;
-use backend\forms\FetchGameForm;
-use backend\forms\CreateGameForm;
-use backend\forms\CreateProductForm;
-use backend\forms\EditGameForm;
-use backend\forms\EditProductForm;
-use backend\forms\DeleteGameForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
 use backend\models\Game;
+use backend\models\Product;
+use common\models\GameImage;
 
 class GameController extends Controller
 {
@@ -43,19 +39,22 @@ class GameController extends Controller
     {
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
-
-        $form = new FetchGameForm();
-        if (!$form->validate()) {
-            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
-            return $this->redirect($ref);
+        $q = $request->get('q');
+        $status = $request->get('status');
+        $command = Game::find();
+        $command->where(['<>', 'status', Game::STATUS_DELETE]);
+        if ($status) {
+            $command->andWhere(['status' => $status]);
         }
-        $models = $form->fetch();
-        $command = $form->getCommand();
+        if ($q) {
+            $command->andWhere(['like', 'title', $q]);
+        }
+        $command->orderBy(['id' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         return $this->render('index.tpl', [
-            'models' => $models,
+            'models' => $command->all(),
             'pages' => $pages,
-            'form' => $form,
+            'q' => $q,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -65,16 +64,14 @@ class GameController extends Controller
         $this->view->params['main_menu_active'] = 'game.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new CreateGameForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $game = $model->save();
-            if (!$game) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            } else {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = Url::to(['game/index']);
-                return $this->redirect($ref);    
-            }
+        $model = new Game();
+        $model->setScenario(Game::SCENARIO_CREATE);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = Url::to(['game/index']);
+            return $this->redirect($ref);    
+        } else {
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
         return $this->render('create.tpl', [
             'model' => $model,
@@ -87,26 +84,74 @@ class GameController extends Controller
         $this->view->params['main_menu_active'] = 'game.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new EditGameForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if (!$model->save()) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            } else {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['game/index']));
-                return $this->redirect($ref);    
-            }
+        $model =Game::findOne($id);
+        $model->setScenario(Game::SCENARIO_EDIT);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = Url::to(['game/index']);
+            return $this->redirect($ref);    
         } else {
-            $model->loadData($id);
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
-        $newProductModel = new CreateProductForm(['game_id' => $id]);
-        $editProductModel = new EditProductForm(['game_id' => $id]);
+        $product = new Product();
+        $product->game_id = $id;
         return $this->render('edit.tpl', [
             'model' => $model,
-            'newProductModel' => $newProductModel,
-            'editProductModel' => $editProductModel,
+            'newProductModel' => $product,
             'back' => $request->get('ref', Url::to(['game/index']))
         ]);
+    }
+
+    public function actionAddGallery($id)
+    {
+        $request = Yii::$app->request;
+        $gallery = new GameImage();
+        $gallery->game_id = $id;
+        $gallery->image_id = $request->post('image_id');
+        return $this->renderJson($gallery->save(), null, $gallery->getErrorSummary(true));
+    }
+
+    public function actionRemoveGallery($id)
+    {
+        $request = Yii::$app->request;
+        $gallery = GameImage::findOne(['game_id' => $id, 'image_id' => $request->post('image_id')]);
+        if ($gallery) {
+            return $this->renderJson($gallery->delete(), null, $gallery->getErrorSummary(true));
+        }
+        return $this->renderJson(false, null, ['message' => 'not found']);
+    }
+
+    public function actionAddProduct($id)
+    {
+        $request = Yii::$app->request;
+        $model = new Product();
+        $model->setScenario(Product::SCENARIO_CREATE);
+        $model->game_id = $id;
+        if ($request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->renderJson(true, $model, []);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                return $this->renderJson(false, null, $model->getErrorSummary(true));
+            }
+        }
+    }
+
+    public function actionProducts($id)
+    {
+        $request = Yii::$app->request;
+        $model =Game::findOne($id);
+        $products = $model->products;
+        return $this->renderPartial('products.tpl', [
+            'products' => $products,
+        ]);
+    }
+
+    public function actionRemoveProduct($id)
+    {
+        $request = Yii::$app->request;
+        $model = Product::findOne($id);
+        return $this->renderJson($model->delete(), $model, $model->getErrorSummary(true));
     }
 
     public function actionDelete($id)
@@ -127,8 +172,11 @@ class GameController extends Controller
             $keyword = $request->get('q');
             $items = [];
             if ($keyword) {
-                $form = new FetchGameForm(['q' => $keyword]);
-                $command = $form->getCommand();
+                $command = Game::find();
+                $command->where(['<>', 'status', Game::STATUS_DELETE]);
+                if ($q) {
+                    $command->andWhere(['like', 'title', $keyword]);
+                }
                 $games = $command->offset(0)->limit(20)->all();
                 foreach ($games as $game) {
                     $item = [];

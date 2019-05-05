@@ -57,7 +57,7 @@ class Product extends ActiveRecord
             'game_id' => Yii::t('app', 'game_id'),
             'status' => Yii::t('app', 'status'),
             'price' => Yii::t('app', 'price'),
-            'unit' => $this->getUnitName(),
+            'unit' => 'Đơn vị game',
             'image_id' => Yii::t('app', 'image'),
         ];
     }

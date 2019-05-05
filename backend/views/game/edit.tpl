@@ -83,10 +83,10 @@
             <div class="portlet-title tabbable-line">
               <ul class="nav nav-tabs">
                 <li class="active">
-                  <a href="#tab_1_1" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
+                  <a href="#main" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
                 <li>
-                  <a href="#tab_1_3" data-toggle="tab">{Yii::t('app', 'packages')}</a>
+                  <a href="#packages" data-toggle="tab">Gói bán game</a>
                 </li>
                 <li>
                   <a href="#images" data-toggle="tab">Hình ảnh</a>
@@ -95,30 +95,52 @@
             </div>
             <div class="portlet-body">
               <div class="tab-content">
-                <div class="tab-pane active" id="tab_1_1">
+                <div class="tab-pane active" id="main">
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'excerpt')->textarea()}
-                  {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'price')->textInput()}
+                  {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
-                <div class="tab-pane" id="tab_1_3">
+                <div class="tab-pane" id="packages">
                   <div style="margin-bottom: 10px;">
                     <a class="btn green" data-toggle="modal" id="add_packages" href="#new-product-modal">{Yii::t('app', 'add_new')}</a>
-                    <a class="btn btn-link product-filter active" id="refresh_package_list" href="{url route='product/index' game_id=$model->id}">{Yii::t('app', 'all')}</a>
-                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=Y}">{Yii::t('app', 'visible')}</a>
-                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=N}">{Yii::t('app', 'disable')}</a>
-                    <a class="btn btn-link product-filter" id="refresh_package_list" href="{url route='product/index' game_id=$model->id status=D}">{Yii::t('app', 'delete')}</a>
                   </div>
-                  {Pjax enablePushState=false enableReplaceState=false linkSelector='.product-filter'}
-                  
-                  {/Pjax}
+                  <div id="products">
+                  <table class="table table-striped table-bordered table-hover table-checkable">
+                    <thead>
+                      <tr>
+                        <th style="width: 20%;"> {Yii::t('app', 'title')} </th>
+                        <th style="width: 10%;"> {Yii::t('app', 'price')} </th>
+                        <th style="width: 10%;"> {Yii::t('app', 'unit')} </th>
+                        <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {if (!$model->products) }
+                        <tr><td colspan="4">{Yii::t('app', 'no_data_found')}</td></tr>
+                        {/if}
+                        {foreach $model->products as $key => $product}
+                        <tr id="product-row-{$product->id}" row-data='{$product->id}'>
+                          <td style="vertical-align: middle;" row-data='title'>{$product->title}</td>
+                          <td style="vertical-align: middle;" row-data='price'>{$product->price}</td>
+                          <td style="vertical-align: middle;" row-data='unit'>{$product->unit}</td>
+                          <td style="vertical-align: middle;" class='actions'>
+                            <a href='{url route="game/remove-product" id=$product->id}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}" data-pjax="0"><i class="fa fa-trash-o"></i></a>
+                          </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                  </table>
+                  </div>
                 </div>
                 <div class="tab-pane" id="images">
-                  {$form->field($model, 'gallery', [
-                    'template' => '{input}{hint}{error}'
-                  ])->widget(MultipleImageInputWidget::className(), [
-                  ])->label(false)}
+                  {MultipleImageInputWidget::widget([
+                    'name' => 'test', 
+                    'items' => array_column($model->images, 'image_id'),
+                    'ajax_add_url' => "{url route='game/add-gallery' id=$model->id}",
+                    'ajax_remove_url' => "{url route='game/remove-gallery' id=$model->id}"
+                  ])}
                 </div>
               </div>
             </div>
@@ -130,15 +152,15 @@
   </div>
 </div>
 {/ActiveForm}
-<!-- Modal -->
+
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="new-product-modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{Yii::t('app', 'create_package')}</h4>
+        <h4 class="modal-title">Tạo gói game</h4>
       </div>
-      {ActiveForm assign='newform' options=['id' => 'add-product-form'] action='/product/create'}
+      {ActiveForm assign='newform' options=['id' => 'add-product-form'] action="{url route='game/add-product' id=$model->id}"}
       <div class="modal-body">
       {$newform->field($newProductModel, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
         <div class="row">
@@ -163,54 +185,45 @@
     </div>
   </div>
 </div>
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="edit-product-modal">
-</div>
-<!-- Modal -->
-
 {registerJs}
 {literal}
-//$('.product-filter.active').click();
-
+var game_id = '{/literal}{$model->id}{literal}';
 var newform = new AjaxFormSubmit({element: '#add-product-form'});
 newform.success = function(data, form) {
   $(form)[0].reset();
   $('#new-product-modal').modal('hide');
-  $('.product-filter.active').click();
+  console.log(data);
+  loadProducts(game_id);
 }
 newform.error = function(errors) {
   console.log(errors);
 }
 
-// Edit product form
-$('body').on('click', '.edit-product', function(e) {
+$('html').on('click', '.actions>a.delete-action', function(e) {
   e.preventDefault();
-  $('#edit-product-modal').load( $(this).attr('href') );
-  $('#edit-product-modal').modal('show');
+  e.stopImmediatePropagation();
+  if (!window.confirm('Bạn có muốn xóa gói giá game này không?')) {
+    return;
+  }
+  var element = this;
+  $.ajax({
+      url: $(this).attr('href'),
+      type: 'GET',
+      dataType : 'json',
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+          alert('Có lỗi xảy ra');
+          return false;
+        } else {
+          loadProducts(game_id);
+        }
+      },
+  });
+  return false;
 });
 
-$('body').on('submit', '.edit-product-form', function(e) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    var form = $(this);
-    $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        dataType : 'json',
-        data: form.serialize(),
-        success: function (result, textStatus, jqXHR) {
-          console.log(result);
-          if (result.status == true) {
-            $('#edit-product-modal').modal('hide');
-            $('.product-filter.active').click();
-          }
-        },
-    });
-    return false;
-});
-
-$('.product-filter').on('click', function(e){
-  $('.product-filter').removeClass('active');
-  $(this).addClass('active');
-})
+function loadProducts(id) {
+  $( "#products" ).load( '/game/products?id=' + id );
+}
 {/literal}
 {/registerJs}
