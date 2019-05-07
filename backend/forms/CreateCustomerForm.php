@@ -78,7 +78,6 @@ class CreateCustomerForm extends Model
         }
         
         $user = new User();
-        // $user->setScenario(User::SCENARIO_CREATE);
         $user->name = $this->name;
         $user->username = $this->username;
         $user->email = $this->email;

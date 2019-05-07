@@ -35,11 +35,16 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
         return \Cloudinary\Uploader::upload($file->tempName, $option);
     }
 
-    public function get($fileModel)
+    public function getUrl($fileModel)
     {
         $options = [];
         $id = $this->getPublicId($fileModel);
         return cloudinary_url($id, $options);
+    }
+
+    public function getPath($fileModel)
+    {
+        return $this->getPublicId($fileModel);
     }
 
     protected function getPublicId($fileModel)

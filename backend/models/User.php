@@ -14,10 +14,10 @@ class User extends CommonUser
 
     public function scenarios()
     {
-        return [
-            self::SCENARIO_CREATE => ['name', 'country_code', 'phone', 'address', 'birthday', 'status', 'password'],
-            self::SCENARIO_EDIT => ['id', 'name', 'country_code', 'phone', 'address', 'birthday', 'status'],
-        ];
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_CREATE] = ['name', 'country_code', 'phone', 'address', 'birthday', 'status', 'password'];
+        $scenarios[self::SCENARIO_EDIT] = ['id', 'name', 'country_code', 'phone', 'address', 'birthday', 'status'];
+        return $scenarios;
     }
 
     public function rules()

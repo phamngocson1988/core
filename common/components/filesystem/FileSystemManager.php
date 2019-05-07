@@ -74,11 +74,17 @@ class FileSystemManager extends DynamicModel
         }
     }   
 
-    public function get($fileModel)
+    public function getUrl($fileModel)
     {
         $dependency = $this->instanceDependency();
-        $fileUrl = $dependency->get($fileModel);
+        $fileUrl = $dependency->getUrl($fileModel);
         return $fileUrl;
+    }
+
+    public function getPath($fileModel)
+    {
+        $dependency = $this->instanceDependency();
+        return $dependency->getPath($fileModel);
     }
 
     protected function saveToDatabase($file)

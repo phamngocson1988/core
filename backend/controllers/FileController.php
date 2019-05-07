@@ -50,6 +50,7 @@ class FileController extends Controller
                 $info = [];
                 $info['id'] = $fileId = $file->getId();
                 $info['src'] = $file->getUrl();
+                $info['path'] = $file->getPath();
                 $fileArray[] = $info;
             }
 
