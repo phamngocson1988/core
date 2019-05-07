@@ -16,10 +16,10 @@ class Contact extends ActiveRecord
 
     public function scenarios()
     {
-        return [
-            self::SCENARIO_CREATE => ['user_id', 'phone', 'name', 'description'],
-            self::SCENARIO_EDIT => ['id', 'phone', 'name', 'description'],
-        ];
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_CREATE] = ['user_id', 'phone', 'name', 'description'];
+        $scenarios[self::SCENARIO_EDIT] = ['id', 'phone', 'name', 'description'];
+        return $scenarios;
     }
 
     public function rules()

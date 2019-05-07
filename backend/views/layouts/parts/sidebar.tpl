@@ -41,6 +41,7 @@
           </li>
         </ul>
       </li>
+      {if $app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
@@ -55,6 +56,21 @@
           </li>
         </ul>
       </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-settings"></i>
+        <span class="title">Cấu hình</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/setting/import'}" class="nav-link " code='setting.import'>
+            <span class="title">Import</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {/if}
     </ul>
   </div>
 </div>

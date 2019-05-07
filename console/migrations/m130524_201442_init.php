@@ -77,7 +77,7 @@ class m130524_201442_init extends Migration
             'vinamobile' => $this->integer()->defaultValue(null),
             'gmobile' => $this->integer()->defaultValue(null),
             'other' => $this->integer()->defaultValue(null),
-
+        ], $tableOptions);
         $this->createTable('{{%transaction_history}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
@@ -112,6 +112,14 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer(),
             'created_by' => $this->integer(),
         ], $tableOptions);
+        $this->createTable('{{%file}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(100)->notNull(),
+            'extension' => $this->string(10)->notNull(),
+            'size' => $this->string(20)->notNull(),
+            'created_at' => $this->integer(),
+            'created_by' => $this->integer(),
+        ], $tableOptions);
     }
 
     public function down()
@@ -119,6 +127,7 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%user}}');
         // $this->dropTable('{{%customer}}');
         $this->dropTable('{{%image}}');
+        $this->dropTable('{{%file}}');
         // $this->dropTable('{{%profile}}');
         $this->dropTable('{{%transaction_history}}');
         $this->dropTable('{{%dailer}}');

@@ -74,8 +74,4 @@ yii migrate
 
 yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
 
-yii migrate/up --migrationPath=vendor/webzop/yii2-notifications/migrations
-
-yii migrate --migrationPath=@vendor/yii2mod/yii2-cart/migrations
-
 Config host and enjoy.

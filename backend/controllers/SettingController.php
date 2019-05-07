@@ -8,6 +8,7 @@ use backend\forms\ApplicationSettingForm;
 use backend\forms\SocialSettingForm;
 use backend\forms\HeaderScriptSettingForm;
 use backend\forms\GallerySettingForm;
+use backend\forms\ImportSettingForm;
 
 /**
  * Class SettingController
@@ -45,6 +46,12 @@ class SettingController extends Controller
                 'modelClass' => GallerySettingForm::class,
                 'view' => 'gallery.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.gallery']
+            ],
+            'import' => [
+                'class' => SettingsAction::class,
+                'modelClass' => ImportSettingForm::class,
+                'view' => 'import.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.import']
             ],
         ];
     }

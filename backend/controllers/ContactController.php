@@ -6,7 +6,9 @@ use common\components\Controller;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use common\models\Contact;
+use common\models\File;
 use yii\data\Pagination;
+use yii\web\NotFoundHttpException;
 
 /**
  * ContactController
@@ -93,5 +95,62 @@ class ContactController extends Controller
             'model' => $model,
             'back' => $request->get('ref', Url::to(['contact/index']))
         ]);
+    }
+
+    public function actionImport($id)
+    {
+        $request = Yii::$app->request;
+        $file = File::findOne($id);
+        if (!$file) throw new NotFoundHttpException("File không tồn tại", 1);
+        $url = $file->getUrl();
+        $fp = fopen($url, 'r');
+        if ($fp) {
+            $models = [];
+            $first_time = true;
+            while (($line = fgetcsv($fp, 1000, ",")) != FALSE) {
+                if ($first_time == true) {
+                    $first_time = false;
+                    continue;
+                }
+                $model = new Contact();
+                $model->user_id = Yii::$app->user->id;
+                $model->phone = $line[0];
+                $model->name  = $line[1];
+                $model->description  = $line[2];
+                $models[] = $model;
+            }
+
+            if ($request->isPost) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    foreach ($models as $model) {
+                        $model->save();
+                    }
+                    $transaction->commit();
+                    $file->delete();
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                    return $this->redirect(['contact/index']);
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    throw $e;
+                } catch (\Throwable $e) {
+                    $transaction->rollBack();
+                    throw $e;
+                }
+            }
+            return $this->render('import.tpl', [
+                'models' => $models,
+                'back' => $request->get('ref', Url::to(['contact/index']))
+            ]);
+        }
+    }
+
+    public function actionDownload() 
+    {
+        $settings = Yii::$app->settings;
+        $template = $settings->get('ImportSettingForm', 'import_contact_template', null);
+        if (file_exists($template)) {
+           Yii::$app->response->sendFile($template);
+        } 
     }
 }

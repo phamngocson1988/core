@@ -27,6 +27,9 @@
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
+            <a class="btn green btn-outline sbold" href="{url route='contact/download'}">Download Template</a>
+            <a class="btn red btn-outline sbold" id="csv_upload">Import</a>
+            <input type="file" id="file_upload" name="file" style="display: none" accept="csv" />
             <a class="btn green" href="{url route='contact/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
         </div>
@@ -87,5 +90,10 @@
 </div>
 {registerJs}
 {literal}
+var csvUpload = new AjaxUploadFile({trigger_element: '#csv_upload', file_element: '#file_upload'});
+csvUpload.callback = function(result) {
+  var file = result[0];
+  window.location.href = "{/literal}{url route='contact/import'}{literal}" + "?id=" + file.id;
+}
 {/literal}
 {/registerJs}
