@@ -102,7 +102,7 @@ class ContactController extends Controller
         $request = Yii::$app->request;
         $file = File::findOne($id);
         if (!$file) throw new NotFoundHttpException("File không tồn tại", 1);
-        $url = $file->getUrl();
+        $url = $file->getPath();
         $fp = fopen($url, 'r');
         if ($fp) {
             $models = [];

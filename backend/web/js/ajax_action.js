@@ -576,10 +576,8 @@ function AjaxUploadFile(opts) {
     this.options = {
         trigger_element: null,
         file_element: '#file', // seletor of the file element
+        link_upload: '/file/ajax-upload',
     }; 
-    this.links = {
-        upload: '/file/ajax-upload',
-    };
     // form to push data to server
     this.form = new FormData();
  
@@ -614,7 +612,7 @@ function AjaxUploadFile(opts) {
     this.upload = function() {
         var that = this;
         $.ajax({
-            url: this.links.upload,
+            url: this.link_upload,
             type: 'POST',
             processData: false, // important
             contentType: false, // important

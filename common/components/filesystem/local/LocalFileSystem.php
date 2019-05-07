@@ -14,7 +14,7 @@ class LocalFileSystem extends Model implements FileSystemInterface
 
     public function save($file, $fileModel)
     {
-        $filePath = $this->getFilePath($fileModel);
+        $filePath = $this->getPath($fileModel);
         $fileDir = dirname($filePath);
         FileHelper::createDirectory($fileDir);
         $file->saveAs($filePath);

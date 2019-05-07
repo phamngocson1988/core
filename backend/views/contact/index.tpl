@@ -90,7 +90,11 @@
 </div>
 {registerJs}
 {literal}
-var csvUpload = new AjaxUploadFile({trigger_element: '#csv_upload', file_element: '#file_upload'});
+var csvUpload = new AjaxUploadFile({
+  trigger_element: '#csv_upload', 
+  file_element: '#file_upload',
+  link_upload: '{/literal}{url route='file/ajax-upload'}{literal}'
+});
 csvUpload.callback = function(result) {
   var file = result[0];
   window.location.href = "{/literal}{url route='contact/import'}{literal}" + "?id=" + file.id;
