@@ -50,7 +50,7 @@ class File extends ActiveRecord
 
 	public function getUrl()
 	{
-		return Yii::$app->file->get($this);
+		return Yii::$app->file->getUrl($this);
 	}
 
 	public function getPath()
