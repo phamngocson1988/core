@@ -3,7 +3,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use backend\models\User;
+use common\models\User;
 
 /**
  * CreateCustomerForm
@@ -78,6 +78,7 @@ class CreateCustomerForm extends Model
         }
         
         $user = new User();
+        // $user->setScenario(User::SCENARIO_CREATE);
         $user->name = $this->name;
         $user->username = $this->username;
         $user->email = $this->email;
@@ -87,13 +88,7 @@ class CreateCustomerForm extends Model
         $user->status = $this->status;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        if ($user->save()) {
-            if ($this->send_mail == true) {
-                $this->sendEmail();
-            }
-            return $user;
-        }
-        return false;
+        return $user->save() ? $user : null;
     }
 
     public function getUserStatus()

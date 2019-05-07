@@ -72,7 +72,7 @@ class CustomerController extends Controller
         $request = Yii::$app->request;
         $model = new CreateCustomerForm();
         if ($model->load($request->post())) {
-            if ($user = $model->create()) {
+            if ($model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['customer/index']);
             } else {
