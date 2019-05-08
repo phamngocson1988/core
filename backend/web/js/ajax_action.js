@@ -612,7 +612,7 @@ function AjaxUploadFile(opts) {
     this.upload = function() {
         var that = this;
         $.ajax({
-            url: this.link_upload,
+            url: this.options.link_upload,
             type: 'POST',
             processData: false, // important
             contentType: false, // important
