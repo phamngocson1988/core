@@ -21,22 +21,25 @@
         <span class="selected"></span>
         <span class="arrow open"></span>
         </a>
-      </li>
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user"></i>
-        <span class="title">{Yii::t('app', 'user')}</span>
-        <span class="arrow"></span>
-        </a>
         <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
-            <span class="title">{Yii::t('app', 'customers')}</span>
-            </a>
-          </li>
           <li class="nav-item  ">
             <a href="{url route='/contact/index'}" class="nav-link " code='contact.index'>
             <span class="title">Danh bạ</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/contact/call'}" class="nav-link " code='contact.call'>
+            <span class="title">Gọi điện</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/contact/sms'}" class="nav-link " code='contact.sms'>
+            <span class="title">Nhắn tin</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/customer/history' id=$app->user->id}" class="nav-link " code='customer.history'>
+            <span class="title">Lịch sử giao dịch</span>
             </a>
           </li>
         </ul>
@@ -52,6 +55,20 @@
           <li class="nav-item  ">
             <a href="{url route='/dialer/index'}" class="nav-link " code='dialer.index'>
             <span class="title">Bộ số</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user"></i>
+        <span class="title">{Yii::t('app', 'user')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
+            <span class="title">{Yii::t('app', 'customers')}</span>
             </a>
           </li>
         </ul>

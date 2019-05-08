@@ -204,10 +204,12 @@ class CustomerController extends Controller
 
     public function actionHistory($id)
     {
-        $this->view->params['main_menu_active'] = 'customer.index';
+        $this->view->params['main_menu_active'] = 'customer.history';
         $request = Yii::$app->request;
         $get = $request->get();
-        $search = new FetchTransactionHistoryForm();
+        $search = new FetchTransactionHistoryForm([
+            'customer_id' => $id
+        ]);
         $search->load($get, '');
         $command = $search->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

@@ -153,4 +153,14 @@ class ContactController extends Controller
            Yii::$app->response->sendFile($template);
         } 
     }
+
+    public function actionCall()
+    {
+        return $this->render('call.tpl');
+    }
+
+    public function actionSms()
+    {
+        return $this->render('sms.tpl');
+    }
 }
