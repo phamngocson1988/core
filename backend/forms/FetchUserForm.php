@@ -13,6 +13,7 @@ class FetchUserForm extends Model
 {
     public $q;
     public $status;
+    public $role;
     private $_command;
 
     public function rules()
@@ -39,6 +40,12 @@ class FetchUserForm extends Model
         }
         if ((string)$this->status !== "") {
             $command->andWhere(['status' => $this->status]);
+        }
+
+        if ($this->role) {
+            $authManager = Yii::$app->authManager;
+            $filterRole = sprintf("%s.%s = %s.%s", $authManager->assignmentTable, 'user_id', User::tableName(), 'id');
+            $command->join('LEFT JOIN', $authManager->assignmentTable, $filterRole)->andWhere(["$authManager->assignmentTable.item_name" => $this->role]);
         }
         $this->_command = $command;
     }

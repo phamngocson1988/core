@@ -24,32 +24,33 @@
           <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_roles')}</span>
         </div>
         {if $app->user->can('admin')}
-        <!--<div class="actions">
+        <div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="{url route='rbac/create-role' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
-        </div>-->
+        </div>
         {/if}
       </div>
       <div class="portlet-body">
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 30%;"> {Yii::t('app', 'role')} </th>
-              <th style="width: 30%;"> {Yii::t('app', 'description')} </th>
+              <th style="width: 10%;"> {Yii::t('app', 'no')} </th>
+              <th style="width: 50%;"> {Yii::t('app', 'description')} </th>
               <th style="width: 20%;"> {Yii::t('app', 'count')} </th>
               <th style="width: 20%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
           <tbody>
             {if $models}
-            {foreach $models as $model}
+            {foreach array_values($models) as $key => $model}
             <tr>
-              <td>{$model->name}</td>
+              <td>{$key + 1}</td>
               <td>{$model->description}</td>
               <td>{count(Yii::$app->authManager->getUserIdsByRole($model->name))}</td>
               <td>
                 <a class="btn btn-xs grey-salsa tooltips" href="{url route='rbac/user-role' name=$model->name}" data-container="body" data-original-title="Danh sách"><i class="fa fa-list"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='rbac/edit-role' name=$model->name}" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
               </td>
             </tr>
             {/foreach}

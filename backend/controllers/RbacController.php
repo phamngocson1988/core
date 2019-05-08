@@ -6,6 +6,7 @@ use common\components\Controller;
 use common\models\User;
 use yii\base\InvalidParamException;
 use backend\forms\CreateRoleForm;
+use backend\forms\EditRoleForm;
 use backend\forms\AssignRoleForm;
 use backend\forms\RevokeRoleForm;
 use backend\forms\FetchUserByRoleForm;
@@ -60,6 +61,19 @@ class RbacController extends Controller
         $auth = Yii::$app->authManager;
         $sale = $auth->getRole('handler');
         $auth->assign($sale, $id);
+    }
+
+    public function actionAssignCustomer()
+    {
+        $auth = Yii::$app->authManager;
+        $customer = $auth->getRole('customer');
+        $users = User::find()->all();
+        foreach ($users as $user) {
+            $roles = $auth->getRolesByUser($user->id);
+            if (!$roles) {
+                $auth->assign($customer, $user->id);
+            }
+        }
     }
 
     public function actionCreateEditOrderPermission()
@@ -209,13 +223,34 @@ class RbacController extends Controller
         $model = new CreateRoleForm();
         if (Yii::$app->request->isPost) {
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                $ref = Yii::$app->request->get('ref', Url::to(['rabc/role']));
+                $ref = Yii::$app->request->get('ref', Url::to(['rbac/role']));
                 return $this->redirect($ref);
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }    
         }
         return $this->render('create-role.tpl', [
+            'model' => $model,
+        ]);
+        
+    }
+
+    public function actionEditRole($name)
+    {
+        $this->view->params['main_menu_active'] = 'rbac.role';
+        $model = new EditRoleForm();
+        $model->name = $name;
+        if (Yii::$app->request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                $ref = Yii::$app->request->get('ref', Url::to(['rbac/role']));
+                return $this->redirect($ref);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            }    
+        } else {
+            $model->loadData();
+        }
+        return $this->render('edit-role.tpl', [
             'model' => $model,
         ]);
         

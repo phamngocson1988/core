@@ -33,12 +33,12 @@
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          <!-- <li class="nav-item  ">
+          <li class="nav-item">
             <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
-            <span class="title">{Yii::t('app', 'users')}</span>
+            <span class="title">Người dùng</span>
             </a>
-          </li>-->
-          <li class="nav-item  ">
+          </li>
+          <li class="nav-item">
             <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
             <span class="title">{Yii::t('app', 'role')}</span>
             </a>

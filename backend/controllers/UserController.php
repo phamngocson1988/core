@@ -44,7 +44,8 @@ class UserController extends Controller
         $request = Yii::$app->request;
         $q = $request->get('q');
         $status = $request->get('status', '');
-        $form = new FetchUserForm(['q' => $q, 'status' => $status]);
+        $role = '';
+        $form = new FetchUserForm(['q' => $q, 'status' => $status, 'role' => $role]);
 
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
