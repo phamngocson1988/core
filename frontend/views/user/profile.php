@@ -66,7 +66,16 @@ use common\models\User;
                 'labelOptions' => ['class' => 'form-label-outside'],
                 'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                 'template' => '{label}{input}{hint}{error}'
-              ])->widget(\yii\jui\DatePicker::className(),['clientOptions' => ['changeMonth' => true, 'changeYear' => true], "dateFormat" => "yyyy-MM-dd"]) ?>
+              // ])->widget(\yii\jui\DatePicker::className(),['clientOptions' => ['changeMonth' => true, 'changeYear' => true], "dateFormat" => "yyyy-MM-dd"]) 
+              ])->widget(\dosamigos\datepicker\DatePicker::className(), [
+                'inline' => false, 
+                'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon" style="border-radius: 0px 35px 35px 0px"><i class="mdi mdi-calendar"></i></div></div>',
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+              ]);
+              ?>
             </div>
             <div class="col-md-6">
               <?= $form->field($model, 'favorite', [

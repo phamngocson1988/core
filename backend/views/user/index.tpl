@@ -27,7 +27,7 @@
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="{url route='user/invite' ref=$ref}">{Yii::t('app', 'invite_user')}</a>
+            <a class="btn green" href="{url route='user/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
         </div>
       </div>
@@ -84,6 +84,7 @@
               </td>
               <td>{$model->getStatusLabel()}</td>
               <td>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>
                 {if $app->user->id != $model->id}
                 {if $model->isActive()}
                 <a class="btn btn-xs grey-salsa delete-user tooltips" href="{url route='user/change-status' id=$model->id status='delete'}" data-container="body" data-original-title="{Yii::t('app', 'disable_user')}"><i class="fa fa-minus-circle"></i></a>

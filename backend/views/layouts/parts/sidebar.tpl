@@ -45,7 +45,7 @@
           </li>
         </ul>
       </li>
-      <li class="nav-item  ">
+      <!--<li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user"></i>
         <span class="title">{Yii::t('app', 'customers')}</span>
@@ -58,7 +58,7 @@
             </a>
           </li>
         </ul>
-      </li>
+      </li>-->
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user-following"></i>

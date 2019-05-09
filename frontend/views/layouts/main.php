@@ -56,7 +56,7 @@ AppAsset::register($this);
             </div>
             <div class="rd-navbar-aside-right-inner">
               <!-- RD Navbar Search-->
-              <div class="rd-navbar-search"><a class="rd-navbar-search-toggle" data-rd-navbar-toggle=".rd-navbar-search" href="#"><span></span></a>
+              <!-- <div class="rd-navbar-search"><a class="rd-navbar-search-toggle" data-rd-navbar-toggle=".rd-navbar-search" href="#"><span></span></a>
                 <form class="rd-search" action="search-results.html" data-search-live="rd-search-results-live" method="GET">
                   <div class="form-wrap">
                     <label class="form-label form-label" for="rd-navbar-search-form-input">Search...</label>
@@ -65,12 +65,13 @@ AppAsset::register($this);
                   </div>
                   <button class="rd-search-form-submit mdi mdi-magnify"></button>
                 </form>
-              </div>
+              </div> -->
               <?php if (Yii::$app->user->isGuest) :?>
-              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-login" href="<?=Url::to(['site/login']);?>"></a></div>
+              <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-account-plus" href="<?=Url::to(['site/signup']);?>"><span class="d-none d-xl-inline">Signup </span></a></div>
+              <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-login" href="<?=Url::to(['site/login']);?>"><span class="d-none d-xl-inline">Login </span></a></div>
               <?php else :?>
-              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-account-outline" href="<?=Url::to(['user/index']);?>"></a></div>
-              <div class="rd-navbar-shop"><a class="rd-navbar-shop-icon mdi mdi-logout" href="<?=Url::to(['site/logout']);?>"></a></div>
+              <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-account-outline" href="<?=Url::to(['user/index']);?>"><span class="d-none d-xl-inline"><?=Yii::$app->user->getIdentity()->name;?> </span></a></div>
+              <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-logout" href="<?=Url::to(['site/logout']);?>"><span class="d-none d-xl-inline">Logout </span></a></div>
               <?php endif;?>
             </div>
           </div>

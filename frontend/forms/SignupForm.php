@@ -15,16 +15,17 @@ class SignupForm extends Model
 {
     public $email;
     public $password;
+    public $repassword;
     public $name;
     public $country_code;
     public $phone;
     public $birthday;
-    public $favorite;
+    // public $favorite;
     public $is_reseller;
     public $invite_code;
     public $verifyCode;
     
-
+    protected $_inviter;
     /**
      * @param boolean $is_active
      * If false, the customer will be actived after signup
@@ -46,6 +47,7 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+            ['repassword', 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match"],        
 
             ['name', 'trim'],
             ['name', 'required'],
@@ -55,13 +57,33 @@ class SignupForm extends Model
             ['phone', 'required'],
             ['phone', 'string', 'max' => 20],
 
-            [['favorite', 'country_code', 'birthday', 'invite_code'], 'trim'],
+            [['country_code', 'birthday'], 'trim'],
             ['is_reseller', 'default', 'value' => User::IS_NOT_RESELLER],
             ['is_reseller', 'in', 'range' => array_keys(User::getResellerStatus())],
 
+            ['invite_code', 'trim'],
+            ['invite_code', 'validateInviteCode'],
+
             ['verifyCode', 'required'],
-            ['verifyCode', 'captcha'],
+            ['verifyCode', 'captcha', 'message' => 'Captcha is not match'],
         ];
+    }
+
+    public function validateInviteCode($attribute, $params) 
+    {
+        if (!$this->invite_code) return;
+        $affiliateUser = $this->getInviter();
+        if (!$affiliateUser) {
+            $this->addError($attribute, 'Invite code is not exist');
+        }
+    }
+
+    public function getInviter()
+    {
+        if (!$this->_inviter) {
+            $this->_inviter = User::findOne(['affiliate_code' => $this->invite_code]);
+        }
+        return $this->_inviter;
     }
 
     /**
@@ -81,12 +103,16 @@ class SignupForm extends Model
         $user->name = $this->name;
         $user->country_code = $this->country_code;
         $user->phone = $this->phone;
-        $user->favorite = $this->favorite;
+        // $user->favorite = $this->favorite;
         $user->birthday = $this->birthday;
         $user->affiliate_code = Yii::$app->security->generateRandomString(6);
         $user->is_reseller = $this->is_reseller;
         $user->setPassword($this->password);
         $user->generateAuthKey();
+        $affiliateUser = $this->getInviter();
+        if ($affiliateUser) {
+            $user->invited_by = $affiliateUser->id;
+        }
 
         if ($this->invite_code) {
             $affiliateUser = User::findOne(['affiliate_code' => $this->invite_code]);

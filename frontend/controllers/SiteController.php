@@ -4,7 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
+use common\components\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -223,6 +223,13 @@ class SiteController extends Controller
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionFindEmail($email)
+    {
+        $user = User::findOne(['email' => $email]);
+        $result = ($user instanceOf User);
+        return $this->renderJson($result);
     }
 
     public function actionActivate()

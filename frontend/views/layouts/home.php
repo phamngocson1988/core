@@ -75,9 +75,10 @@ AppAsset::register($this);
           </div>
           <div class="rd-navbar-aside-right">
             <?php if (Yii::$app->user->isGuest) :?>
+            <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-account-plus" href="<?=Url::to(['site/signup']);?>"><span class="d-none d-xl-inline">Signup </span></a></div>
             <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-login" href="<?=Url::to(['site/login']);?>"><span class="d-none d-xl-inline">Login </span></a></div>
             <?php else :?>
-            <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-account-outline" href="<?=Url::to(['user/index']);?>"><span class="d-none d-xl-inline">Account </span></a></div>
+            <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-account-outline" href="<?=Url::to(['user/index']);?>"><span class="d-none d-xl-inline"><?=Yii::$app->user->getIdentity()->name;?> </span></a></div>
             <div class="rd-navbar-shop rd-navbar-login"><a class="rd-navbar-shop-icon mdi mdi-logout" href="<?=Url::to(['site/logout']);?>"><span class="d-none d-xl-inline">Logout </span></a></div>
             <?php endif;?>
           </div>

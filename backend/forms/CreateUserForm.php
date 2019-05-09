@@ -6,6 +6,7 @@ use Yii;
 use common\forms\SignupForm as BaseSignupForm;
 use yii\helpers\ArrayHelper;
 use backend\forms\AssignRoleForm;
+use common\models\User;
 
 class CreateUserForm extends BaseSignupForm
 {
@@ -13,6 +14,10 @@ class CreateUserForm extends BaseSignupForm
     public $username;
     public $email;
     public $password;
+    public $phone;
+    public $address;
+    public $birthday;
+    public $status;
 	public $role;
 
 	public function rules()
@@ -41,7 +46,9 @@ class CreateUserForm extends BaseSignupForm
                      $this->addError($attribute, Yii::t('app', 'no_white_space_allowed')); //No white spaces allowed!
                 }
             }],
-
+            ['status', 'in', 'range' => array_keys(User::getUserStatus())],
+            [['phone', 'address', 'birthday'], 'trim'],
+            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
             ['role', 'trim']
         ];
     }
@@ -54,7 +61,7 @@ class CreateUserForm extends BaseSignupForm
         return $names;
     }
 	
-	public function create()
+	public function signup()
 	{
 		$connection = Yii::$app->db;
 		$transaction = $connection->beginTransaction();
@@ -66,12 +73,16 @@ class CreateUserForm extends BaseSignupForm
 	        $user = new User();
 	        $user->name = $this->name;        
 	        $user->username = $this->username;
-	        $user->email = $this->email;
+            $user->email = $this->email;
+            $user->phone = $this->phone;
+            $user->address = $this->address;
+            $user->birthday = $this->birthday;
+            $user->status = $this->status;
 	        $user->setPassword($this->password);
 	        $user->generateAuthKey();
 	        $user->save();
 	        
-			if ($this->role && ($user instanceof \common\models\User)) {
+			if ($this->role && $user) {
 				$form = new AssignRoleForm(['user_id' => $user->id, 'role' => $this->role, 'scenario' => AssignRoleForm::SCENARIO_ADD]);
 				$form->save();
 			}	
@@ -97,5 +108,10 @@ class CreateUserForm extends BaseSignupForm
             ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)
             ->setTextBody('Bạn nhận được lời mời làm thành viên quản trị từ kinggems.us')
             ->send();
+    }
+
+    public function getUserStatus()
+    {
+        return User::getUserStatus();
     }
 }

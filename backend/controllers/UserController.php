@@ -8,6 +8,7 @@ use yii\data\Pagination;
 use yii\helpers\Url;
 use backend\forms\SignupForm;
 use backend\forms\CreateUserForm;
+use backend\forms\EditUserForm;
 use backend\forms\FetchUserForm;
 use backend\forms\ChangeUserStatusForm;
 use backend\forms\InviteUserForm;
@@ -25,7 +26,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'invite', 'change-status'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -82,6 +83,32 @@ class UserController extends Controller
         }
 
         return $this->render('create.tpl', [
+            'model' => $model,
+            'roles' => $roles,
+            'back' => $request->get('ref', Url::to(['user/index']))
+        ]);
+    }
+
+    public function actionEdit($id)
+    {
+        $this->view->params['main_menu_active'] = 'user.index';        
+        $request = Yii::$app->request;
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRoles();
+        $model = new EditUserForm();
+        $model->id = $id;
+        if ($model->load($request->post())) {
+            if ($user = $model->edit()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['user/index']);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            }
+        } else {
+            $model->loadData();
+        }
+
+        return $this->render('edit.tpl', [
             'model' => $model,
             'roles' => $roles,
             'back' => $request->get('ref', Url::to(['user/index']))

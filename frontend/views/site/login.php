@@ -20,18 +20,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix']); ?>
           <?= $form->field($model, 'username', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input'],
+            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'User name'],
             'labelOptions' => ['class' => 'form-label'],
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{label}{hint}{error}'
+            'template' => '{input}{hint}{error}'
           ])->textInput(['autofocus' => true]) ?>
 
           <?= $form->field($model, 'password', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input'],
+            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Password'],
             'labelOptions' => ['class' => 'form-label'],
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{label}{hint}{error}'
+            'template' => '{input}{hint}{error}'
           ])->passwordInput() ?>
 
           <div class="form-button">

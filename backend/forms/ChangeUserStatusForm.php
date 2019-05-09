@@ -4,7 +4,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use backend\models\User;
+use common\models\User;
 
 class ChangeUserStatusForm extends Model
 {
