@@ -8,13 +8,13 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Nhà quản trị</span>
+      <span>Quản lý khách hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Nhà quản trị</h1>
+<h1 class="page-title">Quản lý khách hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -23,7 +23,7 @@
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Nhà quản trị</span>
+          <span class="caption-subject bold uppercase"> Quản lý khách hàng</span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
@@ -34,25 +34,16 @@
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <form method="GET">
-            <div class="form-group col-md-2">
-              <label>Vai trò: </label>
-              <select class="form-control" name="role">
-                <option value="">Tất cả</option>
-                {foreach $form->getManagerRoles() as $name => $description}
-                <option value="{$name}" {if $name === $form->role} selected {/if}>{$description}</option>
-                {/foreach}
-              </select>
-            </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-3">
               <label>{Yii::t('app', 'status')}: </label>
               <select class="form-control" name="status">
-                <option value="">Tất cả</option>
+                <option value="">All</option>
                 {foreach $form->getUserStatus() as $statusKey => $statusLabel}
                 <option value="{$statusKey}" {if (string)$statusKey === $form->status} selected {/if}>{$statusLabel}</option>
                 {/foreach}
               </select>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4">
               <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
                 placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->q}">
             </div>
@@ -71,9 +62,8 @@
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 15%;"> {Yii::t('app', 'name')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'username')} </th>
+              <th style="width: 15%;"> Tên đăng nhập </th>
               <th style="width: 20%;"> {Yii::t('app', 'email')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'role')} </th>
               <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
               <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
@@ -86,11 +76,6 @@
               <td>{$model->name}</td>
               <td>{$model->username}</td>
               <td>{$model->email}</td>
-              <td>
-                {foreach $model->getRoles() as $role}
-                <span class="label label-info label-many">{$role}</span>
-                {/foreach}
-              </td>
               <td>{$model->getStatusLabel()}</td>
               <td>
                 <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>

@@ -182,22 +182,24 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           <thead>
             <tr>
               <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
+              <th style="width: 5%;"> Mã đơn </th>
               <th style="width: 20%;"> Tên khách hàng </th>
               <th style="width: 20%;" data-field="created_at" data-sortable="true" data-sort-name="created_at"> Ngày tạo </th>
               <th style="width: 5%;"> Tổng Coin </th>
               <th style="width: 15%;"> Saler </th>
               <th style="width: 15%;"> Order Team </th>
               <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
               <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
-              <?php foreach ($models as $model) :?>
+              <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;">Order #<?=$model->id;?></td>
+                <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->auth_key;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->customer_name;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;">$<?=$model->total_price;?></td>
@@ -205,7 +207,6 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
                 <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem"><i class="fa fa-eye"></i></a>
                   <?php if (Yii::$app->user->can('edit_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php endif;?>

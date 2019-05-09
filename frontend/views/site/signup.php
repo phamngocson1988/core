@@ -20,13 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row row-fix justify-content-sm-center">
       <div class="col-md-8 col-lg-6 col-xl-4">
         <!-- RD Mailform-->
-        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix', 'options' => ['autocomplete' => 'off']]); ?>
+        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix']); ?>
           <?= $form->field($model, 'email', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],
             'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Input your email', 'id' => 'email'],
             'labelOptions' => ['class' => 'form-label'],
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
+            'template' => '{input}{hint}{error}',
+            'validateOnBlur' => false
           ])->textInput() ?>
 
           <?= $form->field($model, 'name', [
@@ -135,6 +136,7 @@ $('#email').on('blur', function(){
         _c.addClass('has-error');
         _e.html('This email address has already been taken.');
         $('#email').attr('aria-invalid', true);
+        return false;
       }
     },
   });

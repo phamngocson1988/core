@@ -35,7 +35,12 @@
         <ul class="sub-menu">
           <li class="nav-item">
             <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
-            <span class="title">Người dùng</span>
+            <span class="title">Nhà quản trị</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{url route='/user/customer'}" class="nav-link " code='user.customer'>
+            <span class="title">Khách hàng</span>
             </a>
           </li>
           <li class="nav-item">
