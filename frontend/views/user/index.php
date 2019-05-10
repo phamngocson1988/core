@@ -55,7 +55,7 @@ use yii\helpers\Url;
                 </div>
               </article>
             </div>
-            <!--<div class="col-sm-10 col-md-6 col-xl-4">
+            <div class="col-sm-10 col-md-6 col-xl-4">
               <article class="box-minimal box-minimal-border">
                 <div class="box-minimal-icon novi-icon mdi mdi-bank"></div>
                 <p class="big box-minimal-title"><a href="<?=Url::to(['user/transaction']);?>" style="color:white">Transactions</a></p>
@@ -70,7 +70,7 @@ use yii\helpers\Url;
                   <?php endif;?>
                 </div>
               </article>
-            </div>-->
+            </div>
           </div>
         </div>
       </section>
