@@ -31,25 +31,6 @@ class m130524_201442_init extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
-        // $this->createTable('{{%customer}}', [
-        //     'user_id' => $this->integer()->notNull(),
-        //     'phone' => $this->string(50),
-        //     'address' => $this->string(200),
-        //     'company' => $this->string(200)->notNull(),
-        //     'tax_code' => $this->string(20)->notNull(),
-        //     'balance' => $this->integer()->notNull()->defaultValue(0),
-        // ], $tableOptions);
-
-        // $this->createTable('{{%profile}}', [
-        //     'id' => $this->primaryKey(),
-        //     'customer_id' => $this->integer()->notNull(),
-        //     'prefix' => $this->string(50)->notNull(),
-        //     'port' => $this->integer()->notNull(),
-        //     'action' => $this->string(10)->notNull(),
-        //     'price' => $this->integer()->notNull(),
-        //     'api' => $this->string(200)
-        // ], $tableOptions);
-
         $this->createTable('{{%contact}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
@@ -120,6 +101,28 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer(),
             'created_by' => $this->integer(),
         ], $tableOptions);
+
+        this->createTable('{{%record}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer(100)->notNull(),
+            'dialer_id' => $this->integer(100)->notNull(),
+            'dialer_type' => $this->string(10)->notNull(),
+            'start_time' => $this->dateTime(),
+            'end_time' => $this->dateTime(),
+            'message' => $this->text(),
+            'phone' => $this->string(50)->notNull(),
+            'status' => $this->string(10)->notNull(),
+            'created_at' => $this->dateTime()->notNull(),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alter = "ALTER TABLE {{%record}} MODIFY `dialer_type` ENUM('sms', 'call') NOT NULL";
+            $command = $this->db->createCommand($alter);
+            $command->execute();
+
+            $alterStatus = "ALTER TABLE {{%record}} MODIFY `status` ENUM('requesting','calling','end') NOT NULL DEFAULT 'requesting'";
+            $commandStatus = $this->db->createCommand($alterStatus);
+            $commandStatus->execute();
+        }
     }
 
     public function down()
@@ -132,5 +135,6 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%transaction_history}}');
         $this->dropTable('{{%dailer}}');
         $this->dropTable('{{%customer_dailer}}');
+        $this->dropTable('{{%record}}');
     }
 }

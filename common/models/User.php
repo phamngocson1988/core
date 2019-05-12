@@ -264,4 +264,5 @@ class User extends ActiveRecord implements IdentityInterface
         }, $this->transactions);
         return array_sum($amounts);
     }
+
 }

@@ -8,6 +8,10 @@ class Dialer extends ActiveRecord
 {
 	const SCENARIO_CREATE = 'create';
 	const SCENARIO_EDIT = 'edit';
+
+    const ACTION_CALL = 'call';
+    const ACTION_SMS = 'sms';
+
     public static function tableName()
     {
         return '{{%dialer}}';

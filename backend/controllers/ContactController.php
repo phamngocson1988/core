@@ -5,10 +5,15 @@ use Yii;
 use common\components\Controller;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use common\models\Contact;
 use common\models\File;
 use yii\data\Pagination;
 use yii\web\NotFoundHttpException;
+use common\models\Record;
+use common\models\CustomerDialer;
+use common\models\Dialer;
+use common\models\TransactionHistory;
 
 /**
  * ContactController
@@ -156,11 +161,92 @@ class ContactController extends Controller
 
     public function actionCall()
     {
-        return $this->render('call.tpl');
+        $model = new Record();
+        $model->setScenario(Record::SCENARIO_CREATE);
+        $user = Yii::$app->user->getIdentity();
+        $dialers = array_map(function($customerDialer) {
+            $dialer = $customerDialer->dialer;
+            if ($dialer->action == Dialer::ACTION_CALL) return $dialer;
+        }, $user->dialers);
+        $dialers = array_filter($dialers);
+        $dialers = ArrayHelper::map($dialers, 'id', 'number');
+        return $this->render('call', [
+            'dialers' => $dialers,
+            'model' => $model
+        ]);
+    }
+
+    public function actionStartCall()
+    {
+        $request = Yii::$app->request;
+        $model = new Record();
+        $model->setScenario(Record::SCENARIO_CREATE);
+        $model->user_id = Yii::$app->user->id;
+        $model->dialer_type = Record::DIALER_TYPE_CALL;
+        $model->start_time = date('Y-m-d H:i:s');
+        $model->status = Record::STATUS_CALLING;
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->renderJson(true, $model);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
+
+    public function actionEndCall()
+    {
+        $request = Yii::$app->request;
+        $id = $request->post('id');
+        $model = Record::findOne($id);
+        if (!$model) return;
+        $model->setScenario(Record::SCENARIO_EDIT);
+        $model->end_time = date('Y-m-d H:i:s');
+        $model->status = Record::STATUS_END;
+        $model->save();
+
+        $dialer = CustomerDialer::findOne(['dialer_id' => $model->dialer_id, 'user_id' => Yii::$app->user->id]);
+        $amount = $dialer->call / 60 * $model->getDuration();
+        $history = new TransactionHistory();
+        $history->user_id = Yii::$app->user->id;
+        $history->amount = $amount;
+        $history->description = sprintf("Cuộc gọi đến số %s trong %s giây vào lúc %s", $model->phone, $model->getDuration(), $model->created_at);
+        $history->transaction_type = TransactionHistory::TYPE_OUTPUT;
+        $history->created_by = Yii::$app->user->id;
+        $history->save();
+        return $this->renderJson(true);
+        // Yii::warning('Your browser was closed at ' . date('Y-m-d H:i:s'), 'call');
     }
 
     public function actionSms()
     {
         return $this->render('sms.tpl');
+    }
+
+    public function actionSuggestion()
+    {
+        $request = Yii::$app->request;
+
+        if( $request->isAjax) {
+            $keyword = $request->get('q');
+            $items = [];
+            if ($keyword) {
+                $command = Contact::find()->where(['user_id' => Yii::$app->user->id]);
+                $command->andWhere(['like', 'phone', $keyword]);
+                $models = $command->offset(0)->limit(20)->all();
+                if ($models) {
+                    foreach ($models as $model) {
+                        $item = [];
+                        $item['id'] = $model->phone;
+                        $item['text'] = sprintf("%s - %s", $model->phone, $model->name);
+                        $items[] = $item;
+                    }
+                } else {
+                    $item = [];
+                    $item['id'] = $keyword;
+                    $item['text'] = $keyword;
+                    $items[] = $item;
+                }
+            }
+            return $this->renderJson(true, ['items' => $items]);
+        }
     }
 }
