@@ -45,6 +45,7 @@ class TakenOrderForm extends Model
     {
         $order = $this->getOrder();
         $order->handler_id = Yii::$app->user->id;
+        $order->process_start_time = date('Y-m-d H:i:s');
         return $order->save();
     }
 }

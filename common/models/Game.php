@@ -8,25 +8,7 @@ use common\models\Image;
 use common\models\Product;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
-/**
- * Game model
- *
- * @property integer $id
- * @property string $title
- * @property string $slug
- * @property string $excerpt
- * @property string $content
- * @property integer $image_id
- * @property string $meta_title
- * @property string $meta_keyword
- * @property string $meta_description
- * @property integer $created_by
- * @property integer $created_at
- * @property integer $updated_at
- * @property integer $deleted_by
- * @property integer $deleted_at
- * @property string $status
- */
+
 class Game extends ActiveRecord
 {
 	const STATUS_INVISIBLE = 'N';

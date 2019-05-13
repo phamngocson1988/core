@@ -4,7 +4,8 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Order;
+use yii\helpers\ArrayHelper;
+use backend\models\Order;
 use common\models\User;
 use common\models\Game;
 
@@ -23,7 +24,7 @@ class FetchOrderForm extends Model
     {
         return [
             ['q', 'trim'],
-            [['customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe'],
+            [['game_id', 'customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe'],
             ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d')],
         ];
@@ -40,7 +41,6 @@ class FetchOrderForm extends Model
     protected function createCommand()
     {
         $command = Order::find();
-        $command->where(["<>", "status", Order::STATUS_DELETED]);
         
         if ($this->q) {
             $command->andWhere(['OR',
@@ -52,6 +52,9 @@ class FetchOrderForm extends Model
         }
         if ($this->customer_id) {
             $command->andWhere(['customer_id' => $this->customer_id]);
+        }
+        if ($this->game_id) {
+            $command->andWhere(['game_id' => $this->game_id]);
         }
         if ($this->saler_id) {
             $command->andWhere(['saler_id' => $this->saler_id]);
@@ -119,7 +122,11 @@ class FetchOrderForm extends Model
     public function getStatus()
     {
         $list = Order::getStatusList();
-        unset($list[Order::STATUS_DELETED]);
         return $list;
+    }
+
+    public function fetchGames()
+    {
+        return ArrayHelper::map(Game::find()->all(), 'id', 'title');
     }
 }

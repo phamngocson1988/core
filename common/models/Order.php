@@ -20,7 +20,13 @@ class Order extends ActiveRecord
     const STATUS_PENDING = 'pending';
     const STATUS_PROCESSING = 'processing';
     const STATUS_COMPLETED = 'completed';
-    const STATUS_DELETED = 'deleted';
+    const STATUS_DELETED = 'cancelled';
+
+    const SCENARIO_VERIFYING = self::STATUS_VERIFYING;
+    const SCENARIO_PENDING = self::STATUS_PENDING;
+    const SCENARIO_PROCESSING = self::STATUS_PROCESSING;
+    const SCENARIO_COMPLETED = self::STATUS_COMPLETED;
+    const SCENARIO_DELETED = self::STATUS_DELETED;
 
     /**
      * @inheritdoc
@@ -49,7 +55,7 @@ class Order extends ActiveRecord
             self::STATUS_PENDING => 'Pending',
             self::STATUS_PROCESSING => 'Processing',
             self::STATUS_COMPLETED => 'Completed',
-            self::STATUS_DELETED => 'Deleted'
+            self::STATUS_DELETED => 'Cancelled'
         ];
     }
 
@@ -133,6 +139,12 @@ class Order extends ActiveRecord
         return $this->rating;
     }
 
+    public function getPercent()
+    {
+        if (!$this->total_unit) return 0;
+        return floor(min(1, $this->doing_unit / $this->total_unit) * 100);
+    }
+
     /**
      * check if the order is in temporary status or not. The system only allow to delete temporary order
      * If not, just move it to 'deleted' status.
@@ -150,4 +162,5 @@ class Order extends ActiveRecord
         }
         return $flat;
     }
+
 }

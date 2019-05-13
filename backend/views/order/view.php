@@ -74,19 +74,13 @@ use common\models\File;
                             <thead>
                               <tr>
                                 <th> Tên game </th>
-                                <th> Tên đơn vị </th>
-                                <th> Số game </th>
-                                <th> Số lượng </th>
-                                <th> Tổng số game </th>
+                                <th> Số lượng nạp </th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td><?=$item->item_title;?></td>
-                                <td><?=$item->unit_name;?></td>
-                                <td><?=$item->unit;?></td>
-                                <td><?=$item->quantity;?></td>
-                                <td><?=$item->total_unit;?></td>
+                                <td><?=$order->game_title;?></td>
+                                <td><?=$order->total_unit;?></td>
                               </tr>
                             </tbody>
                           </table>
@@ -114,9 +108,7 @@ use common\models\File;
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Order Status: </div>
-                          <div class="col-md-7 value">
-                            <span class="label label-success"> <?=$order->status;?> </span>
-                          </div>
+                          <div class="col-md-7 value"><?=$order->getStatusLabel();?></div>
                         </div>
                         <?php if ($order->total_discount) :?>
                         <div class="row static-info">
@@ -173,51 +165,50 @@ use common\models\File;
                       <div class="portlet-body" id="game_account">
                         <div class="row static-info">
                           <div class="col-md-5"> Username: </div>
-                          <div class="col-md-7"> <?=$item->username;?></div>
+                          <div class="col-md-7"> <?=$order->username;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5"> Password: </div>
-                          <div class="col-md-7"> <?=$item->password;?></div>
+                          <div class="col-md-7"> <?=$order->password;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Tên nhân vật: </div>
-                          <div class="col-md-7 value"><?=$item->character_name;?></div>
+                          <div class="col-md-7 value"><?=$order->character_name;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Platform: </div>
-                          <div class="col-md-7 value"> <?=$item->platform;?></div>
+                          <div class="col-md-7 value"> <?=$order->platform;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Login method: </div>
-                          <div class="col-md-7 value"> <?=$item->login_method;?></div>
+                          <div class="col-md-7 value"> <?=$order->login_method;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Recover Code: </div>
-                          <div class="col-md-7 value"> <?=$item->recover_code;?></div>
+                          <div class="col-md-7 value"> <?=$order->recover_code;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Server: </div>
-                          <div class="col-md-7 value"> <?=$item->server;?></div>
+                          <div class="col-md-7 value"> <?=$order->server;?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Ghi chú: </div>
-                          <div class="col-md-7 value"> <?=$item->note;?></div>
+                          <div class="col-md-7 value"> <?=$order->note;?></div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                
               </div>
               <div class="tab-pane" id="images">
                 <div class="row">
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
-                    <img src="<?=$item->getImageBeforeUrl();?>" id="show_before_image" class="img-responsive">
+                    <!-- <img src="" id="show_before_image" class="img-responsive"> -->
                   </div>
                   <div class="col-md-6 col-sm-12">
                     <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
-                    <img src="<?=$item->getImageAfterUrl();?>" id="show_after_image" class="img-responsive">
+                    <!-- <img src="" id="show_after_image" class="img-responsive"> -->
                   </div>
                 </div>
               </div>

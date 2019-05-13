@@ -27,12 +27,13 @@ class TakenOrderRule extends Rule
         if ($order->handler_id) return false;
         if (Yii::$app->user->can('admin')) return true;
         if (Yii::$app->user->can('handler')) {
-            $checkTaken = new FetchOrderForm([
-                'handler_id' => Yii::$app->user->id,
-                'status' => Order::STATUS_PENDING
-            ]);
-            $checkTakenCommand = $checkTaken->getCommand();
-            return ($checkTakenCommand->count() < 1);
+            // $checkTaken = new FetchOrderForm([
+            //     'handler_id' => Yii::$app->user->id,
+            //     'status' => Order::STATUS_PENDING
+            // ]);
+            // $checkTakenCommand = $checkTaken->getCommand();
+            // return ($checkTakenCommand->count() < 1);
+            return true;
         }
         return false;        
     }

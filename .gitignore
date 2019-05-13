@@ -37,3 +37,4 @@ phpunit.phar
 
 # upload files
 /common/uploads
+/common/runtime

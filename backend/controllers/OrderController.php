@@ -14,7 +14,7 @@ use backend\forms\CreateOrderItemForm;
 use backend\forms\EditOrderItemForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
-use common\models\Order;
+use backend\models\Order;
 use common\models\OrderItems;
 use backend\forms\UpdateOrderStatusPending;
 use backend\forms\UpdateOrderStatusProcessing;
@@ -53,7 +53,7 @@ class OrderController extends Controller
                     
                     [
                         'allow' => true,
-                        'actions' => ['edit', 'my-order'],
+                        'actions' => ['edit', 'my-order', 'pending'],
                         'roles' => ['saler', 'handler'],
                     ],
                     [
@@ -204,11 +204,8 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
         $order = Order::findOne($id);
-        $items = $order->items;
-        $item = reset($items);
         return $this->render('view', [
             'order' => $order,
-            'item' => $item,
             'back' => $request->get('ref', Url::to(['order/index']))
         ]);
     }
@@ -246,29 +243,53 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionVerifying($id)
+    {
+        $this->view->params['main_menu_active'] = 'order.index';
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        return;
+    }
+
+    public function actionPending($id)
+    {
+        $this->view->params['main_menu_active'] = 'order.index';
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        if (!Yii::$app->user->can('edit_order', ['order' => $order])) throw new \yii\web\ForbiddenHttpException('Bạn không có quyền truy cập chức năng này');
+        $order->setScenario(Order::SCENARIO_PENDING);
+        if ($order->load($request->post()) && $order->save()) {
+            Yii::$app->session->setFlash('success', 'Success!');
+        }
+
+        return $this->render('pending', [
+            'order' => $order,
+        ]);
+    }
+
     public function actionEdit($id)
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $order = EditOrderForm::findOne($id);
-        $item = EditOrderItemForm::find()->where(['order_id' => $id])->one();
+        $order = Order::findOne($id);
+        // $item = EditOrderItemForm::find()->where(['order_id' => $id])->one();
         switch ($order->status) {
-            case EditOrderForm::STATUS_VERIFYING:
+            case Order::STATUS_VERIFYING:
                 $template = 'verifying';
                 $updateStatusForm = new UpdateOrderStatusPending();
-                $item->scenario = EditOrderItemForm::SCENARIO_VERIFYING;
+                // $item->scenario = EditOrderItemForm::SCENARIO_VERIFYING;
                 break;
-            case EditOrderForm::STATUS_PENDING:
+            case Order::STATUS_PENDING:
                 $template = 'pending';
                 $updateStatusForm = new UpdateOrderStatusProcessing();
-                $item->scenario = EditOrderItemForm::SCENARIO_PENDING;
+                // $item->scenario = EditOrderItemForm::SCENARIO_PENDING;
                 break;
-            case EditOrderForm::STATUS_PROCESSING:
+            case Order::STATUS_PROCESSING:
                 $template = 'processing';
                 $updateStatusForm = new UpdateOrderStatusProcessing();
-                $item->scenario = EditOrderItemForm::SCENARIO_PROCESSING;
+                // $item->scenario = EditOrderItemForm::SCENARIO_PROCESSING;
                 break;
-            case EditOrderForm::STATUS_COMPLETED:
+            case Order::STATUS_COMPLETED:
                 $template = 'view';
                 $updateStatusForm = new UpdateOrderStatusProcessing();
                 break;
@@ -281,12 +302,12 @@ class OrderController extends Controller
 
         if ($request->isPost) {
             $post = $request->post();
-            if ($order->isVerifyingOrder()) {
-                if (!$order->load($post)) Yii::$app->session->setFlash('error', 'Load Order Error!');
-                elseif (!$order->save()) Yii::$app->session->setFlash('error', 'Save Order Error!');
-            }
-            if (!$item->load($post)) Yii::$app->session->setFlash('error', 'Load Item Error!');
-            if (!$item->save()) Yii::$app->session->setFlash('error', 'Save Item Error!');
+            // if ($order->isVerifyingOrder()) {
+            //     if (!$order->load($post)) Yii::$app->session->setFlash('error', 'Load Order Error!');
+            //     elseif (!$order->save()) Yii::$app->session->setFlash('error', 'Save Order Error!');
+            // }
+            // if (!$item->load($post)) Yii::$app->session->setFlash('error', 'Load Item Error!');
+            // if (!$item->save()) Yii::$app->session->setFlash('error', 'Save Item Error!');
             Yii::$app->session->setFlash('success', 'Success!');
             $ref = $request->get('ref', Url::to(['order/index']));
             return $this->redirect($ref);
@@ -296,7 +317,7 @@ class OrderController extends Controller
         $templateList = OrderComplainTemplate::find()->all();
         return $this->render($template, [
             'order' => $order,
-            'item' => $item,
+            // 'item' => $item,
             'updateStatusForm' => $updateStatusForm,
             'back' => $request->get('ref', Url::to(['order/index'])),
             'template_list' => $templateList,
@@ -374,10 +395,11 @@ class OrderController extends Controller
     public function actionAddUnit($id)
     {
         $request = Yii::$app->request;
-        $model = OrderItems::findOne($id);
+        $model = Order::findOne($id);
         if ($model) {
             $unit = $request->post('doing_unit', 0);
             $model->doing_unit += $unit;
+            if ($model->doing_unit > $model->total_unit) return $this->renderJson(false, [], 'Bạn không thể nạp quá số game của đơn hàng này');
             $model->save();
             return $this->renderJson(true, ['total' => $model->doing_unit]);
         } else {

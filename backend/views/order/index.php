@@ -57,7 +57,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Quản lý đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng</span>
         </div>
         <div class="actions">
           <?php if (Yii::$app->user->can('saler')) :?>
@@ -68,13 +68,14 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         </div>
       </div>
       <div class="portlet-body">
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>     
+               
             <?php $customer = $search->getCustomer();?>
             <?=$form->field($search, 'q', [
               'options' => ['class' => 'form-group col-md-1'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
-            ])->textInput()->label('Order ID/Key');?>
+            ])->textInput()->label('Mã đơn hàng');?>
 
             <?=$form->field($search, 'customer_id', [
               'options' => ['class' => 'form-group col-md-2'],
@@ -143,69 +144,82 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               ])->hiddenInput()->label(false);?>
             <?php endif;?>
 
-            <?=$form->field($search, 'status', [
-              'options' => ['class' => 'form-group col-md-2'],
-              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
-            ])->dropDownList($search->getStatus())->label('Trạng thái');?>
-
-            <div class="form-group col-md-2">
-              <label class="control-label">Ngày tạo</label>
-              <div class="form-control" style="border: none; padding: 0">
-                  <div id="reportrange" class="btn default">
-                      <i class="fa fa-calendar"></i> &nbsp;
-                      <span> </span>
-                      <b class="fa fa-angle-down"></b>
-                  </div>
-              </div>
-              <?=$form->field($search, 'start_date', [
-                'template' => '{input}',
-                'options' => ['tag' => false],
-                'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
-              ])->hiddenInput()->label(false);?>
-              <?=$form->field($search, 'end_date', [
-                'template' => '{input}',
-                'options' => ['tag' => false],
-                'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
-              ])->hiddenInput()->label(false);?>
-            </div>
-
-            <div class="form-group col-md-2">
-              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
-                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
-              </button>
-            </div>
-          <?php ActiveForm::end()?>
+            
+          
         </div>
-        
+        <div class="row">
+          <?=$form->field($search, 'status', [
+            'options' => ['class' => 'form-group col-md-2'],
+            'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
+          ])->dropDownList($search->getStatus())->label('Trạng thái');?>
+
+          <div class="form-group col-md-2">
+            <label class="control-label">Ngày tạo</label>
+            <div class="form-control" style="border: none; padding: 0">
+                <div id="reportrange" class="btn default">
+                    <i class="fa fa-calendar"></i> &nbsp;
+                    <span> </span>
+                    <b class="fa fa-angle-down"></b>
+                </div>
+            </div>
+            <?=$form->field($search, 'start_date', [
+              'template' => '{input}',
+              'options' => ['tag' => false],
+              'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
+            ])->hiddenInput()->label(false);?>
+            <?=$form->field($search, 'end_date', [
+              'template' => '{input}',
+              'options' => ['tag' => false],
+              'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
+            ])->hiddenInput()->label(false);?>
+          </div>
+
+          <?=$form->field($search, 'game_id', [
+            'options' => ['class' => 'form-group col-md-2'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+
+          <div class="form-group col-md-2">
+            <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+              <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+            </button>
+          </div>
+        </div>
+        <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 5%;"> Mã đơn </th>
-              <th style="width: 20%;"> Tên khách hàng </th>
-              <th style="width: 20%;" data-field="created_at" data-sortable="true" data-sort-name="created_at"> Ngày tạo </th>
-              <th style="width: 5%;"> Tổng Coin </th>
-              <th style="width: 15%;"> Saler </th>
-              <th style="width: 15%;"> Order Team </th>
-              <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
-              <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th style="width: 5%;"> STT </th>
+              <th style="width: 10%;"> Mã đơn hàng </th>
+              <th style="width: 10%;"> Tên game </th>
+              <th style="width: 5%;"> Số lượng nạp </th>
+              <th style="width: 10%;"> Thời gian nhận đơn </th>
+              <th style="width: 5%;"> Thời gian chờ </th>
+              <th style="width: 10%;"> Người bán hàng </th>
+              <th style="width: 15%;"> Người quản lý đơn hàng </th>
+              <th style="width: 10%;"> Trạng thái </th>
+              <th style="width: 10%;"> Nhà cung cấp </th>
+              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->auth_key;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->customer_name;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;">$<?=$model->total_price;?></td>
+                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
+                <td style="vertical-align: middle;">$<?=$model->total_unit;?></td>
+                <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
+                <td style="vertical-align: middle;"><?=$model->process_duration_time;?></td>
+                
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=$model->status;?></td>
+                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
+                <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <?php if (Yii::$app->user->can('edit_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
@@ -218,9 +232,6 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   <?php endif;?>
                   <?php if (Yii::$app->user->can('admin')) :?>
                   <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
-                  
-
-
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">

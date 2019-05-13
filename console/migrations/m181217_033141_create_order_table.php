@@ -41,27 +41,11 @@ class m181217_033141_create_order_table extends Migration
             'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),
             'status' => $this->integer(11),
-        ]);
 
-        if ($this->db->driverName === 'mysql') {
-            $status = "ALTER TABLE {{%order}} MODIFY `status` ENUM('verifying','pending','processing','completed','deleted') NOT NULL DEFAULT 'verifying'";
-            $command = $this->db->createCommand($status);
-            $command->execute();
-        }
-
-
-        $this->createTable('{{%order_items}}', [
-            'id' => $this->primaryKey(),
-            'item_title' => $this->string(255)->notNull(),
-            'order_id' => $this->integer(11)->notNull(),
-            'type' => $this->integer(11)->notNull(),
-            'product_id' => $this->integer(11),
+            // Game infor
             'game_id' => $this->integer(11),
-            'price' => $this->integer(11)->notNull(),
-            'quantity' => $this->integer(11)->notNull(),
-            'total' => $this->integer(11)->notNull(),
+            'game_title' => $this->string(255)->notNull(),
             'unit_name' => $this->string(50)->notNull(),
-            'unit' => $this->integer(11),
             'total_unit' => $this->integer(11)->defaultValue(0),
             'doing_unit' => $this->integer(11)->defaultValue(0),
             'username' => $this->string(255),
@@ -72,9 +56,53 @@ class m181217_033141_create_order_table extends Migration
             'recover_code' => $this->string(255),
             'server' => $this->string(255),
             'note' => $this->string(255),
+
+            // time process
+            'process_start_time' => $this->dateTime(),
+            'process_end_time' => $this->dateTime(),
+            'process_duration_time' => $this->integer(11),
+            'provider_id' => $this->integer(11)
+        ]);
+
+        if ($this->db->driverName === 'mysql') {
+            $status = "ALTER TABLE {{%order}} MODIFY `status` ENUM('verifying','pending','processing','completed','deleted') NOT NULL DEFAULT 'verifying'";
+            $command = $this->db->createCommand($status);
+            $command->execute();
+        }
+
+        $this->createTable('{{%order_image}}', [
+            'id' => $this->primaryKey(),
+            'order_id' => $this->integer(11)->notNull(),
             'image_before_payment' => $this->integer(11),
             'image_after_payment' => $this->integer(11),
         ]);
+
+
+        // $this->createTable('{{%order_items}}', [
+        //     'id' => $this->primaryKey(),
+        //     'item_title' => $this->string(255)->notNull(),
+        //     'order_id' => $this->integer(11)->notNull(),
+        //     'type' => $this->integer(11)->notNull(),
+        //     'product_id' => $this->integer(11),
+        //     'game_id' => $this->integer(11),
+        //     'price' => $this->integer(11)->notNull(),
+        //     'quantity' => $this->integer(11)->notNull(),
+        //     'total' => $this->integer(11)->notNull(),
+        //     'unit_name' => $this->string(50)->notNull(),
+        //     'unit' => $this->integer(11),
+        //     'total_unit' => $this->integer(11)->defaultValue(0),
+        //     'doing_unit' => $this->integer(11)->defaultValue(0),
+        //     'username' => $this->string(255),
+        //     'password' => $this->string(255),
+        //     'platform' => $this->string(20),
+        //     'login_method' => $this->string(20),
+        //     'character_name' => $this->string(255),
+        //     'recover_code' => $this->string(255),
+        //     'server' => $this->string(255),
+        //     'note' => $this->string(255),
+        //     'image_before_payment' => $this->integer(11),
+        //     'image_after_payment' => $this->integer(11),
+        // ]);
 
         if ($this->db->driverName === 'mysql') {
             $type = "ALTER TABLE {{%order_items}} MODIFY `type` ENUM('product','payment_fee') NOT NULL DEFAULT 'product'";
@@ -126,7 +154,8 @@ class m181217_033141_create_order_table extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%order}}');
-        $this->dropTable('{{%order_items}}');
+        // $this->dropTable('{{%order_items}}');
+        $this->dropTable('{{%order_image}}');
         $this->dropTable('{{%order_comments}}');
         $this->dropTable('{{%order_fee}}');
     }

@@ -50,20 +50,6 @@
           </li>
         </ul>
       </li>
-      <!--<li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user"></i>
-        <span class="title">{Yii::t('app', 'customers')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
-            <span class="title">{Yii::t('app', 'customers')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>-->
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user-following"></i>
@@ -209,7 +195,7 @@
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
-        <span class="title">{Yii::t('app', 'shop')}</span>
+        <span class="title">Quản lý đơn hàng</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
@@ -219,16 +205,6 @@
             </a>
           </li>
           {if Yii::$app->user->can('saler') || Yii::$app->user->can('handler')}
-          <li class="nav-item  ">
-            <a href="{url route='/order/my-order'}" class="nav-link " code='order.mine'>
-            <span class="title">Đơn hàng của tôi</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/order/my-customer-report'}" class="nav-link " code='order.report'>
-            <span class="title">Báo cáo của tôi</span>
-            </a>
-          </li>
           <li class="nav-item  ">
             <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.pending'>
             <span class="title">Đơn hàng mới</span>
