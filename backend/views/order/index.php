@@ -212,7 +212,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->auth_key;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;">$<?=$model->total_unit;?></td>
+                <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_duration_time;?></td>
                 
@@ -222,7 +222,22 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <?php if (Yii::$app->user->can('edit_order', ['order' => $model])) :?>
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php switch ($model->status) {
+                    case Order::STATUS_VERIFYING :
+                      $editUrl = Url::to(['order/verifying', 'id' => $model->id]);
+                      break;
+                    case Order::STATUS_PENDING :
+                      $editUrl = Url::to(['order/pending', 'id' => $model->id]);
+                      break;
+                    case Order::STATUS_PROCESSING :
+                      $editUrl = Url::to(['order/processing', 'id' => $model->id]);
+                      break;
+                    
+                    default:
+                      $editUrl = '';
+                      break;
+                  };?>
+                  <a href='<?=$editUrl;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php endif;?>
                   <?php if (Yii::$app->user->can('taken_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>

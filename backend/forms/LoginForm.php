@@ -25,12 +25,12 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
+            // password is validated by validatePassword()
+            ['password', 'validatePassword'],
             // user must be a staff
             ['username', 'isStaff', 'message' => 'You are not allowed to login'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
         ];
     }
 

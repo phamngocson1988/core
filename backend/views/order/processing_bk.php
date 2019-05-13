@@ -31,6 +31,7 @@ use common\models\Product;
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
+    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
       <div class="portlet">
         <div class="portlet-title">
           <div class="caption">
@@ -38,6 +39,15 @@ use common\models\Product;
             <span class="caption-subject font-dark sbold uppercase"> Order #<?=$order->id;?>
               <span class="hidden-xs">| <?=$order->created_at;?> </span>
             </span>
+          </div>
+          <div class="actions btn-set">
+            <a href="<?=$back;?>" class="btn default">
+            <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
+            <?php if (Yii::$app->user->can('handler')) :?>
+            <button type="submit" class="btn btn-success">
+            <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
+            </button>
+            <?php endif?>
           </div>
         </div>
         <div class="portlet-body">
@@ -83,9 +93,12 @@ use common\models\Product;
             </div>
           </div>
           <div class="tabbable-bordered">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs">
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
+              </li>
+              <li>
+                <a href="#images" data-toggle="tab"> Hình ảnh</a>
               </li>
               <li>
                 <a href="#complain" data-toggle="tab"> Phản hồi</a>
@@ -107,74 +120,29 @@ use common\models\Product;
                             <thead>
                               <tr>
                                 <th> Tên game </th>
-                                <th> Số lượng nạp </th>
+                                <th> Tên đơn vị </th>
+                                <th> Số game </th>
+                                <th> Số lượng </th>
+                                <th> Tổng số game </th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td><?=$order->game_title;?></td>
-                                <td><?=$order->total_unit;?></td>
+                                <td><?=$item->item_title;?></td>
+                                <td><?=$item->unit_name;?></td>
+                                <td><?=$item->unit;?></td>
+                                <td><?=$item->quantity;?></td>
+                                <td><?=$item->total_unit;?></td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
-                        <div class="row static-info">
-                          <div class="col-md-12">
-                            <strong>Số game đã nạp: <?=$order->doing_unit;?></strong>
-                          </div>
-                      </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                
                 <div class="row">
-                  <div class="col-md-6 col-sm-12">
-                    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated form']]);?>
-                    <div class="portlet blue-hoki box">
-                      <div class="portlet-title">
-                        <div class="caption">
-                          <i class="fa fa-cogs"></i>Thông tin nạp game
-                        </div>
-                      </div>
-                      <div class="portlet-body" id="game_account">
-                        <div class="row static-info">
-                          <div class="col-md-5"> Username: </div>
-                          <div class="col-md-7"> <?=$order->username;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Password: </div>
-                          <div class="col-md-7"><?=$order->password;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Tên nhân vật: </div>
-                          <div class="col-md-7"> <?=$order->character_name;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Platform: </div>
-                          <div class="col-md-7"> <?=$order->platform;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Login method: </div>
-                          <div class="col-md-7"> <?=$order->login_method;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Recover Code: </div>
-                          <div class="col-md-7"> <?=$order->recover_code;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Server: </div>
-                          <div class="col-md-7"> <?=$order->server;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Ghi chú: </div>
-                          <div class="col-md-7"> <?=$order->note;?></div>
-                        </div>
-                      </div>
-                    </div>
-                    <?php ActiveForm::end()?>
-                  </div>
-                  <div class="col-md-6 col-sm-12">
+                  <div class="col-md-4 col-sm-12">
                     <div class="portlet blue-hoki box">
                       <div class="portlet-title">
                         <div class="caption">
@@ -183,45 +151,41 @@ use common\models\Product;
                       </div>
                       <div class="portlet-body">
                         <div class="row static-info">
-                          <div class="col-md-5"> Mã đơn hàng: </div>
-                          <div class="col-md-7"> <?=$order->auth_key;?></div>
+                          <div class="col-md-5 name"> Order #: </div>
+                          <div class="col-md-7 value"> <?=$order->id;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5"> Thời gian tạo: </div>
-                          <div class="col-md-7"> <?=$order->created_at;?> </div>
+                          <div class="col-md-5 name"> Order Date & Time: </div>
+                          <div class="col-md-7 value"> <?=$order->created_at;?> </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5"> Thời gian nhận xử lý: </div>
-                          <div class="col-md-7"> <?=$order->process_start_time;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Order Status: </div>
-                          <div class="col-md-7">
-                            <?=$order->getStatusLabel();?>
+                          <div class="col-md-5 name"> Order Status: </div>
+                          <div class="col-md-7 value">
+                            <span class="label label-success"> <?=$order->status;?> </span>
                           </div>
                         </div>
-                        <?php if (Yii::$app->user->can('admin')) :?>
                         <?php if ($order->total_discount) :?>
                         <div class="row static-info">
-                          <div class="col-md-5"> Sub total: </div>
-                          <div class="col-md-7"> (K) <?=number_format($order->sub_total_price);?> </div>
+                          <div class="col-md-5 name"> Sub total: </div>
+                          <div class="col-md-7 value"> (K) <?=number_format($order->sub_total_price);?> </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5"> Discount: </div>
-                          <div class="col-md-7"> (K) <?=number_format($order->total_discount);?> </div>
-                        </div>
-                        <?php endif;?>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Total: </div>
-                          <div class="col-md-7"> (K) <?=number_format($order->total_price);?> </div>
+                          <div class="col-md-5 name"> Discount: </div>
+                          <div class="col-md-7 value"> (K) <?=number_format($order->total_discount);?> </div>
                         </div>
                         <?php endif;?>
                         <div class="row static-info">
-                          <div class="col-md-5"> Payment Information: </div>
-                          <div class="col-md-7"> King Coin </div>
+                          <div class="col-md-5 name"> Total: </div>
+                          <div class="col-md-7 value"> (K) <?=number_format($order->total_price);?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5 name"> Payment Information: </div>
+                          <div class="col-md-7 value"> King Coin </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-12">
                     <div class="portlet blue-hoki box">
                       <div class="portlet-title">
                         <div class="caption">
@@ -231,19 +195,96 @@ use common\models\Product;
                       <?php $customer = $order->customer;?>
                       <div class="portlet-body">
                         <div class="row static-info">
-                          <div class="col-md-5"> Customer: </div>
-                          <div class="col-md-7"> <?=$customer->name;?> </div>
+                          <div class="col-md-5 name"> Customer Name: </div>
+                          <div class="col-md-7 value"> <?=$customer->name;?> </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5"> Email: </div>
-                          <div class="col-md-7"> <?=$customer->email;?> </div>
+                          <div class="col-md-5 name"> Email: </div>
+                          <div class="col-md-7 value"> <?=$customer->email;?> </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5"> Phone Number: </div>
-                          <div class="col-md-7"> <?=sprintf("(%s)%s", $customer->country_code, $customer->phone);?> </div>
+                          <div class="col-md-5 name"> Phone Number: </div>
+                          <div class="col-md-7 value"> <?=sprintf("(%s)%s", $customer->country_code, $customer->phone);?> </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-12">
+                    <div class="portlet blue-hoki box">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="fa fa-cogs"></i>Thông tin nạp game
+                        </div>
+                      </div>
+                      <div class="portlet-body" id="game_account">
+                        <div class="row static-info">
+                          <div class="col-md-5"> Username: </div>
+                          <div class="col-md-7"> <?=$item->username;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Password: </div>
+                          <div class="col-md-7"> <?=$item->password;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Tên nhân vật: </div>
+                          <div class="col-md-7"> <?=$item->character_name;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Platform: </div>
+                          <div class="col-md-7"> <?=$item->platform;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Login method: </div>
+                          <div class="col-md-7"> <?=$item->login_method;?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Recover Code: </div>
+                          <div class="col-md-7"> <?=$item->recover_code;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Server: </div>
+                          <div class="col-md-7"> <?=$item->server;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Ghi chú: </div>
+                          <div class="col-md-7"> <?=$item->note;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-12">
+                            <center id='current_doing_unit'>Đã nạp: <?=$item->doing_unit;?></center>
+                            <div class="progress progress-striped active">
+                              <div id="doing_unit_progress" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$item->doing_unit;?>" aria-valuemin="0" aria-valuemax="<?=$item->total_unit;?>" style="width: <?=$item->getPercent();?>%">
+                                  <span class="sr-only"> <?=$item->doing_unit;?> </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="images">
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
+                    <input type="file" id="file_before_image" name="before_image" style="display: none" />
+                    <img src="<?=$item->getImageBeforeUrl();?>" id="show_before_image" class="img-responsive">
+                    <?=$form->field($item, 'image_before_payment', [
+                      'template' => '{input}', 
+                      'options' => ['container' => false],
+                      'inputOptions' => ['id' => 'input_before_image']
+                    ])->hiddenInput()->label(false);?>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
+                    <input type="file" id="file_after_image" name="after_image" style="display: none" />
+                    <img src="<?=$item->getImageAfterUrl();?>" id="show_after_image" class="img-responsive">
+                    <?=$form->field($item, 'image_after_payment', [
+                      'template' => '{input}', 
+                      'options' => ['container' => false],
+                      'inputOptions' => ['id' => 'input_after_image']
+                    ])->hiddenInput()->label(false);?>
                   </div>
                 </div>
               </div>
@@ -299,9 +340,34 @@ use common\models\Product;
           </div>
         </div>
       </div>
+      <?php ActiveForm::end()?>
   </div>
 </div>
-
+<div class="modal fade" id="next" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Move the order to processing</h4>
+      </div>
+      <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated', 'id' => 'next-form'], 'action' => Url::to(['order/move-to-processing'])]);?>
+      <?=$nextForm->field($updateStatusForm, 'id', [
+        'template' => '{input}', 
+        'options' => ['container' => false]
+      ])->hiddenInput(['value' => $order->id])->label(false);?>
+      <div class="modal-body"> 
+          <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn green">Save changes</button>
+      </div>
+      <?php ActiveForm::end();?>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -343,8 +409,31 @@ use common\models\Product;
   </div>
   <!-- /.modal-dialog -->
 </div>
+
 <?php
 $script = <<< JS
+$('#edit_game_account').on('click', function(){
+  $('#game_account').find('input, select').prop('disabled', false);
+});
+var beforeImage = new AjaxUploadFile({trigger_element: '#before_image', file_element: '#file_before_image'});
+beforeImage.callback = function(result) {
+  console.log(typeof result);
+  console.log(result);
+  $('#show_before_image').attr('src', result[0].src);
+  $('#input_before_image').val(result[0].id)
+}
+var afterImage = new AjaxUploadFile({trigger_element: '#after_image', file_element: '#file_after_image'});
+afterImage.callback = function(result) {
+  console.log(result);
+  $('#show_after_image').attr('src', result[0].src);
+  $('#input_after_image').val(result[0].id)
+};
+
+var nextForm = new AjaxFormSubmit({element: '#next-form'});
+nextForm.success = function (data, form) {
+  location.reload();
+}
+
 var sendForm = new AjaxFormSubmit({element: '.send-form'});
 sendForm.success = function (data, form) {
   location.reload();

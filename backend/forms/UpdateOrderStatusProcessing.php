@@ -35,12 +35,10 @@ class UpdateOrderStatusProcessing extends Model
         if (!$this->validate()) return false;
         $order = $this->getOrder();
         $order->status = Order::STATUS_PROCESSING;
+        $order->doing_unit = $order->total_unit;
+        $order->process_end_time = date('Y-m-d H:i:s');
+        $order->process_duration_time = strtotime($order->process_end_time) - strtotime($order->process_start_time);
         if ($order->save()) {
-            $items = $order->items;
-            $item = reset($items);
-            $item->doing_unit = $item->total_unit;
-            $item->save();
-            
             $customer = $order->customer;
             $settings = Yii::$app->settings;
             $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);

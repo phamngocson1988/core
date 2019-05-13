@@ -47,13 +47,13 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'move-to-pending', 'delete'],
+                        'actions' => ['create', 'move-to-pending', 'delete', 'verifying'],
                         'roles' => ['saler'],
                     ],
                     
                     [
                         'allow' => true,
-                        'actions' => ['edit', 'my-order', 'pending'],
+                        'actions' => ['edit', 'my-order', 'pending', 'processing'],
                         'roles' => ['saler', 'handler'],
                     ],
                     [
@@ -248,7 +248,16 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
         $order = Order::findOne($id);
-        return;
+        if (!Yii::$app->user->can('edit_order', ['order' => $order])) throw new \yii\web\ForbiddenHttpException('Bạn không có quyền truy cập chức năng này');
+        $order->setScenario(Order::SCENARIO_VERIFYING);
+        if ($order->load($request->post()) && $order->save()) {
+            Yii::$app->session->setFlash('success', 'Success!');
+        }
+        $updateStatusForm = new UpdateOrderStatusPending();
+        return $this->render('verifying', [
+            'order' => $order,
+            'updateStatusForm' => $updateStatusForm
+        ]);
     }
 
     public function actionPending($id)
@@ -261,9 +270,31 @@ class OrderController extends Controller
         if ($order->load($request->post()) && $order->save()) {
             Yii::$app->session->setFlash('success', 'Success!');
         }
+        $updateStatusForm = new UpdateOrderStatusProcessing();
+        $templateList = OrderComplainTemplate::find()->all();
 
         return $this->render('pending', [
             'order' => $order,
+            'updateStatusForm' => $updateStatusForm,
+            'template_list' => $templateList
+        ]);
+    }
+
+    public function actionProcessing($id)
+    {
+        $this->view->params['main_menu_active'] = 'order.index';
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        if (!Yii::$app->user->can('edit_order', ['order' => $order])) throw new \yii\web\ForbiddenHttpException('Bạn không có quyền truy cập chức năng này');
+        $order->setScenario(Order::SCENARIO_PROCESSING);
+        if ($order->load($request->post()) && $order->save()) {
+            Yii::$app->session->setFlash('success', 'Success!');
+        }
+        $templateList = OrderComplainTemplate::find()->all();
+        
+        return $this->render('processing', [
+            'order' => $order,
+            'template_list' => $templateList
         ]);
     }
 
@@ -343,7 +374,7 @@ class OrderController extends Controller
         if ($request->isPost && $request->isAjax) {
             $form = new UpdateOrderStatusProcessing();
             if ($form->load($request->post()) && $form->save()) {
-                return $this->renderJson(true, []);
+                return $this->renderJson(true, ['next' => Url::to(['order/processing', 'id' => $form->id])]);
             } else {
                 return $this->renderJson(false, [], $form->getErrorSummary(true));
             }

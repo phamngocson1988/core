@@ -35,7 +35,7 @@ use common\models\Product;
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
-            <a href="<?=Url::to(['order/index']);?>" class="btn default">
+            <a href="<?=$back;?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
             <?php if (Yii::$app->user->can('saler')) :?>
             <button type="submit" class="btn btn-success">
@@ -121,7 +121,7 @@ use common\models\Product;
                   $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->all();
                   $games = ArrayHelper::map($games, 'id', 'title');
                   ?>
-                  <?=$form->field($order, 'game_id', [
+                  <?=$form->field($item, 'game_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
                     'inputOptions' => ['id' => 'game', 'class' => 'form-control']
@@ -136,48 +136,54 @@ use common\models\Product;
                   $productItems = ArrayHelper::map($products, 'id', 'title');
                   ?>
 
-                  <?=$form->field($order, 'total_unit', [
+                  <?=$form->field($item, 'product_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                    'inputOptions' => ['id' => 'product', 'class' => 'form-control']
+                  ])->dropDownList($productItems, ['prompt' => Yii::t('app', 'choose'), 'options' => $productMeta])->label('Gói game');?>
+
+                  <?=$form->field($item, 'quantity', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control', 'type' => 'number'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Số game cần nạp')?>
+                  ])->textInput()?>
 
-                  <?=$form->field($order, 'username', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Tên đăng nhập game')?>
-                  <?=$form->field($order, 'password', [
+                  <?=$form->field($item, 'username', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
-                  <?=$form->field($order, 'platform', [
+                  <?=$form->field($item, 'password', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
+                  <?=$form->field($item, 'platform', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])?>
-                  <?=$form->field($order, 'login_method', [
+                  <?=$form->field($item, 'login_method', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList(['google' => 'Google', 'facebook' => 'Facebook'])?>
-                  <?=$form->field($order, 'character_name', [
+                  <?=$form->field($item, 'character_name', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
-                  <?=$form->field($order, 'recover_code', [
+                  <?=$form->field($item, 'recover_code', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
-                  <?=$form->field($order, 'server', [
+                  <?=$form->field($item, 'server', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
-                  <?=$form->field($order, 'note', [
+                  <?=$form->field($item, 'note', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
