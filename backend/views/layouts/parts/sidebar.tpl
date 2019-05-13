@@ -38,7 +38,7 @@
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='/customer/history' id=$app->user->id}" class="nav-link " code='customer.history'>
+            <a href="{url route='/contact/history'}" class="nav-link " code='contact.history'>
             <span class="title">Lịch sử giao dịch</span>
             </a>
           </li>

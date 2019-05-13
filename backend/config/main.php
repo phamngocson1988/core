@@ -9,7 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
-    'defaultRoute' => 'customer',
+    'defaultRoute' => 'contact/index',
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
     'bootstrap' => ['log'],

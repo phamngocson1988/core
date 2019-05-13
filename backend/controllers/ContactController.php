@@ -14,6 +14,7 @@ use common\models\Record;
 use common\models\CustomerDialer;
 use common\models\Dialer;
 use common\models\TransactionHistory;
+use backend\forms\FetchTransactionHistoryForm;
 
 /**
  * ContactController
@@ -47,7 +48,7 @@ class ContactController extends Controller
         $this->view->params['main_menu_active'] = 'contact.index';
         $request = Yii::$app->request;
         $q = $request->get('q');
-        $command = Contact::find(['user_id' => Yii::$app->user->id]);
+        $command = Contact::find()->where(['user_id' => Yii::$app->user->id]);
         if ($q) {
              $command->orWhere(['like', 'phone', $q]);
              $command->orWhere(['like', 'name', $q]);
@@ -161,6 +162,7 @@ class ContactController extends Controller
 
     public function actionCall()
     {
+        $this->view->params['main_menu_active'] = 'contact.call';
         $model = new Record();
         $model->setScenario(Record::SCENARIO_CREATE);
         $user = Yii::$app->user->getIdentity();
@@ -218,6 +220,7 @@ class ContactController extends Controller
 
     public function actionSms()
     {
+        $this->view->params['main_menu_active'] = 'contact.sms';
         return $this->render('sms.tpl');
     }
 
@@ -248,5 +251,27 @@ class ContactController extends Controller
             }
             return $this->renderJson(true, ['items' => $items]);
         }
+    }
+
+    public function actionHistory()
+    {
+        $this->view->params['main_menu_active'] = 'contact.history';
+        $id = Yii::$app->user->id;
+        $request = Yii::$app->request;
+        $get = $request->get();
+        $search = new FetchTransactionHistoryForm([
+            'customer_id' => $id
+        ]);
+        $search->load($get, '');
+        $command = $search->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('history', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $search,
+            'customer_id' => $id
+        ]);
     }
 }
