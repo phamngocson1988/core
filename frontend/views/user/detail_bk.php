@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Game;
-$game = $model->game;
+$game = Game::findOne($item->game_id);
 ?>
 <section class="section section-lg bg-default text-center">
   <div class="container">
@@ -17,16 +17,16 @@ $game = $model->game;
             <tr>
               <th>#</th>
               <th>Game</th>
-              <th>Total price</th>
-              <th>Total game</th>
+              <th>Unit</th>
+              <th>Unit Total</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><img src="<?=$game->getImageUrl('100x100');?>" class="img-responsive" /></td>
-              <td><?=$model->game_title;?></td>
-              <td><?=number_format($model->total_price);?></td>
-              <td><?=number_format($model->total_unit);?></td>
+              <td><img src="<?=$model->getImageUrl('100x100');?>" class="img-responsive" /></td>
+              <td><?=$model->model;?></td>
+              <td><?=number_format($model->unit);?> (<?=$model->unit_name;?>)</td>
+              <td><?=number_format($model->total_unit);?> (<?=$model->unit_name;?>)</td>
             </tr>
           </tbody>
         </table>
@@ -107,7 +107,7 @@ $game = $model->game;
                   <td colspan="2">
                     <div class="group-md button-group">
                       <?php if ($model->request_cancel) :?>
-                      <a href="javascript:void(0)" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='cancel'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Request was sent</a>
+                      <a href="javascript:;" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='cancel'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Request was sent</a>
                       <?php else:?>
                       <a href="<?=Url::to(['user/cancel', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='cancel'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Cancel order</a>
                       <?php endif;?>
@@ -165,6 +165,37 @@ $game = $model->game;
                 <?php endif;?>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section section-lg text-center bg-default">
+  <div class="container">
+    <h4>Order Images</h3>
+    <div class="isotope-wrap row row-0 row-md-30 row-fix">
+      <div class="col-xl-12">
+        <div class="isotope" data-isotope-layout="fitRows" data-isotope-group="gallery">
+          <div class="row">
+            <div class="col-6 col-md-6 col-lg-6 isotope-item" data-filter="type 1"><a class="gallery-item" href="<?=$item->getImageBeforeUrl('/images/bg-05.jpg');?>" data-lightgallery="item">
+                <div class="gallery-item-image">
+                  <figure><img src="<?=$item->getImageBeforeUrl('/images/bg-05.jpg');?>" alt="" width="570" height="380" class="img-responsive"/></figure>
+                  <div class="caption">
+                    <p class="caption-title">Before</p>
+                    <p class="caption-text">Your account before doing payment</p>
+                  </div>
+                </div></a>
+            </div>
+            <div class="col-6 col-md-6 col-lg-6 isotope-item" data-filter="type 1"><a class="gallery-item" href="<?=$item->getImageAfterUrl('/images/bg-05.jpg');?>" data-lightgallery="item">
+                <div class="gallery-item-image">
+                  <figure><img src="<?=$item->getImageAfterUrl('/images/bg-05.jpg');?>" alt="" width="570" height="380" class="img-responsive"/></figure>
+                  <div class="caption">
+                    <p class="caption-title">After</p>
+                    <p class="caption-text">Your account after doing payment</p>
+                  </div>
+                </div></a>
+            </div>
           </div>
         </div>
       </div>
@@ -259,7 +290,7 @@ $('#cancel').ajax_action({
   method: 'POST',
   callback: function(data) {
     $('#cancel').html('Cancel request was sent');
-    $('#cancel').prop('href', 'javascript:void(0)');
+    $('#cancel').prop('href', 'javascript;');
   },
 });
 JS;

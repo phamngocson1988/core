@@ -8,7 +8,6 @@ use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\models\Game;
 use common\models\Product;
-use common\models\File;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -40,19 +39,13 @@ use common\models\File;
               <span class="hidden-xs">| <?=$order->created_at;?> </span>
             </span>
           </div>
-          <div class="actions btn-set">
-            <a href="<?=$back;?>" class="btn default">
-            <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-          </div>
         </div>
         <div class="portlet-body">
+          <?php echo $this->render('@backend/views/order/_step.php', ['order' => $order]);?>
           <div class="tabbable-bordered">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" role="tablist">
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
-              </li>
-              <li>
-                <a href="#images" data-toggle="tab"> Hình ảnh</a>
               </li>
               <li>
                 <a href="#complain" data-toggle="tab"> Phản hồi</a>
@@ -85,77 +78,19 @@ use common\models\File;
                             </tbody>
                           </table>
                         </div>
+                        <div class="row static-info">
+                          <div class="col-md-12">
+                            <strong>Số game đã nạp: <?=$order->doing_unit;?></strong>
+                          </div>
+                      </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                
                 <div class="row">
-                  <div class="col-md-4 col-sm-12">
-                    <div class="portlet blue-hoki box">
-                      <div class="portlet-title">
-                        <div class="caption">
-                          <i class="fa fa-cogs"></i>Order Details 
-                        </div>
-                      </div>
-                      <div class="portlet-body">
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Order #: </div>
-                          <div class="col-md-7 value"> <?=$order->id;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Order Date & Time: </div>
-                          <div class="col-md-7 value"> <?=$order->created_at;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Order Status: </div>
-                          <div class="col-md-7 value"><?=$order->getStatusLabel();?></div>
-                        </div>
-                        <?php if ($order->total_discount) :?>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Sub total: </div>
-                          <div class="col-md-7 value"> (K) <?=number_format($order->sub_total_price);?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Discount: </div>
-                          <div class="col-md-7 value"> (K) <?=number_format($order->total_discount);?> </div>
-                        </div>
-                        <?php endif;?>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Total: </div>
-                          <div class="col-md-7 value"> (K) <?=number_format($order->total_price);?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Payment Information: </div>
-                          <div class="col-md-7 value"> King Coin </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4 col-sm-12">
-                    <div class="portlet blue-hoki box">
-                      <div class="portlet-title">
-                        <div class="caption">
-                          <i class="fa fa-cogs"></i>Customer Information 
-                        </div>
-                      </div>
-                      <?php $customer = $order->customer;?>
-                      <div class="portlet-body">
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Customer Name: </div>
-                          <div class="col-md-7 value"> <?=$customer->name;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Email: </div>
-                          <div class="col-md-7 value"> <?=$customer->email;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5 name"> Phone Number: </div>
-                          <div class="col-md-7 value"> <?=sprintf("(%s)%s", $customer->country_code, $customer->phone);?> </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4 col-sm-12">
+                  <div class="col-md-6 col-sm-12">
+                    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated form']]);?>
                     <div class="portlet blue-hoki box">
                       <div class="portlet-title">
                         <div class="caption">
@@ -169,46 +104,106 @@ use common\models\File;
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5"> Password: </div>
-                          <div class="col-md-7"> <?=$order->password;?></div>
+                          <div class="col-md-7"><?=$order->password;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Tên nhân vật: </div>
-                          <div class="col-md-7 value"><?=$order->character_name;?></div>
+                          <div class="col-md-5"> Tên nhân vật: </div>
+                          <div class="col-md-7"> <?=$order->character_name;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Platform: </div>
-                          <div class="col-md-7 value"> <?=$order->platform;?></div>
+                          <div class="col-md-5"> Platform: </div>
+                          <div class="col-md-7"> <?=$order->platform;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Login method: </div>
-                          <div class="col-md-7 value"> <?=$order->login_method;?></div>
+                          <div class="col-md-5"> Login method: </div>
+                          <div class="col-md-7"> <?=$order->login_method;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Recover Code: </div>
-                          <div class="col-md-7 value"> <?=$order->recover_code;?></div>
+                          <div class="col-md-5"> Recover Code: </div>
+                          <div class="col-md-7"> <?=$order->recover_code;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Server: </div>
-                          <div class="col-md-7 value"> <?=$order->server;?></div>
+                          <div class="col-md-5"> Server: </div>
+                          <div class="col-md-7"> <?=$order->server;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5 name"> Ghi chú: </div>
-                          <div class="col-md-7 value"> <?=$order->note;?></div>
+                          <div class="col-md-5"> Ghi chú: </div>
+                          <div class="col-md-7"> <?=$order->note;?></div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="images">
-                <div class="row">
-                  <div class="col-md-6 col-sm-12">
-                    <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
-                    <!-- <img src="" id="show_before_image" class="img-responsive"> -->
+                    <?php ActiveForm::end()?>
                   </div>
                   <div class="col-md-6 col-sm-12">
-                    <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
-                    <!-- <img src="" id="show_after_image" class="img-responsive"> -->
+                    <div class="portlet blue-hoki box">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="fa fa-cogs"></i>Order Details 
+                        </div>
+                      </div>
+                      <div class="portlet-body">
+                        <div class="row static-info">
+                          <div class="col-md-5"> Mã đơn hàng: </div>
+                          <div class="col-md-7"> <?=$order->auth_key;?></div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Thời gian tạo: </div>
+                          <div class="col-md-7"> <?=$order->created_at;?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Thời gian nhận xử lý: </div>
+                          <div class="col-md-7"> <?=$order->process_start_time;?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Order Status: </div>
+                          <div class="col-md-7">
+                            <?=$order->getStatusLabel();?>
+                          </div>
+                        </div>
+                        <?php if (Yii::$app->user->can('admin')) :?>
+                        <?php if ($order->total_discount) :?>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Sub total: </div>
+                          <div class="col-md-7"> (K) <?=number_format($order->sub_total_price);?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Discount: </div>
+                          <div class="col-md-7"> (K) <?=number_format($order->total_discount);?> </div>
+                        </div>
+                        <?php endif;?>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Total: </div>
+                          <div class="col-md-7"> (K) <?=number_format($order->total_price);?> </div>
+                        </div>
+                        <?php endif;?>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Payment Information: </div>
+                          <div class="col-md-7"> King Coin </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="portlet blue-hoki box">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="fa fa-cogs"></i>Customer Information 
+                        </div>
+                      </div>
+                      <?php $customer = $order->customer;?>
+                      <div class="portlet-body">
+                        <div class="row static-info">
+                          <div class="col-md-5"> Customer: </div>
+                          <div class="col-md-7"> <?=$customer->name;?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Email: </div>
+                          <div class="col-md-7"> <?=$customer->email;?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Phone Number: </div>
+                          <div class="col-md-7"> <?=sprintf("(%s)%s", $customer->country_code, $customer->phone);?> </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -263,3 +258,8 @@ use common\models\File;
       </div>
   </div>
 </div>
+<?php
+$script = <<< JS
+JS;
+$this->registerJs($script);
+?>

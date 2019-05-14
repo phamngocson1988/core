@@ -23,6 +23,7 @@ use backend\forms\TakenOrderForm;
 use backend\forms\SendComplainForm;
 use common\models\OrderComplainTemplate;
 use backend\forms\MyCustomerReportForm;
+use backend\forms\CancelOrderForm;
 
 class OrderController extends Controller
 {
@@ -53,7 +54,7 @@ class OrderController extends Controller
                     
                     [
                         'allow' => true,
-                        'actions' => ['edit', 'my-order', 'pending', 'processing'],
+                        'actions' => ['edit', 'my-order', 'pending', 'processing', 'approve', 'disapprove'],
                         'roles' => ['saler', 'handler'],
                     ],
                     [
@@ -181,7 +182,7 @@ class OrderController extends Controller
 
     public function actionNewPendingOrder()
     {
-        $this->view->params['main_menu_active'] = 'order.pending';
+        $this->view->params['main_menu_active'] = 'order.new';
         $request = Yii::$app->request;
         $form = new FetchNewPendingOrderForm();
         $command = $form->getCommand();
@@ -196,17 +197,6 @@ class OrderController extends Controller
             'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
-    public function actionView($id)
-    {
-        $this->view->params['main_menu_active'] = 'order.index';
-        $request = Yii::$app->request;
-        $order = Order::findOne($id);
-        return $this->render('view', [
-            'order' => $order,
-            'back' => $request->get('ref', Url::to(['order/index']))
         ]);
     }
 
@@ -242,6 +232,17 @@ class OrderController extends Controller
             'back' => $request->get('ref', Url::to(['order/index']))
         ]);
     }
+
+    public function actionView($id)
+    {
+        $this->view->params['main_menu_active'] = 'order.index';
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        return $this->render('view', [
+            'order' => $order,
+        ]);
+    }
+
 
     public function actionVerifying($id)
     {
@@ -450,6 +451,40 @@ class OrderController extends Controller
             return $this->renderJson(true, []);
         } else {
             return $this->renderJson(false, [], $assignForm->getErrorSummary(true));
+        }
+    }
+
+    public function actionApprove($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->isAjax) {
+            $form = new CancelOrderForm([
+                'id' => $id
+            ]);
+            if ($form->save()) {
+                return $this->renderJson(true, ['view_url' => Url::to(['order/view', 'id' => $id])]);
+            } else {
+                return $this->renderJson(false, [], $form->getErrorSummary(true));
+            }
+        }
+    }
+
+    public function actionDisapprove($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost && $request->isAjax) {
+            $order = Order::findOne($id);
+            $order->request_cancel = 0;
+            $order->save();
+            $form = new SendComplainForm([
+                'order_id' => $id,
+                'template_id' => $request->post('template_id')
+            ]);
+            if ($form->send()) {
+                return $this->renderJson(true, []);
+            } else {
+                return $this->renderJson(false, [], $form->getErrorSummary(true));
+            }
         }
     }
 }

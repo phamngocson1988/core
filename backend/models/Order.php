@@ -32,10 +32,10 @@ class Order extends \common\models\Order
     {
         $list = [
             self::STATUS_VERIFYING => 'default',
-            self::STATUS_PENDING => 'primary',
-            self::STATUS_PROCESSING => 'warning',
+            self::STATUS_PENDING => 'info',
+            self::STATUS_PROCESSING => 'primary',
             self::STATUS_COMPLETED => 'success',
-            self::STATUS_DELETED => 'danger'
+            self::STATUS_DELETED => 'default'
         ];
         $labels = self::getStatusList();
         $color = $list[$this->status];

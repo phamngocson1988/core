@@ -206,7 +206,7 @@
           </li>
           {if Yii::$app->user->can('saler') || Yii::$app->user->can('handler')}
           <li class="nav-item  ">
-            <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.pending'>
+            <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.new'>
             <span class="title">Đơn hàng mới</span>
             </a>
           </li>
@@ -224,30 +224,130 @@
       {if Yii::$app->user->can('accounting')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="fa fa-line-chart"></i>
-        <span class="title">Báo cáo</span>
-        <span class="arrow"></span>
+          <i class="fa fa-line-chart"></i>
+          <span class="title">Thống kê & báo cáo</span>
+          <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='/report'}" class="nav-link " code='report.index'>
-            <span class="title">Đơn hàng</span>
+            <a href="javascript:;" class="nav-link nav-toggle">
+              <span class="title">Thống kê dòng tiền</span>
+              <span class="arrow"></span>
             </a>
+            <ul class="sub-menu">
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Giao dịch nạp tiền</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Số dư tài khoản khách hàng</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Giao dịch rút tiền</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Số dư tài khoản nhà cung cấp</span>
+                </a>
+              </li>
+            </ul>
           </li>
+          
           <li class="nav-item  ">
-            <a href="{url route='/report/game'}" class="nav-link " code='report.game'>
-            <span class="title">Báo cáo theo game</span>
+            <a href="javascript:;" class="nav-link nav-toggle">
+              <span class="title">Thống kê thực hiện đơn hàng</span>
+              <span class="arrow"></span>
             </a>
+            <ul class="sub-menu">
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo đơn hàng</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo game</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo nhà cung cấp</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo nhân viên</span>
+                </a>
+              </li>
+            </ul>
           </li>
+
           <li class="nav-item  ">
-            <a href="{url route='/report/user'}" class="nav-link " code='report.user'>
-            <span class="title">Báo cáo theo nhân viên</span>
+            <a href="javascript:;" class="nav-link nav-toggle">
+              <span class="title">Thống kê bán hàng</span>
+              <span class="arrow"></span>
             </a>
+            <ul class="sub-menu">
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Doanh số theo đơn hàng</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Doanh số theo game</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Doanh số theo đại lý</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Doanh số theo nhân viên</span>
+                </a>
+              </li>
+            </ul>
           </li>
+
           <li class="nav-item  ">
-            <a href="{url route='/report/transaction'}" class="nav-link " code='report.transaction'>
-            <span class="title">Báo cáo theo giao dịch</span>
+            <a href="javascript:;" class="nav-link nav-toggle">
+              <span class="title">Thống kê chi phí lợi nhuận</span>
+              <span class="arrow"></span>
             </a>
+            <ul class="sub-menu">
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo nhân viên bán hàng</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo nhà cung cấp</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo đại lý</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo tổng đơn</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo game</span>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </li>

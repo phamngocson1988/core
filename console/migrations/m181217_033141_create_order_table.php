@@ -41,6 +41,8 @@ class m181217_033141_create_order_table extends Migration
             'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),
             'status' => $this->integer(11),
+            'request_cancel' => $this->integer(4)->defaultValue(0),
+            'request_cancel_time' => $this->dateTime(),
 
             // Game infor
             'game_id' => $this->integer(11)->notNull(),

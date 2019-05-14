@@ -175,6 +175,19 @@ class UserController extends Controller
         }
     }
 
+    public function actionCancel($key)
+    {
+        $order = Order::findOne(['auth_key' => $key]);
+        if (!$order) throw new yii\web\NotFoundHttpException('Order is invalid');
+        $order->request_cancel = 1;
+        $order->request_cancel_time = date('Y-m-d H:i:s');
+        if ($order->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $order->getErrorSummary(true));
+        }
+    }
+
     public function actionSendComplain()
     {
         $request = Yii::$app->request;

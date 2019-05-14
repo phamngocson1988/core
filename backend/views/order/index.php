@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use dosamigos\datepicker\DateRangePicker;
 use common\models\Order;
 use common\models\User;
+use common\components\helpers\FormatConverter;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -214,11 +215,19 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                <td style="vertical-align: middle;"><?=$model->process_duration_time;?></td>
+                <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
                 
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
+                <td style="vertical-align: middle;">
+                  <?=$model->getStatusLabel();?>
+                  <?php if ($model->hasCancelRequest()) :?>
+                  <span class="label label-danger">Có yêu cầu hủy</span>
+                  <?php endif;?>
+                  <?php if ($model->tooLongProcess()) :?>
+                  <span class="label label-warning">Xử lý chậm</span>
+                  <?php endif;?>
+                </td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <?php if (Yii::$app->user->can('edit_order', ['order' => $model])) :?>
@@ -232,9 +241,8 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                     case Order::STATUS_PROCESSING :
                       $editUrl = Url::to(['order/processing', 'id' => $model->id]);
                       break;
-                    
                     default:
-                      $editUrl = '';
+                      $editUrl = Url::to(['order/view', 'id' => $model->id]);
                       break;
                   };?>
                   <a href='<?=$editUrl;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>

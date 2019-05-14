@@ -41,52 +41,15 @@ use common\models\Product;
           </div>
         </div>
         <div class="portlet-body">
-          <div class="form-wizard">
-            <div class="form-body">
-              <ul class="nav nav-pills nav-justified steps">
-                <li class="active">
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 1 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Verifying</span>
-                  <p style="color: #CCC">Đơn hàng chưa thanh toán</p> 
-                  </a>
-                </li>
-                <li class="active">
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 2 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Pending </span>
-                  <p style="color: #CCC">Đơn hàng đã thanh toán</p> 
-                  </a>
-                </li>
-                <li>
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 3 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Processing </span>
-                  <p style="color: #CCC">Đơn hàng đã thực hiện xong</p> 
-                  </a>
-                </li>
-                <li>
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 4 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Completed </span>
-                  <p style="color: #CCC">Đơn hàng đã hoàn tất</p> 
-                  </a>
-                </li>
-              </ul>
-              <div id="bar" class="progress progress-striped" role="progressbar">
-                <div class="progress-bar progress-bar-success" style="width: 50%"> </div>
-              </div>
-            </div>
-          </div>
+          <?php echo $this->render('@backend/views/order/_step.php', ['order' => $order]);?>
           <div class="tabbable-bordered">
             <ul class="nav nav-tabs" role="tablist">
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
+              <!-- <li>
+                <a href="#images" data-toggle="tab"> Hình ảnh</a>
+              </li> -->
               <li>
                 <a href="#complain" data-toggle="tab"> Phản hồi</a>
               </li>
@@ -231,6 +194,16 @@ use common\models\Product;
                                 </div>
                             </div>
                         </div>
+                        <?php if ($order->hasCancelRequest()) :?>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <a href="<?=Url::to(['order/approve', 'id' => $order->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
+                                    <a class="btn red btn-outline sbold" data-toggle="modal" href="#disapprove"><i class="fa fa-ban"></i> Không chấp nhận</a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif;?>
                       </div>
                     </div>
                     <?php ActiveForm::end()?>
@@ -305,6 +278,17 @@ use common\models\Product;
                         </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="images">
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
+                    <input type="file" id="file_before_image" name="before_image" style="display: none" />
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
                   </div>
                 </div>
               </div>
@@ -431,6 +415,47 @@ use common\models\Product;
   <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="disapprove" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Lý do không chấp nhận hủy đơn hàng</h4>
+      </div>
+      <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" width="5%">#</th>
+              <th scope="col" width="90%">Nội dung</th>
+              <th scope="col" width="5%">Chọn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($template_list as $template_item) :;?>
+            <tr>
+              <td><?=$template_item->id;?></td>
+              <td><?=$template_item->content;?></td>
+              <td>
+                <?= Html::beginForm(['order/disapprove', 'id' => $order->id], 'POST', ['class' => 'send-form']); ?>
+                  <?= Html::hiddenInput('template_id', $template_item->id); ?>
+                  <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
+                <?= Html::endForm(); ?>
+              </td>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
 <?php
 $script = <<< JS
 var nextForm = new AjaxFormSubmit({element: '#next-form'});
@@ -464,6 +489,25 @@ $('#update_unit').on('click', function(e) {
         $('#doing_unit_progress span').html(result.data.total + '(Complete)');
         $('#current_doing_unit').html(result.data.total);
         $('#doing_unit').val('');
+      }
+    },
+  });
+  return false;
+});
+
+$('#cancel_order').on('click', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  $.ajax({
+    url: $(this).prop('href'),
+    type: 'POST',
+    dataType : 'json',
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          alert(result.errors);
+          return false;
+      } else {
+        window.location.href = result.data.view_url;
       }
     },
   });

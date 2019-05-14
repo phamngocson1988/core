@@ -40,4 +40,14 @@ class FormatConverter extends BaseFormatConverter
         if (!$format) $format = \Yii::$app->params['date_format'];
         return date($format, $timestamp);
     }
+
+    public static function countDuration($seconds)
+    {
+        $hourSecond = 3600;
+        $minuteSecond = 60;
+        $hour = floor($seconds / $hourSecond);
+        $minute = floor(($seconds % $hourSecond) / $minuteSecond);
+        $second = $seconds - ($hour * $hourSecond) - ($minute * $minuteSecond);
+        return sprintf("%s:%s:%s", str_pad($hour, 2, "0", STR_PAD_LEFT), str_pad($minute, 2, "0", STR_PAD_LEFT), str_pad($second, 2, "0", STR_PAD_LEFT));
+    }
 }
