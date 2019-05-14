@@ -10,13 +10,15 @@ class RatingOrderForm extends Model
     public $auth_key;
     public $user_id;
     public $value;
+    public $comment_rating;
     private $_order;
 
     public function rules()
     {
         return [
             [['auth_key', 'user_id', 'value'], 'required'],
-            ['auth_key', 'validateOrder']
+            ['auth_key', 'validateOrder'],
+            ['comment_rating', 'trim']
         ];
     }
 
@@ -35,6 +37,7 @@ class RatingOrderForm extends Model
         if (!$this->validate()) return false;
         $order = $this->getOrder();
         $order->rating = $this->value;
+        $order->comment_rating = $this->comment_rating;
         return $order->save();
     }
 

@@ -20,7 +20,7 @@ class Order extends ActiveRecord
     const STATUS_PENDING = 'pending';
     const STATUS_PROCESSING = 'processing';
     const STATUS_COMPLETED = 'completed';
-    const STATUS_DELETED = 'cancelled';
+    const STATUS_DELETED = 'deleted';
 
     const SCENARIO_VERIFYING = self::STATUS_VERIFYING;
     const SCENARIO_PENDING = self::STATUS_PENDING;
@@ -55,7 +55,7 @@ class Order extends ActiveRecord
             self::STATUS_PENDING => 'Pending',
             self::STATUS_PROCESSING => 'Processing',
             self::STATUS_COMPLETED => 'Completed',
-            self::STATUS_DELETED => 'Cancelled'
+            self::STATUS_DELETED => 'Deleted'
         ];
     }
 
@@ -167,22 +167,33 @@ class Order extends ActiveRecord
         return ($this->getProcessDurationTime() > 3600) && $this->isPendingOrder();
     }
 
+    public function ratingGood()
+    {
+        return $this->rating == 1;
+    }
     /**
      * check if the order is in temporary status or not. The system only allow to delete temporary order
      * If not, just move it to 'deleted' status.
      * Before deleting the order, delete all its order items
      */
-    public function beforeDelete()
+    public function afterDelete()
     {
-        if (!$this->isVerifyingOrder()) return false;
-        $flat = parent::beforeDelete();
-        if ($flat) {
-            $items = $this->items;
-            foreach ($this->items as $item) {
-                $item->delete();
-            }
+        foreach ($this->comments as $comment) {
+            $comment->delete();
         }
-        return $flat;
+        foreach ($this->complains as $complain) {
+            $complain->delete();
+        }
+        foreach ($this->fees as $fee) {
+            $fee->delete();
+        }
+        parent::afterDelete();
     }
 
+    public function delete()
+    {
+        if ($this->isVerifyingOrder()) return parent::delete();
+        $this->status = self::STATUS_DELETED;
+        return $this->save();
+    }
 }

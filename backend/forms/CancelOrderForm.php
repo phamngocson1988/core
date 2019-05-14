@@ -55,7 +55,7 @@ class CancelOrderForm extends Model
                 $wallet->type = UserWallet::TYPE_INPUT;
                 $wallet->user_id = $customer_id;
                 $wallet->coin = $total_price;
-                $wallet->description = "Refund order #" . $this->id;
+                $wallet->description = "Refund order #" . $order->auth_key;
                 $wallet->payment_at = date('Y-m-d H:i:s');
                 $wallet->status = UserWallet::STATUS_COMPLETED;
                 $wallet->save();

@@ -21,6 +21,7 @@ class EditOrderRule extends Rule
     {
         $order = isset($params['order']) ? $params['order'] : null;
         if (!$order) return false;
+        if ($order->isDeletedOrder()) return false;
         if (Yii::$app->user->can('admin')) return true;
         if ($order->isVerifyingOrder()) {
             return $order->saler_id == Yii::$app->user->id;

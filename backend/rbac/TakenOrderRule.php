@@ -23,6 +23,7 @@ class TakenOrderRule extends Rule
     {
         $order = isset($params['order']) ? $params['order'] : null;
         if (!$order) return false;
+        if ($order->isDeletedOrder()) return false;
         if ($order->isVerifyingOrder()) return false;        
         if ($order->handler_id) return false;
         if (Yii::$app->user->can('admin')) return true;

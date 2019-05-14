@@ -97,7 +97,9 @@ $game = $model->game;
                   <td colspan="2">
                     <div class="group-md button-group">
                       <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-secondary button-shadow" id='like'><span class="icon novi-icon mdi mdi-thumb-up-outline"></span>Like</a>
-                      <a href="<?=Url::to(['user/dislike', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='dislike'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Dislike</a>
+                      <!-- <a href="<?=Url::to(['user/dislike', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='dislike'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Dislike</a> -->
+                      <button class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" type="button" data-toggle="modal" data-target="#show-modal"><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Dislike</button>
+                      
                     </div>
                   </td>
                 </tr>
@@ -232,6 +234,28 @@ $game = $model->game;
   <?php endif;?>
 </section>
 
+<!-- Modal-->
+<div class="modal modal-custom fade" id="show-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+        <h4 class="modal-title">Sorry for this disadvantage</h4>
+      </div>
+      <div class="modal-body">
+        <p>What's the problems?</p>
+        <?= Html::beginForm(Url::to(['user/dislike', 'key' => $model->auth_key]), 'POST', ['class' => 'rd-mailform rd-mailform-inline rd-mailform-sm', 'id' => 'dislikeForm']); ?>
+          <div class="rd-mailform-inline-inner">
+            <div class="form-wrap">
+              <input class="form-input" type="text" name="comment_rating" placeholder="Leave your complain">
+            </div>
+            <button class="button form-button button-sm button-secondary button-nina" type="submit">Send</button>
+          </div>
+        <?= Html::endForm(); ?>
+      </div>
+    </div>
+  </div>
+</div>
 <?php
 $script = <<< JS
 var complainForm = new AjaxFormSubmit({element: 'form#send-complain'});
@@ -241,13 +265,22 @@ complainForm.success = function (data, form) {
 complainForm.error = function (errors) {
   console.log(errors);
 }
+
+var dislikeForm = new AjaxFormSubmit({element: 'form#dislikeForm'});
+dislikeForm.success = function (data, form) {
+  location.reload();
+}
+dislikeForm.error = function (errors) {
+  console.log(errors);
+}
+
 $('#complete').ajax_action({
   method: 'POST',
   callback: function(data) {
     location.reload();
   },
 });
-$('#like,#dislike').ajax_action({
+$('#like').ajax_action({
   method: 'POST',
   callback: function(data) {
     $('#rating').remove();

@@ -8,6 +8,7 @@ use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\models\Game;
 use common\models\Product;
+use common\components\helpers\FormatConverter;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -153,6 +154,14 @@ use common\models\Product;
                         <div class="row static-info">
                           <div class="col-md-5"> Thời gian nhận xử lý: </div>
                           <div class="col-md-7"> <?=$order->process_start_time;?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Thời gian kết thúc xử lý: </div>
+                          <div class="col-md-7"> <?=$order->process_end_time;?> </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Thời gian chờ: </div>
+                          <div class="col-md-7"> <?=FormatConverter::countDuration($order->getProcessDurationTime());?> </div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5"> Order Status: </div>

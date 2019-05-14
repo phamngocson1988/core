@@ -253,7 +253,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   <?php if (Yii::$app->user->can('delete_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
-                  <?php if (Yii::$app->user->can('admin')) :?>
+                  <?php if (Yii::$app->user->can('admin') && !$model->isDeletedOrder()) :?>
                   <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">

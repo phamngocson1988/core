@@ -163,11 +163,14 @@ class UserController extends Controller
 
     public function actionDislike($key)
     {
+        $request = Yii::$app->request;
         $model = new RatingOrderForm([
             'auth_key' => $key,
             'user_id' => Yii::$app->user->id,
-            'value' => -1
+            'value' => -1,
+            'comment_rating' => $request->post('comment_rating')
         ]);
+
         if ($model->save()) {
             return $this->renderJson(true, []);
         } else {
