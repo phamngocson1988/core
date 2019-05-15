@@ -66,7 +66,7 @@ use yii\helpers\Url;
               <td><?=$model->item_title;?></td>
               <td>(K) <?=number_format($model->total_price);?></td>
               <td><?=$model->created_at;?></td>
-              <td><?=$model->status;?></td>
+              <td><?=$model->getStatusLabel();?></td>
             </tr>
             <?php endforeach;?>
           </tbody>

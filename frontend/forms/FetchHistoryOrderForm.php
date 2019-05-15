@@ -4,7 +4,7 @@ namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Order;
+use frontend\models\Order;
 use common\models\Game;
 use yii\helpers\ArrayHelper;
 

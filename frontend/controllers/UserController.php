@@ -15,7 +15,7 @@ use frontend\forms\FetchHistoryTransactionForm;
 use frontend\forms\FetchHistoryWalletForm;
 use frontend\forms\CompleteOrderForm;
 use frontend\forms\RatingOrderForm;
-use common\models\Order;
+use frontend\models\Order;
 use common\models\UserWallet;
 use common\models\Transaction;
 use common\models\OrderComplains;
@@ -182,9 +182,18 @@ class UserController extends Controller
     {
         $order = Order::findOne(['auth_key' => $key]);
         if (!$order) throw new yii\web\NotFoundHttpException('Order is invalid');
+        // Save cancel request
+        $request = Yii::$app->request;
+        $order->setScenario(Order::SCENARIO_CANCELORDER);
         $order->request_cancel = 1;
         $order->request_cancel_time = date('Y-m-d H:i:s');
         if ($order->save()) {
+            // Send content as complain
+            $model = new OrderComplains();
+            $model->order_id = $order->id;
+            $model->content = $request->post('content');
+            $model->created_by = Yii::$app->user->id;
+            $model->save();
             return $this->renderJson(true, []);
         } else {
             return $this->renderJson(false, [], $order->getErrorSummary(true));

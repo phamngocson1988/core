@@ -109,9 +109,9 @@ $game = $model->game;
                   <td colspan="2">
                     <div class="group-md button-group">
                       <?php if ($model->request_cancel) :?>
-                      <a href="javascript:void(0)" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='cancel'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Request was sent</a>
+                      <button class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" type="button" ><span class="icon novi-icon mdi mdi-close"></span>Request was sent</button>
                       <?php else:?>
-                      <a href="<?=Url::to(['user/cancel', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='cancel'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Cancel order</a>
+                      <button class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" type="button" data-toggle="modal" data-target="#cancel-modal"><span class="icon novi-icon mdi mdi-close"></span>Cancel order</button>
                       <?php endif;?>
                     </div>
                   </td>
@@ -256,6 +256,27 @@ $game = $model->game;
     </div>
   </div>
 </div>
+<div class="modal modal-custom fade" id="cancel-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+        <h4 class="modal-title">Do you want to cancel this order?</h4>
+      </div>
+      <div class="modal-body">
+        <p>Your order is in progress. Your cancel request will be sent to our system and be considered by us.</p>
+        <?= Html::beginForm(Url::to(['user/cancel', 'key' => $model->auth_key]), 'POST', ['class' => 'rd-mailform rd-mailform-inline rd-mailform-sm', 'id' => 'cancelForm']); ?>
+          <div class="rd-mailform-inline-inner">
+            <div class="form-wrap">
+              <input class="form-input" type="text" name="content" placeholder="Leave your complain">
+            </div>
+            <button class="button form-button button-sm button-secondary button-nina" type="submit">Send</button>
+          </div>
+        <?= Html::endForm(); ?>
+      </div>
+    </div>
+  </div>
+</div>
 <?php
 $script = <<< JS
 var complainForm = new AjaxFormSubmit({element: 'form#send-complain'});
@@ -274,6 +295,14 @@ dislikeForm.error = function (errors) {
   console.log(errors);
 }
 
+var cancelForm = new AjaxFormSubmit({element: 'form#cancelForm'});
+cancelForm.success = function (data, form) {
+  location.reload();
+}
+cancelForm.error = function (errors) {
+  console.log(errors);
+}
+
 $('#complete').ajax_action({
   method: 'POST',
   callback: function(data) {
@@ -285,14 +314,6 @@ $('#like').ajax_action({
   callback: function(data) {
     $('#rating').remove();
     alert('Thank for your rating');
-  },
-});
-
-$('#cancel').ajax_action({
-  method: 'POST',
-  callback: function(data) {
-    $('#cancel').html('Cancel request was sent');
-    $('#cancel').prop('href', 'javascript:void(0)');
   },
 });
 JS;
