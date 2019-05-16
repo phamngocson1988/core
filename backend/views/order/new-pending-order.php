@@ -2,16 +2,27 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use dosamigos\datepicker\DateRangePicker;
-use common\models\Order;
+use backend\models\Order;
+use common\models\User;
+use common\components\helpers\FormatConverter;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
+$adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
+$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
+$orderTeamIds = array_unique($orderTeamIds);
+$orderTeamObjects = User::findAll($orderTeamIds);
+$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 ?>
 
 <style>

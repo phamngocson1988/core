@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use dosamigos\datepicker\DateRangePicker;
-use common\models\Order;
+use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
 
