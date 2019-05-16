@@ -148,6 +148,24 @@ class RbacController extends Controller
         $auth->addChild($handler, $permission);
     }
 
+    public function actionCreateViewCustomerPermission()
+    {
+        $auth = Yii::$app->authManager;
+        $rule = new \backend\rbac\ViewCustomerRule;
+        $auth->add($rule);
+
+        $permission = $auth->createPermission('view_customer');
+        $permission->description = 'View customer';
+        $permission->ruleName = $rule->name;
+        $auth->add($permission);
+
+        $saler = $auth->getRole('saler');
+        $auth->addChild($saler, $permission);
+
+        $handler = $auth->getRole('handler');
+        $auth->addChild($handler, $permission);
+    }
+
     //=============== ROLE ===============
     public function actionRole()
     {

@@ -1,0 +1,64 @@
+<?php
+use common\components\helpers\FormatConverter;
+?>
+<div class="portlet blue-hoki box">
+  <div class="portlet-title">
+    <div class="caption">
+      <i class="fa fa-cogs"></i>Order Details 
+    </div>
+  </div>
+  <div class="portlet-body">
+    <div class="row static-info">
+      <div class="col-md-5"> Mã đơn hàng: </div>
+      <div class="col-md-7"> <?=$order->auth_key;?></div>
+    </div>
+    <div class="row static-info">
+      <div class="col-md-5"> Thời gian tạo: </div>
+      <div class="col-md-7"> <?=$order->created_at;?> </div>
+    </div>
+    <?php if ($order->isProcessingOrder() || $order->isCompletedOrder()) :?>
+    <div class="row static-info">
+      <div class="col-md-5"> Thời gian nhận xử lý: </div>
+      <div class="col-md-7"> <?=$order->process_start_time;?> </div>
+    </div>
+    <div class="row static-info">
+      <div class="col-md-5"> Thời gian trả đơn: </div>
+      <div class="col-md-7"> <?=$order->process_end_time;?> </div>
+    </div>
+    <div class="row static-info">
+      <div class="col-md-5"> Tốc độ xử lý: </div>
+      <div class="col-md-7"> <?=FormatConverter::countDuration($order->getProcessDurationTime());?> </div>
+    </div>
+    <div class="row static-info">
+      <div class="col-md-5"> Trung bình xử lý: </div>
+      <div class="col-md-7"> <?=FormatConverter::countDuration(floor($order->getProcessDurationTime() / $order->getGamePack()));?> / pack</div>
+    </div>
+    <?php endif;?>
+    <div class="row static-info">
+      <div class="col-md-5"> Order Status: </div>
+      <div class="col-md-7">
+        <?=$order->getStatusLabel();?>
+      </div>
+    </div>
+    <?php if (Yii::$app->user->can('admin')) :?>
+    <?php if ($order->total_discount) :?>
+    <div class="row static-info">
+      <div class="col-md-5"> Sub total: </div>
+      <div class="col-md-7"> (K) <?=number_format($order->sub_total_price);?> </div>
+    </div>
+    <div class="row static-info">
+      <div class="col-md-5"> Discount: </div>
+      <div class="col-md-7"> (K) <?=number_format($order->total_discount);?> </div>
+    </div>
+    <?php endif;?>
+    <div class="row static-info">
+      <div class="col-md-5"> Total: </div>
+      <div class="col-md-7"> (K) <?=number_format($order->total_price);?> </div>
+    </div>
+    <?php endif;?>
+    <div class="row static-info">
+      <div class="col-md-5"> Payment Information: </div>
+      <div class="col-md-7"> King Coin </div>
+    </div>
+  </div>
+</div>

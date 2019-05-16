@@ -172,6 +172,13 @@ class UserController extends Controller
         ]);
 
         if ($model->save()) {
+            // Send content as complain
+            $order = $model->getOrder();
+            $complain = new OrderComplains();
+            $complain->order_id = $order->id;
+            $complain->content = $request->post('comment_rating');
+            $complain->created_by = Yii::$app->user->id;
+            $complain->save();
             return $this->renderJson(true, []);
         } else {
             return $this->renderJson(false, [], $model->getErrorSummary(true));

@@ -208,6 +208,7 @@
           <li class="nav-item  ">
             <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.new'>
             <span class="title">Đơn hàng mới</span>
+            <span class="badge badge-success">{$this->params['new_pending_order']}</span>
             </a>
           </li>
           {/if}

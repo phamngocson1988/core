@@ -157,6 +157,11 @@ class Order extends ActiveRecord
         return strtotime('now') - strtotime($this->process_start_time);
     }
 
+    public function getGamePack()
+    {
+        return ($this->game_pack) ? $this->game_pack : 1;
+    }
+    
     public function hasCancelRequest()
     {
         return $this->request_cancel && ($this->isPendingOrder() || $this->isVerifyingOrder());

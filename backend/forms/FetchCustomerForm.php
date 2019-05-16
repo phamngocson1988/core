@@ -13,6 +13,7 @@ class FetchCustomerForm extends Model
 {
     public $q;
     public $status;
+    public $country_code;
     private $_command;
 
     public function rules()
@@ -40,6 +41,10 @@ class FetchCustomerForm extends Model
         }
         if ((string)$this->status !== "") {
             $command->andWhere(['status' => $this->status]);
+        }
+
+        if ($this->country_code) {
+            $command->andWhere(['country_code' => $this->country_code]);
         }
         $this->_command = $command;
     }

@@ -47,6 +47,7 @@ class m181217_033141_create_order_table extends Migration
             // Game infor
             'game_id' => $this->integer(11)->notNull(),
             'game_title' => $this->string(255)->notNull(),
+            'game_pack' => $this->float(1)->notNull()->defaultValue(1),
             'unit_name' => $this->string(50)->notNull(),
             'total_unit' => $this->integer(11)->defaultValue(0),
             'doing_unit' => $this->integer(11)->defaultValue(0),

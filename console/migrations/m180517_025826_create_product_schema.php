@@ -25,6 +25,7 @@ class m180517_025826_create_product_schema extends Migration
             'content' => $this->text()->notNull(),
             'image_id' => $this->integer(),
             'price' => $this->integer()->notNull(),
+            'pack' => $this->integer()->notNull()->defaultValue(1),
             'meta_title' => $this->string(160),
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),

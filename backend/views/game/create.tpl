@@ -80,6 +80,7 @@
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'excerpt')->textarea()}
                   {$form->field($model, 'price')->textInput()}
+                  {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>

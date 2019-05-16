@@ -32,7 +32,7 @@ class UserController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['suggestion', 'customer'],
-                        'roles' => ['@'],
+                        'roles' => ['view_customer'],
                     ],
                 ],
             ],

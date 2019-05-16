@@ -62,22 +62,7 @@ use common\models\Product;
                         </div>
                       </div>
                       <div class="portlet-body">
-                        <div class="table-responsive">
-                          <table class="table table-hover table-bordered table-striped">
-                            <thead>
-                              <tr>
-                                <th> Tên game </th>
-                                <th> Số lượng nạp </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td><?=$order->game_title;?></td>
-                                <td><?=$order->total_unit;?></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        <?php echo $this->render('@backend/views/order/_unit.php', ['order' => $order]);?>
                         <div class="row static-info">
                           <div class="col-md-12">
                             <strong>Số game đã nạp: <?=$order->doing_unit;?></strong>
@@ -135,75 +120,8 @@ use common\models\Product;
                     <?php ActiveForm::end()?>
                   </div>
                   <div class="col-md-6 col-sm-12">
-                    <div class="portlet blue-hoki box">
-                      <div class="portlet-title">
-                        <div class="caption">
-                          <i class="fa fa-cogs"></i>Order Details 
-                        </div>
-                      </div>
-                      <div class="portlet-body">
-                        <div class="row static-info">
-                          <div class="col-md-5"> Mã đơn hàng: </div>
-                          <div class="col-md-7"> <?=$order->auth_key;?></div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Thời gian tạo: </div>
-                          <div class="col-md-7"> <?=$order->created_at;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Thời gian nhận xử lý: </div>
-                          <div class="col-md-7"> <?=$order->process_start_time;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Order Status: </div>
-                          <div class="col-md-7">
-                            <?=$order->getStatusLabel();?>
-                          </div>
-                        </div>
-                        <?php if (Yii::$app->user->can('admin')) :?>
-                        <?php if ($order->total_discount) :?>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Sub total: </div>
-                          <div class="col-md-7"> (K) <?=number_format($order->sub_total_price);?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Discount: </div>
-                          <div class="col-md-7"> (K) <?=number_format($order->total_discount);?> </div>
-                        </div>
-                        <?php endif;?>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Total: </div>
-                          <div class="col-md-7"> (K) <?=number_format($order->total_price);?> </div>
-                        </div>
-                        <?php endif;?>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Payment Information: </div>
-                          <div class="col-md-7"> King Coin </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="portlet blue-hoki box">
-                      <div class="portlet-title">
-                        <div class="caption">
-                          <i class="fa fa-cogs"></i>Customer Information 
-                        </div>
-                      </div>
-                      <?php $customer = $order->customer;?>
-                      <div class="portlet-body">
-                        <div class="row static-info">
-                          <div class="col-md-5"> Customer: </div>
-                          <div class="col-md-7"> <?=$customer->name;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Email: </div>
-                          <div class="col-md-7"> <?=$customer->email;?> </div>
-                        </div>
-                        <div class="row static-info">
-                          <div class="col-md-5"> Phone Number: </div>
-                          <div class="col-md-7"> <?=sprintf("(%s)%s", $customer->country_code, $customer->phone);?> </div>
-                        </div>
-                      </div>
-                    </div>
+                    <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
+                    <?php echo $this->render('@backend/views/order/_customer.php', ['order' => $order]);?>
                   </div>
                 </div>
               </div>
