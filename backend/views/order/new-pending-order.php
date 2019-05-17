@@ -17,6 +17,10 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
 
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/table-bootstrap.min.js', ['depends' => '\backend\assets\AppAsset']);
+
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 $orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
@@ -63,17 +67,58 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         </div>
       </div>
       <div class="portlet-body">
+      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/new-pending-order']]);?>
         <div class="row margin-bottom-10">
+               
+            <?php $customer = $search->getCustomer();?>
+            <?=$form->field($search, 'q', [
+              'options' => ['class' => 'form-group col-md-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+            ])->textInput()->label('Mã đơn hàng');?>
+
+            <?=$form->field($search, 'customer_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
+
+            <?=$form->field($search, 'saler_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
+            ])->dropDownList($search->fetchSalers(), ['prompt' => 'Tìm theo nhân viên bán hàng'])->label('Nhân viên bán hàng');?>
+
+            <?=$form->field($search, 'game_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+
+            <div class="form-group col-md-2">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
         </div>
         
+        <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+        <table class="table table-striped table-bordered table-hover table-checkable" data-sort-name="quantity" data-sort-order="desc" data-toggle="table" >
           <thead>
             <tr>
               <th style="width: 5%;"> STT </th>
               <th style="width: 10%;"> Mã đơn hàng </th>
               <th style="width: 10%;"> Tên game </th>
-              <th style="width: 5%;"> Số lượng nạp </th>
+              <th style="width: 5%;" data-sortable="true" data-field="quantity"> Số lượng nạp </th>
               <th style="width: 10%;"> Thời gian nhận đơn </th>
               <th style="width: 5%;"> Thời gian chờ </th>
               <th style="width: 10%;"> Người bán hàng </th>

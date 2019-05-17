@@ -292,6 +292,14 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
+        <div class="row">
+          <div class="col-md-2 col-sm-2">
+            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
+          </div>
+          <div class="col-md-2 col-sm-2">
+            <span class="label label-warning">Tổng gói: <?=number_format($search->getCommand()->sum('total_unit'));?></span>
+          </div>
+        </div>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

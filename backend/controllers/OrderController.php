@@ -184,7 +184,13 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.new';
         $request = Yii::$app->request;
-        $form = new FetchNewPendingOrderForm();
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'game_id' => $request->get('game_id'),
+        ];
+        $form = new FetchNewPendingOrderForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
