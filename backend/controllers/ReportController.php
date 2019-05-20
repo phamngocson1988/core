@@ -16,6 +16,11 @@ use common\models\Order;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
+
+
+
+use backend\forms\ReportProcessOrderByGame;
+
 class ReportController extends Controller
 {
     /**
@@ -188,52 +193,17 @@ class ReportController extends Controller
             'user_id' => $user_id,
         ];
         $form = new ReportByBalanceForm($data);
-        $command = $form->getCommand();
+        $command = $form->getUserCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
                             ->all();
-
-
-        // $userIds = ArrayHelper::getColumn($models, 'user_id');
-        // $balances = [];
-        // foreach ($userIds as $userId) {
-        //     $countStartBalance = new GetUserWalletBalance([
-        //         'date' => $form->start_date,
-        //         'user_id' => $user_id,
-        //     ]);
-        //     $countEndBalance = new GetUserWalletBalance([
-        //         'date' => $form->end_date,
-        //         'user_id' => $user_id,
-        //     ]);
-        //     $balances[$userId] = [
-        //         'start' => $countStartBalance->count(),
-        //         'end' => $countEndBalance->count(),
-        //     ];
-        // }
-        // print_r($balances);die;
-
-
-
-
-        $inputCommand = $form->getInputCommand();
-        $inputBalance = ArrayHelper::map($inputCommand->all(), 'id', 'coin');
-        $outputCommand = $form->getOutputCommand();
-        $outputBalance = ArrayHelper::map($outputCommand->all(), 'id', 'coin');
-
-        // first/last balance
-
-
-
-
-
+        $report = $form->fetch();
         return $this->render('balance', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
-            'inputBalance' => $inputBalance,
-            'outputBalance' => $outputBalance,
+            'report' => $report,
         ]);   
     }
 
@@ -275,17 +245,11 @@ class ReportController extends Controller
             'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
             'end_date' => $request->get('end_date', date('Y-m-d')),
         ];
-        $form = new FetchOrderForm($data);
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_DESC])
-                            ->all();
+        $form = new ReportProcessOrderByGame($data);
+        $models = $form->fetch();
 
         return $this->render('game', [
             'models' => $models,
-            'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);

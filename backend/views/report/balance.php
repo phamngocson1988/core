@@ -76,7 +76,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               ])->hiddenInput()->label(false);?>
             </div>
 
-            <?php $user = $search->user;?>
+            <?php $user = $search->getUser();?>
               <?=$form->field($search, 'user_id', [
               'options' => ['class' => 'form-group col-md-2'],
               ])->widget(kartik\select2\Select2::classname(), [
@@ -120,13 +120,14 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
+              <?php $userId = $model->user_id;?>
               <tr>
                 <td>#<?=($pages->offset + $no + 1)?></td>
-                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
-                <td style="vertical-align: middle;"><?=number_format(ArrayHelper::getValue($inputBalance, $model->id, 0));?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->coin);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($model->coin);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($model->coin);?></td>
+                <td style="vertical-align: middle;"><?=$report[$userId]['name'];?></td>
+                <td style="vertical-align: middle;"><?=number_format($report[$userId]['topup']);?></td>
+                <td style="vertical-align: middle;"><?=number_format($report[$userId]['withdraw']);?></td>
+                <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_start']);?></td>
+                <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_end']);?></td>
                 <td style="vertical-align: middle;">View detail</td>
               </tr>
               <?php endforeach;?>

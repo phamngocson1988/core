@@ -104,55 +104,27 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th style="width: 5%;"> STT </th>
-              <th style="width: 10%;"> Mã đơn hàng </th>
-              <th style="width: 10%;"> Tên game </th>
-              <th style="width: 5%;"> Số gói </th>
-              <th style="width: 5%;"> Thời gian xử lý </th>
-              <th style="width: 10%;"> Người bán hàng </th>
-              <th style="width: 15%;"> Nhân viên đơn hàng </th>
-              <th style="width: 10%;"> Nhà cung cấp </th>
+              <th style="width: 30%;"> Tên game </th>
+              <th style="width: 20%;"> Số lượng gói </th>
+              <th style="width: 20%;"> Tỷ lệ hoàn thành </th>
+              <th style="width: 30%;"> Thời gian xử lý trung bình </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->auth_key;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
-                <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
-                
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
-                <td style="vertical-align: middle;"></td>
+                <td style="vertical-align: middle;"><?=$model['game_title'];?></td>
+                <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
+                <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
+                <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
         </table>
-        <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
-        <?php if ($models) : ?>
-        <?php
-        $totalOrders = $search->getCommand()->count();
-        $totalPacks = $search->getCommand()->sum('game_pack');
-        $averageTime = $search->getCommand()->sum('process_duration_time') / $totalPacks;
-        ?>
-        <div class="row">
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-danger">Tổng đơn hàng: <?=number_format($totalOrders);?></span>
-          </div>
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-warning">Tổng gói: <?=round($totalPacks, 1);?></span>
-          </div>
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-success">Thời gian trung bình: <?=FormatConverter::countDuration(floor($averageTime));?></span>
-          </div>
-        </div>
-        <?php endif;?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
