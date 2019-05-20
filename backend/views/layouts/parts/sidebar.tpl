@@ -177,6 +177,11 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='/order-complain'}" class="nav-link " code='ordercomplain.index'>
+            <span class="title">Mẫu phản hồi</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
             <span class="title">Cổng thanh toán</span><span class="arrow"></span>
             </a>
@@ -191,7 +196,10 @@
         </ul>
       </li>
       {/if}
-      
+
+      {$roles = $app->authManager->getRolesByUser($app->user->id)}
+      {$roles = array_keys($roles)}
+      {if (array_intersect($roles, ['admin', 'handler', 'orderteam_manager', 'saler', 'sale_manager']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
@@ -212,17 +220,9 @@
             </a>
           </li>
           {/if}
-          {if (Yii::$app->user->can('admin'))}
-          <li class="nav-item  ">
-            <a href="{url route='/order-complain'}" class="nav-link " code='ordercomplain.index'>
-            <span class="title">Mẫu phản hồi</span>
-            </a>
-          </li>
-          {/if}
         </ul>
       </li>
-      
-      {if Yii::$app->user->can('accounting')}
+      {/if}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-line-chart"></i>
@@ -230,6 +230,7 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
+          {if (array_intersect($roles, ['admin', 'accounting']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê dòng tiền</span>
@@ -237,12 +238,12 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/transaction'}" class="nav-link nav-toggle" code='report.transaction'>
                   <span class="title">Giao dịch nạp tiền</span>
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/balance'}" class="nav-link nav-toggle" code='report.balance'>
                   <span class="title">Số dư tài khoản khách hàng</span>
                 </a>
               </li>
@@ -258,7 +259,8 @@
               </li>
             </ul>
           </li>
-          
+          {/if}
+          {if (array_intersect($roles, ['admin', 'orderteam_manager']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê thực hiện đơn hàng</span>
@@ -266,7 +268,7 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/order'}" class="nav-link nav-toggle" code="report.order">
                   <span class="title">Theo đơn hàng</span>
                 </a>
               </li>
@@ -287,7 +289,8 @@
               </li>
             </ul>
           </li>
-
+          {/if}
+          {if (array_intersect($roles, ['admin', 'handler']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê bán hàng</span>
@@ -316,7 +319,8 @@
               </li>
             </ul>
           </li>
-
+          {/if}
+          {if (array_intersect($roles, ['admin', 'accounting']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê chi phí lợi nhuận</span>
@@ -350,9 +354,9 @@
               </li>
             </ul>
           </li>
+          {/if}
         </ul>
       </li>
-      {/if}
     </ul>
   </div>
 </div>

@@ -4,7 +4,7 @@ namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Transaction;
+use common\models\PaymentTransaction;
 
 class FetchHistoryTransactionForm extends Model
 {
@@ -30,7 +30,7 @@ class FetchHistoryTransactionForm extends Model
 
     protected function createCommand()
     {
-        $command = Transaction::find();
+        $command = PaymentTransaction::find();
         $command->where(['user_id' => $this->user_id]);
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);

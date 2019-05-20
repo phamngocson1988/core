@@ -58,14 +58,77 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Theo game</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng</span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/game']]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/order']]);?>
+        <div class="row margin-bottom-10">
+            <?=$form->field($search, 'q', [
+              'options' => ['class' => 'form-group col-md-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+            ])->textInput()->label('Mã đơn hàng');?>
+
+            <?php if (Yii::$app->user->can('admin')) :?>
+            <?php $saler = $search->getSaler();?>
+            <?=$form->field($search, 'saler_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn nhân viên sale',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Nhân viên sale')?>
+
+            <?php $handler = $search->getHandler();?>
+            <?=$form->field($search, 'handler_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'handler_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn nhân viên đơn hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Nhân viên đơn hàng')?>
+            <?php elseif (Yii::$app->user->can('saler')):?>
+              <?=$form->field($search, 'saler_id', [
+                'template' => '{input}', 
+                'options' => ['container' => false],
+                'inputOptions' => ['name' => 'saler_id']
+              ])->hiddenInput()->label(false);?>
+            <?php elseif (Yii::$app->user->can('handler')):?>
+              <?=$form->field($search, 'handler_id', [
+                'template' => '{input}', 
+                'options' => ['container' => false],
+                'inputOptions' => ['name' => 'handler_id']
+              ])->hiddenInput()->label(false);?>
+            <?php endif;?>
+
+            
+          
+        </div>
         <div class="row">
+          <?=$form->field($search, 'status', [
+            'options' => ['class' => 'form-group col-md-2'],
+            'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
+          ])->dropDownList([Order::STATUS_COMPLETED => 'Completed', Order::STATUS_DELETED => 'Deleted'])->label('Trạng thái');?>
 
           <div class="form-group col-md-2">
             <label class="control-label">Ngày tạo</label>

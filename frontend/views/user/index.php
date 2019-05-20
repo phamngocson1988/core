@@ -64,7 +64,7 @@ use yii\helpers\Url;
                   List all your transactions of your payments.<br/>
                   <?php if ($transaction) :?>
                   Last transaction: <?=$transaction->created_at;?><br/>
-                  Total: $<?=number_format($transaction->amount);?>
+                  Total: $<?=number_format($transaction->total_price);?>
                   <?php else :?>
                   You have no any transactions.  <a href="<?=Url::to(['pricing/index']);?>">Buy now</a>
                   <?php endif;?>

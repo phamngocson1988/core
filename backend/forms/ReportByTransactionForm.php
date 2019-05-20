@@ -4,13 +4,12 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Transaction;
+use common\models\PaymentTransaction;
 
-class ReportByTransactionForm extends Transaction
+class ReportByTransactionForm extends PaymentTransaction
 {
     public $start_date;
     public $end_date;
-
     public $count_order;
 
     public function rules()
@@ -40,6 +39,18 @@ class ReportByTransactionForm extends Transaction
         }
         if ($this->end_date) {
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
+        }
+
+        if ($this->user_id) {
+            $command->andWhere(['user_id' => $this->user_id]);
+        }
+
+        if ($this->discount_code) {
+            $command->andWhere(['discount_code' => $this->discount_code]);
+        }
+
+        if ($this->auth_key) {
+            $command->andWhere(['auth_key' => $this->auth_key]);
         }
         $this->_command = $command;
     }

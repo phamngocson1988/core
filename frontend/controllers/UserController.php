@@ -17,7 +17,7 @@ use frontend\forms\CompleteOrderForm;
 use frontend\forms\RatingOrderForm;
 use frontend\models\Order;
 use common\models\UserWallet;
-use common\models\Transaction;
+use common\models\PaymentTransaction;
 use common\models\OrderComplains;
 
 /**
@@ -56,7 +56,7 @@ class UserController extends Controller
         $user = Yii::$app->user->getIdentity();
         $order = Order::find()->where(['customer_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
         $wallet = UserWallet::find()->where(['user_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
-        $transaction = Transaction::find()->where(['user_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
+        $transaction = PaymentTransaction::find()->where(['user_id' => $userId])->orderBy(['id' => SORT_DESC])->one();
     	return $this->render('index', [
             'order' => $order,
             'wallet' => $wallet,

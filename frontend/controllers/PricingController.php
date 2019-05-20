@@ -10,7 +10,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\models\PricingCoin;
 use common\models\UserWallet;
-use common\models\Transaction;
+use common\models\PaymentTransaction;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\components\cart\CartDiscount;
@@ -126,14 +126,6 @@ class PricingController extends Controller
 
     public function actionPurchase()
     {
-        // $session = Yii::$app->session;
-        // $cart = $session->has(self::PRICING_CART) ? $session->get(self::PRICING_CART) : [];
-        // $chosenId = ArrayHelper::getValue($cart, 'id');
-        // $chosenQuantity = ArrayHelper::getValue($cart, 'quantity', 1);
-        // if (!$chosenId) throw new NotFoundHttpException("You have not added any pricing package", 1);
-        // $pricing = PricingCoin::findOne($chosenId); 
-        // if (!$pricing || !$pricing->isVisible()) throw new NotFoundHttpException("The package is not found", 1);
-
         // Send to paypal
         $settings = Yii::$app->settings;
         $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
@@ -210,11 +202,6 @@ class PricingController extends Controller
         try {
             $payment->create($apiContext);
             if ('created' == strtolower($payment->state)) {// order was created
-            	// $session = Yii::$app->session;
-            	// $session->set('payment_method', 'paypal');
-            	// $session->set('payment_id', $payment->id);
-             //    $session->set('package_id', $cartItem->getUniqueId());
-            	// $session->set('package_quantity', $cartItem->quantity);
                 return $this->redirect($payment->getApprovalLink());
             }  
         } catch (\PayPal\Exception\PayPalConnectionException $ex) {
@@ -258,22 +245,36 @@ class PricingController extends Controller
         try {
             $payment->execute($execution, $apiContext);
             if ('approved' == strtolower($payment->state)) {// order was created
+                $totalPrice = $cart->getTotalPrice();
+                $subTotalPrice = $cart->getSubTotalPrice();
+                $totalCoin = $cartItem->getPricing()->num_of_coin * $cartItem->quantity;
+                
             	// Create transaction
-            	$trn = new Transaction();
+            	$trn = new PaymentTransaction();
                 $trn->user_id = $user->id;
                 $trn->payment_method = 'paypal';
                 $trn->payment_id = $paymentId;
                 $trn->payment_data = $token;
-                $trn->amount = $transaction->getAmount()->getTotal();
+                $trn->price = $subTotalPrice;
+                $trn->total_price = $totalPrice;//$transaction->getAmount()->getTotal();
+                $trn->coin = $totalCoin;
+                $trn->discount_coin = 0;
+                $trn->total_coin = $totalCoin;
                 $trn->description = "Paypal #$paymentId";
                 $trn->created_by = $user->id;
-                $trn->status = Transaction::STATUS_COMPLETED;
+                $trn->status = PaymentTransaction::STATUS_COMPLETED;
                 $trn->payment_at = date('Y-m-d H:i:s');
                 $trn->generateAuthKey();
+                if ($cart->getTotalDiscount()) {
+                    $discount = $cart->getDiscount();
+                    $trn->discount_price = $cart->getTotalDiscount();
+                    $trn->discount_code = $discount->getPromotion()->code;
+                }
                 $trn->save();
 
                 $wallet = new UserWallet();
                 $wallet->coin = $cartItem->getPricing()->num_of_coin * $cartItem->quantity;
+                $wallet->balance = $user->getWalletAmount() + $wallet->coin;
                 $wallet->type = UserWallet::TYPE_INPUT;
                 $wallet->description = "Transaction #$trn->auth_key";
                 $wallet->created_by = $user->id;

@@ -6,7 +6,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
 
-class Transaction extends ActiveRecord
+class PaymentTransaction extends ActiveRecord
 {
     CONST STATUS_PENDING = "pending";
     const STATUS_COMPLETED = "completed";

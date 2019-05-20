@@ -215,7 +215,8 @@ class CartController extends Controller
         }
 
         $wallet = new UserWallet();
-        $wallet->coin = $totalPrice;
+        $wallet->coin = (-1) * $totalPrice;
+        $wallet->balance = $user->getWalletAmount() + $wallet->coin;
         $wallet->type = UserWallet::TYPE_OUTPUT;
         $wallet->description = "Pay for order #$order->auth_key";
         $wallet->created_by = $user->id;

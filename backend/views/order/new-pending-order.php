@@ -112,13 +112,13 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sort-name="quantity" data-sort-order="desc" data-toggle="table" >
+        <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
               <th style="width: 5%;"> STT </th>
               <th style="width: 10%;"> Mã đơn hàng </th>
               <th style="width: 10%;"> Tên game </th>
-              <th style="width: 5%;" data-sortable="true" data-field="quantity"> Số lượng nạp </th>
+              <th style="width: 5%;"> Số lượng nạp </th>
               <th style="width: 10%;"> Thời gian nhận đơn </th>
               <th style="width: 5%;"> Thời gian chờ </th>
               <th style="width: 10%;"> Người bán hàng </th>

@@ -23,6 +23,7 @@ class m190313_163324_create_wallet extends Migration
             'type' => $this->string(1)->notNull(),
             'user_id' => $this->integer(11)->notNull(),
             'coin' => $this->integer(11)->notNull()->defaultValue(0),
+            'balance' => $this->integer(11)->notNull()->defaultValue(0),
             'description' => $this->string(100), 
             'created_by' => $this->integer(11),
             'created_at' => $this->dateTime()->notNull(),
@@ -31,19 +32,25 @@ class m190313_163324_create_wallet extends Migration
             'status' => $this->string(10)->notNull()->defaultValue('pending'),
         ]);
 
-        $this->createTable('{{%transaction}}', [
+        $this->createTable('{{%payment_transaction}}', [
             'id' => $this->primaryKey(),
             'auth_key' => $this->string(50)->notNull(),
             'user_id' => $this->integer(11)->notNull(),
             'payment_method' => $this->string(10)->notNull(),
             'payment_id' => $this->string(50)->notNull(),
             'payment_data' => $this->string(100),
-            'amount' => $this->integer(11)->notNull()->defaultValue(0),
             'description' => $this->string(100), 
             'created_by' => $this->integer(11),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),
+            'price' => $this->integer(11)->notNull()->defaultValue(0),
+            'discount_price' => $this->integer(11)->notNull()->defaultValue(0),
+            'total_price' => $this->integer(11)->notNull()->defaultValue(0),
+            'coin' => $this->integer(11)->notNull()->defaultValue(0),
+            'discount_coin' => $this->integer(11)->notNull()->defaultValue(0),
+            'total_coin' => $this->integer(11)->notNull()->defaultValue(0),
+            'discount_code' => $this->string(50),
             'status' => $this->string(10)->notNull()->defaultValue('pending'),
         ]);
 

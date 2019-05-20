@@ -56,7 +56,7 @@ use yii\helpers\Url;
             <tr>
               <td>#<?=$model->auth_key;?></td>
               <td><?=$model->created_at;?></td>
-              <td>$<?=number_format($model->amount);?></td>
+              <td>$<?=number_format($model->total_price);?></td>
               <td><?=$model->payment_method;?></td>
               <td><?=$model->status;?></td>
             </tr>

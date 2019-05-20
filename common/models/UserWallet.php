@@ -32,6 +32,11 @@ class UserWallet extends ActiveRecord
         return '{{%user_wallet}}';
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
     public static function getWalletStatus()
     {
         return [
