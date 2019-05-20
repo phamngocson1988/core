@@ -273,7 +273,7 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/game'}" class="nav-link nav-toggle" code="report.game">
                   <span class="title">Theo game</span>
                 </a>
               </li>
@@ -283,7 +283,7 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/user'}" class="nav-link nav-toggle" code="report.user">
                   <span class="title">Theo nhân viên</span>
                 </a>
               </li>
@@ -298,12 +298,12 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/sale-order'}" class="nav-link " code='report.sale.order'>
                   <span class="title">Doanh số theo đơn hàng</span>
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/sale-game'}" class="nav-link " code='report.sale.game'>
                   <span class="title">Doanh số theo game</span>
                 </a>
               </li>
@@ -313,7 +313,7 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/sale-user'}" class="nav-link " code='report.sale.user'>
                   <span class="title">Doanh số theo nhân viên</span>
                 </a>
               </li>

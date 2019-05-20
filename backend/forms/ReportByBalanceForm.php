@@ -28,13 +28,11 @@ class ReportByBalanceForm extends Model
     {
         // Find all users in period
         $command = $this->getUserCommand();
-        $models = $command->all();
+        $models = $command->all();//print_r($models);echo $command->createCommand()->getRawSql();die;
         $users = [];
         foreach ($models as $model) {
-            $users[$model->user_id]['name'] = $model->user->name;
-        }
+            $userId = $model->user_id;
 
-        foreach ($users as $userId => $user) {
             // find topup/ withdraw
             $topupCommand = $this->getCommand();
             $topupCommand->andWhere(['type' => UserWallet::TYPE_INPUT]);
@@ -61,6 +59,7 @@ class ReportByBalanceForm extends Model
             $balanceAtEndModel = $balanceAtEnd->one();
             $balanceAtEndNumber = ($balanceAtEndModel) ? $balanceAtEndModel->balance : 0;
 
+            $users[$model->user_id]['name'] = $model->user->name;
             $users[$model->user_id]['topup'] = $totalTopup;
             $users[$model->user_id]['withdraw'] = $totalWithdraw;
             $users[$model->user_id]['balance_start'] = $balanceAtStartNumber;

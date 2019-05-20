@@ -4,7 +4,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Order;
+use backend\models\Order;
 
 class FetchMyOrderForm extends Model
 {

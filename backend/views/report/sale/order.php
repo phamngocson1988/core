@@ -43,13 +43,13 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê thực hiện đơn hàng</span>
+      <span>Thống kê doanh số</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê thực hiện đơn hàng</h1>
+<h1 class="page-title">Thống kê doanh số</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -58,15 +58,56 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Theo nhân viên</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng</span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/user']]);?>
-        <div class="row">
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/order']]);?>
+        <div class="row margin-bottom-10">
+            <?=$form->field($search, 'q', [
+              'options' => ['class' => 'form-group col-md-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+            ])->textInput()->label('Mã đơn hàng');?>
 
+            <?=$form->field($search, 'customer_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
+
+            <?php $saler = $search->getSaler();?>
+            <?=$form->field($search, 'saler_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn nhân viên sale',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Nhân viên sale')?>
+
+        </div>
+        <div class="row">
           <div class="form-group col-md-2">
             <label class="control-label">Ngày tạo</label>
             <div class="form-control" style="border: none; padding: 0">
@@ -88,10 +129,10 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             ])->hiddenInput()->label(false);?>
           </div>
 
-          <?=$form->field($search, 'handler_id', [
+          <?=$form->field($search, 'game_id', [
             'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'handler_id']
-          ])->dropDownList($search->fetchUsers(), ['prompt' => 'Tìm theo nhân viên'])->label('Tên nhân viên');?>
+            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
 
           <div class="form-group col-md-2">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -104,26 +145,47 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th style="width: 30%;"> Nhân viên </th>
-              <th style="width: 20%;"> Số lượng gói </th>
-              <th style="width: 20%;"> Tỷ lệ hoàn thành </th>
-              <th style="width: 30%;"> Thời gian xử lý trung bình </th>
+              <th style="width: 5%;"> STT </th>
+              <th style="width: 10%;"> Mã đơn hàng </th>
+              <th style="width: 15%;"> Khách hàng / Reseller </th>
+              <th style="width: 10%;"> Tên game </th>
+              <th style="width: 5%;"> Số gói </th>
+              <th style="width: 5%;"> Tổng coin </th>
+              <th style="width: 10%;"> Nhân viên sale/đại lý </th>
+              <th style="width: 10%;"> Nhà cung cấp </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><?=$model['name'];?></td>
-                <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
-                <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
-                <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
+                <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'><?=$model->auth_key;?></a></td>
+                <td style="vertical-align: middle;"><?=$model->customer->name;?></td>
+                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
+                <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
+                <td style="vertical-align: middle;"><?=$model->total_price;?></td>
+                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
+                <td style="vertical-align: middle;"></td>
               </tr>
               <?php endforeach;?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Số gói: <?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+              <td>Tổng coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
         </table>
+        <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>
     </div>

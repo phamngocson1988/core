@@ -43,13 +43,13 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê thực hiện đơn hàng</span>
+      <span>Thống kê doanh số</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê thực hiện đơn hàng</h1>
+<h1 class="page-title">Thống kê doanh số</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -58,13 +58,13 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Theo nhân viên</span>
+          <span class="caption-subject bold uppercase"> Theo game</span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/user']]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/sale-game']]);?>
         <div class="row">
 
           <div class="form-group col-md-2">
@@ -88,10 +88,10 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             ])->hiddenInput()->label(false);?>
           </div>
 
-          <?=$form->field($search, 'handler_id', [
+          <?=$form->field($search, 'game_id', [
             'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'handler_id']
-          ])->dropDownList($search->fetchUsers(), ['prompt' => 'Tìm theo nhân viên'])->label('Tên nhân viên');?>
+            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
 
           <div class="form-group col-md-2">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -104,10 +104,10 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th style="width: 30%;"> Nhân viên </th>
-              <th style="width: 20%;"> Số lượng gói </th>
-              <th style="width: 20%;"> Tỷ lệ hoàn thành </th>
-              <th style="width: 30%;"> Thời gian xử lý trung bình </th>
+              <th style="width: 10%;"> STT </th>
+              <th style="width: 30%;"> Tên game </th>
+              <th style="width: 30%;"> Số lượng gói </th>
+              <th style="width: 30%;"> Số coin </th>
             </tr>
           </thead>
           <tbody>
@@ -116,10 +116,10 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><?=$model['name'];?></td>
+                <td style="vertical-align: middle;"><?=$no + 1;?></td>
+                <td style="vertical-align: middle;"><?=$model['game_title'];?></td>
                 <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
-                <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
-                <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
+                <td style="vertical-align: middle;"><?=$model['total_price'];?></td>
               </tr>
               <?php endforeach;?>
           </tbody>

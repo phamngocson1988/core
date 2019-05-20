@@ -12,14 +12,14 @@ use backend\forms\ReportByTransactionForm;
 use backend\forms\ReportByBalanceForm;
 use backend\forms\GetUserWalletBalance;
 use yii\data\Pagination;
-use common\models\Order;
+use backend\models\Order;
+use common\models\User;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-
-
-
-
 use backend\forms\ReportProcessOrderByGame;
+use backend\forms\ReportProcessOrderByUser;
+use backend\forms\ReportSaleOrderByGame;
+use backend\forms\FetchMyOrderForm;
 
 class ReportController extends Controller
 {
@@ -207,6 +207,33 @@ class ReportController extends Controller
         ]);   
     }
 
+    public function actionBalanceDetail($id)
+    {
+        $this->view->params['main_menu_active'] = 'report.balance';
+        $request = Yii::$app->request;
+
+        $start_date = $request->get('start_date', date('Y-m-01'));
+        $end_date = $request->get('end_date', date('Y-m-t'));
+        $data = [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'user_id' => $id,
+        ];
+        $form = new ReportByBalanceForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+        $user = User::findOne($id);
+        return $this->render('balance-detail', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'user' => $user
+        ]);   
+    }
+
     public function actionOrder()
     {
         $this->view->params['main_menu_active'] = 'report.order';
@@ -250,6 +277,95 @@ class ReportController extends Controller
 
         return $this->render('game', [
             'models' => $models,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionUser()
+    {
+        $this->view->params['main_menu_active'] = 'report.user';
+        $request = Yii::$app->request;
+        $data = [
+            'handler_id' => $request->get('handler_id'),
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+        ];
+        $form = new ReportProcessOrderByUser($data);
+        $models = $form->fetch();
+
+        return $this->render('user', [
+            'models' => $models,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionSaleOrder()
+    {
+        $this->view->params['main_menu_active'] = 'report.sale.order';
+        $request = Yii::$app->request;
+        $data = [
+            'q' => $request->get('q'),
+            'saler_id' => $request->get('saler_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('sale/order', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionSaleGame()
+    {
+        $this->view->params['main_menu_active'] = 'report.sale.game';
+        $request = Yii::$app->request;
+        $data = [
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+        ];
+        $form = new ReportSaleOrderByGame($data);
+        $command = $form->getCommand();
+        $models = $command->asArray()->all();
+        return $this->render('sale/game', [
+            'models' => $models,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionSaleUser()
+    {
+        $this->view->params['main_menu_active'] = 'report.sale.user';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'status' => $request->get('status'),
+        ];
+        $form = new FetchMyOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_DESC])
+                            ->all();
+        return $this->render('sale/user', [
+            'models' => $models,
+            'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);

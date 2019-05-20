@@ -2,28 +2,18 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
-use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use dosamigos\datepicker\DateRangePicker;
-use backend\models\Order;
-use common\models\User;
-use common\components\helpers\FormatConverter;
+use common\models\Order;
+use common\models\UserWallet;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-
-$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
-$adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
-$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
-$orderTeamIds = array_unique($orderTeamIds);
-$orderTeamObjects = User::findAll($orderTeamIds);
-$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
-
 ?>
 
 <style>
@@ -43,13 +33,13 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê thực hiện đơn hàng</span>
+      <span>Lịch sử giao dịch</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê thực hiện đơn hàng</h1>
+<h1 class="page-title">Lịch sử giao dịch</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -58,72 +48,91 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Theo nhân viên</span>
+          <span class="caption-subject bold uppercase">Khách hàng <span style="color:red"><?=$user->name;?></span></span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/user']]);?>
-        <div class="row">
-
-          <div class="form-group col-md-2">
-            <label class="control-label">Ngày tạo</label>
-            <div class="form-control" style="border: none; padding: 0">
-                <div id="reportrange" class="btn default">
-                    <i class="fa fa-calendar"></i> &nbsp;
-                    <span> </span>
-                    <b class="fa fa-angle-down"></b>
-                </div>
+        <div class="row margin-bottom-10">
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/balance-detail', 'id' => $search->user_id]]);?>
+            <div class="form-group col-md-2">
+              <label class="control-label">Ngày tạo</label>
+              <div class="form-control" style="border: none; padding: 0">
+                  <div id="reportrange" class="btn default">
+                      <i class="fa fa-calendar"></i> &nbsp;
+                      <span> </span>
+                      <b class="fa fa-angle-down"></b>
+                  </div>
+              </div>
+              <?=$form->field($search, 'start_date', [
+                'template' => '{input}',
+                'options' => ['tag' => false],
+                'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
+              ])->hiddenInput()->label(false);?>
+              <?=$form->field($search, 'end_date', [
+                'template' => '{input}',
+                'options' => ['tag' => false],
+                'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
+              ])->hiddenInput()->label(false);?>
             </div>
-            <?=$form->field($search, 'start_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
-            ])->hiddenInput()->label(false);?>
-            <?=$form->field($search, 'end_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
-            ])->hiddenInput()->label(false);?>
-          </div>
 
-          <?=$form->field($search, 'handler_id', [
-            'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'handler_id']
-          ])->dropDownList($search->fetchUsers(), ['prompt' => 'Tìm theo nhân viên'])->label('Tên nhân viên');?>
-
-          <div class="form-group col-md-2">
-            <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
-              <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
-            </button>
-          </div>
+            <div class="form-group col-md-2">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
+          <?php ActiveForm::end()?>
         </div>
-        <?php ActiveForm::end()?>
+        
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+        <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 30%;"> Nhân viên </th>
-              <th style="width: 20%;"> Số lượng gói </th>
-              <th style="width: 20%;"> Tỷ lệ hoàn thành </th>
-              <th style="width: 30%;"> Thời gian xử lý trung bình </th>
+              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
+              <th style="width: 30%;"> Mã GD/Mã đơn hàng</th>
+              <th style="width: 10%;"> Loại giao dịch </th>
+              <th style="width: 25%;"> Thời gian hoàn thành </th>
+              <th style="width: 10%;"> Kcoin </th>
+              <th style="width: 10%;"> Số dư ban đầu</th>
+              <th style="width: 10%;"> Số dư hiện tại</th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><?=$model['name'];?></td>
-                <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
-                <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
-                <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
+                <td>#<?=($pages->offset + $no + 1)?></td>
+                <td style="vertical-align: middle;"><?=$model->description;?></td>
+                <td style="vertical-align: middle;">
+                  <?php if ($model->type == UserWallet::TYPE_INPUT) : ?>
+                    <span class="label label-success">Nạp tiền</span>
+                  <?php else : ?> 
+                    <span class="label label-default">Rút tiền</span>
+                  <?php endif; ?>
+                </td>
+                <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->coin);?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->balance - $model->coin);?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->balance);?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Tổng cộng: <?=number_format($search->getCommand()->sum('coin'));?></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
         </table>
+        <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>
     </div>
@@ -132,27 +141,6 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 </div>
 <?php
 $script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-});
-
 var dateFormat = 'YYYY/MM/DD';//MMMM D, YYYY
 $('#reportrange').daterangepicker({
     opens: (App.isRTL() ? 'left' : 'right'),
@@ -196,11 +184,6 @@ $('#reportrange').daterangepicker({
   }
 );
 $('#reportrange span').html(moment($('#start_date').val()).format(dateFormat) + ' - ' + moment($('#end_date').val()).format(dateFormat));
-
-var sendForm = new AjaxFormSubmit({element: '.assign-form'});
-sendForm.success = function (data, form) {
-  location.reload();
-}
 JS;
 $this->registerJs($script);
-?>
+?>s
