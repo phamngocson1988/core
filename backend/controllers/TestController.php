@@ -10,6 +10,11 @@ use backend\forms\UploadImageForm;
 use backend\forms\DeleteImageForm;
 use common\forms\SendmailForm;
 
+
+use yii2tech\spreadsheet\Spreadsheet;
+use yii\data\ArrayDataProvider;
+
+
 /**
  * TestController
  */
@@ -29,10 +34,35 @@ class TestController extends Controller
 
 	public function actionIndex()
 	{
-		// $file = \common\models\Image::findOne(15);
-		// echo Yii::$app->image->get($file);die;
-		$model = new \common\models\Game();
-		return $this->render('index', ['model' => $model]);
+		$exporter = new Spreadsheet([
+			'dataProvider' => new ArrayDataProvider([
+				'allModels' => [
+					[
+						'Tên nhân viên' => 'some name',
+						'price' => '9879',
+					],
+					[
+						'name' => 'name 2',
+						'price' => '79',
+					],
+				],
+			]),
+			'columns' => [
+				[
+					'attribute' => 'Tên nhân viên',
+					'contentOptions' => [
+						'alignment' => [
+							'horizontal' => 'center',
+							'vertical' => 'center',
+						],
+					],
+				],
+				[
+					'attribute' => 'price',
+				],
+			],
+		]);
+		$exporter->send('file1.xls');
 	}
 
 	public function actionSearch()

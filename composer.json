@@ -39,7 +39,9 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "yiiviet/yii2-payment": "*",
         "2amigos/yii2-google-maps-library" : "*",
-        "paypal/rest-api-sdk-php": "*"
+        "paypal/rest-api-sdk-php": "*",
+        "yii2tech/spreadsheet": "*",
+        "2amigos/yii2-chartjs-widget" : "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
