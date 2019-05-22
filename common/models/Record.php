@@ -56,6 +56,11 @@ class Record extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public function getDialer()
+    {
+        return $this->hasOne(Dialer::className(), ['id' => 'dialer_id']);
+    }
+
     public static function getTypeList()
     {
         return [

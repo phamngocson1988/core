@@ -15,6 +15,7 @@ use common\models\CustomerDialer;
 use common\models\Dialer;
 use common\models\TransactionHistory;
 use backend\forms\FetchTransactionHistoryForm;
+use common\components\telecom\Tel4vn;
 
 /**
  * ContactController
@@ -188,7 +189,11 @@ class ContactController extends Controller
         $model->start_time = date('Y-m-d H:i:s');
         $model->status = Record::STATUS_CALLING;
         if ($model->load($request->post()) && $model->save()) {
-            return $this->renderJson(true, $model);
+            $caller = new Tel4vn();
+            $dialer = $model->dialer;
+            $caller->setSetting($dialer);
+            $result = $caller->call($model->phone);
+            return $this->renderJson(true, ['id' => $model->id, 'calling' => $result]);
         } else {
             return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
@@ -206,7 +211,7 @@ class ContactController extends Controller
         $model->save();
 
         $dialer = CustomerDialer::findOne(['dialer_id' => $model->dialer_id, 'user_id' => Yii::$app->user->id]);
-        $amount = $dialer->call / 60 * $model->getDuration();
+        $amount = $dialer->call;//$dialer->call / 60 * $model->getDuration();
         $history = new TransactionHistory();
         $history->user_id = Yii::$app->user->id;
         $history->amount = $amount;

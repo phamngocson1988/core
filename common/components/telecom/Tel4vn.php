@@ -4,17 +4,28 @@ namespace common\components\telecom;
 class Tel4vn 
 {
 	public $server = "https://api.tel4vn.com/api/v1/autocall";
-	public $caller_id_number = '02873001968';
-	public $destination = '1002';
-	public $domain;
+	// public $caller_id_number = '02873001968';
+	// public $destination = '1002';
+	// public $domain;
 
-	function call($phone) 
+	/** @var Dialer **/
+	protected $_setting;
+
+	public function call($phone) 
 	{
+		if (!$this->_setting) throw new Exception("Bạn chưa nhập bộ số", 1);
+		
+		// $param = array(
+		// 	'extension' => $phone,
+		// 	'caller_id_number' => $this->caller_id_number,
+		// 	'destination' => $this->destination,
+		// 	'domain' => $_SERVER['SERVER_NAME']
+		// );
 		$param = array(
 			'extension' => $phone,
-			'caller_id_number' => $this->caller_id_number,
-			'destination' => $this->destination,
-			'domain' => $_SERVER['SERVER_NAME']
+			'caller_id_number' => $this->_setting->number,
+			'destination' => $this->_setting->extend,
+			'domain' => $this->_setting->domain
 		);
 
 		$ch = curl_init($this->server);
@@ -26,5 +37,10 @@ class Tel4vn
 		$result = curl_exec($ch);
 		curl_close($ch);
 		return $result;
+	}
+
+	public function setSetting($setting)
+	{
+		$this->_setting = $setting;
 	}
 }
