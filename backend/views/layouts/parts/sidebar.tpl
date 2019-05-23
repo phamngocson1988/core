@@ -238,7 +238,7 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item  ">
-                <a href="{url route='/report/transaction'}" class="nav-link nav-toggle" code='report.transaction'>
+                <a href="{url route='/report/finance-transaction'}" class="nav-link nav-toggle" code='report.finance.transaction'>
                   <span class="title">Giao dịch nạp tiền</span>
                 </a>
               </li>

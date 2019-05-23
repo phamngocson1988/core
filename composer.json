@@ -40,7 +40,7 @@
         "yiiviet/yii2-payment": "*",
         "2amigos/yii2-google-maps-library" : "*",
         "paypal/rest-api-sdk-php": "*",
-        "yii2tech/spreadsheet": "*",
+        "codemix/yii2-excelexport": "*",
         "2amigos/yii2-chartjs-widget" : "~2.0"
     },
     "require-dev": {

@@ -11,8 +11,8 @@ use backend\forms\DeleteImageForm;
 use common\forms\SendmailForm;
 
 
-use yii2tech\spreadsheet\Spreadsheet;
-use yii\data\ArrayDataProvider;
+
+
 
 
 /**
@@ -34,35 +34,21 @@ class TestController extends Controller
 
 	public function actionIndex()
 	{
-		$exporter = new Spreadsheet([
-			'dataProvider' => new ArrayDataProvider([
-				'allModels' => [
-					[
-						'Tên nhân viên' => 'some name',
-						'price' => '9879',
-					],
-					[
-						'name' => 'name 2',
-						'price' => '79',
-					],
-				],
-			]),
-			'columns' => [
-				[
-					'attribute' => 'Tên nhân viên',
-					'contentOptions' => [
-						'alignment' => [
-							'horizontal' => 'center',
-							'vertical' => 'center',
-						],
-					],
-				],
-				[
-					'attribute' => 'price',
-				],
-			],
+		$file = \Yii::createObject([
+		    'class' => 'codemix\excelexport\ExcelFile',
+		    'sheets' => [
+		        'Users' => [
+		            'class' => 'codemix\excelexport\ActiveExcelSheet',
+		            'query' => \common\models\User::find(),
+		            'startRow' => 3,
+		            'on beforeRender' => function ($event) {
+		                $sheet = $event->sender->getSheet();
+		                $sheet->setCellValue('A1', 'List of current users');
+		            }
+		        ],
+		    ],
 		]);
-		$exporter->send('file1.xls');
+		$file->send(date('His') . '.xlsx');
 	}
 
 	public function actionSearch()

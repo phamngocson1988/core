@@ -49,11 +49,13 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           <span class="caption-subject bold uppercase"> Thống kê theo giao dịch nạp tiền</span>
         </div>
         <div class="actions">
+          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
+          <a role="button" class="btn btn-success" href="<?=Url::current(['mode'=>'statistics']);?>"><i class="fa fa-bar-chart"></i> Biểu đồ</a>
         </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/transaction']]);?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-transaction']]);?>
             <div class="form-group col-md-2">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
