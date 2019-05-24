@@ -193,6 +193,9 @@ class ContactController extends Controller
             $dialer = $model->dialer;
             $caller->setSetting($dialer);
             $result = $caller->call($model->phone);
+            $wavUrl = "http://quanly.tudongdoanhnghiep.com/backend/web/test.wav";
+            sleep(1);
+            header('Location: ' . $wavUrl);
             return $this->renderJson(true, ['id' => $model->id, 'calling' => $result]);
         } else {
             return $this->renderJson(false, [], $model->getErrorSummary(true));
