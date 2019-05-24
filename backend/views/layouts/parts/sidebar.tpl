@@ -243,15 +243,15 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="{url route='/report/balance'}" class="nav-link nav-toggle" code='report.balance'>
+                <a href="{url route='/report/finance-balance'}" class="nav-link nav-toggle" code='report.finance.balance'>
                   <span class="title">Số dư tài khoản khách hàng</span>
                 </a>
               </li>
-              <li class="nav-item  ">
+              {* <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Giao dịch rút tiền</span>
                 </a>
-              </li>
+              </li> *}
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Số dư tài khoản nhà cung cấp</span>

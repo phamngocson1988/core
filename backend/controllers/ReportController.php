@@ -219,9 +219,9 @@ class ReportController extends Controller
         ]);   
     }
 
-    public function actionBalanceDetail($id)
+    public function actionFinanceBalanceDetail($id)
     {
-        $this->view->params['main_menu_active'] = 'report.balance';
+        $this->view->params['main_menu_active'] = 'report.finance.balance';
         $request = Yii::$app->request;
 
         $start_date = $request->get('start_date', date('Y-m-01'));
@@ -238,7 +238,7 @@ class ReportController extends Controller
                             ->limit($pages->limit)
                             ->all();
         $user = User::findOne($id);
-        return $this->render('balance-detail', [
+        return $this->render('finance/balance-detail', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
