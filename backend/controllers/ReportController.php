@@ -185,77 +185,33 @@ class ReportController extends Controller
         ]);
     }
 
-    public function actionFinanceTransactionExport()
+    public function actionFinanceBalance()
     {
-        $this->view->params['main_menu_active'] = 'report.finance.transaction';
-        $request = Yii::$app->request;
-        $data = [
-            'start_date' => $request->get('start_date', date('Y-m-01')),
-            'end_date' => $request->get('end_date', date('Y-m-t')),
-            'discount_code' => $request->get('discount_code'),
-            'user_id' => $request->get('user_id'),
-            'auth_key' => $request->get('auth_key')
-        ];
-        $form = new ReportByTransactionForm($data);
-        $command = $form->getCommand();
-        $models = $command->orderBy(['id' => SORT_DESC])->all();
-        $data = array_map(function($model) {
-            return [
-                'Thứ tự' => '1',
-                'Thời gian' => $model->payment_at,
-                'Khách hàng' => $model->user->name,
-                'Mã giao dịch' => $model->auth_key,
-                'Khuyến mãi Kcoin' => $model->discount_coin,
-                'Số lượng Kcoin' => $model->total_coin,
-                'Giảm giá' => $model->discount_price,
-                'Số tiền' => $model->total_price,
-                'Trạng thái' => $model->status,
-            ];
-        }, $models);
-        $exporter = new Spreadsheet([
-            'dataProvider' => new ArrayDataProvider([
-                'allModels' => $data,
-            ]),
-            // 'columns' => [
-            //     [
-            //         'attribute' => 'Tên nhân viên',
-            //         'contentOptions' => [
-            //             'alignment' => [
-            //                 'horizontal' => 'center',
-            //                 'vertical' => 'center',
-            //             ],
-            //         ],
-            //     ],
-            //     [
-            //         'attribute' => 'price',
-            //     ],
-            // ],
-        ]);
-        $exporter->send('file1.xls');
-    }
-
-    public function actionBalance()
-    {
-        $this->view->params['main_menu_active'] = 'report.balance';
+        $this->view->params['main_menu_active'] = 'report.finance.balance';
         $request = Yii::$app->request;
 
         $start_date = $request->get('start_date', date('Y-m-01'));
         $end_date = $request->get('end_date', date('Y-m-t'));
         $user_id = $request->get('user_id');
-
+        $mode = $request->get('mode');
+        
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
             'user_id' => $user_id,
         ];
         $form = new ReportByBalanceForm($data);
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'so-du-tai-khoan.xls';
+            return $form->export($fileName);
+        }
         $command = $form->getUserCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->all();
         $report = $form->fetch();
-        return $this->render('balance', [
+        return $this->render('finance/balance', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,

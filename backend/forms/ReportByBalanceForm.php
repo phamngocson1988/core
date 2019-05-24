@@ -68,6 +68,98 @@ class ReportByBalanceForm extends Model
         return $users;
     }
 
+    public function export($fileName = null)
+    {
+        // $command = $this->getUserCommand();
+        $report = $this->fetch();
+        $fileName = ($fileName) ? $fileName : 'report-by-balance' . date('His') . '.xlsx';
+        $titles = [
+            'A' => 'Thứ tự',
+            'B' => 'Khách hàng',
+            'C' => 'Số tiền nạp',
+            'D' => 'Số tiền mua hàng',
+            'E' => 'Số dư ban đầu',
+            'F' => 'Số dư hiện tại',
+        ];
+        $totalRow = count($report);
+        $startRow = 5;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);;
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $heading = 'REPORT BY BALANCE';
+        $header = [
+            'A2:I2' => sprintf('Thời gian: %s - %s', $this->start_date, $this->end_date),
+            'A3:I3' => sprintf('Khách hàng: %s', ($this->user_id) ? $this->user->name : ''),
+        ];
+        
+        $data = [];
+        $no = 0;
+        foreach ($report as $userId => $model) {
+            $data[] = [
+                $no + 1, 
+                $model['name'], 
+                $model['topup'], 
+                $model['withdraw'], 
+                $model['balance_start'], 
+                $model['balance_end'], 
+            ];
+        }
+
+        $file = \Yii::createObject([
+		    'class' => 'codemix\excelexport\ExcelFile',
+		    'sheets' => [
+		        'Report by transaction' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    'heading' => $heading,
+                    'header' => $header,
+		            'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+		            'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+		        ],
+		    ],
+        ]);
+		$file->send($fileName);
+    }
+
     protected function createCommand()
     {
         $command = UserWallet::find();

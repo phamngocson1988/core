@@ -34,12 +34,13 @@ class TestController extends Controller
 
 	public function actionIndex()
 	{
+		$users = \common\models\User::find()->asArray()->all();
 		$file = \Yii::createObject([
 		    'class' => 'codemix\excelexport\ExcelFile',
 		    'sheets' => [
 		        'Users' => [
-		            'class' => 'codemix\excelexport\ActiveExcelSheet',
-		            'query' => \common\models\User::find(),
+		            'class' => 'codemix\excelexport\ExcelSheet',
+		            'data' => $users,
 		            'startRow' => 3,
 		            'on beforeRender' => function ($event) {
 		                $sheet = $event->sender->getSheet();

@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use dosamigos\datepicker\DateRangePicker;
@@ -31,13 +32,13 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê theo giao dịch nạp tiền</span>
+      <span>Thống kê số dư tài khoản khách hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê theo giao dịch nạp tiền</h1>
+<h1 class="page-title">Thống kê số dư tài khoản khách hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -46,7 +47,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Thống kê theo giao dịch nạp tiền</span>
+          <span class="caption-subject bold uppercase">Thống kê số dư tài khoản khách hàng</span>
         </div>
         <div class="actions">
           <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
@@ -55,7 +56,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-transaction']]);?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-balance']]);?>
             <div class="form-group col-md-2">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
@@ -77,7 +78,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               ])->hiddenInput()->label(false);?>
             </div>
 
-            <?php $user = $search->user;?>
+            <?php $user = $search->getUser();?>
               <?=$form->field($search, 'user_id', [
               'options' => ['class' => 'form-group col-md-2'],
               ])->widget(kartik\select2\Select2::classname(), [
@@ -95,16 +96,6 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 ]
               ])->label('Khách hàng')?>
 
-              <?=$form->field($search, 'discount_code', [
-                'options' => ['class' => 'form-group col-md-2'],
-                'inputOptions' => ['class' => 'form-control', 'name' => 'discount_code']
-              ])->textInput()->label('Mã khuyến mãi');?>
-
-              <?=$form->field($search, 'auth_key', [
-                'options' => ['class' => 'form-group col-md-2'],
-                'inputOptions' => ['class' => 'form-control', 'name' => 'auth_key']
-              ])->textInput()->label('Mã giao dịch');?>
-
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -118,47 +109,31 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           <thead>
             <tr>
               <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 20%;"> Thời gian </th>
-              <th style="width: 20%;"> Khách hàng </th>
-              <th style="width: 10%;"> Mã giao dịch </th>
-              <th style="width: 10%;"> Khuyến mãi Kcoin</th>
-              <th style="width: 10%;"> Số lượng Kcoin</th>
-              <th style="width: 10%;"> Giảm giá </th>
-              <th style="width: 10%;"> Số tiền </th>
-              <th style="width: 5%;"> Trạng thái </th>
+              <th style="width: 25%;"> Khách hàng </th>
+              <th style="width: 15%;"> Số tiền nạp </th>
+              <th style="width: 15%;"> Số tiền mua hàng</th>
+              <th style="width: 15%;"> Số dư ban đầu</th>
+              <th style="width: 15%;"> Số dư hiện tại </th>
+              <th style="width: 10%;"> Lịch sử giao dịch </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
+              <?php $userId = $model->user_id;?>
               <tr>
                 <td>#<?=($pages->offset + $no + 1)?></td>
-                <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
-                <td style="vertical-align: middle;"><?=$model->auth_key;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->discount_coin);?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->total_coin);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($model->discount_price);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($model->total_price);?></td>
-                <td style="vertical-align: middle;"><?=$model->status;?></td>
+                <td style="vertical-align: middle;"><?=$report[$userId]['name'];?></td>
+                <td style="vertical-align: middle;"><?=number_format($report[$userId]['topup']);?></td>
+                <td style="vertical-align: middle;"><?=number_format($report[$userId]['withdraw']);?></td>
+                <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_start']);?></td>
+                <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_end']);?></td>
+                <td style="vertical-align: middle;"><a href="<?=Url::to(['report/balance-detail', 'id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" target="_blank"> Xem chi tiết</a></td>
               </tr>
               <?php endforeach;?>
           </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('total_coin'));?></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;">Tổng: $<?=number_format($search->getCommand()->sum('total_price'));?></td>
-              <td style="vertical-align: middle;"></td>
-            </tr>
-          </tfoot>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
