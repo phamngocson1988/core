@@ -1,6 +1,8 @@
 <?php 
 namespace common\components\telecom;
 
+use Yii;
+
 class Tel4vn 
 {
 	public $server = "https://api.tel4vn.com/api/v1/autocall";
@@ -10,6 +12,7 @@ class Tel4vn
 
 	/** @var Dialer **/
 	protected $_setting;
+	protected $_params = [];
 
 	public function call($phone) 
 	{
@@ -27,7 +30,8 @@ class Tel4vn
 			'destination' => $this->_setting->extend,
 			'domain' => $this->_setting->domain
 		);
-
+		Yii::debug($this->server);
+		Yii::debug($param);
 		$ch = curl_init($this->server);
 		$payload = json_encode( $param );
 		curl_setopt($ch, CURLOPT_POST, true); 
@@ -36,11 +40,17 @@ class Tel4vn
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 		$result = curl_exec($ch);
 		curl_close($ch);
+		$this->_params = $param;
 		return $result;
 	}
 
 	public function setSetting($setting)
 	{
 		$this->_setting = $setting;
+	}
+
+	public function getParams()
+	{
+		return $this->_params;
 	}
 }

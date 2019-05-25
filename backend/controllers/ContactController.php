@@ -193,7 +193,7 @@ class ContactController extends Controller
             $dialer = $model->dialer;
             $caller->setSetting($dialer);
             $result = $caller->call($model->phone);
-            return $this->renderJson(true, ['id' => $model->id, 'calling' => $result]);
+            return $this->renderJson(true, ['id' => $model->id, 'calling' => $result, 'params' => $caller->getParams()]);
         } else {
             return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
