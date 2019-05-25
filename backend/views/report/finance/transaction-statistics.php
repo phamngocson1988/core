@@ -49,13 +49,11 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           <span class="caption-subject bold uppercase"> Thống kê theo giao dịch nạp tiền</span>
         </div>
         <div class="actions">
-          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
-          <a role="button" class="btn btn-success" href="<?=Url::to(['report/finance-transaction-statistics', 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => 'day']);?>"><i class="fa fa-bar-chart"></i> Biểu đồ</a>
         </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-transaction']]);?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-transaction-statistics']]);?>
             <div class="form-group col-md-2">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
@@ -76,35 +74,19 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
               ])->hiddenInput()->label(false);?>
             </div>
-
-            <?php $user = $search->user;?>
-              <?=$form->field($search, 'user_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-              ])->widget(kartik\select2\Select2::classname(), [
-                'initValueText' => ($search->user_id) ? sprintf("%s - %s", $user->username, $user->email) : '',
-                'options' => ['class' => 'form-control', 'name' => 'user_id'],
-                'pluginOptions' => [
-                  'placeholder' => 'Chọn khách hàng',
-                  'allowClear' => true,
-                  'minimumInputLength' => 3,
-                  'ajax' => [
-                      'url' => Url::to(['user/suggestion']),
-                      'dataType' => 'json',
-                      'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                  ]
-                ]
-              ])->label('Khách hàng')?>
-
-              <?=$form->field($search, 'discount_code', [
-                'options' => ['class' => 'form-group col-md-2'],
-                'inputOptions' => ['class' => 'form-control', 'name' => 'discount_code']
-              ])->textInput()->label('Mã khuyến mãi');?>
-
-              <?=$form->field($search, 'auth_key', [
-                'options' => ['class' => 'form-group col-md-2'],
-                'inputOptions' => ['class' => 'form-control', 'name' => 'auth_key']
-              ])->textInput()->label('Mã giao dịch');?>
-
+            <div class="form-group col-md-4">
+              <h4>Radio</h4>
+              <div class="clearfix">
+                  <div class="btn-group" data-toggle="buttons">
+                      <label class="btn blue active">
+                          <input type="radio" class="toggle"> Option 1 </label>
+                      <label class="btn blue">
+                          <input type="radio" class="toggle"> Option 2 </label>
+                      <label class="btn blue">
+                          <input type="radio" class="toggle"> Option 3 </label>
+                  </div>
+              </div>
+            </div>
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -112,55 +94,43 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
             </div>
           <?php ActiveForm::end()?>
         </div>
-        
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 20%;"> Thời gian </th>
-              <th style="width: 20%;"> Khách hàng </th>
-              <th style="width: 10%;"> Mã giao dịch </th>
-              <th style="width: 10%;"> Khuyến mãi Kcoin</th>
-              <th style="width: 10%;"> Số lượng Kcoin</th>
-              <th style="width: 10%;"> Giảm giá </th>
-              <th style="width: 10%;"> Số tiền </th>
-              <th style="width: 5%;"> Trạng thái </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <tr>
-                <td>#<?=($pages->offset + $no + 1)?></td>
-                <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
-                <td style="vertical-align: middle;"><?=$model->auth_key;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->discount_coin);?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->total_coin);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($model->discount_price);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($model->total_price);?></td>
-                <td style="vertical-align: middle;"><?=$model->status;?></td>
-              </tr>
-              <?php endforeach;?>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('total_coin'));?></td>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;">Tổng: $<?=number_format($search->getCommand()->sum('total_price'));?></td>
-              <td style="vertical-align: middle;"></td>
-            </tr>
-          </tfoot>
-        </table>
-        <?=LinkPager::widget(['pagination' => $pages])?>
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-striped table-bordered table-hover table-checkable">
+              <thead>
+                <tr>
+                  <th style="width: 50%;"> Thời gian </th>
+                  <th style="width: 50%;"> Doanh thu </th>
+                </tr>
+              </thead>
+              <tbody>
+                  <?php if (!$models) :?>
+                  <tr><td colspan="2"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                  <?php endif;?>
+                  <?php foreach ($models as $no => $model) :?>
+                  <tr>
+                    <td style="vertical-align: middle;">
+                      <?php switch ($search->period) {
+                        case 'year':
+                          # code...
+                          break;
+                        
+                        default:
+                          echo sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
+                          break;
+                      };?>
+                    </td>
+                    <td style="vertical-align: middle;"><?=$model['total_price'];?></td>
+                  </tr>
+                  <?php endforeach;?>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <?=$search->showChar();?>
+          </div>
+        </div>
         <?php Pjax::end(); ?>
       </div>
     </div>

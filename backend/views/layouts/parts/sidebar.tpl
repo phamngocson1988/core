@@ -268,22 +268,22 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item  ">
-                <a href="{url route='/report/order'}" class="nav-link nav-toggle" code="report.order">
+                <a href="{url route='/report/process-order'}" class="nav-link nav-toggle" code="report.process.order">
                   <span class="title">Theo đơn hàng</span>
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="{url route='/report/game'}" class="nav-link nav-toggle" code="report.game">
+                <a href="{url route='/report/process-game'}" class="nav-link nav-toggle" code="report.process.game">
                   <span class="title">Theo game</span>
                 </a>
               </li>
-              <li class="nav-item  ">
+              {* <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo nhà cung cấp</span>
                 </a>
-              </li>
+              </li> *}
               <li class="nav-item  ">
-                <a href="{url route='/report/user'}" class="nav-link nav-toggle" code="report.user">
+                <a href="{url route='/report/process-user'}" class="nav-link nav-toggle" code="report.process.user">
                   <span class="title">Theo nhân viên</span>
                 </a>
               </li>

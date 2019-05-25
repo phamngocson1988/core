@@ -130,7 +130,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 <td style="vertical-align: middle;"><?=number_format($report[$userId]['withdraw']);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_start']);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_end']);?></td>
-                <td style="vertical-align: middle;"><a href="<?=Url::to(['report/balance-detail', 'id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" target="_blank"> Xem chi tiết</a></td>
+                <td style="vertical-align: middle;"><a href="<?=Url::to(['report/finance-balance-detail', 'id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" target="_blank" data-pjax="0"> Xem chi tiết</a></td>
               </tr>
               <?php endforeach;?>
           </tbody>

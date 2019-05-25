@@ -20,7 +20,7 @@ use backend\forms\ReportProcessOrderByGame;
 use backend\forms\ReportProcessOrderByUser;
 use backend\forms\ReportSaleOrderByGame;
 use backend\forms\FetchMyOrderForm;
-
+use backend\forms\StatisticsByTransactionForm;
 
 
 class ReportController extends Controller
@@ -185,6 +185,24 @@ class ReportController extends Controller
         ]);
     }
 
+    public function actionFinanceTransactionStatistics()
+    {
+        $this->view->params['main_menu_active'] = 'report.finance.transaction';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date', date('Y-m-01')),
+            'end_date' => $request->get('end_date', date('Y-m-t')),
+            'period' => $request->get('period', 'date'),
+        ];
+        $form = new StatisticsByTransactionForm($data);
+        $command = $form->getCommand();
+        $models = $command->orderBy(['total_price' => SORT_DESC])->asArray()->all();
+        return $this->render('finance/transaction-statistics', [
+            'models' => $models,
+            'search' => $form,
+        ]);
+    }
+
     public function actionFinanceBalance()
     {
         $this->view->params['main_menu_active'] = 'report.finance.balance';
@@ -226,12 +244,17 @@ class ReportController extends Controller
 
         $start_date = $request->get('start_date', date('Y-m-01'));
         $end_date = $request->get('end_date', date('Y-m-t'));
+        $mode = $request->get('mode');
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
             'user_id' => $id,
         ];
         $form = new ReportByBalanceForm($data);
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'chi-tiet-giao-dich.xls';
+            return $form->exportDetail($fileName);
+        }
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -246,9 +269,9 @@ class ReportController extends Controller
         ]);   
     }
 
-    public function actionOrder()
+    public function actionProcessOrder()
     {
-        $this->view->params['main_menu_active'] = 'report.order';
+        $this->view->params['main_menu_active'] = 'report.process.order';
         $request = Yii::$app->request;
         $data = [
             'q' => $request->get('q'),
@@ -267,7 +290,7 @@ class ReportController extends Controller
                             ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
 
-        return $this->render('order', [
+        return $this->render('process/order', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
@@ -275,9 +298,9 @@ class ReportController extends Controller
         ]);
     }
 
-    public function actionGame()
+    public function actionProcessGame()
     {
-        $this->view->params['main_menu_active'] = 'report.game';
+        $this->view->params['main_menu_active'] = 'report.process.game';
         $request = Yii::$app->request;
         $data = [
             'game_id' => $request->get('game_id'),
@@ -287,16 +310,16 @@ class ReportController extends Controller
         $form = new ReportProcessOrderByGame($data);
         $models = $form->fetch();
 
-        return $this->render('game', [
+        return $this->render('process/game', [
             'models' => $models,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
 
-    public function actionUser()
+    public function actionProcessUser()
     {
-        $this->view->params['main_menu_active'] = 'report.user';
+        $this->view->params['main_menu_active'] = 'report.process.user';
         $request = Yii::$app->request;
         $data = [
             'handler_id' => $request->get('handler_id'),
@@ -306,7 +329,7 @@ class ReportController extends Controller
         $form = new ReportProcessOrderByUser($data);
         $models = $form->fetch();
 
-        return $this->render('user', [
+        return $this->render('process/user', [
             'models' => $models,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),

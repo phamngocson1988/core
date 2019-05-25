@@ -160,6 +160,102 @@ class ReportByBalanceForm extends Model
 		$file->send($fileName);
     }
 
+    public function exportDetail($fileName = null)
+    {
+        $command = $this->getCommand();
+        $fileName = ($fileName) ? $fileName : 'report-by-balance' . date('His') . '.xlsx';
+        $titles = [
+            'A' => 'Thứ tự',
+            'B' => 'Mã GD/Mã đơn hàng',
+            'C' => 'Loại giao dịch',
+            'D' => 'Thời gian hoàn thành',
+            'E' => 'Kcoin',
+            'F' => 'Số dư ban đầu',
+            'G' => 'Số dư hiện tại',
+        ];
+        $totalRow = $command->count();
+        $startRow = 5;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);;
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $heading = 'REPORT DETAIL BY BALANCE';
+        $header = [
+            'A2:I2' => sprintf('Thời gian: %s - %s', $this->start_date, $this->end_date),
+            'A3:I3' => sprintf('Khách hàng: %s', ($this->user_id) ? $this->user->name : ''),
+        ];
+        $footer = [
+            "E$footerRow" => 'Tổng: ' . $command->sum('coin')
+        ];
+        
+        $data = [];
+        foreach ($command->all() as $no => $model) {
+            $data[] = [
+                $no + 1, 
+                $model->description, 
+                ($model->type == UserWallet::TYPE_INPUT) ? "Nạp tiền" : "Rút tiền", 
+                $model->payment_at, 
+                $model->coin, 
+                $model->balance - $model->coin,
+                $model->balance 
+            ];
+        }
+
+        $file = \Yii::createObject([
+            'class' => 'codemix\excelexport\ExcelFile',
+            'sheets' => [
+                'Report by transaction' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    'heading' => $heading,
+                    'header' => $header,
+                    'footer' => $footer,
+                    'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+                    'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+                ],
+            ],
+        ]);
+        $file->send($fileName);
+    }
+
     protected function createCommand()
     {
         $command = UserWallet::find();
