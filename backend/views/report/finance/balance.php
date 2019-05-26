@@ -51,7 +51,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
         </div>
         <div class="actions">
           <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
-          <a role="button" class="btn btn-success" href="<?=Url::current(['mode'=>'statistics']);?>"><i class="fa fa-bar-chart"></i> Biểu đồ</a>
+          <!-- <a role="button" class="btn btn-success" href="<?=Url::to(['report/finance-balance-statistics']);?>"><i class="fa fa-bar-chart"></i> Biểu đồ</a> -->
         </div>
       </div>
       <div class="portlet-body">

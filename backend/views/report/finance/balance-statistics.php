@@ -74,19 +74,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
               ])->hiddenInput()->label(false);?>
             </div>
-            <?=$form->field($search, 'period', [
-              'options' => ['class' => 'form-group col-md-4'],
-              'labelOptions' => ['class' => 'control-label'],
-              'template' => '{label}<div class="clearfix">{input}{hint}{error}</div>'
-            ])->radioList(['day' => 'Ngày', 'week' => 'Tuần', 'month' => 'Tháng', 'quarter' => 'Quý'], [
-              'class' => 'btn-group',
-              'data-toggle' => 'buttons', 
-              'itemOptions' => [
-                'labelOptions' => ['class'=>'btn red'],
-                'class' => 'toggle',
-              ],
-              'name' => 'period'
-            ])->label('Thống kê theo:');?>
+            
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>

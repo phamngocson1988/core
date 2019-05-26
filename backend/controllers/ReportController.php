@@ -192,7 +192,7 @@ class ReportController extends Controller
         $data = [
             'start_date' => $request->get('start_date', date('Y-m-01')),
             'end_date' => $request->get('end_date', date('Y-m-t')),
-            'period' => $request->get('period', 'date'),
+            'period' => $request->get('period', 'day'),
         ];
         $form = new StatisticsByTransactionForm($data);
         $command = $form->getCommand();
