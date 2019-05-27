@@ -31,9 +31,29 @@ class StatisticsByTransactionForm extends Model
         $total_prices = array_map(function($model) { 
           return round($model['total_price'], 1);
         }, $models);
-        $labels = array_map(function($model) { 
-          return sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
-        }, $models);
+        switch ($this->period) {
+            case 'week':
+                $labels = array_map(function($model) {
+                  return sprintf("Tuần %s", $model['week'] + 1);
+                }, $models);
+                break;
+            case 'month':
+                $labels = array_map(function($model) {
+                  return sprintf("Tháng %s/%s", str_pad($model['month'], 2, "0", STR_PAD_LEFT), $model['year']);
+                }, $models);
+                break;
+            case 'quarter':
+                $labels = array_map(function($model) {
+                  return sprintf("Quý %s/%s", $model['quarter'], $model['year']);
+                }, $models);
+                break;
+            default:
+                $labels = array_map(function($model) {
+                  return sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
+                }, $models);
+                break;
+        }
+        
         $datasets = [
             [
                 'label' => "Doanh thu",
@@ -50,7 +70,7 @@ class StatisticsByTransactionForm extends Model
         return ChartJs::widget([
             'type' => 'line',
             'options' => [
-                'height' => 400,
+                'height' => 200,
                 'width' => 400
             ],
             'data' => [

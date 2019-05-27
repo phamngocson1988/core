@@ -32,13 +32,21 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê số dư tài khoản khách hàng</span>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Thống kê dòng tiền</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Số dư tài khoản khách hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê số dư tài khoản khách hàng</h1>
+<h1 class="page-title">Số dư tài khoản khách hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -50,7 +58,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           <span class="caption-subject bold uppercase">Thống kê số dư tài khoản khách hàng</span>
         </div>
         <div class="actions">
-          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
+          <!-- <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a> -->
           <!-- <a role="button" class="btn btn-success" href="<?=Url::to(['report/finance-balance-statistics']);?>"><i class="fa fa-bar-chart"></i> Biểu đồ</a> -->
         </div>
       </div>

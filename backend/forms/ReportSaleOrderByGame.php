@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\Order;
 use backend\models\Game;
+use dosamigos\chartjs\ChartJs;
 
 class ReportSaleOrderByGame extends Model
 {
@@ -23,6 +24,52 @@ class ReportSaleOrderByGame extends Model
             ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d')],
         ];
+    }
+
+    public function showChar()
+    {
+        $command = $this->getCommand();
+        $models = $command->asArray()->all();
+        $game_packs = array_map(function($model) { 
+          return round($model['game_pack'], 1);
+        }, $models);
+        $total_prices = array_map(function($model) { 
+            return round($model['total_price'], 1);
+          }, $models);
+        $labels = array_column($models, 'game_title');
+        $datasets = [
+            [
+                'label' => "Số gói",
+                'backgroundColor' => "rgba(54,198,211,0.2)",
+                'borderColor' => "rgba(54,198,211,1)",
+                'pointBackgroundColor' => "rgba(54,198,211,1)",
+                'pointBorderColor' => "#fff",
+                'pointHoverBackgroundColor' => "#fff",
+                'pointHoverBorderColor' => "rgba(54,198,211,1)",
+                'data' => array_values($game_packs)
+            ],
+            [
+                'label' => "Số Kcoin",
+                'backgroundColor' => "rgba(255,99,132,0.2)",
+                'borderColor' => "rgba(255,99,132,1)",
+                'pointBackgroundColor' => "rgba(255,99,132,1)",
+                'pointBorderColor' => "#fff",
+                'pointHoverBackgroundColor' => "#fff",
+                'pointHoverBorderColor' => "rgba(255,99,132,1)",
+                'data' => array_values($total_prices)
+            ],
+        ];
+        return ChartJs::widget([
+            'type' => 'bar',
+            'options' => [
+                'height' => 200,
+                'width' => 400
+            ],
+            'data' => [
+                'labels' => $labels,
+                'datasets' => $datasets
+            ]
+        ]);
     }
 
     public function createCommand()

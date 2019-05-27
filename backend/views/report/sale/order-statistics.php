@@ -43,13 +43,21 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê doanh số</span>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Thống kê bán hàng</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Doanh số theo đơn hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê bán hàng</h1>
+<h1 class="page-title">Doanh số theo đơn hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -58,7 +66,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Thống kê theo đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Biểu đồ</span>
         </div>
         <div class="actions">
         </div>
@@ -115,8 +123,8 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <tr>
                     <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
                     <td style="vertical-align: middle;"><?=$model['date'];?></td>
-                    <td style="vertical-align: middle;"><?=$model['game_pack'];?></td>
-                    <td style="vertical-align: middle;"><?=$model['total_unit'];?></td>
+                    <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
+                    <td style="vertical-align: middle;"><?=number_format($model['total_price']);?></td>
                 </tr>
                 <?php endforeach;?>
             </tbody>
@@ -125,7 +133,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td></td>
                 <td><strong>Tổng:</strong></td>
                 <td><?=round($search->getCommand()->sum('game_pack'), 1);?></td>
-                <td><?=number_format($search->getCommand()->sum('total_unit'));?></td>
+                <td><?=number_format($search->getCommand()->sum('total_price'));?></td>
                 </tr>
             </tfoot>
             </table>

@@ -43,13 +43,21 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê doanh số</span>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Thống kê bán hàng</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Doanh số theo đơn hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê bán hàng</h1>
+<h1 class="page-title">Doanh số theo đơn hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -58,7 +66,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Thống kê theo đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng</span>
         </div>
         <div class="actions">
           <?php if (Yii::$app->user->can('admin') || Yii::$app->user->can('orderteam_manager')) :?>
@@ -181,8 +189,8 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <td></td>
               <td></td>
               <td></td>
-              <td>Số gói: <?=round($search->getCommand()->sum('game_pack'), 1);?></td>
-              <td>Tổng coin: <?=number_format($search->getCommand()->sum('total_price'));?></td>
+              <td>Tổng: <?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+              <td>Tổng: <?=number_format($search->getCommand()->sum('total_price'));?></td>
               <td></td>
               <td></td>
             </tr>

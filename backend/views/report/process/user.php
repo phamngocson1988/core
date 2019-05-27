@@ -44,13 +44,21 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
       <span>Thống kê thực hiện đơn hàng</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Theo nhân viên</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê thực hiện đơn hàng</h1>
+<h1 class="page-title">Theo nhân viên</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -59,7 +67,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Theo nhân viên</span>
+          <span class="caption-subject bold uppercase"> Thống kê thực hiện đơn hàng theo nhân viên</span>
         </div>
         <div class="actions">
         </div>
@@ -177,7 +185,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             <?= ChartJs::widget([
               'type' => 'bar',
               'options' => [
-                  'height' => 400,
+                  'height' => 200,
                   'width' => 400
               ],
               'data' => [

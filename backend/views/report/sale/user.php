@@ -31,13 +31,21 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê doanh số</span>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Thống kê bán hàng</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Doanh số theo nhân viên</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê doanh số</h1>
+<h1 class="page-title">Doanh số theo nhân viên</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -46,7 +54,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Thống kê khách hàng của tôi</span>
+          <span class="caption-subject bold uppercase"> Danh sách đơn hàng</span>
         </div>
         <div class="actions">
         </div>

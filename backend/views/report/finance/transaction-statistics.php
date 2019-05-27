@@ -31,13 +31,21 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê theo giao dịch nạp tiền</span>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Thống kê dòng tiền</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Giao dịch nạp tiền</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê theo giao dịch nạp tiền</h1>
+<h1 class="page-title">Giao dịch nạp tiền</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -46,7 +54,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Thống kê theo giao dịch nạp tiền</span>
+          <span class="caption-subject bold uppercase"> Biểu đồ</span>
         </div>
         <div class="actions">
         </div>

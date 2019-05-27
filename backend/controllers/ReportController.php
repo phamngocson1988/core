@@ -43,117 +43,6 @@ class ReportController extends Controller
         ];
     }
 
-    /**
-     * Show the list of orders
-     */
-    // public function actionIndex()
-    // {
-    //     $this->view->params['main_menu_active'] = 'report.index';
-    //     $request = Yii::$app->request;
-    //     $data = [
-    //         'q' => $request->get('q'),
-    //         'customer_id' => $request->get('customer_id'),
-    //         'saler_id' => $request->get('saler_id'),
-    //         'handler_id' => $request->get('handler_id'),
-    //         'game_id' => $request->get('game_id'),
-    //         'start_date' => $request->get('start_date', date('Y-m-01')),
-    //         'end_date' => $request->get('end_date', date('Y-m-t')),
-    //         'status' => $request->get('status'),
-    //     ];
-    //     $form = new FetchOrderForm($data);
-    //     $command = $form->getCommand();
-    //     $pages = new Pagination(['totalCount' => $command->count()]);
-    //     $models = $command->offset($pages->offset)
-    //                         ->limit($pages->limit)
-    //                         ->orderBy(['updated_at' => SORT_DESC])
-    //                         ->all();
-    //     return $this->render('index', [
-    //         'models' => $models,
-    //         'pages' => $pages,
-    //         'search' => $form,
-    //     ]);
-    // }
-
-    // public function actionView($id)
-    // {
-    //     $this->view->params['main_menu_active'] = 'report.index';
-    //     $request = Yii::$app->request;
-    //     $order = Order::findOne($id);
-    //     $items = $order->items;
-    //     $item = reset($items);
-    //     return $this->render('view', [
-    //         'order' => $order,
-    //         'item' => $item,
-    //         'back' => $request->get('ref', Url::to(['report/index']))
-    //     ]);
-    // }
-
-    // public function actionGame()
-    // {
-    //     $this->view->params['main_menu_active'] = 'report.game';
-    //     $request = Yii::$app->request;
-    //     $data = [
-    //         'start_date' => $request->get('start_date', date('Y-m-01')),
-    //         'end_date' => $request->get('end_date', date('Y-m-t')),
-    //     ];
-    //     $form = new ReportByGameForm($data);
-    //     $command = $form->getCommand();
-    //     $pages = new Pagination(['totalCount' => $command->count()]);
-    //     $models = $command->offset($pages->offset)
-    //                         ->limit($pages->limit)
-    //                         ->orderBy(['total' => SORT_DESC])
-    //                         ->all();
-    //     return $this->render('game', [
-    //         'models' => $models,
-    //         'pages' => $pages,
-    //         'search' => $form,
-    //     ]);
-    // }
-
-    // public function actionUser()
-    // {
-    //     $this->view->params['main_menu_active'] = 'report.user';
-    //     $request = Yii::$app->request;
-    //     $data = [
-    //         'type' => $request->get('type', 'handler'),
-    //         'start_date' => $request->get('start_date', date('Y-m-01')),
-    //         'end_date' => $request->get('end_date', date('Y-m-t')),
-    //     ];
-    //     $form = new ReportByUserForm($data);
-    //     $command = $form->getCommand();
-    //     $pages = new Pagination(['totalCount' => $command->count()]);
-    //     $models = $command->offset($pages->offset)
-    //                         ->limit($pages->limit)
-    //                         ->orderBy(['total_price' => SORT_DESC])
-    //                         ->all();
-    //     return $this->render('user', [
-    //         'models' => $models,
-    //         'pages' => $pages,
-    //         'search' => $form,
-    //     ]);
-    // }
-    // public function actionTransaction()
-    // {
-    //     $this->view->params['main_menu_active'] = 'report.transaction';
-    //     $request = Yii::$app->request;
-    //     $data = [
-    //         'start_date' => $request->get('start_date', date('Y-m-01')),
-    //         'end_date' => $request->get('end_date', date('Y-m-t')),
-    //     ];
-    //     $form = new ReportByTransactionForm($data);
-    //     $command = $form->getCommand();
-    //     $pages = new Pagination(['totalCount' => $command->count()]);
-    //     $models = $command->offset($pages->offset)
-    //                         ->limit($pages->limit)
-    //                         ->orderBy(['id' => SORT_DESC])
-    //                         ->all();
-    //     return $this->render('transaction', [
-    //         'models' => $models,
-    //         'pages' => $pages,
-    //         'search' => $form,
-    //     ]);
-    // }
-
     // New designs
     public function actionFinanceTransaction()
     {
@@ -346,6 +235,7 @@ class ReportController extends Controller
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
             'end_date' => $request->get('end_date', date('Y-m-d')),
+            'status' => [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED]
         ];
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();
@@ -423,6 +313,35 @@ class ReportController extends Controller
                             ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
         return $this->render('sale/user', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCostOrder()
+    {
+        $this->view->params['main_menu_active'] = 'report.cost.order';
+        $request = Yii::$app->request;
+        $data = [
+            'q' => $request->get('q'),
+            'saler_id' => $request->get('saler_id'),
+            'handler_id' => $request->get('handler_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'status' => $request->get('status'),
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('cost/order', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,

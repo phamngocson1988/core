@@ -43,13 +43,21 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê doanh số</span>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Thống kê bán hàng</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Doanh số theo game</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê doanh số</h1>
+<h1 class="page-title">Doanh số theo game</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -58,7 +66,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Theo game</span>
+          <span class="caption-subject bold uppercase"> Biểu đồ</span>
         </div>
         <div class="actions">
         </div>
@@ -100,31 +108,46 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           </div>
         </div>
         <?php ActiveForm::end()?>
-        <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
-          <thead>
-            <tr>
-              <th style="width: 10%;"> STT </th>
-              <th style="width: 30%;"> Tên game </th>
-              <th style="width: 30%;"> Số lượng gói </th>
-              <th style="width: 30%;"> Số coin </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <tr>
-                <td style="vertical-align: middle;"><?=$no + 1;?></td>
-                <td style="vertical-align: middle;"><?=$model['game_title'];?></td>
-                <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
-                <td style="vertical-align: middle;"><?=$model['total_price'];?></td>
-              </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
-        <?php Pjax::end(); ?>
+        <div class="row">
+          <div class="col-md-6">
+            <?php Pjax::begin(); ?>
+            <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+              <thead>
+                <tr>
+                  <th style="width: 10%;"> STT </th>
+                  <th style="width: 30%;"> Tên game </th>
+                  <th style="width: 30%;"> Số lượng gói </th>
+                  <th style="width: 30%;"> Số coin </th>
+                </tr>
+              </thead>
+              <tbody>
+                  <?php if (!$models) :?>
+                  <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                  <?php endif;?>
+                  <?php foreach ($models as $no => $model) :?>
+                  <tr>
+                    <td style="vertical-align: middle;"><?=$no + 1;?></td>
+                    <td style="vertical-align: middle;"><?=$model['game_title'];?></td>
+                    <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
+                    <td style="vertical-align: middle;"><?=$model['total_price'];?></td>
+                  </tr>
+                  <?php endforeach;?>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td><strong>Tổng:</strong></td>
+                  <td><?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+                  <td><?=number_format($search->getCommand()->sum('total_price'));?></td>
+                </tr>
+              </tfoot>
+            </table>
+            <?php Pjax::end(); ?>
+          </div>
+          <div class="col-md-6">
+          <?=$search->showChar();?>
+          </div>
+        </div>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

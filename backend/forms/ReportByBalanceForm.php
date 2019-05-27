@@ -113,6 +113,7 @@ class ReportByBalanceForm extends Model
 
         $file = \Yii::createObject([
 		    'class' => 'codemix\excelexport\ExcelFile',
+            'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
 		    'sheets' => [
 		        'Report by transaction' => [
                     'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',

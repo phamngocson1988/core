@@ -29,8 +29,8 @@ class StatisticsByOrderForm extends Model
         $game_packs = array_map(function($model) { 
           return round($model['game_pack'], 1);
         }, $models);
-        $total_units = array_map(function($model) { 
-            return round($model['total_unit'], 1);
+        $total_prices = array_map(function($model) { 
+            return round($model['total_price'], 1);
           }, $models);
         $labels = array_column($models, 'date');
         $datasets = [
@@ -52,7 +52,7 @@ class StatisticsByOrderForm extends Model
                 'pointBorderColor' => "#fff",
                 'pointHoverBackgroundColor' => "#fff",
                 'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                'data' => array_values($total_units)
+                'data' => array_values($total_prices)
             ],
         ];
         return ChartJs::widget([
@@ -70,7 +70,7 @@ class StatisticsByOrderForm extends Model
     
     protected function createCommand()
     {
-        $select = ["SUM(game_pack) as game_pack", "SUM(total_unit) as total_unit", "DATE(created_at) as `date`"];
+        $select = ["SUM(game_pack) as game_pack", "SUM(total_price) as total_price", "DATE(created_at) as `date`"];
         $command = Order::find();
         $command->select($select);
         $command->where(["IN", "status", [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED]]);
@@ -81,6 +81,7 @@ class StatisticsByOrderForm extends Model
         if ($this->end_date) {
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
+        $command->groupBy(['date']);
         $command->orderBy(['date' => SORT_ASC]);
         $this->_command = $command;
     }

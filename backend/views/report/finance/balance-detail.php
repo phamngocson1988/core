@@ -33,6 +33,14 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <i class="fa fa-circle"></i>
     </li>
     <li>
+      <span>Thống kê & báo cáo</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Thống kê dòng tiền</span>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
       <span>Lịch sử giao dịch</span>
     </li>
   </ul>
@@ -51,8 +59,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           <span class="caption-subject bold uppercase">Khách hàng <span style="color:red"><?=$user->name;?></span></span>
         </div>
         <div class="actions">
-          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
-          <a role="button" class="btn btn-success" href="<?=Url::current(['mode'=>'statistics']);?>"><i class="fa fa-bar-chart"></i> Biểu đồ</a>
+          <!-- <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a> -->
         </div>
       </div>
       <div class="portlet-body">

@@ -251,12 +251,12 @@
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Giao dịch rút tiền</span>
                 </a>
-              </li> *}
+              </li> 
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Số dư tài khoản nhà cung cấp</span>
                 </a>
-              </li>
+              </li> *}
             </ul>
           </li>
           {/if}
@@ -307,11 +307,11 @@
                   <span class="title">Doanh số theo game</span>
                 </a>
               </li>
-              <li class="nav-item  ">
+              {* <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Doanh số theo đại lý</span>
                 </a>
-              </li>
+              </li> *}
               <li class="nav-item  ">
                 <a href="{url route='/report/sale-user'}" class="nav-link " code='report.sale.user'>
                   <span class="title">Doanh số theo nhân viên</span>
@@ -328,8 +328,23 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/cost-order'}" class="nav-link nav-toggle" code='report.cost.order'>
+                  <span class="title">Theo đơn hàng</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="{url route='/report/cost-game'}" class="nav-link nav-toggle" code='report.cost.game'>
+                  <span class="title">Theo game</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="{url route='/report/cost-user'}" class="nav-link nav-toggle" code='report.cost.user'>
                   <span class="title">Theo nhân viên bán hàng</span>
+                </a>
+              </li>
+              {* <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo đại lý</span>
                 </a>
               </li>
               <li class="nav-item  ">
@@ -339,19 +354,9 @@
               </li>
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
-                  <span class="title">Theo đại lý</span>
+                  <span class="title">Theo reseller</span>
                 </a>
-              </li>
-              <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
-                  <span class="title">Theo tổng đơn</span>
-                </a>
-              </li>
-              <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
-                  <span class="title">Theo game</span>
-                </a>
-              </li>
+              </li> *}
             </ul>
           </li>
           {/if}
