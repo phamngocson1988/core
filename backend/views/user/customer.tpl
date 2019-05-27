@@ -60,12 +60,17 @@
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'name')} </th>
-              <th style="width: 15%;"> Tên đăng nhập </th>
-              <th style="width: 20%;"> {Yii::t('app', 'email')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
-              <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+              <th style="width: 2%;"> {Yii::t('app', 'no')} </th>
+              <th style="width: 10%;"> Khách hàng </th>
+              <th style="width: 10%;"> Ngày sinh </th>
+              <th style="width: 10%;"> Email </th>
+              <th style="width: 10%;"> Số điện thoại </th>
+              <th style="width: 10%;"> Ngày đăng ký </th>
+              <th style="width: 8%;"> Quốc tịch </th>
+              <th style="width: 10%;"> Đơn hàng cuối cùng </th>
+              <th style="width: 5%;"> Tổng tiền nạp </th>
+              <th style="width: 5%;"> Tổng tiền mua hàng </th>
+              <th style="width: 10%;"> Đại lý/người bán </th>
             </tr>
           </thead>
           <tbody>
@@ -74,10 +79,16 @@
             <tr>
               <td>{$key + $pages->offset + 1}</td>
               <td>{$model->name}</td>
-              <td>{$model->username}</td>
+              <td>{$model->birthday}</td>
               <td>{$model->email}</td>
-              <td>{$model->getStatusLabel()}</td>
-              <td>
+              <td>{$model->phone}</td>
+              <td>{$model->created_at}</td>
+              <td>{$model->getCountryName()}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <!-- <td>
                 <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>
                 {if $app->user->id != $model->id}
                 {if $model->isActive()}
@@ -86,7 +97,7 @@
                 <a class="btn btn-xs grey-salsa active-user tooltips" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-original-title="{Yii::t('app', 'enable_user')}"><i class="fa fa-check-square"></i></a>
                 {/if}
                 {/if}
-              </td>
+              </td> -->
             </tr>
             {/foreach}
             {else}

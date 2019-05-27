@@ -270,10 +270,20 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(UserWallet::className(), ['user_id' => 'id'])->where('status = :status', [':status' => UserWallet::STATUS_COMPLETED]);
     }
 
+    public function getOrders()
+    {
+        return $this->hasMany(Order::className(), ['customer_id' => 'id']);
+    }
+
     public function getWalletAmount()
     {
         $wallets = $this->wallet;
         $arr = ArrayHelper::getColumn($wallets, 'coin');
         return array_sum($arr);
+    }
+
+    public function getCountryName()
+    {
+        return ArrayHelper::getValue(Yii::$app->params['country_code'], $this->country_code, '');
     }
 }
