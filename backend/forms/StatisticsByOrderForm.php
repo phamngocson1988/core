@@ -4,21 +4,19 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\PaymentTransaction;
+use backend\models\Order;
 use dosamigos\chartjs\ChartJs;
 
-class StatisticsByTransactionForm extends Model
+class StatisticsByOrderForm extends Model
 {
     public $start_date;
     public $end_date;
-    public $period;
 
     public function rules()
     {
         return [
             ['start_date', 'default', 'value' => date('Y-m-01')],
             ['end_date', 'default', 'value' => date('Y-m-t')],
-            ['period', 'default', 'value' => 'day']
         ];
     }
 
@@ -28,29 +26,39 @@ class StatisticsByTransactionForm extends Model
     {
         $command = $this->getCommand();
         $models = $command->asArray()->all();
-        $total_prices = array_map(function($model) { 
-          return round($model['total_price'], 1);
+        $game_packs = array_map(function($model) { 
+          return round($model['game_pack'], 1);
         }, $models);
-        $labels = array_map(function($model) { 
-          return sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
-        }, $models);
+        $total_units = array_map(function($model) { 
+            return round($model['total_unit'], 1);
+          }, $models);
+        $labels = array_column($models, 'date');
         $datasets = [
             [
-                'label' => "Doanh thu",
+                'label' => "Số gói",
                 'backgroundColor' => "rgba(54,198,211,0.2)",
                 'borderColor' => "rgba(54,198,211,1)",
                 'pointBackgroundColor' => "rgba(54,198,211,1)",
                 'pointBorderColor' => "#fff",
                 'pointHoverBackgroundColor' => "#fff",
                 'pointHoverBorderColor' => "rgba(54,198,211,1)",
-                'data' => array_values($total_prices)
+                'data' => array_values($game_packs)
             ],
-            
+            [
+                'label' => "Số Kcoin",
+                'backgroundColor' => "rgba(255,99,132,0.2)",
+                'borderColor' => "rgba(255,99,132,1)",
+                'pointBackgroundColor' => "rgba(255,99,132,1)",
+                'pointBorderColor' => "#fff",
+                'pointHoverBackgroundColor' => "#fff",
+                'pointHoverBorderColor' => "rgba(255,99,132,1)",
+                'data' => array_values($total_units)
+            ],
         ];
         return ChartJs::widget([
-            'type' => 'line',
+            'type' => 'bar',
             'options' => [
-                'height' => 400,
+                'height' => 200,
                 'width' => 400
             ],
             'data' => [
@@ -62,10 +70,10 @@ class StatisticsByTransactionForm extends Model
     
     protected function createCommand()
     {
-        $select = ["SUM(total_price) as total_price", "YEAR(payment_at) as `year`", "QUARTER(payment_at) as `quarter`", "MONTH(payment_at) as `month`", "WEEK(payment_at) as `week`", "DAY(payment_at) as `day`"];
-        $command = PaymentTransaction::find();
+        $select = ["SUM(game_pack) as game_pack", "SUM(total_unit) as total_unit", "DATE(created_at) as `date`"];
+        $command = Order::find();
         $command->select($select);
-        $command->where(["status" => PaymentTransaction::STATUS_COMPLETED]);
+        $command->where(["IN", "status", [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED]]);
 
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
@@ -73,24 +81,7 @@ class StatisticsByTransactionForm extends Model
         if ($this->end_date) {
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
-
-        if ($this->period) {
-            switch ($this->period) {
-                case 'quarter':
-                    $command->groupBy(['year', 'quarter']);
-                    break;
-                case 'month':
-                    $command->groupBy(['year', 'month']);
-                    break;
-                case 'week': 
-                    $command->groupBy(['year', 'week']);
-                    break;
-                default: //day
-                    $command->groupBy(['year', 'month', 'day']);
-                    break;
-            }
-        }
-        $command->orderBy(['year' => SORT_ASC, 'quarter' => SORT_ASC, 'month' => SORT_ASC, 'week' => SORT_ASC, 'day' => SORT_ASC]);
+        $command->orderBy(['date' => SORT_ASC]);
         $this->_command = $command;
     }
 

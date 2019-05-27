@@ -163,6 +163,7 @@ class CartController extends Controller
         $order->customer_phone = $user->phone;
         $order->status = Order::STATUS_PENDING;
         $order->saler_id = $user->invited_by;
+        $order->payment_at = date('Y-m-d H:i:s');
         $order->generateAuthKey();
 
         // Item detail

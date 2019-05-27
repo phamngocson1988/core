@@ -74,19 +74,18 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
               ])->hiddenInput()->label(false);?>
             </div>
-            <?=$form->field($search, 'period', [
-              'options' => ['class' => 'form-group col-md-4'],
-              'labelOptions' => ['class' => 'control-label'],
-              'template' => '{label}<div class="clearfix">{input}{hint}{error}</div>'
-            ])->radioList(['day' => 'Ngày', 'week' => 'Tuần', 'month' => 'Tháng', 'quarter' => 'Quý'], [
-              'class' => 'btn-group',
-              'data-toggle' => 'buttons', 
-              'itemOptions' => [
-                'labelOptions' => ['class'=>'btn red'],
-                'class' => 'toggle',
-              ],
-              'name' => 'period'
-            ])->label('Thống kê theo:');?>
+            <div class='form-group col-md-4'>
+              <label class='control-label'>Thống kê theo:</label>
+              <div class="clearfix">
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn red <?=($search->period == 'day') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="day"> Ngày </label>
+                  <label class="btn red <?=($search->period == 'week') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="week"> Tuần </label>
+                  <label class="btn red <?=($search->period == 'month') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="month"> Tháng </label>
+                  <label class="btn red <?=($search->period == 'quarter') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="quarter"> Quý </label>
+                </div>
+              </div>
+            </div>
+            
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -112,10 +111,19 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                   <tr>
                     <td style="vertical-align: middle;">
                       <?php switch ($search->period) {
-                        case 'year':
-                          # code...
+                        case 'quarter':
+                          echo sprintf("Quý %s (%s)", str_pad($model['quarter'], 2, "0", STR_PAD_LEFT), $model['year']);
+                        break;
+                        case 'month':
+                          echo sprintf("Tháng %s (%s)", str_pad($model['month'], 2, "0", STR_PAD_LEFT), $model['year']);
                           break;
-                        
+                        case 'week':
+                          $week = str_pad($model['week'] + 1, 2, "0", STR_PAD_LEFT);
+                          $dateOfWeek = sprintf("%sW%s", $model['year'], $week);
+                          $startWeek = date('Y-m-d',strtotime($dateOfWeek));
+                          $endWeek = date('Y-m-d',strtotime($startWeek . " + 7 days"));
+                          echo sprintf("Tuần %s (%s - %s)", $week, $startWeek, $endWeek);
+                          break;
                         default:
                           echo sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
                           break;

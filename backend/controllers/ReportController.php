@@ -21,7 +21,7 @@ use backend\forms\ReportProcessOrderByUser;
 use backend\forms\ReportSaleOrderByGame;
 use backend\forms\FetchMyOrderForm;
 use backend\forms\StatisticsByTransactionForm;
-
+use backend\forms\StatisticsByOrderForm;
 
 class ReportController extends Controller
 {
@@ -196,7 +196,7 @@ class ReportController extends Controller
         ];
         $form = new StatisticsByTransactionForm($data);
         $command = $form->getCommand();
-        $models = $command->orderBy(['total_price' => SORT_DESC])->asArray()->all();
+        $models = $command->asArray()->all();
         return $this->render('finance/transaction-statistics', [
             'models' => $models,
             'search' => $form,
@@ -356,6 +356,30 @@ class ReportController extends Controller
                             ->all();
 
         return $this->render('sale/order', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionSaleOrderStatistics()
+    {
+        $this->view->params['main_menu_active'] = 'report.sale.order';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+        ];
+        $form = new StatisticsByOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->asArray()
+                            ->all();
+
+        return $this->render('sale/order-statistics', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,

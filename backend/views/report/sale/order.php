@@ -49,7 +49,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê doanh số</h1>
+<h1 class="page-title">Thống kê bán hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -58,13 +58,16 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Thống kê theo đơn hàng</span>
         </div>
         <div class="actions">
+          <?php if (Yii::$app->user->can('admin') || Yii::$app->user->can('orderteam_manager')) :?>
+          <a role="button" class="btn btn-success" href="<?=Url::to(['report/sale-order-statistics', 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'period' => 'day']);?>"><i class="fa fa-bar-chart"></i> Biểu đồ</a>
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/order']]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/sale-order']]);?>
         <div class="row margin-bottom-10">
             <?=$form->field($search, 'q', [
               'options' => ['class' => 'form-group col-md-1'],
