@@ -50,4 +50,40 @@ class FormatConverter extends BaseFormatConverter
         $second = $seconds - ($hour * $hourSecond) - ($minute * $minuteSecond);
         return sprintf("%s:%s:%s", str_pad($hour, 2, "0", STR_PAD_LEFT), str_pad($minute, 2, "0", STR_PAD_LEFT), str_pad($second, 2, "0", STR_PAD_LEFT));
     }
+
+    /**
+     * Return an array of range of dates
+     * @param string $from <y-m-d>
+     * @param string $to <y-m-d>
+     * @return array $dates
+     */
+    public static function getRangeDate($from, $to, $interval = 1, $unit = 'date')
+    {
+
+        switch ($unit) {
+            case 'year':
+                $intervalFormat = sprintf("P%sY", $interval);
+                $dateFormat = 'Y-01-01';
+                break;        
+            case 'month':
+                $intervalFormat = sprintf("P%sM", $interval);
+                $dateFormat = 'Y-m-01';
+                break;
+            default: //date
+                $intervalFormat = sprintf("P%sD", $interval);
+                $dateFormat = 'Y-m-d';
+                break;
+        }
+        $period = new \DatePeriod(
+            new \DateTime($from),
+            new \DateInterval($intervalFormat),
+            new \DateTime($to)
+        );
+        $dates = [];
+        foreach ($period as $key => $value) {
+            $dates[] = $value->format($dateFormat);
+        }
+        if ($unit = 'date') $dates[] = $to;
+        return $dates;
+    }
 }

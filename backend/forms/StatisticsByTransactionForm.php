@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use common\models\PaymentTransaction;
 use dosamigos\chartjs\ChartJs;
+use common\components\helpers\FormatConverter;
 
 class StatisticsByTransactionForm extends Model
 {
@@ -28,31 +29,48 @@ class StatisticsByTransactionForm extends Model
     {
         $command = $this->getCommand();
         $models = $command->asArray()->all();
-        $total_prices = array_map(function($model) { 
-          return round($model['total_price'], 1);
-        }, $models);
         switch ($this->period) {
             case 'week':
                 $labels = array_map(function($model) {
                   return sprintf("Tuần %s", $model['week'] + 1);
                 }, $models);
+                $range = range(date('W', strtotime($this->start_date)), date('W', strtotime($this->end_date)));
+                $range = array_map(function($d) {
+                    return sprintf("Tuần %s", $d);
+                }, $range);
                 break;
             case 'month':
                 $labels = array_map(function($model) {
                   return sprintf("Tháng %s/%s", str_pad($model['month'], 2, "0", STR_PAD_LEFT), $model['year']);
                 }, $models);
+                $range = FormatConverter::getRangeDate($this->start_date, $this->end_date, 1, 'month');
+                $range = array_map(function($d) {
+                  return sprintf("Tháng %s/%s", date('m', strtotime($d)), date('Y', strtotime($d)));
+                }, $range);
                 break;
             case 'quarter':
                 $labels = array_map(function($model) {
                   return sprintf("Quý %s/%s", $model['quarter'], $model['year']);
                 }, $models);
+                $start_quarter = ceil(date('m', strtotime($this->start_date)) / 3);
+                $end_quarter = ceil(date('m', strtotime($this->end_date)) / 3);
+                $range = range($start_quarter, $end_quarter);
                 break;
             default:
                 $labels = array_map(function($model) {
                   return sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
                 }, $models);
+                $range = FormatConverter::getRangeDate($this->start_date, $this->end_date);
                 break;
         }
+        
+        $total_prices = array_map(function($model) { 
+            return round($model['total_price'], 1);
+        }, $models);
+
+        $data = array_combine($labels, $total_prices);
+        $rangePeriod = array_fill_keys($range, 0);
+        $data = array_merge($rangePeriod, $data);
         
         $datasets = [
             [
@@ -63,7 +81,7 @@ class StatisticsByTransactionForm extends Model
                 'pointBorderColor' => "#fff",
                 'pointHoverBackgroundColor' => "#fff",
                 'pointHoverBorderColor' => "rgba(54,198,211,1)",
-                'data' => array_values($total_prices)
+                'data' => array_values($data)
             ],
             
         ];
@@ -74,7 +92,7 @@ class StatisticsByTransactionForm extends Model
                 'width' => 400
             ],
             'data' => [
-                'labels' => $labels,
+                'labels' => array_keys($data),
                 'datasets' => $datasets
             ]
         ]);
