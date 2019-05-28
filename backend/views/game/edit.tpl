@@ -85,12 +85,12 @@
                 <li class="active">
                   <a href="#main" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
-                <li>
+                {* <li>
                   <a href="#packages" data-toggle="tab">Gói bán game</a>
                 </li>
                 <li>
                   <a href="#images" data-toggle="tab">Hình ảnh</a>
-                </li>
+                </li> *}
               </ul>
             </div>
             <div class="portlet-body">

@@ -16,6 +16,20 @@ class Game extends \common\models\Game
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'title' => Yii::t('app', 'title'),
+            'excerpt' => Yii::t('app', 'excerpt'),
+            'content' => Yii::t('app', 'content'),
+            'unit_name' => 'Tên đơn vị game',
+            'status' => 'Trạng thái sản phẩm',
+            'image_id' => 'Hình ảnh',
+            'price' => 'Giá bán (Kcoin) / gói game',
+            'pack' => 'Số đơn vị game trong gói',
+        ];
+    }
+
     public function rules()
     {
         return [

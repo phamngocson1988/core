@@ -11,6 +11,7 @@ class ApplicationSettingForm extends Model
     public $contact_email;
     public $admin_email;
     public $enable_subscribe;
+    public $exchange_rate_usd; 
 
     public function init()
     {
@@ -23,7 +24,10 @@ class ApplicationSettingForm extends Model
     public function rules()
     {
         return [
-            [['contact_phone', 'contact_email', 'admin_email', 'enable_subscribe'], 'trim'],
+            [['contact_phone', 'contact_email', 'admin_email', 'enable_subscribe', 'exchange_rate_usd'], 'trim'],
+            [['admin_email', 'contact_email'], 'email'],
+            ['exchange_rate_usd', 'number'],
+            ['exchange_rate_usd', 'default', 'value' => '22000'],
         ];
     }
 
@@ -36,7 +40,8 @@ class ApplicationSettingForm extends Model
             'contact_phone' => Yii::t('app', 'contact_phone'),
             'contact_email' => Yii::t('app', 'contact_email'),
             'admin_email' => Yii::t('app', 'admin_email'),
-            'enable_subscribe' => 'Show subscribe Popup'
+            'enable_subscribe' => 'Show subscribe Popup',
+            'exchange_rate_usd' => 'Tỷ giá USD',
         ];
     }
 }

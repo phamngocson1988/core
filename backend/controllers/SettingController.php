@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\web\Controller;
+use backend\controllers\Controller;
 use backend\components\actions\SettingsAction;
 use backend\forms\ApplicationSettingForm;
 use backend\forms\SocialSettingForm;

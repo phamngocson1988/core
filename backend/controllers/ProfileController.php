@@ -2,7 +2,7 @@
 namespace backend\controllers;
 
 use Yii;
-use common\components\Controller;
+use backend\controllers\Controller;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use backend\forms\EditProfileForm;

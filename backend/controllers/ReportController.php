@@ -2,7 +2,7 @@
 namespace backend\controllers;
 
 use Yii;
-use common\components\Controller;
+use backend\controllers\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use backend\forms\FetchOrderForm;
@@ -10,7 +10,6 @@ use backend\forms\ReportByGameForm;
 use backend\forms\ReportByUserForm;
 use backend\forms\ReportByTransactionForm;
 use backend\forms\ReportByBalanceForm;
-use backend\forms\GetUserWalletBalance;
 use yii\data\Pagination;
 use backend\models\Order;
 use common\models\User;
@@ -22,6 +21,7 @@ use backend\forms\ReportSaleOrderByGame;
 use backend\forms\FetchMyOrderForm;
 use backend\forms\StatisticsByTransactionForm;
 use backend\forms\StatisticsByOrderForm;
+use backend\forms\ReportCostOrderBySaler;
 
 class ReportController extends Controller
 {
@@ -344,6 +344,69 @@ class ReportController extends Controller
         return $this->render('cost/order', [
             'models' => $models,
             'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCostOrderStatistics()
+    {
+        $this->view->params['main_menu_active'] = 'report.cost.order';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+        ];
+        $form = new StatisticsByOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->asArray()
+                            ->all();
+
+        return $this->render('cost/order-statistics', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCostGame()
+    {
+        $this->view->params['main_menu_active'] = 'report.cost.game';
+        $request = Yii::$app->request;
+        $data = [
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+        ];
+        $form = new ReportSaleOrderByGame($data);
+        $command = $form->getCommand();
+        $models = $command->asArray()->all();
+
+        return $this->render('cost/game', [
+            'models' => $models,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCostUser()
+    {
+        $this->view->params['main_menu_active'] = 'report.cost.user';
+        $request = Yii::$app->request;
+        $data = [
+            'saler_id' => $request->get('saler_id'),
+            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
+            'end_date' => $request->get('end_date', date('Y-m-d')),
+        ];
+        $form = new ReportCostOrderBySaler($data);
+        $models = $form->getCommand()->asArray()->all();
+
+        return $this->render('cost/user', [
+            'models' => $models,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);

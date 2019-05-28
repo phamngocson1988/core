@@ -57,7 +57,7 @@ class FormatConverter extends BaseFormatConverter
      * @param string $to <y-m-d>
      * @return array $dates
      */
-    public static function getRangeDate($from, $to, $interval = 1, $unit = 'date')
+    public static function getDateRange($from, $to, $interval = 1, $unit = 'date')
     {
 
         switch ($unit) {
@@ -85,5 +85,16 @@ class FormatConverter extends BaseFormatConverter
         }
         if ($unit = 'date') $dates[] = $to;
         return $dates;
+    }
+
+    public static function getQuarterRange($from, $to)
+    {
+        $fromQuarter = ceil(date('m', strtotime($from)) / 3);
+        $toQuarter = ceil(date('m', strtotime($to)) / 3);
+        $fromQuarterMonth = $fromQuarter * 3 - 2;
+        $toQuarterMonth = $toQuarter * 3 - 2;
+        $fromQuarterDate = date("Y-$fromQuarterMonth-01", strtotime($from));
+        $toQuarterDate = date("Y-$toQuarterMonth-01", strtotime($from));
+        return self::getDateRange($fromQuarterDate, $toQuarterDate, 3, 'month');
     }
 }

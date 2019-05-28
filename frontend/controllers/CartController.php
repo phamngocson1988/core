@@ -183,28 +183,6 @@ class CartController extends Controller
 
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        // $item = new OrderItems();
-        // $item->item_title = $cartItem->getLabel();
-        // $item->type = OrderItems::TYPE_PRODUCT;
-        // $item->order_id = $order->id;
-        // $item->game_id = $cartItem->getGame()->id;
-        // $item->product_id = $cartItem->getUniqueId();
-        // $item->price = $cartItem->getPrice();
-        // $item->quantity = $cartItem->quantity;
-        // $item->total = $cartItem->getTotalPrice();
-        // $item->unit_name = $cartItem->getUnitName();
-        // $item->unit = $cartItem->getUnitGame();
-        // $item->total_unit = $cartItem->getTotalUnitGame();
-        // $item->username = $cartItem->username;
-        // $item->password = $cartItem->password;
-        // $item->platform = $cartItem->platform;
-        // $item->login_method = $cartItem->login_method;
-        // $item->character_name = $cartItem->character_name;
-        // $item->recover_code = $cartItem->recover_code;
-        // $item->server = $cartItem->server;
-        // $item->note = $cartItem->note;
-        // $item->save();
-
         if ($discountItem) {
             $itemFee = new OrderFee();
             $itemFee->order_id = $order->id;

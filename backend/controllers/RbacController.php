@@ -2,7 +2,7 @@
 namespace backend\controllers;
 
 use Yii;
-use common\components\Controller;
+use backend\controllers\Controller;
 use common\models\User;
 use yii\base\InvalidParamException;
 use backend\forms\CreateRoleForm;

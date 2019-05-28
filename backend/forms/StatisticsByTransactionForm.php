@@ -32,7 +32,7 @@ class StatisticsByTransactionForm extends Model
         switch ($this->period) {
             case 'week':
                 $labels = array_map(function($model) {
-                  return sprintf("Tuần %s", $model['week'] + 1);
+                    return sprintf("Tuần %s", $model['week'] + 1);
                 }, $models);
                 $range = range(date('W', strtotime($this->start_date)), date('W', strtotime($this->end_date)));
                 $range = array_map(function($d) {
@@ -41,26 +41,28 @@ class StatisticsByTransactionForm extends Model
                 break;
             case 'month':
                 $labels = array_map(function($model) {
-                  return sprintf("Tháng %s/%s", str_pad($model['month'], 2, "0", STR_PAD_LEFT), $model['year']);
+                    return sprintf("Tháng %s/%s", str_pad($model['month'], 2, "0", STR_PAD_LEFT), $model['year']);
                 }, $models);
-                $range = FormatConverter::getRangeDate($this->start_date, $this->end_date, 1, 'month');
+                $range = FormatConverter::getDateRange($this->start_date, $this->end_date, 1, 'month');
                 $range = array_map(function($d) {
-                  return sprintf("Tháng %s/%s", date('m', strtotime($d)), date('Y', strtotime($d)));
+                    return sprintf("Tháng %s/%s", date('m', strtotime($d)), date('Y', strtotime($d)));
                 }, $range);
                 break;
             case 'quarter':
                 $labels = array_map(function($model) {
-                  return sprintf("Quý %s/%s", $model['quarter'], $model['year']);
+                    return sprintf("Quý %s/%s", $model['quarter'], $model['year']);
                 }, $models);
-                $start_quarter = ceil(date('m', strtotime($this->start_date)) / 3);
-                $end_quarter = ceil(date('m', strtotime($this->end_date)) / 3);
-                $range = range($start_quarter, $end_quarter);
+                $range = FormatConverter::getQuarterRange($this->start_date, $this->end_date);
+                $range = array_map(function($d) {
+                    $quarter = ceil(date('m', strtotime($d)) / 3);
+                    return sprintf("Quý %s/%s", $quarter, date('Y', strtotime($d)));
+                }, $range);
                 break;
             default:
                 $labels = array_map(function($model) {
                   return sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
                 }, $models);
-                $range = FormatConverter::getRangeDate($this->start_date, $this->end_date);
+                $range = FormatConverter::getDateRange($this->start_date, $this->end_date);
                 break;
         }
         
