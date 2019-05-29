@@ -12,6 +12,7 @@ use backend\forms\EditUserForm;
 use backend\forms\FetchUserForm;
 use backend\forms\ChangeUserStatusForm;
 use backend\forms\InviteUserForm;
+use backend\forms\FetchCustomerForm;
 
 /**
  * UserController
@@ -72,10 +73,24 @@ class UserController extends Controller
     {
         $this->view->params['main_menu_active'] = 'user.customer';
         $request = Yii::$app->request;
-        $q = $request->get('q');
-        $status = $request->get('status', '');
-        $role = 'customer';
-        $form = new FetchUserForm(['q' => $q, 'status' => $status, 'role' => $role]);
+        $data = [
+            'created_start' => $request->get('created_start'),
+            'created_end' => $request->get('created_end'),
+            'birthday_start' => $request->get('birthday_start'),
+            'birthday_end' => $request->get('birthday_end'),
+            'country_code' => $request->get('country_code'),
+            'game_id' => $request->get('game_id'),
+            'purchase_start' => $request->get('purchase_start'),
+            'purchase_end' => $request->get('purchase_end'),
+            'saler_id' => $request->get('saler_id'),
+            'total_purchase_start' => $request->get('total_purchase_start'),
+            'total_purchase_end' => $request->get('total_purchase_end'),
+            'last_purchase_start' => $request->get('last_purchase_start'),
+            'last_purchase_end' => $request->get('last_purchase_end'),
+            'total_topup_start' => $request->get('total_topup_start'),
+            'total_topup_end' => $request->get('total_topup_end'),
+        ];
+        $form = new FetchCustomerForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
@@ -88,7 +103,7 @@ class UserController extends Controller
         return $this->render('customer.tpl', [
             'models' => $models,
             'pages' => $pages,
-            'form' => $form,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
             'links' => $links
         ]);

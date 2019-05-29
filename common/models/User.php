@@ -282,8 +282,27 @@ class User extends ActiveRecord implements IdentityInterface
         return array_sum($arr);
     }
 
+    public function getWalletTopupAmount()
+    {
+        $command = $this->getWallet();
+        $command->andWhere(['type' => UserWallet::TYPE_INPUT]);
+        return $command->sum('coin');
+    }
+
+    public function getWalletWithdrawAmount()
+    {
+        $command = $this->getWallet();
+        $command->andWhere(['type' => UserWallet::TYPE_OUTPUT]);
+        return $command->sum('coin');
+    }
+
     public function getCountryName()
     {
         return ArrayHelper::getValue(Yii::$app->params['country_code'], $this->country_code, '');
+    }
+
+    public function isReseller() 
+    {
+        return $this->is_reseller == self::IS_RESELLER;
     }
 }

@@ -1,5 +1,8 @@
 {use class='yii\widgets\LinkPager'}
 {use class='yii\widgets\Pjax' type='block'}
+{use class='dosamigos\datepicker\DatePicker'}
+{use class='yii\widgets\ActiveForm' type='block'}
+
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -33,28 +36,116 @@
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <form method="GET">
-            <div class="form-group col-md-3">
-              <label>{Yii::t('app', 'status')}: </label>
-              <select class="form-control" name="status">
-                <option value="">All</option>
-                {foreach $form->getUserStatus() as $statusKey => $statusLabel}
-                <option value="{$statusKey}" {if (string)$statusKey === $form->status} selected {/if}>{$statusLabel}</option>
-                {/foreach}
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
-                placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->q}">
-            </div>
-            <div class="form-group col-md-3">
+          {ActiveForm assign='form' id='filter-form' method='get'}
+            {$form->field($search, 'created_start', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'created_start']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Ngày tham gia từ')}
+            {$form->field($search, 'created_end', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'created_end']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Ngày tham gia đến')}
+
+            {$form->field($search, 'birthday_start', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'birthday_start']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Có sinh nhật từ')}
+            {$form->field($search, 'birthday_end', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'birthday_end']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Có sinh nhật đến')}
+
+            {$form->field($search, 'purchase_start', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'purchase_start']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Có đơn hàng từ')}
+            {$form->field($search, 'purchase_end', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'purchase_end']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Có đơn hàng đến')}
+
+            {$form->field($search, 'total_purchase_start', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'total_purchase_start']
+            ])->textInput()->label('Tổng giá trị đơn hàng từ')}
+
+            {$form->field($search, 'total_purchase_end', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'total_purchase_end']
+            ])->textInput()->label('Tổng giá trị đơn hàng đến')}
+
+            {$form->field($search, 'country_code', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'country_code']
+            ])->dropDownList(Yii::$app->params['country_code'], ['prompt' => 'Quốc gia'])->label('Tên quốc gia')}
+
+            {$form->field($search, 'game_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game')}
+
+            {$form->field($search, 'saler_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
+            ])->dropDownList($search->fetchSalers(),  ['prompt' => 'Tìm nhân viên bán hàng'])->label('Nhân viên bán hàng')}
+
+            {* $form->field($search, 'last_purchase_start', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'last_purchase_start']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Mua hàng lần cuối từ')}
+            {$form->field($search, 'last_purchase_end', [
+              'options' => ['class' => 'form-group col-md-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'last_purchase_end']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Mua hàng lần cuối đến') *}
+
+            <div class="form-group col-md-2">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
                 25px;">
               <i class="fa fa-check"></i> {Yii::t('app', 'search')}
               </button>
             </div>
-          </form>
+          {/ActiveForm}
         </div>
         {Pjax}
         <table class="table table-striped table-bordered table-hover table-checkable">
@@ -62,15 +153,15 @@
             <tr>
               <th style="width: 2%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 10%;"> Khách hàng </th>
-              <th style="width: 10%;"> Ngày sinh </th>
+              <th style="width: 5%;"> Ngày sinh </th>
               <th style="width: 10%;"> Email </th>
-              <th style="width: 10%;"> Số điện thoại </th>
+              <th style="width: 5%;"> Số điện thoại </th>
               <th style="width: 10%;"> Ngày đăng ký </th>
               <th style="width: 8%;"> Quốc tịch </th>
               <th style="width: 10%;"> Đơn hàng cuối cùng </th>
-              <th style="width: 5%;"> Tổng tiền nạp </th>
-              <th style="width: 5%;"> Tổng tiền mua hàng </th>
-              <th style="width: 10%;"> Đại lý/người bán </th>
+              <th style="width: 10%;"> Tổng tiền nạp </th>
+              <th style="width: 10%;"> Tổng tiền mua hàng </th>
+              <th style="width: 5%;"> Đại lý/người bán </th>
             </tr>
           </thead>
           <tbody>
@@ -84,10 +175,10 @@
               <td>{$model->phone}</td>
               <td>{$model->created_at}</td>
               <td>{$model->getCountryName()}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>{$model->last_order_date}</td>
+              <td>{$model->getWalletTopupAmount()}</td>
+              <td>{$model->getWalletWithdrawAmount()}</td>
+              <td>{if $model->isReseller()}Reseller{/if}</td>
               <!-- <td>
                 <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>
                 {if $app->user->id != $model->id}
@@ -102,7 +193,7 @@
             {/foreach}
             {else}
             <tr>
-              <td colspan="7">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="11">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>
