@@ -45,6 +45,7 @@ class m130524_201442_init extends Migration
             'extend' => $this->string(10)->notNull(),
             'domain' => $this->string(100)->notNull(),
             'action' => $this->string(10)->notNull(),
+            'status' => $this->smallInteger()->notNull()->defaultValue(1),
         ], $tableOptions);
 
         $this->createTable('{{%customer_dialer}}', [
@@ -102,7 +103,7 @@ class m130524_201442_init extends Migration
             'created_by' => $this->integer(),
         ], $tableOptions);
 
-        this->createTable('{{%record}}', [
+        $this->createTable('{{%record}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(100)->notNull(),
             'dialer_id' => $this->integer(100)->notNull(),

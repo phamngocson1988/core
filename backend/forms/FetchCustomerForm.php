@@ -31,12 +31,14 @@ class FetchCustomerForm extends Model
     protected function createCommand()
     {
         $command = User::find();
+        $command->where(['<>', 'status', User::STATUS_DELETED]);
 
         if ($this->q) {
             $command->orWhere(['like', 'company', $this->q]);
             $command->orWhere(['like', 'name', $this->q]);
             $command->orWhere(['like', 'phone', $this->q]);
             $command->orWhere(['like', 'address', $this->q]);
+            $command->orWhere(['like', 'email', $this->q]);
         }
         if ((string)$this->status !== "") {
             $command->andWhere(['status' => $this->status]);

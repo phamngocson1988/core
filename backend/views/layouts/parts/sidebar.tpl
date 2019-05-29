@@ -71,6 +71,11 @@
             <span class="title">{Yii::t('app', 'customers')}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/customer/history'}" class="nav-link " code='customer.history'>
+            <span class="title">Lịch sử giao dịch</span>
+            </a>
+          </li>
         </ul>
       </li>
       <li class="nav-item  ">

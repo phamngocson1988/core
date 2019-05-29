@@ -5,6 +5,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\TransactionHistory;
+use common\models\User;
 
 /**
  * FetchTransactionHistoryForm
@@ -17,6 +18,7 @@ class FetchTransactionHistoryForm extends Model
     public $start_date;
     public $end_date;
 
+    protected $_customer;
     private $_command;
 
     public function rules()
@@ -63,5 +65,13 @@ class FetchTransactionHistoryForm extends Model
             $this->createCommand();
         }
         return $this->_command;
+    }
+
+    public function getCustomer()
+    {
+        if (!$this->_customer) {
+            $this->_customer = User::findOne($this->customer_id);
+        }
+        return $this->_customer;
     }
 }

@@ -16,6 +16,8 @@ use backend\forms\TopupForm;
 use backend\forms\FetchTransactionHistoryForm;
 use common\models\CustomerDialer;
 use common\models\Dialer;
+use common\models\User;
+use yii\web\NotFoundHttpException;
 
 /**
  * CustomerController
@@ -30,7 +32,7 @@ class CustomerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['change-status', 'create', 'edit', 'create-profile', 'edit-profile', 'topup', 'history', 'create-dialer', 'edit-dialer'],
+                        'actions' => ['change-status', 'create', 'edit', 'create-profile', 'edit-profile', 'topup', 'history', 'create-dialer', 'edit-dialer', 'delete'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -71,6 +73,7 @@ class CustomerController extends Controller
 
     public function actionCreate()
     {
+        $this->view->params['main_menu_active'] = 'customer.index';
         $request = Yii::$app->request;
         $model = new CreateCustomerForm();
         if ($model->load($request->post())) {
@@ -88,6 +91,7 @@ class CustomerController extends Controller
 
     public function actionEdit($id)
     {
+        $this->view->params['main_menu_active'] = 'customer.index';
         $request = Yii::$app->request;
         $model = EditCustomerForm::findOne($id);
         if ($model->load($request->post())) {
@@ -103,37 +107,18 @@ class CustomerController extends Controller
         ]);
     }
 
-    // public function actionCreateProfile($id)
-    // {
-    //     $request = Yii::$app->request;
-    //     $model = new CreateCustomerProfileForm(['customer_id' => $id]);
-    //     if ($model->load($request->post())) {
-    //         if ($user = $model->save()) {
-    //             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-    //             return $this->redirect(['customer/index']);
-    //         }
-    //     }
-    //     return $this->render('create-profile.tpl', [
-    //         'model' => $model,
-    //         'back' => $request->get('ref', Url::to(['customer/index']))
-    //     ]);
-    // }
-
-    // public function actionEditProfile($id)
-    // {
-    //     $request = Yii::$app->request;
-    //     $model = EditCustomerProfileForm::findOne($id);
-    //     if ($model->load($request->post())) {
-    //         if ($user = $model->save()) {
-    //             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-    //             return $this->redirect(['customer/index']);
-    //         }
-    //     }
-    //     return $this->render('edit-profile.tpl', [
-    //         'model' => $model,
-    //         'back' => $request->get('ref', Url::to(['customer/index']))
-    //     ]);
-    // }
+    public function actionDelete($id)
+    {
+        $request = Yii::$app->request;
+        $model = User::findOne($id);
+        if (!$model) throw new NotFoundHttpException('Not found', 404);
+        $model->status = User::STATUS_DELETED;
+        if ($model->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
 
     public function actionCreateDialer($id)
     {
@@ -202,15 +187,17 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function actionHistory($id)
+    public function actionHistory()
     {
         $this->view->params['main_menu_active'] = 'customer.history';
         $request = Yii::$app->request;
-        $get = $request->get();
+        $customer_id = $request->get('customer_id');
         $search = new FetchTransactionHistoryForm([
-            'customer_id' => $id
+            'customer_id' => $customer_id,
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'transaction_type' => $request->get('transaction_type')
         ]);
-        $search->load($get, '');
         $command = $search->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
@@ -219,7 +206,7 @@ class CustomerController extends Controller
             'models' => $models,
             'pages' => $pages,
             'search' => $search,
-            'customer_id' => $id
+            'customer_id' => $customer_id
         ]);
     }
 
@@ -237,7 +224,7 @@ class CustomerController extends Controller
                 foreach ($customers as $customer) {
                     $item = [];
                     $item['id'] = $customer->id;
-                    $item['text'] = sprintf("%s - %s", $customer->username, $customer->email);
+                    $item['text'] = sprintf("%s - %s", $customer->name, $customer->email);
                     $items[] = $item;
                 }
             }

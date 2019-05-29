@@ -39,10 +39,12 @@
           <thead>
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 30%;"> Phone number </th>
+              <th style="width: 20%;"> Phone number </th>
               <th style="width: 10%;"> Extend </th>
-              <th style="width: 30%;"> Domain </th>
+              <th style="width: 20%;"> Domain </th>
               <th style="width: 10%;"> Action </th>
+              <th style="width: 10%;"> Num of users </th>
+              <th style="width: 10%;"> Status </th>
               <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -55,14 +57,19 @@
               <td>{$model->extend}</td>
               <td>{$model->domain}</td>
               <td>{$model->action}</td>
+              <td>{$model->getNumberUsers()}</td>
+              <td>{if $model->isActive()}Active{else}Disactive{/if}</td>
               <td>
-                <a class="btn btn-xs grey-salsa" href="{url route='dialer/edit' id=$model->id}"><i class="fa fa-edit"></i></i></a>
+                <a class="btn btn-xs grey-salsa" href="{url route='dialer/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
+                {if !$model->getNumberUsers()}
+                <a class="btn btn-xs grey-salsa delete" href="{url route='dialer/delete' id=$model->id}"><i class="fa fa-trash"></i></a>
+                {/if}
               </td>
             </tr>
             {/foreach}
             {else}
             <tr>
-              <td colspan="6">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="8">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>
@@ -76,5 +83,13 @@
 </div>
 {registerJs}
 {literal}
+$('.delete').ajax_action({
+  method: 'DELETE',
+  confirm: true,
+  confirm_text: 'Do you really want to delete this dialer?',
+  callback: function(data) {
+    location.reload();
+  },
+});
 {/literal}
 {/registerJs}

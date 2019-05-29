@@ -167,7 +167,7 @@
                   </div>
                   <!-- /.modal-dialog -->
                 </div>
-
+                <a class="btn btn-xs grey-salsa delete" href="{url route='customer/delete' id=$model->id}"><i class="fa fa-trash"></i></a>
 
               </td>
             </tr>
@@ -188,7 +188,7 @@
 </div>
 {registerJs}
 {literal}
-$(".delete-customer").ajax_action({
+$(".delete").ajax_action({
   confirm: true,
   confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_customer')}{literal}',
   callback: function(eletement, data) {

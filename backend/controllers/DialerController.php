@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 use common\components\Controller;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
@@ -78,6 +79,18 @@ class DialerController extends Controller
             'model' => $model,
             'back' => $request->get('ref', Url::to(['dialer/index']))
         ]);
+    }
+
+    public function actionDelete($id)
+    {
+        $request = Yii::$app->request;
+        $model = Dialer::findOne($id);
+        if (!$model) throw new NotFoundHttpException('Not found', 404);
+        if ($model->delete()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
     }
 
     public function actionSuggestion()

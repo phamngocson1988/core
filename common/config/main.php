@@ -37,6 +37,12 @@ return [
                 ],
             ],
         ],
+        'formatter' => [
+            'dateFormat' => 'yyyy-mm-dd',
+            'decimalSeparator' => ',',
+            'thousandSeparator' => ' ',
+            'currencyCode' => 'USD',
+        ],
         'image' => [
             'class' => 'common\components\filesystem\ImageSystemManager',
             'generate_thumbnail' => true,

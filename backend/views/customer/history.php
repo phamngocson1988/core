@@ -51,12 +51,24 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer/history', 'id' => $customer_id]]);?>     
-
-            <?=$form->field($search, 'q', [
-              'inputOptions' => ['name' => 'q', 'class' => 'form-control'],
-              'options' => ['class' => 'form-group col-md-2']
-            ])->textInput()->label('Keyword');?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer/history']]);?>     
+            <?php $customer = $search->getCustomer();?>
+            <?=$form->field($search, 'customer_id', [
+              'options' => ['class' => 'form-group col-md-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->name, $customer->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['customer/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
 
             <?=$form->field($search, 'transaction_type', [
               'options' => ['class' => 'form-group col-md-2'],

@@ -17,6 +17,7 @@ class EditCustomerForm extends User
         return [
             [['name', 'company', 'tax_code'], 'required'],
             [['phone', 'address'], 'trim'],
+            ['status', 'default', 'value' => User::STATUS_ACTIVE]
         ];
     }
 
@@ -28,6 +29,7 @@ class EditCustomerForm extends User
             'phone' => 'Điện thoại',
             'address' => 'Địa chỉ',
             'tax_code' => 'Mã số thuế',
+            'status' => 'Trạng thái'
         ];
     }
 }
