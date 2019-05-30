@@ -7,7 +7,9 @@ use yii\db\ActiveRecord;
 class Contact extends ActiveRecord
 {
 	const SCENARIO_CREATE = 'create';
-	const SCENARIO_EDIT = 'edit';
+    const SCENARIO_EDIT = 'edit';
+    
+    public $group_ids = [];
 
     public static function tableName()
     {
@@ -17,8 +19,8 @@ class Contact extends ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_CREATE] = ['user_id', 'phone', 'name', 'description'];
-        $scenarios[self::SCENARIO_EDIT] = ['id', 'phone', 'name', 'description'];
+        $scenarios[self::SCENARIO_CREATE] = ['user_id', 'phone', 'name', 'description', 'group_ids'];
+        $scenarios[self::SCENARIO_EDIT] = ['id', 'phone', 'name', 'description', 'group_ids'];
         return $scenarios;
     }
 
@@ -30,5 +32,18 @@ class Contact extends ActiveRecord
             [['phone', 'name'], 'required'],
             ['description', 'trim']
         ];
+    }
+
+    public function getGroups()
+    {
+        return $this->hasMany(ContactGroup::className(), ['contact_id' => 'id']);
+        // return $this->hasMany(Item::className(), ['id' => 'item_id'])
+        //     ->viaTable('order_item', ['order_id' => 'id']);
+    }
+
+    public function deleteGroups()
+    {
+        $groups = $this->groups;
+        foreach ($groups as $group) $group->delete();
     }
 }

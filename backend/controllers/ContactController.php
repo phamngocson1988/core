@@ -16,6 +16,8 @@ use common\models\Dialer;
 use common\models\TransactionHistory;
 use backend\forms\FetchTransactionHistoryForm;
 use common\components\telecom\Tel4vn;
+use common\models\Group;
+use common\models\ContactGroup;
 
 /**
  * ContactController
@@ -73,14 +75,25 @@ class ContactController extends Controller
         $model->setScenario(Contact::SCENARIO_CREATE);
         $model->user_id = Yii::$app->user->id;
         if ($model->load($request->post()) && $model->save()) {
+            $groupIds = $model->group_ids;
+            foreach ($groupIds as $groupId) {
+                $contactGroup = new ContactGroup();
+                $contactGroup->contact_id = $model->id;
+                $contactGroup->group_id = $groupId;
+                $contactGroup->save();
+            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             return $this->redirect(['contact/index']);
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
+        $groupList = ArrayHelper::map(Group::find()->all(), 'id', function($m) {
+            return $m->name . '<span></span>';
+        });
 
         return $this->render('create.tpl', [
             'model' => $model,
+            'groupList' => $groupList,
             'back' => $request->get('ref', Url::to(['contact/index']))
         ]);
     }
@@ -91,15 +104,29 @@ class ContactController extends Controller
         $request = Yii::$app->request;
         $model = Contact::findOne($id);
         $model->setScenario(Contact::SCENARIO_EDIT);
+        $model->group_ids = ArrayHelper::map($model->groups, 'id', 'group_id');
         if ($model->load($request->post()) && $model->save()) {
+            $model->deleteGroups();
+            $groupIds = $model->group_ids;
+            foreach ($groupIds as $groupId) {
+                $contactGroup = new ContactGroup();
+                $contactGroup->contact_id = $model->id;
+                $contactGroup->group_id = $groupId;
+                $contactGroup->save();
+            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             return $this->redirect(['contact/index']);
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
 
+        $groupList = ArrayHelper::map(Group::find()->all(), 'id', function($m) {
+            return $m->name . '<span></span>';
+        });
+
         return $this->render('edit.tpl', [
             'model' => $model,
+            'groupList' => $groupList,
             'back' => $request->get('ref', Url::to(['contact/index']))
         ]);
     }
@@ -173,8 +200,10 @@ class ContactController extends Controller
         }, $user->dialers);
         $dialers = array_filter($dialers);
         $dialers = ArrayHelper::map($dialers, 'id', 'number');
+        $contacts = ArrayHelper::map($user->contacts, 'phone', 'phone');
         return $this->render('call', [
             'dialers' => $dialers,
+            'contacts' => $contacts,
             'model' => $model
         ]);
     }

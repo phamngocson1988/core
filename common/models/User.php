@@ -253,6 +253,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $command->count();
     }
 
+    public function getContacts() 
+    {
+        return $this->hasMany(Contact::className(), ['user_id' => 'id']);
+    }
+
     public function getTransactions()
     {
         return $this->hasMany(TransactionHistory::className(), ['user_id' => 'id']);

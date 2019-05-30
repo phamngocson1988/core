@@ -56,6 +56,14 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
+                  {$form->field($model, 'group_ids', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->checkboxList($groupList, [
+                    'class' => 'md-checkbox-list', 
+                    'encode' => false , 
+                    'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
+                  ])->label('Nhóm liên hệ')}
                 </div>
               </div>
             </div>

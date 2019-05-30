@@ -2,6 +2,17 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+$this->registerCssFile('/vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerCssFile('/vendor/assets/global/plugins/jquery-multi-select/css/multi-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerCssFile('/vendor/assets/global/plugins/select2/css/select2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerCssFile('/vendor/assets/global/plugins/select2/css/select2-bootstrap.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('/vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('/vendor/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('/vendor/assets/global/plugins/select2/js/select2.full.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('/vendor/assets/pages/scripts/components-multi-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+
+
 ?>
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -41,7 +52,7 @@ use yii\web\JsExpression;
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">
-                <?=$form->field($model, 'phone', [
+              <?=$form->field($model, 'phone', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->widget(kartik\select2\Select2::classname(), [
@@ -57,7 +68,13 @@ use yii\web\JsExpression;
                         'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
                     ]
                   ]
-                ])->label('Số điện thoại')?>
+                ])->label('Tìm theo số điện thoại hoặc group')?>
+
+                <?=$form->field($model, 'phone', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                  'inputOptions' => ['class' => 'form-control multi-select', 'id' => "phones", "multiple" => "multiple"]
+                ])->dropDownList($contacts);?>
 
                 <?=$form->field($model, 'dialer_id', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -134,6 +151,20 @@ function incrementSeconds() {
   seconds += 1;
   $('#counting').html(seconds);
 }
+
+// multiple-select
+$('#phones').multiSelect({
+  // afterSelect: function(values){
+  //   if ($("#phones :selected").length > 2) {
+  //     alert('Bạn chỉ được chọn tối đa 50 giá trị.');
+  //     values.forEach(function(element) {
+  //       $("#phones[value="+element+"]").prop("selected", "");
+  //     });
+  //     return false;
+  //   }
+  // }
+});
+
 JS;
 $this->registerJs($script);
 ?>

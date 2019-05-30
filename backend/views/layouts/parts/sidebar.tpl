@@ -42,6 +42,11 @@
             <span class="title">Lịch sử giao dịch</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/group/index'}" class="nav-link " code='group.index'>
+            <span class="title">Nhóm liên hệ</span>
+            </a>
+          </li>
         </ul>
       </li>
       {if $app->user->can('admin')}

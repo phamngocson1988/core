@@ -8,24 +8,24 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='customer/index'}">Quản lý danh bạ</a>
+      <a href="{url route='group/index'}">Quản lý nhóm danh bạ</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo danh bạ</span>
+      <span>Chỉnh sữa danh bạ</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Tạo danh bạ</h1>
+<h1 class="page-title">Chỉnh sữa danh bạ</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='signup-form'}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">Tạo danh bạ</div>
+          <div class="caption">Chỉnh sữa danh bạ</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
@@ -44,10 +44,6 @@
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
-                  {$form->field($model, 'phone', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
                   {$form->field($model, 'name', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -56,14 +52,10 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'group_ids', [
+                  {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->checkboxList($groupList, [
-                    'class' => 'md-checkbox-list', 
-                    'encode' => false , 
-                    'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
-                  ])->label('Nhóm liên hệ')}
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropDownList(['1' => 'Kích hoạt', '0' => 'Ngưng kích hoạt'])}
                 </div>
               </div>
             </div>

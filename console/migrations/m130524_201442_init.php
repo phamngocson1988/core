@@ -39,6 +39,20 @@ class m130524_201442_init extends Migration
             'description' => $this->string(255),
         ], $tableOptions);
 
+        $this->createTable('{{%contact_group}}', [
+            'id' => $this->primaryKey(),
+            'group_id' => $this->string(255)->notNull(),
+            'contact_id' => $this->integer()->notNull(),
+        ], $tableOptions);
+
+        $this->createTable('{{%group}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(255)->notNull(),
+            'description' => $this->string(255),
+            'user_id' => $this->integer()->notNull(),
+            'status' => $this->smallInteger()->notNull()->defaultValue(1),
+        ], $tableOptions);
+
         $this->createTable('{{%dialer}}', [
             'id' => $this->primaryKey(),
             'number' => $this->string(20)->notNull(),
@@ -137,5 +151,7 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%dailer}}');
         $this->dropTable('{{%customer_dailer}}');
         $this->dropTable('{{%record}}');
+        $this->dropTable('{{%group}}');
+        $this->dropTable('{{%contact_group}}');
     }
 }
