@@ -6,7 +6,7 @@
     <!-- BEGIN LOGO -->
     <div class="page-logo">
       <a href="index.html">
-      <img src="/vendor/assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" /> </a>
+      <img src="{Yii::getAlias('@web/vendor/assets/layouts/layout/img/logo.png')}" alt="logo" class="logo-default" /> </a>
       <div class="menu-toggler sidebar-toggler">
         <span></span>
       </div>
@@ -22,7 +22,7 @@
       <ul class="nav navbar-nav pull-right">
         <li class="dropdown dropdown-user">
           <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-          <img alt="Avatar" global="avatar_{$user->id}" class="img-circle" src="{$user->getAvatarUrl('100x100')}"/>
+          <img alt="Avatar" global="avatar_{$user->id}" class="img-circle" src="{$user->getAvatarUrl('100x100', Yii::getAlias('@web/vendor/assets/pages/media/profile/profile_user.jpg'))}"/>
           <span class="username username-hide-on-mobile"> {$user->getName()} </span>
           <i class="fa fa-angle-down"></i>
           </a>

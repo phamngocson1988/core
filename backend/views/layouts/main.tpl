@@ -12,7 +12,7 @@
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   {Html::csrfMetaTags()}
   <title>{Html::encode($this->title)}</title>
-  <link rel="shortcut icon" href="/images/favicon.ico" />
+  <link rel="shortcut icon" href="{Yii::getAlias('@web/images/favicon.ico')}" />
   {$this->head()}
 </head>
 

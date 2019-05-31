@@ -3,18 +3,26 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\helpers\ArrayHelper;
-$this->registerCssFile('/vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerCssFile('/vendor/assets/global/plugins/jquery-multi-select/css/multi-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerCssFile('/vendor/assets/global/plugins/select2/css/select2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerCssFile('/vendor/assets/global/plugins/select2/css/select2-bootstrap.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerJsFile('/vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerJsFile('/vendor/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerJsFile('/vendor/assets/global/plugins/select2/js/select2.full.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerJsFile('/vendor/assets/pages/scripts/components-multi-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-
-
-
+$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerCssFile('@web/vendor/assets/global/plugins/jquery-multi-select/css/multi-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerCssFile('@web/vendor/assets/global/plugins/select2/css/select2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerCssFile('@web/vendor/assets/global/plugins/select2/css/select2-bootstrap.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('@web/vendor/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('@web/vendor/assets/global/plugins/select2/js/select2.full.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('@web/vendor/assets/pages/scripts/components-multi-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 ?>
+<style>
+.custom-header {
+  background-color: black;
+  color: white;
+  padding: 5px;
+  text-align: center;
+}
+.ms-container {
+  width: 500px
+}
+</style>
 <div class="page-bar">
   <ul class="page-breadcrumb">
     <li>
@@ -53,23 +61,6 @@ $this->registerJsFile('/vendor/assets/pages/scripts/components-multi-select.min.
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">
-              <?php /*$form->field($model, 'phone', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->widget(kartik\select2\Select2::classname(), [
-                  'initValueText' => '',
-                  'options' => ['class' => 'form-control'],
-                  'pluginOptions' => [
-                    'placeholder' => 'Nhập số điện thoại',
-                    'allowClear' => true,
-                    'minimumInputLength' => 3,
-                    'ajax' => [
-                        'url' => Url::to(['contact/suggestion']),
-                        'dataType' => 'json',
-                        'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                    ]
-                  ]
-                ])->label('Tìm theo số điện thoại hoặc group'); */?>
                 <div class="form-group">
                   <label class="col-md-2 control-label">Nhóm liên hệ</label>
                   <div class="col-md-6">
@@ -170,7 +161,10 @@ function incrementSeconds() {
 }
 
 // multiple-select
-$('#phones').multiSelect();
+$('#phones').multiSelect({
+  selectableHeader: "<div class='custom-header'>Danh bạ</div>",
+  selectionHeader: "<div class='custom-header'>Số đã chọn</div>",
+});
 $('#contact-group').on('change', function(){
   var notSelected = $('#phones').find('option:not(:selected)');
   if ($(this).val() == '0') {
