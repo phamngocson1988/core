@@ -38,7 +38,7 @@
         <div class="row margin-bottom-10">
           {ActiveForm assign='form' id='filter-form' method='get'}
             {$form->field($search, 'created_start', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'created_start']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -47,7 +47,7 @@
                 ]
             ])->label('Ngày tham gia từ')}
             {$form->field($search, 'created_end', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'created_end']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -57,7 +57,7 @@
             ])->label('Ngày tham gia đến')}
 
             {$form->field($search, 'birthday_start', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'birthday_start']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -66,7 +66,7 @@
                 ]
             ])->label('Có sinh nhật từ')}
             {$form->field($search, 'birthday_end', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'birthday_end']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -76,7 +76,7 @@
             ])->label('Có sinh nhật đến')}
 
             {$form->field($search, 'purchase_start', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'purchase_start']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -85,7 +85,7 @@
                 ]
             ])->label('Có đơn hàng từ')}
             {$form->field($search, 'purchase_end', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'purchase_end']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -95,32 +95,32 @@
             ])->label('Có đơn hàng đến')}
 
             {$form->field($search, 'total_purchase_start', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'total_purchase_start']
             ])->textInput()->label('Tổng giá trị đơn hàng từ')}
 
             {$form->field($search, 'total_purchase_end', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'total_purchase_end']
             ])->textInput()->label('Tổng giá trị đơn hàng đến')}
 
             {$form->field($search, 'country_code', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'country_code']
             ])->dropDownList(Yii::$app->params['country_code'], ['prompt' => 'Quốc gia'])->label('Tên quốc gia')}
 
             {$form->field($search, 'game_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
             ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game')}
 
             {$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
             ])->dropDownList($search->fetchSalers(),  ['prompt' => 'Tìm nhân viên bán hàng'])->label('Nhân viên bán hàng')}
 
             {* $form->field($search, 'last_purchase_start', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'last_purchase_start']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -129,7 +129,7 @@
                 ]
             ])->label('Mua hàng lần cuối từ')}
             {$form->field($search, 'last_purchase_end', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'last_purchase_end']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
@@ -138,7 +138,7 @@
                 ]
             ])->label('Mua hàng lần cuối đến') *}
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
                 25px;">

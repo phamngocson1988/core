@@ -62,7 +62,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-transaction-statistics']]);?>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4 col-lg-3">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
                   <div id="reportrange" class="btn default">
@@ -82,7 +82,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
               ])->hiddenInput()->label(false);?>
             </div>
-            <div class='form-group col-md-4'>
+            <div class='form-group col-md-4 col-lg-3'>
               <label class='control-label'>Thống kê theo:</label>
               <div class="clearfix">
                 <div class="btn-group" data-toggle="buttons">
@@ -94,7 +94,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               </div>
             </div>
             
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
               </button>

@@ -72,12 +72,12 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                
             <?php $customer = $search->getCustomer();?>
             <?=$form->field($search, 'q', [
-              'options' => ['class' => 'form-group col-md-1'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
 
             <?=$form->field($search, 'customer_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
               'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'customer_id'],
@@ -94,16 +94,16 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             ])->label('Khách hàng')?>
 
             <?=$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
             ])->dropDownList($search->fetchSalers(), ['prompt' => 'Tìm theo nhân viên bán hàng'])->label('Nhân viên bán hàng');?>
 
             <?=$form->field($search, 'game_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
             ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
               </button>

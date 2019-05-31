@@ -70,8 +70,11 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/cost-user']]);?>
         <div class="row">
-
-          <div class="form-group col-md-2">
+          <?=$form->field($search, 'saler_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
+          ])->dropDownList($search->fetchUsers(), ['prompt' => 'Tìm theo nhân viên bán hàng'])->label('Nhân viên bán hàng');?>
+          <div class="form-group col-md-4 col-lg-3">
             <label class="control-label">Ngày tạo</label>
             <div class="form-control" style="border: none; padding: 0">
                 <div id="reportrange" class="btn default">
@@ -92,12 +95,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
             ])->hiddenInput()->label(false);?>
           </div>
 
-          <?=$form->field($search, 'saler_id', [
-            'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
-          ])->dropDownList($search->fetchUsers(), ['prompt' => 'Tìm theo nhân viên bán hàng'])->label('Nhân viên bán hàng');?>
-
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
               <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
             </button>

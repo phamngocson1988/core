@@ -71,15 +71,14 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>
         <div class="row margin-bottom-10">
-               
             <?php $customer = $search->getCustomer();?>
             <?=$form->field($search, 'q', [
-              'options' => ['class' => 'form-group col-md-1'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
 
             <?=$form->field($search, 'customer_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
               'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'customer_id'],
@@ -98,7 +97,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             <?php if (Yii::$app->user->can('admin')) :?>
             <?php $saler = $search->getSaler();?>
             <?=$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
               'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'saler_id'],
@@ -116,7 +115,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 
             <?php $handler = $search->getHandler();?>
             <?=$form->field($search, 'handler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
               'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'handler_id'],
@@ -145,46 +144,44 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               ])->hiddenInput()->label(false);?>
             <?php endif;?>
 
-            
+            <?=$form->field($search, 'status', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
+            ])->dropDownList($search->getStatus())->label('Trạng thái');?>
+
+            <?=$form->field($search, 'game_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
           
-        </div>
-        <div class="row">
-          <?=$form->field($search, 'status', [
-            'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
-          ])->dropDownList($search->getStatus())->label('Trạng thái');?>
-
-          <div class="form-group col-md-2">
-            <label class="control-label">Ngày tạo</label>
-            <div class="form-control" style="border: none; padding: 0">
-                <div id="reportrange" class="btn default">
-                    <i class="fa fa-calendar"></i> &nbsp;
-                    <span> </span>
-                    <b class="fa fa-angle-down"></b>
-                </div>
+            <div class="form-group col-md-4 col-lg-3">
+              <label class="control-label">Ngày tạo</label>
+              <div class="form-control" style="border: none; padding: 0">
+                  <div id="reportrange" class="btn default">
+                      <i class="fa fa-calendar"></i> &nbsp;
+                      <span> </span>
+                      <b class="fa fa-angle-down"></b>
+                  </div>
+              </div>
+              <?=$form->field($search, 'start_date', [
+                'template' => '{input}',
+                'options' => ['tag' => false],
+                'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
+              ])->hiddenInput()->label(false);?>
+              <?=$form->field($search, 'end_date', [
+                'template' => '{input}',
+                'options' => ['tag' => false],
+                'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
+              ])->hiddenInput()->label(false);?>
             </div>
-            <?=$form->field($search, 'start_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
-            ])->hiddenInput()->label(false);?>
-            <?=$form->field($search, 'end_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
-            ])->hiddenInput()->label(false);?>
-          </div>
 
-          <?=$form->field($search, 'game_id', [
-            'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+            
 
-          <div class="form-group col-md-2">
-            <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
-              <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
-            </button>
-          </div>
+            <div class="form-group col-md-4 col-lg-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>

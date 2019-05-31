@@ -75,14 +75,14 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/process-order']]);?>
         <div class="row margin-bottom-10">
             <?=$form->field($search, 'q', [
-              'options' => ['class' => 'form-group col-md-1'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
 
             <?php if (Yii::$app->user->can('admin')) :?>
             <?php $saler = $search->getSaler();?>
             <?=$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
               'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'saler_id'],
@@ -100,7 +100,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 
             <?php $handler = $search->getHandler();?>
             <?=$form->field($search, 'handler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
               'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'handler_id'],
@@ -129,16 +129,17 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               ])->hiddenInput()->label(false);?>
             <?php endif;?>
 
-            
-          
-        </div>
-        <div class="row">
-          <?=$form->field($search, 'status', [
-            'options' => ['class' => 'form-group col-md-2'],
+            <?=$form->field($search, 'status', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
           ])->dropDownList([Order::STATUS_COMPLETED => 'Completed', Order::STATUS_DELETED => 'Deleted'])->label('Trạng thái');?>
 
-          <div class="form-group col-md-2">
+          <?=$form->field($search, 'game_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+
+          <div class="form-group col-md-4 col-lg-3">
             <label class="control-label">Ngày tạo</label>
             <div class="form-control" style="border: none; padding: 0">
                 <div id="reportrange" class="btn default">
@@ -159,12 +160,9 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             ])->hiddenInput()->label(false);?>
           </div>
 
-          <?=$form->field($search, 'game_id', [
-            'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+          
 
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
               <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
             </button>

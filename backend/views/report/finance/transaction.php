@@ -64,7 +64,35 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-transaction']]);?>
-            <div class="form-group col-md-2">
+            <?php $user = $search->user;?>
+            <?=$form->field($search, 'user_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->user_id) ? sprintf("%s - %s", $user->username, $user->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'user_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
+
+            <?=$form->field($search, 'discount_code', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'discount_code']
+            ])->textInput()->label('Mã khuyến mãi');?>
+
+            <?=$form->field($search, 'auth_key', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'auth_key']
+            ])->textInput()->label('Mã giao dịch');?>
+
+            <div class="form-group col-md-4 col-lg-3">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
                   <div id="reportrange" class="btn default">
@@ -85,35 +113,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               ])->hiddenInput()->label(false);?>
             </div>
 
-            <?php $user = $search->user;?>
-              <?=$form->field($search, 'user_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-              ])->widget(kartik\select2\Select2::classname(), [
-                'initValueText' => ($search->user_id) ? sprintf("%s - %s", $user->username, $user->email) : '',
-                'options' => ['class' => 'form-control', 'name' => 'user_id'],
-                'pluginOptions' => [
-                  'placeholder' => 'Chọn khách hàng',
-                  'allowClear' => true,
-                  'minimumInputLength' => 3,
-                  'ajax' => [
-                      'url' => Url::to(['user/suggestion']),
-                      'dataType' => 'json',
-                      'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                  ]
-                ]
-              ])->label('Khách hàng')?>
-
-              <?=$form->field($search, 'discount_code', [
-                'options' => ['class' => 'form-group col-md-2'],
-                'inputOptions' => ['class' => 'form-control', 'name' => 'discount_code']
-              ])->textInput()->label('Mã khuyến mãi');?>
-
-              <?=$form->field($search, 'auth_key', [
-                'options' => ['class' => 'form-group col-md-2'],
-                'inputOptions' => ['class' => 'form-control', 'name' => 'auth_key']
-              ])->textInput()->label('Mã giao dịch');?>
-
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
               </button>

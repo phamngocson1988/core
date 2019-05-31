@@ -76,50 +76,52 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       </div>
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/sale-order']]);?>
-        <div class="row margin-bottom-10">
-            <?=$form->field($search, 'q', [
-              'options' => ['class' => 'form-group col-md-1'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
-            ])->textInput()->label('Mã đơn hàng');?>
-
-            <?=$form->field($search, 'customer_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn khách hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Khách hàng')?>
-
-            <?php $saler = $search->getSaler();?>
-            <?=$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-2'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhân viên sale',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhân viên sale')?>
-
-        </div>
         <div class="row">
-          <div class="form-group col-md-2">
+          <?=$form->field($search, 'q', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+          ])->textInput()->label('Mã đơn hàng');?>
+
+          <?=$form->field($search, 'customer_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+          ])->widget(kartik\select2\Select2::classname(), [
+            'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
+            'options' => ['class' => 'form-control', 'name' => 'customer_id'],
+            'pluginOptions' => [
+              'placeholder' => 'Chọn khách hàng',
+              'allowClear' => true,
+              'minimumInputLength' => 3,
+              'ajax' => [
+                  'url' => Url::to(['user/suggestion']),
+                  'dataType' => 'json',
+                  'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+              ]
+            ]
+          ])->label('Khách hàng')?>
+
+          <?php $saler = $search->getSaler();?>
+          <?=$form->field($search, 'saler_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+          ])->widget(kartik\select2\Select2::classname(), [
+            'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
+            'options' => ['class' => 'form-control', 'name' => 'saler_id'],
+            'pluginOptions' => [
+              'placeholder' => 'Chọn nhân viên sale',
+              'allowClear' => true,
+              'minimumInputLength' => 3,
+              'ajax' => [
+                  'url' => Url::to(['user/suggestion']),
+                  'dataType' => 'json',
+                  'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+              ]
+            ]
+          ])->label('Nhân viên sale')?>
+          <?=$form->field($search, 'game_id', [
+          'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+          'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+
+          <div class="form-group col-md-4 col-lg-3">
             <label class="control-label">Ngày tạo</label>
             <div class="form-control" style="border: none; padding: 0">
                 <div id="reportrange" class="btn default">
@@ -139,18 +141,13 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
             ])->hiddenInput()->label(false);?>
           </div>
-
-          <?=$form->field($search, 'game_id', [
-            'options' => ['class' => 'form-group col-md-2'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
-
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
               <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
             </button>
           </div>
         </div>
+        
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
