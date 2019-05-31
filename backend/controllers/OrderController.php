@@ -89,6 +89,7 @@ class OrderController extends Controller
             'q' => $request->get('q'),
             'customer_id' => $request->get('customer_id'),
             'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
             'handler_id' => $request->get('handler_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),

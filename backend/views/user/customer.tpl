@@ -1,6 +1,7 @@
 {use class='yii\widgets\LinkPager'}
 {use class='yii\widgets\Pjax' type='block'}
 {use class='dosamigos\datepicker\DatePicker'}
+{use class='common\models\User'}
 {use class='yii\widgets\ActiveForm' type='block'}
 
 <!-- BEGIN PAGE BAR -->
@@ -138,6 +139,12 @@
                 ]
             ])->label('Mua hàng lần cuối đến') *}
 
+            {$form->field($search, 'is_reseller', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'is_reseller']
+            ])->dropDownList(User::getResellerStatus(),  ['prompt' => 'Tất cả'])->label('Reseller/Khách hàng')}
+
+
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
@@ -152,7 +159,7 @@
           <thead>
             <tr>
               <th style="width: 2%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 10%;"> Khách hàng </th>
+              <th style="width: 5%;"> Khách hàng </th>
               <th style="width: 5%;"> Ngày sinh </th>
               <th style="width: 10%;"> Email </th>
               <th style="width: 5%;"> Số điện thoại </th>
@@ -161,6 +168,7 @@
               <th style="width: 10%;"> Đơn hàng cuối cùng </th>
               <th style="width: 10%;"> Tổng tiền nạp </th>
               <th style="width: 10%;"> Tổng tiền mua hàng </th>
+              <th style="width: 5%;"> Reseller/Khách hàng </th>
               <th style="width: 5%;"> Đại lý/người bán </th>
             </tr>
           </thead>
@@ -172,13 +180,14 @@
               <td>{$model->name}</td>
               <td>{$model->birthday}</td>
               <td>{$model->email}</td>
-              <td>{$model->phone}</td>
+              <td>{$model->country_code} {$model->phone}</td>
               <td>{$model->created_at}</td>
               <td>{$model->getCountryName()}</td>
               <td>{$model->last_order_date}</td>
               <td>{$model->getWalletTopupAmount()}</td>
               <td>{$model->getWalletWithdrawAmount()}</td>
-              <td>{if $model->isReseller()}Reseller{/if}</td>
+              <td>{if $model->isReseller()}Reseller{else}Khách hàng{/if}</td>
+              <td></td>
               <!-- <td>
                 <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>
                 {if $app->user->id != $model->id}
@@ -193,7 +202,7 @@
             {/foreach}
             {else}
             <tr>
-              <td colspan="11">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="12">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>

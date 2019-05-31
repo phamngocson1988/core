@@ -83,6 +83,7 @@ class UserController extends Controller
             'purchase_start' => $request->get('purchase_start'),
             'purchase_end' => $request->get('purchase_end'),
             'saler_id' => $request->get('saler_id'),
+            'is_reseller' => $request->get('is_reseller'),
             'total_purchase_start' => $request->get('total_purchase_start'),
             'total_purchase_end' => $request->get('total_purchase_end'),
             'last_purchase_start' => $request->get('last_purchase_start'),
@@ -94,7 +95,6 @@ class UserController extends Controller
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
-
         $links = [
             'delete' => Url::to(['user/change-status', 'status' => 'delete']),
             'active' => Url::to(['user/change-status', 'status' => 'active'])

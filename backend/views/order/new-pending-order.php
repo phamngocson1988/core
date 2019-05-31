@@ -119,10 +119,11 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <th style="width: 10%;"> Mã đơn hàng </th>
               <th style="width: 10%;"> Tên game </th>
               <th style="width: 5%;"> Số lượng nạp </th>
+              <th style="width: 5%;"> Số gói </th>
               <th style="width: 10%;"> Thời gian nhận đơn </th>
               <th style="width: 5%;"> Thời gian chờ </th>
               <th style="width: 10%;"> Người bán hàng </th>
-              <th style="width: 15%;"> Người quản lý đơn hàng </th>
+              <th style="width: 10%;"> Người quản lý đơn hàng </th>
               <th style="width: 10%;"> Trạng thái </th>
               <th style="width: 10%;"> Nhà cung cấp </th>
               <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
@@ -130,7 +131,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
@@ -138,6 +139,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->auth_key;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
+                <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_duration_time;?></td>
                 

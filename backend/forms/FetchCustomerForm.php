@@ -23,6 +23,7 @@ class FetchCustomerForm extends User
     public $purchase_start;
     public $purchase_end;
     public $saler_id;
+    // public $is_reseller;
     public $last_purchase_start;
     public $last_purchase_end;
     public $total_purchase_start;
@@ -84,6 +85,10 @@ class FetchCustomerForm extends User
             $command->andWhere(["{$orderTable}.saler_id" => $this->saler_id]);
         }
 
+        if ($this->is_reseller) {
+            $command->andWhere(["{$userTable}.is_reseller" => $this->is_reseller]);
+        }
+
         // Having
         if ($this->total_purchase_start) {
             $command->andHaving(['>=', 'total_purchase', $this->total_purchase_start]);
@@ -125,5 +130,4 @@ class FetchCustomerForm extends User
         $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         return $salerTeam;
     }
-
 }

@@ -154,6 +154,11 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
             ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
           
+            <?=$form->field($search, 'provider_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control']
+            ])->dropDownList([])->label('Nhà cung cấp');?>
+
             <div class="form-group col-md-4 col-lg-3">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
@@ -192,10 +197,11 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <th style="width: 10%;"> Mã đơn hàng </th>
               <th style="width: 10%;"> Tên game </th>
               <th style="width: 5%;"> Số lượng nạp </th>
+              <th style="width: 5%;"> Số gói </th>
               <th style="width: 10%;"> Thời gian nhận đơn </th>
               <th style="width: 5%;"> Thời gian chờ </th>
               <th style="width: 10%;"> Người bán hàng </th>
-              <th style="width: 15%;"> Người quản lý đơn hàng </th>
+              <th style="width: 10%;"> Người quản lý đơn hàng </th>
               <th style="width: 10%;"> Trạng thái </th>
               <th style="width: 10%;"> Nhà cung cấp </th>
               <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
@@ -203,7 +209,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
@@ -211,6 +217,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->auth_key;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
+                <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
                 <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
                 
@@ -295,6 +302,9 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           </div>
           <div class="col-md-2 col-sm-2">
             <span class="label label-warning">Tổng số lượng nạp: <?=number_format($search->getCommand()->sum('total_unit'));?></span>
+          </div>
+          <div class="col-md-2 col-sm-2">
+            <span class="label label-success">Tổng số gói: <?=round($search->getCommand()->sum('game_pack'), 1);?></span>
           </div>
         </div>
       </div>

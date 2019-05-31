@@ -220,8 +220,8 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getResellerStatus()
     {
         return [
-            self::IS_NOT_RESELLER => Yii::t('app', 'individual'),
-            self::IS_RESELLER => Yii::t('app', 'reseller'),
+            self::IS_NOT_RESELLER => 'Customer',
+            self::IS_RESELLER => 'Reseller',
         ];
     }
 
