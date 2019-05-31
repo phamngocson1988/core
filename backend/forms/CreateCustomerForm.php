@@ -17,6 +17,9 @@ class CreateCustomerForm extends Model
     public $tax_code;
     public $phone;
     public $address;
+    public $province_id;
+    public $city_id;
+    public $ward_id;
     public $status;
     /**
      * @inheritdoc
@@ -35,7 +38,9 @@ class CreateCustomerForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-            ['status', 'default', 'value' => User::STATUS_ACTIVE]
+            ['status', 'default', 'value' => User::STATUS_ACTIVE],
+
+            [['province_id', 'city_id', 'ward_id'], 'safe']
         ];
     }
 
@@ -49,7 +54,10 @@ class CreateCustomerForm extends Model
             'phone' => 'Điện thoại',
             'address' => 'Địa chỉ',
             'tax_code' => 'Mã số thuế',
-            'status' => 'Trạng thái'
+            'status' => 'Trạng thái',
+            'province_id' => 'Tỉnh thành',
+            'city_id' => 'Quận huyện',
+            'ward_id' => 'Xã phường'
         ];
     }
 
@@ -67,6 +75,9 @@ class CreateCustomerForm extends Model
         $user->company = $this->company;
         $user->phone = $this->phone;
         $user->address = $this->address;
+        $user->province_id = $this->province_id;
+        $user->city_id = $this->city_id;
+        $user->ward_id = $this->ward_id;
         $user->tax_code = $this->tax_code;
         $user->balance = 0;
         $user->status = $this->status;

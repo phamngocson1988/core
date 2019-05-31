@@ -17,7 +17,8 @@ class EditCustomerForm extends User
         return [
             [['name', 'company', 'tax_code'], 'required'],
             [['phone', 'address'], 'trim'],
-            ['status', 'default', 'value' => User::STATUS_ACTIVE]
+            ['status', 'default', 'value' => User::STATUS_ACTIVE],
+            [['province_id', 'city_id', 'ward_id'], 'safe']
         ];
     }
 
@@ -29,7 +30,10 @@ class EditCustomerForm extends User
             'phone' => 'Điện thoại',
             'address' => 'Địa chỉ',
             'tax_code' => 'Mã số thuế',
-            'status' => 'Trạng thái'
+            'status' => 'Trạng thái',
+            'province_id' => 'Tỉnh thành',
+            'city_id' => 'Quận huyện',
+            'ward_id' => 'Xã phường'
         ];
     }
 }

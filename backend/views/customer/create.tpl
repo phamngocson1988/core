@@ -1,5 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='yii\helpers\ArrayHelper'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -72,6 +73,21 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
+                  {$form->field($model, 'province_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'province']
+                  ])->dropDownList(ArrayHelper::map($provinces, 'id', 'name'))}
+                  {$form->field($model, 'city_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'city']
+                  ])->dropDownList([])}
+                  {$form->field($model, 'ward_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'ward']
+                  ])->dropDownList([])}
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -85,3 +101,50 @@
       {/ActiveForm}
   </div>
 </div>
+{registerJs}
+{literal}
+$("#province").on('change', function() {
+  $.ajax({
+    url: '{/literal}{url route='customer/cities'}{literal}' + '?id=' + $(this).val(),
+    type: 'GET',
+    dataType : 'json',
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          alert(result.errors.join("\n"));
+          return false;
+      } else {
+          var cities = result.data.cities;
+          var str = '';
+          $.each(cities, function(index, value){
+            str += "<option value='"+index+"'>"+value+"</option>";
+          });
+          $('#city').html(str);
+          $("#city").trigger('change');
+      }
+    }
+  });
+});
+$("#city").on('change', function() {
+  $.ajax({
+    url: '{/literal}{url route='customer/wards'}{literal}' + '?id=' + $(this).val(),
+    type: 'GET',
+    dataType : 'json',
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          alert(result.errors.join("\n"));
+          return false;
+      } else {
+          var wards = result.data.wards;
+          var str = '';
+          $.each(wards, function(index, value){
+            str += "<option value='"+index+"'>"+value+"</option>";
+          });
+          $('#ward').html(str);
+      }
+          
+    }
+  });
+});
+$("#province").trigger('change');
+{/literal}
+{/registerJs}

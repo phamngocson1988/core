@@ -6,6 +6,7 @@ use common\components\Controller;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use backend\forms\FetchCustomerForm;
 use backend\forms\ChangeCustomerStatusForm;
 use backend\forms\CreateCustomerForm;
@@ -17,6 +18,9 @@ use backend\forms\FetchTransactionHistoryForm;
 use common\models\CustomerDialer;
 use common\models\Dialer;
 use common\models\User;
+use common\models\Province;
+use common\models\City;
+use common\models\Ward;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -37,7 +41,7 @@ class CustomerController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'suggestion'],
+                        'actions' => ['index', 'suggestion', 'cities', 'wards'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -82,9 +86,11 @@ class CustomerController extends Controller
                 return $this->redirect(['customer/index']);
             }
         }
+        $provinces = Province::find()->all();
 
         return $this->render('create.tpl', [
             'model' => $model,
+            'provinces' => $provinces,
             'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
     }
@@ -100,11 +106,31 @@ class CustomerController extends Controller
                 return $this->redirect(['customer/index']);
             }
         }
+        $provinces = Province::find()->all();
+        $cities = City::find()->where(['province_id' => $model->province_id])->all();
+        $wards = Ward::find()->where(['city_id' => $model->city_id])->all();
 
         return $this->render('edit.tpl', [
             'model' => $model,
+            'provinces' => $provinces,
+            'cities' => $cities,
+            'wards' => $wards,
             'back' => $request->get('ref', Url::to(['customer/index']))
         ]);
+    }
+
+    public function actionCities($id)
+    {
+        $model = Province::findOne($id);
+        $cities = $model->cities;
+        return $this->renderJson(true, ['cities' => ArrayHelper::map($cities, 'id', 'name')]);
+    }
+
+    public function actionWards($id)
+    {
+        $model = City::findOne($id);
+        $wards = $model->wards;
+        return $this->renderJson(true, ['wards' => ArrayHelper::map($wards, 'id', 'name')]);
     }
 
     public function actionDelete($id)
