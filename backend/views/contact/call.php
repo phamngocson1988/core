@@ -2,6 +2,7 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+use yii\helpers\ArrayHelper;
 $this->registerCssFile('/vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerCssFile('/vendor/assets/global/plugins/jquery-multi-select/css/multi-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerCssFile('/vendor/assets/global/plugins/select2/css/select2.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -52,7 +53,7 @@ $this->registerJsFile('/vendor/assets/pages/scripts/components-multi-select.min.
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">
-              <?=$form->field($model, 'phone', [
+              <?php /*$form->field($model, 'phone', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->widget(kartik\select2\Select2::classname(), [
@@ -68,13 +69,29 @@ $this->registerJsFile('/vendor/assets/pages/scripts/components-multi-select.min.
                         'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
                     ]
                   ]
-                ])->label('Tìm theo số điện thoại hoặc group')?>
+                ])->label('Tìm theo số điện thoại hoặc group'); */?>
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Nhóm liên hệ</label>
+                  <div class="col-md-6">
+                    <select id="contact-group" class="form-control">
+                      <option value="0">Tất cả</option>
+                      <?php foreach ($groups as $group) :?>
+                      <option value="<?=$group->id;?>" data-contacts="<?=implode(",", (ArrayHelper::getColumn($group->contacts, 'contact_id')));?>"><?=$group->name;?></option>
+                      <?php endforeach;?>
+                    </select>
+                  </div>
+                </div>
 
-                <?=$form->field($model, 'phone', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
-                  'inputOptions' => ['class' => 'form-control multi-select', 'id' => "phones", "multiple" => "multiple"]
-                ])->dropDownList($contacts);?>
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Số điện thoại</label>
+                  <div class="col-md-6">
+                    <select id="phones" class="form-control multi-select" name="phones[]" multiple="multiple">
+                      <?php foreach ($contacts as $contact) :?>
+                      <option value="<?=$contact->id;?>" data-contacts="<?=implode(",", (ArrayHelper::getColumn($contact->groups, 'group_id')));?>"><?=$contact->phone;?></option>
+                      <?php endforeach;?>
+                    </select>
+                  </div>
+                </div>
 
                 <?=$form->field($model, 'dialer_id', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -153,18 +170,28 @@ function incrementSeconds() {
 }
 
 // multiple-select
-$('#phones').multiSelect({
-  // afterSelect: function(values){
-  //   if ($("#phones :selected").length > 2) {
-  //     alert('Bạn chỉ được chọn tối đa 50 giá trị.');
-  //     values.forEach(function(element) {
-  //       $("#phones[value="+element+"]").prop("selected", "");
-  //     });
-  //     return false;
-  //   }
-  // }
+$('#phones').multiSelect();
+$('#contact-group').on('change', function(){
+  var notSelected = $('#phones').find('option:not(:selected)');
+  if ($(this).val() == '0') {
+    notSelected.show();
+  } else {
+    notSelected.hide();
+    var delimeter = ",";
+    var dataContacts = String($(this).find(':selected').data('contacts'));
+    var contacts = dataContacts.split(",");
+    for (var i = 0; i < notSelected.length; i++) {
+      var element = notSelected[i];
+      var value = $(element).prop('value');
+      if (contacts.indexOf(value) == -1) {
+        $("#phones").find(element).hide();
+      } else {
+        $("#phones").find(element).show();
+      }
+    }
+  }
+  $('#phones').multiSelect('refresh');
 });
-
 JS;
 $this->registerJs($script);
 ?>

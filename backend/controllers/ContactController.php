@@ -200,54 +200,66 @@ class ContactController extends Controller
         }, $user->dialers);
         $dialers = array_filter($dialers);
         $dialers = ArrayHelper::map($dialers, 'id', 'number');
-        $contacts = ArrayHelper::map($user->contacts, 'phone', 'phone');
+        $contacts = $user->contacts;
+        $groups = Group::find()->all();
         return $this->render('call', [
             'dialers' => $dialers,
             'contacts' => $contacts,
-            'model' => $model
+            'model' => $model,
+            'groups' => $groups
         ]);
     }
 
     public function actionStartCall()
     {
         $request = Yii::$app->request;
-        $model = new Record();
-        $model->setScenario(Record::SCENARIO_CREATE);
-        $model->user_id = Yii::$app->user->id;
-        $model->dialer_type = Record::DIALER_TYPE_CALL;
-        $model->start_time = date('Y-m-d H:i:s');
-        $model->status = Record::STATUS_CALLING;
-        if ($model->load($request->post()) && $model->save()) {
-            $caller = new Tel4vn();
-            $dialer = $model->dialer;
-            $caller->setSetting($dialer);
-            $result = $caller->call($model->phone);
-            return $this->renderJson(true, ['id' => $model->id, 'calling' => $result, 'params' => $caller->getParams()]);
-        } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        $contactIds = $request->post('phones', []);
+        $contacts = Contact::findAll($contactIds);
+        $phones = ArrayHelper::getColumn($contacts, 'phone');
+        $phones = array_filter($phones);
+        $total = count($phones);
+        $success = $failure = [];
+        foreach ($phones as $phone) {
+            $model = new Record();
+            $model->setScenario(Record::SCENARIO_CREATE);
+            $model->user_id = Yii::$app->user->id;
+            $model->dialer_type = Record::DIALER_TYPE_CALL;
+            $model->start_time = date('Y-m-d H:i:s');
+            $model->status = Record::STATUS_CALLING;
+            $model->phone = $phone;
+            if ($model->load($request->post()) && $model->save()) {
+                $caller = new Tel4vn();
+                $dialer = $model->dialer;
+                $caller->setSetting($dialer);
+                $result = $caller->call($model->phone);
+                $success[] = $phone;
+            } else {
+                $failure[] = $phone;
+            }
         }
+        return $this->renderJson(true, ['total' => $total, 'success' => $success, 'failure' => $failure]);
     }
 
     public function actionEndCall()
     {
         $request = Yii::$app->request;
-        $id = $request->post('id');
-        $model = Record::findOne($id);
-        if (!$model) return;
-        $model->setScenario(Record::SCENARIO_EDIT);
-        $model->end_time = date('Y-m-d H:i:s');
-        $model->status = Record::STATUS_END;
-        $model->save();
-
-        $dialer = CustomerDialer::findOne(['dialer_id' => $model->dialer_id, 'user_id' => Yii::$app->user->id]);
-        $amount = $dialer->call;//$dialer->call / 60 * $model->getDuration();
-        $history = new TransactionHistory();
-        $history->user_id = Yii::$app->user->id;
-        $history->amount = $amount;
-        $history->description = sprintf("Cuộc gọi đến số %s trong %s giây vào lúc %s", $model->phone, $model->getDuration(), $model->created_at);
-        $history->transaction_type = TransactionHistory::TYPE_OUTPUT;
-        $history->created_by = Yii::$app->user->id;
-        $history->save();
+        $models = Record::findAll(['status' => Record::STATUS_CALLING]);
+        foreach ($models as $model) {
+            $model->setScenario(Record::SCENARIO_EDIT);
+            $model->end_time = date('Y-m-d H:i:s');
+            $model->status = Record::STATUS_END;
+            $model->save();
+    
+            $dialer = CustomerDialer::findOne(['dialer_id' => $model->dialer_id, 'user_id' => Yii::$app->user->id]);
+            $amount = $dialer->call;//$dialer->call / 60 * $model->getDuration();
+            $history = new TransactionHistory();
+            $history->user_id = Yii::$app->user->id;
+            $history->amount = $amount;
+            $history->description = sprintf("Cuộc gọi đến số %s trong %s giây vào lúc %s", $model->phone, $model->getDuration(), $model->created_at);
+            $history->transaction_type = TransactionHistory::TYPE_OUTPUT;
+            $history->created_by = Yii::$app->user->id;
+            $history->save();
+        }
         return $this->renderJson(true);
         // Yii::warning('Your browser was closed at ' . date('Y-m-d H:i:s'), 'call');
     }
