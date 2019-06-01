@@ -232,7 +232,7 @@ class ContactController extends Controller
                 $dialer = $model->dialer;
                 $caller->setSetting($dialer);
                 $result = $caller->call($model->phone);
-                $success[] = $phone;
+                $success[$phone] = $result;
             } else {
                 $failure[] = $phone;
             }
