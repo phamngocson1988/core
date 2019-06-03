@@ -174,7 +174,7 @@ class GameController extends Controller
             if ($keyword) {
                 $command = Game::find();
                 $command->where(['<>', 'status', Game::STATUS_DELETE]);
-                if ($q) {
+                if ($keyword) {
                     $command->andWhere(['like', 'title', $keyword]);
                 }
                 $games = $command->offset(0)->limit(20)->all();

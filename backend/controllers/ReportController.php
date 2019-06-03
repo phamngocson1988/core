@@ -54,7 +54,8 @@ class ReportController extends Controller
             'end_date' => $request->get('end_date', date('Y-m-t')),
             'discount_code' => $request->get('discount_code'),
             'user_id' => $request->get('user_id'),
-            'auth_key' => $request->get('auth_key')
+            'auth_key' => $request->get('auth_key'),
+            'is_reseller' => $request->get('is_reseller'),
         ];
         $form = new ReportByTransactionForm($data);
         if ($mode === 'export') {
@@ -192,12 +193,17 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.process.game';
         $request = Yii::$app->request;
         $data = [
+            'limit' => $request->get('limit', '5'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
             'end_date' => $request->get('end_date', date('Y-m-d')),
         ];
         $form = new ReportProcessOrderByGame($data);
         $models = $form->fetch();
+        if ($models === false) {
+            $models = [];
+            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
+        }
 
         return $this->render('process/game', [
             'models' => $models,

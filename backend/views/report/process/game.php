@@ -75,10 +75,27 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/process-game']]);?>
         <div class="row">
+          <?=$form->field($search, 'limit', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'limit', 'id' => 'limit']
+          ])->dropDownList($search->getLimitOptions())->label('Tùy chọn thống kê');?>
+
           <?=$form->field($search, 'game_id', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+          ])->widget(kartik\select2\Select2::classname(), [
+            'initValueText' => ($search->game_id) ? sprintf("%s", $search->getGame()->title) : '',
+            'options' => ['class' => 'form-control', 'name' => 'game_id'],
+            'pluginOptions' => [
+              'placeholder' => 'Chọn game',
+              'allowClear' => true,
+              'minimumInputLength' => 3,
+              'ajax' => [
+                  'url' => Url::to(['game/suggestion']),
+                  'dataType' => 'json',
+                  'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+              ]
+            ]
+          ])->label('Tên game')?>
 
           <div class="form-group col-md-4 col-lg-3">
             <label class="control-label">Ngày tạo</label>

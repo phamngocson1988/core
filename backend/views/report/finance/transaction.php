@@ -5,7 +5,8 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use dosamigos\datepicker\DateRangePicker;
-use common\models\Order;
+use backend\models\Order;
+use common\models\User;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -92,6 +93,11 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               'inputOptions' => ['class' => 'form-control', 'name' => 'auth_key']
             ])->textInput()->label('Mã giao dịch');?>
 
+            <?=$form->field($search, 'is_reseller', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'is_reseller']
+            ])->dropDownList(User::getResellerStatus(),  ['prompt' => 'Tất cả'])->label('Reseller/Khách hàng');?>
+
             <div class="form-group col-md-4 col-lg-3">
               <label class="control-label">Ngày tạo</label>
               <div class="form-control" style="border: none; padding: 0">
@@ -126,8 +132,9 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           <thead>
             <tr>
               <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 20%;"> Thời gian </th>
-              <th style="width: 20%;"> Khách hàng </th>
+              <th style="width: 15%;"> Thời gian </th>
+              <th style="width: 15%;"> Khách hàng </th>
+              <th style="width: 10%;"> Loại khách hàng </th>
               <th style="width: 10%;"> Mã giao dịch </th>
               <th style="width: 10%;"> Khuyến mãi Kcoin</th>
               <th style="width: 10%;"> Số lượng Kcoin</th>
@@ -138,13 +145,14 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td>#<?=($pages->offset + $no + 1)?></td>
                 <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->user->name;?></td>
+                <td style="vertical-align: middle;"><?=($model->user->isReseller()) ? 'Reseller' : 'Customer';?></td>
                 <td style="vertical-align: middle;"><?=$model->auth_key;?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->discount_coin);?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->total_coin);?></td>
@@ -160,7 +168,8 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;"></td>
+              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->count());?></td>
+              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('discount_coin'));?></td>
               <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('total_coin'));?></td>
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;">Tổng: $<?=number_format($search->getCommand()->sum('total_price'));?></td>

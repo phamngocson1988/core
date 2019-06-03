@@ -5,12 +5,14 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\PaymentTransaction;
+use common\models\User;
 
 class ReportByTransactionForm extends PaymentTransaction
 {
     public $start_date;
     public $end_date;
     public $count_order;
+    public $is_reseller;
 
     public function rules()
     {
@@ -137,26 +139,32 @@ class ReportByTransactionForm extends PaymentTransaction
     protected function createCommand()
     {
         $command = self::find();
-        $command->where(["status" => self::STATUS_COMPLETED]);
+        $table = self::tableName();
+        $command->where(["$table.status" => self::STATUS_COMPLETED]);
 
         if ($this->start_date) {
-            $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
+            $command->andWhere(['>=', "$table.created_at", $this->start_date . " 00:00:00"]);
         }
         if ($this->end_date) {
-            $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
+            $command->andWhere(['<=', "$table.created_at", $this->end_date . " 23:59:59"]);
         }
 
         if ($this->user_id) {
-            $command->andWhere(['user_id' => $this->user_id]);
+            $command->andWhere(["$table.user_id" => $this->user_id]);
         }
 
         if ($this->discount_code) {
-            $command->andWhere(['discount_code' => $this->discount_code]);
+            $command->andWhere(["$table.discount_code" => $this->discount_code]);
         }
 
         if ($this->auth_key) {
-            $command->andWhere(['auth_key' => $this->auth_key]);
+            $command->andWhere(["$table.auth_key" => $this->auth_key]);
         }
+
+        if ($this->is_reseller) {
+            $userTable = User::tableName();
+            $command->leftJoin($userTable, "$table.user_id = $userTable.id")->andWhere(["$userTable.is_reseller" => $this->is_reseller]);
+        }//echo $command->createCommand()->getRawSql();die;
         $this->_command = $command;
     }
 
