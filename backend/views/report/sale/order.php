@@ -121,6 +121,11 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
           ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
 
+          <?=$form->field($search, 'agency_id', [
+          'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+          'inputOptions' => ['class' => 'form-control', 'name' => 'agency_id']
+          ])->dropDownList([], ['prompt' => 'Nhập mã đại lý'])->label('Mã đại lý');?>
+
           <div class="form-group col-md-4 col-lg-3">
             <label class="control-label">Ngày tạo</label>
             <div class="form-control" style="border: none; padding: 0">
@@ -150,22 +155,22 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+        <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
               <th style="width: 5%;"> STT </th>
               <th style="width: 10%;"> Mã đơn hàng </th>
-              <th style="width: 15%;"> Khách hàng / Reseller </th>
-              <th style="width: 10%;"> Tên game </th>
+              <th style="width: 20%;"> Khách hàng / Reseller </th>
+              <th style="width: 15%;"> Tên game </th>
               <th style="width: 5%;"> Số gói </th>
               <th style="width: 5%;"> Tổng coin </th>
               <th style="width: 10%;"> Nhân viên sale/đại lý </th>
-              <th style="width: 10%;"> Nhà cung cấp </th>
+              <!-- <th style="width: 10%;"> Nhà cung cấp </th> -->
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
@@ -176,7 +181,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_price;?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"></td>
+                <!-- <td style="vertical-align: middle;"></td> -->
               </tr>
               <?php endforeach;?>
           </tbody>
@@ -189,7 +194,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <td>Tổng: <?=round($search->getCommand()->sum('game_pack'), 1);?></td>
               <td>Tổng: <?=number_format($search->getCommand()->sum('total_price'));?></td>
               <td></td>
-              <td></td>
+              <!-- <td></td> -->
             </tr>
           </tfoot>
         </table>

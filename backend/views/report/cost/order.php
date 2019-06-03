@@ -115,6 +115,21 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
             'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
           ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
 
+          <?=$form->field($search, 'reseller_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'reseller_id']
+          ])->dropDownList([], ['prompt' => 'Tìm theo reseller'])->label('Reseller');?>
+
+          <?=$form->field($search, 'agency_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'agency_id']
+          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo đại lý'])->label('Tên đại lý');?>
+
+          <?=$form->field($search, 'provider_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'provider_id']
+          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo nhà cung cấp'])->label('Tên nhà cung cấp');?>
+
           <div class="form-group col-md-4 col-lg-3">
             <label class="control-label">Ngày tạo</label>
             <div class="form-control" style="border: none; padding: 0">

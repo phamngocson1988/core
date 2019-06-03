@@ -95,6 +95,18 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             ])->hiddenInput()->label(false);?>
           </div>
 
+          <div class='form-group col-md-4 col-lg-3'>
+            <label class='control-label'>Thống kê theo:</label>
+            <div class="clearfix">
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn red <?=($search->period == 'day') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="day"> Ngày </label>
+                <label class="btn red <?=($search->period == 'week') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="week"> Tuần </label>
+                <label class="btn red <?=($search->period == 'month') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="month"> Tháng </label>
+                <label class="btn red <?=($search->period == 'quarter') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="quarter"> Quý </label>
+              </div>
+            </div>
+          </div>
+
           <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
               <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -122,7 +134,26 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
                     <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                    <td style="vertical-align: middle;"><?=$model['date'];?></td>
+                    <td style="vertical-align: middle;">
+                      <?php switch ($search->period) {
+                        case 'quarter':
+                          echo sprintf("Quý %s (%s)", str_pad($model['quarter'], 2, "0", STR_PAD_LEFT), $model['year']);
+                        break;
+                        case 'month':
+                          echo sprintf("Tháng %s (%s)", str_pad($model['month'], 2, "0", STR_PAD_LEFT), $model['year']);
+                          break;
+                        case 'week':
+                          $week = str_pad($model['week'] + 1, 2, "0", STR_PAD_LEFT);
+                          $dateOfWeek = sprintf("%sW%s", $model['year'], $week);
+                          $startWeek = date('Y-m-d',strtotime($dateOfWeek));
+                          $endWeek = date('Y-m-d',strtotime($startWeek . " + 7 days"));
+                          echo sprintf("Tuần %s (%s - %s)", $week, $startWeek, $endWeek);
+                          break;
+                        default:
+                          echo sprintf("%s-%s-%s", $model['year'], str_pad($model['month'], 2, "0", STR_PAD_LEFT)  , str_pad($model['day'], 2, "0", STR_PAD_LEFT));
+                          break;
+                      };?>
+                    </td>
                     <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
                     <td style="vertical-align: middle;"><?=number_format($model['total_price']);?></td>
                 </tr>

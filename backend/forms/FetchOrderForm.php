@@ -20,7 +20,9 @@ class FetchOrderForm extends Model
     public $handler_id;
     public $provider_id;
     public $status;
-
+    public $agency_id;
+    public $reseller_id;
+    
     public function rules()
     {
         return [
@@ -28,7 +30,7 @@ class FetchOrderForm extends Model
             [['game_id', 'customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe'],
             ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d')],
-            ['provider_id', 'safe'],
+            [['provider_id', 'agency_id', 'reseller_id'], 'safe'],
         ];
     }
 

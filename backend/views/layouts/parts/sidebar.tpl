@@ -277,11 +277,21 @@
                   <span class="title">Theo game</span>
                 </a>
               </li>
-              {* <li class="nav-item  ">
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo đại lý</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Theo reseller</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo nhà cung cấp</span>
                 </a>
-              </li> *}
+              </li>
               <li class="nav-item  ">
                 <a href="{url route='/report/process-user'}" class="nav-link nav-toggle" code="report.process.user">
                   <span class="title">Theo nhân viên</span>

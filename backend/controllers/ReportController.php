@@ -266,6 +266,7 @@ class ReportController extends Controller
         $data = [
             'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
             'end_date' => $request->get('end_date', date('Y-m-d')),
+            'period' => $request->get('period', 'day'),
         ];
         $form = new StatisticsByOrderForm($data);
         $command = $form->getCommand();
@@ -291,10 +292,17 @@ class ReportController extends Controller
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
             'end_date' => $request->get('end_date', date('Y-m-d')),
+            'period' => $request->get('period', 'day'),
+            'limit' => $request->get('limit', '5'),
         ];
         $form = new ReportSaleOrderByGame($data);
         $command = $form->getCommand();
-        $models = $command->asArray()->all();
+        $models = $form->fetch();
+        if ($models === false) {
+            $models = [];
+            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
+        }
+
         return $this->render('sale/game', [
             'models' => $models,
             'search' => $form,
@@ -338,6 +346,9 @@ class ReportController extends Controller
             'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
             'end_date' => $request->get('end_date', date('Y-m-d')),
             'status' => $request->get('status'),
+            'agency_id' => $request->get('agency_id'),
+            'provider_id' => $request->get('provider_id'),
+            'reseller_id' => $request->get('reseller_id'),
         ];
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();

@@ -14,8 +14,17 @@ class ReportSaleOrderByGame extends Model
     public $game_id;
     public $start_date;
     public $end_date;
+    public $period;
+    public $limit;
 
+    protected $_game;
     private $_command;
+
+    public function init()
+    {
+        if ($this->limit === null) $this->limit = '5';
+        if ($this->limit != '0') $this->game_id = null;
+    }
 
     public function rules()
     {
@@ -23,13 +32,50 @@ class ReportSaleOrderByGame extends Model
             ['game_id', 'trim'],
             ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d')],
+            ['period', 'default', 'value' => 'day'],
+            ['limit', 'default', 'value' => '5'],
+            ['game_id', 'required', 'when' => function($model) {
+                return $model->limit == 0;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#limit').val() == '0';
+            }",
+            'message' => 'Chọn một game để thống kê'],
         ];
+    }
+
+    public function fetch()
+    {
+        if (!$this->validate()) return false;
+        // Find all game in period
+        $command = $this->getCommand();
+        if ($this->game_id) {
+            return $command->asArray()->all();
+        }
+
+        $command->offset(0);
+        $command->limit($this->limit);
+        $games = $command->asArray()->all();
+       
+        // Other games
+        $otherCommand = $this->getCommand();
+        $otherCommand->andWhere(['NOT IN', 'game_id', array_column($games, 'game_id')]);
+        if ($otherCommand->count()) {
+            $other = [
+                'id' => 'other',
+                'game_id' => 'other_game',
+                'game_title' => 'Game khác',
+                'game_pack' => $otherCommand->sum('game_pack'),
+                'total_price' => $otherCommand->sum('total_price'),
+            ];
+            $games[] = $other;
+        }
+        
+        return $games;
     }
 
     public function showChar()
     {
-        $command = $this->getCommand();
-        $models = $command->asArray()->all();
+        $models = $this->fetch();
         $game_packs = array_map(function($model) { 
           return round($model['game_pack'], 1);
         }, $models);
@@ -87,7 +133,7 @@ class ReportSaleOrderByGame extends Model
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
         $command->groupBy('game_id');
-
+        $command->orderBy(['game_pack' => SORT_DESC]);
         return $command;
     }
 
@@ -110,6 +156,24 @@ class ReportSaleOrderByGame extends Model
         return [
             Order::STATUS_PROCESSING, 
             Order::STATUS_COMPLETED
+        ];
+    }
+
+    public function getGame()
+    {
+        if (!$this->_game) {
+            $this->_game = Game::findOne($this->game_id);
+        }
+        return $this->_game;
+    }
+
+    public function getLimitOptions()
+    {
+        return [
+            '3' => 'Top 3',
+            '5' => 'Top 5',
+            '10' => 'Top 10',
+            '0' => 'Game cụ thể',
         ];
     }
 }
