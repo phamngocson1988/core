@@ -78,7 +78,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
-                'format' => 'yyyy-mm-dd HH:ii',
+                'format' => 'yyyy-mm-dd hh:ii',
                 'minuteStep' => 1,
               ]
           ])->label('Ngày tạo từ');?>
@@ -89,7 +89,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                   'autoclose' => true,
-                  'format' => 'yyyy-mm-dd HH:ii',
+                  'format' => 'yyyy-mm-dd hh:ii',
                   'todayBtn' => true,
                   'minuteStep' => 1,
               ]

@@ -123,7 +123,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
-                'format' => 'yyyy-mm-dd HH:ii',
+                'format' => 'yyyy-mm-dd hh:ii',
                 'minuteStep' => 1,
               ]
           ])->label('Ngày tạo từ');?>
@@ -134,7 +134,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                   'autoclose' => true,
-                  'format' => 'yyyy-mm-dd HH:ii',
+                  'format' => 'yyyy-mm-dd hh:ii',
                   'todayBtn' => true,
                   'minuteStep' => 1,
               ]

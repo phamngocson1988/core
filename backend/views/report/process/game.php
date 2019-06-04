@@ -101,7 +101,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           ])->widget(DateTimePicker::className(), [
             'clientOptions' => [
               'autoclose' => true,
-              'format' => 'yyyy-mm-dd HH:ii',
+              'format' => 'yyyy-mm-dd hh:ii',
               'minuteStep' => 1,
             ]
           ])->label('Ngày tạo từ');?>
@@ -112,7 +112,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                   'autoclose' => true,
-                  'format' => 'yyyy-mm-dd HH:ii',
+                  'format' => 'yyyy-mm-dd hh:ii',
                   'todayBtn' => true,
                   'minuteStep' => 1,
               ]

@@ -73,6 +73,7 @@ class UserController extends Controller
     {
         $this->view->params['main_menu_active'] = 'user.customer';
         $request = Yii::$app->request;
+        $mode = $request->get('mode');
         $data = [
             'created_start' => $request->get('created_start'),
             'created_end' => $request->get('created_end'),
@@ -92,6 +93,10 @@ class UserController extends Controller
             'total_topup_end' => $request->get('total_topup_end'),
         ];
         $form = new FetchCustomerForm($data);
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'danh-sach-khach-hang.xls';
+            return $form->export($fileName);
+        }
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();

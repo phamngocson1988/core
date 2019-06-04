@@ -30,6 +30,7 @@
           <span class="caption-subject bold uppercase"> Quản lý khách hàng</span>
         </div>
         <div class="actions">
+         <!-- <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="{url route='user/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>

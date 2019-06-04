@@ -41,6 +41,119 @@ class FetchCustomerForm extends User
         return $command->all();
     }
 
+    public function export($fileName = null)
+    {
+        $command = $this->getCommand();
+        $fileName = ($fileName) ? $fileName : 'customer-list' . date('His') . '.xlsx';
+        $titles = [
+            'A' => 'Thứ tự',
+            'B' => 'Khách hàng',
+            'C' => 'Ngày sinh',
+            'D' => 'Email',
+            'E' => 'Số điện thoại',
+            'F' => 'Ngày đăng ký',
+            'G' => 'Quốc tịch',
+            'H' => 'Đơn hàng cuối cùng',
+            'I' => 'Tổng tiền nạp',
+            'J' => 'Tổng tiền mua',
+            'K' => 'Reseller / Khách hàng',
+            'L' => 'Đại lý / Người bán hàng',
+        ];
+        $totalRow = $command->count();
+        $startRow = 8;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);
+
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $heading = 'CUSTOMER LIST';
+        $header = [
+            'A2:L2' => sprintf('Ngày tham gia: %s - %s', $this->created_start, $this->created_end),
+            'A3:L3' => sprintf('Sinh nhật: %s - %s', $this->birthday_start, $this->birthday_end),
+            'A4:L4' => sprintf('Có đơn hàng trong khoảng: %s - %s', $this->purchase_start, $this->purchase_end),
+            'A5:L5' => sprintf('Tổng giá trị đơn hàng: %s - %s', $this->total_purchase_start, $this->total_purchase_end),
+            'A5:L6' => sprintf('Quốc gia: %s', Yii::$app->params['country_codes'][$this->country_code]),
+            // 'A5:L5' => sprintf('Đã từng mua game: %s', $this->game->title),
+            // 'A5:L5' => sprintf('Nhân viên bán hàng: %s', $this->game->title),
+            // 'A5:L5' => sprintf('Reseller / khách hàng: %s', $this->game->title),
+        ];
+        $footer = [
+            "F$footerRow" => sprintf('Tổng: %s', $command->sum('total_coin')),
+            "H$footerRow" => sprintf('Tổng: %s', $command->sum('total_price')),
+        ];
+        
+        $data = [];
+        
+        foreach ($command->all() as $no => $model) {
+            $data[] = [
+                $no + 1, 
+                $model->payment_at, 
+                $model->user->name,
+                $model->auth_key,
+                $model->discount_coin,
+                $model->total_coin,
+                $model->discount_price,
+                $model->total_price,
+                $model->status,
+            ];
+        }
+
+        $file = \Yii::createObject([
+            'class' => 'codemix\excelexport\ExcelFile',
+            'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
+            'sheets' => [
+                'Report by transaction' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    'heading' => $heading,
+                    'header' => $header,
+                    'footer' => $footer,
+                    'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+                    'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+                ],
+            ],
+        ]);
+        $file->send($fileName);
+    }
+
     protected function createCommand()
     {
         $userTable = User::tableName();
