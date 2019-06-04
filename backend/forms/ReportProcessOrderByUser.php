@@ -16,12 +16,19 @@ class ReportProcessOrderByUser extends Model
 
     private $_command;
 
+    public function init()
+    {
+        if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
+        if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
+    }
+
     public function rules()
     {
         return [
             ['handler_id', 'trim'],
-            ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
-            ['end_date', 'default', 'value' => date('Y-m-d')],
+            ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
+            ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
+            [['start_date', 'end_date'], 'required'],
         ];
     }
 
@@ -75,10 +82,10 @@ class ReportProcessOrderByUser extends Model
             $command->andWhere(['handler_id' => $this->handler_id]);
         }
         if ($this->start_date) {
-            $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
+            $command->andWhere(['>=', 'created_at', $this->start_date]);
         }
         if ($this->end_date) {
-            $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
+            $command->andWhere(['<=', 'created_at', $this->end_date]);
         }
         return $command;
     }

@@ -27,11 +27,11 @@ use common\components\helpers\FormatConverter;
     </div>
     <div class="row static-info">
       <div class="col-md-5"> Tốc độ xử lý: </div>
-      <div class="col-md-7"> <?=FormatConverter::countDuration($order->getProcessDurationTime());?> </div>
+      <div class="col-md-7"> <?=round($order->getProcessDurationTime() / 60, 1);?> (minutes)</div>
     </div>
     <div class="row static-info">
       <div class="col-md-5"> Trung bình xử lý: </div>
-      <div class="col-md-7"> <?=FormatConverter::countDuration(floor($order->getProcessDurationTime() / $order->getGamePack()));?> / pack</div>
+      <div class="col-md-7"> <?=round(($order->getProcessDurationTime() / 60) / $order->getGamePack(), 1);?> minutes / pack</div>
     </div>
     <?php endif;?>
     <div class="row static-info">

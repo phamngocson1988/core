@@ -24,14 +24,17 @@ class ReportSaleOrderByGame extends Model
     {
         if ($this->limit === null) $this->limit = '5';
         if ($this->limit != '0') $this->game_id = null;
+        if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
+        if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
     }
 
     public function rules()
     {
         return [
             ['game_id', 'trim'],
-            ['start_date', 'default', 'value' => date('Y-m-d', strtotime('-29 days'))],
-            ['end_date', 'default', 'value' => date('Y-m-d')],
+            ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
+            ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
+            [['start_date', 'end_date'], 'required'],
             ['period', 'default', 'value' => 'day'],
             ['limit', 'default', 'value' => '5'],
             ['game_id', 'required', 'when' => function($model) {
@@ -127,10 +130,10 @@ class ReportSaleOrderByGame extends Model
             $command->andWhere(['game_id' => $this->game_id]);
         }
         if ($this->start_date) {
-            $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
+            $command->andWhere(['>=', 'created_at', $this->start_date]);
         }
         if ($this->end_date) {
-            $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
+            $command->andWhere(['<=', 'created_at', $this->end_date]);
         }
         $command->groupBy('game_id');
         $command->orderBy(['game_pack' => SORT_DESC]);

@@ -352,7 +352,7 @@
                   <span class="title">Theo nhân viên bán hàng</span>
                 </a>
               </li>
-              {* <li class="nav-item  ">
+              <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo đại lý</span>
                 </a>
@@ -366,7 +366,7 @@
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo reseller</span>
                 </a>
-              </li> *}
+              </li>
             </ul>
           </li>
           {/if}

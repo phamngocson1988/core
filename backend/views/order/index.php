@@ -219,7 +219,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
+                <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?> minutes</td>
                 
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
@@ -305,6 +305,9 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           </div>
           <div class="col-md-2 col-sm-2">
             <span class="label label-success">Tổng số gói: <?=round($search->getCommand()->sum('game_pack'), 1);?></span>
+          </div>
+          <div class="col-md-2 col-sm-2">
+            <span class="label label-default">Thời gian trung bình: <?=round(($search->getCommand()->sum('process_duration_time') / 60) / $search->getCommand()->sum('game_pack'), 1);?></span>
           </div>
         </div>
       </div>

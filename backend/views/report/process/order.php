@@ -6,16 +6,14 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use dosamigos\datepicker\DateRangePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
+use dosamigos\datetimepicker\DateTimePicker;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
@@ -139,28 +137,30 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
           ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
 
-          <div class="form-group col-md-4 col-lg-3">
-            <label class="control-label">Ngày tạo</label>
-            <div class="form-control" style="border: none; padding: 0">
-                <div id="reportrange" class="btn default">
-                    <i class="fa fa-calendar"></i> &nbsp;
-                    <span> </span>
-                    <b class="fa fa-angle-down"></b>
-                </div>
-            </div>
-            <?=$form->field($search, 'start_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
-            ])->hiddenInput()->label(false);?>
-            <?=$form->field($search, 'end_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
-            ])->hiddenInput()->label(false);?>
-          </div>
-
           
+
+          <?=$form->field($search, 'start_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+            ])->widget(DateTimePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd HH:ii',
+                    'minuteStep' => 1,
+                ]
+            ])->label('Ngày tạo từ');?>
+
+            <?=$form->field($search, 'end_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+            ])->widget(DateTimePicker::className(), [
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd HH:ii',
+                    'todayBtn' => true,
+                    'minuteStep' => 1,
+                ]
+            ])->label('Ngày tạo đến');?>
 
           <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -193,7 +193,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'><?=$model->auth_key;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
-                <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
+                <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?></td>
                 
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
@@ -213,7 +213,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <td style="vertical-align: middle;">Tổng đơn hàng: <?=number_format($totalOrders);?></td>
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;">Tổng gói: <?=round($totalPacks, 1);?></td>
-              <td style="vertical-align: middle;">Thời gian trung bình: <?=FormatConverter::countDuration(floor($averageTime));?></td>
+              <td style="vertical-align: middle;">Thời gian trung bình: <?=round($averageTime / 60, 1);?></td>
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;"></td>
@@ -250,50 +250,6 @@ $('.delete').ajax_action({
     location.reload();
   },
 });
-
-var dateFormat = 'YYYY/MM/DD';//MMMM D, YYYY
-$('#reportrange').daterangepicker({
-    opens: (App.isRTL() ? 'left' : 'right'),
-    startDate: moment($('#start_date').val()),
-    endDate: moment($('#end_date').val()),
-    dateLimit: {
-        days: 90
-    },
-    showDropdowns: true,
-    showWeekNumbers: true,
-    timePicker: false,
-    timePickerIncrement: 1,
-    timePicker12Hour: true,
-    ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-        'Last 7 Days': [moment().subtract('days', 6), moment()],
-        'Last 30 Days': [moment().subtract('days', 29), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-    },
-    buttonClasses: ['btn'],
-    applyClass: 'green',
-    cancelClass: 'default',
-    format: 'MM/DD/YYYY',
-    separator: ' to ',
-    locale: {
-        applyLabel: 'Apply',
-        fromLabel: 'From',
-        toLabel: 'To',
-        customRangeLabel: 'Custom Range',
-        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        firstDay: 1
-    }
-  },
-  function (start, end) {
-      $('#reportrange span').html(start.format(dateFormat) + ' - ' + end.format(dateFormat));
-      $('#start_date').val(start.format('YYYY-MM-DD'));
-      $('#end_date').val(end.format('YYYY-MM-DD'));
-  }
-);
-$('#reportrange span').html(moment($('#start_date').val()).format(dateFormat) + ' - ' + moment($('#end_date').val()).format(dateFormat));
 
 var sendForm = new AjaxFormSubmit({element: '.assign-form'});
 sendForm.success = function (data, form) {

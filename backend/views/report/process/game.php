@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use dosamigos\datepicker\DateRangePicker;
+use dosamigos\datetimepicker\DateTimePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
@@ -15,8 +15,6 @@ use dosamigos\chartjs\ChartJs;
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
@@ -97,25 +95,39 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             ]
           ])->label('Tên game')?>
 
-          <div class="form-group col-md-4 col-lg-3">
-            <label class="control-label">Ngày tạo</label>
-            <div class="form-control" style="border: none; padding: 0">
-                <div id="reportrange" class="btn default">
-                    <i class="fa fa-calendar"></i> &nbsp;
-                    <span> </span>
-                    <b class="fa fa-angle-down"></b>
-                </div>
+          <?=$form->field($search, 'start_date', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+          ])->widget(DateTimePicker::className(), [
+            'clientOptions' => [
+              'autoclose' => true,
+              'format' => 'yyyy-mm-dd HH:ii',
+              'minuteStep' => 1,
+            ]
+          ])->label('Ngày tạo từ');?>
+
+          <?=$form->field($search, 'end_date', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+          ])->widget(DateTimePicker::className(), [
+              'clientOptions' => [
+                  'autoclose' => true,
+                  'format' => 'yyyy-mm-dd HH:ii',
+                  'todayBtn' => true,
+                  'minuteStep' => 1,
+              ]
+          ])->label('Ngày tạo đến');?>
+
+          <div class='form-group col-md-4 col-lg-3'>
+            <label class='control-label'>Thống kê theo:</label>
+            <div class="clearfix">
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn red <?=($search->period == 'day') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="day"> Ngày </label>
+                <label class="btn red <?=($search->period == 'week') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="week"> Tuần </label>
+                <label class="btn red <?=($search->period == 'month') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="month"> Tháng </label>
+                <label class="btn red <?=($search->period == 'quarter') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="quarter"> Quý </label>
+              </div>
             </div>
-            <?=$form->field($search, 'start_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'start_date', 'name' => 'start_date']
-            ])->hiddenInput()->label(false);?>
-            <?=$form->field($search, 'end_date', [
-              'template' => '{input}',
-              'options' => ['tag' => false],
-              'inputOptions' => ['id' => 'end_date', 'name' => 'end_date']
-            ])->hiddenInput()->label(false);?>
           </div>
 
           <div class="form-group col-md-4 col-lg-3">
@@ -131,85 +143,35 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
               <thead>
                 <tr>
+                  <th style="width: 20%;"> Ngày thống kê </th>
                   <th style="width: 30%;"> Tên game </th>
                   <th style="width: 20%;"> Số lượng gói </th>
                   <th style="width: 20%;"> Tỷ lệ hoàn thành </th>
-                  <th style="width: 30%;"> Thời gian xử lý trung bình </th>
+                  <th style="width: 10%;"> Thời gian xử lý trung bình </th>
                 </tr>
               </thead>
               <tbody>
                   <?php if (!$models) :?>
-                  <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                  <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
                   <?php endif;?>
-                  <?php foreach ($models as $no => $model) :?>
+                  <?php foreach ($models as $date => $records) :?>
+                  <?php foreach (array_values($records) as $no => $model) :?>
                   <tr>
+                    <?php if (!$no) :?>
+                    <td rowspan="<?=count($records);?>"><?=$date;?></td>
+                    <?php endif;?>
                     <td style="vertical-align: middle;"><?=$model['game_title'];?></td>
                     <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
                     <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
                     <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
                   </tr>
                   <?php endforeach;?>
+                  <?php endforeach;?>
               </tbody>
             </table>
           </div>
           <div class="col-md-6">
-            <?php
-            $game_packs = array_map(function($item) { 
-              return round($item['game_pack'], 1);
-            }, $models);
-            $completed_rates = array_map(function($item) { 
-              return round($item['completed_rate'], 1);
-            }, $models);
-            $avarage_times = array_map(function($item) { 
-              return round($item['avarage_time']);
-            }, $models);
-            $labels = array_column($models, 'game_title');
-            $datasets = [
-                [
-                    'label' => "Thời gian xử lý trung bình",
-                    'backgroundColor' => "rgba(54,198,211,0.2)",
-                    'borderColor' => "rgba(54,198,211,1)",
-                    'pointBackgroundColor' => "rgba(54,198,211,1)",
-                    'pointBorderColor' => "#fff",
-                    'pointHoverBackgroundColor' => "#fff",
-                    'pointHoverBorderColor' => "rgba(54,198,211,1)",
-                    'data' => array_values($game_packs)
-                ],
-                [
-                    'label' => "Tỷ lệ hoàn thành",
-                    'backgroundColor' => "rgba(255,99,132,0.2)",
-                    'borderColor' => "rgba(255,99,132,1)",
-                    'pointBackgroundColor' => "rgba(255,99,132,1)",
-                    'pointBorderColor' => "#fff",
-                    'pointHoverBackgroundColor' => "#fff",
-                    'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                    'data' => array_values($completed_rates)
-                ],
-                [
-                    'label' => "Số lượng gói",
-                    'backgroundColor' => "rgba(179,181,198,0.2)",
-                    'borderColor' => "rgba(179,181,198,1)",
-                    'pointBackgroundColor' => "rgba(179,181,198,1)",
-                    'pointBorderColor' => "#fff",
-                    'pointHoverBackgroundColor' => "#fff",
-                    'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                    'data' => array_values($avarage_times)
-                ],
-                
-            ];
-            ?>
-            <?= ChartJs::widget([
-              'type' => 'bar',
-              'options' => [
-                  'height' => 200,
-                  'width' => 400
-              ],
-              'data' => [
-                  'labels' => $labels,
-                  'datasets' => $datasets
-              ]
-          ]);
-          ?>
+            
           </div>
         </div>
         <?php Pjax::end(); ?>
@@ -240,50 +202,6 @@ $('.delete').ajax_action({
     location.reload();
   },
 });
-
-var dateFormat = 'YYYY/MM/DD';//MMMM D, YYYY
-$('#reportrange').daterangepicker({
-    opens: (App.isRTL() ? 'left' : 'right'),
-    startDate: moment($('#start_date').val()),
-    endDate: moment($('#end_date').val()),
-    dateLimit: {
-        days: 90
-    },
-    showDropdowns: true,
-    showWeekNumbers: true,
-    timePicker: false,
-    timePickerIncrement: 1,
-    timePicker12Hour: true,
-    ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-        'Last 7 Days': [moment().subtract('days', 6), moment()],
-        'Last 30 Days': [moment().subtract('days', 29), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-    },
-    buttonClasses: ['btn'],
-    applyClass: 'green',
-    cancelClass: 'default',
-    format: 'MM/DD/YYYY',
-    separator: ' to ',
-    locale: {
-        applyLabel: 'Apply',
-        fromLabel: 'From',
-        toLabel: 'To',
-        customRangeLabel: 'Custom Range',
-        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        firstDay: 1
-    }
-  },
-  function (start, end) {
-      $('#reportrange span').html(start.format(dateFormat) + ' - ' + end.format(dateFormat));
-      $('#start_date').val(start.format('YYYY-MM-DD'));
-      $('#end_date').val(end.format('YYYY-MM-DD'));
-  }
-);
-$('#reportrange span').html(moment($('#start_date').val()).format(dateFormat) + ' - ' + moment($('#end_date').val()).format(dateFormat));
 
 var sendForm = new AjaxFormSubmit({element: '.assign-form'});
 sendForm.success = function (data, form) {

@@ -50,8 +50,8 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $mode = $request->get('mode');
         $data = [
-            'start_date' => $request->get('start_date', date('Y-m-01')),
-            'end_date' => $request->get('end_date', date('Y-m-t')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'discount_code' => $request->get('discount_code'),
             'user_id' => $request->get('user_id'),
             'auth_key' => $request->get('auth_key'),
@@ -80,8 +80,8 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.finance.transaction';
         $request = Yii::$app->request;
         $data = [
-            'start_date' => $request->get('start_date', date('Y-m-01')),
-            'end_date' => $request->get('end_date', date('Y-m-t')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'period' => $request->get('period', 'day'),
         ];
         $form = new StatisticsByTransactionForm($data);
@@ -98,8 +98,8 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.finance.balance';
         $request = Yii::$app->request;
 
-        $start_date = $request->get('start_date', date('Y-m-01'));
-        $end_date = $request->get('end_date', date('Y-m-t'));
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
         $user_id = $request->get('user_id');
         $mode = $request->get('mode');
         
@@ -168,8 +168,8 @@ class ReportController extends Controller
             'saler_id' => $request->get('saler_id'),
             'handler_id' => $request->get('handler_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'status' => $request->get('status'),
         ];
         $form = new FetchOrderForm($data);
@@ -195,8 +195,9 @@ class ReportController extends Controller
         $data = [
             'limit' => $request->get('limit', '5'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'period' => $request->get('period'),
         ];
         $form = new ReportProcessOrderByGame($data);
         $models = $form->fetch();
@@ -204,7 +205,7 @@ class ReportController extends Controller
             $models = [];
             Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
         }
-
+print_r($models);die;
         return $this->render('process/game', [
             'models' => $models,
             'search' => $form,
@@ -218,8 +219,8 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $data = [
             'handler_id' => $request->get('handler_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
         ];
         $form = new ReportProcessOrderByUser($data);
         $models = $form->fetch();
@@ -239,8 +240,8 @@ class ReportController extends Controller
             'q' => $request->get('q'),
             'saler_id' => $request->get('saler_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'status' => [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED]
         ];
         $form = new FetchOrderForm($data);
@@ -264,8 +265,8 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.sale.order';
         $request = Yii::$app->request;
         $data = [
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'period' => $request->get('period', 'day'),
         ];
         $form = new StatisticsByOrderForm($data);
@@ -290,8 +291,8 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $data = [
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'period' => $request->get('period', 'day'),
             'limit' => $request->get('limit', '5'),
         ];
@@ -315,8 +316,8 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.sale.user';
         $request = Yii::$app->request;
         $data = [
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'status' => $request->get('status'),
         ];
         $form = new FetchMyOrderForm($data);
@@ -343,8 +344,8 @@ class ReportController extends Controller
             'saler_id' => $request->get('saler_id'),
             'handler_id' => $request->get('handler_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'status' => $request->get('status'),
             'agency_id' => $request->get('agency_id'),
             'provider_id' => $request->get('provider_id'),
@@ -371,8 +372,8 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.cost.order';
         $request = Yii::$app->request;
         $data = [
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
         ];
         $form = new StatisticsByOrderForm($data);
         $command = $form->getCommand();
@@ -396,8 +397,9 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $data = [
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'limit' => $request->get('limit', '5'),
         ];
         $form = new ReportSaleOrderByGame($data);
         $command = $form->getCommand();
@@ -416,8 +418,8 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $data = [
             'saler_id' => $request->get('saler_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
         ];
         $form = new ReportCostOrderBySaler($data);
         $models = $form->getCommand()->asArray()->all();

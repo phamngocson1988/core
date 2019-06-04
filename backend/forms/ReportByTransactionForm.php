@@ -14,11 +14,18 @@ class ReportByTransactionForm extends PaymentTransaction
     public $count_order;
     public $is_reseller;
 
+    public function init()
+    {
+        if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
+        if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
+    }
+
     public function rules()
     {
         return [
-            ['start_date', 'default', 'value' => date('Y-m-01')],
-            ['end_date', 'default', 'value' => date('Y-m-t')],
+            ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
+            ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
+            [['start_date', 'end_date'], 'required'],
         ];
     }
 
@@ -143,10 +150,10 @@ class ReportByTransactionForm extends PaymentTransaction
         $command->where(["$table.status" => self::STATUS_COMPLETED]);
 
         if ($this->start_date) {
-            $command->andWhere(['>=', "$table.created_at", $this->start_date . " 00:00:00"]);
+            $command->andWhere(['>=', "$table.created_at", $this->start_date]);
         }
         if ($this->end_date) {
-            $command->andWhere(['<=', "$table.created_at", $this->end_date . " 23:59:59"]);
+            $command->andWhere(['<=', "$table.created_at", $this->end_date]);
         }
 
         if ($this->user_id) {

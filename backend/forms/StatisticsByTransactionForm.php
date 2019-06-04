@@ -14,11 +14,18 @@ class StatisticsByTransactionForm extends Model
     public $end_date;
     public $period;
 
+    public function init()
+    {
+        if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
+        if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
+    }
+
     public function rules()
     {
         return [
-            ['start_date', 'default', 'value' => date('Y-m-01')],
-            ['end_date', 'default', 'value' => date('Y-m-t')],
+            ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
+            ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
+            [['start_date', 'end_date'], 'required'],
             ['period', 'default', 'value' => 'day']
         ];
     }
