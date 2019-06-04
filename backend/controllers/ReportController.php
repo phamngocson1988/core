@@ -205,7 +205,7 @@ class ReportController extends Controller
             $models = [];
             Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
         }
-print_r($models);die;
+
         return $this->render('process/game', [
             'models' => $models,
             'search' => $form,

@@ -52,17 +52,76 @@ class ReportProcessOrderByGame extends Model
         if (!$this->validate()) return false;
         $gameIds = $this->filterTopGames();
         $games = $this->statByGame($gameIds);
+        if ($this->game_id) return $games;
         // Other games
         $others = $this->statByOtherGames($gameIds);
         $games = array_merge_recursive($games, $others);
         return $games;
     }
 
+    // public function showChart()
+    // {
+    //     $games = $this->fetch();
+    //     $game_packs = array_map(function($item) { 
+    //       return round($item['game_pack'], 1);
+    //     }, $games);
+    //     $completed_rates = array_map(function($item) { 
+    //       return round($item['completed_rate'], 1);
+    //     }, $games);
+    //     $avarage_times = array_map(function($item) { 
+    //       return round($item['avarage_time']);
+    //     }, $games);
+    //     $labels = array_column($games, 'game_title');
+    //     $datasets = [
+    //         [
+    //             'label' => "Thời gian xử lý trung bình",
+    //             'backgroundColor' => "rgba(54,198,211,0.2)",
+    //             'borderColor' => "rgba(54,198,211,1)",
+    //             'pointBackgroundColor' => "rgba(54,198,211,1)",
+    //             'pointBorderColor' => "#fff",
+    //             'pointHoverBackgroundColor' => "#fff",
+    //             'pointHoverBorderColor' => "rgba(54,198,211,1)",
+    //             'data' => array_values($game_packs)
+    //         ],
+    //         [
+    //             'label' => "Tỷ lệ hoàn thành",
+    //             'backgroundColor' => "rgba(255,99,132,0.2)",
+    //             'borderColor' => "rgba(255,99,132,1)",
+    //             'pointBackgroundColor' => "rgba(255,99,132,1)",
+    //             'pointBorderColor' => "#fff",
+    //             'pointHoverBackgroundColor' => "#fff",
+    //             'pointHoverBorderColor' => "rgba(255,99,132,1)",
+    //             'data' => array_values($completed_rates)
+    //         ],
+    //         [
+    //             'label' => "Số lượng gói",
+    //             'backgroundColor' => "rgba(179,181,198,0.2)",
+    //             'borderColor' => "rgba(179,181,198,1)",
+    //             'pointBackgroundColor' => "rgba(179,181,198,1)",
+    //             'pointBorderColor' => "#fff",
+    //             'pointHoverBackgroundColor' => "#fff",
+    //             'pointHoverBorderColor' => "rgba(179,181,198,1)",
+    //             'data' => array_values($avarage_times)
+    //         ],
+            
+    //     ];
+    //     return ChartJs::widget([
+    //       'type' => 'bar',
+    //       'options' => [
+    //           'height' => 200,
+    //           'width' => 400
+    //       ],
+    //       'data' => [
+    //           'labels' => $labels,
+    //           'datasets' => $datasets
+    //       ]
+    //   ]);
+    // }
+
     public function createCommand()
     {
         $command = Order::find();
         $command->where(['BETWEEN', 'created_at', $this->start_date, $this->end_date]);
-        $command->orderBy(['game_pack' => SORT_DESC]);
         return $command;
     }
 
@@ -82,6 +141,7 @@ class ReportProcessOrderByGame extends Model
         $command = $this->getCommand();
         $command->select(['id', 'game_id', 'SUM(game_pack) as game_pack']);
         $command->andWhere(['IN', 'status', $status]);
+        $command->orderBy(['game_pack' => SORT_DESC]);
         $command->offset(0);
         $command->limit($this->limit);
         $games = $command->asArray()->all();
@@ -92,9 +152,10 @@ class ReportProcessOrderByGame extends Model
     {
         $status = $this->availabelStatus();
         $command = $this->getCommand();
-        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'status'], [$this->getSelectByPeriod()]));
+        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(process_duration_time) as process_duration_time', 'status'], [$this->getSelectByPeriod()]));
         $command->andWhere(['IN', 'status', $status]);
         $command->andWhere(['IN', 'game_id', $gameIds]);
+        $command->orderBy(['created_at' => SORT_ASC]);
         $command->groupBy([$this->getGroupByPeriod(), 'game_id', 'status']);
         $reports = $command->asArray()->all();
         $filterColumn = $this->filter_column;
@@ -124,7 +185,7 @@ class ReportProcessOrderByGame extends Model
                 $totalPackage = array_sum(array_column($reportByGame, 'game_pack'));
                 $rate = (!$completedCount) ? 0 : $completedCount / ($completedCount + $penddingCount) * 100;
                 $avarageTime = (!$completedCount) ? 0 : $totalProcessTime / ($completedCount * 60); //mins
-                
+
                 $gameInfo = reset($reportByGame);
                 $games[$date][$gameId]['game_title'] = $gameInfo['game_title'];
                 $games[$date][$gameId]['game_pack'] = $totalPackage;
@@ -139,9 +200,10 @@ class ReportProcessOrderByGame extends Model
     {
         $status = $this->availabelStatus();
         $command = $this->getCommand();
-        $command->select(array_merge(['SUM(game_pack) as game_pack', 'status'], [$this->getSelectByPeriod()]));
+        $command->select(array_merge(['SUM(game_pack) as game_pack', 'SUM(process_duration_time) as process_duration_time', 'status'], [$this->getSelectByPeriod()]));
         $command->andWhere(['IN', 'status', $status]);
         $command->andWhere(['NOT IN', 'game_id', $gameIds]);
+        $command->orderBy(['created_at' => SORT_ASC]);
         $command->groupBy([$this->getGroupByPeriod(), 'status']);
         $reports = $command->asArray()->all();
         $filterColumn = $this->filter_column;
@@ -244,6 +306,25 @@ class ReportProcessOrderByGame extends Model
                 $group = "CONCAT_WS('-', YEAR(created_at), MONTH(created_at), DAY(created_at))";
                 // $group = ['year', 'month', 'day'];
                 break;
+        }
+        return $group;
+    }
+
+    public function getLabelByPeriod($label)
+    {
+        switch ($this->period) {
+            case 'quarter':
+                list($year, $quarter) = explode("-", $label);
+                return sprintf("Qúy %s / %s", $quarter, $year);
+            case 'month':
+                list($year, $month) = explode("-", $label);
+                return sprintf("Tháng %s / %s", str_pad($month, 2, "0", STR_PAD_LEFT), $year);
+            case 'week': 
+                list($year, $week) = explode("-", $label);
+                return sprintf("Tuần %s / %s", $week + 1, $year);
+            default: //day
+                list($year, $month, $day) = explode("-", $label);
+                return sprintf("%s-%s-%s", $year, str_pad($month, 2, "0", STR_PAD_LEFT), str_pad($day, 2, "0", STR_PAD_LEFT));
         }
         return $group;
     }

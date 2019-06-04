@@ -158,9 +158,9 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   <?php foreach (array_values($records) as $no => $model) :?>
                   <tr>
                     <?php if (!$no) :?>
-                    <td rowspan="<?=count($records);?>"><?=$date;?></td>
+                    <td rowspan="<?=count($records);?>" style="vertical-align: middle;"><?=$search->getLabelByPeriod($date);?></td>
                     <?php endif;?>
-                    <td style="vertical-align: middle;"><?=$model['game_title'];?></td>
+                    <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$model['game_title'];?></td>
                     <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
                     <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
                     <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
