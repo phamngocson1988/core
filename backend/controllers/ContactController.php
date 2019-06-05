@@ -231,7 +231,7 @@ class ContactController extends Controller
                 $caller = new Tel4vn();
                 $dialer = $model->dialer;
                 $caller->setSetting($dialer);
-                $result = $caller->call($model->phone);
+                $result = $caller->call($model->phone, $model->message);
                 $success[$phone] = $result;
             } else {
                 $failure[] = $phone;
@@ -319,5 +319,97 @@ class ContactController extends Controller
             'search' => $search,
             'customer_id' => $id
         ]);
+    }
+
+    public function actionGetVoice()
+    {
+        $request = Yii::$app->request;
+        $enable_jsonp    = false;
+        $enable_native   = true;
+        $valid_url_regex = '/.*/';
+        // ############################################################################
+        //$url = $_GET['url'];
+        $qt = urlencode($_GET['t']);
+        $ql = urlencode($_GET['tl']);
+        $qv = urlencode($_GET['sv']);
+        $qn = urlencode($_GET['vn']);
+        $pitch = urlencode($_GET['pitch']);
+        $rate = urlencode($_GET['rate']);
+        $vol = urlencode($_GET['vol']);
+        //die($qt);
+        if ( empty($qv) ) {
+          //$url = ('https://translate.google.com/translate_tts?ie=UTF-8&q=' . ($qt) . '&tl=' . $ql);
+          $url = ('https://www.google.com/speech-api/v1/synthesize?ie=UTF-8&text=' . ($qt) . '&lang=' . $ql . '&pitch=' . $pitch . '&speed=' . $rate . '&vol=' . $vol);
+          // die($url);
+          } elseif ($qv == "g1") {
+          $url = ('https://www.google.com/speech-api/v1/synthesize?ie=UTF-8&text=' . ($qt) . '&lang=' . $ql . '&name=' . $qn . '&pitch=' . $pitch . '&speed=' . $rate . '&vol=' . $vol);
+        } elseif ($qv == "tts-api") {
+          $url = ('http://tts-api.com/tts.mp3?q=' . ($qt) );
+        }
+        if ( !$url ) {
+          
+          // Passed url not specified.
+          $contents = 'ERROR: url not specified';
+          $status = array( 'http_code' => 'ERROR' );
+          
+        } else if ( !preg_match( $valid_url_regex, $url ) ) {
+          
+          // Passed url doesn't match $valid_url_regex.
+          $contents = 'ERROR: invalid url';
+          $status = array( 'http_code' => 'ERROR' );
+          
+        } else {
+          $ch = curl_init( $url );
+          
+          if ( strtolower($_SERVER['REQUEST_METHOD']) == 'post' ) {
+            curl_setopt( $ch, CURLOPT_POST, true );
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, $_POST );
+          }
+          
+          if ( $request->get('send_cookies') ) {
+            $cookie = array();
+            foreach ( $_COOKIE as $key => $value ) {
+              $cookie[] = $key . '=' . $value;
+            }
+            if ( $request->get('send_session') ) {
+              $cookie[] = SID;
+            }
+            $cookie = implode( '; ', $cookie );
+            
+            curl_setopt( $ch, CURLOPT_COOKIE, $cookie );
+          }
+          
+          curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+          curl_setopt( $ch, CURLOPT_HEADER, true );
+          curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+          $user_agent = $request->get('user_agent');
+          curl_setopt( $ch, CURLOPT_USERAGENT, ($user_agent) ? $user_agent : $_SERVER['HTTP_USER_AGENT'] );
+          
+          list( $header, $contents ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+          
+          $status = curl_getinfo( $ch );
+          
+          curl_close( $ch );
+        }
+        // Split header text into an array.
+        $header_text = preg_split( '/[\r\n]+/', $header );
+        if ( !$enable_native ) {
+            $contents = 'ERROR: invalid mode';
+            $status = array( 'http_code' => 'ERROR' );
+        }
+          
+        // Propagate headers to response.
+        foreach ( $header_text as $header ) {
+            if ( preg_match( '/^(?:Content-Type|Content-Language|Set-Cookie):/i', $header ) ) {
+              header( $header );
+            }
+        }
+        // eader('Content-type: text/plain');
+
+        print_r($contents);
+
+        exit;
+        // return $this->renderPartial('get-voice', ['contents' => $contents]);
+        // return $this->renderContent($contents);
     }
 }
