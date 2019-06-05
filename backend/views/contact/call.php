@@ -61,6 +61,10 @@ $this->registerJsFile('@web/vendor/assets/pages/scripts/components-multi-select.
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">
+                <?=$form->field($model, 'message', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->textArea();?>
                 <div class="form-group">
                   <label class="col-md-2 control-label">Nhóm liên hệ</label>
                   <div class="col-md-6">

@@ -28,8 +28,9 @@ class Tel4vn
 		$param = array(
 			'extension' => $phone,
 			'caller_id_number' => $this->_setting->number,
-			'destination' => $this->_setting->extend,
-			'domain' => $this->_setting->domain
+			'destination' => $this->_setting->extend . Yii::$app->user->id,
+			'domain' => $this->_setting->domain,
+			'audio' => 'http://quanly.tudongdoanhnghiep.com/backend/web/files/wav/$id-user/[tenfile]'
 		);
 		Yii::debug($this->server);
 		Yii::debug($param);

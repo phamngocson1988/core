@@ -26,7 +26,7 @@ class Record extends ActiveRecord
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['user_id', 'dialer_id', 'dialer_type', 'start_time', 'phone', 'status'],
+            self::SCENARIO_CREATE => ['user_id', 'dialer_id', 'dialer_type', 'start_time', 'phone', 'message', 'status'],
             self::SCENARIO_EDIT => ['id', 'end_time', 'status'],
         ];
     }
@@ -34,7 +34,7 @@ class Record extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'dialer_id', 'dialer_type', 'start_time', 'phone', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['user_id', 'dialer_id', 'dialer_type', 'start_time', 'phone', 'message', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
             [['id', 'end_time', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
         ];
     }
