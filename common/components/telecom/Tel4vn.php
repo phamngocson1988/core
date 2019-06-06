@@ -3,6 +3,7 @@ namespace common\components\telecom;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\FileHelper;
 
 class Tel4vn 
 {
@@ -60,7 +61,7 @@ class Tel4vn
 
 	private static function execConvertWav($mp3File, $wavFile)
 	{
-		$temp = dirname($mp3File) . '/' . basename($mp3File, ".mp3") . ".wav";
+		$temp = dirname($mp3File) . '/' . basename($mp3File, ".mp3") . "-temp.wav";
 		$decode = "lame --decode $mp3File $temp";
 		exec($decode);
 		$cmd = "sox $temp -r 8000 -c  1 $wavFile";
@@ -81,11 +82,12 @@ class Tel4vn
 		$wav = Yii::getAlias("@backend/web/files/wav/$userId/$phone.wav");
 		@unlink($mp3);
 		@unlink($wav);
+		if (!file_exists(dirname($mp3))) FileHelper::createDirectory(dirname($mp3)); 
 	    $fp = fopen( $mp3, 'ab' );
 	    fwrite( $fp, $output );
 	    fclose( $fp );
 	    self::execConvertWav($mp3, $wav);
-		// @unlink($mp3);
+		@unlink($mp3);
 	}
 
 	private static function getAudioData($message)
