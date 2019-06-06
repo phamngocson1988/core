@@ -58,20 +58,6 @@ class Tel4vn
 		return $this->_params;
 	}
 
-	private static function generateAudio($content)
-	{
-		$params = [];
-		$params['t'] = $content;
-		$params['tl'] = 'vi';
-		$params['pitch'] = '0.5';
-		$params['rate'] = '0.5';
-		$params['vol'] = '1';
-		$params['sv'] = '';
-		$params['vn'] = '';	
-		return Url::to(array_merge(['contact/get-voice'], $params), true);
-		// return sprintf("%s?%s", 'http://localhost:8080/docchu/getvoice.php', http_build_query($params));
-	}
-
 	private static function execConvertWav($mp3File, $wavFile)
 	{
 		$temp = dirname($mp3File) . '/' . basename($mp3File, ".mp3") . ".wav";
@@ -89,23 +75,91 @@ class Tel4vn
 	 */
 	private static function downloadMP3($phone, $content)
 	{    
-		$url = self::generateAudio($content);
+		$output = self::getAudioData($content);
 		$userId = Yii::$app->user->id;
 		$mp3 = Yii::getAlias("@backend/web/files/wav/$userId/$phone.mp3");
 		$wav = Yii::getAlias("@backend/web/files/wav/$userId/$phone.wav");
-		$agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322)';
-		$curl = curl_init();
-	    curl_setopt( $curl, CURLOPT_URL, $url );
-	    curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
-		curl_setopt( $curl, CURLOPT_CONNECTTIMEOUT, 0 );
-		curl_setopt( $curl, CURLOPT_USERAGENT, $agent);
-	    $output = curl_exec( $curl );    
-	    curl_close( $curl );
+		@unlink($mp3);
+		@unlink($wav);
 	    $fp = fopen( $mp3, 'ab' );
 	    fwrite( $fp, $output );
 	    fclose( $fp );
-	    // self::execConvertWav($mp3, $wav);
+	    self::execConvertWav($mp3, $wav);
 		// @unlink($mp3);
+	}
+
+	private static function getAudioData($message)
+	{
+		$params = [];
+		$params['t'] = $message;
+		$params['tl'] = 'vi';
+		$params['pitch'] = '0.5';
+		$params['rate'] = '0.5';
+		$params['vol'] = '1';
+		$params['sv'] = '';
+		$params['vn'] = '';	
+		$enable_jsonp    = false;
+		$enable_native   = true;
+		$valid_url_regex = '/.*/';
+		// ############################################################################
+		//$url = $_GET['url'];
+		$qt = urlencode($params['t']);
+		$ql = urlencode($params['tl']);
+		$qv = urlencode($params['sv']);
+		$qn = urlencode($params['vn']);
+		$pitch = urlencode($params['pitch']);
+		$rate = urlencode($params['rate']);
+		$vol = urlencode($params['vol']);
+		//die($qt);
+		if ( empty($qv) ) {
+		//$url = ('https://translate.google.com/translate_tts?ie=UTF-8&q=' . ($qt) . '&tl=' . $ql);
+		$url = ('https://www.google.com/speech-api/v1/synthesize?ie=UTF-8&text=' . ($qt) . '&lang=' . $ql . '&pitch=' . $pitch . '&speed=' . $rate . '&vol=' . $vol);
+		//die($url);
+		} elseif ($qv == "g1") {
+		$url = ('https://www.google.com/speech-api/v1/synthesize?ie=UTF-8&text=' . ($qt) . '&lang=' . $ql . '&name=' . $qn . '&pitch=' . $pitch . '&speed=' . $rate . '&vol=' . $vol);
+		} elseif ($qv == "tts-api") {
+		$url = ('http://tts-api.com/tts.mp3?q=' . ($qt) );
+		}
+		if ( !$url ) {
+		
+		// Passed url not specified.
+		$contents = 'ERROR: url not specified';
+		$status = array( 'http_code' => 'ERROR' );
+		
+		} else if ( !preg_match( $valid_url_regex, $url ) ) {
+		
+		// Passed url doesn't match $valid_url_regex.
+		$contents = 'ERROR: invalid url';
+		$status = array( 'http_code' => 'ERROR' );
+		
+		} else {
+		$ch = curl_init( $url );
+		
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+		curl_setopt( $ch, CURLOPT_HEADER, true );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		
+		curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
+		
+		list( $header, $contents ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+		
+		$status = curl_getinfo( $ch );
+		
+		curl_close( $ch );
+		}
+		// Split header text into an array.
+		$header_text = preg_split( '/[\r\n]+/', $header );
+		if ( !$enable_native ) {
+			$contents = 'ERROR: invalid mode';
+			$status = array( 'http_code' => 'ERROR' );
+		}
+		
+		// Propagate headers to response.
+		foreach ( $header_text as $header ) {
+			if ( preg_match( '/^(?:Content-Type|Content-Language|Set-Cookie):/i', $header ) ) {
+			header( $header );
+			}
+		}
+		return $contents;
 	}
 }
