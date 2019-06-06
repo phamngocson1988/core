@@ -92,8 +92,8 @@ class OrderController extends Controller
             'provider_id' => $request->get('provider_id'),
             'handler_id' => $request->get('handler_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date', date('Y-m-d', strtotime('-29 days'))),
-            'end_date' => $request->get('end_date', date('Y-m-d')),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'status' => $request->get('status'),
         ];
         $form = new FetchOrderForm($data);

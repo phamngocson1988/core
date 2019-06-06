@@ -60,7 +60,7 @@ class FetchCustomerForm extends User
             'L' => 'Đại lý / Người bán hàng',
         ];
         $totalRow = $command->count();
-        $startRow = 8;
+        $startRow = 10;
         $endRow = $startRow + $totalRow;
         $footerRow = $endRow + 1;
         $columns = array_keys($titles);
@@ -72,34 +72,40 @@ class FetchCustomerForm extends User
         $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
 
         $heading = 'CUSTOMER LIST';
+        $game = Game::findOne($this->game_id);
+        $saler = User::findOne($this->saler_id);
+        $resellerStatus = self::getResellerStatus();
+        $customerType = ArrayHelper::getValue($resellerStatus, $this->is_reseller, '');
         $header = [
             'A2:L2' => sprintf('Ngày tham gia: %s - %s', $this->created_start, $this->created_end),
             'A3:L3' => sprintf('Sinh nhật: %s - %s', $this->birthday_start, $this->birthday_end),
             'A4:L4' => sprintf('Có đơn hàng trong khoảng: %s - %s', $this->purchase_start, $this->purchase_end),
             'A5:L5' => sprintf('Tổng giá trị đơn hàng: %s - %s', $this->total_purchase_start, $this->total_purchase_end),
-            'A5:L6' => sprintf('Quốc gia: %s', Yii::$app->params['country_codes'][$this->country_code]),
-            // 'A5:L5' => sprintf('Đã từng mua game: %s', $this->game->title),
-            // 'A5:L5' => sprintf('Nhân viên bán hàng: %s', $this->game->title),
-            // 'A5:L5' => sprintf('Reseller / khách hàng: %s', $this->game->title),
+            'A6:L6' => sprintf('Quốc gia: %s', ArrayHelper::getValue(Yii::$app->params['country_code'], $this->country_code, '')),
+            'A7:L7' => sprintf('Đã từng mua game: %s', ($game) ? $game->title : ''),
+            'A8:L8' => sprintf('Nhân viên bán hàng: %s', ($saler) ? $saler->name : ''),
+            'A9:L9' => sprintf('Loại người dùng: %s', $customerType),
         ];
-        $footer = [
-            "F$footerRow" => sprintf('Tổng: %s', $command->sum('total_coin')),
-            "H$footerRow" => sprintf('Tổng: %s', $command->sum('total_price')),
-        ];
+        // $footer = [
+        //     "F$footerRow" => sprintf('Tổng: %s', $command->sum('total_unit_purchase')),
+        //     "H$footerRow" => sprintf('Tổng: %s', $command->sum('total_price_purchase')),
+        // ];
         
         $data = [];
         
         foreach ($command->all() as $no => $model) {
             $data[] = [
                 $no + 1, 
-                $model->payment_at, 
-                $model->user->name,
-                $model->auth_key,
-                $model->discount_coin,
-                $model->total_coin,
-                $model->discount_price,
-                $model->total_price,
-                $model->status,
+                $model->name,
+                $model->birthday, 
+                $model->email,
+                sprintf("%s %s", $model->country_code, $model->phone),
+                $model->created_at,
+                $model->getCountryName(),
+                $model->last_order_date,
+                $model->getWalletTopupAmount(),
+                $model->getWalletWithdrawAmount(),
+                ($model->isReseller()) ? 'Reseller' : 'Customer',
             ];
         }
 
@@ -111,7 +117,7 @@ class FetchCustomerForm extends User
                     'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
                     'heading' => $heading,
                     'header' => $header,
-                    'footer' => $footer,
+                    // 'footer' => $footer,
                     'data' => $data,
                     'startRow' => $startRow,
                     'titles' => $titles,
@@ -160,7 +166,7 @@ class FetchCustomerForm extends User
         $orderTable = Order::tableName();
         $orderStatus = [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED];
         $command = self::find();
-        $command->select(["{$userTable}.*", "{$orderTable}.created_at as last_order_date", "SUM({$orderTable}.total_price) as total_purchase"]);
+        $command->select(["{$userTable}.*", "{$orderTable}.game_title", "{$orderTable}.created_at as last_order_date", "SUM({$orderTable}.total_price) as total_price_purchase", "SUM({$orderTable}.total_unit) as total_unit_purchase"]);
         $command->leftJoin($orderTable, "{$orderTable}.customer_id = {$userTable}.id");
 
         if ($this->created_start) {
@@ -204,11 +210,11 @@ class FetchCustomerForm extends User
 
         // Having
         if ($this->total_purchase_start) {
-            $command->andHaving(['>=', 'total_purchase', $this->total_purchase_start]);
+            $command->andHaving(['>=', 'total_price_purchase', $this->total_purchase_start]);
         }
 
         if ($this->total_purchase_end) {
-            $command->andHaving(['<=', 'total_purchase', $this->total_purchase_end]);
+            $command->andHaving(['<=', 'total_price_purchase', $this->total_purchase_end]);
         }
 
         $command->groupBy("{$userTable}.id");

@@ -132,11 +132,23 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
           ])->dropDownList([Order::STATUS_COMPLETED => 'Completed', Order::STATUS_DELETED => 'Deleted'])->label('Trạng thái');?>
 
+          <?php $game = $search->getGame();?>   
           <?=$form->field($search, 'game_id', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
-
+          ])->widget(kartik\select2\Select2::classname(), [
+            'initValueText' => ($game) ? $game->title : '',
+            'options' => ['class' => 'form-control', 'name' => 'game_id'],
+            'pluginOptions' => [
+              'placeholder' => 'Chọn game',
+              'allowClear' => true,
+              'minimumInputLength' => 3,
+              'ajax' => [
+                  'url' => Url::to(['game/suggestion']),
+                  'dataType' => 'json',
+                  'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+              ]
+            ]
+          ])->label('Tên game')?>
           
 
           <?=$form->field($search, 'start_date', [

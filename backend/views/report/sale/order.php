@@ -107,10 +107,25 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ]
           ])->label('Nhân viên sale')?>
+          
+          <?php $game = $search->getGame();?>   
           <?=$form->field($search, 'game_id', [
-          'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-          'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+          ])->widget(kartik\select2\Select2::classname(), [
+            'initValueText' => ($game) ? $game->title : '',
+            'options' => ['class' => 'form-control', 'name' => 'game_id'],
+            'pluginOptions' => [
+              'placeholder' => 'Chọn game',
+              'allowClear' => true,
+              'minimumInputLength' => 3,
+              'ajax' => [
+                  'url' => Url::to(['game/suggestion']),
+                  'dataType' => 'json',
+                  'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+              ]
+            ]
+          ])->label('Tên game')?>
+          
 
           <?=$form->field($search, 'agency_id', [
           'options' => ['class' => 'form-group col-md-4 col-lg-3'],

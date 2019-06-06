@@ -21,7 +21,7 @@ class FetchOrderForm extends Model
     public $provider_id;
     public $status;
     public $agency_id;
-    public $reseller_id;
+    public $is_reseller;
 
     public function init()
     {
@@ -37,7 +37,7 @@ class FetchOrderForm extends Model
             ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
             [['start_date', 'end_date'], 'required'],
-            [['provider_id', 'agency_id', 'reseller_id'], 'safe'],
+            [['provider_id', 'agency_id', 'is_reseller'], 'safe'],
         ];
     }
 
@@ -52,44 +52,49 @@ class FetchOrderForm extends Model
     protected function createCommand()
     {
         $command = Order::find();
+        $table = Order::tableName();
         
         if ($this->q) {
             $command->andWhere(['OR',
-                ['id' => $this->q],
-                ['auth_key' =>  $this->q]
+                ["$table.id" => $this->q],
+                ["$table.auth_key" =>  $this->q]
             ]);
             $this->_command = $command;
             return;
         }
         if ($this->customer_id) {
-            $command->andWhere(['customer_id' => $this->customer_id]);
+            $command->andWhere(["$table.customer_id" => $this->customer_id]);
         }
         if ($this->game_id) {
-            $command->andWhere(['game_id' => $this->game_id]);
+            $command->andWhere(["$table.game_id" => $this->game_id]);
         }
         if ($this->saler_id) {
-            $command->andWhere(['saler_id' => $this->saler_id]);
+            $command->andWhere(["$table.saler_id" => $this->saler_id]);
         }
         if ($this->handler_id) {
             if ($this->handler_id == -1) {
-                $command->andWhere(['handler_id' => null]);
+                $command->andWhere(["$table.handler_id" => null]);
                 $this->handler_id = '';
             } else {
-                $command->andWhere(['handler_id' => $this->handler_id]);
+                $command->andWhere(["$table.handler_id" => $this->handler_id]);
             }
         }
         if ($this->start_date) {
-            $command->andWhere(['>=', 'created_at', $this->start_date]);
+            $command->andWhere(['>=', "$table.created_at", $this->start_date]);
         }
         if ($this->end_date) {
-            $command->andWhere(['<=', 'created_at', $this->end_date]);
+            $command->andWhere(['<=', "$table.created_at", $this->end_date]);
         }
         if ($this->status) {
             if (is_array($this->status)) {
-                $command->andWhere(['IN', 'status', $this->status]);
+                $command->andWhere(['IN', "$table.status", $this->status]);
             } else {
-                $command->andWhere(['status' => $this->status]);
+                $command->andWhere(["$table.status" => $this->status]);
             }
+        }
+        if ($this->is_reseller) {
+            $userTable = User::tableName();
+            $command->leftJoin($userTable, "$table.customer_id = $userTable.id")->andWhere(["$userTable.is_reseller" => $this->is_reseller]);
         }
         $this->_command = $command;
     }
