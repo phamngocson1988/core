@@ -16,13 +16,19 @@ $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootst
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
-$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
-$adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
-$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
-$orderTeamIds = array_unique($orderTeamIds);
-$orderTeamObjects = User::findAll($orderTeamIds);
-$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
-
+$gameReports = [];
+$dates = array_keys($models);
+foreach ($models as $date => $records) {
+  foreach ($records as $gameId => $game) {
+    $gameReports[$gameId]['game_title'] = $game['game_title'];
+    $gameReports[$gameId]['dates'][$date]['game_pack'] = $game['game_pack'];
+    $gameReports[$gameId]['dates'][$date]['completed_rate'] = $game['completed_rate'];
+    $gameReports[$gameId]['dates'][$date]['avarage_time'] = $game['avarage_time'];
+  }
+}
+echo '<pre>';
+print_r($gameReports);
+echo '</pre>';
 ?>
 
 <style>
@@ -97,25 +103,27 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 
           <?=$form->field($search, 'start_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
           ])->widget(DateTimePicker::className(), [
             'clientOptions' => [
               'autoclose' => true,
               'format' => 'yyyy-mm-dd hh:ii',
               'minuteStep' => 1,
-            ]
+              'endDate' => date('Y-m-d H:i')
+            ],
           ])->label('Ngày tạo từ');?>
 
           <?=$form->field($search, 'end_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:ii',
-                  'todayBtn' => true,
-                  'minuteStep' => 1,
-              ]
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:ii',
+                'todayBtn' => true,
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+              ],
           ])->label('Ngày tạo đến');?>
 
           <div class='form-group col-md-4 col-lg-3'>
@@ -139,39 +147,59 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
         <div class="row">
-          <div class="col-md-6">
-            <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
-              <thead>
+          <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover table-checkable">
+              <thead style="background-color: #d0d0cf">
                 <tr>
-                  <th style="width: 20%;"> Ngày thống kê </th>
-                  <th style="width: 30%;"> Tên game </th>
-                  <th style="width: 20%;"> Số lượng gói </th>
-                  <th style="width: 20%;"> Tỷ lệ hoàn thành </th>
-                  <th style="width: 10%;"> Thời gian xử lý trung bình </th>
+                  <th style="vertical-align: middle; text-align: center" rowspan="2"> STT </th>
+                  <th style="vertical-align: middle; text-align: center" rowspan="2"> Tên game </th>
+                  <?php if ($search->period == 'day') : ?>
+                  <th style="vertical-align: middle; text-align: center" colspan="3">Thống kê theo ngày</th>
+                  <?php else : ?>
+                  <?php foreach ($models as $date => $records) :?>
+                  <th style="vertical-align: middle; text-align: center" colspan="3"><?=$search->getLabelByPeriod($date);?></th>
+                  <?php endforeach;?>
+                  <?php endif;?>
+                </tr>
+                <tr>
+                  <?php if ($search->period == 'day') : ?>
+                  <th style="vertical-align: middle; text-align: center">Số lượng gói</th>
+                  <th style="vertical-align: middle; text-align: center">Tỷ lệ hoàn thành</th>
+                  <th style="vertical-align: middle; text-align: center">Thời gian xử lý trung bình</th>
+                  <?php else : ?>
+                  <?php foreach ($models as $date => $records) :?>
+                  <th style="vertical-align: middle; text-align: center">Số lượng gói</th>
+                  <th style="vertical-align: middle; text-align: center">Tỷ lệ hoàn thành</th>
+                  <th style="vertical-align: middle; text-align: center">Thời gian xử lý trung bình</th>
+                  <?php endforeach;?>
+                  <?php endif;?>
                 </tr>
               </thead>
               <tbody>
-                  <?php if (!$models) :?>
-                  <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
-                  <?php endif;?>
-                  <?php foreach ($models as $date => $records) :?>
-                  <?php foreach (array_values($records) as $no => $model) :?>
-                  <tr>
-                    <?php if (!$no) :?>
-                    <td rowspan="<?=count($records);?>" style="vertical-align: middle;"><?=$search->getLabelByPeriod($date);?></td>
+                <?php if (!$models) :?>
+                <tr><td colspan="<?=count($records) + 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach (array_values($gameReports) as $no => $game): ?>
+                <tr>
+                    <td style="vertical-align: middle;"><?=++$no;?></td>
+                    <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$game['game_title'];?></td>
+                    <?php if ($search->period == 'day') : ?>
+                    <?php $reportData = $game['dates'];?>
+                    <td style="vertical-align: middle;"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                    <td style="vertical-align: middle;"><?=round(array_sum(array_column($reportData, 'completed_rate')), 1) . '%';?></td>
+                    <td style="vertical-align: middle;"><?=round(array_sum(array_column($reportData, 'avarage_time')), 1) . ' (minutes)';?></td>
+                    <?php else : ?>
+                    <?php foreach ($dates as $date): ?>
+                    <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['game_pack' => 0, 'completed_rate' => 0, 'avarage_time' => 0]) ;?>
+                    <td style="vertical-align: middle;"><?=round($reportData['game_pack'], 1);?></td>
+                    <td style="vertical-align: middle;"><?=round($reportData['completed_rate']) . '%';?></td>
+                    <td style="vertical-align: middle;"><?=round($reportData['avarage_time']) . ' (minutes)';?></td>
+                    <?php endforeach;?>
                     <?php endif;?>
-                    <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$model['game_title'];?></td>
-                    <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
-                    <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
-                    <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
                   </tr>
-                  <?php endforeach;?>
-                  <?php endforeach;?>
+                <?php endforeach;?>
               </tbody>
             </table>
-          </div>
-          <div class="col-md-6">
-            
           </div>
         </div>
         <?php Pjax::end(); ?>
@@ -180,33 +208,3 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<?php
-$script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-});
-
-var sendForm = new AjaxFormSubmit({element: '.assign-form'});
-sendForm.success = function (data, form) {
-  location.reload();
-}
-JS;
-$this->registerJs($script);
-?>

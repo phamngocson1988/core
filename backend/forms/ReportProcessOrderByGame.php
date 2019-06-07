@@ -33,7 +33,7 @@ class ReportProcessOrderByGame extends Model
         return [
             ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
-            ['period', 'default', 'value' => 'day'],
+            ['period', 'default', 'value' => 'week'],
             [['start_date', 'end_date', 'period'], 'required'],
             ['limit', 'default', 'value' => '5'],
             ['game_id', 'trim'],
@@ -58,65 +58,6 @@ class ReportProcessOrderByGame extends Model
         $games = array_merge_recursive($games, $others);
         return $games;
     }
-
-    // public function showChart()
-    // {
-    //     $games = $this->fetch();
-    //     $game_packs = array_map(function($item) { 
-    //       return round($item['game_pack'], 1);
-    //     }, $games);
-    //     $completed_rates = array_map(function($item) { 
-    //       return round($item['completed_rate'], 1);
-    //     }, $games);
-    //     $avarage_times = array_map(function($item) { 
-    //       return round($item['avarage_time']);
-    //     }, $games);
-    //     $labels = array_column($games, 'game_title');
-    //     $datasets = [
-    //         [
-    //             'label' => "Thời gian xử lý trung bình",
-    //             'backgroundColor' => "rgba(54,198,211,0.2)",
-    //             'borderColor' => "rgba(54,198,211,1)",
-    //             'pointBackgroundColor' => "rgba(54,198,211,1)",
-    //             'pointBorderColor' => "#fff",
-    //             'pointHoverBackgroundColor' => "#fff",
-    //             'pointHoverBorderColor' => "rgba(54,198,211,1)",
-    //             'data' => array_values($game_packs)
-    //         ],
-    //         [
-    //             'label' => "Tỷ lệ hoàn thành",
-    //             'backgroundColor' => "rgba(255,99,132,0.2)",
-    //             'borderColor' => "rgba(255,99,132,1)",
-    //             'pointBackgroundColor' => "rgba(255,99,132,1)",
-    //             'pointBorderColor' => "#fff",
-    //             'pointHoverBackgroundColor' => "#fff",
-    //             'pointHoverBorderColor' => "rgba(255,99,132,1)",
-    //             'data' => array_values($completed_rates)
-    //         ],
-    //         [
-    //             'label' => "Số lượng gói",
-    //             'backgroundColor' => "rgba(179,181,198,0.2)",
-    //             'borderColor' => "rgba(179,181,198,1)",
-    //             'pointBackgroundColor' => "rgba(179,181,198,1)",
-    //             'pointBorderColor' => "#fff",
-    //             'pointHoverBackgroundColor' => "#fff",
-    //             'pointHoverBorderColor' => "rgba(179,181,198,1)",
-    //             'data' => array_values($avarage_times)
-    //         ],
-            
-    //     ];
-    //     return ChartJs::widget([
-    //       'type' => 'bar',
-    //       'options' => [
-    //           'height' => 200,
-    //           'width' => 400
-    //       ],
-    //       'data' => [
-    //           'labels' => $labels,
-    //           'datasets' => $datasets
-    //       ]
-    //   ]);
-    // }
 
     public function createCommand()
     {
