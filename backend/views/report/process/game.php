@@ -24,11 +24,11 @@ foreach ($models as $date => $records) {
     $gameReports[$gameId]['dates'][$date]['game_pack'] = $game['game_pack'];
     $gameReports[$gameId]['dates'][$date]['completed_rate'] = $game['completed_rate'];
     $gameReports[$gameId]['dates'][$date]['avarage_time'] = $game['avarage_time'];
+    $gameReports[$gameId]['dates'][$date]['completed_count'] = $game['completed_count'];
+    $gameReports[$gameId]['dates'][$date]['pendding_count'] = $game['pendding_count'];
+    $gameReports[$gameId]['dates'][$date]['total_process_time'] = $game['total_process_time'];
   }
 }
-echo '<pre>';
-print_r($gameReports);
-echo '</pre>';
 ?>
 
 <style>
@@ -184,10 +184,17 @@ echo '</pre>';
                     <td style="vertical-align: middle;"><?=++$no;?></td>
                     <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$game['game_title'];?></td>
                     <?php if ($search->period == 'day') : ?>
-                    <?php $reportData = $game['dates'];?>
+                    <?php 
+                    $reportData = $game['dates'];
+                    $completedCount = array_sum(array_column($reportData, 'completed_count'));
+                    $penddingCount = array_sum(array_column($reportData, 'pendding_count'));
+                    $totalProcessTime = array_sum(array_column($reportData, 'total_process_time'));
+                    $rate = (!$completedCount) ? 0 : $completedCount / ($completedCount + $penddingCount) * 100;
+                    $avarageTime = (!$completedCount) ? 0 : $totalProcessTime / ($completedCount * 60); //mins
+                    ?>
                     <td style="vertical-align: middle;"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
-                    <td style="vertical-align: middle;"><?=round(array_sum(array_column($reportData, 'completed_rate')), 1) . '%';?></td>
-                    <td style="vertical-align: middle;"><?=round(array_sum(array_column($reportData, 'avarage_time')), 1) . ' (minutes)';?></td>
+                    <td style="vertical-align: middle;"><?=round($rate, 1) . '%';?></td>
+                    <td style="vertical-align: middle;"><?=round($avarageTime, 1) . ' (minutes)';?></td>
                     <?php else : ?>
                     <?php foreach ($dates as $date): ?>
                     <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['game_pack' => 0, 'completed_rate' => 0, 'avarage_time' => 0]) ;?>

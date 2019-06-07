@@ -132,6 +132,9 @@ class ReportProcessOrderByGame extends Model
                 $games[$date][$gameId]['game_pack'] = $totalPackage;
                 $games[$date][$gameId]['completed_rate'] = $rate;
                 $games[$date][$gameId]['avarage_time'] = $avarageTime;
+                $games[$date][$gameId]['completed_count'] = $completedCount;
+                $games[$date][$gameId]['pendding_count'] = $penddingCount;
+                $games[$date][$gameId]['total_process_time'] = $totalProcessTime;
             }
         }
         return $games;
@@ -174,6 +177,9 @@ class ReportProcessOrderByGame extends Model
             $games[$date]['other']['game_pack'] = $totalPackage;
             $games[$date]['other']['completed_rate'] = $rate;
             $games[$date]['other']['avarage_time'] = $avarageTime;
+            $games[$date]['other']['completed_count'] = $completedCount;
+            $games[$date]['other']['pendding_count'] = $penddingCount;
+            $games[$date]['other']['total_process_time'] = $totalProcessTime;
         }
         return $games;
     }
