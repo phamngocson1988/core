@@ -19,6 +19,7 @@ class ReportSaleOrderByGame extends Model
 
     protected $_game;
     private $_command;
+    protected $filter_column = "filter";
 
     public function init()
     {
@@ -46,7 +47,7 @@ class ReportSaleOrderByGame extends Model
         ];
     }
 
-    public function fetch()
+    public function fetch1()
     {
         if (!$this->validate()) return false;
         // Find all game in period
@@ -73,6 +74,87 @@ class ReportSaleOrderByGame extends Model
             $games[] = $other;
         }
         
+        return $games;
+    }
+
+    public function fetch()
+    {
+        if (!$this->validate()) return false;
+        $gameIds = $this->filterTopGames();
+        $games = $this->statByGame($gameIds);
+        if ($this->game_id) return $games;
+        // Other games
+        $others = $this->statByOtherGames($gameIds);
+        $games = array_merge_recursive($games, $others);
+        return $games;
+    }
+
+    protected function filterTopGames()
+    {
+        if ($this->game_id) return [$this->game_id];
+
+        $command = $this->getCommand();
+        $command->select(['id', 'game_id', 'SUM(game_pack) as game_pack']);
+        $command->orderBy(['game_pack' => SORT_DESC]);
+        $command->offset(0);
+        $command->limit($this->limit);
+        $games = $command->asArray()->all();
+        return array_column($games, 'game_id');
+    }
+
+    protected function statByGame($gameIds)
+    {
+        $command = $this->getCommand();
+        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
+        $command->andWhere(['IN', 'game_id', $gameIds]);
+        $command->orderBy(['created_at' => SORT_ASC]);
+        $command->groupBy([$this->getGroupByPeriod(), 'game_id']);
+        $reports = $command->asArray()->all();
+        $filterColumn = $this->filter_column;
+        $reportDates = array_unique(array_column($reports, $filterColumn));
+        $games = [];
+        foreach ($reportDates as $date) {
+            $reportByDates = array_filter($reports, function($r) use ($date, $filterColumn) {
+                return $r[$filterColumn] == $date;
+            });
+            foreach ($gameIds as $gameId) {
+                $reportByGame = array_filter($reportByDates, function($r) use ($gameId) {
+                    return $r['game_id'] == $gameId;
+                });
+                $totalPackage = array_sum(array_column($reportByGame, 'game_pack'));
+                $totalPrice = array_sum(array_column($reportByGame, 'total_price'));
+                $gameInfo = reset($reportByGame);
+                $games[$date][$gameId]['game_title'] = $gameInfo['game_title'];
+                $games[$date][$gameId]['game_pack'] = $totalPackage;
+                $games[$date][$gameId]['total_price'] = $totalPrice;
+            }
+        }
+        return $games;
+    }
+
+    protected function statByOtherGames($gameIds)
+    {
+        $command = $this->getCommand();
+        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
+        $command->andWhere(['NOT IN', 'game_id', $gameIds]);
+        $command->orderBy(['created_at' => SORT_ASC]);
+        $command->groupBy([$this->getGroupByPeriod()]);
+        $reports = $command->asArray()->all();
+        $filterColumn = $this->filter_column;
+        $reportDates = array_unique(array_column($reports, $filterColumn));
+        $games = [];
+
+        foreach ($reportDates as $date) {
+            $reportByDates = array_filter($reports, function($r) use ($date, $filterColumn) {
+                return $r[$filterColumn] == $date;
+            });
+            $totalPackage = array_sum(array_column($reportByDates, 'game_pack'));
+            $totalPrice = array_sum(array_column($reportByDates, 'total_price'));
+            
+            $games[$date]['other']['game_title'] = 'Game khác';
+            $games[$date]['other']['game_pack'] = $totalPackage;
+            $games[$date]['other']['total_price'] = $totalPrice;
+        }
         return $games;
     }
 
@@ -121,7 +203,7 @@ class ReportSaleOrderByGame extends Model
         ]);
     }
 
-    public function createCommand()
+    public function createCommand1()
     {
         $command = Order::find();
         $command->select(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price']);
@@ -137,6 +219,14 @@ class ReportSaleOrderByGame extends Model
         }
         $command->groupBy('game_id');
         $command->orderBy(['game_pack' => SORT_DESC]);
+        return $command;
+    }
+
+    public function createCommand()
+    {
+        $command = Order::find();
+        $command->where(['BETWEEN', 'created_at', $this->start_date, $this->end_date]);
+        $command->andWhere(['IN', 'status', $this->availabelStatus()]);
         return $command;
     }
 
@@ -177,6 +267,59 @@ class ReportSaleOrderByGame extends Model
             '5' => 'Top 5',
             '10' => 'Top 10',
             '0' => 'Game cụ thể',
+        ];
+    }
+
+    public function getGroupByPeriod()
+    {
+        switch ($this->period) {
+            case 'quarter':
+                $group = "CONCAT_WS('-', YEAR(created_at), QUARTER(created_at))";
+                break;
+            case 'month':
+                $group = "CONCAT_WS('-', YEAR(created_at), MONTH(created_at))";
+                break;
+            case 'week': 
+                $group = "CONCAT_WS('-', YEAR(created_at), WEEK(created_at))";
+                break;
+            default: //day
+                $group = "CONCAT_WS('-', YEAR(created_at), MONTH(created_at), DAY(created_at))";
+                break;
+        }
+        return $group;
+    }
+
+    public function getLabelByPeriod($label)
+    {
+        switch ($this->period) {
+            case 'quarter':
+                list($year, $quarter) = explode("-", $label);
+                return sprintf("Qúy %s / %s", $quarter, $year);
+            case 'month':
+                list($year, $month) = explode("-", $label);
+                return sprintf("Tháng %s / %s", str_pad($month, 2, "0", STR_PAD_LEFT), $year);
+            case 'week': 
+                list($year, $week) = explode("-", $label);
+                return sprintf("Tuần %s / %s", $week + 1, $year);
+            default: //day
+                list($year, $month, $day) = explode("-", $label);
+                return sprintf("%s-%s-%s", $year, str_pad($month, 2, "0", STR_PAD_LEFT), str_pad($day, 2, "0", STR_PAD_LEFT));
+        }
+        return $group;
+    }
+
+    public function getSelectByPeriod()
+    {
+        return $this->getGroupByPeriod() . " AS " . $this->filter_column;
+    }
+
+    public function availabelStatus()
+    {
+        return [
+            Order::STATUS_VERIFYING,
+            Order::STATUS_PENDING, 
+            Order::STATUS_PROCESSING, 
+            Order::STATUS_COMPLETED
         ];
     }
 }

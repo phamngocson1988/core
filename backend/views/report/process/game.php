@@ -107,9 +107,10 @@ foreach ($models as $date => $records) {
           ])->widget(DateTimePicker::className(), [
             'clientOptions' => [
               'autoclose' => true,
-              'format' => 'yyyy-mm-dd hh:ii',
+              'format' => 'yyyy-mm-dd hh:00',
               'minuteStep' => 1,
-              'endDate' => date('Y-m-d H:i')
+              'endDate' => date('Y-m-d H:i'),
+              'minView' => '1'
             ],
           ])->label('Ngày tạo từ');?>
 
@@ -119,10 +120,11 @@ foreach ($models as $date => $records) {
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
-                'format' => 'yyyy-mm-dd hh:ii',
+                'format' => 'yyyy-mm-dd hh:59',
                 'todayBtn' => true,
                 'minuteStep' => 1,
                 'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
               ],
           ])->label('Ngày tạo đến');?>
 
@@ -130,10 +132,10 @@ foreach ($models as $date => $records) {
             <label class='control-label'>Thống kê theo:</label>
             <div class="clearfix">
               <div class="btn-group" data-toggle="buttons">
-                <label class="btn red <?=($search->period == 'day') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="day"> Ngày </label>
-                <label class="btn red <?=($search->period == 'week') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="week"> Tuần </label>
-                <label class="btn red <?=($search->period == 'month') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="month"> Tháng </label>
-                <label class="btn red <?=($search->period == 'quarter') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="quarter"> Quý </label>
+                <label class="btn red <?=($search->period == 'day') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="day" <?=($search->period == 'day') ? 'checked="checked"' : '';?> > Ngày </label>
+                <label class="btn red <?=($search->period == 'week') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="week" <?=($search->period == 'week') ? 'checked="checked"' : '';?> > Tuần </label>
+                <label class="btn red <?=($search->period == 'month') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="month" <?=($search->period == 'month') ? 'checked="checked"' : '';?> > Tháng </label>
+                <label class="btn red <?=($search->period == 'quarter') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="quarter" <?=($search->period == 'quarter') ? 'checked="checked"' : '';?> > Quý </label>
               </div>
             </div>
           </div>
@@ -181,7 +183,7 @@ foreach ($models as $date => $records) {
                 <?php endif;?>
                 <?php foreach (array_values($gameReports) as $no => $game): ?>
                 <tr>
-                    <td style="vertical-align: middle;"><?=++$no;?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=++$no;?></td>
                     <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$game['game_title'];?></td>
                     <?php if ($search->period == 'day') : ?>
                     <?php 
@@ -192,15 +194,15 @@ foreach ($models as $date => $records) {
                     $rate = (!$completedCount) ? 0 : $completedCount / ($completedCount + $penddingCount) * 100;
                     $avarageTime = (!$completedCount) ? 0 : $totalProcessTime / ($completedCount * 60); //mins
                     ?>
-                    <td style="vertical-align: middle;"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
-                    <td style="vertical-align: middle;"><?=round($rate, 1) . '%';?></td>
-                    <td style="vertical-align: middle;"><?=round($avarageTime, 1) . ' (minutes)';?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round($rate, 1) . '%';?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round($avarageTime, 1) . ' (minutes)';?></td>
                     <?php else : ?>
                     <?php foreach ($dates as $date): ?>
                     <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['game_pack' => 0, 'completed_rate' => 0, 'avarage_time' => 0]) ;?>
-                    <td style="vertical-align: middle;"><?=round($reportData['game_pack'], 1);?></td>
-                    <td style="vertical-align: middle;"><?=round($reportData['completed_rate']) . '%';?></td>
-                    <td style="vertical-align: middle;"><?=round($reportData['avarage_time']) . ' (minutes)';?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round($reportData['game_pack'], 1);?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round($reportData['completed_rate']) . '%';?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round($reportData['avarage_time']) . ' (minutes)';?></td>
                     <?php endforeach;?>
                     <?php endif;?>
                   </tr>

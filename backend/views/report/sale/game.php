@@ -14,14 +14,17 @@ use common\components\helpers\FormatConverter;
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$gameReports = [];
+$dates = array_keys($models);
+foreach ($models as $date => $records) {
+  foreach ($records as $gameId => $game) {
+    $gameReports[$gameId]['game_title'] = $game['game_title'];
+    $gameReports[$gameId]['dates'][$date]['game_pack'] = $game['game_pack'];
+    $gameReports[$gameId]['dates'][$date]['total_price'] = $game['total_price'];
+  }
 
-$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
-$adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
-$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
-$orderTeamIds = array_unique($orderTeamIds);
-$orderTeamObjects = User::findAll($orderTeamIds);
-$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
-
+}
+// print_r($models);die;
 ?>
 
 <style>
@@ -125,43 +128,65 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         </div>
         <?php ActiveForm::end()?>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <?php Pjax::begin(); ?>
-            <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
-              <thead>
+            <table class="table table-striped table-bordered table-hover table-checkable">
+              <thead style="background-color: #d0d0cf">
                 <tr>
-                  <th style="width: 10%;"> STT </th>
-                  <th style="width: 30%;"> Tên game </th>
-                  <th style="width: 30%;"> Số lượng gói </th>
-                  <th style="width: 30%;"> Số coin </th>
+                  <th style="vertical-align: middle; text-align: center" rowspan="2"> STT </th>
+                  <th style="vertical-align: middle; text-align: center" rowspan="2"> Tên game </th>
+                  <?php if ($search->period == 'day') : ?>
+                  <th style="vertical-align: middle; text-align: center" colspan="2">Thống kê theo ngày</th>
+                  <?php else : ?>
+                  <?php foreach ($models as $date => $records) :?>
+                  <th style="vertical-align: middle; text-align: center" colspan="2"><?=$search->getLabelByPeriod($date);?></th>
+                  <?php endforeach;?>
+                  <?php endif;?>
+                </tr>
+                <tr>
+                  <?php if ($search->period == 'day') : ?>
+                  <th style="vertical-align: middle; text-align: center">Số lượng gói</th>
+                  <th style="vertical-align: middle; text-align: center">Số coin</th>
+                  <?php else : ?>
+                  <?php foreach ($models as $date => $records) :?>
+                  <th style="vertical-align: middle; text-align: center">Số lượng gói</th>
+                  <th style="vertical-align: middle; text-align: center">Số coin</th>
+                  <?php endforeach;?>
+                  <?php endif;?>
                 </tr>
               </thead>
               <tbody>
-                  <?php if (!$models) :?>
-                  <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
-                  <?php endif;?>
-                  <?php foreach ($models as $no => $model) :?>
-                  <tr>
-                    <td style="vertical-align: middle;"><?=$no + 1;?></td>
-                    <td style="vertical-align: middle;"><?=$model['game_title'];?></td>
-                    <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
-                    <td style="vertical-align: middle;"><?=$model['total_price'];?></td>
-                  </tr>
-                  <?php endforeach;?>
-              </tbody>
-              <tfoot>
+                <?php if (!$models) :?>
+                <tr><td colspan="<?=count($records) + 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach (array_values($gameReports) as $no => $game): ?>
                 <tr>
-                  <td></td>
-                  <td><strong>Tổng:</strong></td>
-                  <td><?=round($search->getCommand()->sum('game_pack'), 1);?></td>
-                  <td><?=number_format($search->getCommand()->sum('total_price'));?></td>
-                </tr>
-              </tfoot>
+                    <td style="vertical-align: middle; text-align: center"><?=++$no;?></td>
+                    <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$game['game_title'];?></td>
+                    <?php if ($search->period == 'day') : ?>
+                    <?php 
+                    $reportData = $game['dates'];
+                    $completedCount = array_sum(array_column($reportData, 'completed_count'));
+                    $penddingCount = array_sum(array_column($reportData, 'pendding_count'));
+                    $totalProcessTime = array_sum(array_column($reportData, 'total_process_time'));
+                    $rate = (!$completedCount) ? 0 : $completedCount / ($completedCount + $penddingCount) * 100;
+                    $avarageTime = (!$completedCount) ? 0 : $totalProcessTime / ($completedCount * 60); //mins
+                    ?>
+                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></td>
+                    <?php else : ?>
+                    <?php foreach ($dates as $date): ?>
+                    <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['game_pack' => 0, 'completed_rate' => 0, 'avarage_time' => 0]) ;?>
+                    ?>
+                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></td>
+                    <?php endforeach;?>
+                    <?php endif;?>
+                  </tr>
+                <?php endforeach;?>
+              </tbody>
             </table>
             <?php Pjax::end(); ?>
-          </div>
-          <div class="col-md-6">
-          <?=$search->showChar();?>
           </div>
         </div>
       </div>
