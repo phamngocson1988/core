@@ -6,9 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\Order;
-use common\models\User;
 
-class ReportCostOrderBySaler extends Model
+class ReportSaleOrderByUser extends Model
 {
     public $start_date;
     public $end_date;
@@ -139,4 +138,3 @@ class ReportCostOrderBySaler extends Model
         ];
     }
 }
-

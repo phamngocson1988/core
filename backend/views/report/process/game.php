@@ -179,7 +179,7 @@ foreach ($models as $date => $records) {
               </thead>
               <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="<?=count($records) + 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="<?=count($models) + 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach (array_values($gameReports) as $no => $game): ?>
                 <tr>

@@ -6,10 +6,21 @@ use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use dosamigos\datetimepicker\DateTimePicker;
 use common\models\Order;
+use yii\helpers\ArrayHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+$userReports = [];
+$dates = array_keys($models);
+foreach ($models as $date => $records) {
+  foreach ($records as $userId => $record) {
+    $userReports[$userId]['name'] = $record['name'];
+    $userReports[$userId]['dates'][$date]['game_pack'] = $record['game_pack'];
+    $userReports[$userId]['dates'][$date]['total_price'] = $record['total_price'];
+  }
+}
 ?>
 
 <style>
@@ -62,27 +73,43 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/sale-user']]);?>     
             <?=$form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
             ])->widget(DateTimePicker::className(), [
-                'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:ii',
-                  'minuteStep' => 1,
-                ]
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:00',
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
             ])->label('Ngày tạo từ');?>
 
             <?=$form->field($search, 'end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii',
-                    'todayBtn' => true,
-                    'minuteStep' => 1,
-                ]
+                  'autoclose' => true,
+                  'format' => 'yyyy-mm-dd hh:59',
+                  'todayBtn' => true,
+                  'minuteStep' => 1,
+                  'endDate' => date('Y-m-d H:i'),
+                  'minView' => '1'
+                ],
             ])->label('Ngày tạo đến');?>
 
+            <div class='form-group col-md-4 col-lg-3'>
+              <label class='control-label'>Thống kê theo:</label>
+              <div class="clearfix">
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn red <?=($search->period == 'day') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="day" <?=($search->period == 'day') ? 'checked="checked"' : '';?> > Ngày </label>
+                  <label class="btn red <?=($search->period == 'week') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="week" <?=($search->period == 'week') ? 'checked="checked"' : '';?> > Tuần </label>
+                  <label class="btn red <?=($search->period == 'month') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="month" <?=($search->period == 'month') ? 'checked="checked"' : '';?> > Tháng </label>
+                  <label class="btn red <?=($search->period == 'quarter') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="quarter" <?=($search->period == 'quarter') ? 'checked="checked"' : '';?> > Quý </label>
+                </div>
+              </div>
+            </div>	
+            
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -90,82 +117,60 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </div>
           <?php ActiveForm::end()?>
         </div>
-        
-        <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
-          <thead>
-            <tr>
-              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 10%;"> Mã đơn hàng </th>
-              <th style="width: 15%;"> Tên khách hàng </th>
-              <th style="width: 15%;"> Ngày tạo </th>
-              <th style="width: 15%;"> Tổng Coin </th>
-              <th style="width: 15%;"> Nhân viên sale </th>
-              <th style="width: 15%;"> Nhân viên xử lý đơn hàng </th>
-              <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <tr>
-                <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$model->auth_key;?></td>
-                <td style="vertical-align: middle;"><?=$model->customer_name;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->total_price;?></td>
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
-              </tr>
-              <?php endforeach;?>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td style="vertical-align: middle;">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></td>
-              <td></td>
-              <td></td>
-              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('total_price'));?></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              
-            </tr>
-          </tfoot>
-        </table>
-        <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover table-checkable">
+              <thead>
+                <tr>
+                  <th style="vertical-align: middle; text-align: center" rowspan="2"> STT </th>
+                  <th style="vertical-align: middle; text-align: center" rowspan="2"> Tên nhân viên </th>
+                  <?php if ($search->period == 'day') : ?>
+                  <th style="vertical-align: middle; text-align: center" colspan="2">Thống kê theo ngày</th>
+                  <?php else : ?>
+                  <?php foreach ($models as $date => $records) :?>
+                  <th style="vertical-align: middle; text-align: center" colspan="2"><?=$search->getLabelByPeriod($date);?></th>
+                  <?php endforeach;?>
+                  <?php endif;?>
+                </tr>
+                <tr>
+                  <?php if ($search->period == 'day') : ?>
+                  <th style="vertical-align: middle; text-align: center">Số gói</th>
+                  <th style="vertical-align: middle; text-align: center">Số coin</th>
+                  <?php else : ?>
+                  <?php foreach ($models as $date => $records) :?>
+                  <th style="vertical-align: middle; text-align: center">Số gói</th>
+                  <th style="vertical-align: middle; text-align: center">Số coin</th>
+                  <?php endforeach;?>
+                  <?php endif;?>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="2"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach (array_values($userReports) as $no => $record):?>
+                <tr>
+                  <td style="vertical-align: middle; text-align: center"><?=++$no;?></td>
+                  <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$record['name'];?></td>
+                  <?php if ($search->period == 'day') : ?>
+                  <?php $reportData = $record['dates']; ?>
+                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></td>
+                  <?php else : ?>
+                  <?php foreach ($dates as $date): ?>
+                  <?php $reportData = ArrayHelper::getValue($record['dates'], $date, ['game_pack' => 0, 'total_price' => 0]);?>
+                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['game_pack'], 1);?></td>
+                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['total_price'], 1);?></td>
+                  <?php endforeach;?>
+                  <?php endif;?>
+                </tr>
+                <?php endforeach;?>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<?php
-$script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-});
-
-JS;
-$this->registerJs($script);
-?>

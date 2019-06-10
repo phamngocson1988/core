@@ -22,6 +22,7 @@ use backend\forms\FetchMyOrderForm;
 use backend\forms\StatisticsByTransactionForm;
 use backend\forms\StatisticsByOrderForm;
 use backend\forms\ReportCostOrderBySaler;
+use backend\forms\ReportSaleOrderByUser;
 
 class ReportController extends Controller
 {
@@ -318,18 +319,12 @@ class ReportController extends Controller
         $data = [
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
-            'status' => $request->get('status'),
+            'period' => $request->get('period'),
         ];
-        $form = new FetchMyOrderForm($data);
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_DESC])
-                            ->all();
+        $form = new ReportSaleOrderByUser($data);
+        $models = $form->fetch();
         return $this->render('sale/user', [
             'models' => $models,
-            'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
@@ -400,10 +395,10 @@ class ReportController extends Controller
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
             'limit' => $request->get('limit', '5'),
+            'period' => $request->get('period', 'day'),
         ];
         $form = new ReportSaleOrderByGame($data);
-        $command = $form->getCommand();
-        $models = $command->asArray()->all();
+        $models = $form->fetch();
 
         return $this->render('cost/game', [
             'models' => $models,
@@ -417,13 +412,12 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.cost.user';
         $request = Yii::$app->request;
         $data = [
-            'saler_id' => $request->get('saler_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
+            'period' => $request->get('period'),
         ];
         $form = new ReportCostOrderBySaler($data);
-        $models = $form->getCommand()->asArray()->all();
-
+        $models = $form->fetch();
         return $this->render('cost/user', [
             'models' => $models,
             'search' => $form,

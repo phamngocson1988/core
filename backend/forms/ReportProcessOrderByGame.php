@@ -82,6 +82,7 @@ class ReportProcessOrderByGame extends Model
         $command = $this->getCommand();
         $command->select(['id', 'game_id', 'SUM(game_pack) as game_pack']);
         $command->andWhere(['IN', 'status', $status]);
+        $command->groupBy('game_id');
         $command->orderBy(['game_pack' => SORT_DESC]);
         $command->offset(0);
         $command->limit($this->limit);
@@ -113,6 +114,7 @@ class ReportProcessOrderByGame extends Model
                 $reportByGame = array_filter($reportByDates, function($r) use ($gameId) {
                     return $r['game_id'] == $gameId;
                 });
+                if (!$reportByGame) continue;
                 $unCompleteRecords = array_filter($reportByGame, function($r) use ($unCompleteStatus) {
                     return in_array($r['status'], $unCompleteStatus);
                 });

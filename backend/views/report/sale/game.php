@@ -22,9 +22,8 @@ foreach ($models as $date => $records) {
     $gameReports[$gameId]['dates'][$date]['game_pack'] = $game['game_pack'];
     $gameReports[$gameId]['dates'][$date]['total_price'] = $game['total_price'];
   }
-
 }
-// print_r($models);die;
+
 ?>
 
 <style>
@@ -97,28 +96,44 @@ foreach ($models as $date => $records) {
             ]
           ])->label('Tên game')?>
 
-          <?=$form->field($search, 'start_date', [
+          <?=$form->field($search, 'start_date', [    
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
           ])->widget(DateTimePicker::className(), [
-              'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd hh:ii',
-                'minuteStep' => 1,
-              ]
+            'clientOptions' => [
+              'autoclose' => true,
+              'format' => 'yyyy-mm-dd hh:00',
+              'minuteStep' => 1,
+              'endDate' => date('Y-m-d H:i'),
+              'minView' => '1'
+            ],
           ])->label('Ngày tạo từ');?>
 
           <?=$form->field($search, 'end_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:ii',
-                  'todayBtn' => true,
-                  'minuteStep' => 1,
-              ]
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:59',
+                'todayBtn' => true,
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
           ])->label('Ngày tạo đến');?>
+
+          <div class='form-group col-md-4 col-lg-3'>
+            <label class='control-label'>Thống kê theo:</label>
+            <div class="clearfix">
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn red <?=($search->period == 'day') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="day" <?=($search->period == 'day') ? 'checked="checked"' : '';?> > Ngày </label>
+                <label class="btn red <?=($search->period == 'week') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="week" <?=($search->period == 'week') ? 'checked="checked"' : '';?> > Tuần </label>
+                <label class="btn red <?=($search->period == 'month') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="month" <?=($search->period == 'month') ? 'checked="checked"' : '';?> > Tháng </label>
+                <label class="btn red <?=($search->period == 'quarter') ? 'active' : '';?>"><input type="radio" class="toggle" name="period" value="quarter" <?=($search->period == 'quarter') ? 'checked="checked"' : '';?> > Quý </label>
+              </div>
+            </div>
+          </div>
         
           <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -126,10 +141,9 @@ foreach ($models as $date => $records) {
             </button>
           </div>
         </div>
-        <?php ActiveForm::end()?>
+        <?php ActiveForm::end(); ?>
         <div class="row">
           <div class="col-md-12">
-            <?php Pjax::begin(); ?>
             <table class="table table-striped table-bordered table-hover table-checkable">
               <thead style="background-color: #d0d0cf">
                 <tr>
@@ -157,36 +171,27 @@ foreach ($models as $date => $records) {
               </thead>
               <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="<?=count($records) + 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="<?=count($models) + 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
-                <?php foreach (array_values($gameReports) as $no => $game): ?>
+                <?php foreach (array_values($gameReports) as $no => $game):?>
                 <tr>
-                    <td style="vertical-align: middle; text-align: center"><?=++$no;?></td>
-                    <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$game['game_title'];?></td>
-                    <?php if ($search->period == 'day') : ?>
-                    <?php 
-                    $reportData = $game['dates'];
-                    $completedCount = array_sum(array_column($reportData, 'completed_count'));
-                    $penddingCount = array_sum(array_column($reportData, 'pendding_count'));
-                    $totalProcessTime = array_sum(array_column($reportData, 'total_process_time'));
-                    $rate = (!$completedCount) ? 0 : $completedCount / ($completedCount + $penddingCount) * 100;
-                    $avarageTime = (!$completedCount) ? 0 : $totalProcessTime / ($completedCount * 60); //mins
-                    ?>
-                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
-                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></td>
-                    <?php else : ?>
-                    <?php foreach ($dates as $date): ?>
-                    <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['game_pack' => 0, 'completed_rate' => 0, 'avarage_time' => 0]) ;?>
-                    ?>
-                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
-                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></td>
-                    <?php endforeach;?>
-                    <?php endif;?>
-                  </tr>
+                  <td style="vertical-align: middle; text-align: center"><?=++$no;?></td>
+                  <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$game['game_title'];?></td>
+                  <?php if ($search->period == 'day') : ?>
+                  <?php $reportData = $game['dates']; ?>
+                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></td>
+                  <?php else : ?>
+                  <?php foreach ($dates as $date): ?>
+                  <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['game_pack' => 0, 'total_price' => 0]);?>
+                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['game_pack'], 1);?></td>
+                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['total_price'], 1);?></td>
+                  <?php endforeach;?>
+                  <?php endif;?>
+                </tr>
                 <?php endforeach;?>
               </tbody>
             </table>
-            <?php Pjax::end(); ?>
           </div>
         </div>
       </div>
@@ -194,33 +199,3 @@ foreach ($models as $date => $records) {
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<?php
-$script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-});
-
-var sendForm = new AjaxFormSubmit({element: '.assign-form'});
-sendForm.success = function (data, form) {
-  location.reload();
-}
-JS;
-$this->registerJs($script);
-?>

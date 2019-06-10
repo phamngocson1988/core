@@ -95,6 +95,7 @@ class ReportSaleOrderByGame extends Model
 
         $command = $this->getCommand();
         $command->select(['id', 'game_id', 'SUM(game_pack) as game_pack']);
+        $command->groupBy('game_id');
         $command->orderBy(['game_pack' => SORT_DESC]);
         $command->offset(0);
         $command->limit($this->limit);
@@ -108,7 +109,7 @@ class ReportSaleOrderByGame extends Model
         $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
         $command->andWhere(['IN', 'game_id', $gameIds]);
         $command->orderBy(['created_at' => SORT_ASC]);
-        $command->groupBy([$this->getGroupByPeriod(), 'game_id']);
+        $command->groupBy([$this->getGroupByPeriod(), 'game_id']);//die($command->createCommand()->getRawSql());
         $reports = $command->asArray()->all();
         $filterColumn = $this->filter_column;
         $reportDates = array_unique(array_column($reports, $filterColumn));
@@ -121,6 +122,7 @@ class ReportSaleOrderByGame extends Model
                 $reportByGame = array_filter($reportByDates, function($r) use ($gameId) {
                     return $r['game_id'] == $gameId;
                 });
+                if (!$reportByGame) continue;
                 $totalPackage = array_sum(array_column($reportByGame, 'game_pack'));
                 $totalPrice = array_sum(array_column($reportByGame, 'total_price'));
                 $gameInfo = reset($reportByGame);
@@ -156,51 +158,6 @@ class ReportSaleOrderByGame extends Model
             $games[$date]['other']['total_price'] = $totalPrice;
         }
         return $games;
-    }
-
-    public function showChar()
-    {
-        $models = $this->fetch();
-        $game_packs = array_map(function($model) { 
-          return round($model['game_pack'], 1);
-        }, $models);
-        $total_prices = array_map(function($model) { 
-            return round($model['total_price'], 1);
-          }, $models);
-        $labels = array_column($models, 'game_title');
-        $datasets = [
-            [
-                'label' => "Số gói",
-                'backgroundColor' => "rgba(54,198,211,0.2)",
-                'borderColor' => "rgba(54,198,211,1)",
-                'pointBackgroundColor' => "rgba(54,198,211,1)",
-                'pointBorderColor' => "#fff",
-                'pointHoverBackgroundColor' => "#fff",
-                'pointHoverBorderColor' => "rgba(54,198,211,1)",
-                'data' => array_values($game_packs)
-            ],
-            [
-                'label' => "Số Kcoin",
-                'backgroundColor' => "rgba(255,99,132,0.2)",
-                'borderColor' => "rgba(255,99,132,1)",
-                'pointBackgroundColor' => "rgba(255,99,132,1)",
-                'pointBorderColor' => "#fff",
-                'pointHoverBackgroundColor' => "#fff",
-                'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                'data' => array_values($total_prices)
-            ],
-        ];
-        return ChartJs::widget([
-            'type' => 'bar',
-            'options' => [
-                'height' => 200,
-                'width' => 400
-            ],
-            'data' => [
-                'labels' => $labels,
-                'datasets' => $datasets
-            ]
-        ]);
     }
 
     public function createCommand1()
