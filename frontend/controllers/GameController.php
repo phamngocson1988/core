@@ -19,11 +19,13 @@ class GameController extends Controller
     {
     	$model = Game::findOne($id);
         if (!$model) throw new BadRequestHttpException('Can not find the product');
-        // $item = new CartItem(['game_id' => $id]);
-        // $item->setScenario(CartItem::SCENARIO_ADD);
+    	$request = Yii::$app->request;
+        $item = new CartItem(['game_id' => $id]);
+        $item->setScenario(CartItem::SCENARIO_ADD);
+        $item->load($request->post());
+        $item->validate();
     	return $this->render('view', [
-            'model' => $model,
-            // 'item' => $item
+            'item' => $item
         ]);
     }
 }

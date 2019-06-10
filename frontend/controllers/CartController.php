@@ -64,36 +64,34 @@ class CartController extends Controller
     public function actionIndex()
     {
         $request = Yii::$app->request;
-        $cart = Yii::$app->cart->setMode('product');
-        // $item = $cart->getItem($cart->getItemType('product'));
+        $cart = Yii::$app->cart;
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
 
         $item->setScenario(CartItem::SCENARIO_EDIT);
-        // $discount = $cart->getItem($cart->getItemType('discount'));
-        $discount = $cart->getDiscount();
-        if ($request->isPost) {
-            if ($item->load($request->post()) && $item->validate()) {
-                $cart->add($item);
-            }
+        // $discount = $cart->getDiscount();
+        // if ($request->isPost) {
+        //     if ($item->load($request->post()) && $item->validate()) {
+        //         $cart->add($item);
+        //     }
             
-            if ($discount) $cart->remove($discount->getUniqueId());
-            $discount = new CartDiscount();
-            $discount->setCart($cart);
-            if ($discount->load($request->post()) && $discount->validate()) {
-                $cart->add($discount);
-            }
-        }
-        if (!$discount) $discount = new CartDiscount();
+        //     if ($discount) $cart->remove($discount->getUniqueId());
+        //     $discount = new CartDiscount();
+        //     $discount->setCart($cart);
+        //     if ($discount->load($request->post()) && $discount->validate()) {
+        //         $cart->add($discount);
+        //     }
+        // }
+        // if (!$discount) $discount = new CartDiscount();
 
         return $this->render('index', [
             'cart' => $cart,
-            'discount' => $discount,
-            'item' => $item,
+            // 'discount' => $discount,
+            // 'item' => $item,
         ]);
     }
 
-    public function actionAdd()
+    public function actionAdd1()
     {
     	$request = Yii::$app->request;
     	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
@@ -110,6 +108,24 @@ class CartController extends Controller
             return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
         }
 
+    }
+    public function actionAdd($id)
+    {
+    	$request = Yii::$app->request;
+    	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+    	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
+
+        $cart = Yii::$app->cart;
+        $cart->clear();
+        $item = new CartItem(['game_id' => $id]);
+        $item->setScenario(CartItem::SCENARIO_ADD);
+        if ($item->load($request->post()) && $item->validate()) {
+            $cart->add($item);
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
+        } else {
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
+        }
     }
 
     public function actionUpdate()

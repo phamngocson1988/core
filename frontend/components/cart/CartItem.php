@@ -9,7 +9,6 @@ use common\models\Product;
 class CartItem extends Model implements CartItemInterface
 {
     public $game_id;
-    public $product_id;
     public $quantity;
     public $username;
     public $password;
@@ -22,55 +21,40 @@ class CartItem extends Model implements CartItemInterface
 
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
-    const SCENARIO_INFO = 'info';
 
-    /** @var Product **/
-    protected $_product;
     /** @var Game **/
     protected $_game;
+
+    public function init()
+    {
+        $this->quantity = ($this->quantity > 0) ? $this->quantity : 1;
+    }
 
     public function scenarios()
     {
         return [
-            self::SCENARIO_ADD => ['game_id', 'product_id', 'quantity'],
-            self::SCENARIO_EDIT => ['product_id', 'quantity'],
-            self::SCENARIO_INFO => ['username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
+            self::SCENARIO_ADD => ['game_id', 'quantity'],
+            self::SCENARIO_EDIT => ['quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['game_id', 'product_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
-            [['product_id', 'quantity'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_INFO],
-            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_INFO],
+            [['game_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
+            ['quantity', 'number'],
+            ['quantity', 'default', 'value' => 1],
+            [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_EDIT],
+            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_EDIT],
             ['game_id', 'validateGame'],
-            ['product_id', 'validateProduct'],
         ];
-    }
-
-    public function validateProduct($attribute, $params)
-    {
-        $product = $this->getProduct();
-        if (!$product) {
-            $this->addError($attribute, 'Không tìm thấy gói sản phẩm');
-        }
-    }
-
-    public function getProduct()
-    {
-        if (!$this->_product) {
-            $this->_product = Product::findOne($this->product_id);
-        }
-        return $this->_product;
     }
 
     public function validateGame($attribute, $params)
     {
         $game = $this->getGame();
         if (!$game) {
-            $this->addError($attribute, 'Không tìm thấy game');
+            $this->addError($attribute, 'Not found');
         }
     }
 
@@ -84,7 +68,7 @@ class CartItem extends Model implements CartItemInterface
 
     public function setQuantity($num)
     {
-        $this->quantity = max(0, (int)$num);
+        $this->quantity = max(1, (int)$num);
     }
 
     public function increase()
@@ -107,14 +91,9 @@ class CartItem extends Model implements CartItemInterface
         return $this->getGame()->unit_name;
     }
 
-    public function getUnitGame()
+    public function getTotalPack()
     {
-        return $this->_product->unit;
-    }
-
-    public function getTotalUnitGame()
-    {
-        return $this->_product->unit * $this->quantity;
+        return $this->getGame()->pack * $this->quantity;
     }
 
     public function getGameId()
@@ -125,9 +104,7 @@ class CartItem extends Model implements CartItemInterface
     // ============== implement interface ===========//
     public function getPrice() : int
     {
-        $product = $this->getProduct();
-        if (!$product) return 0;
-        return (int)$product->price;
+        return $this->getGame()->price;
     }
 
     public function getLabel()
@@ -137,6 +114,6 @@ class CartItem extends Model implements CartItemInterface
 
     public function getUniqueId()
     {
-        return 'game_' . $this->game_id;
+        return $this->game_id;
     }
 }

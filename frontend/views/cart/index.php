@@ -4,14 +4,12 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+
+$item = $cart->getItem();
 ?>
 
 <?php Pjax::begin(); ?>
 <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
-<?= $form->field($item, 'scenario', [
-  'options' => ['tag' => false],
-  'template' => '{input}'
-])->hiddenInput()->label(false) ?>
 <section class="section section-lg bg-default">
   <div class="container container-wide">
     <div class="row row-fix justify-content-lg-center">
@@ -21,9 +19,8 @@ use yii\bootstrap\ActiveForm;
             <thead>
               <tr>
                 <th style="width: 30%;">Game</th>
-                <th style="width: 30%;">Package</th>
                 <th style="width: 10%;">King Coin</th>
-                <th style="width: 10%;"><?=ucfirst($item->getGame()->unit_name);?></th>
+                <th style="width: 10%;"><?=ucfirst($item->getUnitName());?></th>
                 <th style="width: 20%;">Quantity</th>
               </tr>
             </thead>
@@ -35,15 +32,8 @@ use yii\bootstrap\ActiveForm;
                     <div class="unit-body"><a class="text-gray-darker" style="white-space: normal;" href="javascript:;"><?=$item->getLabel();?></a></div>
                   </div>
                 </td>
-                <td>
-                  <?= $form->field($item, 'product_id', [
-                    'options' => ['tag' => false],
-                    'inputOptions' => ['class' => 'form-input select-filter', 'id' => 'products'],
-                    'template' => '{input}'
-                  ])->dropDownList(ArrayHelper::map($item->getGame()->products, 'id', 'title')) ?>
-                </td>
                 <td id="price"><?=number_format($item->getTotalPrice());?></td>
-                <td id="unit"><?=number_format($item->getTotalUnitGame());?></td>
+                <td id="unit"><?=number_format($item->getTotalPack());?></td>
                 <td>
                   <?= $form->field($item, 'quantity', [
                     'options' => ['class' => 'form-wrap box-width-1 shop-input'],
