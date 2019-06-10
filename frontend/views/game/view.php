@@ -82,13 +82,12 @@ $('body').on('click', "#add-cart-button", function(){
             alert(result.errors);
           }
         } else {
-          window.location.href = "[:cart_url]";
+          window.location.href = result.cart_url;
         }
       },
   });
 });
 JS;
 $script = str_replace("[:addcart_url]", Url::to(['cart/add', 'id' => $item->game_id]), $script);
-$script = str_replace("[:cart_url]", Url::to(['cart/index']), $script);
 $this->registerJs($script);
 ?>

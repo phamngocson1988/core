@@ -12,6 +12,7 @@ use Yii;
  */
 class Cart extends \yii2mod\cart\Cart
 {
+	public $discount_code;
 	public function getItem() 
 	{
 		$items = $this->getItems();

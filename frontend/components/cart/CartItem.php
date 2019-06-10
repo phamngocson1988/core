@@ -18,9 +18,11 @@ class CartItem extends Model implements CartItemInterface
     public $note;
     public $platform;
     public $login_method;
+    public $discount_code;
 
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
+    const SCENARIO_INFO = 'info';
 
     /** @var Game **/
     protected $_game;
@@ -34,18 +36,21 @@ class CartItem extends Model implements CartItemInterface
     {
         return [
             self::SCENARIO_ADD => ['game_id', 'quantity'],
-            self::SCENARIO_EDIT => ['quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
+            self::SCENARIO_EDIT => ['game_id', 'quantity', 'discount_code'],
+            self::SCENARIO_INFO => ['game_id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['game_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
+            [['game_id'], 'required'],
+            [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_ADD]],
+            ['discount_code', 'safe', 'on' => self::SCENARIO_EDIT],
             ['quantity', 'number'],
             ['quantity', 'default', 'value' => 1],
-            [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_EDIT],
+            [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_INFO],
+            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_INFO],
             ['game_id', 'validateGame'],
         ];
     }

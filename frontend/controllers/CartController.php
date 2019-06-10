@@ -67,27 +67,16 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
-
         $item->setScenario(CartItem::SCENARIO_EDIT);
-        // $discount = $cart->getDiscount();
-        // if ($request->isPost) {
-        //     if ($item->load($request->post()) && $item->validate()) {
-        //         $cart->add($item);
-        //     }
+        if ($item->load($request->post()) && $item->validate()) {
+            $cart->clear();
+            $cart->add($item);
+            $cart->load($request->post());
+            $cart->validate();
+        }
             
-        //     if ($discount) $cart->remove($discount->getUniqueId());
-        //     $discount = new CartDiscount();
-        //     $discount->setCart($cart);
-        //     if ($discount->load($request->post()) && $discount->validate()) {
-        //         $cart->add($discount);
-        //     }
-        // }
-        // if (!$discount) $discount = new CartDiscount();
-
         return $this->render('index', [
             'cart' => $cart,
-            // 'discount' => $discount,
-            // 'item' => $item,
         ]);
     }
 
@@ -122,7 +111,12 @@ class CartController extends Controller
         $item->setScenario(CartItem::SCENARIO_ADD);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
-            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
+            return json_encode([
+                'status' => true, 
+                'user_id' => Yii::$app->user->id, 
+                'cart' => $cart->getItems(),
+                'cart_url' => Url::to(['cart/index'])
+            ]);
         } else {
             return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
         }

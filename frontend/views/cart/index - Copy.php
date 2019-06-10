@@ -54,17 +54,24 @@ $item = $cart->getItem();
             <!-- RD Mailform: Subscribe-->
             <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
               <div class="rd-mailform-inline-inner">
-                <?= $form->field($cart, 'storageClass', [
+                <?php if (!$discount->code) : ?>
+                <?= $form->field($discount, 'code', [
                   'options' => ['class' => 'form-wrap'],
-                  'inputOptions' => ['class' => 'form-input', 'id' => 'voucher', 'readonly' => (boolean)$cart->discount_code],
+                  'inputOptions' => ['class' => 'form-input', 'id' => 'voucher'],
                   'labelOptions' => ['class' => 'form-label'],
                   'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                   'template' => '{input}{error}{label}'
                 ])->textInput()->label('Enter your voucher'); ?>
-                <?php if ($cart->discount_code) : ?>
-                <button id="remove_voucher" class="button form-button button-sm button-secondary button-nina">Remove</button>
-                <?php else : ?>
                 <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
+                <?php else :?>
+                <?= $form->field($discount, 'code', [
+                  'options' => ['class' => 'form-wrap'],
+                  'inputOptions' => ['class' => 'form-input', 'readonly' => true, 'id' => 'voucher'],
+                  'labelOptions' => ['class' => 'form-label'],
+                  'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+                  'template' => '{input}{error}{label}'
+                ])->textInput()->label('Enter your voucher'); ?>
+                <button id="remove_voucher" class="button form-button button-sm button-secondary button-nina">Remove</button>
                 <?php endif;?>
               </div>
             </div>
@@ -191,7 +198,7 @@ complainForm.error = function (errors) {
   console.log(errors);
 }
 
-$('body').on('change', "#quantity", function(){
+$('body').on('change', "#products, #quantity", function(){
   $(this).closest('form').submit();
 });
 $('body').on('click', '#apply_voucher', function(e){
