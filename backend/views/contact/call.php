@@ -71,7 +71,7 @@ $this->registerJsFile('@web/vendor/assets/pages/scripts/components-multi-select.
                     <select id="contact-group" class="form-control">
                       <option value="0">Tất cả</option>
                       <?php foreach ($groups as $group) :?>
-                      <option value="<?=$group->id;?>" data-contacts="<?=implode(",", (ArrayHelper::getColumn($group->contacts, 'contact_id')));?>"><?=$group->name;?></option>
+                      <option value="<?=$group->id;?>" data-contacts="<?=implode(",", (ArrayHelper::getColumn($group->contactGroups, 'contact_id')));?>"><?=$group->name;?></option>
                       <?php endforeach;?>
                     </select>
                   </div>
@@ -82,7 +82,7 @@ $this->registerJsFile('@web/vendor/assets/pages/scripts/components-multi-select.
                   <div class="col-md-6">
                     <select id="phones" class="form-control multi-select" name="phones[]" multiple="multiple">
                       <?php foreach ($contacts as $contact) :?>
-                      <option value="<?=$contact->id;?>" data-contacts="<?=implode(",", (ArrayHelper::getColumn($contact->groups, 'group_id')));?>"><?=$contact->phone;?></option>
+                      <option value="<?=$contact->id;?>" data-contacts="<?=implode(",", (ArrayHelper::getColumn($contact->contactGroups, 'group_id')));?>"><?=$contact->phone;?></option>
                       <?php endforeach;?>
                     </select>
                   </div>

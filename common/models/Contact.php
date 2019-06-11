@@ -34,16 +34,20 @@ class Contact extends ActiveRecord
         ];
     }
 
-    public function getGroups()
+    public function getContactGroups()
     {
         return $this->hasMany(ContactGroup::className(), ['contact_id' => 'id']);
-        // return $this->hasMany(Item::className(), ['id' => 'item_id'])
-        //     ->viaTable('order_item', ['order_id' => 'id']);
+    }
+
+    public function getGroups()
+    {
+        return $this->hasMany(Group::className(), ['id' => 'group_id'])
+            ->viaTable(ContactGroup::tableName(), ['contact_id' => 'id']);
     }
 
     public function deleteGroups()
     {
-        $groups = $this->groups;
+        $groups = $this->contactGroups;
         foreach ($groups as $group) $group->delete();
     }
 }

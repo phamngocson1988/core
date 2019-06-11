@@ -1,5 +1,9 @@
 {use class='yii\widgets\LinkPager'}
 {use class='yii\widgets\Pjax' type='block'}
+{use class='yii\widgets\ActiveForm' type='block'}
+{$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
+{$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset'])}
+{$this->registerJsFile('@web/vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset'])}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -36,11 +40,15 @@
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <form method="GET">
-            <div class="form-group col-md-4">
-              <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control"
-                placeholder="Keyword" name="q" value="{$q}">
-            </div>
+          {ActiveForm assign='form' method='get'}
+            {$form->field($search, 'q', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+            ])->textInput()->label('Keyword')}
+            {$form->field($search, 'group_ids', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'group_ids[]']
+            ])->dropDownList($search->fetchGroups())->label('Nhóm danh bạ')}
             <div class="form-group col-md-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
@@ -48,7 +56,7 @@
               <i class="fa fa-check"></i> {Yii::t('app', 'search')}
               </button>
             </div>
-          </form>
+          {/ActiveForm}
         </div>
         {Pjax}
         <table class="table table-striped table-bordered table-hover table-checkable">
@@ -56,9 +64,10 @@
             <tr>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
               <th style="width: 15%;"> Tên </th>
-              <th style="width: 25%;"> Số điện thoại </th>
+              <th style="width: 10%;"> Số điện thoại </th>
               <th style="width: 10%;"> Mô tả </th>
-              <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+              <th style="width: 20%;"> Nhóm </th>
+              <th style="width: 5%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
           <tbody>
@@ -69,6 +78,11 @@
               <td>{$model->name}</td>
               <td>{$model->phone}</td>
               <td>{$model->description}</td>
+              <td>
+              {foreach $model->groups as $group}
+              <span class="label label-default">{$group->name}</span> 
+              {/foreach}
+              </td>
               <td>
                 <a class="btn btn-xs grey-salsa" href="{url route='contact/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
               </td>

@@ -36,14 +36,20 @@ class Group extends ActiveRecord
         ];
     }
 
-    public function getContacts()
+    public function getContactGroups()
     {
         return $this->hasMany(ContactGroup::className(), ['group_id' => 'id']);
     }
 
+    public function getContacts()
+    {
+        return $this->hasMany(Contact::className(), ['id' => 'contact_id'])
+            ->viaTable(ContactGroup::tableName(), ['group_id' => 'id']);
+    }
+
     public function getNumberContacts()
     {
-        $user = $this->getContacts();
+        $user = $this->getContactGroups();
         return $user->count();
     }
 

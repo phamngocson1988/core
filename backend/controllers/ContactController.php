@@ -18,6 +18,7 @@ use backend\forms\FetchTransactionHistoryForm;
 use common\components\telecom\Tel4vn;
 use common\models\Group;
 use common\models\ContactGroup;
+use backend\forms\FetchContactForm;
 
 /**
  * ContactController
@@ -51,18 +52,26 @@ class ContactController extends Controller
         $this->view->params['main_menu_active'] = 'contact.index';
         $request = Yii::$app->request;
         $q = $request->get('q');
-        $command = Contact::find()->where(['user_id' => Yii::$app->user->id]);
-        if ($q) {
-             $command->orWhere(['like', 'phone', $q]);
-             $command->orWhere(['like', 'name', $q]);
-        }
+        $group_ids = $request->get('group_ids');
+        $search = new FetchContactForm([
+            'q' => $q, 
+            'group_ids' => $group_ids,
+            'user_id' => Yii::$app->user->id
+        ]);
+        $command = $search->getCommand();
+        // $command = Contact::find()->where(['user_id' => Yii::$app->user->id]);
+        // if ($q) {
+        //     $command->andWhere(['or',
+        //         ['like', 'phone', $q],
+        //         ['like', 'name', $q]
+        //     ]);
+        // }
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
-        
         return $this->render('index.tpl', [
             'models' => $models,
             'pages' => $pages,
-            'q' => $q,
+            'search' => $search,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -104,7 +113,7 @@ class ContactController extends Controller
         $request = Yii::$app->request;
         $model = Contact::findOne($id);
         $model->setScenario(Contact::SCENARIO_EDIT);
-        $model->group_ids = ArrayHelper::map($model->groups, 'id', 'group_id');
+        $model->group_ids = ArrayHelper::map($model->contactGroups, 'id', 'group_id');
         if ($model->load($request->post()) && $model->save()) {
             $model->deleteGroups();
             $groupIds = $model->group_ids;
