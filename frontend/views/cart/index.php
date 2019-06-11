@@ -54,14 +54,14 @@ $item = $cart->getItem();
             <!-- RD Mailform: Subscribe-->
             <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
               <div class="rd-mailform-inline-inner">
-                <?= $form->field($cart, 'storageClass', [
+                <?= $form->field($discount, 'code', [
                   'options' => ['class' => 'form-wrap'],
-                  'inputOptions' => ['class' => 'form-input', 'id' => 'voucher', 'readonly' => (boolean)$cart->discount_code],
+                  'inputOptions' => ['class' => 'form-input', 'id' => 'voucher', 'readonly' => $cart->hasDiscount()],
                   'labelOptions' => ['class' => 'form-label'],
                   'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
                   'template' => '{input}{error}{label}'
                 ])->textInput()->label('Enter your voucher'); ?>
-                <?php if ($cart->discount_code) : ?>
+                <?php if ($cart->hasDiscount()) : ?>
                 <button id="remove_voucher" class="button form-button button-sm button-secondary button-nina">Remove</button>
                 <?php else : ?>
                 <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
@@ -172,7 +172,7 @@ $item = $cart->getItem();
           </div>
           <div class="col-lg-12 offset-custom-1">
             <div class="form-button text-md-right">
-              <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina']) ?>
+              <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina', 'id' => 'update-cart-button']) ?>
             </div>
           </div>
         </div>
@@ -183,13 +183,24 @@ $item = $cart->getItem();
 <?php ActiveForm::end(); ?>
 <?php
 $script = <<< JS
-var complainForm = new AjaxFormSubmit({element: 'form#update-cart'});
-complainForm.success = function (data, form) {
-  window.location.href = "[:checkout_url]";
-}
-complainForm.error = function (errors) {
-  console.log(errors);
-}
+$('body').on('click', "#update-cart-button", function(){
+  var form = $(this).closest('form');
+  $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      dataType : 'json',
+      data: form.serialize(),
+      success: function (result, textStatus, jqXHR) {
+        if (!result.status) {
+          if (result.errors) {
+            alert(result.errors);
+          }
+        } else {
+          window.location.href = result.checkout_url;
+        }
+      },
+  });
+});
 
 $('body').on('change', "#quantity", function(){
   $(this).closest('form').submit();
@@ -210,6 +221,5 @@ $('body').on('click', '#remove_voucher', function(e){
 })
 
 JS;
-$script = str_replace("[:checkout_url]", Url::to(['cart/checkout']), $script);
 $this->registerJs($script);
 ?>

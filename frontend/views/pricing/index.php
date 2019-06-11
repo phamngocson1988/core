@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use yii\widgets\Pjax;
 ?>
 <section class="section-lg text-center bg-default">
   <!-- Style switcher-->
@@ -16,7 +17,7 @@ use yii\bootstrap\ActiveForm;
           <div class="row row-50 justify-content-sm-center">
             <!-- Pricing Box XL-->
             <?php foreach ($items as $item) :?>
-            <div class="col-md-6 col-xl-3" class="pricing-package">
+            <div class="col-md-6 col-xl-3" class="pricing-package">s
               <div class="pricing-box pricing-box-xl pricing-box-novi">
                 <div class="pricing-box-header">
                   <h4><?=$item->getPricing()->title;?></h4>

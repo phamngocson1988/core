@@ -68,36 +68,22 @@ class CartController extends Controller
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
         $item->setScenario(CartItem::SCENARIO_EDIT);
+        $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
         if ($item->load($request->post()) && $item->validate()) {
             $cart->clear();
             $cart->add($item);
-            $cart->load($request->post());
-            $cart->validate();
+        }
+        if ($request->isPost && $discount->load($request->post())) {
+            if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
+            else $cart->setDiscountItem($discount);
         }
             
         return $this->render('index', [
             'cart' => $cart,
+            'discount' => $discount
         ]);
     }
 
-    public function actionAdd1()
-    {
-    	$request = Yii::$app->request;
-    	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-    	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
-
-        $cart = Yii::$app->cart->setMode('product');
-        $cart->clear();
-        $item = new CartItem(['scenario' => CartItem::SCENARIO_ADD]);
-        if ($item->load($request->post()) && $item->validate()) {
-            $cart->add($item);
-            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
-        } else {
-            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
-        }
-
-    }
     public function actionAdd($id)
     {
     	$request = Yii::$app->request;
@@ -128,15 +114,12 @@ class CartController extends Controller
     	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
     	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
-
-        $cart = Yii::$app->cart->setMode('product');
-        // $items = $cart->getItems($cart->getItemType('product'));
-        // $item = reset($items);
+        $cart = Yii::$app->cart;
         $item = $cart->getItem();
         $item->setScenario(CartItem::SCENARIO_INFO);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
-            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'checkout_url' => Url::to(['cart/checkout'])]);
         } else {
             return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
         }
@@ -146,7 +129,7 @@ class CartController extends Controller
     {
         $model = new CartItem();
         $user = Yii::$app->user->getIdentity();
-        $cart = Yii::$app->cart->setMode('product');
+        $cart = Yii::$app->cart;
         $canPlaceOrder = $user->getWalletAmount() > $cart->getTotalPrice();
         return $this->render('checkout', ['model' => $model, 'can_place_order' => $canPlaceOrder]);
     }
@@ -155,12 +138,11 @@ class CartController extends Controller
     {
         // Create order
         $user = Yii::$app->user->getIdentity();
-        $cart = Yii::$app->cart->setMode('product');
+        $cart = Yii::$app->cart;
         $totalPrice = $cart->getTotalPrice();
         $subTotalPrice = $cart->getSubTotalPrice();
         $discount = $cart->getTotalDiscount();
         $cartItem = $cart->getItem();
-        $discountItem = $cart->getDiscount();
 
         // Order detail
         $order = new Order();
@@ -179,9 +161,9 @@ class CartController extends Controller
         // Item detail
         $order->game_id = $cartItem->getGame()->id;
         $order->game_title = $cartItem->getLabel();
-        $order->game_pack = round($cartItem->getTotalUnitGame() / $cartItem->getGame()->pack, 1);
+        $order->game_pack = $cartItem->quantity;
         $order->unit_name = $cartItem->getUnitName();
-        $order->total_unit = $cartItem->getTotalUnitGame();
+        $order->total_unit = $cartItem->getTotalPack();
         $order->username = $cartItem->username;
         $order->password = $cartItem->password;
         $order->platform = $cartItem->platform;
@@ -193,7 +175,8 @@ class CartController extends Controller
 
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        if ($discountItem) {
+        if ($cart->hasDiscount()) {
+            $discountItem = $cart->getDiscountItem();
             $itemFee = new OrderFee();
             $itemFee->order_id = $order->id;
             $itemFee->type = OrderFee::TYPE_DISCOUNT;
@@ -208,6 +191,8 @@ class CartController extends Controller
         $wallet->balance = $user->getWalletAmount() + $wallet->coin;
         $wallet->type = UserWallet::TYPE_OUTPUT;
         $wallet->description = "Pay for order #$order->auth_key";
+        $wallet->ref_name = Order::classname();
+        $wallet->ref_key = $order->auth_key;
         $wallet->created_by = $user->id;
         $wallet->user_id = $user->id;
         $wallet->status = UserWallet::STATUS_COMPLETED;
@@ -227,8 +212,8 @@ class CartController extends Controller
         }
         $this->layout = 'notice';
         return $this->render('/site/notice', [           
-            'title' => 'Đặt hàng thành công',
-            'content' => 'Xin chúc mừng bạn đã đặt hàng thành công'
+            'title' => 'Place order successfully',
+            'content' => 'Congratulation.'
         ]);
     }
 }

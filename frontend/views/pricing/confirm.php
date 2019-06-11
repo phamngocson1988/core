@@ -4,7 +4,8 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-$cart = Yii::$app->cart->setMode('pricing');
+
+$item = $cart->getItem();
 ?>
 
 <?php Pjax::begin(); ?>

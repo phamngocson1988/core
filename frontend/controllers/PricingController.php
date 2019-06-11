@@ -13,8 +13,8 @@ use common\models\UserWallet;
 use common\models\PaymentTransaction;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use frontend\components\cart\CartDiscount;
-use frontend\components\cart\CartPricingItem;
+use frontend\components\kingcoin\CartDiscount;
+use frontend\components\kingcoin\CartItem;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\Item;
@@ -60,66 +60,102 @@ class PricingController extends Controller
     {
         $models = PricingCoin::find()->select('id')->all();
         $items = array_map(function($model){
-            return new CartPricingItem(['pricing_id' => $model->id, 'quantity' => 1]);
+            return new CartItem(['pricing_id' => $model->id, 'quantity' => 1]);
         }, $models);
     	return $this->render('index', [
             'items' => $items,
     	]);
     }
 
-    public function actionAdd()
+    public function actionAdd($id)
     {
     	$request = Yii::$app->request;
     	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
     	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
 
-        $cart = Yii::$app->cart->setMode('pricing');
+        $cart = Yii::$app->kingcoin;
         $cart->clear();
-        $item = new CartPricingItem(['scenario' => CartPricingItem::SCENARIO_ADD]);
+        $item = new CartItem(['pricing_id' => $id]);
+        $item->setScenario(CartItem::SCENARIO_ADD);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
-            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'cart' => $cart->getItems()]);
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'checkout_url' => Url::to(['pricing/confirm'])]);
         } else {
             return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
         }
+
+
+        // $request = Yii::$app->request;
+        // $cart = Yii::$app->kingcoin;
+        // $item = $cart->getItem();
+        // if (!$item) return $this->redirect(['site/index']);
+        // $item->setScenario(CartItem::SCENARIO_EDIT);
+        // $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
+        // if ($item->load($request->post()) && $item->validate()) {
+        //     $cart->clear();
+        //     $cart->add($item);
+        // }
+        // if ($request->isPost && $discount->load($request->post())) {
+        //     if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
+        //     else $cart->setDiscountItem($discount);
+        // }
+            
+        // return $this->render('index', [
+        //     'cart' => $cart,
+        //     'discount' => $discount
+        // ]);
 
     }
 
     public function actionConfirm()
     {
         $request = Yii::$app->request;
-        $cart = Yii::$app->cart->setMode('pricing');
+        $cart = Yii::$app->cart;
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
-
-        $item->setScenario(CartPricingItem::SCENARIO_EDIT);
-        $discount = $cart->getDiscount();
-
-        if ($request->isPost) {
-            if ($item->load($request->post()) && $item->validate()) {
-                $cart->add($item);
-            }
-            
-            if ($discount) $cart->remove($discount->getUniqueId());
-            $discount = new CartDiscount();
-            $discount->setCart($cart);
-            if ($discount->load($request->post()) && $discount->validate()) {
-                $cart->add($discount);
-            }
+        $item->setScenario(CartItem::SCENARIO_EDIT);
+        $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
+        if ($item->load($request->post()) && $item->validate()) {
+            $cart->clear();
+            $cart->add($item);
         }
-        if (!$discount) $discount = new CartDiscount();
+        if ($request->isPost && $discount->load($request->post())) {
+            if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
+            else $cart->setDiscountItem($discount);
+        }
 
         return $this->render('confirm', [
             'discount' => $discount,
             'item' => $item,
         ]);
+
+
+        // $request = Yii::$app->request;
+        // $cart = Yii::$app->cart;
+        // $item = $cart->getItem();
+        // if (!$item) return $this->redirect(['site/index']);
+        // $item->setScenario(CartItem::SCENARIO_EDIT);
+        // $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
+        // if ($item->load($request->post()) && $item->validate()) {
+        //     $cart->clear();
+        //     $cart->add($item);
+        // }
+        // if ($request->isPost && $discount->load($request->post())) {
+        //     if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
+        //     else $cart->setDiscountItem($discount);
+        // }
+            
+        // return $this->render('index', [
+        //     'cart' => $cart,
+        //     'discount' => $discount
+        // ]);
     }
 
     public function actionCheckout()
     {
 
-        $cart = Yii::$app->cart->setMode('pricing');
+        $cart = Yii::$app->kingcoin;
         if (!$cart->getItem()) throw new NotFoundHttpException("You have not added any pricing package", 1);
         return $this->render('checkout');
     }
@@ -142,7 +178,7 @@ class PricingController extends Controller
             new \PayPal\Auth\OAuthTokenCredential($clientId, $clientSecret)
         );
 
-        $cart = Yii::$app->cart->setMode('pricing');
+        $cart = Yii::$app->kingcoin;
         $totalPrice = $cart->getTotalPrice();
         $subTotalPrice = $cart->getSubTotalPrice();
         $cartItem = $cart->getItem();
@@ -157,7 +193,7 @@ class PricingController extends Controller
 
         // For discount
         if ($cart->getTotalDiscount()) {
-            $discount = $cart->getDiscount();
+            $discount = $cart->getDiscountItem();
             $discountItem = new Item();
             $discountItem->setName($discount->getPromotion()->title)
             ->setCurrency('USD')
@@ -183,7 +219,7 @@ class PricingController extends Controller
         $transaction = new PaypalTransaction();
         $transaction->setAmount($amount)
             ->setItemList($ppitemList)
-            ->setDescription("Pay for package of coins #" . $cartItem->getUniqueId() . " " . $cartItem->getPricing()->title)
+            ->setDescription("Pay for package of coins #" . $cartItem->getUniqueId() . " " . $cartItem->getLabel())
             ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
@@ -212,7 +248,7 @@ class PricingController extends Controller
     public function actionSuccess()
     {
         $request = Yii::$app->request;
-        $cart = Yii::$app->cart->setMode('pricing');
+        $cart = Yii::$app->kingcoin;
         $cartItem = $cart->getItem();
         $user = Yii::$app->user->getIdentity();
         $paymentId = $request->get('paymentId');
@@ -277,6 +313,8 @@ class PricingController extends Controller
                 $wallet->balance = $user->getWalletAmount() + $wallet->coin;
                 $wallet->type = UserWallet::TYPE_INPUT;
                 $wallet->description = "Transaction #$trn->auth_key";
+                $wallet->ref_name = PaymentTransaction::className();
+                $wallet->ref_key = $trn->auth_key;
                 $wallet->created_by = $user->id;
                 $wallet->user_id = $user->id;
                 $wallet->status = UserWallet::STATUS_COMPLETED;
@@ -284,17 +322,9 @@ class PricingController extends Controller
                 $wallet->save();
             }
         } catch (Exception $ex) {
-        	// $session->remove('payment_method');
-	        // $session->remove('payment_id');
-         //    $session->remove('package_id');
-	        // $session->remove('package_quantity');
             exit(1);
         }
 
-        // $session->remove('payment_method');
-        // $session->remove('payment_id');
-        // $session->remove('package_id');
-        // $session->remove('package_quantity');
         $this->layout = 'notice';
         return $this->render('/site/notice', [
             'title' => 'You have just bought a pricing successfully.',

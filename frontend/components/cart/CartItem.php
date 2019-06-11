@@ -18,7 +18,6 @@ class CartItem extends Model implements CartItemInterface
     public $note;
     public $platform;
     public $login_method;
-    public $discount_code;
 
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
@@ -36,7 +35,7 @@ class CartItem extends Model implements CartItemInterface
     {
         return [
             self::SCENARIO_ADD => ['game_id', 'quantity'],
-            self::SCENARIO_EDIT => ['game_id', 'quantity', 'discount_code'],
+            self::SCENARIO_EDIT => ['game_id', 'quantity'],
             self::SCENARIO_INFO => ['game_id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
         ];
     }
@@ -46,7 +45,6 @@ class CartItem extends Model implements CartItemInterface
         return [
             [['game_id'], 'required'],
             [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_ADD]],
-            ['discount_code', 'safe', 'on' => self::SCENARIO_EDIT],
             ['quantity', 'number'],
             ['quantity', 'default', 'value' => 1],
             [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_INFO],
@@ -119,6 +117,6 @@ class CartItem extends Model implements CartItemInterface
 
     public function getUniqueId()
     {
-        return $this->game_id;
+        return 'item' . $this->game_id;
     }
 }

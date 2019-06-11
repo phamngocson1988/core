@@ -1,11 +1,11 @@
 <?php
-namespace frontend\components\cart;
+namespace frontend\components\kingcoin;
 
 use yii2mod\cart\models\CartItemInterface;
 use yii\base\Model;
 use common\models\PricingCoin;
 
-class CartPricingItem extends Model implements CartItemInterface
+class CartItem extends Model implements CartItemInterface
 {
     public $pricing_id;
     public $quantity;

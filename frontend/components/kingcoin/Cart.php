@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\components\cart;
+namespace frontend\components\kingcoin;
 
 use Yii;
 use yii2mod\cart\models\CartItemInterface;
@@ -13,7 +13,7 @@ use yii2mod\cart\models\CartItemInterface;
  */
 class Cart extends \yii2mod\cart\Cart
 {
-	const ITEM_DISCOUNT = '\frontend\components\cart\CartDiscount';
+	const ITEM_DISCOUNT = '\frontend\components\kingcoin\CartDiscount';
 
 	/** instance of CartItemInterface */
 	// protected $discount;
@@ -36,15 +36,11 @@ class Cart extends \yii2mod\cart\Cart
 
 	public function setDiscountItem($item)
 	{
-		// $this->discount = $item;
-		// $this->getStorage()->save($this);
 		$this->add($item);
 	}
 
 	public function removeDiscountItem()
 	{
-		// $this->discount = null;
-		// $this->getStorage()->save($this);
 		$item = $this->getDiscountItem();
 		if (!$item) return;
 		$this->remove($item->getUniqueId());

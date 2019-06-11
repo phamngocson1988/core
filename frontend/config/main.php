@@ -63,8 +63,15 @@ return [
             'class' => 'frontend\components\cart\Cart',
             // you can change default storage class as following:
             'storageClass' => [
-                'class' => 'yii2mod\cart\storage\DatabaseStorage',
+                'class' => 'yii2mod\cart\storage\SessionStorage',
                 // you can also override some properties 
+                'deleteIfEmpty' => true
+            ]
+        ],
+        'kingcoin' => [
+            'class' => 'frontend\components\kingcoin\Cart',
+            'storageClass' => [
+                'class' => 'yii2mod\cart\storage\DatabaseStorage',
                 'deleteIfEmpty' => true
             ]
         ],

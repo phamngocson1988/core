@@ -1,5 +1,5 @@
 <?php
-namespace frontend\components\cart;
+namespace frontend\components\kingcoin;
 
 use Yii;
 use yii\base\Model;

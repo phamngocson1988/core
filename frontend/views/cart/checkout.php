@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-$cart = Yii::$app->cart->setMode('product');
+$cart = Yii::$app->cart;
 $item = $cart->getItem();
 // print_r($item);die;
 ?>
@@ -20,7 +20,7 @@ $item = $cart->getItem();
                   <td>
                     <?=$item->getLabel();?><br/>
                     <small>Quantity <?=$item->quantity;?></small>
-                    <small><?=$item->getUnitName();?> <?=number_format($item->getTotalUnitGame());?></small>
+                    <small><?=$item->getUnitName();?> <?=number_format($item->getTotalPack());?></small>
                   </td>
                   <td>(K)<?=$item->getTotalPrice();?></td>
                 </tr>
