@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
-$cart = Yii::$app->cart->setMode('pricing');
+$cart = Yii::$app->kingcoin;
 $item = $cart->getItem();
 ?>
 <section class="section-xl text-center bg-default">
@@ -22,7 +22,7 @@ $item = $cart->getItem();
             <div class="col-md-8 col-xl-6">
               <div class="pricing-box pricing-box-lg pricing-box-novi">
                 <div class="pricing-box-header text-sm-left">
-                  <h4><?=$item->getPricing()->title;?></h4>
+                  <h4><?=$item->getLabel();?></h4>
                 </div>
                 <div class="pricing-box-body">
                   <div class="row row-fix align-items-sm-center">

@@ -17,19 +17,18 @@ use yii\widgets\Pjax;
           <div class="row row-50 justify-content-sm-center">
             <!-- Pricing Box XL-->
             <?php foreach ($items as $item) :?>
-            <div class="col-md-6 col-xl-3" class="pricing-package">s
+            <div class="col-md-6 col-xl-3" class="pricing-package">
               <div class="pricing-box pricing-box-xl pricing-box-novi">
                 <div class="pricing-box-header">
                   <h4><?=$item->getPricing()->title;?></h4>
                 </div>
                 <?php $form = ActiveForm::begin([
-                  'action' => Url::to(['pricing/add']),
+                  'action' => Url::to(['pricing/add', 'id' => $item->pricing_id]),
                   'options' => ['class' => 'add-to-cart']
                 ]); ?>
                 <div class="pricing-box-price">
                   <div class="heading-2"><sup>$</sup><span id="price-<?=$item->getPricing()->id;?>"><?=number_format($item->getPricing()->amount);?></span></div>
                 </div>
-                <?= $form->field($item, 'pricing_id', ['template' => '{input}'])->hiddenInput() ?>
                 <?= Html::submitButton('Buy now', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
                 <div class="pricing-box-body">
                   <ul class="pricing-box-list">
@@ -43,7 +42,7 @@ use yii\widgets\Pjax;
                         <div class="unit-body">
                           <?= $form->field($item, 'quantity', [
                           'options' => ['class' => 'form-wrap box-width-1 shop-input'],
-                          'inputOptions' => ['class' => 'form-input input-append', 'type' => 'number', 'min' => 1, 'value' => 1, 'id' => 'quantity'],
+                          'inputOptions' => ['class' => 'form-input input-append quantity-control', 'type' => 'number', 'min' => 1, 'id' => "item" . $item->pricing_id],
                           'template' => '{input}'
                         ])->textInput() ?>
                         </div>
@@ -68,14 +67,9 @@ complainForm.success = function (data, form) {
   window.location.href = "[:checkout_url]";
 }
 
-$(".quantity-control").on("change", function(){
-  var id = $(this).data("id");
-  var price = $(this).data("price");
-  var coin = $(this).data("coin");
-  var qt = $(this).val();
-  $(this).closest("form").find("#price-" + id).html(formatMoney(price * qt, 0));
-  $(this).closest("form").find("#coin-" + id).html(formatMoney(coin * qt, 0));
-});
+// $('body').on('change', ".quantity-control", function() {
+//   $(this).closest('form').submit();
+// });
 JS;
 $script = str_replace("[:checkout_url]", Url::to(['pricing/confirm']), $script);
 $this->registerJs($script);

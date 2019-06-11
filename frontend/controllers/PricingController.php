@@ -58,10 +58,18 @@ class PricingController extends Controller
 
     public function actionIndex()
     {
+        $request = Yii::$app->request;
         $models = PricingCoin::find()->select('id')->all();
         $items = array_map(function($model){
             return new CartItem(['pricing_id' => $model->id, 'quantity' => 1]);
         }, $models);
+        if ($request->isPost) {
+            $item = new CartItem();
+            $item->load($request->post());
+            $items = array_filter($items, function($model) use ($item) {
+                return $model->pricing_id == $item->pricing_id;
+            });
+        }
     	return $this->render('index', [
             'items' => $items,
     	]);
@@ -84,34 +92,12 @@ class PricingController extends Controller
         } else {
             return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
         }
-
-
-        // $request = Yii::$app->request;
-        // $cart = Yii::$app->kingcoin;
-        // $item = $cart->getItem();
-        // if (!$item) return $this->redirect(['site/index']);
-        // $item->setScenario(CartItem::SCENARIO_EDIT);
-        // $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
-        // if ($item->load($request->post()) && $item->validate()) {
-        //     $cart->clear();
-        //     $cart->add($item);
-        // }
-        // if ($request->isPost && $discount->load($request->post())) {
-        //     if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
-        //     else $cart->setDiscountItem($discount);
-        // }
-            
-        // return $this->render('index', [
-        //     'cart' => $cart,
-        //     'discount' => $discount
-        // ]);
-
     }
 
     public function actionConfirm()
     {
         $request = Yii::$app->request;
-        $cart = Yii::$app->cart;
+        $cart = Yii::$app->kingcoin;
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
         $item->setScenario(CartItem::SCENARIO_EDIT);
@@ -127,29 +113,8 @@ class PricingController extends Controller
 
         return $this->render('confirm', [
             'discount' => $discount,
-            'item' => $item,
+            'cart' => $cart,
         ]);
-
-
-        // $request = Yii::$app->request;
-        // $cart = Yii::$app->cart;
-        // $item = $cart->getItem();
-        // if (!$item) return $this->redirect(['site/index']);
-        // $item->setScenario(CartItem::SCENARIO_EDIT);
-        // $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
-        // if ($item->load($request->post()) && $item->validate()) {
-        //     $cart->clear();
-        //     $cart->add($item);
-        // }
-        // if ($request->isPost && $discount->load($request->post())) {
-        //     if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
-        //     else $cart->setDiscountItem($discount);
-        // }
-            
-        // return $this->render('index', [
-        //     'cart' => $cart,
-        //     'discount' => $discount
-        // ]);
     }
 
     public function actionCheckout()
@@ -302,7 +267,7 @@ class PricingController extends Controller
                 $trn->payment_at = date('Y-m-d H:i:s');
                 $trn->generateAuthKey();
                 if ($cart->getTotalDiscount()) {
-                    $discount = $cart->getDiscount();
+                    $discount = $cart->getDiscountItem();
                     $trn->discount_price = $cart->getTotalDiscount();
                     $trn->discount_code = $discount->getPromotion()->code;
                 }

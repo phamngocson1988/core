@@ -65,7 +65,7 @@ return [
             'storageClass' => [
                 'class' => 'yii2mod\cart\storage\SessionStorage',
                 // you can also override some properties 
-                'deleteIfEmpty' => true
+                // 'deleteIfEmpty' => true
             ]
         ],
         'kingcoin' => [

@@ -59,7 +59,7 @@ class CartDiscount extends Model implements CartItemInterface
     public function getPromotion()
     {
         if (!$this->_promotion) {
-            $this->_promotion = Promotion::findOne(['code' => $this->code, 'object_type' => Promotion::OBJECT_COIN]);
+            $this->_promotion = Promotion::findOne(['code' => $this->code, 'object_type' => Promotion::OBJECT_MONEY]);
         }
         return $this->_promotion;
     }
