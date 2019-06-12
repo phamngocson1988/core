@@ -177,6 +177,11 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='/setting/gallery'}" class="nav-link " code='setting.gallery'>
+            <span class="title">Home banner</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/order-complain'}" class="nav-link " code='ordercomplain.index'>
             <span class="title">Mẫu phản hồi</span>
             </a>

@@ -7,18 +7,29 @@ use yii\base\Model;
 
 class GallerySettingForm extends Model
 {
-    public $main_gallery = [];
+    public $title1;
+    public $content1;
+    public $link1;
 
-    public function init()
-    {
-        parent::init();
-        $this->main_gallery = array_filter($this->main_gallery);
-    }
+    public $title2;
+    public $content2;
+    public $link2;
+
+    public $title3;
+    public $content3;
+    public $link3;
+
+    public $title4;
+    public $content4;
+    public $link4;
 
     public function rules()
     {
         return [
-            [['main_gallery'], 'trim'],
+            [['title1', 'content1', 'link1'], 'trim'],
+            [['title2', 'content2', 'link2'], 'trim'],
+            [['title3', 'content3', 'link3'], 'trim'],
+            [['title4', 'content4', 'link4'], 'trim'],
         ];
     }
 
@@ -28,8 +39,17 @@ class GallerySettingForm extends Model
     public function attributeLabels()
     {
         return [
-            'main_gallery' => Yii::t('app', 'main_gallery'),
-            // 'gallery1' => Yii::t('app', 'gallery1'),
+            'title1' => 'Tiêu đề',
+            'content1' => 'Nội dung',
+
+            'title2' => 'Tiêu đề',
+            'content2' => 'Nội dung',
+
+            'title3' => 'Tiêu đề',
+            'content3' => 'Nội dung',
+
+            'title4' => 'Tiêu đề',
+            'content4' => 'Nội dung',
         ];
     }
 }
