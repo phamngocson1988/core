@@ -73,6 +73,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
             'inputOptions' => ['class' => 'form-control', 'name' => 'q']
           ])->textInput()->label('Mã đơn hàng');?>
 
+          <?php $customer = $search->getCustomer();?>
           <?=$form->field($search, 'customer_id', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
           ])->widget(kartik\select2\Select2::classname(), [
@@ -143,25 +144,29 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
 
           <?=$form->field($search, 'start_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
           ])->widget(DateTimePicker::className(), [
-              'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd hh:ii',
-                'minuteStep' => 1,
-              ]
+            'clientOptions' => [
+              'autoclose' => true,
+              'format' => 'yyyy-mm-dd hh:00',
+              'minuteStep' => 1,
+              'endDate' => date('Y-m-d H:i'),
+              'minView' => '1'
+            ],
           ])->label('Ngày tạo từ');?>
 
           <?=$form->field($search, 'end_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
           ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:ii',
-                  'todayBtn' => true,
-                  'minuteStep' => 1,
-              ]
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:59',
+                'todayBtn' => true,
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
           ])->label('Ngày tạo đến');?>
 
           <div class="form-group col-md-4 col-lg-3">

@@ -84,22 +84,11 @@ foreach ($models as $date => $records) {
             'inputOptions' => ['class' => 'form-control', 'name' => 'limit', 'id' => 'limit']
           ])->dropDownList($search->getLimitOptions())->label('Tùy chọn thống kê');?>
 
-
-          <?=$form->field($search, 'game_id', [
+          <?=$form->field($search, 'game_ids', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
           ])->widget(kartik\select2\Select2::classname(), [
-            'initValueText' => ($search->game_id) ? sprintf("%s", $search->getGame()->title) : '',
-            'options' => ['class' => 'form-control', 'name' => 'game_id'],
-            'pluginOptions' => [
-              'placeholder' => 'Chọn game',
-              'allowClear' => true,
-              'minimumInputLength' => 3,
-              'ajax' => [
-                  'url' => Url::to(['game/suggestion']),
-                  'dataType' => 'json',
-                  'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-              ]
-            ]
+            'data' => $search->fetchGames(),
+            'options' => ['class' => 'form-control', 'name' => 'game_ids[]', 'multiple' => 'true'],
           ])->label('Tên game')?>
           
           <?=$form->field($search, 'start_date', [
@@ -182,7 +171,7 @@ foreach ($models as $date => $records) {
               </thead>
               <tbody>
                   <?php if (!$models) :?>
-                  <tr><td colspan="2"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                  <tr><td colspan="<?=($search->period == 'day') ? 6 : 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                   <?php endif;?>
                   <?php foreach (array_values($gameReports) as $no => $game):?>
                   <tr>
@@ -206,6 +195,7 @@ foreach ($models as $date => $records) {
                   </tr>
                   <?php endforeach;?>
               </tbody>
+              <?php if ($models) :?>
               <tfoot>
                 <tr>
                   <td></td>
@@ -225,6 +215,7 @@ foreach ($models as $date => $records) {
                   <?php endif;?>
                 </tr>
               </tfoot>
+              <?php endif;?>
             </table>
             <?php Pjax::end(); ?>
           </div>

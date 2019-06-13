@@ -11,7 +11,7 @@ use dosamigos\chartjs\ChartJs;
 
 class ReportSaleOrderByGame extends Model
 {
-    public $game_id;
+    public $game_ids;
     public $start_date;
     public $end_date;
     public $period;
@@ -24,7 +24,7 @@ class ReportSaleOrderByGame extends Model
     public function init()
     {
         if ($this->limit === null) $this->limit = '5';
-        if ($this->limit != '0') $this->game_id = null;
+        if ($this->limit != '0') $this->game_ids = [];
         if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
         if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
     }
@@ -32,57 +32,26 @@ class ReportSaleOrderByGame extends Model
     public function rules()
     {
         return [
-            ['game_id', 'trim'],
             ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
             [['start_date', 'end_date'], 'required'],
             ['period', 'default', 'value' => 'day'],
             ['limit', 'default', 'value' => '5'],
-            ['game_id', 'required', 'when' => function($model) {
+            ['game_ids', 'required', 'when' => function($model) {
                 return $model->limit == 0;
             }, 'whenClient' => "function (attribute, value) {
                 return $('#limit').val() == '0';
             }",
-            'message' => 'Chọn một game để thống kê'],
+            'message' => 'Chọn ít nhất một game để thống kê'],
         ];
-    }
-
-    public function fetch1()
-    {
-        if (!$this->validate()) return false;
-        // Find all game in period
-        $command = $this->getCommand();
-        if ($this->game_id) {
-            return $command->asArray()->all();
-        }
-
-        $command->offset(0);
-        $command->limit($this->limit);
-        $games = $command->asArray()->all();
-       
-        // Other games
-        $otherCommand = $this->getCommand();
-        $otherCommand->andWhere(['NOT IN', 'game_id', array_column($games, 'game_id')]);
-        if ($otherCommand->count()) {
-            $other = [
-                'id' => 'other',
-                'game_id' => 'other_game',
-                'game_title' => 'Game khác',
-                'game_pack' => $otherCommand->sum('game_pack'),
-                'total_price' => $otherCommand->sum('total_price'),
-            ];
-            $games[] = $other;
-        }
-        
-        return $games;
     }
 
     public function fetch()
     {
-        if (!$this->validate()) return false;
+        if (!$this->validate()) return [];
         $gameIds = $this->filterTopGames();
         $games = $this->statByGame($gameIds);
-        if ($this->game_id) return $games;
+        if ($this->game_ids) return $games;
         // Other games
         $others = $this->statByOtherGames($gameIds);
         $games = array_merge_recursive($games, $others);
@@ -91,7 +60,7 @@ class ReportSaleOrderByGame extends Model
 
     protected function filterTopGames()
     {
-        if ($this->game_id) return [$this->game_id];
+        if ($this->game_ids) return (array)$this->game_ids;
 
         $command = $this->getCommand();
         $command->select(['id', 'game_id', 'SUM(game_pack) as game_pack']);
@@ -109,7 +78,7 @@ class ReportSaleOrderByGame extends Model
         $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
         $command->andWhere(['IN', 'game_id', $gameIds]);
         $command->orderBy(['created_at' => SORT_ASC]);
-        $command->groupBy([$this->getGroupByPeriod(), 'game_id']);//die($command->createCommand()->getRawSql());
+        $command->groupBy([$this->getGroupByPeriod(), 'game_id']);
         $reports = $command->asArray()->all();
         $filterColumn = $this->filter_column;
         $reportDates = array_unique(array_column($reports, $filterColumn));
@@ -158,25 +127,6 @@ class ReportSaleOrderByGame extends Model
             $games[$date]['other']['total_price'] = $totalPrice;
         }
         return $games;
-    }
-
-    public function createCommand1()
-    {
-        $command = Order::find();
-        $command->select(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price']);
-        $command->where(['IN', 'status', $this->completeStatus()]);
-        if ($this->game_id) {
-            $command->andWhere(['game_id' => $this->game_id]);
-        }
-        if ($this->start_date) {
-            $command->andWhere(['>=', 'created_at', $this->start_date]);
-        }
-        if ($this->end_date) {
-            $command->andWhere(['<=', 'created_at', $this->end_date]);
-        }
-        $command->groupBy('game_id');
-        $command->orderBy(['game_pack' => SORT_DESC]);
-        return $command;
     }
 
     public function createCommand()

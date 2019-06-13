@@ -10,7 +10,7 @@ use backend\models\Game;
 
 class ReportProcessOrderByGame extends Model
 {
-    public $game_id;
+    public $game_ids;
     public $start_date;
     public $end_date;
     public $limit = '5';
@@ -23,7 +23,7 @@ class ReportProcessOrderByGame extends Model
     public function init()
     {
         if ($this->limit === null) $this->limit = '5';
-        if ($this->limit != '0') $this->game_id = null;
+        if ($this->limit != '0') $this->game_ids = [];
         if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
         if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
     }
@@ -36,13 +36,12 @@ class ReportProcessOrderByGame extends Model
             ['period', 'default', 'value' => 'week'],
             [['start_date', 'end_date', 'period'], 'required'],
             ['limit', 'default', 'value' => '5'],
-            ['game_id', 'trim'],
-            ['game_id', 'required', 'when' => function($model) {
+            ['game_ids', 'required', 'when' => function($model) {
                 return $model->limit == 0;
             }, 'whenClient' => "function (attribute, value) {
                 return $('#limit').val() == '0';
             }",
-            'message' => 'Chọn một game để thống kê'],
+            'message' => 'Chọn ít nhất một game để thống kê'],
     
         ];
     }
@@ -52,7 +51,7 @@ class ReportProcessOrderByGame extends Model
         if (!$this->validate()) return false;
         $gameIds = $this->filterTopGames();
         $games = $this->statByGame($gameIds);
-        if ($this->game_id) return $games;
+        if ($this->game_ids) return $games;
         // Other games
         $others = $this->statByOtherGames($gameIds);
         $games = array_merge_recursive($games, $others);
@@ -76,7 +75,7 @@ class ReportProcessOrderByGame extends Model
 
     protected function filterTopGames()
     {
-        if ($this->game_id) return [$this->game_id];
+        if ($this->game_ids) return (array)$this->game_ids;
 
         $status = $this->availabelStatus();
         $command = $this->getCommand();

@@ -64,28 +64,32 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/balance-detail', 'id' => $search->user_id]]);?>
-            <?=$form->field($search, 'start_date', [
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-balance-detail', 'id' => $search->user_id]]);?>
+            <?=$form->field($search, 'start_date', [    
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
             ])->widget(DateTimePicker::className(), [
-                  'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:ii',
-                  'minuteStep' => 1,
-                ]
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:00',
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
             ])->label('Ngày tạo từ');?>
 
             <?=$form->field($search, 'end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:ii',
+                  'format' => 'yyyy-mm-dd hh:59',
                   'todayBtn' => true,
                   'minuteStep' => 1,
-                ]
+                  'endDate' => date('Y-m-d H:i'),
+                  'minView' => '1'
+                ],
             ])->label('Ngày tạo đến');?>
 
             <div class="form-group col-md-4 col-lg-3">

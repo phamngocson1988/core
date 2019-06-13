@@ -157,7 +157,7 @@ foreach ($models as $date => $records) {
               </thead>
               <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="2"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="<?=($search->period == 'day') ? 6 : 2;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach (array_values($userReports) as $no => $record):?>
                 <tr>

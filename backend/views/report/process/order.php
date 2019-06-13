@@ -152,27 +152,31 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
           
 
           <?=$form->field($search, 'start_date', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
-            ])->widget(DateTimePicker::className(), [
-                'clientOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii',
-                    'minuteStep' => 1,
-                ]
-            ])->label('Ngày tạo từ');?>
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+          ])->widget(DateTimePicker::className(), [
+            'clientOptions' => [
+              'autoclose' => true,
+              'format' => 'yyyy-mm-dd hh:00',
+              'minuteStep' => 1,
+              'endDate' => date('Y-m-d H:i'),
+              'minView' => '1'
+            ],
+          ])->label('Ngày tạo từ');?>
 
-            <?=$form->field($search, 'end_date', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
-            ])->widget(DateTimePicker::className(), [
-                'clientOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii',
-                    'todayBtn' => true,
-                    'minuteStep' => 1,
-                ]
-            ])->label('Ngày tạo đến');?>
+          <?=$form->field($search, 'end_date', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+          ])->widget(DateTimePicker::className(), [
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:59',
+                'todayBtn' => true,
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
+          ])->label('Ngày tạo đến');?>
 
           <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">

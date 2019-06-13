@@ -195,7 +195,7 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $data = [
             'limit' => $request->get('limit', '5'),
-            'game_id' => $request->get('game_id'),
+            'game_ids' => $request->get('game_ids', []),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
             'period' => $request->get('period'),
@@ -240,6 +240,7 @@ class ReportController extends Controller
         $data = [
             'q' => $request->get('q'),
             'saler_id' => $request->get('saler_id'),
+            'customer_id' => $request->get('customer_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
@@ -291,7 +292,7 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.sale.game';
         $request = Yii::$app->request;
         $data = [
-            'game_id' => $request->get('game_id'),
+            'game_ids' => $request->get('game_ids', []),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
             'period' => $request->get('period', 'day'),
@@ -338,6 +339,7 @@ class ReportController extends Controller
             'q' => $request->get('q'),
             'saler_id' => $request->get('saler_id'),
             'handler_id' => $request->get('handler_id'),
+            'customer_id' => $request->get('customer_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
@@ -391,7 +393,7 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.cost.game';
         $request = Yii::$app->request;
         $data = [
-            'game_id' => $request->get('game_id'),
+            'game_ids' => $request->get('game_ids'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
             'limit' => $request->get('limit', '5'),
