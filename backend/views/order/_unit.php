@@ -11,7 +11,7 @@
       <tr>
         <td><?=$order->game_title;?></td>
         <td><?=$order->total_unit;?></td>
-        <td><?=$order->game_pack;?></td>
+        <td><?=$order->quantity;?></td>
       </tr>
     </tbody>
   </table>

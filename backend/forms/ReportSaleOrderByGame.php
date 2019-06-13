@@ -63,9 +63,9 @@ class ReportSaleOrderByGame extends Model
         if ($this->game_ids) return (array)$this->game_ids;
 
         $command = $this->getCommand();
-        $command->select(['id', 'game_id', 'SUM(game_pack) as game_pack']);
+        $command->select(['id', 'game_id', 'SUM(quantity) as quantity']);
         $command->groupBy('game_id');
-        $command->orderBy(['game_pack' => SORT_DESC]);
+        $command->orderBy(['quantity' => SORT_DESC]);
         $command->offset(0);
         $command->limit($this->limit);
         $games = $command->asArray()->all();
@@ -75,7 +75,7 @@ class ReportSaleOrderByGame extends Model
     protected function statByGame($gameIds)
     {
         $command = $this->getCommand();
-        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
+        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(quantity) as quantity', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
         $command->andWhere(['IN', 'game_id', $gameIds]);
         $command->orderBy(['created_at' => SORT_ASC]);
         $command->groupBy([$this->getGroupByPeriod(), 'game_id']);
@@ -92,11 +92,11 @@ class ReportSaleOrderByGame extends Model
                     return $r['game_id'] == $gameId;
                 });
                 if (!$reportByGame) continue;
-                $totalPackage = array_sum(array_column($reportByGame, 'game_pack'));
+                $totalPackage = array_sum(array_column($reportByGame, 'quantity'));
                 $totalPrice = array_sum(array_column($reportByGame, 'total_price'));
                 $gameInfo = reset($reportByGame);
                 $games[$date][$gameId]['game_title'] = $gameInfo['game_title'];
-                $games[$date][$gameId]['game_pack'] = $totalPackage;
+                $games[$date][$gameId]['quantity'] = $totalPackage;
                 $games[$date][$gameId]['total_price'] = $totalPrice;
             }
         }
@@ -106,7 +106,7 @@ class ReportSaleOrderByGame extends Model
     protected function statByOtherGames($gameIds)
     {
         $command = $this->getCommand();
-        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
+        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(quantity) as quantity', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
         $command->andWhere(['NOT IN', 'game_id', $gameIds]);
         $command->orderBy(['created_at' => SORT_ASC]);
         $command->groupBy([$this->getGroupByPeriod()]);
@@ -119,11 +119,11 @@ class ReportSaleOrderByGame extends Model
             $reportByDates = array_filter($reports, function($r) use ($date, $filterColumn) {
                 return $r[$filterColumn] == $date;
             });
-            $totalPackage = array_sum(array_column($reportByDates, 'game_pack'));
+            $totalPackage = array_sum(array_column($reportByDates, 'quantity'));
             $totalPrice = array_sum(array_column($reportByDates, 'total_price'));
             
             $games[$date]['other']['game_title'] = 'Game khác';
-            $games[$date]['other']['game_pack'] = $totalPackage;
+            $games[$date]['other']['quantity'] = $totalPackage;
             $games[$date]['other']['total_price'] = $totalPrice;
         }
         return $games;

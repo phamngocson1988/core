@@ -78,10 +78,10 @@ class StatisticsByOrderForm extends Model
         }, $models);
         $total_prices = array_combine($labels, $total_prices);
 
-        $game_packs = array_map(function($model) { 
-          return round($model['game_pack'], 1);
+        $quantitys = array_map(function($model) { 
+          return round($model['quantity'], 1);
         }, $models);
-        $game_packs = array_combine($labels, $game_packs);
+        $quantitys = array_combine($labels, $quantitys);
         
         $datasets = [
             [
@@ -92,7 +92,7 @@ class StatisticsByOrderForm extends Model
                 'pointBorderColor' => "#fff",
                 'pointHoverBackgroundColor' => "#fff",
                 'pointHoverBorderColor' => "rgba(54,198,211,1)",
-                'data' => array_values($game_packs)
+                'data' => array_values($quantitys)
             ],
             [
                 'label' => "Số Kcoin",
@@ -120,7 +120,7 @@ class StatisticsByOrderForm extends Model
     
     protected function createCommand()
     {
-        $select = ["SUM(game_pack) as game_pack", "SUM(total_price) as total_price", "YEAR(created_at) as `year`", "QUARTER(created_at) as `quarter`", "MONTH(created_at) as `month`", "WEEK(created_at) as `week`", "DAY(created_at) as `day`"];
+        $select = ["SUM(quantity) as quantity", "SUM(total_price) as total_price", "YEAR(created_at) as `year`", "QUARTER(created_at) as `quarter`", "MONTH(created_at) as `month`", "WEEK(created_at) as `week`", "DAY(created_at) as `day`"];
         $command = Order::find();
         $command->select($select);
         $command->where(["IN", "status", [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED]]);

@@ -24,7 +24,7 @@ $dates = array_keys($models);
 foreach ($models as $date => $records) {
   foreach ($records as $userId => $record) {
     $userReports[$userId]['name'] = $record['name'];
-    $userReports[$userId]['dates'][$date]['game_pack'] = $record['game_pack'];
+    $userReports[$userId]['dates'][$date]['quantity'] = $record['quantity'];
     $userReports[$userId]['dates'][$date]['total_price'] = $record['total_price'];
   }
 }
@@ -165,14 +165,14 @@ foreach ($models as $date => $records) {
                   <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$record['name'];?></td>
                   <?php if ($search->period == 'day') : ?>
                   <?php $reportData = $record['dates']; ?>
-                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'quantity')), 1);?></td>
                   <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1) * $rate;?></td>
                   <td style="vertical-align: middle; text-align: center"></td>
                   <td style="vertical-align: middle; text-align: center"></td>
                   <?php else : ?>
                   <?php foreach ($dates as $date): ?>
-                  <?php $reportData = ArrayHelper::getValue($record['dates'], $date, ['game_pack' => 0, 'total_price' => 0]);?>
-                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['game_pack'], 1);?></td>
+                  <?php $reportData = ArrayHelper::getValue($record['dates'], $date, ['quantity' => 0, 'total_price' => 0]);?>
+                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['quantity'], 1);?></td>
                   <td style="vertical-align: middle; text-align: center"><?=round($reportData['total_price'], 1) * $rate;?></td>
                   <td style="vertical-align: middle; text-align: center"></td>
                   <td style="vertical-align: middle; text-align: center"></td>

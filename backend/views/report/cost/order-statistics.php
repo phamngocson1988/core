@@ -119,7 +119,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
                 <tr>
                     <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
                     <td style="vertical-align: middle;"><?=$model['day'];?></td>
-                    <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
+                    <td style="vertical-align: middle;"><?=round($model['quantity'], 1);?></td>
                     <td style="vertical-align: middle;"><?=number_format($model['total_price'] * $rate / 1000);?></td>
                 </tr>
                 <?php endforeach;?>
@@ -128,7 +128,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
                 <tr>
                 <td></td>
                 <td><strong>Tổng:</strong></td>
-                <td><?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+                <td><?=round($search->getCommand()->sum('quantity'), 1);?></td>
                 <td><?=number_format($search->getCommand()->sum('total_price'));?></td>
                 </tr>
             </tfoot>
@@ -139,8 +139,8 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
           <div class="col-md-6">
           <?php 
           $command = $search->getCommand();
-          $game_packs = array_map(function($model) { 
-            return round($model['game_pack'], 1);
+          $quantitys = array_map(function($model) { 
+            return round($model['quantity'], 1);
           }, $models);
           $total_prices = array_map(function($model) { 
               $settings = Yii::$app->settings;
@@ -157,7 +157,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
                   'pointBorderColor' => "#fff",
                   'pointHoverBackgroundColor' => "#fff",
                   'pointHoverBorderColor' => "rgba(54,198,211,1)",
-                  'data' => array_values($game_packs)
+                  'data' => array_values($quantitys)
               ],
               [
                   'label' => "Doanh thu (Nghìn đồng)",

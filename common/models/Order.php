@@ -159,7 +159,7 @@ class Order extends ActiveRecord
 
     public function getGamePack()
     {
-        return ($this->game_pack) ? $this->game_pack : 1;
+        return ($this->quantity) ? $this->quantity : 1;
     }
     
     public function hasCancelRequest()

@@ -38,7 +38,7 @@ class ReportCostOrderBySaler extends Model
     {
         if (!$this->validate()) return false;
         $command = $this->getCommand();
-        $command->select(array_merge(['id', 'saler_id', 'SUM(game_pack) as game_pack', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
+        $command->select(array_merge(['id', 'saler_id', 'SUM(quantity) as quantity', 'SUM(total_price) as total_price'], [$this->getSelectByPeriod()]));
         $command->with('saler');
         $command->orderBy(['created_at' => SORT_ASC]);
         $command->groupBy([$this->getGroupByPeriod(), 'saler_id']);
@@ -59,10 +59,10 @@ class ReportCostOrderBySaler extends Model
                 });
                 if (!$reportBySaler) continue;
                 $salerInfo = reset($reportBySaler);
-                $totalPackage = array_sum(array_column($reportBySaler, 'game_pack'));
+                $totalPackage = array_sum(array_column($reportBySaler, 'quantity'));
                 $totalPrice = array_sum(array_column($reportBySaler, 'total_price'));
                 $orders[$date][$salerId]['name'] = $salerInfo['saler']['name'];
-                $orders[$date][$salerId]['game_pack'] = $totalPackage;
+                $orders[$date][$salerId]['quantity'] = $totalPackage;
                 $orders[$date][$salerId]['total_price'] = $totalPrice;
             }
         }

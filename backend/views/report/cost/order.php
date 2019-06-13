@@ -205,9 +205,9 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
                 <td style="vertical-align: middle;"><?=$model->customer->name;?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
+                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->game->price * $rate);?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->game->price * $rate * $model->game_pack);?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->game->price * $rate * $model->quantity);?></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;"></td>
@@ -222,7 +222,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
               <td></td>
               <td></td>
               <td></td>
-              <td>Tổng: <?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+              <td>Tổng: <?=round($search->getCommand()->sum('quantity'), 1);?></td>
               <td></td>
               <td></td>
               <td></td>

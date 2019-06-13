@@ -79,10 +79,10 @@ class ReportProcessOrderByGame extends Model
 
         $status = $this->availabelStatus();
         $command = $this->getCommand();
-        $command->select(['id', 'game_id', 'SUM(game_pack) as game_pack']);
+        $command->select(['id', 'game_id', 'SUM(quantity) as quantity']);
         $command->andWhere(['IN', 'status', $status]);
         $command->groupBy('game_id');
-        $command->orderBy(['game_pack' => SORT_DESC]);
+        $command->orderBy(['quantity' => SORT_DESC]);
         $command->offset(0);
         $command->limit($this->limit);
         $games = $command->asArray()->all();
@@ -93,7 +93,7 @@ class ReportProcessOrderByGame extends Model
     {
         $status = $this->availabelStatus();
         $command = $this->getCommand();
-        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(game_pack) as game_pack', 'SUM(process_duration_time) as process_duration_time', 'status'], [$this->getSelectByPeriod()]));
+        $command->select(array_merge(['id', 'game_id', 'game_title', 'SUM(quantity) as quantity', 'SUM(process_duration_time) as process_duration_time', 'status'], [$this->getSelectByPeriod()]));
         $command->andWhere(['IN', 'status', $status]);
         $command->andWhere(['IN', 'game_id', $gameIds]);
         $command->orderBy(['created_at' => SORT_ASC]);
@@ -124,13 +124,13 @@ class ReportProcessOrderByGame extends Model
                 $penddingCount = count($unCompleteRecords);
 
                 $totalProcessTime = array_sum(array_column($completeRecords, 'process_duration_time'));
-                $totalPackage = array_sum(array_column($reportByGame, 'game_pack'));
+                $totalPackage = array_sum(array_column($reportByGame, 'quantity'));
                 $rate = (!$completedCount) ? 0 : $completedCount / ($completedCount + $penddingCount) * 100;
                 $avarageTime = (!$completedCount) ? 0 : $totalProcessTime / ($completedCount * 60); //mins
 
                 $gameInfo = reset($reportByGame);
                 $games[$date][$gameId]['game_title'] = $gameInfo['game_title'];
-                $games[$date][$gameId]['game_pack'] = $totalPackage;
+                $games[$date][$gameId]['quantity'] = $totalPackage;
                 $games[$date][$gameId]['completed_rate'] = $rate;
                 $games[$date][$gameId]['avarage_time'] = $avarageTime;
                 $games[$date][$gameId]['completed_count'] = $completedCount;
@@ -145,7 +145,7 @@ class ReportProcessOrderByGame extends Model
     {
         $status = $this->availabelStatus();
         $command = $this->getCommand();
-        $command->select(array_merge(['SUM(game_pack) as game_pack', 'SUM(process_duration_time) as process_duration_time', 'status'], [$this->getSelectByPeriod()]));
+        $command->select(array_merge(['SUM(quantity) as quantity', 'SUM(process_duration_time) as process_duration_time', 'status'], [$this->getSelectByPeriod()]));
         $command->andWhere(['IN', 'status', $status]);
         $command->andWhere(['NOT IN', 'game_id', $gameIds]);
         $command->orderBy(['created_at' => SORT_ASC]);
@@ -170,12 +170,12 @@ class ReportProcessOrderByGame extends Model
             $completedCount = count($completeRecords);
             $penddingCount = count($unCompleteRecords);
             $totalProcessTime = array_sum(array_column($completeRecords, 'process_duration_time'));
-            $totalPackage = array_sum(array_column($reportByDates, 'game_pack'));
+            $totalPackage = array_sum(array_column($reportByDates, 'quantity'));
             $rate = (!$completedCount) ? 0 : $completedCount / ($completedCount + $penddingCount) * 100;
             $avarageTime = (!$completedCount) ? 0 : $totalProcessTime / ($completedCount * 60); //mins
             
             $games[$date]['other']['game_title'] = 'Game khác';
-            $games[$date]['other']['game_pack'] = $totalPackage;
+            $games[$date]['other']['quantity'] = $totalPackage;
             $games[$date]['other']['completed_rate'] = $rate;
             $games[$date]['other']['avarage_time'] = $avarageTime;
             $games[$date]['other']['completed_count'] = $completedCount;

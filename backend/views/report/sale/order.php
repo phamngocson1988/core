@@ -191,7 +191,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'><?=$model->auth_key;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->customer->name;?></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
+                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_price;?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <!-- <td style="vertical-align: middle;"></td> -->
@@ -204,7 +204,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td></td>
               <td></td>
               <td></td>
-              <td>Tổng: <?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+              <td>Tổng: <?=round($search->getCommand()->sum('quantity'), 1);?></td>
               <td>Tổng: <?=number_format($search->getCommand()->sum('total_price'));?></td>
               <td></td>
               <!-- <td></td> -->

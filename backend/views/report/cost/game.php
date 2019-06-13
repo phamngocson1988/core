@@ -24,7 +24,7 @@ $dates = array_keys($models);
 foreach ($models as $date => $records) {
   foreach ($records as $gameId => $game) {
     $gameReports[$gameId]['game_title'] = $game['game_title'];
-    $gameReports[$gameId]['dates'][$date]['game_pack'] = $game['game_pack'];
+    $gameReports[$gameId]['dates'][$date]['quantity'] = $game['quantity'];
     $gameReports[$gameId]['dates'][$date]['total_price'] = $game['total_price'];
   }
 }
@@ -179,14 +179,14 @@ foreach ($models as $date => $records) {
                     <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$game['game_title'];?></td>
                     <?php if ($search->period == 'day') : ?>
                     <?php $reportData = $game['dates']; ?>
-                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'game_pack')), 1);?></td>
+                    <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'quantity')), 1);?></td>
                     <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1) * $rate;?></td>
                     <td style="vertical-align: middle; text-align: center"></td>
                     <td style="vertical-align: middle; text-align: center"></td>
                     <?php else : ?>
                     <?php foreach ($dates as $date): ?>
-                    <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['game_pack' => 0, 'total_price' => 0]);?>
-                    <td style="vertical-align: middle; text-align: center"><?=round($reportData['game_pack'], 1);?></td>
+                    <?php $reportData = ArrayHelper::getValue($game['dates'], $date, ['quantity' => 0, 'total_price' => 0]);?>
+                    <td style="vertical-align: middle; text-align: center"><?=round($reportData['quantity'], 1);?></td>
                     <td style="vertical-align: middle; text-align: center"><?=round($reportData['total_price'], 1) * $rate;?></td>
                     <td style="vertical-align: middle; text-align: center"></td>
                     <td style="vertical-align: middle; text-align: center"></td>
@@ -201,13 +201,13 @@ foreach ($models as $date => $records) {
                   <td></td>
                   <td><strong>Tổng:</strong></td>
                   <?php if ($search->period == 'day') : ?>
-                  <td style="vertical-align: middle; text-align: center"><?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+                  <td style="vertical-align: middle; text-align: center"><?=round($search->getCommand()->sum('quantity'), 1);?></td>
                   <td style="vertical-align: middle; text-align: center"><?=number_format($search->getCommand()->sum('total_price') * $rate);?></td>
                   <td></td>
                   <td></td>
                   <?php else : ?>
                   <?php foreach ($models as $reports): ?>
-                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reports, 'game_pack')), 1);?></td>
+                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reports, 'quantity')), 1);?></td>
                   <td style="vertical-align: middle; text-align: center"><?=number_format(array_sum(array_column($reports, 'total_price'))) * $rate;?></td>
                   <td></td>
                   <td></td>

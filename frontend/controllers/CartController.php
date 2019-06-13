@@ -161,7 +161,7 @@ class CartController extends Controller
         // Item detail
         $order->game_id = $cartItem->getGame()->id;
         $order->game_title = $cartItem->getLabel();
-        $order->game_pack = $cartItem->quantity;
+        $order->quantity = $cartItem->quantity;
         $order->unit_name = $cartItem->getUnitName();
         $order->total_unit = $cartItem->getTotalPack();
         $order->username = $cartItem->username;

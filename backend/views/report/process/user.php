@@ -121,7 +121,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <?php foreach ($models as $no => $model) :?>
                   <tr>
                     <td style="vertical-align: middle;"><?=$model['name'];?></td>
-                    <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
+                    <td style="vertical-align: middle;"><?=round($model['quantity'], 1);?></td>
                     <td style="vertical-align: middle;"><?=round($model['completed_rate']) . '%';?></td>
                     <td style="vertical-align: middle;"><?=round($model['avarage_time']) . ' (minutes)';?></td>
                   </tr>
@@ -131,8 +131,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </div>
           <div class="col-md-6">
             <?php
-            $game_packs = array_map(function($item) { 
-              return round($item['game_pack'], 1);
+            $quantitys = array_map(function($item) { 
+              return round($item['quantity'], 1);
             }, $models);
             $completed_rates = array_map(function($item) { 
               return round($item['completed_rate'], 1);
@@ -150,7 +150,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     'pointBorderColor' => "#fff",
                     'pointHoverBackgroundColor' => "#fff",
                     'pointHoverBorderColor' => "rgba(54,198,211,1)",
-                    'data' => array_values($game_packs)
+                    'data' => array_values($quantitys)
                 ],
                 [
                     'label' => "Tỷ lệ hoàn thành",

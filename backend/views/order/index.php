@@ -228,7 +228,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->auth_key;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
-                <td style="vertical-align: middle;"><?=$model->game_pack;?></td>
+                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
                 <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?> minutes</td>
                 
@@ -315,10 +315,10 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             <span class="label label-warning">Tổng số lượng nạp: <?=number_format($search->getCommand()->sum('total_unit'));?></span>
           </div>
           <div class="col-md-2 col-sm-2">
-            <span class="label label-success">Tổng số gói: <?=round($search->getCommand()->sum('game_pack'), 1);?></span>
+            <span class="label label-success">Tổng số gói: <?=round($search->getCommand()->sum('quantity'), 1);?></span>
           </div>
           <div class="col-md-2 col-sm-2">
-            <span class="label label-default">Thời gian trung bình: <?=round(($search->getCommand()->sum('process_duration_time') / 60) / $search->getCommand()->sum('game_pack'), 1);?></span>
+            <span class="label label-default">Thời gian trung bình: <?=round(($search->getCommand()->sum('process_duration_time') / 60) / $search->getCommand()->sum('quantity'), 1);?></span>
           </div>
         </div>
       </div>

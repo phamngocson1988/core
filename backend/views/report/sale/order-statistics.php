@@ -151,7 +151,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                           break;
                       };?>
                     </td>
-                    <td style="vertical-align: middle;"><?=round($model['game_pack'], 1);?></td>
+                    <td style="vertical-align: middle;"><?=round($model['quantity'], 1);?></td>
                     <td style="vertical-align: middle;"><?=number_format($model['total_price']);?></td>
                 </tr>
                 <?php endforeach;?>
@@ -160,7 +160,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <tr>
                 <td></td>
                 <td><strong>Tổng:</strong></td>
-                <td><?=round($search->getCommand()->sum('game_pack'), 1);?></td>
+                <td><?=round($search->getCommand()->sum('quantity'), 1);?></td>
                 <td><?=number_format($search->getCommand()->sum('total_price'));?></td>
                 </tr>
             </tfoot>

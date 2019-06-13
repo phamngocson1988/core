@@ -37,7 +37,7 @@ class ReportProcessOrderByUser extends Model
         // Find all user in period
         $status = $this->availabelStatus();
         $command = $this->getCommand();
-        $command->select(['id', 'handler_id', 'SUM(game_pack) as game_pack']);
+        $command->select(['id', 'handler_id', 'SUM(quantity) as quantity']);
         $command->with('handler');
         $command->groupBy('handler_id');
         $command->andWhere(['IN', 'status', $status]);
@@ -67,7 +67,7 @@ class ReportProcessOrderByUser extends Model
             }
 
             $users[$id]['name'] = ($order->handler) ? $order->handler->name : '';
-            $users[$id]['game_pack'] = $order->game_pack;
+            $users[$id]['quantity'] = $order->quantity;
             $users[$id]['completed_rate'] = $rate;
             $users[$id]['avarage_time'] = $avarageTime;
         }
