@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 
 class OrderImage extends ActiveRecord
 {
+
     /**
      * @inheritdoc
      */

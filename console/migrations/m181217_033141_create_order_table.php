@@ -80,7 +80,12 @@ class m181217_033141_create_order_table extends Migration
             'image_after_payment' => $this->integer(11),
         ]);
 
-
+        $this->createTable('{{%order_file}}', [
+            'id' => $this->primaryKey(),
+            'order_id' => $this->integer(11)->notNull(),
+            'link' => $this->string(255)->notNull(),
+            'file_type' => $this->string(50)->notNull(),
+        ]);
         // $this->createTable('{{%order_items}}', [
         //     'id' => $this->primaryKey(),
         //     'item_title' => $this->string(255)->notNull(),
@@ -161,5 +166,6 @@ class m181217_033141_create_order_table extends Migration
         $this->dropTable('{{%order_image}}');
         $this->dropTable('{{%order_comments}}');
         $this->dropTable('{{%order_fee}}');
+        $this->dropTable('{{%order_file}}');
     }
 }

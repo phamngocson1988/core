@@ -15,6 +15,7 @@ use backend\forms\EditOrderItemForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use backend\models\Order;
+use backend\models\OrderFile;
 use common\models\OrderItems;
 use backend\forms\UpdateOrderStatusPending;
 use backend\forms\UpdateOrderStatusProcessing;
@@ -59,7 +60,7 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['move-to-processing', 'taken', 'add-unit', 'new-pending-order'],
+                        'actions' => ['move-to-processing', 'taken', 'add-unit', 'new-pending-order', 'add-evidence-image', 'remove-evidence-image'],
                         'roles' => ['handler'],
                     ],
                     [
@@ -493,5 +494,28 @@ class OrderController extends Controller
                 return $this->renderJson(false, [], $form->getErrorSummary(true));
             }
         }
+    }
+
+    public function actionAddEvidenceImage($id)
+    {
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        if (!$order) return $this->renderJson(false, [], 'Error');
+        $model = new OrderFile();
+        $model->setScenario(OrderFile::SCENARIO_CREATE);
+        $model->order_id = $id;
+        $model->file_type = OrderFile::TYPE_EVIDENCE;
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->renderJson(true, ['html' => $this->renderPartial('_evidence', ['images' => $order->evidences, 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])])]);
+        } else {
+            return $this->renderJson(false);
+        } 
+    }
+
+    public function actionRemoveEvidenceImage($id)
+    {
+        $request = Yii::$app->request;
+        $model = OrderFile::findOne($id);
+        return $this->renderJson($model->delete());
     }
 }

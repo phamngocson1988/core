@@ -48,6 +48,9 @@ use common\models\Product;
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
               <li>
+                <a href="#images" data-toggle="tab"> Hình ảnh</a>
+              </li>
+              <li>
                 <a href="#complain" data-toggle="tab"> Phản hồi</a>
               </li>
             </ul>
@@ -123,6 +126,11 @@ use common\models\Product;
                     <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
                     <?php echo $this->render('@backend/views/order/_customer.php', ['order' => $order]);?>
                   </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="images">
+                <div class="row" id="evidences">
+                  <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->evidences, 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
                 </div>
               </div>
               <div class="tab-pane" id="complain">

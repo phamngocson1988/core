@@ -48,6 +48,9 @@ use common\models\Product;
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
               <li>
+                <a href="#images" data-toggle="tab"> Hình ảnh</a>
+              </li>
+              <li>
                 <a href="#complain" data-toggle="tab"> Phản hồi</a>
               </li>
             </ul>
@@ -123,6 +126,17 @@ use common\models\Product;
                     <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
                     <?php echo $this->render('@backend/views/order/_customer.php', ['order' => $order]);?>
                   </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="images">
+                <div class="row" style="margin-bottom: 20px">
+                  <div class=col-md-12>
+                    <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh</a>
+                    <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple/>
+                  </div>
+                </div>
+                <div class="row" id="evidences">
+                  <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->evidences, 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
                 </div>
               </div>
               <div class="tab-pane" id="complain">
@@ -227,6 +241,52 @@ var sendForm = new AjaxFormSubmit({element: '.send-form'});
 sendForm.success = function (data, form) {
   location.reload();
 }
+
+// delete
+$('body').on('click', '.delete', function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if (!window.confirm('Bạn có muốn xóa hình này không?')) {
+      return;
+    }
+    var element = $(this);
+    $.ajax({
+      url: $(this).attr('href'),
+      type: 'DELETE',
+      dataType : 'json',
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+          console.log(result.errors);
+          return false;
+        } else {
+          element.closest('.image-item').remove();
+        }
+      }
+    });
+    return false;
+});
+
+var upload = new AjaxUploadFile({trigger_element: '#uploadElement', file_element: '#uploadEvidence'});
+upload.callback = function(result) {
+  result.forEach(function(element) {
+    $.ajax({
+      url: '###ADD_EVIDENCE_URL###',
+      type: 'POST',
+      dataType : 'json',
+      data: {'OrderFile[file_id]': element.id},
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            alert('Error occur with #' + element.id);
+            return false;
+        } else {
+          $('#evidences').html(result.data.html);
+        }
+      },
+    });
+  });
+}
 JS;
+$addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
+$script = str_replace('###ADD_EVIDENCE_URL###', $addEvidenceUrl, $script);
 $this->registerJs($script);
 ?>

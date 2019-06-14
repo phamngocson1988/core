@@ -84,6 +84,16 @@ class Order extends ActiveRecord
         return $this->hasMany(OrderItems::className(), ['order_id' => 'id']);
     }
 
+    public function getFiles() 
+    {
+        return $this->hasMany(OrderFile::className(), ['order_id' => 'id']);
+    }
+
+    public function getEvidences() 
+    {
+        return $this->hasMany(OrderFile::className(), ['order_id' => 'id'])->where('file_type = :type', [':type' => OrderFile::TYPE_EVIDENCE]);
+    }
+
     public function getComments() 
     {
         return $this->hasMany(OrderComments::className(), ['order_id' => 'id']);

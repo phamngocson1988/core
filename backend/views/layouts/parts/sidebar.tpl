@@ -256,12 +256,12 @@
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Giao dịch rút tiền</span>
                 </a>
-              </li> 
+              </li> *}
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Số dư tài khoản nhà cung cấp</span>
                 </a>
-              </li> *}
+              </li> 
             </ul>
           </li>
           {/if}

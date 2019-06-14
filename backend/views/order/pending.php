@@ -47,9 +47,9 @@ use common\models\Product;
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
-              <!-- <li>
+              <li>
                 <a href="#images" data-toggle="tab"> Hình ảnh</a>
-              </li> -->
+              </li>
               <li>
                 <a href="#complain" data-toggle="tab"> Phản hồi</a>
               </li>
@@ -200,14 +200,14 @@ use common\models\Product;
                 </div>
               </div>
               <div class="tab-pane" id="images">
-                <div class="row">
-                  <div class="col-md-6 col-sm-12">
-                    <a class="btn red btn-outline sbold" id="before_image">Hình trước</a>
-                    <input type="file" id="file_before_image" name="before_image" style="display: none" />
+                <div class="row" style="margin-bottom: 20px">
+                  <div class=col-md-12>
+                    <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh</a>
+                    <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple/>
                   </div>
-                  <div class="col-md-6 col-sm-12">
-                    <a class="btn red btn-outline sbold" id="after_image">Hình sau</a>
-                  </div>
+                </div>
+                <div class="row" id="evidences">
+                  <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->evidences, 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
                 </div>
               </div>
               <div class="tab-pane" id="complain">
@@ -432,10 +432,54 @@ $('#cancel_order').on('click', function(e) {
   return false;
 });
 
+// delete
+$('body').on('click', '.delete', function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if (!window.confirm('Bạn có muốn xóa hình này không?')) {
+      return;
+    }
+    var element = $(this);
+    $.ajax({
+      url: $(this).attr('href'),
+      type: 'DELETE',
+      dataType : 'json',
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+          console.log(result.errors);
+          return false;
+        } else {
+          element.closest('.image-item').remove();
+        }
+      }
+    });
+    return false;
+});
 
+var upload = new AjaxUploadFile({trigger_element: '#uploadElement', file_element: '#uploadEvidence'});
+upload.callback = function(result) {
+  result.forEach(function(element) {
+    $.ajax({
+      url: '###ADD_EVIDENCE_URL###',
+      type: 'POST',
+      dataType : 'json',
+      data: {'OrderFile[file_id]': element.id},
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            alert('Error occur with #' + element.id);
+            return false;
+        } else {
+          $('#evidences').html(result.data.html);
+        }
+      },
+    });
+  });
+}
 
 JS;
 $redirect = Url::to(['order/add-unit', 'id' => $order->id]);
 $script = str_replace('###UPDATE_UNIT###', $redirect, $script);
+$addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
+$script = str_replace('###UPDATE_UNIT###', $addEvidenceUrl, $script);
 $this->registerJs($script);
 ?>
