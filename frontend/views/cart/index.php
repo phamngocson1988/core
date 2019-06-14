@@ -4,12 +4,14 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use frontend\components\cart\CartItem;
 
-$item = $cart->getItem();
+// $item = $cart->getItem();
 ?>
 
 <?php Pjax::begin(); ?>
 <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
+<?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT);?>
 <section class="section section-lg bg-default">
   <div class="container container-wide">
     <div class="row row-fix justify-content-lg-center">
@@ -83,7 +85,8 @@ $item = $cart->getItem();
 <?php ActiveForm::end(); ?>
 <?php Pjax::end(); ?>
 
-<?php $form = ActiveForm::begin(['id' => 'update-cart', 'action' => ['cart/update']]); ?>
+<?php $form = ActiveForm::begin(['id' => 'update-cart1', 'action' => ['cart/index']]); ?>
+<?=Html::hiddenInput('scenario', CartItem::SCENARIO_INFO);?>
 <section class="section section-lg bg-default novi-background bg-cover text-center">
   <!-- section wave-->
   <div class="container">
@@ -183,7 +186,7 @@ $item = $cart->getItem();
 <?php ActiveForm::end(); ?>
 <?php
 $script = <<< JS
-$('body').on('click', "#update-cart-button", function(){
+$('body').on('click', "#update-cart-button1", function(){
   var form = $(this).closest('form');
   $.ajax({
       url: form.attr('action'),

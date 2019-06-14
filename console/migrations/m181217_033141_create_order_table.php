@@ -83,7 +83,7 @@ class m181217_033141_create_order_table extends Migration
         $this->createTable('{{%order_file}}', [
             'id' => $this->primaryKey(),
             'order_id' => $this->integer(11)->notNull(),
-            'link' => $this->string(255)->notNull(),
+            'file_id' => $this->integer(11)->notNull(),
             'file_type' => $this->string(50)->notNull(),
         ]);
         // $this->createTable('{{%order_items}}', [

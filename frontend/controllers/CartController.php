@@ -67,20 +67,36 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
-        $item->setScenario(CartItem::SCENARIO_EDIT);
-        $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
-        if ($item->load($request->post()) && $item->validate()) {
-            $cart->clear();
-            $cart->add($item);
+        $item->setScenario($request->post('scenario'));
+        $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();   
+        if ($request->isPost) {
+            if ($item->load($request->post()) && $item->validate()) {
+                $cart->add($item);
+                if ($item->scenario == CartItem::SCENARIO_EDIT) {
+                    $discount->load($request->post());
+                    if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();    
+                    else $cart->setDiscountItem($discount);
+                } elseif ($item->scenario == CartItem::SCENARIO_INFO) {
+                    return $this->redirect(Url::to(['cart/checkout']));
+                } 
+            }
         }
-        if ($request->isPost && $discount->load($request->post())) {
-            if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
-            else $cart->setDiscountItem($discount);
-        }
+
+        // $item->setScenario(CartItem::SCENARIO_EDIT);
+        // $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
+        // if ($item->load($request->post()) && $item->validate()) {
+        //     $cart->clear();
+        //     $cart->add($item);
+        // }
+        // if ($request->isPost && $discount->load($request->post())) {
+        //     if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
+        //     else $cart->setDiscountItem($discount);
+        // }
             
         return $this->render('index', [
             'cart' => $cart,
-            'discount' => $discount
+            'discount' => $discount,
+            'item' => $item
         ]);
     }
 
@@ -127,11 +143,10 @@ class CartController extends Controller
 
     public function actionCheckout()
     {
-        $model = new CartItem();
-        $user = Yii::$app->user->getIdentity();
         $cart = Yii::$app->cart;
+        $user = Yii::$app->user->getIdentity();
         $canPlaceOrder = $user->getWalletAmount() > $cart->getTotalPrice();
-        return $this->render('checkout', ['model' => $model, 'can_place_order' => $canPlaceOrder]);
+        return $this->render('checkout', ['can_place_order' => $canPlaceOrder]);
     }
 
     public function actionPurchase()
