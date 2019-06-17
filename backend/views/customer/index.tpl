@@ -129,11 +129,11 @@
               </td>
               <td>{$model->getStatusLabel()}</td>
               <td>
-                <a class="btn btn-xs grey-salsa" href="{url route='customer/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='customer/edit' id=$model->id}" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
                 <!--<a class="btn btn-xs grey-salsa" href="{url route='customer/create-profile' id=$model->id}"><i class="fa fa-plus"></i></a>-->
-                <a class="btn btn-xs grey-salsa" data-toggle="modal" href="#dialer{$model->id}"><i class="fa fa-plus"></i></a>
-                <a class="btn btn-xs grey-salsa" href="{url route='customer/topup' id=$model->id}"><i class="fa fa-arrow-up"></i></a>
-                <a class="btn btn-xs grey-salsa" href="{url route='customer/history' id=$model->id}"><i class="fa fa-list"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" data-toggle="modal" href="#dialer{$model->id}" data-container="body" data-original-title="Thêm bộ số"><i class="fa fa-plus"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='customer/topup' id=$model->id}" data-container="body" data-original-title="Nạp tiền"><i class="fa fa-arrow-up"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='customer/history' id=$model->id}" data-container="body" data-original-title="Lịch sử giao dịch"><i class="fa fa-list"></i></a>
 
                 <div class="modal fade bs-modal-lg" id="dialer{$model->id}" tabindex="-1" role="dialog" aria-hidden="true">
                   <div class="modal-dialog modal-lg">
@@ -167,7 +167,7 @@
                   </div>
                   <!-- /.modal-dialog -->
                 </div>
-                <a class="btn btn-xs grey-salsa delete" href="{url route='customer/delete' id=$model->id}"><i class="fa fa-trash"></i></a>
+                <a class="btn btn-xs grey-salsa delete tooltips" href="{url route='customer/delete' id=$model->id}" data-container="body" data-original-title="Xóa"><i class="fa fa-trash"></i></a>
 
               </td>
             </tr>

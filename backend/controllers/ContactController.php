@@ -329,4 +329,16 @@ class ContactController extends Controller
             'customer_id' => $id
         ]);
     }
+
+    public function actionDelete($id)
+    {
+        $request = Yii::$app->request;
+        $model = Contact::findOne($id);
+        if (!$model) throw new NotFoundHttpException('Not found', 404);
+        if ($model->delete()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
 }

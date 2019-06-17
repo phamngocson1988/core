@@ -60,9 +60,9 @@
               <td>{$model->getNumberUsers()}</td>
               <td>{if $model->isActive()}Active{else}Disactive{/if}</td>
               <td>
-                <a class="btn btn-xs grey-salsa" href="{url route='dialer/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='dialer/edit' id=$model->id}" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
                 {if !$model->getNumberUsers()}
-                <a class="btn btn-xs grey-salsa delete" href="{url route='dialer/delete' id=$model->id}"><i class="fa fa-trash"></i></a>
+                <a class="btn btn-xs grey-salsa delete tooltips" href="{url route='dialer/delete' id=$model->id}" data-container="body" data-original-title="Xóa"><i class="fa fa-trash"></i></a>
                 {/if}
               </td>
             </tr>

@@ -1,6 +1,7 @@
 {use class='yii\widgets\LinkPager'}
 {use class='yii\widgets\Pjax' type='block'}
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='yii\helpers\Html'}
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']])}
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset'])}
 {$this->registerJsFile('@web/vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset'])}
@@ -62,8 +63,9 @@
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
+              <th style="width: 5%;"> {Html::checkbox('checkall')} <button id="deleteall">Delete All</button></th>
               <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 15%;"> Tên </th>
+              <th style="width: 10%;"> Tên </th>
               <th style="width: 10%;"> Số điện thoại </th>
               <th style="width: 10%;"> Mô tả </th>
               <th style="width: 20%;"> Nhóm </th>
@@ -74,6 +76,7 @@
             {if $models}
             {foreach $models as $key => $model}
             <tr>
+              <td> {Html::checkbox('id[]', false, ['value' => $model->id])}</td>
               <td>{$key + $pages->offset + 1}</td>
               <td>{$model->name}</td>
               <td>{$model->phone}</td>
@@ -84,7 +87,8 @@
               {/foreach}
               </td>
               <td>
-                <a class="btn btn-xs grey-salsa" href="{url route='contact/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='contact/edit' id=$model->id}" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-xs grey-salsa delete tooltips" href="{url route='contact/delete' id=$model->id}" data-container="body" data-original-title="Xóa"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             {/foreach}
@@ -113,5 +117,36 @@ csvUpload.callback = function(result) {
   var file = result[0];
   window.location.href = "{/literal}{url route='contact/import'}{literal}" + "?id=" + file.id;
 }
+$(".delete").ajax_action({
+  confirm: true,
+  confirm_text: '{/literal}{Yii::t('app', 'Bạn có muốn xóa liên hệ này không?')}{literal}',
+  callback: function(eletement, data) {
+    location.reload();
+  }
+});
+$("input[name='id[]']:checked")
+$('#deleteall').on('click', function() {
+  var ids = [];
+  $.each($("input[name='id[]']:checked"), function(){
+    ids.push($(this).val());
+  });
+  $.ajax({
+    url: this.options.link_upload,
+    type: 'POST',
+    processData: false, // important
+    contentType: false, // important
+    dataType : 'json',
+    data: this.form,
+    success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            alert(result.errors.join("\n"));
+            return false;
+        } else {
+            that.callback(result.data);
+        }
+          
+    },
+  });
+})
 {/literal}
 {/registerJs}

@@ -56,9 +56,9 @@
               <td>{$model->getNumberContacts()}</td>
               <td>{if $model->isActive()}Active{else}Disactive{/if}</td>
               <td>
-                <a class="btn btn-xs grey-salsa" href="{url route='group/edit' id=$model->id}"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-xs grey-salsa tooltips" href="{url route='group/edit' id=$model->id}" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
                 {if !$model->getNumberContacts()}
-                <a class="btn btn-xs grey-salsa delete" href="{url route='group/delete' id=$model->id}"><i class="fa fa-trash"></i></a>
+                <a class="btn btn-xs grey-salsa delete tooltips" href="{url route='group/delete' id=$model->id}" data-container="body" data-original-title="Xóa nhóm danh bạ khi không có liên hệ nào trong nhóm này"><i class="fa fa-trash"></i></a>
                 {/if}
               </td>
             </tr>
@@ -80,7 +80,7 @@
 {registerJs}
 {literal}
 $('.delete').ajax_action({
-  method: 'DELETE',
+  method: 'POST',
   confirm: true,
   confirm_text: 'Do you really want to delete this group?',
   callback: function(data) {

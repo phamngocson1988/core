@@ -51,13 +51,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer/history', 'id' => $customer_id]]);?>     
-
-            <?=$form->field($search, 'q', [
-              'inputOptions' => ['name' => 'q', 'class' => 'form-control'],
-              'options' => ['class' => 'form-group col-md-2']
-            ])->textInput()->label('Keyword');?>
-
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer/history', 'customer_id' => $customer_id]]);?>     
             <?=$form->field($search, 'transaction_type', [
               'options' => ['class' => 'form-group col-md-2'],
               'inputOptions' => ['name' => 'transaction_type', 'class' => 'form-control'],
