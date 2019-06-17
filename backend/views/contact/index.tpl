@@ -60,11 +60,13 @@
           {/ActiveForm}
         </div>
         {Pjax}
+        <button class="btn btn-default" id="deleteall"><i class="glyphicon glyphicon-trash"></i><span> Destroy</span></button>
+
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 5%;"> {Html::checkbox('checkall')} <button id="deleteall">Delete All</button></th>
-              <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
+              <th style="width: 5%;"> {Html::checkbox('checkall', false, ['id' => 'checkall'])}</th>
+              <th style="width: 5%; vertical-align: middle; text-align: center"> {Yii::t('app', 'no')} </th>
               <th style="width: 10%;"> Tên </th>
               <th style="width: 10%;"> Số điện thoại </th>
               <th style="width: 10%;"> Mô tả </th>
@@ -77,7 +79,7 @@
             {foreach $models as $key => $model}
             <tr>
               <td> {Html::checkbox('id[]', false, ['value' => $model->id])}</td>
-              <td>{$key + $pages->offset + 1}</td>
+              <td style="vertical-align: middle; text-align: center">{$key + $pages->offset + 1}</td>
               <td>{$model->name}</td>
               <td>{$model->phone}</td>
               <td>{$model->description}</td>
@@ -124,29 +126,33 @@ $(".delete").ajax_action({
     location.reload();
   }
 });
-$("input[name='id[]']:checked")
+$('#checkall').on('click', function(){
+  $("input[name='id[]']").prop('checked', $(this).is(':checked'));
+});
+$("input[name='id[]']").on('click', function(){
+  $('#checkall').prop('checked', $("input[name='id[]']:checked").length == $("input[name='id[]']").length);
+})
 $('#deleteall').on('click', function() {
   var ids = [];
   $.each($("input[name='id[]']:checked"), function(){
     ids.push($(this).val());
   });
-  $.ajax({
-    url: this.options.link_upload,
-    type: 'POST',
-    processData: false, // important
-    contentType: false, // important
-    dataType : 'json',
-    data: this.form,
-    success: function (result, textStatus, jqXHR) {
-        if (result.status == false) {
-            alert(result.errors.join("\n"));
-            return false;
-        } else {
-            that.callback(result.data);
-        }
-          
-    },
-  });
-})
+  
+  if (ids.length) {
+    if (!window.confirm('Bạn có muốn xóa không?')) {
+        return;
+    }
+    $.ajax({
+      url: '{/literal}{url route='contact/delete-all'}{literal}' + '?ids=' + ids.join(','),
+      type: 'POST',
+      processData: false, // important
+      contentType: false, // important
+      dataType : 'json',
+      success: function (result, textStatus, jqXHR) {
+        location.reload();
+      }
+    });
+  }
+});
 {/literal}
 {/registerJs}

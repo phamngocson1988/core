@@ -84,7 +84,8 @@ class ContactController extends Controller
         $model->setScenario(Contact::SCENARIO_CREATE);
         $model->user_id = Yii::$app->user->id;
         if ($model->load($request->post()) && $model->save()) {
-            $groupIds = $model->group_ids;
+            $groupIds = (array)$model->group_ids;
+            $groupIds = array_filter($groupIds);
             foreach ($groupIds as $groupId) {
                 $contactGroup = new ContactGroup();
                 $contactGroup->contact_id = $model->id;
@@ -340,5 +341,16 @@ class ContactController extends Controller
         } else {
             return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
+    }
+
+    public function actionDeleteAll($ids)
+    {
+        $request = Yii::$app->request;
+        $ids = explode(',', $ids);
+        foreach ($ids as $id) {
+            $model = Contact::findOne($id);
+            $model->delete();
+        }
+        return $this->renderJson(true, $ids);
     }
 }
