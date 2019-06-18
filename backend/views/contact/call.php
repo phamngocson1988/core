@@ -61,10 +61,24 @@ $this->registerJsFile('@web/vendor/assets/pages/scripts/components-multi-select.
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">
+                <div class="form-group field-record-dialer_id required">
+                  <label class="col-md-2 control-label">Mẫu nội dung</label>
+                  <div class="col-md-6">
+                    <select id="template" class="form-control">
+                      <option value=''>Chọn một mẫu nội dung</option>
+                      <?php foreach ($templates as $template) : ?>
+                      <option value="<?=$template->content;?>"><?=$template->title;?></option>
+                      <?php endforeach;?>
+                    </select>
+                  </div>
+                </div>
+
                 <?=$form->field($model, 'message', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textArea();?>
+                  'inputOptions' => ['class' => 'form-control', 'id' => 'message'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                  'hintOptions' => ['class' => 'alert alert-block alert-info fade in', 'tag' => 'div']
+                ])->textArea()->hint('Những biến được hỗ trợ: <strong>%%%NAME%%%</strong> (tên người nhận), <strong>%%%PHONE%%%</strong> (số điện thoại người nhận)');?>
                 <div class="form-group">
                   <label class="col-md-2 control-label">Nhóm liên hệ</label>
                   <div class="col-md-6">
@@ -189,6 +203,11 @@ $('#contact-group').on('change', function(){
     }
   }
   $('#phones').multiSelect('refresh');
+});
+
+// Change template
+$('#template').on('change', function(){
+  $('#message').val($(this).val());
 });
 JS;
 $this->registerJs($script);

@@ -62,6 +62,14 @@ class m130524_201442_init extends Migration
             'status' => $this->smallInteger()->notNull()->defaultValue(1),
         ], $tableOptions);
 
+        $this->createTable('{{%template}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'title' => $this->string(100)->notNull(),
+            'content' => $this->text(),
+            'status' => $this->smallInteger()->notNull()->defaultValue(1),
+        ], $tableOptions);
+
         $this->createTable('{{%customer_dialer}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),

@@ -20,6 +20,7 @@ use common\models\Group;
 use common\models\ContactGroup;
 use backend\forms\FetchContactForm;
 use common\components\telecom\ParseMessage;
+use common\models\Template;
 
 /**
  * ContactController
@@ -213,11 +214,13 @@ class ContactController extends Controller
         $dialers = ArrayHelper::map($dialers, 'id', 'number');
         $contacts = $user->contacts;
         $groups = Group::find()->all();
+        $templates = Template::find()->where(['status' => Template::STATUS_ACTIVE])->all();
         return $this->render('call', [
             'dialers' => $dialers,
             'contacts' => $contacts,
             'model' => $model,
-            'groups' => $groups
+            'groups' => $groups,
+            'templates' => $templates
         ]);
     }
 
@@ -242,11 +245,11 @@ class ContactController extends Controller
             if ($model->load($request->post())) {
                 $model->message = $parser->parse($model);
                 if ($model->save()) {
-                $caller = new Tel4vn();
-                $dialer = $model->dialer;
-                $caller->setSetting($dialer);
-                $result = $caller->call($model->phone, $model->message);
-                $success[$phone] = $result;
+                    $caller = new Tel4vn();
+                    $dialer = $model->dialer;
+                    $caller->setSetting($dialer);
+                    $result = $caller->call($model->phone, $model->message);
+                    $success[$phone] = $result;
                 }
             } else {
                 $failure[] = $phone;

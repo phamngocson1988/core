@@ -47,6 +47,11 @@
             <span class="title">Nhóm liên hệ</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/template/index'}" class="nav-link " code='template.index'>
+            <span class="title">Mẫu tin</span>
+            </a>
+          </li>
         </ul>
       </li>
       {if $app->user->can('admin')}
