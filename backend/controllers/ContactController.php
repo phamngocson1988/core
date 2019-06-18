@@ -19,6 +19,7 @@ use common\components\telecom\Tel4vn;
 use common\models\Group;
 use common\models\ContactGroup;
 use backend\forms\FetchContactForm;
+use common\components\telecom\ParseMessage;
 
 /**
  * ContactController
@@ -229,6 +230,7 @@ class ContactController extends Controller
         $phones = array_filter($phones);
         $total = count($phones);
         $success = $failure = [];
+        $parser = new ParseMessage();
         foreach ($phones as $phone) {
             $model = new Record();
             $model->setScenario(Record::SCENARIO_CREATE);
@@ -237,12 +239,15 @@ class ContactController extends Controller
             $model->start_time = date('Y-m-d H:i:s');
             $model->status = Record::STATUS_CALLING;
             $model->phone = $phone;
-            if ($model->load($request->post()) && $model->save()) {
+            if ($model->load($request->post())) {
+                $model->message = $parser->parse($model);
+                if ($model->save()) {
                 $caller = new Tel4vn();
                 $dialer = $model->dialer;
                 $caller->setSetting($dialer);
                 $result = $caller->call($model->phone, $model->message);
                 $success[$phone] = $result;
+                }
             } else {
                 $failure[] = $phone;
             }
