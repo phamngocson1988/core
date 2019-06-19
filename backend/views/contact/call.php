@@ -19,6 +19,12 @@ $this->registerJsFile('@web/vendor/assets/pages/scripts/components-multi-select.
   padding: 5px;
   text-align: center;
 }
+.custom-footer {
+  /* background-color: black;
+  color: white; */
+  padding: 5px;
+  text-align: center;
+}
 .ms-container {
   width: 500px
 }
@@ -94,6 +100,7 @@ $this->registerJsFile('@web/vendor/assets/pages/scripts/components-multi-select.
                 <div class="form-group">
                   <label class="col-md-2 control-label">Số điện thoại</label>
                   <div class="col-md-6">
+                    
                     <select id="phones" class="form-control multi-select" name="phones[]" multiple="multiple">
                       <?php foreach ($contacts as $contact) :?>
                       <option value="<?=$contact->id;?>" data-contacts="<?=implode(",", (ArrayHelper::getColumn($contact->contactGroups, 'group_id')));?>"><?=$contact->phone;?></option>
@@ -182,6 +189,10 @@ function incrementSeconds() {
 $('#phones').multiSelect({
   selectableHeader: "<div class='custom-header'>Danh bạ</div>",
   selectionHeader: "<div class='custom-header'>Số đã chọn</div>",
+  selectableFooter: "<div class='custom-footer'><button type='button' class='btn btn-outline-light btn-sm' id='select-all'>Chọn tất cả</button></div>",
+  selectionFooter: "<div class='custom-footer'><button type='button' class='btn btn-outline-light btn-sm' id='deselect-all'>Bỏ chọn tất cả</button></div>",
+  
+                    
 });
 $('#contact-group').on('change', function(){
   var notSelected = $('#phones').find('option:not(:selected)');
@@ -203,6 +214,14 @@ $('#contact-group').on('change', function(){
     }
   }
   $('#phones').multiSelect('refresh');
+});
+$('#select-all').click(function(){
+  $('#phones').multiSelect('select_all');
+  return false;
+});
+$('#deselect-all').click(function(){
+  $('#phones').multiSelect('deselect_all');
+  return false;
 });
 
 // Change template
