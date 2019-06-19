@@ -6,8 +6,8 @@ use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
-use common\models\Game;
-use common\models\Product;
+use common\models\Promotion;
+use common\widgets\TinyMce;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -64,23 +64,39 @@ use common\models\Product;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Mã khuyến mãi');?>
 
-                  <?=$form->field($model, 'value_type', [
+                  <?=$form->field($model, 'content', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(TinyMce::className(), [
+                    'options' => ['rows' => 10]
+                  ]);?>
+                  
+                  <?=$form->field($model, 'image_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(common\widgets\ImageInputWidget::className(), [
+                    'template' => '<div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">{image}{input}</div>{choose_button}{cancel_button}',
+                    'imageOptions' => ['width' => 150, 'height' => 150]
+                  ])->label('Hình ảnh');?>
+
+                  <?=$form->field($model, 'promotion_type', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
-                  ])->dropDownList(['fix' => 'Giảm cụ thể', 'percent' => 'Giảm theo phần trăm'])->label('Phương thức giảm giá');?>
+                  ])->dropDownList(['fix' => 'Áp dụng cụ thể', 'percent' => 'Áp dụng theo phần trăm'])->label('Phương thức áp dụng');?>
 
                   <?=$form->field($model, 'value', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Giá trị giảm')?>
+                  ])->textInput()->label('Giá trị áp dụng')?>
 
-                  <?=$form->field($model, 'object_type', [
+                  <?=$form->field($model, 'promotion_scenario', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
-                  ])->dropDownList(['coin' => 'Giảm khi mua game', 'money' => 'Giảm khi mua coin'])->label('Ngữ cảnh áp dụng');?>
+                  ])->dropDownList([Promotion::SCENARIO_BUY_GEMS => 'Áp dụng khi mua gems của game', Promotion::SCENARIO_BUY_COIN => 'Áp dụng khi nạp tiền ví Kingcoin'])->label('Ngữ cảnh áp dụng');?>
 
-                  <?=$form->field($model, 'number_of_use', [
+                  <?=$form->field($model, 'user_using', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control', 'type' => 'number'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -100,6 +116,22 @@ use common\models\Product;
                         'todayHighlight' => true
                     ]
                   ])?>
+
+                  <?=$form->field($model, 'game_ids', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-4">{input}{hint}{error}</div>',
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => ArrayHelper::map($games, 'id', 'title'),
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                  ])->label('Áp dụng cho game')?>
+
+                  <?=$form->field($model, 'user_ids', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-4">{input}{hint}{error}</div>',
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => ArrayHelper::map($users, 'id', 'email'),
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                  ])->label('Áp dụng cho khách hàng')?>
 
                   <?=$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

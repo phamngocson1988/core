@@ -63,6 +63,10 @@
                   'inputOptions' => ['type' => 'number', 'class' => 'form-control']
                 ])->textInput()}
 
+                {$form->field($model, 'sign_on_bonus', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->dropDownList($model->getPromotions(), ['prompt' => '- Chọn chương trình khuyến mãi -'])}
               </div>
             </div>
           </div>

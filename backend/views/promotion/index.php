@@ -73,12 +73,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td style="vertical-align: middle;"><?=$model->title;?></td>
                 <td style="vertical-align: middle;"><?=$model->code;?></td>
                 <td style="vertical-align: middle;"><?=sprintf("%s - %s", $model->from_date, $model->to_date);?></td>
-                <td style="vertical-align: middle;"><?=sprintf("%s (%s)", $model->value, $model->value_type);?></td>
+                <td style="vertical-align: middle;"><?=sprintf("%s (%s)", $model->value, $model->promotion_type);?></td>
                 <td style="vertical-align: middle;"><?php
-                if ($model->object_type == 'coin') :
-                  echo 'Giảm khi mua game';
-                elseif ($model->object_type == 'money') :
-                  echo 'Giảm khi mua coin';
+                if ($model->promotion_scenario == Promotion::SCENARIO_BUY_GEMS) :
+                  echo 'Áp dụng khi mua gems của game';
+                elseif ($model->promotion_scenario == Promotion::SCENARIO_BUY_COIN) :
+                  echo 'Áp dụng khi nạp tiền ví Kingcoin';
                 endif;
                 ?></td>
                 <td style="vertical-align: middle;"><?php

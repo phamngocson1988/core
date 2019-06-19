@@ -23,8 +23,11 @@ class Promotion extends ActiveRecord
     const TYPE_FIX = 'fix';
     const TYPE_PERCENT = 'percent';
 
-    const OBJECT_COIN = 'coin';
-    const OBJECT_MONEY = 'money';
+    const SCENARIO_BUY_GEMS = 'coin';
+    const SCENARIO_BUY_COIN = 'money';
+
+    public $user_ids = [];
+    public $game_ids = [];
 
     /**
      * @inheritdoc
@@ -54,17 +57,17 @@ class Promotion extends ActiveRecord
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'code', 'value_type', 'value', 'object_type', 'number_of_use', 'from_date', 'to_date', 'status'],
-            self::SCENARIO_EDIT => ['id', 'title', 'code', 'value_type', 'value', 'object_type', 'number_of_use', 'from_date', 'to_date', 'status'],
+            self::SCENARIO_CREATE => ['title', 'content', 'image_id', 'code', 'promotion_type', 'value', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'game_ids', 'user_ids'],
+            self::SCENARIO_EDIT => ['id', 'title', 'content', 'image_id', 'code', 'promotion_type', 'value', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'game_ids', 'user_ids'],
         ];
     }
 
     public function rules()
     {
     	return [
-    		[['title', 'code', 'value_type', 'value', 'object_type', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
-            [['id', 'title', 'code', 'value_type', 'value', 'object_type', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['number_of_use', 'from_date', 'to_date'], 'safe'],
+    		[['title', 'code', 'promotion_type', 'value', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['id', 'title', 'code', 'promotion_type', 'value', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
+            [['user_using', 'from_date', 'to_date', 'content', 'image_id', 'game_ids', 'user_ids'], 'safe'],
             ['code', 'unique', 'targetClass' => '\common\models\Promotion', 'message' => 'Voucher code is duplicated'],
     	];
     }
@@ -80,9 +83,9 @@ class Promotion extends ActiveRecord
 
     public function calculateDiscount($amount)
     {
-        if ($this->value_type == self::TYPE_FIX) {
+        if ($this->promotion_type == self::TYPE_FIX) {
             return min($amount, $this->value);
-        } elseif ($this->value_type == self::TYPE_PERCENT) {
+        } elseif ($this->promotion_type == self::TYPE_PERCENT) {
             return ceil(($this->value * $amount) / 100);
         }
     }
@@ -100,5 +103,31 @@ class Promotion extends ActiveRecord
     public function isEnable()
     {
         return $this->status == self::STATUS_VISIBLE;
+    }
+
+    public function getPromotionGames()
+    {
+        return $this->hasMany(PromotionGame::className(), ['promotion_id' => 'id']);
+    }
+
+    public function getPromotionUsers()
+    {
+        return $this->hasMany(PromotionUser::className(), ['promotion_id' => 'id']);
+    }
+
+    public static function findAvailable()
+    {
+        $command = self::find();
+        $command->where(["IN", "status", [self::STATUS_VISIBLE, self::STATUS_INVISIBLE]]);
+        $now = date('Y-m-d');
+        $command->andWhere(['OR', 
+            ['<=', 'from_date', $now],
+            ['from_date' => null]
+        ]);
+        $command->andWhere(['OR', 
+            ['>=', 'to_date', $now],
+            ['to_date' => null]
+        ]);
+        return $command;
     }
 }

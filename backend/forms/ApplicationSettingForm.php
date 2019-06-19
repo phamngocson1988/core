@@ -4,6 +4,8 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
+use backend\models\Promotion;
 
 class ApplicationSettingForm extends Model
 {
@@ -12,6 +14,7 @@ class ApplicationSettingForm extends Model
     public $admin_email;
     public $enable_subscribe;
     public $exchange_rate_usd; 
+    public $sign_on_bonus;
 
     public function init()
     {
@@ -28,6 +31,7 @@ class ApplicationSettingForm extends Model
             [['admin_email', 'contact_email'], 'email'],
             ['exchange_rate_usd', 'number'],
             ['exchange_rate_usd', 'default', 'value' => '22000'],
+            [['sign_on_bonus'], 'safe'],
         ];
     }
 
@@ -42,6 +46,14 @@ class ApplicationSettingForm extends Model
             'admin_email' => Yii::t('app', 'admin_email'),
             'enable_subscribe' => 'Show subscribe Popup',
             'exchange_rate_usd' => 'Tỷ giá USD',
+            'sign_on_bonus' => 'Khuyến mãi khi đăng ký',
         ];
+    }
+
+    public function getPromotions()
+    {
+        $command = Promotion::findAvailable();
+        $command->select(['id', 'title']);
+        return ArrayHelper::map($command->all(), 'id', 'title');
     }
 }

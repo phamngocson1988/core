@@ -18,6 +18,8 @@ class CartDiscount extends Model implements CartItemInterface
         return [
             [['code'], 'trim'],
             ['code', 'validateCode'],
+            ['code', 'checkValidGame'],
+            ['code', 'checkValidUser'],
             ['code', 'checkNumberUsing']
         ];
     }
@@ -35,11 +37,29 @@ class CartDiscount extends Model implements CartItemInterface
         }
     }
 
+    public function checkValidGame($attribute, $params) 
+    {
+        $promotion = $this->getPromotion();
+        $games =(array)$promotion->promotionGames;
+        if (!$games) return;
+        $gameIds = ArrayHelper::getColumn($games, 'game_id');
+        
+    }
+
+    public function checkValidUser($attribute, $params) 
+    {
+        $promotion = $this->getPromotion();
+        $users =(array)$promotion->promotionUsers;
+        if (!$users) return;
+        $userIds = ArrayHelper::getColumn($users, 'user_id');
+        
+    }
+
     public function checkNumberUsing($attribute, $params)
     {
         $promotion = $this->getPromotion();
         if (!$promotion) return;
-        if (!$promotion->number_of_use) return;
+        if (!$promotion->user_using) return;
         $command = Order::find();
         $command->joinWith('discounts');
         $command->where(["<>", "order.status", Order::STATUS_DELETED]);
@@ -51,7 +71,7 @@ class CartDiscount extends Model implements CartItemInterface
         if ($promotion->to_date) {
             $command->andWhere(["<=", "order.created_at", $promotion->to_date]);
         }
-        if ((int)$promotion->number_of_use <= $command->count()) {
+        if ((int)$promotion->user_using <= $command->count()) {
             $this->addError($attribute, 'This voucher code has applied before');
         }
     }
@@ -59,7 +79,7 @@ class CartDiscount extends Model implements CartItemInterface
     public function getPromotion()
     {
         if (!$this->_promotion) {
-            $this->_promotion = Promotion::findOne(['code' => $this->code, 'object_type' => Promotion::OBJECT_COIN]);
+            $this->_promotion = Promotion::findOne(['code' => $this->code, 'promotion_scenario' => Promotion::SCENARIO_BUY_GEMS]);
         }
         return $this->_promotion;
     }
