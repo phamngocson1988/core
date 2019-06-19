@@ -51,7 +51,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer/history', 'customer_id' => $customer_id]]);?>     
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['contact/history']]);?>     
             <?=$form->field($search, 'transaction_type', [
               'options' => ['class' => 'form-group col-md-2'],
               'inputOptions' => ['name' => 'transaction_type', 'class' => 'form-control'],

@@ -84,7 +84,7 @@
 {registerJs}
 {literal}
 $('.delete').ajax_action({
-  method: 'DELETE',
+  method: 'POST',
   confirm: true,
   confirm_text: 'Do you really want to delete this dialer?',
   callback: function(data) {
