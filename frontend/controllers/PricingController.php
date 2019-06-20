@@ -127,6 +127,35 @@ class PricingController extends Controller
 
     public function actionPurchase()
     {
+        $paymentCart = new PaymentCart([
+            'title' => 'Test cho vui',
+        ]);
+        $cart = Yii::$app->kingcoin;
+        $cartItem = $cart->getItem();
+        $paymentCartItem = new PaymentItem([
+            'id' => $cartItem->getUniqueId(),
+            'title' => $cartItem->getTitle(),
+            'quantity' => $cartItem->getQuantity(),
+            'price' => $cartItem->getPrice()
+        ]);
+        $paymentCart->addItem($paymentCartItem);
+        
+        if ($cart->getTotalDiscount()) {
+            $discountItem = $cart->getDiscountItem();
+            $paymentDiscount = new PaymentDiscount([
+                'id' => $discountItem->code,
+                'title' => 'Discount promotion code ' . $discountItem->code,
+                'price' => $discountItem->getPrice()
+            ]);
+            $paymentCart->setDiscount($paymentDiscount);
+        }
+        $gateway = new PaymentGateway();
+        $client = $gateway->getClient($request->post('gateway'));
+        $client->request($paymentCart);
+    }
+
+    public function actionPurchase1()
+    {
         // Send to paypal
         $settings = Yii::$app->settings;
         $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
