@@ -3,6 +3,7 @@ namespace frontend\components\payment\clients;
 
 use Yii;
 use yii\helpers\Url;
+use yii\base\Model;
 
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
@@ -16,7 +17,7 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 
-class Paypal extends PaymentClientInterface
+class Paypal extends Model
 {
     public function loadConfig()
     {
@@ -34,10 +35,7 @@ class Paypal extends PaymentClientInterface
 
     public function loadData($cart)
     {
-        // $cart = Yii::$app->kingcoin;
         $totalPrice = $cart->getTotalPrice();
-        $subTotalPrice = $cart->getSubTotalPrice();
-        // $cartItem = $cart->getItem();
         $currency = "USD";
 
         $itemList = [];
@@ -104,14 +102,42 @@ class Paypal extends PaymentClientInterface
         try {
             $payment->create($apiContext);
             if ('created' == strtolower($payment->state)) {// order was created
-                return $this->redirect($payment->getApprovalLink());
+                // return $this->redirect($payment->getApprovalLink());
+                return Yii::$app->getResponse()->redirect($payment->getApprovalLink(), 302);
             }  
         } catch (\PayPal\Exception\PayPalConnectionException $ex) {
             echo $ex->getData();
         }
     }
+    
     public function confirm()
     {
-        
+        $paymentId = $this->getQueryParam('paymentId');
+        $payerId = $this->getQueryParam('PayerID');
+        $token = $this->getQueryParam('token');
+
+        if (!$paymentId || !$payerId || !$token) throw new BadRequestHttpException("The request is invalid", 1);
+
+        $apiContext = $this->loadConfig();
+        $payment = Payment::get($paymentId, $apiContext);
+        if ('created' != strtolower($payment->state)) throw new BadRequestHttpException("Transaction #$paymentId : status is invalid", 1);
+        $execution = new PaymentExecution();
+        $execution->setPayerId($payerId);
+        $transactions = $payment->getTransactions();
+        $transaction = reset($transactions);
+        $execution->addTransaction($transaction);
+        try {
+            $payment->execute($execution, $apiContext);
+            return 'approved' == strtolower($payment->state);
+        } catch (Exception $ex) {
+            exit(1);
+        }
+    }
+
+    protected function getQueryParam($name, $defaultValue = null)
+    {
+        $request = Yii::$app->getRequest();
+        $params = $request->getQueryParams();
+        return isset($params[$name]) && is_scalar($params[$name]) ? $params[$name] : $defaultValue;
     }
 }

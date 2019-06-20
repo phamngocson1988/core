@@ -25,6 +25,12 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction as PaypalTransaction;
 use PayPal\Api\PaymentExecution;
 
+
+use frontend\components\payment\cart\PaymentItem;
+use frontend\components\payment\cart\PaymentCart;
+use frontend\components\payment\cart\PaymentDiscount;
+use frontend\components\payment\PaymentGateway;
+
 /**
  * UserController
  */
@@ -134,8 +140,8 @@ class PricingController extends Controller
         $cartItem = $cart->getItem();
         $paymentCartItem = new PaymentItem([
             'id' => $cartItem->getUniqueId(),
-            'title' => $cartItem->getTitle(),
-            'quantity' => $cartItem->getQuantity(),
+            'title' => $cartItem->getLabel(),
+            'quantity' => $cartItem->quantity,
             'price' => $cartItem->getPrice()
         ]);
         $paymentCart->addItem($paymentCartItem);
@@ -150,8 +156,93 @@ class PricingController extends Controller
             $paymentCart->setDiscount($paymentDiscount);
         }
         $gateway = new PaymentGateway();
-        $client = $gateway->getClient($request->post('gateway'));
-        $client->request($paymentCart);
+        $client = $gateway->getClient('paypal');
+        $gateway->setCart($paymentCart);
+        $gateway->setClient($client);
+        $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) {
+            $gateway = $event->sender;
+            $cart = Yii::$app->kingcoin;
+            $user = Yii::$app->user->getIdentity();
+            
+            $trn = new PaymentTransaction();
+            $trn->user_id = $user->id;
+            $trn->payment_method = 'paypal';
+            // $trn->payment_id = $paymentId;
+            // $trn->payment_data = $token;
+            $trn->price = $subTotalPrice;
+            $trn->total_price = $totalPrice;//$transaction->getAmount()->getTotal();
+            $trn->coin = $totalCoin;
+            $trn->discount_coin = 0;
+            $trn->total_coin = $totalCoin;
+            $trn->description = "Paypal";
+            $trn->created_by = $user->id;
+            $trn->status = PaymentTransaction::STATUS_PENDING;
+            $trn->payment_at = date('Y-m-d H:i:s');
+            $trn->generateAuthKey();
+            if ($cart->getTotalDiscount()) {
+                $discount = $cart->getDiscountItem();
+                $trn->discount_price = $cart->getTotalDiscount();
+                $trn->discount_code = $discount->getPromotion()->code;
+            }
+            $trn->save();
+        });
+        $gateway->request();
+    }
+
+    public function actionSuccess()
+    {
+        $gateway = new PaymentGateway();
+        $client = $gateway->getClient('paypal');
+        $gateway->setClient($client);
+        if ($gateway->confirm()) {
+            $cart = Yii::$app->kingcoin;
+            $cartItem = $cart->getItem();
+            $user = Yii::$app->user->getIdentity();
+            $totalPrice = $cart->getTotalPrice();
+            $subTotalPrice = $cart->getSubTotalPrice();
+            $totalCoin = $cartItem->getPricing()->num_of_coin * $cartItem->quantity;
+            
+            // Create transaction
+            $trn = new PaymentTransaction();
+            $trn->user_id = $user->id;
+            $trn->payment_method = 'paypal';
+            // $trn->payment_id = $paymentId;
+            // $trn->payment_data = $token;
+            $trn->price = $subTotalPrice;
+            $trn->total_price = $totalPrice;//$transaction->getAmount()->getTotal();
+            $trn->coin = $totalCoin;
+            $trn->discount_coin = 0;
+            $trn->total_coin = $totalCoin;
+            $trn->description = "Paypal";
+            $trn->created_by = $user->id;
+            $trn->status = PaymentTransaction::STATUS_COMPLETED;
+            $trn->payment_at = date('Y-m-d H:i:s');
+            $trn->generateAuthKey();
+            if ($cart->getTotalDiscount()) {
+                $discount = $cart->getDiscountItem();
+                $trn->discount_price = $cart->getTotalDiscount();
+                $trn->discount_code = $discount->getPromotion()->code;
+            }
+            $trn->save();
+
+            $wallet = new UserWallet();
+            $wallet->coin = $cartItem->getPricing()->num_of_coin * $cartItem->quantity;
+            $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+            $wallet->type = UserWallet::TYPE_INPUT;
+            $wallet->description = "Transaction #$trn->auth_key";
+            $wallet->ref_name = PaymentTransaction::className();
+            $wallet->ref_key = $trn->auth_key;
+            $wallet->created_by = $user->id;
+            $wallet->user_id = $user->id;
+            $wallet->status = UserWallet::STATUS_COMPLETED;
+            $wallet->payment_at = date('Y-m-d H:i:s');
+            $wallet->save();
+            $this->layout = 'notice';
+            return $this->render('/site/notice', [
+                'title' => 'You have just bought a pricing successfully.',
+                'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
+            ]);
+        }
     }
 
     public function actionPurchase1()
@@ -239,7 +330,7 @@ class PricingController extends Controller
         }
     }
 
-    public function actionSuccess()
+    public function actionSuccess1()
     {
         $request = Yii::$app->request;
         $cart = Yii::$app->kingcoin;

@@ -10,6 +10,11 @@ class PaymentCart extends Model
     public $items = [];
     public $discount;
 
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
     public function getItems()
     {
         return (array)$this->items;
@@ -45,5 +50,20 @@ class PaymentCart extends Model
     {
         $discount = $this->getDiscount();
         return ($discount) ? $discount->getTotalPrice() : 0;
+    }
+
+    public function getTotalPrice()
+    {
+        $subTotal = $this->getSubTotalPrice();
+        $discount = $this->hasDiscount();
+        return $subTotal - $discount;
+    }
+
+    public function getSubTotalPrice()
+    {
+        $prices = array_map(function($item) {
+            return $item->getTotalPrice();
+        }, $this->getItems());
+        return array_sum($prices);
     }
 }
