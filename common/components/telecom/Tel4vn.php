@@ -7,8 +7,10 @@ use yii\helpers\FileHelper;
 
 class Tel4vn 
 {
-	// public $server = "https://ncapi.tel4vn.com/api/v1/autocall";
-	public $server = "https://api.tel4vn.com/api/v1/autocall";
+	 public $server = "http://ncapi.tel4vn.com/api/v1/autocall";
+
+
+	//public $server = "https://api.tel4vn.com/api/v1/autocall";
 	// public $caller_id_number = '02873001968';
 	// public $destination = '1002';
 	// public $domain;
