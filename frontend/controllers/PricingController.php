@@ -5,6 +5,7 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
+use yii\base\Exception;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -15,15 +16,15 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\components\kingcoin\CartDiscount;
 use frontend\components\kingcoin\CartItem;
-use PayPal\Api\Amount;
-use PayPal\Api\Details;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Transaction as PaypalTransaction;
-use PayPal\Api\PaymentExecution;
+// use PayPal\Api\Amount;
+// use PayPal\Api\Details;
+// use PayPal\Api\Item;
+// use PayPal\Api\ItemList;
+// use PayPal\Api\Payer;
+// use PayPal\Api\Payment;
+// use PayPal\Api\RedirectUrls;
+// use PayPal\Api\Transaction as PaypalTransaction;
+// use PayPal\Api\PaymentExecution;
 
 
 use frontend\components\payment\cart\PaymentItem;
@@ -155,10 +156,8 @@ class PricingController extends Controller
             ]);
             $paymentCart->setDiscount($paymentDiscount);
         }
-        $gateway = new PaymentGateway();
-        $client = $gateway->loadClient('paypal');
+        $gateway = new PaymentGateway('paypal');
         $gateway->setCart($paymentCart);
-        $gateway->setClient($client);
         $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) {
             $gateway = $event->sender;
             $client = $gateway->getClient();
@@ -172,7 +171,7 @@ class PricingController extends Controller
             $trn = new PaymentTransaction();
             $trn->user_id = $user->id;
             $trn->payment_method = $client->identifier;
-            $trn->payment_id = $event->reference_id;
+            $trn->payment_id = $client->getReferenceId();
             $trn->price = $subTotalPrice;
             $trn->total_price = $totalPrice;
             $trn->coin = $totalCoin;
@@ -189,43 +188,76 @@ class PricingController extends Controller
                 $trn->discount_code = $discount->getPromotion()->code;
             }
             $trn->save();
+            $cart->clear();
         });
         return $gateway->request();
     }
 
     public function actionSuccess()
     {
-        $gateway = new PaymentGateway();
-        $client = $gateway->loadClient('paypal');
-        $gateway->setClient($client);
+        $gateway = new PaymentGateway('paypal');
         $gateway->on(PaymentGateway::EVENT_AFTER_CONFIRM, function($event) {
-            $gateway = $event->sender;
-            $client = $gateway->getClient();
-            $user = Yii::$app->user->getIdentity();
-            $trn = PaymentTransaction::find()->where(['payment_id' => $client->getReferenceId(), 'status' => PaymentTransaction::STATUS_PENDING])->one();
-            $trn->status = PaymentTransaction::STATUS_COMPLETED;
-            $trn->save();
+            try {
+                $gateway = $event->sender;
+                $client = $gateway->getClient();
+                $user = Yii::$app->user->getIdentity();
+                $refId = $client->getReferenceId();
+                $trn = PaymentTransaction::find()->where([
+                    'payment_id' => $refId, 
+                    'status' => PaymentTransaction::STATUS_PENDING
+                ])->one();
+                if (!$trn) {
+                    Yii::$app->session->setFlash('error', 'Đã có lỗi xảy ra');
+                    throw new Exception("Không tìm thấy giao dịch $refId");
+                }
+                $trn->status = PaymentTransaction::STATUS_COMPLETED;
+                $trn->payment_at = date('Y-m-d H:i:s');
+                $trn->save();
+
+                $wallet = new UserWallet();
+                $wallet->coin = $trn->total_coin;
+                $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+                $wallet->type = UserWallet::TYPE_INPUT;
+                $wallet->description = "Transaction #$trn->auth_key";
+                $wallet->ref_name = PaymentTransaction::className();
+                $wallet->ref_key = $trn->auth_key;
+                $wallet->created_by = $user->id;
+                $wallet->user_id = $user->id;
+                $wallet->status = UserWallet::STATUS_COMPLETED;
+                $wallet->payment_at = date('Y-m-d H:i:s');
+                $wallet->save();
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage(), 1);
+            }
         });
         if ($gateway->confirm()) {
-
-            // $wallet = new UserWallet();
-            // $wallet->coin = $cartItem->getPricing()->num_of_coin * $cartItem->quantity;
-            // $wallet->balance = $user->getWalletAmount() + $wallet->coin;
-            // $wallet->type = UserWallet::TYPE_INPUT;
-            // $wallet->description = "Transaction #$trn->auth_key";
-            // $wallet->ref_name = PaymentTransaction::className();
-            // $wallet->ref_key = $trn->auth_key;
-            // $wallet->created_by = $user->id;
-            // $wallet->user_id = $user->id;
-            // $wallet->status = UserWallet::STATUS_COMPLETED;
-            // $wallet->payment_at = date('Y-m-d H:i:s');
-            // $wallet->save();
             $this->layout = 'notice';
             return $this->render('/site/notice', [
                 'title' => 'You have just bought a pricing successfully.',
                 'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
             ]);
         }
+    }
+
+    public function actionError()
+    {
+        $gateway = new PaymentGateway('paypal');
+        $gateway->on(PaymentGateway::EVENT_AFTER_CANCEL, function($event) {
+            try {
+                $gateway = $event->sender;
+                $client = $gateway->getClient();
+                $refId = $client->getReferenceId();
+                $trn = PaymentTransaction::find()->where([
+                    'payment_id' => $refId, 
+                    'status' => PaymentTransaction::STATUS_PENDING
+                ])->one();
+                if ($trn) $trn->delete();
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage(), 1);
+            }
+        });
+        $gateway->cancel();
+        throw new BadRequestHttpException("You have just cancelled the order", 1);
     }
 
     public function actionPurchase1()
@@ -400,7 +432,7 @@ class PricingController extends Controller
         ]);
     }
 
-    public function actionError()
+    public function actionError1()
     {
         $request = Yii::$app->request;
         $token = $request->get('token');

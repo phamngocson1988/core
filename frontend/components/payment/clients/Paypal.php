@@ -2,9 +2,9 @@
 namespace frontend\components\payment\clients;
 
 use Yii;
-use yii\helpers\Url;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
+use yii\base\Exception;
 
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
@@ -24,6 +24,15 @@ class Paypal extends Model
     const PAYMENT_STATE_APPROVED = 'approved';
     
     public $identifier = 'paypal';
+
+    protected $params = [
+        'paymentId',
+        'PayerID',
+        'token',
+    ];
+    protected $return_url;
+    protected $cancel_url;
+
     protected $reference_id;
 
     protected function setReferenceId($reference_id)
@@ -34,6 +43,31 @@ class Paypal extends Model
     public function getReferenceId()
     {
         return $this->reference_id;
+    }
+
+    public function getResponseParams()
+    {
+        return $this->params;
+    }
+
+    public function setReturnUrl($url)
+    {
+        $this->return_url = $url;
+    }
+
+    public function getReturnUrl()
+    {
+        return $this->return_url;
+    }
+
+    public function setCancelUrl($url)
+    {
+        $this->cancel_url = $url;
+    }
+
+    public function getCancelUrl()
+    {
+        return $this->cancel_url;
     }
 
     protected function loadConfig()
@@ -98,8 +132,8 @@ class Paypal extends Model
             ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(Url::to(['pricing/success'], true))
-            ->setCancelUrl(Url::to(['pricing/error'], true));
+        $redirectUrls->setReturnUrl($this->getReturnUrl())
+            ->setCancelUrl($this->getCancelUrl());
 
         $payer = new Payer();
         $payer->setPaymentMethod("paypal");
@@ -131,19 +165,16 @@ class Paypal extends Model
         }
     }
     
-    public function confirm()
+    public function confirm($response)
     {
-        $paymentId = $this->getQueryParam('paymentId');
-        $payerId = $this->getQueryParam('PayerID');
-        $token = $this->getQueryParam('token');
-
-        if (!$paymentId || !$payerId || !$token) throw new BadRequestHttpException("The request is invalid", 1);
+        extract($response); // now can use $paymentId, $PayerID, $token
+        if (!$paymentId || !$PayerID || !$token) throw new BadRequestHttpException("The request is invalid", 1);
 
         $apiContext = $this->loadConfig();
         $payment = Payment::get($paymentId, $apiContext);
         if (self::PAYMENT_STATE_CREATED != strtolower($payment->state)) throw new BadRequestHttpException("Transaction #$paymentId : status is invalid", 1);
         $execution = new PaymentExecution();
-        $execution->setPayerId($payerId);
+        $execution->setPayerId($PayerID);
         $transactions = $payment->getTransactions();
         $transaction = reset($transactions);
         $execution->addTransaction($transaction);
@@ -151,15 +182,15 @@ class Paypal extends Model
             $payment->execute($execution, $apiContext);
             $this->setReferenceId($token);
             return self::PAYMENT_STATE_APPROVED == strtolower($payment->state);
-        } catch (Exception $ex) {
-            exit(1);
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
-    protected function getQueryParam($name, $defaultValue = null)
+    public function cancel($response)
     {
-        $request = Yii::$app->getRequest();
-        $params = $request->getQueryParams();
-        return isset($params[$name]) && is_scalar($params[$name]) ? $params[$name] : $defaultValue;
+        extract($response); // now can use $token
+        $this->setReferenceId($token);
+        return true;
     }
 }
