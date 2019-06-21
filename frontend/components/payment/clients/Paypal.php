@@ -4,6 +4,7 @@ namespace frontend\components\payment\clients;
 use Yii;
 use yii\helpers\Url;
 use yii\base\Model;
+use yii\web\BadRequestHttpException;
 
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
@@ -19,7 +20,23 @@ use PayPal\Auth\OAuthTokenCredential;
 
 class Paypal extends Model
 {
-    public function loadConfig()
+    const PAYMENT_STATE_CREATED = 'created';
+    const PAYMENT_STATE_APPROVED = 'approved';
+    
+    public $identifier = 'paypal';
+    protected $reference_id;
+
+    protected function setReferenceId($reference_id)
+    {
+        $this->reference_id = $reference_id;
+    }
+
+    public function getReferenceId()
+    {
+        return $this->reference_id;
+    }
+
+    protected function loadConfig()
     {
         $settings = Yii::$app->settings;
         $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
@@ -33,7 +50,7 @@ class Paypal extends Model
         return new ApiContext(new OAuthTokenCredential($clientId, $clientSecret));
     }
 
-    public function loadData($cart)
+    protected function loadData($cart)
     {
         $totalPrice = $cart->getTotalPrice();
         $currency = "USD";
@@ -95,15 +112,19 @@ class Paypal extends Model
         return $payment;
     }
 
-    public function request($cart)
+    public function getPaymentLink($cart)
     {
         $apiContext = $this->loadConfig();
         $payment = $this->loadData($cart);
         try {
             $payment->create($apiContext);
-            if ('created' == strtolower($payment->state)) {// order was created
-                // return $this->redirect($payment->getApprovalLink());
-                return Yii::$app->getResponse()->redirect($payment->getApprovalLink(), 302);
+            if (self::PAYMENT_STATE_CREATED == strtolower($payment->state)) {// order was created
+                $link = $payment->getApprovalLink();
+                $query = parse_url($link, PHP_URL_QUERY);
+                parse_str($query, $params);
+                $token = isset($params['token']) ? $params['token'] : '';
+                $this->setReferenceId($token);
+                return $link;
             }  
         } catch (\PayPal\Exception\PayPalConnectionException $ex) {
             echo $ex->getData();
@@ -120,7 +141,7 @@ class Paypal extends Model
 
         $apiContext = $this->loadConfig();
         $payment = Payment::get($paymentId, $apiContext);
-        if ('created' != strtolower($payment->state)) throw new BadRequestHttpException("Transaction #$paymentId : status is invalid", 1);
+        if (self::PAYMENT_STATE_CREATED != strtolower($payment->state)) throw new BadRequestHttpException("Transaction #$paymentId : status is invalid", 1);
         $execution = new PaymentExecution();
         $execution->setPayerId($payerId);
         $transactions = $payment->getTransactions();
@@ -128,7 +149,8 @@ class Paypal extends Model
         $execution->addTransaction($transaction);
         try {
             $payment->execute($execution, $apiContext);
-            return 'approved' == strtolower($payment->state);
+            $this->setReferenceId($token);
+            return self::PAYMENT_STATE_APPROVED == strtolower($payment->state);
         } catch (Exception $ex) {
             exit(1);
         }

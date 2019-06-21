@@ -5,13 +5,14 @@ use Yii;
 use yii\base\Model;
 use frontend\components\payment\cart\PaymentCart;
 use yii\helpers\ArrayHelper;
+use frontend\components\payment\events\BeforeRequestEvent;
 
 class PaymentGateway extends Model
 {
     const EVENT_BEFORE_REQUEST = 'EVENT_BEFORE_REQUEST';
     const EVENT_BEFORE_CONFIRM = 'EVENT_BEFORE_CONFIRM';
     const EVENT_AFTER_CONFIRM = 'EVENT_AFTER_CONFIRM';
-    
+
     public $clients = [
         'paypal' => [
             'class' => '\frontend\components\payment\clients\Paypal',
@@ -23,7 +24,7 @@ class PaymentGateway extends Model
     protected $client;
     protected $cart;
 
-    public function getClient($identifier) 
+    public function loadClient($identifier) 
     {
         $client = ArrayHelper::getValue($this->clients, $identifier);
         if (!$client) return null;
@@ -35,15 +36,22 @@ class PaymentGateway extends Model
         $this->cart = $cart;
     }
 
-    public function setClient($client);
+    public function setClient($client)
     {
         $this->client = $client;
     }
 
+    public function getClient()
+    {
+        return $this->client;
+    }
+
     public function request()
     {
+        $client = $this->getClient();
+        $link = $client->getPaymentLink($this->cart);
         $this->trigger(self::EVENT_BEFORE_REQUEST);
-        return $this->client->request();
+        return Yii::$app->getResponse()->redirect($link, 302);
     }
 
     public function confirm()
