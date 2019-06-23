@@ -15,14 +15,18 @@ class PaymentGateway extends Model
     const EVENT_AFTER_CONFIRM = 'EVENT_AFTER_CONFIRM';
     const EVENT_BEFORE_CANCEL = 'EVENT_BEFORE_CANCEL';
     const EVENT_AFTER_CANCEL = 'EVENT_AFTER_CANCEL';
+    const EVENT_CONFIRM_SUCCESS = 'EVENT_CONFIRM_SUCCESS';
+    const EVENT_CONFIRM_ERROR = 'EVENT_CONFIRM_ERROR';
 
     public $clients = [
         'paypal' => [
             'class' => '\frontend\components\payment\clients\Paypal',
         ]
     ];
-    public $return_url = 'pricing/success';
-    public $cancel_url = 'pricing/error';
+    public $confirm_url = 'pricing/verify';
+    public $success_url = 'pricing/success';
+    public $cancel_url = 'pricing/cancel';
+    public $error_url = 'pricing/error';
 
     protected $client;
     protected $cart;
@@ -32,8 +36,10 @@ class PaymentGateway extends Model
         $clientData = ArrayHelper::getValue($this->clients, $identifier);
         if (!$clientData) return null;
         $client = Yii::createObject($clientData);
-        $client->setReturnUrl(Url::to([$this->return_url], true));
-        $client->setCancelUrl(Url::to([$this->cancel_url], true));
+        $client->setConfirmUrl(Url::to([$this->confirm_url, 'identifier' => $client->identifier], true));
+        $client->setSuccessUrl(Url::to([$this->success_url], true));
+        $client->setCancelUrl(Url::to([$this->cancel_url, 'identifier' => $client->identifier], true));
+        $client->setErrorUrl(Url::to([$this->error_url], true));
         $this->setClient($client);
     }
 
@@ -70,8 +76,13 @@ class PaymentGateway extends Model
         }
         $this->trigger(self::EVENT_BEFORE_CONFIRM);
         $result = $client->confirm($response);
+        $this->trigger(self::EVENT_AFTER_CONFIRM);
         if ($result) {
-            $this->trigger(self::EVENT_AFTER_CONFIRM);
+            $this->trigger(self::EVENT_CONFIRM_SUCCESS);
+            $client->success();
+        } else {
+            $this->trigger(self::EVENT_CONFIRM_ERROR);
+            $client->error();
         }
         return $result;
     }

@@ -18,12 +18,12 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 
-class Paypal extends Model
+class Alipay extends Model
 {
     const PAYMENT_STATE_CREATED = 'created';
     const PAYMENT_STATE_APPROVED = 'approved';
     
-    public $identifier = 'paypal';
+    public $identifier = 'alipay';
 
     protected $params = [
         'paymentId',
@@ -95,15 +95,14 @@ class Paypal extends Model
     protected function loadConfig()
     {
         $settings = Yii::$app->settings;
-        $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
-        if ($paypalMode == 'live') {
-            $clientId = $settings->get('PaypalSettingForm', 'client_id');
-            $clientSecret = $settings->get('PaypalSettingForm', 'client_secret');
-        } else {
-            $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
-            $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
-        }
-        return new ApiContext(new OAuthTokenCredential($clientId, $clientSecret));
+        $config['partner'] = $settings->get('AlipaySettingForm', 'partner');
+        $config['seller_email'] = $settings->get('AlipaySettingForm', 'seller_email');
+        $config['key'] = $settings->get('AlipaySettingForm', 'key');
+        $config['sign_type'] = strtoupper('MD5');
+        $config['input_charset'] = strtolower('utf-8');
+        $config['cacert'] = __DIR__ . '/cacert.pem';
+        $config['transport'] = 'http';
+        return $config;
     }
 
     protected function loadData($cart)
@@ -166,25 +165,47 @@ class Paypal extends Model
             ->setRedirectUrls($redirectUrls)
             ->setTransactions(array($transaction));
         return $payment;
+
+        $email = $_POST['WIDemail'];
+        $account_name = "北京纽斯洛网络科技有限公司";
+        $pay_date = date("Y-m-d");
+        $batch_no = date("YmdHis");
+        $batch_fee = round($totalPrice, 2);
+        $batch_num = 2;
+        //必填，即参数detail_data的值中，“|”字符出现的数量加1，最大支持1000笔（即“|”字符出现的数量999个）
+
+        //付款详细数据
+        $detail_data = "流水号1^收款方帐号1^真实姓名^0.01^测试付款1,这是备注|流水号2^收款方帐号2^真实姓名^0.01^测试付款2,这是备注";
+        //必填，格式：流水号1^收款方帐号1^真实姓名^付款金额1^备注说明1|流水号2^收款方帐号2^真实姓名^付款金额2^备注说明2....
+
     }
 
     public function getPaymentLink($cart)
     {
-        $apiContext = $this->loadConfig();
-        $payment = $this->loadData($cart);
-        try {
-            $payment->create($apiContext);
-            if (self::PAYMENT_STATE_CREATED == strtolower($payment->state)) {// order was created
-                $link = $payment->getApprovalLink();
-                $query = parse_url($link, PHP_URL_QUERY);
-                parse_str($query, $params);
-                $token = isset($params['token']) ? $params['token'] : '';
-                $this->setReferenceId($token);
-                return $link;
-            }  
-        } catch (\PayPal\Exception\PayPalConnectionException $ex) {
-            echo $ex->getData();
-        }
+        
+
+        /************************************************************/
+
+        $alipayConfig = $this->loadConfig();
+        $parameter = array(
+            "service" => "batch_trans_notify",
+            "partner" => trim($alipayConfig['partner']),
+            "notify_url"    => $this->getConfirmUrl(),
+            "email" => trim($alipayConfig['seller_email']),
+
+            "account_name"  => $account_name,
+            "pay_date"  => $pay_date,
+            "batch_no"  => $batch_no,
+            "batch_fee" => $batch_fee,
+            "batch_num" => $batch_num,
+            "detail_data"   => $detail_data,
+            "_input_charset"    => trim(strtolower($alipayConfig['input_charset']))
+        );
+
+        //建立请求
+        $alipaySubmit = new AlipaySubmit($alipayConfig);
+        $html_text = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
+        return $html_text;
     }
     
     public function confirm($response)

@@ -41,7 +41,8 @@
         "2amigos/yii2-google-maps-library" : "*",
         "paypal/rest-api-sdk-php": "*",
         "codemix/yii2-excelexport": "*",
-        "2amigos/yii2-chartjs-widget" : "~2.0"
+        "2amigos/yii2-chartjs-widget" : "~2.0",
+        "izyue/yii2-alipay": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

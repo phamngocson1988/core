@@ -47,7 +47,7 @@ class PricingController extends Controller
                 'only' => ['purchase', 'success', 'store'],
                 'rules' => [
                     [
-                        'actions' => ['purchase', 'success', 'store', 'add'],
+                        'actions' => ['purchase', 'success', 'store', 'add', 'verify'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -193,10 +193,10 @@ class PricingController extends Controller
         return $gateway->request();
     }
 
-    public function actionSuccess()
+    public function actionVerify()
     {
         $gateway = new PaymentGateway('paypal');
-        $gateway->on(PaymentGateway::EVENT_AFTER_CONFIRM, function($event) {
+        $gateway->on(PaymentGateway::EVENT_CONFIRM_SUCCESS, function($event) {
             try {
                 $gateway = $event->sender;
                 $client = $gateway->getClient();
@@ -230,16 +230,19 @@ class PricingController extends Controller
                 throw new Exception($e->getMessage(), 1);
             }
         });
-        if ($gateway->confirm()) {
-            $this->layout = 'notice';
-            return $this->render('/site/notice', [
-                'title' => 'You have just bought a pricing successfully.',
-                'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
-            ]);
-        }
+        return $gateway->confirm();
     }
 
-    public function actionError()
+    public function actionSuccess()
+    {
+        $this->layout = 'notice';
+        return $this->render('/site/notice', [
+            'title' => 'You have just bought a pricing successfully.',
+            'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
+        ]);
+    }
+
+    public function actionCancel()
     {
         $gateway = new PaymentGateway('paypal');
         $gateway->on(PaymentGateway::EVENT_AFTER_CANCEL, function($event) {
