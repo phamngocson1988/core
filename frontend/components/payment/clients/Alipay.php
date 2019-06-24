@@ -5,18 +5,8 @@ use Yii;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
 use yii\base\Exception;
-
-use PayPal\Api\Amount;
-use PayPal\Api\Details;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Transaction as PaypalTransaction;
-use PayPal\Api\PaymentExecution;
-use PayPal\Rest\ApiContext;
-use PayPal\Auth\OAuthTokenCredential;
+use izyue\alipay\AlipayNotify;
+use izyue\alipay\AlipaySubmit;
 
 class Alipay extends Model
 {
@@ -95,117 +85,67 @@ class Alipay extends Model
     protected function loadConfig()
     {
         $settings = Yii::$app->settings;
-        $config['partner'] = $settings->get('AlipaySettingForm', 'partner');
-        $config['seller_email'] = $settings->get('AlipaySettingForm', 'seller_email');
-        $config['key'] = $settings->get('AlipaySettingForm', 'key');
-        $config['sign_type'] = strtoupper('MD5');
-        $config['input_charset'] = strtolower('utf-8');
-        $config['cacert'] = __DIR__ . '/cacert.pem';
-        $config['transport'] = 'http';
-        return $config;
+        $alipay_config['partner'] = $settings->get('AlipaySettingForm', 'partner');
+        $alipay_config['seller_email'] = $settings->get('AlipaySettingForm', 'seller_email');
+        $alipay_config['key'] = $settings->get('AlipaySettingForm', 'key');
+        $alipay_config['sign_type']    = strtoupper('MD5');
+        $alipay_config['input_charset']= strtolower('utf-8');
+        $alipay_config['cacert']    = Yii::getAlias('D:\xampp\htdocs\kinggerm\frontend\cacert.pem');//Yii::$app->params['cacert'];//'\cacert.pem';
+        $alipay_config['transport']    = 'http';
+        return $alipay_config;
     }
 
     protected function loadData($cart)
     {
-        $totalPrice = $cart->getTotalPrice();
-        $currency = "USD";
+        $payment_type = "1";
+        $notify_url = $this->getConfirmUrl();
+        $return_url = $this->getSuccessUrl();
+        $out_trade_no = date('YmdHis');
+        $total_fee = $cart->getTotalPrice();
+        $show_url = '';//Yii::$app->urlManager->createAbsoluteUrl(['product/view', 'id' => $firstProduct]);
+        $anti_phishing_key = time();
+        $exter_invoke_ip = "";
+        $subject = $body = '';
 
-        $itemList = [];
-        foreach ($cart->getItems() as $cartItem) {
-            $ppItem = new Item();
-            $ppItem->setName($cartItem->getTitle())
-            ->setCurrency($currency)
-            ->setQuantity($cartItem->getQuantity())
-            ->setSku($cartItem->getId())
-            ->setPrice($cartItem->getPrice());
-            $itemList[] = $ppItem;
+        $items = array_values($cart->getItems());
+        foreach ($items as $key => $cartItem) {
+            if ($key == 0) {
+                $subject = $cartItem->getTitle();
+                if (count($items) > 1) {
+                    $subject .= '等' . count($items) . '件商品';
+                }
+            }
+            $body .= $cartItem->getTitle() . ' | ';
         }
 
-        // For discount
-        if ($cart->hasDiscount()) {
-            $discount = $cart->getDiscount();
-            $discountItem = new Item();
-            $discountItem->setName($discount->getTitle())
-            ->setCurrency($currency)
-            ->setQuantity(1)
-            ->setSku($discount->getId())
-            ->setPrice(($cart->getTotalDiscount()) * (-1));
-            $itemList[] = $discountItem;
-        }
-
-        $ppitemList = new ItemList();
-        $ppitemList->setItems($itemList);
-
-        $details = new Details();
-        $details->setShipping(0)
-            ->setTax(0)
-            ->setSubtotal($totalPrice);
-        // ### Amount
-        $amount = new Amount();
-        $amount->setCurrency($currency)
-            ->setTotal($totalPrice)
-            ->setDetails($details);
-
-        $transaction = new PaypalTransaction();
-        $transaction->setAmount($amount)
-            ->setItemList($ppitemList)
-            ->setDescription($cart->getTitle())
-            ->setInvoiceNumber(uniqid());
-
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl($this->getConfirmUrl())
-            ->setCancelUrl($this->getCancelUrl());
-
-        $payer = new Payer();
-        $payer->setPaymentMethod("paypal");
-
-        $payment = new Payment();
-        $payment->setIntent("sale")
-            ->setPayer($payer)
-            ->setRedirectUrls($redirectUrls)
-            ->setTransactions(array($transaction));
-        return $payment;
-
-        $email = $_POST['WIDemail'];
-        $account_name = "北京纽斯洛网络科技有限公司";
-        $pay_date = date("Y-m-d");
-        $batch_no = date("YmdHis");
-        $batch_fee = round($totalPrice, 2);
-        $batch_num = 2;
-        //必填，即参数detail_data的值中，“|”字符出现的数量加1，最大支持1000笔（即“|”字符出现的数量999个）
-
-        //付款详细数据
-        $detail_data = "流水号1^收款方帐号1^真实姓名^0.01^测试付款1,这是备注|流水号2^收款方帐号2^真实姓名^0.01^测试付款2,这是备注";
-        //必填，格式：流水号1^收款方帐号1^真实姓名^付款金额1^备注说明1|流水号2^收款方帐号2^真实姓名^付款金额2^备注说明2....
-
+        return [
+            "payment_type"  => $payment_type,
+            "notify_url"    => $notify_url,
+            "return_url"    => $return_url,
+            "out_trade_no"  => $out_trade_no,
+            "subject"   => $subject,
+            "total_fee" => $total_fee,
+            "body"  => $body,
+            "show_url"  => $show_url,
+            "anti_phishing_key" => $anti_phishing_key,
+            "exter_invoke_ip"   => $exter_invoke_ip,
+        ];
     }
 
     public function getPaymentLink($cart)
     {
-        
-
-        /************************************************************/
-
-        $alipayConfig = $this->loadConfig();
-        $parameter = array(
-            "service" => "batch_trans_notify",
-            "partner" => trim($alipayConfig['partner']),
-            "notify_url"    => $this->getConfirmUrl(),
-            "email" => trim($alipayConfig['seller_email']),
-
-            "account_name"  => $account_name,
-            "pay_date"  => $pay_date,
-            "batch_no"  => $batch_no,
-            "batch_fee" => $batch_fee,
-            "batch_num" => $batch_num,
-            "detail_data"   => $detail_data,
-            "_input_charset"    => trim(strtolower($alipayConfig['input_charset']))
-        );
-
-        //建立请求
-        $alipaySubmit = new AlipaySubmit($alipayConfig);
-        $html_text = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
-        return $html_text;
+        $alipay_config = $this->loadConfig();
+        $data = $this->loadData($cart);
+        $parameter = array_merge([
+            "service" => "create_direct_pay_by_user",
+            "partner" => trim($alipay_config['partner']),
+            "seller_email" => trim($alipay_config['seller_email']),
+            "_input_charset"    => trim(strtolower($alipay_config['input_charset'])),
+        ], $data);
+        $alipaySubmit = new AlipaySubmit($alipay_config);
+        $html_text = $alipaySubmit->buildRequestForm($parameter, "post", "正在跳转支付宝付款，请稍候...");
+        echo $html_text;
+        die;
     }
     
     public function confirm($response)

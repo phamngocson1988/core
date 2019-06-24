@@ -10,6 +10,7 @@ use backend\forms\SocialSettingForm;
 use backend\forms\HeaderScriptSettingForm;
 use backend\forms\GallerySettingForm;
 use backend\forms\PaypalSettingForm;
+use backend\forms\AlipaySettingForm;
 
 /**
  * Class SettingController
@@ -47,6 +48,12 @@ class SettingController extends Controller
                 'modelClass' => PaypalSettingForm::class,
                 'view' => 'paypal.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.paypal']
+            ],
+            'alipay' => [
+                'class' => SettingsAction::class,
+                'modelClass' => AlipaySettingForm::class,
+                'view' => 'alipay.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.alipay']
             ],
             'gallery' => [
                 'class' => SettingsAction::class,

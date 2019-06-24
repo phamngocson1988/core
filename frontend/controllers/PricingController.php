@@ -156,7 +156,7 @@ class PricingController extends Controller
             ]);
             $paymentCart->setDiscount($paymentDiscount);
         }
-        $gateway = new PaymentGateway('paypal');
+        $gateway = new PaymentGateway('alipay');
         $gateway->setCart($paymentCart);
         $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) {
             $gateway = $event->sender;

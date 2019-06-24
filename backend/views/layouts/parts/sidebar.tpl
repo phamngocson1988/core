@@ -196,6 +196,11 @@
                   <i class="cc-paypal"></i> Paypal
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{url route='setting/alipay'}" class="nav-link" code='setting.alipay'>
+                  <i class="cc-alipay"></i> Aiipay
+                </a>
+              </li>
             </ul
           </li>
         </ul>

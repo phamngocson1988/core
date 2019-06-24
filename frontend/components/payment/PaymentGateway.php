@@ -21,6 +21,9 @@ class PaymentGateway extends Model
     public $clients = [
         'paypal' => [
             'class' => '\frontend\components\payment\clients\Paypal',
+        ],
+        'alipay' => [
+            'class' => '\frontend\components\payment\clients\Alipay',
         ]
     ];
     public $confirm_url = 'pricing/verify';
