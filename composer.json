@@ -42,7 +42,8 @@
         "paypal/rest-api-sdk-php": "*",
         "codemix/yii2-excelexport": "*",
         "2amigos/yii2-chartjs-widget" : "~2.0",
-        "izyue/yii2-alipay": "*"
+        "izyue/yii2-alipay": "*",
+        "zvook/php-skrill-quick-checkout": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

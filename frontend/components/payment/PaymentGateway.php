@@ -24,6 +24,9 @@ class PaymentGateway extends Model
         ],
         'alipay' => [
             'class' => '\frontend\components\payment\clients\Alipay',
+        ],
+        'skrill' => [
+            'class' => '\frontend\components\payment\clients\Skrill',
         ]
     ];
     public $confirm_url = 'pricing/verify';

@@ -156,9 +156,9 @@ class PricingController extends Controller
             ]);
             $paymentCart->setDiscount($paymentDiscount);
         }
-        $gateway = new PaymentGateway('alipay');
+        $gateway = new PaymentGateway('skrill');
         $gateway->setCart($paymentCart);
-        $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) {
+        $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) { return;
             $gateway = $event->sender;
             $client = $gateway->getClient();
             $cart = Yii::$app->kingcoin;
