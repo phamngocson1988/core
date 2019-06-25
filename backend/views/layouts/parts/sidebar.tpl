@@ -201,6 +201,11 @@
                   <i class="cc-alipay"></i> Aiipay
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{url route='setting/skrill'}" class="nav-link" code='setting.skrill'>
+                  <i class="cc-alipay"></i> Skrill
+                </a>
+              </li>
             </ul
           </li>
         </ul>

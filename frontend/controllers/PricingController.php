@@ -158,7 +158,7 @@ class PricingController extends Controller
         }
         $gateway = new PaymentGateway('skrill');
         $gateway->setCart($paymentCart);
-        $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) { return;
+        $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) { 
             $gateway = $event->sender;
             $client = $gateway->getClient();
             $cart = Yii::$app->kingcoin;
@@ -177,7 +177,7 @@ class PricingController extends Controller
             $trn->coin = $totalCoin;
             $trn->discount_coin = 0;
             $trn->total_coin = $totalCoin;
-            $trn->description = "Paypal";
+            $trn->description = $client->identifier;
             $trn->created_by = $user->id;
             $trn->status = PaymentTransaction::STATUS_PENDING;
             $trn->payment_at = date('Y-m-d H:i:s');
@@ -195,7 +195,7 @@ class PricingController extends Controller
 
     public function actionVerify()
     {
-        $gateway = new PaymentGateway('paypal');
+        $gateway = new PaymentGateway('skrill');
         $gateway->on(PaymentGateway::EVENT_CONFIRM_SUCCESS, function($event) {
             try {
                 $gateway = $event->sender;

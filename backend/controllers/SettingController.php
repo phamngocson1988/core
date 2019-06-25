@@ -11,6 +11,7 @@ use backend\forms\HeaderScriptSettingForm;
 use backend\forms\GallerySettingForm;
 use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
+use backend\forms\SkrillSettingForm;
 
 /**
  * Class SettingController
@@ -54,6 +55,12 @@ class SettingController extends Controller
                 'modelClass' => AlipaySettingForm::class,
                 'view' => 'alipay.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.alipay']
+            ],
+            'skrill' => [
+                'class' => SettingsAction::class,
+                'modelClass' => SkrillSettingForm::class,
+                'view' => 'skrill.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.skrill']
             ],
             'gallery' => [
                 'class' => SettingsAction::class,
