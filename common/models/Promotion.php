@@ -90,6 +90,15 @@ class Promotion extends ActiveRecord
         }
     }
 
+    public function calculateBenifit($amount)
+    {
+        if ($this->promotion_type == self::TYPE_FIX) {
+            return min($amount, $this->value);
+        } elseif ($this->promotion_type == self::TYPE_PERCENT) {
+            return ceil(($this->value * $amount) / 100);
+        }
+    }
+
     public function isValid($time = 'now')
     {
         $now = strtotime($time);
@@ -129,5 +138,45 @@ class Promotion extends ActiveRecord
             ['to_date' => null]
         ]);
         return $command;
+    }
+
+    public static function findValid()
+    {
+        $command = self::find();
+        $command->where(["status" => self::STATUS_VISIBLE]);
+        $now = date('Y-m-d');
+        $command->andWhere(['OR', 
+            ['<=', 'from_date', $now],
+            ['from_date' => null]
+        ]);
+        $command->andWhere(['OR', 
+            ['>=', 'to_date', $now],
+            ['to_date' => null]
+        ]);
+        return $command;
+    }
+
+    public function canApplyGame($gameId)
+    {
+        $games = $this->promotionGames;
+        // Apply for all games
+        if (empty($games)) return true;
+        // Apply for current game
+        else {
+            $gameIds = array_column($games, 'game_id');
+            return in_array($gameId, $gameIds);
+        }
+    }
+
+    public function canApplyUser($userId)
+    {
+        $users = $this->promotionUsers;
+        // Apply for all users
+        if (empty($users)) return true;
+        // Apply for current user
+        else {
+            $userIds = array_column($users, 'user_id');
+            return in_array($userId, $userIds);
+        }
     }
 }

@@ -9,11 +9,16 @@ use yii\helpers\Url;
         <div class="isotope isotope-md row" data-isotope-layout="fitRows" data-isotope-group="movies" data-lightgallery="group">
           <div class="row">
             <?php foreach ($models as $model) : ?>
+
             <div class="col-6 col-md-4 col-lg-3 col-xxl-2 isotope-item" data-filter="type 3">
               <!-- Thumbnail simple-->
               <div class="thumbnail-simple"><a class="thumbnail-simple-image-wrap" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>"><img class="thumbnail-simple-image" src="<?=$model->getImageUrl('270x400');?>" alt="" width="270" height="400"/></a>
                 <p class="thumbnail-simple-title"><a href="<?=Url::to(['game/view', 'id' => $model->id]);?>"><?=$model->title;?></a></p>
                 <p class="thumbnail-simple-subtitle">(K) <?=number_format($model->price);?> / <?=number_format($model->pack);?> <?=$model->unit_name;?></p>
+                <?php $best = $model->findTheBestPromotion($promotions);?>
+                <?php if ($best) : ?>
+                <p class="thumbnail-simple-subtitle"><?=$best->code;?></p>
+                <?php endif; ?>
               </div>
             </div>
             <?php endforeach;?>
