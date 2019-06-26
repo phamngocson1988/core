@@ -32,6 +32,10 @@ return [
         'purchase-cancel' => 'cart/error',
         //user
         'user/dashboard' => 'user/index',
+
+        // payment
+        'pricing/<identifier>/verify' => 'pricing/verify',
+        'pricing/<identifier>/cancel' => 'pricing/cancel',
         // notifications
         'notifications/default/index' => 'notifications/default/index',
         'notifications/default/list' => 'notifications/default/list',

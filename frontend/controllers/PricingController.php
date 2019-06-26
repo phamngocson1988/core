@@ -31,6 +31,7 @@ use frontend\components\payment\cart\PaymentItem;
 use frontend\components\payment\cart\PaymentCart;
 use frontend\components\payment\cart\PaymentDiscount;
 use frontend\components\payment\PaymentGateway;
+use frontend\components\payment\PaymentGatewayFactory;
 
 /**
  * UserController
@@ -61,6 +62,15 @@ class PricingController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function beforeAction($action)
+    {            
+        if ($action->id == 'verify') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     public function actionIndex()
@@ -134,6 +144,9 @@ class PricingController extends Controller
 
     public function actionPurchase()
     {
+        $request = Yii::$app->request;
+        $identifier = $request->post('identifier');
+        if (!$identifier) throw new InvalidParamException('You must choose a payment gateway');
         $paymentCart = new PaymentCart([
             'title' => 'Test cho vui',
         ]);
@@ -156,11 +169,10 @@ class PricingController extends Controller
             ]);
             $paymentCart->setDiscount($paymentDiscount);
         }
-        $gateway = new PaymentGateway('skrill');
+        $gateway = PaymentGatewayFactory::getClient($identifier);
         $gateway->setCart($paymentCart);
         $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) { 
             $gateway = $event->sender;
-            $client = $gateway->getClient();
             $cart = Yii::$app->kingcoin;
             $cartItem = $cart->getItem();
             $totalPrice = $cart->getTotalPrice();
@@ -170,14 +182,14 @@ class PricingController extends Controller
             
             $trn = new PaymentTransaction();
             $trn->user_id = $user->id;
-            $trn->payment_method = $client->identifier;
-            $trn->payment_id = $client->getReferenceId();
+            $trn->payment_method = $gateway->identifier;
+            $trn->payment_id = $gateway->getReferenceId();
             $trn->price = $subTotalPrice;
             $trn->total_price = $totalPrice;
             $trn->coin = $totalCoin;
             $trn->discount_coin = 0;
             $trn->total_coin = $totalCoin;
-            $trn->description = $client->identifier;
+            $trn->description = $gateway->identifier;
             $trn->created_by = $user->id;
             $trn->status = PaymentTransaction::STATUS_PENDING;
             $trn->payment_at = date('Y-m-d H:i:s');
@@ -193,15 +205,14 @@ class PricingController extends Controller
         return $gateway->request();
     }
 
-    public function actionVerify()
+    public function actionVerify($identifier)
     {
-        $gateway = new PaymentGateway('skrill');
+        $gateway = PaymentGatewayFactory::getClient($identifier);
         $gateway->on(PaymentGateway::EVENT_CONFIRM_SUCCESS, function($event) {
             try {
                 $gateway = $event->sender;
-                $client = $gateway->getClient();
                 $user = Yii::$app->user->getIdentity();
-                $refId = $client->getReferenceId();
+                $refId = $gateway->getReferenceId();
                 $trn = PaymentTransaction::find()->where([
                     'payment_id' => $refId, 
                     'status' => PaymentTransaction::STATUS_PENDING
@@ -242,14 +253,13 @@ class PricingController extends Controller
         ]);
     }
 
-    public function actionCancel()
+    public function actionCancel($identifier)
     {
-        $gateway = new PaymentGateway('paypal');
+        $gateway = PaymentGatewayFactory::getClient($identifier);
         $gateway->on(PaymentGateway::EVENT_AFTER_CANCEL, function($event) {
             try {
                 $gateway = $event->sender;
-                $client = $gateway->getClient();
-                $refId = $client->getReferenceId();
+                $refId = $gateway->getReferenceId();
                 $trn = PaymentTransaction::find()->where([
                     'payment_id' => $refId, 
                     'status' => PaymentTransaction::STATUS_PENDING

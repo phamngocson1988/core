@@ -17,7 +17,6 @@ use PayPal\Api\Transaction as PaypalTransaction;
 use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Exception\PayPalConnectionException;
 
 class Paypal extends PaymentGateway
 {
@@ -26,11 +25,72 @@ class Paypal extends PaymentGateway
     
     public $identifier = 'paypal';
 
-    protected $confirmParams = [
+    protected $params = [
         'paymentId',
         'PayerID',
         'token',
     ];
+    protected $confirm_url;
+    protected $success_url;
+    protected $cancel_url;
+    protected $error_url;
+
+    protected $reference_id;
+
+    protected function setReferenceId($reference_id)
+    {
+        $this->reference_id = $reference_id;
+    }
+
+    public function getReferenceId()
+    {
+        return $this->reference_id;
+    }
+
+    public function getResponseParams()
+    {
+        return $this->params;
+    }
+
+    public function setConfirmUrl($url)
+    {
+        $this->confirm_url = $url;
+    }
+
+    public function getConfirmUrl()
+    {
+        return $this->confirm_url;
+    }
+
+    public function setSuccessUrl($url)
+    {
+        $this->success_url = $url;
+    }
+
+    public function getSuccessUrl()
+    {
+        return $this->success_url;
+    }
+
+    public function setCancelUrl($url)
+    {
+        $this->cancel_url = $url;
+    }
+
+    public function getCancelUrl()
+    {
+        return $this->cancel_url;
+    }
+
+    public function setErrorUrl($url)
+    {
+        $this->error_url = $url;
+    }
+
+    public function getErrorUrl()
+    {
+        return $this->error_url;
+    }
 
     protected function loadConfig()
     {
@@ -46,9 +106,8 @@ class Paypal extends PaymentGateway
         return new ApiContext(new OAuthTokenCredential($clientId, $clientSecret));
     }
 
-    protected function loadData()
+    protected function loadData($cart)
     {
-        $cart = $this->cart;
         $totalPrice = $cart->getTotalPrice();
         $currency = "USD";
 
@@ -92,8 +151,7 @@ class Paypal extends PaymentGateway
         $transaction->setAmount($amount)
             ->setItemList($ppitemList)
             ->setDescription($cart->getTitle())
-            ->setInvoiceNumber($this->getReferenceId());
-            // ->setInvoiceNumber(uniqid());
+            ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
         $redirectUrls->setReturnUrl($this->getConfirmUrl())
@@ -110,26 +168,26 @@ class Paypal extends PaymentGateway
         return $payment;
     }
 
-    protected function sendRequest()
+    public function getPaymentLink($cart)
     {
         $apiContext = $this->loadConfig();
-        $payment = $this->loadData();
+        $payment = $this->loadData($cart);
         try {
             $payment->create($apiContext);
             if (self::PAYMENT_STATE_CREATED == strtolower($payment->state)) {// order was created
                 $link = $payment->getApprovalLink();
                 $query = parse_url($link, PHP_URL_QUERY);
                 parse_str($query, $params);
-                // $token = isset($params['token']) ? $params['token'] : '';
-                // $this->setReferenceId($token);
-                return $this->redirect($link);
+                $token = isset($params['token']) ? $params['token'] : '';
+                $this->setReferenceId($token);
+                return $link;
             }  
-        } catch (PayPalConnectionException $ex) {
-            throw $ex;
+        } catch (\PayPal\Exception\PayPalConnectionException $ex) {
+            echo $ex->getData();
         }
     }
     
-    protected function verify($response)
+    public function confirm($response)
     {
         extract($response); // now can use $paymentId, $PayerID, $token
         if (!$paymentId || !$PayerID || !$token) throw new BadRequestHttpException("The request is invalid", 1);
@@ -144,24 +202,27 @@ class Paypal extends PaymentGateway
         $execution->addTransaction($transaction);
         try {
             $payment->execute($execution, $apiContext);
+            $this->setReferenceId($token);
             return self::PAYMENT_STATE_APPROVED == strtolower($payment->state);
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public function cancelPayment()
+    public function success()
     {
+        return Yii::$app->getResponse()->redirect($this->getSuccessUrl(), 302);
+    }
+
+    public function error()
+    {
+        return Yii::$app->getResponse()->redirect($this->getErrorUrl(), 302);
+    }
+
+    public function cancel($response)
+    {
+        extract($response); // now can use $token
+        $this->setReferenceId($token);
         return true;
-    }
-
-    protected function doSuccess()
-    {
-        return $this->redirect($this->getSuccessUrl());
-    }
-
-    protected function doError()
-    {
-        return $this->redirect($this->getErrorUrl());
     }
 }

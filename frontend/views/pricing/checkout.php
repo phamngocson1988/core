@@ -50,6 +50,7 @@ $item = $cart->getItem();
                       <?php $form = ActiveForm::begin([
                         'action' => Url::to(['pricing/purchase']),
                       ]); ?>
+                      <?=Html::radioList ( 'identifier', 'paypal', ['paypal' => 'Paypal', 'skrill' => 'Skrill'] );?>
                       <?= Html::submitButton('Pay by Palpal', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
                       <?php ActiveForm::end();?>
                     </div>

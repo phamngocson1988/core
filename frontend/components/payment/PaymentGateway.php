@@ -18,95 +18,67 @@ class PaymentGateway extends Model
     const EVENT_CONFIRM_SUCCESS = 'EVENT_CONFIRM_SUCCESS';
     const EVENT_CONFIRM_ERROR = 'EVENT_CONFIRM_ERROR';
 
-    public $clients = [
-        'paypal' => [
-            'class' => '\frontend\components\payment\clients\Paypal',
-        ],
-        'alipay' => [
-            'class' => '\frontend\components\payment\clients\Alipay',
-        ],
-        'skrill' => [
-            'class' => '\frontend\components\payment\clients\Skrill',
-        ]
-    ];
     public $confirm_url = 'pricing/verify';
     public $success_url = 'pricing/success';
     public $cancel_url = 'pricing/cancel';
     public $error_url = 'pricing/error';
 
-    protected $client;
-    protected $cart;
+    public $identifier;
 
-    public function __construct($identifier) 
-    {
-        $clientData = ArrayHelper::getValue($this->clients, $identifier);
-        if (!$clientData) return null;
-        $client = Yii::createObject($clientData);
-        $client->setConfirmUrl(Url::to([$this->confirm_url, 'identifier' => $client->identifier], true));
-        $client->setSuccessUrl(Url::to([$this->success_url], true));
-        $client->setCancelUrl(Url::to([$this->cancel_url, 'identifier' => $client->identifier], true));
-        $client->setErrorUrl(Url::to([$this->error_url], true));
-        $this->setClient($client);
-    }
+    /** @var <any> unique ID for every payment request */
+    protected $reference_id;
+
+    /** @var array include parameter names of confirm request */
+    protected $confirmParams = [];
+
+    /** @var PaymentCart */
+    protected $cart;
 
     public function setCart($cart)
     {
         $this->cart = $cart;
     }
 
-    public function setClient($client)
-    {
-        $this->client = $client;
-    }
-
-    public function getClient()
-    {
-        return $this->client;
-    }
-
     public function request()
     {
-        $client = $this->getClient();
-        $link = $client->getPaymentLink($this->cart);
         $this->trigger(self::EVENT_BEFORE_REQUEST);
-        return Yii::$app->getResponse()->redirect($link, 302);
+        return $this->sendRequest();
     }
 
     public function confirm()
     {
-        $client = $this->getClient();
-        $params = $client->getResponseParams();
-        $response = [];
-        foreach ($params as $name) {
-            $response[$name] = $this->getQueryParam($name);
-        }
+        $this->initResponseParams();
         $this->trigger(self::EVENT_BEFORE_CONFIRM);
-        $result = $client->confirm($response);
+        $response = $this->getConfirmParams();
+        Yii::info($response, 'skirll_response');
+        Yii::info($this->getReferenceId(), 'skirll_response');
+        $result = $this->verify($response);
         $this->trigger(self::EVENT_AFTER_CONFIRM);
         if ($result) {
+            Yii::info($this->identifier . $this->getReferenceId() . " confirm success");
             $this->trigger(self::EVENT_CONFIRM_SUCCESS);
-            $client->success();
+            return $this->doSuccess();
         } else {
+            Yii::info($this->identifier . $this->getReferenceId() . " confirm failure");
             $this->trigger(self::EVENT_CONFIRM_ERROR);
-            $client->error();
+            return $this->doError();
         }
         return $result;
     }
 
     public function cancel()
     {
-        $client = $this->getClient();
-        $params = $client->getResponseParams();
-        $response = [];
-        foreach ($params as $name) {
-            $response[$name] = $this->getQueryParam($name);
-        }
+        $this->initResponseParams();
         $this->trigger(self::EVENT_BEFORE_CANCEL);
-        $result = $client->cancel($response);
-        if ($result) {
-            $this->trigger(self::EVENT_AFTER_CANCEL);
-        }
+        $result = $this->cancelPayment();
+        $this->trigger(self::EVENT_AFTER_CANCEL);
         return $result;
+    }
+
+    public function getReferenceId()
+    {
+        if (!$this->reference_id) $this->reference_id = md5(date('YmdHis') . Yii::$app->user->id);
+        return $this->reference_id;
     }
 
     protected function getQueryParam($name, $defaultValue = null)
@@ -114,5 +86,74 @@ class PaymentGateway extends Model
         $request = Yii::$app->getRequest();
         $params = $request->getQueryParams();
         return isset($params[$name]) && is_scalar($params[$name]) ? $params[$name] : $defaultValue;
+    }
+
+    protected function getQueryParams()
+    {
+        $request = Yii::$app->getRequest();
+        $get = $request->getQueryParams();
+        $post = $request->getBodyParams();
+        $params = array_merge($get, $post);
+        $params = array_filter($params, function($var) { return is_scalar($var); });
+        return $params;
+    }
+
+    protected function initResponseParams()
+    {
+        $this->reference_id = $this->getQueryParam('ref');
+    }
+
+    protected function getConfirmParams()
+    {
+        $params = (array)$this->confirmParams;
+
+        // Return all query param if not declare confirm params
+        if (empty($params)) return $this->getQueryParams();
+
+        $response = [];
+        foreach ($params as $name) {
+            $response[$name] = $this->getQueryParam($name);
+        }
+        return $response;
+    }
+
+    protected function redirect($link)
+    {
+        return Yii::$app->getResponse()->redirect($link, 302);
+    }
+
+    protected function getConfirmUrl($params = [])
+    {
+        $params['identifier'] = $this->identifier;
+        $params['ref'] = $this->getReferenceId();
+        return Url::to(array_merge([$this->confirm_url], $params), true);
+    }
+
+    protected function getSuccessUrl($params = [])
+    {
+        return Url::to(array_merge([$this->success_url], $params), true);
+    }
+
+    protected function getCancelUrl($params = [])
+    {
+        $params['identifier'] = $this->identifier;
+        $params['ref'] = $this->getReferenceId();
+        return Url::to(array_merge([$this->cancel_url], $params), true);
+    }
+
+    protected function getErrorUrl($params = [])
+    {
+        return $this->error_url;
+        return Url::to(array_merge([$this->error_url], $params), true);
+    }
+
+    protected function doSuccess()
+    {
+
+    }
+
+    protected function doError()
+    {
+
     }
 }
