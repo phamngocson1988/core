@@ -22,7 +22,7 @@ class ViewCustomerRule extends Rule
         $user = Yii::$app->user;
         if ($user->can('admin')) return true;
         elseif ($user->can('orderteam_manager')) return true;
-        elseif ($user->can('handler')) return false;
+        elseif ($user->can('orderteam')) return false;
         else return true;
     }
 }

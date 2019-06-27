@@ -91,12 +91,12 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
               ]
             ])->label('Nhân viên sale')?>
 
-            <?php $handler = $search->getHandler();?>
-            <?=$form->field($search, 'handler_id', [
+            <?php $orderTeam = $search->getOrderteam();?>
+            <?=$form->field($search, 'orderteam_id', [
               'options' => ['class' => 'form-group col-md-2'],
             ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'handler_id'],
+              'initValueText' => ($orderTeam) ? sprintf("%s - %s", $orderTeam->username, $orderTeam->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'orderteam_id'],
               'pluginOptions' => [
                 'placeholder' => 'Chọn nhân viên đơn hàng',
                 'allowClear' => true,
@@ -114,11 +114,11 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 'options' => ['container' => false],
                 'inputOptions' => ['name' => 'saler_id']
               ])->hiddenInput()->label(false);?>
-            <?php elseif (Yii::$app->user->can('handler')):?>
-              <?=$form->field($search, 'handler_id', [
+            <?php elseif (Yii::$app->user->can('orderteam')):?>
+              <?=$form->field($search, 'orderteam_id', [
                 'template' => '{input}', 
                 'options' => ['container' => false],
-                'inputOptions' => ['name' => 'handler_id']
+                'inputOptions' => ['name' => 'orderteam_id']
               ])->hiddenInput()->label(false);?>
             <?php endif;?>
 
@@ -180,7 +180,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;">$<?=$model->total_price;?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
+                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
               </tr>
               <?php endforeach;?>

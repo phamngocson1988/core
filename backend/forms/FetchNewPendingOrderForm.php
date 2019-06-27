@@ -36,7 +36,7 @@ class FetchNewPendingOrderForm extends Model
     {
         $command = Order::find();
         $command->where(['status' => Order::STATUS_PENDING]);
-        $command->andWhere(['handler_id' => null]);
+        $command->andWhere(['orderteam_id' => null]);
         if ($this->q) {
             $command->andWhere(['OR',
                 ['id' => $this->q],

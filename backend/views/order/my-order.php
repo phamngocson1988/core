@@ -113,7 +113,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/da
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;">$<?=$model->total_price;?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
+                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->status;?></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem"><i class="fa fa-eye"></i></a>

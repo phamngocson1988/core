@@ -137,6 +137,37 @@ use common\widgets\TinyMce;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
                   ])->dropDownList(['Y' => 'Đã kích hoạt', 'N' => 'Chưa kích hoạt'])->label('Trạng thái');?>
+
+                  <hr>
+
+                  <?php 
+                  $rules = \common\models\PromotionRule::$rules;
+                  $ruleList = [];
+                  foreach ($rules as $identifier => $params) {
+                    $ruleList[$identifier] = $params['title'];
+                  }
+                  ?>
+                  <?=$form->field($model, 'rule', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'rules'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                  ])->dropDownList($ruleList, ['prompt' => 'Chọn quy định áp dụng'])->label('Quy định áp dụng');?>
+                  
+                  <div id="rule-container">
+                  <?php foreach ($rules as $identifier => $params) {
+                    $rule = Yii::createObject($params);
+                    $content = '';
+                    foreach ($rule->safeAttributes() as $attr) {
+                      $content .= $form->field($rule, $attr, [
+                        'options' => ['class' => 'form-group rule', 'id' => $identifier],
+                        'labelOptions' => ['class' => 'col-md-2 control-label'],
+                        'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                      ])->textInput();
+                    }
+                    echo Html::tag('div', $content, ['class' => 'rule-item', 'id' => $identifier]);
+                  } ?>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -146,3 +177,17 @@ use common\widgets\TinyMce;
     <?php ActiveForm::end()?>
   </div>
 </div>
+<template id="rule-template" style="display: none">
+</template>
+<?php
+$script = <<< JS
+$( "#rule-container .rule-item" ).appendTo( $( "#rule-template" ) );
+$('#rules').on('change', function(){
+  var val = $(this).val();
+  $( "#rule-container .rule-item" ).appendTo( $( "#rule-template" ) );
+  if (!val) return;
+  $('#' + val).appendTo( $( "#rule-container" ) );
+});
+JS;
+$this->registerJs($script);
+?>

@@ -7,7 +7,7 @@ use frontend\models\Promotion;
 use yii2mod\cart\models\CartItemInterface;
 use common\models\Order;
 
-class CartDiscount extends CartPromotion implements CartItemInterface
+class CartBenefit extends CartPromotion implements CartItemInterface
 {
     // ============== implement interface ===========//
     public function getPrice() : int
@@ -15,7 +15,7 @@ class CartDiscount extends CartPromotion implements CartItemInterface
         $promotion = $this->getPromotion();
         $cart = Yii::$app->cart;
         if (!$promotion) return 0;
-        return $promotion->calculateDiscount($cart->getSubTotalPrice());
+        return $promotion->calculateBenefit($cart->getSubTotalPrice());
     }
 
     public function getLabel()

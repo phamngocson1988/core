@@ -59,7 +59,7 @@ class RbacController extends Controller
     public function actionAssignHandler($id)
     {
         $auth = Yii::$app->authManager;
-        $sale = $auth->getRole('handler');
+        $sale = $auth->getRole('orderteam');
         $auth->assign($sale, $id);
     }
 
@@ -90,8 +90,8 @@ class RbacController extends Controller
         $saler = $auth->getRole('saler');
         $auth->addChild($saler, $permission);
 
-        $handler = $auth->getRole('handler');
-        $auth->addChild($handler, $permission);
+        $orderTeam = $auth->getRole('orderteam');
+        $auth->addChild($orderTeam, $permission);
     }
 
     public function actionCreateTakenOrderPermission()
@@ -108,8 +108,8 @@ class RbacController extends Controller
         $saler = $auth->getRole('saler');
         $auth->addChild($saler, $permission);
 
-        $handler = $auth->getRole('handler');
-        $auth->addChild($handler, $permission);
+        $orderTeam = $auth->getRole('orderteam');
+        $auth->addChild($orderTeam, $permission);
     }
 
     public function actionCreateDeleteOrderPermission()
@@ -126,8 +126,8 @@ class RbacController extends Controller
         $saler = $auth->getRole('saler');
         $auth->addChild($saler, $permission);
 
-        $handler = $auth->getRole('handler');
-        $auth->addChild($handler, $permission);
+        $orderTeam = $auth->getRole('orderteam');
+        $auth->addChild($orderTeam, $permission);
     }
 
     public function actionCreateCancelOrderPermission()
@@ -144,8 +144,8 @@ class RbacController extends Controller
         $saler = $auth->getRole('saler');
         $auth->addChild($saler, $permission);
 
-        $handler = $auth->getRole('handler');
-        $auth->addChild($handler, $permission);
+        $orderTeam = $auth->getRole('orderteam');
+        $auth->addChild($orderTeam, $permission);
     }
 
     public function actionCreateViewCustomerPermission()
@@ -162,8 +162,8 @@ class RbacController extends Controller
         $saler = $auth->getRole('saler');
         $auth->addChild($saler, $permission);
 
-        $handler = $auth->getRole('handler');
-        $auth->addChild($handler, $permission);
+        $orderTeam = $auth->getRole('orderteam');
+        $auth->addChild($orderTeam, $permission);
     }
 
     //=============== ROLE ===============

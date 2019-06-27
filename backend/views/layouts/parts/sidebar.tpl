@@ -214,7 +214,7 @@
 
       {$roles = $app->authManager->getRolesByUser($app->user->id)}
       {$roles = array_keys($roles)}
-      {if (array_intersect($roles, ['admin', 'handler', 'orderteam_manager', 'saler', 'sale_manager']))}
+      {if (array_intersect($roles, ['admin', 'orderteam', 'orderteam_manager', 'saler', 'sale_manager']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
@@ -227,7 +227,7 @@
             <span class="title">Đơn hàng</span>
             </a>
           </li>
-          {if Yii::$app->user->can('saler') || Yii::$app->user->can('handler')}
+          {if Yii::$app->user->can('saler') || Yii::$app->user->can('orderteam')}
           <li class="nav-item  ">
             <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.new'>
             <span class="title">Đơn hàng mới</span>
@@ -315,7 +315,7 @@
             </ul>
           </li>
           {/if}
-          {if (array_intersect($roles, ['admin', 'handler']))}
+          {if (array_intersect($roles, ['admin', 'orderteam']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê bán hàng</span>

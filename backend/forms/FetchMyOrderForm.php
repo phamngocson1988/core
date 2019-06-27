@@ -41,7 +41,7 @@ class FetchMyOrderForm extends Model
         $command->where(["<>", "status", Order::STATUS_DELETED]);
         $command->andWhere(['OR',
             ['saler_id' => Yii::$app->user->id],
-            ['handler_id' =>  Yii::$app->user->id]
+            ['orderteam_id' =>  Yii::$app->user->id]
         ]);
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date]);

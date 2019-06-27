@@ -15,7 +15,7 @@ $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootst
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
-$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
+$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 $orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
 $orderTeamIds = array_unique($orderTeamIds);
@@ -96,12 +96,12 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               ]
             ])->label('Nhân viên sale')?>
 
-            <?php $handler = $search->getHandler();?>
-            <?=$form->field($search, 'handler_id', [
+            <?php $orderTeam = $search->getOrderteam();?>
+            <?=$form->field($search, 'orderteam_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($handler) ? sprintf("%s - %s", $handler->username, $handler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'handler_id'],
+              'initValueText' => ($orderTeam) ? sprintf("%s - %s", $orderTeam->username, $orderTeam->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'orderteam_id'],
               'pluginOptions' => [
                 'placeholder' => 'Chọn nhân viên đơn hàng',
                 'allowClear' => true,
@@ -119,11 +119,11 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 'options' => ['container' => false],
                 'inputOptions' => ['name' => 'saler_id']
               ])->hiddenInput()->label(false);?>
-            <?php elseif (Yii::$app->user->can('handler')):?>
-              <?=$form->field($search, 'handler_id', [
+            <?php elseif (Yii::$app->user->can('orderteam')):?>
+              <?=$form->field($search, 'orderteam_id', [
                 'template' => '{input}', 
                 'options' => ['container' => false],
-                'inputOptions' => ['name' => 'handler_id']
+                'inputOptions' => ['name' => 'orderteam_id']
               ])->hiddenInput()->label(false);?>
             <?php endif;?>
 
@@ -212,7 +212,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?></td>
                 
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
+                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                 <td style="vertical-align: middle;"></td>
               </tr>
               <?php endforeach;?>

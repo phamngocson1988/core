@@ -43,7 +43,7 @@ use common\models\Product;
           <div class="actions btn-set">
             <a href="<?=$back;?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-            <?php if (Yii::$app->user->can('handler')) :?>
+            <?php if (Yii::$app->user->can('orderteam')) :?>
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
             </button>

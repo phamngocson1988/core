@@ -26,7 +26,7 @@ class EditOrderRule extends Rule
         if ($order->isVerifyingOrder()) {
             return $order->saler_id == Yii::$app->user->id;
         } else {
-            return $order->handler_id == Yii::$app->user->id;
+            return $order->orderteam_id == Yii::$app->user->id;
         }
         return false;
     }

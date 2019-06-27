@@ -23,7 +23,7 @@ class DeleteOrderRule extends Rule
         if (!$order) return false;
         if (!$order->isVerifyingOrder()) return false;
         if (Yii::$app->user->can('admin')) return true;
-        if (Yii::$app->user->can('handler')) return false;
+        if (Yii::$app->user->can('orderteam')) return false;
         if (Yii::$app->user->can('saler') && !$order->saler_id) return true;
         if (Yii::$app->user->can('saler') && $order->saler_id == Yii::$app->user->id) return true;
         return false;

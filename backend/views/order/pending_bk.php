@@ -43,7 +43,7 @@ use common\models\Product;
           <div class="actions btn-set">
             <a href="<?=$back;?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-            <?php if (Yii::$app->user->can('handler')) :?>
+            <?php if (Yii::$app->user->can('orderteam')) :?>
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
             </button>
@@ -211,7 +211,7 @@ use common\models\Product;
                         <div class="caption">
                           <i class="fa fa-cogs"></i>Thông tin nạp game
                         </div>
-                        <?php if (Yii::$app->user->can('handler')) :?>
+                        <?php if (Yii::$app->user->can('orderteam')) :?>
                         <div class="actions">
                           <a href="javascript:;" id="edit_game_account" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                         </div>

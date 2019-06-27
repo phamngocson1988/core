@@ -74,6 +74,8 @@ class CartController extends Controller
                 $cart->add($item);
                 if ($item->scenario == CartItem::SCENARIO_EDIT) {
                     $discount->load($request->post());
+                    $discount->user_id = Yii::$app->user->id;
+                    $discount->game_ids = [$item->game_id];
                     if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();    
                     else $cart->setDiscountItem($discount);
                 } elseif ($item->scenario == CartItem::SCENARIO_INFO) {
@@ -82,17 +84,6 @@ class CartController extends Controller
             }
         }
 
-        // $item->setScenario(CartItem::SCENARIO_EDIT);
-        // $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
-        // if ($item->load($request->post()) && $item->validate()) {
-        //     $cart->clear();
-        //     $cart->add($item);
-        // }
-        // if ($request->isPost && $discount->load($request->post())) {
-        //     if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
-        //     else $cart->setDiscountItem($discount);
-        // }
-            
         return $this->render('index', [
             'cart' => $cart,
             'discount' => $discount,

@@ -35,6 +35,7 @@ class m190218_154112_create_promotion extends Migration
             'created_by' => $this->integer(11),
             'created_at' => $this->dateTime(),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
+            'is_valid' => $this->integer(11)->defaultValue(1),
         ]);
 
         $this->createIndex('idx_unique_code', '{{%promotion}}', 'code', true); // unique index
@@ -72,6 +73,13 @@ class m190218_154112_create_promotion extends Migration
             'to_date' => $this->date(),
         ]);
         $this->addPrimaryKey('pro-game_pk', '{{%promotion_game}}', ['promotion_id', 'game_id']);
+
+        $this->createTable('{{%promotion_apply}}', [
+            'id' => $this->primaryKey(),
+            'promotion_id' => $this->integer(11)->notNull(),
+            'user_id' => $this->integer(11)->notNull(),
+            'created_at' => $this->dateTime(),
+        ]);
     }
 
     /**
@@ -84,6 +92,7 @@ class m190218_154112_create_promotion extends Migration
         $this->dropTable('{{%promotion}}');
         $this->dropTable('{{%promotion_user}}');
         $this->dropTable('{{%promotion_game}}');
+        $this->dropTable('{{%promotion_apply}}');
     }
 
     /*

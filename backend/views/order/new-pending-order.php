@@ -21,7 +21,7 @@ $this->registerCssFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-t
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/table-bootstrap.min.js', ['depends' => '\backend\assets\AppAsset']);
 
-$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
+$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 $orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
 $orderTeamIds = array_unique($orderTeamIds);
@@ -144,7 +144,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->process_duration_time;?></td>
                 
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->handler) ? $model->handler->name : '';?></td>
+                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">

@@ -48,7 +48,7 @@ class MyCustomerReportForm extends Order
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
         $command->andWhere(['or',
-            ['handler_id' => $this->user_id],
+            ['orderteam_id' => $this->user_id],
             ['saler_id' => $this->user_id],
         ]);
         $command->groupBy('customer_id');

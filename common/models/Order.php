@@ -64,9 +64,9 @@ class Order extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'saler_id']);
     }
 
-    public function getHandler()
+    public function getOrderteam()
     {
-        return $this->hasOne(User::className(), ['id' => 'handler_id']);
+        return $this->hasOne(User::className(), ['id' => 'orderteam_id']);
     }
 
     public function getCustomer()
@@ -107,6 +107,11 @@ class Order extends ActiveRecord
     public function getDiscounts() 
     {
         return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_DISCOUNT]);
+    }
+
+    public function getPromotions() 
+    {
+        return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_PROMOTION]);
     }
 
     public function getFees() 

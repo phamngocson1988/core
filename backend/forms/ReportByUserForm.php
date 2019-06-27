@@ -38,7 +38,7 @@ class ReportByUserForm extends Order
     protected function createCommand()
     {
         $command = self::find();
-        $command->select(['id', 'sum(total_price) as total_price', 'count(handler_id) as count_order', 'handler_id', 'saler_id']);
+        $command->select(['id', 'sum(total_price) as total_price', 'count(orderteam_id) as count_order', 'orderteam_id', 'saler_id']);
         $command->where(["IN", "status", [Order::STATUS_PROCESSING, Order::STATUS_COMPLETED]]);
 
         if ($this->start_date) {
@@ -47,10 +47,10 @@ class ReportByUserForm extends Order
         if ($this->end_date) {
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
-        if ($this->type == 'handler') {
-            $command->andWhere(['IS NOT', 'handler_id', null]);
-            $command->groupBy('handler_id');
-            $command->with('handler');
+        if ($this->type == 'orderteam') {
+            $command->andWhere(['IS NOT', 'orderteam_id', null]);
+            $command->groupBy('orderteam_id');
+            $command->with('orderteam');
         } else if ($this->type == 'saler') {
             $command->andWhere(['IS NOT', 'saler_id', null]);
             $command->groupBy('saler_id');

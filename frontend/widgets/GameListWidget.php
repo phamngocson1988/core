@@ -3,7 +3,7 @@ namespace frontend\widgets;
 
 use yii\base\Widget;
 use frontend\models\Game;
-use common\models\Promotion;
+use frontend\models\Promotion;
 
 class GameListWidget extends Widget
 {

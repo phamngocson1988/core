@@ -25,11 +25,11 @@ class TakenOrderRule extends Rule
         if (!$order) return false;
         if ($order->isDeletedOrder()) return false;
         if ($order->isVerifyingOrder()) return false;        
-        if ($order->handler_id) return false;
+        if ($order->orderteam_id) return false;
         if (Yii::$app->user->can('admin')) return true;
-        if (Yii::$app->user->can('handler')) {
+        if (Yii::$app->user->can('orderteam')) {
             // $checkTaken = new FetchOrderForm([
-            //     'handler_id' => Yii::$app->user->id,
+            //     'orderteam_id' => Yii::$app->user->id,
             //     'status' => Order::STATUS_PENDING
             // ]);
             // $checkTakenCommand = $checkTaken->getCommand();

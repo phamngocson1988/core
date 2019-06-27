@@ -65,9 +65,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/process-user']]);?>
         <div class="row">
-          <?=$form->field($search, 'handler_id', [
+          <?=$form->field($search, 'orderteam_id', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'handler_id']
+            'inputOptions' => ['class' => 'form-control', 'name' => 'orderteam_id']
           ])->dropDownList($search->fetchUsers(), ['prompt' => 'Tìm theo nhân viên'])->label('Tên nhân viên');?>
           <?=$form->field($search, 'start_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],

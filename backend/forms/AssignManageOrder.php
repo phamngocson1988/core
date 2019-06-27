@@ -39,7 +39,7 @@ class AssignManageOrder extends Model
         $user = $this->getUser();
         if (!$user) {
             $this->addError($attribute, 'Nhân viên không tồn tại');
-        // } elseif (!in_array('handler', $this->getUserRoles())) {
+        // } elseif (!in_array('orderteam', $this->getUserRoles())) {
         //     $this->addError($attribute, 'Nhân viên không có đủ quyền hạn để quản lý đơn hàng');
         }
     }
@@ -48,7 +48,7 @@ class AssignManageOrder extends Model
     {
         if (!$this->validate()) return false;
         $order = $this->getOrder();
-        $order->handler_id = $this->user_id;
+        $order->orderteam_id = $this->user_id;
         return $order->save();
     }
 

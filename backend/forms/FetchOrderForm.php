@@ -17,7 +17,7 @@ class FetchOrderForm extends Model
     public $start_date;
     public $end_date;
     public $saler_id;
-    public $handler_id;
+    public $orderteam_id;
     public $provider_id;
     public $status;
     public $agency_id;
@@ -33,7 +33,7 @@ class FetchOrderForm extends Model
     {
         return [
             ['q', 'trim'],
-            [['game_id', 'customer_id', 'saler_id', 'handler_id', 'start_date', 'end_date', 'status'], 'safe'],
+            [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'start_date', 'end_date', 'status'], 'safe'],
             ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
             [['start_date', 'end_date'], 'required'],
@@ -71,12 +71,12 @@ class FetchOrderForm extends Model
         if ($this->saler_id) {
             $command->andWhere(["$table.saler_id" => $this->saler_id]);
         }
-        if ($this->handler_id) {
-            if ($this->handler_id == -1) {
-                $command->andWhere(["$table.handler_id" => null]);
-                $this->handler_id = '';
+        if ($this->orderteam_id) {
+            if ($this->orderteam_id == -1) {
+                $command->andWhere(["$table.orderteam_id" => null]);
+                $this->orderteam_id = '';
             } else {
-                $command->andWhere(["$table.handler_id" => $this->handler_id]);
+                $command->andWhere(["$table.orderteam_id" => $this->orderteam_id]);
             }
         }
         if ($this->start_date) {
@@ -121,10 +121,10 @@ class FetchOrderForm extends Model
         }
     }
 
-    public function getHandler()
+    public function getOrderteam()
     {
-        if ($this->handler_id) {
-            return User::findOne($this->handler_id);
+        if ($this->orderteam_id) {
+            return User::findOne($this->orderteam_id);
         }
     }
 

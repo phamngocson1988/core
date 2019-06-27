@@ -7,6 +7,7 @@ use common\models\Image;
 use common\models\User;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * Promotion model
@@ -26,8 +27,12 @@ class Promotion extends ActiveRecord
     const SCENARIO_BUY_GEMS = 'coin';
     const SCENARIO_BUY_COIN = 'money';
 
+    const IS_VALID = 1;
+    const IS_INVALID = 0;
+
     public $user_ids = [];
     public $game_ids = [];
+    public $rule;
 
     /**
      * @inheritdoc
@@ -83,15 +88,16 @@ class Promotion extends ActiveRecord
 
     public function calculateDiscount($amount)
     {
-        if ($this->promotion_type == self::TYPE_FIX) {
-            return min($amount, $this->value);
-        } elseif ($this->promotion_type == self::TYPE_PERCENT) {
-            return ceil(($this->value * $amount) / 100);
-        }
+        return ($this->promotion_direction == 'down') ? $this->calculateValue($amount) : 0;
     }
 
     public function calculateBenifit($amount)
     {
+        return ($this->promotion_direction == 'up') ? $this->calculateValue($amount) : 0;
+    }
+
+    public function calculateValue($amount)
+    {
         if ($this->promotion_type == self::TYPE_FIX) {
             return min($amount, $this->value);
         } elseif ($this->promotion_type == self::TYPE_PERCENT) {
@@ -99,8 +105,33 @@ class Promotion extends ActiveRecord
         }
     }
 
+    public function apply($userId)
+    {
+        $apply = new PromotionApply();
+        $apply->promotion_id = $this->id;
+        $apply->user_id = $userId;
+        $apply->save();
+        if ($this->total_using && $this->countApply() >= $this->total_using) {
+            $this->is_valid = self::IS_INVALID;
+            $this->save();
+        } elseif ($this->user_using && $this->countApply($userId) >= $this->user_using) {
+            $this->is_valid = self::IS_INVALID;
+            $this->save();
+        }
+    }
+
+    public function countApply($userId = null)
+    {
+        $command = PromotionApply::find()->where(['promotion_id' => $this->id]);
+        if ($userId) { 
+            $command->andWhere(['user_id' => $userId]);
+        }
+        return $command->count();
+    }
+
     public function isValid($time = 'now')
     {
+        if ($this->is_value == self::IS_INVALID) return fasle;
         $now = strtotime($time);
         if (!$this->from_date && !$this->to_date) return true;
         elseif ($this->from_date && $this->to_date) return ($now >= strtotime($this->from_date) && ($now <= strtotime($this->to_date)));
@@ -111,7 +142,7 @@ class Promotion extends ActiveRecord
 
     public function isEnable()
     {
-        return $this->status == self::STATUS_VISIBLE;
+        return $this->status == self::STATUS_VISIBLE && $this->isValid();
     }
 
     public function getPromotionGames()
@@ -128,6 +159,7 @@ class Promotion extends ActiveRecord
     {
         $command = self::find();
         $command->where(["IN", "status", [self::STATUS_VISIBLE, self::STATUS_INVISIBLE]]);
+        $command->andWhere(["is_valid" => self::IS_VALID]);
         $now = date('Y-m-d');
         $command->andWhere(['OR', 
             ['<=', 'from_date', $now],
@@ -144,6 +176,7 @@ class Promotion extends ActiveRecord
     {
         $command = self::find();
         $command->where(["status" => self::STATUS_VISIBLE]);
+        $command->andWhere(["is_valid" => self::IS_VALID]);
         $now = date('Y-m-d');
         $command->andWhere(['OR', 
             ['<=', 'from_date', $now],
@@ -156,27 +189,11 @@ class Promotion extends ActiveRecord
         return $command;
     }
 
-    public function canApplyGame($gameId)
+    public function addRule($rule)
     {
-        $games = $this->promotionGames;
-        // Apply for all games
-        if (empty($games)) return true;
-        // Apply for current game
-        else {
-            $gameIds = array_column($games, 'game_id');
-            return in_array($gameId, $gameIds);
-        }
-    }
-
-    public function canApplyUser($userId)
-    {
-        $users = $this->promotionUsers;
-        // Apply for all users
-        if (empty($users)) return true;
-        // Apply for current user
-        else {
-            $userIds = array_column($users, 'user_id');
-            return in_array($userId, $userIds);
-        }
+        $object = new PromotionRule();
+        $object->promotion_id = $this->id;
+        $object->addRule($rule);
+        $object->save();
     }
 }

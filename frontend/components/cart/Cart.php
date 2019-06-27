@@ -36,8 +36,6 @@ class Cart extends \yii2mod\cart\Cart
 
 	public function setDiscountItem($item)
 	{
-		// $this->discount = $item;
-		// $this->getStorage()->save($this);
 		$this->add($item);
 	}
 
@@ -81,6 +79,13 @@ class Cart extends \yii2mod\cart\Cart
 	}
 
 	public function getTotalDiscount()
+	{
+		if (!$this->hasDiscount()) return 0;
+		$discount = $this->getDiscountItem();
+		return $discount->getPrice();
+	}
+
+	public function getTotalBenefit()
 	{
 		if (!$this->hasDiscount()) return 0;
 		$discount = $this->getDiscountItem();

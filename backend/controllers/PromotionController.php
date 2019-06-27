@@ -65,24 +65,32 @@ class PromotionController extends Controller
         $model = new Promotion(['scenario' => Promotion::SCENARIO_CREATE]);
         $model->on(Promotion::EVENT_AFTER_INSERT, function ($event) {
             $promotion = $event->sender;
-            foreach ($promotion->game_ids as $gameId) {
-                $game = new PromotionGame();
-                $game->promotion_id = $promotion->id;
-                $game->game_id = $gameId;
-                $game->from_date = $promotion->from_date;
-                $game->to_date = $promotion->to_date;
-                $game->save();
-            }
-            foreach ($promotion->user_ids as $userId) {
-                $user = new PromotionUser();
-                $user->promotion_id = $promotion->id;
-                $user->user_id = $userId;
-                $user->from_date = $promotion->from_date;
-                $user->to_date = $promotion->to_date;
-                $user->save();
-            }
+            // foreach ($promotion->game_ids as $gameId) {
+            //     $game = new PromotionGame();
+            //     $game->promotion_id = $promotion->id;
+            //     $game->game_id = $gameId;
+            //     $game->from_date = $promotion->from_date;
+            //     $game->to_date = $promotion->to_date;
+            //     $game->save();
+            // }
+            // foreach ($promotion->user_ids as $userId) {
+            //     $user = new PromotionUser();
+            //     $user->promotion_id = $promotion->id;
+            //     $user->user_id = $userId;
+            //     $user->from_date = $promotion->from_date;
+            //     $user->to_date = $promotion->to_date;
+            //     $user->save();
+            // }
+
+           
         });
         if ($model->load($request->post()) && $model->save()) {
+            if ($model->rule) {
+                $rules = \common\models\PromotionRule::$ruels;
+                $rule = Yii::createObject($rules[$promotion->rule]);
+                $rule->load($request->post());
+                $model->addRule($rule);
+            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             return $this->redirect(['promotion/index']);
         } else {

@@ -167,7 +167,7 @@ class ReportController extends Controller
         $data = [
             'q' => $request->get('q'),
             'saler_id' => $request->get('saler_id'),
-            'handler_id' => $request->get('handler_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
@@ -219,7 +219,7 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.process.user';
         $request = Yii::$app->request;
         $data = [
-            'handler_id' => $request->get('handler_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
         ];
@@ -338,7 +338,7 @@ class ReportController extends Controller
         $data = [
             'q' => $request->get('q'),
             'saler_id' => $request->get('saler_id'),
-            'handler_id' => $request->get('handler_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
             'customer_id' => $request->get('customer_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),

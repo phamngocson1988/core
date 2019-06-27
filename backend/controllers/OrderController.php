@@ -45,7 +45,7 @@ class OrderController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index', 'send-complain'],
-                        'roles' => ['saler', 'handler', 'admin', 'accounting'],
+                        'roles' => ['saler', 'orderteam', 'admin', 'accounting'],
                     ],
                     [
                         'allow' => true,
@@ -56,12 +56,12 @@ class OrderController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['edit', 'my-order', 'pending', 'processing', 'approve', 'disapprove'],
-                        'roles' => ['saler', 'handler'],
+                        'roles' => ['saler', 'orderteam'],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['move-to-processing', 'taken', 'add-unit', 'new-pending-order', 'add-evidence-image', 'remove-evidence-image'],
-                        'roles' => ['handler'],
+                        'roles' => ['orderteam'],
                     ],
                     [
                         'allow' => true,
@@ -91,7 +91,7 @@ class OrderController extends Controller
             'customer_id' => $request->get('customer_id'),
             'saler_id' => $request->get('saler_id'),
             'provider_id' => $request->get('provider_id'),
-            'handler_id' => $request->get('handler_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),

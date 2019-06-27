@@ -24,7 +24,7 @@ class CancelOrderRule extends Rule
         if (!$order->isPendingOrder()) return false;
         if (Yii::$app->user->can('admin')) return true;
         if (Yii::$app->user->can('saler')) return false;
-        if (Yii::$app->user->can('handler') && $order->handler_id == Yii::$app->user->id) return true;
+        if (Yii::$app->user->can('orderteam') && $order->orderteam_id == Yii::$app->user->id) return true;
         return false;
     }
 }

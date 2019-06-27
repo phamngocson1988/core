@@ -10,7 +10,7 @@ use common\models\User;
 
 class ReportProcessOrderByUser extends Model
 {
-    public $handler_id;
+    public $orderteam_id;
     public $start_date;
     public $end_date;
 
@@ -25,7 +25,7 @@ class ReportProcessOrderByUser extends Model
     public function rules()
     {
         return [
-            ['handler_id', 'trim'],
+            ['orderteam_id', 'trim'],
             ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
             ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
             [['start_date', 'end_date'], 'required'],
@@ -37,12 +37,12 @@ class ReportProcessOrderByUser extends Model
         // Find all user in period
         $status = $this->availabelStatus();
         $command = $this->getCommand();
-        $command->select(['id', 'handler_id', 'SUM(quantity) as quantity']);
-        $command->with('handler');
-        $command->groupBy('handler_id');
+        $command->select(['id', 'orderteam_id', 'SUM(quantity) as quantity']);
+        $command->with('orderteam');
+        $command->groupBy('orderteam_id');
         $command->andWhere(['IN', 'status', $status]);
-        $command->andWhere(['IS NOT', 'handler_id', null]);
-        $models = $command->indexBy('handler_id')->all();
+        $command->andWhere(['IS NOT', 'orderteam_id', null]);
+        $models = $command->indexBy('orderteam_id')->all();
         $users = [];
         
         // query report
@@ -50,13 +50,13 @@ class ReportProcessOrderByUser extends Model
             // pending order
             $penddingCommand = $this->getCommand();
             $penddingCommand->andWhere(['IN', 'status', $this->unCompleteStatus()]);
-            $penddingCommand->andWhere(['handler_id' => $id]);
+            $penddingCommand->andWhere(['orderteam_id' => $id]);
             $penddingCount = $penddingCommand->count();
 
             // completed order
             $completedCommand = $this->getCommand();
             $completedCommand->andWhere(['IN', 'status', $this->completeStatus()]);
-            $completedCommand->andWhere(['handler_id' => $id]);
+            $completedCommand->andWhere(['orderteam_id' => $id]);
             $completedCount = $completedCommand->count();
 
             if (!$completedCount) {
@@ -66,7 +66,7 @@ class ReportProcessOrderByUser extends Model
                 $avarageTime = $completedCommand->sum('process_duration_time') / ($completedCount * 60); //mins
             }
 
-            $users[$id]['name'] = ($order->handler) ? $order->handler->name : '';
+            $users[$id]['name'] = ($order->orderteam) ? $order->orderteam->name : '';
             $users[$id]['quantity'] = $order->quantity;
             $users[$id]['completed_rate'] = $rate;
             $users[$id]['avarage_time'] = $avarageTime;
@@ -78,8 +78,8 @@ class ReportProcessOrderByUser extends Model
     {
         $command = Order::find();
         $command->where("1=1");
-        if ($this->handler_id) {
-            $command->andWhere(['handler_id' => $this->handler_id]);
+        if ($this->orderteam_id) {
+            $command->andWhere(['orderteam_id' => $this->orderteam_id]);
         }
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date]);
@@ -101,7 +101,7 @@ class ReportProcessOrderByUser extends Model
 
     public function fetchUsers()
     {
-        $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('handler');
+        $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
         $managerTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam_manager');
         $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 

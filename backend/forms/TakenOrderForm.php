@@ -44,7 +44,7 @@ class TakenOrderForm extends Model
     public function taken()
     {
         $order = $this->getOrder();
-        $order->handler_id = Yii::$app->user->id;
+        $order->orderteam_id = Yii::$app->user->id;
         $order->process_start_time = date('Y-m-d H:i:s');
         return $order->save();
     }
