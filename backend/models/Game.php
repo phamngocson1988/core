@@ -11,8 +11,8 @@ class Game extends \common\models\Game
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'pack'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'pack'],
+            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'original_price', 'pack', 'pin'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'original_price', 'pack', 'pin'],
         ];
     }
 
@@ -26,7 +26,9 @@ class Game extends \common\models\Game
             'status' => 'Trạng thái sản phẩm',
             'image_id' => 'Hình ảnh',
             'price' => 'Giá bán (Kcoin) / gói game',
+            'original_price' => 'Giá gốc (Kcoin) / gói game',
             'pack' => 'Số đơn vị game trong gói',
+            'pin' => 'Ưu tiên hiển thị'
         ];
     }
 
@@ -37,7 +39,9 @@ class Game extends \common\models\Game
             [['title', 'content', 'unit_name', 'price', 'pack'], 'required'],
             ['status', 'default', 'value' => self::STATUS_VISIBLE],
             [['image_id', 'excerpt'], 'safe'],
-            ['pack', 'default', 'value' => 1]
+            ['pack', 'default', 'value' => 1],
+            ['pin', 'default', 'value' => self::UNPIN],
+            ['original_price', 'trim']
         ];
     }
 

@@ -15,6 +15,9 @@ class Game extends ActiveRecord
     const STATUS_VISIBLE = 'Y';
     const STATUS_DELETE = 'D';
 
+    const UNPIN = 0;
+    const PIN = 1;
+
     /**
      * @inheritdoc
      */
@@ -87,22 +90,6 @@ class Game extends ActiveRecord
         ->where('status = :status', [':status' => Product::STATUS_VISIBLE]);
     }
 
-    // public function getPrice()
-    // {
-        // $products = $this->products;
-        // $product = reset($products);
-        // if ($product) return $product->price;
-        // return $this->price;
-    // }
-
-    // public function getUnit()
-    // {
-    //     $products = $this->products;
-    //     $product = reset($products);
-    //     if ($product) return $product->unit;   
-    //     return 1;
-    // }
-
     public function getCreator()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
@@ -140,6 +127,17 @@ class Game extends ActiveRecord
         }
         return $excerpt;
     }   
+
+    public function getOriginalPrice()
+    {
+        return ($this->original_price) ? $this->original_price : $this->price;
+    }
+
+    public function getSavedPrice()
+    {
+        $ori = $this->getOriginalPrice();
+        return round(($this->price - $ori) * 100/ $ori, 2);
+    }
 
     public function getImages()
     {

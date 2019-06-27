@@ -4,6 +4,7 @@
 {use class='unclead\multipleinput\MultipleInput'}
 {use class='common\widgets\ImageInputWidget'}
 {use class='common\widgets\RadioListInput'}
+{use class='common\widgets\CheckboxInput'}
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
@@ -55,6 +56,10 @@
           'options' => ['class' => 'mt-radio-list']
         ])}
 
+        {$form->field($model, 'pin', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->widget(CheckboxInput::className())->label(false)}
+
         {Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green'])}
         {Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default'])}
         <!-- END MENU -->
@@ -80,6 +85,7 @@
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'excerpt')->textarea()}
                   {$form->field($model, 'price')->textInput()}
+                  {$form->field($model, 'original_price')->textInput()}
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
