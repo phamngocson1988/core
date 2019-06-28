@@ -2,18 +2,14 @@
 namespace common\models\promotions;
 
 use Yii;
-use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use common\models\PromotionApply;
 
 /**
  * Promotion model
  */
-class TotalUsingRule extends Model
+class TotalUsingRule extends PromotionRuleAbstract implements PromotionRuleInterface
 {
-    public $title;
-    public $label;
-    public $promotion_id;
     public $total;
 
     public function scenarios()
@@ -30,8 +26,13 @@ class TotalUsingRule extends Model
         ];
     }
 
+    public function render($form, $attr, $options = [])
+    {
+        if (!$this->isSafeAttribute($attr)) return '';
+        return $form->field($this, $attr, $options)->textInput();
+    }
 
-    public function isValid($user = null, $game = null)
+    public function isValid($params)
     {
         $command = PromotionApply::find()->where(['promotion_id' => $this->promotion_id]);
         return $command->count() < $this->total;

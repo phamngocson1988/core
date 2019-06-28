@@ -7,7 +7,7 @@ use frontend\models\Promotion;
 use yii2mod\cart\models\CartItemInterface;
 use common\models\Order;
 
-class CartBenefit extends CartPromotion implements CartItemInterface
+class CartBenefit extends Model #implements CartItemInterface
 {
     // ============== implement interface ===========//
     public function getPrice() : int

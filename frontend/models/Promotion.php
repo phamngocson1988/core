@@ -3,73 +3,43 @@ namespace frontend\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\db\ActiveQuery;
 
 /**
  * Promotion model
  */
 class Promotion extends \common\models\Promotion
 {
-    public function canApplyGame($gameId)
-    {
-        if (!$this->isValid()) return false;
-        if (!$this->isEnable()) return false;
-        if ($this->total_using) {
-            $command = Order::find();
-            $command->joinWith('promotions');
-            $command->where(["order_fee.reference" => $this->id]);
-            if ((int)$promotion->total_using <= $command->count()) return fasle;
-        }
-        
-        $games = $this->promotionGames;
-        // Apply for all games
-        if (empty($games)) return true;
-        // Apply for current game
-        else {
-            $gameIds = ArrayHelper::getColumn($games, 'game_id');
-            return in_array($gameId, $gameIds);
-        }
+    public static function find()
+	{
+		return new PromotionQuery(get_called_class());
     }
-
-    public function canApplyUser($userId)
-    {
-        $users = $this->promotionUsers;
-        // Apply for all users
-        if (empty($users)) return true;
-        // Apply for current user
-        else {
-            $userIds = ArrayHelper::getColumn($users, 'user_id');
-            return in_array($userId, $userIds);
-        }
-    }
-
     
-
-
-    public function checkUserUsing($attribute, $params)
+    public function isValid($params) 
     {
-        if (!$this->user_id) return;
-        $promotion = $this->getPromotion();
-        if (!$promotion) return;
-        if (!$promotion->user_using) return;
-        $command = Order::find();
-        $command->joinWith('promotions');
-        $command->where(["order_fee.reference" => $promotion->id]);
-        $command->andWhere(["order.customer_id" => $this->user_id]);
-        if ((int)$promotion->user_using <= $command->count()) {
-            $this->addError($attribute, 'This voucher code has applied before');
-        }
+        $rule = $this->getRule();
+        if (!$rule) return true;
+        return $rule->isValid($params);
     }
+}
 
-    public function checkTotalUsing($attribute, $params)
+class PromotionQuery extends ActiveQuery
+{
+    public function init()
     {
-        $promotion = $this->getPromotion();
-        if (!$promotion) return;
-        if (!$promotion->total_using) return;
-        $command = Order::find();
-        $command->joinWith('promotions');
-        $command->where(["order_fee.reference" => $promotion->id]);
-        if ((int)$promotion->total_using <= $command->count()) {
-            $this->addError($attribute, 'This voucher code has been used by others');
-        }
+        $now = date('Y-m-d');
+        $this->andOnCondition([
+            'status' => Promotion::STATUS_VISIBLE,
+            'is_valid' => Promotion::IS_VALID,
+            ['OR', 
+                ['<=', 'from_date', $now],
+                ['from_date' => null]
+            ],
+            ['OR', 
+                ['>=', 'to_date', $now],
+                ['to_date' => null]
+            ]
+        ]);
+        parent::init();
     }
 }

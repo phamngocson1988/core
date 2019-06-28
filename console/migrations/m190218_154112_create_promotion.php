@@ -36,6 +36,10 @@ class m190218_154112_create_promotion extends Migration
             'created_at' => $this->dateTime(),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
             'is_valid' => $this->integer(11)->defaultValue(1),
+            'rule_name' => $this->string(50),
+            'rule_data' => $this->text(),
+            'benefit_name' => $this->string(50),
+            'benefit_data' => $this->text(),
         ]);
 
         $this->createIndex('idx_unique_code', '{{%promotion}}', 'code', true); // unique index
@@ -58,21 +62,21 @@ class m190218_154112_create_promotion extends Migration
             $commandDirection->execute();
         }
 
-        $this->createTable('{{%promotion_user}}', [
-            'promotion_id' => $this->integer(11)->notNull(),
-            'user_id' => $this->integer(11)->notNull(),
-            'from_date' => $this->date(),
-            'to_date' => $this->date(),
-        ]);
-        $this->addPrimaryKey('pro-user_pk', '{{%promotion_user}}', ['promotion_id', 'user_id']);
+        // $this->createTable('{{%promotion_user}}', [
+        //     'promotion_id' => $this->integer(11)->notNull(),
+        //     'user_id' => $this->integer(11)->notNull(),
+        //     'from_date' => $this->date(),
+        //     'to_date' => $this->date(),
+        // ]);
+        // $this->addPrimaryKey('pro-user_pk', '{{%promotion_user}}', ['promotion_id', 'user_id']);
 
-        $this->createTable('{{%promotion_game}}', [
-            'promotion_id' => $this->integer(11)->notNull(),
-            'game_id' => $this->integer(11)->notNull(),
-            'from_date' => $this->date(),
-            'to_date' => $this->date(),
-        ]);
-        $this->addPrimaryKey('pro-game_pk', '{{%promotion_game}}', ['promotion_id', 'game_id']);
+        // $this->createTable('{{%promotion_game}}', [
+        //     'promotion_id' => $this->integer(11)->notNull(),
+        //     'game_id' => $this->integer(11)->notNull(),
+        //     'from_date' => $this->date(),
+        //     'to_date' => $this->date(),
+        // ]);
+        // $this->addPrimaryKey('pro-game_pk', '{{%promotion_game}}', ['promotion_id', 'game_id']);
 
         $this->createTable('{{%promotion_apply}}', [
             'id' => $this->primaryKey(),
@@ -90,8 +94,8 @@ class m190218_154112_create_promotion extends Migration
         echo "m190218_154112_create_promotion cannot be reverted.\n";
         $this->dropIndex('idx_unique_code', '{{%promotion}}');
         $this->dropTable('{{%promotion}}');
-        $this->dropTable('{{%promotion_user}}');
-        $this->dropTable('{{%promotion_game}}');
+        // $this->dropTable('{{%promotion_user}}');
+        // $this->dropTable('{{%promotion_game}}');
         $this->dropTable('{{%promotion_apply}}');
     }
 

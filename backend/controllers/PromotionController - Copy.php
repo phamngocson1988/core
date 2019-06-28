@@ -63,37 +63,34 @@ class PromotionController extends Controller
         $this->view->params['main_menu_active'] = 'promotion.index';
         $request = Yii::$app->request;
         $model = new Promotion(['scenario' => Promotion::SCENARIO_CREATE]);
-        // $model->on(Promotion::EVENT_AFTER_INSERT, function ($event) {
-        //     $promotion = $event->sender;
-        //     foreach ($promotion->game_ids as $gameId) {
-        //         $game = new PromotionGame();
-        //         $game->promotion_id = $promotion->id;
-        //         $game->game_id = $gameId;
-        //         $game->from_date = $promotion->from_date;
-        //         $game->to_date = $promotion->to_date;
-        //         $game->save();
-        //     }
-        //     foreach ($promotion->user_ids as $userId) {
-        //         $user = new PromotionUser();
-        //         $user->promotion_id = $promotion->id;
-        //         $user->user_id = $userId;
-        //         $user->from_date = $promotion->from_date;
-        //         $user->to_date = $promotion->to_date;
-        //         $user->save();
-        //     }
-        // });
-        if ($model->load($request->post())) {
-            if ($model->rule_name) {
-                $rule = Promotion::pickRule($model->rule_name);
+        $model->on(Promotion::EVENT_AFTER_INSERT, function ($event) {
+            $promotion = $event->sender;
+            // foreach ($promotion->game_ids as $gameId) {
+            //     $game = new PromotionGame();
+            //     $game->promotion_id = $promotion->id;
+            //     $game->game_id = $gameId;
+            //     $game->from_date = $promotion->from_date;
+            //     $game->to_date = $promotion->to_date;
+            //     $game->save();
+            // }
+            // foreach ($promotion->user_ids as $userId) {
+            //     $user = new PromotionUser();
+            //     $user->promotion_id = $promotion->id;
+            //     $user->user_id = $userId;
+            //     $user->from_date = $promotion->from_date;
+            //     $user->to_date = $promotion->to_date;
+            //     $user->save();
+            // }
+
+           
+        });
+        if ($model->load($request->post()) && $model->save()) {
+            if ($model->rule) {
+                $rules = \common\models\PromotionRule::$ruels;
+                $rule = Yii::createObject($rules[$promotion->rule]);
                 $rule->load($request->post());
-                $model->setRuleData($rule);
+                $model->addRule($rule);
             }
-            if ($model->benefit_name) {
-                $benefit = Promotion::pickBenefit($model->benefit_name);
-                $benefit->load($request->post());
-                $model->setBenefitData($benefit);
-            }
-            $model->save();
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             return $this->redirect(['promotion/index']);
         } else {
@@ -116,26 +113,39 @@ class PromotionController extends Controller
         $request = Yii::$app->request;
         $model = Promotion::findOne($id);
         $model->setScenario(Promotion::SCENARIO_EDIT);
+        $model->on(Promotion::EVENT_AFTER_UPDATE, function ($event) {
+            $promotion = $event->sender;
+            foreach ($promotion->promotionGames as $game) {
+                $game->delete();
+            }
 
-        if ($model->load($request->post())) {
-            if ($model->rule_name) {
-                $rule = Promotion::pickRule($model->rule_name);
-                $rule->load($request->post());
-                $model->setRuleData($rule);
+            foreach ($promotion->promotionUsers as $user) {
+                $user->delete();
             }
-            if ($model->benefit_name) {
-                $benefit = Promotion::pickBenefit($model->benefit_name);
-                $benefit->load($request->post());
-                $model->setBenefitData($benefit);
+            foreach ($promotion->game_ids as $gameId) {
+                $game = new PromotionGame();
+                $game->promotion_id = $promotion->id;
+                $game->game_id = $gameId;
+                $game->from_date = $promotion->from_date;
+                $game->to_date = $promotion->to_date;
+                $game->save();
             }
-            $model->save();
+
+            foreach ($promotion->user_ids as $userId) {
+                $user = new PromotionUser();
+                $user->promotion_id = $promotion->id;
+                $user->user_id = $userId;
+                $user->from_date = $promotion->from_date;
+                $user->to_date = $promotion->to_date;
+                $user->save();
+            }
+        });
+        if ($model->load($request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             return $this->redirect(['promotion/index']);
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
-
-
         $games = Game::find()->select(['id', 'title'])->where(['IN', 'status', [Game::STATUS_VISIBLE, Game::STATUS_INVISIBLE]])->all();
         $users = User::find()->select(['id', 'email'])->where(['IN', 'status', [User::STATUS_ACTIVE, User::STATUS_INACTIVE]])->all();
         $model->game_ids = ArrayHelper::getColumn($model->promotionGames, 'game_id');
