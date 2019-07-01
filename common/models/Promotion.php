@@ -162,7 +162,7 @@ class Promotion extends ActiveRecord
     //     return $command->count();
     // }
 
-    public function isValid($params)
+    public function isValid($params = [])
     {
         if (!$this->isEnable()) return false;
         $rule = $this->getRule();

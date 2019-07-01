@@ -13,14 +13,7 @@ class Promotion extends \common\models\Promotion
     public static function find()
 	{
 		return new PromotionQuery(get_called_class());
-    }
-    
-    public function isValid($params) 
-    {
-        $rule = $this->getRule();
-        if (!$rule) return true;
-        return $rule->isValid($params);
-    }
+    }   
 }
 
 class PromotionQuery extends ActiveQuery

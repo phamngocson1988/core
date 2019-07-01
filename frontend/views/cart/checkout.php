@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 $cart = Yii::$app->cart;
 $item = $cart->getItem();
-// print_r($item);die;
+$cart->applyPromotion();
 ?>
 <section class="section section-lg bg-default novi-background bg-cover">
   <!-- section wave-->
@@ -20,7 +20,7 @@ $item = $cart->getItem();
                   <td>
                     <?=$item->getLabel();?><br/>
                     <small>Quantity <?=$item->quantity;?></small>
-                    <small><?=$item->getUnitName();?> <?=number_format($item->getTotalPack());?></small>
+                    <small><?=$item->unit_name;?> <?=number_format($item->getTotalUnit());?></small>
                   </td>
                   <td>(K)<?=$item->getTotalPrice();?></td>
                 </tr>
@@ -29,12 +29,12 @@ $item = $cart->getItem();
                   <td>(K)<?=$cart->getSubTotalPrice();?></td>
                 </tr>
                 <tr>
-                  <td>Discount</td>
-                  <td>(K)<?=$cart->getTotalDiscount();?></td>
-                </tr>
-                <tr>
                   <td>Total</td>
                   <td>(K)<?=$cart->getTotalPrice();?></td>
+                </tr>
+                <tr>
+                  <td>Total unit</td>
+                  <td>(K)<?=$cart->getTotalUnit();?> (<?=$cart->getSubTotalUnit();?> + <?=$cart->getPromotionUnit();?>)</td>
                 </tr>
               </tbody>
             </table>

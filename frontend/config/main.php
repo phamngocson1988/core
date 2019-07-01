@@ -29,7 +29,7 @@ return [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'info'],
+                    'levels' => ['error', 'warning'],
                 ],
             ],
         ],
@@ -40,7 +40,7 @@ return [
                     'basePath' => '@webroot',
                     'baseUrl' => '@web',
                     'js' => [
-                        'js/core.min.js',
+                        'js/jquery-3.3.1.min.js',
                     ]
                 ],
                 'yii\bootstrap\BootstrapAsset' => [
@@ -48,9 +48,11 @@ return [
                     'basePath' => '@webroot',
                     'baseUrl' => '@web',
                     'css' => [
-                        'css/bootstrap.css',
+                        'css/bootstrap.min.css',
                     ],
-                    'js' => [],
+                    'js' => [
+                        'js/bootstrap.min.js'
+                    ],
                     'depends' => ['yii\web\YiiAsset']
                 ],
             ],

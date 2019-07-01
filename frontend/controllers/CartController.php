@@ -62,50 +62,30 @@ class CartController extends Controller
             ],
         ];
     }
-
     public function actionIndex()
     {
         $request = Yii::$app->request;
         $cart = Yii::$app->cart;
-        $scenario = $request->post('scenario');
+        $promotion_code = $request->post('promotion_code');
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
-        // $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();   
+        $item->setScenario($request->post('scenario'));
         if ($request->isPost) {
-            switch ($scenario) {
-                case CartItem::SCENARIO_EDIT_CART:
-                    $item->setScenario($scenario);
-                    if ($item->load($request->post()) && $item->validate()) {
-                        $cart->add($item);
-                    }
-                    break;
-                case CartItem::SCENARIO_INFO_CART:
-                    $item->setScenario($scenario);
-                    if ($item->load($request->post()) && $item->validate()) {
-                        $cart->add($item);
-                    }
-                    return $this->redirect(Url::to(['cart/checkout']));
-                    break;
-                case Cart::SCENARIO_ADD_PROMOTION:
-                    $cart->setScenario($scenario);
-                    if ($cart->load($request->post()) && $cart->validate()) {
-                        $promotion = $cart->getPromotion();
-                        $cart->setPromotionItem($promotion);
-                        $cart->applyPromotion();
-                    }print_r($cart->getItems());
-                    break;
-                default:
-                    break;
-            }
             if ($item->load($request->post()) && $item->validate()) {
                 $cart->add($item);
                 if ($item->scenario == CartItem::SCENARIO_EDIT_CART) {
-                    // $discount->load($request->post());
-                    // $discount->user_id = Yii::$app->user->id;
-                    // $discount->game_ids = [$item->game_id];
-                    // if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();    
-                    // else $cart->setDiscountItem($discount);
-                } elseif ($item->scenario == CartItem::SCENARIO_INFO) {
+                    $discount = CartPromotion::findOne(['code' => $promotion_code]);
+                    
+                    if ($discount) {
+                        $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
+                        if (!$discount->validate() || !$discount->code) $cart->removePromotionItem();                            
+                        else {
+                            $cart->setPromotionItem($discount);
+                            $cart->applyPromotion();
+                        }
+                    }
+                    
+                } elseif ($item->scenario == CartItem::SCENARIO_INFO_CART) {
                     return $this->redirect(Url::to(['cart/checkout']));
                 } 
             }
@@ -113,7 +93,7 @@ class CartController extends Controller
 
         return $this->render('index', [
             'cart' => $cart,
-            // 'discount' => $discount,
+            'promotion_code' => $promotion_code,
             'item' => $item
         ]);
     }

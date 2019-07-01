@@ -31,11 +31,3 @@ function showLoader() {
 function hideLoader() {
     $(".overlay").hide();
 }
-$(document).ajaxStart(function(){
-  // Show image container
-  showLoader();
-});
-$(document).ajaxComplete(function(){
-  // Hide image container
-  hideLoader();
-});

@@ -4,7 +4,6 @@ namespace frontend\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
-use common\components\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -19,15 +18,8 @@ use frontend\forms\ContactForm;
 
 use common\models\User;
 use common\forms\SendmailForm;
+use frontend\models\Game;
 
-use PayPal\Api\Amount;
-use PayPal\Api\Details;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Transaction;
 /**
  * Site controller
  */
@@ -73,7 +65,8 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
-                'layout' => 'notice'
+                // 'layout' => 'notice'
+                'layout' => 'main'
             ],
             'captcha' => [
                 'class' => '\frontend\components\captcha\CaptchaAction',
@@ -90,7 +83,10 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $this->layout = 'home';
-        return $this->render('index');
+        $games = Game::find()->limit(10)->all();
+        return $this->render('index', [
+            'games' => $games
+        ]);
     }
 
     /**
@@ -100,14 +96,16 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $this->layout = 'signup';
+        // $this->layout = 'signup';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        $request = Yii::$app->request;
+        if ($model->load($request->post()) && $model->login()) {
+            // return $this->goBack();
+            return $this->redirect($request->getReferrer());
         } else {
             return $this->render('login', [
                 'model' => $model,

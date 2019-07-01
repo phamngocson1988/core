@@ -7,17 +7,16 @@ use yii\bootstrap\ActiveForm;
 use frontend\components\cart\CartItem;
 use frontend\components\cart\Cart;
 
-// $item = $cart->getItem();
 ?>
 
-<?php Pjax::begin(); ?>
 
+<?php Pjax::begin(); ?>
+<?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
+<?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
 <section class="section section-lg bg-default">
   <div class="container container-wide">
     <div class="row row-fix justify-content-lg-center">
       <div class="col-xl-11 col-xxl-8">
-        <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
-        <?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
         <div class="table-novi table-custom-responsive table-shop-responsive">
           <table class="table-custom table-shop table">
             <thead>
@@ -53,38 +52,30 @@ use frontend\components\cart\Cart;
             </tbody>
           </table>
         </div>
-        <?php ActiveForm::end(); ?>
-
-        <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
-        <?=Html::hiddenInput('scenario', Cart::SCENARIO_ADD_PROMOTION);?>
         <div class="row row-fix justify-content-between align-items-md-center text-center">
           <div class="col-md-7 col-xl-6 cell-xxl-5">
             <!-- RD Mailform: Subscribe-->
             <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
               <div class="rd-mailform-inline-inner">
-                <?= $form->field($cart, 'promotion_code', [
-                  'options' => ['class' => 'form-wrap'],
-                  'inputOptions' => ['class' => 'form-input', 'id' => 'voucher'],
-                  'labelOptions' => ['class' => 'form-label'],
-                  'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                  'template' => '{input}{error}{label}'
-                ])->textInput()->label('Enter your voucher'); ?>
+                <input name="promotion_code" value="<?=$promotion_code;?>" id="voucher"/>
                 <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
               </div>
             </div>
           </div>
           <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
-            <div class="heading-5 text-regular">Sub total: <span><?=number_format($cart->getSubTotalUnit());?></span></div>
+            <div class="heading-5 text-regular">Sub total unit: <span><?=number_format($cart->getSubTotalUnit());?></span></div>
           </div>
           <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
-            <div class="heading-5 text-regular">Total: <span><?=number_format($cart->getTotalUnit());?></span></div>
+            <div class="heading-5 text-regular">Total unit: <span><?=number_format($cart->getTotalUnit());?> </span></div>
+            <div class="heading-5 text-regular">Promotion unit: <span><?=$cart->promotion_unit;?> </span></div>
+            
           </div>
         </div>
-        <?php ActiveForm::end(); ?>
       </div>
     </div>
   </div>
 </section>
+<?php ActiveForm::end(); ?>
 <?php Pjax::end(); ?>
 
 <?php $form = ActiveForm::begin(['id' => 'update-cart1', 'action' => ['cart/index']]); ?>

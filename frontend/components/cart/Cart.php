@@ -16,53 +16,10 @@ use frontend\models\Promotion;
 class Cart extends \yii2mod\cart\Cart
 {
 	// Declare item type
-	const ITEM_PROMOTION = 'CartPromotion';
+	const ITEM_PROMOTION = '\frontend\components\cart\CartPromotion';
 
-	// Declare scenario
-	const SCENARIO_ADD_PROMOTION = 'promotion';
-
-	public $promotion_code;
-
-	public $promotion_coin;
-	public $promotion_unit;
-
-	//========== Validate promotion============
-	public function scenarios()
-    {
-        return [
-            self::SCENARIO_ADD_PROMOTION => ['promotion_code'],
-        ];
-    }
-
-	public function rules()
-    {
-
-        return [
-            [['promotion_code'], 'trim'],
-            ['promotion_code', 'validateCode'],
-        ];
-    }
-
-    public function validateCode($attribute, $params)
-    {
-        if (!$this->promotion_code) return;
-        $user_id = Yii::$app->user->id;
-        $item = $this->getItem();
-        $game_id = $item->id;
-        $promotion = $this->getPromotion();
-        if (!$promotion) {
-            $this->addError($attribute, 'This voucher code is not exist');
-        } elseif (!$promotion->isValid(['user_id' => $user_id, 'game_id' => $game_id])) {
-            $this->addError($attribute, 'This voucher is not valid');
-        }
-    }
-
-    public function getPromotion()
-    {
-        return CartPromotion::findOne(['code' => $this->promotion_code, 'promotion_scenario' => Promotion::SCENARIO_BUY_GEMS]);
-    }
-
-
+	protected $promotion_coin;
+	protected $promotion_unit;
 
 	/** instance of CartItemInterface */
 	//==========Item=========
@@ -103,8 +60,12 @@ class Cart extends \yii2mod\cart\Cart
 	{
 		if (!$this->hasPromotion()) return;
 		$promotion = $this->getPromotionItem();
-		$this->promotion_unit = $promotion->getPrice();
 		$this->promotion_coin = $promotion->getPrice();
+	}
+
+	public function getPromotionUnit()
+	{
+		return (int)$this->promotion_unit;
 	}
 
 	//============= For product ==========
@@ -119,9 +80,8 @@ class Cart extends \yii2mod\cart\Cart
 
 	public function getTotalPrice()
 	{
-		if (!$this->promotion_coin) $this->applyPromotion();
 		$subTotal = $this->getSubTotalPrice();
-		$sum = $subTotal - $this->promotion_coin;
+		$sum = $subTotal;
 		return $sum;
 	}
 
@@ -133,9 +93,8 @@ class Cart extends \yii2mod\cart\Cart
 
 	public function getTotalUnit()
 	{
-		if (!$this->promotion_unit) $this->applyPromotion();
 		$subTotal = $this->getSubTotalUnit();
-		$sum = $subTotal - $this->promotion_unit;
+		$sum = $subTotal + $this->getPromotionUnit();
 		return $sum;
 	}
 }

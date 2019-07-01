@@ -31,6 +31,7 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['captcha', 'captcha', 'message' => 'Captcha is not match'],
         ];
     }
 
