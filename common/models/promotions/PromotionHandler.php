@@ -11,8 +11,14 @@ use common\models\PromotionApply;
  */
 abstract class PromotionHandler extends Model
 {
+    const EFFECT_USER = 'user';
+    const EFFECT_GAME = 'game';
+    
     public $title;
     public $promotion_id;
+    public $object;
+
+    public static $_effected_objects = [self::EFFECT_USER, self::EFFECT_GAME];
 
     public function asArray()
     {
@@ -27,5 +33,10 @@ abstract class PromotionHandler extends Model
     {
         $safe = $this->safeAttributes();
         return in_array($attr, $safe);
+    }
+
+    public function getEffectedObject()
+    {
+        return $this->object;
     }
 }

@@ -67,7 +67,7 @@ use frontend\components\cart\Cart;
           </div>
           <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
             <div class="heading-5 text-regular">Total unit: <span><?=number_format($cart->getTotalUnit());?> </span></div>
-            <div class="heading-5 text-regular">Promotion unit: <span><?=$cart->promotion_unit;?> </span></div>
+            <div class="heading-5 text-regular">Promotion unit: <span><?=$cart->getPromotionUnit();?> </span></div>
             
           </div>
         </div>

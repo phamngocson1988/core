@@ -80,17 +80,6 @@ use common\widgets\TinyMce;
                     'imageOptions' => ['width' => 150, 'height' => 150]
                   ])->label('Hình ảnh');?>
 
-                  <?=$form->field($model, 'promotion_type', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
-                  ])->dropDownList(['fix' => 'Áp dụng cụ thể', 'percent' => 'Áp dụng theo phần trăm'])->label('Phương thức áp dụng');?>
-
-                  <?=$form->field($model, 'value', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Giá trị áp dụng')?>
-
                   <?=$form->field($model, 'promotion_scenario', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
@@ -116,22 +105,6 @@ use common\widgets\TinyMce;
                         'todayHighlight' => true
                     ]
                   ])?>
-
-                  <?=$form->field($model, 'game_ids', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-4">{input}{hint}{error}</div>',
-                  ])->widget(kartik\select2\Select2::classname(), [
-                    'data' => ArrayHelper::map($games, 'id', 'title'),
-                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
-                  ])->label('Áp dụng cho game')?>
-
-                  <?=$form->field($model, 'user_ids', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-4">{input}{hint}{error}</div>',
-                  ])->widget(kartik\select2\Select2::classname(), [
-                    'data' => ArrayHelper::map($users, 'id', 'email'),
-                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
-                  ])->label('Áp dụng cho khách hàng')?>
 
                   <?=$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

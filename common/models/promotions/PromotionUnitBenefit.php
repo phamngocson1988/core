@@ -7,9 +7,9 @@ use yii\helpers\ArrayHelper;
 use common\models\PromotionApply;
 
 /**
- * PromotionCoinBenefit model
+ * PromotionUnitBenefit model
  */
-class PromotionCoinBenefit extends PromotionBenefitAbstract implements PromotionBenefitInterface
+class PromotionUnitBenefit extends PromotionBenefitAbstract implements PromotionBenefitInterface
 {
     public $value;
     public $type;
@@ -69,6 +69,6 @@ class PromotionCoinBenefit extends PromotionBenefitAbstract implements Promotion
 
     public function applyCart(&$cart)
     {
-        $cart->setPromotionCoin($this->calculate($cart->getSubTotalPrice()));
+        $cart->setPromotionUnit($this->calculate($cart->getSubTotalUnit()));
     }
 }

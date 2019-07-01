@@ -12,6 +12,8 @@ class SpecifiedGamesRule extends PromotionRuleAbstract implements PromotionRuleI
 {
     public $games;
 
+    public $object = self::EFFECT_GAME;
+
     protected $_all_games;
 
     public function scenarios()

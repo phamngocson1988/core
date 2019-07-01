@@ -74,10 +74,15 @@ class CartController extends Controller
             if ($item->load($request->post()) && $item->validate()) {
                 $cart->add($item);
                 if ($item->scenario == CartItem::SCENARIO_EDIT_CART) {
-                    $discount = CartPromotion::findOne(['code' => $promotion_code]);
-                    
+                    $discount = CartPromotion::findOne([
+                        'code' => $promotion_code,
+                        'promotion_scenario' => CartPromotion::SCENARIO_BUY_GEMS,
+                    ]);
+
                     if ($discount) {
                         $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
+                        $discount->user_id = Yii::$app->user->id;
+                        $discount->game_id = $item->id;
                         if (!$discount->validate() || !$discount->code) $cart->removePromotionItem();                            
                         else {
                             $cart->setPromotionItem($discount);

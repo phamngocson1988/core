@@ -10,7 +10,10 @@ use common\models\Order;
 class CartPromotion extends Promotion implements CartItemInterface
 {
     const SCENARIO_ADD_PROMOTION = 'promotion';
-    
+ 
+    public $user_id;
+    public $game_id;
+
     public function scenarios()
     {
         return [
@@ -28,16 +31,20 @@ class CartPromotion extends Promotion implements CartItemInterface
 
     public function validateCode($attribute, $params)
     {
-        if (!$this->isValid()) {
-            $this->addError($attribute, 'This voucher code is not valid');
+        if ($this->user_id && !$this->canApplyForUser($this->user_id)) {
+            $this->addError($attribute, 'This voucher code is not valid for this user');
+        }
+        if ($this->game_id && !$this->canApplyForGame($this->game_id)) {
+            $this->addError($attribute, 'This voucher code is not valid for this game');
         }
     }
 
+   
     //===========================
 
     public function getPrice() : int
     {
-        return 10;
+        return $this->get;
     }
 
     public function getLabel()

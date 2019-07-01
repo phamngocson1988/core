@@ -30,9 +30,6 @@ class Promotion extends ActiveRecord
     const IS_VALID = 1;
     const IS_INVALID = 0;
 
-    public $user_ids = [];
-    public $game_ids = [];
-
     /**
      * @inheritdoc
      */
@@ -61,32 +58,32 @@ class Promotion extends ActiveRecord
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'content', 'image_id', 'code', 'promotion_type', 'value', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'game_ids', 'user_ids', 'rule_name', 'benefit_name'],
-            self::SCENARIO_EDIT => ['id', 'title', 'content', 'image_id', 'promotion_type', 'value', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'game_ids', 'user_ids', 'rule_name', 'benefit_name'],
+            self::SCENARIO_CREATE => ['title', 'content', 'image_id', 'code', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'rule_name', 'benefit_name'],
+            self::SCENARIO_EDIT => ['id', 'title', 'content', 'image_id', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'rule_name', 'benefit_name'],
         ];
     }
 
     public function rules()
     {
     	return [
-    		[['title', 'code', 'promotion_type', 'value', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
-            [['id', 'title', 'code', 'promotion_type', 'value', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['user_using', 'from_date', 'to_date', 'content', 'image_id', 'game_ids', 'user_ids', 'rule_name', 'benefit_name'], 'safe'],
-            ['code', 'unique', 'targetClass' => '\common\models\Promotion', 'message' => 'Voucher code is duplicated'],
+    		[['title', 'code', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
+            ['code', 'unique', 'targetClass' => '\common\models\Promotion', 'message' => 'Voucher code is duplicated', 'on' => self::SCENARIO_CREATE],
+            [['id', 'title', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
+            [['user_using', 'from_date', 'to_date', 'content', 'image_id', 'rule_name', 'benefit_name'], 'safe'],
     	];
     }
 
     public static function  getRuleHandlers()
     {
         return [
-            'total_using' => [
-                'class' => '\common\models\promotions\TotalUsingRule',
-                'title' => 'Limit the number of using this promotion'
-            ],
-            'user_using' => [
-                'class' => '\common\models\promotions\UserUsingRule',
-                'title' => 'Limit the number of using this promotion for 1 user'
-            ],
+            // 'total_using' => [
+            //     'class' => '\common\models\promotions\TotalUsingRule',
+            //     'title' => 'Limit the number of using this promotion'
+            // ],
+            // 'user_using' => [
+            //     'class' => '\common\models\promotions\UserUsingRule',
+            //     'title' => 'Limit the number of using this promotion for 1 user'
+            // ],
             'specified_users' => [
                 'class' => '\common\models\promotions\SpecifiedUsersRule',
                 'title' => 'Khuyến mãi dành cho khách hàng cụ thể'
@@ -103,7 +100,11 @@ class Promotion extends ActiveRecord
         return [
             'promotion_coin' => [
                 'class' => '\common\models\promotions\PromotionCoinBenefit',
-                'title' => 'Gift Kingcoin'
+                'title' => 'Discount Kingcoin'
+            ],
+            'promotion_unit' => [
+                'class' => '\common\models\promotions\PromotionUnitBenefit',
+                'title' => 'Gift Game Unit'
             ],
         ];
     }
@@ -119,61 +120,46 @@ class Promotion extends ActiveRecord
         ];
     }
 
-    // public function calculateDiscount($amount)
-    // {
-    //     return ($this->promotion_direction == 'down') ? $this->calculateValue($amount) : 0;
-    // }
-
-    // public function calculateBenifit($amount)
-    // {
-    //     return ($this->promotion_direction == 'up') ? $this->calculateValue($amount) : 0;
-    // }
-
-    // public function calculateValue($amount)
-    // {
-    //     if ($this->promotion_type == self::TYPE_FIX) {
-    //         return min($amount, $this->value);
-    //     } elseif ($this->promotion_type == self::TYPE_PERCENT) {
-    //         return ceil(($this->value * $amount) / 100);
-    //     }
-    // }
-
-    // public function apply($userId)
-    // {
-    //     $apply = new PromotionApply();
-    //     $apply->promotion_id = $this->id;
-    //     $apply->user_id = $userId;
-    //     $apply->save();
-    //     if ($this->total_using && $this->countApply() >= $this->total_using) {
-    //         $this->is_valid = self::IS_INVALID;
-    //         $this->save();
-    //     } elseif ($this->user_using && $this->countApply($userId) >= $this->user_using) {
-    //         $this->is_valid = self::IS_INVALID;
-    //         $this->save();
-    //     }
-    // }
-
-    // public function countApply($userId = null)
-    // {
-    //     $command = PromotionApply::find()->where(['promotion_id' => $this->id]);
-    //     if ($userId) { 
-    //         $command->andWhere(['user_id' => $userId]);
-    //     }
-    //     return $command->count();
-    // }
-
-    public function isValid($params = [])
+    // Check validate
+    public function canApplyForUser($userId)
     {
         if (!$this->isEnable()) return false;
         $rule = $this->getRule();
         if (!$rule) return true;
-        return $rule->isValid($params);
+        if ($rule->getEffectedObject() != 'user') return true;
+        return $rule->isValid($userId);
     }
 
+    public function canApplyForGame($gameId)
+    {
+        if (!$this->isEnable()) return false;
+        $rule = $this->getRule();
+        if (!$rule) return true;
+        if ($rule->getEffectedObject() != 'game') return true;
+        return $rule->isValid($gameId);
+    }
+
+    // Apply
+    public function apply($amount)
+    {
+        $benefit = $this->getBenefit();
+        if (!$benefit) return 0;
+        return $benefit->apply($amount);
+    }
+
+    public function applyCart(&$cart)
+    {
+        $benefit = $this->getBenefit();
+        if (!$benefit) return;
+        $benefit->applyCart($cart);
+    }
+
+    // Validate a promotion is valid
     public function isEnable()
     {
+        // Check status
         if ($this->status != self::STATUS_VISIBLE) return false;
-        if ($this->is_valid != self::IS_VALID) return fasle;
+
         // Check time
         $now = strtotime('now');
         $from = ($this->from_date) ? strtotime($this->from_date) : null;
@@ -184,50 +170,6 @@ class Promotion extends ActiveRecord
         elseif ($to) return $now <= $to;
         return false;
     }
-
-    // public function getPromotionGames()
-    // {
-    //     return $this->hasMany(PromotionGame::className(), ['promotion_id' => 'id']);
-    // }
-
-    // public function getPromotionUsers()
-    // {
-    //     return $this->hasMany(PromotionUser::className(), ['promotion_id' => 'id']);
-    // }
-
-    // public static function findAvailable()
-    // {
-    //     $command = self::find();
-    //     $command->where(["IN", "status", [self::STATUS_VISIBLE, self::STATUS_INVISIBLE]]);
-    //     $command->andWhere(["is_valid" => self::IS_VALID]);
-    //     $now = date('Y-m-d');
-    //     $command->andWhere(['OR', 
-    //         ['<=', 'from_date', $now],
-    //         ['from_date' => null]
-    //     ]);
-    //     $command->andWhere(['OR', 
-    //         ['>=', 'to_date', $now],
-    //         ['to_date' => null]
-    //     ]);
-    //     return $command;
-    // }
-
-    // public static function findValid()
-    // {
-    //     $command = self::find();
-    //     $command->where(["status" => self::STATUS_VISIBLE]);
-    //     $command->andWhere(["is_valid" => self::IS_VALID]);
-    //     $now = date('Y-m-d');
-    //     $command->andWhere(['OR', 
-    //         ['<=', 'from_date', $now],
-    //         ['from_date' => null]
-    //     ]);
-    //     $command->andWhere(['OR', 
-    //         ['>=', 'to_date', $now],
-    //         ['to_date' => null]
-    //     ]);
-    //     return $command;
-    // }
 
     // Promotion rule
     public static function pickRule($ruleName)

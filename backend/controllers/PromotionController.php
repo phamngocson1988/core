@@ -63,25 +63,6 @@ class PromotionController extends Controller
         $this->view->params['main_menu_active'] = 'promotion.index';
         $request = Yii::$app->request;
         $model = new Promotion(['scenario' => Promotion::SCENARIO_CREATE]);
-        // $model->on(Promotion::EVENT_AFTER_INSERT, function ($event) {
-        //     $promotion = $event->sender;
-        //     foreach ($promotion->game_ids as $gameId) {
-        //         $game = new PromotionGame();
-        //         $game->promotion_id = $promotion->id;
-        //         $game->game_id = $gameId;
-        //         $game->from_date = $promotion->from_date;
-        //         $game->to_date = $promotion->to_date;
-        //         $game->save();
-        //     }
-        //     foreach ($promotion->user_ids as $userId) {
-        //         $user = new PromotionUser();
-        //         $user->promotion_id = $promotion->id;
-        //         $user->user_id = $userId;
-        //         $user->from_date = $promotion->from_date;
-        //         $user->to_date = $promotion->to_date;
-        //         $user->save();
-        //     }
-        // });
         if ($model->load($request->post())) {
             if ($model->rule_name) {
                 $rule = Promotion::pickRule($model->rule_name);
@@ -100,12 +81,8 @@ class PromotionController extends Controller
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
 
-        $games = Game::find()->select(['id', 'title'])->where(['IN', 'status', [Game::STATUS_VISIBLE, Game::STATUS_INVISIBLE]])->all();
-        $users = User::find()->select(['id', 'email'])->where(['IN', 'status', [User::STATUS_ACTIVE, User::STATUS_INACTIVE]])->all();
         return $this->render('create', [
             'model' => $model,
-            'games' => $games,
-            'users' => $users,
             'back' => $request->get('ref', Url::to(['promotion/index']))
         ]);
     }
@@ -135,15 +112,8 @@ class PromotionController extends Controller
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
 
-
-        $games = Game::find()->select(['id', 'title'])->where(['IN', 'status', [Game::STATUS_VISIBLE, Game::STATUS_INVISIBLE]])->all();
-        $users = User::find()->select(['id', 'email'])->where(['IN', 'status', [User::STATUS_ACTIVE, User::STATUS_INACTIVE]])->all();
-        $model->game_ids = ArrayHelper::getColumn($model->promotionGames, 'game_id');
-        $model->user_ids = ArrayHelper::getColumn($model->promotionUsers, 'user_id');
         return $this->render('edit', [
             'model' => $model,
-            'games' => $games,
-            'users' => $users,
             'back' => $request->get('ref', Url::to(['promotion/index']))
         ]);
     }

@@ -60,12 +60,27 @@ class Cart extends \yii2mod\cart\Cart
 	{
 		if (!$this->hasPromotion()) return;
 		$promotion = $this->getPromotionItem();
-		$this->promotion_coin = $promotion->getPrice();
+		$promotion->applyCart($this);
 	}
 
 	public function getPromotionUnit()
 	{
 		return (int)$this->promotion_unit;
+	}
+
+	public function setPromotionUnit($amount)
+	{
+		$this->promotion_unit = $amount;
+	}
+
+	public function getPromotionCoin()
+	{
+		return (int)$this->promotion_coin;
+	}
+
+	public function setPromotionCoin($amount)
+	{
+		$this->promotion_coin = $amount;
 	}
 
 	//============= For product ==========

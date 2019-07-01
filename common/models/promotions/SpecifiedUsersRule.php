@@ -12,14 +12,15 @@ use common\models\User;
 class SpecifiedUsersRule extends PromotionRuleAbstract implements PromotionRuleInterface
 {
     public $users;
-    public $total;
+
+    public $object = self::EFFECT_USER;
 
     protected $_all_users;
 
     public function scenarios()
     {
         return [
-            self::SCENARIO_DEFAULT => ['users', 'total'],
+            self::SCENARIO_DEFAULT => ['users'],
         ];
     }
 
@@ -27,7 +28,6 @@ class SpecifiedUsersRule extends PromotionRuleAbstract implements PromotionRuleI
     {
         return [
             'users' => 'Khách hàng',
-            'total' => 'Số lần sử dụng',
         ];
     }
 
@@ -44,21 +44,15 @@ class SpecifiedUsersRule extends PromotionRuleAbstract implements PromotionRuleI
                     'options' => ['class' => 'form-control', 'multiple' => 'true'],
                 ]);
                 break;
-            case 'total':
-                return $form->field($this, $attr, $options)->textInput();
             default:
                 return '';
         }
     }
 
-    public function isValid($params)
+    public function isValid($userId)
     {
-        $userId = ArrayHelper::getValue($params, 'user_id');
         if (!$userId); return false;
         if (!in_array($userId, $this->users)) return false;
-        if (!$this->total) return true;
-        $command = PromotionApply::find()->where(['promotion_id' => $this->promotion_id, 'user_id' => $userId]);
-        return $command->count() < $this->total;
     }
 
     protected function loadAllUsers()
