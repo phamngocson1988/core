@@ -10,7 +10,7 @@ class GameListWidget extends Widget
     public function run()
     {
     	$models = Game::find()->all();
-    	$promotions = Promotion::findValid()->all();
+    	$promotions = [];//Promotion::findValid()->all();
         return $this->render('game_list', [
         	'models' => $models,
         	'promotions' => $promotions

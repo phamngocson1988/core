@@ -311,6 +311,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
+        <?php if ($models) :?>
         <div class="row">
           <div class="col-md-2 col-sm-2">
             <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
@@ -325,6 +326,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             <span class="label label-default">Thời gian trung bình: <?=round(($search->getCommand()->sum('process_duration_time') / 60) / $search->getCommand()->sum('quantity'), 1);?></span>
           </div>
         </div>
+        <?php endif;?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

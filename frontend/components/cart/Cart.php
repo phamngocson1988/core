@@ -4,6 +4,8 @@ namespace frontend\components\cart;
 
 use Yii;
 use yii2mod\cart\models\CartItemInterface;
+use frontend\components\cart\CartPromotion;
+use frontend\models\Promotion;
 
 /**
  * Class Cart provides basic cart functionality (adding, removing, clearing, listing items). You can extend this class and
@@ -13,11 +15,57 @@ use yii2mod\cart\models\CartItemInterface;
  */
 class Cart extends \yii2mod\cart\Cart
 {
-	const ITEM_DISCOUNT = '\frontend\components\cart\CartDiscount';
+	// Declare item type
+	const ITEM_PROMOTION = 'CartPromotion';
+
+	// Declare scenario
+	const SCENARIO_ADD_PROMOTION = 'promotion';
+
+	public $promotion_code;
+
+	public $promotion_coin;
+	public $promotion_unit;
+
+	//========== Validate promotion============
+	public function scenarios()
+    {
+        return [
+            self::SCENARIO_ADD_PROMOTION => ['promotion_code'],
+        ];
+    }
+
+	public function rules()
+    {
+
+        return [
+            [['promotion_code'], 'trim'],
+            ['promotion_code', 'validateCode'],
+        ];
+    }
+
+    public function validateCode($attribute, $params)
+    {
+        if (!$this->promotion_code) return;
+        $user_id = Yii::$app->user->id;
+        $item = $this->getItem();
+        $game_id = $item->id;
+        $promotion = $this->getPromotion();
+        if (!$promotion) {
+            $this->addError($attribute, 'This voucher code is not exist');
+        } elseif (!$promotion->isValid(['user_id' => $user_id, 'game_id' => $game_id])) {
+            $this->addError($attribute, 'This voucher is not valid');
+        }
+    }
+
+    public function getPromotion()
+    {
+        return CartPromotion::findOne(['code' => $this->promotion_code, 'promotion_scenario' => Promotion::SCENARIO_BUY_GEMS]);
+    }
+
+
 
 	/** instance of CartItemInterface */
-	// protected $discount;
-
+	//==========Item=========
 	public function getItem() 
 	{
 		$items = $this->getItems(static::ITEM_PRODUCT);
@@ -25,38 +73,43 @@ class Cart extends \yii2mod\cart\Cart
 		return $item;
 	}
 
-	public function getDiscountItem()
+	//========Promotion==========
+	public function getPromotionItem()
 	{
-		// if ($this->discount instanceof CartItemInterface) return $this->discount;
-		// return null;
-		$items = $this->getItems(static::ITEM_DISCOUNT);
+		$items = $this->getItems(static::ITEM_PROMOTION);
 		$item = reset($items);
 		return $item;
 	}
 
-	public function setDiscountItem($item)
+	public function setPromotionItem($item)
 	{
 		$this->add($item);
 	}
 
-	public function removeDiscountItem()
+	public function removePromotionItem()
 	{
-		// $this->discount = null;
-		// $this->getStorage()->save($this);
-		$item = $this->getDiscountItem();
+		$item = $this->getPromotionItem();
 		if (!$item) return;
 		$this->remove($item->getUniqueId());
 	}
 
-	public function hasDiscount()
+	public function hasPromotion()
 	{
-		// return (boolean)$this->discount;
-		$item = $this->getDiscountItem();
+		$item = $this->getPromotionItem();
 		return (boolean)$item;
 	}
 
+	public function applyPromotion()
+	{
+		if (!$this->hasPromotion()) return;
+		$promotion = $this->getPromotionItem();
+		$this->promotion_unit = $promotion->getPrice();
+		$this->promotion_coin = $promotion->getPrice();
+	}
+
+	//============= For product ==========
 	/**
-	 * The total of products only
+	 * The total of items only
 	 */
 	public function getSubTotalPrice()
 	{
@@ -66,29 +119,23 @@ class Cart extends \yii2mod\cart\Cart
 
 	public function getTotalPrice()
 	{
+		if (!$this->promotion_coin) $this->applyPromotion();
 		$subTotal = $this->getSubTotalPrice();
-		$fee = $this->getTotalFee();
-		$discount = $this->getTotalDiscount();
-		$sum = $subTotal + $fee - $discount;
+		$sum = $subTotal - $this->promotion_coin;
 		return $sum;
 	}
 
-	public function getTotalFee()
+	public function getSubTotalUnit()
 	{
-		return 0;
+		$item = $this->getItem();
+		return $item->getTotalUnit();
 	}
 
-	public function getTotalDiscount()
+	public function getTotalUnit()
 	{
-		if (!$this->hasDiscount()) return 0;
-		$discount = $this->getDiscountItem();
-		return $discount->getPrice();
-	}
-
-	public function getTotalBenefit()
-	{
-		if (!$this->hasDiscount()) return 0;
-		$discount = $this->getDiscountItem();
-		return $discount->getPrice();
+		if (!$this->promotion_unit) $this->applyPromotion();
+		$subTotal = $this->getSubTotalUnit();
+		$sum = $subTotal - $this->promotion_unit;
+		return $sum;
 	}
 }

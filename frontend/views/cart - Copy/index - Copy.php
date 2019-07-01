@@ -4,27 +4,23 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-use frontend\components\cart\CartItem;
-use frontend\components\cart\Cart;
 
-// $item = $cart->getItem();
+$item = $cart->getItem();
 ?>
 
 <?php Pjax::begin(); ?>
-
+<?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
 <section class="section section-lg bg-default">
   <div class="container container-wide">
     <div class="row row-fix justify-content-lg-center">
       <div class="col-xl-11 col-xxl-8">
-        <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
-        <?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
         <div class="table-novi table-custom-responsive table-shop-responsive">
           <table class="table-custom table-shop table">
             <thead>
               <tr>
                 <th style="width: 30%;">Game</th>
                 <th style="width: 10%;">King Coin</th>
-                <th style="width: 10%;"><?=ucfirst($item->unit_name);?></th>
+                <th style="width: 10%;"><?=ucfirst($item->getUnitName());?></th>
                 <th style="width: 20%;">Quantity</th>
               </tr>
             </thead>
@@ -32,12 +28,12 @@ use frontend\components\cart\Cart;
               <tr>
                 <td>
                   <div class="unit flex-row align-items-center">
-                    <div class="unit-left"><a href="<?=Url::to(['game/view', 'id' => $item->id]);?>"><img src="<?=$item->getImageUrl('71x71');?>" alt="" width="54" height="71"/></a></div>
+                    <div class="unit-left"><a href="<?=Url::to(['game/view', 'id' => $item->game_id]);?>"><img src="<?=$item->getGame()->getImageUrl('71x71');?>" alt="" width="54" height="71"/></a></div>
                     <div class="unit-body"><a class="text-gray-darker" style="white-space: normal;" href="javascript:;"><?=$item->getLabel();?></a></div>
                   </div>
                 </td>
                 <td id="price"><?=number_format($item->getTotalPrice());?></td>
-                <td id="unit"><?=number_format($item->getTotalUnit());?></td>
+                <td id="unit"><?=number_format($item->getTotalPack());?></td>
                 <td>
                   <?= $form->field($item, 'quantity', [
                     'options' => ['class' => 'form-wrap box-width-1 shop-input'],
@@ -53,16 +49,13 @@ use frontend\components\cart\Cart;
             </tbody>
           </table>
         </div>
-        <?php ActiveForm::end(); ?>
-
-        <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
-        <?=Html::hiddenInput('scenario', Cart::SCENARIO_ADD_PROMOTION);?>
         <div class="row row-fix justify-content-between align-items-md-center text-center">
           <div class="col-md-7 col-xl-6 cell-xxl-5">
             <!-- RD Mailform: Subscribe-->
             <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
               <div class="rd-mailform-inline-inner">
-                <?= $form->field($cart, 'promotion_code', [
+                <?php if (!$discount->code) : ?>
+                <?= $form->field($discount, 'code', [
                   'options' => ['class' => 'form-wrap'],
                   'inputOptions' => ['class' => 'form-input', 'id' => 'voucher'],
                   'labelOptions' => ['class' => 'form-label'],
@@ -70,25 +63,34 @@ use frontend\components\cart\Cart;
                   'template' => '{input}{error}{label}'
                 ])->textInput()->label('Enter your voucher'); ?>
                 <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
+                <?php else :?>
+                <?= $form->field($discount, 'code', [
+                  'options' => ['class' => 'form-wrap'],
+                  'inputOptions' => ['class' => 'form-input', 'readonly' => true, 'id' => 'voucher'],
+                  'labelOptions' => ['class' => 'form-label'],
+                  'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
+                  'template' => '{input}{error}{label}'
+                ])->textInput()->label('Enter your voucher'); ?>
+                <button id="remove_voucher" class="button form-button button-sm button-secondary button-nina">Remove</button>
+                <?php endif;?>
               </div>
             </div>
           </div>
           <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
-            <div class="heading-5 text-regular">Sub total: <span><?=number_format($cart->getSubTotalUnit());?></span></div>
+            <div class="heading-5 text-regular">Sub total: <span><?=number_format($cart->getSubTotalPrice());?></span></div>
           </div>
           <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
-            <div class="heading-5 text-regular">Total: <span><?=number_format($cart->getTotalUnit());?></span></div>
+            <div class="heading-5 text-regular">Total: <span><?=number_format($cart->getTotalPrice());?></span></div>
           </div>
         </div>
-        <?php ActiveForm::end(); ?>
       </div>
     </div>
   </div>
 </section>
+<?php ActiveForm::end(); ?>
 <?php Pjax::end(); ?>
 
-<?php $form = ActiveForm::begin(['id' => 'update-cart1', 'action' => ['cart/index']]); ?>
-<?=Html::hiddenInput('scenario', CartItem::SCENARIO_INFO_CART);?>
+<?php $form = ActiveForm::begin(['id' => 'update-cart', 'action' => ['cart/update']]); ?>
 <section class="section section-lg bg-default novi-background bg-cover text-center">
   <!-- section wave-->
   <div class="container">
@@ -177,7 +179,7 @@ use frontend\components\cart\Cart;
           </div>
           <div class="col-lg-12 offset-custom-1">
             <div class="form-button text-md-right">
-              <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina', 'id' => 'update-cart-button']) ?>
+              <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina']) ?>
             </div>
           </div>
         </div>
@@ -188,26 +190,15 @@ use frontend\components\cart\Cart;
 <?php ActiveForm::end(); ?>
 <?php
 $script = <<< JS
-$('body').on('click', "#update-cart-button1", function(){
-  var form = $(this).closest('form');
-  $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        if (!result.status) {
-          if (result.errors) {
-            alert(result.errors);
-          }
-        } else {
-          window.location.href = result.checkout_url;
-        }
-      },
-  });
-});
+var complainForm = new AjaxFormSubmit({element: 'form#update-cart'});
+complainForm.success = function (data, form) {
+  window.location.href = "[:checkout_url]";
+}
+complainForm.error = function (errors) {
+  console.log(errors);
+}
 
-$('body').on('change', "#quantity", function(){
+$('body').on('change', "#products, #quantity", function(){
   $(this).closest('form').submit();
 });
 $('body').on('click', '#apply_voucher', function(e){
@@ -226,5 +217,6 @@ $('body').on('click', '#remove_voucher', function(e){
 })
 
 JS;
+$script = str_replace("[:checkout_url]", Url::to(['cart/checkout']), $script);
 $this->registerJs($script);
 ?>

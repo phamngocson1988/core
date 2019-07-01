@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 use frontend\widgets\LoginPopupWidget;
 use yii\widgets\Pjax;
 
+$game = $item->getGame();
 ?>
 <!-- Product Page-->
 <section class="section section-lg bg-default">
@@ -37,17 +38,17 @@ use yii\widgets\Pjax;
         <p class="text-spacing-sm"><?=$game->excerpt;?></p>
         <ul class="inline-list">
           <li class="text-center"><span class="icon novi-icon icon-md mdi mdi-coin text-secondary-3"></span>
-            <p class="text-spacing-sm offset-0">Price<br><h4 id="price"><?=$game->getTotalPrice();?></h4></p>
+            <p class="text-spacing-sm offset-0">Price<br><h4 id="price"><?=$item->getTotalPrice();?></h4></p>
           </li>
           <li class="text-center"><span class="icon novi-icon icon-md mdi mdi-trophy text-secondary-3"></span>
-            <p class="text-spacing-sm offset-0"><?=ucfirst($game->unit_name);?><br><h4 id="unit"><?=$game->getTotalUnit();?></h4></p>
+            <p class="text-spacing-sm offset-0"><?=ucfirst($item->getUnitName());?><br><h4 id="unit"><?=$item->getTotalPack();?></h4></p>
           </li>
         </ul>
         <ul class="inline-list">
           <li class="text-middle">
-            <?= $form->field($game, 'quantity', [
+            <?= $form->field($item, 'quantity', [
               'options' => ['class' => 'form-wrap box-width-1 shop-input'],
-              'inputOptions' => ['class' => 'form-input input-append', 'type' => 'number', 'min' => 0.5, 'step' => 0.5, 'id' => 'quantity'],
+              'inputOptions' => ['class' => 'form-input input-append', 'type' => 'number', 'min' => 1, 'id' => 'quantity'],
               'template' => '{input}{error}'
             ])->textInput() ?>
           </li>
@@ -87,6 +88,6 @@ $('body').on('click', "#add-cart-button", function(){
   });
 });
 JS;
-$script = str_replace("[:addcart_url]", Url::to(['cart/add', 'id' => $game->id]), $script);
+$script = str_replace("[:addcart_url]", Url::to(['cart/add', 'id' => $item->game_id]), $script);
 $this->registerJs($script);
 ?>

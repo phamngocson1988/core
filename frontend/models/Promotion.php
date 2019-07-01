@@ -28,17 +28,17 @@ class PromotionQuery extends ActiveQuery
     public function init()
     {
         $now = date('Y-m-d');
-        $this->andOnCondition([
+        $this->where([
             'status' => Promotion::STATUS_VISIBLE,
             'is_valid' => Promotion::IS_VALID,
-            ['OR', 
-                ['<=', 'from_date', $now],
-                ['from_date' => null]
-            ],
-            ['OR', 
-                ['>=', 'to_date', $now],
-                ['to_date' => null]
-            ]
+        ]);
+        $this->andWhere(['OR', 
+            ['<=', 'from_date', $now],
+            ['from_date' => null]
+        ]);
+        $this->andWhere(['OR', 
+            ['>=', 'to_date', $now],
+            ['to_date' => null]
         ]);
         parent::init();
     }
