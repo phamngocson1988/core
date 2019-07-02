@@ -19,6 +19,7 @@ use frontend\forms\ContactForm;
 use common\models\User;
 use common\forms\SendmailForm;
 use frontend\models\Game;
+use frontend\models\Promotion;
 
 /**
  * Site controller
@@ -84,8 +85,12 @@ class SiteController extends Controller
     {
         $this->layout = 'home';
         $games = Game::find()->limit(10)->all();
+        // Fetch valid promotions which just apply for game
+        $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
+
         return $this->render('index', [
-            'games' => $games
+            'games' => $games,
+            'promotions' => $promotions
         ]);
     }
 
@@ -184,7 +189,7 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $this->layout = 'signup';
+        // $this->layout = 'signup';
         $model = new SignupForm();
         $model->setNeedConfirm(true);
         if ($model->load(Yii::$app->request->post())) {

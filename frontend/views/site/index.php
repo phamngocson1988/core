@@ -22,16 +22,30 @@ $this->title = 'Home Page';
         <div class="prod-price">
           <span><?=number_format($game->pack);?> GEMS</span> for COC
         </div>
+        <?php 
+        $gameId = $game->id;
+        $unit = $game->pack;
+        $gamePromotions = array_filter($promotions, function($promotion) use ($gameId) {
+          return $promotion->canApplyForGame($gameId);
+        });
+        usort($gamePromotions, function($p1, $p2) use ($unit) {
+          return ($p1->apply($unit) < $p2->apply($unit)) ? 1 : -1;
+        });
+        $gamePromotion = reset($gamePromotions);
+        if ($gamePromotion) :
+          $benefit = $gamePromotion->getBenefit();
+        ?>
         <div class="prod-code">
           <div class="prod-code-left">
             <p>Nhập mã</p>
-            <p>5TS8798</p>
+            <p><?=$gamePromotion->code;?></p>
           </div>
           <div class="prod-code-right">
-            <p>-80 GEMS</p>
+            <p>+<?=$gamePromotion->apply($game->pack);?> GEMS</p>
             <p>cho HFKEJK</p>
           </div>
         </div>
+        <?php endif;?>
       </div>
       <?php endforeach;?>
       <div class="col col-lg-20-per col-sm-12 prod-item">

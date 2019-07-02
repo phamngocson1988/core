@@ -8,17 +8,13 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
-use frontend\forms\FetchProductForm;
-use frontend\models\AddCartForm;
-use frontend\models\Product;
-use common\models\Order;
-use common\models\OrderItems;
-use common\models\OrderFee;
+
 use frontend\components\cart\Cart;
 use frontend\components\cart\CartItem;
-use frontend\components\cart\CartDiscount;
 use frontend\components\cart\CartPromotion;
-use common\models\UserWallet;
+use frontend\models\Order;
+use frontend\models\UserWallet;
+use frontend\models\PromotionApply;
 
 /**
  * CartController
@@ -88,6 +84,8 @@ class CartController extends Controller
                             $cart->setPromotionItem($discount);
                             $cart->applyPromotion();
                         }
+                    } else {
+                        $cart->removePromotionItem();
                     }
                     
                 } elseif ($item->scenario == CartItem::SCENARIO_INFO_CART) {
@@ -157,15 +155,19 @@ class CartController extends Controller
         // Create order
         $user = Yii::$app->user->getIdentity();
         $cart = Yii::$app->cart;
+        if ($cart->hasPromotion()) {
+            $cart->applyPromotion();
+        }
         $totalPrice = $cart->getTotalPrice();
         $subTotalPrice = $cart->getSubTotalPrice();
-        $discount = $cart->getTotalDiscount();
-        $cartItem = $cart->getItem();
+        $promotionCoin = $cart->getPromotionCoin();
+        $promotionUnit = $cart->getPromotionUnit();
 
+        $cartItem = $cart->getItem();
         // Order detail
         $order = new Order();
         $order->sub_total_price = $subTotalPrice;
-        $order->total_discount = $discount;
+        $order->total_discount = $promotionCoin;
         $order->total_price = $totalPrice;
         $order->customer_id = $user->id;
         $order->customer_name = $user->name;
@@ -177,11 +179,13 @@ class CartController extends Controller
         $order->generateAuthKey();
 
         // Item detail
-        $order->game_id = $cartItem->getGame()->id;
+        $order->game_id = $cartItem->id;
         $order->game_title = $cartItem->getLabel();
         $order->quantity = $cartItem->quantity;
-        $order->unit_name = $cartItem->getUnitName();
-        $order->total_unit = $cartItem->getTotalPack();
+        $order->unit_name = $cartItem->unit_name;
+        $order->sub_total_unit = $cartItem->getTotalUnit();
+        $order->promotion_unit = $promotionUnit;
+        $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
         $order->username = $cartItem->username;
         $order->password = $cartItem->password;
         $order->platform = $cartItem->platform;
@@ -193,24 +197,21 @@ class CartController extends Controller
 
         if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        if ($cart->hasDiscount()) {
-            $discountItem = $cart->getDiscountItem();
-            $itemFee = new OrderFee();
-            $itemFee->order_id = $order->id;
-            $itemFee->type = OrderFee::TYPE_DISCOUNT;
-            $itemFee->description = $discountItem->code;
-            $itemFee->reference = $discountItem->getPromotion()->id;
-            $itemFee->amount = $discountItem->getPrice();
-            $itemFee->save();
+        if ($cart->hasPromotion()) {
+            $promotionItem = $cart->getPromotionItem();
+            $apply = new PromotionApply();
+            $apply->promotion_id = $promotionItem->id;
+            $apply->user_id = $user->id;
+            $apply->save();
         }
 
         $wallet = new UserWallet();
         $wallet->coin = (-1) * $totalPrice;
         $wallet->balance = $user->getWalletAmount() + $wallet->coin;
         $wallet->type = UserWallet::TYPE_OUTPUT;
-        $wallet->description = "Pay for order #$order->auth_key";
+        $wallet->description = "Pay for order #$order->id";
         $wallet->ref_name = Order::classname();
-        $wallet->ref_key = $order->auth_key;
+        $wallet->ref_key = $order->id;
         $wallet->created_by = $user->id;
         $wallet->user_id = $user->id;
         $wallet->status = UserWallet::STATUS_COMPLETED;
@@ -228,7 +229,7 @@ class CartController extends Controller
             ->setTextBody("Thanks for your order")
             ->send();
         }
-        $this->layout = 'notice';
+        // $this->layout = 'notice';
         return $this->render('/site/notice', [           
             'title' => 'Place order successfully',
             'content' => 'Congratulation.'

@@ -49,6 +49,8 @@ class m181217_033141_create_order_table extends Migration
             'game_title' => $this->string(255)->notNull(),
             'game_pack' => $this->float(1)->notNull()->defaultValue(1),
             'unit_name' => $this->string(50)->notNull(),
+            'sub_total_unit' => $this->integer(11)->defaultValue(0),
+            'promotion_unit' => $this->integer(11)->defaultValue(0),
             'total_unit' => $this->integer(11)->defaultValue(0),
             'doing_unit' => $this->integer(11)->defaultValue(0),
             'username' => $this->string(255),
@@ -140,20 +142,20 @@ class m181217_033141_create_order_table extends Migration
             'created_by' => $this->integer(11)->notNull(),
         ]);
 
-        $this->createTable('{{%order_fee}}', [
-            'id' => $this->primaryKey(),
-            'order_id' => $this->integer(11)->notNull(),
-            'type' => $this->string(50)->notNull(),
-            'description' => $this->string(100),
-            'reference' => $this->string(50),
-            'amount' => $this->integer(11)->notNull()->defaultValue(0),
-        ]);
+        // $this->createTable('{{%order_fee}}', [
+        //     'id' => $this->primaryKey(),
+        //     'order_id' => $this->integer(11)->notNull(),
+        //     'type' => $this->string(50)->notNull(),
+        //     'description' => $this->string(100),
+        //     'reference' => $this->string(50),
+        //     'amount' => $this->integer(11)->notNull()->defaultValue(0),
+        // ]);
 
-        if ($this->db->driverName === 'mysql') {
-            $type = "ALTER TABLE {{%order_fee}} MODIFY `type` ENUM('discount','fee','tax') NOT NULL";
-            $command = $this->db->createCommand($type);
-            $command->execute();
-        }
+        // if ($this->db->driverName === 'mysql') {
+        //     $type = "ALTER TABLE {{%order_fee}} MODIFY `type` ENUM('discount','fee','tax') NOT NULL";
+        //     $command = $this->db->createCommand($type);
+        //     $command->execute();
+        // }
     }
 
     /**
@@ -165,7 +167,7 @@ class m181217_033141_create_order_table extends Migration
         // $this->dropTable('{{%order_items}}');
         $this->dropTable('{{%order_image}}');
         $this->dropTable('{{%order_comments}}');
-        $this->dropTable('{{%order_fee}}');
+        // $this->dropTable('{{%order_fee}}');
         $this->dropTable('{{%order_file}}');
     }
 }

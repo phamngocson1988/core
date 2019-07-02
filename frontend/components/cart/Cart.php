@@ -20,6 +20,7 @@ class Cart extends \yii2mod\cart\Cart
 
 	protected $promotion_coin;
 	protected $promotion_unit;
+	protected $promotion_money;
 
 	/** instance of CartItemInterface */
 	//==========Item=========
@@ -63,25 +64,7 @@ class Cart extends \yii2mod\cart\Cart
 		$promotion->applyCart($this);
 	}
 
-	public function getPromotionUnit()
-	{
-		return (int)$this->promotion_unit;
-	}
-
-	public function setPromotionUnit($amount)
-	{
-		$this->promotion_unit = $amount;
-	}
-
-	public function getPromotionCoin()
-	{
-		return (int)$this->promotion_coin;
-	}
-
-	public function setPromotionCoin($amount)
-	{
-		$this->promotion_coin = $amount;
-	}
+	
 
 	//============= For product ==========
 	/**
@@ -111,5 +94,36 @@ class Cart extends \yii2mod\cart\Cart
 		$subTotal = $this->getSubTotalUnit();
 		$sum = $subTotal + $this->getPromotionUnit();
 		return $sum;
+	}
+
+	// =============get/set benefit===========
+	public function getPromotionUnit()
+	{
+		return (int)$this->promotion_unit;
+	}
+
+	public function setPromotionUnit($amount)
+	{
+		$this->promotion_unit = $amount;
+	}
+
+	public function getPromotionCoin()
+	{
+		return (int)$this->promotion_coin;
+	}
+
+	public function setPromotionCoin($amount)
+	{
+		$this->promotion_coin = $amount;
+	}
+
+	public function getPromotionMoney()
+	{
+		return (int)$this->promotion_money;
+	}
+
+	public function setPromotionMoney($amount)
+	{
+		$this->promotion_money = $amount;
 	}
 }

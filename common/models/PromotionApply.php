@@ -25,7 +25,7 @@ class PromotionApply extends ActiveRecord
             [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => fasle,
+                'updatedAtAttribute' => false,
                 'value' => date('Y-m-d H:i:s')
             ],
         ];

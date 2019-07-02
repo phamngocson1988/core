@@ -16,15 +16,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\components\kingcoin\CartDiscount;
 use frontend\components\kingcoin\CartItem;
-// use PayPal\Api\Amount;
-// use PayPal\Api\Details;
-// use PayPal\Api\Item;
-// use PayPal\Api\ItemList;
-// use PayPal\Api\Payer;
-// use PayPal\Api\Payment;
-// use PayPal\Api\RedirectUrls;
-// use PayPal\Api\Transaction as PaypalTransaction;
-// use PayPal\Api\PaymentExecution;
 
 
 use frontend\components\payment\cart\PaymentItem;

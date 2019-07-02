@@ -31,12 +31,22 @@ class CartPromotion extends Promotion implements CartItemInterface
 
     public function validateCode($attribute, $params)
     {
+        if ($this->promotion_scenario != self::SCENARIO_BUY_GEMS) {
+            $this->addError($attribute, 'This voucher code is not valid');
+        }
         if ($this->user_id && !$this->canApplyForUser($this->user_id)) {
             $this->addError($attribute, 'This voucher code is not valid for this user');
         }
         if ($this->game_id && !$this->canApplyForGame($this->game_id)) {
             $this->addError($attribute, 'This voucher code is not valid for this game');
         }
+    }
+
+    public function applyCart(&$cart)
+    {
+        $benefit = $this->getBenefit();
+        if (!$benefit) return;
+        $benefit->applyCart($cart);
     }
 
    

@@ -1,10 +1,6 @@
 <?php
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-use frontend\widgets\LoginPopupWidget;
-use yii\widgets\Pjax;
 
 ?>
 <!-- Product Page-->
@@ -30,7 +26,6 @@ use yii\widgets\Pjax;
         </div>
       </div>
       <div class="col-lg-7 col-xl-6 col-xxl-6 text-center text-lg-left">
-        <?php Pjax::begin(); ?>
         <?php $form = ActiveForm::begin(['id' => 'add-to-cart', 'class' => 'rd-mailform form-fix', 'options' => ['data-pjax' => 'true']]); ?>
         <h3><?=$game->title;?></h3>
         <div class="divider divider-default"></div>
@@ -52,41 +47,35 @@ use yii\widgets\Pjax;
             ])->textInput() ?>
           </li>
           <li class="text-middle">
-            <?= Html::button('Add to cart', ['class' => 'button button-sm button-secondary button-nina', 'data-pjax' => 'false', 'id' => 'add-cart-button']) ?>
+            <?= Html::hiddenInput('action', null, ['id' => 'action']);?>
+            <?= Html::submitButton('Add to cart', ['class' => 'button button-sm button-secondary button-nina', 'data-pjax' => 'false', 'id' => 'add-cart-button']) ?>
           </li>
-          <!-- <li class="text-middle"><a class="button button-sm button-default-outline button-nina" href="#">add to wishlist</a></li> -->
         </ul>
         <?php ActiveForm::end(); ?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
   </div>
 </section>
-<?=LoginPopupWidget::widget(['popup_id' => 'account-modal']);?>
 <?php
 $script = <<< JS
 $('body').on('change', "#quantity", function(){
-  $(this).closest('form').submit();
-});
-$('body').on('click', "#add-cart-button", function(){
+  $('#action').val('change');
   var form = $(this).closest('form');
   $.ajax({
-      url: '[:addcart_url]',
+      url: form.attr('action'),
       type: form.attr('method'),
       dataType : 'json',
       data: form.serialize(),
       success: function (result, textStatus, jqXHR) {
         if (!result.status) {
-          if (result.errors) {
-            alert(result.errors);
-          }
+          alert(result.error);
         } else {
-          window.location.href = result.cart_url;
+          $('#price').html(result.data.price);
+          $('#unit').html(result.data.unit);
         }
       },
   });
 });
 JS;
-$script = str_replace("[:addcart_url]", Url::to(['cart/add', 'id' => $game->id]), $script);
 $this->registerJs($script);
 ?>

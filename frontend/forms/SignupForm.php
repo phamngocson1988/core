@@ -20,7 +20,6 @@ class SignupForm extends Model
     public $country_code;
     public $phone;
     public $birthday;
-    // public $favorite;
     public $is_reseller;
     public $invite_code;
     public $verifyCode;
@@ -93,9 +92,7 @@ class SignupForm extends Model
      */
     public function signup()
     {
-        if (!$this->validate()) {
-            return null;
-        }
+        if (!$this->validate())  return null;
         
         $user = new User();
         $user->username = $this->email;
@@ -103,7 +100,6 @@ class SignupForm extends Model
         $user->name = $this->name;
         $user->country_code = $this->country_code;
         $user->phone = $this->phone;
-        // $user->favorite = $this->favorite;
         $user->birthday = $this->birthday;
         $user->affiliate_code = Yii::$app->security->generateRandomString(6);
         $user->is_reseller = $this->is_reseller;

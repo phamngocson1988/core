@@ -52,34 +52,34 @@ class m180517_025826_create_product_schema extends Migration
             'image_id' => $this->integer()->notNull()
         ], $tableOptions);
 
-        $this->createTable('{{%product}}', [
-            'id' => $this->primaryKey(),
-            'title' => $this->string(100)->notNull(),
-            'game_id' => $this->integer()->notNull(),
-            'image_id' => $this->integer(),
-            'price' => $this->integer(),
-            'unit' => $this->integer(),
-            'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
-            'position' => $this->integer(),            
-            'created_at' => $this->dateTime(),            
-            'created_by' => $this->integer(),
-            'updated_at' => $this->dateTime(),
-            'updated_by' => $this->integer(),
-            'deleted_at' => $this->dateTime(),
-            'deleted_by' => $this->integer(),
-        ], $tableOptions);
+        // $this->createTable('{{%product}}', [
+        //     'id' => $this->primaryKey(),
+        //     'title' => $this->string(100)->notNull(),
+        //     'game_id' => $this->integer()->notNull(),
+        //     'image_id' => $this->integer(),
+        //     'price' => $this->integer(),
+        //     'unit' => $this->integer(),
+        //     'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
+        //     'position' => $this->integer(),            
+        //     'created_at' => $this->dateTime(),            
+        //     'created_by' => $this->integer(),
+        //     'updated_at' => $this->dateTime(),
+        //     'updated_by' => $this->integer(),
+        //     'deleted_at' => $this->dateTime(),
+        //     'deleted_by' => $this->integer(),
+        // ], $tableOptions);
 
-        if ($this->db->driverName === 'mysql') {
-            $alter = "ALTER TABLE {{%product}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
-            $command = $this->db->createCommand($alter);
-            $command->execute();
-        }
+        // if ($this->db->driverName === 'mysql') {
+        //     $alter = "ALTER TABLE {{%product}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+        //     $command = $this->db->createCommand($alter);
+        //     $command->execute();
+        // }
     }
 
     public function down()
     {
         $this->dropTable('{{%game}}');
         $this->dropTable('{{%game_image}}');
-        $this->dropTable('{{%product}}');
+        // $this->dropTable('{{%product}}');
     }
 }

@@ -40,13 +40,10 @@ class SpecifiedGamesRule extends PromotionRuleAbstract implements PromotionRuleI
         ]);
     }
 
-    public function isValid($params)
+    public function isValid($gameId)
     {
         if (!$this->games) return false;
-        $gameIds = ArrayHelper::getValue($params, 'game_id');
-        if (!$gameIds) return false;
-        if (!is_array($gameIds)) $gameIds = (array)$gameIds;
-        return !empty(array_intersect($gameIds, $this->games));
+        return in_array($gameId, $this->games);
     }
 
     protected function loadAllGames()
