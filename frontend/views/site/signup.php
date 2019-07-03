@@ -21,86 +21,21 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="col-md-8 col-lg-6 col-xl-4">
         <!-- RD Mailform-->
         <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix']); ?>
-          <?= $form->field($model, 'email', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Input your email', 'id' => 'email'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}',
-            'validateOnBlur' => false
-          ])->textInput() ?>
+          <?= $form->field($model, 'firstname')->textInput() ?>
+          <?= $form->field($model, 'lastname')->textInput() ?>
+          <?= $form->field($model, 'username')->textInput() ?>
+          <?= $form->field($model, 'password')->passwordInput() ?>
+          <?= $form->field($model, 'repassword')->passwordInput() ?>
+          <?= $form->field($model, 'email')->textInput() ?>
+          <?= $form->field($model, 'birth_date')->textInput() ?>
+          <?= $form->field($model, 'birth_month')->textInput() ?>
+          <?= $form->field($model, 'birth_year')->textInput() ?>
+          <?= $form->field($model, 'currency')->textInput() ?>
+          <?= $form->field($model, 'country_code')->textInput() ?>
+          <?= $form->field($model, 'phone')->textInput() ?>
 
-          <?= $form->field($model, 'name', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Input your name'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->textInput() ?>
 
-          <?= $form->field($model, 'country_code', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Chọn game yêu thích'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->dropDownList(Yii::$app->params['country_code']) ?>
-
-          <?= $form->field($model, 'phone', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Input your phone'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->textInput() ?>
-
-          <?= $form->field($model, 'birthday', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'readonly' => true, 'placeholder' => 'Input your birthday'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          // ])->widget(\yii\jui\DatePicker::className(),['clientOptions' => ['changeMonth' => true, 'changeYear' => true], "dateFormat" => "yyyy-MM-dd"]) 
-          ])->widget(\dosamigos\datepicker\DatePicker::className(), [
-            'inline' => false, 
-            'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon" style="border-radius: 0px 35px 35px 0px"><i class="mdi mdi-calendar"></i></div></div>',
-            'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd'
-            ]
-          ]);
-          ?>
-
-          <?= $form->field($model, 'password', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Input your password'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->passwordInput() ?>
-          <?= $form->field($model, 'repassword', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Re-type your password'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->passwordInput() ?>
-
-          <?= $form->field($model, 'invite_code', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Invite code'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->textInput() ?>
-
-          <?= $form->field($model, 'is_reseller', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Choose type of account'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->dropDownList(User::getResellerStatus()) ?>
-
-          <?= $form->field($model, 'verifyCode', [
+          <?= $form->field($model, 'captcha', [
             'options' => ['class' => 'form-wrap form-wrap-validation'],
             'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Input captcha'],
             'labelOptions' => ['class' => 'form-label'],

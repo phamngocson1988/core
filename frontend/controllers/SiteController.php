@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -15,12 +16,12 @@ use frontend\forms\ResetPasswordForm;
 use frontend\forms\SignupForm;
 use frontend\forms\ActiveCustomerForm;
 use frontend\forms\ContactForm;
+use frontend\forms\VerifyAccountViaPhoneForm;
 
 use common\models\User;
 use common\forms\SendmailForm;
 use frontend\models\Game;
 use frontend\models\Promotion;
-
 /**
  * Site controller
  */
@@ -187,7 +188,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup()
+    public function actionSignup1()
     {
         // $this->layout = 'signup';
         $model = new SignupForm();
@@ -226,6 +227,61 @@ class SiteController extends Controller
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionSignup()
+    {
+        $request = Yii::$app->request;
+        $model = new SignupForm();
+        if ($model->load($request->post()) && ($user = $model->signup())) {
+            $verify = VerifyAccountViaPhoneForm::findUserByAuth($user->auth_key);
+            if (!$verify->send()) {
+                Yii::$app->getSession()->setFlash('error', $verify->getErrorSummary(true));
+            } else {
+                Yii::$app->getSession()->setFlash('success', 'A verification code is sent to your phone, type it to form below to active your account.');
+            }
+            return $this->redirect(['site/verify-phone', 'auth' => $user->auth_key]);
+        }
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionVerifyPhone($auth)
+    {
+        $request = Yii::$app->request;
+        $model = VerifyAccountViaPhoneForm::findUserByAuth($auth);
+        if (!$model) throw new NotFoundHttpException('model does not exist.');
+        if ($model->load($request->post()) && $model->verify()) {
+            Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
+            return $this->redirect(['site/login']);
+        } else {
+            $model->send();
+            print_r($model);
+        }
+        return $this->render('verify-phone', ['model' => $model]);
+    }
+
+    public function actionTest($phone)
+    {
+        $provider = new \common\components\telecom\SpeedSms();
+        if (!$provider->sms($phone)) {
+            print_r($provider);
+        }
+        echo 'Success';
+    }
+
+    public function actionSendVerificationCode($auth)
+    {
+        $user = User::findOne(['auth_key' => $auth, 'status' => User::STATUS_INACTIVE]);
+        if (!$user) throw new NotFoundHttpException('model does not exist.');
+        $service = new \common\components\telecom\SpeedSms();
+        $phone = sprintf("%s%s", $user->country_code, $user->phone);
+        if (!$service->sms($phone)) {
+            Yii::$app->getSession()->setFlash('error', $service->getErrorSummary(true));
+            return $this->redirect($request->getReferrer());
+        }
+        return $this->redirect(['site/verify-phone', 'auth' => $auth]);
     }
 
     public function actionFindEmail($email)
