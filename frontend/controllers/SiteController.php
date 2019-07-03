@@ -188,47 +188,6 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup1()
-    {
-        // $this->layout = 'signup';
-        $model = new SignupForm();
-        $model->setNeedConfirm(true);
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                // Send mail notify admin if this user register to become reseller
-                if ($model->is_reseller == User::IS_RESELLER) {
-                    $settings = Yii::$app->settings;
-                    $adminEmail =  $settings->get('ApplicationSettingForm', 'admin_email', null);
-                    if ($adminEmail) {
-                        $notifyMail = new SendmailForm();
-                        $notifyMail->subject = '[Notification] New reseller have just registered';
-                        $notifyMail->body = 'New reseller have just registered: #' . $user->id;
-                        $notifyMail->template = 'notify_reseller_mail';
-                        $notifyMail->params = ['user' => $user];
-                        $notifyMail->send($adminEmail);
-                    }
-                }
-                // If need to confirm, send mail to customer
-                if ($model->isNeedConfirm()) {
-                    $activeLink = Yii::$app->urlManager->createAbsoluteUrl(['site/activate', 'id' => $user->id, 'key' => $user->auth_key]);
-                    $signupMail = new SendmailForm();
-                    $signupMail->subject = 'Signup Confirmation';
-                    $signupMail->body = 'Click this link ' . Html::a('confirm', $activeLink);
-                    $signupMail->template = 'signup_mail';
-                    $signupMail->params = ['user' => $user, 'link' => $activeLink];
-                    $signupMail->send($user->email);
-                } else { // If no need to confirm, log user in
-                    Yii::$app->getUser()->login($user);
-                }                
-                return $this->redirect(['site/success']);
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
-    }
-
     public function actionSignup()
     {
         $request = Yii::$app->request;
@@ -256,8 +215,7 @@ class SiteController extends Controller
             Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
             return $this->redirect(['site/login']);
         } else {
-            $model->send();
-            print_r($model);
+            Yii::$app->getSession()->setFlash('success', $model->getErrorSummary(true));
         }
         return $this->render('verify-phone', ['model' => $model]);
     }

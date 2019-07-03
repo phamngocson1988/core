@@ -43,6 +43,14 @@ class m130524_201442_init extends Migration
             'favorite_game_id' => $this->integer()->notNull()
         ], $tableOptions);
 
+        $this->createTable('{{%user_refer}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'email' => $this->string(255)->notNull(),
+            'name' => $this->string(255),
+            'created_at' => $this->dateTime()
+        ], $tableOptions);
+
 
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
@@ -124,6 +132,7 @@ class m130524_201442_init extends Migration
     {
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%user_favorite}}');
+        $this->dropTable('{{%user_refer}}');
         $this->dropTable('{{%post_category}}');
         $this->dropTable('{{%post}}');
         $this->dropTable('{{%category}}');

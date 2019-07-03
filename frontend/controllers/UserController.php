@@ -19,6 +19,7 @@ use frontend\models\Order;
 use common\models\UserWallet;
 use common\models\PaymentTransaction;
 use common\models\OrderComplains;
+use frontend\models\UserRefer;
 
 /**
  * UserController
@@ -267,5 +268,10 @@ class UserController extends Controller
             'filterForm' => $form,
             'coin' => $user->getWalletAmount(),
         ]);
+    }
+
+    public function actionRefer()
+    {
+        return $this->render('refer');
     }
 }

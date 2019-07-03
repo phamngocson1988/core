@@ -55,6 +55,7 @@ class SignupForm extends Model
 
             ['phone', 'trim'],
             [['country_code', 'phone'], 'required'],
+            ['phone', 'unique', 'targetClass' => User::className(), 'message' => 'This phone has already been taken.'],
 
             ['currency', 'required'],
 

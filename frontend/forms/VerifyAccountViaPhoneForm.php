@@ -17,7 +17,7 @@ class VerifyAccountViaPhoneForm extends User
     {
         return [
             [['digit_1', 'digit_2', 'digit_3', 'digit_4'], 'required'],
-            [['digit_1', 'digit_2', 'digit_3', 'digit_4'], 'number', 'max' => 1],
+            [['digit_1', 'digit_2', 'digit_3', 'digit_4'], 'number', 'max' => 9],
         ];
     }
 
