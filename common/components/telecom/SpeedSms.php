@@ -23,14 +23,29 @@ class SpeedSms extends Model
         
         $url = $this->_server . "/" . $this->_create_pin_api;
         $headers = ["Content-Type: application/json"];
-		$ch = curl_init(); 
-	    curl_setopt($ch, CURLOPT_URL, $url); 
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($smsData)); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		$ch = curl_init($url); 
+	    // curl_setopt($ch, CURLOPT_URL, $url); 
+        // curl_setopt($ch, CURLOPT_POST, TRUE);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($smsData)); 
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        // curl_setopt($ch, CURLOPT_USERPWD, $this->access_token);
+
+
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($smsData));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->access_token);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->access_token.':x');
+
+
         $returnValue = curl_exec($ch);
         // { "status": "success", "code": "00", "data": { "pin_code": "generated pin code", "tranId": "transaction id", "totalPrice": total price number } }
         // { "status": "error", "code": "error code", "message": "error description" }
@@ -54,14 +69,26 @@ class SpeedSms extends Model
         
         $url = $this->_server . "/" . $this->_verify_pin_api;
         $headers = ["Content-Type: application/json"];
-		$ch = curl_init(); 
-	    curl_setopt($ch, CURLOPT_URL, $url); 
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $smsData); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->access_token);
+		$ch = curl_init($url); 
+	    // curl_setopt($ch, CURLOPT_URL, $url); 
+        // curl_setopt($ch, CURLOPT_POST, TRUE);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $smsData); 
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($ch, CURLOPT_USERPWD, $this->access_token);
+        // curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($smsData));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->access_token.':x');
         $returnValue = curl_exec($ch);
         // { "status": "success", "data": { "pin": "Mã pin mà người dùng đã nhập", "phone": "số điện thoại của người dùng", "verified": true/fale, "remainingAttempts": số lần được phép nhập lại mã pin nếu nhập sai trước đó } }
         // { "status": "error", "code": "error code", "message": "error description" }

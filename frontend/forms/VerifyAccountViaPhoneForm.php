@@ -4,6 +4,7 @@ namespace frontend\forms;
 use Yii;
 use frontend\models\User;
 use yii\helpers\ArrayHelper;
+use frontend\events\AfterActiveEvent;
 
 class VerifyAccountViaPhoneForm extends User
 {
@@ -44,6 +45,9 @@ class VerifyAccountViaPhoneForm extends User
         }
         $this->status = self::STATUS_ACTIVE;
         $this->save();
+
+        $event = new AfterActiveEvent();
+        $this->trigger(self::EVENT_AFTER_ACTIVE, $event);
         return true;
     }
 

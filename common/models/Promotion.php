@@ -24,8 +24,8 @@ class Promotion extends ActiveRecord
     const TYPE_FIX = 'fix';
     const TYPE_PERCENT = 'percent';
 
-    const SCENARIO_BUY_GEMS = 'coin';
-    const SCENARIO_BUY_COIN = 'money';
+    const SCENARIO_BUY_GEMS = 'gems';
+    const SCENARIO_BUY_COIN = 'coin';
 
     const IS_VALID = 1;
     const IS_INVALID = 0;

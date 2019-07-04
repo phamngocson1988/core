@@ -2,15 +2,10 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\controllers\Controller;
 use yii\filters\AccessControl;
-use backend\forms\FetchImageForm;
 use yii\helpers\Url;
-use backend\forms\CreatePricingCoinForm;
-use backend\forms\EditPricingCoinForm;
-use common\models\PricingCoin;
+use backend\models\Package;
 use yii\web\NotFoundHttpException;
-use backend\forms\SetPricingCoinBest;
 /**
  * PricingCoinController
  */
@@ -36,7 +31,7 @@ class PricingCoinController extends Controller
     {
         $this->view->params['main_menu_active'] = 'coin.index';
         $request = Yii::$app->request;
-        $models = PricingCoin::find()->all();
+        $models = Package::find()->all();
         return $this->render('index.tpl', [
             'models' => $models,
         ]);
@@ -46,16 +41,14 @@ class PricingCoinController extends Controller
     {
         $this->view->params['main_menu_active'] = 'coin.create';
         $request = Yii::$app->request;
-        $model = new CreatePricingCoinForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $coin = $model->save();
-            if (!$coin) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            } else {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = Url::to(['pricing-coin/index']);
-                return $this->redirect($ref);    
-            }
+        $model = new Package();
+        $model->setScenario(Package::SCENARIO_CREATE);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = Url::to(['pricing-coin/index']);
+            return $this->redirect($ref);    
+        } else {
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
         return $this->render('create.tpl', [
             'model' => $model,
@@ -67,17 +60,15 @@ class PricingCoinController extends Controller
     {
         $this->view->params['main_menu_active'] = 'coin.index';
         $request = Yii::$app->request;
-        $model = EditPricingCoinForm::findOne($id);
+        $model = Package::findOne($id);
         if (!$model) throw new NotFoundHttpException('Not found');
-        
-        if ($model->load(Yii::$app->request->post())) {
-            if (!$model->save()) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            } else {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['pricing-coin/index']));
-                return $this->redirect($ref);    
-            }
+        $model->setScenario(Package::SCENARIO_EDIT);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = $request->get('ref', Url::to(['pricing-coin/index']));
+            return $this->redirect($ref);    
+        } else {
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
         return $this->render('edit.tpl', [
             'model' => $model,
@@ -87,9 +78,11 @@ class PricingCoinController extends Controller
 
     public function actionSetBest($id)
     {
-        $request = Yii::$app->request;
-        $model = SetPricingCoinBest::findOne($id);
-        $result = $model->setBest();
+        $model = Package::findOne($id);
+        if (!$model) throw new NotFoundHttpException('Not found');
+        Package::updateAll(['is_best' => Package::IS_NOT_BEST]);
+        $model->is_best = self::IS_BEST;
+        $model->save();
         return $this->redirect(Url::to(['pricing-coin/index'])); 
     }
 

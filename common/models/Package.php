@@ -5,9 +5,12 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 
-class PricingCoin extends ActiveRecord
+class Package extends ActiveRecord
 {
-	const IS_BEST = "Y";
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_EDIT = 'edit';	
+    
+    const IS_BEST = "Y";
     const IS_NOT_BEST = "N";
 
     CONST STATUS_VISIBLE = "Y";
@@ -30,6 +33,28 @@ class PricingCoin extends ActiveRecord
     {
         return '{{%pricing_coin}}';
     }
+
+    public function attributeLabels() { 
+
+        return  [
+            'title' => Yii::t('app', 'title'),
+            'description' => Yii::t('app', 'description'),
+            'status' => Yii::t('app', 'status'),
+            'num_of_coin' => Yii::t('app', 'num_of_coin'),
+            'unit_name' => Yii::t('app', 'unit_name'),
+            'amount' => Yii::t('app', 'amount'),
+        ];
+    }
+
+    public function rules()
+    {
+        return [
+            [['title', 'description'], 'trim'],
+            [['title', 'num_of_coin', 'amount'], 'required'],
+            ['status', 'in', 'range' => array_keys(self::getStatusList())],
+        ];
+    }
+
 
     public static function getStatusList()
     {

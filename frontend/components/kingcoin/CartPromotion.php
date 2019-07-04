@@ -1,5 +1,5 @@
 <?php
-namespace frontend\components\cart;
+namespace frontend\components\kingcoin;
 
 use Yii;
 use yii\base\Model;
@@ -31,7 +31,7 @@ class CartPromotion extends Promotion implements CartItemInterface
 
     public function validateCode($attribute, $params)
     {
-        if ($this->promotion_scenario != self::SCENARIO_BUY_GEMS) {
+        if ($this->promotion_scenario != self::SCENARIO_BUY_COIN) {
             $this->addError($attribute, 'This voucher code is not valid');
         }
         if ($this->user_id && !$this->canApplyForUser($this->user_id)) {

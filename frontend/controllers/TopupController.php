@@ -14,47 +14,21 @@ use common\models\UserWallet;
 use common\models\PaymentTransaction;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use frontend\components\kingcoin\CartDiscount;
+use frontend\components\kingcoin\CartPromotion;
 use frontend\components\kingcoin\CartItem;
 
 
 use frontend\components\payment\cart\PaymentItem;
 use frontend\components\payment\cart\PaymentCart;
-use frontend\components\payment\cart\PaymentDiscount;
+use frontend\components\payment\cart\PaymentPromotion;
 use frontend\components\payment\PaymentGateway;
 use frontend\components\payment\PaymentGatewayFactory;
 
 /**
- * UserController
+ * TopupController
  */
-class PricingController extends Controller
+class TopupController extends Controller
 {
-    const PRICING_CART = 'pricing_cart';
-
-	public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['purchase', 'success', 'store'],
-                'rules' => [
-                    [
-                        'actions' => ['purchase', 'success', 'store', 'add', 'verify'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'store' => ['post'],
-                    'purchase' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     public function beforeAction($action)
     {            
         if ($action->id == 'verify') {
@@ -64,64 +38,69 @@ class PricingController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionIndex()
+    public function actionIndex($id)
     {
         $request = Yii::$app->request;
-        $models = Package::find()->select('id')->all();
-        $items = array_map(function($model){
-            return new CartItem(['pricing_id' => $model->id, 'quantity' => 1]);
-        }, $models);
-        if ($request->isPost) {
-            $item = new CartItem();
-            $item->load($request->post());
-            $items = array_filter($items, function($model) use ($item) {
-                return $model->pricing_id == $item->pricing_id;
-            });
+        $package = CartItem::findOne($id);
+        if (!$package) throw new BadRequestHttpException('Can not find the package');
+        $package->setScenario(CartItem::SCENARIO_ADD_CART);
+        if ($package->load($request->post()) && $package->validate()) {
+            if ($request->isAjax) {
+                return $this->asJson(['status' => true, 'data' => [
+                    'price' => $package->getTotalPrice(),
+                    'coin' => $package->getTotalCoin()
+                ]]);
+            }
+            $cart = Yii::$app->kingcoin;
+            $cart->clear();
+            $cart->add($package);
+            return $this->redirect(['topup/view']);
+        }
+        if ($request->isAjax) {
+            return $this->asJson(['status' => false, 'package' => $package, 'error' => $package->getErrorSummary(true)]);
         }
     	return $this->render('index', [
-            'items' => $items,
-    	]);
-    }
-
-    public function actionAdd($id)
-    {
-    	$request = Yii::$app->request;
-    	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-    	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
-
-        $cart = Yii::$app->kingcoin;
-        $cart->clear();
-        $item = new CartItem(['pricing_id' => $id]);
-        $item->setScenario(CartItem::SCENARIO_ADD);
-        if ($item->load($request->post()) && $item->validate()) {
-            $cart->add($item);
-            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'checkout_url' => Url::to(['pricing/confirm'])]);
-        } else {
-            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
-        }
+            'package' => $package,
+        ]);
     }
 
     public function actionConfirm()
     {
         $request = Yii::$app->request;
         $cart = Yii::$app->kingcoin;
+        $promotion_code = $request->post('promotion_code');
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
-        $item->setScenario(CartItem::SCENARIO_EDIT);
-        $discount = $cart->hasDiscount() ? $cart->getDiscountItem() : new CartDiscount();
-        if ($item->load($request->post()) && $item->validate()) {
-            $cart->clear();
-            $cart->add($item);
-        }
-        if ($request->isPost && $discount->load($request->post())) {
-            if (!$discount->validate() || !$discount->code) $cart->removeDiscountItem();
-            else $cart->setDiscountItem($discount);
+        $item->setScenario($request->post('scenario'));
+        if ($request->isPost) {
+            if ($item->load($request->post()) && $item->validate()) {
+                $cart->add($item);
+                if ($item->scenario == CartItem::SCENARIO_EDIT_CART) {
+                    $discount = CartPromotion::findOne([
+                        'code' => $promotion_code,
+                        'promotion_scenario' => CartPromotion::SCENARIO_BUY_COIN,
+                    ]);
+
+                    if ($discount) {
+                        $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
+                        $discount->user_id = Yii::$app->user->id;
+                        $discount->game_id = $item->id;
+                        if (!$discount->validate() || !$discount->code) $cart->removePromotionItem();                            
+                        else {
+                            $cart->setPromotionItem($discount);
+                            $cart->applyPromotion();
+                        }
+                    } else {
+                        $cart->removePromotionItem();
+                    }
+                } 
+            }
         }
 
         return $this->render('confirm', [
-            'discount' => $discount,
             'cart' => $cart,
+            'promotion_code' => $promotion_code,
+            'item' => $item
         ]);
     }
 
@@ -151,14 +130,14 @@ class PricingController extends Controller
         ]);
         $paymentCart->addItem($paymentCartItem);
         
-        if ($cart->getTotalDiscount()) {
-            $discountItem = $cart->getDiscountItem();
-            $paymentDiscount = new PaymentDiscount([
-                'id' => $discountItem->code,
-                'title' => 'Discount promotion code ' . $discountItem->code,
-                'price' => $discountItem->getPrice()
+        if ($cart->getTotalPromotion()) {
+            $PromotionItem = $cart->getPromotionItem();
+            $paymentPromotion = new PaymentPromotion([
+                'id' => $PromotionItem->code,
+                'title' => 'promotion promotion code ' . $PromotionItem->code,
+                'price' => $PromotionItem->getPrice()
             ]);
-            $paymentCart->setDiscount($paymentDiscount);
+            $paymentCart->setPromotion($paymentPromotion);
         }
         $gateway = PaymentGatewayFactory::getClient($identifier);
         $gateway->setCart($paymentCart);
@@ -178,17 +157,17 @@ class PricingController extends Controller
             $trn->price = $subTotalPrice;
             $trn->total_price = $totalPrice;
             $trn->coin = $totalCoin;
-            $trn->discount_coin = 0;
+            $trn->Promotion_coin = 0;
             $trn->total_coin = $totalCoin;
             $trn->description = $gateway->identifier;
             $trn->created_by = $user->id;
             $trn->status = PaymentTransaction::STATUS_PENDING;
             $trn->payment_at = date('Y-m-d H:i:s');
             $trn->generateAuthKey();
-            if ($cart->getTotalDiscount()) {
-                $discount = $cart->getDiscountItem();
-                $trn->discount_price = $cart->getTotalDiscount();
-                $trn->discount_code = $discount->getPromotion()->code;
+            if ($cart->getTotalPromotion()) {
+                $promotion = $cart->getPromotionItem();
+                $trn->Promotion_price = $cart->getTotalPromotion();
+                $trn->Promotion_code = $promotion->getPromotion()->code;
             }
             $trn->save();
             $cart->clear();
@@ -295,16 +274,16 @@ class PricingController extends Controller
         ->setPrice($cartItem->getPrice());
         $itemList[] = $ppItem;
 
-        // For discount
-        if ($cart->getTotalDiscount()) {
-            $discount = $cart->getDiscountItem();
-            $discountItem = new Item();
-            $discountItem->setName($discount->getPromotion()->title)
+        // For promotion
+        if ($cart->getTotalPromotion()) {
+            $promotion = $cart->getPromotionItem();
+            $PromotionItem = new Item();
+            $PromotionItem->setName($promotion->getPromotion()->title)
             ->setCurrency('USD')
             ->setQuantity(1)
-            ->setSku($discount->code)
-            ->setPrice(($cart->getTotalDiscount()) * (-1));
-            $itemList[] = $discountItem;
+            ->setSku($promotion->code)
+            ->setPrice(($cart->getTotalPromotion()) * (-1));
+            $itemList[] = $PromotionItem;
         }
 
         $ppitemList = new ItemList();
@@ -398,17 +377,17 @@ class PricingController extends Controller
                 $trn->price = $subTotalPrice;
                 $trn->total_price = $totalPrice;//$transaction->getAmount()->getTotal();
                 $trn->coin = $totalCoin;
-                $trn->discount_coin = 0;
+                $trn->Promotion_coin = 0;
                 $trn->total_coin = $totalCoin;
                 $trn->description = "Paypal #$paymentId";
                 $trn->created_by = $user->id;
                 $trn->status = PaymentTransaction::STATUS_COMPLETED;
                 $trn->payment_at = date('Y-m-d H:i:s');
                 $trn->generateAuthKey();
-                if ($cart->getTotalDiscount()) {
-                    $discount = $cart->getDiscountItem();
-                    $trn->discount_price = $cart->getTotalDiscount();
-                    $trn->discount_code = $discount->getPromotion()->code;
+                if ($cart->getTotalPromotion()) {
+                    $promotion = $cart->getPromotionItem();
+                    $trn->Promotion_price = $cart->getTotalPromotion();
+                    $trn->Promotion_code = $promotion->getPromotion()->code;
                 }
                 $trn->save();
 

@@ -6,12 +6,15 @@ use yii\base\Model;
 use frontend\models\User;
 use frontend\models\Game;
 use yii\helpers\ArrayHelper;
+use frontend\events\AfterSignupEvent;
 
 /**
  * Signup form
  */
 class SignupForm extends Model
 {
+    const EVENT_AFTER_SIGNUP = 'EVENT_AFTER_SIGNUP';
+
     public $firstname;
     public $lastname;
     public $username;
@@ -26,7 +29,8 @@ class SignupForm extends Model
     public $currency;
     public $captcha;
 
-    public $verification_code;
+    // In case refer
+    public $refer;
 
     public function rules()
     {
@@ -84,7 +88,13 @@ class SignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->status = User::STATUS_INACTIVE;
-        return $user->save() ? $user : null;
+        if ($user->save()) {
+            $event = new AfterSignupEvent();
+            $event->user = $user;
+            $this->trigger(self::EVENT_AFTER_SIGNUP, $event);
+            return $user;
+        }
+        return null;
     }
 
 }

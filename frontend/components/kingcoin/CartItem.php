@@ -3,50 +3,33 @@ namespace frontend\components\kingcoin;
 
 use yii2mod\cart\models\CartItemInterface;
 use yii\base\Model;
-use common\models\PricingCoin;
+use frontend\models\Package;
 
-class CartItem extends Model implements CartItemInterface
+class CartItem extends Package implements CartItemInterface
 {
-    public $pricing_id;
     public $quantity;
 
-    const SCENARIO_ADD = 'add';
-    const SCENARIO_EDIT = 'edit';
+    const SCENARIO_ADD_CART = 'add_cart';
+    const SCENARIO_EDIT_CART = 'edit_cart';
 
-    /** @var PricingCoin **/
-    protected $_pricing;
+    public function init()
+    {
+        $this->quantity = ($this->quantity > 0) ? $this->quantity : 1;
+    }
 
     public function scenarios()
     {
         return [
-            self::SCENARIO_ADD => ['pricing_id', 'quantity'],
-            self::SCENARIO_EDIT => ['quantity'],
+            self::SCENARIO_ADD_CART => ['quantity'],
+            self::SCENARIO_EDIT_CART => ['quantity'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['pricing_id', 'quantity'], 'required', 'on' => self::SCENARIO_ADD],
-            [['pricing_id', 'quantity'], 'required', 'on' => self::SCENARIO_EDIT],
-            ['pricing_id', 'validatePricing'],
+            [['quantity'], 'required'],
         ];
-    }
-
-    public function validatePricing($attribute, $params)
-    {
-        $pricing = $this->getPricing();
-        if (!$pricing) {
-            $this->addError($attribute, 'Không tìm thấy gói sản phẩm');
-        }
-    }
-
-    public function getPricing()
-    {
-        if (!$this->_pricing) {
-            $this->_pricing = PricingCoin::findOne($this->pricing_id);
-        }
-        return $this->_pricing;
     }
 
     public function getTotalPrice()
@@ -54,23 +37,24 @@ class CartItem extends Model implements CartItemInterface
         return $this->getPrice() * $this->quantity;
     }
 
+    public function getTotalCoin()
+    {
+        return $this->num_of_coin * $this->quantity;
+    }
+
     // ============== implement interface ===========//
     public function getPrice() : int
     {
-        $pricing = $this->getPricing();
-        if (!$pricing) return 0;
-        return (int)$pricing->amount;
+        return (int)$this->amount;
     }
 
     public function getLabel()
     {
-        $pricing = $this->getPricing();
-        if (!$pricing) return '';
-        return $pricing->title;
+        return $this->title;
     }
 
     public function getUniqueId()
     {
-        return 'pricing_' . $this->pricing_id;
+        return 'item' . $this->id;
     }
 }

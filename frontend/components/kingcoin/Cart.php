@@ -13,11 +13,14 @@ use yii2mod\cart\models\CartItemInterface;
  */
 class Cart extends \yii2mod\cart\Cart
 {
-	const ITEM_DISCOUNT = '\frontend\components\kingcoin\CartDiscount';
+	const ITEM_PROMOTION = '\frontend\components\kingcoin\CartPromotion';
+
+	protected $promotion_coin;
+	protected $promotion_unit;
+	protected $promotion_money;
 
 	/** instance of CartItemInterface */
-	// protected $discount;
-
+	//==========Item=========
 	public function getItem() 
 	{
 		$items = $this->getItems(static::ITEM_PRODUCT);
@@ -25,36 +28,45 @@ class Cart extends \yii2mod\cart\Cart
 		return $item;
 	}
 
-	public function getDiscountItem()
+	//========Promotion==========
+	public function getPromotionItem()
 	{
-		// if ($this->discount instanceof CartItemInterface) return $this->discount;
+		// if ($this->Promotion instanceof CartItemInterface) return $this->Promotion;
 		// return null;
-		$items = $this->getItems(static::ITEM_DISCOUNT);
+		$items = $this->getItems(static::ITEM_PROMOTION);
 		$item = reset($items);
 		return $item;
 	}
 
-	public function setDiscountItem($item)
+	public function setPromotionItem($item)
 	{
 		$this->add($item);
 	}
 
-	public function removeDiscountItem()
+	public function removePromotionItem()
 	{
-		$item = $this->getDiscountItem();
+		$item = $this->getPromotionItem();
 		if (!$item) return;
 		$this->remove($item->getUniqueId());
 	}
 
-	public function hasDiscount()
+	public function hasPromotion()
 	{
-		// return (boolean)$this->discount;
-		$item = $this->getDiscountItem();
+		// return (boolean)$this->Promotion;
+		$item = $this->getPromotionItem();
 		return (boolean)$item;
 	}
 
+	public function applyPromotion()
+	{
+		if (!$this->hasPromotion()) return;
+		$promotion = $this->getPromotionItem();
+		$promotion->applyCart($this);
+	}
+
+	//============= For product ==========
 	/**
-	 * The total of products only
+	 * The total of items only
 	 */
 	public function getSubTotalPrice()
 	{
@@ -65,21 +77,40 @@ class Cart extends \yii2mod\cart\Cart
 	public function getTotalPrice()
 	{
 		$subTotal = $this->getSubTotalPrice();
-		$fee = $this->getTotalFee();
-		$discount = $this->getTotalDiscount();
-		$sum = $subTotal + $fee - $discount;
+		$sum = $subTotal;
 		return $sum;
 	}
 
-	public function getTotalFee()
+	// =============get/set benefit===========
+	public function getPromotionUnit()
 	{
-		return 0;
+		return (int)$this->promotion_unit;
 	}
 
-	public function getTotalDiscount()
+	public function setPromotionUnit($amount)
 	{
-		if (!$this->hasDiscount()) return 0;
-		$discount = $this->getDiscountItem();
-		return $discount->getPrice();
+		$this->promotion_unit = $amount;
 	}
+
+	public function getPromotionCoin()
+	{
+		return (int)$this->promotion_coin;
+	}
+
+	public function setPromotionCoin($amount)
+	{
+		$this->promotion_coin = $amount;
+	}
+
+	public function getPromotionMoney()
+	{
+		return (int)$this->promotion_money;
+	}
+
+	public function setPromotionMoney($amount)
+	{
+		$this->promotion_money = $amount;
+	}
+
+
 }

@@ -18,10 +18,12 @@ use frontend\forms\ActiveCustomerForm;
 use frontend\forms\ContactForm;
 use frontend\forms\VerifyAccountViaPhoneForm;
 
-use common\models\User;
-use common\forms\SendmailForm;
+use frontend\models\User;
 use frontend\models\Game;
 use frontend\models\Promotion;
+use frontend\models\UserRefer;
+use frontend\events\SignupEventHandler;
+
 /**
  * Site controller
  */
@@ -192,6 +194,10 @@ class SiteController extends Controller
     {
         $request = Yii::$app->request;
         $model = new SignupForm();
+
+        // Register an event
+        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'afterSignupEvent']);
+
         if ($model->load($request->post()) && ($user = $model->signup())) {
             $verify = VerifyAccountViaPhoneForm::findUserByAuth($user->auth_key);
             if (!$verify->send()) {
@@ -211,6 +217,9 @@ class SiteController extends Controller
         $request = Yii::$app->request;
         $model = VerifyAccountViaPhoneForm::findUserByAuth($auth);
         if (!$model) throw new NotFoundHttpException('model does not exist.');
+        // Register an event
+        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'afterActiveEvent']);
+
         if ($model->load($request->post()) && $model->verify()) {
             Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
             return $this->redirect(['site/login']);

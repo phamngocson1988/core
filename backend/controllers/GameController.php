@@ -51,8 +51,12 @@ class GameController extends Controller
         }
         $command->orderBy(['id' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
         return $this->render('index.tpl', [
-            'models' => $command->all(),
+            'models' => $models,
             'pages' => $pages,
             'q' => $q,
             'ref' => Url::to($request->getUrl(), true),

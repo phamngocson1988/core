@@ -10,14 +10,4 @@ use frontend\forms\LoginForm;
  */
 class Controller extends BaseController
 {
-	public function beforeAction($action)
-	{
-		if (parent::beforeAction($action)) {
-			// // Login form
-			// $model = new LoginForm();
-            // $this->view->params['top_login_form'] = $model;
-            return true;
-        }
-        return false;
-	}
 }

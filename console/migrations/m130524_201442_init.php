@@ -48,7 +48,11 @@ class m130524_201442_init extends Migration
             'user_id' => $this->integer()->notNull(),
             'email' => $this->string(255)->notNull(),
             'name' => $this->string(255),
-            'created_at' => $this->dateTime()
+            'status' => $this->string(255),
+            'note' => $this->string(255),
+            'created_at' => $this->dateTime(),
+            'updated_ad' => $this->dateTime(),
+            'payment_at' => $this->dateTime(),
         ], $tableOptions);
 
 
