@@ -95,18 +95,23 @@ class Promotion extends ActiveRecord
         ];
     }
 
-    public static function  getBenefitHandlers()
+    public static function  getBenefitHandlers($type = null)
     {
-        return [
+        $list = [
             'promotion_coin' => [
                 'class' => '\common\models\promotions\PromotionCoinBenefit',
-                'title' => 'Discount Kingcoin'
+                'title' => 'Gift Kingcoin',
+                'promotion_type' => self::SCENARIO_BUY_COIN
             ],
             'promotion_unit' => [
                 'class' => '\common\models\promotions\PromotionUnitBenefit',
-                'title' => 'Gift Game Unit'
+                'title' => 'Gift Game Unit',
+                'promotion_type' => self::SCENARIO_BUY_GEMS
             ],
         ];
+        return array_map(function($benefit) use ($type) {
+            return $benefit['promotion_type'] == $type;
+        });
     }
 
     
@@ -209,6 +214,7 @@ class Promotion extends ActiveRecord
         $handlers = self::getBenefitHandlers();
         $handler = ArrayHelper::getValue($handlers, $benefitName);
         if (!$handler) return null;
+        if ($handler->promotion_type != $this->promotion_type) return null;
         return Yii::createObject($handler);
     }
 

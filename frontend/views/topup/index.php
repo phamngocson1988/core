@@ -20,14 +20,14 @@ use yii\widgets\Pjax;
             <div class="col-md-6 col-xl-3" class="pricing-package">
               <div class="pricing-box pricing-box-xl pricing-box-novi">
                 <div class="pricing-box-header">
-                  <h4><?=$item->getPricing()->title;?></h4>
+                  <h4><?=$item->title;?></h4>
                 </div>
                 <?php $form = ActiveForm::begin([
-                  'action' => Url::to(['pricing/add', 'id' => $item->pricing_id]),
-                  'options' => ['class' => 'add-to-cart']
+                  'action' => Url::to(['topup/add', 'id' => $item->id]),
+                  'options' => ['class' => 'add-to-cart', 'id' => "package-$item->id"]
                 ]); ?>
                 <div class="pricing-box-price">
-                  <div class="heading-2"><sup>$</sup><span id="price-<?=$item->getPricing()->id;?>"><?=number_format($item->getPricing()->amount);?></span></div>
+                  <div class="heading-2"><sup>$</sup><span id="price-<?=$item->id;?>" class="price"><?=number_format($item->amount);?></span></div>
                 </div>
                 <?= Html::submitButton('Buy now', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
                 <div class="pricing-box-body">
@@ -35,14 +35,14 @@ use yii\widgets\Pjax;
                     <li>
                       <div class="unit unit-spacing-sm flex-row align-items-center">
                         <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-database"></span></div>
-                        <div class="unit-body"><span id="coin-<?=$item->getPricing()->id;?>"><?=number_format($item->getPricing()->num_of_coin);?></span> King Coins</div>
+                        <div class="unit-body"><span id="coin-<?=$item->id;?>" class="coin"><?=number_format($item->num_of_coin);?></span> King Coins</div>
                       </div>
                       <div class="unit unit-spacing-sm flex-row align-items-center">
                         <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-cart-outline"></span></div>
                         <div class="unit-body">
                           <?= $form->field($item, 'quantity', [
                           'options' => ['class' => 'form-wrap box-width-1 shop-input'],
-                          'inputOptions' => ['class' => 'form-input input-append quantity-control', 'type' => 'number', 'min' => 1, 'id' => "item" . $item->pricing_id],
+                          'inputOptions' => ['class' => 'form-input input-append quantity-control', 'type' => 'number', 'min' => 1, 'id' => "item" . $item->id],
                           'template' => '{input}'
                         ])->textInput() ?>
                         </div>
@@ -62,14 +62,24 @@ use yii\widgets\Pjax;
 </section>
 <?php
 $script = <<< JS
-var complainForm = new AjaxFormSubmit({element: 'form.add-to-cart'});
-complainForm.success = function (data, form) {
-  window.location.href = "[:checkout_url]";
-}
-
-// $('body').on('change', ".quantity-control", function() {
-//   $(this).closest('form').submit();
-// });
+$('body').on('change', ".quantity-control", function() {
+  // $(this).closest('form').submit();
+  var form = $(this).closest('form');
+  $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      dataType : 'json',
+      data: form.serialize(),
+      success: function (result, textStatus, jqXHR) {
+        if (!result.status) {
+          alert(result.error);
+        } else {
+          form.find('.price').html(result.data.price);
+          form.find('.coin').html(result.data.coin);
+        }
+      },
+  });
+});
 JS;
 $script = str_replace("[:checkout_url]", Url::to(['pricing/confirm']), $script);
 $this->registerJs($script);

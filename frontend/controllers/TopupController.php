@@ -38,7 +38,20 @@ class TopupController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionIndex($id)
+    public function actionIndex()
+    {
+        $request = Yii::$app->request;
+        $items = CartItem::find()->indexBy('id')->all();
+        
+        
+
+    	return $this->render('index', [
+            // 'package' => $package,
+            'items' => $items
+        ]);
+    }
+
+    public function actionAdd($id)
     {
         $request = Yii::$app->request;
         $package = CartItem::findOne($id);
@@ -54,14 +67,14 @@ class TopupController extends Controller
             $cart = Yii::$app->kingcoin;
             $cart->clear();
             $cart->add($package);
-            return $this->redirect(['topup/view']);
+            return $this->redirect(['topup/confirm']);
+        } else {
+            if ($request->isAjax) {
+                return $this->asJson(['status' => false, 'package' => $package, 'error' => $package->getErrorSummary(true)]);
+            }
+            Yii::$app->session->setFlash('error', $package->getErrorSummary(true));
+            return $this->redirect(['topup/index']);
         }
-        if ($request->isAjax) {
-            return $this->asJson(['status' => false, 'package' => $package, 'error' => $package->getErrorSummary(true)]);
-        }
-    	return $this->render('index', [
-            'package' => $package,
-        ]);
     }
 
     public function actionConfirm()
@@ -71,29 +84,27 @@ class TopupController extends Controller
         $promotion_code = $request->post('promotion_code');
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
-        $item->setScenario($request->post('scenario'));
+        $item->setScenario(CartItem::SCENARIO_EDIT_CART);
         if ($request->isPost) {
             if ($item->load($request->post()) && $item->validate()) {
                 $cart->add($item);
-                if ($item->scenario == CartItem::SCENARIO_EDIT_CART) {
-                    $discount = CartPromotion::findOne([
-                        'code' => $promotion_code,
-                        'promotion_scenario' => CartPromotion::SCENARIO_BUY_COIN,
-                    ]);
+                $discount = CartPromotion::findOne([
+                    'code' => $promotion_code,
+                    'promotion_scenario' => CartPromotion::SCENARIO_BUY_COIN,
+                ]);
 
-                    if ($discount) {
-                        $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
-                        $discount->user_id = Yii::$app->user->id;
-                        $discount->game_id = $item->id;
-                        if (!$discount->validate() || !$discount->code) $cart->removePromotionItem();                            
-                        else {
-                            $cart->setPromotionItem($discount);
-                            $cart->applyPromotion();
-                        }
-                    } else {
-                        $cart->removePromotionItem();
+                if ($discount) {
+                    $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
+                    $discount->user_id = Yii::$app->user->id;
+                    $discount->game_id = $item->id;
+                    if (!$discount->validate() || !$discount->code) $cart->removePromotionItem();                            
+                    else {
+                        $cart->setPromotionItem($discount);
+                        $cart->applyPromotion();
                     }
-                } 
+                } else {
+                    $cart->removePromotionItem();
+                }
             }
         }
 

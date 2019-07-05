@@ -81,6 +81,19 @@ class Cart extends \yii2mod\cart\Cart
 		return $sum;
 	}
 
+	public function getSubTotalCoin()
+	{
+		$item = $this->getItem();
+		return $item->getTotalCoin();
+	}
+
+	public function getTotalCoin()
+	{
+		$subTotal = $this->getSubTotalCoin();
+		$sum = $subTotal + $this->getPromotionCoin();
+		return $sum;
+	}
+
 	// =============get/set benefit===========
 	public function getPromotionUnit()
 	{

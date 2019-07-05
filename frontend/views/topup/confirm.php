@@ -32,11 +32,11 @@ $item = $cart->getItem();
             </thead>
             <tbody>
               <tr>
-                <td><?=$item->getPricing()->title;?></td>
+                <td><?=$item->title;?></td>
                 <td>$<?=number_format($item->getPrice());?></td>
                 <td>$<?=number_format($item->getTotalPrice());?></td>
-                <td><?=number_format($item->getPricing()->num_of_coin);?></td>
-                <td><?=number_format($item->getPricing()->num_of_coin * $item->quantity);?></td>
+                <td><?=number_format($item->num_of_coin);?></td>
+                <td><?=number_format($item->num_of_coin * $item->quantity);?></td>
                 <td>
                   <?= $form->field($item, 'quantity', [
                     'options' => ['class' => 'form-wrap box-width-1 shop-input'],
@@ -57,28 +57,18 @@ $item = $cart->getItem();
             <!-- RD Mailform: Subscribe-->
             <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
               <div class="rd-mailform-inline-inner">
-                <?= $form->field($discount, 'code', [
-                  'options' => ['class' => 'form-wrap'],
-                  'inputOptions' => ['class' => 'form-input', 'id' => 'voucher', 'readonly' => $cart->hasDiscount()],
-                  'labelOptions' => ['class' => 'form-label'],
-                  'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                  'template' => '{input}{error}{label}'
-                ])->textInput()->label('Enter your voucher'); ?>
-                <?php if ($cart->hasDiscount()) : ?>
-                <button id="remove_voucher" class="button form-button button-sm button-secondary button-nina">Remove</button>
-                <?php else : ?>
+                <input name="promotion_code" value="<?=$promotion_code;?>" id="voucher"/>
                 <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
-                <?php endif;?>
               </div>
             </div>
           </div>
-          <div class="cells-sm-5 col-xl-6 col-xxl-5 text-md-right">
-            <ul class="inline-list">
-              <li class="text-middle">
-                <div class="heading-5 text-regular">$<?=number_format($cart->getTotalPrice());?></div>
-              </li>
-              <li class="text-middle"><a class="button button-secondary button-nina" href="<?=Url::to(['pricing/checkout']);?>">checkout</a></li>
-            </ul>
+          <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
+            <div class="heading-5 text-regular">Sub total Coin: <span><?=number_format($cart->getSubTotalCoin());?></span></div>
+          </div>
+          <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
+            <div class="heading-5 text-regular">Total Coin: <span><?=number_format($cart->getTotalCoin());?> </span></div>
+            <div class="heading-5 text-regular">Promotion Coin: <span><?=$cart->getPromotionCoin();?> </span></div>
+            
           </div>
         </div>
       </div>
