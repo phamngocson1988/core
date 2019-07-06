@@ -16,7 +16,6 @@ abstract class PromotionHandler extends Model
     
     public $title;
     public $promotion_id;
-    public $promotion_type;
     public $object;
 
     public static $_effected_objects = [self::EFFECT_USER, self::EFFECT_GAME];

@@ -80,11 +80,6 @@ use common\widgets\TinyMce;
                     'imageOptions' => ['width' => 150, 'height' => 150]
                   ])->label('Hình ảnh');?>
 
-                  <?=$form->field($model, 'promotion_scenario', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
-                  ])->dropDownList([Promotion::SCENARIO_BUY_GEMS => 'Áp dụng khi mua gems của game', Promotion::SCENARIO_BUY_COIN => 'Áp dụng khi nạp tiền ví Kingcoin'])->label('Ngữ cảnh áp dụng');?>
-
                   <?=$form->field($model, 'user_using', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control', 'type' => 'number'],
@@ -142,7 +137,7 @@ use common\widgets\TinyMce;
 
                   <hr><!-- Benefit -->
                   <?php 
-                  $benefits = Promotion::getBenefitHandlers();
+                  $benefits = Promotion::getBenefitHandlers($model->promotion_scenario);
                   $benefitList = [];
                   foreach ($benefits as $identifier => $params) {
                     $benefitList[$identifier] = $params['title'];

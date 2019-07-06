@@ -50,9 +50,9 @@ class m190313_163324_create_wallet extends Migration
             'discount_price' => $this->integer(11)->notNull()->defaultValue(0),
             'total_price' => $this->integer(11)->notNull()->defaultValue(0),
             'coin' => $this->integer(11)->notNull()->defaultValue(0),
-            'discount_coin' => $this->integer(11)->notNull()->defaultValue(0),
+            'promotion_coin' => $this->integer(11)->notNull()->defaultValue(0),
             'total_coin' => $this->integer(11)->notNull()->defaultValue(0),
-            'discount_code' => $this->string(50),
+            'promotion_code' => $this->string(50),
             'status' => $this->string(10)->notNull()->defaultValue('pending'),
         ]);
 

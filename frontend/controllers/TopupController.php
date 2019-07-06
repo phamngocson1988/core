@@ -126,6 +126,7 @@ class TopupController extends Controller
     public function actionPurchase()
     {
         $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
         $identifier = $request->post('identifier');
         if (!$identifier) throw new InvalidParamException('You must choose a payment gateway');
         $paymentCart = new PaymentCart([
@@ -141,48 +142,43 @@ class TopupController extends Controller
         ]);
         $paymentCart->addItem($paymentCartItem);
         
-        if ($cart->getTotalPromotion()) {
-            $PromotionItem = $cart->getPromotionItem();
+        if ($cart->hasPromotion()) {
+            $cart->applyPromotion();
+            $promotionItem = $cart->getPromotionItem();
             $paymentPromotion = new PaymentPromotion([
-                'id' => $PromotionItem->code,
-                'title' => 'promotion promotion code ' . $PromotionItem->code,
-                'price' => $PromotionItem->getPrice()
+                'id' => $promotionItem->code,
+                'title' => 'promotion promotion code ' . $promotionItem->code,
+                'price' => $cart->getPromotionMoney()
             ]);
             $paymentCart->setPromotion($paymentPromotion);
         }
         $gateway = PaymentGatewayFactory::getClient($identifier);
+
+        // Save transaction
+        $trn = new PaymentTransaction();
+        $trn->user_id = $user->id;
+        $trn->payment_method = $identifier;
+        $trn->payment_id = $gateway->getReferenceId();
+        // Price
+        $trn->price = $cart->getSubTotalPrice();
+        $trn->discount_price = $cart->hasPromotion() ? $cart->getPromotionMoney() : 0;
+        $trn->total_price = $cart->getTotalPrice();
+        // Coin
+        $trn->coin = $cart->getSubTotalCoin();
+        $trn->promotion_coin = $cart->getPromotionCoin();
+        $trn->total_coin = $cart->getTotalCoin();
+        $trn->description = $gateway->identifier;
+        $trn->created_by = $user->id;
+        $trn->status = PaymentTransaction::STATUS_PENDING;
+        $trn->payment_at = date('Y-m-d H:i:s');
+        $trn->generateAuthKey();
+        if ($cart->hasPromotion()) {
+            $promotion = $cart->getPromotionItem();
+            $trn->promotion_code = $promotion->code;
+        }
+        $trn->save();
+        // $cart->clear();
         $gateway->setCart($paymentCart);
-        $gateway->on(PaymentGateway::EVENT_BEFORE_REQUEST, function($event) { 
-            $gateway = $event->sender;
-            $cart = Yii::$app->kingcoin;
-            $cartItem = $cart->getItem();
-            $totalPrice = $cart->getTotalPrice();
-            $subTotalPrice = $cart->getSubTotalPrice();
-            $totalCoin = $cartItem->getPricing()->num_of_coin * $cartItem->quantity;
-            $user = Yii::$app->user->getIdentity();
-            
-            $trn = new PaymentTransaction();
-            $trn->user_id = $user->id;
-            $trn->payment_method = $gateway->identifier;
-            $trn->payment_id = $gateway->getReferenceId();
-            $trn->price = $subTotalPrice;
-            $trn->total_price = $totalPrice;
-            $trn->coin = $totalCoin;
-            $trn->Promotion_coin = 0;
-            $trn->total_coin = $totalCoin;
-            $trn->description = $gateway->identifier;
-            $trn->created_by = $user->id;
-            $trn->status = PaymentTransaction::STATUS_PENDING;
-            $trn->payment_at = date('Y-m-d H:i:s');
-            $trn->generateAuthKey();
-            if ($cart->getTotalPromotion()) {
-                $promotion = $cart->getPromotionItem();
-                $trn->Promotion_price = $cart->getTotalPromotion();
-                $trn->Promotion_code = $promotion->getPromotion()->code;
-            }
-            $trn->save();
-            $cart->clear();
-        });
         return $gateway->request();
     }
 

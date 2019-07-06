@@ -69,6 +69,6 @@ class PromotionCoinBenefit extends PromotionBenefitAbstract implements Promotion
 
     public function applyCart(&$cart)
     {
-        $cart->setPromotionCoin($this->calculate($cart->getSubTotalPrice()));
+        $cart->setPromotionCoin($this->calculate($cart->getSubTotalCoin()));
     }
 }

@@ -9,6 +9,7 @@ class PaymentCart extends Model
     public $title;
     public $items = [];
     public $discount;
+    public $promotion;
 
     public function getTitle()
     {
@@ -41,15 +42,33 @@ class PaymentCart extends Model
         }
     }
 
+    public function setPromotion($promotion)
+    {
+        if ($promotion instanceof PaymentDiscount) {
+            $this->promotion = $promotion;
+        }
+    }
+
     public function getDiscount()
     {
         return $this->discount;
+    }
+
+    public function getPromotion()
+    {
+        return $this->promotion;
     }
 
     public function hasDiscount()
     {
         $discount = $this->getDiscount();
         return ($discount) ? $discount->getTotalPrice() : 0;
+    }
+
+    public function hasPromotion()
+    {
+        $promotion = $this->getPromotion();
+        return ($promotion) ? $promotion->getTotalPrice() : 0;   
     }
 
     public function getTotalPrice()

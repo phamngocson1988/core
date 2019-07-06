@@ -37,12 +37,13 @@ class PricingCoinController extends Controller
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($promotion_scenario)
     {
         $this->view->params['main_menu_active'] = 'coin.create';
         $request = Yii::$app->request;
         $model = new Package();
         $model->setScenario(Package::SCENARIO_CREATE);
+        $model->promotion_scenario = $promotion_scenario;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             $ref = Url::to(['pricing-coin/index']);

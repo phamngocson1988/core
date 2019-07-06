@@ -39,11 +39,13 @@ class PromotionController extends Controller
      * Lists all Promotion models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($promotion_scenario)
     {
-        $this->view->params['main_menu_active'] = 'promotion.index';
+        $menu = (Promotion::SCENARIO_BUY_COIN == $promotion_scenario) ? 'package.promotion' : 'game.promotion';
+        $this->view->params['main_menu_active'] = $menu;
         $request = Yii::$app->request;
         $command = Promotion::find();
+        $command->where(['promotion_scenario' => $promotion_scenario]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -54,15 +56,17 @@ class PromotionController extends Controller
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
+            'promotion_scenario' => $promotion_scenario,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($promotion_scenario)
     {
         $this->view->params['main_menu_active'] = 'promotion.index';
         $request = Yii::$app->request;
         $model = new Promotion(['scenario' => Promotion::SCENARIO_CREATE]);
+        $model->promotion_scenario = $promotion_scenario;
         if ($model->load($request->post())) {
             if ($model->rule_name) {
                 $rule = Promotion::pickRule($model->rule_name);
@@ -76,7 +80,7 @@ class PromotionController extends Controller
             }
             $model->save();
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-            return $this->redirect(['promotion/index']);
+            return $this->redirect(['promotion/index', 'promotion_scenario' => $promotion_scenario]);
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
@@ -107,7 +111,7 @@ class PromotionController extends Controller
             }
             $model->save();
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-            return $this->redirect(['promotion/index']);
+            return $this->redirect(['promotion/index', 'promotion_scenario' => $model->promotion_scenario]);
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }

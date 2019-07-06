@@ -76,14 +76,6 @@ class Promotion extends ActiveRecord
     public static function  getRuleHandlers()
     {
         return [
-            // 'total_using' => [
-            //     'class' => '\common\models\promotions\TotalUsingRule',
-            //     'title' => 'Limit the number of using this promotion'
-            // ],
-            // 'user_using' => [
-            //     'class' => '\common\models\promotions\UserUsingRule',
-            //     'title' => 'Limit the number of using this promotion for 1 user'
-            // ],
             'specified_users' => [
                 'class' => '\common\models\promotions\SpecifiedUsersRule',
                 'title' => 'Khuyến mãi dành cho khách hàng cụ thể'
@@ -101,16 +93,17 @@ class Promotion extends ActiveRecord
             'promotion_coin' => [
                 'class' => '\common\models\promotions\PromotionCoinBenefit',
                 'title' => 'Gift Kingcoin',
-                'promotion_type' => self::SCENARIO_BUY_COIN
+                'promotion_scenario' => self::SCENARIO_BUY_COIN
             ],
             'promotion_unit' => [
                 'class' => '\common\models\promotions\PromotionUnitBenefit',
                 'title' => 'Gift Game Unit',
-                'promotion_type' => self::SCENARIO_BUY_GEMS
+                'promotion_scenario' => self::SCENARIO_BUY_GEMS
             ],
         ];
-        return array_map(function($benefit) use ($type) {
-            return $benefit['promotion_type'] == $type;
+        if (!$type) return $list;
+        return array_filter($list, function($benefit) use ($type) {
+            return $benefit['promotion_scenario'] == $type;
         });
     }
 
@@ -214,7 +207,6 @@ class Promotion extends ActiveRecord
         $handlers = self::getBenefitHandlers();
         $handler = ArrayHelper::getValue($handlers, $benefitName);
         if (!$handler) return null;
-        if ($handler->promotion_type != $this->promotion_type) return null;
         return Yii::createObject($handler);
     }
 

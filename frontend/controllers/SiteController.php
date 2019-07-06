@@ -112,7 +112,6 @@ class SiteController extends Controller
         $model = new LoginForm();
         $request = Yii::$app->request;
         if ($model->load($request->post()) && $model->login()) {
-            // return $this->goBack();
             return $this->redirect($request->getReferrer());
         } else {
             return $this->render('login', [

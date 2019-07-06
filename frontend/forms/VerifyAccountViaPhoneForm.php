@@ -8,6 +8,8 @@ use frontend\events\AfterActiveEvent;
 
 class VerifyAccountViaPhoneForm extends User
 {
+    const EVENT_AFTER_ACTIVE = 'EVENT_AFTER_ACTIVE';
+
     public $digit_1;
     public $digit_2;
     public $digit_3;
@@ -46,8 +48,7 @@ class VerifyAccountViaPhoneForm extends User
         $this->status = self::STATUS_ACTIVE;
         $this->save();
 
-        $event = new AfterActiveEvent();
-        $this->trigger(self::EVENT_AFTER_ACTIVE, $event);
+        $this->trigger(self::EVENT_AFTER_ACTIVE);
         return true;
     }
 

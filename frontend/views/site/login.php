@@ -7,6 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use yii\captcha\Captcha;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,6 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
             'template' => '{input}{hint}{error}'
           ])->passwordInput() ?>
+
+          <?= $form->field($model, 'captcha', [
+              'options' => ['tag' => false],
+              'inputOptions' => ['class' => '', 'placeholder' => 'Input captcha'],
+              'template' => '{input}'
+          ])->widget(Captcha::className(), [
+              'template' => '{input}{image}',
+              'imageOptions' => ['class' => 'captcha-image']
+          ])->label('Captcha') ?>
 
           <div class="form-button">
             <?= Html::submitButton('Signin', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Signin']) ?>

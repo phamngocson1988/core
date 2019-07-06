@@ -8,5 +8,5 @@ use Yii;
  */
 abstract class PromotionBenefitAbstract extends PromotionHandler
 {
-    
+    public $promotion_scenario;
 }

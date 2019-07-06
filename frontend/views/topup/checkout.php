@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 
 $cart = Yii::$app->kingcoin;
 $item = $cart->getItem();
+$cart->applyPromotion();
 ?>
 <section class="section-xl text-center bg-default">
   <div class="container">
@@ -29,7 +30,9 @@ $item = $cart->getItem();
                     <div class="col-sm-6 text-sm-left">
                       <ul class="pricing-box-list list-marked">
                         <li>Quantity: <?=$item->quantity;?></li>
-                        <li>King Coins: <?=($item->getPricing()->num_of_coin * $item->quantity);?></li>
+                        <li>King Coins: <?=$item->getTotalCoin();?></li>
+                        <li>Promotion Coins: <?=$cart->getPromotionCoin();?></li>
+                        <li>Total Coins: <?=$cart->getTotalCoin();?></li>
                       </ul>
                     </div>
                     <div class="col-sm-6 text-sm-right">
@@ -48,7 +51,7 @@ $item = $cart->getItem();
                         </div>
                       </div>
                       <?php $form = ActiveForm::begin([
-                        'action' => Url::to(['pricing/purchase']),
+                        'action' => Url::to(['topup/purchase']),
                       ]); ?>
                       <?=Html::radioList ( 'identifier', 'paypal', ['paypal' => 'Paypal', 'skrill' => 'Skrill'] );?>
                       <?= Html::submitButton('Pay by Palpal', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>

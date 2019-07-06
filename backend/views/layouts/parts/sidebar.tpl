@@ -1,3 +1,4 @@
+{use class='backend\models\Promotion'}
 <!-- BEGIN SIDEBAR -->
 <div class="page-sidebar-wrapper">
   <div class="page-sidebar navbar-collapse collapse">
@@ -115,7 +116,7 @@
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='/promotion'}" class="nav-link " code='promotion.index'>
+            <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
             <span class="title">Khuyến mãi</span>
             </a>
           </li>
@@ -136,6 +137,11 @@
           <li class="nav-item  ">
             <a href="{url route='/pricing-coin/create'}" class="nav-link " code='coin.create'>
             <span class="title">{Yii::t('app', 'add_new')}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_COIN}" class="nav-link " code='package.promotion'>
+            <span class="title">Khuyến mãi</span>
             </a>
           </li>
         </ul>

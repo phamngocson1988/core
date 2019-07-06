@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <?= Html::a(Yii::t('app', 'add_new'), ['promotion/create'], ['class' => 'btn green']) ?>
+            <?= Html::a(Yii::t('app', 'add_new'), ['promotion/create', 'promotion_scenario' => $promotion_scenario], ['class' => 'btn green']) ?>
           </div>
         </div>
       </div>
