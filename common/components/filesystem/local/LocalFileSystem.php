@@ -14,7 +14,11 @@ class LocalFileSystem extends Model implements FileSystemInterface
 
     public function save($file, $fileModel)
     {
-        $filePath = $this->getPath($fileModel);
+        if (is_string($fileModel)) {
+            $filePath = $fileModel;    
+        } else {
+            $filePath = $this->getPath($fileModel);
+        }
         $fileDir = dirname($filePath);
         FileHelper::createDirectory($fileDir);
         $file->saveAs($filePath);
@@ -23,8 +27,12 @@ class LocalFileSystem extends Model implements FileSystemInterface
 
     public function getUrl($fileModel)
     {
-        $fileDir = sprintf("%s/%s", $this->file_url, $this->getRelativePath($fileModel->id));
-        $fileUrl = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+        if (is_string($fileModel)) {
+            $fileUrl = sprintf("%s/%s", $this->fileUrl, $fileModel);
+        } else {
+            $fileDir = sprintf("%s/%s", $this->file_url, $this->getRelativePath($fileModel->id));
+            $fileUrl = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+        }
         return $fileUrl;
     }
     
@@ -32,8 +40,12 @@ class LocalFileSystem extends Model implements FileSystemInterface
 
     public function getPath($fileModel)
     {
-        $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
-        $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+        if (is_string($fileModel)) {
+            $filePath = sprintf("%s/%s", Yii::getAlias($this->file_path), $fileModel);
+        } else {
+            $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
+            $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+        }
         return $filePath;
     }
 

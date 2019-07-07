@@ -16,6 +16,25 @@ use frontend\components\cart\CartItem;
  */
 class GameController extends Controller
 {
+    public function actionIndex()
+    {
+        $request = Yii::$app->request;
+        $q = $request->get('q');
+        $command = Game::find();
+        if ($q) {
+            $command->andWhere(['like', 'title', $q]);
+        }
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('index', [
+            'models' => $models,
+            'pages' => $pages,
+            'q' => $q,
+        ]);
+    }
     public function actionView($id)
     {
     	$request = Yii::$app->request;

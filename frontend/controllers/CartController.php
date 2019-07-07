@@ -174,7 +174,6 @@ class CartController extends Controller
         $order->customer_email = $user->email;
         $order->customer_phone = $user->phone;
         $order->status = Order::STATUS_PENDING;
-        $order->saler_id = $user->invited_by;
         $order->payment_at = date('Y-m-d H:i:s');
         $order->generateAuthKey();
 
@@ -235,4 +234,121 @@ class CartController extends Controller
             'content' => 'Congratulation.'
         ]);
     }
+
+    public function actionReseller()
+    {
+        
+    }
+
+    public function actionDownload() 
+    {
+        $fileName ='template.xlsx';
+        $titles = [
+            'A' => 'No',
+            'B' => 'Amount',
+            'C' => 'Login method',
+            'D' => 'Character name',
+            'E' => 'ID / Username',
+            'F' => 'Password',
+            'G' => 'Server',
+            'H' => 'Recovery code',
+            'I' => 'Remark'
+        ];
+        $totalRow = 1;
+        $startRow = 5;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);;
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $heading = 'THE MORE CAREFULLY YOU DO THIS, THE FASTER PROCESS WOULD BE!';
+        $header = [
+            'A2:I2' => 'Thanks for your orders, that would be our pleasure to cooperate with you!!!',
+            'A3:I3' => 'List of orders',
+        ];
+        
+        // $data[] = ['1', '', '', '', '', '', '', '', ''];
+        $data = [];
+
+        $file = \Yii::createObject([
+            'class' => 'codemix\excelexport\ExcelFile',
+            'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
+            'sheets' => [
+                'Orders' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    'heading' => $heading,
+                    'header' => $header,
+                    'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+                    'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+                ],
+            ],
+        ]);
+        $file->send($fileName);
+    }
+
+    public function actionImport()
+{
+    $inputFile = Yii::getAlias('@frontend') . '/template.xlsx';
+    try{
+        $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
+        $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+        $objPHPExcel = $objReader->load($inputFile);
+    } catch (Exception $e) {
+        die('Error');
+    }
+
+    $sheet = $objPHPExcel->getSheet(0);
+    $highestRow = $sheet->getHighestRow();
+    $highestColumn = $sheet->getHighestColumn();
+
+    for($row=1; $row <= $highestRow; $row++)
+    {
+        $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,NULL,TRUE,FALSE);
+
+        if($row==1)
+        {
+            continue;
+        }
+        print_r($rowData);
+    }
+    die('okay');
+}
 }

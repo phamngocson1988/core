@@ -32,6 +32,9 @@ class SignupForm extends Model
     // In case refer
     public $refer;
 
+    // In case affiliate
+    public $affiliate;
+
     public function rules()
     {
         return [
@@ -84,7 +87,7 @@ class SignupForm extends Model
         $user->phone = $this->phone;
         $user->currency = $this->currency;
         $user->birthday = sprintf("%s-%s-%s", $this->birth_year, $this->birth_month, $this->birth_date);
-        $user->affiliate_code = Yii::$app->security->generateRandomString(6);
+        $user->refer_code = Yii::$app->security->generateRandomString(6);
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->status = User::STATUS_INACTIVE;

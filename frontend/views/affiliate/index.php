@@ -19,8 +19,8 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
 <?php $form = ActiveForm::begin(); ?>
 <div id='email_list'>
     <?php foreach(range(0, 19) as $i) {
-        $name = Html::textInput("refers[$i][name]");
-        $email = Html::textInput("refers[$i][email]");
+        $name = Html::textInput("affiliates[$i][name]");
+        $email = Html::textInput("affiliates[$i][email]");
         echo Html::tag('div', $name . $email, ['class' => 'form-group']);
     }?>
 </div>

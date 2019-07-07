@@ -47,5 +47,6 @@ AppAsset::register($this);
 </div>
 <?php $this->endBody() ?>
 </body>
+<?php require_once(Yii::$app->basePath . '/views/layouts/livechat.php');?>
 </html>
 <?php $this->endPage() ?>

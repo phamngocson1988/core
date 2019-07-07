@@ -53,7 +53,7 @@ class ReferController extends Controller
                 $count = UserRefer::find()->where(['user_id' => $user->id, 'email' => $email])->count();
                 if (!$count) {
                     // Sent mail
-                    $link = Url::to(['site/signup', 'refer' => $user->affiliate_code], true);
+                    $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
                     $mailer->compose('refer_mail', ['user' => $user, 'link' => $link])
                     ->setTo($email)
                     ->setFrom([$admin => Yii::$app->name])

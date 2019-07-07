@@ -17,7 +17,7 @@ class TopupEventHandler extends Model
         if ($model->status != UserWallet::STATUS_COMPLETED) return;
         // refer gift just be applied for user who was invited by another account
         $user = Yii::$app->user->getIdentity();
-        if (!$user->invited_by) return;
+        if (!$user->referred_by) return;
         // refer gift just be applied for the first transaction
         $command = UserWallet::find();
         $command->where(['user_id' => $user->id]);
@@ -27,7 +27,7 @@ class TopupEventHandler extends Model
         
         // Apply
         $refer = UserRefer::find([
-            'user_id' => $user->invited_by, 
+            'user_id' => $user->referred_by, 
             'email' => $user->email,
             'status' => UserRefer::STATUS_ACTIVATED
         ]);

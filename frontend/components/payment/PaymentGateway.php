@@ -18,10 +18,10 @@ class PaymentGateway extends Model
     const EVENT_CONFIRM_SUCCESS = 'EVENT_CONFIRM_SUCCESS';
     const EVENT_CONFIRM_ERROR = 'EVENT_CONFIRM_ERROR';
 
-    public $confirm_url = 'pricing/verify';
-    public $success_url = 'pricing/success';
-    public $cancel_url = 'pricing/cancel';
-    public $error_url = 'pricing/error';
+    public $confirm_url = 'topup/verify';
+    public $success_url = 'topup/success';
+    public $cancel_url = 'topup/cancel';
+    public $error_url = 'topup/error';
 
     public $identifier;
 

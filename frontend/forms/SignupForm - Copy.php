@@ -80,7 +80,7 @@ class SignupForm extends Model
     public function getInviter()
     {
         if (!$this->_inviter) {
-            $this->_inviter = User::findOne(['affiliate_code' => $this->invite_code]);
+            $this->_inviter = User::findOne(['refer_code' => $this->invite_code]);
         }
         return $this->_inviter;
     }
@@ -101,18 +101,18 @@ class SignupForm extends Model
         $user->country_code = $this->country_code;
         $user->phone = $this->phone;
         $user->birthday = $this->birthday;
-        $user->affiliate_code = Yii::$app->security->generateRandomString(6);
+        $user->refer_code = Yii::$app->security->generateRandomString(6);
         $user->is_reseller = $this->is_reseller;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $affiliateUser = $this->getInviter();
         if ($affiliateUser) {
-            $user->invited_by = $affiliateUser->id;
+            $user->referred_by = $affiliateUser->id;
         }
 
         if ($this->invite_code) {
-            $affiliateUser = User::findOne(['affiliate_code' => $this->invite_code]);
-            $user->invited_by = $affiliateUser->id;
+            $affiliateUser = User::findOne(['refer_code' => $this->invite_code]);
+            $user->referred_by = $affiliateUser->id;
         }
 
         if ($this->isNeedConfirm()) {

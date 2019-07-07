@@ -7,16 +7,16 @@ use frontend\models\UserRefer;
 
 class SignupEventHandler extends Model
 {
-    public static function afterSignupEvent(AfterSignupEvent $event) 
+    public static function referCheckingEvent(AfterSignupEvent $event) 
     {
         $form = $event->sender;
         if (!$form->refer) return;
-        $invitor = User::findOne(['affiliate_code' => $form->refer]);
+        $invitor = User::findOne(['refer_code' => $form->refer]);
         if (!$invitor) return;
         $user = $form->user;
         if (!$user) return;
         // Update invited user
-        $user->invited_by = $invitor->id;
+        $user->referred_by = $invitor->id;
         $user->save();
         // Process in user refer table
         $referModel = UserRefer::findOne(['user_id' => $invitor->id, 'email' => $user->email]);
@@ -34,14 +34,27 @@ class SignupEventHandler extends Model
         }
     }
 
+    public static function affiliateCheckingEvent(AfterSignupEvent $event) 
+    {
+        $form = $event->sender;
+        if (!$form->affiliate) return;
+        $invitor = User::findOne(['affiliate_code' => $form->affiliate]);
+        if (!$invitor) return;
+        $user = $form->user;
+        if (!$user) return;
+        // Update invited user
+        $user->affiliated_with = $invitor->id;
+        $user->save();
+    }
+
     public static function afterActiveEvent($event) 
     {
         $user = $event->sender;
         if (!$user) return;
-        if (!$user->invited_by) return;
+        if (!$user->referred_by) return;
         // Process in user refer table
         $referModel = UserRefer::findOne([
-            'user_id' => $user->invited_by, 
+            'user_id' => $user->referred_by, 
             'email' => $user->email,
             'status' => UserRefer::STATUS_CREATED
         ]);

@@ -195,7 +195,14 @@ class SiteController extends Controller
         $model = new SignupForm();
 
         // Register an event
-        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'afterSignupEvent']);
+        if ($request->get('refer')) {
+            $model->refer = $request->get('refer');
+            $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'referCheckingEvent']);
+        }
+        if ($request->get('affiliate')) {
+            $model->affiliate = $request->get('affiliate');
+            $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
+        }
 
         if ($model->load($request->post()) && ($user = $model->signup())) {
             $verify = VerifyAccountViaPhoneForm::findUserByAuth($user->auth_key);
