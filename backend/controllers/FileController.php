@@ -38,7 +38,7 @@ class FileController extends Controller
             return;
         }
         $attribute = $request->post('name', 'upload_file');
-        $files = Yii::$app->file->upload($attribute);
+        $files = Yii::$app->file->save($attribute);
 
         $result = false;
         $data = [];

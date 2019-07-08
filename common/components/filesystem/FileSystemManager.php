@@ -49,7 +49,7 @@ class FileSystemManager extends DynamicModel
         return parent::validate($attributeNames, $clearErrors);
     }
 
-    public function upload($name)
+    public function save($name)
     {
         $files = [];
         try {
@@ -66,6 +66,27 @@ class FileSystemManager extends DynamicModel
                 $files[] = $fileModel;
             }
             $transaction->commit();
+            $this->undefineAttribute($name);
+            return $files;
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            return false;
+        }
+    }   
+
+    public function upload($name, $path = '')
+    {
+        $files = [];
+        try {
+            $uploadedFiles = UploadedFile::getInstancesByName($name);
+            $this->defineAttribute($name, $uploadedFiles);
+            if (!$this->validate()) { 
+                return false;
+            }
+            $dependency = $this->instanceDependency();
+            foreach ($uploadedFiles as $file) {
+                $files[] = $dependency->upload($file, $path);
+            }
             $this->undefineAttribute($name);
             return $files;
         } catch (Exception $e) {

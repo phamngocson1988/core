@@ -2,6 +2,14 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 ?>
+<?php $form = ActiveForm::begin([
+    'action' => ['reseller/import', 'id' => $id],
+    'options' => ['enctype' => 'multipart/form-data']
+]); ?>
+<?=Html::fileInput("template");?>
+<?=Html::submitButton('Submit');?>
+<?php ActiveForm::end();?>
+
 <?php $form = ActiveForm::begin(['action' => ['reseller/purchase', 'id' => $id]]); ?>
 <table>
 <tr>
