@@ -20,7 +20,14 @@ class CartItem extends Game implements CartItemInterface
     const SCENARIO_ADD_CART = 'add_cart';
     const SCENARIO_EDIT_CART = 'edit_cart';
     const SCENARIO_INFO_CART = 'info_cart';
+    const SCENARIO_IMPORT_CART = 'import_cart';
 
+    // public function behaviors()
+    // {
+    //     return [
+    //         CartItemImportBehavior::className(),
+    //     ];
+    // }
     public function init()
     {
         $this->quantity = ($this->quantity > 0) ? $this->quantity : 1;
@@ -32,6 +39,7 @@ class CartItem extends Game implements CartItemInterface
             self::SCENARIO_ADD_CART => ['id', 'quantity'],
             self::SCENARIO_EDIT_CART => ['id', 'quantity'],
             self::SCENARIO_INFO_CART => ['id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
+            self::SCENARIO_IMPORT_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
         ];
     }
 
@@ -39,11 +47,11 @@ class CartItem extends Game implements CartItemInterface
     {
         return [
             [['id'], 'required'],
-            [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT_CART, self::SCENARIO_ADD_CART]],
+            [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT_CART, self::SCENARIO_ADD_CART, self::SCENARIO_IMPORT_CART]],
             ['quantity', 'number'],
             ['quantity', 'default', 'value' => 1],
-            [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => self::SCENARIO_INFO_CART],
-            [['server', 'recover_code', 'note'], 'trim', 'on' => self::SCENARIO_INFO_CART],
+            [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
+            [['server', 'recover_code', 'note'], 'trim', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
         ];
     }
 

@@ -183,6 +183,11 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='/setting/import'}" class="nav-link " code='setting.import'>
+            <span class="title">Imports</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/setting/gallery'}" class="nav-link " code='setting.gallery'>
             <span class="title">Home banner</span>
             </a>

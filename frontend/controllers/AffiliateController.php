@@ -32,15 +32,6 @@ class AffiliateController extends Controller
     public function actionIndex()
     {
         $user = Yii::$app->user->getIdentity();
-        if (!$user->affiliate_code) throw new NotFoundHttpException("Not found", 1);
-        return $this->render('index', [
-            'user' => $user
-        ]);
-    }
-
-    public function actionIndex()
-    {
-        $user = Yii::$app->user->getIdentity();
         $request = Yii::$app->request;
         if ($request->isPost) {
             $affiliates = $request->post('affiliates', []);

@@ -12,7 +12,7 @@ use backend\forms\GallerySettingForm;
 use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
 use backend\forms\SkrillSettingForm;
-
+use backend\forms\ImportSettingForm;
 /**
  * Class SettingController
  *
@@ -43,6 +43,12 @@ class SettingController extends Controller
                 'modelClass' => HeaderScriptSettingForm::class,
                 'view' => 'script.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.script']
+            ],
+            'import' => [
+                'class' => SettingsAction::class,
+                'modelClass' => ImportSettingForm::class,
+                'view' => 'import.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.import']
             ],
             'paypal' => [
                 'class' => SettingsAction::class,
