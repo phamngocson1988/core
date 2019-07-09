@@ -224,7 +224,8 @@ class SiteController extends Controller
         $model = VerifyAccountViaPhoneForm::findUserByAuth($auth);
         if (!$model) throw new NotFoundHttpException('model does not exist.');
         // Register an event
-        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'afterActiveEvent']);
+        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'referApplyingEvent']);
+        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
 
         if ($model->load($request->post()) && $model->verify()) {
             Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
@@ -233,15 +234,6 @@ class SiteController extends Controller
             Yii::$app->getSession()->setFlash('success', $model->getErrorSummary(true));
         }
         return $this->render('verify-phone', ['model' => $model]);
-    }
-
-    public function actionTest($phone)
-    {
-        $provider = new \common\components\telecom\SpeedSms();
-        if (!$provider->sms($phone)) {
-            print_r($provider);
-        }
-        echo 'Success';
     }
 
     public function actionSendVerificationCode($auth)
@@ -256,6 +248,22 @@ class SiteController extends Controller
         }
         return $this->redirect(['site/verify-phone', 'auth' => $auth]);
     }
+
+    // public function actionVerifyEmail($id, $key)
+    // {
+    //     $confirmForm = new ActiveCustomerForm([
+    //         'id'=>$id,
+    //         'auth_key'=>$key,
+    //     ]);
+    //     if ($user = $confirmForm->confirm()) {
+    //         Yii::$app->getSession()->setFlash('success','Success!');
+    //         Yii::$app->getUser()->login($user);
+    //     } else{
+    //         Yii::$app->getSession()->setFlash('warning','Failed!');
+    //     }
+        
+    //     return $this->goHome();
+    // }
 
     public function actionFindEmail($email)
     {

@@ -1,6 +1,7 @@
 <?php
 namespace frontend\events;
 
+use Yii;
 use yii\base\Event;
 use yii\base\Model;
 use frontend\models\UserRefer;
@@ -47,7 +48,7 @@ class SignupEventHandler extends Model
         $user->save();
     }
 
-    public static function afterActiveEvent($event) 
+    public static function referApplyingEvent($event) 
     {
         $user = $event->sender;
         if (!$user) return;
@@ -62,6 +63,22 @@ class SignupEventHandler extends Model
             $referModel->status = UserRefer::STATUS_ACTIVATED;
             $referModel->save();
         }
+    }
+
+    public static function notifyWelcomeEmail($event) 
+    {
+        $user = $event->sender;
+        if (!$user) return;
+        $admin = Yii::$app->params['email_admin'];
+        $siteName = Yii::$app->name;
+        $email = Yii::$app->mailer->compose('welcome_newcomer', [
+            'user' => $user
+        ])
+        ->setTo($user->email)
+        ->setFrom([$admin => $siteName])
+        ->setSubject('Registration Confirmation')
+        ->setTextBody("Welcome to Kinggems")
+        ->send();
     }
 }
 
