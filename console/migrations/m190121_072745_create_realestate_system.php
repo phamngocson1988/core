@@ -68,6 +68,25 @@ class m190121_072745_create_realestate_system extends Migration
             'realestate_id' => $this->integer(),
             'image_id' => $this->integer(),
         ], $tableOptions);
+
+        $this->createTable('{{%service}}', [
+            'id' => $this->primaryKey(),
+            'title' => $this->string(255),
+        ], $tableOptions);
+
+        $this->createTable('{{%realestate_service}}', [
+            'id' => $this->primaryKey(),
+            'service_id' => $this->integer()->notNull(),
+            'realestate_id' => $this->integer()->notNull(),
+            'price' => $this->integer(),
+        ], $tableOptions);
+
+        $this->createTable('{{%room_service}}', [
+            'id' => $this->primaryKey(),
+            'room_id' => $this->integer()->notNull(),
+            'realestate_service_id' => $this->integer()->notNull(),
+            'price' => $this->integer(),
+        ], $tableOptions);
     }
 
     /**
