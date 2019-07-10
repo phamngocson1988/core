@@ -17,4 +17,9 @@ class RealestateService extends \yii\db\ActiveRecord
             [['price'], 'number'],
         ];
     }
+
+    public function getService()
+    {
+        return $this->hasOne(Service::className(), ['id' => 'service_id']);
+    }
 }

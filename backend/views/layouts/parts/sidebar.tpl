@@ -62,68 +62,19 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user-following"></i>
-        <span class="title">{Yii::t('app', 'staffs')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/staff/index'}" class="nav-link " code='staff.index'>
-            <span class="title">{Yii::t('app', 'staffs')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/department/index'}" class="nav-link " code='department.index'>
-            <span class="title">{Yii::t('app', 'department')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      {if Yii::$app->user->can('admin')}
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-clock"></i>
-        <span class="title">{Yii::t('app', 'tasks')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/task/index'}" class="nav-link " code='task.index'>
-            <span class="title">{Yii::t('app', 'tasks')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      {/if}
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-note"></i>
-        <span class="title">{Yii::t('app', 'posts')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/post/index'}" class="nav-link " code='post.index'>
-            <span class="title">{Yii::t('app', 'posts')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/category/index'}" class="nav-link " code='category.index'>
-            <span class="title">{Yii::t('app', 'categories')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
         <i class="fa fa-building"></i>
-        <span class="title">{Yii::t('app', 'realestates')}</span>
+        <span class="title">Nhà cho thuê</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
             <a href="{url route='/realestate'}" class="nav-link " code='realestate.index'>
-            <span class="title">{Yii::t('app', 'realestates')}</span>
+            <span class="title">Nhà cho thuê</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/service'}" class="nav-link " code='service.index'>
+            <span class="title">Dịch vụ</span>
             </a>
           </li>
         </ul>

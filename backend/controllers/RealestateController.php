@@ -10,6 +10,9 @@ use backend\forms\EditRealestateForm;
 use backend\forms\DeleteRealestateForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
+use common\models\Realestate;
+use common\models\Service;
+use common\models\RealestateService;
 
 class RealestateController extends Controller
 {
@@ -106,6 +109,26 @@ class RealestateController extends Controller
             return $this->renderJson($form->delete(), [], $form->getErrorSummary(true));
         }
         return $this->redirectNotFound();
+    }
+
+    public function actionService($id)
+    {
+        $this->view->params['main_menu_active'] = 'realestate.index';
+        $request = Yii::$app->request;
+        $realestate = Realestate::findOne($id);
+        $services = Service::find()->all();
+        $model = new RealestateService();
+        $model->realestate_id = $id;
+        if ($model->load($request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Thành công');
+            $model = new RealestateService();
+            $request->bodyParams = [];
+        }
+        return $this->render('service', [
+            'realestate' => $realestate,
+            'model' => $model,
+            'services' => $services
+        ]);
     }
     
 }

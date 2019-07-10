@@ -63,6 +63,23 @@ class m190121_072745_create_realestate_system extends Migration
             $command->execute();
         }
 
+        $this->createTable('{{%room}}', [
+            'id' => $this->primaryKey(),
+            'code' => $this->string(50)->notNull(),
+            'title' => $this->string(100)->notNull(),
+            'content' => $this->text(),
+            'image_id' => $this->integer(),
+            'realestate_id' => $this->integer()->notNull(),
+            'price' => $this->integer()defaultValue(0),
+            'status' => $this->string()->comment('Enum: available,rent')->defaultValue('available')->notNull(),
+        ], $tableOptions);
+
+        if ($this->db->driverName === 'mysql') {
+            $alter = "ALTER TABLE {{%room}} MODIFY `status` ENUM('available', 'rent') NULL";
+            $command = $this->db->createCommand($alter);
+            $command->execute();
+        }
+
         $this->createTable('{{%realestate_image}}', [
             'id' => $this->primaryKey(),
             'realestate_id' => $this->integer(),

@@ -16,6 +16,7 @@ class Realestate extends \yii\db\ActiveRecord
     const DIRECTION_T = 'T';
     const DIRECTION_N = 'N';
     const DIRECTION_B = 'B';
+    public $service_id;
     /**
      * {@inheritdoc}
      */
@@ -118,4 +119,15 @@ class Realestate extends \yii\db\ActiveRecord
         }
         return $excerpt;
     }  
+
+    public function getServices()
+    {
+        return $this->hasMany(Service::className(), ['id' => 'service_id'])
+            ->viaTable(RealestateService::tableName(), ['realestate_id' => 'id']);
+    }
+
+    public function getRealestateServices()
+    {
+        return $this->hasMany(RealestateService::className(), ['realestate_id' => 'id']);
+    }
 }

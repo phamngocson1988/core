@@ -1,8 +1,3 @@
-{use class='backend\widgets\DashboardTaskWidget'}
-{use class='backend\widgets\DashboardStatisticsWidget'}
-{use class='backend\widgets\DashboardStaffBirthdayWidget'}
-{use class='backend\widgets\DashboardTaskStatsWidget'}
-
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -24,17 +19,4 @@
 </h1>
 <!-- END PAGE TITLE-->
 <!-- END PAGE HEADER-->
-<!-- BEGIN DASHBOARD STATS 1-->
-{DashboardStatisticsWidget::widget()}
-<div class="clearfix"></div>
-<!-- END DASHBOARD STATS 1-->
-
-<div class="row">
-{DashboardTaskWidget::widget()}
-{DashboardStaffBirthdayWidget::widget()}
-</div>
-
-<div class="row">
-  {DashboardTaskStatsWidget::widget()}
-</div>
 
