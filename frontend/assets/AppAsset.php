@@ -12,6 +12,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+        'css/font-awesome-all.css',
         'css/layout.css',
         'css/jquery.bxslider.css',
 

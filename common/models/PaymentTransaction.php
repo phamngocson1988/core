@@ -25,7 +25,7 @@ class PaymentTransaction extends ActiveRecord
 
 	public static function tableName()
     {
-        return '{{%transaction}}';
+        return '{{%payment_transaction}}';
     }
 
     public function generateAuthKey()

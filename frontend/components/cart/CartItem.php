@@ -60,6 +60,11 @@ class CartItem extends Game implements CartItemInterface
         return $this->getPrice() * $this->quantity;
     }
 
+    public function getTotalOriginalPrice()
+    {
+        return $this->getOriginalPrice() * $this->quantity;
+    }
+
     public function getTotalUnit()
     {
         return $this->pack * $this->quantity;

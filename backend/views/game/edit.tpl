@@ -90,12 +90,6 @@
                 <li class="active">
                   <a href="#main" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
-                {* <li>
-                  <a href="#packages" data-toggle="tab">Gói bán game</a>
-                </li>
-                <li>
-                  <a href="#images" data-toggle="tab">Hình ảnh</a>
-                </li> *}
               </ul>
             </div>
             <div class="portlet-body">
@@ -109,46 +103,6 @@
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
                 </div>
-                <div class="tab-pane" id="packages">
-                  <div style="margin-bottom: 10px;">
-                    <a class="btn green" data-toggle="modal" id="add_packages" href="#new-product-modal">{Yii::t('app', 'add_new')}</a>
-                  </div>
-                  <div id="products">
-                  <table class="table table-striped table-bordered table-hover table-checkable">
-                    <thead>
-                      <tr>
-                        <th style="width: 20%;"> {Yii::t('app', 'title')} </th>
-                        <th style="width: 10%;"> {Yii::t('app', 'price')} </th>
-                        <th style="width: 10%;"> {Yii::t('app', 'unit')} </th>
-                        <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        {if (!$model->products) }
-                        <tr><td colspan="4">{Yii::t('app', 'no_data_found')}</td></tr>
-                        {/if}
-                        {foreach $model->products as $key => $product}
-                        <tr id="product-row-{$product->id}" row-data='{$product->id}'>
-                          <td style="vertical-align: middle;" row-data='title'>{$product->title}</td>
-                          <td style="vertical-align: middle;" row-data='price'>{$product->price}</td>
-                          <td style="vertical-align: middle;" row-data='unit'>{$product->unit}</td>
-                          <td style="vertical-align: middle;" class='actions'>
-                            <a href='{url route="game/remove-product" id=$product->id}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}" data-pjax="0"><i class="fa fa-trash-o"></i></a>
-                          </td>
-                        </tr>
-                        {/foreach}
-                    </tbody>
-                  </table>
-                  </div>
-                </div>
-                <div class="tab-pane" id="images">
-                  {MultipleImageInputWidget::widget([
-                    'name' => 'test', 
-                    'items' => array_column($model->images, 'image_id'),
-                    'ajax_add_url' => "{url route='game/add-gallery' id=$model->id}",
-                    'ajax_remove_url' => "{url route='game/remove-gallery' id=$model->id}"
-                  ])}
-                </div>
               </div>
             </div>
           </div>
@@ -160,38 +114,6 @@
 </div>
 {/ActiveForm}
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="new-product-modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Tạo gói game</h4>
-      </div>
-      {ActiveForm assign='newform' options=['id' => 'add-product-form'] action="{url route='game/add-product' id=$model->id}"}
-      <div class="modal-body">
-      {$newform->field($newProductModel, 'game_id', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()}
-        <div class="row">
-          <div class="col-md-12">
-            {$newform->field($newProductModel, 'title')}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            {$newform->field($newProductModel, 'price')}
-          </div>
-          <div class="col-md-6">
-            {$newform->field($newProductModel, 'unit')}
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">{Yii::t('app', 'cancel')}</button>
-        <button type="submit" class="btn btn-primary">{Yii::t('app', 'submit')}</button>
-      </div>
-      {/ActiveForm}
-    </div>
-  </div>
-</div>
 {registerJs}
 {literal}
 var game_id = '{/literal}{$model->id}{literal}';

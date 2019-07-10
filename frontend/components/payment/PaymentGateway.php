@@ -50,19 +50,17 @@ class PaymentGateway extends Model
         $this->initResponseParams();
         $this->trigger(self::EVENT_BEFORE_CONFIRM);
         $response = $this->getConfirmParams();
-        Yii::info($response, 'skirll_response');
-        Yii::info($this->getReferenceId(), 'skirll_response');
         $result = $this->verify($response);
-        $this->trigger(self::EVENT_AFTER_CONFIRM);
-        if ($result) {
-            Yii::info($this->identifier . $this->getReferenceId() . " confirm success");
-            $this->trigger(self::EVENT_CONFIRM_SUCCESS);
-            return $this->doSuccess();
-        } else {
-            Yii::info($this->identifier . $this->getReferenceId() . " confirm failure");
-            $this->trigger(self::EVENT_CONFIRM_ERROR);
-            return $this->doError();
-        }
+        // $this->trigger(self::EVENT_AFTER_CONFIRM);
+        // if ($result) {
+        //     Yii::info($this->identifier . $this->getReferenceId() . " confirm success");
+        //     $this->trigger(self::EVENT_CONFIRM_SUCCESS);
+        //     return $this->doSuccess();
+        // } else {
+        //     Yii::info($this->identifier . $this->getReferenceId() . " confirm failure");
+        //     $this->trigger(self::EVENT_CONFIRM_ERROR);
+        //     return $this->doError();
+        // }
         return $result;
     }
 
@@ -143,16 +141,15 @@ class PaymentGateway extends Model
 
     protected function getErrorUrl($params = [])
     {
-        return $this->error_url;
         return Url::to(array_merge([$this->error_url], $params), true);
     }
 
-    protected function doSuccess()
+    public function doSuccess()
     {
 
     }
 
-    protected function doError()
+    public function doError()
     {
 
     }

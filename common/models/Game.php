@@ -5,7 +5,6 @@ use Yii;
 use yii\db\ActiveRecord;
 use common\models\User;
 use common\models\Image;
-use common\models\Product;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 
@@ -82,12 +81,6 @@ class Game extends ActiveRecord
             return $image->getUrl($size);
         }
         return $default;
-    }
-
-    public function getProducts() 
-    {
-        return $this->hasMany(Product::className(), ['game_id' => 'id'])
-        ->where('status = :status', [':status' => Product::STATUS_VISIBLE]);
     }
 
     public function getCreator()

@@ -142,16 +142,16 @@ class TopupController extends Controller
         ]);
         $paymentCart->addItem($paymentCartItem);
         
-        if ($cart->hasPromotion()) {
-            $cart->applyPromotion();
-            $promotionItem = $cart->getPromotionItem();
-            $paymentPromotion = new PaymentPromotion([
-                'id' => $promotionItem->code,
-                'title' => 'promotion promotion code ' . $promotionItem->code,
-                'price' => $cart->getPromotionMoney()
-            ]);
-            $paymentCart->setPromotion($paymentPromotion);
-        }
+        // if ($cart->hasPromotion()) {
+        //     $cart->applyPromotion();
+        //     $promotionItem = $cart->getPromotionItem();
+        //     $paymentPromotion = new PaymentPromotion([
+        //         'id' => $promotionItem->code,
+        //         'title' => 'promotion promotion code ' . $promotionItem->code,
+        //         'price' => $cart->getPromotionMoney()
+        //     ]);
+        //     $paymentCart->setPromotion($paymentPromotion);
+        // }
         $gateway = PaymentGatewayFactory::getClient($identifier);
 
         // Save transaction
@@ -185,11 +185,10 @@ class TopupController extends Controller
     public function actionVerify($identifier)
     {
         $gateway = PaymentGatewayFactory::getClient($identifier);
-        $gateway->on(PaymentGateway::EVENT_CONFIRM_SUCCESS, function($event) {
-            try {
-                $gateway = $event->sender;
-                $user = Yii::$app->user->getIdentity();
+        try {
+            if ($gateway->confirm()) {
                 $refId = $gateway->getReferenceId();
+                $user = Yii::$app->user->getIdentity();
                 $trn = PaymentTransaction::find()->where([
                     'payment_id' => $refId, 
                     'status' => PaymentTransaction::STATUS_PENDING
@@ -201,7 +200,7 @@ class TopupController extends Controller
                 $trn->status = PaymentTransaction::STATUS_COMPLETED;
                 $trn->payment_at = date('Y-m-d H:i:s');
                 $trn->save();
-
+        
                 $wallet = new UserWallet();
                 $wallet->coin = $trn->total_coin;
                 $wallet->balance = $user->getWalletAmount() + $wallet->coin;
@@ -214,11 +213,16 @@ class TopupController extends Controller
                 $wallet->status = UserWallet::STATUS_COMPLETED;
                 $wallet->payment_at = date('Y-m-d H:i:s');
                 $wallet->save();
-            } catch (Exception $e) {
-                throw new Exception($e->getMessage(), 1);
+                return $gateway->doSuccess();
+            } else {
+                return $gateway->doError();
             }
-        });
-        return $gateway->confirm();
+        } catch (Exception $e) {
+            Yii::error($gateway->identifier . $gateway->getReferenceId() . " confirm error " . $e->getMessage());
+            return $gateway->doError();
+        }
+        
+        
     }
 
     public function actionSuccess()
@@ -228,6 +232,11 @@ class TopupController extends Controller
             'title' => 'You have just bought a pricing successfully.',
             'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
         ]);
+    }
+
+    public function actionError()
+    {
+        die('error');
     }
 
     public function actionCancel($identifier)

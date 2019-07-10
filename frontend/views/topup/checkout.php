@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 
 $cart = Yii::$app->kingcoin;
 $item = $cart->getItem();
-$cart->applyPromotion();
+// $cart->applyPromotion();
 ?>
 <section class="section-xl text-center bg-default">
   <div class="container">

@@ -18,7 +18,8 @@ AppAsset::register($this);
 <!--[if IE 9 ]> <html lang="vi" class="ie9 loading-site no-js"> <![endif]-->
 <!--[if IE 8 ]> <html lang="vi" class="ie8 loading-site no-js"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!-->
-<html class="loading-site no-js" lang="<?= Yii::$app->language ?>">
+<html lang="vi" class="loading-site no-js" lang="<?= Yii::$app->language ?>">
+<!--<![endif]-->
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -32,21 +33,15 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 <div class="wrapper">
   <section class="header">
-    <div class="container">
-      <div class="row">
-        <div class="col col-sm-12">
-          <?php require_once(Yii::$app->basePath . '/views/layouts/top-header.php');?>
-          <?php require_once(Yii::$app->basePath . '/views/layouts/bottom-header.php');?>
-        </div>
-      </div>
-    </div>
+    <?php require_once(Yii::$app->basePath . '/views/layouts/top-header.php');?>
+    <?php require_once(Yii::$app->basePath . '/views/layouts/bottom-header.php');?>
   </section>
   <?= $content ?>
   <?php require_once(Yii::$app->basePath . '/views/layouts/highlight.php');?>
   <?php require_once(Yii::$app->basePath . '/views/layouts/footer.php');?>
 </div>
 <?php $this->endBody() ?>
-<?php require_once(Yii::$app->basePath . '/views/layouts/livechat.php');?>
 </body>
+<?php require_once(Yii::$app->basePath . '/views/layouts/livechat.php');?>
 </html>
 <?php $this->endPage() ?>

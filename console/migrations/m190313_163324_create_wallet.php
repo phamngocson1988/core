@@ -24,6 +24,8 @@ class m190313_163324_create_wallet extends Migration
             'user_id' => $this->integer(11)->notNull(),
             'coin' => $this->integer(11)->notNull()->defaultValue(0),
             'balance' => $this->integer(11)->notNull()->defaultValue(0),
+            'ref_name' => $this->string(100), 
+            'ref_key' => $this->string(100), 
             'description' => $this->string(100), 
             'created_by' => $this->integer(11),
             'created_at' => $this->dateTime()->notNull(),
@@ -40,8 +42,6 @@ class m190313_163324_create_wallet extends Migration
             'payment_id' => $this->string(50)->notNull(),
             'payment_data' => $this->string(100),
             'description' => $this->string(100), 
-            'ref_name' => $this->string(100), 
-            'ref_key' => $this->string(100), 
             'created_by' => $this->integer(11),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime(),
@@ -93,6 +93,7 @@ class m190313_163324_create_wallet extends Migration
         echo "m190313_163324_create_wallet cannot be reverted.\n";
         $this->dropTable('{{%user_wallet}}');
         $this->dropTable('{{%pricing_coin}}');
+        $this->dropTable('{{%payment_transaction}}');
         return false;
     }
 

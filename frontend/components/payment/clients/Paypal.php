@@ -120,8 +120,6 @@ class Paypal extends PaymentGateway
                 $link = $payment->getApprovalLink();
                 $query = parse_url($link, PHP_URL_QUERY);
                 parse_str($query, $params);
-                // $token = isset($params['token']) ? $params['token'] : '';
-                // $this->setReferenceId($token);
                 return $this->redirect($link);
             }  
         } catch (PayPalConnectionException $ex) {
@@ -155,12 +153,12 @@ class Paypal extends PaymentGateway
         return true;
     }
 
-    protected function doSuccess()
+    public function doSuccess()
     {
         return $this->redirect($this->getSuccessUrl());
     }
 
-    protected function doError()
+    public function doError()
     {
         return $this->redirect($this->getErrorUrl());
     }

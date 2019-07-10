@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 use frontend\models\Game;
+use frontend\models\Promotion;
 use frontend\components\cart\CartItem;
 
 /**
@@ -29,9 +30,11 @@ class GameController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['id' => SORT_DESC])
                             ->all();
+        $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
+            'promotions' => $promotions,
             'q' => $q,
         ]);
     }
@@ -44,6 +47,7 @@ class GameController extends Controller
         if ($game->load($request->post()) && $game->validate()) {
             if ($request->isAjax) {
                 return $this->asJson(['status' => true, 'data' => [
+                    'origin' => $game->getTotalOriginalPrice(),
                     'price' => $game->getTotalPrice(),
                     'unit' => $game->getTotalUnit()
                 ]]);
@@ -56,8 +60,10 @@ class GameController extends Controller
         if ($request->isAjax) {
             return $this->asJson(['status' => false, 'game' => $game, 'error' => $game->getErrorSummary(true)]);
         }
+        $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
     	return $this->render('view', [
             'game' => $game,
+            'promotions' => $promotions,
         ]);
     }
 }

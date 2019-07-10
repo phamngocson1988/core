@@ -97,11 +97,8 @@ class GameController extends Controller
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
-        $product = new Product();
-        $product->game_id = $id;
         return $this->render('edit.tpl', [
             'model' => $model,
-            'newProductModel' => $product,
             'back' => $request->get('ref', Url::to(['game/index']))
         ]);
     }
