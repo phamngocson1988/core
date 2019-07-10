@@ -11,12 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
-    'bootstrap' => ['log', 'shop'],
-    'modules' => [
-        'shop' => [
-            'class' => 'backend\modules\shop\Module',
-        ],
-    ],
+    'bootstrap' => ['log'],
     'language' => 'vi',
     'sourceLanguage' => 'en-US',
     'components' => [
@@ -83,13 +78,6 @@ return [
                     ],
                 ],
             ],
-        ],
-        'image' => [
-            'class' => 'common\components\uploadfiles\standard\ImageHandler',
-            'image_path' => '@common/uploads/images',
-            'image_url' => 'http://image.core.com',
-            // 'file_path' => '@common/uploads/files',
-            // 'file_url' => 'http://file.chuchu.com',
         ],
     ],
     'params' => $params,

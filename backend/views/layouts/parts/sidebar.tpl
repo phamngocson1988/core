@@ -75,25 +75,6 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-note"></i>
-        <span class="title">{Yii::t('module.shop', 'products')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/shop/product'}" class="nav-link " code='product.index'>
-            <span class="title">{Yii::t('module.shop', 'products')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/shop/category/index'}" class="nav-link " code='product.category.index'>
-            <span class="title">{Yii::t('module.shop', 'categories')}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
         <span class="title">{Yii::t('app', 'settings')}</span>
         <span class="arrow"></span>
