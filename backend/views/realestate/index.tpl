@@ -8,13 +8,13 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'manage_realestates')}</span>
+      <span>Quản lý nhà cho thuê</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'manage_realestates')}</h1>
+<h1 class="page-title">Quản lý nhà cho thuê</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -23,7 +23,7 @@
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> {Yii::t('app', 'manage_realestates')}</span>
+          <span class="caption-subject bold uppercase"> Quản lý nhà cho thuê</span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">

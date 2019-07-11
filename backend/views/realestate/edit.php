@@ -28,17 +28,17 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['realestate/index']);?>"><?= Yii::t('app', 'manage_realestates');?></a>
+      <a href="<?=Url::to(['realestate/index']);?>">Quản lý nhà cho thuê</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span><?= Yii::t('app', 'edit_realestate');?></span>
+      <span>Chỉnh sửa</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title"> <?= Yii::t('app', 'edit_realestate');?> </h1>
+<h1 class="page-title"> Chỉnh sửa </h1>
 <!-- END PAGE TITLE-->
 <?php $form = ActiveForm::begin(['class' => 'form-horizontal form-row-seperated form']);?>
 <?=$form->field($model, 'id', ['template' => '{input}'])->hiddenInput();?>

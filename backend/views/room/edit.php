@@ -33,13 +33,13 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo phòng</span>
+      <span>Chỉnh sửa</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title"> Tạo phòng </h1>
+<h1 class="page-title"> Chỉnh sửa </h1>
 <!-- END PAGE TITLE-->
 <?php $form = ActiveForm::begin(['class' => 'form-horizontal form-row-seperated form']);?>
 <div class="row">

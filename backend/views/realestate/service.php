@@ -17,17 +17,17 @@ use common\widgets\TinyMce;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['promotion/index'])?>">Quản lý khuyến mãi</a>
+      <a href="<?=Url::to(['realestate/index'])?>">Quản lý nhà cho thuê</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo khuyến mãi</span>
+      <span>Quản lý dịch vụ</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Tạo khuyến mãi</h1>
+<h1 class="page-title">Quản lý dịch vụ</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">

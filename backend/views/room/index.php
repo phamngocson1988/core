@@ -21,6 +21,10 @@ use common\widgets\TinyMce;
       <i class="fa fa-circle"></i>
     </li>
     <li>
+      <a href="<?=Url::to(['room/index', 'id' => $realestate->id]);?>"><?=$realestate->title;?></a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
       <span>Quản lý phòng</span>
     </li>
   </ul>
