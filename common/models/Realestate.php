@@ -130,4 +130,9 @@ class Realestate extends \yii\db\ActiveRecord
     {
         return $this->hasMany(RealestateService::className(), ['realestate_id' => 'id']);
     }
+
+    public function getRooms()
+    {
+        return $this->hasMany(Room::className(), ['realestate_id' => 'id']);
+    }
 }

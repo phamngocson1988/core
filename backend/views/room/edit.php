@@ -16,7 +16,6 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/boo
 $this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -96,16 +95,16 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   <hr/>
                   <div class="row">
                     <?php foreach ($roomServices as $roomService) : ?>
-                    <?php $service = ArrayHelper::getValue($services, $roomService->realestate_service_id);?>
-                    <?php if (!$service) continue;?>
-                    <div class="col-lg-3">
-                      <div class="input-group">
-                        <span class="input-group-addon">
-                          <input type="checkbox" value="1" <?=($roomService->isApply()) ? 'checked="checked"' : '';?> name="roomServices[<?=$roomService->realestate_service_id;?>][apply]"> <?=$service->title;?>
-                        </span>
-                        <input type="text" class="form-control" name="roomServices[<?=$roomService->realestate_service_id;?>][price]" value="<?=$roomService->price;?>">
-                      </div><!-- /input-group -->
-                    </div><!-- /.col-lg-3 -->
+                      <?php $service = ArrayHelper::getValue($services, $roomService->realestate_service_id);?>
+                      <?php if (!$service) continue;?>
+                      <div class="col-lg-3">
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <input type="checkbox" value="1" <?=($roomService->isApply()) ? 'checked="checked"' : '';?> name="roomServices[<?=$roomService->realestate_service_id;?>][apply]"> <?=$service->title;?>
+                          </span>
+                          <input type="text" class="form-control" name="roomServices[<?=$roomService->realestate_service_id;?>][price]" value="<?=$roomService->price;?>">
+                        </div><!-- /input-group -->
+                      </div><!-- /.col-lg-3 -->
                     <?php endforeach;?>
                   </div><!-- /.row -->
                 </div>

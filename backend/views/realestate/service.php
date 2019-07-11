@@ -78,7 +78,35 @@ use common\widgets\TinyMce;
                           <td style="vertical-align: middle;"><?=$service->title;?></td>
                           <td style="vertical-align: middle;"><?=number_format($realestateService->price);?></td>
                           <td style="vertical-align: middle;">
-                            <a href='<?=Url::to(['service/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                            <a href='#edit<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                            <a href='<?=Url::to(['realestate/delete-service', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
+                            <div class="modal fade" id="edit<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                    <h4 class="modal-title">Chỉnh sửa nội dung dịch vụ</h4>
+                                  </div>
+                                  <?php $editForm = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated edit-form', 'id' => 'edit-form-' . $model->id], 'action' => Url::to(['realestate/edit-service', 'id' => $model->id])]);?>
+                                  <div class="modal-body"> 
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <?=$editForm->field($model, 'price', [
+                                          'options' => ['style' => 'margin: 10px']
+                                        ])->textInput()->label('Giá dịch vụ');?>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Đóng</button>
+                                    <button type="submit" class="btn green">Cập nhật</button>
+                                  </div>
+                                  <?php ActiveForm::end();?>
+                                </div>
+                                <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                            </div>
                           </td>
                         </tr>
                         <?php endforeach;?>
@@ -106,3 +134,28 @@ use common\widgets\TinyMce;
     <?php ActiveForm::end()?>
   </div>
 </div>
+
+<?php
+$script = <<< JS
+// edit
+var editForm = new AjaxFormSubmit({element: '.edit-form'});
+editForm.success = function (data, form) {
+  location.reload();
+};
+editForm.error = function (errors) {
+  alert(errors[0]);
+  return false;
+}
+
+// delete
+$('.delete').ajax_action({
+  method: 'DELETE',
+  confirm: true,
+  confirm_text: 'Bạn có muốn xóa dịch vụ này không? Thao tác này sẽ xóa luôn những dịch vụ trong những phòng thuộc nhà cho thuê này.',
+  callback: function(data) {
+    location.reload();
+  },
+});
+JS;
+$this->registerJs($script);
+?>

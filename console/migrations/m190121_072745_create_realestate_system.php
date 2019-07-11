@@ -70,7 +70,7 @@ class m190121_072745_create_realestate_system extends Migration
             'content' => $this->text(),
             'image_id' => $this->integer(),
             'realestate_id' => $this->integer()->notNull(),
-            'price' => $this->integer()defaultValue(0),
+            'price' => $this->integer()->defaultValue(0),
             'status' => $this->string()->comment('Enum: available,rent')->defaultValue('available')->notNull(),
         ], $tableOptions);
 
@@ -102,7 +102,8 @@ class m190121_072745_create_realestate_system extends Migration
             'id' => $this->primaryKey(),
             'room_id' => $this->integer()->notNull(),
             'realestate_service_id' => $this->integer()->notNull(),
-            'price' => $this->integer(),
+            'price' => $this->integer()->notNull()->defaultValue(0),
+            'apply' => $this->integer()->notNull()->defaultValue(0),
         ], $tableOptions);
     }
 
@@ -114,6 +115,10 @@ class m190121_072745_create_realestate_system extends Migration
         echo "m190121_072745_create_realestate_system cannot be reverted.\n";
         $this->dropTable('{{%realestate}}');
         $this->dropTable('{{%realestate_image}}');
+        $this->dropTable('{{%service}}');
+        $this->dropTable('{{%realestate_service}}');
+        $this->dropTable('{{%room}}');
+        $this->dropTable('{{%room_service}}');
         return false;
     }
 

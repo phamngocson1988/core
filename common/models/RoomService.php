@@ -17,4 +17,21 @@ class RoomService extends \yii\db\ActiveRecord
             [['price'], 'number'],
         ];
     }
+
+    public function getRealestateService()
+    {
+        return $this->hasOne(RealestateService::className(), ['id', 'realestate_service_id']);
+    }
+
+    public function getPrice()
+    {
+        if ($this->price) return (int)$this->price;
+        $service = $this->realestateService;
+        return $service->price;
+    }
+
+    public function isApply()
+    {
+        return (boolean)$this->apply;
+    }
 }

@@ -2,7 +2,6 @@
 namespace backend\controllers;
 
 use Yii;
-use common\components\Controller;
 use yii\filters\AccessControl;
 use backend\forms\FetchRealestateForm;
 use backend\forms\CreateRealestateForm;
@@ -130,5 +129,26 @@ class RealestateController extends Controller
             'services' => $services
         ]);
     }
-    
+
+    public function actionDeleteService($id)
+    {
+        $request = Yii::$app->request;
+        $model = RealestateService::findOne($id);
+        if ($model && $model->delete()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
+
+    public function actionEditService($id)
+    {
+        $request = Yii::$app->request;
+        $model = RealestateService::findOne($id);
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->renderJson(true, []);
+        } else {
+            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        }
+    }
 }

@@ -22,4 +22,14 @@ class RealestateService extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Service::className(), ['id' => 'service_id']);
     }
+
+    public function afterDelete()
+    {
+        $roomServices = RoomService::find()->where(['realestate_service_id' => $this->id])->all();
+        foreach ($roomServices as $service) {
+            $service->delete();
+        }
+        parent::afterDelete();
+    }
+
 }

@@ -1,14 +1,14 @@
 <?php
-
 namespace backend\controllers;
 
 use Yii;
-use common\models\Room;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\forms\CreateRoomForm;
+use yii\helpers\ArrayHelper;
+use backend\models\Room;
+use backend\models\RoomService;
+use backend\models\Realestate;
 
 /**
  * RoomController implements the CRUD actions for Room model.
@@ -34,97 +34,131 @@ class RoomController extends Controller
      * Lists all Room models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Room::find(),
-        ]);
+        $this->view->params['main_menu_active'] = 'realestate.index';
+        $realestate = Realestate::findOne($id);
+        if (!$realestate) throw new NotFoundHttpException('Không tồn tại');
+        $rooms = $realestate->rooms;
+
+        // room services
+        $realestateServiceCommand = $realestate->getRealestateServices();
+        $realestateServices = $realestateServiceCommand->indexBy('id')->with('service')->all();
+        $services = array_map(function ($item) {
+            return $item->service;
+        }, $realestateServices);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'realestate' => $realestate,
+            'rooms' => $rooms,
+            'services' => $services
         ]);
     }
 
-    /**
-     * Displays a single Room model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
      * Creates a new Room model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
-        $model = new CreateRoomForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        $this->view->params['main_menu_active'] = 'realestate.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+        $request = Yii::$app->request;
+        $realestate = Realestate::findOne($id);
+        $model = new Room();
+        $model->setScenario(Room::SCENARIO_CREATE);
+        $model->realestate_id = $id;
+        if ($model->load($request->post()) && $model->save()) {
+            // print_r($request->post('roomServices', []));die;
+            foreach ($request->post('roomServices', []) as $rsId => $service) {
+                $roomService = new RoomService();
+                $roomService->realestate_service_id = $rsId;
+                $roomService->room_id = $model->id;
+                $roomService->price = $service['price'];
+                $roomService->apply = (int)ArrayHelper::getValue($service, 'apply');
+                $roomService->save();
+            }
+            return $this->redirect(['room/index', 'id' => $id]);
         } else {
-            print_r($model->getErrors());
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
+
+        // room services
+        $realestateServiceCommand = $realestate->getRealestateServices();
+        $realestateServices = $realestateServiceCommand->indexBy('id')->with('service')->all();
+        $roomServices = array_map(function($item) {
+            $rs = new RoomService();
+            $rs->realestate_service_id = $item->id;
+            $rs->price = $item->price;
+            $rs->apply = 0;
+            return $rs;
+        }, $realestateServices);
+        $services = array_map(function ($item) {
+            return $item->service;
+        }, $realestateServices);
 
         return $this->render('create', [
+            'realestate' => $realestate,
             'model' => $model,
+            'roomServices' => $roomServices,
+            'services' => $services
         ]);
     }
 
-    /**
-     * Updates an existing Room model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionEdit($id, $roomId)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $this->view->params['main_menu_active'] = 'realestate.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+        $request = Yii::$app->request;
+        $realestate = Realestate::findOne($id);
+        $model = Room::findOne($roomId);
+        $model->setScenario(Room::SCENARIO_EDIT);
+        if ($model->load($request->post()) && $model->save()) {
+            foreach ($request->post('roomServices', []) as $rsId => $service) {
+                $roomService = RoomService::findOne(['room_id' => $roomId, 'realestate_service_id' => $rsId]);
+                if (!$roomService) {
+                    $roomService = new RoomService();
+                    $roomService->room_id = $roomId;
+                    $roomService->realestate_service_id = $rsId;
+                }
+                $roomService->price = $service['price'];
+                $roomService->apply = (int)ArrayHelper::getValue($service, 'apply');
+                $roomService->save();
+            }
+            return $this->redirect(['room/index', 'id' => $id]);
+        } else {
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
 
-        return $this->render('update', [
+        // room services
+        $realestateServiceCommand = $realestate->getRealestateServices();
+        $realestateServices = $realestateServiceCommand->indexBy('id')->with('service')->all();
+        $roomServiceCommand = $model->getRoomServices();
+        $roomServices = $roomServiceCommand->indexBy('realestate_service_id')->all();
+        $missingServiceIds = array_diff(array_keys($realestateServices), array_keys($roomServices));
+        if (!empty($missingServiceIds)) {
+            foreach ($realestateServices as $realestateService) {
+                if (in_array($realestateService->id, $missingServiceIds)) {
+                    $rs = new RoomService();
+                    $rs->room_id = $roomId;
+                    $rs->realestate_service_id = $realestateService->id;
+                    $rs->price = $realestateService->price;
+                    $rs->apply = 0;
+                    $roomServices[$realestateService->id] = $rs;
+                }
+            }
+        }
+        $services = array_map(function ($item) {
+            return $item->service;
+        }, $realestateServices);
+
+        return $this->render('edit', [
+            'realestate' => $realestate,
             'model' => $model,
+            'roomServices' => $roomServices,
+            'services' => $services
         ]);
-    }
-
-    /**
-     * Deletes an existing Room model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Room model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Room the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Room::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }
