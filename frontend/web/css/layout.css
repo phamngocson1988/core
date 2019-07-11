@@ -84,6 +84,7 @@ section.header .top-header {
 .header .top-header .top-header-inner {
     background: rgba(0, 0, 0, 0.9);
     float: left;
+    padding-bottom: 15px;
 }
 
 .top-header .logo {
@@ -183,7 +184,7 @@ section.header .top-header {
     float: right;
     width: 100%;
     display: flex;
-    justify-content: right;
+    justify-content: flex-end;
     margin: 22px 20px 0 0;
 }
 
@@ -709,7 +710,26 @@ section.product-description h3 {
 
 /* End Product Detail */
 
+/* Chat Now */
+div.chat-now {
+    position: fixed;
+    top: 40%;
+    right: -80px;
+    transform: rotate(-90deg);
+}
+.chat-now .btn-chat-now, .chat-now a {
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    background: url(../images/ico-chat-now.png) no-repeat 25px center #ffdd00;
+    border-left: 4px solid #ff3600;
+    line-height: 60px;
+    padding: 0 20px 0 75px;
+    display: inline-block;
+    text-transform: uppercase;
+}
 
+/* Footer */
 .footer .top-footer {
     background: #fff;
 }
@@ -756,6 +776,10 @@ section.product-description h3 {
     float: left;
     margin-right: 20px;
     margin-bottom: 20px;
+}
+
+.footer .bot-footer .footer-security>div:nth-child(2n) {
+    margin-right: 0;
 }
 
 .footer .bot-footer .footer-socials {
