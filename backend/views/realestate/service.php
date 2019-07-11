@@ -79,7 +79,7 @@ use common\widgets\TinyMce;
                           <td style="vertical-align: middle;"><?=number_format($realestateService->price);?></td>
                           <td style="vertical-align: middle;">
                             <a href='#edit<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                            <a href='<?=Url::to(['realestate/delete-service', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
+                            <a href='<?=Url::to(['realestate/delete-service', 'id' => $realestateService->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                             <div class="modal fade" id="edit<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
