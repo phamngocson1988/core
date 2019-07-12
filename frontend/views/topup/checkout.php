@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 
 $cart = Yii::$app->kingcoin;
 $item = $cart->getItem();
-// $cart->applyPromotion();
+$cart->applyPromotion();
 ?>
 <section class="section-xl text-center bg-default">
   <div class="container">
@@ -53,8 +53,8 @@ $item = $cart->getItem();
                       <?php $form = ActiveForm::begin([
                         'action' => Url::to(['topup/purchase']),
                       ]); ?>
-                      <?=Html::radioList ( 'identifier', 'paypal', ['paypal' => 'Paypal', 'skrill' => 'Skrill'] );?>
-                      <?= Html::submitButton('Pay by Palpal', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
+                      <?=Html::radioList ( 'identifier', 'paypal', ['paypal' => 'Paypal', 'skrill' => 'Skrill', 'offline' => 'Offline payment'] );?>
+                      <?= Html::submitButton('Pay', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
                       <?php ActiveForm::end();?>
                     </div>
                   </div>

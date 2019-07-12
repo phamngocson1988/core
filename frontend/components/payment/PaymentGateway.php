@@ -48,19 +48,8 @@ class PaymentGateway extends Model
     public function confirm()
     {
         $this->initResponseParams();
-        $this->trigger(self::EVENT_BEFORE_CONFIRM);
         $response = $this->getConfirmParams();
         $result = $this->verify($response);
-        // $this->trigger(self::EVENT_AFTER_CONFIRM);
-        // if ($result) {
-        //     Yii::info($this->identifier . $this->getReferenceId() . " confirm success");
-        //     $this->trigger(self::EVENT_CONFIRM_SUCCESS);
-        //     return $this->doSuccess();
-        // } else {
-        //     Yii::info($this->identifier . $this->getReferenceId() . " confirm failure");
-        //     $this->trigger(self::EVENT_CONFIRM_ERROR);
-        //     return $this->doError();
-        // }
         return $result;
     }
 

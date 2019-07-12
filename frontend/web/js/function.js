@@ -31,3 +31,18 @@ function showLoader() {
 function hideLoader() {
     $(".overlay").hide();
 }
+
+// _y, _m, _d : jQuery object
+function correctDate(_y, _m, _d) {
+    var year, month, day;
+    year = parseInt(_y.val());
+    month = parseInt(_m.val());
+    day = parseInt(_d.val());
+    if (!year || !month || !day) return;
+    if ([1,2,3,4,5,6,7,8,9,10,11,12].indexOf(month) < 0) return;
+    if ([1,3,5,7,8,10,12].indexOf(month) >=0) day = Math.min(day, 31);
+    else if([4,6,9,11].indexOf(month) >=0) day = Math.min(day, 30);
+    else if ((year % 4) == 0) day = Math.min(day, 29);
+    else day = Math.min(day, 28);
+    _d.val(day);
+}

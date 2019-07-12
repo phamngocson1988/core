@@ -2,6 +2,8 @@
 use yii\bootstrap\ActiveForm;
 use frontend\forms\LoginForm;
 use yii\captcha\Captcha;
+use yii\helpers\Url;
+$setting = Yii::$app->settings;
 ?>
 <div class="container top-header-container">
     <div class="row">
@@ -13,20 +15,20 @@ use yii\captcha\Captcha;
                         <div class="mobile-nav-block">
                             <nav>
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Top up</a></li>
-                                    <li><a href="#">Shop</a></li>
-                                    <li><a href="#">Promotion</a></li>
-                                    <li><a href="#">Refer Friend</a></li>
-                                    <li><a href="#">Afiliate</a></li>
-                                    <li><a href="#">Q&A</a></li>
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="<?=Url::to(['topup/index']);?>">Top up</a></li>
+                                    <li><a href="<?=Url::to(['game/index']);?>">Shop</a></li>
+                                    <li><a href="<?=Url::to(['promotion/index']);?>">Promotion</a></li>
+                                    <li><a href="<?=Url::to(['refer/index']);?>">Refer Friend</a></li>
+                                    <li><a href="<?=Url::to(['affiliate/index']);?>">Afiliate</a></li>
+                                    <li><a href="<?=Url::to(['site/question']);?>">Q&A</a></li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                     <div class="logo fl-left">
                         <a href="#">
-                            <img src="/images/logo.png" alt="">
+                            <img src="<?=$setting->get('ApplicationSettingForm', 'logo');?>" alt="">
                         </a>
                     </div>
                     <div class="right-box fl-right" id="login-box-wrapper">
@@ -76,13 +78,13 @@ use yii\captcha\Captcha;
                         <div class="main-nav">
                             <nav>
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Top up</a></li>
-                                    <li><a href="#">Shop</a></li>
-                                    <li><a href="#">Promotion</a></li>
-                                    <li><a href="#">Refer Friend</a></li>
-                                    <li><a href="#">Afiliate</a></li>
-                                    <li><a href="#">Q&A</a></li>
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="<?=Url::to(['topup/index']);?>">Top up</a></li>
+                                    <li><a href="<?=Url::to(['game/index']);?>">Shop</a></li>
+                                    <li><a href="<?=Url::to(['promotion/index']);?>">Promotion</a></li>
+                                    <li><a href="<?=Url::to(['refer/index']);?>">Refer Friend</a></li>
+                                    <li><a href="<?=Url::to(['affiliate/index']);?>">Afiliate</a></li>
+                                    <li><a href="<?=Url::to(['site/question']);?>">Q&A</a></li>
                                 </ul>
                             </nav>
                             <div class="search-box">
@@ -98,7 +100,7 @@ use yii\captcha\Captcha;
                 </div>
                 <div class="header-time-box display-ib">
                     <span class="fl-left"><?=date('d/m/Y | H:i');?>(GTM+7)</span>
-                    <span class="fl-right">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span>
+                    <span class="fl-right"><?=$setting->get('ApplicationSettingForm', 'top_notice');?></span>
                 </div>
             </div>
         </div>

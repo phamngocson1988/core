@@ -26,7 +26,7 @@
         <div class="caption">Thiết lập cho Skrill</div>
         <div class="actions btn-set">
           <button type="reset" class="btn default">
-          <i class="fa fa-angle-left"></i> {Yii::t('app', 'reset')}</a>
+          <i class="fa fa-angle-left"></i> {Yii::t('app', 'reset')}
           <button type="submit" class="btn btn-success">
           <i class="fa fa-check"></i> {Yii::t('app', 'save')}
           </button>

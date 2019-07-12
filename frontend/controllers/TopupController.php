@@ -5,6 +5,7 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
+use yii\base\ViewNotFoundException;
 use yii\base\Exception;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -130,7 +131,7 @@ class TopupController extends Controller
         $identifier = $request->post('identifier');
         if (!$identifier) throw new InvalidParamException('You must choose a payment gateway');
         $paymentCart = new PaymentCart([
-            'title' => 'Test cho vui',
+            'title' => 'Pay for buying Kingcoin',
         ]);
         $cart = Yii::$app->kingcoin;
         $cartItem = $cart->getItem();
@@ -142,16 +143,16 @@ class TopupController extends Controller
         ]);
         $paymentCart->addItem($paymentCartItem);
         
-        // if ($cart->hasPromotion()) {
-        //     $cart->applyPromotion();
-        //     $promotionItem = $cart->getPromotionItem();
-        //     $paymentPromotion = new PaymentPromotion([
-        //         'id' => $promotionItem->code,
-        //         'title' => 'promotion promotion code ' . $promotionItem->code,
-        //         'price' => $cart->getPromotionMoney()
-        //     ]);
-        //     $paymentCart->setPromotion($paymentPromotion);
-        // }
+        if ($cart->hasPromotion()) {
+            $cart->applyPromotion();
+            $promotionItem = $cart->getPromotionItem();
+            $paymentPromotion = new PaymentPromotion([
+                'id' => $promotionItem->code,
+                'title' => 'promotion promotion code ' . $promotionItem->code,
+                'price' => $cart->getPromotionMoney()
+            ]);
+            $paymentCart->setPromotion($paymentPromotion);
+        }
         $gateway = PaymentGatewayFactory::getClient($identifier);
 
         // Save transaction
@@ -177,9 +178,17 @@ class TopupController extends Controller
             $trn->promotion_code = $promotion->code;
         }
         $trn->save();
-        // $cart->clear();
+        $cart->clear();
         $gateway->setCart($paymentCart);
-        return $gateway->request();
+        $paygateData = $gateway->request();
+        try {
+            return $this->render($identifier, [
+                'paygateData' => (array)$paygateData,
+                'transaction' => $trn 
+            ]);
+        } catch (ViewNotFoundException $e) {
+            return;
+        }
     }
 
     public function actionVerify($identifier)
@@ -193,10 +202,7 @@ class TopupController extends Controller
                     'payment_id' => $refId, 
                     'status' => PaymentTransaction::STATUS_PENDING
                 ])->one();
-                if (!$trn) {
-                    Yii::$app->session->setFlash('error', 'Đã có lỗi xảy ra');
-                    throw new Exception("Không tìm thấy giao dịch $refId");
-                }
+                if (!$trn) throw new Exception("Can not find out the transaction #$refId");
                 $trn->status = PaymentTransaction::STATUS_COMPLETED;
                 $trn->payment_at = date('Y-m-d H:i:s');
                 $trn->save();
@@ -221,8 +227,6 @@ class TopupController extends Controller
             Yii::error($gateway->identifier . $gateway->getReferenceId() . " confirm error " . $e->getMessage());
             return $gateway->doError();
         }
-        
-        
     }
 
     public function actionSuccess()
@@ -242,20 +246,17 @@ class TopupController extends Controller
     public function actionCancel($identifier)
     {
         $gateway = PaymentGatewayFactory::getClient($identifier);
-        $gateway->on(PaymentGateway::EVENT_AFTER_CANCEL, function($event) {
-            try {
-                $gateway = $event->sender;
-                $refId = $gateway->getReferenceId();
-                $trn = PaymentTransaction::find()->where([
-                    'payment_id' => $refId, 
-                    'status' => PaymentTransaction::STATUS_PENDING
-                ])->one();
-                if ($trn) $trn->delete();
-            } catch (Exception $e) {
-                throw new Exception($e->getMessage(), 1);
-            }
-        });
         $gateway->cancel();
-        throw new BadRequestHttpException("You have just cancelled the order", 1);
+        try {
+            $refId = $gateway->getReferenceId();
+            $trn = PaymentTransaction::find()->where([
+                'payment_id' => $refId, 
+                'status' => PaymentTransaction::STATUS_PENDING
+            ])->one();
+            if ($trn) $trn->delete();
+            die('You have cancelled the order successfully');
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+        }
     }
 }

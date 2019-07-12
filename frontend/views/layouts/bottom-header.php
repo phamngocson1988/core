@@ -1,66 +1,50 @@
+<?php
+use yii\helpers\Html;
+$setting = Yii::$app->settings;
+$gallery = [
+    [
+        'title' => $setting->get('GallerySettingForm', 'title1'),
+        'content' => $setting->get('GallerySettingForm', 'content1'),
+        'link' => $setting->get('GallerySettingForm', 'link1'),
+    ],
+    [
+        'title' => $setting->get('GallerySettingForm', 'title2'),
+        'content' => $setting->get('GallerySettingForm', 'content2'),
+        'link' => $setting->get('GallerySettingForm', 'link2'),
+    ],
+    [
+        'title' => $setting->get('GallerySettingForm', 'title3'),
+        'content' => $setting->get('GallerySettingForm', 'content3'),
+        'link' => $setting->get('GallerySettingForm', 'link3'),
+    ],
+    [
+        'title' => $setting->get('GallerySettingForm', 'title4'),
+        'content' => $setting->get('GallerySettingForm', 'content4'),
+        'link' => $setting->get('GallerySettingForm', 'link4'),
+    ]
+];
+$gallery = array_filter($gallery, function($data) {
+    return $data['link'];
+});
+?>
 <div class="bottom-header">
     <div class="main-slider">
+        
         <div class="main-slider-bxslider">
-            <div style="background: url(/images/header-bg.jpg) no-repeat center 0; background-size: auto 100%;">
+            <?php foreach ($gallery as $data) : ?>
+            <div style="background: url(<?=Html::encode($data['link']);?>) no-repeat center 0; background-size: auto 100%;">
                 <div class="container">
                     <div class="row">
                         <div class="col col-sm-12">
                             <div class="slider-text-box">
-                                <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod</p>
-                                <p>Food supplement with Serenoa Repens that contributes to supporting
-                                    prostate
-                                    and
-                                    urinary-tract function.</p>
+                                <p><?=$data['title'];?></p>
+                                <p><?=$data['content'];?></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="background: url(/images/header-bg.jpg) no-repeat center 0; background-size: auto 100%;">
-                <div class="container">
-                    <div class="row">
-                        <div class="col col-sm-12">
-                            <div class="slider-text-box">
-                                <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod</p>
-                                <p>Food supplement with Serenoa Repens that contributes to supporting
-                                    prostate
-                                    and
-                                    urinary-tract function.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="background: url(/images/header-bg.jpg) no-repeat center 0; background-size: auto 100%;">
-                <div class="container">
-                    <div class="row">
-                        <div class="col col-sm-12">
-                            <div class="slider-text-box">
-                                <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod</p>
-                                <p>Food supplement with Serenoa Repens that contributes to supporting
-                                    prostate
-                                    and
-                                    urinary-tract function.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="background: url(/images/header-bg.jpg) no-repeat center 0; background-size: auto 100%;">
-                <div class="container">
-                    <div class="row">
-                        <div class="col col-sm-12">
-                            <div class="slider-text-box">
-                                <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod</p>
-                                <p>Food supplement with Serenoa Repens that contributes to supporting
-                                    prostate
-                                    and
-                                    urinary-tract function.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach;?>
         </div>
         <div class="container">
             <div class="row">

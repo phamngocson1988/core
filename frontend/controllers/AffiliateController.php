@@ -5,7 +5,6 @@ use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
 use yii\helpers\Url;
 
 

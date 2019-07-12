@@ -23,6 +23,10 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     background: #ccc;
 }
+body.global-bg {
+    background: url(../images/game-list-bg.jpg) no-repeat;
+    background-size: 100% auto;
+}
 
 a,
 a:hover {
@@ -34,6 +38,10 @@ ol,
 ul li,
 ol li {
     list-style: none;
+}
+
+input:focus {
+    outline: none;
 }
 
 .text-center {
@@ -479,7 +487,8 @@ section.product-listing {
 }
 
 .prod-listing-viewmore a,
-a.main-btn {
+a.main-btn,
+.main-btn {
     display: inline-block;
     line-height: 50px;
     padding: 0 40px;
@@ -717,7 +726,8 @@ div.chat-now {
     right: -80px;
     transform: rotate(-90deg);
 }
-.chat-now .btn-chat-now, .chat-now a {
+.chat-now .btn-chat-now,
+.chat-now a {
     font-size: 22px;
     font-weight: bold;
     color: #000;
@@ -728,6 +738,131 @@ div.chat-now {
     display: inline-block;
     text-transform: uppercase;
 }
+
+/* Promotion */
+.page-title-content {
+    margin-top: 62px;
+}
+.promotion-page {
+    padding-top: 50px;
+    background: #000;
+}
+.promotion-page .product-listing .product-item {
+    margin-bottom: 30px;
+}
+.promotion-page .product-listing .product-image {
+    position: relative;
+    display: block;
+    padding-top: 50%;
+    overflow: hidden;
+    border: 1px solid #fff;
+}
+
+.promotion-page .product-listing .product-image img {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+
+.promotion-page .product-listing .product-image .overlay {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+    height: 100%;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: all 0.4s;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+}
+.promotion-page .product-listing .product-image:hover .overlay {
+    opacity: 1;
+}
+.promotion-page .product-listing .product-image .overlay span {
+    margin: 20% 0;
+}
+.promotion-page .product-listing .product-name {
+    color: #fff;
+    font-size: 20px;
+    margin-top: 10px;
+    display: block;
+}
+.product-list-action {
+    margin-bottom: 40px;
+}
+section.promotion-search {
+    text-align: center;
+}
+section.promotion-search form {
+    width: 47%;
+    margin: 0 auto;
+    border: 1px solid #ffdd00;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+section.promotion-search form input[type="text"] {
+    height: 56px;
+    background: none;
+    border: 0;
+    color: #fff;
+    font-size: 30px;
+    padding: 0 37px;
+    float: left;
+    width: 86%;
+}
+
+section.promotion-search {
+    padding: 0 0 80px;
+}
+section.promotion-search form input[type="submit"] {
+    background: url(../images/ico-search-large.png) no-repeat;
+    background-size: 100% 100%;
+    width: 40px;
+    height: 40px;
+    float: right;
+    border: none;
+    margin: 8px 30px 8px 0;
+}
+.promotion-page .product-category ul li {
+    margin-bottom: 20px;
+}
+.promotion-page .product-category ul li a {
+    min-width: 226px;
+    padding: 0;
+    text-align: center;
+}
+.promotion-page .product-category ul li a.active {
+    background: #ffdd00;
+}
+/* End Promotion */
+
+/* Global Control */
+a.cus-btn {
+    line-height: 45px;
+    padding: 0 30px;
+    font-size: 24px;
+    border-left: 4px solid #ff3600;
+    background: #fff;
+    color: #000;
+    text-transform: uppercase;
+    display: inline-block;
+    font-weight: bold;
+}
+
+a.cus-btn.gray-btn {
+    background: #ccc;
+}
+/* End Global Control */
 
 /* Footer */
 .footer .top-footer {
@@ -1186,6 +1321,18 @@ div.chat-now {
     .product-detail .product-info {
         width: 100%;
     }
+    /* Promotion */
+    body.global-bg {
+        background-size: auto 100%;
+        background-position: center;
+    }
+    .promotion-page .product-category ul li a {
+        min-width: 100%;
+        font-size: 17px;
+    }
+    section.promotion-search form {
+        width: 100%;
+    }
 }
 
 @media(max-width: 736px) {
@@ -1202,6 +1349,10 @@ div.chat-now {
     .main-slider .slider-text-box p:last-child {
         font-size: 16px;
         width: 70%;
+    }
+
+    section.promotion-search form {
+        width: 100%;
     }
 }
 
@@ -1304,6 +1455,10 @@ div.chat-now {
     }
     .product-detail-code {
         width: 70%;
+    }
+    /* Promotion */
+    section.promotion-search form input[type="text"] {
+        width: 77%;
     }
 }
 

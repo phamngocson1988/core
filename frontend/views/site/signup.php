@@ -27,9 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
           <?= $form->field($model, 'password')->passwordInput() ?>
           <?= $form->field($model, 'repassword')->passwordInput() ?>
           <?= $form->field($model, 'email')->textInput() ?>
-          <?= $form->field($model, 'birth_date')->textInput() ?>
-          <?= $form->field($model, 'birth_month')->textInput() ?>
-          <?= $form->field($model, 'birth_year')->textInput() ?>
+          <?= $form->field($model, 'birth_date', [
+            'inputOptions' => ['class' => 'form-control', 'id' => 'birth_date']
+          ])->textInput() ?>
+          <?= $form->field($model, 'birth_month', [
+            'inputOptions' => ['class' => 'form-control', 'id' => 'birth_month']
+          ])->textInput() ?>
+          <?= $form->field($model, 'birth_year', [
+            'inputOptions' => ['class' => 'form-control', 'id' => 'birth_year']
+          ])->textInput() ?>
           <?= $form->field($model, 'currency')->textInput() ?>
           <?= $form->field($model, 'country_code')->textInput() ?>
           <?= $form->field($model, 'phone')->textInput() ?>
@@ -58,6 +64,10 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <?php
 $script = <<< JS
+$('#birth_year, #birth_month, #birth_date').on('change', function() {
+  correctDate($('#birth_year'),$('#birth_month'),$('#birth_date'));
+  console.log('date trigger');
+});
 $('#email').on('blur', function(){
   var _c = $(this).closest('.form-wrap');
   var _e = _c.find('.form-validation');

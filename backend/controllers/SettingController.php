@@ -13,6 +13,11 @@ use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
 use backend\forms\SkrillSettingForm;
 use backend\forms\ImportSettingForm;
+use backend\forms\OfflinePaymentSettingForm;
+use backend\models\PaymentTransaction;
+use backend\models\UserWallet;
+use yii\data\Pagination;
+
 /**
  * Class SettingController
  *
@@ -68,6 +73,12 @@ class SettingController extends Controller
                 'view' => 'skrill.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.skrill']
             ],
+            'offline' => [
+                'class' => SettingsAction::class,
+                'modelClass' => OfflinePaymentSettingForm::class,
+                'view' => 'offline.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.offline']
+            ],
             'gallery' => [
                 'class' => SettingsAction::class,
                 'modelClass' => GallerySettingForm::class,
@@ -90,4 +101,68 @@ class SettingController extends Controller
             ],
         ];
     }
+
+    public function actionListOffline()
+    {
+        $this->view->params['main_menu_active'] = 'setting.offline';
+        $request = Yii::$app->request;
+        $command = PaymentTransaction::find()->where(['payment_method' => 'offline']);
+        $auth_key = $request->get('auth_key');
+        if ($auth_key) {
+            $command->andWhere(['auth_key' => $auth_key]);
+        }
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('list-offline', [
+            'models' => $models,
+            'auth_key' => $auth_key,
+            'pages' => $pages
+        ]);
+    }
+
+    public function actionPayOffline($id) 
+    {
+        $request = Yii::$app->request;
+        $transaction = PaymentTransaction::findOne($id);
+        $transaction->setScenario(PaymentTransaction::SCENARIO_CONFIRM_OFFLINE_PAYMENT);
+        if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
+        if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Giao dịch đã được thanh toán']);
+        if ($transaction->load($request->post()) && $transaction->save()) {
+            $user = $transaction->user;
+            $wallet = new UserWallet();
+            $wallet->coin = $transaction->total_coin;
+            $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+            $wallet->type = UserWallet::TYPE_INPUT;
+            $wallet->description = "Transaction #$transaction->auth_key";
+            $wallet->ref_name = PaymentTransaction::className();
+            $wallet->ref_key = $transaction->auth_key;
+            $wallet->created_by = Yii::$app->user->id;
+            $wallet->user_id = $user->id;
+            $wallet->status = UserWallet::STATUS_COMPLETED;
+            $wallet->payment_at = date('Y-m-d H:i:s');
+            $wallet->save();
+            return $this->asJson(['status' => true]);
+        }
+        else {
+            $errors = $transaction->getErrorSummary(true);
+            return $this->asJson(['status' => false, 'errors' => reset($errors)]);
+        }
+    }
+
+    public function actionDeleteOffline($id)
+    {
+        $request = Yii::$app->request;
+        $transaction = PaymentTransaction::findOne($id);
+        if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
+        if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Không thể xóa giao dịch']);
+        if ($transaction->delete()) return $this->asJson(['status' => true]);
+        else {
+            $errors = $transaction->getErrorSummary(true);
+            return $this->asJson(['status' => false, 'errors' => reset($errors)]);
+        }
+    }
+    
 }

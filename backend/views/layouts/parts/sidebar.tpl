@@ -217,6 +217,11 @@
                   <i class="cc-alipay"></i> Skrill
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{url route='setting/offline'}" class="nav-link" code='setting.offline'>
+                  <i class="cc-offline"></i> Offline
+                </a>
+              </li>
             </ul
           </li>
         </ul>

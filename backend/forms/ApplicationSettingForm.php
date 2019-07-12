@@ -15,6 +15,8 @@ class ApplicationSettingForm extends Model
     public $enable_subscribe;
     public $exchange_rate_usd; 
     public $sign_on_bonus;
+    public $logo;
+    public $top_notice;
 
     public function init()
     {
@@ -31,7 +33,7 @@ class ApplicationSettingForm extends Model
             [['admin_email', 'contact_email'], 'email'],
             ['exchange_rate_usd', 'number'],
             ['exchange_rate_usd', 'default', 'value' => '22000'],
-            [['sign_on_bonus'], 'safe'],
+            [['sign_on_bonus', 'logo', 'top_notice'], 'safe'],
         ];
     }
 
@@ -47,13 +49,28 @@ class ApplicationSettingForm extends Model
             'enable_subscribe' => 'Show subscribe Popup',
             'exchange_rate_usd' => 'Tỷ giá USD',
             'sign_on_bonus' => 'Khuyến mãi khi đăng ký',
+            'logo' => 'Logo',
+            'top_notice' => 'Dòng thông báo ở đầu trang web',
         ];
     }
 
     public function getPromotions()
     {
-        $command = Promotion::findAvailable();
+        $command = Promotion::find();
         $command->select(['id', 'title']);
+        $now = date('Y-m-d');
+        $command->where([
+            'status' => Promotion::STATUS_VISIBLE,
+            'is_valid' => Promotion::IS_VALID,
+        ]);
+        $command->andWhere(['OR', 
+            ['<=', 'from_date', $now],
+            ['from_date' => null]
+        ]);
+        $command->andWhere(['OR', 
+            ['>=', 'to_date', $now],
+            ['to_date' => null]
+        ]);
         return ArrayHelper::map($command->all(), 'id', 'title');
     }
 }

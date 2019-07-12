@@ -15,7 +15,7 @@ $this->title = 'Home Page';
     <div class="row">
       <?php foreach ($games as $game) :?>
       <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>">
+        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $game->id]);?>">
         <img src="<?=$game->getImageUrl('300x300');?>" alt="">
         </a>
         <a class="prod-title" href="#"><?=$game->title;?></a>
@@ -48,120 +48,6 @@ $this->title = 'Home Page';
         <?php endif;?>
       </div>
       <?php endforeach;?>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game2.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game3.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game4.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game5.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game1.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game2.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
       <div class="col col-lg-20-per col-sm-12 prod-item">
         <a class="prod-img" href="#">
         <img src="uploads/game3.jpg" alt="">

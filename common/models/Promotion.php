@@ -107,7 +107,19 @@ class Promotion extends ActiveRecord
         });
     }
 
-    
+    public function getImage() 
+    {
+        return $this->hasOne(Image::className(), ['id' => 'image_id']);
+    }
+
+    public function getImageUrl($size = null, $default = '/images/noimage.png')
+    {
+        $image = $this->image;
+        if ($image) {
+            return $image->getUrl($size);
+        }
+        return $default;
+    }
 
     public static function getStatusList()
     {

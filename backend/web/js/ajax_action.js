@@ -59,7 +59,7 @@ $.fn.ajax_action = function(opts) {
         loading: function(){},
         complete: function(){},
         callback: function(data) {},
-        error: function(errors) {
+        error: function(element, errors) {
             alert(errors);
         },
     };
