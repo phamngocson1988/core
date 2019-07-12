@@ -53,7 +53,7 @@ class m190218_154112_create_promotion extends Migration
             $commandValueType = $this->db->createCommand($alterValueType);
             $commandValueType->execute();
 
-            $alterObjectType = "ALTER TABLE {{%promotion}} MODIFY `promotion_scenario` ENUM('coin', 'money') NOT NULL DEFAULT 'money'";
+            $alterObjectType = "ALTER TABLE {{%promotion}} MODIFY `promotion_scenario` ENUM('coin', 'gems') NOT NULL DEFAULT 'money'";
             $commandObjectType = $this->db->createCommand($alterObjectType);
             $commandObjectType->execute();
 

@@ -114,7 +114,7 @@ $cart->applyPromotion();
         <div class="form-wrap">
           <h5>Your wallet is not enough King Coin</h5>
         </div>
-        <?= Html::a('go to topup', Url::to(['pricing/index']), ['class' => 'button button-secondary button-nina']) ?>
+        <?= Html::a('go to topup', Url::to(['topup/index']), ['class' => 'button button-secondary button-nina']) ?>
       </div>
     </div>
     <?php endif;?>

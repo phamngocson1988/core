@@ -75,7 +75,7 @@ $this->title = 'Shop';
 			            <p><?=$gamePromotion->code;?></p>
 			          </div>
 			          <div class="prod-code-right">
-			            <p>+<?=$gamePromotion->apply($game->pack);?> GEMS</p>
+			            <p>+<?=$gamePromotion->apply($model->pack);?> GEMS</p>
 			            <p>cho HFKEJK</p>
 			          </div>
 			        </div>

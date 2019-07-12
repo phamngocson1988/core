@@ -63,7 +63,8 @@ class PromotionController extends Controller
 
     public function actionCreate($promotion_scenario)
     {
-        $this->view->params['main_menu_active'] = 'promotion.index';
+        $menu = (Promotion::SCENARIO_BUY_COIN == $promotion_scenario) ? 'package.promotion' : 'game.promotion';
+        $this->view->params['main_menu_active'] = $menu;
         $request = Yii::$app->request;
         $model = new Promotion(['scenario' => Promotion::SCENARIO_CREATE]);
         $model->promotion_scenario = $promotion_scenario;
@@ -93,7 +94,7 @@ class PromotionController extends Controller
 
     public function actionEdit($id)
     {
-        $this->view->params['main_menu_active'] = 'promotion.index';
+        
         $request = Yii::$app->request;
         $model = Promotion::findOne($id);
         $model->setScenario(Promotion::SCENARIO_EDIT);
@@ -115,7 +116,8 @@ class PromotionController extends Controller
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
-
+        $menu = (Promotion::SCENARIO_BUY_COIN == $model->promotion_scenario) ? 'package.promotion' : 'game.promotion';
+        $this->view->params['main_menu_active'] = $menu;
         return $this->render('edit', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['promotion/index']))
