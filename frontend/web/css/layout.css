@@ -40,7 +40,7 @@ ol li {
     list-style: none;
 }
 
-input:focus {
+input:focus, select {
     outline: none;
 }
 
@@ -743,7 +743,7 @@ div.chat-now {
 .page-title-content {
     margin-top: 62px;
 }
-.promotion-page {
+.promotion-page, .shop-page {
     padding-top: 50px;
     background: #000;
 }
@@ -799,7 +799,7 @@ div.chat-now {
 section.promotion-search {
     text-align: center;
 }
-section.promotion-search form {
+section.promotion-search form, .shop-search form {
     width: 47%;
     margin: 0 auto;
     border: 1px solid #ffdd00;
@@ -810,7 +810,8 @@ section.promotion-search form {
     display: inline-block;
 }
 
-section.promotion-search form input[type="text"] {
+section.promotion-search form input[type="text"],
+.shop-search form input[type="text"] {
     height: 56px;
     background: none;
     border: 0;
@@ -821,10 +822,12 @@ section.promotion-search form input[type="text"] {
     width: 86%;
 }
 
-section.promotion-search {
+section.promotion-search,
+section.shop-search {
     padding: 0 0 80px;
 }
-section.promotion-search form input[type="submit"] {
+section.promotion-search form input[type="submit"],
+.shop-search form input[type="submit"] {
     background: url(../images/ico-search-large.png) no-repeat;
     background-size: 100% 100%;
     width: 40px;
@@ -846,8 +849,166 @@ section.promotion-search form input[type="submit"] {
 }
 /* End Promotion */
 
+/* Shop Page */
+.shop-search-box {
+    display: flex;
+    justify-content: space-between;
+}
+.shop-search-paging a {
+    float: left;
+    width: 57px;
+    height: 45px;
+    background: #ffdd00;
+    color: #000;
+    line-height: 45px;
+    text-align: center;
+}
+
+.shop-search-paging a.current-page {
+    background: #fff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.shop-search-paging a i {
+    font-size: 40px;
+    line-height: 45px;
+}
+
+.shop-search-paging span {
+    float: left;
+    color: #fff;
+    font-size: 20px;
+    line-height: 45px;
+    margin-left: 15px;
+}
+.shop-search form {
+    margin: 5px 0 0;
+    width: 60%;
+}
+.shop-search-paging,
+.shop-search-filter {
+    padding: 9px 0;
+}
+.shop-search-filter select {
+    background: url(../images/ico-caret-bottom.png) no-repeat right 13px center #ffdd00;
+    border: 0;
+    height: 45px;
+    border-left: 4px solid red;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 0;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 0 56px 0 33px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+/* End Shop Page */
+
+/* Top Up Page */
+.topup-page {
+    padding: 45px 0;
+    background: #ccc;
+}
+.page-title-sub {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    line-height: 25px;
+    margin-bottom: 95px;
+}
+.topup-pack {
+    background: #fff;
+    border-top: 5px solid #ff3600;
+}
+
+.topup-pack .pack-name {
+    background: #000;
+    color: #ffdd00;
+    font-size: 40px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 75px;
+    margin-bottom: 29px;
+}
+.topup-pack .pack-info {
+    /* padding-bottom: 10px; */
+}
+.topup-pack .pack-info .pack-info-line {
+    height: 60px;
+    font-size: 40px;
+    color: #000;
+    text-align: center;
+    margin-bottom: 30px;
+    display: inline-block;
+    width: 100%;
+}
+
+.topup-pack .pack-info .pack-info-line .price, .topup-pack .pack-info .pack-info-line .king-coin-price {
+    border: 1px solid #000;
+    line-height: 60px;
+    display: inline-block;
+    width: 39%;
+    height: 60px;
+}
+
+.topup-pack .pack-info .pack-info-line .price sup {
+    font-size: 23px;
+}
+
+.topup-pack .pack-info .pack-info-line .king-coin-price {
+    width: 25%;
+    float: left;
+}
+.topup-pack .pack-info .pack-info-line .ico-king-coin {
+    float: left;
+    width: 39px;
+    height: 39px;
+    background: url(../images/ico-king-coint.png) no-repeat;
+    background-size: 100% 100%;
+    margin: 10px 20px 0 0;
+}
+.topup-pack .pack-info .pack-info-line .pack-king-price {
+    display: flex;
+    justify-content: center;
+}
+.topup-pack .pack-info .pack-info-line .kc-text {
+    float: left;
+    font-size: 20px;
+    line-height: 60px;
+    margin-left: 20px;
+}
+
+.topup-pack .pack-info .pack-info-line .pack-qty button {
+    float: left;
+    width: 75px;
+    border: 0;
+    background: #ffdd00;
+    height: 60px;
+}
+
+.topup-pack .pack-info .pack-info-line .pack-qty .pack-qty-txt {
+    width: 75px;
+    float: left;
+    background: #ccc;
+    border: 0;
+    height: 60px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.topup-pack .pack-info .pack-info-line .pack-qty {
+    display: inline-block;
+}
+
+/* End Top Up Page */
+
 /* Global Control */
-a.cus-btn {
+.cus-btn {
     line-height: 45px;
     padding: 0 30px;
     font-size: 24px;
@@ -858,8 +1019,11 @@ a.cus-btn {
     display: inline-block;
     font-weight: bold;
 }
+.cus-btn.yellow {
+    background: #ffdd00;
+}
 
-a.cus-btn.gray-btn {
+.cus-btn.gray-btn {
     background: #ccc;
 }
 /* End Global Control */
@@ -1178,9 +1342,20 @@ a.cus-btn.gray-btn {
     .footer .bot-footer .footer-socials {
         width: 14%;
     }
+    /* Shop Page */
+    .shop-search form {
+        width: 40%;
+    }
+    .shop-search form input[type="text"] {
+        width: 79%;
+    }
 }
 
 @media (max-width: 960px) {
+    body.global-bg {
+        background-size: auto 120vh;
+        background-position: initial;
+    }
     .top-header-container {
         position: relative;
         z-index: 9999;
@@ -1322,10 +1497,6 @@ a.cus-btn.gray-btn {
         width: 100%;
     }
     /* Promotion */
-    body.global-bg {
-        background-size: auto 100%;
-        background-position: center;
-    }
     .promotion-page .product-category ul li a {
         min-width: 100%;
         font-size: 17px;
@@ -1333,9 +1504,74 @@ a.cus-btn.gray-btn {
     section.promotion-search form {
         width: 100%;
     }
+    /* Shop Page */
+    .shop-search-paging, .shop-search-filter {
+        padding: 4px 0;
+    }
+    .shop-search form {
+        width: 46%;
+        height: 45px;
+    } 
+    .shop-search-filter select {
+        font-size: 18px;
+        padding: 0 46px 0 15px;
+    }
+    
+    .shop-search-paging a.current-page {
+        font-size: 20px;
+    }
+    
+    .shop-search-paging a {
+        width: 45px;
+    }
+    
+    .shop-search form input[type="text"] {
+        font-size: 20px;
+        height: 45px;
+        width: 86%;
+        padding: 0 0 0 20px;
+    }
+    
+    .shop-search form input[type="submit"] {
+        background-size: 20px auto;
+        margin: 11px 10px 11px 0;
+        height: 20px;
+        width: 20px;
+    }
+    /* Top Up */
+    .topup-pack .pack-info .pack-info-line {
+        height: 45px;
+    }
+    .topup-pack .pack-info .pack-info-line .price {
+        width: 58%;
+    }
+    .topup-pack .pack-info .pack-info-line, .topup-pack .pack-info .pack-info-line .pack-qty .pack-qty-txt {
+        font-size: 25px;
+    }
+    .topup-pack .pack-info .pack-info-line .pack-qty button, .topup-pack .pack-info .pack-info-line .pack-qty .pack-qty-txt {
+        width: 55px;
+    }
+    .topup-pack .pack-name {
+        font-size: 30px;
+        line-height: 55px;
+    }
+    .topup-pack .pack-info .pack-info-line .ico-king-coin {
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;
+    }
+    .topup-pack .pack-info .pack-info-line .kc-text {
+        margin-left: 10px;
+        font-size: 16px;
+    }
+    
 }
 
 @media(max-width: 736px) {
+    body.global-bg {
+        background-size: auto 120vh;
+        background-position: initial;
+    }
     .container {
         max-width: 700px;
     }
@@ -1357,6 +1593,10 @@ a.cus-btn.gray-btn {
 }
 
 @media(max-width: 414px) {
+    body.global-bg {
+        background-size: auto 100vh;
+        background-position: initial;
+    }
     .mobile-nav-block {
         width: 70vw;
     }
@@ -1459,6 +1699,29 @@ a.cus-btn.gray-btn {
     /* Promotion */
     section.promotion-search form input[type="text"] {
         width: 77%;
+    }
+    /* Shop Page */
+    .shop-search form {
+        width: 100%;
+        flex: none;
+    }
+    
+    .shop-search-paging, .shop-search-filter {
+        flex: none;
+        float: left;
+    }
+    .shop-search-paging {
+        width: 64%;
+    }
+    .shop-search-filter {
+        width: 36%;
+    }
+    .shop-search-filter select {
+        width: 100%;
+    }
+    .shop-search-box {
+        display: inline-block;
+        width: 100%;
     }
 }
 

@@ -5,58 +5,66 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
 ?>
-<section class="section-lg text-center bg-default">
-  <!-- Style switcher-->
-  <div class="style-switcher" data-container="">
-    <div class="style-switcher-container">
-      <div class="style-switcher-toggle-wrap"> 
+<section class="page-title">
+  <div class="container">
+    <div class="row">
+      <div class="col col-sm-12">
+        <div class="page-title-content text-center">
+          <img src="/images/text-top-up.png" alt="">
+        </div>
+        <div class="page-title-sub">
+          <p>Simple, Transparent Pricing</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed  do eiusmod tempor incidi</p>
+        </div>
       </div>
-      <section class="section section-lg bg-default novi-background bg-cover text-center bg-gray-darker">
-        <div class="container container-wide">
-          <h3>pricing packages</h3>
-          <div class="row row-50 justify-content-sm-center">
-            <!-- Pricing Box XL-->
-            <?php foreach ($items as $item) :?>
-            <div class="col-md-6 col-xl-3" class="pricing-package">
-              <div class="pricing-box pricing-box-xl pricing-box-novi">
-                <div class="pricing-box-header">
-                  <h4><?=$item->title;?></h4>
-                </div>
+    </div>
+  </div>
+</section>
+
+<section class="topup-page">
+  <div class="container">
+    <div class="row">
+      <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="row">
+          <?php foreach ($items as $item) :?>
+          <div class="col col-12 col-lg-4 col-md-4 col-sm-12 pack-item">
+            <div class="topup-pack">
+              <div class="pack-name"><?=$item->title;?></div>
+              <div class="pack-info">
                 <?php $form = ActiveForm::begin([
                   'action' => Url::to(['topup/add', 'id' => $item->id]),
                   'options' => ['class' => 'add-to-cart', 'id' => "package-$item->id"]
                 ]); ?>
-                <div class="pricing-box-price">
-                  <div class="heading-2"><sup>$</sup><span id="price-<?=$item->id;?>" class="price"><?=number_format($item->amount);?></span></div>
+                <div class="pack-info-line">
+                  <span class="price"><sup>$</sup><span class="usd-price"><?=number_format($item->amount);?></span></span>
                 </div>
-                <?= Html::submitButton('Buy now', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
-                <div class="pricing-box-body">
-                  <ul class="pricing-box-list">
-                    <li>
-                      <div class="unit unit-spacing-sm flex-row align-items-center">
-                        <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-database"></span></div>
-                        <div class="unit-body"><span id="coin-<?=$item->id;?>" class="coin"><?=number_format($item->num_of_coin);?></span> King Coins</div>
-                      </div>
-                      <div class="unit unit-spacing-sm flex-row align-items-center">
-                        <div class="unit-left"><span class="icon novi-icon icon-md-big icon-primary mdi mdi-cart-outline"></span></div>
-                        <div class="unit-body">
-                          <?= $form->field($item, 'quantity', [
-                          'options' => ['class' => 'form-wrap box-width-1 shop-input'],
-                          'inputOptions' => ['class' => 'form-input input-append quantity-control', 'type' => 'number', 'min' => 1, 'id' => "item" . $item->id],
-                          'template' => '{input}'
-                        ])->textInput() ?>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
+                <div class="pack-info-line">
+                  <div class="pack-king-price">
+                    <span class="ico-king-coin"></span><span class="king-coin-price"><?=number_format($item->num_of_coin);?></span><span class="kc-text">King Coins</span>
+                  </div>
+                </div>
+                
+                <div class="pack-info-line">
+                  <div class="pack-qty">
+                    <button type="button" class="minus">-</button>
+                    <?= $form->field($item, 'quantity', [
+                      'options' => ['tag' => false],
+                      'inputOptions' => ['class' => 'pack-qty-txt quantity-control', 'type' => 'number', 'min' => 1, 'id' => "item" . $item->id, 'value' => 1],
+                      'template' => '{input}'
+                    ])->textInput() ?>
+                    <button type="button" class="plus">+</button>
+                  </div>
+                </div>
+                <div class="pack-info-line">
+                  <?= Html::submitButton('Buy now', ['class' => 'cus-btn yellow', 'onclick' => 'showLoader()']) ?>
                 </div>
                 <?php ActiveForm::end();?>
               </div>
             </div>
-            <?php endforeach;?>
           </div>
+          <?php endforeach;?>
         </div>
-      </section>
+      </div>
     </div>
   </div>
 </section>
@@ -74,13 +82,28 @@ $('body').on('change', ".quantity-control", function() {
         if (!result.status) {
           alert(result.error);
         } else {
-          form.find('.price').html(result.data.price);
-          form.find('.coin').html(result.data.coin);
+          form.find('.usd-price').html(result.data.price);
+          form.find('.king-coin-price').html(result.data.coin);
         }
       },
   });
 });
+
+$('.minus').click(function(){
+    var input = $(this).closest('.pack-qty').find('input.pack-qty-txt');
+    var _qty = input.val();
+    _qty = parseInt(_qty)-1;
+    input.val(Math.max(_qty, 1));
+    input.trigger('change');
+});
+
+$('.plus').click(function(){
+    var input = $(this).closest('.pack-qty').find('input.pack-qty-txt');
+    var _qty = input.val();
+    _qty = parseInt(_qty)+1;
+    input.val(_qty);
+    input.trigger('change');
+});
 JS;
-$script = str_replace("[:checkout_url]", Url::to(['pricing/confirm']), $script);
 $this->registerJs($script);
 ?>

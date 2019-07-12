@@ -41,6 +41,7 @@ class TopupController extends Controller
 
     public function actionIndex()
     {
+        $this->view->params['body_class'] = 'global-bg';
         $request = Yii::$app->request;
         $items = CartItem::find()->indexBy('id')->all();
         
@@ -134,6 +135,7 @@ class TopupController extends Controller
             'title' => 'Pay for buying Kingcoin',
         ]);
         $cart = Yii::$app->kingcoin;
+        if (!$cart->getItems()) return $this->redirect(['site/index']);
         $cartItem = $cart->getItem();
         $paymentCartItem = new PaymentItem([
             'id' => $cartItem->getUniqueId(),

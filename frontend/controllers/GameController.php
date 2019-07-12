@@ -7,7 +7,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
+use yii\data\Pagination;
 use frontend\models\Game;
 use frontend\models\Promotion;
 use frontend\components\cart\CartItem;
@@ -19,6 +19,7 @@ class GameController extends Controller
 {
     public function actionIndex()
     {
+        $this->view->params['body_class'] = 'global-bg';
         $request = Yii::$app->request;
         $q = $request->get('q');
         $command = Game::find();

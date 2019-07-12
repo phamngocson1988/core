@@ -29,7 +29,10 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<?php
+$bodyClass = isset($this->params['body_class']) ? $this->params['body_class'] : '';
+?>
+<body class='<?=$bodyClass;?>' >
 <?php $this->beginBody() ?>
 <div class="wrapper">
   <section class="header no-home">

@@ -9,6 +9,7 @@ class PromotionController extends Controller
 {
     public function actionIndex()
     {
+        $this->view->params['body_class'] = 'global-bg';
         $request = Yii::$app->request;
         $q = $request->get('q');
         $command = Promotion::find();
