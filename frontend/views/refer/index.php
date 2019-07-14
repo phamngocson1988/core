@@ -168,8 +168,12 @@ $('.btn-add-more-refer-mail').click(function(){
 });
 
 $('.refer-qa-list .qa-item .qa-question').click(function(){
-    $('.refer-qa-list .qa-item .qa-answer.showing').slideToggle().removeClass('showing');
-    $(this).next().slideToggle().addClass('showing');
+    if(!$(this).next().hasClass('showing')){
+        $('.refer-qa-list .qa-item .qa-answer.showing').slideToggle().removeClass('showing');
+        $(this).next().slideToggle().addClass('showing');
+    }else{
+        $(this).next().slideToggle().removeClass('showing');
+    }
 });
 JS;
 $this->registerJs($script);

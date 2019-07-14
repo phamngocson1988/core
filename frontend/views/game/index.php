@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 
 $this->title = 'Shop';
 ?>
@@ -19,21 +20,29 @@ $this->title = 'Shop';
     <div class="row">
       <div class="col col-sm-12">
         <div class="shop-search-box">
-          <form action="#" class="">
-            <input type="text" placeholder="Search">
+          <form method="GET">
+            <input type="text" placeholder="Search" name="q" value="<?=$q;?>">
             <input type="submit" value="">
           </form>
+          <?php
+          $current_page = $pages->getPage() + 1;
+          $total_page = $pages->getPageCount();
+          $next_page = $current_page + 1; 
+          $prev_page = $current_page - 1; 
+          $link_next_page = ($next_page > $total_page) ? 'javascript:void;' : Url::current([$pages->pageParam => $next_page]);
+          $link_prev_page = ($prev_page < 1) ? 'javascript:void;' : Url::current([$pages->pageParam => $prev_page]);
+          ?>
           <div class="shop-search-paging">
-            <a href="#"><i class="fas fa-caret-left"></i></a>
-            <a class="current-page" href="#">2</a>
-            <a href="#"><i class="fas fa-caret-right"></i></a>
-            <span>of 10</span>
+            <a href="<?=$link_prev_page;?>"><i class="fas fa-caret-left"></i></a>
+            <a class="current-page" href="javascript:void;"><?=$current_page;?></a>
+            <a href="<?=$link_next_page;?>"><i class="fas fa-caret-right"></i></a>
+            <span>of <?=$total_page;?></span>
           </div>
           <div class="shop-search-filter">
-            <select name="" id="">
+            <select name="sort">
               <option value="">FILTER</option>
-              <option value="">A - Z</option>
-              <option value="">Z - A</option>
+              <option value="asc"><a href="<?=Url::current(['sort' => 'asc']);?>">A - Z</a></option>
+              <option value="desc"><a href="<?=Url::current(['sort' => 'desc']);?>">Z - A</a></option>
             </select>
           </div>
         </div>
@@ -86,82 +95,6 @@ $this->title = 'Shop';
 
 
 
-            <div class="col col-lg-20-per col-sm-12 prod-item">
-              <a class="prod-img" href="#">
-              <img src="/uploads/game1.jpg" alt="">
-              </a>
-              <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-              <div class="prod-price">
-                <span>14,000 GEMS</span> for COC
-              </div>
-              <div class="prod-code">
-                <div class="prod-code-left">
-                  <p>Nhập mã</p>
-                  <p>5TS8798</p>
-                </div>
-                <div class="prod-code-right">
-                  <p>-80 GEMS</p>
-                  <p>cho HFKEJK</p>
-                </div>
-              </div>
-            </div>
-            <div class="col col-lg-20-per col-sm-12 prod-item">
-              <a class="prod-img" href="#">
-              <img src="/uploads/game2.jpg" alt="">
-              </a>
-              <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-              <div class="prod-price">
-                <span>14,000 GEMS</span> for COC
-              </div>
-              <div class="prod-code">
-                <div class="prod-code-left">
-                  <p>Nhập mã</p>
-                  <p>5TS8798</p>
-                </div>
-                <div class="prod-code-right">
-                  <p>-80 GEMS</p>
-                  <p>cho HFKEJK</p>
-                </div>
-              </div>
-            </div>
-            <div class="col col-lg-20-per col-sm-12 prod-item">
-              <a class="prod-img" href="#">
-              <img src="/uploads/game3.jpg" alt="">
-              </a>
-              <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-              <div class="prod-price">
-                <span>14,000 GEMS</span> for COC
-              </div>
-              <div class="prod-code">
-                <div class="prod-code-left">
-                  <p>Nhập mã</p>
-                  <p>5TS8798</p>
-                </div>
-                <div class="prod-code-right">
-                  <p>-80 GEMS</p>
-                  <p>cho HFKEJK</p>
-                </div>
-              </div>
-            </div>
-            <div class="col col-lg-20-per col-sm-12 prod-item">
-              <a class="prod-img" href="#">
-              <img src="/uploads/game4.jpg" alt="">
-              </a>
-              <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-              <div class="prod-price">
-                <span>14,000 GEMS</span> for COC
-              </div>
-              <div class="prod-code">
-                <div class="prod-code-left">
-                  <p>Nhập mã</p>
-                  <p>5TS8798</p>
-                </div>
-                <div class="prod-code-right">
-                  <p>-80 GEMS</p>
-                  <p>cho HFKEJK</p>
-                </div>
-              </div>
-            </div>
             
           </div>
         </div>

@@ -68,6 +68,7 @@ $item = $cart->getItem();
           <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
             <div class="heading-5 text-regular">Total Coin: <span><?=number_format($cart->getTotalCoin());?> </span></div>
             <div class="heading-5 text-regular">Promotion Coin: <span><?=$cart->getPromotionCoin();?> </span></div>
+            <div class="heading-5 text-regular"><a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false>Checkout</a></div>
             
           </div>
         </div>

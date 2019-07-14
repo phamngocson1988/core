@@ -48,66 +48,9 @@ $this->title = 'Home Page';
         <?php endif;?>
       </div>
       <?php endforeach;?>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game3.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game4.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="#">
-        <img src="uploads/game5.jpg" alt="">
-        </a>
-        <a class="prod-title" href="#">PlayerUnknown's Battlegrounds Name...</a>
-        <div class="prod-price">
-          <span>14,000 GEMS</span> for COC
-        </div>
-        <div class="prod-code">
-          <div class="prod-code-left">
-            <p>Nhập mã</p>
-            <p>5TS8798</p>
-          </div>
-          <div class="prod-code-right">
-            <p>-80 GEMS</p>
-            <p>cho HFKEJK</p>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="prod-listing-viewmore">
-      <a href="#" class="main-btn">See More</a>
+      <a href="<?=Url::to(['game/index']);?>" class="main-btn">See More</a>
     </div>
   </div>
 </section>

@@ -153,8 +153,12 @@
 <?php
 $script = <<< JS
 $('.qa-section .qa-section-title').click(function(){
-  $('.qa-section .qa-section-list.showing').slideToggle().removeClass('showing');
-  $(this).next().slideToggle().addClass('showing');
+  if(!$(this).next().hasClass('showing')){
+      $('.qa-section .qa-section-list.showing').slideToggle().removeClass('showing');
+      $(this).next().slideToggle().addClass('showing');
+  }else{
+      $(this).next().slideToggle().removeClass('showing');
+  }
 });
 JS;
 $this->registerJs($script);

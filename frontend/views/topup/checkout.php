@@ -53,7 +53,7 @@ $cart->applyPromotion();
                       <?php $form = ActiveForm::begin([
                         'action' => Url::to(['topup/purchase']),
                       ]); ?>
-                      <?=Html::radioList ( 'identifier', 'paypal', ['paypal' => 'Paypal', 'skrill' => 'Skrill', 'offline' => 'Offline payment'] );?>
+                      <?=Html::radioList ( 'identifier', 'paypal', ['paypal' => 'Paypal', 'offline' => 'Offline payment'] );?>
                       <?= Html::submitButton('Pay', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
                       <?php ActiveForm::end();?>
                     </div>
