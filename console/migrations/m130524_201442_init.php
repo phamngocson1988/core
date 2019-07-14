@@ -53,7 +53,7 @@ class m130524_201442_init extends Migration
             'status' => $this->string(255),
             'note' => $this->string(255),
             'created_at' => $this->dateTime(),
-            'updated_ad' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),
         ], $tableOptions);
 

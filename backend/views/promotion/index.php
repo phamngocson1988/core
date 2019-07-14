@@ -55,11 +55,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
               <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
               <th style="width: 20%;"> Tiêu đề </th>
-              <th style="width: 10%;"> Mã khuyến mãi </th>
-              <th style="width: 20%;"> Ngày áp dụng </th>
-              <th style="width: 10%;"> Loại giảm giá </th>
-              <th style="width: 20%;"> Ngữ cảnh áp dụng </th>
-              <th style="width: 10%;"> <?=Yii::t('app', 'status');?> </th>
+              <th style="width: 5%;"> Mã khuyến mãi </th>
+              <th style="width: 10%;"> Ngày áp dụng </th>
+              <th style="width: 20%;"> Điều kiện áp dụng </th>
+              <th style="width: 20%;"> Giá trị áp dụng </th>
+              <th style="width: 10%;"> Ngữ cảnh áp dụng </th>
+              <th style="width: 5%;"> <?=Yii::t('app', 'status');?> </th>
               <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -73,7 +74,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td style="vertical-align: middle;"><?=$model->title;?></td>
                 <td style="vertical-align: middle;"><?=$model->code;?></td>
                 <td style="vertical-align: middle;"><?=sprintf("%s - %s", $model->from_date, $model->to_date);?></td>
-                <td style="vertical-align: middle;"><?=sprintf("%s (%s)", $model->value, $model->promotion_type);?></td>
+                <td style="vertical-align: middle;">
+                  <?php
+                  $rule = $model->getRule();
+                  echo ($rule) ? $rule->title : '';
+                  ?>
+                </td>
+                <td style="vertical-align: middle;">
+                  <?php
+                  $benefit = $model->getBenefit();
+                  echo ($benefit) ? $benefit->title . "($benefit->value $benefit->type)" : '';
+                  ?>
+                </td>
                 <td style="vertical-align: middle;"><?php
                 if ($model->promotion_scenario == Promotion::SCENARIO_BUY_GEMS) :
                   echo 'Áp dụng khi mua gems của game';

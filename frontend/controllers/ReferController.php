@@ -31,6 +31,7 @@ class ReferController extends Controller
 
     public function actionIndex()
     {
+        $this->view->params['body_class'] = 'global-bg';
         $user = Yii::$app->user->getIdentity();
         $request = Yii::$app->request;
         if ($request->isPost) {

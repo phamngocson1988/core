@@ -39,7 +39,6 @@ $bodyClass = isset($this->params['body_class']) ? $this->params['body_class'] : 
     <?php require_once(Yii::$app->basePath . '/views/layouts/top-header.php');?>
   </section>
   <?= $content ?>
-  <?php require_once(Yii::$app->basePath . '/views/layouts/highlight.php');?>
   <?php require_once(Yii::$app->basePath . '/views/layouts/footer.php');?>
 </div>
 <?php $this->endBody() ?>

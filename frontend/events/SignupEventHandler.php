@@ -81,13 +81,3 @@ class SignupEventHandler extends Model
         ->send();
     }
 }
-
-// ==== Declare events =====
-class AfterSignupEvent extends Event
-{
-    /** 
-     * The user which has just created
-     * @var instanceof \common\models\User
-     */
-    public $user;
-}

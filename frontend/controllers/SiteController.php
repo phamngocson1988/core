@@ -191,6 +191,7 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        $this->view->params['body_class'] = 'global-bg';
         $request = Yii::$app->request;
         $model = new SignupForm();
 
@@ -351,5 +352,11 @@ class SiteController extends Controller
             'title' => 'You have registered successfully.',
             'content' => 'Check your email for activation link'
         ]);
+    }
+
+    public function actionQuestion()
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        return $this->render('question');
     }
 }

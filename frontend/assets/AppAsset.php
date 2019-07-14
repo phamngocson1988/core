@@ -15,11 +15,13 @@ class AppAsset extends AssetBundle
         'css/font-awesome-all.css',
         'css/layout.css',
         'css/jquery.bxslider.css',
+        'css/jquery.fancybox.min.css',
 
     ];
     public $js = [
         'js/jquery.bxslider.min.js',
         // 'js/ajax_action.js',
+        'js/jquery.fancybox.min.js',
         'js/function.js',
     ];
     public $depends = [
