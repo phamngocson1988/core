@@ -21,6 +21,12 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js
 $this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
+<style>
+.form-horizontal .form-group {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+</style>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -58,13 +64,6 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
           'chooseButtonOptions' => ['tag' => 'span', 'options' => ['class' => 'btn btn-circle green btn-sm']],
           'cancelButtonOptions' => ['tag' => 'button', 'options' => ['class' => 'btn btn-circle red btn-sm']]
         ])->label(false);?>
-
-        <!-- <?php/*$form->field($model, 'status', [
-          'options' => ['class' => 'list-separated profile-stat']
-        ])->widget(RadioListInput::className(), [
-          'items' => $model->getStatusList(),
-          'options' => ['class' => 'mt-radio-list']
-        ]);*/?> -->
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
         <?=Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default']);?>
