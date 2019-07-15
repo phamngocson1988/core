@@ -89,7 +89,7 @@ class CartController extends Controller
                     }
                     
                 } elseif ($item->scenario == CartItem::SCENARIO_INFO_CART) {
-                    return $this->redirect(Url::to(['cart/checkout']));
+                    return $this->redirect(Url::to(['cart/confirm']));
                 } 
             }
         }
@@ -187,7 +187,7 @@ class CartController extends Controller
         $order->total_price = $totalPrice;
         $order->customer_id = $user->id;
         $order->customer_name = $user->name;
-        $order->customer_email = $user->email;
+        $order->customer_email = $cartItem->reception_email;
         $order->customer_phone = $user->phone;
         $order->status = Order::STATUS_PENDING;
         $order->payment_at = date('Y-m-d H:i:s');

@@ -5,6 +5,7 @@
 {use class='common\widgets\ImageInputWidget'}
 {use class='common\widgets\RadioListInput'}
 {use class='common\widgets\CheckboxInput'}
+{use class='unclead\multipleinput\MultipleInput'}
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js', ['depends' => [\yii\web\JqueryAsset::className()]])}
@@ -77,6 +78,9 @@
                 <li class="active">
                   <a href="#tab_1_1" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
+                <li>
+                  <a href="#tab_1_2" data-toggle="tab">Giá theo số lượng</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -86,9 +90,35 @@
                   {$form->field($model, 'excerpt')->textarea()}
                   {$form->field($model, 'price')->textInput()}
                   {$form->field($model, 'original_price')->textInput()}
+                  {$form->field($model, 'reseller_price')->textInput()}
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
+                </div>
+                <div class="tab-pane" id="tab_1_2">
+                {$form->field($model, 'units')->widget(MultipleInput::className(), [
+                  'max' => 10,
+                  'columns' => [
+                    [
+                      'name'  => 'quantity',
+                      'title' => 'Số lượng mua',
+                      'enableError' => true,
+                      'options' => [
+                        'type' => 'number',
+                        'class' => 'input-priority'
+                      ]
+                    ],
+                    [
+                      'name'  => 'unit',
+                      'title' => 'Số lượng gems nhận được',
+                      'enableError' => true,
+                      'options' => [
+                        'type' => 'number',
+                        'class' => 'input-priority'
+                      ]
+                    ]
+                  ]
+                ])->label(false)}
                 </div>
               </div>
             </div>

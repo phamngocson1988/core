@@ -136,4 +136,9 @@ class Game extends ActiveRecord
     {
         return $this->hasMany(GameImage::className(), ['game_id' => 'id']);
     }
+
+    public function getGameUnits()
+    {
+        return $this->hasMany(GameUnit::className(), ['game_id' => 'id'])->orderBy(['quantity' => SORT_ASC]);
+    }
 }

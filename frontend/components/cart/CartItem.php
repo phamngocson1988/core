@@ -72,7 +72,14 @@ class CartItem extends Game implements CartItemInterface
 
     public function getTotalUnit()
     {
-        return $this->pack * $this->quantity;
+        $pack = $this->pack;
+        foreach ($this->gameUnits as $gameUnit) {
+            if ($this->quantity >= $gameUnit->quantity) {
+                $pack = $gameUnit->unit;
+                break;
+            }
+        }
+        return $pack * $this->quantity;
     }
 
     // ============== implement interface ===========//

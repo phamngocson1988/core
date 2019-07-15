@@ -7,6 +7,7 @@ use yii\bootstrap\ActiveForm;
 use frontend\components\cart\CartItem;
 use frontend\components\cart\Cart;
 
+$item = $cart->getItem();
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'update-cart1']); ?>
