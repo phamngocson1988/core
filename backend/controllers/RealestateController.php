@@ -59,15 +59,31 @@ class RealestateController extends Controller
         $this->view->params['main_menu_active'] = 'realestate.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new CreateRealestateForm();
+        // $model = new CreateRealestateForm();
+        $model = new Realestate();
         if ($model->load(Yii::$app->request->post())) {
-            if (!$model->save()) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            } else {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['realestate/index']));
-                return $this->redirect($ref);    
+            // if (!$model->save()) {
+            //     Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            // } else {
+                // Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                // $ref = $request->get('ref', Url::to(['realestate/index']));
+                // return $this->redirect($ref);    
+            // }
+
+            if ($model->electric_name) {
+                $electric = Realestate::pickElectric($model->electric_name);
+                $electric->load($request->post());
+                $model->setElectricData($electric);
             }
+            if ($model->water_name) {
+                $water = Realestate::pickWater($model->water_name);
+                $water->load($request->post());
+                $model->setWaterData($water);
+            }
+            $model->save();
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = $request->get('ref', Url::to(['realestate/index']));
+            return $this->redirect($ref);    
         }
 
         return $this->render('create.php', [
@@ -82,17 +98,29 @@ class RealestateController extends Controller
         $this->view->params['main_menu_active'] = 'realestate.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new EditRealestateForm();
+        $model = Realestate::findOne($id);
         if ($model->load(Yii::$app->request->post())) {
-            if (!$model->save()) {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            } else {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                $ref = $request->get('ref', Url::to(['realestate/index']));
-                return $this->redirect($ref);    
+            // if (!$model->save()) {
+            //     Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            // } else {
+            //     Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            //     $ref = $request->get('ref', Url::to(['realestate/index']));
+            //     return $this->redirect($ref);    
+            // }
+            if ($model->electric_name) {
+                $electric = Realestate::pickElectric($model->electric_name);
+                $electric->load($request->post());
+                $model->setElectricData($electric);
             }
-        } else {
-            $model->loadData($id);
+            if ($model->water_name) {
+                $water = Realestate::pickWater($model->water_name);
+                $water->load($request->post());
+                $model->setWaterData($water);
+            }
+            $model->save();
+            Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            $ref = $request->get('ref', Url::to(['realestate/index']));
+            return $this->redirect($ref);    
         }
         return $this->render('edit.php', [
             'model' => $model,

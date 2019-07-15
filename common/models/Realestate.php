@@ -5,9 +5,13 @@ namespace common\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 class Realestate extends \yii\db\ActiveRecord
 {
+    // const SCENARIO_CREATE = 'SCENARIO_CREATE';
+    // const SCENARIO_EDIT = 'SCENARIO_EDIT';
+
 	const STATUS_INCOMING = 'incoming';
     const STATUS_SELLING = 'selling';
     const STATUS_SOLDOUT = 'soldout';
@@ -44,6 +48,29 @@ class Realestate extends \yii\db\ActiveRecord
         ];
     }
 
+    public function attributeLabels() { 
+
+        return  [
+            'title' => Yii::t('app', 'title'),
+            'content' => Yii::t('app', 'description'),
+            'status' => Yii::t('app', 'status'),
+            'excerpt' => Yii::t('app', 'excerpt'),
+            'image_id' => Yii::t('app', 'image'),
+            'meta_title' => Yii::t('app', 'meta_title'),
+            'meta_keyword' => Yii::t('app', 'meta_keyword'),
+            'meta_description' => Yii::t('app', 'meta_description'),
+            'gallery' => Yii::t('app', 'gallery'),
+        ];
+    }
+
+    public function rules()
+    {
+        return [
+            [['title', 'address'], 'required'],
+            [['excerpt', 'content', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery', 'latitude', 'longitude', 'electric_name', 'electric_data', 'water_name', 'water_data'], 'safe']
+        ];
+    }
+
     public static function getStatusList()
     {
         return [
@@ -62,6 +89,43 @@ class Realestate extends \yii\db\ActiveRecord
             self::DIRECTION_B => Yii::t('app', 'north'),
         ];
     }
+
+    public static function  getElectricHandlers()
+    {
+        return [
+            'electric_standard' => [
+                'class' => '\common\models\realestate\ElectricStandard',
+                'title' => 'Tính theo giá nhà nước'
+            ],
+            'electric_fix' => [
+                'class' => '\common\models\realestate\ElectricFix',
+                'title' => 'Tính theo giá cố định theo tháng'
+            ],
+            'electric_per_people' => [
+                'class' => '\common\models\realestate\ElectricPerPeople',
+                'title' => 'Tính theo đầu người'
+            ],
+        ];
+    }
+
+    public static function  getWaterHandlers()
+    {
+        return [
+            'water_standard' => [
+                'class' => '\common\models\realestate\WaterStandard',
+                'title' => 'Tính theo giá nhà nước'
+            ],
+            'water_fix' => [
+                'class' => '\common\models\realestate\WaterFix',
+                'title' => 'Tính theo giá cố định theo tháng'
+            ],
+            'water_per_people' => [
+                'class' => '\common\models\realestate\WaterPerPeople',
+                'title' => 'Tính theo đầu người'
+            ]
+        ];
+    }
+
     public function getImage() 
     {
         return $this->hasOne(Image::className(), ['id' => 'image_id']);
@@ -134,5 +198,81 @@ class Realestate extends \yii\db\ActiveRecord
     public function getRooms()
     {
         return $this->hasMany(Room::className(), ['realestate_id' => 'id']);
+    }
+
+    // Electric fee
+    public static function pickElectric($electricName)
+    {
+        if (!$electricName) return null;
+        $handlers = self::getElectricHandlers();
+        $handler = ArrayHelper::getValue($handlers, $electricName);
+        if (!$handler) return null;
+        return Yii::createObject($handler);
+    }
+
+    public function getElectric()
+    {
+        $electric = self::pickElectric($this->electric_name);
+        if (!$electric) return null;
+        $attrs = $this->getElectricData();
+        if (!$attrs) return null;
+        $attrs['promotion_id'] = $this->id;
+        $electric->attributes = $attrs;
+        return $electric;
+    }
+
+    public function addElectric($electric)
+    {
+        $this->setElectricData($electric);
+        $this->save();
+    }
+
+    public function setElectricData($electric)
+    {
+        $electricData = $electric->asArray();
+        $this->electric_data = serialize($electricData);
+    }
+
+    public function getElectricData()
+    {
+        return @unserialize($this->electric_data);
+    }
+
+    // Water
+    public static function pickWater($waterName)
+    {
+        if (!$waterName) return null;
+        $handlers = self::getWaterHandlers();
+        $handler = ArrayHelper::getValue($handlers, $waterName);
+        if (!$handler) return null;
+        return Yii::createObject($handler);
+    }
+
+    public function getWater()
+    {
+        $water = self::pickWater($this->water_name);
+        if (!$water) return null;
+        $attrs = $this->getWaterData();
+        if (!$attrs) return null;
+        $attrs['promotion_id'] = $this->id;
+        $water->attributes = $attrs;
+        return $water;
+    }
+
+    public function addWater($water)
+    {
+        $this->setWaterData($water);
+        $this->save();
+    }
+
+    public function setWaterData($water)
+    {
+        $waterData = $water->asArray();
+        $this->water_data = serialize($waterData);
+    }
+
+    public function getWaterData()
+    {
+        return @unserialize($this->water_data);
     }
 }

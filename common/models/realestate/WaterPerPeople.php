@@ -1,0 +1,42 @@
+<?php
+namespace common\models\realestate;
+
+use Yii;
+use yii\base\Model;
+use yii\helpers\ArrayHelper;
+
+class WaterPerPeople extends WaterAbstract implements WaterInterface
+{
+    public $people;
+    public $price;
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_DEFAULT => ['price'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'price' => 'Giá tiền cố định trên 1 người',
+        ];
+    }
+
+    public function render($form, $attr, $options = [])
+    {
+        // if (!$this->isSafeAttribute($attr)) return '';
+        switch ($attr) {
+            case 'price':
+                return $form->field($this, $attr, $options)->textInput();
+            default:
+                return '';
+        }
+    }
+
+    public function calculate($from, $to)
+    {
+        return $this->people * $this->price;
+    }
+}

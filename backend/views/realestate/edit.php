@@ -12,6 +12,7 @@ use dosamigos\google\maps\overlays\InfoWindow;
 use dosamigos\google\maps\overlays\Marker;
 use dosamigos\google\maps\Event;
 use common\widgets\MultipleImageInputWidget;
+use common\models\Realestate;
 
 $this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]]);
 $this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
@@ -59,12 +60,12 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
           'cancelButtonOptions' => ['tag' => 'button', 'options' => ['class' => 'btn btn-circle red btn-sm']]
         ])->label(false);?>
 
-        <?=$form->field($model, 'status', [
+        <!-- <?php/*$form->field($model, 'status', [
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(RadioListInput::className(), [
           'items' => $model->getStatusList(),
           'options' => ['class' => 'mt-radio-list']
-        ]);?>
+        ]);*/?> -->
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
         <?=Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default']);?>
@@ -84,16 +85,13 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   <a href="#tab_1_1" data-toggle="tab"><?= Yii::t('app', 'main_content');?></a>
                 </li>
                 <li>
-                  <a href="#tab_1_2" data-toggle="tab"><?= Yii::t('app', 'meta');?></a>
-                </li>
-                <li>
                   <a href="#tab_1_3" data-toggle="tab"><?= Yii::t('app', 'gallery');?></a>
                 </li>
               </ul>
             </div>
             <div class="portlet-body">
               <div class="tab-content">
-                <div class="tab-pane active" id="tab_1_1">
+                <div class="tab-pane active form-horizontal form-row-seperated" id="tab_1_1">
                   <?=$form->field($model, 'title')->textInput();?>
                   <?=$form->field($model, 'excerpt')->textarea();?>
                   <?=$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]]);?>
@@ -113,8 +111,17 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
 
                   <?php 
                   $coord = new LatLng(['lat' => $model->latitude, 'lng' => $model->longitude]);
-                  $marker = new Marker(['position' => $coord]);
-                  $marker->setName('marker');
+                  // $marker = new Marker(['position' => $coord]);
+                  // $marker->setName('marker');
+                  $marker = new Marker([
+                    'position' => $coord,
+                    'title' => $model->title,
+                  ]);
+                  $marker->attachInfoWindow(
+                    new InfoWindow([
+                        'content' => "<p>$model->title</p>"
+                    ])
+                  );
 
                   $event = new Event([
                     'trigger' => 'click',
@@ -136,35 +143,71 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   echo $map->display();
                   ?>
 
-                  <hr/>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      <?=$form->field($model, 'direction')->dropDownList($model->getDirectionList(), ['prompt' => Yii::t('app', 'choose')]);?>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      <?=$form->field($model, 'area')->textInput();?>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      <?=$form->field($model, 'price')->textInput();?>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      <?=$form->field($model, 'num_bed')->textInput();?>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      <?=$form->field($model, 'num_toilet')->textInput();?>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      <?=$form->field($model, 'deposit')->textInput();?>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                      <?=$form->field($model, 'deposit_duration')->textInput();?>
-                    </div>
+                  <hr><!-- Electric -->
+                  <?php 
+                  $electrics = Realestate::getElectricHandlers();
+                  $electricList = [];
+                  foreach ($electrics as $identifier => $params) {
+                    $electricList[$identifier] = $params['title'];
+                  }
+                  ?>
+                  <?=$form->field($model, 'electric_name', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'electrics'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                  ])->dropDownList($electricList, ['prompt' => 'Chọn quy định áp dụng'])->label('Quy định áp dụng');?>
+
+                  <div id="electric-container">
+                  <?php foreach ($electrics as $identifier => $params) {
+                    if ($identifier == $model->electric_name) {
+                      $electric = $model->getElectric();
+                    } else {
+                      $electric = Yii::createObject($params);
+                    }
+                    $content = '';
+                    foreach ($electric->safeAttributes() as $attr) {
+                      $content .= $electric->render($form, $attr, [
+                        'options' => ['class' => 'form-group electric', 'id' => $identifier],
+                        'labelOptions' => ['class' => 'col-md-2 control-label'],
+                        'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                      ]);
+                    }
+                    echo Html::tag('div', $content, ['class' => 'electric-item', 'id' => $identifier]);
+                  } ?>
                   </div>
-                </div>
-                <div class="tab-pane" id="tab_1_2">
-                  <?=$form->field($model, 'meta_title')->textInput();?>
-                  <?=$form->field($model, 'meta_keyword')->textInput();?>
-                  <?=$form->field($model, 'meta_description')->textarea(['rows' => '5']);?>
+
+                  <hr><!-- Water -->
+                  <?php 
+                  $waters = Realestate::getWaterHandlers();
+                  $waterList = [];
+                  foreach ($waters as $identifier => $params) {
+                    $waterList[$identifier] = $params['title'];
+                  }
+                  ?>
+                  <?=$form->field($model, 'water_name', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'waters'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                  ])->dropDownList($waterList, ['prompt' => 'Chọn giá trị áp dụng'])->label('Giá trị áp dụng');?>
+                  
+                  <div id="water-container">
+                  <?php foreach ($waters as $identifier => $params) {
+                    if ($identifier == $model->water_name) {
+                      $water = $model->getWater();
+                    } else {
+                      $water = Yii::createObject($params);
+                    }
+                    $content = '';
+                    foreach ($water->safeAttributes() as $attr) {
+                      $content .= $water->render($form, $attr, [
+                        'options' => ['class' => 'form-group water', 'id' => $identifier],
+                        'labelOptions' => ['class' => 'col-md-2 control-label'],
+                        'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                      ]);
+                    }
+                    echo Html::tag('div', $content, ['class' => 'water-item', 'id' => $identifier]);
+                  } ?>
+                  </div>
                 </div>
                 <div class="tab-pane" id="tab_1_3">
                   <?=$form->field($model, 'gallery', [
@@ -183,3 +226,35 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
   </div>
 </div>
 <?php ActiveForm::end() ?>
+<template id="electric-template" style="display: none">
+</template>
+<template id="water-template" style="display: none">
+</template>
+<?php
+$script = <<< JS
+hideAllElectricItems();
+function hideAllElectricItems() {
+  $( "#electric-container .electric-item" ).appendTo( $( "#electric-template" ) );
+}
+$('#electrics').on('change', function(){
+  var val = $(this).val();
+  hideAllElectricItems();
+  if (!val) return;
+  $('#' + val).appendTo( $( "#electric-container" ) );
+});
+$('#electrics').trigger('change');
+
+hideAllWaterItems();
+function hideAllWaterItems() {
+  $( "#water-container .water-item" ).appendTo( $( "#water-template" ) );
+}
+$('#waters').on('change', function(){
+  var val = $(this).val();
+  hideAllWaterItems();
+  if (!val) return;
+  $('#' + val).appendTo( $( "#water-container" ) );
+});
+$('#waters').trigger('change');
+JS;
+$this->registerJs($script);
+?>
