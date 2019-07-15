@@ -9,7 +9,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
-use common\widgets\Alert;
+// use common\widgets\Alert;
+use lavrentiev\widgets\toastr\NotificationFlash;
 
 AppAsset::register($this);
 ?>
@@ -33,6 +34,7 @@ AppAsset::register($this);
 $bodyClass = isset($this->params['body_class']) ? $this->params['body_class'] : '';
 ?>
 <body class='<?=$bodyClass;?>' >
+<?= NotificationFlash::widget() ?>
 <?php $this->beginBody() ?>
 <div class="wrapper">
   <section class="header no-home">

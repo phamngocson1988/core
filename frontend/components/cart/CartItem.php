@@ -17,9 +17,12 @@ class CartItem extends Game implements CartItemInterface
     public $platform;
     public $login_method;
 
+    public $reception_email;
+
     const SCENARIO_ADD_CART = 'add_cart';
     const SCENARIO_EDIT_CART = 'edit_cart';
     const SCENARIO_INFO_CART = 'info_cart';
+    const SCENARIO_RECEPTION_CART = 'reception_cart';
     const SCENARIO_IMPORT_CART = 'import_cart';
 
     // public function behaviors()
@@ -40,6 +43,7 @@ class CartItem extends Game implements CartItemInterface
             self::SCENARIO_EDIT_CART => ['id', 'quantity'],
             self::SCENARIO_INFO_CART => ['id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
             self::SCENARIO_IMPORT_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
+            self::SCENARIO_RECEPTION_CART => ['id', 'reception_email']
         ];
     }
 
@@ -52,6 +56,7 @@ class CartItem extends Game implements CartItemInterface
             ['quantity', 'default', 'value' => 1],
             [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             [['server', 'recover_code', 'note'], 'trim', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
+            ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART]
         ];
     }
 

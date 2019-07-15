@@ -131,7 +131,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id]);
         } else {
-            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $model->getErrors()]);
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $model->getErrorSummary(true)]);
         }
     }
 

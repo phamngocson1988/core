@@ -142,6 +142,22 @@ class CartController extends Controller
         }
     }
 
+    public function actionConfirm()
+    {
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
+        $cart = Yii::$app->cart;
+        $item = $cart->getItem();
+        if (!$item) return $this->redirect(['site/index']);
+        $item->setScenario(CartItem::SCENARIO_RECEPTION_CART);
+        if ($item->load($request->post()) && $item->validate()) {
+            $cart->add($item);
+            return $this->redirect(['cart/checkout']);
+        }
+        if (!$item->reception_email) $item->reception_email = $user->email;
+        return $this->render('confirm', ['cart' => $cart]);
+    }
+
     public function actionCheckout()
     {
         $cart = Yii::$app->cart;

@@ -39,8 +39,8 @@ $setting = Yii::$app->settings;
                         </div>
                         <?php else :?>
                         <div class="login-box">
-                            <?php $form = ActiveForm::begin(['action' => ['site/login']]); ?>
-                            <span class="fl-left">Join Now</span>
+                            <?php $form = ActiveForm::begin(['action' => ['site/ajax-login'], 'options' => ['id' => 'top-login']]); ?>
+                            <span class="fl-left"><a href="<?=Url::to(['site/signup']);?>" style="color:black">Join Now</a></span>
                             <div class="login-form fl-left">
                                 <div class="login-control fl-left">
                                     <?php $top_login_form = new LoginForm();?>
@@ -69,7 +69,7 @@ $setting = Yii::$app->settings;
                                 </div>
                                 <div class="login-submit fl-left">
                                     <input type="submit" value="Login">
-                                    <div class="forgot-password"><a href="#">Forgot login detail?</a></div>
+                                    <div class="forgot-password"><a href="javascript:void;" id="ajax-login-error"></a></div>
                                 </div>
                             </div>
                             <?php ActiveForm::end(); ?>
@@ -127,6 +127,15 @@ $('body').on('click', function(e) {
         $('#login-box-wrapper, #login-box-wrapper a.ico-user-login').removeClass('active');
     }
 });
+var ajaxLoginForm = new AjaxFormSubmit({element: 'form#top-login'});
+ajaxLoginForm.success = function (data, form) {
+    location.reload();
+}
+ajaxLoginForm.error = function (errors) {
+    $('.captcha-image').yiiCaptcha('refresh');
+    $('#ajax-login-error').html(errors[0]);
+    return false;
+}
 JS;
 $this->registerJs($script);
 ?>

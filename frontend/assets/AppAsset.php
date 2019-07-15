@@ -16,11 +16,12 @@ class AppAsset extends AssetBundle
         'css/layout.css',
         'css/jquery.bxslider.css',
         'css/jquery.fancybox.min.css',
+        'css/theme.css',
 
     ];
     public $js = [
         'js/jquery.bxslider.min.js',
-        // 'js/ajax_action.js',
+        'js/ajax_action.js',
         'js/jquery.fancybox.min.js',
         'js/function.js',
     ];
