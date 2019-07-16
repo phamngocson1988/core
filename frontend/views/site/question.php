@@ -13,7 +13,7 @@
   <div class="container">
     <div class="row">
       <div class="col col-sm-12">
-        <form action="#" class="">
+        <form method="GET" autocomplete='off'>
           <input type="text" placeholder="Got a question? Find it here...">
           <input type="submit" value="">
         </form>

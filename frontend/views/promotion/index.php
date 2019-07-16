@@ -21,10 +21,10 @@ use yii\widgets\Pjax;
   <div class="container">
     <div class="row">
       <div class="col col-sm-12">
-        <?php $form = ActiveForm::begin(['method' => 'GET']); ?>
+        <form method="GET" autocomplete='off'>
           <input type="text" name="q" value="<?=$q;?>" placeholder="Search">
           <input type="submit" value="">
-        <?php ActiveForm::end();?>
+        </form>
       </div>
     </div>
   </div>

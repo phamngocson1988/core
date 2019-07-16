@@ -20,7 +20,7 @@ $this->title = 'Shop';
     <div class="row">
       <div class="col col-sm-12">
         <div class="shop-search-box">
-          <form method="GET">
+          <form method="GET" autocomplete='off'>
             <input type="text" placeholder="Search" name="q" value="<?=$q;?>">
             <input type="submit" value="">
           </form>

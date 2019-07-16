@@ -64,8 +64,6 @@ class SignupForm extends Model
             [['country_code', 'phone'], 'required'],
             ['phone', 'unique', 'targetClass' => User::className(), 'message' => 'This phone has already been taken.'],
 
-            ['currency', 'required'],
-
             ['captcha', 'required'],
             ['captcha', 'captcha', 'message' => 'Captcha is not match'],
         ];
@@ -85,7 +83,6 @@ class SignupForm extends Model
         $user->name = sprintf("%s %s", $this->firstname, $this->lastname);
         $user->country_code = $this->country_code;
         $user->phone = $this->phone;
-        $user->currency = $this->currency;
         $user->birthday = sprintf("%s-%s-%s", $this->birth_year, $this->birth_month, $this->birth_date);
         $user->refer_code = Yii::$app->security->generateRandomString(6);
         $user->setPassword($this->password);

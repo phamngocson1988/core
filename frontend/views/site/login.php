@@ -33,12 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="row">
         <div class="col col-12 col-lg-7 col-md-7 col-sm-12">
           <div class="register-block">
-            <?php $form = ActiveForm::begin(['id' => 'form-login']); ?>
+            <?php $form = ActiveForm::begin(['id' => 'form-login', 'options' => ['autocomplete' => 'off']]); ?>
               <p>Please note that we do not permit members to own more than (1) account.</p>
               <?= $form->field($model, 'username')->textInput()->label('Username <span class="required">*</span>') ?>
               <?= $form->field($model, 'password')->passwordInput()->label('Password <span class="required">*</span>') ?>
               <?= $form->field($model, 'captcha', [
-                'inputOptions' => ['class' => 'form-control captcha-code']
+                'inputOptions' => ['class' => 'form-control captcha-code', 'autocomplete' => false]
               ])->widget(Captcha::className(), [
                 'template' => '{input}<div class="captcha-image">{image}</div>',
               ])->label('Validation Code <span class="required">*</span>') ?>

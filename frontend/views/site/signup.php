@@ -39,7 +39,7 @@ $years = array_combine($rangeYears, $rangeYears);
       <div class="row">
         <div class="col col-12 col-lg-7 col-md-7 col-sm-12">
           <div class="register-block">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+            <?php $form = ActiveForm::begin(['id' => 'form-signup', 'options' => ['autocomplete' => 'off']]); ?>
               <p>Please note that we do not permit members to own more than (1) account.</p>
               <?= $form->field($model, 'firstname')->textInput()->label('Firstname <span class="required">*</span>') ?>
               <?= $form->field($model, 'lastname')->textInput()->label('Lastname <span class="required">*</span>') ?>
@@ -66,8 +66,6 @@ $years = array_combine($rangeYears, $rangeYears);
                 ])->dropDownList($years);?>
               </div>
               
-              <?= $form->field($model, 'currency')->textInput() ?>
-
               <div class="form-group">
                 <label>Contact Number <span class="required">*</span></label>
                 <?= $form->field($model, 'country_code', [
@@ -83,19 +81,19 @@ $years = array_combine($rangeYears, $rangeYears);
               </div>
 
               <?= $form->field($model, 'captcha', [
-                'inputOptions' => ['class' => 'form-control captcha-code']
+                'inputOptions' => ['class' => 'form-control captcha-code', 'autocomplete' => false]
               ])->widget(Captcha::className(), [
                 'template' => '{input}<div class="captcha-image">{image}</div>',
               ])->label('Validation Code <span class="required">*</span>') ?>
 
               <p>By clicking <b>Register Now!</b>, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim </p>
-              <div class="terms">
-                <div class="terms-row">
-                  <input type="checkbox" name="" id=""><span>I would like to receive details of special offers, free bets and other promotions.</span>
-                </div>
-                <div class="terms-row">
-                  <input type="checkbox" name="" id=""><span>* I am at least 18 years of age an I accept the <font style="color: #ff3600;">Terms & Conditions.</font></span>
-                </div>
+               <div class="terms">
+                  <div class="terms-row">
+                      <input type="checkbox"><span>I would like to receive details of special offers, free bets and other promotions.</span>
+                  </div>
+                  <div class="terms-row">
+                      <input type="checkbox" id="agree"><span>* I am at least 18 years of age an I accept the <font style="color: #ff3600;">Terms & Conditions.</font></span>
+                  </div>
               </div>
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Register Now!</button>
@@ -162,6 +160,12 @@ $('#email').on('blur', function(){
       }
     },
   });
+});
+$('#form-signup').on('submit', function(e){
+  if (!$('#agree').is(':checked')) {
+    alert('You need to agree with our terms & conditions.');
+    return false;
+  }
 })
 JS;
 $checkEmail = Url::to(['site/find-email']);

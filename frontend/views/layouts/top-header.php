@@ -41,7 +41,7 @@ $setting = Yii::$app->settings;
                         </div>
                         <?php else :?>
                         <div class="login-box">
-                            <?php $form = ActiveForm::begin(['action' => ['site/ajax-login'], 'options' => ['id' => 'top-login']]); ?>
+                            <?php $form = ActiveForm::begin(['action' => ['site/ajax-login'], 'options' => ['id' => 'top-login', 'autocomplete' => 'off']]); ?>
                             <span class="fl-left"><a href="<?=Url::to(['site/signup']);?>" style="color:black">Join Now</a></span>
                             <div class="login-form fl-left">
                                 <div class="login-control fl-left">
@@ -61,7 +61,7 @@ $setting = Yii::$app->settings;
                                     <div class="captcha-example">
                                         <?= $form->field($top_login_form, 'captcha', [
                                             'options' => ['tag' => false],
-                                            'inputOptions' => ['class' => '', 'placeholder' => 'Input captcha'],
+                                            'inputOptions' => ['class' => '', 'placeholder' => 'Input captcha', 'autocomplete' => false],
                                             'template' => '{input}'
                                         ])->widget(Captcha::className(), [
                                             'template' => '{input}{image}',

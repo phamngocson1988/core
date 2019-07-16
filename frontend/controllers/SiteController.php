@@ -204,7 +204,6 @@ class SiteController extends Controller
             $model->affiliate = $request->get('affiliate');
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
-
         if ($model->load($request->post()) && ($user = $model->signup())) {
             $verify = VerifyAccountViaPhoneForm::findUserByAuth($user->auth_key);
             if (!$verify->send()) {
