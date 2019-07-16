@@ -1,24 +1,27 @@
+<?php
+$setting = Yii::$app->settings;
+?>
 <section class="footer">
     <div class="top-footer">
         <div class="container">
             <div class="small-container footer-accept">
                 <div class="logo-item">
-                    <a href="#"><img src="/images/logo-visa.png" alt=""></a>
+                    <a href="javascript:void;"><img src="/images/logo-visa.png" alt=""></a>
                 </div>
                 <div class="logo-item">
-                    <a href="#"><img src="/images/logo-mastercard.png" alt=""></a>
+                    <a href="javascript:void;"><img src="/images/logo-mastercard.png" alt=""></a>
                 </div>
                 <div class="logo-item">
-                    <a href="#"><img src="/images/logo-payonneer.png" alt=""></a>
+                    <a href="javascript:void;"><img src="/images/logo-payonneer.png" alt=""></a>
                 </div>
                 <div class="logo-item">
-                    <a href="#"><img src="/images/logo-paypal.png" alt=""></a>
+                    <a href="javascript:void;"><img src="/images/logo-paypal.png" alt=""></a>
                 </div>
                 <div class="logo-item">
-                    <a href="#"><img src="/images/logo-alipay.png" alt=""></a>
+                    <a href="javascript:void;"><img src="/images/logo-alipay.png" alt=""></a>
                 </div>
                 <div class="logo-item">
-                    <a href="#"><img src="/images/logo-wechat.png" alt=""></a>
+                    <a href="javascript:void;"><img src="/images/logo-wechat.png" alt=""></a>
                 </div>
             </div>
         </div>
@@ -27,8 +30,8 @@
         <div class="container">
             <div class="small-container">
                 <div class="footer-logo">
-                    <a href="#">
-                        <img src="/images/logo.png" alt="">
+                    <a href="/">
+                        <img src="<?=$setting->get('ApplicationSettingForm', 'logo', '/images/logo.png');?>" alt="">
                     </a>
                 </div>
                 <div class="footer-about">
@@ -62,11 +65,11 @@
                 <div class="footer-socials">
                     <h4>Find Us</h4>
                     <ul>
-                        <li><a href="#"><img src="/images/ico-fb.png" alt=""></a></li>
-                        <li><a href="#"><img src="/images/ico-viber.png" alt=""></a></li>
-                        <li><a href="#"><img src="/images/ico-mb.png" alt=""></a></li>
-                        <li><a href="#"><img src="/images/ico-wechat.png" alt=""></a></li>
-                        <li><a href="#"><img src="/images/ico-line.png" alt=""></a></li>
+                        <li><a href="javascript:void;"><img src="/images/ico-fb.png" alt=""></a></li>
+                        <li><a href="javascript:void;"><img src="/images/ico-viber.png" alt=""></a></li>
+                        <li><a href="javascript:void;"><img src="/images/ico-mb.png" alt=""></a></li>
+                        <li><a href="javascript:void;"><img src="/images/ico-wechat.png" alt=""></a></li>
+                        <li><a href="javascript:void;"><img src="/images/ico-line.png" alt=""></a></li>
                     </ul>
                 </div>
             </div>

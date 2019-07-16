@@ -27,15 +27,17 @@ $setting = Yii::$app->settings;
                         </div>
                     </div>
                     <div class="logo fl-left">
-                        <a href="#">
-                            <img src="<?=$setting->get('ApplicationSettingForm', 'logo');?>" alt="">
+                        <a href="/">
+                            <img src="<?=$setting->get('ApplicationSettingForm', 'logo', '/images/logo.png');?>" alt="">
                         </a>
                     </div>
                     <div class="right-box fl-right" id="login-box-wrapper">
                         <a href="javascript:;" class="ico-user-login"><i class="fas fa-user"></i></a>
                         <?php if (!Yii::$app->user->isGuest) :?>
-                        <div class="login-box">
-                            <span class="fl-left">Chào bạn</span>
+                        <div class="login-box" style="color: white;">
+                            <?php $user = Yii::$app->user->getIdentity();?>
+                            <span class="fl-left">Chào <?=$user->name;?></span>&nbsp;|&nbsp;
+                            <a href="<?=Url::to(['site/logout']);?>">Logout</a>
                         </div>
                         <?php else :?>
                         <div class="login-box">

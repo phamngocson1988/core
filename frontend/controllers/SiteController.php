@@ -104,7 +104,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        // $this->layout = 'signup';
+        $this->view->params['body_class'] = 'global-bg';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

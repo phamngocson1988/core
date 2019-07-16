@@ -2,55 +2,84 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \common\models\LoginForm */
+/* @var $model \frontend\models\SignupForm */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use common\models\User;
 use yii\captcha\Captcha;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="section-lg text-center">
+
+<section class="page-title">
   <div class="container">
-    <h3>Login</h3>
-    <div class="row row-fix justify-content-sm-center">
-      <div class="col-md-8 col-lg-6 col-xl-4">
-        <!-- RD Mailform-->
-        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix']); ?>
-          <?= $form->field($model, 'username', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'User name'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->textInput(['autofocus' => true]) ?>
-
-          <?= $form->field($model, 'password', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input', 'placeholder' => 'Password'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{hint}{error}'
-          ])->passwordInput() ?>
-
-          <?= $form->field($model, 'captcha', [
-              'options' => ['tag' => false],
-              'inputOptions' => ['class' => '', 'placeholder' => 'Input captcha'],
-              'template' => '{input}'
-          ])->widget(Captcha::className(), [
-              'template' => '{input}{image}',
-              'imageOptions' => ['class' => 'captcha-image']
-          ])->label('Captcha') ?>
-
-          <div class="form-button">
-            <?= Html::submitButton('Signin', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Signin']) ?>
-          </div>
-        <?php ActiveForm::end(); ?>
+    <div class="row">
+      <div class="col col-sm-12">
+        <div class="page-title-content text-center pad-bot">
+          <img src="/images/text-register.png" alt="">
+          <p>Login</p>
+        </div>
       </div>
     </div>
-    <p class="offset-custom-1 text-gray-light"><a href="<?=Url::to(['site/request-password-reset']);?>" style="color: white">Forgot password</a> | <a href="<?=Url::to(['site/signup']);?>" style="color: white">Register now</a></p>
-    <div class="group-xs group-middle"><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-facebook" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-twitter" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-google" href="#"></a></div>
   </div>
-</div>
+</section>
+
+<section class="register-page">
+  <div class="container">
+    <div class="small-container">
+      <div class="row">
+        <div class="col col-12 col-lg-7 col-md-7 col-sm-12">
+          <div class="register-block">
+            <?php $form = ActiveForm::begin(['id' => 'form-login']); ?>
+              <p>Please note that we do not permit members to own more than (1) account.</p>
+              <?= $form->field($model, 'username')->textInput()->label('Username <span class="required">*</span>') ?>
+              <?= $form->field($model, 'password')->passwordInput()->label('Password <span class="required">*</span>') ?>
+              <?= $form->field($model, 'captcha', [
+                'inputOptions' => ['class' => 'form-control captcha-code']
+              ])->widget(Captcha::className(), [
+                'template' => '{input}<div class="captcha-image">{image}</div>',
+              ])->label('Validation Code <span class="required">*</span>') ?>
+
+              <div class="register-action">
+                <button type="submit" class="cus-btn yellow has-shadow">Login</button>
+              </div>
+            <?php ActiveForm::end(); ?>
+          </div>
+        </div>
+        <div class="col col-12 col-lg-1 col-md-1 col-sm-12"></div>
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-12">
+          <div class="reg-deposit">
+            <div class="has-left-border has-shadow">
+              <img src="/images/ico-deposit-large.png" alt="">
+              <p class="large-txt">
+                Deposit
+              </p>
+              <p class="small-txt">Fast, Safe and Secure!</p>
+            </div>
+          </div>
+          <div class="reg-useful-tools">
+            <h3>Useful Tools</h3>
+            <div class="has-left-border gray has-shadow">
+              <img src="/images/ico-how-to-deposit.png" alt="">
+              <p class="small-txt">How to</p>
+              <p class="large-txt">Deposit</p>
+            </div>
+            <div class="has-left-border gray has-shadow">
+              <img src="/images/ico-how-to-transfer.png" alt="">
+              <p class="small-txt">How to</p>
+              <p class="large-txt">Transfer</p>
+            </div>
+            <div class="has-left-border gray has-shadow">
+              <img src="/images/ico-how-to-play.png" alt="">
+              <p class="small-txt">How to</p>
+              <p class="large-txt">Play</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
