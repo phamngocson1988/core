@@ -22,8 +22,8 @@ class Room extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['code', 'title', 'realestate_id', 'content', 'image_id', 'price', 'status'],
-            self::SCENARIO_EDIT => ['code', 'title', 'content', 'image_id', 'price', 'status'],
+            self::SCENARIO_CREATE => ['code', 'title', 'realestate_id', 'content', 'image_id', 'price', 'status', 'area', 'bed', 'toilet', 'kitchen'],
+            self::SCENARIO_EDIT => ['code', 'title', 'content', 'image_id', 'price', 'status', 'area', 'bed', 'toilet', 'kitchen'],
         ];
     }
 
@@ -35,7 +35,7 @@ class Room extends \yii\db\ActiveRecord
         return [
             [['code', 'title'], 'required'],
             [['realestate_id'], 'required', 'on' => self::SCENARIO_CREATE],
-            [['content', 'image_id', 'price', 'status'], 'safe'],
+            [['content', 'image_id', 'price', 'status', 'area', 'bed', 'toilet', 'kitchen'], 'safe'],
         ];
     }
 
@@ -72,5 +72,10 @@ class Room extends \yii\db\ActiveRecord
     public function getAvailableRoomServices()
     {
         return $this->hasMany(RoomService::className(), ['room_id' => 'id'])->andOnCondition(['apply' => 1]);
+    }
+
+    public function getRealestate()
+    {
+        return $this->hasOne(Realestate::className(), ['id' => 'realestate_id']);
     }
 }

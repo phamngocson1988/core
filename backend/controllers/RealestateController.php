@@ -8,6 +8,7 @@ use backend\forms\CreateRealestateForm;
 use backend\forms\EditRealestateForm;
 use backend\forms\DeleteRealestateForm;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
 use common\models\Realestate;
 use common\models\Service;
@@ -37,19 +38,24 @@ class RealestateController extends Controller
     {
         $this->view->params['main_menu_active'] = 'realestate.index';
         $request = Yii::$app->request;
-
-        $form = new FetchRealestateForm();
-        if (!$form->validate()) {
-            Yii::$app->session->setFlash('error', $form->getErrorSummary(true));
-            return $this->redirect($ref);
+        $q = $request->get('q');
+        $command = Realestate::find();
+        if ($q) {
+            $command->orWhere(['like', 'title', $q]);
+            $command->orWhere(['like', 'excerpt', $q]);
+            $command->orWhere(['like', 'content', $q]);
+            $command->orWhere(['like', 'address', $q]);
         }
-        $models = $form->fetch();
-        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+
         return $this->render('index.tpl', [
             'models' => $models,
             'pages' => $pages,
-            'form' => $form,
+            'q' => $q,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -62,14 +68,6 @@ class RealestateController extends Controller
         // $model = new CreateRealestateForm();
         $model = new Realestate();
         if ($model->load(Yii::$app->request->post())) {
-            // if (!$model->save()) {
-            //     Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            // } else {
-                // Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                // $ref = $request->get('ref', Url::to(['realestate/index']));
-                // return $this->redirect($ref);    
-            // }
-
             if ($model->electric_name) {
                 $electric = Realestate::pickElectric($model->electric_name);
                 $electric->load($request->post());
@@ -81,14 +79,21 @@ class RealestateController extends Controller
                 $model->setWaterData($water);
             }
             $model->save();
+            foreach ($model->realestate_services as $serviceData) {
+                $realestateService = new RealestateService($serviceData);
+                $realestateService->realestate_id = $model->id;
+                if ($realestateService->validate()) $realestateService->save();
+                else Yii::$app->session->setFlash('warning', "Một số dịch vụ bị lỗi, chưa được lưu vào trong nhà cho thuê này");
+            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             $ref = $request->get('ref', Url::to(['realestate/index']));
             return $this->redirect($ref);    
         }
-
+        $services = ArrayHelper::map(Service::find()->all(), 'id', 'title');
         return $this->render('create.php', [
             // 'map' => $map,
             'model' => $model,
+            'services' => $services,
             'back' => $request->get('ref', Url::to(['realestate/index']))
         ]);
     }
@@ -99,14 +104,8 @@ class RealestateController extends Controller
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = Realestate::findOne($id);
+        
         if ($model->load(Yii::$app->request->post())) {
-            // if (!$model->save()) {
-            //     Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-            // } else {
-            //     Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-            //     $ref = $request->get('ref', Url::to(['realestate/index']));
-            //     return $this->redirect($ref);    
-            // }
             if ($model->electric_name) {
                 $electric = Realestate::pickElectric($model->electric_name);
                 $electric->load($request->post());
@@ -118,12 +117,34 @@ class RealestateController extends Controller
                 $model->setWaterData($water);
             }
             $model->save();
+            $newServiceIds = array_filter(ArrayHelper::getColumn($model->realestate_services, 'id'));
+            $oldServiceIds = ArrayHelper::getColumn($model->realestateServices, 'id');
+            $deletedServiceIds = array_diff($oldServiceIds, $newServiceIds);
+            foreach ($deletedServiceIds as $deletedServiceId) {
+                $realestateService = RealestateService::findOne($deletedServiceId);
+                $realestateService->delete();
+            }
+            foreach ($model->realestate_services as $serviceData) {
+                $realestateServiceId = ArrayHelper::getValue($serviceData, 'id');
+                if ($realestateServiceId) {
+                    $realestateService = RealestateService::findOne($realestateServiceId);
+                    $realestateService->price = ArrayHelper::getValue($serviceData, 'price', 0);
+                } else {
+                    $realestateService = new RealestateService($serviceData);
+                    $realestateService->realestate_id = $model->id;
+                }
+                if ($realestateService->validate()) $realestateService->save();
+                else Yii::$app->session->setFlash('warning', "Một số dịch vụ bị lỗi, chưa được lưu vào trong nhà cho thuê này");
+            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             $ref = $request->get('ref', Url::to(['realestate/index']));
             return $this->redirect($ref);    
         }
+        $services = ArrayHelper::map(Service::find()->all(), 'id', 'title');
+        $model->realestate_services = $model->realestateServices;
         return $this->render('edit.php', [
             'model' => $model,
+            'services' => $services,
             'back' => $request->get('ref', Url::to(['realestate/index']))
         ]);
     }
@@ -136,47 +157,5 @@ class RealestateController extends Controller
             return $this->renderJson($form->delete(), [], $form->getErrorSummary(true));
         }
         return $this->redirectNotFound();
-    }
-
-    public function actionService($id)
-    {
-        $this->view->params['main_menu_active'] = 'realestate.index';
-        $request = Yii::$app->request;
-        $realestate = Realestate::findOne($id);
-        $services = Service::find()->all();
-        $model = new RealestateService();
-        $model->realestate_id = $id;
-        if ($model->load($request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Thành công');
-            $model = new RealestateService();
-            $request->bodyParams = [];
-        }
-        return $this->render('service', [
-            'realestate' => $realestate,
-            'model' => $model,
-            'services' => $services
-        ]);
-    }
-
-    public function actionDeleteService($id)
-    {
-        $request = Yii::$app->request;
-        $model = RealestateService::findOne($id);
-        if ($model && $model->delete()) {
-            return $this->renderJson(true, []);
-        } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
-        }
-    }
-
-    public function actionEditService($id)
-    {
-        $request = Yii::$app->request;
-        $model = RealestateService::findOne($id);
-        if ($model->load($request->post()) && $model->save()) {
-            return $this->renderJson(true, []);
-        } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
-        }
     }
 }

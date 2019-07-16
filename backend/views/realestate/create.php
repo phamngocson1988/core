@@ -83,6 +83,9 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   <a href="#tab_1_1" data-toggle="tab"><?= Yii::t('app', 'main_content');?></a>
                 </li>
                 <li>
+                  <a href="#tab_1_2" data-toggle="tab">Dịch vụ</a>
+                </li>
+                <li>
                   <a href="#tab_1_3" data-toggle="tab"><?= Yii::t('app', 'gallery');?></a>
                 </li>
               </ul>
@@ -91,23 +94,11 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
               <div class="tab-content">
                 <div class="tab-pane active form-horizontal form-row-seperated" id="tab_1_1">
                   <?=$form->field($model, 'title')->textInput();?>
-                  <?=$form->field($model, 'excerpt')->textarea();?>
+                  <?=$form->field($model, 'address')->textInput();?>
                   <?=$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]]);?>
 
-                  <hr/>
-                  <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                      <?=$form->field($model, 'address')->textInput();?>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <?=$form->field($model, 'latitude')->textInput(['id' => 'latitude', 'readonly' => true]);?>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <?=$form->field($model, 'longitude')->textInput(['id' => 'longitude', 'readonly' => true]);?>
-                    </div>
-                  </div>
                   <?php 
-                  $coord = new LatLng(['lat' => 10.7795, 'lng' => 106.692]);
+                  /*$coord = new LatLng(['lat' => 10.7795, 'lng' => 106.692]);
                   $marker = new Marker(['position' => $coord]);
                   $marker->setName('marker');
 
@@ -128,7 +119,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   $map->setName('map');
                   $map->addOverlay($marker);
                   $map->addEvent($event);
-                  echo $map->display();
+                  echo $map->display();*/
                   ?>
 
                   <hr><!-- Electric -->
@@ -189,7 +180,27 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   } ?>
                   </div>
                 </div>
-                  
+                <div class="tab-pane" id="tab_1_2">
+                <?=$form->field($model, 'realestate_services')->widget(MultipleInput::className(), [
+                    'columns' => [
+                        [
+                            'name'  => 'service_id',
+                            'type'  => 'dropDownList',
+                            'title' => 'Dịch vụ hiện có',
+                            'items' => $services,
+                        ],
+                        [
+                            'name'  => 'price',
+                            'title' => 'Giá tiền',
+                            'enableError' => true,
+                            'options' => [
+                                'type' => 'number',
+                                'class' => 'input-priority',
+                            ]
+                        ]
+                    ]
+                ])->label(false);?>
+                </div>
                 <div class="tab-pane" id="tab_1_3">
                   <?=$form->field($model, 'gallery', [
                     'template' => '{input}{hint}{error}'

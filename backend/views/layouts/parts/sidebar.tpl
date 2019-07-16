@@ -73,6 +73,11 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='/room/search'}" class="nav-link " code='realestate.room'>
+            <span class="title">Tìm phòng</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/service'}" class="nav-link " code='service.index'>
             <span class="title">Dịch vụ</span>
             </a>

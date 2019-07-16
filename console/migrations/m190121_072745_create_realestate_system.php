@@ -108,6 +108,20 @@ class m190121_072745_create_realestate_system extends Migration
             'price' => $this->integer()->notNull()->defaultValue(0),
             'apply' => $this->integer()->notNull()->defaultValue(0),
         ], $tableOptions);
+
+        $this->createTable('{{%contract}}', [
+            'id' => $this->primaryKey(),
+            'room_id' => $this->integer()->notNull(),
+            'customer_name' => $this->string(255)->notNull(),
+            'customer_email' => $this->string(255)->notNull(),
+            'customer_phone' => $this->string(255)->notNull(),
+            'customer_identifier' => $this->string(255)->notNull(),
+            'start_date' => $this->dateTime()->notNull(),
+            'end_date' => $this->dateTime(),
+            'people' => $this->integer(),
+            'created_at' => $this->dateTime()->notNull(),
+            'created_by' => $this->integer()->notNull(),
+        ], $tableOptions);
     }
 
     /**

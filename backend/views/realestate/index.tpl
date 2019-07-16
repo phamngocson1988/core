@@ -35,7 +35,7 @@
         <div class="row margin-bottom-10">
           <form method="GET">
             <div class="form-group col-md-4">
-              <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control" placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$form->q}">
+              <label>{Yii::t('app', 'keyword')}: </label> <input type="search" class="form-control" placeholder="{Yii::t('app', 'keyword')}" name="q" value="{$q}">
             </div>
             <div class="form-group col-md-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -67,7 +67,6 @@
                 <td style="vertical-align: middle;">{$model->getCreatorName()}</td>
                 <td style="vertical-align: middle;">
                     <a href='{url route="realestate/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}"><i class="fa fa-pencil"></i></a>
-                    <a href='{url route="realestate/service" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="Dịch vụ"><i class="fa fa-list"></i></a>
                     <a href='{url route="room/index" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="Danh sách phòng"><i class="glyphicon glyphicon-bed"></i></a>
                     <a href='{url route="realestate/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}"><i class="fa fa-trash-o"></i></a>
                 </td>

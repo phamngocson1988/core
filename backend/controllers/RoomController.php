@@ -6,8 +6,10 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\data\Pagination;
 use backend\models\Room;
 use backend\models\RoomService;
+use backend\models\Service;
 use backend\models\Realestate;
 
 /**
@@ -50,6 +52,22 @@ class RoomController extends Controller
 
         return $this->render('index', [
             'realestate' => $realestate,
+            'rooms' => $rooms,
+            'services' => $services
+        ]);
+    }
+
+    public function actionSearch()
+    {
+        $this->view->params['main_menu_active'] = 'realestate.room';
+        $command = Room::find()->with('realestate');
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $rooms = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        $services = Service::find()->indexBy('id')->all();
+        return $this->render('search', [
             'rooms' => $rooms,
             'services' => $services
         ]);

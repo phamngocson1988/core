@@ -84,6 +84,9 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   <a href="#tab_1_1" data-toggle="tab"><?= Yii::t('app', 'main_content');?></a>
                 </li>
                 <li>
+                  <a href="#tab_1_2" data-toggle="tab">Dịch vụ</a>
+                </li>
+                <li>
                   <a href="#tab_1_3" data-toggle="tab"><?= Yii::t('app', 'gallery');?></a>
                 </li>
               </ul>
@@ -92,23 +95,10 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
               <div class="tab-content">
                 <div class="tab-pane active form-horizontal form-row-seperated" id="tab_1_1">
                   <?=$form->field($model, 'title')->textInput();?>
-                  <?=$form->field($model, 'excerpt')->textarea();?>
+                  <?=$form->field($model, 'address')->textInput();?>
                   <?=$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]]);?>
 
-                  <hr/>
-                  <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                      <?=$form->field($model, 'address')->textInput();?>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <?=$form->field($model, 'latitude')->textInput(['id' => 'latitude', 'readonly' => true]);?>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <?=$form->field($model, 'longitude')->textInput(['id' => 'longitude', 'readonly' => true]);?>
-                    </div>
-                  </div>
-
-                  <?php 
+                  <?php /*
                   $coord = new LatLng(['lat' => $model->latitude, 'lng' => $model->longitude]);
                   // $marker = new Marker(['position' => $coord]);
                   // $marker->setName('marker');
@@ -139,7 +129,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   $map->setName('map');
                   $map->addOverlay($marker);
                   $map->addEvent($event);
-                  echo $map->display();
+                  echo $map->display();*/
                   ?>
 
                   <hr><!-- Electric -->
@@ -182,6 +172,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   foreach ($waters as $identifier => $params) {
                     $waterList[$identifier] = $params['title'];
                   }
+                  
                   ?>
                   <?=$form->field($model, 'water_name', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -197,6 +188,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                       $water = Yii::createObject($params);
                     }
                     $content = '';
+                    
                     foreach ($water->safeAttributes() as $attr) {
                       $content .= $water->render($form, $attr, [
                         'options' => ['class' => 'form-group water', 'id' => $identifier],
@@ -207,6 +199,33 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                     echo Html::tag('div', $content, ['class' => 'water-item', 'id' => $identifier]);
                   } ?>
                   </div>
+                </div>
+                <div class="tab-pane" id="tab_1_2">
+                <?=$form->field($model, 'realestate_services')->widget(MultipleInput::className(), [
+                    'id' => 'multiple-input',
+                    'columns' => [
+                        [
+                            'name'  => 'id',
+                            'type'  => 'hiddenInput',
+                            'title' => 'ID',
+                        ],
+                        [
+                            'name'  => 'service_id',
+                            'type'  => 'dropDownList',
+                            'title' => 'Dịch vụ hiện có',
+                            'items' => $services,
+                            'options' => ['readonly' => true, 'disabled' => true]
+                        ],
+                        [
+                            'name'  => 'price',
+                            'title' => 'Giá tiền',
+                            'enableError' => true,
+                            'options' => [
+                                'type' => 'number',
+                            ]
+                        ]
+                    ]
+                ])->label(false);?>
                 </div>
                 <div class="tab-pane" id="tab_1_3">
                   <?=$form->field($model, 'gallery', [
@@ -254,6 +273,13 @@ $('#waters').on('change', function(){
   $('#' + val).appendTo( $( "#water-container" ) );
 });
 $('#waters').trigger('change');
+
+// services
+jQuery('#multiple-input').on('afterAddRow', function(e, row, currentIndex) {
+    $(row).find('select').removeAttr('disabled').removeAttr('readonly');
+}).on('beforeDeleteRow', function(e, row, currentIndex){
+  return confirm('Bạn có chắc muốn xóa dịch vụ này? Nó cũng sẽ xóa dịch vụ này ở những phòng trong căn nhà này và những hợp đồng cho thuê hiện có.')
+});
 JS;
 $this->registerJs($script);
 ?>

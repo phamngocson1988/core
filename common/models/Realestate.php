@@ -20,7 +20,9 @@ class Realestate extends \yii\db\ActiveRecord
     const DIRECTION_T = 'T';
     const DIRECTION_N = 'N';
     const DIRECTION_B = 'B';
-    public $service_id;
+
+    public $realestate_services;
+    
     /**
      * {@inheritdoc}
      */
@@ -67,7 +69,7 @@ class Realestate extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'address'], 'required'],
-            [['excerpt', 'content', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery', 'latitude', 'longitude', 'electric_name', 'electric_data', 'water_name', 'water_data'], 'safe']
+            [['excerpt', 'content', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'gallery', 'latitude', 'longitude', 'electric_name', 'electric_data', 'water_name', 'water_data', 'realestate_services'], 'safe']
         ];
     }
 
@@ -215,7 +217,7 @@ class Realestate extends \yii\db\ActiveRecord
         $electric = self::pickElectric($this->electric_name);
         if (!$electric) return null;
         $attrs = $this->getElectricData();
-        if (!$attrs) return null;
+        if (!is_array($attrs)) return null;
         $attrs['promotion_id'] = $this->id;
         $electric->attributes = $attrs;
         return $electric;
@@ -253,7 +255,7 @@ class Realestate extends \yii\db\ActiveRecord
         $water = self::pickWater($this->water_name);
         if (!$water) return null;
         $attrs = $this->getWaterData();
-        if (!$attrs) return null;
+        if (!is_array($attrs)) return null;
         $attrs['promotion_id'] = $this->id;
         $water->attributes = $attrs;
         return $water;

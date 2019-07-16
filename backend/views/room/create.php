@@ -90,9 +90,34 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
               <div class="tab-content">
                 <div class="tab-pane active" id="tab_1_1">
                   <?=$form->field($model, 'title')->textInput();?>
-                  <?=$form->field($model, 'code')->textInput();?>
+                  <div class="row">
+                    <?=$form->field($model, 'code', [
+                      'options' => ['class' => 'form-group col-md-6']
+                    ])->textInput();?>
+                    <?=$form->field($model, 'price', [
+                      'options' => ['class' => 'form-group col-md-6']
+                    ])->textInput();?>
+                  </div>
+                  <div class="row">
+                    <?=$form->field($model, 'area', [
+                      'options' => ['class' => 'form-group col-md-3'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                    ])->textInput();?>
+                    <?=$form->field($model, 'bed', [
+                      'options' => ['class' => 'form-group col-md-3'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                      ])->textInput();?>
+                    <?=$form->field($model, 'toilet', [
+                      'options' => ['class' => 'form-group col-md-3'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                      ])->textInput();?>
+                    <?=$form->field($model, 'kitchen', [
+                      'options' => ['class' => 'form-group col-md-3'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                      ])->textInput();?>
+                  </div>
                   <?=$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]]);?>
-                  <?=$form->field($model, 'price')->textInput();?>
+                  
                   <hr/>
                   <div class="row">
                     <?php foreach ($roomServices as $roomService) : ?>
