@@ -117,7 +117,7 @@ $gamePromotion = reset($gamePromotions);
             <div class="row">
                 <div class="col col-sm-12">
                     <div class="prod-des-content">
-                        <h3>About game:</h3>
+                        <h3>Description:</h3>
                         <?=$game->content;?>
                     </div>
                 </div>

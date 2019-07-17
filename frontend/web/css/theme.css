@@ -1,3 +1,6 @@
 .top-header .right-box .login-box form>.login-form .login-captcha, .top-header .right-box .login-box form>.login-form .login-submit {
     width: 100%;
 }
+.cart-table table .quantity-box input {
+    width: 100px;
+}

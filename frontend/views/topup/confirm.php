@@ -9,67 +9,59 @@ $item = $cart->getItem();
 ?>
 
 <?php Pjax::begin(); ?>
-<?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
+<?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true', 'autocomplete' => 'off']]); ?>
 <?= $form->field($item, 'scenario', [
   'options' => ['tag' => false],
   'template' => '{input}'
 ])->hiddenInput()->label(false) ?>
-<section class="section section-lg bg-default">
-  <div class="container container-wide">
-    <div class="row row-fix justify-content-lg-center">
-      <div class="col-xl-11 col-xxl-8">
-        <div class="table-novi table-custom-responsive table-shop-responsive">
-          <table class="table-custom table-shop table">
-            <thead>
-              <tr>
-                <th style="width: 30%;">Pricing Package</th>
-                <th style="width: 10%;">Price</th>
-                <th style="width: 10%;">Total Price</th>
-                <th style="width: 10%;">Coins</th>
-                <th style="width: 10%;">Total Coins</th>
-                <th style="width: 20%;">Quantity</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><?=$item->title;?></td>
-                <td>$<?=number_format($item->getPrice());?></td>
-                <td>$<?=number_format($item->getTotalPrice());?></td>
-                <td><?=number_format($item->num_of_coin);?></td>
-                <td><?=number_format($item->num_of_coin * $item->quantity);?></td>
-                <td>
-                  <?= $form->field($item, 'quantity', [
-                    'options' => ['class' => 'form-wrap box-width-1 shop-input'],
-                    'inputOptions' => ['class' => 'form-input input-append',
-                      'id' => 'quantity', 
-                      'type' => 'number', 
-                      'min' => '1', 
-                    ],
-                    'template' => '{input}'
-                  ])->textInput() ?>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="row row-fix justify-content-between align-items-md-center text-center">
-          <div class="col-md-7 col-xl-6 cell-xxl-5">
-            <!-- RD Mailform: Subscribe-->
-            <div class="rd-mailform rd-mailform-inline rd-mailform-sm rd-mailform-inline-modern">
-              <div class="rd-mailform-inline-inner">
-                <input name="promotion_code" value="<?=$promotion_code;?>" id="voucher"/>
-                <button id="apply_voucher" class="button form-button button-sm button-secondary button-nina">Apply</button>
-              </div>
+<section class="topup-page">
+  <div class="container">
+    <div class="small-container">
+      <div class="row">
+        <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="affiliate-top no-mar-bot">
+            <div class="has-left-border has-shadow no-mar-top">
+              MY SHOPPING KINGCOINS
             </div>
           </div>
-          <div class="cells-sm-2 col-xl-3 col-xxl-2 text-md-right">
-            <div class="heading-5 text-regular">Sub total Coin: <span><?=number_format($cart->getSubTotalCoin());?></span></div>
-          </div>
-          <div class="cells-sm-3 col-xl-3 col-xxl-3 text-md-right">
-            <div class="heading-5 text-regular">Total Coin: <span><?=number_format($cart->getTotalCoin());?> </span></div>
-            <div class="heading-5 text-regular">Promotion Coin: <span><?=$cart->getPromotionCoin();?> </span></div>
-            <div class="heading-5 text-regular"><a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false>Checkout</a></div>
-            
+          <div class="cart-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pricing Package</th>
+                  <th>Coins</th>
+                  <th>Quantity</th>
+                  <th>Total Coins</th>
+                  <th>Price</th>
+                  <th>Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><?=$item->title;?></td>
+                  <td><?=number_format($item->num_of_coin);?></td>
+                  <td>
+                    <?= $form->field($item, 'quantity', [
+                      'options' => ['class' => 'quantity-box'],
+                      'inputOptions' => [
+                        'id' => 'quantity', 
+                        'type' => 'number', 
+                        'min' => '1', 
+                      ],
+                      'template' => '<button type="button" class="minus">-</button>{input}<button type="button" class="plus">+</button>'
+                    ])->textInput() ?>
+                  </td>
+                  <td><?=number_format($item->getTotalCoin());?></td>
+                  <td>$<?=number_format($item->getPrice());?></td>
+                  <td class="co-orange">$<?=number_format($item->getTotalPrice());?></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="cart-coupon">
+              <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion_code;?>">
+              <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
+              <a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false class="cus-btn yellow fl-right">Check Out</a>
+            </div>
           </div>
         </div>
       </div>
@@ -96,8 +88,23 @@ $('body').on('click', '#remove_voucher', function(e){
   $('#voucher').val('').prop('disabled', false);
   $(this).closest('form').submit();
   return false;
+});
 
-})
+$('body').on('click', '.quantity-box button.plus', function(){
+    var _qty = $('#quantity').val();
+    _qty = parseInt(_qty)+1;
+    $('#quantity').val(_qty);
+    $("#quantity").trigger('change');
+});
+
+$('body').on('click', '.quantity-box button.minus', function(){
+    var _qty = $('#quantity').val();
+    if(parseInt(_qty) > 1){
+        _qty = parseInt(_qty)-1;
+    }
+    $('#quantity').val(_qty);
+    $("#quantity").trigger('change');
+});
 
 JS;
 $this->registerJs($script);
