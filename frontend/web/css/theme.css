@@ -4,3 +4,10 @@
 .cart-table table .quantity-box input {
     width: 100px;
 }
+
+.register-block .form-group .form-control.phone-code {
+    width: 30%;
+}
+.register-block .form-group .form-control.phone-number {
+    width: 30%;
+}

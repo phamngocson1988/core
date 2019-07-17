@@ -70,12 +70,12 @@ $years = array_combine($rangeYears, $rangeYears);
                 <label>Contact Number <span class="required">*</span></label>
                 <?= $form->field($model, 'country_code', [
                   'options' => ['tag' => false],
-                  'inputOptions' => ['class' => 'form-control phone-code'],
+                  'inputOptions' => ['class' => 'form-control phone-code', 'id' => 'country_code'],
                   'template' => '{input}'
                 ])->dropDownList(Yii::$app->params['country_code']) ?>
                 <?= $form->field($model, 'phone', [
                   'options' => ['tag' => false],
-                  'inputOptions' => ['class' => 'form-control phone-number'],
+                  'inputOptions' => ['class' => 'form-control phone-number', 'id' => 'phone'],
                   'template' => '{input}'
                 ])->textInput() ?>
               </div>
@@ -142,6 +142,9 @@ $script = <<< JS
 $('#birth_year, #birth_month, #birth_date').on('change', function() {
   correctDate($('#birth_year'),$('#birth_month'),$('#birth_date'));
   console.log('date trigger');
+});
+$('#country_code').on('change', function(){
+  $('#phone').val($(this).val());
 });
 $('#email').on('blur', function(){
   var _c = $(this).closest('.form-wrap');

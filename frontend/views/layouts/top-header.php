@@ -90,9 +90,9 @@ $setting = Yii::$app->settings;
                                 </ul>
                             </nav>
                             <div class="search-box">
-                                <form action="#">
+                                <form method="GET" autocomplete='off' action="<?=Url::to(['game/index']);?>">
                                     <div class="search-control">
-                                        <input type="text" placeholder="Search">
+                                        <input type="text" placeholder="Search" name="q">
                                         <input type="submit" value="">
                                     </div>
                                 </form>
