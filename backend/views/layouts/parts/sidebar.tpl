@@ -173,6 +173,11 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='/setting/top_notice'}" class="nav-link " code='setting.top_notice'>
+            <span class="title">Thông báo ở đầu trang</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/setting/social'}" class="nav-link " code='setting.social'>
             <span class="title">{Yii::t('app', 'social_networks')}</span>
             </a>

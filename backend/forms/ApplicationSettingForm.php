@@ -16,7 +16,6 @@ class ApplicationSettingForm extends Model
     public $exchange_rate_usd; 
     public $sign_on_bonus;
     public $logo;
-    public $top_notice;
 
     public function init()
     {
@@ -33,7 +32,7 @@ class ApplicationSettingForm extends Model
             [['admin_email', 'contact_email'], 'email'],
             ['exchange_rate_usd', 'number'],
             ['exchange_rate_usd', 'default', 'value' => '22000'],
-            [['sign_on_bonus', 'logo', 'top_notice'], 'safe'],
+            [['sign_on_bonus', 'logo'], 'safe'],
         ];
     }
 
@@ -50,7 +49,6 @@ class ApplicationSettingForm extends Model
             'exchange_rate_usd' => 'Tỷ giá USD',
             'sign_on_bonus' => 'Khuyến mãi khi đăng ký',
             'logo' => 'Logo',
-            'top_notice' => 'Dòng thông báo ở đầu trang web',
         ];
     }
 

@@ -3,6 +3,7 @@ use yii\bootstrap\ActiveForm;
 use frontend\forms\LoginForm;
 use yii\captcha\Captcha;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 $setting = Yii::$app->settings;
 ?>
 <div class="container top-header-container">
@@ -49,12 +50,12 @@ $setting = Yii::$app->settings;
                                     <?= $form->field($top_login_form, 'username', [
                                         'template' => '{input}', 
                                         'options' => ['tag' => false],
-                                        'inputOptions' => ['class' => '']
+                                        'inputOptions' => ['class' => '', 'placeholder' => 'Your ID']
                                     ])->textInput() ?>
                                     <?= $form->field($top_login_form, 'password', [
                                         'template' => '{input}', 
                                         'options' => ['tag' => false],
-                                        'inputOptions' => ['class' => '']
+                                        'inputOptions' => ['class' => '', 'placeholder' => 'Your Password']
                                     ])->passwordInput() ?>
                                 </div>
                                 <div class="login-captcha fl-left">
@@ -102,7 +103,21 @@ $setting = Yii::$app->settings;
                 </div>
                 <div class="header-time-box display-ib">
                     <span class="fl-left"><?=date('d/m/Y | H:i');?>(GTM+7)</span>
-                    <span class="fl-right"><?=$setting->get('ApplicationSettingForm', 'top_notice');?></span>
+                    <?php
+                    $top_notice = $setting->get('TopNoticeSettingForm', 'top_notice');
+                    $top_notice = @unserialize($top_notice);
+                    $notices = [];
+                    if ($top_notice) {
+                        $notices = array_map(function($item) {
+                            $link = ArrayHelper::getValue($item, 'link');
+                            $link = ($link) ? $link : 'javascript:void;';
+                            $notice = ArrayHelper::getValue($item, 'notice');
+                            return sprintf("<a href='%s' target='_blank'>%s</a>", $link, $notice);
+                        }, $top_notice);
+                    }
+                    ?>
+
+                    <span class="fl-right"><?=implode('&nbsp;&nbsp;|&nbsp;&nbsp;', $notices);?></span>
                 </div>
             </div>
         </div>

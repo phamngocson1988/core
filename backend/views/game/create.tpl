@@ -5,7 +5,6 @@
 {use class='common\widgets\ImageInputWidget'}
 {use class='common\widgets\RadioListInput'}
 {use class='common\widgets\CheckboxInput'}
-{use class='unclead\multipleinput\MultipleInput'}
 {$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]])}
 {$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js', ['depends' => [\yii\web\JqueryAsset::className()]])}

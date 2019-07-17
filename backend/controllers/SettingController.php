@@ -14,6 +14,7 @@ use backend\forms\AlipaySettingForm;
 use backend\forms\SkrillSettingForm;
 use backend\forms\ImportSettingForm;
 use backend\forms\OfflinePaymentSettingForm;
+use backend\forms\TopNoticeSettingForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
 use yii\data\Pagination;
@@ -35,7 +36,7 @@ class SettingController extends Controller
                 'class' => SettingsAction::class,
                 'modelClass' => ApplicationSettingForm::class,
                 'view' => 'application.tpl',
-                'layoutParams' => ['main_menu_active' => 'setting.application']
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
             ],
             'social' => [
                 'class' => SettingsAction::class,
@@ -98,6 +99,16 @@ class SettingController extends Controller
                         Yii::$app->settings->set('GallerySettingForm', $key, json_encode($value));
                     }
                 }
+            ],
+            'top_notice' => [
+                'class' => SettingsAction::class,
+                'modelClass' => TopNoticeSettingForm::class,
+                'view' => 'top_notice.php',
+                'layoutParams' => ['main_menu_active' => 'setting.top_notice'],
+                'on beforeSave' => function ($event) {
+                    $form = $event->form;
+                    $form->top_notice = serialize($form->top_notice);
+                },
             ],
         ];
     }
