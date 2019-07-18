@@ -4,8 +4,6 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-
-$item = $cart->getItem();
 ?>
 
 <?php Pjax::begin(); ?>
@@ -51,15 +49,21 @@ $item = $cart->getItem();
                       'template' => '<button type="button" class="minus">-</button>{input}<button type="button" class="plus">+</button>'
                     ])->textInput() ?>
                   </td>
-                  <td><?=number_format($item->getTotalCoin());?></td>
+                  <td><?=number_format($item->getTotalCoin());?> <?= $cart->hasPromotion() ? '(+' . $cart->getPromotionCoin() . ')' : '';?></td>
                   <td>$<?=number_format($item->getPrice());?></td>
                   <td class="co-orange">$<?=number_format($item->getTotalPrice());?></td>
                 </tr>
               </tbody>
             </table>
             <div class="cart-coupon">
+              <?php if ($cart->hasPromotion()) : ?>
+              <?php $promotion = $cart->getPromotionItem();?>
+              <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion->code;?>" readonly>
+              <button class="cus-btn yellow fl-left apply-coupon-btn" id="clear_voucher" type="button">Clear</button>
+              <?php else : ?>
               <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion_code;?>">
               <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
+              <?php endif;?>
               <a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false class="cus-btn yellow fl-right">Check Out</a>
             </div>
           </div>
@@ -80,6 +84,12 @@ $('body').on('click', '#apply_voucher', function(e){
   e.preventDefault();
   e.stopImmediatePropagation();
   if ($('#voucher').val()) $(this).closest('form').submit();
+  return false;
+});
+$('body').on('click', '#clear_voucher', function(e){
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  if ($('#voucher').val('')) $(this).closest('form').submit();
   return false;
 });
 $('body').on('click', '#remove_voucher', function(e){

@@ -95,18 +95,16 @@ class TopupController extends Controller
                 if ($discount) {
                     $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
                     $discount->user_id = Yii::$app->user->id;
-                    $discount->game_id = $item->id;
-                    if (!$discount->validate() || !$discount->code) $cart->removePromotionItem();                            
+                    if (!$discount->validate()) $cart->removePromotionItem();                            
                     else {
                         $cart->setPromotionItem($discount);
-                        $cart->applyPromotion();
                     }
                 } else {
                     $cart->removePromotionItem();
                 }
             }
         }
-
+        $cart->applyPromotion();
         return $this->render('confirm', [
             'cart' => $cart,
             'promotion_code' => $promotion_code,
