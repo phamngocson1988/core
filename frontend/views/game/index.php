@@ -21,30 +21,21 @@ $this->title = 'Shop';
       <div class="col col-sm-12">
         <div class="shop-search-box">
           <form method="GET" autocomplete='off'>
-            <input type="text" placeholder="Search" name="q" value="<?=$q;?>">
-            <input type="submit" value="">
+            <div class="shop-search-keyword">
+              <input type="text" placeholder="Search" name="q" value="<?=$q;?>">
+              <input type="submit" value="">
+            </div>
+            <div class="shop-search-paging">
+              <?=LinkPager::widget(['pagination' => $pages, 'maxButtonCount' => 1, 'hideOnSinglePage' => false]);?>
+            </div>
+            <div class="shop-search-filter">
+              <select name="sort">
+                <option value="">FILTER</option>
+                <option value="asc" <?=($sort == 'asc') ? "selected" : "";?> >A - Z</option>
+                <option value="desc" <?=($sort == 'desc') ? "selected" : "";?> >Z - A</option>
+              </select>
+            </div>
           </form>
-          <?php
-          $current_page = $pages->getPage() + 1;
-          $total_page = $pages->getPageCount();
-          $next_page = $current_page + 1; 
-          $prev_page = $current_page - 1; 
-          $link_next_page = ($next_page > $total_page) ? 'javascript:void;' : Url::current([$pages->pageParam => $next_page]);
-          $link_prev_page = ($prev_page < 1) ? 'javascript:void;' : Url::current([$pages->pageParam => $prev_page]);
-          ?>
-          <div class="shop-search-paging">
-            <a href="<?=$link_prev_page;?>"><i class="fas fa-caret-left"></i></a>
-            <a class="current-page" href="javascript:void;"><?=$current_page;?></a>
-            <a href="<?=$link_next_page;?>"><i class="fas fa-caret-right"></i></a>
-            <span>of <?=$total_page;?></span>
-          </div>
-          <div class="shop-search-filter">
-            <select name="sort">
-              <option value="">FILTER</option>
-              <option value="asc"><a href="<?=Url::current(['sort' => 'asc']);?>">A - Z</a></option>
-              <option value="desc"><a href="<?=Url::current(['sort' => 'desc']);?>">Z - A</a></option>
-            </select>
-          </div>
         </div>
       </div>
     </div>
@@ -58,12 +49,12 @@ $this->title = 'Shop';
           <div class="row">
             <?php foreach ($models as $model) :?>
 			      <div class="col col-lg-20-per col-sm-12 prod-item">
-			        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $model->id]);?>">
+			        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>">
 			        <img src="<?=$model->getImageUrl('300x300');?>" alt="">
 			        </a>
 			        <a class="prod-title" href="#"><?=$model->title;?></a>
 			        <div class="prod-price">
-			          <span><?=number_format($model->pack);?> GEMS</span> for COC
+			          <span><?=number_format($model->pack);?> <?=strtoupper($model->unit_name);?></span> for <?=$model->getShortTitle();?>
 			        </div>
 			        <?php 
 			        $gameId = $model->id;

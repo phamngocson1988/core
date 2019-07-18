@@ -57,6 +57,7 @@ class Game extends ActiveRecord
 
         return  [
             'title' => Yii::t('app', 'title'),
+            'short_title' => 'Tên viết tắt',
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
             'excerpt' => Yii::t('app', 'excerpt'),
@@ -81,6 +82,11 @@ class Game extends ActiveRecord
             return $image->getUrl($size);
         }
         return $default;
+    }
+
+    public function getShortTitle()
+    {
+        return ($this->short_title) ? $this->short_title : $this->title;
     }
 
     public function getCreator()

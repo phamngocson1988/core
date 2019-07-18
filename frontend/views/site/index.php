@@ -15,12 +15,12 @@ $this->title = 'Home Page';
     <div class="row">
       <?php foreach ($games as $game) :?>
       <div class="col col-lg-20-per col-sm-12 prod-item">
-        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $game->id]);?>">
+        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>">
         <img src="<?=$game->getImageUrl('300x300');?>" alt="">
         </a>
         <a class="prod-title" href="#"><?=$game->title;?></a>
         <div class="prod-price">
-          <span><?=number_format($game->pack);?> GEMS</span> for COC
+          <span><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></span> for <?=$game->getShortTitle();?>
         </div>
         <?php 
         $gameId = $game->id;

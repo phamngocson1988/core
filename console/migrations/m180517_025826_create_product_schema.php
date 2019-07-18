@@ -19,6 +19,7 @@ class m180517_025826_create_product_schema extends Migration
         $this->createTable('{{%game}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(100)->notNull(),
+            'short_title' => $this->string(100),
             'slug' => $this->string(100)->notNull()->unique(),
             'excerpt' => $this->string(200),
             'unit_name' => $this->string(50),

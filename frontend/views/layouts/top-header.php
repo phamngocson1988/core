@@ -43,7 +43,9 @@ $setting = Yii::$app->settings;
                         <?php else :?>
                         <div class="login-box">
                             <?php $form = ActiveForm::begin(['action' => ['site/ajax-login'], 'options' => ['id' => 'top-login', 'autocomplete' => 'off']]); ?>
-                            <span class="fl-left"><a href="<?=Url::to(['site/signup']);?>" style="color:black">Join Now</a></span>
+                            <a href="<?=Url::to(['site/signup']);?>" class="reg-link">
+                                <span class="fl-left">Join Now</span>
+                            </a>
                             <div class="login-form fl-left">
                                 <div class="login-control fl-left">
                                     <?php $top_login_form = new LoginForm();?>
@@ -116,8 +118,7 @@ $setting = Yii::$app->settings;
                         }, $top_notice);
                     }
                     ?>
-
-                    <span class="fl-right"><?=implode('&nbsp;&nbsp;|&nbsp;&nbsp;', $notices);?></span>
+                    <span class="fl-right"><marquee onMouseOver="this.stop()" onMouseOut="this.start()"><?=implode('&nbsp;&nbsp;|&nbsp;&nbsp;', $notices);?></marquee></span>
                 </div>
             </div>
         </div>

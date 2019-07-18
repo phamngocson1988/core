@@ -13,8 +13,8 @@ class Game extends \common\models\Game
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
+            self::SCENARIO_CREATE => ['title', 'short_title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'short_title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
         ];
     }
 
@@ -22,6 +22,7 @@ class Game extends \common\models\Game
     {
         return [
             'title' => Yii::t('app', 'title'),
+            'short_title' => 'Tên viết tắt',
             'excerpt' => Yii::t('app', 'excerpt'),
             'content' => Yii::t('app', 'content'),
             'unit_name' => 'Tên đơn vị game',
@@ -44,7 +45,7 @@ class Game extends \common\models\Game
             [['image_id', 'excerpt', 'units', 'reseller_price'], 'safe'],
             ['pack', 'default', 'value' => 1],
             ['pin', 'default', 'value' => self::UNPIN],
-            ['original_price', 'trim'],
+            [['original_price', 'short_title'], 'trim'],
         ];
     }
 

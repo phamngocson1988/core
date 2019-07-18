@@ -125,7 +125,11 @@ section.header .top-header {
     margin: 18px 20px 0 0;
 }
 
-.top-header .right-box .login-box form>span {
+.top-header .right-box .login-box form .reg-link {
+    color: #000;
+}
+
+.top-header .right-box .login-box form .reg-link span {
     background: #fd0;
     border-left: 3px solid #ff3600;
     text-transform: uppercase;
@@ -273,6 +277,14 @@ section.header .top-header {
     padding: 0 20px;
 }
 
+.top-header .header-time-box span:last-child {
+    width: 73.5%;
+}
+
+.top-header .header-time-box span marquee {
+    float: left;
+}
+
 .bottom-header {
     position: absolute;
     top: 0;
@@ -303,7 +315,7 @@ section.header .top-header {
 .main-slider .bx-wrapper .bx-viewport>div>div {
     height: 108vh;
     position: relative;
-    background-size: auto 100%;
+    background-size: 100% auto !important;
 }
 
 .main-slider .bx-wrapper .bx-controls {
@@ -844,7 +856,7 @@ div.chat-now {
 section.promotion-search {
     text-align: center;
 }
-section.promotion-search form, .shop-search form {
+section.promotion-search form, .shop-search .shop-search-keyword {
     width: 47%;
     margin: 0 auto;
     border: 1px solid #ffdd00;
@@ -902,7 +914,7 @@ section.promotion-search form input[type="submit"],
     display: flex;
     justify-content: space-between;
 }
-.shop-search-paging a {
+.shop-search-paging a, .shop-search-paging span {
     float: left;
     width: 57px;
     height: 45px;
@@ -912,7 +924,7 @@ section.promotion-search form input[type="submit"],
     text-align: center;
 }
 
-.shop-search-paging a.current-page {
+.shop-search-paging li.active a {
     background: #fff;
     font-size: 20px;
     font-weight: bold;
@@ -925,12 +937,15 @@ section.promotion-search form input[type="submit"],
 
 .shop-search-paging span {
     float: left;
-    color: #fff;
     font-size: 18px;
     line-height: 45px;
-    margin-left: 15px;
 }
 .shop-search form {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.shop-search .shop-search-keyword {
     margin: 2px 0 0;
     width: 60%;
 }

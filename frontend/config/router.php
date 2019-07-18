@@ -16,13 +16,14 @@ return [
         'captcha' => 'site/captcha',
         'signup' => 'site/signup',
         'activate' => 'site/activate',
-        // 'cau-hoi-thuong-gap' => 'site/faq',
+        'faq' => 'site/question',
         'request-password-reset' => 'site/request-password-reset',
         'reset-password' => 'site/reset-password',
         'subscribe' => 'subscriber/create',
 
-        'game/<id:\d+>-<slug:[\w\-]+>' => 'game/view',
         // game
+        'game/<id:\d+>-<slug:[\w\-]+>' => 'game/view',
+        'shop' => 'game/index', 
 
         // cart
         'shopping-cart' => 'cart/index',
@@ -36,6 +37,19 @@ return [
         // payment
         'pricing/<identifier>/verify' => 'pricing/verify',
         'pricing/<identifier>/cancel' => 'pricing/cancel',
+
+        // topup
+        'topup' => 'topup/index',
+
+        // promotion
+        'promotion' => 'promotion/index',
+
+        // refer
+        'refer-friend' => 'refer/index',
+
+        // affiliate
+        'affiliate' => 'affiliate/index',
+
         // notifications
         'notifications/default/index' => 'notifications/default/index',
         'notifications/default/list' => 'notifications/default/list',

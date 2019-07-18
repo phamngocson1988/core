@@ -20,6 +20,24 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
+        'view' => [
+            'class' => 'frontend\components\web\View',
+            'title' => 'Kinggems',
+            'on afterRender' => function($event) {
+                $view = $event->sender;
+                $view->registerMetaTag(['property' => 'og:type', 'content' => 'website'], 'og:type');
+                $view->registerMetaTag(['property' => 'og:url', 'content' => \yii\helpers\Url::current([], true)], 'og:url');
+                if (!isset($view->metaTags['og:image'])) {
+                    $view->registerMetaTag(['property' => 'og:image', 'content' => Yii::$app->settings->get('ApplicationSettingForm', 'logo', '/images/logo.png')], 'og:image');
+                }
+                if (!isset($view->metaTags['og:title'])) {
+                    $view->registerMetaTag(['property' => 'og:title', 'content' => $view->title], 'og:title');
+                }
+                if (!isset($view->metaTags['og:description'])) {
+                    $view->registerMetaTag(['property' => 'og:description', 'content' => 'Kinggems US website is a market of games, providers and customers'], 'og:description');
+                }
+            }
+        ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',

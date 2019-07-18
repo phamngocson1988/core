@@ -1,7 +1,10 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-
+$this->registerMetaTag(['property' => 'og:image', 'content' => $game->getImageUrl('150x150')], 'og:image');
+$this->registerMetaTag(['property' => 'og:title', 'content' => $game->getMetaTitle()], 'og:title');
+$this->registerMetaTag(['property' => 'og:description', 'content' => $game->getMetaDescription()], 'og:description');
 $gameId = $game->id;
 $unit = $game->pack;
 $gamePromotions = array_filter($promotions, function($promotion) use ($gameId) {
@@ -25,7 +28,7 @@ $gamePromotion = reset($gamePromotions);
                             <a href="javascript:void;"><?=$game->title;?></a>
                         </h2>
                         <div class="product-detail-price">
-                            <span><?=number_format($game->pack);?> GEMS</span> for COC
+                            <span><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></span> for <?=$game->getShortTitle();?>
                         </div>
                         <?php if ($gamePromotion) :
                           $benefit = $gamePromotion->getBenefit();
@@ -36,7 +39,7 @@ $gamePromotion = reset($gamePromotions);
                                 <p><?=$gamePromotion->code;?></p>
                             </div>
                             <div class="prod-code-right">
-                                <p>+<?=$gamePromotion->apply($game->pack);?> GEMS</p>
+                                <p>+<?=$gamePromotion->apply($game->pack);?> <?=strtoupper($game->unit_name);?></p>
                                 <p>cho HFKEJK</p>
                             </div>
                         </div>
@@ -54,7 +57,7 @@ $gamePromotion = reset($gamePromotions);
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><?=number_format($game->pack);?> GEMS</td>
+                                        <td><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></td>
                                         <td>
                                             <div class="quantity-box">
                                                 <button class="quantity-minus" type="button">-</button>

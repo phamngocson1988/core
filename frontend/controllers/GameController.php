@@ -22,14 +22,21 @@ class GameController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $request = Yii::$app->request;
         $q = $request->get('q');
+        $sort = $request->get('sort', null);
         $command = Game::find();
         if ($q) {
             $command->andWhere(['like', 'title', $q]);
         }
+        if ($sort == 'desc') {
+            $command->orderBy(['title' => SORT_DESC]);
+        } elseif ($sort == 'asc') {
+            $command->orderBy(['title' => SORT_ASC]);
+        } else {
+            $command->orderBy(['id' => SORT_DESC]);
+        }
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
                             ->all();
         $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
         return $this->render('index', [
@@ -37,6 +44,7 @@ class GameController extends Controller
             'pages' => $pages,
             'promotions' => $promotions,
             'q' => $q,
+            'sort' => $sort
         ]);
     }
     public function actionView($id)

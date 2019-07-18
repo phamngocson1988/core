@@ -34,6 +34,8 @@ AppAsset::register($this);
 $bodyClass = isset($this->params['body_class']) ? $this->params['body_class'] : '';
 ?>
 <body class='<?=$bodyClass;?>' >
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.3&appId=734107406647333&autoLogAppEvents=1"></script>
 <?= NotificationFlash::widget() ?>
 <?php $this->beginBody() ?>
 <div class="wrapper">
