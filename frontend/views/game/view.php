@@ -59,15 +59,23 @@ $gamePromotion = reset($gamePromotions);
                                     <tr>
                                         <td><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></td>
                                         <td>
+                                            <?php if ($game->gameUnits) : ?>
+                                                <?= $form->field($game, 'quantity', [
+                                                'options' => ['tag' => false],
+                                                'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
+                                                'template' => '{input}'
+                                                ])->dropDownList(ArrayHelper::map($game->gameUnits, 'quantity', 'quantity'));?>
+                                            <?php else : ?>
                                             <div class="quantity-box">
                                                 <button class="quantity-minus" type="button">-</button>
                                                 <?= $form->field($game, 'quantity', [
-                                                  'template' => '{input}', 
-                                                  'options' => ['tag' => false],
-                                                  'inputOptions' => ['class' => 'txt-qty', 'type' => 'number', 'min' => 0.5, 'step' => 0.5, 'id' => 'quantity'],
+                                                'template' => '{input}', 
+                                                'options' => ['tag' => false],
+                                                'inputOptions' => ['class' => 'txt-qty', 'type' => 'number', 'min' => 0.5, 'step' => 0.5, 'id' => 'quantity'],
                                                 ])->textInput() ?>
                                                 <button class="quantity-plus" type="button">+</button>
                                             </div>
+                                            <?php endif; ?>
                                         </td>
                                         <td><span id="unit"><?=number_format($game->getTotalUnit());?></span></td>
                                         <td>
@@ -154,18 +162,23 @@ $('body').on('click', function(e) {
 
 $('.product-temple-total .quantity-box button.quantity-plus').click(function(){
     var _qty = $('.product-temple-total .quantity-box input').val();
-    _qty = parseInt(_qty)+1;
-    $('.product-temple-total .quantity-box input').val(_qty);
-    $("#quantity").trigger('change');
+    var step = 0.5;
+    if (_qty < 10) {
+        _qty = parseFloat(_qty) + step;
+        $('.product-temple-total .quantity-box input').val(_qty);
+        $("#quantity").trigger('change');
+    }
 });
 
 $('.product-temple-total .quantity-box button.quantity-minus').click(function(){
     var _qty = $('.product-temple-total .quantity-box input').val();
-    if(parseInt(_qty) > 1){
-        _qty = parseInt(_qty)-1;
-    }
-    $('.product-temple-total .quantity-box input').val(_qty);
-    $("#quantity").trigger('change');
+    _qty = parseFloat(_qty);
+    var step = 0.5;
+    if (_qty > step) {
+        _qty = _qty - step;
+        $('.product-temple-total .quantity-box input').val(_qty);
+        $("#quantity").trigger('change');
+    } 
 });
 
 // For update quantity
@@ -188,6 +201,8 @@ $('body').on('change', "#quantity", function(){
       },
   });
 });
+$("#quantity").trigger('change');
+
 JS;
 $this->registerJs($script);
 ?>

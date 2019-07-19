@@ -3,6 +3,7 @@ namespace frontend\components\cart;
 
 use yii2mod\cart\models\CartItemInterface;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use frontend\models\Game;
 
 class CartItem extends Game implements CartItemInterface
@@ -53,7 +54,6 @@ class CartItem extends Game implements CartItemInterface
             [['id'], 'required'],
             [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT_CART, self::SCENARIO_ADD_CART, self::SCENARIO_IMPORT_CART]],
             ['quantity', 'number'],
-            ['quantity', 'default', 'value' => 1],
             [['username', 'password', 'character_name', 'platform', 'login_method'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             [['server', 'recover_code', 'note'], 'trim', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART]
@@ -73,12 +73,17 @@ class CartItem extends Game implements CartItemInterface
     public function getTotalUnit()
     {
         $pack = $this->pack;
-        foreach ($this->gameUnits as $gameUnit) {
-            if ($this->quantity >= $gameUnit->quantity) {
-                $pack = $gameUnit->unit;
-                break;
-            }
+        if ($this->gameUnits) {
+            $units = ArrayHelper::map($this->gameUnits, 'quantity', 'unit');
+            if (!$this->quantity) $this->quantity = key($units);
+            return ArrayHelper::getValue($units, $this->quantity, 0);
         }
+        // foreach ($this->gameUnits as $gameUnit) {
+        //     if ($this->quantity >= $gameUnit->quantity) {
+        //         $pack = $gameUnit->unit;
+        //         break;
+        //     }
+        // }
         return $pack * $this->quantity;
     }
 

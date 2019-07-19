@@ -107,7 +107,7 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
                 <li>4. Your friend must click the link and register then fund their account with minimumminimum of $50.</li>
                 <li>5. Once your friend has met the funding requirement your bonus will be credited automatically to your account.</li>
               </ul>
-              <p>Referring your friends to KingGems.us is quick and easy and you can invite as many as you wish. The more you invite, the more bonus cash you earn!</p>
+              <p>Referring your friends to KingGems.us is quick and easy and you can invite as many as you wish. The more you invite, the more bonus you earn!</p>
             </div>
           </div>
           <div class="qa-item">

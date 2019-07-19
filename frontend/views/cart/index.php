@@ -38,6 +38,13 @@ use frontend\components\cart\Cart;
                 <td id="price"><?=number_format($item->getTotalPrice());?></td>
                 <td id="unit"><?=number_format($item->getTotalUnit());?></td>
                 <td>
+                  <?php if ($item->gameUnits) : ?>
+                  <?= $form->field($item, 'quantity', [
+                  'options' => ['class' => 'form-wrap box-width-1 shop-input'],
+                  'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
+                  'template' => '{input}'
+                  ])->dropDownList(ArrayHelper::map($item->gameUnits, 'quantity', 'quantity'));?>
+                  <?php else : ?>
                   <?= $form->field($item, 'quantity', [
                     'options' => ['class' => 'form-wrap box-width-1 shop-input'],
                     'inputOptions' => ['class' => 'form-input input-append',
@@ -47,6 +54,7 @@ use frontend\components\cart\Cart;
                     ],
                     'template' => '{input}'
                   ])->textInput() ?>
+                  <?php endif; ?>
                 </td>
               </tr>
             </tbody>
@@ -215,6 +223,7 @@ $('body').on('click', '#remove_voucher', function(e){
   return false;
 
 })
+$("#quantity").trigger('change');
 
 JS;
 $this->registerJs($script);
