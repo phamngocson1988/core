@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 $this->registerMetaTag(['property' => 'og:image', 'content' => $game->getImageUrl('150x150')], 'og:image');
 $this->registerMetaTag(['property' => 'og:title', 'content' => $game->getMetaTitle()], 'og:title');
@@ -113,8 +114,8 @@ $gamePromotion = reset($gamePromotions);
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- <a class="btn-product-detail-add-to-cart" href="javascript:;">Add To Cart</a> -->
                         <?= Html::submitButton('Add To Cart', ['class' => 'btn-product-detail-add-to-cart', 'data-pjax' => 'false', 'id' => 'add-cart-button']) ?>
+                        <a class="btn-product-detail-add-to-cart" href="<?=Url::to(['reseller/import', 'id' => $game->id]);?>">For reseller</a>
                         <?php ActiveForm::end(); ?>
                     </div>
                 </div>

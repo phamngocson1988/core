@@ -40,7 +40,6 @@ class ResellerController extends Controller
         if ($request->isPost) {
             $files = Yii::$app->file->upload('template', "template/$userId");
             $inputFile = reset($files);//Yii::getAlias('@frontend') . '/template_1.xlsx';
-            $id = 1;
             $game = CartItem::findOne($id);
             try{
                 $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
@@ -108,9 +107,14 @@ class ResellerController extends Controller
             $cartItem->platform = $importData['platform'];
             $cartItem->login_method = $importData['login_method'];
             $cartItem->setScenario(CartItem::SCENARIO_IMPORT_CART);
-            if ($cartItem->validate()) {
-                $totalPrice = $cartItem->getTotalPrice();
+            $totalPrice = $cartItem->getTotalPrice();
+            $balance = $user->getWalletAmount();
+            if ($totalPrice > $balance) {
+                $errors[] = 'Not enough balance in your wallet';
+                break;
+            } elseif ($cartItem->validate()) {
                 $totalUnit = $cartItem->getTotalUnit();
+                
                 // Order detail
                 $order = new Order();
                 $order->sub_total_price = $totalPrice;
