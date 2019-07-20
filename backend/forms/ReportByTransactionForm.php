@@ -68,7 +68,7 @@ class ReportByTransactionForm extends PaymentTransaction
         $header = [
             'A2:I2' => sprintf('Thời gian: %s - %s', $this->start_date, $this->end_date),
             'A3:I3' => sprintf('Khách hàng: %s', ($this->user_id) ? $this->user->name : ''),
-            'A4:I4' => sprintf('Mã khuyến mãi: %s', $this->discount_code),
+            'A4:I4' => sprintf('Mã khuyến mãi: %s', $this->promotion_code),
             'A5:I5' => sprintf('Mã giao dịch: %s', $this->auth_key),
         ];
         $footer = [
@@ -84,7 +84,7 @@ class ReportByTransactionForm extends PaymentTransaction
                 $model->payment_at, 
                 $model->user->name,
                 $model->auth_key,
-                $model->discount_coin,
+                $model->promotion_coin,
                 $model->total_coin,
                 $model->discount_price,
                 $model->total_price,
@@ -160,8 +160,8 @@ class ReportByTransactionForm extends PaymentTransaction
             $command->andWhere(["$table.user_id" => $this->user_id]);
         }
 
-        if ($this->discount_code) {
-            $command->andWhere(["$table.discount_code" => $this->discount_code]);
+        if ($this->promotion_code) {
+            $command->andWhere(["$table.promotion_code" => $this->promotion_code]);
         }
 
         if ($this->auth_key) {

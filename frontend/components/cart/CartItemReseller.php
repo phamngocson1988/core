@@ -1,20 +1,13 @@
-<?php 
+<?php
 namespace frontend\components\cart;
 
-use yii\base\Behavior;
-
-class CartItemImportBehavior extends Behavior
+class CartItemReseller extends CartItem
 {
-    public $row_index;
+	public $row_index;
     public $no;
 
     public function getPrice() : int
     {
         return ($this->reseller_price) ? (int)$this->reseller_price : (int)$this->price;
-    }
-
-    public function getTotalPrice()
-    {
-        return 1;
     }
 }

@@ -53,7 +53,7 @@ class ReportController extends Controller
         $data = [
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
-            'discount_code' => $request->get('discount_code'),
+            'promotion_code' => $request->get('promotion_code'),
             'user_id' => $request->get('user_id'),
             'auth_key' => $request->get('auth_key'),
             'is_reseller' => $request->get('is_reseller'),

@@ -81,9 +81,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ])->label('Khách hàng')?>
 
-            <?=$form->field($search, 'discount_code', [
+            <?=$form->field($search, 'promotion_code', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'discount_code']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'promotion_code']
             ])->textInput()->label('Mã khuyến mãi');?>
 
             <?=$form->field($search, 'auth_key', [
@@ -158,7 +158,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><?=$model->user->name;?></td>
                 <td style="vertical-align: middle;"><?=($model->user->isReseller()) ? 'Reseller' : 'Customer';?></td>
                 <td style="vertical-align: middle;"><?=$model->auth_key;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->discount_coin);?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->promotion_coin);?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->total_coin);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($model->discount_price);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($model->total_price);?></td>
@@ -173,7 +173,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->count());?></td>
-              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('discount_coin'));?></td>
+              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('promotion_coin'));?></td>
               <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('total_coin'));?></td>
               <td style="vertical-align: middle;"></td>
               <td style="vertical-align: middle;">Tổng: $<?=number_format($search->getCommand()->sum('total_price'));?></td>

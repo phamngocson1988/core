@@ -58,3 +58,10 @@ a, a:hover {
 button:hover {
 	cursor: pointer;
 }
+
+.top-header .right-box .main-nav ul li a {
+	font-weight: inherit;
+}
+.top-header .right-box .main-nav ul li a.active {
+	font-weight: bold;
+}

@@ -13,6 +13,7 @@ use yii\helpers\Url;
 use frontend\components\cart\Cart;
 use frontend\components\cart\CartItemImportBehavior;
 use frontend\components\cart\CartItem;
+use frontend\components\cart\CartItemReseller;
 use frontend\components\cart\CartPromotion;
 use frontend\models\Order;
 use frontend\models\UserWallet;
@@ -40,7 +41,7 @@ class ResellerController extends Controller
         if ($request->isPost) {
             $files = Yii::$app->file->upload('template', "template/$userId");
             $inputFile = reset($files);//Yii::getAlias('@frontend') . '/template_1.xlsx';
-            $game = CartItem::findOne($id);
+            $game = CartItemReseller::findOne($id);
             try{
                 $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
                 $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
@@ -57,7 +58,6 @@ class ResellerController extends Controller
             
             foreach ($rowData as $no => $data) {
                 $item = clone $game;
-                $item->attachBehavior('import', new CartItemImportBehavior);
                 $item->row_index = $startRow + $no;
                 $item->no = $data[0];
                 $item->quantity = $data[1];
@@ -69,7 +69,7 @@ class ResellerController extends Controller
                 $item->note = $data[8];
                 $item->platform = 'ios';
                 $item->login_method = $data[2];
-                $item->setScenario(CartItem::SCENARIO_IMPORT_CART);
+                $item->setScenario(CartItemReseller::SCENARIO_IMPORT_CART);
                 $records[] = $item;
             }
             $validRecords = array_filter($records, function($item) {
@@ -91,7 +91,7 @@ class ResellerController extends Controller
     {
         $user = Yii::$app->user->getIdentity();
         $request = Yii::$app->request;
-        $game = CartItem::findOne($id);
+        $game = CartItemReseller::findOne($id);
         if (!$game) throw new NotFoundHttpException("Not found", 1);
         $imports = $request->post('import', []);
         $errors = [];
@@ -106,7 +106,7 @@ class ResellerController extends Controller
             $cartItem->note = $importData['note'];
             $cartItem->platform = $importData['platform'];
             $cartItem->login_method = $importData['login_method'];
-            $cartItem->setScenario(CartItem::SCENARIO_IMPORT_CART);
+            $cartItem->setScenario(CartItemReseller::SCENARIO_IMPORT_CART);
             $totalPrice = $cartItem->getTotalPrice();
             $balance = $user->getWalletAmount();
             if ($totalPrice > $balance) {
