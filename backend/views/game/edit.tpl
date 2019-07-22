@@ -114,20 +114,12 @@
                     [
                       'name'  => 'quantity',
                       'title' => 'Số lượng mua',
-                      'enableError' => true,
-                      'options' => [
-                        'type' => 'number',
-                        'class' => 'input-priority'
-                      ]
+                      'enableError' => true
                     ],
                     [
                       'name'  => 'unit',
                       'title' => 'Số lượng gems nhận được',
-                      'enableError' => true,
-                      'options' => [
-                        'type' => 'number',
-                        'class' => 'input-priority'
-                      ]
+                      'enableError' => true
                     ]
                   ]
                 ])->label(false)}

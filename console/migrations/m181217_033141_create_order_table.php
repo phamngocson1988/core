@@ -25,6 +25,7 @@ class m181217_033141_create_order_table extends Migration
             'payment_method' => $this->string(50),
             'payment_data' => $this->text(),
             'sub_total_price' => $this->integer(11)->defaultValue(0),
+            'quantity' => $this->float(1)->notNull()->defaultValue(1),
             'total_discount' => $this->integer(11)->defaultValue(0),
             'total_fee' => $this->integer(11)->defaultValue(0),
             'total_tax' => $this->integer(11)->defaultValue(0),
@@ -47,7 +48,6 @@ class m181217_033141_create_order_table extends Migration
             // Game infor
             'game_id' => $this->integer(11)->notNull(),
             'game_title' => $this->string(255)->notNull(),
-            'game_pack' => $this->float(1)->notNull()->defaultValue(1),
             'unit_name' => $this->string(50)->notNull(),
             'sub_total_unit' => $this->integer(11)->defaultValue(0),
             'promotion_unit' => $this->integer(11)->defaultValue(0),
