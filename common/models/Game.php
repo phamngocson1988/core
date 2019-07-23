@@ -57,6 +57,7 @@ class Game extends ActiveRecord
 
         return  [
             'title' => Yii::t('app', 'title'),
+            'sku' => 'Mã game',
             'short_title' => 'Tên viết tắt',
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),

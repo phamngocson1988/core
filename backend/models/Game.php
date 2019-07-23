@@ -13,8 +13,8 @@ class Game extends \common\models\Game
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'short_title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'short_title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
+            self::SCENARIO_CREATE => ['title', 'sku', 'short_title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'sku', 'short_title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
         ];
     }
 
@@ -22,6 +22,7 @@ class Game extends \common\models\Game
     {
         return [
             'title' => Yii::t('app', 'title'),
+            'sku' => 'Mã game',
             'short_title' => 'Tên viết tắt',
             'excerpt' => Yii::t('app', 'excerpt'),
             'content' => Yii::t('app', 'content'),
@@ -40,7 +41,7 @@ class Game extends \common\models\Game
     {
         return [
             ['id', 'required', 'on' => self::SCENARIO_EDIT],
-            [['title', 'content', 'unit_name', 'price', 'pack'], 'required'],
+            [['title', 'sku', 'content', 'unit_name', 'price', 'pack'], 'required'],
             ['status', 'default', 'value' => self::STATUS_VISIBLE],
             [['image_id', 'excerpt', 'units', 'reseller_price'], 'safe'],
             ['pack', 'default', 'value' => 1],

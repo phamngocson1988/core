@@ -5,6 +5,11 @@ use Yii;
 use yii\filters\AccessControl;
 use backend\models\User;
 use yii\web\NotFoundHttpException;
+use yii\data\Pagination;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use backend\models\Game;
+use backend\models\GameReseller;
 
 class ResellerController extends Controller
 {
@@ -53,5 +58,48 @@ class ResellerController extends Controller
         $request = Yii::$app->request;
         $user = User::findOne($id);
         if (!$user) throw new NotFoundHttpException('Not found');
+        
+        // Fetch all reseller prices
+        $command = GameReseller::find()->where(['reseller_id' => $id])->with('game');
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+
+        // Fetch all games
+        $games = Game::find()->select(['id', 'title'])->all();
+        $games = ArrayHelper::map($games, 'id', 'title');
+        return $this->render('price', [
+            'models' => $models,
+            'pages' => $pages,
+            'id' => $id,
+            'games' => $games,
+            'newModel' => new GameReseller()
+        ]);
+    }
+
+    public function actionCreatePrice($id)
+    {
+        $request = Yii::$app->request;
+        $user = User::findOne($id);
+        if (!$user) throw new NotFoundHttpException('Not found');
+        $model = new GameReseller();
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            return $this->asJson(['status' => false, 'errors' => $model->getErrorSummary(true)]);
+        }
+    }
+
+    public function actionEditPrice($game_id, $reseller_id)
+    {
+        $request = Yii::$app->request;
+        $model = GameReseller::findOne(['game_id' => $game_id, 'reseller_id' => $reseller_id]);
+        if (!$model) throw new NotFoundHttpException('Not found price');
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            return $this->asJson(['status' => false, 'errors' => $model->getErrorSummary(true)]);
+        }
     }
 }

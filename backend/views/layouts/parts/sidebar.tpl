@@ -120,6 +120,11 @@
             <span class="title">Khuyến mãi</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/reseller'}" class="nav-link " code='game.reseller'>
+            <span class="title">Giá cho nhân viên</span>
+            </a>
+          </li>
         </ul>
       </li>
       <li class="nav-item  ">

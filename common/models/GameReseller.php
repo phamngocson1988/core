@@ -17,4 +17,9 @@ class GameReseller extends ActiveRecord
             [['game_id', 'reseller_id', 'price'], 'required'],
         ];
     }
+    
+    public function getGame()
+    {
+        return $this->hasOne(Game::className(), ['id' => 'game_id']);
+    }
 }

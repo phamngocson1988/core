@@ -56,7 +56,7 @@ use yii\widgets\ActiveForm;
               <th style="width: 20%;"> Email </th>
               <th style="width: 15%;"> Phone </th>
               <th style="width: 15%;">  </th>
-              <th style="width: 15%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+              <th style="width: 15%;" class="dt-center"> Tác vụ </th>
             </tr>
           </thead>
           <tbody>

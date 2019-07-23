@@ -38,6 +38,15 @@ class Game extends \common\models\Game
     // {
     //     return $this->hasMany(GameUnit::className(), ['game_id' => 'id'])->orderBy(['quantity' => SORT_DESC]);
     // }
+
+    public function getImageUrl($size = null, $default = '/images/no-img.png')
+    {
+        $image = $this->image;
+        if ($image) {
+            return $image->getUrl($size);
+        }
+        return $default;
+    }
 }
 
 class GameQuery extends ActiveQuery
