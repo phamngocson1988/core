@@ -58,7 +58,7 @@ class GameController extends Controller
                 return $this->asJson(['status' => true, 'data' => [
                     'origin' => number_format($game->getTotalOriginalPrice()),
                     'price' => number_format($game->getTotalPrice()),
-                    'unit' => number_format($game->getTotalUnit())
+                    'unit' => number_format($game->getTotalUnit()),
                 ]]);
             }
             $cart = Yii::$app->cart;

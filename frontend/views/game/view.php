@@ -61,11 +61,17 @@ $gamePromotion = reset($gamePromotions);
                                         <td><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></td>
                                         <td>
                                             <?php if ($game->gameUnits) : ?>
+                                            <?php 
+                                            $units = [];
+                                            foreach ($game->gameUnits as $unit) {
+                                                $units[(string)$unit->quantity] = $unit->quantity;
+                                            }
+                                            ?>
                                                 <?= $form->field($game, 'quantity', [
                                                 'options' => ['tag' => false],
                                                 'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
                                                 'template' => '{input}'
-                                                ])->dropDownList(ArrayHelper::map($game->gameUnits, 'quantity', 'quantity'));?>
+                                                ])->dropDownList($units);?>
                                             <?php else : ?>
                                             <div class="quantity-box">
                                                 <button class="quantity-minus" type="button">-</button>

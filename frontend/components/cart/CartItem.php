@@ -62,28 +62,23 @@ class CartItem extends Game implements CartItemInterface
 
     public function getTotalPrice()
     {
-        return $this->getPrice() * $this->quantity;
+        return $this->getPrice() * (float)$this->quantity;
     }
 
     public function getTotalOriginalPrice()
     {
-        return $this->getOriginalPrice() * $this->quantity;
+        return $this->getOriginalPrice() * (float)$this->quantity;
     }
 
     public function getTotalUnit()
     {
         $pack = $this->pack;
+        $quantity = $this->quantity;
         if ($this->gameUnits) {
-            $units = ArrayHelper::map($this->gameUnits, 'quantity', 'unit');
-            if (!$this->quantity) $this->quantity = key($units);
-            return ArrayHelper::getValue($units, $this->quantity, 0);
+            foreach ($this->gameUnits as $unit) {
+                if ($this->quantity == $unit->quantity) return $unit->unit;
+            }
         }
-        // foreach ($this->gameUnits as $gameUnit) {
-        //     if ($this->quantity >= $gameUnit->quantity) {
-        //         $pack = $gameUnit->unit;
-        //         break;
-        //     }
-        // }
         return $pack * $this->quantity;
     }
 
