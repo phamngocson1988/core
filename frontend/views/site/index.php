@@ -20,7 +20,8 @@ $this->title = 'Home Page';
         </a>
         <a class="prod-title" href="#"><?=$game->title;?></a>
         <div class="prod-price">
-          <span><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></span> for <?=$game->getShortTitle();?>
+          <?=number_format($game->pack);?> <?=$game->unit_name;?> <br/>
+          <span>$<?=number_format($game->price);?></span>
         </div>
         <?php 
         $gameId = $game->id;

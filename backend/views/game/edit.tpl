@@ -99,7 +99,6 @@
               <div class="tab-content">
                 <div class="tab-pane active" id="main">
                   {$form->field($model, 'title')->textInput()}
-                  {$form->field($model, 'sku')->textInput()}
                   {$form->field($model, 'short_title')->textInput()}
                   {$form->field($model, 'price')->textInput()}
                   {$form->field($model, 'original_price')->textInput()}
@@ -111,6 +110,7 @@
                 <div class="tab-pane" id="tab_1_2">
                 {$form->field($model, 'units')->widget(MultipleInput::className(), [
                   'max' => 10,
+                  'min' => 0,
                   'columns' => [
                     [
                       'name'  => 'quantity',

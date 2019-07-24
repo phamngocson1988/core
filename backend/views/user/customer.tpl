@@ -170,8 +170,9 @@
               <th style="width: 10%;"> Đơn hàng cuối cùng </th>
               <th style="width: 10%;"> Tổng tiền nạp </th>
               <th style="width: 10%;"> Tổng tiền mua hàng </th>
-              <th style="width: 5%;"> Reseller/Khách hàng </th>
-              <th style="width: 5%;"> Đại lý/người bán </th>
+              <th style="width: 10%;"> Reseller/Khách hàng </th>
+              <th style="width: 10%;"> Đại lý/người bán </th>
+              <th style="width: 5%;"> Tác vụ </th>
             </tr>
           </thead>
           <tbody>
@@ -190,16 +191,21 @@
               <td>{$model->getWalletWithdrawAmount()}</td>
               <td>{if $model->isReseller()}Reseller{else}Khách hàng{/if}</td>
               <td></td>
-              <!-- <td>
-                <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>
+              <td>
+                {* <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>
                 {if $app->user->id != $model->id}
                 {if $model->isActive()}
                 <a class="btn btn-xs grey-salsa delete-user tooltips" href="{url route='user/change-status' id=$model->id status='delete'}" data-container="body" data-original-title="{Yii::t('app', 'disable_user')}"><i class="fa fa-minus-circle"></i></a>
                 {else}
                 <a class="btn btn-xs grey-salsa active-user tooltips" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-original-title="{Yii::t('app', 'enable_user')}"><i class="fa fa-check-square"></i></a>
                 {/if}
+                {/if} *}
+                {if !$model->isReseller()}
+                <a class="btn btn-xs grey-salsa link-action tooltips" href="{url route='user/upgrade-reseller' id=$model->id}" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                {else}
+                <a class="btn btn-xs grey-salsa link-action tooltips" href="{url route='user/downgrade-reseller' id=$model->id}" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="glyphicon glyphicon-arrow-down"></i></a>
                 {/if}
-              </td> -->
+              </td>
             </tr>
             {/foreach}
             {else}
@@ -228,6 +234,13 @@ $(".delete-user").ajax_action({
 $(".active-user").ajax_action({
   confirm: true,
   confirm_text: '{/literal}{Yii::t('app', 'confirm_enable_user')}{literal}',
+  callback: function(eletement, data) {
+    location.reload();
+  }
+});
+$(".link-action").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có chắc muốn thực hiện tác vụ này?',
   callback: function(eletement, data) {
     location.reload();
   }

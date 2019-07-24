@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use Yii;
 use backend\controllers\Controller;
+use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
@@ -13,6 +14,7 @@ use backend\forms\FetchUserForm;
 use backend\forms\ChangeUserStatusForm;
 use backend\forms\InviteUserForm;
 use backend\forms\FetchCustomerForm;
+use backend\models\User;
 
 /**
  * UserController
@@ -27,7 +29,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -228,6 +230,28 @@ class UserController extends Controller
                     break;
             }
             return $this->renderJson($result, null, $form->getErrors());
+        }
+    }
+
+    public function actionUpgradeReseller($id)
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->is_reseller = User::IS_RESELLER;
+            return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
+        }
+    }
+
+    public function actionDowngradeReseller($id)
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->is_reseller = User::IS_NOT_RESELLER;
+            return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
         }
     }
 }

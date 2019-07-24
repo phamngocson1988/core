@@ -83,7 +83,7 @@ use yii\widgets\ActiveForm;
                             <div class="col-md-12">
                               <?=$editForm->field($model, 'price', [
                                 'options' => ['style' => 'margin: 10px', 'class' => 'form-group']
-                              ])->textInput()->label('Giá tiền');?>
+                              ])->textInput()->label(sprintf("%s (%s %s)", "Giá tiền trên 1 gói game", $model->game->pack, $model->game->unit_name));?>
                             </div>
                           </div>
                         </div>
@@ -135,7 +135,7 @@ use yii\widgets\ActiveForm;
             ])->label('Tên game')?>
             <?=$newForm->field($newModel, 'price', [
               'options' => ['style' => 'margin: 10px', 'class' => 'form-group']
-            ])->textInput()->label('Giá tiền');?>
+            ])->textInput()->label(sprintf("%s", "Giá tiền trên 1 gói"));?>
           </div>
         </div>
       </div>

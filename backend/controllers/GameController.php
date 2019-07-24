@@ -72,11 +72,13 @@ class GameController extends Controller
         $model = new Game();
         $model->setScenario(Game::SCENARIO_CREATE);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            foreach ($model->units as $unitData) {
-                $gameUnit = new GameUnit($unitData);
-                $gameUnit->game_id = $model->id;
-                if ($gameUnit->validate()) $gameUnit->save();
-                else Yii::$app->session->setFlash('warning', "Some game price is not saved");
+            if ($model->units) {
+                foreach ((array)$model->units as $unitData) {
+                    $gameUnit = new GameUnit($unitData);
+                    $gameUnit->game_id = $model->id;
+                    if ($gameUnit->validate()) $gameUnit->save();
+                    else Yii::$app->session->setFlash('warning', "Some game price is not saved");
+                }
             }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             $ref = Url::to(['game/index']);
@@ -102,11 +104,13 @@ class GameController extends Controller
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             GameUnit::deleteAll(['game_id' => $id]);
-            foreach ($model->units as $unitData) {
-                $gameUnit = new GameUnit($unitData);
-                $gameUnit->game_id = $model->id;
-                if ($gameUnit->validate()) $gameUnit->save();
-                else Yii::$app->session->setFlash('warning', "Some game price is not saved");
+            if ($model->units) {
+                foreach ((array)$model->units as $unitData) {
+                    $gameUnit = new GameUnit($unitData);
+                    $gameUnit->game_id = $model->id;
+                    if ($gameUnit->validate()) $gameUnit->save();
+                    else Yii::$app->session->setFlash('warning', "Some game price is not saved");
+                }
             }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             $ref = Url::to(['game/index']);

@@ -86,6 +86,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->view->params['main_menu_active'] = 'site.index';
         $this->layout = 'home';
         $games = Game::find()->limit(10)->all();
         // Fetch valid promotions which just apply for game
@@ -356,6 +357,7 @@ class SiteController extends Controller
     public function actionQuestion()
     {
         $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'site.question';
         return $this->render('question');
     }
 }

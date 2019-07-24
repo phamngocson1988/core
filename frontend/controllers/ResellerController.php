@@ -8,6 +8,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use frontend\components\acf\ResellerAccessRule;
 use yii\helpers\Url;
 
 use frontend\components\cart\Cart;
@@ -24,6 +25,25 @@ use frontend\models\PromotionApply;
  */
 class ResellerController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->isReseller();
+                        }
+                    ],
+                ],
+                
+            ],
+        ];
+    }
+
     public function actionDownload()
     {
         $settings = Yii::$app->settings;

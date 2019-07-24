@@ -8,13 +8,13 @@ class Game extends \common\models\Game
     const SCENARIO_CREATE = 'create';
     const SCENARIO_EDIT = 'edit';
 
-    public $units;
+    public $units = [];
     
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'sku', 'short_title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'sku', 'short_title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
+            self::SCENARIO_CREATE => ['title', 'short_title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'short_title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'units'],
         ];
     }
 
@@ -22,7 +22,6 @@ class Game extends \common\models\Game
     {
         return [
             'title' => Yii::t('app', 'title'),
-            'sku' => 'Mã game',
             'short_title' => 'Tên viết tắt',
             'excerpt' => Yii::t('app', 'excerpt'),
             'content' => Yii::t('app', 'content'),

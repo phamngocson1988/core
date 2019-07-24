@@ -42,6 +42,7 @@ class TopupController extends Controller
     public function actionIndex()
     {
         $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'topup.index';
         $request = Yii::$app->request;
         $items = CartItem::find()->indexBy('id')->all();
     	return $this->render('index', [
@@ -78,6 +79,7 @@ class TopupController extends Controller
 
     public function actionConfirm()
     {
+        $this->view->params['main_menu_active'] = 'topup.index';
         $request = Yii::$app->request;
         $cart = Yii::$app->kingcoin;
         $promotion_code = $request->post('promotion_code');
@@ -114,7 +116,7 @@ class TopupController extends Controller
 
     public function actionCheckout()
     {
-
+        $this->view->params['main_menu_active'] = 'topup.index';
         $cart = Yii::$app->kingcoin;
         if (!$cart->getItem()) throw new NotFoundHttpException("You have not added any pricing package", 1);
         return $this->render('checkout');
@@ -122,6 +124,7 @@ class TopupController extends Controller
 
     public function actionPurchase()
     {
+        $this->view->params['main_menu_active'] = 'topup.index';
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
         $identifier = $request->post('identifier');
@@ -190,6 +193,7 @@ class TopupController extends Controller
 
     public function actionVerify($identifier)
     {
+        $this->view->params['main_menu_active'] = 'topup.index';
         $gateway = PaymentGatewayFactory::getClient($identifier);
         try {
             if ($gateway->confirm()) {
@@ -229,6 +233,7 @@ class TopupController extends Controller
     public function actionSuccess()
     {
         // $this->layout = 'notice';
+        $this->view->params['main_menu_active'] = 'topup.index';
         return $this->render('/site/notice', [
             'title' => 'You have just bought a pricing successfully.',
             'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
@@ -237,11 +242,13 @@ class TopupController extends Controller
 
     public function actionError()
     {
+        $this->view->params['main_menu_active'] = 'topup.index';
         die('error');
     }
 
     public function actionCancel($identifier)
     {
+        $this->view->params['main_menu_active'] = 'topup.index';
         $gateway = PaymentGatewayFactory::getClient($identifier);
         $gateway->cancel();
         try {

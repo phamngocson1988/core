@@ -5,6 +5,7 @@ use yii\captcha\Captcha;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 $setting = Yii::$app->settings;
+$main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
 ?>
 <div class="container top-header-container">
     <div class="row">
@@ -15,14 +16,14 @@ $setting = Yii::$app->settings;
                         <a href="javascript:;" class="mobile-nav-ico"><i class="fas fa-bars"></i></a>
                         <div class="mobile-nav-block">
                             <nav>
-                                <ul>
-                                    <li><a href="/">Home</a></li>
-                                    <li><a href="<?=Url::to(['topup/index']);?>">Top up</a></li>
-                                    <li><a href="<?=Url::to(['game/index']);?>">Shop</a></li>
-                                    <li><a href="<?=Url::to(['promotion/index']);?>">Promotion</a></li>
-                                    <li><a href="<?=Url::to(['refer/index']);?>">Refer Friend</a></li>
-                                    <li><a href="<?=Url::to(['affiliate/index']);?>">Afiliate</a></li>
-                                    <li><a href="<?=Url::to(['site/question']);?>">Q&A</a></li>
+                                <ul class="page-sidebar-menu" main_menu_active='<?=$main_menu_active;?>'>
+                                    <li><a href="/" code='site.index'>Home</a></li>
+                                    <li><a href="<?=Url::to(['topup/index']);?>" code='topup.index'>Top up</a></li>
+                                    <li><a href="<?=Url::to(['game/index']);?>" code='game.index'>Shop</a></li>
+                                    <li><a href="<?=Url::to(['promotion/index']);?>" code='promotion.index'>Promotion</a></li>
+                                    <li><a href="<?=Url::to(['refer/index']);?>" code='refer.index'>Refer Friend</a></li>
+                                    <li><a href="<?=Url::to(['affiliate/index']);?>" code='affiliate.index'>Afiliate</a></li>
+                                    <li><a href="<?=Url::to(['site/question']);?>" code='site.question'>Q&A</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -82,14 +83,14 @@ $setting = Yii::$app->settings;
                         <?php endif;?>
                         <div class="main-nav">
                             <nav>
-                                <ul>
-                                    <li><a href="/">Home</a></li>
-                                    <li><a href="<?=Url::to(['topup/index']);?>">Top up</a></li>
-                                    <li><a href="<?=Url::to(['game/index']);?>">Shop</a></li>
-                                    <li><a href="<?=Url::to(['promotion/index']);?>">Promotion</a></li>
-                                    <li><a href="<?=Url::to(['refer/index']);?>">Refer Friend</a></li>
-                                    <li><a href="<?=Url::to(['affiliate/index']);?>">Afiliate</a></li>
-                                    <li><a href="<?=Url::to(['site/question']);?>">Q&A</a></li>
+                                <ul class="page-sidebar-menu" main_menu_active='<?=$main_menu_active;?>'>
+                                    <li><a href="/" code='site.index'>Home</a></li>
+                                    <li><a href="<?=Url::to(['topup/index']);?>" code='topup.index'>Top up</a></li>
+                                    <li><a href="<?=Url::to(['game/index']);?>" code='game.index'>Shop</a></li>
+                                    <li><a href="<?=Url::to(['promotion/index']);?>" code='promotion.index'>Promotion</a></li>
+                                    <li><a href="<?=Url::to(['refer/index']);?>" code='refer.index'>Refer Friend</a></li>
+                                    <li><a href="<?=Url::to(['affiliate/index']);?>" code='affiliate.index'>Afiliate</a></li>
+                                    <li><a href="<?=Url::to(['site/question']);?>" code='site.question'>Q&A</a></li>
                                 </ul>
                             </nav>
                             <div class="search-box">

@@ -122,7 +122,7 @@
           </li>
           <li class="nav-item  ">
             <a href="{url route='/reseller'}" class="nav-link " code='game.reseller'>
-            <span class="title">Giá cho nhân viên</span>
+            <span class="title">Giá bán lẻ</span>
             </a>
           </li>
         </ul>

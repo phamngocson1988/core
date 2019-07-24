@@ -20,6 +20,7 @@ class GameController extends Controller
     public function actionIndex()
     {
         $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
         $q = $request->get('q');
         $sort = $request->get('sort', null);

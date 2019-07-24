@@ -67,7 +67,11 @@ class ResellerController extends Controller
                             ->all();
 
         // Fetch all games
-        $games = Game::find()->select(['id', 'title'])->all();
+        $games = Game::find()->select(['id', 'title', 'pack', 'unit_name'])->all();
+        $games = array_map(function($game) {
+            $game->title = sprintf("%s (%s %s)", $game->title, $game->pack, $game->unit_name);
+            return $game;
+        }, $games);
         $games = ArrayHelper::map($games, 'id', 'title');
         return $this->render('price', [
             'models' => $models,

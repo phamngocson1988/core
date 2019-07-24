@@ -46,3 +46,16 @@ function correctDate(_y, _m, _d) {
     else day = Math.min(day, 28);
     _d.val(day);
 }
+
+function activeSidebarMenu() {
+    // var _url = window.location.href;
+    var _active = $('ul.page-sidebar-menu').attr('main_menu_active');
+    $('ul.page-sidebar-menu').find('a').each(function(i, v) {
+        var _code = $(v).attr('code');
+        if (_active == _code) {
+            $('ul.page-sidebar-menu').find('a').removeClass('active');
+            $(v).addClass('active');
+        }
+    })
+}
+activeSidebarMenu();

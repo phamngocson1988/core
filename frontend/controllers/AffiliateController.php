@@ -31,6 +31,7 @@ class AffiliateController extends Controller
     public function actionIndex()
     {
         $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'affiliate.index';
         $user = Yii::$app->user->getIdentity();
         $request = Yii::$app->request;
         if ($request->isPost) {
