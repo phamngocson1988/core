@@ -57,6 +57,15 @@ class m130524_201442_init extends Migration
             'payment_at' => $this->dateTime(),
         ], $tableOptions);
 
+        $this->createTable('{{%user_affiliate}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'commission' => $this->integer()->notNull(),
+            'order_id' => $this->integer()->notNull(),
+            'created_at' => $this->dateTime(),
+            'status' => $this->integer()->notNull()->defaultValue(0),
+        ], $tableOptions);
+
 
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',

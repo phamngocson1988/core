@@ -189,7 +189,13 @@
               <td>{$model->last_order_date}</td>
               <td>{$model->getWalletTopupAmount()}</td>
               <td>{$model->getWalletWithdrawAmount()}</td>
-              <td>{if $model->isReseller()}Reseller{else}Khách hàng{/if}</td>
+              <td>
+                {if $model->isReseller()}
+                <a href="{url route='user/downgrade-reseller' id=$model->id}" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i> Reseller </a>
+                {else}
+                <a href="{url route='user/upgrade-reseller' id=$model->id}" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="fa fa-arrow-up"></i> Khách hàng </a>
+                {/if}
+              </td>
               <td></td>
               <td>
                 {* <a class="btn btn-xs grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="{Yii::t('app', 'edit_user')}"><i class="fa fa-pencil"></i></a>
@@ -200,10 +206,10 @@
                 <a class="btn btn-xs grey-salsa active-user tooltips" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-original-title="{Yii::t('app', 'enable_user')}"><i class="fa fa-check-square"></i></a>
                 {/if}
                 {/if} *}
-                {if !$model->isReseller()}
-                <a class="btn btn-xs grey-salsa link-action tooltips" href="{url route='user/upgrade-reseller' id=$model->id}" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                {if ($model->affiliate_code)}
+                <a href="{url route='user/downgrade-affiliate' id=$model->id}" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
                 {else}
-                <a class="btn btn-xs grey-salsa link-action tooltips" href="{url route='user/downgrade-reseller' id=$model->id}" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                <a href="{url route='user/upgrade-affiliate' id=$model->id}" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Kích hoạt tính năng affiliate"><i class="fa fa-arrow-up"></i> Affiliate </a>
                 {/if}
               </td>
             </tr>

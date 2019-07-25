@@ -16,11 +16,11 @@ class AffiliateProgramForm extends Model
     public function rules()
     {
         return [
-            [['content', 'duration'], 'trim'],
+            [['content'], 'trim'],
             ['status', 'default', 'value' => 0],
             ['type', 'in', 'range' => ['fix', 'percent']],
             ['type', 'default', 'value' => 'fix'],
-            [['value', 'duration'], 'integer'],
+            [['value', 'duration'], 'number'],
             ['duration', 'default', 'value' => 30],
         ];
     }

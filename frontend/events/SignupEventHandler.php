@@ -4,6 +4,7 @@ namespace frontend\events;
 use Yii;
 use yii\base\Event;
 use yii\base\Model;
+use frontend\models\User;
 use frontend\models\UserRefer;
 use frontend\models\UserWallet;
 
@@ -15,7 +16,7 @@ class SignupEventHandler extends Model
         if (!$form->refer) return;
         $invitor = User::findOne(['refer_code' => $form->refer]);
         if (!$invitor) return;
-        $user = $form->user;
+        $user = $event->user;
         if (!$user) return;
         // Update invited user
         $user->referred_by = $invitor->id;
@@ -42,7 +43,7 @@ class SignupEventHandler extends Model
         if (!$form->affiliate) return;
         $invitor = User::findOne(['affiliate_code' => $form->affiliate]);
         if (!$invitor) return;
-        $user = $form->user;
+        $user = $event->user;
         if (!$user) return;
         // Update invited user
         $user->affiliated_with = $invitor->id;

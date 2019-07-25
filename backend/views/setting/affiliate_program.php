@@ -50,19 +50,19 @@ use yii\widgets\ActiveForm;
 
                 <?=$form->field($model, 'value', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
+                  'inputOptions' => ['class' => 'form-control'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput()->label('Giá trị nhận được cho một đơn hàng');?>
 
                 <?=$form->field($model, 'type', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
+                  'inputOptions' => ['class' => 'form-control'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->dropDownList(['fix' => 'Giá trị cố định', 'percent' => 'Tính theo phần trăm'])->label('Cách tính');?>
 
                 <?=$form->field($model, 'duration', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
+                  'inputOptions' => ['class' => 'form-control'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput()->label('Thời gian chờ (theo ngày)');?>
 

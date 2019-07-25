@@ -29,7 +29,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller', 'upgrade-affiliate', 'downgrade-affiliate'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -252,6 +252,28 @@ class UserController extends Controller
             if (!$user) throw new NotFoundHttpException('Not found');
             $user->is_reseller = User::IS_NOT_RESELLER;
             return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
+        }
+    }
+
+    public function actionUpgradeAffiliate($id)
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->affiliate_code = Yii::$app->security->generateRandomString(6);
+            return $this->asJson(['status' => $user->save(true, ['affiliate_code'])]);
+        }
+    }
+
+    public function actionDowngradeAffiliate($id)
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->affiliate_code = null;
+            return $this->asJson(['status' => $user->save(true, ['affiliate_code'])]);
         }
     }
 }
