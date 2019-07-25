@@ -61,7 +61,12 @@ use unclead\multipleinput\MultipleInput;
                       'name'  => 'link',
                       'title' => 'Liên kết',
                       'enableError' => true
-                    ]
+                    ],
+                    [
+                      'name'  => 'content',
+                      'type'  => \common\widgets\TinyMce::className(),
+                      'title' => 'Nội dung',
+                    ],
                   ]
                 ])->label(false);?>
               </div>

@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Event;
 use yii\base\Model;
 use frontend\models\UserRefer;
+use frontend\models\UserWallet;
 
 class SignupEventHandler extends Model
 {
@@ -79,5 +80,27 @@ class SignupEventHandler extends Model
         ->setSubject('Registration Confirmation')
         ->setTextBody("Welcome to Kinggems")
         ->send();
+    }
+
+    public static function signonBonus($event) 
+    {
+        $setting = Yii::$app->settings;
+        if (!$setting->get('WelcomeBonusForm', 'status')) return;
+        if ($setting->get('WelcomeBonusForm', 'content')) {
+
+        }        
+        if ($setting->get('WelcomeBonusForm', 'value')) {
+            $user = $event->sender;
+            $wallet = new UserWallet();
+            $wallet->coin = (int)$setting->get('WelcomeBonusForm', 'value', 0);
+            $wallet->balance = $wallet->coin;
+            $wallet->type = UserWallet::TYPE_INPUT;
+            $wallet->description = "Signon Bonus";
+            $wallet->created_by = $user->id;
+            $wallet->user_id = $user->id;
+            $wallet->status = UserWallet::STATUS_COMPLETED;
+            $wallet->payment_at = date('Y-m-d H:i:s');
+            $wallet->save();
+        }        
     }
 }

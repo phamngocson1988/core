@@ -198,10 +198,14 @@ class SiteController extends Controller
 
         // Register an event
         if ($request->get('refer')) {
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => 'You are referred by your friend'], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => 'You are referred by your friend'], 'og:description');
             $model->refer = $request->get('refer');
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'referCheckingEvent']);
         }
         if ($request->get('affiliate')) {
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => 'You are affiliated by your friend'], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => 'You are affiliated by your friend'], 'og:description');
             $model->affiliate = $request->get('affiliate');
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
@@ -227,12 +231,13 @@ class SiteController extends Controller
         // Register an event
         $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'referApplyingEvent']);
         $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
+        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'signonBonus']);
 
         if ($model->load($request->post()) && $model->verify()) {
             Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
             return $this->redirect(['site/login']);
         } else {
-            Yii::$app->getSession()->setFlash('success', $model->getErrorSummary(true));
+            Yii::$app->getSession()->setFlash('error', $model->getErrorSummary(true));
         }
         return $this->render('verify-phone', ['model' => $model]);
     }

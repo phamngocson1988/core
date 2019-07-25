@@ -15,6 +15,8 @@ use frontend\components\cart\CartPromotion;
 use frontend\models\Order;
 use frontend\models\UserWallet;
 use frontend\models\PromotionApply;
+use frontend\forms\PurchaseGameForm;
+use frontend\events\ShoppingEventHandler;
 
 /**
  * CartController
@@ -171,79 +173,93 @@ class CartController extends Controller
         // Create order
         $user = Yii::$app->user->getIdentity();
         $cart = Yii::$app->cart;
-        if ($cart->hasPromotion()) {
-            $cart->applyPromotion();
+        $form = new PurchaseGameForm([
+            'user' => $user,
+            'cart' => $cart
+        ]);
+        // echo '<pre>';
+        // print_r($form);die;
+        $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
+        $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
+        $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
+        if (!$form->purchase()) {
+            print_r($form->getErrorSummary(true));die;
+        } else {
+            $cart->clear();
         }
-        $totalPrice = $cart->getTotalPrice();
-        $subTotalPrice = $cart->getSubTotalPrice();
-        $promotionCoin = $cart->getPromotionCoin();
-        $promotionUnit = $cart->getPromotionUnit();
+        // if ($cart->hasPromotion()) {
+        //     $cart->applyPromotion();
+        // }
+        // $totalPrice = $cart->getTotalPrice();
+        // $subTotalPrice = $cart->getSubTotalPrice();
+        // $promotionCoin = $cart->getPromotionCoin();
+        // $promotionUnit = $cart->getPromotionUnit();
 
-        $cartItem = $cart->getItem();
-        // Order detail
-        $order = new Order();
-        $order->sub_total_price = $subTotalPrice;
-        $order->total_discount = $promotionCoin;
-        $order->total_price = $totalPrice;
-        $order->customer_id = $user->id;
-        $order->customer_name = $user->name;
-        $order->customer_email = $cartItem->reception_email;
-        $order->customer_phone = $user->phone;
-        $order->status = Order::STATUS_PENDING;
-        $order->payment_at = date('Y-m-d H:i:s');
-        $order->generateAuthKey();
+        // $cartItem = $cart->getItem();
+        // // Order detail
+        // $order = new Order();
+        // $order->sub_total_price = $subTotalPrice;
+        // $order->total_discount = $promotionCoin;
+        // $order->total_price = $totalPrice;
+        // $order->customer_id = $user->id;
+        // $order->customer_name = $user->name;
+        // $order->customer_email = $cartItem->reception_email;
+        // $order->customer_phone = $user->phone;
+        // $order->status = Order::STATUS_PENDING;
+        // $order->payment_at = date('Y-m-d H:i:s');
+        // $order->generateAuthKey();
 
-        // Item detail
-        $order->game_id = $cartItem->id;
-        $order->game_title = $cartItem->getLabel();
-        $order->quantity = $cartItem->quantity;
-        $order->unit_name = $cartItem->unit_name;
-        $order->sub_total_unit = $cartItem->getTotalUnit();
-        $order->promotion_unit = $promotionUnit;
-        $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
-        $order->username = $cartItem->username;
-        $order->password = $cartItem->password;
-        $order->platform = $cartItem->platform;
-        $order->login_method = $cartItem->login_method;
-        $order->character_name = $cartItem->character_name;
-        $order->recover_code = $cartItem->recover_code;
-        $order->server = $cartItem->server;
-        $order->note = $cartItem->note;
+        // // Item detail
+        // $order->game_id = $cartItem->id;
+        // $order->game_title = $cartItem->getLabel();
+        // $order->quantity = $cartItem->quantity;
+        // $order->unit_name = $cartItem->unit_name;
+        // $order->sub_total_unit = $cartItem->getTotalUnit();
+        // $order->promotion_unit = $promotionUnit;
+        // $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
+        // $order->username = $cartItem->username;
+        // $order->password = $cartItem->password;
+        // $order->platform = $cartItem->platform;
+        // $order->login_method = $cartItem->login_method;
+        // $order->character_name = $cartItem->character_name;
+        // $order->recover_code = $cartItem->recover_code;
+        // $order->server = $cartItem->server;
+        // $order->note = $cartItem->note;
 
-        if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
+        // if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        if ($cart->hasPromotion()) {
-            $promotionItem = $cart->getPromotionItem();
-            $apply = new PromotionApply();
-            $apply->promotion_id = $promotionItem->id;
-            $apply->user_id = $user->id;
-            $apply->save();
-        }
+        // if ($cart->hasPromotion()) {
+        //     $promotionItem = $cart->getPromotionItem();
+        //     $apply = new PromotionApply();
+        //     $apply->promotion_id = $promotionItem->id;
+        //     $apply->user_id = $user->id;
+        //     $apply->save();
+        // }
 
-        $wallet = new UserWallet();
-        $wallet->coin = (-1) * $totalPrice;
-        $wallet->balance = $user->getWalletAmount() + $wallet->coin;
-        $wallet->type = UserWallet::TYPE_OUTPUT;
-        $wallet->description = "Pay for order #$order->id";
-        $wallet->ref_name = Order::classname();
-        $wallet->ref_key = $order->id;
-        $wallet->created_by = $user->id;
-        $wallet->user_id = $user->id;
-        $wallet->status = UserWallet::STATUS_COMPLETED;
-        $wallet->payment_at = date('Y-m-d H:i:s');
-        $wallet->save();
+        // $wallet = new UserWallet();
+        // $wallet->coin = (-1) * $totalPrice;
+        // $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+        // $wallet->type = UserWallet::TYPE_OUTPUT;
+        // $wallet->description = "Pay for order #$order->id";
+        // $wallet->ref_name = Order::classname();
+        // $wallet->ref_key = $order->id;
+        // $wallet->created_by = $user->id;
+        // $wallet->user_id = $user->id;
+        // $wallet->status = UserWallet::STATUS_COMPLETED;
+        // $wallet->payment_at = date('Y-m-d H:i:s');
+        // $wallet->save();
 
         // Send mail to customer
-        $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        if ($adminEmail) {
-            $email = Yii::$app->mailer->compose()
-            ->setTo($user->email)
-            ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
-            ->setSubject("Order #$order->id Confirmation")
-            ->setTextBody("Thanks for your order")
-            ->send();
-        }
+        // $settings = Yii::$app->settings;
+        // $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        // if ($adminEmail) {
+        //     $email = Yii::$app->mailer->compose('place_order', ['order' => $order])
+        //     ->setTo($user->email)
+        //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+        //     ->setSubject(sprintf("Order confirmation - %s", $order->id))
+        //     ->setTextBody("Thanks for your order")
+        //     ->send();
+        // }
         // $this->layout = 'notice';
         return $this->render('/site/notice', [           
             'title' => 'Place order successfully',

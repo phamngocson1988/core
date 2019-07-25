@@ -15,6 +15,9 @@ use backend\forms\SkrillSettingForm;
 use backend\forms\ImportSettingForm;
 use backend\forms\OfflinePaymentSettingForm;
 use backend\forms\TopNoticeSettingForm;
+use backend\forms\FlashAnnouncementForm;
+use backend\forms\WelcomeBonusForm;
+use backend\forms\AffiliateProgramForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
 use yii\data\Pagination;
@@ -109,6 +112,24 @@ class SettingController extends Controller
                     $form = $event->form;
                     $form->top_notice = serialize($form->top_notice);
                 },
+            ],
+            'flash_announcement' => [
+                'class' => SettingsAction::class,
+                'modelClass' => FlashAnnouncementForm::class,
+                'view' => 'flash_announcement.php',
+                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+            ],
+            'welcome_bonus' => [
+                'class' => SettingsAction::class,
+                'modelClass' => WelcomeBonusForm::class,
+                'view' => 'welcome_bonus.php',
+                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+            ],
+            'affiliate_program' => [
+                'class' => SettingsAction::class,
+                'modelClass' => AffiliateProgramForm::class,
+                'view' => 'affiliate_program.php',
+                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
             ],
         ];
     }

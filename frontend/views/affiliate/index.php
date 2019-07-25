@@ -18,10 +18,7 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
             <img src="/images/text-affiliate.png" alt="">
           </div>
           <p class="no-upper">Link & Earn</p>
-          <p class="small-txt">
-            Earn <span>10%</span> of Kinggems.us revenue share for a lifetime <br>
-            from purchases made by affiliate members in your team!
-          </p>
+          <p class="small-txt">Earn up to <span>20%</span> of Kinggems Net Profit....</p>
         </div>
       </div>
     </div>

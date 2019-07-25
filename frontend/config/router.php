@@ -14,6 +14,8 @@ return [
         'login' => 'site/login',
         'logout' => 'site/logout',
         'captcha' => 'site/captcha',
+        'signup/refer/<refer:[\w]+>' => 'site/signup',
+        'signup/affiliate/<affiliate:[\w]+>' => 'site/signup',
         'signup' => 'site/signup',
         'activate' => 'site/activate',
         'faq' => 'site/question',

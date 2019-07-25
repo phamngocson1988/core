@@ -29,7 +29,7 @@ $this->title = 'Shop';
               <?=LinkPager::widget(['pagination' => $pages, 'maxButtonCount' => 1, 'hideOnSinglePage' => false]);?>
             </div>
             <div class="shop-search-filter">
-              <select name="sort">
+              <select name="sort" id="fitler">
                 <option value="">FILTER</option>
                 <option value="asc" <?=($sort == 'asc') ? "selected" : "";?> >A - Z</option>
                 <option value="desc" <?=($sort == 'desc') ? "selected" : "";?> >Z - A</option>
@@ -93,3 +93,11 @@ $this->title = 'Shop';
     </div>
   </div>
 </section>
+<?php
+$script = <<< JS
+$('#fitler').on('change', function(){
+  $(this).closest('form').submit();
+});
+JS;
+$this->registerJs($script);
+?>

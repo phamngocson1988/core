@@ -13,8 +13,7 @@ use yii\widgets\Pjax;
           <img src="/images/text-top-up.png" alt="">
         </div>
         <div class="page-title-sub">
-          <p>Simple, Transparent Pricing</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed  do eiusmod tempor incidi</p>
+          <p>Simple, Convenient and Get extra bonus UP TO 5%</p>
         </div>
       </div>
     </div>
