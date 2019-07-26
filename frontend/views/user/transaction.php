@@ -3,6 +3,7 @@ use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use yii\helpers\Html;
 ?>
 <section class="section section-lg bg-default text-center">
         <!-- section wave-->
@@ -45,6 +46,7 @@ use yii\helpers\Url;
               <th>Date</th>
               <th>Amount</th>
               <th>Method</th>
+              <th>Bank Invoice</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -58,6 +60,16 @@ use yii\helpers\Url;
               <td><?=$model->created_at;?></td>
               <td>$<?=number_format($model->total_price);?></td>
               <td><?=$model->payment_method;?></td>
+              <td>
+              <?php $form = ActiveForm::begin([
+                  'action' => ['user/evidence', 'id' => $model->id],
+                  'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
+              ]); ?>
+              <?=Html::fileInput("evidence", null, ['class' => 'file_upload']);?>
+              <?=Html::submitButton('Upload', ['class' => 'cus-btn yellow fl-left apply-coupon-btn']);?>
+              <?php ActiveForm::end(); ?>
+
+              </td>
               <td><?=$model->status;?></td>
             </tr>
             <?php endforeach;?>
@@ -87,6 +99,10 @@ $('.date-picker').bootstrapMaterialDatePicker({
   time: false,
   year: false
 });
+
+// $('form.upload-form').on('submit', function() {
+//   if (!document.getElementById("file_upload").files.length) return false;
+// });
 JS;
 $this->registerJs($script);
 ?>

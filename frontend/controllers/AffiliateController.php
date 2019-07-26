@@ -4,16 +4,20 @@ namespace frontend\controllers;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-
+use frontend\models\UserAffiliate;
+use frontend\models\User;
+use frontend\forms\TakeCommission;
 
 /**
  * AffiliateController
  */
 class AffiliateController extends Controller
 {
-	public function behaviors()
+    public function behaviors()
     {
         return [
             'access' => [
@@ -22,8 +26,12 @@ class AffiliateController extends Controller
                     [
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->affiliate_code;
+                        }
                     ],
                 ],
+                
             ],
         ];
     }
@@ -34,38 +42,38 @@ class AffiliateController extends Controller
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $user = Yii::$app->user->getIdentity();
         $request = Yii::$app->request;
-        if ($request->isPost) {
-            $affiliates = $request->post('affiliates', []);
-            $setting = Yii::$app->settings;
-            $mailer = Yii::$app->mailer;
-            $admin =  $setting->get('ApplicationSettingForm', 'admin_email', null);
-
-            $affiliates = array_filter($affiliates, function($affiliate) {
-                $name = ArrayHelper::getValue($affiliate, 'name');
-                if (!$name) return false;
-                $email = ArrayHelper::getValue($affiliate, 'email');
-                if (!$email) return false;
-                $validator = new \yii\validators\EmailValidator();
-                return $validator->validate($email);
-            });
-            foreach ($affiliates as $affiliate) {
-                $name = ArrayHelper::getValue($affiliate, 'name');
-                $email = ArrayHelper::getValue($affiliate, 'email');
-                $count = UserRefer::find()->where(['user_id' => $user->id, 'email' => $email])->count();
-                if (!$count) {
-                    // Sent mail
-                    $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
-                    $mailer->compose('affiliate_mail', ['user' => $user, 'link' => $link])
-                    ->setTo($email)
-                    ->setFrom([$admin => Yii::$app->name])
-                    ->setSubject(sprintf("[%s][Affiliate Email] You have received affiliate link from %s ", Yii::$app->name, $user->name))
-                    ->setTextBody(sprintf("%s have just sent you a link: %s", $user->name, $link))
-                    ->send();
-                }
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 30);
+        $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
+        $command = UserAffiliate::find()->where(['user_id' => $user->id]);
+        if ($request->get('status')) {
+            switch ($request->get('status')) {
+                case 'completed':
+                    $command->andWhere(['status' => UserAffiliate::STATUS_COMPLETED]);
+                    break;
+                case 'pending':
+                $command->andWhere(['status' => UserAffiliate::STATUS_PENDING]);
+                $command->andWhere(['<', 'date(created_at)' => $readyDate]);
+                    break;
+                case 'ready':
+                    $command->andWhere(['status' => UserAffiliate::STATUS_PENDING]);
+                    $command->andWhere(['>=', 'date(created_at)' => $readyDate]);
+                break;
             }
+            
         }
+        if ($request->get('created_at')) {
+            $command->andWhere(['date(created_at)' => $request->get('created_at')]);
+        }
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        $member = User::find()->where(['affiliated_with' => $user->id])->count();
         return $this->render('index', [
-            'user' => $user
+            'member' => $member,
+            'models' => $models,
+            'pages' => $pages
         ]);
     }
 
@@ -75,4 +83,11 @@ class AffiliateController extends Controller
         if ($user->affiliate_code) return $this->redirect(['affiliate/index']);
 
     }
+
+    public function actionTake($id)
+    {
+        $commission = TakeCommission::findOne($id);
+        return $this->asJson(['status' => $commission->takeCommission(), 'errors' => $commission->getErrorSummary(true)]);
+    }
+
 }

@@ -60,10 +60,10 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%user_affiliate}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
-            'commission' => $this->integer()->notNull(),
+            'commission' => $this->float()->notNull()->defaultValue(0),
             'order_id' => $this->integer()->notNull(),
             'created_at' => $this->dateTime(),
-            'status' => $this->integer()->notNull()->defaultValue(0),
+            'status' => $this->integer()->notNull()->defaultValue(1), // set 1: pending, 2: completed
         ], $tableOptions);
 
 

@@ -1,11 +1,10 @@
 <?php
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-if (!$user->affiliate_code) {
-  $user->affiliate_code = Yii::$app->security->generateRandomString(6);
-  $user->save();
-}
+
+$user = Yii::$app->user->identity;
 $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
 ?>
 
@@ -36,11 +35,10 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
             </div>
             <div class="affiliate-create-reflink">
               <button type="button" class="cus-btn yellow has-shadow f20">CREATE YOUR FIRST REFLINK</button>
-              <!-- <a href="#" class="cus-btn yellow has-shadow">CREATE YOUR FIRST REFLINK</a> -->
             </div>
             <div class="has-left-border has-shadow">
-              Your Members: 0
-              <a href="#" style="color: #ff3600;">Tell me how to earn more</a>
+              Your Members: <?=number_format($member);?>
+              <a href="<?=Url::to(['site/affiliate']);?>" style="color: #ff3600;">Tell me how to earn more</a>
             </div>
           </div>
           <div class="affiliate-bottom">
@@ -52,19 +50,20 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
               <div class="aff-tabs-content-block">
                 <div class="aff-tabs-content has-shadow active" id="reward-feed">
                   <div class="profit-filter">
+                    <?php $form = ActiveForm::begin(['method' => 'get']);?>
                     <span>Filter by</span>
-                    <select name="" id="">
-                      <option value="">Today</option>
-                      <option value="">Last Day</option>
+                    <select name="created_at" id="">
+                      <option value="<?=date('Y-m-d');?>">Today</option>
+                      <option value="<?=date('Y-m-d', strtotime("yesterday"));?>">Last Day</option>
                     </select>
-                    <select name="" id="">
-                      <option value="">All currencies</option>
-                      <option value="">Vietnam Dong</option>
+                    <select name="status">
+                      <option value="">All</option>
+                      <option value="pending">Pending</option>
+                      <option value="ready">Ready</option>
+                      <option value="completed">Completed</option>
                     </select>
-                    <select name="" id="">
-                      <option value="">All Status</option>
-                      <option value="">All Status</option>
-                    </select>
+                    <?php ActiveForm::end()?>
+
                   </div>
                   <div class="profit-amount">
                     <h3>Profit Today ~ 0</h3>
@@ -80,21 +79,39 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
                         <tr>
                           <th>Date <span class="tool-tip">?</span></th>
                           <th>Amount <span class="tool-tip">?</span></th>
+                          <th>Description <span class="tool-tip">?</span></th>
                           <th>Status <span class="tool-tip">?</span></th>
-                          <th>Reward Eta <span class="tool-tip">?</span></th>
                         </tr>
                       </thead>
                       <tbody>
+                        <?php if (!$models) : ?>
+                        <tr><td colspan="4">No data found</td></tr>
+                        <?php else: ?>
+                        <?php foreach ($models as $model) : ?>
                         <tr>
-                          <td>a</td>
-                          <td>b</td>
-                          <td>c</td>
-                          <td>d</td>
+                          <td>
+                          <?=$model->created_at;?>
+                          </td>
+                          <td><?=number_format($model->commission, 1);?></td>
+                          <td></td>
+                          <td>
+                          <?php if ($model->isCompleted()) : ?>
+                          <span class="label label-default"><?=sprintf("Completed at %s", $model->updated_at);?><span>
+                          <?php elseif ($model->isPending()) : ?>
+                          <span class="label label-default"><?=sprintf("Pending up to %s", $model->getReadyDate());?><span>
+                          <?php elseif ($model->isReady()) : ?>
+                          <a href="<?=Url::to(['affiliate/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Ready</a>
+                          <?php endif; ?>
+                          </td>
                         </tr>
+                        <?php endforeach; ?>
+                        <?php endif;?>
                       </tbody>
                     </table>
+                    <?=LinkPager::widget(['pagination' => $pages])?>
                   </div>
                 </div>
+
                 <div class="aff-tabs-content" id="reflink">
                   <p style="padding: 40px;"><?=$link;?></p>
                 </div>
@@ -115,6 +132,15 @@ $('.aff-tabs .aff-tabs-nav span').click(function(){
 
   $('.aff-tabs .aff-tabs-nav span').removeClass('active');
   $(this).addClass('active');
+});
+
+$(".link-action").ajax_action({
+  confirm: true,
+  confirm_text: 'Do you really want to transfer this commission to your wallet?',
+  callback: function(eletement, data) {
+    // location.reload();
+    console.log(data);
+  }
 });
 JS;
 $this->registerJs($script);

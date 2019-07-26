@@ -55,8 +55,8 @@ class ShoppingEventHandler extends Model
         $commission = ($type == 'percent') ? ($totalPrice * $value) / 100 : $value;
         // save to affiliate table
         $userAff = new UserAffiliate();
-        $userAff->user_id = $user->id;
-        $userAff->commission = $commission;
+        $userAff->user_id = $user->affiliated_with;
+        $userAff->commission = round($commission, 1);
         $userAff->order_id = $order->id;
         $userAff->save();
     }

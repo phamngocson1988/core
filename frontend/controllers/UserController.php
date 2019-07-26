@@ -36,7 +36,7 @@ class UserController extends Controller
                 'only' => ['index', 'profile', 'password'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'profile', 'password', 'orders', 'order-detail'],
+                        'actions' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -270,5 +270,18 @@ class UserController extends Controller
             'filterForm' => $form,
             'coin' => $user->getWalletAmount(),
         ]);
+    }
+
+    public function actionEvidence($id)
+    {
+    	$request = Yii::$app->request;
+        if ($request->isPost) {
+            $transaction = PaymentTransaction::findOne($id);
+            $files = Yii::$app->file->upload('evidence', "evidence/$id");
+            $inputFile = reset($files);
+            $transaction->evidence = $inputFile;
+            $transaction->save();
+            return $this->redirect($request->getReferrer());
+        }
     }
 }

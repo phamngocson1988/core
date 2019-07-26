@@ -22,8 +22,8 @@ class m190313_163324_create_wallet extends Migration
             'id' => $this->primaryKey(),
             'type' => $this->string(1)->notNull(),
             'user_id' => $this->integer(11)->notNull(),
-            'coin' => $this->integer(11)->notNull()->defaultValue(0),
-            'balance' => $this->integer(11)->notNull()->defaultValue(0),
+            'coin' => $this->float()->notNull()->defaultValue(0),
+            'balance' => $this->float()->notNull()->defaultValue(0),
             'ref_name' => $this->string(100), 
             'ref_key' => $this->string(100), 
             'description' => $this->string(100), 
@@ -53,6 +53,7 @@ class m190313_163324_create_wallet extends Migration
             'promotion_coin' => $this->integer(11)->notNull()->defaultValue(0),
             'total_coin' => $this->integer(11)->notNull()->defaultValue(0),
             'promotion_code' => $this->string(50),
+            'evidence' => $this->string(255),
             'status' => $this->string(10)->notNull()->defaultValue('pending'),
         ]);
 
