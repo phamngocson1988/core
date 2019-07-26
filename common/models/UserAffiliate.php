@@ -11,7 +11,7 @@ class UserAffiliate extends ActiveRecord
     const STATUS_PENDING = 1;
     const STATUS_COMPLETED = 2;
 
-    public $default_duration = 30; //days
+    public static $default_duration = 30; //days
 
 	public static function tableName()
     {
@@ -51,7 +51,7 @@ class UserAffiliate extends ActiveRecord
 
     public function isPending()
     {
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', $this->default_duration);
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', self::$default_duration);
         $today = new \DateTime();
         $createdDate = new \DateTime($this->created_at);
         return $today->diff($createdDate)->days < $duration && !$this->isCompleted();
@@ -59,7 +59,7 @@ class UserAffiliate extends ActiveRecord
 
     public function isReady()
     {
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', $this->default_duration);
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', self::$default_duration);
         $today = new \DateTime();
         $createdDate = new \DateTime($this->created_at);
         return $today->diff($createdDate)->days >= $duration && !$this->isCompleted();
@@ -67,7 +67,7 @@ class UserAffiliate extends ActiveRecord
 
     public function getReadyDate($format = 'Y-m-d')
     {
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', $this->default_duration);
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', self::$default_duration);
         $createdDate = new \DateTime($this->created_at);
         return $createdDate->add(new \DateInterval(sprintf("P%sD", $duration)))->format($format);
     }

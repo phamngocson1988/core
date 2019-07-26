@@ -156,7 +156,6 @@
             </div>
           {/ActiveForm}
         </div>
-        {Pjax}
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
@@ -207,9 +206,9 @@
                 {/if}
                 {/if} *}
                 {if ($model->affiliate_code)}
-                <a href="{url route='user/downgrade-affiliate' id=$model->id}" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
+                <a href="{url route='affiliate/downgrade' id=$model->id}" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
                 {else}
-                <a href="{url route='user/upgrade-affiliate' id=$model->id}" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Kích hoạt tính năng affiliate"><i class="fa fa-arrow-up"></i> Affiliate </a>
+                <a href="{url route='affiliate/upgrade' id=$model->id}" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Kích hoạt tính năng affiliate"><i class="fa fa-arrow-up"></i> Affiliate </a>
                 {/if}
               </td>
             </tr>
@@ -222,7 +221,6 @@
           </tbody>
         </table>
         {LinkPager::widget(['pagination' => $pages])}
-        {/Pjax}
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

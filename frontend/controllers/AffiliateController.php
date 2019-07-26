@@ -24,16 +24,53 @@ class AffiliateController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['not-be-affiliate', 'send-request', 'cancel-request'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->affiliate_code;
-                        }
+                        },
+
                     ],
+
                 ],
+                'denyCallback' => function ($rule, $action) {
+                    $user = Yii::$app->user;
+                    if ($user->getIsGuest()) $user->loginRequired();
+                    else return $this->redirect(['affiliate/not-be-affiliate']);
+                }
                 
             ],
         ];
+    }
+
+    public function actionNotBeAffiliate()
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        return $this->render('not_be_affiliate');
+    }
+
+    public function actionSendRequest()
+    {
+        $user = Yii::$app->user->identity;
+        $user->affiliate_request = 1;
+        $user->affiliate_request_time = date('Y-m-d H:i:s');
+        $user->save(true, ['affiliate_request', 'affiliate_request_time']);
+        return $this->asJson(['status' => true]);
+    }
+
+    public function actionCancelRequest()
+    {
+        $user = Yii::$app->user->identity;
+        $user->affiliate_request = 0;
+        $user->affiliate_request_time = null;
+        $user->save(true, ['affiliate_request', 'affiliate_request_time']);
+        return $this->asJson(['status' => true]);
     }
 
     public function actionIndex()
@@ -75,13 +112,6 @@ class AffiliateController extends Controller
             'models' => $models,
             'pages' => $pages
         ]);
-    }
-
-    public function actionRequest()
-    {
-        $user = Yii::$app->user->getIdentity();
-        if ($user->affiliate_code) return $this->redirect(['affiliate/index']);
-
     }
 
     public function actionTake($id)

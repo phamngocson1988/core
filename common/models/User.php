@@ -305,4 +305,36 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->is_reseller == self::IS_RESELLER;
     }
+
+    public function getAffiliateChildren()
+    {
+        return $this->hasMany(self::className(), ['affiliated_with' => 'id']);
+    }
+
+    public function getCommission()
+    {
+        return $this->hasMany(UserAffiliate::className(), ['user_id' => 'id']);
+    }
+
+    public function getReadyCommission()
+    {
+        $table = UserAffiliate::tableName();
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserAffiliate::$default_duration);
+        $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
+        $command = $this->getCommission();
+        $command->andWhere(['>=', 'date(' . $table . '.created_at)', $readyDate]);
+        $command->andWhere(['date(' . $table . '.status)' => UserAffiliate::STATUS_PENDING]);
+        return $command;
+    }
+
+    public function getPendingCommission()
+    {
+        $table = UserAffiliate::tableName();
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserAffiliate::$default_duration);
+        $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
+        $command = $this->getCommission();
+        $command->andWhere(['<', 'date(' . $table . '.created_at)', $readyDate]);
+        $command->andWhere(['date(' . $table . '.status)' => UserAffiliate::STATUS_PENDING]);
+        return $command;
+    }
 }

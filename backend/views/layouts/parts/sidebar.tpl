@@ -45,6 +45,12 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{url route='/affiliate/request'}" class="nav-link " code='user.affiliate'>
+              <span class="title">Bán hàng liên kết</span>
+              <span class="badge badge-success">{$this->params['new_affiliate_request']}</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
             <span class="title">{Yii::t('app', 'role')}</span>
             </a>
