@@ -106,9 +106,28 @@ class AffiliateController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['id' => SORT_DESC])
                             ->all();
-        $member = User::find()->where(['affiliated_with' => $user->id])->count();
+        $member = $user->getAffiliateChildren()->count();
         return $this->render('index', [
             'member' => $member,
+            'models' => $models,
+            'pages' => $pages
+        ]);
+    }
+
+    public function actionMember()
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        $user = Yii::$app->user->getIdentity();
+        $request = Yii::$app->request;
+        $command = $user->getAffiliateChildren();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();
+        return $this->render('member', [
+            'member' => $command->count(),
             'models' => $models,
             'pages' => $pages
         ]);

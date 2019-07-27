@@ -65,3 +65,76 @@ button:hover {
 .top-header .right-box .main-nav ul li a.active {
 	font-weight: bold;
 }
+
+/* Affiliate page */
+#reflink .profit-filter {
+    padding: 20px;
+}
+
+#reflink .profit-filter select {
+    font-weight: bold;
+    min-width: 200px;
+    height: 34px;
+    margin-right: 20px;
+    padding: 0 20px;
+}
+
+#reflink .profit-filter span {
+    margin-right: 20px;
+}
+
+#reflink .profit-amount {
+    padding: 0 20px;
+    font-size: 14px;
+}
+
+#reflink .profit-amount h3 {
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#reflink .profit-notes {
+    padding: 20px;
+}
+
+#reflink .profit-listing {}
+
+#reflink .profit-listing table thead th {
+    background: #707070;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-right: 1px solid #bcbcbc;
+    text-align: center;
+    padding: 9px 0;
+}
+
+#reflink .profit-listing table {
+    width: 100%;
+    margin-bottom: 50px;
+    float: left;
+}
+
+#reflink .profit-listing table thead th:last-child {
+    border-right: none;
+}
+
+#reflink .profit-listing table thead th .tool-tip {
+    background: #fff;
+    border-radius: 30px;
+    color: #000;
+    font-size: 12px;
+    width: 20px;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+#reflink .profit-listing table tbody td {
+    text-align: center;
+    font-size: 18px;
+    padding: 8px 0;
+}
+/* End Affiliate Page */

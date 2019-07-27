@@ -45,27 +45,13 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
           <div class="affiliate-bottom">
             <div class="aff-tabs">
               <div class="aff-tabs-nav">
-                <span class="active" tab-content="#reward-feed" ><a href="<?=Url::to(['affiliate/index']);?>">Reward Feed</a></span>
-                <span tab-content="#reflink"><a href="<?=Url::to(['affiliate/member']);?>">Members </a></span>
+                <span tab-content="#reward-feed" ><a href="<?=Url::to(['affiliate/index']);?>">Reward Feed</a></span>
+                <span class="active" tab-content="#reflink"><a href="<?=Url::to(['affiliate/member']);?>">Members </a></span>
               </div>
               <div class="aff-tabs-content-block">
-                <div class="aff-tabs-content has-shadow active" id="reward-feed">
-                  <div class="profit-filter">
-                    <?php $form = ActiveForm::begin(['method' => 'get']);?>
-                    <span>Filter by</span>
-                    <select name="created_at" id="">
-                      <option value="<?=date('Y-m-d');?>">Today</option>
-                      <option value="<?=date('Y-m-d', strtotime("yesterday"));?>">Last Day</option>
-                    </select>
-                    <select name="status">
-                      <option value="">All</option>
-                      <option value="pending">Pending</option>
-                      <option value="ready">Ready</option>
-                      <option value="completed">Completed</option>
-                    </select>
-                    <?php ActiveForm::end()?>
-
-                  </div>
+                <div class="aff-tabs-content has-shadow" id="reward-feed">
+                </div>
+                <div class="aff-tabs-content active" id="reflink">
                   <div class="profit-amount">
                     <h3>Profit Today ~ 0</h3>
                     <span>(2019/06/15 - 2019/06/15)</span>
@@ -78,32 +64,24 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
                     <table>
                       <thead>
                         <tr>
-                          <th>Date <span class="tool-tip">?</span></th>
-                          <th>Amount <span class="tool-tip">?</span></th>
-                          <th>Description <span class="tool-tip">?</span></th>
-                          <th>Status <span class="tool-tip">?</span></th>
+                          <th>No</th>
+                          <th>Email</th>
+                          <th>Name</th>
+                          <th>Register Date</th>
+                          <th>Number of orders</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php if (!$models) : ?>
-                        <tr><td colspan="4">No data found</td></tr>
+                        <tr><td colspan="5">No data found</td></tr>
                         <?php else: ?>
-                        <?php foreach ($models as $model) : ?>
+                        <?php foreach ($models as $no => $model) : ?>
                         <tr>
-                          <td>
-                          <?=$model->created_at;?>
-                          </td>
-                          <td><?=number_format($model->commission, 1);?></td>
-                          <td></td>
-                          <td>
-                          <?php if ($model->isCompleted()) : ?>
-                          <span class="label label-default"><?=sprintf("Completed at %s", $model->updated_at);?><span>
-                          <?php elseif ($model->isPending()) : ?>
-                          <span class="label label-default"><?=sprintf("Pending up to %s", $model->getReadyDate());?><span>
-                          <?php elseif ($model->isReady()) : ?>
-                          <a href="<?=Url::to(['affiliate/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Ready</a>
-                          <?php endif; ?>
-                          </td>
+                          <td><?=$no + $pages->offset + 1;?></td>
+                          <td><?=$model->email;?></td>
+                          <td><?=$model->name;?></td>
+                          <td><?=$model->created_at;?></td>
+                          <td><?=number_format($model->getOrders()->count());?></td>
                         </tr>
                         <?php endforeach; ?>
                         <?php endif;?>
@@ -111,8 +89,6 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
                     </table>
                     <?=LinkPager::widget(['pagination' => $pages])?>
                   </div>
-                </div>
-                <div class="aff-tabs-content" id="reflink">
                 </div>
               </div>
             </div>
