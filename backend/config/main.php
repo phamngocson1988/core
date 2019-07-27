@@ -99,7 +99,10 @@ return [
                 ],
             ],
         ],
-        
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@backend/mail',
+        ],
         'syslog' => [
             'class' => 'backend\components\logs\SystemLog',
         ],

@@ -470,6 +470,17 @@ class OrderController extends Controller
                 'id' => $id
             ]);
             if ($form->save()) {
+                // Send mail notification
+                $admin = Yii::$app->params['email_admin'];
+                $siteName = Yii::$app->name;
+                $email = Yii::$app->mailer->compose('cancel_order', [
+                    'order' => $form->getOrder()
+                ])
+                ->setTo($user->email)
+                ->setFrom([$admin => $siteName])
+                ->setSubject("KINGGEMS.US - Confirmed order cancelation $order->id")
+                ->setTextBody("Confirmed order cancelation")
+                ->send();
                 return $this->renderJson(true, ['view_url' => Url::to(['order/view', 'id' => $id])]);
             } else {
                 return $this->renderJson(false, [], $form->getErrorSummary(true));
