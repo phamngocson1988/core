@@ -24,6 +24,7 @@ body {
     background: #ccc;
     color: #000;
 }
+
 body.global-bg {
     background: url(../images/game-list-bg.jpg) no-repeat;
     background-size: 100% auto;
@@ -41,7 +42,9 @@ ol li {
     list-style: none;
 }
 
-input:focus, select, button:focus {
+input:focus,
+select,
+button:focus {
     outline: none;
 }
 
@@ -738,6 +741,7 @@ section.product-detail {
     display: inline-block;
     border-left: 3px solid #ff3600;
 }
+
 .btn-product-detail-add-to-cart:hover {
     color: #000;
 }
@@ -748,8 +752,9 @@ section.product-description {
     color: #000;
     font-size: 15px;
     line-height: 25px;
-        padding: 50px 0;
-} 
+    padding: 50px 0;
+}
+
 section.product-description h3 {
     font-size: 17px;
     font-weight: bold;
@@ -765,6 +770,7 @@ div.chat-now {
     right: -56px;
     transform: rotate(-90deg);
 }
+
 .chat-now .btn-chat-now,
 .chat-now a {
     font-weight: bold;
@@ -782,31 +788,40 @@ div.chat-now {
 .page-title-content {
     margin-top: 62px;
 }
+
 .page-title-content.pad-bot {
     padding-bottom: 60px;
 }
+
 .page-title-content img {
     max-width: 100%;
 }
-.page-title-content > p {
+
+.page-title-content>p {
     color: #fff;
     font-weight: bold;
     font-size: 20px;
 }
-.page-title-content > p.small-txt {
+
+.page-title-content>p.small-txt {
     font-size: 15px;
     font-weight: normal;
 }
-.page-title-content > p > span {
+
+.page-title-content>p>span {
     color: #ffdd00;
 }
-.promotion-page, .shop-page {
+
+.promotion-page,
+.shop-page {
     padding-top: 50px;
     background: #000;
 }
+
 .promotion-page .product-listing .product-item {
     margin-bottom: 30px;
 }
+
 .promotion-page .product-listing .product-image {
     position: relative;
     display: block;
@@ -838,25 +853,32 @@ div.chat-now {
     -webkit-transition: all 0.4s;
     -moz-transition: all 0.4s;
 }
+
 .promotion-page .product-listing .product-image:hover .overlay {
     opacity: 1;
 }
+
 .promotion-page .product-listing .product-image .overlay span {
     margin: 20% 0;
 }
+
 .promotion-page .product-listing .product-name {
     color: #fff;
     font-size: 16px;
     margin-top: 10px;
     display: block;
 }
+
 .product-list-action {
     margin-bottom: 40px;
 }
+
 section.promotion-search {
     text-align: center;
 }
-section.promotion-search form, .shop-search .shop-search-keyword {
+
+section.promotion-search form,
+.shop-search .shop-search-keyword {
     width: 47%;
     margin: 0 auto;
     border: 1px solid #ffdd00;
@@ -867,7 +889,8 @@ section.promotion-search form, .shop-search .shop-search-keyword {
     display: inline-block;
 }
 
-section.promotion-search form input[type="text"], .shop-search form input[type="text"] {
+section.promotion-search form input[type="text"],
+.shop-search form input[type="text"] {
     height: 45px;
     background: none;
     border: 0;
@@ -878,7 +901,8 @@ section.promotion-search form input[type="text"], .shop-search form input[type="
     width: 86%;
 }
 
-section.promotion-search form input[type="text"]::placeholder, .shop-search form input[type="text"]::placeholder {
+section.promotion-search form input[type="text"]::placeholder,
+.shop-search form input[type="text"]::placeholder {
     color: #fff;
 }
 
@@ -886,6 +910,7 @@ section.promotion-search,
 section.shop-search {
     padding: 0 0 80px;
 }
+
 section.promotion-search form input[type="submit"],
 .shop-search form input[type="submit"] {
     background: url(../images/ico-search-large.png) no-repeat;
@@ -896,17 +921,21 @@ section.promotion-search form input[type="submit"],
     border: none;
     margin: 10px 20px 10px 0;
 }
+
 .promotion-page .product-category ul li {
     margin-bottom: 20px;
 }
+
 .promotion-page .product-category ul li a {
     min-width: 226px;
     padding: 0;
     text-align: center;
 }
+
 .promotion-page .product-category ul li a.active {
     background: #ffdd00;
 }
+
 /* End Promotion */
 
 /* Shop Page */
@@ -914,7 +943,9 @@ section.promotion-search form input[type="submit"],
     display: flex;
     justify-content: space-between;
 }
-.shop-search-paging a, .shop-search-paging span {
+
+.shop-search-paging a,
+.shop-search-paging span {
     float: left;
     width: 57px;
     height: 45px;
@@ -940,19 +971,23 @@ section.promotion-search form input[type="submit"],
     font-size: 18px;
     line-height: 45px;
 }
+
 .shop-search form {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
+
 .shop-search .shop-search-keyword {
     margin: 2px 0 0;
     width: 60%;
 }
+
 .shop-search-paging,
 .shop-search-filter {
     padding: 3px 0;
 }
+
 .shop-search-filter select {
     background: url(../images/ico-caret-bottom.png) no-repeat right 13px center #ffdd00;
     border: 0;
@@ -967,6 +1002,7 @@ section.promotion-search form input[type="submit"],
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
 /* End Shop Page */
 
 /* Top Up Page */
@@ -974,6 +1010,7 @@ section.promotion-search form input[type="submit"],
     padding: 45px 0;
     background: #ccc;
 }
+
 .page-title-sub {
     font-size: 17px;
     font-weight: bold;
@@ -982,6 +1019,7 @@ section.promotion-search form input[type="submit"],
     line-height: 25px;
     margin-bottom: 65px;
 }
+
 .topup-pack {
     background: #fff;
     border-top: 5px solid #ff3600;
@@ -997,6 +1035,7 @@ section.promotion-search form input[type="submit"],
     line-height: 55px;
     margin-bottom: 29px;
 }
+
 .topup-pack .pack-info .pack-info-line {
     height: 50px;
     font-size: 30px;
@@ -1007,7 +1046,8 @@ section.promotion-search form input[type="submit"],
     width: 100%;
 }
 
-.topup-pack .pack-info .pack-info-line .price, .topup-pack .pack-info .pack-info-line .king-coin-price {
+.topup-pack .pack-info .pack-info-line .price,
+.topup-pack .pack-info .pack-info-line .king-coin-price {
     border: 1px solid #000;
     line-height: 50px;
     display: inline-block;
@@ -1023,6 +1063,7 @@ section.promotion-search form input[type="submit"],
     width: 25%;
     float: left;
 }
+
 .topup-pack .pack-info .pack-info-line .ico-king-coin {
     float: left;
     width: 39px;
@@ -1031,10 +1072,12 @@ section.promotion-search form input[type="submit"],
     background-size: 100% 100%;
     margin: 10px 20px 0 0;
 }
+
 .topup-pack .pack-info .pack-info-line .pack-king-price {
     display: flex;
     justify-content: center;
 }
+
 .topup-pack .pack-info .pack-info-line .kc-text {
     float: left;
     font-size: 18px;
@@ -1068,7 +1111,8 @@ section.promotion-search form input[type="submit"],
 /* End Top Up Page */
 
 /* Global Control */
-a.cus-btn, .cus-btn {
+a.cus-btn,
+.cus-btn {
     line-height: 45px;
     padding: 0 30px;
     font-size: 17px;
@@ -1079,18 +1123,23 @@ a.cus-btn, .cus-btn {
     display: inline-block;
     font-weight: bold;
 }
-a.cus-btn.yellow, .cus-btn.yellow {
+
+a.cus-btn.yellow,
+.cus-btn.yellow {
     background: #ffdd00;
 }
 
-a.cus-btn.gray-btn, .cus-btn.gray-btn {
+a.cus-btn.gray-btn,
+.cus-btn.gray-btn {
     background: #ccc;
 }
+
 button.cus-btn {
     border-right: 0;
     border-bottom: 0;
     border-top: 0;
 }
+
 /* End Global Control */
 
 /* Refer */
@@ -1102,6 +1151,7 @@ button.cus-btn {
     padding-top: 70px;
     padding-bottom: 30px;
 }
+
 .refer-page-title p {
     font-size: 20px;
     text-transform: uppercase;
@@ -1121,7 +1171,8 @@ button.cus-btn {
     font-size: 18px;
 }
 
-.refer-page-title .refer-link-copy input, .refer-page-title .refer-link-copy button {
+.refer-page-title .refer-link-copy input,
+.refer-page-title .refer-link-copy button {
     float: left;
     height: 50px;
     border: 0;
@@ -1136,15 +1187,19 @@ button.cus-btn {
     letter-spacing: -1px;
     width: 30%;
 }
+
 .refer-page-title .refer-socials .mail {
     background: url(../images/ico-mail.png) no-repeat;
 }
+
 .refer-page-title .refer-socials .fb {
     background: url(../images/ico-refer-fb.png) no-repeat;
 }
+
 .refer-page-title .refer-socials .tw {
     background: url(../images/ico-twitter.png) no-repeat;
 }
+
 .refer-page-title .refer-socials .refer-social-item {
     width: 90px;
     height: 90px;
@@ -1159,16 +1214,18 @@ button.cus-btn {
     margin: 0 auto;
     margin-bottom: 30px;
 }
-.refer-qa-list .qa-item .qa-question, .qa-section-title {
+
+.refer-qa-list .qa-item .qa-question,
+.qa-section-title {
     line-height: 50px;
     font-size: 16px;
     font-weight: bold;
     background: #fff;
     padding-left: 24px;
     border-left: 5px solid #ff3600;
-    box-shadow: 0px 5px 16px 0px rgba(0,0,0,0.3);
-    -webkit-box-shadow: 0px 5px 16px 0px rgba(0,0,0,0.3);
-    -moz-box-shadow: 0px 5px 16px 0px rgba(0,0,0,0.3);
+    box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
     cursor: pointer;
 }
@@ -1203,44 +1260,55 @@ button.cus-btn {
 .refer-qa-list .qa-item .qa-answer ul {
     margin: 30px 0 30px 40px;
 }
-#refer-by-mails-popup, .btn-add-more-refer-mail {
+
+#refer-by-mails-popup,
+.btn-add-more-refer-mail {
     background: #ccc;
     font-size: 16px;
 }
+
 #refer-by-mails-popup table {
     width: 100%;
 }
+
 #refer-by-mails-popup table thead td {
     font-size: 20px;
     font-weight: bold;
 }
+
 #refer-by-mails-popup table input {
     border: 1px solid #000;
     height: 30px;
     padding: 0 15px;
     width: 100%;
 }
+
 #refer-by-mails-popup table td {
     padding: 5px;
 }
+
 #refer-by-mails-popup table tbody tr td:first-child {
     font-weight: bold;
     padding: 5px 20px 5px 0;
 }
+
 #refer-by-mails-popup table tfoot td:last-child {
     text-align: right;
 }
+
 #refer-by-mails-popup table tfoot .btn-add-more-refer-mail {
     font-style: italic;
     text-decoration: underline;
     color: #000;
 }
+
 #refer-by-mails-popup .fancybox-close-small {
     background: #000;
     color: #fff;
     opacity: 1;
     padding: 1px;
 }
+
 /* End Refer */
 
 /* Q&A */
@@ -1248,9 +1316,11 @@ button.cus-btn {
     padding: 45px 0 0;
     background: #ccc;
 }
+
 .qa-section .qa-section-list {
     display: none;
 }
+
 .qa-section-list .qa-item {
     margin-bottom: 50px;
 }
@@ -1265,15 +1335,18 @@ button.cus-btn {
     margin-right: 20px;
     width: 20%;
 }
+
 .qa-section-list .qa-item .qa-img img {
     width: 100%;
 }
+
 /* End Q&A */
 
 /* Register Page */
 section.register-page {
     background: #ccc;
 }
+
 .register-block {
     background: #dbdbdb;
     padding: 44px 25px;
@@ -1288,11 +1361,11 @@ section.register-page {
     margin: 0;
 }
 
-.register-block label .required {
+.register-block label .required, span.required {
     color: #ff3600;
 }
 
-.register-block .form-group .form-control {
+.register-block .form-group .form-control, .game-info .form-group .form-control {
     width: 63%;
     float: left;
     border-radius: 0;
@@ -1300,7 +1373,7 @@ section.register-page {
     height: 33px;
 }
 
-.register-block .form-group .form-control.has-error {
+.register-block .form-group .form-control.has-error, .game-info .form-group .form-control.has-error {
     border-color: red;
 }
 
@@ -1323,7 +1396,7 @@ section.register-page {
     margin-bottom: 20px;
 }
 
-.register-block .form-group {
+.register-block .form-group, .form-group {
     margin-bottom: 12px;
     display: inline-block;
     width: 100%;
@@ -1365,7 +1438,8 @@ section.register-page {
     height: 33px;
 }
 
-.register-block .terms, .register-block .terms .terms-row {
+.register-block .terms,
+.register-block .terms .terms-row {
     display: inline-block;
     width: 100%;
 }
@@ -1383,6 +1457,7 @@ section.register-page {
     text-align: center;
     margin-top: 20px;
 }
+
 .has-left-border {
     border-left: 3px solid #ff3600;
     background: #fff;
@@ -1390,57 +1465,70 @@ section.register-page {
     width: 100%;
     padding: 10px 0 10px 18px;
 }
+
 .has-left-border img {
     float: left;
     margin-right: 25px;
 }
+
 .reg-deposit {
     margin-top: 50px;
 }
+
 .reg-deposit .large-txt {
     font-size: 20px;
     font-weight: bold;
     text-transform: uppercase;
 }
+
 .has-left-border.gray {
     background: #e6e6e6;
 }
+
 .reg-useful-tools {
     margin-top: 70px;
 }
+
 .reg-useful-tools .has-left-border {
     margin-bottom: 20px;
     padding-left: 44px;
 }
+
 .reg-useful-tools h3 {
     font-size: 20px;
     font-weight: bold;
     text-transform: uppercase;
     margin-bottom: 20px;
 }
+
 .reg-useful-tools .has-left-border .large-txt {
     font-size: 15px;
     font-weight: bold;
     text-transform: uppercase;
 }
+
 .reg-useful-tools .has-left-border .small-txt {
     font-size: 15px;
     line-height: normal;
 }
+
 .has-shadow {
-    box-shadow: 0px 5px 16px 0px rgba(0,0,0,0.3);
-    -webkit-box-shadow: 0px 5px 16px 0px rgba(0,0,0,0.3);
-    -moz-box-shadow: 0px 5px 16px 0px rgba(0,0,0,0.3);
+    box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.3);
 }
+
 /* End Register Page */
 
 /* Affiliate Page */
 .f20 {
     font-size: 20px;
 }
+
 .no-upper {
     text-transform: none !important;
 }
+
 .affiliate-terms h3 {
     font-size: 20px;
     font-weight: bold;
@@ -1451,6 +1539,7 @@ section.register-page {
 .affiliate-terms p {
     font-size: 14px;
 }
+
 .affiliate-terms {
     float: left;
 }
@@ -1517,11 +1606,14 @@ section.register-page {
 }
 
 .aff-tabs-content {
-    display: none;;
+    display: none;
+    ;
 }
+
 .aff-tabs-content.active {
     display: block;
 }
+
 #reward-feed .profit-filter {
     padding: 20px;
 }
@@ -1587,11 +1679,13 @@ section.register-page {
     margin-left: 6px;
     cursor: pointer;
 }
+
 #reward-feed .profit-listing table tbody td {
     text-align: center;
     font-size: 18px;
     padding: 8px 0;
 }
+
 /* End Affiliate Page */
 
 
@@ -1620,7 +1714,8 @@ section.register-page {
     padding: 11px 0;
 }
 
-.cart-table table th:last-child, .cart-table table td:last-child {
+.cart-table table th:last-child,
+.cart-table table td:last-child {
     border-right: 0;
 }
 
@@ -1678,7 +1773,132 @@ section.register-page {
     line-height: 30px;
     margin: 10px 0;
 }
+
 /* End Topup Cart */
+
+/* Checkout - Cart */
+.checkout-page {
+padding: 30px 0 50px;
+}
+.checkout-navigation-tabs {
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    background: #e5e5e5;
+    border-left: 5px solid #ff3600;
+    margin-bottom: 30px;
+}
+
+.checkout-navigation-tabs>div {
+    width: 33.3333%;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 60px;
+}
+
+.checkout-navigation-tabs>div.active {
+    background: #ffdd00;
+}
+
+.checkout-navigation-tabs>div.ck-tab-payment-method {
+    background: #fff;
+}
+
+.checkout-navigation-tabs>div span:first-child {
+    border: 1px solid #525252;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    border-radius: 30px;
+    line-height: 40px;
+    text-align: center;
+    margin: 0 25px 0 22px;
+}
+
+
+.checkout-tabs-content .game-info {
+    float: left;
+    width: 50%;
+    padding-right: 50px;
+    font-size: 18px;
+}
+.game-info .form-group label {
+    float: left;
+    width: 37%;
+}
+
+
+.form-group .radio-form-control, .form-group .multi-control {
+    float: left;
+    width: 63%;
+  }
+  .form-group .radio-form-control > div {
+    /*! display: inline-block; */
+  }
+  .game-info .form-group .radio-form-control > div {
+    float: left;
+    width: 50%;
+  }
+  .form-group .radio-form-control > div input {
+    margin-right: 7px;
+  }
+
+
+  .form-group .recovery-code-hint-box {
+    width: 80%;
+    font-size: 10px;
+    background: #fff;
+    padding: 8px;
+    line-height: normal;
+    margin-top: 10px;
+    border: 1px solid #9c9c9c;
+  }
+  .form-group .recovery-code-hint-box .top, .form-group .recovery-code-hint-box a {
+    color: #ff3600;
+  }
+  .form-group .recovery-code-hint-box .top {
+    margin-bottom: 10px;
+  }
+  .form-group .multi-control .form-control {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+
+.checkout-tabs-content .checkout-cart-total {
+    width: 50%;
+    float: left;
+  }
+  .checkout-cart-total .game-name h2 {
+    font-size: 24px;
+  }
+  .checkout-cart-total .game-name .game-image {
+    float: left;
+    width: 31%;
+    margin-right: 30px;
+  }
+  .checkout-cart-total .game-name .game-image img {
+    width: 100%;
+  }
+  .checkout-cart-total .game-name {
+    display: inline-block;
+    width: 100%;
+  }
+  .checkout-cart-total .cart-table .cart-coupon input[type="text"] {
+    width: 50%;
+    font-size: 18px;
+  }
+
+  .ck-submit-form {
+      text-align: center;
+      margin-top: 30px;
+      display: inline-block;
+      width: 100%;
+  }
+
+
+/* End Checkout - Cart */
 
 /* Footer */
 .footer .top-footer {
@@ -1817,6 +2037,7 @@ section.register-page {
     .top-header .right-box {
         width: 75%;
     }
+
     .footer .bot-footer .footer-security {
         width: 20%;
     }
@@ -1967,39 +2188,51 @@ section.register-page {
     .footer .bot-footer .footer-socials {
         width: 14%;
     }
+
     /* Shop Page */
     .shop-search form {
         width: 40%;
     }
+
     .shop-search form input[type="text"] {
         width: 79%;
     }
+
     /* Refer */
     body.global-bg {
         background-size: auto 100vh
     }
+
     .refer-page-title {
         background-size: auto 76%;
         height: 60vh;
         min-height: auto;
     }
-    .refer-page-title p, .refer-page-title .small, .refer-page-title .refer-link-copy {
+
+    .refer-page-title p,
+    .refer-page-title .small,
+    .refer-page-title .refer-link-copy {
         font-size: 20px;
     }
+
     .refer-page-title .page-title-image img {
         width: 50%;
     }
+
     .refer-page-title .refer-socials .refer-social-item {
         width: 60px;
         height: 60px;
     }
+
     /* Register Page */
     .register-block .form-group .form-control {
         width: 68%;
     }
+
     .register-block .form-group .form-control.date-year {
         width: 17%;
     }
+
     .register-block .form-group .form-control.phone-code {
         width: 18%;
     }
@@ -2016,6 +2249,7 @@ section.register-page {
         background-size: auto 120vh;
         background-position: initial;
     }
+
     .top-header-container {
         position: relative;
         z-index: 9999;
@@ -2150,106 +2384,130 @@ section.register-page {
         text-align: center;
         margin-bottom: 30px;
     }
+
     .product-detail .product-image img {
         width: 70%;
     }
+
     .product-detail .product-info {
         width: 100%;
     }
+
     /* Promotion */
     .promotion-page .product-category ul li a {
         min-width: 100%;
         font-size: 17px;
     }
+
     section.promotion-search form {
         width: 100%;
     }
+
     /* Shop Page */
-    .shop-search-paging, .shop-search-filter {
+    .shop-search-paging,
+    .shop-search-filter {
         padding: 3px 0;
     }
+
     .shop-search form {
         width: 46%;
         height: 45px;
-    } 
+    }
+
     .shop-search-filter select {
         font-size: 18px;
         padding: 0 46px 0 15px;
     }
-    
+
     .shop-search-paging a.current-page {
         font-size: 20px;
     }
-    
+
     .shop-search-paging a {
         width: 45px;
     }
-    
+
     .shop-search form input[type="text"] {
         font-size: 20px;
         height: 45px;
         width: 86%;
         padding: 0 0 0 20px;
     }
-    
+
     .shop-search form input[type="submit"] {
         background-size: 20px auto;
         margin: 11px 10px 11px 0;
         height: 20px;
         width: 20px;
     }
+
     /* Top Up */
     .topup-pack .pack-info .pack-info-line {
         height: 45px;
     }
+
     .topup-pack .pack-info .pack-info-line .price {
         width: 58%;
     }
-    .topup-pack .pack-info .pack-info-line, .topup-pack .pack-info .pack-info-line .pack-qty .pack-qty-txt {
+
+    .topup-pack .pack-info .pack-info-line,
+    .topup-pack .pack-info .pack-info-line .pack-qty .pack-qty-txt {
         font-size: 25px;
     }
-    .topup-pack .pack-info .pack-info-line .pack-qty button, .topup-pack .pack-info .pack-info-line .pack-qty .pack-qty-txt {
+
+    .topup-pack .pack-info .pack-info-line .pack-qty button,
+    .topup-pack .pack-info .pack-info-line .pack-qty .pack-qty-txt {
         width: 55px;
     }
+
     .topup-pack .pack-name {
         font-size: 30px;
         line-height: 55px;
     }
+
     .topup-pack .pack-info .pack-info-line .ico-king-coin {
         width: 28px;
         height: 28px;
         margin-right: 10px;
     }
+
     .topup-pack .pack-info .pack-info-line .kc-text {
         margin-left: 10px;
         font-size: 16px;
     }
+
     /* Refer */
     .refer-qa-list .qa-item .qa-answer {
         width: 90%;
     }
+
     .refer-qa-list .qa-item .qa-answer .refer-values {
         width: 90%;
     }
+
     .refer-page-title {
         background-image: none;
         height: auto;
     }
+
     .refer-page-title .refer-link-copy {
         width: 70%;
     }
+
     /* Register Page */
     .register-block .form-group .form-control.date-month {
         width: 19%;
     }
+
     .register-block .form-group .form-control.phone-code {
         width: 17%;
     }
+
     /* Affiliate */
     #reward-feed .profit-filter select {
         min-width: 150px;
     }
-    
+
 }
 
 @media(max-width: 768px) {
@@ -2263,6 +2521,7 @@ section.register-page {
         background-size: auto 145vh;
         background-position: initial;
     }
+
     .container {
         max-width: 700px;
     }
@@ -2281,23 +2540,27 @@ section.register-page {
     section.promotion-search form {
         width: 100%;
     }
+
     /* Refer */
     .refer-qa-list .qa-item {
         width: 100%;
     }
+
     #refer-by-mails-popup {
         padding: 20px;
     }
+
     #refer-by-mails-popup table thead td {
         font-size: 17px;
     }
+
     #refer-by-mails-popup table thead td:nth-child(2),
     #refer-by-mails-popup table thead td:nth-child(3) {
         width: 50% !important;
     }
 }
 
-@media(max-width: 667px) { 
+@media(max-width: 667px) {
     body.global-bg {
         background-size: auto 160vh;
         background-position: initial;
@@ -2309,6 +2572,7 @@ section.register-page {
         background-size: auto 100vh;
         background-position: initial;
     }
+
     .mobile-nav-block {
         width: 70vw;
     }
@@ -2395,82 +2659,106 @@ section.register-page {
     .product-detail .product-image img {
         width: 100%;
     }
+
     .product-temple-total {
         font-size: 16px;
     }
+
     .product-temple-total table thead th {
         padding: 10px;
     }
+
     .product-temple-total table tfoot tr.tr-grand-total td:last-child,
     .product-temple-total table tbody tr.instant-total td.instant-total-number {
         font-size: 20px;
     }
+
     .product-detail-code {
         width: 70%;
     }
+
     /* Promotion */
     section.promotion-search form input[type="text"] {
         width: 77%;
     }
+
     /* Shop Page */
     .shop-search form {
         width: 100%;
         flex: none;
     }
-    
-    .shop-search-paging, .shop-search-filter {
+
+    .shop-search-paging,
+    .shop-search-filter {
         flex: none;
         float: left;
     }
+
     .shop-search-paging {
         width: 64%;
     }
+
     .shop-search-filter {
         width: 36%;
     }
+
     .shop-search-filter select {
         width: 100%;
     }
+
     .shop-search-box {
         display: inline-block;
         width: 100%;
     }
+
     /* Refer */
-    .refer-qa-list .qa-item, .refer-qa-list .qa-item .qa-answer .refer-values td {
+    .refer-qa-list .qa-item,
+    .refer-qa-list .qa-item .qa-answer .refer-values td {
         font-size: 16px;
     }
+
     .refer-qa-list .qa-item .qa-question {
         line-height: 30px;
         font-size: 18px;
         padding: 5px 10px;
     }
+
     .refer-qa-list .qa-item .qa-answer ul {
         margin: 20px 0 20px 20px;
     }
+
     .refer-page-title .refer-link-copy {
         width: 100%;
     }
+
     .qa-section-list .qa-item .qa-group-name {
         font-size: 26px;
     }
+
     #reward-feed .profit-filter select {
         min-width: 100%;
         margin-bottom: 10px;
     }
+
     #reward-feed .profit-listing table thead th {
         padding: 9px 10px;
     }
+
     /* Checkout */
     .cart-table table th {
         font-size: 14px;
         padding: 10px;
     }
+
     .cart-table table .quantity-box {
         padding: 0 5px;
     }
-    .cart-table table .quantity-box button, .cart-table table .quantity-box input {
+
+    .cart-table table .quantity-box button,
+    .cart-table table .quantity-box input {
         width: 100%;
     }
+
     .cart-table .cart-coupon input[type="text"] {
         width: 60%;
         margin-bottom: 20px;
@@ -2481,10 +2769,12 @@ section.register-page {
     .top-header .right-box .login-box form>.login-form .login-control {
         max-width: 34%;
     }
+
     .register-block .form-group label {
         width: 30%;
         font-size: 13px;
     }
+
     .register-block {
         padding: 30px 10px
     }
