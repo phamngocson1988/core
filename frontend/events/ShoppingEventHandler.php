@@ -4,7 +4,7 @@ namespace frontend\events;
 use Yii;
 use yii\base\Model;
 use frontend\models\PromotionApply;
-use frontend\models\UserAffiliate;
+use frontend\models\UserCommission;
 
 class ShoppingEventHandler extends Model
 {
@@ -54,7 +54,7 @@ class ShoppingEventHandler extends Model
         $type = $setting->get('AffiliateProgramForm', 'type', 'fix');
         $commission = ($type == 'percent') ? ($totalPrice * $value) / 100 : $value;
         // save to affiliate table
-        $userAff = new UserAffiliate();
+        $userAff = new UserCommission();
         $userAff->user_id = $user->affiliated_with;
         $userAff->commission = round($commission, 1);
         $userAff->order_id = $order->id;

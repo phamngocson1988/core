@@ -313,28 +313,28 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getCommission()
     {
-        return $this->hasMany(UserAffiliate::className(), ['user_id' => 'id']);
+        return $this->hasMany(UserCommission::className(), ['user_id' => 'id']);
     }
 
     public function getReadyCommission()
     {
-        $table = UserAffiliate::tableName();
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserAffiliate::$default_duration);
+        $table = UserCommission::tableName();
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserCommission::$default_duration);
         $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
         $command = $this->getCommission();
         $command->andWhere(['>=', 'date(' . $table . '.created_at)', $readyDate]);
-        $command->andWhere(['date(' . $table . '.status)' => UserAffiliate::STATUS_PENDING]);
+        $command->andWhere(['date(' . $table . '.status)' => UserCommission::STATUS_PENDING]);
         return $command;
     }
 
     public function getPendingCommission()
     {
-        $table = UserAffiliate::tableName();
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserAffiliate::$default_duration);
+        $table = UserCommission::tableName();
+        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserCommission::$default_duration);
         $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
         $command = $this->getCommission();
         $command->andWhere(['<', 'date(' . $table . '.created_at)', $readyDate]);
-        $command->andWhere(['date(' . $table . '.status)' => UserAffiliate::STATUS_PENDING]);
+        $command->andWhere(['date(' . $table . '.status)' => UserCommission::STATUS_PENDING]);
         return $command;
     }
 }

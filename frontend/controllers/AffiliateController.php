@@ -8,6 +8,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use frontend\models\UserCommission;
 use frontend\models\UserAffiliate;
 use frontend\models\User;
 use frontend\forms\TakeCommission;
@@ -24,7 +25,7 @@ class AffiliateController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['not-be-affiliate', 'send-request', 'cancel-request'],
+                        'actions' => ['not-be-affiliate', 'register', 'send-request', 'cancel-request'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -41,7 +42,7 @@ class AffiliateController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     $user = Yii::$app->user;
                     if ($user->getIsGuest()) $user->loginRequired();
-                    else return $this->redirect(['affiliate/not-be-affiliate']);
+                    else return $this->redirect(['affiliate/register']);
                 }
                 
             ],
@@ -50,9 +51,28 @@ class AffiliateController extends Controller
 
     public function actionNotBeAffiliate()
     {
+        $user = Yii::$app->user->identity;
+        if ($user->affiliate_code) return $this->redirect(['affiliate/index']);
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
         return $this->render('not_be_affiliate');
+    }
+
+    public function actionRegister()
+    {
+        $user = Yii::$app->user->identity;
+        if ($user->affiliate_code) return $this->redirect(['affiliate/index']);
+        $request = Yii::$app->request;
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+
+        $model = UserAffiliate::findOne($user->id);
+        $sent = ($model) ? true : false;
+        if (!$model) $model = new UserAffiliate(['user_id' => $user->id]);
+        if ($model->load($request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
+        }
+        return $this->render('register', ['model' => $model, 'sent' => $sent]);
     }
 
     public function actionSendRequest()
@@ -70,6 +90,8 @@ class AffiliateController extends Controller
         $user->affiliate_request = 0;
         $user->affiliate_request_time = null;
         $user->save(true, ['affiliate_request', 'affiliate_request_time']);
+        $aff = UserAffiliate::findOne($user->id);
+        if ($aff) $aff->delete();
         return $this->asJson(['status' => true]);
     }
 
@@ -81,18 +103,18 @@ class AffiliateController extends Controller
         $request = Yii::$app->request;
         $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 30);
         $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
-        $command = UserAffiliate::find()->where(['user_id' => $user->id]);
+        $command = UserCommission::find()->where(['user_id' => $user->id]);
         if ($request->get('status')) {
             switch ($request->get('status')) {
                 case 'completed':
-                    $command->andWhere(['status' => UserAffiliate::STATUS_COMPLETED]);
+                    $command->andWhere(['status' => UserCommission::STATUS_COMPLETED]);
                     break;
                 case 'pending':
-                $command->andWhere(['status' => UserAffiliate::STATUS_PENDING]);
+                $command->andWhere(['status' => UserCommission::STATUS_PENDING]);
                 $command->andWhere(['<', 'date(created_at)' => $readyDate]);
                     break;
                 case 'ready':
-                    $command->andWhere(['status' => UserAffiliate::STATUS_PENDING]);
+                    $command->andWhere(['status' => UserCommission::STATUS_PENDING]);
                     $command->andWhere(['>=', 'date(created_at)' => $readyDate]);
                 break;
             }

@@ -59,7 +59,7 @@ class m130524_201442_init extends Migration
             'payment_at' => $this->dateTime(),
         ], $tableOptions);
 
-        $this->createTable('{{%user_affiliate}}', [
+        $this->createTable('{{%user_commission}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
             'commission' => $this->float()->notNull()->defaultValue(0),

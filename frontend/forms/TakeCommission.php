@@ -2,13 +2,13 @@
 namespace frontend\forms;
 
 use Yii;
-use frontend\models\UserAffiliate;
+use frontend\models\UserCommission;
 use frontend\models\UserWallet;
 
 /**
  * Signup form
  */
-class TakeCommission extends UserAffiliate
+class TakeCommission extends UserCommission
 {
     public function rules()
     {
