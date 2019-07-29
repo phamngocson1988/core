@@ -205,11 +205,6 @@
                 <a class="btn btn-xs grey-salsa active-user tooltips" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-original-title="{Yii::t('app', 'enable_user')}"><i class="fa fa-check-square"></i></a>
                 {/if}
                 {/if} *}
-                {if ($model->affiliate_code)}
-                <a href="{url route='affiliate/downgrade' id=$model->id}" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
-                {else}
-                <a href="{url route='affiliate/upgrade' id=$model->id}" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Kích hoạt tính năng affiliate"><i class="fa fa-arrow-up"></i> Affiliate </a>
-                {/if}
               </td>
             </tr>
             {/foreach}

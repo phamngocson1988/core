@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Event;
 use yii\base\Model;
 use frontend\models\User;
+use frontend\models\UserAffiliate;
 use frontend\models\UserRefer;
 use frontend\models\UserWallet;
 
@@ -41,12 +42,13 @@ class SignupEventHandler extends Model
     {
         $form = $event->sender;
         if (!$form->affiliate) return;
-        $invitor = User::findOne(['affiliate_code' => $form->affiliate]);
+        $invitor = UserAffiliate::findOne(['code' => $form->affiliate]);
         if (!$invitor) return;
+        if (!$invitor->isEnable()) return;
         $user = $event->user;
         if (!$user) return;
         // Update invited user
-        $user->affiliated_with = $invitor->id;
+        $user->affiliated_with = $invitor->user_id;
         $user->save();
     }
 

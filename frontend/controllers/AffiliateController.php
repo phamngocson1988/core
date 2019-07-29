@@ -25,7 +25,7 @@ class AffiliateController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['not-be-affiliate', 'register', 'send-request', 'cancel-request'],
+                        'actions' => ['register', 'cancel-request'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -33,42 +33,45 @@ class AffiliateController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            return Yii::$app->user->identity->affiliate_code;
+                            $user = Yii::$app->user->identity;
+                            $aff = $user->affiliate;
+                            if (!$aff) return false;
+                            if (!$aff->isEnable()) return false;
+                            return true;
                         },
 
                     ],
 
                 ],
                 'denyCallback' => function ($rule, $action) {
-                    $user = Yii::$app->user;
-                    if ($user->getIsGuest()) $user->loginRequired();
-                    else return $this->redirect(['affiliate/register']);
+                    $user = Yii::$app->user->identity;
+                    $aff = $user->affiliate;
+                    if (Yii::$app->user->getIsGuest()) Yii::$app->user->loginRequired();
+                    elseif (!$aff) return $this->redirect(['affiliate/register']);
+                    elseif (!$aff->isEnable()) return $this->redirect(['affiliate/register']);
+                    else return ;
                 }
                 
             ],
         ];
     }
 
-    public function actionNotBeAffiliate()
-    {
-        $user = Yii::$app->user->identity;
-        if ($user->affiliate_code) return $this->redirect(['affiliate/index']);
-        $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'affiliate.index';
-        return $this->render('not_be_affiliate');
-    }
-
     public function actionRegister()
     {
         $user = Yii::$app->user->identity;
-        if ($user->affiliate_code) return $this->redirect(['affiliate/index']);
+        
         $request = Yii::$app->request;
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
 
         $model = UserAffiliate::findOne($user->id);
-        $sent = ($model) ? true : false;
-        if (!$model) $model = new UserAffiliate(['user_id' => $user->id]);
+        $sent = false;
+        if ($model) {
+            if ($model->isEnable()) return $this->redirect(['affiliate/index']);
+            $sent = true;
+        } else {
+            $model = new UserAffiliate(['user_id' => $user->id]);
+        }
         if ($model->load($request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
             $sent = true;
@@ -76,21 +79,9 @@ class AffiliateController extends Controller
         return $this->render('register', ['model' => $model, 'sent' => $sent]);
     }
 
-    public function actionSendRequest()
-    {
-        $user = Yii::$app->user->identity;
-        $user->affiliate_request = 1;
-        $user->affiliate_request_time = date('Y-m-d H:i:s');
-        $user->save(true, ['affiliate_request', 'affiliate_request_time']);
-        return $this->asJson(['status' => true]);
-    }
-
     public function actionCancelRequest()
     {
         $user = Yii::$app->user->identity;
-        $user->affiliate_request = 0;
-        $user->affiliate_request_time = null;
-        $user->save(true, ['affiliate_request', 'affiliate_request_time']);
         $aff = UserAffiliate::findOne($user->id);
         if ($aff) $aff->delete();
         return $this->asJson(['status' => true]);

@@ -66,4 +66,9 @@ class UserAffiliate extends ActiveRecord
     {
         $this->code = Yii::$app->security->generateRandomString(6);
     }
+
+    public function isEnable()
+    {
+        return $this->status == self::STATUS_ENABLE;
+    }
 }

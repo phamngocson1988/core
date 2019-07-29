@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 $user = Yii::$app->user->identity;
-$link = Url::to(['site/signup', 'affiliate' => $user->affiliate_code], true);
+$link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
 ?>
 
 <section class="page-title">
