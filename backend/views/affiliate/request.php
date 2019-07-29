@@ -58,29 +58,37 @@ use common\components\helpers\FormatConverter;
           <thead>
             <tr>
               <th style="width: 5%;"> STT </th>
-              <th style="width: 20%;"> Tên </th>
-              <th style="width: 20%;"> Email </th>
-              <th style="width: 20%;"> Số điện thoại </th>
+              <th style="width: 10%;"> Tên </th>
+              <th style="width: 10%;"> Email </th>
+              <th style="width: 10%;"> Số điện thoại </th>
               <th style="width: 10%;"> Ngày gửi yêu cầu </th>
-              <th style="width: 10%;"> Số đơn hàng </th>
-              <th style="width: 15%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th style="width: 10%;"> Preferred IM </th>
+              <th style="width: 10%;"> IM Account </th>
+              <th style="width: 10%;"> Company </th>
+              <th style="width: 10%;"> Channel </th>
+              <th style="width: 10%;"> Channel Type </th>
+              <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$model->name;?></td>
-                <td style="vertical-align: middle;"><?=$model->email;?></td>
-                <td style="vertical-align: middle;"><?=sprintf("(%s) %s", $model->country_code, $model->phone);?></td>
-                <td style="vertical-align: middle;"><?=$model->affiliate_request_time;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->getOrders()->count());?></td>
+                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
+                <td style="vertical-align: middle;"><?=$model->user->email;?></td>
+                <td style="vertical-align: middle;"><?=sprintf("(%s) %s", $model->user->country_code, $model->user->phone);?></td>
+                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
+                <td style="vertical-align: middle;"><?=$model->preferred_im;?></td>
+                <td style="vertical-align: middle;"><?=$model->im_account;?></td>
+                <td style="vertical-align: middle;"><?=$model->company;?></td>
+                <td style="vertical-align: middle;"><?=$model->channel;?></td>
+                <td style="vertical-align: middle;"><?=$model->channel_type;?></td>
                 <td style="vertical-align: middle;">
-                  <a href="<?=Url::to(['affiliate/downgrade', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Không phê duyệt"><i class="fa fa-arrow-down"></i> Disapprove </a>
-                  <a href="<?=Url::to(['affiliate/upgrade', 'id' => $model->id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Chấp nhận"><i class="fa fa-arrow-up"></i> Approve </a>
+                  <a href="<?=Url::to(['affiliate/downgrade', 'id' => $model->user_id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Không phê duyệt"><i class="fa fa-arrow-down"></i> Disapprove </a>
+                  <a href="<?=Url::to(['affiliate/upgrade', 'id' => $model->user_id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Chấp nhận"><i class="fa fa-arrow-up"></i> Approve </a>
                 </td>
               </tr>
               <?php endforeach;?>

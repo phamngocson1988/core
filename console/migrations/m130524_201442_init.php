@@ -59,6 +59,15 @@ class m130524_201442_init extends Migration
             'payment_at' => $this->dateTime(),
         ], $tableOptions);
 
+        $this->createTable('{{%user_affiliate}}', [
+            'user_id' => $this->integer()->notNull(),
+            'preferred_im' => $this->string(50)->notNull(),
+            'im_account' => $this->string(255)->notNull(),
+            'company' => $this->string()->notNull(),
+            'channel' => $this->string(),
+            'channel_type' => $this->string(50)->notNull(), // set 1: pending, 2: completed
+        ], $tableOptions);
+
         $this->createTable('{{%user_commission}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),

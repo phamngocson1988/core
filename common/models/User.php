@@ -316,6 +316,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(UserCommission::className(), ['user_id' => 'id']);
     }
 
+    public function getAffiliate()
+    {
+        return $this->hasOne(UserAffiliate::className(), ['user_id' => 'id']);
+    }
+
     public function getReadyCommission()
     {
         $table = UserCommission::tableName();

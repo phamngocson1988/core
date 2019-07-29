@@ -7,7 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
-use common\models\User;
+use frontend\models\UserAffiliate;
 use yii\captcha\Captcha;
 
 $this->title = 'Register Affiliate';
@@ -37,11 +37,11 @@ $this->params['breadcrumbs'][] = $this->title;
           <div class="register-block">
             <?php if (!$sent) : ?>
             <?php $form = ActiveForm::begin(['id' => 'form-signup', 'options' => ['autocomplete' => 'off']]); ?>
-              <?= $form->field($model, 'preferred_im')->textInput()->label('Preferred IM <span class="required">*</span>') ?>
+              <?= $form->field($model, 'preferred_im')->dropDownList(UserAffiliate::preferImList(), ['prompt' => 'Select Preferred IM'])->label('Preferred IM <span class="required">*</span>') ?>
               <?= $form->field($model, 'im_account')->textInput()->label('IM account <span class="required">*</span>') ?>
               <?= $form->field($model, 'company')->textInput()->label('Company Name <span class="required">*</span>') ?>
               <?= $form->field($model, 'channel')->textInput()->label('Channel <span class="required">*</span>') ?>
-              <?= $form->field($model, 'channel_type')->textInput()->label('Channel type <span class="required">*</span>') ?>
+              <?= $form->field($model, 'channel_type')->dropDownList(UserAffiliate::channelTypeList(), ['prompt' => 'Select channel type'])->label('Channel type <span class="required">*</span>') ?>
                <div class="terms">
                   <div class="terms-row">
                       <input type="checkbox" id="agree"><span>* I have read and agree with the <font style="color: #ff3600;">Terms & Conditions.</font></span>

@@ -5,7 +5,7 @@ use Yii;
 use common\components\Controller as BaseController;
 use yii\web\Response;
 use backend\forms\FetchNewPendingOrderForm;
-use backend\models\User;
+use backend\models\UserAffiliate;
 
 /**
  * Controller
@@ -22,7 +22,7 @@ class Controller extends BaseController
             $this->view->params['new_pending_order'] = $total ? $total : '';
 
             // Show number of new affiliate request
-	        $command = User::find()->where(['affiliate_request' => 1]);
+	        $command = UserAffiliate::find()->where(['status' => UserAffiliate::STATUS_DISABLE]);
 	        $affiliateTotal = $command->count();
             $this->view->params['new_affiliate_request'] = $affiliateTotal ? $affiliateTotal : '';
             return true;

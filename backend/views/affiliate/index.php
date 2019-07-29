@@ -55,14 +55,19 @@ use common\components\helpers\FormatConverter;
           <thead>
             <tr>
               <th style="width: 5%;"> STT </th>
-              <th style="width: 10%;"> Tên </th>
-              <th style="width: 20%;"> Email </th>
+              <th style="width: 5%;"> Tên </th>
+              <th style="width: 10%;"> Email </th>
               <th style="width: 10%;"> Số điện thoại </th>
+              <th style="width: 5%;"> Preferred IM </th>
+              <th style="width: 10%;"> IM Account </th>
+              <th style="width: 10%;"> Company </th>
+              <th style="width: 10%;"> Channel </th>
+              <th style="width: 5%;"> Channel Type </th>
               <th style="width: 10%;"> Ngày duyệt </th>
-              <th style="width: 10%;"> Số lượng thành viên </th>
-              <th style="width: 10%;"> Hoa hồng được phép dùng </th>
-              <th style="width: 10%;"> Hoa hồng đang chờ nhận </th>
-              <th style="width: 15%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th style="width: 5%;"> Số lượng thành viên </th>
+              <th style="width: 5%;"> Hoa hồng được phép dùng </th>
+              <th style="width: 5%;"> Hoa hồng đang chờ nhận </th>
+              <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
@@ -72,17 +77,20 @@ use common\components\helpers\FormatConverter;
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$model->name;?></td>
-                <td style="vertical-align: middle;"><?=$model->email;?></td>
-                <td style="vertical-align: middle;"><?=sprintf("(%s) %s", $model->country_code, $model->phone);?></td>
-                <td style="vertical-align: middle;"><?=$model->affiliate_request_time;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->getAffiliateChildren()->count());?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->getReadyCommission()->count());?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->getPendingCommission()->count());?></td>
+                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
+                <td style="vertical-align: middle;"><?=$model->user->email;?></td>
+                <td style="vertical-align: middle;"><?=sprintf("(%s) %s", $model->user->country_code, $model->user->phone);?></td>
+                <td style="vertical-align: middle;"><?=$model->preferred_im;?></td>
+                <td style="vertical-align: middle;"><?=$model->im_account;?></td>
+                <td style="vertical-align: middle;"><?=$model->company;?></td>
+                <td style="vertical-align: middle;"><?=$model->channel;?></td>
+                <td style="vertical-align: middle;"><?=$model->channel_type;?></td>
+                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->user->getAffiliateChildren()->count());?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->user->getReadyCommission()->count());?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->user->getPendingCommission()->count());?></td>
                 <td style="vertical-align: middle;">
-                  <?php if ($model->affiliate_code) : ?>
-                  <a href="<?=Url::to(['affiliate/downgrade', 'id' => $model->id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
-                  <?php endif;?>
+                  <a href="<?=Url::to(['affiliate/downgrade', 'id' => $model->user_id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
                 </td>
               </tr>
               <?php endforeach;?>
