@@ -46,7 +46,7 @@
           </li>
           <li class="nav-item">
             <a href="{url route='/affiliate/request'}" class="nav-link " code='user.affiliate'>
-              <span class="title">Bán hàng liên kết</span>
+              <span class="title">Affiliate</span>
               <span class="badge badge-success">{$this->params['new_affiliate_request']}</span>
             </a>
           </li>
@@ -128,7 +128,7 @@
           </li>
           <li class="nav-item  ">
             <a href="{url route='/reseller'}" class="nav-link " code='game.reseller'>
-            <span class="title">Giá bán lẻ</span>
+            <span class="title">Giá bán sỉ</span>
             </a>
           </li>
         </ul>

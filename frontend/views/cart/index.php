@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use frontend\components\cart\CartItem;
 use frontend\components\cart\Cart;
+$this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js', ['depends' => '\frontend\assets\AppAsset']);
 ?>
 
 <section class="checkout-page">
@@ -29,18 +30,20 @@ use frontend\components\cart\Cart;
               <div class="ck-tab-content active" id="ck-cart-box">
                 <?php $form = ActiveForm::begin(['id' => 'infor-form', 'action' => ['cart/index']]); ?>
                   <?=Html::hiddenInput('scenario', CartItem::SCENARIO_INFO_CART);?>
+                  <?php $item->setScenario(CartItem::SCENARIO_INFO_CART);?>
                   <div class="game-info">
                     <div class="form-group">
                       <label>Game</label>
                       <span><?=$item->title;?></span>
                     </div>
                     <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios'], ['class' => 'radio-form-control']) ?>
-                    <?= $form->field($item, 'character_name')->textInput()->label('Character Name <span class="required">*</span>');?>
-                    <?= $form->field($item, 'username')->textInput()->label('CAccount Login <span class="required">*</span>');?>
-                    <?= $form->field($item, 'password')->textInput()->label('Account Password <span class="required">*</span>');?>
-                    <?= $form->field($item, 'server')->textInput()->label('Server <span class="required">*</span>');?>
-                    <?= $form->field($item, 'login_method')->dropDownList(['facebook' => 'Facebook', 'google' => 'Google'], ['prompt'=>'Choose one method'])->label('Login Method <span class="required">*</span>');?>
-                    <?= $form->field($item, 'recover_code')->textInput()->label('Recovery Code <span class="required">*</span>');?>
+                    <?= $form->field($item, 'character_name')->textInput()->label('Character Name');?>
+                    <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
+                    <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
+                    <?= $form->field($item, 'server')->textInput()->label('Server');?>
+                    <?= $form->field($item, 'login_method', ['inputOptions' => ['id' => 'login_method']])->dropDownList(['facebook' => 'Facebook', 'google' => 'Google'], ['prompt'=>'Choose one method'])->label('Login Method');?>
+                    <?= $form->field($item, 'recover_code', ['inputOptions' => ['id' => 'recover_code']])->textInput()->label('Recovery Code')->hint('Example: 12345678 11112222 33334444');?>
+                    <?= $form->field($item, 'note')->textInput()->label('Note for saler');?>
 
                     <!-- <div class="form-group">
                       <label>
@@ -68,6 +71,7 @@ use frontend\components\cart\Cart;
                   <?php Pjax::begin(); ?>
                   <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
                   <?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
+                  <?php $item->setScenario(CartItem::SCENARIO_EDIT_CART);?>
                   <div class="checkout-cart-total">
                     <div class="game-name">
                       <div class="game-image">
@@ -239,7 +243,6 @@ $('.product-temple-total .quantity-box button.quantity-minus').click(function(){
     } 
 });
 $("#quantity").trigger('change');
-
 JS;
 $this->registerJs($script);
 ?>

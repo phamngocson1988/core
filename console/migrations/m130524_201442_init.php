@@ -63,6 +63,10 @@ class m130524_201442_init extends Migration
             'company' => $this->string()->notNull(),
             'channel' => $this->string(),
             'channel_type' => $this->string(50)->notNull(), // set 1: pending, 2: completed
+            'status' => $this->integer()->defaultValue(1),
+            'code' => $this->string(50),
+            'created_at' => $this->dateTime()->notNull(),
+            'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
         $this->createTable('{{%user_commission}}', [
