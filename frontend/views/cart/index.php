@@ -34,7 +34,7 @@ use frontend\components\cart\Cart;
                       <label>Game</label>
                       <span><?=$item->title;?></span>
                     </div>
-                    <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios']) ?>
+                    <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios'], ['class' => 'radio-form-control']) ?>
                     <?= $form->field($item, 'character_name')->textInput()->label('Character Name <span class="required">*</span>');?>
                     <?= $form->field($item, 'username')->textInput()->label('CAccount Login <span class="required">*</span>');?>
                     <?= $form->field($item, 'password')->textInput()->label('Account Password <span class="required">*</span>');?>
@@ -137,10 +137,12 @@ use frontend\components\cart\Cart;
                               <td colspan="3">Sub Total Unit:</td>
                               <td><span class="subtotal-num"><?=number_format($cart->getSubTotalUnit());?></span></td>
                             </tr>
+                            <?php if ($cart->hasPromotion()) : ?>
                             <tr>
                               <td colspan="3">Promotion:</td>
                               <td>+<span class="saving-number"><?=$cart->getPromotionUnit();?></span></td>
                             </tr>
+                            <?php endif;?>
                             <tr class="tr-grand-total">
                               <td colspan="3">Grand Total Unit:</td>
                               <td><span><?=number_format($cart->getTotalUnit());?></span></td>

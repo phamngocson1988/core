@@ -8,29 +8,74 @@ use frontend\components\cart\CartItem;
 use frontend\components\cart\Cart;
 
 $item = $cart->getItem();
+$cart->applyPromotion();
 ?>
 
-<?php $form = ActiveForm::begin(['id' => 'update-cart1']); ?>
-<?=Html::hiddenInput('scenario', CartItem::SCENARIO_RECEPTION_CART);?>
-<section class="section section-lg bg-default novi-background bg-cover text-center">
-  <!-- section wave-->
+<section class="checkout-page">
   <div class="container">
-    <div class="row row-fix justify-content-sm-center">
-      <div class="col-md-10 col-xl-8">
-        <h3>Reception Email</h3>
-        <div class="row row-fix row-20">
-          <div class="col-md-6">
-            <?= $form->field($item, 'reception_email', [
-              'options' => ['class' => 'form-wrap form-wrap-validation'],
-              'inputOptions' => ['class' => 'form-input'],
-              'labelOptions' => ['class' => 'form-label-outside'],
-              'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-              'template' => '{label}{input}{error}'
-            ])->textInput() ?>
-          </div>
-          <div class="col-lg-12 offset-custom-1">
-            <div class="form-button text-md-right">
-              <?= Html::submitButton('checkout', ['class' => 'button button-secondary button-nina', 'id' => 'update-cart-button']) ?>
+    <div class="checkout-block">
+      <div class="checkout-navigation">
+        <div class="row">
+          <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="checkout-navigation-tabs has-shadow">
+              <div class="ck-tab-cart">
+                <span class="done"><i class="fa fa-check"></i></span><span>Cart</span>
+              </div>
+              <div class="ck-tab-payment-confirm active">
+                <span>2</span><span>Payment Confirm</span>
+              </div>
+              <div class="ck-tab-payment-method">
+                <span>3</span><span>Payment Methods</span>
+              </div>
+            </div>
+            <div class="checkout-tabs-content">
+              <div class="ck-tab-content active" id="ck-cart-box">
+                <?php $form = ActiveForm::begin(['id' => 'update-cart1']); ?>
+                <?=Html::hiddenInput('scenario', CartItem::SCENARIO_RECEPTION_CART);?>
+                <div class="game-confirm">
+                  <div class="ck-confirm-note">
+                    <span class="note-ico">!</span><span>Your information is committed to security by <strong>Kinggems.us!</strong></span>
+                  </div>
+                  <?= $form->field($item, 'reception_email')->textInput();?>
+                  <!-- <div class="form-group">
+                    <label>Reception email</label>
+                    <input class="form-control" type="text">
+                  </div> -->
+                  <div class="is-desktop">
+                    <?= Html::submitButton('Next', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'update-cart-button']) ?>
+                  </div>
+                </div>
+                <div class="checkout-cart-total">
+                  <div class="game-name">
+                    <div class="game-image">
+                      <img src="<?=$item->getImageUrl('300x300');?>" alt="">
+                    </div>
+                    <h2><?=$item->getLabel();?></h2>
+                  </div>
+                  <div class="game-totals">
+                    <div class="product-grand-total">
+                      <div class="grand-line">
+                        <span>Subtotal Unit:</span><span><?=number_format($cart->getSubTotalUnit());?></span>
+                      </div>
+                      <?php if ($cart->hasPromotion()) : ?>
+                      <div class="grand-line">
+                        <span>Promo:</span><span>+<?=$cart->getPromotionUnit();?></span>
+                      </div>
+                      <?php endif;?>
+                      <div class="grand-line">
+                        <span>Total Unit:</span><span><?=number_format($item->getTotalUnit());?></span>
+                      </div>
+                      <div class="grand-line last-line">
+                        <span>Total Price:</span><span>$<?=number_format($item->getTotalPrice());?></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="is-mobile">
+                    <?= Html::submitButton('Next', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'update-cart-button']) ?>
+                  </div>
+                </div>
+                <?php ActiveForm::end(); ?>
+              </div>
             </div>
           </div>
         </div>
@@ -38,46 +83,3 @@ $item = $cart->getItem();
     </div>
   </div>
 </section>
-<?php ActiveForm::end(); ?>
-<?php
-$script = <<< JS
-$('body').on('click', "#update-cart-button1", function(){
-  var form = $(this).closest('form');
-  $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        if (!result.status) {
-          if (result.errors) {
-            alert(result.errors);
-          }
-        } else {
-          window.location.href = result.checkout_url;
-        }
-      },
-  });
-});
-
-$('body').on('change', "#quantity", function(){
-  $(this).closest('form').submit();
-});
-$('body').on('click', '#apply_voucher', function(e){
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  if ($('#voucher').val()) $(this).closest('form').submit();
-  return false;
-});
-$('body').on('click', '#remove_voucher', function(e){
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  $('#voucher').val('').prop('disabled', false);
-  $(this).closest('form').submit();
-  return false;
-
-})
-
-JS;
-$this->registerJs($script);
-?>

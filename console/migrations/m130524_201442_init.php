@@ -70,6 +70,7 @@ class m130524_201442_init extends Migration
             'user_id' => $this->integer()->notNull(),
             'commission' => $this->float()->notNull()->defaultValue(0),
             'order_id' => $this->integer()->notNull(),
+            'member_id' => $this->integer()->notNull(),
             'created_at' => $this->dateTime(),
             'status' => $this->integer()->notNull()->defaultValue(1), // set 1: pending, 2: completed
         ], $tableOptions);

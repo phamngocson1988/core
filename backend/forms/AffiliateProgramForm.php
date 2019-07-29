@@ -10,6 +10,7 @@ class AffiliateProgramForm extends Model
     public $value;
     public $type;
     public $content;
+    public $min_member;
     public $status;
     public $duration; // days
 
@@ -22,6 +23,7 @@ class AffiliateProgramForm extends Model
             ['type', 'default', 'value' => 'fix'],
             [['value', 'duration'], 'number'],
             ['duration', 'default', 'value' => 30],
+            ['min_member', 'safe']
         ];
     }
 }

@@ -66,6 +66,12 @@ use yii\widgets\ActiveForm;
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput()->label('Thời gian chờ (theo ngày)');?>
 
+                <?=$form->field($model, 'min_member', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput()->label('Số thành viên tối thiểu');?>
+
                 <?=$form->field($model, 'status', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'

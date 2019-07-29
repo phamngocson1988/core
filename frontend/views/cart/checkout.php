@@ -6,117 +6,100 @@ $cart = Yii::$app->cart;
 $item = $cart->getItem();
 $cart->applyPromotion();
 ?>
-<section class="section section-lg bg-default novi-background bg-cover">
-  <!-- section wave-->
-  <div class="container grid-demonstration">
-    <h3 class="text-center">Confirmation</h3>
-    <div class="row">
-      <div class="col-6">
-        <div class="box-classic box-bordered box-novi">
-          <div class="box-classic-content">
-            <table class="table-custom table-hover">
-              <tbody>
-                <tr>
-                  <td>
-                    <?=$item->getLabel();?><br/>
-                    <small>Quantity <?=$item->quantity;?></small>
-                    <small><?=$item->unit_name;?> <?=number_format($item->getTotalUnit());?></small>
-                  </td>
-                  <td>(K)<?=$item->getTotalPrice();?></td>
-                </tr>
-                <tr>
-                  <td>Sub total</td>
-                  <td>(K)<?=$cart->getSubTotalPrice();?></td>
-                </tr>
-                <tr>
-                  <td>Total</td>
-                  <td>(K)<?=$cart->getTotalPrice();?></td>
-                </tr>
-                <tr>
-                  <td>Total unit</td>
-                  <td>(K)<?=$cart->getTotalUnit();?> (<?=$cart->getSubTotalUnit();?> + <?=$cart->getPromotionUnit();?>)</td>
-                </tr>
-              </tbody>
-            </table>
+<section class="checkout-page">
+  <div class="container">
+    <div class="checkout-block">
+      <div class="checkout-navigation">
+        <div class="row">
+          <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="checkout-navigation-tabs has-shadow">
+              <div class="ck-tab-cart">
+                <span class="done"><i class="fa fa-check"></i></span><span>Cart</span>
+              </div>
+              <div class="ck-tab-payment-confirm bg-white">
+                <span class="done"><i class="fa fa-check"></i></span><span>Payment Confirm</span>
+              </div>
+              <div class="ck-tab-payment-method active">
+                <span>3</span><span>Payment Methods</span>
+              </div>
+            </div>
+            <div class="checkout-tabs-content">
+              <div class="ck-tab-content active" id="ck-cart-box">
+                <?php $form = ActiveForm::begin(['id' => 'form-signup', 'action' => Url::to(['cart/purchase'])]); ?>
+                  <div class="game-confirm">
+                    <div class="ck-confirm-note">
+                      <span class="note-ico">!</span><span>Your information is committed to security by <strong>Kinggems.us!</strong></span>
+                    </div>
+                    <div class="method-chooser">
+                      <!-- <div class="method-line">
+                        <input type="radio" name="abc" id=""><span>Visa/Master Card</span>
+                      </div> -->
+                      <!-- <div class="method-line">
+                        <input type="radio" name="abc" id="" value="paypal"><span>Paypal</span>
+                      </div> -->
+                      <div class="method-line">
+                        <input type="radio" name="paygate" id="kingcoin"><span>King Coins - Balance</span>
+                      </div>
+                      <!-- <div class="method-line">
+                        <input type="radio" name="abc" id=""><span>Skrill</span>
+                      </div>
+                      <div class="method-line">
+                        <input type="radio" name="abc" id=""><span>Wechat</span>
+                      </div>
+                      <div class="method-line">
+                        <input type="radio" name="abc" id=""><span>Alipay</span>
+                      </div> -->
+                    </div>
+                    <div class="is-desktop">
+                      <?php if ($can_place_order) :?>
+                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart']) ?>
+                      <?php else :?>
+                      <?= Html::a('Go to topup', Url::to(['topup/index']), ['class' => 'btn-product-detail-add-to-cart']) ?>
+                      <?php endif;?>
+                    </div>
+                  </div>
+                  <div class="checkout-cart-total">
+                    <div class="order-quantity">
+                      Order <span>(<?=$item->quantity;?> product)</span>
+                    </div>
+                    <div class="game-name">
+                      <div class="game-image">
+                        <img src="<?=$item->getImageUrl('300x300');?>" alt="">
+                      </div>
+                      <h2><?=$item->getLabel();?></h2>
+                    </div>
+                    <div class="game-totals">
+                      <div class="product-grand-total">
+                        <div class="grand-line">
+                          <span>Subtotal Unit:</span><span><?=$cart->getSubTotalUnit();?></span>
+                        </div>
+                        <?php if ($cart->hasPromotion()) : ?>
+                        <div class="grand-line">
+                          <span>Promo:</span><span>+<?=$cart->getPromotionUnit();?></span>
+                        </div>
+                        <?php endif;?>
+                        <div class="grand-line">
+                          <span>Total Unit:</span><span><?=$cart->getTotalUnit();?></span>
+                        </div>
+                        <div class="grand-line last-line">
+                          <span>Total Price:</span><span>$<?=$cart->getTotalPrice();?></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="is-mobile">
+                      <?php if ($can_place_order) :?>
+                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart']) ?>
+                      <?php else :?>
+                      <?= Html::a('Go to topup', Url::to(['topup/index']), ['class' => 'btn-product-detail-add-to-cart']) ?>
+                      <?php endif;?>
+                    </div>
+                  </div>
+                <?php ActiveForm::end();?>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-6">
-         <div class="box-classic box-bordered box-novi">
-          <div class="box-classic-content">
-            <table class="table-custom table-hover">
-              <tbody>
-                <tr>
-                  <td>Username</td>
-                  <td><?=$item->username;?></td>
-                </tr>
-                <tr>
-                  <td>Password</td>
-                  <td><?=$item->password;?></td>
-                </tr>
-                <tr>
-                  <td>Character name</td>
-                  <td><?=$item->character_name;?></td>
-                </tr>
-                <tr>
-                  <td>Platform</td>
-                  <td><?=$item->platform;?></td>
-                </tr>
-                <tr>
-                  <td>Login method</td>
-                  <td><?=$item->login_method;?></td>
-                </tr>
-                <?php if ($item->recover_code):?>
-                <tr>
-                  <td>Recover Code</td>
-                  <td><?=$item->recover_code;?></td>
-                </tr>
-                <?php endif;?>
-                <?php if ($item->server):?>
-                <tr>
-                  <td>Server</td>
-                  <td><?=$item->server;?></td>
-                </tr>
-                <?php endif;?>
-                <?php if ($item->note):?>
-                <tr>
-                  <td>Note</td>
-                  <td><?=$item->note;?></td>
-                </tr>
-                <?php endif;?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
-    <?php if ($can_place_order) :?>
-    <div class="row">
-      <div class="col-12">
-        <div class="form-wrap">
-          <ul class="radio-group">
-            <li>
-              <label class="radio-inline">
-              <input type="radio" name="radio-group" checked="checked">Pay by King Coin
-              </label>
-            </li>
-          </ul>
-        </div>
-        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'action' => Url::to(['cart/purchase'])]); ?>
-        <?= Html::a('Go back', Url::to(['cart/index']), ['class' => 'button button-primary button-nina']) ?>
-        <?= Html::submitButton('place order', ['class' => 'button button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
-        <?php ActiveForm::end();?>
-      </div>
-    </div>
-    <?php else: ?>
-    <div class="row">
-      <div class="col-12">
-        <div class="form-wrap">
-          <h5>Your wallet is not enough King Coin</h5>
-        </div>
-        <?= Html::a('go to topup', Url::to(['topup/index']), ['class' => 'button button-secondary button-nina']) ?>
-      </div>
-    </div>
-    <?php endif;?>
   </div>
 </section>

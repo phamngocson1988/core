@@ -96,13 +96,17 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
                           <td><?=number_format($model->commission, 1);?></td>
                           <td></td>
                           <td>
-                          <?php if ($model->isCompleted()) : ?>
-                          <span class="label label-default"><?=sprintf("Completed at %s", $model->updated_at);?><span>
-                          <?php elseif ($model->isPending()) : ?>
-                          <span class="label label-default"><?=sprintf("Pending up to %s", $model->getReadyDate());?><span>
-                          <?php elseif ($model->isReady()) : ?>
-                          <a href="<?=Url::to(['affiliate/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Ready</a>
-                          <?php endif; ?>
+                          <?php if (!$can_withdraw) : ?>
+                          <span class="label label-default"><?=sprintf("Waiting");?><span>
+                          <?php else : ?>
+                            <?php if ($model->isCompleted()) : ?>
+                            <span class="label label-default"><?=sprintf("Completed at %s", $model->updated_at);?><span>
+                            <?php elseif ($model->isPending()) : ?>
+                            <span class="label label-default"><?=sprintf("Pending up to %s", $model->getReadyDate());?><span>
+                            <?php elseif ($model->isReady()) : ?>
+                            <a href="<?=Url::to(['affiliate/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Ready</a>
+                            <?php endif; ?>
+                          <?php endif;?>
                           </td>
                         </tr>
                         <?php endforeach; ?>

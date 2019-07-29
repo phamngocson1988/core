@@ -12,6 +12,7 @@ use frontend\models\UserCommission;
 use frontend\models\UserAffiliate;
 use frontend\models\User;
 use frontend\forms\TakeCommission;
+use frontend\behaviors\UserCommissionBehavior;
 
 /**
  * AffiliateController
@@ -92,6 +93,7 @@ class AffiliateController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $user = Yii::$app->user->getIdentity();
+        $user->attachBehavior('UserCommissionBehavior', UserCommissionBehavior::className(), ['id' => $user->id]);
         $request = Yii::$app->request;
         $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 30);
         $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
@@ -124,6 +126,7 @@ class AffiliateController extends Controller
         return $this->render('index', [
             'member' => $member,
             'models' => $models,
+            'can_withdraw' => $user->canWithDraw(),
             'pages' => $pages
         ]);
     }

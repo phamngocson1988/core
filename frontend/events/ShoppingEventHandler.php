@@ -58,6 +58,7 @@ class ShoppingEventHandler extends Model
         $userAff->user_id = $user->affiliated_with;
         $userAff->commission = round($commission, 1);
         $userAff->order_id = $order->id;
+        $userAff->member_id = $user->id;
         $userAff->save();
     }
 }
