@@ -1,6 +1,7 @@
 <?php
 namespace frontend\events;
 
+use Yii;
 use yii\base\Event;
 use yii\base\Model;
 use frontend\models\UserRefer;
