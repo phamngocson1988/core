@@ -17,6 +17,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\components\kingcoin\CartPromotion;
 use frontend\components\kingcoin\CartItem;
+use frontend\events\TopupEventHandler;
 
 
 use frontend\components\payment\cart\PaymentItem;
@@ -204,6 +205,7 @@ class TopupController extends Controller
                     'status' => PaymentTransaction::STATUS_PENDING
                 ])->one();
                 if (!$trn) throw new Exception("Can not find out the transaction #$refId");
+                $trn->on(PaymentTransaction::EVENT_AFTER_UPDATE, [TopupEventHandler::className(), 'applyReferGift']);
                 $trn->status = PaymentTransaction::STATUS_COMPLETED;
                 $trn->payment_at = date('Y-m-d H:i:s');
                 $trn->save();

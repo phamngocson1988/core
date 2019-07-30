@@ -270,6 +270,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(UserWallet::className(), ['user_id' => 'id'])->where('status = :status', [':status' => UserWallet::STATUS_COMPLETED]);
     }
 
+    public function getTransactions()
+    {
+        return $this->hasMany(PaymentTransaction::className(), ['user_id' => 'id'])->where('status = :status', [':status' => PaymentTransaction::STATUS_COMPLETED]);
+    }
+
     public function getOrders()
     {
         return $this->hasMany(Order::className(), ['customer_id' => 'id']);

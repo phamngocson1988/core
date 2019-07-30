@@ -109,14 +109,6 @@ class PurchaseGameForm extends Model
 
             if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
 
-            // if ($cart->hasPromotion()) {
-            //     $promotionItem = $cart->getPromotionItem();
-            //     $apply = new PromotionApply();
-            //     $apply->promotion_id = $promotionItem->id;
-            //     $apply->user_id = $user->id;
-            //     $apply->save();
-            // }
-
             $wallet = new UserWallet();
             $wallet->coin = (-1) * $totalPrice;
             $wallet->balance = $user->getWalletAmount() + $wallet->coin;

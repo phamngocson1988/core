@@ -52,8 +52,8 @@ class ReferController extends Controller
             foreach ($refers as $refer) {
                 $name = ArrayHelper::getValue($refer, 'name');
                 $email = ArrayHelper::getValue($refer, 'email');
-                $count = UserRefer::find()->where(['user_id' => $user->id, 'email' => $email])->count();
-                if (!$count) {
+                // $count = UserRefer::find()->where(['user_id' => $user->id, 'email' => $email])->count();
+                // if (!$count) {
                     // Sent mail
                     $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
                     $mailer->compose('refer_mail', ['user' => $user, 'link' => $link])
@@ -64,16 +64,34 @@ class ReferController extends Controller
                     ->send();
                             
                     // Save model
-                    $model = new UserRefer();
-                    $model->user_id = $user->id;
-                    $model->name = $name;
-                    $model->email = $email;
-                    $model->status = UserRefer::STATUS_SENT;
-                    $model->save();
-                }
+                    // $model = new UserRefer();
+                    // $model->user_id = $user->id;
+                    // $model->name = $name;
+                    // $model->email = $email;
+                    // $model->status = UserRefer::STATUS_SENT;
+                    // $model->save();
+                // }
             }
         }
         return $this->render('index', [
+            'user' => $user
+        ]);
+    }
+
+    public function actionMember()
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'refer.index';
+        $user = Yii::$app->user->getIdentity();
+        $command = UserRefer::find()->where(['user_id' => Yii::$app->user->id]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('member', [
+            'models' => $models,
+            'pages' => $pages,
             'user' => $user
         ]);
     }

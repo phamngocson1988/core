@@ -20,6 +20,9 @@ class PaymentGatewayFactory extends Model
         ],
         'offline' => [
             'class' => '\frontend\components\payment\clients\OfflinePayment',
+        ],
+        'kinggems' => [
+            'class' => '\frontend\components\payment\clients\Kinggems',
         ]
     ];
 

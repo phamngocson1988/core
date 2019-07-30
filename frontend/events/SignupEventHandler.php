@@ -29,13 +29,10 @@ class SignupEventHandler extends Model
             $referModel->user_id = $invitor->id;
             $referModel->name = $user->name;
             $referModel->email = $user->email;
-            $referModel->status = UserRefer::STATUS_CREATED;
-            $referModel->note = 'Created not from email refer';
-            $referModel->save();
-        } else {
-            $referModel->status = UserRefer::STATUS_CREATED;
-            $referModel->save();
+            $referModel->note = 'Created';
         }
+        $referModel->status = UserRefer::STATUS_CREATED;
+        $referModel->save();
     }
 
     public static function affiliateCheckingEvent(AfterSignupEvent $event) 

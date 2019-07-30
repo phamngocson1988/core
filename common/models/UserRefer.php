@@ -33,6 +33,19 @@ class UserRefer extends ActiveRecord
         ];
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['email' => 'email']);
+    }
+
+    public function getTransaction()
+    {
+        $user = $this->user;
+        if (!$user) return null;
+        $command = $user->getTransactions();
+        return $command->one();
+    }
+
     public function checkExpired($date = null)
     {
         $now = ($date) ? strtotime($date) : strtotime('now');

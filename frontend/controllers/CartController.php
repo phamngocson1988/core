@@ -168,6 +168,94 @@ class CartController extends Controller
         return $this->render('checkout', ['can_place_order' => $canPlaceOrder]);
     }
 
+    public function actionPurchase1()
+    {
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
+        $identifier = $request->post('identifier');
+        if (!$identifier) throw new InvalidParamException('You must choose a payment gateway');
+        $paymentCart = new PaymentCart([
+            'title' => 'Pay for buying Game',
+        ]);
+        $cart = Yii::$app->cart;
+        if (!$cart->getItems()) return $this->redirect(['site/index']);
+        $cartItem = $cart->getItem();
+        $paymentCartItem = new PaymentItem([
+            'id' => $cartItem->getUniqueId(),
+            'title' => $cartItem->getLabel(),
+            'quantity' => $cartItem->quantity,
+            'price' => $cartItem->getPrice()
+        ]);
+        $paymentCart->addItem($paymentCartItem);
+        
+        if ($cart->hasPromotion()) {
+            $cart->applyPromotion();
+            if ($cart->getPromotionMoney()) {
+                $promotionItem = $cart->getPromotionItem();
+                $paymentPromotion = new PaymentPromotion([
+                    'id' => $promotionItem->code,
+                    'title' => 'promotion promotion code ' . $promotionItem->code,
+                    'price' => $cart->getPromotionMoney()
+                ]);
+                $paymentCart->setPromotion($paymentPromotion);
+            }
+        }
+        $gateway = PaymentGatewayFactory::getClient($identifier);
+        $gateway->confirm_url = 'cart/verify';
+        $gateway->success_url = 'cart/success';
+        $gateway->cancel_url = 'cart/cancel';
+        $gateway->error_url = 'cart/error';
+
+        // Create order
+        $totalPrice = $cart->getTotalPrice();
+        $subTotalPrice = $cart->getSubTotalPrice();
+        $promotionCoin = $cart->getPromotionCoin();
+        $promotionUnit = $cart->getPromotionUnit();
+
+        // Order detail
+        $order = new Order();
+        $order->sub_total_price = $subTotalPrice;
+        $order->total_discount = $promotionCoin;
+        $order->total_price = $totalPrice;
+        $order->customer_id = $user->id;
+        $order->customer_name = $user->name;
+        $order->customer_email = $cartItem->reception_email;
+        $order->customer_phone = $user->phone;
+        $order->status = Order::STATUS_VERIFYING;
+        $order->payment_at = date('Y-m-d H:i:s');
+        $order->generateAuthKey();
+
+        // Item detail
+        $order->game_id = $cartItem->id;
+        $order->game_title = $cartItem->getLabel();
+        $order->quantity = $cartItem->quantity;
+        $order->unit_name = $cartItem->unit_name;
+        $order->sub_total_unit = $cartItem->getTotalUnit();
+        $order->promotion_unit = $promotionUnit;
+        $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
+        $order->username = $cartItem->username;
+        $order->password = $cartItem->password;
+        $order->platform = $cartItem->platform;
+        $order->login_method = $cartItem->login_method;
+        $order->character_name = $cartItem->character_name;
+        $order->recover_code = $cartItem->recover_code;
+        $order->server = $cartItem->server;
+        $order->note = $cartItem->note;
+
+        if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
+        $cart->clear();
+        $gateway->setCart($paymentCart);
+        $paygateData = $gateway->request();
+        try {
+            return $this->render($identifier, [
+                'paygateData' => (array)$paygateData,
+                'transaction' => $trn 
+            ]);
+        } catch (ViewNotFoundException $e) {
+            return;
+        }
+    }
+
     public function actionPurchase()
     {
         // Create order
