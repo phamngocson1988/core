@@ -34,12 +34,13 @@ $cart->applyPromotion();
                       <!-- <div class="method-line">
                         <input type="radio" name="abc" id=""><span>Visa/Master Card</span>
                       </div> -->
+                      <?=Html::radioList( 'identifier', 'paypal', ['paypal' => 'Paypal', 'kinggems' => 'King Coins - Balance'] );?>
                       <!-- <div class="method-line">
-                        <input type="radio" name="abc" id="" value="paypal"><span>Paypal</span>
-                      </div> -->
-                      <div class="method-line">
-                        <input type="radio" name="paygate" id="kingcoin"><span>King Coins - Balance</span>
+                        <input type="radio" name="identifier" id="" value="paypal"><span>Paypal</span>
                       </div>
+                      <div class="method-line">
+                        <input type="radio" name="identifier" id="kingcoin"><span>King Coins - Balance</span>
+                      </div> -->
                       <!-- <div class="method-line">
                         <input type="radio" name="abc" id=""><span>Skrill</span>
                       </div>

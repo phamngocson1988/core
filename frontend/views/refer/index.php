@@ -119,7 +119,7 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
               <p>2. The promotion is available for all active KingGems.us members. To qualify as an active member you must have placed at least one order since opening your account.</p>
               <p>3. In order to quality for the referral bonus, friends must fund their account with a minimum of USD 50 or currency equivalent within 10 days of registration.</p>
               <p>4. In order to qualify for the referral bonus, friends must be new customers and not already hold an account with KingGems.us.</p>
-              <p>5. The referral bonus will be automatically credited to your account when your friend meets the deposit requirements. The bonus will be USD10 or currency equivalent per successful referral.</p>
+              <p>5. The referral bonus will be automatically credited to your account when your friend meets the deposit requirements. The bonus will be USD5 or currency equivalent per successful referral.</p>
               <p>7. The referral bonuses must be used within 10 days of being credited.</p>
               <p>9. The company reserves the right to disqualify members or refuse to accept new referrals at it’s own discretion.</p>
               <p>10. The company reserves the right to change or end the promotion at any time.</p>

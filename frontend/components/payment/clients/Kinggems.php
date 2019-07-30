@@ -14,77 +14,52 @@ class Kinggems extends PaymentGateway
     protected function loadData()
     {
         $cart = $this->cart;
-        $totalPrice = $cart->getTotalPrice();
-
+        $user = Yii::$app->user->identify;
         $itemList = [];
         foreach ($cart->getItems() as $cartItem) {
-            $ppItem = new Item();
-            $ppItem->setName($cartItem->getTitle())
-            ->setCurrency($currency)
-            ->setQuantity($cartItem->getQuantity())
-            ->setSku($cartItem->getId())
-            ->setPrice($cartItem->getPrice());
-            $itemList[] = $ppItem;
+            $itemList[] = [
+                'id' => $cartItem->getId(),
+                'title' => $cartItem->getTitle(),
+                'quantity' => $cartItem->getQuantity(),
+                'price' => $cartItem->getPrice()
+            ];
         }
 
-        // For discount
-        if ($cart->hasDiscount()) {
-            $discount = $cart->getDiscount();
-            $discountItem = new Item();
-            $discountItem->setName($discount->getTitle())
-            ->setCurrency($currency)
-            ->setQuantity(1)
-            ->setSku($discount->getId())
-            ->setPrice(($cart->getTotalDiscount()) * (-1));
-            $itemList[] = $discountItem;
-        }
-
-        $ppitemList = new ItemList();
-        $ppitemList->setItems($itemList);
-
-        $details = new Details();
-        $details->setShipping(0)
-            ->setTax(0)
-            ->setSubtotal($totalPrice);
-        // ### Amount
-        $amount = new Amount();
-        $amount->setCurrency($currency)
-            ->setTotal($totalPrice)
-            ->setDetails($details);
-
-        $transaction = new PaypalTransaction();
-        $transaction->setAmount($amount)
-            ->setItemList($ppitemList)
-            ->setDescription($cart->getTitle())
-            ->setInvoiceNumber($this->getReferenceId());
-            // ->setInvoiceNumber(uniqid());
-
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl($this->getConfirmUrl())
-            ->setCancelUrl($this->getCancelUrl());
-
-        $payer = new Payer();
-        $payer->setPaymentMethod("paypal");
-
-        $payment = new Payment();
-        $payment->setIntent("sale")
-            ->setPayer($payer)
-            ->setRedirectUrls($redirectUrls)
-            ->setTransactions(array($transaction));
-        return $payment;
+        return [
+            'items' => $itemList,
+            'payer' => $user->auth_key,
+            'ref_key' => $this->getReferenceId(),
+            'secret' => Yii::$app->session->setFlash('kinggems_paygate', Yii::$app->security->generateRandomString())
+        ];
     }
 
     protected function sendRequest()
     {
         $payment = $this->loadData();
         try {
-            $payment->create($apiContext);
-            if (self::PAYMENT_STATE_CREATED == strtolower($payment->state)) {// order was created
-                $link = $payment->getApprovalLink();
-                $query = parse_url($link, PHP_URL_QUERY);
-                parse_str($query, $params);
-                return $this->redirect($link);
-            }  
+            // create transaction
+            $server = Url::to(['cart/kinggems', 'scenario' => 'create'], true);
+            $ch = curl_init(); 
+            curl_setopt($ch, CURLOPT_URL, $server); 
+            curl_setopt($ch, CURLOPT_POST, TRUE); 
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payment);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+            $payload = curl_exec($ch); 
+            curl_close($ch);
+            $transaction = json_decode($payload, true);
+            if ($transaction['status'] == false) {
+                die($transaction['message']);
+            }
+
+            // approve transaction
+            $appoveData = [
+                'id' => $transaction['id'], 
+                'error_url' => $this->getErrorUrl(),
+                'success_url' => $this->getSuccessUrl(),
+                'verify_url' => $this->getConfirmUrl()
+            ];
+            $approveLink = Url::to(array_merge(['cart/kinggems', 'scenario' => 'approve'], $appoveData), true);
+            return $this->redirect($approveLink);
         } catch (PayPalConnectionException $ex) {
             throw $ex;
         }

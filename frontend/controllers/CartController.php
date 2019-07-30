@@ -60,6 +60,16 @@ class CartController extends Controller
             ],
         ];
     }
+
+    public function actions()
+    {
+        return [
+            'kinggems' => [
+                'class' => 'frontend\components\payment\actions\KinggemsPaygateAction',
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $request = Yii::$app->request;
@@ -168,7 +178,7 @@ class CartController extends Controller
         return $this->render('checkout', ['can_place_order' => $canPlaceOrder]);
     }
 
-    public function actionPurchase1()
+    public function actionPurchase()
     {
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
@@ -256,7 +266,7 @@ class CartController extends Controller
         }
     }
 
-    public function actionPurchase()
+    public function actionPurchase1()
     {
         // Create order
         $user = Yii::$app->user->getIdentity();
