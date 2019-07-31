@@ -6,18 +6,28 @@ use yii\web\BadRequestHttpException;
 use yii\base\Action;
 use frontend\models\UserWallet;
 use frontend\models\Order;
+use frontend\models\User;
 
 class KinggemsPaygateAction extends Action
 {
 	public function run()
 	{
 		$request = Yii::$app->request;
-		$user = Yii::$app->user->identity;
+		$user = User::findOne([
+			'auth_key' => $request->post('payer'),
+			'status' => User::STATUS_ACTIVE
+		]);
+		// Yii::$app->request->csrfParam => Yii::$app->request->getCsrfToken(),
+
+		if (!$user) return $this->controller->asJson(['status' => false, 'message' => 'User is invalid']);
+		Yii::$app->user->login($user);
 		$scenario = $request->get('scenario');
 		switch ($scenario) {
 			case 'create':
-				return $this->createTransaction();
-			case 'approve'
+				$data = $this->createTransaction();
+				return $this->controller->asJson($data);
+			case 'approve':
+				die('laksdfjldks');
 				$transactionId = $request->get('id');
 				$success_url = $request->get('success_url');
 				$error_url = $request->get('error_url');
@@ -28,13 +38,14 @@ class KinggemsPaygateAction extends Action
 		            curl_setopt($ch, CURLOPT_RETURNTRANSFER, FALSE); 
 		            curl_exec($ch); 
             		curl_close($ch);
-					return $this->redirect($success_url);
+					return $this->controller->redirect($success_url);
 				} else {
-					return $this->redirect($error_url);
+					return $this->controller->redirect($error_url);
 				}
 				break;
 			default:
-				return $this->asJson(['status' => false, 'message' => 'Invalid scenario']);
+				die('laksdfjldks');
+				return $this->controller->asJson(['status' => false, 'message' => 'Invalid scenario']);
 		}
 	}
 
@@ -42,12 +53,6 @@ class KinggemsPaygateAction extends Action
 	{
 		$request = Yii::$app->request;
 		$user = Yii::$app->user->identity;
-		if ($request->post('secret') != Yii::$app->session->getFlash('kinggems_paygate')) {
-			return $this->asJson(['status' => false, 'message' => 'Secrect code is invalid']);
-		}
-		if ($request->post('payer') != $user->getAuthKey()) {
-			return $this->asJson(['status' => false, 'message' => 'Payer is invalid']);
-		}
 		$refId = $request->post('ref_key');
 		$items = (array)$request->post('items', []);
 		$totals = array_map(function($item) {
@@ -67,10 +72,10 @@ class KinggemsPaygateAction extends Action
 	        $wallet->status = UserWallet::STATUS_PENDING;
 	        $wallet->payment_at = date('Y-m-d H:i:s');
 	        if ($wallet->save()) {
-	        	return $this->asJson(['status' => true, 'id' => $wallet->id]);
+	        	return ['status' => true, 'id' => $wallet->id];
 	        }
 		} catch (\Exception $e) {
-			return $this->asJson(['status' => false, 'message' => $e->getMessage()]);
+			return ['status' => false, 'message' => $e->getMessage()];
 		}
 	}
 

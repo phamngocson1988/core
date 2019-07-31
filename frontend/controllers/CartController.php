@@ -18,11 +18,18 @@ use frontend\models\PromotionApply;
 use frontend\forms\PurchaseGameForm;
 use frontend\events\ShoppingEventHandler;
 
+use frontend\components\payment\cart\PaymentItem;
+use frontend\components\payment\cart\PaymentCart;
+use frontend\components\payment\cart\PaymentPromotion;
+use frontend\components\payment\PaymentGateway;
+use frontend\components\payment\PaymentGatewayFactory;
+
 /**
  * CartController
  */
 class CartController extends Controller
 {
+    // public $enableCsrfValidation = false;
     /**
      * @inheritdoc
      */
@@ -31,7 +38,7 @@ class CartController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'add', 'update', 'checkout', 'purchase'],
+                'only' => ['index', 'add', 'update', 'checkout', 'purchase', 'kinggems'],
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -39,7 +46,7 @@ class CartController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['add', 'update'],
+                        'actions' => ['add', 'update', 'kinggems'],
                         'allow' => true,
                         'roles' => ['@', '?'],
                     ],
@@ -215,54 +222,81 @@ class CartController extends Controller
         $gateway->success_url = 'cart/success';
         $gateway->cancel_url = 'cart/cancel';
         $gateway->error_url = 'cart/error';
-
-        // Create order
-        $totalPrice = $cart->getTotalPrice();
-        $subTotalPrice = $cart->getSubTotalPrice();
-        $promotionCoin = $cart->getPromotionCoin();
-        $promotionUnit = $cart->getPromotionUnit();
-
-        // Order detail
-        $order = new Order();
-        $order->sub_total_price = $subTotalPrice;
-        $order->total_discount = $promotionCoin;
-        $order->total_price = $totalPrice;
-        $order->customer_id = $user->id;
-        $order->customer_name = $user->name;
-        $order->customer_email = $cartItem->reception_email;
-        $order->customer_phone = $user->phone;
-        $order->status = Order::STATUS_VERIFYING;
-        $order->payment_at = date('Y-m-d H:i:s');
-        $order->generateAuthKey();
-
-        // Item detail
-        $order->game_id = $cartItem->id;
-        $order->game_title = $cartItem->getLabel();
-        $order->quantity = $cartItem->quantity;
-        $order->unit_name = $cartItem->unit_name;
-        $order->sub_total_unit = $cartItem->getTotalUnit();
-        $order->promotion_unit = $promotionUnit;
-        $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
-        $order->username = $cartItem->username;
-        $order->password = $cartItem->password;
-        $order->platform = $cartItem->platform;
-        $order->login_method = $cartItem->login_method;
-        $order->character_name = $cartItem->character_name;
-        $order->recover_code = $cartItem->recover_code;
-        $order->server = $cartItem->server;
-        $order->note = $cartItem->note;
-
-        if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
-        $cart->clear();
-        $gateway->setCart($paymentCart);
-        $paygateData = $gateway->request();
+        
         try {
-            return $this->render($identifier, [
-                'paygateData' => (array)$paygateData,
-                'transaction' => $trn 
-            ]);
-        } catch (ViewNotFoundException $e) {
-            return;
+            // Create order
+            $totalPrice = $cart->getTotalPrice();
+            $subTotalPrice = $cart->getSubTotalPrice();
+            $promotionCoin = $cart->getPromotionCoin();
+            $promotionUnit = $cart->getPromotionUnit();
+
+            // Order detail
+            $order = new Order();
+            $order->payment_method = $identifier;
+            $order->payment_id = $gateway->getReferenceId();
+            $order->sub_total_price = $subTotalPrice;
+            $order->total_discount = $promotionCoin;
+            $order->total_price = $totalPrice;
+            $order->customer_id = $user->id;
+            $order->customer_name = $user->name;
+            $order->customer_email = $cartItem->reception_email;
+            $order->customer_phone = $user->phone;
+            $order->status = Order::STATUS_VERIFYING;
+            $order->payment_at = date('Y-m-d H:i:s');
+            $order->generateAuthKey();
+
+            // Item detail
+            $order->game_id = $cartItem->id;
+            $order->game_title = $cartItem->getLabel();
+            $order->quantity = $cartItem->quantity;
+            $order->unit_name = $cartItem->unit_name;
+            $order->sub_total_unit = $cartItem->getTotalUnit();
+            $order->promotion_unit = $promotionUnit;
+            $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
+            $order->username = $cartItem->username;
+            $order->password = $cartItem->password;
+            $order->platform = $cartItem->platform;
+            $order->login_method = $cartItem->login_method;
+            $order->character_name = $cartItem->character_name;
+            $order->recover_code = $cartItem->recover_code;
+            $order->server = $cartItem->server;
+            $order->note = $cartItem->note;
+
+            if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
+            // $cart->clear();
+            $gateway->setCart($paymentCart);
+            return $gateway->request();
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function actionVerify($identifier)
+    {
+        $gateway = PaymentGatewayFactory::getClient($identifier);
+        try {
+            if ($gateway->confirm()) {
+                $refId = $gateway->getReferenceId();
+                $user = Yii::$app->user->getIdentity();
+                $order = Order::find()->where([
+                    'payment_method' => $identifier,
+                    'payment_id' => $refId,
+                    'status' => Order::STATUS_VERIFYING,
+                ])->one();
+                if (!$order) throw new \Exception('Order is not exist');
+                $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
+                $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
+                $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
+                $order->status = Order::STATUS_COMPLETED;
+                $order->payment_at = date('Y-m-d H:i:s');
+                $order->save();
+                return $gateway->doSuccess();
+            } else {
+                return $gateway->doError();
+            }
+        } catch (\Exception $e) {
+            Yii::error($gateway->identifier . $gateway->getReferenceId() . " confirm error " . $e->getMessage());
+            return $gateway->doError();
         }
     }
 

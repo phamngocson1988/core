@@ -88,11 +88,7 @@ $cart->applyPromotion();
                       </div>
                     </div>
                     <div class="is-mobile">
-                      <?php if ($can_place_order) :?>
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart']) ?>
-                      <?php else :?>
-                      <?= Html::a('Go to topup', Url::to(['topup/index']), ['class' => 'btn-product-detail-add-to-cart']) ?>
-                      <?php endif;?>
                     </div>
                   </div>
                 <?php ActiveForm::end();?>
