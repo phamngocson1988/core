@@ -10,9 +10,21 @@ class ShoppingEventHandler extends Model
 {
     public static function sendNotificationEmail($event) 
     {
-        $form = $event->sender;
-        $user = $form->user;
-        $order = $form->getOrder();
+        // $form = $event->sender;
+        // $user = $form->user;
+        // $order = $form->getOrder();
+        // $settings = Yii::$app->settings;
+        // $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        // if ($adminEmail) {
+        //     $email = Yii::$app->mailer->compose('place_order', ['order' => $order])
+        //     ->setTo($user->email)
+        //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+        //     ->setSubject(sprintf("Order confirmation - %s", $order->id))
+        //     ->setTextBody("Thanks for your order")
+        //     ->send();
+        // }
+        $order = $event->sender;
+        $user = $order->customer;
         $settings = Yii::$app->settings;
         $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
         if ($adminEmail) {
@@ -27,29 +39,54 @@ class ShoppingEventHandler extends Model
 
     public static function applyVoucherForUser($event) 
     {
-        $form = $event->sender;
-        $cart = $form->cart;
-        $user = $form->user;
-        if ($cart->hasPromotion()) {
+        // $form = $event->sender;
+        // $cart = $form->cart;
+        // $user = $form->user;
+        // if ($cart->hasPromotion()) {
+        //     $promotionItem = $cart->getPromotionItem();
+        //     $apply = new PromotionApply();
+        //     $apply->promotion_id = $promotionItem->id;
+        //     $apply->user_id = $user->id;
+        //     $apply->save();
+        // }
+        $order = $event->sender;
+        if ($order->promotion_id) {
             $promotionItem = $cart->getPromotionItem();
             $apply = new PromotionApply();
-            $apply->promotion_id = $promotionItem->id;
-            $apply->user_id = $user->id;
+            $apply->promotion_id = $order->promotion_id;
+            $apply->user_id = $order->customer_id;
             $apply->save();
         }
     }
 
     public static function applyAffiliateProgram($event) 
     {
+        // $setting = Yii::$app->settings;
+        // $form = $event->sender;
+        // $cart = $form->cart;
+        // $user = $form->user;
+        // $order = $form->getOrder();
+        // if (!$user->affiliated_with) return;
+        // if (!$setting->get('AffiliateProgramForm', 'status')) return;
+        // if ($cart->hasPromotion()) $cart->applyPromotion();
+        // $totalPrice = $cart->getTotalPrice();
+        // $value = $setting->get('AffiliateProgramForm', 'value', 0);
+        // $type = $setting->get('AffiliateProgramForm', 'type', 'fix');
+        // $commission = ($type == 'percent') ? ($totalPrice * $value) / 100 : $value;
+        // // save to affiliate table
+        // $userAff = new UserCommission();
+        // $userAff->user_id = $user->affiliated_with;
+        // $userAff->commission = round($commission, 1);
+        // $userAff->order_id = $order->id;
+        // $userAff->member_id = $user->id;
+        // $userAff->save();
         $setting = Yii::$app->settings;
-        $form = $event->sender;
-        $cart = $form->cart;
-        $user = $form->user;
-        $order = $form->getOrder();
+        $order = $event->sender;
+        $user = $order->customer;
         if (!$user->affiliated_with) return;
         if (!$setting->get('AffiliateProgramForm', 'status')) return;
-        if ($cart->hasPromotion()) $cart->applyPromotion();
-        $totalPrice = $cart->getTotalPrice();
+        
+        $totalPrice = $order->total_price;
         $value = $setting->get('AffiliateProgramForm', 'value', 0);
         $type = $setting->get('AffiliateProgramForm', 'type', 'fix');
         $commission = ($type == 'percent') ? ($totalPrice * $value) / 100 : $value;

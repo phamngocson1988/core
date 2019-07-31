@@ -34,13 +34,14 @@ $cart->applyPromotion();
                       <!-- <div class="method-line">
                         <input type="radio" name="abc" id=""><span>Visa/Master Card</span>
                       </div> -->
-                      <?=Html::radioList( 'identifier', 'paypal', ['paypal' => 'Paypal', 'kinggems' => 'King Coins - Balance'] );?>
-                      <!-- <div class="method-line">
-                        <input type="radio" name="identifier" id="" value="paypal"><span>Paypal</span>
-                      </div>
                       <div class="method-line">
-                        <input type="radio" name="identifier" id="kingcoin"><span>King Coins - Balance</span>
-                      </div> -->
+                        <input type="radio" name="identifier" value="paypal" checked=""><span>Paypal</span>
+                      </div>
+                      <?php if ($can_place_order) : ?>
+                      <div class="method-line">
+                        <input type="radio" name="identifier" value="kinggems"><span>King Coins - Balance</span>
+                      </div>
+                      <?php endif;?>
                       <!-- <div class="method-line">
                         <input type="radio" name="abc" id=""><span>Skrill</span>
                       </div>
@@ -52,11 +53,7 @@ $cart->applyPromotion();
                       </div> -->
                     </div>
                     <div class="is-desktop">
-                      <?php if ($can_place_order) :?>
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart']) ?>
-                      <?php else :?>
-                      <?= Html::a('Go to topup', Url::to(['topup/index']), ['class' => 'btn-product-detail-add-to-cart']) ?>
-                      <?php endif;?>
                     </div>
                   </div>
                   <div class="checkout-cart-total">

@@ -45,26 +45,19 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     <?= $form->field($item, 'recover_code', ['inputOptions' => ['id' => 'recover_code']])->textInput()->label('Recovery Code')->hint('Example: 12345678 11112222 33334444');?>
                     <?= $form->field($item, 'note')->textInput()->label('Note for saler');?>
 
-                    <!-- <div class="form-group">
-                      <label>
-                        Recovery Code
-                        <div class="recovery-code-hint-box">
-                          <div class="top">
+                    <div class="form-group">
+                      <div class="recovery-code-hint-box">
+                        <div class="top">
                             This codes is necessary, unless you would like to wait
                             for a long time.
-                          </div>
-                          <div class="bottom">
-                            <div><strong>How to?</strong></div>
-                            <div>Get Google code, <a href="#">click here</a></div>
-                            <div>Get Facebook code, <a href="#">click here</a></div>
-                          </div>
                         </div>
-                      </label>
-                      <div class="multi-control">
-                        <input class="form-control" type="text">
-                        <input class="form-control" type="text">
+                        <div class="bottom">
+                            <div><strong>How to?</strong></div>
+                            <div>Get Google code, <a href="https://youtu.be/F3xMAXFRHNE" target="_blank">click here</a></div>
+                            <div>Get Facebook code, <a href="https://youtu.be/sG1GAcsslzs" target="_blank">click here</a></div>
+                        </div>
                       </div>
-                    </div> -->
+                    </div>
                   </div>
                   <?php ActiveForm::end(); ?>
 

@@ -32,13 +32,11 @@ return [
         'checkout' => 'cart/checkout',
         'purchase' => 'cart/purchase',
         'purchase-success' => 'cart/success',
-        'purchase-cancel' => 'cart/error',
+        'purchase-cancel' => 'cart/cancel',
+        'purchase-error' => 'cart/error',
+        
         //user
         'user/dashboard' => 'user/index',
-
-        // payment
-        'pricing/<identifier>/verify' => 'pricing/verify',
-        'pricing/<identifier>/cancel' => 'pricing/cancel',
 
         // topup
         'topup' => 'topup/index',

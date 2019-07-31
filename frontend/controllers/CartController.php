@@ -4,7 +4,6 @@ namespace frontend\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -13,9 +12,6 @@ use frontend\components\cart\Cart;
 use frontend\components\cart\CartItem;
 use frontend\components\cart\CartPromotion;
 use frontend\models\Order;
-use frontend\models\UserWallet;
-use frontend\models\PromotionApply;
-use frontend\forms\PurchaseGameForm;
 use frontend\events\ShoppingEventHandler;
 
 use frontend\components\payment\cart\PaymentItem;
@@ -38,7 +34,7 @@ class CartController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'add', 'update', 'checkout', 'purchase', 'kinggems'],
+                'only' => ['index', 'add', 'update', 'checkout', 'purchase'],
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -46,7 +42,7 @@ class CartController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['add', 'update', 'kinggems'],
+                        'actions' => ['add', 'update'],
                         'allow' => true,
                         'roles' => ['@', '?'],
                     ],
@@ -64,15 +60,6 @@ class CartController extends Controller
                     'update' => ['post'],
                     'purchase' => ['post'],
                 ],
-            ],
-        ];
-    }
-
-    public function actions()
-    {
-        return [
-            'kinggems' => [
-                'class' => 'frontend\components\payment\actions\KinggemsPaygateAction',
             ],
         ];
     }
@@ -252,6 +239,7 @@ class CartController extends Controller
             $order->unit_name = $cartItem->unit_name;
             $order->sub_total_unit = $cartItem->getTotalUnit();
             $order->promotion_unit = $promotionUnit;
+            $order->promotion_id = $cart->hasPromotion() ? $cart->getPromotionItem()->id : null;
             $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
             $order->username = $cartItem->username;
             $order->password = $cartItem->password;
@@ -263,7 +251,7 @@ class CartController extends Controller
             $order->note = $cartItem->note;
 
             if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
-            // $cart->clear();
+            $cart->clear();
             $gateway->setCart($paymentCart);
             return $gateway->request();
         } catch (\Exception $e) {
@@ -274,9 +262,14 @@ class CartController extends Controller
     public function actionVerify($identifier)
     {
         $gateway = PaymentGatewayFactory::getClient($identifier);
+        $gateway->confirm_url = 'cart/verify';
+        $gateway->success_url = 'cart/success';
+        $gateway->cancel_url = 'cart/cancel';
+        $gateway->error_url = 'cart/error';
+        $request = Yii::$app->request;
+        $refId = $request->get('ref');
         try {
             if ($gateway->confirm()) {
-                $refId = $gateway->getReferenceId();
                 $user = Yii::$app->user->getIdentity();
                 $order = Order::find()->where([
                     'payment_method' => $identifier,
@@ -300,26 +293,51 @@ class CartController extends Controller
         }
     }
 
-    public function actionPurchase1()
+    public function actionSuccess()
     {
-        // Create order
-        $user = Yii::$app->user->getIdentity();
-        $cart = Yii::$app->cart;
-        $form = new PurchaseGameForm([
-            'user' => $user,
-            'cart' => $cart
-        ]);
-        $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
-        $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
-        $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
-        if (!$form->purchase()) {
-            print_r($form->getErrorSummary(true));die;
-        } else {
-            $cart->clear();
-        }
         return $this->render('/site/notice', [           
             'title' => 'Place order successfully',
             'content' => 'Congratulation.'
         ]);
     }
+
+    public function actionCancel()
+    {
+        return $this->render('/site/error', [           
+            'name' => 'Canncel order',
+            'message' => 'Your have cancelled order'
+        ]);
+
+    }
+
+    public function actionError()
+    {
+        return $this->render('/site/error', [           
+            'name' => 'Error order',
+            'message' => 'There is error occurred'
+        ]);
+    }
+
+    // public function actionPurchase1()
+    // {
+    //     // Create order
+    //     $user = Yii::$app->user->getIdentity();
+    //     $cart = Yii::$app->cart;
+    //     $form = new PurchaseGameForm([
+    //         'user' => $user,
+    //         'cart' => $cart
+    //     ]);
+    //     $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
+    //     $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
+    //     $form->on(PurchaseGameForm::EVENT_AFTER_PURCHASE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
+    //     if (!$form->purchase()) {
+    //         print_r($form->getErrorSummary(true));die;
+    //     } else {
+    //         $cart->clear();
+    //     }
+    //     return $this->render('/site/notice', [           
+    //         'title' => 'Place order successfully',
+    //         'content' => 'Congratulation.'
+    //     ]);
+    // }
 }
