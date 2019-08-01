@@ -42,7 +42,7 @@ class SiteController extends Controller
                     [
                         'actions' => ['signup'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?', '@'],
                     ],
                     [
                         'actions' => ['logout'],
@@ -192,20 +192,25 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        if (!Yii::$app->user->getIsGuest()) return $this->redirect(['site/index']);
         $this->view->params['body_class'] = 'global-bg';
         $request = Yii::$app->request;
         $model = new SignupForm();
 
         // Register an event
         if ($request->get('refer')) {
-            $this->view->registerMetaTag(['property' => 'og:title', 'content' => 'You are referred by your friend'], 'og:title');
-            $this->view->registerMetaTag(['property' => 'og:description', 'content' => 'You are referred by your friend'], 'og:description');
+            $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
+            $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $referTitle], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $referContent], 'og:description');
             $model->refer = $request->get('refer');
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'referCheckingEvent']);
         }
         if ($request->get('affiliate')) {
-            $this->view->registerMetaTag(['property' => 'og:title', 'content' => 'You are affiliated by your friend'], 'og:title');
-            $this->view->registerMetaTag(['property' => 'og:description', 'content' => 'You are affiliated by your friend'], 'og:description');
+            $affTitle = Html::encode("WELCOME TO KINGGEMS.US");
+            $affContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $affTitle], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $affContent], 'og:description');
             $model->affiliate = $request->get('affiliate');
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
