@@ -13,6 +13,7 @@ class PromotionCoinBenefit extends PromotionBenefitAbstract implements Promotion
 {
     public $value;
     public $type;
+    public $max_value;
 
     const TYPE_FIX = 'fix';
     const TYPE_PERCENT = 'percent';
@@ -25,7 +26,7 @@ class PromotionCoinBenefit extends PromotionBenefitAbstract implements Promotion
     public function scenarios()
     {
         return [
-            self::SCENARIO_DEFAULT => ['value', 'type'],
+            self::SCENARIO_DEFAULT => ['value', 'type', 'max_value'],
         ];
     }
 
@@ -34,6 +35,7 @@ class PromotionCoinBenefit extends PromotionBenefitAbstract implements Promotion
         return [
             'value' => 'Giá trị',
             'type' => 'Cách tính',
+            'max_value' => 'Giới hạn khuyến mãi'
         ];
     }
 
@@ -43,9 +45,10 @@ class PromotionCoinBenefit extends PromotionBenefitAbstract implements Promotion
         switch ($attr) {
             case 'value':
                 return $form->field($this, $attr, $options)->textInput();
-                break;
             case 'type':
                 return $form->field($this, $attr, $options)->dropDownList(self::listTypes());
+            case 'max_value':
+                return $form->field($this, $attr, $options)->textInput();
             default:
                 return '';
         }
@@ -59,7 +62,8 @@ class PromotionCoinBenefit extends PromotionBenefitAbstract implements Promotion
         } elseif ($this->type == self::TYPE_PERCENT) {
             $addition = ceil(($this->value * $amount) / 100);
         }
-        return $addition;
+
+        return ($this->max_value && $addition) ? min($this->max_value, $addition) : $addition;
     }
 
     public function apply($amount)

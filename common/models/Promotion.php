@@ -83,7 +83,11 @@ class Promotion extends ActiveRecord
             'specified_games' => [
                 'class' => '\common\models\promotions\SpecifiedGamesRule',
                 'title' => 'Khuyến mãi dành cho game cụ thể'
-            ]
+            ],
+            'first_topup' => [
+                'class' => '\common\models\promotions\FirstTopupRule',
+                'title' => 'Khuyến mãi cho đơn hàng đầu tiên'
+            ],
         ];
     }
 
@@ -188,8 +192,7 @@ class Promotion extends ActiveRecord
     {
         $rule = self::pickRule($this->rule_name);
         if (!$rule) return null;
-        $attrs = $this->getRuleData();
-        if (!$attrs) return null;
+        $attrs = (array)$this->getRuleData();
         $attrs['promotion_id'] = $this->id;
         $rule->attributes = $attrs;
         return $rule;
@@ -226,8 +229,7 @@ class Promotion extends ActiveRecord
     {
         $benefit = self::pickBenefit($this->benefit_name);
         if (!$benefit) return null;
-        $attrs = $this->getBenefitData();
-        if (!$attrs) return null;
+        $attrs = (array)$this->getBenefitData();
         $attrs['promotion_id'] = $this->id;
         $benefit->attributes = $attrs;
         return $benefit;
