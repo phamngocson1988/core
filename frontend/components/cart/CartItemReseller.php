@@ -18,6 +18,6 @@ class CartItemReseller extends CartItem
     	if ($model) {
     		return (int)$model->price;
     	}
-        return ($this->reseller_price) ? (int)$this->reseller_price : (int)$this->price;
+        return (int)$this->price;
     }
 }

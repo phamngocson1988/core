@@ -26,6 +26,21 @@ class CartItem extends Game implements CartItemInterface
     const SCENARIO_RECEPTION_CART = 'reception_cart';
     const SCENARIO_IMPORT_CART = 'import_cart';
 
+    public static $quantites = [
+        '0.5' => 0.5, 
+        1 => 1, 
+        2 => 2, 
+        3 => 3, 
+        4 => 4, 
+        5 => 5, 
+        6 => 6, 
+        7 => 7, 
+        8 => 8, 
+        9 => 9, 
+        10 => 10, 
+        15 => 15, 
+    ];
+
     // public function behaviors()
     // {
     //     return [
@@ -91,12 +106,12 @@ class CartItem extends Game implements CartItemInterface
     {
         $pack = $this->pack;
         $quantity = $this->quantity;
-        if ($this->gameUnits) {
-            foreach ($this->gameUnits as $unit) {
-                if ($this->quantity == $unit->quantity) return $unit->unit;
-            }
-        }
-        return $pack * $this->quantity;
+        // if ($this->gameUnits) {
+        //     foreach ($this->gameUnits as $unit) {
+        //         if ($this->quantity == $unit->quantity) return $unit->unit;
+        //     }
+        // }
+        return $pack * $quantity;
     }
 
     // ============== implement interface ===========//

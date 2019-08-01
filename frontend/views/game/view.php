@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use frontend\components\cart\CartItem;
+
 $this->registerMetaTag(['property' => 'og:image', 'content' => $game->getImageUrl('150x150')], 'og:image');
 $this->registerMetaTag(['property' => 'og:title', 'content' => $game->getMetaTitle()], 'og:title');
 $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getMetaDescription()], 'og:description');
@@ -60,29 +62,11 @@ $gamePromotion = reset($gamePromotions);
                                     <tr>
                                         <td><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></td>
                                         <td>
-                                            <?php if ($game->gameUnits) : ?>
-                                            <?php 
-                                            $units = [];
-                                            foreach ($game->gameUnits as $unit) {
-                                                $units[(string)$unit->quantity] = $unit->quantity;
-                                            }
-                                            ?>
-                                                <?= $form->field($game, 'quantity', [
-                                                'options' => ['tag' => false],
-                                                'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
-                                                'template' => '{input}'
-                                                ])->dropDownList($units);?>
-                                            <?php else : ?>
-                                            <div class="quantity-box">
-                                                <button class="quantity-minus" type="button">-</button>
-                                                <?= $form->field($game, 'quantity', [
-                                                'template' => '{input}', 
-                                                'options' => ['tag' => false],
-                                                'inputOptions' => ['class' => 'txt-qty', 'type' => 'number', 'min' => 0.5, 'step' => 0.5, 'id' => 'quantity'],
-                                                ])->textInput() ?>
-                                                <button class="quantity-plus" type="button">+</button>
-                                            </div>
-                                            <?php endif; ?>
+                                            <?= $form->field($game, 'quantity', [
+                                            'options' => ['tag' => false],
+                                            'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
+                                            'template' => '{input}'
+                                            ])->dropDownList(CartItem::$quantites);?>
                                         </td>
                                         <td><span id="unit"><?=number_format($game->getTotalUnit());?></span></td>
                                         <td>

@@ -72,14 +72,6 @@ class GameController extends Controller
         $model = new Game();
         $model->setScenario(Game::SCENARIO_CREATE);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($model->units) {
-                foreach ((array)$model->units as $unitData) {
-                    $gameUnit = new GameUnit($unitData);
-                    $gameUnit->game_id = $model->id;
-                    if ($gameUnit->validate()) $gameUnit->save();
-                    else Yii::$app->session->setFlash('warning', "Some game price is not saved");
-                }
-            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             $ref = Url::to(['game/index']);
             return $this->redirect($ref);    
@@ -99,19 +91,7 @@ class GameController extends Controller
         $request = Yii::$app->request;
         $model =Game::findOne($id);
         $model->setScenario(Game::SCENARIO_EDIT);
-        foreach ($model->gameUnits as $gameUnit) {
-            $model->units[] = ['quantity' => $gameUnit->quantity, 'unit' => $gameUnit->unit];
-        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            GameUnit::deleteAll(['game_id' => $id]);
-            if ($model->units) {
-                foreach ((array)$model->units as $unitData) {
-                    $gameUnit = new GameUnit($unitData);
-                    $gameUnit->game_id = $model->id;
-                    if ($gameUnit->validate()) $gameUnit->save();
-                    else Yii::$app->session->setFlash('warning', "Some game price is not saved");
-                }
-            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
             $ref = Url::to(['game/index']);
             return $this->redirect($ref);    

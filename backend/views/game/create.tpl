@@ -77,9 +77,6 @@
                 <li class="active">
                   <a href="#tab_1_1" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
-                <li>
-                  <a href="#tab_1_2" data-toggle="tab">Giá theo số lượng</a>
-                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -89,28 +86,9 @@
                   {$form->field($model, 'short_title')->textInput()}
                   {$form->field($model, 'price')->textInput()}
                   {$form->field($model, 'original_price')->textInput()}
-                  {$form->field($model, 'reseller_price')->textInput()}
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
-                </div>
-                <div class="tab-pane" id="tab_1_2">
-                {$form->field($model, 'units')->widget(MultipleInput::className(), [
-                  'max' => 10,
-                  'min' => 0,
-                  'columns' => [
-                    [
-                      'name'  => 'quantity',
-                      'title' => 'Số lượng mua',
-                      'enableError' => true
-                    ],
-                    [
-                      'name'  => 'unit',
-                      'title' => 'Số lượng gems nhận được',
-                      'enableError' => true
-                    ]
-                  ]
-                ])->label(false)}
                 </div>
               </div>
             </div>

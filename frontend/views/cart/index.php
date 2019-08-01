@@ -87,29 +87,11 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                             <tr>
                               <td><?=number_format($item->pack);?> <?=strtoupper($item->unit_name);?></td>
                               <td>
-                                <?php if ($item->gameUnits) : ?>
-                                <?php 
-                                $units = [];
-                                foreach ($item->gameUnits as $unit) {
-                                    $units[(string)$unit->quantity] = $unit->quantity;
-                                }
-                                ?>
-                                    <?= $form->field($item, 'quantity', [
-                                    'options' => ['tag' => false],
-                                    'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
-                                    'template' => '{input}'
-                                    ])->dropDownList($units);?>
-                                <?php else : ?>
-                                <div class="quantity-box">
-                                    <button class="quantity-minus" type="button">-</button>
-                                    <?= $form->field($item, 'quantity', [
-                                    'template' => '{input}', 
-                                    'options' => ['tag' => false],
-                                    'inputOptions' => ['class' => 'txt-qty', 'type' => 'number', 'min' => 0.5, 'step' => 0.5, 'id' => 'quantity'],
-                                    ])->textInput() ?>
-                                    <button class="quantity-plus" type="button">+</button>
-                                </div>
-                                <?php endif; ?>
+                                <?= $form->field($item, 'quantity', [
+                                'options' => ['tag' => false],
+                                'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
+                                'template' => '{input}'
+                                ])->dropDownList(CartItem::$quantites);?>
                               </td>
                               <td id="unit"><?=number_format($item->getTotalUnit());?></td>
                               <td>
