@@ -53,7 +53,7 @@ use yii\widgets\Pjax;
           <div class="row">
             <?php foreach ($models as $model) : ?>
             <div class="col col-lg-6 col-md-6 col-sm-12 col-12 product-item">
-              <a class="product-image" href="<?=Url::to(['promotion/view', 'id' => $model->id]);?>">
+              <a class="product-image" href="<?=Url::to(['promotion/view', 'id' => $model->id, 'slug' => $model->slug]);?>">
                 <div class="overlay">
                   <span class="main-btn">More Info</span>
                 </div>
@@ -64,9 +64,9 @@ use yii\widgets\Pjax;
             <?php endforeach;?>
           </div>
         </div>
-        <div class="product-list-action text-center">
+        <!-- <div class="product-list-action text-center">
           <a href="javascript:void;" class="main-btn">See More</a>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

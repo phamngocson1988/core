@@ -1,0 +1,79 @@
+.main-btn:hover{
+    background-color: #ffffff;
+}
+.product-promo-detail{
+    color: #ffffff;
+}
+.product-promo-detail ul, ol, ul li, ol li {
+    list-style: unset;
+}
+.product-promo-detail .img-wrap{
+    width: 100%;
+    height: 212px;
+    border: 1px solid #d0cfd0;
+    overflow: hidden;
+    position: relative;
+}
+.product-promo-detail .img-wrap img{
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.product-promo-detail .ti-main-content{
+    
+    font-size: 18px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.product-promo-detail .ti-title-content h1{
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.product-promo-detail .ti-title-content .ti-breadcrumb{
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.product-promo-detail .ti-title-content .ti-breadcrumb a{
+    color: #ff3600;
+}
+.product-promo-detail .ti-title-content .ti-breadcrumb a::after{
+    content: '/';
+}
+.product-promo-detail .ti-main-content h3{
+    color: #ffdd00;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+
+.product-promo-detail .ti-main-content p{
+    margin-bottom: 20px;
+}
+.product-promo-detail .ti-main-content .ti-code{
+    margin-top: 38px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.product-promo-detail .ti-main-content .ti-code span{
+    
+    padding: 18px 21px;
+    color: #ffdd00;
+    background-color: #707070;
+}
+.product-promo-detail .ti-main-content ul.ti-main-ul{
+    list-style-type: decimal;
+    padding-left: 20px;
+}
+.product-promo-detail .ti-main-content .ti-main-ul a{
+    color: #ffdd00;
+    text-decoration: underline;
+    text-underline-position: under;
+}
+.product-promo-detail .ti-main-content .ti-sub-ul{
+    padding-left: 40px;
+    list-style-type: circle;
+}

@@ -10,7 +10,7 @@ use yii\db\ActiveQuery;
  */
 class Promotion extends \common\models\Promotion
 {
-    public static function find()
+    public static function findValid()
 	{
 		return new PromotionQuery(get_called_class());
     }   

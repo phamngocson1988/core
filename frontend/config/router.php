@@ -43,6 +43,7 @@ return [
 
         // promotion
         'promotion' => 'promotion/index',
+        'promotion/<id:\d+>-<slug:[\w\-]+>' => 'promotion/view',
 
         // refer
         'refer-friend' => 'refer/index',

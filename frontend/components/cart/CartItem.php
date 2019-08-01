@@ -72,24 +72,23 @@ class CartItem extends Game implements CartItemInterface
 
             [['username', 'password', 'character_name', 'platform'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             [['server', 'note', 'login_method', 'recover_code'], 'trim', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
-            ['recover_code', 'validateRecoverCode', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             ['recover_code', 'required', 'whenClient' => "function (attribute, value) {
                 return $('#login_method').val();
-            }", 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART],
+            }",
+            'when' =>  [$this, 'validateRecoverCode'],
+            'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART],
             'message' => 'Recover code is required in case you choose facebook/google'
             ],
-            ['recover_code', 'match', 'pattern' => '/^\d{8}\d*(\s\d{8}\d*)*$/i', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
+            ['recover_code', 'match', 'pattern' => '/^\d{8}\d*(\s\d{8}\d*)*$/i', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART], 'message' => 'Recovery codes are invalid'],
 
             ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART],
 
         ];
     }
 
-    public function validateRecoverCode($attribute, $params = [])
+    public function validateRecoverCode($model) 
     {
-        if ($this->login_method && !$this->recover_code) {
-            $this->addError($attribute, 'Recover code is required in case you choose facebook/google');
-        }
+        return $model->login_method;
     }
 
     public function getTotalPrice()

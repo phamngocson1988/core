@@ -38,11 +38,14 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     </div>
                     <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios'], ['class' => 'radio-form-control']) ?>
                     <?= $form->field($item, 'character_name')->textInput()->label('Character Name');?>
+                    <?= $form->field($item, 'login_method', ['inputOptions' => ['id' => 'login_method']])->dropDownList(['facebook' => 'Facebook', 'google' => 'Google'], ['prompt'=>'Game account'])->label('Login Method');?>
                     <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
                     <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
                     <?= $form->field($item, 'server')->textInput()->label('Server');?>
-                    <?= $form->field($item, 'login_method', ['inputOptions' => ['id' => 'login_method']])->dropDownList(['facebook' => 'Facebook', 'google' => 'Google'], ['prompt'=>'Choose one method'])->label('Login Method');?>
-                    <?= $form->field($item, 'recover_code', ['inputOptions' => ['id' => 'recover_code']])->textInput()->label('Recovery Code')->hint('Example: 12345678 11112222 33334444');?>
+                    <?= $form->field($item, 'recover_code', [
+                      'inputOptions' => ['id' => 'recover_code'],
+                      'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; text-align: right']
+                    ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 8 digits, and kindly provide atleast 3 codes. Ex: 12345678 13456578 12252546');?>
                     <?= $form->field($item, 'note')->textInput()->label('Note for saler');?>
 
                     <div class="form-group">
@@ -162,22 +165,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
 <?php
 $script = <<< JS
 $('body').on('click', "#update-cart-button", function(){
-  var form = $('form#infor-form');
-  $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        if (!result.status) {
-          if (result.errors) {
-            alert(result.errors);
-          }
-        } else {
-          window.location.href = result.checkout_url;
-        }
-      },
-  });
+  $('form#infor-form').submit();
 });
 
 $('body').on('change', "#quantity", function(){

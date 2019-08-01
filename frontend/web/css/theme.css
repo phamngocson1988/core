@@ -138,3 +138,7 @@ button:hover {
     padding: 8px 0;
 }
 /* End Affiliate Page */
+
+.form-group .recovery-code-hint-box {
+    font-size: 15px;
+}

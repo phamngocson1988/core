@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle
         'css/layout.css',
         'css/jquery.bxslider.css',
         'css/jquery.fancybox.min.css',
+        'css/ti-style.css',
         'css/theme.css',
     ];
     public $js = [

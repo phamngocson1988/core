@@ -58,7 +58,7 @@ $cart->applyPromotion();
                   </div>
                   <div class="checkout-cart-total">
                     <div class="order-quantity">
-                      Order <span>(<?=$item->quantity;?> product)</span>
+                      Order <span>(1 product)</span>
                     </div>
                     <div class="game-name">
                       <div class="game-image">
