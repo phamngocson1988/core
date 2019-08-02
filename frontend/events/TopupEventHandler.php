@@ -80,6 +80,7 @@ class TopupEventHandler extends Model
             $refer->note = 'The gift is expired';
         } else {
             $refer->status = UserRefer::STATUS_PAYMENT;
+            $refer->payment_at = date('Y-m-d H:i:s');
             $refer->note = 'You have gifted 10 coin.';
         }
         $refer->save();

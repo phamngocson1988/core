@@ -39,6 +39,13 @@ class CartItem extends Game implements CartItemInterface
         9 => 9, 
         10 => 10, 
         15 => 15, 
+        20 => 20,
+        25 => 25,
+        30 => 30,
+        35 => 35,
+        40 => 40,
+        45 => 45,
+        50 => 50,
     ];
 
     // public function behaviors()

@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 use frontend\models\UserRefer;
+use frontend\forms\TakeReferCommission;
 
 /**
  * ReferController
@@ -125,5 +126,11 @@ class ReferController extends Controller
             'models' => $models,
             'pages' => $pages,
         ]);
+    }
+
+    public function actionTake($id)
+    {
+        $commission = TakeReferCommission::findOne($id);
+        return $this->asJson(['status' => $commission->takeCommission(), 'errors' => $commission->getErrorSummary(true)]);
     }
 }

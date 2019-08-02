@@ -108,7 +108,13 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
                           <?=sprintf("Date %s - Amount $ %s", $model->transaction->payment_at, number_format($model->transaction->total_price));?>
                           <?php endif;?>
                           </td>
-                          <td><?=$model->status;?></td>
+                          <td>
+                          <?php if ($model->isReady()) : ?>
+                          <a href="<?=Url::to(['refer/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Move to wallet</a>
+                          <?php else:?>
+                          <?=$model->status;?>
+                          <?php endif;?>
+                          </td>
                         </tr>
                         <?php endforeach; ?>
                         <?php endif;?>
@@ -160,6 +166,14 @@ $('.refer-qa-list .qa-item .qa-question').click(function(){
     }else{
         $(this).next().slideToggle().removeClass('showing');
     }
+});
+
+$(".link-action").ajax_action({
+  confirm: true,
+  confirm_text: 'Do you really want to transfer this commission to your wallet?',
+  callback: function(eletement, data) {
+    location.reload();
+  }
 });
 JS;
 $this->registerJs($script);

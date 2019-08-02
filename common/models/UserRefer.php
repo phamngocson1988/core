@@ -49,7 +49,12 @@ class UserRefer extends ActiveRecord
     public function checkExpired($date = null)
     {
         $now = ($date) ? strtotime($date) : strtotime('now');
-        $start = strtotime($this->created_at);
-        return ($now - $start) <= $this->duration; // within 7 days
+        $start = strtotime($this->payment_at);
+        return ($now - $start) > $this->duration; // within 7 days
+    }
+
+    public function isReady()
+    {
+        return $this->status == self::STATUS_PAYMENT && !$this->checkExpired();
     }
 }
