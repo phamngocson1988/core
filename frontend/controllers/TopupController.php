@@ -234,11 +234,13 @@ class TopupController extends Controller
 
     public function actionSuccess()
     {
-        // $this->layout = 'notice';
         $this->view->params['main_menu_active'] = 'topup.index';
-        return $this->render('/site/notice', [
-            'title' => 'You have just bought a pricing successfully.',
-            'content' => 'Congratulations!!! Now your wallet is full of King Coins.'
+        $refId = Yii::$app->request->get('ref');
+        $trn = PaymentTransaction::findOne(['payment_id' => $refId]);
+        $user = Yii::$app->user->getIdentity();
+        return $this->render('success', [
+            'trn' => $trn,
+            'user' => $user
         ]);
     }
 

@@ -155,7 +155,8 @@ class Paypal extends PaymentGateway
 
     public function doSuccess()
     {
-        return $this->redirect($this->getSuccessUrl());
+        $refId = $this->getReferenceId();
+        return $this->redirect($this->getSuccessUrl(['ref' => $refId]));
     }
 
     public function doError()

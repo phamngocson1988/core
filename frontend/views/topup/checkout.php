@@ -7,63 +7,68 @@ use yii\bootstrap\ActiveForm;
 $cart = Yii::$app->kingcoin;
 $item = $cart->getItem();
 $cart->applyPromotion();
+$sub = $cart->getSubTotalPrice();
+$total = $cart->getTotalPrice(); 
 ?>
-<section class="section-xl text-center bg-default">
+<section class="topup-page">
   <div class="container">
-    <h3 class="text-gray-4">confirmation</h3>
-  </div>
-  <!-- Style switcher-->
-  <div class="style-switcher" data-container="">
-    <div class="style-switcher-container">
-      <section class="section section-xl bg-default text-center bg-image section-2-columns">
-        <div class="bg-image-poster"><img src="/images/bg-02.jpg" alt=""></div>
-        <div class="container">
-          <div class="row justify-content-sm-end row-30 row-fix">
-            <!-- Pricing Box Lg -->
-            <div class="col-md-8 col-xl-6">
-              <div class="pricing-box pricing-box-lg pricing-box-novi">
-                <div class="pricing-box-header text-sm-left">
-                  <h4><?=$item->getLabel();?></h4>
-                </div>
-                <div class="pricing-box-body">
-                  <div class="row row-fix align-items-sm-center">
-                    <div class="col-sm-6 text-sm-left">
-                      <ul class="pricing-box-list list-marked">
-                        <li>Quantity: <?=$item->quantity;?></li>
-                        <li>King Coins: <?=$item->getTotalCoin();?></li>
-                        <li>Promotion Coins: <?=$cart->getPromotionCoin();?></li>
-                        <li>Total Coins: <?=$cart->getTotalCoin();?></li>
-                      </ul>
-                    </div>
-                    <div class="col-sm-6 text-sm-right">
-                      <div class="pricing-box-price">
-                        <?php
-                        $sub = $cart->getSubTotalPrice();
-                        $total = $cart->getTotalPrice(); 
-                        ?>
-                        <?php if ($sub != $total) :?>
-                        <div class="pricing-box-price-old">
-                          <div class="heading-5">$<?=($sub);?></div>
-                        </div>
-                        <?php endif;?>
-                        <div class="pricing-box-price-new">
-                          <div class="heading-2">$<?=($total);?></div>
-                        </div>
-                      </div>
-                      <?php $form = ActiveForm::begin([
-                        'action' => Url::to(['topup/purchase']),
-                      ]); ?>
-                      <?=Html::radioList ( 'identifier', 'paypal', ['paypal' => 'Paypal', 'offline' => 'Offline payment'] );?>
-                      <?= Html::submitButton('Pay', ['class' => 'button button-sm button-secondary button-nina', 'onclick' => 'showLoader()']) ?>
-                      <?php ActiveForm::end();?>
-                    </div>
+    <div class="small-container">
+      <div class="row">
+        <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="affiliate-top no-mar-bot">
+            <div class="has-left-border has-shadow no-mar-top">
+              Your Order <span>(1 Product)</span>
+              <div class="top-bar-action">
+                <a class="edit-btn" href="<?=Url::to(['topup/index']);?>">Edit</a>
+              </div>
+            </div>
+          </div>
+          <div class="top-up-confirm">
+            <div class="kingcoins-logo">
+              <img src="/images/logo-king-coins.png" alt="">
+            </div>
+            <div class="cart-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pricing Package</th>
+                    <th>King Coins</th>
+                    <th>USD</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><?=$item->getLabel();?> - <b><?=number_format($cart->getTotalCoin());?> King Coins</b></td>
+                    <td><?=number_format($item->num_of_coin);?> x <?=$item->quantity;?><?php if ($cart->getPromotionUnit()) echo sprintf("(+ %s)", number_format($cart->getPromotionUnit()));?></td>
+                    <td>$<?=number_format($item->getPrice());?> x <?=$item->quantity;?></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="game-totals">
+                <div class="product-grand-total">
+                  <div class="grand-line">
+                    <span>Subtotal:</span><span>$<?=number_format($sub, 1);?></span>
+                  </div>
+                  <?php if ($cart->getPromotionMoney()) :?>
+                  <div class="grand-line">
+                    <span>Saving:</span><span>-$<?=$cart->getPromotionMoney();?></span>
+                  </div>
+                  <?php endif;?>
+                  <div class="grand-line last-line">
+                    <span>Grand Total:</span><span>$<?=number_format($total, 1);?></span>
                   </div>
                 </div>
+              </div>
+              <div class="text-right">
+                <?php $form = ActiveForm::begin(['action' => Url::to(['topup/purchase'])]); ?>
+                <?=Html::hiddenInput('identifier', 'paypal');?>
+                <?= Html::submitButton('Submit', ['class' => 'btn-product-detail-add-to-cart']) ?>
+                <?php ActiveForm::end();?>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   </div>
 </section>
