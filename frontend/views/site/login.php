@@ -45,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Login</button>
+                <div class="reg-login-now"><a href="<?=Url::to(['site/signup']);?>">Register now</a></div>
               </div>
             <?php ActiveForm::end(); ?>
           </div>

@@ -97,6 +97,7 @@ $years = array_combine($rangeYears, $rangeYears);
               </div>
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Register Now!</button>
+                <div class="reg-login-now"><a href="<?=Url::to(['site/login']);?>">Have account. Login now</a></div>
               </div>
             <?php ActiveForm::end(); ?>
           </div>

@@ -54,7 +54,8 @@ $this->title = 'Shop';
 			        </a>
 			        <a class="prod-title" href="#"><?=$model->title;?></a>
 			        <div class="prod-price">
-			          <span><?=number_format($model->pack);?> <?=strtoupper($model->unit_name);?></span> for <?=$model->getShortTitle();?>
+                <span><?=number_format($model->pack);?></span> <?=$model->unit_name;?>
+                <div class="price-usd">Only <span>$<?=number_format($model->price);?></span></div>
 			        </div>
 			        <?php 
 			        $gameId = $model->id;
@@ -82,11 +83,6 @@ $this->title = 'Shop';
 			        <?php endif;?>
 			      </div>
 			      <?php endforeach;?>
-
-
-
-
-            
           </div>
         </div>
       </div>

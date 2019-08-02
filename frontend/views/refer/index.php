@@ -60,7 +60,7 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
           <tr>
             <td></td>
             <td>
-              <!-- <a class="btn-add-more-refer-mail" href="javascript:;">Add more</a> -->
+              <a class="btn-add-more-refer-mail" href="javascript:;">Add more</a>
             </td>
             <td>
               <?=Html::submitButton('Send', ['class' => 'cus-btn yellow']);?>
@@ -160,11 +160,13 @@ $(".open-mail-popup").fancybox({
 });
 
 $('.btn-add-more-refer-mail').click(function(){
-    var _newReferMailRow = $('#refer-by-mails-popup table tbody tr:last-child').clone();
-    var _newNum = parseInt(_newReferMailRow.attr('tr-num')) + 1;
-    _newReferMailRow.attr('tr-num', _newNum);
-    _newReferMailRow.find('td:first-child').html(_newNum);
-    $('#refer-by-mails-popup table tbody').append(_newReferMailRow);
+    // var _newReferMailRow = $('#refer-by-mails-popup table tbody tr:last-child').clone();
+    // var _newNum = parseInt(_newReferMailRow.attr('tr-num')) + 1;
+    // _newReferMailRow.attr('tr-num', _newNum);
+    // _newReferMailRow.find('td:first-child').html(_newNum);
+    // $('#refer-by-mails-popup table tbody').append(_newReferMailRow);
+    $('#refer-by-mails-popup table tbody tr').show();
+    $(this).hide();
 });
 
 $('.refer-qa-list .qa-item .qa-question').click(function(){

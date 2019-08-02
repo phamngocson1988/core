@@ -464,10 +464,15 @@ section.product-listing {
     font-size: 16px;
 }
 
+.prod-price .price-usd {
+    float: right;
+    text-transform: uppercase;
+}
+
 .product-listing .prod-price {
     color: #fff;
-    font-size: 17px;
-    margin-bottom: 2px;
+    font-size: 11px;
+    margin: 3px 0 7px;
 }
 
 .product-listing .prod-code,
@@ -511,11 +516,6 @@ section.product-listing {
     font-size: 15px;
     font-weight: bold;
     padding-top: 5px;
-}
-
-.product-listing .prod-title,
-.product-listing .prod-price {
-    padding: 0 10px;
 }
 
 .hostest-product-title {
@@ -1466,6 +1466,14 @@ span.required {
 .register-block .register-action {
     text-align: center;
     margin-top: 20px;
+}
+
+.register-block .register-action .reg-login-now {
+    margin-top: 20px;
+}
+
+.register-block .register-action .reg-login-now a {
+    color: #ff3600;
 }
 
 .has-left-border {

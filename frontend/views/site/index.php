@@ -20,8 +20,8 @@ $this->title = 'Home Page';
         </a>
         <a class="prod-title" href="#"><?=$game->title;?></a>
         <div class="prod-price">
-          <?=number_format($game->pack);?> <?=$game->unit_name;?> <br/>
-          <span>$<?=number_format($game->price);?></span>
+          <span><?=number_format($game->pack);?></span> <?=$game->unit_name;?>
+          <div class="price-usd">Only <span>$<?=number_format($game->price);?></span></div>
         </div>
         <?php 
         $gameId = $game->id;
