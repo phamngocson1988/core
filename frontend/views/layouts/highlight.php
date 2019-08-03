@@ -42,7 +42,7 @@ use yii\helpers\Url;
             </div>
         </div>
         <div class="text-center">
-            <a href="<?=Url::to(['site/signup']);?>" class="main-btn">join now</a>
+            <a href="<?=Url::to(['site/signup', '#' => 'page-title']);?>" class="main-btn">join now</a>
         </div>
     </div>
 

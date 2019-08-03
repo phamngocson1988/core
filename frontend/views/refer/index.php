@@ -49,7 +49,7 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
         	<?php foreach(range(0, 19) as $i) {?>
         		<?php 
         		?>
-          <tr tr-num="<?=++$i;?>">
+          <tr tr-num="<?=++$i;?>" class="<?=($i > 5) ? 'hide-element' : '';?>">
             <td><?=$i;?></td>
             <td><?=Html::textInput("refers[$i][name]", '', ['class' => 'refer_name']);?></td>
             <td><?=Html::textInput("refers[$i][email]", '', ['class' => 'refer_email']);?></td>
@@ -177,6 +177,9 @@ $('.refer-qa-list .qa-item .qa-question').click(function(){
         $(this).next().slideToggle().removeClass('showing');
     }
 });
+
+// Hide elements on refer popup
+$('.hide-element').hide();
 JS;
 $this->registerJs($script);
 ?>

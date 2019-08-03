@@ -52,7 +52,7 @@ $this->title = 'Shop';
 			        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>">
 			        <img src="<?=$model->getImageUrl('300x300');?>" alt="">
 			        </a>
-			        <a class="prod-title" href="#"><?=$model->title;?></a>
+			        <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>"><?=$model->title;?></a>
 			        <div class="prod-price">
                 <span><?=number_format($model->pack);?></span> <?=$model->unit_name;?>
                 <div class="price-usd">Only <span>$<?=number_format($model->price);?></span></div>

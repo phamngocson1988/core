@@ -105,7 +105,7 @@ $gamePromotion = reset($gamePromotions);
                             </table>
                         </div>
                         <?= Html::submitButton('Add To Cart', ['class' => 'btn-product-detail-add-to-cart', 'data-pjax' => 'false', 'id' => 'add-cart-button']) ?>
-                        <a class="btn-product-detail-add-to-cart" href="<?=Url::to(['reseller/import', 'id' => $game->id]);?>">For Bulk of orders</a>
+                        <button class="btn-product-detail-add-to-cart" data-pjax="false" onclick="window.location='<?=Url::to(['reseller/import', 'id' => $game->id]);?>';">For Bulk of orders</button>
                         <?php ActiveForm::end(); ?>
                     </div>
                 </div>

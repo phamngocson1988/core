@@ -18,7 +18,7 @@ $this->title = 'Home Page';
         <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>">
         <img src="<?=$game->getImageUrl('300x300');?>" alt="">
         </a>
-        <a class="prod-title" href="#"><?=$game->title;?></a>
+        <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>"><?=$game->title;?></a>
         <div class="prod-price">
           <span><?=number_format($game->pack);?></span> <?=$game->unit_name;?>
           <div class="price-usd">Only <span>$<?=number_format($game->price);?></span></div>

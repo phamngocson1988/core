@@ -14,7 +14,7 @@ $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<section class="page-title">
+<section class="page-title" id="page-title">
   <div class="container">
     <div class="row">
       <div class="col col-sm-12">
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Login</button>
-                <div class="reg-login-now"><a href="<?=Url::to(['site/signup']);?>">Register now</a></div>
+                <div class="reg-login-now"><a href="<?=Url::to(['site/signup', '#' => 'page-title']);?>">Register now</a></div>
               </div>
             <?php ActiveForm::end(); ?>
           </div>

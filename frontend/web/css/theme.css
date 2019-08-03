@@ -142,3 +142,38 @@ button:hover {
 .form-group .recovery-code-hint-box {
     font-size: 15px;
 }
+
+.topup-pack .pack-name {
+    background: #ffdd00; 
+    color: #000000;
+    font-size: 30px;
+    font-weight: normal;
+    text-transform: none;
+    text-align: center;
+    line-height: 55px;
+    margin-bottom: 29px;
+}
+
+.product-temple-total table thead th {
+    font-weight: normal;
+}
+
+.product-temple-total table tbody tr.instant-total td {
+    font-weight: normal;
+}
+
+.product-detail .product-info .product-detail-price span {
+    font-weight: normal;
+}
+
+.product-temple-total table tfoot tr td {
+    font-weight: normal;
+}
+
+.btn-product-detail-add-to-cart {
+    font-weight: normal;
+}
+
+.product-temple-total table tbody td .sale-price {
+    font-weight: normal;
+}

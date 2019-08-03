@@ -20,7 +20,7 @@ class TakeCommission extends UserCommission
     public function validateCommission($attribute, $params = null) 
     {
         if ($this->user_id != Yii::$app->user->id) $this->addError($attribute, "You don't have permission to take this commission"); 
-        if ($this->isCompleted()) $this->addError($attribute, "This commission was completed");
+        // if ($this->isCompleted()) $this->addError($attribute, "This commission was completed");
         if ($this->isPending()) $this->addError($attribute, "This commission is pending now");
     }
 

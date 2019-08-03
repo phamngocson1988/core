@@ -40,6 +40,25 @@ class TopupController extends Controller
         return parent::beforeAction($action);
     }
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'add'],
+                        'allow' => true,
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $this->view->params['body_class'] = 'global-bg';

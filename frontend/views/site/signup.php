@@ -20,7 +20,7 @@ $rangeYears = array_reverse(range(date('Y') - 100, date('Y') - 18));
 $years = array_combine($rangeYears, $rangeYears);
 ?>
 
-<section class="page-title">
+<section class="page-title" id="page-title">
   <div class="container">
     <div class="row">
       <div class="col col-sm-12">
@@ -97,7 +97,7 @@ $years = array_combine($rangeYears, $rangeYears);
               </div>
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Register Now!</button>
-                <div class="reg-login-now"><a href="<?=Url::to(['site/login']);?>">Have account. Login now</a></div>
+                <div class="reg-login-now"><a href="<?=Url::to(['site/login', '#' => 'page-title']);?>">Have account. Login now</a></div>
               </div>
             <?php ActiveForm::end(); ?>
           </div>
@@ -147,6 +147,9 @@ $('#birth_year, #birth_month, #birth_date').on('change', function() {
 $('#country_code').on('change', function(){
   $('#phone').val($(this).val());
 });
+if (!$('#phone').val()) {
+  $('#country_code').trigger('change');
+}
 $('#email').on('blur', function(){
   var _c = $(this).closest('.form-wrap');
   var _e = _c.find('.form-validation');
@@ -170,7 +173,7 @@ $('#form-signup').on('submit', function(e){
     alert('You need to agree with our terms & conditions.');
     return false;
   }
-})
+});
 JS;
 $checkEmail = Url::to(['site/find-email']);
 $script = str_replace('###LINK###', $checkEmail, $script);

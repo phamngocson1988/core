@@ -19,6 +19,6 @@ class FirstTopupRule extends PromotionRuleAbstract implements PromotionRuleInter
         return PaymentTransaction::find()->where([
             'user_id' => $userId,
             'status' => PaymentTransaction::STATUS_COMPLETED
-        ])->count == 1;
+        ])->count == 0;
     }
 }

@@ -105,6 +105,12 @@ $("#cancel-request").ajax_action({
     location.reload();
   }
 });
+$('#form-signup').on('submit', function(e){
+  if (!$('#agree').is(':checked')) {
+    alert('You need to agree with our terms & conditions.');
+    return false;
+  }
+});
 JS;
 $this->registerJs($script);
 ?>

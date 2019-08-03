@@ -72,7 +72,7 @@ use common\components\helpers\FormatConverter;
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="14"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
