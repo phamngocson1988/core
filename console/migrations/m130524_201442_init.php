@@ -31,7 +31,7 @@ class m130524_201442_init extends Migration
             'refer_code' => $this->string(10),
             'referred_by' => $this->integer(),
             'affiliated_with' => $this->integer(),
-            'is_reseller' => $this->smallInteger()->defaultValue(0),
+            'is_reseller' => $this->smallInteger()->defaultValue(1),
             'saler_id' => $this->integer(),
             'marketing_id' => $this->integer(),
             'created_at' => $this->dateTime(),
