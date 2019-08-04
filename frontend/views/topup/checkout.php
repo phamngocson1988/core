@@ -39,7 +39,7 @@ $total = $cart->getTotalPrice();
                 <tbody>
                   <tr>
                     <td><?=$item->getLabel();?> - <b><?=number_format($cart->getTotalCoin());?> King Coins</b></td>
-                    <td><?=number_format($item->num_of_coin);?> x <?=$item->quantity;?><?php if ($cart->getPromotionUnit()) echo sprintf("(+ %s)", number_format($cart->getPromotionUnit()));?></td>
+                    <td><?=number_format($item->getCoin());?> x <?=$item->quantity;?><?php if ($cart->getPromotionUnit()) echo sprintf("(+ %s)", number_format($cart->getPromotionUnit()));?></td>
                     <td>$<?=number_format($item->getPrice());?> x <?=$item->quantity;?></td>
                   </tr>
                 </tbody>

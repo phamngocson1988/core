@@ -38,7 +38,9 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     </div>
                     <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios'], ['class' => 'radio-form-control']) ?>
                     <?= $form->field($item, 'character_name')->textInput()->label('Character Name');?>
-                    <?= $form->field($item, 'login_method', ['inputOptions' => ['id' => 'login_method']])->dropDownList(['facebook' => 'Facebook', 'google' => 'Google'], ['prompt'=>'Game account'])->label('Login Method');?>
+                    <?= $form->field($item, 'login_method', [
+                      'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem']
+                    ])->dropDownList(['facebook' => 'Facebook', 'google' => 'Google'], ['prompt'=>'Game account'])->label('Login Method');?>
                     <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
                     <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
                     <?= $form->field($item, 'server')->textInput()->label('Server');?>
@@ -46,18 +48,18 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                       'inputOptions' => ['id' => 'recover_code'],
                       'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; text-align: right']
                     ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 8 digits, and kindly provide atleast 3 codes. Ex: 12345678 13456578 12252546');?>
-                    <?= $form->field($item, 'note')->textInput()->label('Note for saler');?>
+                    <?= $form->field($item, 'note')->textInput()->label('Special note (optional)');?>
 
                     <div class="form-group">
-                      <div class="recovery-code-hint-box">
+                      <label class="control-label" for="cartitem-note"></label>
+                      <div class="recovery-code-hint-box1" style="font-size: 12px;color: #6f5e5e;text-align: left;width: 63%;float: left;">
                         <div class="top">
-                            This codes is necessary, unless you would like to wait
-                            for a long time.
-                        </div>
+                            The recovery code is very necessary, kindly support!
+                        </div><br/>
                         <div class="bottom">
-                            <div><strong>How to?</strong></div>
-                            <div>Get Google code, <a href="https://youtu.be/F3xMAXFRHNE" target="_blank">click here</a></div>
-                            <div>Get Facebook code, <a href="https://youtu.be/sG1GAcsslzs" target="_blank">click here</a></div>
+                            <div>How to get?</div>
+                            <div>Get Google code, <a href="https://youtu.be/F3xMAXFRHNE" target="_blank" style="color: blue;">click here</a></div>
+                            <div>Get Facebook code, <a href="https://youtu.be/sG1GAcsslzs" target="_blank" style="color: blue;">click here</a></div>
                         </div>
                       </div>
                     </div>

@@ -55,11 +55,17 @@ class Paypal extends PaymentGateway
         $itemList = [];
         foreach ($cart->getItems() as $cartItem) {
             $ppItem = new Item();
-            $ppItem->setName($cartItem->getTitle())
-            ->setCurrency($currency)
-            ->setQuantity($cartItem->getQuantity())
-            ->setSku($cartItem->getId())
-            ->setPrice($cartItem->getPrice());
+            // if ($cartItem->getQuantity() == 0.5) {
+            //     $ppItem->setName($cartItem->getTitle() . " (1/2)");
+            //     $ppItem->setQuantity(1);
+            //     $ppItem->setPrice($cartItem->getTotalPrice());
+            // } else {
+                $ppItem->setName($cartItem->getTitle());
+                $ppItem->setQuantity($cartItem->getQuantity());
+                $ppItem->setPrice($cartItem->getPrice());
+            // }
+            $ppItem->setCurrency($currency);
+            $ppItem->setSku($cartItem->getId());
             $itemList[] = $ppItem;
         }
 

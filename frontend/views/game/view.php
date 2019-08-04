@@ -31,7 +31,7 @@ $gamePromotion = reset($gamePromotions);
                             <a href="javascript:void;"><?=$game->title;?></a>
                         </h2>
                         <div class="product-detail-price">
-                            <span><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></span> for <?=$game->getShortTitle();?>
+                            <span><?=number_format($game->pack);?> <?=strtoupper($game->unit_name);?></span>
                         </div>
                         <?php if ($gamePromotion) :
                           $benefit = $gamePromotion->getBenefit();

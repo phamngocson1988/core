@@ -37,7 +37,7 @@ use yii\bootstrap\ActiveForm;
               <tbody>
                 <tr>
                   <td><?=$item->title;?></td>
-                  <td><?=number_format($item->num_of_coin);?></td>
+                  <td><?=number_format($item->getCoin());?></td>
                   <td>
                     <?= $form->field($item, 'quantity', [
                       'options' => ['class' => 'quantity-box'],

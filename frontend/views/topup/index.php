@@ -39,7 +39,7 @@ use yii\widgets\Pjax;
                 </div>
                 <div class="pack-info-line">
                   <div class="pack-king-price">
-                    <span class="ico-king-coin"></span><span class="king-coin-price"><?=number_format($item->num_of_coin);?></span><span class="kc-text">King Coins</span>
+                    <span class="ico-king-coin"></span><span class="king-coin-price"><?=number_format($item->getCoin());?></span><span class="kc-text">King Coins</span>
                   </div>
                 </div>
                 

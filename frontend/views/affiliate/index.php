@@ -104,7 +104,8 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
                             <?php elseif ($model->isPending()) : ?>
                             <span class="label label-default"><?=sprintf("Pending up to %s", $model->getReadyDate());?><span>
                             <?php elseif ($model->isReady()) : ?>
-                            <a href="<?=Url::to(['affiliate/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Ready</a>
+                            <span class="label label-success"><?=sprintf("Ready");?><span>
+                            <!-- <a href="<?=Url::to(['affiliate/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Ready</a> -->
                             <?php endif; ?>
                           <?php endif;?>
                           </td>

@@ -1,6 +1,7 @@
 <?php
 namespace frontend\components\kingcoin;
 
+use Yii;
 use yii2mod\cart\models\CartItemInterface;
 use yii\base\Model;
 use frontend\models\Package;
@@ -39,7 +40,17 @@ class CartItem extends Package implements CartItemInterface
 
     public function getTotalCoin()
     {
-        return $this->num_of_coin * $this->quantity;
+        
+        return $this->getCoin() * $this->quantity;
+    }
+
+    public function getCoin()
+    {
+        if (!Yii::$app->user->getIsGuest()) {
+            $user = Yii::$app->user->identity;
+            if ($user->isReseller()) return $this->getPrice();
+        }
+        return $this->num_of_coin;
     }
 
     // ============== implement interface ===========//
