@@ -295,9 +295,13 @@ class CartController extends Controller
 
     public function actionSuccess()
     {
-        return $this->render('/site/notice', [           
-            'title' => 'Place order successfully',
-            'content' => 'Congratulation.'
+        $this->view->params['main_menu_active'] = 'shop.index';
+        $refId = Yii::$app->request->get('ref');
+        $order = Order::findOne(['payment_id' => $refId]);
+        $user = Yii::$app->user->getIdentity();
+        return $this->render('success', [
+            'order' => $order,
+            'user' => $user
         ]);
     }
 

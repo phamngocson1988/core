@@ -126,9 +126,9 @@ class UserController extends Controller
     	return $this->render('orders');
     }
 
-    public function actionDetail($key)
+    public function actionDetail($id)
     {
-        $order = Order::findOne(['auth_key' => $key]);
+        $order = Order::findOne($id);
         if (!$order) throw new NotFoundHttpException("The order not found", 1);
         $complainModel = new OrderComplains();
         return $this->render('detail', [
