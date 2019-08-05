@@ -48,6 +48,10 @@ button:focus {
     outline: none;
 }
 
+button {
+    border: none;
+}
+
 .text-center {
     text-align: center;
 }
@@ -93,7 +97,7 @@ button:focus {
 section.header {
     /* background: url(../images/header-bg.jpg) no-repeat center 0; */
     /* height: 108vh; */
-    height: 75vh;
+    height: 80vh;
     /* background-size: auto 100%; */
 }
 
@@ -282,6 +286,8 @@ section.header .top-header {
     font-size: 15px;
     font-family: AndaleMono;
     padding: 0 20px;
+    float: left;
+    width: 100%;
 }
 
 .top-header .header-time-box span:last-child {
@@ -297,7 +303,7 @@ section.header .top-header {
     top: 0;
     left: 0;
     /* min-height: 108vh; */
-    height: 75vh;
+    height: 80vh;
     width: 100%;
     overflow: hidden;
 }
@@ -309,20 +315,44 @@ section.header .top-header {
     box-shadow: none;
     position: relative;
     /* height: 90vh; */
-    height: 65vh;
+    height: 70vh;
     margin-bottom: 40px;
 }
 
 .main-slider-bxslider .container,
 .main-slider-bxslider .row {
     /* height: 108vh; */
-    height: 75vh;
+    height: 80vh;
 }
 
 .main-slider .bx-wrapper .bx-viewport>div>div {
     height: 108vh;
     position: relative;
     background-size: 100% auto !important;
+}
+
+.main-slider .main-slider-blurred {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+    background-size: 100% auto !important;
+    overflow: hidden;
+    transition: left 0.5s;
+    -webkit-transition: left 0.5s;
+    -moz-transition: left 0.5s;
+}
+
+.main-slider .main-slider-blurred > div {
+    float: left;
+    
+}
+
+.main-slider .main-slider-blurred img {
+    width: 100%;
 }
 
 .main-slider .bx-wrapper .bx-controls {
@@ -347,9 +377,12 @@ section.header .top-header {
     height: 27px;
 }
 
-.main-slider-prev-control,
-.main-slider-next-control {
+.main-slider-prev-control, .main-slider-next-control {
     float: left;
+}
+
+.main-slider-prev-control {
+    margin-left: 25px;
 }
 
 .main-slider-prev-control a,
@@ -405,10 +438,19 @@ section.header .top-header {
     height: 11px;
 }
 
+.main-slider .slider-image-box {
+    position: relative;
+}
+
 .main-slider .slider-text-box {
     position: absolute;
-    bottom: 20%;
-    left: 15px;
+    top: 15%;
+    left: 0;
+    margin-left: 25px;
+}
+
+.main-slider .slider-image-box img {
+    width: 100%;
 }
 
 .main-slider .slider-text-box p:first-child {
@@ -1567,6 +1609,13 @@ span.required {
     margin: 10px 0;
 }
 
+.affiliate-create-reflink input {
+    float: left;
+    height: 44px;
+    border: 0;
+    padding: 0 10px;
+}
+
 .affiliate-top .has-left-border {
     font-size: 20px;
     font-weight: bold;
@@ -1618,6 +1667,7 @@ span.required {
     padding: 0 20px;
     border-left: 3px solid #ff3600;
     cursor: pointer;
+    color: #000;
 }
 
 .aff-tabs .aff-tabs-nav span.active {
@@ -2442,9 +2492,19 @@ span.required {
         background-position: initial;
     }
 
+    section.header {
+        height: auto;
+    }
+    
+    section.header .top-header {
+        float: left;
+    }
+
     .top-header-container {
         position: relative;
         z-index: 9999;
+        max-width: 100%;
+        padding: 0;
     }
 
     .top-header .right-box .main-nav {
@@ -2470,6 +2530,7 @@ span.required {
     .top-header .right-box.active .login-box {
         opacity: 1;
         visibility: visible;
+        z-index: 9999;
     }
 
     .top-header .right-box .login-box form>span {
@@ -2559,6 +2620,17 @@ span.required {
         width: 84%;
     }
 
+    .top-header .right-box .login-box form .reg-link {
+        float: left;
+        width: 16%;
+    }
+
+    .top-header .right-box .login-box form .reg-link span {
+        height: 74px;
+        padding: 16px 0;
+        text-align: center;
+    }
+
     .mobile-nav-block a {
         color: #000;
         font-size: 18px;
@@ -2572,6 +2644,19 @@ span.required {
 
     .mobile-nav-block ul li:last-child {
         border: 0;
+    }
+
+    .bottom-header {
+        position: relative;
+        height: 75vh;
+    }
+
+    .main-slider .slider-image-box {
+        margin-top: 0 !important;
+    }
+
+    .main-slider .bx-wrapper {
+        height: 64vh;
     }
 
     /* Product Detail */
@@ -2606,8 +2691,12 @@ span.required {
     }
 
     .shop-search form {
-        width: 46%;
+        width: 100%;
         height: 45px;
+    }
+
+    .shop-search .shop-search-keyword {
+        width: 55%;
     }
 
     .shop-search-filter select {
@@ -2619,7 +2708,7 @@ span.required {
         font-size: 20px;
     }
 
-    .shop-search-paging a {
+    .shop-search-paging a, .shop-search-paging span {
         width: 45px;
     }
 
@@ -2761,6 +2850,12 @@ span.required {
     .top-up-confirm .kingcoins-logo img {
         width: 88%;
     }
+
+    .main-slider .main-slider-blurred img, .main-slider .slider-image-box img {
+        height: 100vh;
+        width: auto;
+        max-width: none !important;
+    }
 }
 
 @media(max-width: 768px) {
@@ -2839,7 +2934,11 @@ span.required {
     }
 
     .top-header .right-box .login-box {
-        width: 92vw;
+        width: 95vw;
+    }
+
+    .top-header .right-box .login-box form>.login-form {
+        width: 80%;
     }
 
     .top-header .right-box .login-box form>.login-form .login-control {
@@ -2862,10 +2961,6 @@ span.required {
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%;
-    }
-
-    .product-listing .prod-title {
-        min-height: 44px;
     }
 
     .product-listing .prod-img {
@@ -2938,6 +3033,11 @@ span.required {
         width: 70%;
     }
 
+    .product-detail .product-info button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
     /* Promotion */
     section.promotion-search form input[type="text"] {
         width: 77%;
@@ -2947,6 +3047,7 @@ span.required {
     .shop-search form {
         width: 100%;
         flex: none;
+        height: auto;
     }
 
     .shop-search-paging,
@@ -2970,6 +3071,16 @@ span.required {
     .shop-search-box {
         display: inline-block;
         width: 100%;
+    }
+
+    .shop-search form {
+        display: inline-block;
+    }
+
+    .shop-search-box form > div {
+        float: left;
+        width: 100% !important;
+        margin-top: 20px;
     }
 
     /* Refer */
@@ -3005,6 +3116,15 @@ span.required {
         padding: 9px 10px;
     }
 
+    .refer-page-title .refer-socials {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .refer-page-title .refer-socials .refer-social-item {
+        margin: 0;
+    }
+
     /* Checkout */
     .cart-table table th {
         font-size: 14px;
@@ -3015,14 +3135,16 @@ span.required {
         padding: 0 5px;
     }
 
-    .cart-table table .quantity-box button,
-    .cart-table table .quantity-box input {
-        width: 100%;
-    }
-
     .cart-table .cart-coupon input[type="text"] {
         width: 60%;
         margin-bottom: 20px;
+    }
+
+    .cart-table .cart-coupon .topup-cart-submit-btn {
+        display: block;
+        width: 60%;
+        margin: 0 auto;
+        float: none;
     }
 
     /* Shop Checkout */
@@ -3056,6 +3178,47 @@ span.required {
     
     .top-up-confirm .cart-table {
         width: 100%;
+    }
+
+    /* Responsive Table */
+    .responsive-table,
+    .responsive-table thead,
+    .responsive-table tbody,
+    .responsive-table th,
+    .responsive-table td,
+    .responsive-table tr {
+        display: block;
+    }
+    .responsive-table > thead > tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    .responsive-table > tbody > tr td {
+        border: none;
+        border-bottom: 1px solid #ccc;
+        position: relative;
+        padding-left:50% !important;
+        width: 100%;
+        overflow: hidden;
+    }
+    .responsive-table > tbody > tr td:before {
+        content: attr(data-title);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        padding-right: 10px;
+        white-space: nowrap;
+        height: 41px;
+        line-height: 41px;
+        background: #707070;
+        color: #fff;
+    }
+
+    /* Affiliate Page */
+    .affiliate-top .has-left-border a {
+        float: left;
     }
 }
 

@@ -28,60 +28,80 @@ $gallery = array_filter($gallery, function($data) {
 });
 ?>
 <div class="bottom-header">
-    <div class="main-slider">
-        
-        <div class="main-slider-bxslider">
+  <div class="main-slider">
+    <div class="main-slider-blurred">
+      <?php foreach ($gallery as $data) : ?>
+      <div>
+        <img src="<?=$data['link'];?>" alt="">
+      </div>
+      <?php endforeach;?>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col col-sm-12">
+          <div class="main-slider-bxslider">
             <?php foreach ($gallery as $data) : ?>
-            <div style="background: url(<?=Html::encode($data['link']);?>) no-repeat center 0; background-size: auto 100%;">
-                <div class="container">
-                    <div class="row">
-                        <div class="col col-sm-12">
-                            <div class="slider-text-box">
-                                <p><?=$data['title'];?></p>
-                                <p><?=$data['content'];?></p>
-                            </div>
-                        </div>
-                    </div>
+            <div>
+              <div class="slider-image-box">
+                <img src="<?=$data['link'];?>" alt="">
+                <div class="slider-text-box">
+                  <p><?=Html::encode($data['title']);?></p>
+                  <p><?=Html::encode($data['content']);?></p>
                 </div>
+              </div>
             </div>
             <?php endforeach;?>
+          </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <span class="main-slider-prev-control"></span>
-                    <div class="mainSlider-custom-Pager">
-                    </div>
-                    <span class="main-slider-next-control"></span>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <span class="main-slider-prev-control"></span>
+          <div class="mainSlider-custom-Pager">
+          </div>
+          <span class="main-slider-next-control"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 <?php
 $script = <<< JS
+var _headerHeight = $('section.header .top-header').height();
+$('.main-slider .slider-image-box').css('margin-top', _headerHeight + 'px');
+$('.main-slider .main-slider-blurred').css('width', 100*$('.main-slider .main-slider-blurred > div').length+'%');
+$('.main-slider .main-slider-blurred > div').css('width', $('.main-slider .main-slider-blurred').width()/$('.main-slider .main-slider-blurred > div').length+'px');
 $('.main-slider-bxslider').bxSlider({
     pagerSelector: $('.mainSlider-custom-Pager'),
     nextSelector: $('.main-slider-next-control'),
-    prevSelector: $('.main-slider-prev-control')
+    prevSelector: $('.main-slider-prev-control'),
+    speed: 1000,
+    onSlideBefore: function(slideElement, oldIndex, newIndex) {
+        setTimeout(function(){
+            $('.main-slider .main-slider-blurred').css('left', '-'+(100*newIndex)+'%');
+        }, 500);
+    },
 });
 
-$('.top-header .right-box a.ico-user-login').click(function(){
+$('.top-header .right-box a.ico-user-login').click(function () {
     $(this).parent().toggleClass('active');
     $(this).toggleClass('active');
 });
 
-$('.mobile-nav a.mobile-nav-ico').click(function(){
+$('.mobile-nav a.mobile-nav-ico').click(function () {
     $(this).parent().toggleClass('active');
     $(this).toggleClass('active');
 });
 
-$('body').on('click', function(e) {
-    if($(e.target).closest('#mobile-nav-wrapper').length == 0) {
+$('body').on('click', function (e) {
+    if ($(e.target).closest('#mobile-nav-wrapper').length == 0) {
         $('#mobile-nav-wrapper, .mobile-nav a.mobile-nav-ico').removeClass('active');
     }
 
-    if($(e.target).closest('#login-box-wrapper').length == 0) {
+    if ($(e.target).closest('#login-box-wrapper').length == 0) {
         $('#login-box-wrapper, #login-box-wrapper a.ico-user-login').removeClass('active');
     }
 });

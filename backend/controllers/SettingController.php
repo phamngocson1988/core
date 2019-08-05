@@ -88,20 +88,6 @@ class SettingController extends Controller
                 'modelClass' => GallerySettingForm::class,
                 'view' => 'gallery.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.gallery'],
-                'prepareModel' => function($model) {
-                    foreach ($model->attributes() as $attribute) {
-                        $value = Yii::$app->settings->get('GallerySettingForm', $attribute);
-
-                        if (!is_null($value)) {
-                            $model->{$attribute} = json_decode($value, true);
-                        }
-                    }
-                }, 
-                'saveSettings' => function($model) {
-                    foreach ($model->toArray() as $key => $value) {
-                        Yii::$app->settings->set('GallerySettingForm', $key, json_encode($value));
-                    }
-                }
             ],
             'top_notice' => [
                 'class' => SettingsAction::class,

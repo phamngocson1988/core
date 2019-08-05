@@ -25,7 +25,7 @@ $this->title = 'Shop';
               <input type="text" placeholder="Search" name="q" value="<?=$q;?>">
               <input type="submit" value="">
             </div>
-            <div class="shop-search-paging">
+            <div class="shop-search-paging is-desktop">
               <?=LinkPager::widget(['pagination' => $pages, 'maxButtonCount' => 1, 'hideOnSinglePage' => false]);?>
             </div>
             <div class="shop-search-filter">
@@ -34,6 +34,9 @@ $this->title = 'Shop';
                 <option value="asc" <?=($sort == 'asc') ? "selected" : "";?> >A - Z</option>
                 <option value="desc" <?=($sort == 'desc') ? "selected" : "";?> >Z - A</option>
               </select>
+            </div>
+            <div class="shop-search-paging is-mobile">
+              <?=LinkPager::widget(['pagination' => $pages, 'maxButtonCount' => 1, 'hideOnSinglePage' => false]);?>
             </div>
           </form>
         </div>

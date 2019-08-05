@@ -23,7 +23,7 @@ use yii\bootstrap\ActiveForm;
             </div>
           </div>
           <div class="cart-table">
-            <table>
+            <table class="responsive-table">
               <thead>
                 <tr>
                   <th>Pricing Package</th>
@@ -36,9 +36,9 @@ use yii\bootstrap\ActiveForm;
               </thead>
               <tbody>
                 <tr>
-                  <td><?=$item->title;?></td>
-                  <td><?=number_format($item->getCoin());?></td>
-                  <td>
+                  <td data-title="Pricing Package"><?=$item->title;?></td>
+                  <td data-title="Coins"><?=number_format($item->getCoin());?></td>
+                  <td data-title="Quantity">
                     <?= $form->field($item, 'quantity', [
                       'options' => ['class' => 'quantity-box'],
                       'inputOptions' => [
@@ -49,9 +49,9 @@ use yii\bootstrap\ActiveForm;
                       'template' => '<button type="button" class="minus">-</button>{input}<button type="button" class="plus">+</button>'
                     ])->textInput() ?>
                   </td>
-                  <td><?=number_format($item->getTotalCoin());?> <?= $cart->hasPromotion() ? '(+' . $cart->getPromotionCoin() . ')' : '';?></td>
-                  <td>$<?=number_format($item->getPrice());?></td>
-                  <td class="co-orange">$<?=number_format($item->getTotalPrice());?></td>
+                  <td data-title="Total Coins"><?=number_format($item->getTotalCoin());?> <?= $cart->hasPromotion() ? '(+' . $cart->getPromotionCoin() . ')' : '';?></td>
+                  <td data-title="Price">$<?=number_format($item->getPrice());?></td>
+                  <td data-title="Total Price" class="co-orange">$<?=number_format($item->getTotalPrice());?></td>
                 </tr>
               </tbody>
             </table>
@@ -64,7 +64,7 @@ use yii\bootstrap\ActiveForm;
               <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion_code;?>">
               <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
               <?php endif;?>
-              <a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false class="cus-btn yellow fl-right">Check Out</a>
+              <a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false class="cus-btn yellow fl-right topup-cart-submit-btn">Check Out</a>
             </div>
           </div>
         </div>
