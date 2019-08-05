@@ -66,8 +66,8 @@ class Promotion extends ActiveRecord
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'content', 'image_id', 'code', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'rule_name', 'benefit_name'],
-            self::SCENARIO_EDIT => ['id', 'title', 'content', 'image_id', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'rule_name', 'benefit_name'],
+            self::SCENARIO_CREATE => ['title', 'content', 'image_id', 'code', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'rule_name', 'benefit_name', 'category'],
+            self::SCENARIO_EDIT => ['id', 'title', 'content', 'image_id', 'promotion_scenario', 'user_using', 'from_date', 'to_date', 'status', 'rule_name', 'benefit_name', 'category'],
         ];
     }
 
@@ -77,8 +77,17 @@ class Promotion extends ActiveRecord
     		[['title', 'code', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_CREATE],
             ['code', 'unique', 'targetClass' => '\common\models\Promotion', 'message' => 'Voucher code is duplicated', 'on' => self::SCENARIO_CREATE],
             [['id', 'title', 'promotion_scenario', 'status'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['user_using', 'from_date', 'to_date', 'content', 'image_id', 'rule_name', 'benefit_name'], 'safe'],
+            [['user_using', 'from_date', 'to_date', 'content', 'image_id', 'rule_name', 'benefit_name', 'category'], 'safe'],
     	];
+    }
+
+    public static function getCategories()
+    {
+        return [
+            'new-member' => 'New member',
+            'hot-product' => 'Hot product',
+            'vip-member' => 'Vip member'
+        ];
     }
 
     public static function  getRuleHandlers()

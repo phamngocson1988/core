@@ -96,7 +96,6 @@
               <div class="tab-content">
                 <div class="tab-pane active" id="main">
                   {$form->field($model, 'title')->textInput()}
-                  {$form->field($model, 'short_title')->textInput()}
                   {$form->field($model, 'price')->textInput()}
                   {$form->field($model, 'original_price')->textInput()}
                   {$form->field($model, 'pack')->textInput()}

@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\NotFoundHttpException;
 use frontend\models\Promotion;
+use yii\data\Pagination;
 
 class PromotionController extends Controller
 {
@@ -13,11 +14,23 @@ class PromotionController extends Controller
         $this->view->params['main_menu_active'] = 'promotion.index';
         $request = Yii::$app->request;
         $q = $request->get('q');
+        $cat = $request->get('cat');
         $command = Promotion::find();
-        $models = $command->all();
+        if ($q) {
+            $command->andWhere(['like', 'title', $q]);
+        }
+        if ($cat) {
+            $command->andWhere(['category' => $cat]);
+        }
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
         return $this->render('index', [
             'models' => $models,
-            'q' => $q
+            'pages' => $pages,
+            'q' => $q,
+            'cat' => $cat
         ]);
     }
 

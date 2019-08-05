@@ -72,6 +72,12 @@ use common\widgets\TinyMce;
                     'options' => ['rows' => 10]
                   ]);?>
 
+                  <?=$form->field($model, 'category', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'rules'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                  ])->dropDownList(Promotion::getCategories(), ['prompt' => 'Phân loại khuyến mãi'])->label('Quy định áp dụng');?>
+
                   <?=$form->field($model, 'image_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'

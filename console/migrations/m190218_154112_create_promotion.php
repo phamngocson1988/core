@@ -22,6 +22,7 @@ class m190218_154112_create_promotion extends Migration
             'id' => $this->primaryKey(),
             'title' => $this->string(500)->notNull(),
             'content' => $this->text(),
+            'category' => $this->string(50),
             'image_id' => $this->integer(11),
             'code' => $this->string(50), 
             'promotion_type' => $this->string(10),//fix,percent

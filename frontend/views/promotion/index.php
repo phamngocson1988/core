@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
+use frontend\models\Promotion;
 ?>
 <section class="page-title">
   <div class="container">
@@ -36,15 +37,11 @@ use yii\widgets\Pjax;
       <div class="col col-lg-3 col-md-3 col-sm-12 col-12">
         <div class="product-category">
           <ul>
+            <?php foreach (Promotion::getCategories() as $key => $value) : ?>
             <li>
-              <a class="cus-btn gray-btn" href="javascript:void;">New Member</a>
+              <a class="cus-btn gray-btn <?php if ($cat == $key) echo 'active';?>" href="<?=Url::to(['promotion/index', 'cat' => $key]);?>"><?=$value;?></a>
             </li>
-            <li>
-              <a class="cus-btn gray-btn active" href="javascript:void;">Hot Product</a>
-            </li>
-            <li>
-              <a class="cus-btn gray-btn" href="javascript:void;">VIP Member</a>
-            </li>
+            <?php endforeach; ?>
           </ul>
         </div>
       </div>

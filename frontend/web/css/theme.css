@@ -177,3 +177,11 @@ button:hover {
 .product-temple-total table tbody td .sale-price {
     font-weight: normal;
 }
+
+.affiliate-top .has-left-border {
+    font-weight: normal;
+}
+
+th {
+    font-weight: normal;
+}
