@@ -40,7 +40,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     <?= $form->field($item, 'character_name')->textInput()->label('Character Name');?>
                     <?= $form->field($item, 'login_method', [
                       'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem']
-                    ])->dropDownList(['facebook' => 'Facebook', 'google' => 'Google'], ['prompt'=>'Game account'])->label('Login Method');?>
+                    ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'])->label('Login Method');?>
                     <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
                     <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
                     <?= $form->field($item, 'server')->textInput()->label('Server');?>

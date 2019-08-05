@@ -13,20 +13,24 @@ use yii\bootstrap\ActiveForm;
     <div class="small-container">
       <div class="row">
         <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
-          <div class="cart-table">
-            <div class="cart-coupon">
-              <?=Html::fileInput("template", null, ['id' => 'file_upload']);?>
-              <?=Html::a('Download', Url::to(['reseller/download']), ['class' => 'cus-btn yellow fl-left apply-coupon-btn']);?>
-              <?=Html::submitButton('Upload', ['class' => 'cus-btn yellow fl-left apply-coupon-btn']);?>
+          <div class="affiliate-top no-mar-bot">
+            <div class="has-left-border has-shadow no-mar-top">
+              Import your list
+              <?=Html::fileInput("template", null, ['id' => 'file_upload', 'style' => 'display:none']);?>
+              <div class="top-bar-action">
+                <?=Html::a('Upload', 'javascript:;', ['class' => 'edit-btn', 'id' => 'upload-button']);?>
+                <?=Html::a('Download', Url::to(['reseller/download']), ['class' => 'edit-btn']);?>
+              </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
   </div>
 </section>
-<?php ActiveForm::end();?>
 
+<?php ActiveForm::end();?>
 <?php $form = ActiveForm::begin(['action' => ['reseller/purchase', 'id' => $id]]); ?>
 <section class="topup-page">
   <div class="container">
@@ -143,6 +147,12 @@ use yii\bootstrap\ActiveForm;
 $script = <<< JS
 $('#upload-form').on('submit', function() {
   if (!document.getElementById("file_upload").files.length) return false;
+});
+$('#file_upload').on('change', function() {
+  $(this).closest('form').submit();
+});
+$('#upload-button').on('click', function() {
+  $('#file_upload').trigger('click');
 });
 JS;
 $this->registerJs($script);

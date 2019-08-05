@@ -57,8 +57,12 @@ $this->title = 'Shop';
 			        </a>
 			        <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>"><?=$model->title;?></a>
 			        <div class="prod-price">
+                <?php if ($model->isSoldout()) : ?>
+                Out of Stock. Coming back soon!
+                <?php else :?>
                 <span><?=number_format($model->pack);?></span> <?=$model->unit_name;?>
                 <div class="price-usd">Only <span>$<?=number_format($model->price);?></span></div>
+                <?php endif;?>
 			        </div>
 			        <?php 
 			        $gameId = $model->id;

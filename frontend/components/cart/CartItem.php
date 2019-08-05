@@ -80,7 +80,8 @@ class CartItem extends Game implements CartItemInterface
             [['username', 'password', 'character_name', 'platform'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             [['server', 'note', 'login_method', 'recover_code'], 'trim', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             ['recover_code', 'required', 'whenClient' => "function (attribute, value) {
-                return $('#login_method').val();
+                return $('#login_method').val() != 'account';
+                return ['facebook', 'google'].includes($('#login_method').val());
             }",
             'when' =>  [$this, 'validateRecoverCode'],
             'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART],
@@ -95,7 +96,7 @@ class CartItem extends Game implements CartItemInterface
 
     public function validateRecoverCode($model) 
     {
-        return $model->login_method;
+        return in_array($model->login_method, ['facebook', 'google']);
     }
 
     public function getTotalPrice()
@@ -112,11 +113,6 @@ class CartItem extends Game implements CartItemInterface
     {
         $pack = $this->pack;
         $quantity = $this->quantity;
-        // if ($this->gameUnits) {
-        //     foreach ($this->gameUnits as $unit) {
-        //         if ($this->quantity == $unit->quantity) return $unit->unit;
-        //     }
-        // }
         return $pack * $quantity;
     }
 

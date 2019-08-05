@@ -73,6 +73,10 @@
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(CheckboxInput::className())->label(false)}
 
+        {$form->field($model, 'soldout', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->widget(CheckboxInput::className())->label(false)}
+
         {Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green'])}
         {Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default'])}
         <!-- END MENU -->

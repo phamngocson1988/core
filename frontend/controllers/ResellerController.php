@@ -77,14 +77,15 @@ class ResellerController extends Controller
                 $item = clone $game;
                 $item->row_index = $startRow + $no;
                 $item->no = $data[0];
+                if (!$data[0]) continue;
                 $item->quantity = $data[1];
                 $item->username = $data[4];
                 $item->password = $data[5];
                 $item->character_name = $data[3];
                 $item->recover_code = $data[7];
                 $item->server = $data[6];
-                $item->note = $data[8];
-                $item->platform = 'ios';
+                $item->note = $data[9];
+                $item->platform = $data[8];
                 $item->login_method = $data[2];
                 $item->setScenario(CartItemReseller::SCENARIO_IMPORT_CART);
                 $records[] = $item;

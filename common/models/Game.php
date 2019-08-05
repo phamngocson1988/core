@@ -17,6 +17,9 @@ class Game extends ActiveRecord
     const UNPIN = 0;
     const PIN = 1;
 
+
+    const SOLDOUT = 1;
+
     /**
      * @inheritdoc
      */
@@ -57,7 +60,6 @@ class Game extends ActiveRecord
 
         return  [
             'title' => Yii::t('app', 'title'),
-            'short_title' => 'Tên viết tắt',
             'content' => Yii::t('app', 'description'),
             'status' => Yii::t('app', 'status'),
             'excerpt' => Yii::t('app', 'excerpt'),
@@ -143,8 +145,8 @@ class Game extends ActiveRecord
         return $this->hasMany(GameImage::className(), ['game_id' => 'id']);
     }
 
-    public function getGameUnits()
+    public function isSoldout()
     {
-        return $this->hasMany(GameUnit::className(), ['game_id' => 'id'])->orderBy(['quantity' => SORT_ASC]);
+        return $this->soldout == self::SOLDOUT;
     }
 }

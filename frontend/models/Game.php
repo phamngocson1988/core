@@ -34,11 +34,6 @@ class Game extends \common\models\Game
 		return reset($forGames);
 	}
 
-	// public function getGameUnits()
-    // {
-    //     return $this->hasMany(GameUnit::className(), ['game_id' => 'id'])->orderBy(['quantity' => SORT_DESC]);
-    // }
-
     public function getImageUrl($size = null, $default = '/images/no-img.png')
     {
         $image = $this->image;

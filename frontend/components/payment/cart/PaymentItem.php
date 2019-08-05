@@ -23,7 +23,7 @@ class PaymentItem extends Model
 
     public function getQuantity()
     {
-        return (int)$this->quantity;
+        return (float)$this->quantity;
     }
 
     public function getPrice()

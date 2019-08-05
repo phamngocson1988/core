@@ -55,15 +55,15 @@ class Paypal extends PaymentGateway
         $itemList = [];
         foreach ($cart->getItems() as $cartItem) {
             $ppItem = new Item();
-            // if ($cartItem->getQuantity() == 0.5) {
-            //     $ppItem->setName($cartItem->getTitle() . " (1/2)");
-            //     $ppItem->setQuantity(1);
-            //     $ppItem->setPrice($cartItem->getTotalPrice());
-            // } else {
+            if ($cartItem->getQuantity() < 1) {
+                $ppItem->setName($cartItem->getTitle() . " (1/2)");
+                $ppItem->setQuantity(1);
+                $ppItem->setPrice($cartItem->getTotalPrice());
+            } else {
                 $ppItem->setName($cartItem->getTitle());
                 $ppItem->setQuantity($cartItem->getQuantity());
                 $ppItem->setPrice($cartItem->getPrice());
-            // }
+            }
             $ppItem->setCurrency($currency);
             $ppItem->setSku($cartItem->getId());
             $itemList[] = $ppItem;
@@ -99,7 +99,6 @@ class Paypal extends PaymentGateway
             ->setItemList($ppitemList)
             ->setDescription($cart->getTitle())
             ->setInvoiceNumber($this->getReferenceId());
-            // ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
         $redirectUrls->setReturnUrl($this->getConfirmUrl())
