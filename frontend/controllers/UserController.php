@@ -71,7 +71,7 @@ class UserController extends Controller
     public function actionProfile()
     {
         $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'user.profile';
+        $this->view->params['user_menu_active'] = 'user.profile';
     	$request = Yii::$app->request;
     	$model = EditUserForm::findOne(Yii::$app->user->id);
     	if ($request->isPost) {
@@ -88,14 +88,16 @@ class UserController extends Controller
     public function actionPassword()
     {
         $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'user.password';
+        $this->view->params['user_menu_active'] = 'user.password';
         $request = Yii::$app->request;
         $post = $request->post();
         $model = new ChangePasswordForm();
         
         if ($model->load($post) && $model->change()) {
             $model = new ChangePasswordForm();
-            return $this->redirect(['user/index']);
+            Yii::$app->session->setFlash('success', 'You have updated successfully.');
+        } else {
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
 
         return $this->render('password', [
@@ -107,7 +109,7 @@ class UserController extends Controller
     public function actionOrders()
     {
         $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'user.order';
+        $this->view->params['user_menu_active'] = 'user.order';
         $request = Yii::$app->request;
         $today = date('Y-m-d');
         $firstOfMonth = date('Y-m-01');
@@ -256,7 +258,7 @@ class UserController extends Controller
     public function actionWallet()
     {
         $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'user.wallet';
+        $this->view->params['user_menu_active'] = 'user.wallet';
         $user = Yii::$app->user->getIdentity();
     	$request = Yii::$app->request;
         $today = date('Y-m-d');

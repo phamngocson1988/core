@@ -59,3 +59,16 @@ function activeSidebarMenu() {
     })
 }
 activeSidebarMenu();
+
+function activeUserMenu() {
+    // var _url = window.location.href;
+    var _active = $('ul.refer-qa-list').attr('user_menu_active');
+    $('ul.refer-qa-list').find('a').each(function(i, v) {
+        var _code = $(v).attr('code');
+        if (_active == _code) {
+            $('ul.refer-qa-list').find('a').removeClass('active');
+            $(v).addClass('active');
+        }
+    })
+}
+activeUserMenu();
