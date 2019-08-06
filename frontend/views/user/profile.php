@@ -4,105 +4,86 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\models\User;
 ?>
-<section class="section section-lg bg-default novi-background bg-cover text-center">
+<section class="page-title">
   <div class="container">
-    <div class="row row-fix justify-content-sm-center">
-      <div class="col-md-10 col-xl-8">
-        <h3>Profile</h3>
-        <!-- RD Mailform-->
-        <?php $form = ActiveForm::begin(); ?>
-          <div class="row row-fix row-20">
-            <div class="col-md-6">
-              <div class="form-wrap form-wrap-validation">
-                <label class="form-label-outside" for="forms-3-name">Username</label>
-                <input class="form-input" type="text" value="<?=$model->username;?>" readonly>
-              </div>
+    <div class="row">
+      <div class="col col-sm-12">
+        <div class="page-title-content text-center">
+          <img src="/images/text-your-account.png" alt="">
+        </div>
+        <div class="page-title-sub">
+          <p>Manage your account</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="profile-page">
+  <div class="container-fluid">
+    <div class="row">
+      <?php require_once(Yii::$app->basePath . '/views/user/_left_menu.php');?>
+      <div class="wrap-profile-right col col-lg-8 col-md-9 col-sm-12 col-12">
+        <div class="profile-right">
+          <div class="profile-top">
+            <p class="profile-name"><?=$model->name;?></p>
+            <div class="wrap-info">
+              <span>
+                <p>Birthday</p>
+                <p><?=$model->birthday;?></p>
+              </span>
+              <span>
+                <p>Address</p>
+                <p><?=$model->address;?></p>
+              </span>
+              <span>
+                <p>Phone</p>
+                <p><?=$model->phone;?></p>
+              </span>
+              <span>
+                <p>Email</p>
+                <p><?=$model->email;?></p>
+              </span>
             </div>
-            <div class="col-md-6">
-              <div class="form-wrap form-wrap-validation">
-                <label class="form-label-outside" for="forms-3-last-name">Email</label>
-                <input class="form-input" type="text" value="<?=$model->email;?>" readonly>
-              </div>
-            </div>
-            <div class="col-sm-12">
-              <?= $form->field($model, 'name', [
-                'options' => ['class' => 'form-wrap form-wrap-inline'],
-                'inputOptions' => ['class' => 'form-input'],
-                'labelOptions' => ['class' => 'form-label-outside'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{label}{input}{hint}{error}'
-              ])->textInput(['autofocus' => true]) ?>
-
-              <?= $form->field($model, 'address', [
-                'options' => ['class' => 'form-wrap form-wrap-inline'],
-                'inputOptions' => ['class' => 'form-input'],
-                'labelOptions' => ['class' => 'form-label-outside'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{label}{input}{hint}{error}'
-              ])->textInput() ?>
-            </div>
-            <div class="col-md-6">
-              <?= $form->field($model, 'country_code', [
-                'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Choose a country'],
-                'labelOptions' => ['class' => 'form-label-outside'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{label}{input}{hint}{error}'
-              ])->dropDownList(Yii::$app->params['country_code']) ?>
-            </div>
-            <div class="col-md-6">
-              <?= $form->field($model, 'phone', [
-                'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input'],
-                'labelOptions' => ['class' => 'form-label-outside'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{label}{input}{hint}{error}'
-              ])->textInput() ?>
-            </div>
-            <div class="col-md-6">
-              <?= $form->field($model, 'birthday', [
-                'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input', 'autocomplete' => false, 'readonly' => true],
-                'labelOptions' => ['class' => 'form-label-outside'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{label}{input}{hint}{error}'
-              // ])->widget(\yii\jui\DatePicker::className(),['clientOptions' => ['changeMonth' => true, 'changeYear' => true], "dateFormat" => "yyyy-MM-dd"]) 
-              ])->widget(\dosamigos\datepicker\DatePicker::className(), [
-                'inline' => false, 
-                'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon" style="border-radius: 0px 35px 35px 0px"><i class="mdi mdi-calendar"></i></div></div>',
-                'clientOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd'
-                ]
-              ]);
-              ?>
-            </div>
-            <div class="col-md-6">
-              <?= $form->field($model, 'favorite', [
-                'options' => ['class' => 'form-wrap form-wrap-validation'],
-                'inputOptions' => ['class' => 'form-input select-filter', 'data-placeholder' => 'Choose favorite game'],
-                'labelOptions' => ['class' => 'form-label-outside'],
-                'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-                'template' => '{label}{input}{hint}{error}'
-              ])->dropDownList($model->fetchGames()) ?>
-            </div>
-            <?= Html::a('Go back', Url::to(['user/index']), ['class' => 'button button-primary button-nina']) ?>
-            <?= Html::submitButton('Update', ['class' => 'button button-secondary button-nina']) ?>
+            <a class="btn-product-detail-add-to-cart has-shadow" href="javascript:;" id='edit-button'>edit your account</a>
           </div>
-        <?php ActiveForm::end();?>
+          <div class="profile-coin">
+            <div class="left-coin">
+              <p class="profile-title-coin">KINGGEM COINS INFORMATION</p>
+              <span>
+                <p>Full name</p>
+                <p>Mail</p>
+                <p>Phone</p>
+                <p>Account balance</p>
+              </span>
+              <span>
+                <p><?=$model->name;?></p>
+                <p><?=$model->email;?></p>
+                <p><?=$model->phone;?></p>
+                <p><?=number_format($model->getWalletAmount());?></p>
+              </span>
+            </div>
+            <div class="right-coin">
+              <img src="/images/logo-king-coin.png" alt="">
+            </div>
+          </div>
+          <div class="profile-edit" style="display: none">
+            <?php $form = ActiveForm::begin(); ?>
+              <?= $form->field($model, 'name');?>
+              <?= $form->field($model, 'address');?>
+              <?= Html::submitButton('Submit', ['class' => 'btn-product-detail-add-to-cart has-shadow']) ?>
+            <?php ActiveForm::end();?>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 <?php
 $script = <<< JS
-var cur= new Date();
-$('.date-picker').bootstrapMaterialDatePicker({
-  format: 'YYYY-MM-DD',
-  maxDate: cur,
-  time: false,
-  year: false
-});
+$('#edit-button').on('click', function(){
+  $('.profile-top, .profile-coin').hide();
+  $('.profile-edit').show();
+})
 JS;
 $this->registerJs($script);
 ?>

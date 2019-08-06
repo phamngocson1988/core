@@ -185,3 +185,11 @@ button:hover {
 th {
     font-weight: normal;
 }
+
+.profile-page .profile-left .refer-qa-list .qa-item .qa-answer .sub-btn {
+    font-weight: normal;
+}
+
+.profile-page .profile-left .refer-qa-list .qa-item .qa-question {
+    font-weight: normal;
+}
