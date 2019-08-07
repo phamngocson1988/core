@@ -92,7 +92,7 @@ $years = array_combine($rangeYears, $rangeYears);
                       <input type="checkbox"><span>I would like to receive details of special offers, free bets and other promotions.</span>
                   </div>
                   <div class="terms-row">
-                      <input type="checkbox" id="agree"><span>* I am at least 18 years of age an I accept the <font style="color: #ff3600;">Terms & Conditions.</font></span>
+                      <input type="checkbox" id="agree"><span>* I am at least 18 years of age an I accept the <font style="color: #ff3600;"><a href="<?=Url::to(['site/term', 'slug' => 'member']);?>" target="_blank">Terms & Conditions.</a></font></span>
                   </div>
               </div>
               <div class="register-action">

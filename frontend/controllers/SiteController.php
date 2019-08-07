@@ -370,4 +370,15 @@ class SiteController extends Controller
         $this->view->params['main_menu_active'] = 'site.question';
         return $this->render('question');
     }
+
+    public function actionTerm($slug)
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $request = Yii::$app->request;
+        $content = Yii::$app->settings->get('TermsConditionForm', $slug);
+        if ($request->isAjax) {
+            return $this->renderParital('term', ['content' => $content]);
+        }
+        return $this->render('term', ['content' => $content]);
+    }
 }

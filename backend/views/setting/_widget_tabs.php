@@ -9,7 +9,9 @@ use yii\helpers\Url;
     <a href="<?=Url::to(['setting/welcome_bonus']);?>">Qùa tặng khi đăng ký</a>
   </li>
   <li <?php if ($tab == 'affiliate_program') echo 'class="active"' ;?> >
-    <a href="<?=Url::to(['setting/affiliate_program']);?>">Chương trình bán hàng liên kết</a>
+    <a href="<?=Url::to(['setting/affiliate_program']);?>">Affiliate</a>
   </li>
- 
+  <li <?php if ($tab == 'terms') echo 'class="active"' ;?> >
+    <a href="<?=Url::to(['setting/terms']);?>">Terms and conditions</a>
+  </li>
 </ul>

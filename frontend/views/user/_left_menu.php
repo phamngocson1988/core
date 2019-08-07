@@ -18,8 +18,8 @@ $user_menu_active = ArrayHelper::getValue($this->params, 'user_menu_active');
         <a class="cus-btn gray-btn qa-question" href="javascript:;">HIstory
         transaction</a>
         <div class="qa-answer showing" style="display: block">
-          <a href="javascript:;" class="sub-btn" code='user.wallet'>Wallet</a>
-          <a href="javascript:;" class="sub-btn" code='user.order'>Order</a>
+          <a href="<?=Url::to(['user/transaction']);?>" class="sub-btn" code='user.wallet'>Transaction</a>
+          <a href="<?=Url::to(['user/orders']);?>" class="sub-btn" code='user.order'>Order</a>
         </div>
       </li>
     </ul>

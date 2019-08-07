@@ -18,6 +18,7 @@ use backend\forms\TopNoticeSettingForm;
 use backend\forms\FlashAnnouncementForm;
 use backend\forms\WelcomeBonusForm;
 use backend\forms\AffiliateProgramForm;
+use backend\forms\TermsConditionForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
 use yii\data\Pagination;
@@ -117,6 +118,12 @@ class SettingController extends Controller
                 'view' => 'affiliate_program.php',
                 'layoutParams' => ['main_menu_active' => 'setting.widgets'],
             ],
+            'terms' => [
+                'class' => SettingsAction::class,
+                'modelClass' => TermsConditionForm::class,
+                'view' => 'terms.php',
+                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+            ]
         ];
     }
 
