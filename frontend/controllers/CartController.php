@@ -12,6 +12,7 @@ use frontend\components\cart\Cart;
 use frontend\components\cart\CartItem;
 use frontend\components\cart\CartPromotion;
 use frontend\models\Order;
+use frontend\models\User;
 use frontend\events\ShoppingEventHandler;
 
 use frontend\components\payment\cart\PaymentItem;
@@ -249,7 +250,11 @@ class CartController extends Controller
             $order->recover_code = $cartItem->recover_code;
             $order->server = $cartItem->server;
             $order->note = $cartItem->note;
-
+            
+            if ($cartItem->saler_code) {
+                $invitor = User::findOne(['saler_code' => $cartItem->saler_code]);
+                $order->saler_id = ($invitor) ? $invitor->id : null;
+            }
             if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
             $cart->clear();
             $gateway->setCart($paymentCart);

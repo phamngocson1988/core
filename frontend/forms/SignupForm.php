@@ -35,6 +35,9 @@ class SignupForm extends Model
     // In case affiliate
     public $affiliate;
 
+    // Saler code
+    public $saler_code;
+
     public function rules()
     {
         return [
@@ -66,6 +69,9 @@ class SignupForm extends Model
 
             ['captcha', 'required'],
             ['captcha', 'captcha', 'message' => 'Captcha is not match'],
+
+            // Saler
+            ['saler_code', 'trim'],
         ];
     }
 

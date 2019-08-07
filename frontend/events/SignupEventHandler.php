@@ -49,6 +49,20 @@ class SignupEventHandler extends Model
         $user->save();
     }
 
+    public static function salerCheckingEvent(AfterSignupEvent $event) 
+    {
+        $form = $event->sender;
+        if (!$form->saler_code) return;
+        $invitor = User::findOne(['saler_code' => $form->saler_code]);
+        if (!$invitor) return;
+        $user = $event->user;
+        if (!$user) return;
+        // Update invited user
+        $user->saler_id = $invitor->id;
+        $user->save();
+        Yii::$app->session->remove('saler_code');
+    }
+
     public static function referApplyingEvent($event) 
     {
         $user = $event->sender;

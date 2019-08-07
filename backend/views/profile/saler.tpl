@@ -52,10 +52,10 @@
                 <li>
                   <a href="{$links.profile}">{Yii::t('app', 'personal_info')}</a>
                 </li>
-                <li class="active">
-                  <a href="#tab_1_2">{Yii::t('app', 'change_password')}</a>
-                </li>
                 <li>
+                  <a href="{$links.password}">{Yii::t('app', 'change_password')}</a>
+                </li>
+                <li class="active">
                   <a href="{$links.saler}">Saler</a>
                 </li>
               </ul>
@@ -66,12 +66,11 @@
                 <!-- PERSONAL INFO TAB -->
                 <div class="tab-pane active" id="tab_1_2">
                   {ActiveForm assign='form'}
-                    {$form->field($model, 'old_password')->passwordInput()}
-                    {$form->field($model, 'new_password')->passwordInput()}
-                    {$form->field($model, 're_password')->passwordInput()}
+                    {$form->field($model, 'saler_code', ['inputOptions' => ['readonly' => true, 'class' => 'form-control', 'id' => 'saler-code']])}
                     <div class="margiv-top-10">
-                      <button type="submit" class="btn green"> {Yii::t('app', 'save_changes')} </button>
-                      <a href="javascript:;" class="btn default"> {Yii::t('app', 'cancel')} </a>
+                      <button type="submit" class="btn green"> Generate </button>
+                      <a class="btn success" href="javascript:;" id="copy_code"> Copy code </a>
+                      <a class="btn success" href="javascript:;" id="copy_link"> Copy link </a>
                     </div>
                   {/ActiveForm}
                 </div>
@@ -107,6 +106,13 @@ $("a[action='change-avatar']").selectImage(manager, {
       },
     });
   }
+});
+$('#copy_code').on('click', function(){
+    copyToClipboard($('#saler-code').val());
+});
+$('#copy_link').on('click', function(){
+    var link = 'https://kinggems.us/site/saler.html?code=' + $('#saler-code').val();
+    copyToClipboard(link);
 });
 {/literal}
 {/registerJs}

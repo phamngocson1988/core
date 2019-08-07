@@ -200,6 +200,11 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    public function generateSalerCode()
+    {
+        $this->saler_code = Yii::$app->security->generateRandomString(6);
+    }
+
     public function getRoles()
     {
         $auth = Yii::$app->authManager;

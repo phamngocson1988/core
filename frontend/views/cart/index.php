@@ -44,6 +44,10 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
                     <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
                     <?= $form->field($item, 'server')->textInput()->label('Server');?>
+                    <?php $saler_code = Yii::$app->session->get('saler_code');?>
+                    <?= $form->field($item, 'saler_code', [
+                      'inputOptions' => ['value' => $saler_code, 'readonly' => (boolean)$saler_code],
+                    ])->textInput()->label('Saler code') ?>
                     <?= $form->field($item, 'recover_code', [
                       'inputOptions' => ['id' => 'recover_code'],
                       'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; text-align: right']

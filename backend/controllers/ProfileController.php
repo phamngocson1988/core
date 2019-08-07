@@ -58,8 +58,10 @@ class ProfileController extends Controller
         }
 
         $links = [
+            'profile' => Url::to(['profile/index']),
             'change_avatar' => Url::to(['profile/change-avatar']),
             'password' => Url::to(['profile/password']),
+            'saler' => Url::to(['profile/saler']),
             'upload_image' => Url::to(['image/ajax-upload']),
         ];
         return $this->render('index.tpl', [
@@ -87,12 +89,41 @@ class ProfileController extends Controller
         }
 
         $links = [
-            'change_avatar' => Url::to(['profile/change-avatar']),
             'profile' => Url::to(['profile/index']),
+            'change_avatar' => Url::to(['profile/change-avatar']),
+            'password' => Url::to(['profile/password']),
+            'saler' => Url::to(['profile/saler']),
             'upload_image' => Url::to(['image/ajax-upload']),
         ];
 
         return $this->render('password.tpl', [
+            'model' => $model,
+            'user' => Yii::$app->user->getIdentity(),
+            'links' => $links
+        ]);
+    }
+
+    public function actionSaler()
+    {
+        $request = Yii::$app->request;
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+        $this->view->registerCssFile('vendor/assets/pages/css/profile.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+
+        $model = Yii::$app->user->identity;
+        if ($request->isPost) {
+            $model->generateSalerCode();
+            $model->save(true, ['saler_code']);
+        }
+        $links = [
+            'profile' => Url::to(['profile/index']),
+            'change_avatar' => Url::to(['profile/change-avatar']),
+            'password' => Url::to(['profile/password']),
+            'saler' => Url::to(['profile/saler']),
+            'upload_image' => Url::to(['image/ajax-upload']),
+        ];
+
+        return $this->render('saler.tpl', [
             'model' => $model,
             'user' => Yii::$app->user->getIdentity(),
             'links' => $links

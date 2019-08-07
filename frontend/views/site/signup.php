@@ -79,6 +79,11 @@ $years = array_combine($rangeYears, $rangeYears);
                   'template' => '{input}'
                 ])->textInput() ?>
               </div>
+              
+              <?php $saler_code = Yii::$app->session->get('saler_code');?>
+              <?= $form->field($model, 'saler_code', [
+                'inputOptions' => ['value' => $saler_code, 'readonly' => (boolean)$saler_code],
+              ])->textInput()->label('Saler code') ?>
 
               <?= $form->field($model, 'captcha', [
                 'inputOptions' => ['class' => 'form-control captcha-code', 'autocomplete' => false]

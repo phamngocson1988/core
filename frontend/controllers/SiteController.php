@@ -69,7 +69,6 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
-                // 'layout' => 'notice'
                 'layout' => 'main'
             ],
             'captcha' => [
@@ -96,6 +95,12 @@ class SiteController extends Controller
             'games' => $games,
             'promotions' => $promotions
         ]);
+    }
+
+    public function actionSaler($code)
+    {
+        if ($code) Yii::$app->session->set('saler_code', $code);
+        return $this->goHome();
     }
 
     /**
@@ -198,6 +203,7 @@ class SiteController extends Controller
         $model = new SignupForm();
 
         // Register an event
+        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'salerCheckingEvent']);
         if ($request->get('refer')) {
             $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
             $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");

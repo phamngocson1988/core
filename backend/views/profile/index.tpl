@@ -57,6 +57,9 @@
                 <li>
                   <a href="{$links.password}">{Yii::t('app', 'change_password')}</a>
                 </li>
+                <li>
+                  <a href="{$links.saler}">Saler</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">

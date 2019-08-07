@@ -19,6 +19,8 @@ class CartItem extends Game implements CartItemInterface
     public $login_method;
 
     public $reception_email;
+    /* Saler */
+    public $saler_code;
 
     const SCENARIO_ADD_CART = 'add_cart';
     const SCENARIO_EDIT_CART = 'edit_cart';
@@ -64,7 +66,7 @@ class CartItem extends Game implements CartItemInterface
         return [
             self::SCENARIO_ADD_CART => ['id', 'quantity'],
             self::SCENARIO_EDIT_CART => ['id', 'quantity'],
-            self::SCENARIO_INFO_CART => ['id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
+            self::SCENARIO_INFO_CART => ['id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note', 'saler_code'],
             self::SCENARIO_IMPORT_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
             self::SCENARIO_RECEPTION_CART => ['id', 'reception_email']
         ];
@@ -90,7 +92,7 @@ class CartItem extends Game implements CartItemInterface
             ['recover_code', 'match', 'pattern' => '/^\d{8}\d*(\s\d{8}\d*)*$/i', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART], 'message' => 'Recovery codes are invalid'],
 
             ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART],
-
+            ['saler_code', 'trim', 'on' => self::SCENARIO_INFO_CART],
         ];
     }
 
