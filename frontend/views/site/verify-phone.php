@@ -1,20 +1,8 @@
 <?php 
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 use yii\helpers\Html;
-print_r(Yii::$app->getSession()->getFlash('error'));
-print_r(Yii::$app->getSession()->getFlash('success'));
-
 ?>
-<?php $form = ActiveForm::begin(['id' => 'form-signup', 'class' => 'rd-mailform form-fix']); ?>
-<?= $form->field($model, 'digit_1')->textInput() ?>
-<?= $form->field($model, 'digit_2')->textInput() ?>
-<?= $form->field($model, 'digit_3')->textInput() ?>
-<?= $form->field($model, 'digit_4')->textInput() ?>
-<div class="form-button">
-<?= Html::submitButton('Signup', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Signup']) ?>
-</div>
-<?php ActiveForm::end(); ?>
-
 <section class="verify-code">
   <div class="container">
     <div class="small-container">
@@ -29,21 +17,35 @@ print_r(Yii::$app->getSession()->getFlash('success'));
             </div>
             <div class="col-12 col-md-8 right-code">
               <p>Enter the 4 digit code we sent you<br>
-                via SMS <span>(+84********09)</span> to continue
+                via SMS <span>(<?=substr_replace($model->phone, str_pad("", strlen($model->phone) - 5, "*"), 3, -2);?>)</span> to continue
               </p>
-              <div class="wrap-numb">
-                <span class="numb">9</span>
-                <?= $form->field($model, 'digit_1', [
-                	'inputOptions' => ['class' => 'numb'],
-                	'template' => '{input}'
-                ])->textInput() ?>
-                <span class="numb">8</span>
-                <span class="numb">3</span>
-                <span class="numb">7</span>
-              </div>
-              <p>code expires in: <span class="red">00:39</span></p>
-              <a class="btn-product-detail-add-to-cart has-shadow" href="javascript:;">continue</a>
-              <p>Didn’t get the code? <a href="javascript:;" class="red">Resend code</a></p>
+              <?php $form = ActiveForm::begin(['options' => ['autocomplete' => 'off']]); ?>
+                <div class="wrap-numb">
+                  <?= $form->field($model, 'digit_1', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}',
+                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
+                  ])->textInput() ?>
+                  <?= $form->field($model, 'digit_2', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}',
+                    'inputOptions' => ['class' => 'numb', 'type' => 'number', 'maxlength' => 1]
+                  ])->textInput() ?>
+                  <?= $form->field($model, 'digit_3', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}',
+                    'inputOptions' => ['class' => 'numb', 'type' => 'number', 'maxlength' => 1]
+                  ])->textInput() ?>
+                  <?= $form->field($model, 'digit_4', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}',
+                    'inputOptions' => ['class' => 'numb', 'type' => 'number', 'maxlength' => 1]
+                  ])->textInput() ?>
+                </div>
+                <p>code expires in: <span class="red" id="time">00:00</span></p>
+                <?= Html::submitButton('continue', ['class' => 'btn-product-detail-add-to-cart has-shadow', 'name' => 'Signup']) ?>
+              <?php ActiveForm::end(); ?>
+              <p>Didn’t get the code? <a href="" class="red">Resend code</a></p>
             </div>
           </div>
         </div>
@@ -51,3 +53,23 @@ print_r(Yii::$app->getSession()->getFlash('success'));
     </div>
   </div>
 </section>
+<?php
+$script = <<< JS
+var counter = null;
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    counter = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.text(minutes + ":" + seconds);
+        if (--timer < 0) {
+          clearInterval(counter);
+        }
+    }, 1000);
+}
+startTimer(60, $('#time'));
+JS;
+$this->registerJs($script);
+?>

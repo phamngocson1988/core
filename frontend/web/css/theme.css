@@ -193,3 +193,24 @@ th {
 .profile-page .profile-left .refer-qa-list .qa-item .qa-question {
     font-weight: normal;
 }
+
+/*Hide input arrow*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+.profile-right .profile-info-right .img-wrap-info-right .img-info-right:last-child {
+    padding-left: 0px;
+}
+
+.main-slider .main-slider-blurred {
+    filter: blur(6px);
+    -webkit-filter: blur(6px);
+}

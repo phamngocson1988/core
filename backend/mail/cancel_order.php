@@ -5,7 +5,7 @@
 <h3>Information Order</h3>
 <ul>
 <li>Order code: <?=$order->id;?></li>
-<li>Order time: <?=date('F j, Y, g:i a'), strtotime($order->created_at));?></li>
+<li>Order time: <?=date('F j, Y, g:i a', strtotime($order->created_at));?></li>
 <li>Order status: Cancel</li>
 </ul>
 <h3>Order detail:</h3>

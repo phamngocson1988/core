@@ -38,6 +38,7 @@ class Order extends \common\models\Order
         $labels = self::getStatusList();
         $color = $list[$this->status];
         $label = $labels[$this->status];
+        if (!$format) return $label;
         return sprintf($format, $color, $label);
     }
 }
