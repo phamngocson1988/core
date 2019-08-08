@@ -38,7 +38,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                         <?php if (!Yii::$app->user->isGuest) :?>
                         <div class="login-box" style="color: white;">
                             <?php $user = Yii::$app->user->getIdentity();?>
-                            <span class="fl-left">Chào <?=$user->name;?></span>&nbsp;|&nbsp;
+                            <span class="fl-left">Chào <a href="<?=Url::to(['user/profile']);?>"><?=$user->name;?></a></span>&nbsp;|&nbsp;
                             <a href="<?=Url::to(['site/logout']);?>">Logout</a>
                         </div>
                         <?php else :?>

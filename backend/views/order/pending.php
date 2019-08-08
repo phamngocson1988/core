@@ -47,9 +47,9 @@ use common\models\Product;
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="#images" data-toggle="tab"> Hình ảnh</a>
-              </li>
+              </li> -->
               <li>
                 <a href="#complain" data-toggle="tab"> Phản hồi</a>
               </li>
@@ -197,17 +197,6 @@ use common\models\Product;
                     <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
                     <?php echo $this->render('@backend/views/order/_customer.php', ['order' => $order]);?>
                   </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="images">
-                <div class="row" style="margin-bottom: 20px">
-                  <div class=col-md-12>
-                    <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh</a>
-                    <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple/>
-                  </div>
-                </div>
-                <div class="row" id="evidences">
-                  <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->evidences, 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
                 </div>
               </div>
               <div class="tab-pane" id="complain">

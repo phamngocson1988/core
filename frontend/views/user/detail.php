@@ -5,233 +5,115 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Game;
-$game = $model->game;
 ?>
-<section class="section section-lg bg-default text-center">
+<section class="page-title">
   <div class="container">
-    <div class="row justify-content-sm-center">
-      <div class="col-md-12 col-xl-12">
-        <h4>Order Item</h3>
-        <table class="table-custom table-hover">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Game</th>
-              <th>Total price</th>
-              <th>Total game</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><img src="<?=$game->getImageUrl('100x100');?>" class="img-responsive" /></td>
-              <td><?=$model->game_title;?></td>
-              <td><?=number_format($model->total_price);?></td>
-              <td><?=number_format($model->total_unit);?></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section-lg bg-default novi-background bg-cover" id="content">
-  <!-- section wave-->
-  <div class="container grid-demonstration">
-    <h4 class="text-center">Order Information</h3>
     <div class="row">
-      <div class="col-6">
-        <div class="box-classic box-bordered box-novi">
-          <div class="box-classic-content">
-            <table class="table-custom table-hover">
-              <tbody>
-                <tr>
-                  <td>Customer Name</td>
-                  <td><?=$model->customer_name;?></td>
-                </tr>
-                <tr>
-                  <td>Customer email</td>
-                  <td><?=$model->customer_email;?></td>
-                </tr>
-                <tr>
-                  <td>Customer phone</td>
-                  <td><?=$model->customer_phone;?></td>
-                </tr>
-                <tr>
-                  <td>Created at:</td>
-                  <td><?=$model->created_at;?></td>
-                </tr>
-                <tr>
-                  <td>Payment method:</td>
-                  <td>King Payment Gateway</td>
-                </tr>
-                <?php if ($model->total_discount):?>
-                <tr>
-                  <td>Sub total:</td>
-                  <td><?=number_format($model->sub_total_price);?></td>
-                </tr>
-                <tr>
-                  <td>Discount:</td>
-                  <td><?=number_format($model->total_discount);?></td>
-                </tr>
-                <?php endif;?>
-                <tr>
-                  <td>Total:</td>
-                  <td><?=number_format($model->total_price);?></td>
-                </tr>
-                <tr>
-                  <td>Order status:</td>
-                  <td><?=$model->status;?></td>
-                </tr>
-                <?php if ($model->isProcessingOrder()) :?>
-                <tr>
-                  <td colspan="2" style="align:center">
-                    <div style="align:center">
-                      <a href="<?=Url::to(['user/confirm', 'key' => $model->auth_key]);?>" id="complete" class="button button-default-outline button-nina button-block button-blog">Confirm Delivery</a>
-                    </div>
-                  </td>
-                </tr>
-                <?php endif;?>
-                <?php if (!$model->isRating()) :?>
-                <tr id="rating">
-                  <td colspan="2">
-                    <div class="group-md button-group">
-                      <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-secondary button-shadow" id='like'><span class="icon novi-icon mdi mdi-thumb-up-outline"></span>Like</a>
-                      <!-- <a href="<?=Url::to(['user/dislike', 'key' => $model->auth_key]);?>" class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" id='dislike'><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Dislike</a> -->
-                      <button class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" type="button" data-toggle="modal" data-target="#show-modal"><span class="icon novi-icon mdi mdi-thumb-down-outline"></span>Dislike</button>
-                      
-                    </div>
-                  </td>
-                </tr>
-                <?php endif;?>
-                <?php if ($model->isPendingOrder() || $model->isVerifyingOrder()) :?>
-                <tr id="request">
-                  <td colspan="2">
-                    <div class="group-md button-group">
-                      <?php if ($model->request_cancel) :?>
-                      <button class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" type="button" ><span class="icon novi-icon mdi mdi-close"></span>Request was sent</button>
-                      <?php else:?>
-                      <button class="button button-icon-alternate button-icon-left button-xs button-default-outline button-shadow" type="button" data-toggle="modal" data-target="#cancel-modal"><span class="icon novi-icon mdi mdi-close"></span>Cancel order</button>
-                      <?php endif;?>
-                    </div>
-                  </td>
-                </tr>
-                <?php endif;?>
-              </tbody>
-            </table>
-          </div>
+      <div class="col col-sm-12">
+        <div class="page-title-content text-center">
+          <img src="/images/text-your-account.png" alt="">
         </div>
-      </div>
-      <div class="col-6">
-        <div class="box-classic box-bordered box-novi">
-          <div class="box-classic-content">
-            <table class="table-custom table-hover">
-              <tbody>
-                <tr>
-                  <td>Username</td>
-                  <td><?=$model->username;?></td>
-                </tr>
-                <tr>
-                  <td>Password</td>
-                  <td><?=$model->password;?></td>
-                </tr>
-                <tr>
-                  <td>Character name</td>
-                  <td><?=$model->character_name;?></td>
-                </tr>
-                <tr>
-                  <td>Platform</td>
-                  <td><?=$model->platform;?></td>
-                </tr>
-                <tr>
-                  <td>Login method</td>
-                  <td><?=$model->login_method;?></td>
-                </tr>
-                <?php if ($model->recover_code):?>
-                <tr>
-                  <td>Recover Code</td>
-                  <td><?=$model->recover_code;?></td>
-                </tr>
-                <?php endif;?>
-                <?php if ($model->server):?>
-                <tr>
-                  <td>Server</td>
-                  <td><?=$model->server;?></td>
-                </tr>
-                <?php endif;?>
-                <?php if ($model->note):?>
-                <tr>
-                  <td>Note</td>
-                  <td><?=$model->note;?></td>
-                </tr>
-                <?php endif;?>
-              </tbody>
-            </table>
-          </div>
+        <div class="page-title-sub">
+          <p>Manage your account</p>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section class="section-lg text-center bg-default" id="complains">
-  <!-- section wave-->
-  <div class="container">
-    <h4 class="text-center">Order Complains</h3>
-  </div>
-  <!-- Style switcher-->
-  <?php if ($model->complains) : ?>
-  <div class="style-switcher" data-container="">
-    <div class="style-switcher-container">
-      <div class="style-switcher-toggle-wrap"> 
-      </div>
-      <section class="section section-lg novi-background bg-cover text-center text-lg-left bg-gray-darker">
-        <div class="container">
-          <div class="time-line-vertical">
-            <?php foreach ($model->complains as $complain) : ?>
-            <div class="time-line-vertical-element">
-              <div class="unit unit-sm flex-column flex-md-row unit-spacing-xxl">
-                <div class="unit-left">
-                  <div class="time-line-time">
-                    <time class="wow fadeInLeft" data-wow-delay=".6s" datetime="2018"><?=$complain->sender->name;?> (<?=$complain->created_at;?>)</time>
-                  </div>
-                </div>
-                <div class="unit-body">
-                  <div class="time-line-content wow fadeInRight" data-wow-delay=".6s">
-                    <p><?=$complain->content;?></p>
-                  </div>
-                </div>
-              </div>
+<section class="profile-page">
+  <div class="container-fluid">
+    <div class="row">
+      <?php require_once(Yii::$app->basePath . '/views/user/_left_menu.php');?>
+      <div class="wrap-profile-right col col-lg-8 col-md-9 col-sm-12 col-12">
+        <div class="profile-right">
+          <div class="profile-info-left">
+            <p class="profile-name">
+              ORDER DETAIL <span>#<?=$model->id;?></span>
+            </p>
+            <div class="left-coin">
+              <span>
+                <p>Game:</p>
+                <p>Platform:</p>
+                <p>Character Name:</p>
+                <p>Account Login:</p>
+                <p>Account Password</p>
+                <p>Server</p>
+                <p>Login Method</p>
+                <p>Recovery Code</p>
+                <p>Special note to seller</p>
+              </span>
+              <span class="red">
+                <p><?=$model->game_title;?></p>
+                <p><?=$model->platform;?></p>
+                <p><?=$model->character_name;?></p>
+                <p><?=$model->username;?></p>
+                <p><?=$model->password;?></p>
+                <p><?=$model->server;?></p>
+                <p><?=$model->login_method;?></p>
+                <p><?=$model->recover_code;?></p>
+                <p><?=$model->note;?></p>
+              </span>
             </div>
-            <?php endforeach;?>
           </div>
-        </div>
-      </section>
-    </div>
-  </div>
-  <?php endif;?>
-  <?php if (!$model->isCompletedOrder() && !$model->isDeletedOrder()) :?>
-  <?= Html::beginForm(['user/send-complain'], 'POST', ['id' => 'send-complain']); ?>
-  <div class="container">
-    <div class="row row-fix justify-content-sm-center">
-      <div class="row row-fix row-20">
-        <div class="col-md-12">
-          <div class="form-wrap form-wrap-validation field-cartitem-server has-success">
-            <label class="form-label-outside">Content</label>
-            <?= Html::textArea('content', '', ['class' => 'form-input']); ?>
-          </div>
-          <?= Html::hiddenInput('order_id', $model->id); ?>
-        </div>
-        <div class="col-lg-12 offset-custom-1">
-          <div class="form-button text-md-right">
-            <?= Html::submitButton('Send complain', ['class' => 'button button-secondary button-nina', 'id' => 'send-form']) ?>
+          <div class="profile-info-right">
+            <p class="profile-name">DELIVERY STATUS<span><?=$model->doing_unit;?>/<?=$model->total_unit;?> <?=$model->getStatusLabel(null);?></span> </p>
+            <div class="img-wrap-info-right">
+              <?php foreach ($model->files as $file) :?>
+              <div class="img-info-right">
+                <a href="<?=$file->getUrl();?>" target="_blank"><img src="<?=$file->getUrl();?>" width="280px" height="175px" ></a>
+              </div>
+              <?php endforeach;?>
+            </div>
+            <div class="text-delivery">
+              <div class="wrap-text">
+                <p><?= date('F j, Y, H:i A \(P\)', strtotime($model->updated_at));?></p>
+                <p>Deliveried 1</p>
+                <p><?=$model->getStatusLabel(null);?>.</p>
+              </div>
+              
+              <?php if ($model->isPendingOrder() || $model->isVerifyingOrder()) :?>
+                <?php if ($model->request_cancel) :?>
+                <a class="btn-product-detail-add-to-cart" href="javascript:;">Request was sent</a>
+                <?php else:?>
+                <a class="btn-product-detail-add-to-cart" href="javascript:;" data-toggle="modal" data-target="#cancel-modal">Cancel order</a>
+                <?php endif;?>
+              <?php endif;?>
+            </div>
+            <div class="tag-rate has-shadow">
+              <svg id="star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="30" height="30" viewBox="0 0 30 30">
+                <image  width="30" height="30"
+                  xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAA/1BMVEX/3QD/////3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QD/3QAAAABiC+9QAAAAU3RSTlMAADTa4DvR6h0pdIzF2yAya4XOECoLCAd/jQpW3u7r4Wrc8OMuobMNfjbi9E0MsccckyExouT8BD+Jp5uP6CxEd0o5jgHCGq/mCQJ9D13pWEndZuKjeAIAAAABYktHRFTkA4ilAAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH4wgIAxgpay8ezgAAAPxJREFUKM990elaAiEUBmDQcszct9QanVwyTS3NFtdyyd3UuP97cYBR5pD4/Tqcl4cHDgjZ43BeXGJ7gCIXIZqa3cTMlZI9lK+V7KXsU7GfsAQUHOQcUnCYs+80R4iVKOBYnOUmceAkb8RTJt/e6WkWjRyj8Y6eMRA5G3R/TrPI7VJrLm9eraDShyJ7mHFaHw/vLpX/41NFjKVak/X5BUzNA7UuDbUB+VXiJuSaxG+Q3z8Af8pXqwBuydwG7LS6na5V9Ozct5oJMcIvG3+zjj4wSzzkIxwJHrNf/ZnQGuPilK5m8yMv2HZ+EG0u6XolDl//ljdIMN7u0n+s2ANWG4iIp1uJLgAAAABJRU5ErkJggg==" />
+              </svg>
+              <p class="text-rate"><span>Rate this order!</span> How would you rate this buyer?</p>
+
+              <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" id='like'>
+                <svg id="like" xmlns="http://www.w3.org/2000/svg" width="31" height="31"
+                  viewBox="0 0 31 31">
+                  <circle id="Ellipse_5_copy_4" data-name="Ellipse 5 copy 4" class="cls-1"
+                    cx="15.5" cy="15.5" r="15" />
+                  <path class="cls-2"
+                    d="M1644.95,943.7a13.285,13.285,0,0,1-1.87.063,5.478,5.478,0,0,1-1.33-.192,1.04,1.04,0,0,1-.72-0.691c-0.51-1.039-1.11-2.045-1.71-3.039-0.65-1.076-1.45-2.07-2.09-3.148-0.53-.9-0.68-2.148-1.45-2.9-0.73-.708-1.78,0-2.2.678a3.455,3.455,0,0,0,.29,3.358,6.034,6.034,0,0,1,.87,1.848,4.6,4.6,0,0,1-.03,1.612,2.566,2.566,0,0,1-.07.271c0.17-.091.33-0.182,0.49-0.273a16.357,16.357,0,0,0-5.06-.091,2.673,2.673,0,0,0-2.34,1.673,2.317,2.317,0,0,0,.91,2.2v-0.552a2.877,2.877,0,0,0-.84,1.27,2.265,2.265,0,0,0,1.13,2.475c-0.05-.178-0.1-0.356-0.14-0.535a2.007,2.007,0,0,0,.45,3.06l-0.15-.534a1.836,1.836,0,0,0,.05,1.631,3.289,3.289,0,0,0,2.46,1.363,20.941,20.941,0,0,0,4.62.22,0.391,0.391,0,0,0,0-.781,25.535,25.535,0,0,1-3.61-.086,5.576,5.576,0,0,1-2.21-.558,1.242,1.242,0,0,1-.69-1.016,1.1,1.1,0,0,1,.05-0.311,0.177,0.177,0,1,0,.02-0.068,0.4,0.4,0,0,0-.14-0.534c-0.81-.466-0.63-1.332-0.17-1.991a0.4,0.4,0,0,0-.14-0.535,1.434,1.434,0,0,1-.69-1.79,2.241,2.241,0,0,1,.56-0.728,0.377,0.377,0,0,0,0-.552,1.36,1.36,0,0,1-.45-1.907,3.338,3.338,0,0,1,2.27-.75,17.189,17.189,0,0,1,3.9.178,0.405,0.405,0,0,0,.49-0.273,5.4,5.4,0,0,0,.09-2.3c-0.21-1.4-1.44-2.318-1.44-3.783a1.427,1.427,0,0,1,.82-1.364c0.4-.163.59,0.354,0.72,0.632,0.25,0.513.43,1.055,0.66,1.572a9.742,9.742,0,0,0,1.03,1.622c0.72,1.023,1.37,2.1,1.99,3.184,0.28,0.483.56,0.97,0.82,1.462a5.834,5.834,0,0,0,.58,1.047,3.435,3.435,0,0,0,2.4.7,12.309,12.309,0,0,0,1.87-.063c0.5-.056.5-0.838,0-0.781h0Z"
+                    transform="translate(-1620.69 -928.094)" />
+                </svg>
+              </a>
+
+              <a href="javascript:;" data-toggle="modal" data-target="#show-modal" id='dislike'>
+                <svg id="dislike" xmlns="http://www.w3.org/2000/svg" width="31" height="31"
+                  viewBox="0 0 31 31">
+                  <circle id="Ellipse_5_copy_3" data-name="Ellipse 5 copy 3" class="cls-1"
+                    cx="15.5" cy="15.5" r="15" />
+                  <path class="cls-2"
+                    d="M1668.05,943.8a13,13,0,0,1,1.86-.063,5.557,5.557,0,0,1,1.34.191,1.06,1.06,0,0,1,.72.69c0.51,1.039,1.11,2.043,1.71,3.036,0.65,1.075,1.45,2.067,2.09,3.144,0.53,0.9.68,2.145,1.46,2.895,0.72,0.707,1.77,0,2.19-.677a3.418,3.418,0,0,0-.28-3.353,6.039,6.039,0,0,1-.87-1.847,4.359,4.359,0,0,1,.03-1.61,1.281,1.281,0,0,1,.06-0.27c-0.16.09-.33,0.181-0.49,0.272a16.365,16.365,0,0,0,5.07.091,2.671,2.671,0,0,0,2.34-1.671,2.293,2.293,0,0,0-.91-2.2v0.552a2.885,2.885,0,0,0,.84-1.269,2.26,2.26,0,0,0-1.13-2.472c0.05,0.178.1,0.356,0.14,0.534a2,2,0,0,0-.45-3.056l0.15,0.534a1.833,1.833,0,0,0-.05-1.63,3.294,3.294,0,0,0-2.46-1.361,20.88,20.88,0,0,0-4.62-.219,0.39,0.39,0,0,0,0,.78,25.457,25.457,0,0,1,3.61.085,5.576,5.576,0,0,1,2.21.558,1.238,1.238,0,0,1,.69,1.014,1.086,1.086,0,0,1-.05.31,0.171,0.171,0,1,0-.02.069,0.4,0.4,0,0,0,.14.534c0.81,0.465.63,1.33,0.17,1.988a0.388,0.388,0,0,0,.14.534,1.432,1.432,0,0,1,.69,1.788,2.237,2.237,0,0,1-.56.727,0.377,0.377,0,0,0,0,.552,1.348,1.348,0,0,1,.45,1.9,3.347,3.347,0,0,1-2.28.75,17.359,17.359,0,0,1-3.9-.178,0.414,0.414,0,0,0-.49.272,5.391,5.391,0,0,0-.09,2.3c0.21,1.394,1.44,2.314,1.45,3.778a1.434,1.434,0,0,1-.83,1.362c-0.4.162-.59-0.354-0.72-0.632-0.24-.512-0.42-1.053-0.66-1.569a10.266,10.266,0,0,0-1.02-1.62c-0.73-1.023-1.38-2.1-2-3.181-0.28-.482-0.56-0.968-0.82-1.459a5.834,5.834,0,0,0-.58-1.047,3.445,3.445,0,0,0-2.41-.7,12.051,12.051,0,0,0-1.86.063c-0.5.055-.51,0.836,0,0.78h0Z"
+                    transform="translate(-1660.69 -928.094)" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <?= Html::endForm(); ?>
-  <?php endif;?>
 </section>
 
 <!-- Modal-->

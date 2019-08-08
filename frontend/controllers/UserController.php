@@ -136,6 +136,7 @@ class UserController extends Controller
 
     public function actionDetail($id)
     {
+        $this->view->params['body_class'] = 'global-bg';
         $order = Order::findOne($id);
         if (!$order) throw new NotFoundHttpException("The order not found", 1);
         $complainModel = new OrderComplains();
@@ -234,6 +235,8 @@ class UserController extends Controller
 
     public function actionTransaction()
     {
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['user_menu_active'] = 'user.transaction';
     	$request = Yii::$app->request;
         $today = date('Y-m-d');
         $firstOfMonth = date('Y-m-01');
