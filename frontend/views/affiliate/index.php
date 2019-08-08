@@ -47,6 +47,7 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
               <div class="aff-tabs-nav">
                 <a href="javascript:void;"><span class="active" tab-content="#reward-feed">Reward Feed</span></a>
                 <a href="<?=Url::to(['affiliate/member']);?>"><span tab-content="#reflink">Members</span></a>
+                <a href="<?=Url::to(['affiliate/withdraw']);?>"><span tab-content="#withdraw">Withdraw</span></a>
               </div>
               <div class="aff-tabs-content-block">
                 <div class="aff-tabs-content has-shadow active" id="reward-feed">

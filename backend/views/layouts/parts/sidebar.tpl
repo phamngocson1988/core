@@ -45,14 +45,34 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{url route='/affiliate/request'}" class="nav-link " code='user.affiliate'>
-              <span class="title">Affiliate</span>
-              <span class="badge badge-success">{$this->params['new_affiliate_request']}</span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
             <span class="title">{Yii::t('app', 'role')}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+          <i class="fa fa-link"></i>
+          <span class="title">Affiliate</span>
+          <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/index'}" class="nav-link " code='affiliate.index'>
+            <span class="title">Tất cả</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/request'}" class="nav-link " code='affiliate.request'>
+            <span class="title">Yêu cầu hợp tác</span>
+            <span class="badge badge-success">{$this->params['new_affiliate_request']}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/withdraw'}" class="nav-link " code='affiliate.withdraw'>
+            <span class="title">Yêu cầu rút tiền</span>
+            <span class="badge badge-success">{$this->params['new_commission_withdraw']}</span>
             </a>
           </li>
         </ul>

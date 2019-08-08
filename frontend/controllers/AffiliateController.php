@@ -9,9 +9,9 @@ use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\models\UserCommission;
+use frontend\models\UserCommissionWithdraw;
 use frontend\models\UserAffiliate;
 use frontend\models\User;
-use frontend\forms\TakeCommission;
 use frontend\behaviors\UserCommissionBehavior;
 
 /**
@@ -150,10 +150,37 @@ class AffiliateController extends Controller
         ]);
     }
 
-    public function actionTake($id)
+    public function actionWithdraw()
     {
-        $commission = TakeCommission::findOne($id);
-        return $this->asJson(['status' => $commission->takeCommission(), 'errors' => $commission->getErrorSummary(true)]);
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        $user = Yii::$app->user->getIdentity();
+        $command = UserCommissionWithdraw::find()->where(['user_id' =>$user->id]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();
+        $member = $user->getAffiliateChildren()->count();
+        return $this->render('withdraw', [
+            'member' => $member,
+            'models' => $models,
+            'pages' => $pages
+        ]);
+    }
+
+    public function actionWithdrawRequest()
+    {
+        $request = Yii::$app->request;
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+
+        $model = new UserCommissionWithdraw();
+        if ($model->load($request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
+            return $this->redirect(['affiliate/withdraw']);
+        }
+        return $this->render('withdraw_request', ['model' => $model]);
     }
 
 }

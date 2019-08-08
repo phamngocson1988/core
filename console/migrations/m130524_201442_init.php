@@ -81,6 +81,19 @@ class m130524_201442_init extends Migration
             'status' => $this->integer()->notNull()->defaultValue(1), // set 1: pending, 2: completed
         ], $tableOptions);
 
+        $this->createTable('{{%user_commission_withdraw}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'amount' => $this->float()->notNull()->defaultValue(0),
+            'created_at' => $this->dateTime()->notNull(),
+            'updated_at' => $this->dateTime(),
+            'approved_by' => $this->integer()->notNull(),
+            'executed_by' => $this->integer()->notNull(),
+            'note' => $this->string(255),
+            'evidence' => $this->integer(),
+            'status' => $this->integer()->notNull()->defaultValue(1), // set 1: request, 2: approved, 3: executed
+        ], $tableOptions);
+
 
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
@@ -167,5 +180,7 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%post}}');
         $this->dropTable('{{%category}}');
         $this->dropTable('{{%image}}');
+        $this->dropTable('{{%user_commission}}');
+        $this->dropTable('{{%user_commission_withdraw}}');
     }
 }

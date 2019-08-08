@@ -6,6 +6,7 @@ use common\components\Controller as BaseController;
 use yii\web\Response;
 use backend\forms\FetchNewPendingOrderForm;
 use backend\models\UserAffiliate;
+use backend\models\UserCommissionWithdraw;
 
 /**
  * Controller
@@ -25,6 +26,11 @@ class Controller extends BaseController
 	        $command = UserAffiliate::find()->where(['status' => UserAffiliate::STATUS_DISABLE]);
 	        $affiliateTotal = $command->count();
             $this->view->params['new_affiliate_request'] = $affiliateTotal ? $affiliateTotal : '';
+
+            // Show number of new commission withdraw
+            $command = UserCommissionWithdraw::find()->where(['status' => UserCommissionWithdraw::STATUS_REQUEST]);
+	        $commissionTotal = $command->count();
+            $this->view->params['new_commission_withdraw'] = $commissionTotal ? $commissionTotal : '';
             return true;
         }
 

@@ -39,40 +39,40 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
             </div>
             <div class="has-left-border has-shadow">
               Your Members: <?=number_format($member);?>
-              <a href="<?=Url::to(['site/affiliate']);?>" style="color: #ff3600;">Tell me how to earn more</a>
+              <a href="<?=Url::to(['affiliate/withdraw-request']);?>" style="color: #ff3600;">Withdraw your commission</a>
             </div>
           </div>
           <div class="affiliate-bottom">
             <div class="aff-tabs">
               <div class="aff-tabs-nav">
                 <a href="<?=Url::to(['affiliate/index']);?>"><span tab-content="#reward-feed">Reward Feed</span></a>
-                <a href="javascript:void;"><span class="active" tab-content="#reflink">Members</span></a>
-                <a href="<?=Url::to(['affiliate/withdraw']);?>"><span tab-content="#withdraw">Withdraw</span></a>
+                <a href="<?=Url::to(['affiliate/member']);?>"><span tab-content="#reflink">Members</span></a>
+                <a href="javascript:void;"><span class="active" tab-content="#withdraw">Withdraw</span></a>
               </div>
               <div class="aff-tabs-content-block">
+                <div class="aff-tabs-content has-shadow" id="reward-feed">
+                </div>
                 <div class="aff-tabs-content active" id="reflink">
                   <div class="profit-listing">
                     <table>
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Email</th>
-                          <th>Name</th>
-                          <th>Register Date</th>
-                          <th>Number of orders</th>
+                          <th>Request date</th>
+                          <th>Amount</th>
+                          <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php if (!$models) : ?>
-                        <tr><td colspan="5">No data found</td></tr>
+                        <tr><td colspan="4">No data found</td></tr>
                         <?php else: ?>
                         <?php foreach ($models as $no => $model) : ?>
                         <tr>
                           <td><?=$no + $pages->offset + 1;?></td>
-                          <td><?=$model->email;?></td>
-                          <td><?=$model->name;?></td>
                           <td><?=$model->created_at;?></td>
-                          <td><?=number_format($model->getOrders()->count());?></td>
+                          <td><?=number_format($model->amount);?></td>
+                          <td><?=$model->getStatusLabel();?></td>
                         </tr>
                         <?php endforeach; ?>
                         <?php endif;?>
@@ -89,30 +89,3 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
     </div>
   </div>
 </section>
-<?php
-$script = <<< JS
-$('.click-to-copy-btn').click(function(){
-    var _tempElement = $("<input>");
-    $(this).parent().find('input').val($(this).parent().find('input').val()).select();
-    document.execCommand("copy");
-});
-$('.aff-tabs .aff-tabs-nav span').click(function(){
-  var _tabContentId = $(this).attr('tab-content');
-  $('.aff-tabs-content').removeClass('active');
-  $('.aff-tabs-content'+_tabContentId).addClass('active');
-
-  $('.aff-tabs .aff-tabs-nav span').removeClass('active');
-  $(this).addClass('active');
-});
-
-$(".link-action").ajax_action({
-  confirm: true,
-  confirm_text: 'Do you really want to transfer this commission to your wallet?',
-  callback: function(eletement, data) {
-    // location.reload();
-    console.log(data);
-  }
-});
-JS;
-$this->registerJs($script);
-?>
