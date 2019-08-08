@@ -18,8 +18,8 @@ use yii\bootstrap\ActiveForm;
               Import your list
               <?=Html::fileInput("template", null, ['id' => 'file_upload', 'style' => 'display:none']);?>
               <div class="top-bar-action">
-                <?=Html::a('Upload', 'javascript:;', ['class' => 'edit-btn', 'id' => 'upload-button']);?>
-                <?=Html::a('Download', Url::to(['reseller/download']), ['class' => 'edit-btn']);?>
+                <?=Html::a('Upload', 'javascript:;', ['class' => 'upload-btn', 'id' => 'upload-button']);?>
+                <?=Html::a('Download', Url::to(['reseller/download']), ['class' => 'download-btn']);?>
               </div>
             </div>
           </div>

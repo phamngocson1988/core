@@ -214,3 +214,17 @@ input[type=number] {
     filter: blur(6px);
     -webkit-filter: blur(6px);
 }
+
+.top-bar-action a {
+    background: none;
+}
+
+.top-bar-action a.edit-btn {
+    background: url(../images/ico-edit.png) no-repeat 0 center;
+}
+.top-bar-action a.download-btn {
+    background: url(../images/download_icon.png) no-repeat 0 center;
+}
+.top-bar-action a.upload-btn {
+    background: url(../images/upload_icon.png) no-repeat 0 center;
+}
