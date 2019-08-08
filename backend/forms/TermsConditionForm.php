@@ -8,11 +8,12 @@ use yii\base\Model;
 class TermsConditionForm extends Model
 {
     public $member;
+    public $risk;
 
     public function rules()
     {
         return [
-            [['member'], 'trim'],
+            [['member', 'risk'], 'trim'],
         ];
     }
 }
