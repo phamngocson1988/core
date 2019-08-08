@@ -72,3 +72,6 @@ function activeUserMenu() {
     })
 }
 activeUserMenu();
+
+// Fancybox
+$(".fancybox").fancybox();

@@ -39,8 +39,6 @@ class FetchHistoryOrderForm extends Order
     protected function createCommand()
     {
         $command = self::find();
-        $command->joinWith('items');
-        $command->select(['order.*', 'order_items.item_title']);
         $command->where(['customer_id' => $this->user_id]);
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
@@ -49,9 +47,9 @@ class FetchHistoryOrderForm extends Order
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
         if ($this->game_id) {
-            $command->andWhere(['order_items.game_id' => $this->game_id]);
+            $command->andWhere(['game_id' => $this->game_id]);
         }
-        $command->orderBy(['order.created_at' => SORT_DESC]);
+        $command->orderBy(['created_at' => SORT_DESC]);
         $this->_command = $command;
     }
 

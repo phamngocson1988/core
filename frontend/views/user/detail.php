@@ -60,7 +60,7 @@ use frontend\models\Game;
             <div class="img-wrap-info-right">
               <?php foreach ($model->files as $file) :?>
               <div class="img-info-right">
-                <a href="<?=$file->getUrl();?>" target="_blank"><img src="<?=$file->getUrl();?>" width="280px" height="175px" ></a>
+                <a href="<?=$file->getUrl();?>" class="fancybox" rel="gallery"><img src="<?=$file->getUrl();?>" width="280px" height="175px" ></a>
               </div>
               <?php endforeach;?>
             </div>
