@@ -29,17 +29,17 @@ use yii\helpers\Html;
                   <?= $form->field($model, 'digit_2', [
                     'options' => ['tag' => false],
                     'template' => '{input}',
-                    'inputOptions' => ['class' => 'numb', 'type' => 'number', 'maxlength' => 1]
+                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
                   ])->textInput() ?>
                   <?= $form->field($model, 'digit_3', [
                     'options' => ['tag' => false],
                     'template' => '{input}',
-                    'inputOptions' => ['class' => 'numb', 'type' => 'number', 'maxlength' => 1]
+                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
                   ])->textInput() ?>
                   <?= $form->field($model, 'digit_4', [
                     'options' => ['tag' => false],
                     'template' => '{input}',
-                    'inputOptions' => ['class' => 'numb', 'type' => 'number', 'maxlength' => 1]
+                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
                   ])->textInput() ?>
                 </div>
                 <p>code expires in: <span class="red" id="time">00:00</span></p>

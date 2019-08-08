@@ -14,7 +14,10 @@ class VerifyAccountViaPhoneForm extends User
     public $digit_2;
     public $digit_3;
     public $digit_4;
-    public $provider = '\common\components\telecom\SpeedSms';
+    public $provider = [
+        'class' => '\common\components\telecom\SpeedSms',
+        'demo_mode' => true
+    ];
 
     public function rules()
     {
@@ -27,9 +30,10 @@ class VerifyAccountViaPhoneForm extends User
     public function send()
     {
         $provider = $this->getProvider();
-        $phone = sprintf("%s%s", $this->country_code, $this->phone);
+        $phone = $this->phone;
         if (!$provider->sms($phone)) {
-            $this->addError('phone', $provider->getErrorSummary(true));
+            $errors = $provider->getErrorSummary(false);
+            $this->addError('phone', reset($errors));
             return false;
         }
         return true;
@@ -39,10 +43,11 @@ class VerifyAccountViaPhoneForm extends User
     {
         if (!$this->validate()) return false;
         $provider = $this->getProvider();
-        $phone = sprintf("%s%s", $this->country_code, $this->phone);
+        $phone = $this->phone;
         $verification = $this->getVerificationCode();
         if (!$provider->verify($phone, $verification)) {
-            $this->addError('verification_code', $provider->getErrorSummary(true));
+            $errors = $provider->getErrorSummary(false);
+            $this->addError('verification_code', reset($errors));
             return false;
         }
         $this->status = self::STATUS_ACTIVE;
@@ -59,9 +64,7 @@ class VerifyAccountViaPhoneForm extends User
 
     protected function getProvider()
     {
-        return Yii::createObject([
-            'class' => $this->provider,
-        ]);
+        return Yii::createObject($this->provider);
     }
 
     public static function findUserByAuth($auth)

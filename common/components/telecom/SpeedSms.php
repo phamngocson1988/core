@@ -60,7 +60,13 @@ class SpeedSms extends Model
     
     public function verify($phone, $pin)
     {
-        if ($this->demo_mode) return true;
+        if ($this->demo_mode) {
+            if ($pin != '1111') {
+                $this->addError($phone, 'Incorrect code.');
+                return false;
+            }
+            return true;
+        }
         $smsData = [
 			"phone" => $phone,
 			"pin_code" => $pin,

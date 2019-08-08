@@ -246,8 +246,8 @@ class SiteController extends Controller
         if ($model->load($request->post()) && $model->verify()) {
             Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
             return $this->redirect(['site/login']);
-        } else {
-            Yii::$app->getSession()->setFlash('error', $model->getErrorSummary(true));
+        } else { 
+            Yii::$app->getSession()->setFlash('error', $model->getErrorSummary(false));
         }
         return $this->render('verify-phone', ['model' => $model]);
     }
@@ -257,9 +257,9 @@ class SiteController extends Controller
         $user = User::findOne(['auth_key' => $auth, 'status' => User::STATUS_INACTIVE]);
         if (!$user) throw new NotFoundHttpException('model does not exist.');
         $service = new \common\components\telecom\SpeedSms();
-        $phone = sprintf("%s%s", $user->country_code, $user->phone);
+        $phone = $user->phone;
         if (!$service->sms($phone)) {
-            Yii::$app->getSession()->setFlash('error', $service->getErrorSummary(true));
+            Yii::$app->getSession()->setFlash('error', $service->getErrorSummary(false));
             return $this->redirect($request->getReferrer());
         }
         return $this->redirect(['site/verify-phone', 'auth' => $auth]);
