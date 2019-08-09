@@ -386,4 +386,20 @@ class SiteController extends Controller
         }
         return $this->render('term', ['content' => $content]);
     }
+
+    public function actionTestPhone($phone)
+    {
+        $provider = Yii::createObject([
+            'class' => '\common\components\telecom\SpeedSms',
+            'demo_mode' => false
+        ]);
+        print_r($provider);
+        if (!$provider->sms($phone)) {
+            print_r($provider->getErrors());
+        } else {
+            print_r('Success');
+
+        }
+        die;
+    }
 }

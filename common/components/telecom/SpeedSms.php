@@ -1,6 +1,7 @@
 <?php
 namespace common\components\telecom;
 
+use Yii;
 use yii\base\Model;
 
 class SpeedSms extends Model
@@ -24,14 +25,6 @@ class SpeedSms extends Model
         $url = $this->_server . "/" . $this->_create_pin_api;
         $headers = ["Content-Type: application/json"];
 		$ch = curl_init($url); 
-	    // curl_setopt($ch, CURLOPT_URL, $url); 
-        // curl_setopt($ch, CURLOPT_POST, TRUE);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($smsData)); 
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        // curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        // curl_setopt($ch, CURLOPT_USERPWD, $this->access_token);
-
 
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -55,6 +48,7 @@ class SpeedSms extends Model
             $this->addError($phone, $response['message']);
             return false;
         } 
+        Yii::$app->session->setFlash('success', $response['status']);
         return true;
     }
     
@@ -76,13 +70,6 @@ class SpeedSms extends Model
         $url = $this->_server . "/" . $this->_verify_pin_api;
         $headers = ["Content-Type: application/json"];
 		$ch = curl_init($url); 
-	    // curl_setopt($ch, CURLOPT_URL, $url); 
-        // curl_setopt($ch, CURLOPT_POST, TRUE);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $smsData); 
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        // curl_setopt($ch, CURLOPT_USERPWD, $this->access_token);
-        // curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -103,8 +90,11 @@ class SpeedSms extends Model
         if ($response['status'] == 'error') {
             $this->addError($phone, $response['message']);
             return false;
+        } elseif ((boolean)$response['data']['verified'] == false) {
+            $this->addError($phone, sprintf("Your code is not correct. You have %s times remaining.", $response['data']['remainingAttempts']));
+            return false;
         }
-        return $response['verified'];
+        return true;
     }
 
 	protected function getErrorList()
