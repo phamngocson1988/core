@@ -10,7 +10,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 // use common\widgets\Alert;
-use lavrentiev\widgets\toastr\NotificationFlash;
+use frontend\components\toastr\NotificationFlash;
 
 AppAsset::register($this);
 ?>

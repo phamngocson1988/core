@@ -244,8 +244,9 @@ class SiteController extends Controller
         $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'signonBonus']);
 
         if ($model->load($request->post()) && $model->verify()) {
-            Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
-            return $this->redirect(['site/login']);
+            // Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
+            Yii::$app->getSession()->setFlash('popup-annoucement', '/images/welcome.png');
+            return $this->redirect(['site/index']);
         } else { 
             Yii::$app->getSession()->setFlash('error', $model->getErrorSummary(false));
         }

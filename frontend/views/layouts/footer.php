@@ -81,3 +81,12 @@ $setting = Yii::$app->settings;
         </div>
     </div>
 </section>
+<?php if (Yii::$app->session->hasFlash('popup-annoucement')) : ?>
+<a href="<?=Yii::$app->session->getFlash('popup-annoucement');?>" class='fancybox popup-annoucement' style="display: none"></a>
+<?php endif;?>
+<?php
+$script = <<< JS
+$('.popup-annoucement').trigger('click');
+JS;
+$this->registerJs($script);
+?>
