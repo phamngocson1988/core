@@ -28,8 +28,8 @@ use frontend\models\Game;
         <div class="profile-list">
           <div class="top-profile-list">
             <div class="left-top-profile-list">
-              <!-- <span class="number-page font-weight-bold">1 - 5</span>
-              <span class="text-page">of 20 Orders</span> -->
+              <span class="number-page font-weight-bold"><?=$pages->offset + 1;?> - <?=min($pages->offset + $pages->limit, $pages->totalCount);?></span>
+              <span class="text-page">of <?=number_format($pages->totalCount);?> Orders</span>
             </div>
             <div class="right-top-profile-list">
               <!-- LinkPager::widget([

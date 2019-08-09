@@ -24,38 +24,75 @@ use yii\helpers\Html;
     <div class="row">
       <?php require_once(Yii::$app->basePath . '/views/user/_left_menu.php');?>
       <div class="wrap-profile-right col col-lg-8 col-md-9 col-sm-12 col-12">
-        <div class="profile-right" style="width: 100%;" id="reward-feed">
-          <div class="profit-listing">
-            <table class="table-custom table-hover">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Date</th>
-                  <th>Type</th>
-                  <th>Coin</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php if (!$models) :?>
-                <tr><td colspan="6">No data found</td></tr>
-                <?php endif;?>
-                <?php foreach ($models as $no => $model) :?>
-                <tr>
-                  <td>#<?=$model->id?></td>
-                  <td><?=$model->payment_at;?></td>
-                  <td><?=$model->getTypeLabel();?></td>
-                  <td><?=number_format($model->coin);?></td>
-                  <td><?=$model->description;?></td>
-                  <td><?=$model->status;?></td>
-                </tr>
-                <?php endforeach;?>
-              </tbody>
-            </table>
+        <div class="profile-list">
+          <div class="top-profile-list">
+            <div class="left-top-profile-list">
+              <span class="number-page font-weight-bold"><?=$pages->offset + 1;?> - <?=min($pages->offset + $pages->limit, $pages->totalCount);?></span>
+              <span class="text-page">of <?=number_format($pages->totalCount);?> transactions</span>
+            </div>
+            <div class="right-top-profile-list">
+              <!-- LinkPager::widget([
+                'pagination' => $pages, 
+                'maxButtonCount' => 1, 
+                'hideOnSinglePage' => false,
+                'linkOptions' => ['class' => 'page-link'],
+                'pageCssClass' => 'page-item',
+                // 'prevPageCssClass' => 'page-item btn-pagi',
+                // 'prevPageLabel' => '<span aria-hidden="true"><i class="fas fa-caret-left"></i></span><span class="sr-only">Previous</span>',
+                // 'nextPageCssClass' => 'page-item btn-pagi',
+                // 'nextPageLabel' => '<span aria-hidden="true"><i class="fas fa-caret-right"></i></span><span class="sr-only">Next</span>',
+              ]); -->
+              <!-- <ul class="pagination">
+                <li class="page-item btn-pagi">
+                  <a class="page-link btn-pagi" href="#" aria-label="Previous">
+                  <span aria-hidden="true"><i class="fas fa-caret-left"></i></span>
+                  <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1/10</a></li>
+                <li class="page-item btn-pagi">
+                  <a class="page-link " href="#" aria-label="Next">
+                  <span aria-hidden="true"><i class="fas fa-caret-right"></i></span>
+                  <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul> -->
+              <!-- <select id="inputState" class="form-control">
+                <option selected>Sort by</option>
+                <option>Name</option>
+              </select> -->
+            </div>
           </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Coin</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (!$models) :?>
+              <tr><td colspan="6">No data found</td></tr>
+              <?php endif;?>
+              <?php foreach ($models as $no => $model) :?>
+              <tr>
+                <td>#<?=$model->id?></td>
+                <td><?=$model->payment_at;?></td>
+                <td><?=$model->getTypeLabel();?></td>
+                <td><?=number_format($model->coin);?></td>
+                <td><?=$model->description;?></td>
+                <td><?=$model->status;?></td>
+              </tr>
+              <?php endforeach;?>
+            </tbody>
+          </table>
         </div>
       </div>
+      
     </div>
   </div>
 </section>
