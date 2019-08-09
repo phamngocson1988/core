@@ -350,6 +350,58 @@ ol li {
       .profile-right .profile-info-right .img-wrap-info-right .img-info-right:last-child {
         padding-left: 10px; }
 
+.profile-list {
+  background-color: #dbdbdb;
+  padding-top: 45px;
+  padding-bottom: 45px;
+  font-size: 18px; }
+  @media screen and (max-width: 992px) {
+    .profile-list {
+      padding-top: 30px;
+      padding-bottom: 30px; } }
+  .profile-list .top-profile-list {
+    margin-bottom: 45px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: flex;
+    display: -moz-flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: space-between; }
+    .profile-list .top-profile-list .right-top-profile-list {
+      display: flex;
+      display: -moz-flex;
+      display: -webkit-flex;
+      align-items: center; }
+    @media screen and (max-width: 992px) {
+      .profile-list .top-profile-list {
+        margin-bottom: 30px;
+        padding-left: 30px;
+        padding-right: 30px; } }
+  .profile-list .table {
+    text-align: center;
+    background-color: #fff; }
+    .profile-list .table th {
+      background-color: #707070;
+      color: #fff; }
+  .profile-list .pagination .page-item {
+    background-color: #fff; }
+  .profile-list .pagination .btn-pagi {
+    background-color: #ffdd00; }
+  .profile-list .pagination .page-link {
+    background: transparent;
+    color: #000000;
+    border: none; }
+  .profile-list select {
+    width: 200px;
+    height: 34px;
+    border-radius: 0;
+    float: left;
+    margin-left: 20px; }
+    @media screen and (max-width: 992px) {
+      .profile-list select {
+        width: 100px; } }
+
 .red {
   color: #ff3600; }
 

@@ -87,8 +87,8 @@ class m130524_201442_init extends Migration
             'amount' => $this->float()->notNull()->defaultValue(0),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime(),
-            'approved_by' => $this->integer()->notNull(),
-            'executed_by' => $this->integer()->notNull(),
+            'approved_by' => $this->integer(),
+            'executed_by' => $this->integer(),
             'note' => $this->string(255),
             'evidence' => $this->integer(),
             'status' => $this->integer()->notNull()->defaultValue(1), // set 1: request, 2: approved, 3: executed
