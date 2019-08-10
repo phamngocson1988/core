@@ -6,10 +6,8 @@ use Yii;
 use yii\base\Model;
 use common\models\UserWallet;
 
-class FetchHistoryWalletForm extends Model
+class FetchHistoryWalletForm extends UserWallet
 {
-    public $user_id;
-    public $type;
     public $start_date;
     public $end_date;
 
@@ -19,7 +17,7 @@ class FetchHistoryWalletForm extends Model
             ['user_id', 'required'],
             ['start_date', 'default', 'value' => date('Y-m-01')],
             ['end_date', 'default', 'value' => date('Y-m-d')],
-            ['type', 'trim']
+            [['type', 'status'], 'trim']
         ];
     }
 
@@ -37,6 +35,9 @@ class FetchHistoryWalletForm extends Model
         $command->where(['user_id' => $this->user_id]);
         if ($this->type) {
             $command->andWhere(['type' => $this->type]);
+        }
+        if ($this->status) {
+            $command->andWhere(['status' => $this->status]);
         }
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
@@ -56,10 +57,8 @@ class FetchHistoryWalletForm extends Model
         return $this->_command;
     }
 
-    public function getWalletType()
+    public function fetchTypeList()
     {
-        $type = UserWallet::getWalletType();
-        array_unshift($type, "Select one");
-        return $type;
+        return UserWallet::getWalletType();
     }
 }

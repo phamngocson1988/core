@@ -10,10 +10,8 @@ use yii\helpers\ArrayHelper;
 
 class FetchHistoryOrderForm extends Order
 {
-    public $user_id;
     public $start_date;
     public $end_date;
-    public $game_id;
 
     /*Attribute for query*/
     public $item_title;
@@ -23,10 +21,10 @@ class FetchHistoryOrderForm extends Order
     public function rules()
     {
         return [
-            ['user_id', 'required'],
+            ['customer_id', 'required'],
             ['start_date', 'default', 'value' => date('Y-m-01')],
             ['end_date', 'default', 'value' => date('Y-m-d')],
-            ['game_id','trim']
+            [['game_id', 'status'],'trim']
         ];
     }
     
@@ -39,7 +37,7 @@ class FetchHistoryOrderForm extends Order
     protected function createCommand()
     {
         $command = self::find();
-        $command->where(['customer_id' => $this->user_id]);
+        $command->where(['customer_id' => $this->customer_id]);
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
         }
@@ -48,6 +46,9 @@ class FetchHistoryOrderForm extends Order
         }
         if ($this->game_id) {
             $command->andWhere(['game_id' => $this->game_id]);
+        }
+        if ($this->status) {
+            $command->andWhere(['status' => $this->status]);
         }
         $command->orderBy(['created_at' => SORT_DESC]);
         $this->_command = $command;
@@ -67,5 +68,10 @@ class FetchHistoryOrderForm extends Order
         $games = ArrayHelper::map($games, 'id', 'title');
         array_unshift($games, 'Choose one game');
         return $games;
+    }
+
+    public function fetchStatusList()
+    {
+        return self::getStatusList();
     }
 }

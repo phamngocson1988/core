@@ -114,10 +114,11 @@ class UserController extends Controller
         $today = date('Y-m-d');
         $firstOfMonth = date('Y-m-01');
         $filter = [
-            'user_id' => Yii::$app->user->id,
+            'customer_id' => Yii::$app->user->id,
             'start_date' => $request->get('start_date', $firstOfMonth),
             'end_date' => $request->get('end_date', $today),
-            'game_id' => $request->get('game_id')
+            'game_id' => $request->get('game_id'),
+            'status' => $request->get('status')
         ];
         $form = new FetchHistoryOrderForm($filter);
 
@@ -244,6 +245,7 @@ class UserController extends Controller
             'user_id' => Yii::$app->user->id,
             'start_date' => $request->get('start_date', $firstOfMonth),
             'end_date' => $request->get('end_date', $today),
+            'status' => $request->get('status'),
         ];
         $form = new FetchHistoryTransactionForm($filter);
 
@@ -270,7 +272,8 @@ class UserController extends Controller
             'user_id' => Yii::$app->user->id,
             'start_date' => $request->get('start_date', $firstOfMonth),
             'end_date' => $request->get('end_date', $today),
-            'type' => $request->get('type')
+            'type' => $request->get('type'),
+            'status' => $request->get('status'),
         ];
         $form = new FetchHistoryWalletForm($filter);
         $command = $form->getCommand();

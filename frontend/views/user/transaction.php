@@ -31,36 +31,20 @@ use yii\helpers\Html;
               <span class="text-page">of <?=number_format($pages->totalCount);?> transactions</span>
             </div>
             <div class="right-top-profile-list">
-              <!-- LinkPager::widget([
+              <?=LinkPager::widget([
                 'pagination' => $pages, 
                 'maxButtonCount' => 1, 
                 'hideOnSinglePage' => false,
                 'linkOptions' => ['class' => 'page-link'],
                 'pageCssClass' => 'page-item',
-                // 'prevPageCssClass' => 'page-item btn-pagi',
-                // 'prevPageLabel' => '<span aria-hidden="true"><i class="fas fa-caret-left"></i></span><span class="sr-only">Previous</span>',
-                // 'nextPageCssClass' => 'page-item btn-pagi',
-                // 'nextPageLabel' => '<span aria-hidden="true"><i class="fas fa-caret-right"></i></span><span class="sr-only">Next</span>',
-              ]); -->
-              <!-- <ul class="pagination">
-                <li class="page-item btn-pagi">
-                  <a class="page-link btn-pagi" href="#" aria-label="Previous">
-                  <span aria-hidden="true"><i class="fas fa-caret-left"></i></span>
-                  <span class="sr-only">Previous</span>
-                  </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1/10</a></li>
-                <li class="page-item btn-pagi">
-                  <a class="page-link " href="#" aria-label="Next">
-                  <span aria-hidden="true"><i class="fas fa-caret-right"></i></span>
-                  <span class="sr-only">Next</span>
-                  </a>
-                </li>
-              </ul> -->
-              <!-- <select id="inputState" class="form-control">
-                <option selected>Sort by</option>
-                <option>Name</option>
-              </select> -->
+              ]);?>
+              <?php $form = ActiveForm::begin(['method' => 'get']); ?>
+                <?= $form->field($filterForm, 'status', [
+                  'options' => ['tag' => false],
+                  'template' => '{input}',
+                  'inputOptions' => ['class' => 'form-control', 'name' => 'status', 'id' => 'status']
+                ])->dropDownList($filterForm->fetchStatusList(), ['prompt' => 'All']);?>
+              <?php $form = ActiveForm::end(); ?>
             </div>
           </div>
           <table class="table table-bordered">
@@ -116,6 +100,9 @@ $('.file_upload').on('change', function() {
 });
 $('.action-link').on('click', function() {
   $(this).closest('form').find('.file_upload').trigger('click');
+});
+$('#status').on('change', function(){
+  $(this).closest('form').submit();
 });
 JS;
 $this->registerJs($script);

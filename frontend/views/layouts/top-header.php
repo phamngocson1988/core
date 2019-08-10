@@ -36,10 +36,46 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                     <div class="right-box fl-right" id="login-box-wrapper">
                         <a href="javascript:;" class="ico-user-login"><i class="fas fa-user"></i></a>
                         <?php if (!Yii::$app->user->isGuest) :?>
-                        <div class="login-box" style="color: white;">
-                            <?php $user = Yii::$app->user->getIdentity();?>
-                            <span class="fl-left">Chào <a href="<?=Url::to(['user/profile']);?>"><?=$user->name;?></a></span>&nbsp;|&nbsp;
-                            <a href="<?=Url::to(['site/logout']);?>">Logout</a>
+                        <?php $user = Yii::$app->user->getIdentity();?>
+                        <div class="login-box">
+                          <form action="">
+                            <div class="info-box">
+                              <div class="info-box-fix">
+                                <div class="img-wrap">
+                                  <img src="/uploads/game1.jpg" alt="">
+                                </div>
+                                <div class="right-login-box fl-left">
+                                  <p class="name-box-login"><?=$user->name;?><i
+                                    class="fas fa-sort-down"></i></p>
+                                  <p class="info-k-coin"><img src="/images/logo-kc-box.png"
+                                    alt=""><span
+                                    class="red font-weight-bold"><?=number_format($user->getWalletAmount());?></span>K-coin</p>
+                                </div>
+                              </div>
+                              <div class="info-box-show">
+                                <ul>
+                                  <li>
+                                    <a href="<?=Url::to(['user/profile']);?>">
+                                    Profile
+                                    <img src="/images/setting_icon.png" alt="">
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="<?=Url::to(['user/transaction']);?>">
+                                    History transaction
+                                    <img src="/images/history_icon.png" alt="">
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="<?=Url::to(['site/logout']);?>">
+                                    Log out
+                                    <img src="/images/logout_icon.png" alt="">
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </form>
                         </div>
                         <?php else :?>
                         <div class="login-box">
@@ -127,6 +163,14 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
 </div>
 <?php
 $script = <<< JS
+$('.info-box-fix').click(function () {
+    $('.info-box-show').toggleClass('show-box');
+});
+$('.top-header .right-box a.ico-user-login').click(function () {
+    $(this).parent().toggleClass('active');
+    $(this).toggleClass('active');
+});
+
 $('.top-header .right-box a.ico-user-login').click(function(){
     $(this).parent().toggleClass('active');
     $(this).toggleClass('active');

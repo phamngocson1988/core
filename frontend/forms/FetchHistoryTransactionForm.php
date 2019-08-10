@@ -6,9 +6,8 @@ use Yii;
 use yii\base\Model;
 use common\models\PaymentTransaction;
 
-class FetchHistoryTransactionForm extends Model
+class FetchHistoryTransactionForm extends PaymentTransaction
 {
-    public $user_id;
     public $start_date;
     public $end_date;
     private $_command;
@@ -19,6 +18,7 @@ class FetchHistoryTransactionForm extends Model
             ['user_id', 'required'],
             ['start_date', 'default', 'value' => date('Y-m-01')],
             ['end_date', 'default', 'value' => date('Y-m-d')],
+            ['status', 'trim'],
         ];
     }
     
@@ -38,6 +38,9 @@ class FetchHistoryTransactionForm extends Model
         if ($this->end_date) {
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
+        if ($this->status) {
+            $command->andWhere(['status' => $this->status]);
+        }
         $command->orderBy(['created_at' => SORT_DESC]);
         $this->_command = $command;
     }
@@ -48,5 +51,10 @@ class FetchHistoryTransactionForm extends Model
             $this->createCommand();
         }
         return $this->_command;
+    }
+
+    public function fetchStatusList()
+    {
+        return self::getStatusList();
     }
 }
