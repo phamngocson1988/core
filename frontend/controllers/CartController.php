@@ -285,7 +285,7 @@ class CartController extends Controller
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
-                $order->status = Order::STATUS_COMPLETED;
+                $order->status = Order::STATUS_PENDING;
                 $order->payment_at = date('Y-m-d H:i:s');
                 $order->save();
                 return $gateway->doSuccess();

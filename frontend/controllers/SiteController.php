@@ -86,7 +86,7 @@ class SiteController extends Controller
     {
         $this->view->params['main_menu_active'] = 'site.index';
         $this->layout = 'home';
-        $games = Game::find()->limit(10)->all();
+        $games = Game::find()->where(['pin' => Game::PIN])->limit(10)->all();
         // Fetch valid promotions which just apply for game
         $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
 

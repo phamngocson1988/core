@@ -195,7 +195,7 @@ $('#like').ajax_action({
   method: 'POST',
   callback: function(data) {
     $('#rating').remove();
-    alert('Thank for your rating');
+    alert('Thank for your rating!');
   },
 });
 JS;

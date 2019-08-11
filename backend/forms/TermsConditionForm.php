@@ -9,11 +9,12 @@ class TermsConditionForm extends Model
 {
     public $member;
     public $risk;
+    public $affiliate;
 
     public function rules()
     {
         return [
-            [['member', 'risk'], 'trim'],
+            [['member', 'risk', 'affiliate'], 'trim'],
         ];
     }
 }

@@ -22,7 +22,7 @@ use yii\bootstrap\ActiveForm;
     <div class="row">
       <?php require_once(Yii::$app->basePath . '/views/user/_left_menu.php');?>
       <div class="wrap-profile-right col col-lg-8 col-md-9 col-sm-12 col-12">
-        <div class="profile-right">
+        <div class="profile-right" style="width: 100%;">
           <div class="profile-password">
             <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal']]); ?>
               <?= $form->field($model, 'old_password')->passwordInput(['autofocus' => true]) ?>

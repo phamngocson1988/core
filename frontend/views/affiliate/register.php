@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
               <?= $form->field($model, 'channel_type')->dropDownList(UserAffiliate::channelTypeList(), ['prompt' => 'Select channel type'])->label('Channel type <span class="required">*</span>') ?>
                <div class="terms">
                   <div class="terms-row">
-                      <input type="checkbox" id="agree"><span>* I have read and agree with the <font style="color: #ff3600;">Terms & Conditions.</font></span>
+                      <input type="checkbox" id="agree"><span>* I have read and agree with the <font style="color: #ff3600;"><a href="<?=Url::to(['site/term', 'slug' => 'affiliate']);?>" target="_blank">Terms & Conditions.</a></font></span>
                   </div>
               </div>
               <div class="register-action">

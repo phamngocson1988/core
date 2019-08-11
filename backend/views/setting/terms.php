@@ -57,6 +57,15 @@ use yii\widgets\ActiveForm;
                   'options' => ['rows' => 20]
                 ]);?>
               </div>
+              <div class="form-body">
+                <?=$form->field($model, 'affiliate', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->widget(\common\widgets\TinyMce::className(), [
+                  'options' => ['rows' => 20]
+                ]);?>
+              </div>
             </div>
           </div>
         </div>

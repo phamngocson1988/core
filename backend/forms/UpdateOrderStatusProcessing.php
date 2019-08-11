@@ -46,7 +46,7 @@ class UpdateOrderStatusProcessing extends Model
             Yii::$app->mailer->compose('admin_send_complete_order', [
                 'mail' => $this, 
                 'order' => $this->getOrder(),
-                'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'key' => $order->auth_key], true),
+                'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
             ])
             ->setTo($customer->email)
             ->setFrom([$adminEmail => Yii::$app->name])

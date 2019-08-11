@@ -54,6 +54,7 @@ use yii\helpers\Html;
                 <th scope="col">Date</th>
                 <th scope="col">Type</th>
                 <th scope="col">Coin</th>
+                <th scope="col">Balance</th>
                 <th scope="col">Description</th>
                 <th scope="col">Status</th>
               </tr>
@@ -68,6 +69,7 @@ use yii\helpers\Html;
                 <td><?=$model->payment_at;?></td>
                 <td><?=$model->getTypeLabel();?></td>
                 <td><?=number_format($model->coin);?></td>
+                <td><?=number_format($model->balance);?></td>
                 <td><?=$model->description;?></td>
                 <td><?=$model->status;?></td>
               </tr>
