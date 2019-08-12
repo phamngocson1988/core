@@ -27,7 +27,7 @@ class TopupEventHandler extends Model
         if ($command->count() > 1) return;
         
         // Apply
-        $refer = UserRefer::find([
+        $refer = UserRefer::findOne([
             'user_id' => $user->referred_by, 
             'email' => $user->email,
             'status' => UserRefer::STATUS_ACTIVATED
@@ -64,7 +64,7 @@ class TopupEventHandler extends Model
         if ($command->count() > 1) return;
         
         // Apply
-        $refer = UserRefer::find([
+        $refer = UserRefer::findOne([
             'user_id' => $user->referred_by, 
             'email' => $user->email,
             'status' => UserRefer::STATUS_ACTIVATED

@@ -245,6 +245,7 @@ class SiteController extends Controller
 
         if ($model->load($request->post()) && $model->verify()) {
             // Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
+            Yii::$app->user->login($model, 3600 * 24 * 30);
             Yii::$app->getSession()->setFlash('popup-annoucement', '/images/welcome.png');
             return $this->redirect(['site/index']);
         } else { 
