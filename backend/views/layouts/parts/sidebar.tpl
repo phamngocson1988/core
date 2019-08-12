@@ -131,6 +131,25 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-question"></i>
+        <span class="title">Trung tâm hỗ trợ</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/question/index'}" class="nav-link " code='question.index'>
+            <span class="title">Trung tâm hỗ trợ</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/question/category'}" class="nav-link " code='question.category'>
+            <span class="title">{Yii::t('app', 'categories')}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
         <span class="title">{Yii::t('app', 'games')}</span>
         <span class="arrow"></span>
