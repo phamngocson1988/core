@@ -228,3 +228,7 @@ input[type=number] {
 .top-bar-action a.upload-btn {
     background: url(../images/upload_icon.png) no-repeat 0 center;
 }
+
+.profile-page .profile-right {
+    width: 100%;
+}
