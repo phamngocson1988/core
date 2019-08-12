@@ -14,6 +14,19 @@ class Kinggems extends PaymentGateway
 {
     public $identifier = 'kinggems';
 
+    public function validatePayment()
+    {
+        $user = Yii::$app->user->getIdentity();
+        $cart = $this->cart;
+        $totalPrice = $cart->getTotalPrice();
+        $wallet = $user->getWalletAmount();
+        if ($totalPrice > $wallet) {
+            $this->addError('*', 'Not enough coins to pay this order');
+            return false;
+        }
+        return true;
+    }
+
     protected function sendRequest()
     {
         try {

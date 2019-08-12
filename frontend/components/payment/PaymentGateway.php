@@ -39,6 +39,11 @@ class PaymentGateway extends Model
         $this->cart = $cart;
     }
 
+    public function validatePayment()
+    {
+        return true;
+    }
+
     public function request()
     {
         $this->trigger(self::EVENT_BEFORE_REQUEST);

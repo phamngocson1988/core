@@ -37,11 +37,9 @@ $cart->applyPromotion();
                       <div class="method-line">
                         <input type="radio" name="identifier" value="paypal" checked=""><span>Paypal</span>
                       </div>
-                      <?php if ($can_place_order) : ?>
                       <div class="method-line">
-                        <input type="radio" name="identifier" value="kinggems"><span>King Coins - Balance</span>
+                        <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?> ><span>King Coins - Balance <?=(!$can_place_order) ? Html::a(' - Go to Topup', Url::to(['topup/index']), ['style' => 'color: #ff3600']) : '';?></span>
                       </div>
-                      <?php endif;?>
                       <!-- <div class="method-line">
                         <input type="radio" name="abc" id=""><span>Skrill</span>
                       </div>

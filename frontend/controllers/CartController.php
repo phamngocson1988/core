@@ -210,6 +210,11 @@ class CartController extends Controller
         $gateway->success_url = 'cart/success';
         $gateway->cancel_url = 'cart/cancel';
         $gateway->error_url = 'cart/error';
+        $gateway->setCart($paymentCart);
+        if (!$gateway->validatePayment()) {
+            Yii::$app->session->setFlash('error', $gateway->getErrorSummary(true));
+            return $this->redirect(['cart/checkout']);
+        }
         
         try {
             // Create order
@@ -257,7 +262,6 @@ class CartController extends Controller
             }
             if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
             $cart->clear();
-            $gateway->setCart($paymentCart);
             return $gateway->request();
         } catch (\Exception $e) {
             die($e->getMessage());
