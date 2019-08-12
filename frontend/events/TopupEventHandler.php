@@ -11,6 +11,10 @@ class TopupEventHandler extends Model
 {
     public static function applyReferGift($event) 
     {
+        $status = Yii::$app->settings->get('ReferProgramForm', 'status', 0);
+        if (!$status) return;
+        $min_total_price = Yii::$app->settings->get('ReferProgramForm', 'min_total_price', 50);
+        $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
         $model = $event->sender; //transaction
         // refer gift just be applied only if the transaction is completed
         if ($model->status != PaymentTransaction::STATUS_COMPLETED) return;
@@ -31,7 +35,8 @@ class TopupEventHandler extends Model
         ]);
         if (!$refer) return;
         // refer gift just be applied when transaction's amount is bigger than 50
-        if ($model->total_price < 50) {
+
+        if ($model->total_price < $min_total_price) {
             $refer->status = UserRefer::STATUS_INVALID;
             $refer->note = 'The first transaction has amount litte than 50';
         }
@@ -41,7 +46,7 @@ class TopupEventHandler extends Model
         } else {
             $refer->status = UserRefer::STATUS_PAYMENT;
             $refer->payment_at = date('Y-m-d H:i:s');
-            $refer->note = 'You have gifted 10 coin.';
+            $refer->note = "You have gifted $gift_value coins.";
         }
         $refer->save();
         return;

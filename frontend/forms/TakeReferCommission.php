@@ -26,14 +26,15 @@ class TakeReferCommission extends UserRefer
     public function takeCommission()
     {
         if (!$this->validate()) return false;
-        
+        $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $this->status = self::STATUS_COMPLETED;
-            $this->save();
+            $this->save(false);
+            
             $user = Yii::$app->user->identity;
             $wallet = new UserWallet();
-            $wallet->coin = 5;
+            $wallet->coin = $gift_value;
             $wallet->balance = $user->getWalletAmount() + $wallet->coin;
             $wallet->type = UserWallet::TYPE_INPUT;
             $wallet->description = "Commission from refer #" . $this->id;
@@ -46,10 +47,10 @@ class TakeReferCommission extends UserRefer
             return true;
         } catch (\Exception $e) {
             $transaction->rollBack();
-            throw $e;
+            return false;
         } catch (\Throwable $e) {
             $transaction->rollBack();
-            throw $e;
+            return false;
         }
     }
 }

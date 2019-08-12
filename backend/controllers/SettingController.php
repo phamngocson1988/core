@@ -18,6 +18,7 @@ use backend\forms\TopNoticeSettingForm;
 use backend\forms\FlashAnnouncementForm;
 use backend\forms\WelcomeBonusForm;
 use backend\forms\AffiliateProgramForm;
+use backend\forms\ReferProgramForm;
 use backend\forms\TermsConditionForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
@@ -116,6 +117,12 @@ class SettingController extends Controller
                 'class' => SettingsAction::class,
                 'modelClass' => AffiliateProgramForm::class,
                 'view' => 'affiliate_program.php',
+                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+            ],
+            'refer_program' => [
+                'class' => SettingsAction::class,
+                'modelClass' => ReferProgramForm::class,
+                'view' => 'refer_program.php',
                 'layoutParams' => ['main_menu_active' => 'setting.widgets'],
             ],
             'terms' => [

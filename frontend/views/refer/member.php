@@ -8,6 +8,7 @@ if (!$user->refer_code) {
   $user->save();
 }
 $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
+$gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
 ?>
 
 <section class="page-title">
@@ -18,7 +19,7 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
           <div class="page-title-image">
             <img src="/images/text-refer.png" alt="">
           </div>
-          <p>invite a friend to join kinggems<br>& get $5 bonus!</p>
+          <p>invite a friend to join kinggems<br>& get $<?=$gift_value;?> bonus!</p>
           <p class="small">Share your unique referral link</p>
           <div class="refer-link-copy">
             <input type="text" value="<?=$link;?>">
@@ -90,6 +91,7 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
                           <th>Name</th>
                           <th>Register Date</th>
                           <th>First transaction</th>
+                          <th>Gift</th>
                           <th>Status</th>
                         </tr>
                       </thead>
@@ -108,9 +110,10 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
                           <?=sprintf("Date %s - Amount $ %s", $model->transaction->payment_at, number_format($model->transaction->total_price));?>
                           <?php endif;?>
                           </td>
+                          <td><?=$model->note;?></td>
                           <td>
                           <?php if ($model->isReady()) : ?>
-                          <a href="<?=Url::to(['refer/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Move to wallet</a>
+                          <a href="<?=Url::to(['refer/take', 'id' => $model->id]);?>" class="btn btn-info link-action">Move to wallet</a>
                           <?php else:?>
                           <?=$model->status;?>
                           <?php endif;?>
@@ -152,11 +155,6 @@ $(".open-mail-popup").fancybox({
 });
 
 $('.btn-add-more-refer-mail').click(function(){
-    // var _newReferMailRow = $('#refer-by-mails-popup table tbody tr:last-child').clone();
-    // var _newNum = parseInt(_newReferMailRow.attr('tr-num')) + 1;
-    // _newReferMailRow.attr('tr-num', _newNum);
-    // _newReferMailRow.find('td:first-child').html(_newNum);
-    // $('#refer-by-mails-popup table tbody').append(_newReferMailRow);
     $('#refer-by-mails-popup table tbody tr').show();
     $(this).hide();
 });
@@ -173,7 +171,7 @@ $('.refer-qa-list .qa-item .qa-question').click(function(){
 $(".link-action").ajax_action({
   confirm: true,
   confirm_text: 'Do you really want to transfer this commission to your wallet?',
-  callback: function(eletement, data) {
+  callback: function(eletement, data) { return false;
     location.reload();
   }
 });

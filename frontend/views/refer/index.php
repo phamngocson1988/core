@@ -7,6 +7,7 @@ if (!$user->refer_code) {
   $user->save();
 }
 $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
+$gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
 ?>
 
 <section class="page-title">
@@ -17,7 +18,7 @@ $link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
           <div class="page-title-image">
             <img src="/images/text-refer.png" alt="">
           </div>
-          <p>invite a friend to join kinggems<br>& get $5 bonus!</p>
+          <p>invite a friend to join kinggems<br>& get $<?=$gift_value;?> bonus!</p>
           <p class="small">Share your unique referral link</p>
           <div class="refer-link-copy">
             <input type="text" value="<?=$link;?>">
