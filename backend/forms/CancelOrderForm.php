@@ -6,7 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\Order;
-use common\models\UserWallet;
+use backend\models\UserWallet;
+use backend\models\UserCommission;
 use yii\db\Exception;
 
 class CancelOrderForm extends Model
@@ -55,13 +56,15 @@ class CancelOrderForm extends Model
                 $wallet->type = UserWallet::TYPE_INPUT;
                 $wallet->user_id = $customer_id;
                 $wallet->coin = $total_price;
-                $wallet->description = "Refund order #" . $order->auth_key;
+                $wallet->description = "Refund order #" . $order->id;
                 $wallet->payment_at = date('Y-m-d H:i:s');
                 $wallet->status = UserWallet::STATUS_COMPLETED;
                 $wallet->save();
                 if (!$wallet->save()) throw new Exception('Không thể hoàn tiền cho khách hàng từ cơ sở dữ liệu.');
 
             }
+            $commission = UserCommission::findOne(['order_id' => $order->id]);
+            if ($commission) $commission->delete();
             $transaction->commit();
             return true;
         } catch (\Exception $e) {
