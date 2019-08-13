@@ -78,6 +78,9 @@ use frontend\models\Game;
                 <a class="btn-product-detail-add-to-cart" href="javascript:;" data-toggle="modal" data-target="#cancel-modal">Cancel order</a>
                 <?php endif;?>
               <?php endif;?>
+              <?php if ($model->isProcessingOrder()) :?>
+              <a href="<?=Url::to(['user/confirm', 'key' => $model->auth_key]);?>" id="complete" class="btn-product-detail-add-to-cart">Confirm Delivery</a>
+              <?php endif;?>
             </div>
             <div class="tag-rate has-shadow">
               <svg id="star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
