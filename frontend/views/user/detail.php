@@ -87,7 +87,7 @@ use frontend\models\Game;
               </svg>
               <p class="text-rate"><span>Rate this order!</span> How would you rate this buyer?</p>
 
-              <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" id='like'>
+              <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" id='like' <?php if ($model->rating == 1): ?>class="red"<?php endif;?> >
                 <svg id="like" xmlns="http://www.w3.org/2000/svg" width="31" height="31"
                   viewBox="0 0 31 31">
                   <circle id="Ellipse_5_copy_4" data-name="Ellipse 5 copy 4" class="cls-1"
@@ -98,7 +98,7 @@ use frontend\models\Game;
                 </svg>
               </a>
 
-              <a href="javascript:;" data-toggle="modal" data-target="#show-modal" id='dislike'>
+              <a href="javascript:;" data-toggle="modal" data-target="#show-modal" id='dislike' <?php if ($model->rating == -1): ?>class="red"<?php endif;?>>
                 <svg id="dislike" xmlns="http://www.w3.org/2000/svg" width="31" height="31"
                   viewBox="0 0 31 31">
                   <circle id="Ellipse_5_copy_3" data-name="Ellipse 5 copy 3" class="cls-1"

@@ -178,12 +178,18 @@ class CartController extends Controller
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
         $identifier = $request->post('identifier');
-        if (!$identifier) throw new InvalidParamException('You must choose a payment gateway');
+        if (!$identifier) {
+            Yii::$app->session->setFlash('error', 'You must choose a payment gateway');
+            return $this->redirect(['cart/checkout']);
+        }
         $paymentCart = new PaymentCart([
             'title' => 'Pay for buying Game',
         ]);
         $cart = Yii::$app->cart;
-        if (!$cart->getItems()) return $this->redirect(['site/index']);
+        if (!$cart->getItems()) {
+            Yii::$app->session->setFlash('error', 'Your cart is empty');
+            return $this->redirect(['game/index']);
+        }
         $cartItem = $cart->getItem();
         $paymentCartItem = new PaymentItem([
             'id' => $cartItem->getUniqueId(),

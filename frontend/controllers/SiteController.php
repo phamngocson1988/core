@@ -220,24 +220,24 @@ class SiteController extends Controller
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
         if ($model->load($request->post()) && ($user = $model->signup())) {
-            $verify = VerifyAccountViaPhoneForm::findUserByAuth($user->auth_key);
+            $verify = VerifyAccountViaPhoneForm::findOne($user->id);
             if (!$verify->send()) {
                 Yii::$app->getSession()->setFlash('error', $verify->getErrorSummary(true));
             } else {
                 Yii::$app->getSession()->setFlash('success', 'A verification code is sent to your phone, type it to form below to active your account.');
             }
-            return $this->redirect(['site/verify-phone', 'auth' => $user->auth_key]);
+            return $this->redirect(['site/verify-phone', 'id' => $user->id]);
         }
         return $this->render('signup', [
             'model' => $model,
         ]);
     }
 
-    public function actionVerifyPhone($auth)
+    public function actionVerifyPhone($id)
     {
         $request = Yii::$app->request;
-        $model = VerifyAccountViaPhoneForm::findUserByAuth($auth);
-        if (!$model) throw new NotFoundHttpException('model does not exist.');
+        $model = VerifyAccountViaPhoneForm::findOne($id);
+        if (!$model) throw new NotFoundHttpException("User #$id not found.");
         // Register an event
         $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'referApplyingEvent']);
         $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
@@ -254,10 +254,10 @@ class SiteController extends Controller
         return $this->render('verify-phone', ['model' => $model]);
     }
 
-    public function actionSendVerificationCode($auth)
+    public function actionSendVerificationCode($id)
     {
-        $user = User::findOne(['auth_key' => $auth, 'status' => User::STATUS_INACTIVE]);
-        if (!$user) throw new NotFoundHttpException('model does not exist.');
+        $user = User::findOne(['id' => $id, 'status' => User::STATUS_INACTIVE]);
+        if (!$user) throw new NotFoundHttpException("User #$id not found.");
         $service = new \common\components\telecom\SpeedSms();
         $phone = $user->phone;
         if (!$service->sms($phone)) {

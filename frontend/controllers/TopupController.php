@@ -153,7 +153,10 @@ class TopupController extends Controller
             'title' => 'Pay for buying Kingcoin',
         ]);
         $cart = Yii::$app->kingcoin;
-        if (!$cart->getItems()) return $this->redirect(['site/index']);
+        if (!$cart->getItems()) {
+            Yii::$app->session->setFlash('error', 'Your cart is empty');
+            return $this->redirect(['topup/index']);
+        }
         $cartItem = $cart->getItem();
         $paymentCartItem = new PaymentItem([
             'id' => $cartItem->getUniqueId(),

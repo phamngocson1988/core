@@ -24,22 +24,22 @@ use yii\helpers\Html;
                   <?= $form->field($model, 'digit_1', [
                     'options' => ['tag' => false],
                     'template' => '{input}',
-                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
+                    'inputOptions' => ['class' => 'numb', 'id' => 'digit_1', 'maxlength' => 1]
                   ])->textInput() ?>
                   <?= $form->field($model, 'digit_2', [
                     'options' => ['tag' => false],
                     'template' => '{input}',
-                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
+                    'inputOptions' => ['class' => 'numb', 'id' => 'digit_2', 'maxlength' => 1]
                   ])->textInput() ?>
                   <?= $form->field($model, 'digit_3', [
                     'options' => ['tag' => false],
                     'template' => '{input}',
-                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
+                    'inputOptions' => ['class' => 'numb', 'id' => 'digit_3', 'maxlength' => 1]
                   ])->textInput() ?>
                   <?= $form->field($model, 'digit_4', [
                     'options' => ['tag' => false],
                     'template' => '{input}',
-                    'inputOptions' => ['class' => 'numb', 'maxlength' => 1]
+                    'inputOptions' => ['class' => 'numb', 'id' => 'digit_4', 'maxlength' => 1]
                   ])->textInput() ?>
                 </div>
                 <p>code expires in: <span class="red" id="time">00:00</span></p>
@@ -70,6 +70,16 @@ function startTimer(duration, display) {
     }, 1000);
 }
 startTimer(60, $('#time'));
+
+$('#digit_1').on('input', function() {
+  if ($(this).val()) $('#digit_2').focus();
+});
+$('#digit_2').on('input', function() {
+  if ($(this).val()) $('#digit_3').focus();
+});
+$('#digit_3').on('input', function() {
+  if ($(this).val()) $('#digit_4').focus();
+});
 JS;
 $this->registerJs($script);
 ?>
