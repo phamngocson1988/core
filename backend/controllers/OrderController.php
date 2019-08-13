@@ -512,12 +512,13 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $order = Order::findOne($id);
         if (!$order) return $this->renderJson(false, [], 'Error');
+        $type = $request->get('type', 'before');
         $model = new OrderFile();
         $model->setScenario(OrderFile::SCENARIO_CREATE);
         $model->order_id = $id;
-        $model->file_type = OrderFile::TYPE_EVIDENCE;
+        $model->file_type = ($type == 'after') ? (OrderFile::TYPE_EVIDENCE_AFTER) : (OrderFile::TYPE_EVIDENCE_BEFORE);
         if ($model->load($request->post()) && $model->save()) {
-            return $this->renderJson(true, ['html' => $this->renderPartial('_evidence', ['images' => $order->evidences, 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])])]);
+            return $this->renderJson(true, ['html' => $this->renderPartial('_evidence', ['images' => $order->getEvidencesByType($model->file_type), 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])])]);
         } else {
             return $this->renderJson(false);
         } 

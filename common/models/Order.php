@@ -91,7 +91,13 @@ class Order extends ActiveRecord
 
     public function getEvidences() 
     {
-        return $this->hasMany(OrderFile::className(), ['order_id' => 'id'])->where('file_type = :type', [':type' => OrderFile::TYPE_EVIDENCE]);
+        return $this->hasMany(OrderFile::className(), ['order_id' => 'id']);
+    }
+
+    public function getEvidencesByType($type)
+    {
+        $command = $this->getEvidences();
+        return $command->where('file_type = :type', [':type' => $type])->all();
     }
 
     public function getComments() 

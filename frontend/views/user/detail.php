@@ -5,6 +5,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Game;
+use frontend\models\OrderFile;
 ?>
 <section class="page-title">
   <div class="container">
@@ -58,11 +59,37 @@ use frontend\models\Game;
           <div class="profile-info-right">
             <p class="profile-name">DELIVERY STATUS<span><?=$model->doing_unit;?>/<?=$model->total_unit;?> <?=$model->getStatusLabel(null);?></span> </p>
             <div class="img-wrap-info-right">
-              <?php foreach ($model->files as $file) :?>
+              <?php 
+              $evidenceBefores = $model->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE);
+              $totalBefore = count($evidenceBefores);
+              $firstBefore = array_shift($evidenceBefores);
+              $evidenceAfters = $model->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER);
+              $totalAfter = count($evidenceAfters);
+              $firstAfter = array_shift($evidenceAfters);
+              ?>
               <div class="img-info-right">
-                <a href="<?=$file->getUrl();?>" class="fancybox" rel="gallery"><img src="<?=$file->getUrl();?>" width="280px" height="175px" ></a>
+                <?php if (!$totalBefore) : ?>
+                <img src="images/detail-info.png" alt="">
+                <?php else : ?>
+                <a href="<?=$firstBefore->getUrl();?>" class="fancybox" data-fancybox="gallery_before"><img src="<?=$firstBefore->getUrl();?>" width="280px" height="175px" ></a>
+                BEFORE (<?=$totalBefore;?>)
+                <?php foreach ($evidenceBefores as $file) :?>
+                <a href="<?=$file->getUrl();?>" class="fancybox" data-fancybox="gallery_before" style="display:none"><img src="<?=$file->getUrl();?>" width="280px" height="175px" ></a>
+                <?php endforeach;?>
+                <?php endif;?>
               </div>
-              <?php endforeach;?>
+              
+              <div class="img-info-right">
+                <?php if (!$totalAfter) : ?>
+                <img src="images/detail-info.png" alt="">
+                <?php else : ?>
+                <a href="<?=$firstAfter->getUrl();?>" class="fancybox" rel="gallery_after" data-fancybox="gallery_after" data-caption="Caption #2"><img src="<?=$firstAfter->getUrl();?>" width="280px" height="175px" ></a>
+                AFTER (<?=$totalAfter;?>)
+                <?php foreach ($evidenceAfters as $file) :?>
+                <a href="<?=$file->getUrl();?>" class="fancybox" data-fancybox="gallery_after" style="display:none"><img src="<?=$file->getUrl();?>" width="280px" height="175px" ></a>
+                <?php endforeach;?>
+                <?php endif;?>
+              </div>
             </div>
             <div class="text-delivery">
               <div class="wrap-text">

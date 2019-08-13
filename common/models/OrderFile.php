@@ -6,7 +6,8 @@ use yii\db\ActiveRecord;
 
 class OrderFile extends ActiveRecord
 {
-    const TYPE_EVIDENCE = 'evidence';
+    const TYPE_EVIDENCE_BEFORE = 'evidence_before';
+    const TYPE_EVIDENCE_AFTER = 'evidence_after';
 
     /**
      * @inheritdoc
