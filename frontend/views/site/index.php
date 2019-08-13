@@ -21,7 +21,7 @@ $this->title = 'Home Page';
         <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>"><?=$game->title;?></a>
         <div class="prod-price">
           <?php if ($game->isSoldout()) : ?>
-          Out of Stock. Coming back soon!
+          <span style="color:#ffdd00; font-size:11px;">OUT OF STOCK. COMING BACK SOON!</span>
           <?php else :?>
           <span><?=number_format($game->pack);?></span> <?=$game->unit_name;?>
           <div class="price-usd">Only <span>$<?=number_format($game->price);?></span></div>

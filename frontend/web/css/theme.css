@@ -232,3 +232,27 @@ input[type=number] {
 .profile-page .profile-right {
     width: 100%;
 }
+
+.product-grand-total {
+    font-weight: normal;
+}
+
+.checkout-navigation-tabs>div {
+    font-weight: normal;
+}
+
+.login-box .right-login-box .name-box-login {
+    font-weight: normal;
+}
+
+.top-header .right-box .main-nav .search-box input[type="text"] {
+    font-weight: normal;
+}
+
+.footer .bot-footer .footer-about h4 {
+    font-weight: normal;
+}
+
+.footer .bot-footer .footer-socials h4 {
+    font-weight: normal;
+}

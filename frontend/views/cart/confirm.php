@@ -34,7 +34,7 @@ $cart->applyPromotion();
                 <?=Html::hiddenInput('scenario', CartItem::SCENARIO_RECEPTION_CART);?>
                 <div class="game-confirm">
                   <div class="ck-confirm-note">
-                    <span class="note-ico">!</span><span>Your information is committed to security by <strong>Kinggems.us!</strong></span>
+                    <span class="note-ico">!</span><span>Your information is committed to security by <span style="color:#ff3600">Kinggems.us!</span></span>
                   </div>
                   <?= $form->field($item, 'reception_email')->textInput();?>
                   <!-- <div class="form-group">
