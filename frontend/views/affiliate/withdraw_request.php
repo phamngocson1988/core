@@ -31,6 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col col-12 col-lg-7 col-md-7 col-sm-12">
           <div class="register-block">
             <?php $form = ActiveForm::begin(['id' => 'form-signup', 'options' => ['autocomplete' => 'off']]); ?>
+              <div class="form-group">
+                <label class="control-label">Available amount</label>
+                <label class="control-label">$<?=$user->getAvailabelCommission();?></label>
+              </div>
               <?= $form->field($model, 'amount', ['inputOptions' => ['type' => 'number']])->textInput()->label('Amount you wish to withdraw <span class="required">*</span>') ?>
               <div class="register-action">
                 <a href="<?=Url::to(['affiliate/withdraw']);?>" class="cus-btn has-shadow" style="background-color: #ccc">Back</a>

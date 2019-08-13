@@ -89,7 +89,7 @@ class CartItem extends Game implements CartItemInterface
             'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART],
             'message' => 'Recover code is required in case you choose facebook/google'
             ],
-            ['recover_code', 'match', 'pattern' => '/^\d{8}\d*(\s\d{8}\d*)*$/i', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART], 'message' => 'Recovery codes are invalid'],
+            ['recover_code', 'match', 'pattern' => '/^\d{6}\d*(\s\d{6}\d*)*$/i', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART], 'message' => 'Recovery codes are invalid'],
 
             ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART],
             ['saler_code', 'trim', 'on' => self::SCENARIO_INFO_CART],

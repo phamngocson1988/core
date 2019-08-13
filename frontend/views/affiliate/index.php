@@ -54,23 +54,22 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
                   <div class="profit-filter">
                     <?php $form = ActiveForm::begin(['method' => 'get']);?>
                     <span>Filter by</span>
-                    <select name="created_at" id="">
+                    <!-- <select name="created_at" id="">
                       <option value="<?=date('Y-m-d');?>">Today</option>
                       <option value="<?=date('Y-m-d', strtotime("yesterday"));?>">Last Day</option>
-                    </select>
-                    <select name="status">
+                    </select> -->
+                    <select name="status" id="status">
                       <option value="">All</option>
-                      <option value="pending">Pending</option>
-                      <option value="ready">Ready</option>
-                      <option value="completed">Completed</option>
+                      <option value="pending" <?php if($status == 'pending'):?> selected <?php endif;?>>Pending</option>
+                      <option value="ready" <?php if($status == 'ready'):?> selected <?php endif;?>>Ready</option>
                     </select>
                     <?php ActiveForm::end()?>
 
                   </div>
-                  <div class="profit-amount">
+                 <!--  <div class="profit-amount">
                     <h3>Profit Today ~ 0</h3>
                     <span>(2019/06/15 - 2019/06/15)</span>
-                  </div>
+                  </div> -->
                   <div class="profit-notes">
                     <p>*Total profits = All currencies within the selected time filter, converted to USD</p>
                     <p>*Amount shown is approximate and subject to currency exchange rates.</p>
@@ -79,10 +78,10 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
                     <table>
                       <thead>
                         <tr>
-                          <th>Date <span class="tool-tip">?</span></th>
-                          <th>Amount <span class="tool-tip">?</span></th>
-                          <th>Description <span class="tool-tip">?</span></th>
-                          <th>Status <span class="tool-tip">?</span></th>
+                          <th>Date </th>
+                          <th>Amount </th>
+                          <th>Description </th>
+                          <th>Status </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -95,18 +94,15 @@ $link = Url::to(['site/signup', 'affiliate' => $user->affiliate->code], true);
                           <?=$model->created_at;?>
                           </td>
                           <td><?=number_format($model->commission, 1);?></td>
-                          <td></td>
+                          <td><?=$model->description;?></td>
                           <td>
                           <?php if (!$can_withdraw) : ?>
                           <span class="label label-default"><?=sprintf("Waiting");?><span>
                           <?php else : ?>
-                            <?php if ($model->isCompleted()) : ?>
-                            <span class="label label-default"><?=sprintf("Completed at %s", $model->updated_at);?><span>
-                            <?php elseif ($model->isPending()) : ?>
-                            <span class="label label-default"><?=sprintf("Pending up to %s", $model->getReadyDate());?><span>
+                            <?php if ($model->isPending()) : ?>
+                            <span class="label label-default"><?=sprintf("Pending up to %s", $model->valid_from_date);?><span>
                             <?php elseif ($model->isReady()) : ?>
                             <span class="label label-success"><?=sprintf("Ready");?><span>
-                            <!-- <a href="<?=Url::to(['affiliate/take', 'id' => $model->id]);?>" class="btn btn-info link-action" role="button">Ready</a> -->
                             <?php endif; ?>
                           <?php endif;?>
                           </td>
@@ -142,6 +138,10 @@ $('.aff-tabs .aff-tabs-nav span').click(function(){
 
   $('.aff-tabs .aff-tabs-nav span').removeClass('active');
   $(this).addClass('active');
+});
+
+$('#status').on('change', function(){
+  $(this).closest('form').submit();
 });
 
 $(".link-action").ajax_action({

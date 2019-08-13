@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
 use common\models\UserWallet;
+use common\behaviors\UserCommissionBehavior;
 
 /**
  * User model
@@ -54,6 +55,9 @@ class User extends ActiveRecord implements IdentityInterface
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
+            ],
+            [
+                'class' => UserCommissionBehavior::className(),
             ],
         ];
     }
@@ -321,35 +325,8 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(self::className(), ['affiliated_with' => 'id']);
     }
 
-    public function getCommission()
-    {
-        return $this->hasMany(UserCommission::className(), ['user_id' => 'id']);
-    }
-
     public function getAffiliate()
     {
         return $this->hasOne(UserAffiliate::className(), ['user_id' => 'id']);
-    }
-
-    public function getReadyCommission()
-    {
-        $table = UserCommission::tableName();
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserCommission::$default_duration);
-        $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
-        $command = $this->getCommission();
-        $command->andWhere(['>=', 'date(' . $table . '.created_at)', $readyDate]);
-        $command->andWhere(['date(' . $table . '.status)' => UserCommission::STATUS_PENDING]);
-        return $command;
-    }
-
-    public function getPendingCommission()
-    {
-        $table = UserCommission::tableName();
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', UserCommission::$default_duration);
-        $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
-        $command = $this->getCommission();
-        $command->andWhere(['<', 'date(' . $table . '.created_at)', $readyDate]);
-        $command->andWhere(['date(' . $table . '.status)' => UserCommission::STATUS_PENDING]);
-        return $command;
     }
 }

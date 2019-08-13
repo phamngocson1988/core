@@ -95,28 +95,19 @@ class AffiliateController extends Controller
         $user = Yii::$app->user->getIdentity();
         $user->attachBehavior('UserCommissionBehavior', UserCommissionBehavior::className(), ['id' => $user->id]);
         $request = Yii::$app->request;
-        $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 30);
-        $readyDate = date('Y-m-d', strtotime(sprintf("-%d days", $duration)));
-        $command = UserCommission::find()->where(['user_id' => $user->id]);
-        if ($request->get('status')) {
-            switch ($request->get('status')) {
-                case 'completed':
-                    $command->andWhere(['status' => UserCommission::STATUS_COMPLETED]);
-                    break;
-                case 'pending':
-                $command->andWhere(['status' => UserCommission::STATUS_PENDING]);
-                $command->andWhere(['<', 'date(created_at)' => $readyDate]);
-                    break;
-                case 'ready':
-                    $command->andWhere(['status' => UserCommission::STATUS_PENDING]);
-                    $command->andWhere(['>=', 'date(created_at)' => $readyDate]);
+        $status = $request->get('status');
+        switch ($status) {
+            case 'pending':
+                $command = $user->getPendingCommission();
                 break;
-            }
-            
+            case 'ready':
+                $command = $user->getReadyCommission();
+                break;
+            default :
+                $command = $user->getCommission();
+                break;
         }
-        if ($request->get('created_at')) {
-            $command->andWhere(['date(created_at)' => $request->get('created_at')]);
-        }
+
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -126,6 +117,7 @@ class AffiliateController extends Controller
         return $this->render('index', [
             'member' => $member,
             'models' => $models,
+            'status' => $status,
             'can_withdraw' => $user->canWithDraw(),
             'pages' => $pages
         ]);
@@ -172,6 +164,7 @@ class AffiliateController extends Controller
     public function actionWithdrawRequest()
     {
         $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
 
@@ -180,7 +173,10 @@ class AffiliateController extends Controller
             Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
             return $this->redirect(['affiliate/withdraw']);
         }
-        return $this->render('withdraw_request', ['model' => $model]);
+        return $this->render('withdraw_request', [
+            'model' => $model,
+            'user' => $user,
+        ]);
     }
 
 }

@@ -256,3 +256,19 @@ input[type=number] {
 .footer .bot-footer .footer-socials h4 {
     font-weight: normal;
 }
+
+.aff-tabs .aff-tabs-nav span {
+    font-weight: normal;
+}
+
+#reward-feed .profit-listing table thead th {
+    font-weight: normal;
+}
+
+#reward-feed .profit-amount h3 {
+    font-weight: normal;
+}
+
+#reward-feed .profit-filter select {
+    font-weight: normal;
+}
