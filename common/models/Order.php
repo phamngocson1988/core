@@ -198,21 +198,6 @@ class Order extends ActiveRecord
     {
         return $this->rating == 1;
     }
-    /**
-     * check if the order is in temporary status or not. The system only allow to delete temporary order
-     * If not, just move it to 'deleted' status.
-     * Before deleting the order, delete all its order items
-     */
-    public function afterDelete()
-    {
-        foreach ($this->comments as $comment) {
-            $comment->delete();
-        }
-        foreach ($this->complains as $complain) {
-            $complain->delete();
-        }
-        parent::afterDelete();
-    }
 
     public function delete()
     {

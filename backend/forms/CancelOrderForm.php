@@ -44,9 +44,9 @@ class CancelOrderForm extends Model
 
     public function save()
     {
-        if (!$this->validate()) return false;
+        // if (!$this->validate()) return false;
         $order = $this->getOrder();
-        $total_price = $order->total_price;
+        $total_price = $order->sub_total_price;
         $customer_id = $order->customer_id;
         $transaction = Yii::$app->db->beginTransaction();
         try {

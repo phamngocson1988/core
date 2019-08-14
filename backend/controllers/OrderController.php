@@ -26,6 +26,9 @@ use common\models\OrderComplainTemplate;
 use backend\forms\MyCustomerReportForm;
 use backend\forms\CancelOrderForm;
 
+
+use backend\events\OrderEventHandler;
+
 class OrderController extends Controller
 {
     /**
@@ -465,25 +468,37 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         if ($request->isAjax) {
-            $form = new CancelOrderForm([
-                'id' => $id
-            ]);
-            if ($form->save()) {
-                // Send mail notification
-                $admin = Yii::$app->params['email_admin'];
-                $siteName = Yii::$app->name;
-                $email = Yii::$app->mailer->compose('cancel_order', [
-                    'order' => $form->getOrder()
-                ])
-                ->setTo($user->email)
-                ->setFrom([$admin => $siteName])
-                ->setSubject("KINGGEMS.US - Confirmed order cancelation $order->id")
-                ->setTextBody("Confirmed order cancelation")
-                ->send();
-                return $this->renderJson(true, ['view_url' => Url::to(['order/view', 'id' => $id])]);
-            } else {
-                return $this->renderJson(false, [], $form->getErrorSummary(true));
+            $order = Order::findOne($id);
+            $order->on(Order::EVENT_BEFORE_DELETE, [OrderEventHandler::className(), 'beforeDeleteEvent']);
+            if ($order->isVerifyingOrder()) {
+                $order->on(Order::EVENT_AFTER_DELETE, [OrderEventHandler::className(), 'afterDeleteEvent']);
+                $order->on(Order::EVENT_AFTER_DELETE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
+                $order->on(Order::EVENT_AFTER_DELETE, [OrderEventHandler::className(), 'removeCommission']);
+            } elseif ($order->isPendingOrder()) {
+                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
+                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
+                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
             }
+            return $this->renderJson($order->delete(), ['view_url' => Url::to(['order/view', 'id' => $id])], $order->getErrorSummary(true));
+            // $form = new CancelOrderForm([
+            //     'id' => $id
+            // ]);
+            // if ($form->save()) {
+            //     // Send mail notification
+            //     $admin = Yii::$app->params['email_admin'];
+            //     $siteName = Yii::$app->name;
+            //     $email = Yii::$app->mailer->compose('cancel_order', [
+            //         'order' => $form->getOrder()
+            //     ])
+            //     ->setTo($user->email)
+            //     ->setFrom([$admin => $siteName])
+            //     ->setSubject("KINGGEMS.US - Confirmed order cancelation $order->id")
+            //     ->setTextBody("Confirmed order cancelation")
+            //     ->send();
+            //     return $this->renderJson(true, ['view_url' => Url::to(['order/view', 'id' => $id])]);
+            // } else {
+            //     return $this->renderJson(false, [], $form->getErrorSummary(true));
+            // }
         }
     }
 
