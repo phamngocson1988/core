@@ -138,6 +138,7 @@ class UserController extends Controller
     public function actionDetail($id)
     {
         $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['user_menu_active'] = 'user.order';
         $order = Order::findOne($id);
         if (!$order) throw new NotFoundHttpException("The order not found", 1);
         $complainModel = new OrderComplains();

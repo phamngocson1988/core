@@ -26,6 +26,30 @@ use frontend\models\OrderFile;
     <div class="row">
       <?php require_once(Yii::$app->basePath . '/views/user/_left_menu.php');?>
       <div class="wrap-profile-right col col-lg-8 col-md-9 col-sm-12 col-12">
+        <div class="profile-list">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">Game</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Created date</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><?=$model->game_title;?></td>
+                <td><?=number_format($model->quantity);?></td>
+                <td>$<?=number_format($model->total_price);?></td>
+                <td><?=number_format($model->total_unit);?> <?=$model->unit_name;?></td>
+                <td><?=$model->created_at;?></td>
+                <td><?=$model->getStatusLabel();?></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="profile-right">
           <div class="profile-info-left">
             <p class="profile-name">
@@ -33,7 +57,6 @@ use frontend\models\OrderFile;
             </p>
             <div class="left-coin">
               <span>
-                <p>Game:</p>
                 <p>Platform:</p>
                 <p>Character Name:</p>
                 <p>Account Login:</p>
@@ -44,7 +67,6 @@ use frontend\models\OrderFile;
                 <p>Special note to seller</p>
               </span>
               <span class="red">
-                <p><?=$model->game_title;?></p>
                 <p><?=$model->platform;?></p>
                 <p><?=$model->character_name;?></p>
                 <p><?=$model->username;?></p>
