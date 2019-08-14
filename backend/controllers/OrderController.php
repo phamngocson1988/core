@@ -10,13 +10,13 @@ use backend\forms\FetchMyOrderForm;
 use backend\forms\FetchNewPendingOrderForm;
 use backend\forms\CreateOrderForm;
 use backend\forms\EditOrderForm;
-use backend\forms\CreateOrderItemForm;
 use backend\forms\EditOrderItemForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use backend\models\Order;
+use backend\models\User;
+use backend\models\Game;
 use backend\models\OrderFile;
-use common\models\OrderItems;
 use backend\forms\UpdateOrderStatusPending;
 use backend\forms\UpdateOrderStatusProcessing;
 use backend\forms\AssignManageOrder;
@@ -212,31 +212,30 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $order = new CreateOrderForm();
-        $item = new CreateOrderItemForm();
-        if ($request->isPost) {
-            $post = $request->post();
-            if (!$order->load($post)) Yii::$app->session->setFlash('error', 'Order Error!');
-            elseif (!$item->load($post)) {
-                print_r($item->getErrors());die;
-                Yii::$app->session->setFlash('error', 'Item Error!');
+        $order = new Order(['scenario' => Order::SCENARIO_CREATE]);
+        if ($order->load($request->post()) && $order->validate()) {
+            $customer = User::findOne($order->customer_id);
+            $game = Game::findOne($order->game_id);
+            $order->generateAuthKey();
+            $order->status = Order::STATUS_VERIFYING;
+            $order->saler_id = Yii::$app->user->id;
+            $order->customer_name = $customer->name;
+            $order->customer_email = $customer->email;
+            $order->customer_phone = $customer->phone;
+            $order->game_title = $game->title;
+            $order->unit_name = $game->unit_name;
+            $order->total_unit = $game->pack * (float)$order->quantity;
+            $order->sub_total_unit = $game->pack * (float)$order->quantity;
+            $order->sub_total_price = $game->price * (float)$order->quantity;
+            $order->total_price = $game->price * (float)$order->quantity;
+            if ($order->save(false)) {
+                Yii::$app->session->setFlash('success', 'Tạo mới đơn hàng thành công.');
+                return $this->redirect(['order/index']);
             }
-            elseif (!$order->save()) Yii::$app->session->setFlash('error', 'Order Error!');
-            $item->order_id = $order->id;
-            if (!$item->save()) {
-                print_r($item->getErrors());die;
-                Yii::$app->session->setFlash('error', 'Item Error!');
-            }
-            $order->total_price = $item->getTotalPrice();
-            $order->save();
-            Yii::$app->session->setFlash('success', 'Success!');
-            $ref = $request->get('ref', Url::to(['order/index']));
-            return $this->redirect($ref);
         }
 
         return $this->render('create', [
             'order' => $order,
-            'item' => $item,
             'back' => $request->get('ref', Url::to(['order/index']))
         ]);
     }

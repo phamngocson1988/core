@@ -10,17 +10,17 @@ class Order extends \common\models\Order
 {
     public function scenarios()
     {
-        $scenarios = parent::scenarios();
-        $new = [
+        return [
+            self::SCENARIO_CREATE => ['game_id', 'customer_id', 'quantity', 'username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
             self::SCENARIO_VERIFYING => ['game_id', 'customer_id', 'total_unit', 'username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
             self::SCENARIO_PENDING => ['username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
         ];
-        return array_merge($scenarios, $new);
     }
 
     public function rules()
     {
         return [
+            [['game_id', 'customer_id', 'quantity'], 'required', 'on' => self::SCENARIO_CREATE],
             [['game_id', 'customer_id', 'total_unit'], 'required', 'on' => self::SCENARIO_VERIFYING],
             // ['game_id', 'validateGame', 'on' => self::SCENARIO_VERIFYING],
             [['username', 'password', 'platform', 'login_method', 'character_name'], 'required'],

@@ -22,6 +22,7 @@ class Order extends ActiveRecord
     const STATUS_COMPLETED = 'completed';
     const STATUS_DELETED = 'deleted';
 
+    const SCENARIO_CREATE = 'create';
     const SCENARIO_VERIFYING = self::STATUS_VERIFYING;
     const SCENARIO_PENDING = self::STATUS_PENDING;
     const SCENARIO_PROCESSING = self::STATUS_PROCESSING;
