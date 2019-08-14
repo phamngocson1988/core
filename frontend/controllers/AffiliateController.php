@@ -45,12 +45,14 @@ class AffiliateController extends Controller
 
                 ],
                 'denyCallback' => function ($rule, $action) {
-                    $user = Yii::$app->user->identity;
-                    $aff = $user->affiliate;
-                    if (Yii::$app->user->getIsGuest()) Yii::$app->user->loginRequired();
-                    elseif (!$aff) return $this->redirect(['affiliate/register']);
-                    elseif (!$aff->isEnable()) return $this->redirect(['affiliate/register']);
-                    else return ;
+                    if (Yii::$app->user->getIsGuest()) return $this->redirect(Yii::$app->user->loginUrl);
+                    else {
+                        $user = Yii::$app->user->identity;
+                        $aff = $user->affiliate;
+                        if (!$aff) return $this->redirect(['affiliate/register']);
+                        elseif (!$aff->isEnable()) return $this->redirect(['affiliate/register']);
+                        else return ;
+                    }
                 }
                 
             ],
