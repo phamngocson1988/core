@@ -13,6 +13,7 @@ use frontend\models\Order;
 class Kinggems extends PaymentGateway
 {
     public $identifier = 'kinggems';
+    public $type = 'online';
 
     public function validatePayment()
     {

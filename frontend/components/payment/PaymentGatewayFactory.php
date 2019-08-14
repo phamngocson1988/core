@@ -18,8 +18,8 @@ class PaymentGatewayFactory extends Model
         'skrill' => [
             'class' => '\frontend\components\payment\clients\Skrill',
         ],
-        'offline' => [
-            'class' => '\frontend\components\payment\clients\OfflinePayment',
+        'alipay' => [
+            'class' => '\frontend\components\payment\clients\Alipay',
         ],
         'kinggems' => [
             'class' => '\frontend\components\payment\clients\Kinggems',

@@ -25,6 +25,7 @@ class Paypal extends PaymentGateway
     const PAYMENT_STATE_APPROVED = 'approved';
     
     public $identifier = 'paypal';
+    public $type = 'online';
 
     protected $confirmParams = [
         'paymentId',

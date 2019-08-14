@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+$setting = Yii::$app->settings;
 ?>
 <section class="topup-page">
   <div class="container">
@@ -16,7 +17,7 @@ use yii\helpers\Url;
               <img src="/images/logo-king-coins.png" alt="">
             </div>
             <div class="cart-table order-final-info">
-              <div><strong>Order Code:</strong></div>
+              <div>Order Code:</div>
               <div><span class="order-code-label"><?=$order->id;?></span></div>
               <div>
                 You can review <a class="review-order-btn" href="<?=Url::to(['user/detail', 'id' => $order->id]);?>">Your Order</a>
@@ -25,6 +26,14 @@ use yii\helpers\Url;
                 <p>Details of the order have been sent to <?=$user->email;?></p>
                 <p>If not found please check in Spam or Junk Folder mailbox.</p>
               </div>
+              <?php if ($order->payment_type == 'offline') : ?>
+              <div class="order-info-email-note">
+                <p>Bank name: <?=$setting->get('AlipaySettingForm', 'bank_name');?></p>
+                <p>Account number: <?=$setting->get('AlipaySettingForm', 'account_number');?></p>
+                <p>Account Holder: <?=$setting->get('AlipaySettingForm', 'account_holder');?></p>
+                <p>Note: "KINGGEMS_GAME_<?=$order->auth_key;?>"</h3></p>
+              </div>
+              <?php endif;?>
             </div>
           </div>
         </div>

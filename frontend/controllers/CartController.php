@@ -232,6 +232,7 @@ class CartController extends Controller
             // Order detail
             $order = new Order();
             $order->payment_method = $identifier;
+            $order->payment_type = $gateway->type;
             $order->payment_id = $gateway->getReferenceId();
             $order->sub_total_price = $subTotalPrice;
             $order->total_discount = $promotionCoin;

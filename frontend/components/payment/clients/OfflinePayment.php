@@ -9,7 +9,8 @@ use frontend\components\payment\PaymentGateway;
 
 class OfflinePayment extends PaymentGateway
 {
-    public $identifier = 'offline_payment';
+    public $identifier = 'offline';
+    public $type = 'offline';
 
     protected function loadConfig()
     {
@@ -22,7 +23,7 @@ class OfflinePayment extends PaymentGateway
 
     protected function sendRequest()
     {
-        return [];
+        return $this->doSuccess();
     }
     
     protected function verify($response)
@@ -37,7 +38,8 @@ class OfflinePayment extends PaymentGateway
 
     public function doSuccess()
     {
-        return $this->redirect($this->getSuccessUrl());
+        $refId = $this->getReferenceId();
+        return $this->redirect($this->getSuccessUrl(['ref' => $refId]));
     }
 
     public function doError()

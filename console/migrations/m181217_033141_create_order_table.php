@@ -23,6 +23,7 @@ class m181217_033141_create_order_table extends Migration
             'auth_key' => $this->string(10), // used for non-login user
             'payment_id' => $this->string(50),
             'payment_method' => $this->string(50),
+            'payment_type' => $this->string(10),
             'payment_data' => $this->text(),
             'sub_total_price' => $this->integer(11)->defaultValue(0),
             'quantity' => $this->float(1)->notNull()->defaultValue(1),

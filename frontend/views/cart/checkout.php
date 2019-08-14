@@ -40,6 +40,9 @@ $cart->applyPromotion();
                       <div class="method-line">
                         <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?> ><span>King Coins - Balance <?=(!$can_place_order) ? Html::a(' - Go to Topup', Url::to(['topup/index']), ['style' => 'color: #ff3600']) : '';?></span>
                       </div>
+                      <div class="method-line">
+                        <input type="radio" name="identifier" value="alipay"><span>Alipay</span>
+                      </div>
                       <!-- <div class="method-line">
                         <input type="radio" name="abc" id=""><span>Skrill</span>
                       </div>

@@ -18,48 +18,58 @@
 <!-- BEGIN PAGE TITLE-->
 <h1 class="page-title">Thiết lập cho Alipay</h1>
 <!-- END PAGE TITLE-->
+{ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
 <div class="row">
   <div class="col-md-12">
-    {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
     <div class="portlet">
       <div class="portlet-title">
-        <div class="caption">Thiết lập cho Alipay</div>
+        <div class="caption">Tài khoản ngân hàng</div>
         <div class="actions btn-set">
-          <button type="reset" class="btn default">
-          <i class="fa fa-angle-left"></i> {Yii::t('app', 'reset')}
+          <a href="{url route='setting/list-offline'}" class="btn default"><i class="fa fa-angle-left"></i> Danh sách giao dịch chuyển khoản</a>
           <button type="submit" class="btn btn-success">
           <i class="fa fa-check"></i> {Yii::t('app', 'save')}
           </button>
         </div>
       </div>
-      <div class="portlet-body">
-        <div class="tabbable-bordered">
-          <ul class="nav nav-tabs">
-            <li class="active">
-              <a href="#tab_general" data-toggle="tab"> {Yii::t('app', 'main_content')} </a>
-            </li>
-          </ul>
-          <div class="tab-content repeater">
-            <div class="tab-pane active" id="tab_general">
-              <div class="form-body">
-                {$form->field($model, 'partner', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textInput()}
-                {$form->field($model, 'seller_email', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textInput()->label('Email người bán')}
-                {$form->field($model, 'key', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textInput()->label('Alipay key')}
-              </div>   
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-    {/ActiveForm}
   </div>
 </div>
+{*<div class="panel panel-default">
+  <div class="panel-heading">Tài khoản Alipay Offline</div>
+  <div class="panel-body">
+    <div class="row">
+        {$form->field($model, 'partner', [
+        'labelOptions' => ['class' => 'col-md-2 control-label'],
+        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+        ])->textInput()}
+        {$form->field($model, 'seller_email', [
+        'labelOptions' => ['class' => 'col-md-2 control-label'],
+        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+        ])->textInput()}
+        {$form->field($model, 'key', [
+        'labelOptions' => ['class' => 'col-md-2 control-label'],
+        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+        ])->textInput()}
+    </div>
+  </div>
+</div>*}
+<div class="panel panel-default">
+  <div class="panel-heading">Tài khoản ngân hàng 1</div>
+  <div class="panel-body">
+    <div class="row">
+        {$form->field($model, 'bank_name', [
+        'labelOptions' => ['class' => 'col-md-2 control-label'],
+        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+        ])->textInput()}
+        {$form->field($model, 'account_number', [
+        'labelOptions' => ['class' => 'col-md-2 control-label'],
+        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+        ])->textInput()}
+        {$form->field($model, 'account_holder', [
+        'labelOptions' => ['class' => 'col-md-2 control-label'],
+        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
+        ])->textInput()}
+    </div>
+  </div>
+</div>
+{/ActiveForm}
