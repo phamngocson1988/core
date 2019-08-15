@@ -26,7 +26,7 @@
       <li class="heading">
         <h3 class="uppercase">{Yii::t('app', 'features')}</h3>
       </li>
-      {if Yii::$app->user->can('admin')}
+      
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-lock"></i>
@@ -34,23 +34,28 @@
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
+          {if Yii::$app->user->can('admin')}
           <li class="nav-item">
             <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
             <span class="title">Nhà quản trị</span>
             </a>
           </li>
+          {/if}
           <li class="nav-item">
             <a href="{url route='/user/customer'}" class="nav-link " code='user.customer'>
             <span class="title">Khách hàng</span>
             </a>
           </li>
+          {if Yii::$app->user->can('admin')}
           <li class="nav-item">
             <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
             <span class="title">{Yii::t('app', 'role')}</span>
             </a>
           </li>
+          {/if}
         </ul>
       </li>
+      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
