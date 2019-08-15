@@ -8,6 +8,8 @@ use Yii;
  */
 class Order extends \common\models\Order
 {
+    const SCENARIO_GO_PENDING = 'go_pending';
+
     public function scenarios()
     {
         $parents = parent::scenarios();
@@ -15,6 +17,7 @@ class Order extends \common\models\Order
             self::SCENARIO_CREATE => ['game_id', 'customer_id', 'quantity', 'username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
             self::SCENARIO_VERIFYING => ['game_id', 'customer_id', 'total_unit', 'username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
             self::SCENARIO_PENDING => ['username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
+            self::SCENARIO_GO_PENDING => ['payment_method', 'payment_data'],
         ]);
     }
 
@@ -23,9 +26,9 @@ class Order extends \common\models\Order
         return [
             [['game_id', 'customer_id', 'quantity'], 'required', 'on' => self::SCENARIO_CREATE],
             [['game_id', 'customer_id', 'total_unit'], 'required', 'on' => self::SCENARIO_VERIFYING],
-            // ['game_id', 'validateGame', 'on' => self::SCENARIO_VERIFYING],
-            [['username', 'password', 'platform', 'login_method', 'character_name'], 'required'],
-            [['recover_code', 'server', 'note'], 'trim'],
+            [['username', 'password', 'platform', 'login_method', 'character_name'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
+            [['recover_code', 'server', 'note'], 'trim', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
+            [['payment_method', 'payment_data'], 'required', 'on' => self::SCENARIO_GO_PENDING],
         ];
     }
 

@@ -17,7 +17,6 @@ use backend\models\Order;
 use backend\models\User;
 use backend\models\Game;
 use backend\models\OrderFile;
-use backend\forms\UpdateOrderStatusPending;
 use backend\forms\UpdateOrderStatusProcessing;
 use backend\forms\AssignManageOrder;
 use backend\forms\TakenOrderForm;
@@ -28,6 +27,7 @@ use backend\forms\CancelOrderForm;
 
 
 use backend\events\OrderEventHandler;
+use backend\models\OrderComplains;
 
 class OrderController extends Controller
 {
@@ -264,10 +264,8 @@ class OrderController extends Controller
         if ($order->load($request->post()) && $order->save()) {
             Yii::$app->session->setFlash('success', 'Success!');
         }
-        $updateStatusForm = new UpdateOrderStatusPending();
         return $this->render('verifying', [
             'order' => $order,
-            'updateStatusForm' => $updateStatusForm
         ]);
     }
 
@@ -318,8 +316,6 @@ class OrderController extends Controller
         switch ($order->status) {
             case Order::STATUS_VERIFYING:
                 $template = 'verifying';
-                $updateStatusForm = new UpdateOrderStatusPending();
-                // $item->scenario = EditOrderItemForm::SCENARIO_VERIFYING;
                 break;
             case Order::STATUS_PENDING:
                 $template = 'pending';
@@ -366,16 +362,28 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionMoveToPending()
+    public function actionMoveToPending($id)
     {
+        $model = Order::findOne($id);
+        if (!$model) return $this->asJson(['status' => false, 'error' => 'Đơn hàng không tồn tại']);
+        if (!$model->isVerifyingOrder()) return $this->asJson(['status' => false, 'error' => 'Không thể chuyển trạng thái']);
         $request = Yii::$app->request;
-        if ($request->isPost && $request->isAjax) {
-            $form = new UpdateOrderStatusPending();
-            if ($form->load($request->post()) && $form->save()) {
-                return $this->renderJson(true, []);
-            } else {
-                return $this->renderJson(false, [], $form->getErrorSummary(true));
-            }
+        $model->setScenario(Order::SCENARIO_GO_PENDING);
+        $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
+            $order = $event->sender;
+            $user = Yii::$app->user->getIdentity();
+            $complain = new OrderComplains();
+            $complain->order_id = $order->id;
+            $complain->content = sprintf("%s (#%s) move order to pending. The payment data is %s", $user->name, $user->id, $order->payment_data);
+            $complain->save();
+        });
+        if (!$model->auth_key) $model->generateAuthKey();
+        $model->payment_type = 'offline';
+        $model->status = Order::STATUS_PENDING;
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->renderJson(true, ['next' => Url::to(['order/pending', 'id' => $id])]);
+        } else {
+            return $this->asJson(['status' => true, 'error' => $model->getErrorSummary(false)]);
         }
     }
 

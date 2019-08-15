@@ -252,7 +252,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   <?php if (Yii::$app->user->can('edit_order', ['order' => $model])) :?>
                   <?php switch ($model->status) {
                     case Order::STATUS_VERIFYING :
-                      $editUrl = Url::to(['order/view', 'id' => $model->id]);
+                      $editUrl = Url::to(['order/verifying', 'id' => $model->id]);
                       break;
                     case Order::STATUS_PENDING :
                       $editUrl = Url::to(['order/pending', 'id' => $model->id]);

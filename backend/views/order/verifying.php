@@ -6,8 +6,8 @@ use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
-use common\models\Game;
-use common\models\Product;
+use backend\models\Game;
+use backend\models\Order;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -21,175 +21,160 @@ use common\models\Product;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Chỉnh sửa đơn hàng</span>
+      <span>Xem đơn hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Chỉnh sửa đơn hàng</h1>
+<h1 class="page-title">Xem đơn hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
-    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
       <div class="portlet">
         <div class="portlet-title">
-          <div class="actions btn-set">
-            <a href="<?=Url::to(['order/index']);?>" class="btn default">
-            <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-            <?php if (Yii::$app->user->can('saler')) :?>
-            <button type="submit" class="btn btn-success">
-            <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
-            </button>
-            <a class="btn red btn-outline sbold" data-toggle="modal" href="#next">
-            <i class="fa fa-angle-right"></i> <?=Yii::t('app', 'pending')?></a>
-            <?php endif?>
+          <div class="caption">
+            <i class="icon-settings font-dark"></i>
+            <span class="caption-subject font-dark sbold uppercase"> Order #<?=$order->id;?>
+              <span class="hidden-xs">| <?=$order->created_at;?> </span>
+            </span>
           </div>
         </div>
         <div class="portlet-body">
-          <div class="form-wizard">
-            <div class="form-body">
-              <ul class="nav nav-pills nav-justified steps">
-                <li class="active">
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 1 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Verifying </span>
-                  <p style="color: #CCC">Đơn hàng chưa thanh toán</p> 
-                  </a>
-                </li>
-                <li>
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 2 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Pending </span>
-                  <p style="color: #CCC">Đơn hàng đã thanh toán</p> 
-                  </a>
-                </li>
-                <li>
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 3 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Processing </span>
-                  <p style="color: #CCC">Đơn hàng đã thực hiện xong</p> 
-                  </a>
-                </li>
-                <li>
-                  <a href="javasciprt:;" class="step">
-                  <span class="number"> 4 </span>
-                  <span class="desc">
-                  <i class="fa fa-check"></i> Completed </span>
-                  <p style="color: #CCC">Đơn hàng đã hoàn tất</p> 
-                  </a>
-                </li>
-              </ul>
-              <div id="bar" class="progress progress-striped" role="progressbar">
-                <div class="progress-bar progress-bar-success" style="width: 25%"> </div>
-              </div>
-            </div>
-          </div>
+          <?php echo $this->render('@backend/views/order/_step.php', ['order' => $order]);?>
           <div class="tabbable-bordered">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" role="tablist">
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
-                <div class="form-body">
-                  <?php $customer = $order->customer;?>
-                  <?=$form->field($order, 'customer_id', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->widget(kartik\select2\Select2::classname(), [
-                    'initValueText' => ($customer) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
-                    'options' => ['class' => 'form-control'],
-                    'pluginOptions' => [
-                      'placeholder' => 'Tìm khách hàng',
-                      'allowClear' => true,
-                      'minimumInputLength' => 3,
-                      'ajax' => [
-                          'url' => Url::to(['user/suggestion']),
-                          'dataType' => 'json',
-                          'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                      ]
-                    ]
-                  ])->label('Khách hàng')?>
-                  <hr/>
-                  <h4>Thông tin game</h4>
-                  <?php 
-                  $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->all();
-                  $games = ArrayHelper::map($games, 'id', 'title');
-                  ?>
-                  <?=$form->field($order, 'game_id', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
-                    'inputOptions' => ['id' => 'game', 'class' => 'form-control']
-                  ])->dropDownList($games)->label('Game');?>
-
-                  <?php
-                  $products = Product::find()->where(['<>', 'status', Product::STATUS_DELETE])->all();
-                  $productMeta = [];
-                  foreach ($products as $product) {
-                    $productMeta[$product->id] = ['game_id' => $product->game_id];
-                  }
-                  $productItems = ArrayHelper::map($products, 'id', 'title');
-                  ?>
-
-                  <?=$form->field($order, 'total_unit', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control', 'type' => 'number'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Số game cần nạp')?>
-
-                  <?=$form->field($order, 'username', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Tên đăng nhập game')?>
-                  <?=$form->field($order, 'password', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-                  <?=$form->field($order, 'platform', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])?>
-                  <?=$form->field($order, 'login_method', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList(['google' => 'Google', 'facebook' => 'Facebook'])?>
-                  <?=$form->field($order, 'character_name', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-                  <?=$form->field($order, 'recover_code', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-                  <?=$form->field($order, 'server', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-                  <?=$form->field($order, 'note', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-
+                <div class="row">
+                  <div class="col-md-12 col-sm-12">
+                    <div class="portlet grey-cascade box">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="fa fa-cogs"></i>Game
+                        </div>
+                      </div>
+                      <div class="portlet-body">
+                        <?php echo $this->render('@backend/views/order/_unit.php', ['order' => $order]);?>
+                        <div class="row static-info">
+                          <div class="col-md-12">
+                            <strong>Số game đã nạp: <?=$order->doing_unit;?></strong>
+                          </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated form']]);?>
+                    <div class="portlet blue-hoki box">
+                      <div class="portlet-title">
+                        <div class="caption">
+                          <i class="fa fa-cogs"></i>Thông tin nạp game
+                        </div>
+                      </div>
+                      <div class="portlet-body" id="game_account">
+                        <div class="row static-info">
+                          <div class="col-md-5"> Username: </div>
+                          <div class="col-md-7"> 
+                            <?=$form->field($order, 'username', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Password: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'password', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Tên nhân vật: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'character_name', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Platform: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'platform', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Login method: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'login_method', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->dropDownList(Order::getLoginMethodList())->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Recover Code: </div>
+                          <div class="col-md-7"> 
+                            <?=$form->field($order, 'recover_code', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Server: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'server', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
+                        </div>
+                        <div class="row static-info">
+                          <div class="col-md-5"> Ghi chú: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'note', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <a href="<?=Url::to(['order/index']);?>" class="btn default"><i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
+                                    <button type="submit" class="btn green">Cập nhật</button>
+                                    <a class="btn red btn-outline sbold" data-toggle="modal" href="#next"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Pending</a>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <?php ActiveForm::end()?>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
+                    <?php echo $this->render('@backend/views/order/_customer.php', ['order' => $order]);?>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <?php ActiveForm::end()?>
   </div>
 </div>
 <div class="modal fade" id="next" tabindex="-1" role="basic" aria-hidden="true">
@@ -197,23 +182,17 @@ use common\models\Product;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Move the order to pending</h4>
+        <h4 class="modal-title">Chuyển tới trạng thái Pending</h4>
       </div>
-      <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated', 'id' => 'next-form'], 'action' => Url::to(['order/move-to-pending'])]);?>
-      <?=$nextForm->field($updateStatusForm, 'id', [
-        'template' => '{input}', 
-        'options' => ['container' => false]
-      ])->hiddenInput(['value' => $order->id])->label(false);?>
+      <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated', 'id' => 'next-form'], 'action' => Url::to(['order/move-to-pending', 'id' => $order->id])]);?>
       <div class="modal-body"> 
-          <p>Mô tả quá trình thanh toán của khách hàng cho đơn hàng này.</p>
-          <?=$nextForm->field($updateStatusForm, 'description', [
-            'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-            'template' => '<div class="col-md-12">{input}{hint}{error}</div>'
-          ])->textarea()?>
+          <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
+          <?=$nextForm->field($order, 'payment_method')->textInput();?>
+          <?=$nextForm->field($order, 'payment_data')->textInput();?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn green">Save changes</button>
+        <button type="submit" class="btn green">Xác nhận</button>
       </div>
       <?php ActiveForm::end();?>
     </div>
@@ -221,25 +200,14 @@ use common\models\Product;
   </div>
   <!-- /.modal-dialog -->
 </div>
+
 <?php
 $script = <<< JS
-$('#game').on('change', function(){
-  $('#product').val('');
-  changeGame($(this).val());
-  // $('#product').val($('#product>option[game_id='+$(this).val()+']:first-child').attr('value'));
-});
-function changeGame(id) {
-  $('#product>option').hide();
-  $('#product>option[game_id='+id+']').show();
-}
-changeGame($('#game').val());
-
 var nextForm = new AjaxFormSubmit({element: '#next-form'});
 nextForm.success = function (data, form) {
-  window.location.href = "###REDIRECT###";
+  window.location.href = data.next;
 }
+
 JS;
-$redirect = Url::to(['order/index']);
-$script = str_replace('###REDIRECT###', $redirect, $script);
 $this->registerJs($script);
 ?>

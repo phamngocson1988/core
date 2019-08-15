@@ -44,21 +44,25 @@ use common\components\helpers\FormatConverter;
     <?php if ($order->total_discount) :?>
     <div class="row static-info">
       <div class="col-md-5"> Sub total: </div>
-      <div class="col-md-7"> (K) <?=number_format($order->sub_total_price);?> </div>
+      <div class="col-md-7"> <?=number_format($order->sub_total_price);?> </div>
     </div>
     <div class="row static-info">
       <div class="col-md-5"> Discount: </div>
-      <div class="col-md-7"> (K) <?=number_format($order->total_discount);?> </div>
+      <div class="col-md-7"> <?=number_format($order->total_discount);?> </div>
     </div>
     <?php endif;?>
     <div class="row static-info">
-      <div class="col-md-5"> Total: </div>
-      <div class="col-md-7"> (K) <?=number_format($order->total_price);?> </div>
+      <div class="col-md-5"> Total price: </div>
+      <div class="col-md-7"> <?=number_format($order->total_price);?> </div>
     </div>
     <?php endif;?>
     <div class="row static-info">
-      <div class="col-md-5"> Payment Information: </div>
-      <div class="col-md-7"> King Coin </div>
+      <div class="col-md-5"> Cổng thanh toán: </div>
+      <div class="col-md-7"> <?=$order->payment_method;?> </div>
+    </div>
+    <div class="row static-info">
+      <div class="col-md-5"> Phương thức thanh toán: </div>
+      <div class="col-md-7"> <?=$order->payment_type;?> </div>
     </div>
   </div>
 </div>

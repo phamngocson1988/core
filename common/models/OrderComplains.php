@@ -5,7 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use common\models\Order;
 use yii\behaviors\TimestampBehavior;
-
+use yii\behaviors\BlameableBehavior;
 /**
  * OrderComplains model
  */
@@ -27,6 +27,11 @@ class OrderComplains extends ActiveRecord
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => false,
                 'value' => date('Y-m-d H:i:s')
+            ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => false,
             ],
         ];
     }

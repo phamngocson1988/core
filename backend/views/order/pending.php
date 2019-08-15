@@ -6,8 +6,8 @@ use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
-use common\models\Game;
-use common\models\Product;
+use backend\models\Game;
+use backend\models\Order;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -140,7 +140,7 @@ use common\models\Product;
                             <?=$form->field($order, 'login_method', [
                               'options' => ['class' => ''],
                               'inputOptions' => ['class' => 'form-control']
-                            ])->dropDownList(['google' => 'Google', 'facebook' => 'Facebook'])->label(false);?>
+                            ])->dropDownList(Order::getLoginMethodList())->label(false);?>
                           </div>
                         </div>
                         <div class="row static-info">

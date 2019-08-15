@@ -60,6 +60,16 @@ class Order extends ActiveRecord
         ];
     }
 
+    public static function getLoginMethodList()
+    {
+        return [
+            'account' => 'Game account',
+            'android' => 'Android',
+            'ios' => 'Ios', 
+
+        ];
+    }
+
     public function getSaler()
     {
         return $this->hasOne(User::className(), ['id' => 'saler_id']);
