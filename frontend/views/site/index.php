@@ -56,6 +56,49 @@ $this->title = 'Home Page';
     </div>
     <div class="prod-listing-viewmore">
       <a href="<?=Url::to(['game/index']);?>" class="main-btn">See More</a>
+      <!-- <a href="#" class="main-btn" data-toggle="modal" data-target="#joinModal">join now</a> -->
     </div>
   </div>
 </section>
+<div class="modal" id="topupModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-wrap">
+        <button type="button" class="close" data-dismiss="modal">Ã—</button>
+        <!-- <img src="images/close-icon.png" alt=""> -->
+        <a href="">
+        <img class="btn-modal-topup" src="images/btn-topup-now.png" alt="">
+        </a>
+        <img class="bg-modal" src="images/bg-popup-topup-now.png" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="joinModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-wrap">
+        <button type="button" class="close" data-dismiss="modal">Ã—</button>
+        <!-- <img src="images/close-icon.png" alt=""> -->
+        <a href="">
+        <img class="btn-modal-join" src="images/btn-join-now.png" alt="">
+        </a>
+        <img class="bg-modal" src="images/bg-popup-join-now.png" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="walletModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-wrap">
+        <button type="button" class="close" data-dismiss="modal">Ã—</button>
+        <!-- <img src="images/close-icon.png" alt=""> -->
+        <a href="">
+        <img class="btn-modal-wallet" src="images/btn-wallet-now.png" alt="">
+        </a>
+        <img class="bg-modal" src="images/bg-popup-wallet-now.png" alt="">
+      </div>
+    </div>
+  </div>
+</div>

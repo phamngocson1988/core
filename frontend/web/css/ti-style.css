@@ -484,4 +484,72 @@ ol li {
 .red {
   color: #ff3600; }
 
+.modal {
+  padding-right: 0 !important; }
+  .modal .bg-modal {
+    width: 100%;
+    height: auto; }
+  .modal button.close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #ccc;
+    opacity: 1; }
+  .modal .modal-wrap {
+    position: relative;
+    width: 100%;
+    height: auto; }
+  .modal .btn-modal-join {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    right: 100px;
+    max-width: 215px; }
+  .modal .btn-modal-topup {
+    position: absolute;
+    width: 100%;
+    top: 60%;
+    right: 50%;
+    max-width: 154px;
+    transform: translateX(50%);
+    -webkit-transform: translateX(50%);
+    -moz-transform: translateX(50%); }
+  .modal .btn-modal-wallet {
+    position: absolute;
+    width: 100%;
+    top: 58%;
+    right: 138px;
+    max-width: 138px; }
+  .modal a:hover img {
+    transform: scale(1.1); }
+  .modal a:hover img.btn-modal-topup {
+    transform: translateX(50%) scale(1.1);
+    -webkit-transform: translateX(50%) scale(1.1);
+    -moz-transform: translateX(50%) scale(1.1); }
+  .modal .close:not(:disabled):not(.disabled):focus, .modal .close:not(:disabled):not(.disabled):hover {
+    color: #ccc;
+    opacity: 0.5; }
+  @media (min-width: 992px) {
+    .modal .modal-dialog {
+      max-width: 800px;
+      margin: 10rem auto; } }
+  @media screen and (max-width: 992px) {
+    .modal .btn-modal-join {
+      max-width: 130px;
+      right: 70px; }
+    .modal .btn-modal-topup {
+      max-width: 100px; }
+    .modal .btn-modal-wallet {
+      right: 76px;
+      max-width: 110px; }
+    .modal .modal-dialog {
+      margin: 12rem auto; } }
+  @media screen and (max-width: 480px) {
+    .modal .btn-modal-join {
+      width: 25%;
+      right: 14%; }
+    .modal .btn-modal-wallet {
+      width: 25%;
+      right: 14%; } }
+
 /*# sourceMappingURL=ti-style.css.map */

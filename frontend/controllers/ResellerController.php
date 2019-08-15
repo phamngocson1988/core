@@ -58,6 +58,7 @@ class ResellerController extends Controller
         if ($request->isPost) {
             $files = Yii::$app->file->upload('template', "template/$userId");
             $inputFile = reset($files);//Yii::getAlias('@frontend') . '/template_1.xlsx';
+            $inputFile = Yii::$app->file->getPath($inputFile);
             $game = CartItemReseller::findOne($id);
             try{
                 $inputFileType = \PHPExcel_IOFactory::identify($inputFile);

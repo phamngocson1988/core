@@ -52,7 +52,7 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'move-to-pending', 'delete', 'verifying'],
+                        'actions' => ['create', 'move-to-pending', 'delete', 'verifying', 'new-pending-order'],
                         'roles' => ['saler'],
                     ],
                     
