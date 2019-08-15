@@ -105,16 +105,17 @@ class SignupEventHandler extends Model
         }        
         if ($setting->get('WelcomeBonusForm', 'value')) {
             $user = $event->sender;
-            $wallet = new UserWallet();
-            $wallet->coin = (int)$setting->get('WelcomeBonusForm', 'value', 0);
-            $wallet->balance = $wallet->coin;
-            $wallet->type = UserWallet::TYPE_INPUT;
-            $wallet->description = "Signon Bonus";
-            $wallet->created_by = $user->id;
-            $wallet->user_id = $user->id;
-            $wallet->status = UserWallet::STATUS_COMPLETED;
-            $wallet->payment_at = date('Y-m-d H:i:s');
-            $wallet->save();
+            // $wallet = new UserWallet();
+            // $wallet->coin = (int)$setting->get('WelcomeBonusForm', 'value', 0);
+            // $wallet->balance = $wallet->coin;
+            // $wallet->type = UserWallet::TYPE_INPUT;
+            // $wallet->description = "Signon Bonus";
+            // $wallet->created_by = $user->id;
+            // $wallet->user_id = $user->id;
+            // $wallet->status = UserWallet::STATUS_COMPLETED;
+            // $wallet->payment_at = date('Y-m-d H:i:s');
+            // $wallet->save();
+            $user->topup((int)$setting->get('WelcomeBonusForm', 'value', 0), null, 'Signon Bonus');
         }        
     }
 }

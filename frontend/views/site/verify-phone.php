@@ -19,7 +19,7 @@ use yii\helpers\Html;
               <p>Enter the 4 digit code we sent you<br>
                 via SMS <span>(<?=substr_replace($model->phone, str_pad("", strlen($model->phone) - 5, "*"), 3, -2);?>)</span> to continue
               </p>
-              <?php $form = ActiveForm::begin(['options' => ['autocomplete' => 'off']]); ?>
+              <?php $form = ActiveForm::begin(['id' => 'verify-form', 'options' => ['autocomplete' => 'off']]); ?>
                 <div class="wrap-numb">
                   <?= $form->field($model, 'digit_1', [
                     'options' => ['tag' => false],
@@ -79,6 +79,12 @@ $('#digit_2').on('input', function() {
 });
 $('#digit_3').on('input', function() {
   if ($(this).val()) $('#digit_4').focus();
+});
+
+var is_submit = false;
+$('#verify-form').on('submit', function(e){
+  if (is_submit) return false;
+  is_submit = true;
 });
 JS;
 $this->registerJs($script);

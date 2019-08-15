@@ -168,11 +168,15 @@ $('#email').on('blur', function(){
     },
   });
 });
+var is_submit = false;
 $('#form-signup').on('submit', function(e){
   if (!$('#agree').is(':checked')) {
     alert('You need to agree with our terms & conditions.');
+    is_submit = false;
     return false;
   }
+  if (is_submit) return false;
+  is_submit = true;
 });
 JS;
 $checkEmail = Url::to(['site/find-email']);

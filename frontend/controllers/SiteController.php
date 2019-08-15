@@ -238,10 +238,13 @@ class SiteController extends Controller
         $request = Yii::$app->request;
         $model = VerifyAccountViaPhoneForm::findOne($id);
         if (!$model) throw new NotFoundHttpException("User #$id not found.");
+
         // Register an event
-        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'referApplyingEvent']);
-        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
-        $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_ACTIVE, [SignupEventHandler::className(), 'signonBonus']);
+        if ($model->status == VerifyAccountViaPhoneForm::STATUS_INACTIVE) {
+            $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'referApplyingEvent']);
+            $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
+            $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'signonBonus']);
+        }
 
         if ($model->load($request->post()) && $model->verify()) {
             // Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
