@@ -13,6 +13,7 @@ class EditUserForm extends Model
     public $id;
 	public $name;
     public $username;
+    public $password;
     public $email;
     public $phone;
     public $address;
@@ -28,6 +29,14 @@ class EditUserForm extends Model
             ['name', 'trim'],
             ['name', 'required'],
             ['name', 'string', 'min' => 2, 'max' => 255],
+
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+
+            ['password', 'trim'],
+            ['password', 'string', 'min' => 6],
 
             ['status', 'in', 'range' => array_keys(User::getUserStatus())],
             [['phone', 'address', 'birthday'], 'trim'],
@@ -53,11 +62,16 @@ class EditUserForm extends Model
 	        }
 	        
 	        $user = $this->getUser();
-	        $user->name = $this->name;        
+            $user->name = $this->name;    
+            $user->email = $this->email;    
             $user->phone = $this->phone;
             $user->address = $this->address;
             $user->birthday = $this->birthday;
             $user->status = $this->status;
+            if ($this->password) {
+                $user->setPassword($this->password);
+                $user->generateAuthKey();
+            }
 	        $user->save();
 			$transaction->commit();
             Yii::$app->syslog->log('edit_user', 'edit user', $user);

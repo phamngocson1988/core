@@ -57,7 +57,11 @@
                   {$form->field($model, 'email', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput(['disabled' => true])}
+                  ])->textInput()}
+                  {$form->field($model, 'password', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()}
                   {$form->field($model, 'phone', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
