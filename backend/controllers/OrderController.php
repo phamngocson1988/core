@@ -52,14 +52,14 @@ class OrderController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'move-to-pending', 'delete', 'verifying', 'new-pending-order'],
+                        'actions' => ['create', 'new-pending-order'],
                         'roles' => ['saler'],
                     ],
                     
                     [
                         'allow' => true,
                         'actions' => ['edit', 'my-order', 'pending', 'processing', 'approve', 'disapprove'],
-                        'roles' => ['saler', 'orderteam'],
+                        'roles' => ['saler', 'orderteam', 'accounting'],
                     ],
                     [
                         'allow' => true,
@@ -71,6 +71,11 @@ class OrderController extends Controller
                         'actions' => ['assign'],
                         'roles' => ['admin'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['verifying', 'delete', 'move-to-pending', 'new-verifying-order'],
+                        'roles' => ['accounting']
+                    ]
                 ],
             ],
             'verbs' => [
@@ -211,6 +216,24 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionNewVerifyingOrder()
+    {
+        $this->view->params['main_menu_active'] = 'order.new-verifying';
+        $request = Yii::$app->request;
+        $command = Order::find()->where(['status' => Order::STATUS_VERIFYING]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->all();
+
+        return $this->render('new-verifying-order', [
+            'models' => $models,
+            'pages' => $pages,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
     public function actionCreate()
     {
         $this->view->params['main_menu_active'] = 'order.index';
@@ -259,7 +282,7 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
         $order = Order::findOne($id);
-        if (!Yii::$app->user->can('edit_order', ['order' => $order])) throw new \yii\web\ForbiddenHttpException('Bạn không có quyền truy cập chức năng này');
+        // if (!Yii::$app->user->can('edit_order', ['order' => $order])) throw new \yii\web\ForbiddenHttpException('Bạn không có quyền truy cập chức năng này');
         $order->setScenario(Order::SCENARIO_VERIFYING);
         if ($order->load($request->post()) && $order->save()) {
             Yii::$app->session->setFlash('success', 'Success!');
@@ -381,7 +404,7 @@ class OrderController extends Controller
         $model->payment_type = 'offline';
         $model->status = Order::STATUS_PENDING;
         if ($model->load($request->post()) && $model->save()) {
-            return $this->renderJson(true, ['next' => Url::to(['order/pending', 'id' => $id])]);
+            return $this->renderJson(true, ['next' => Url::to(['order/index'])]);
         } else {
             return $this->asJson(['status' => true, 'error' => $model->getErrorSummary(false)]);
         }
@@ -436,7 +459,7 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $model = Order::findOne($id);
         if ($model && $model->delete()) {
-            return $this->renderJson(true, []);
+            return $this->renderJson(true, ['url' => Url::to(['order/index'])]);
         } else {
             return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
@@ -477,37 +500,15 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         if ($request->isAjax) {
             $order = Order::findOne($id);
-            $order->on(Order::EVENT_BEFORE_DELETE, [OrderEventHandler::className(), 'beforeDeleteEvent']);
-            if ($order->isVerifyingOrder()) {
-                $order->on(Order::EVENT_AFTER_DELETE, [OrderEventHandler::className(), 'afterDeleteEvent']);
-                $order->on(Order::EVENT_AFTER_DELETE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
-                $order->on(Order::EVENT_AFTER_DELETE, [OrderEventHandler::className(), 'removeCommission']);
-            } elseif ($order->isPendingOrder()) {
+            if ($order->isPendingOrder()) {
+                $order->status = Order::STATUS_DELETED;
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
+                return $this->renderJson($order->save(), ['view_url' => Url::to(['order/view', 'id' => $id])], []);
             }
-            return $this->renderJson($order->delete(), ['view_url' => Url::to(['order/view', 'id' => $id])], $order->getErrorSummary(true));
-            // $form = new CancelOrderForm([
-            //     'id' => $id
-            // ]);
-            // if ($form->save()) {
-            //     // Send mail notification
-            //     $admin = Yii::$app->params['email_admin'];
-            //     $siteName = Yii::$app->name;
-            //     $email = Yii::$app->mailer->compose('cancel_order', [
-            //         'order' => $form->getOrder()
-            //     ])
-            //     ->setTo($user->email)
-            //     ->setFrom([$admin => $siteName])
-            //     ->setSubject("KINGGEMS.US - Confirmed order cancelation $order->id")
-            //     ->setTextBody("Confirmed order cancelation")
-            //     ->send();
-            //     return $this->renderJson(true, ['view_url' => Url::to(['order/view', 'id' => $id])]);
-            // } else {
-            //     return $this->renderJson(false, [], $form->getErrorSummary(true));
-            // }
         }
+        return $this->renderJson(false, null, ['error' => 'Không thể cancel đơn hàng']);
     }
 
     public function actionDisapprove($id)

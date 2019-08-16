@@ -80,12 +80,6 @@ $('#digit_2').on('input', function() {
 $('#digit_3').on('input', function() {
   if ($(this).val()) $('#digit_4').focus();
 });
-
-var is_submit = false;
-$('#verify-form').on('submit', function(e){
-  if (is_submit) return false;
-  is_submit = true;
-});
 JS;
 $this->registerJs($script);
 ?>

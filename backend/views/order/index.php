@@ -60,9 +60,9 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         </div>
         <div class="actions">
           <?php if (Yii::$app->user->can('saler')) :?>
-          <div class="btn-group btn-group-devided">
+          <!-- <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['order/create', 'ref' => $ref])?>"><?=Yii::t('app', 'add_new')?></a>
-          </div>
+          </div> -->
           <?php endif;?>
         </div>
       </div>

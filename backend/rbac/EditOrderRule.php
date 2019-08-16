@@ -24,7 +24,8 @@ class EditOrderRule extends Rule
         if ($order->isDeletedOrder()) return false;
         if (Yii::$app->user->can('admin')) return true;
         if ($order->isVerifyingOrder()) {
-            return $order->saler_id == Yii::$app->user->id;
+            // return $order->saler_id == Yii::$app->user->id;
+            return Yii::$app->user->can('accounting');
         } else {
             return $order->orderteam_id == Yii::$app->user->id;
         }

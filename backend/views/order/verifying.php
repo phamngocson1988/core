@@ -161,6 +161,15 @@ use backend\models\Order;
                                 </div>
                             </div>
                         </div>
+                        <?php if ($order->hasCancelRequest()) :?>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <a href="<?=Url::to(['order/delete', 'id' => $order->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif;?>
                       </div>
                     </div>
                     <?php ActiveForm::end()?>
@@ -206,7 +215,26 @@ $script = <<< JS
 var nextForm = new AjaxFormSubmit({element: '#next-form'});
 nextForm.success = function (data, form) {
   window.location.href = data.next;
-}
+};
+
+$('#cancel_order').on('click', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  $.ajax({
+    url: $(this).prop('href'),
+    type: 'POST',
+    dataType : 'json',
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          alert(result.errors);
+          return false;
+      } else {
+        window.location.href = result.data.url;
+      }
+    },
+  });
+  return false;
+});
 
 JS;
 $this->registerJs($script);
