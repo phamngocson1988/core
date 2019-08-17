@@ -400,11 +400,6 @@
               </li>
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
-                  <span class="title">Theo reseller</span>
-                </a>
-              </li>
-              <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo nhà cung cấp</span>
                 </a>
               </li>
@@ -441,6 +436,11 @@
               <li class="nav-item  ">
                 <a href="{url route='/report/sale-user'}" class="nav-link " code='report.sale.user'>
                   <span class="title">Doanh số theo nhân viên</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
+                <a href="{url route='/report/sale-reseller'}" class="nav-link " code='report.sale.reseller'>
+                  <span class="title">Doanh số theo reseller</span>
                 </a>
               </li>
             </ul>

@@ -23,6 +23,7 @@ use backend\forms\StatisticsByTransactionForm;
 use backend\forms\StatisticsByOrderForm;
 use backend\forms\ReportCostOrderBySaler;
 use backend\forms\ReportSaleOrderByUser;
+use backend\forms\ReportSaleOrderByReseller;
 
 class ReportController extends Controller
 {
@@ -325,6 +326,24 @@ class ReportController extends Controller
         $form = new ReportSaleOrderByUser($data);
         $models = $form->fetch();
         return $this->render('sale/user', [
+            'models' => $models,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionSaleReseller()
+    {
+        $this->view->params['main_menu_active'] = 'report.sale.reseller';
+        $request = Yii::$app->request;
+        $data = [
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'period' => $request->get('period'),
+        ];
+        $form = new ReportSaleOrderByReseller($data);
+        $models = $form->fetch();
+        return $this->render('sale/reseller', [
             'models' => $models,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
