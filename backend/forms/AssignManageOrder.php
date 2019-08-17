@@ -49,6 +49,7 @@ class AssignManageOrder extends Model
         if (!$this->validate()) return false;
         $order = $this->getOrder();
         $order->orderteam_id = $this->user_id;
+        $order->process_start_time = date('Y-m-d H:i:s');
         return $order->save();
     }
 

@@ -17,10 +17,10 @@ use yii\helpers\Url;
             </div>
             <div class="cart-table order-final-info">
               <div>
-                You can review <a class="review-order-btn" href="<?=Url::to(['user/transaction']);?>">Your Order</a>
+                You can review <a class="review-order-btn" href="<?=Url::to(['user/orders']);?>">Your Order</a>
               </div>
               <div class="order-info-email-note">
-                <p>Details of the order have been sent to <?=Yii::$app->user->email;?></p>
+                <p>Details of the order have been sent to <?=Yii::$app->user->identity->email;?></p>
                 <p>If not found please check in Spam or Junk Folder mailbox.</p>
               </div>
             </div>

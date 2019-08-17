@@ -8,9 +8,6 @@ use yii\helpers\Url;
   <li <?php if ($tab == 'welcome_bonus') echo 'class="active"' ;?> >
     <a href="<?=Url::to(['setting/welcome_bonus']);?>">Qùa tặng khi đăng ký</a>
   </li>
-  <li <?php if ($tab == 'affiliate_program') echo 'class="active"' ;?> >
-    <a href="<?=Url::to(['setting/affiliate_program']);?>">Affiliate</a>
-  </li>
   <li <?php if ($tab == 'refer_program') echo 'class="active"' ;?> >
     <a href="<?=Url::to(['setting/refer_program']);?>">Refer friend</a>
   </li>

@@ -117,7 +117,7 @@ class SettingController extends Controller
                 'class' => SettingsAction::class,
                 'modelClass' => AffiliateProgramForm::class,
                 'view' => 'affiliate_program.php',
-                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+                'layoutParams' => ['main_menu_active' => 'affiliate.setting'],
             ],
             'refer_program' => [
                 'class' => SettingsAction::class,

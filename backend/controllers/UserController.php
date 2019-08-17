@@ -34,8 +34,7 @@ class UserController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['suggestion', 'customer'],
-                        // 'roles' => ['view_customer'],
+                        'actions' => ['suggestion', 'index'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -46,35 +45,6 @@ class UserController extends Controller
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'user.index';
-        $request = Yii::$app->request;
-        $q = $request->get('q');
-        $status = $request->get('status', '');
-        $form = new FetchUserForm(['q' => $q, 'status' => $status]);
-        $managerRoles = $form->getManagerRoles();
-        $role = $request->get('role');
-        $role = ($role) ? $role : array_keys($managerRoles);
-        $form->role = $role;
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
-
-        $links = [
-            'delete' => Url::to(['user/change-status', 'status' => 'delete']),
-            'active' => Url::to(['user/change-status', 'status' => 'active'])
-        ];
-
-        return $this->render('index.tpl', [
-            'models' => $models,
-            'pages' => $pages,
-            'form' => $form,
-            'ref' => Url::to($request->getUrl(), true),
-            'links' => $links,
-        ]);
-    }
-
-    public function actionCustomer()
-    {
-        $this->view->params['main_menu_active'] = 'user.customer';
         $request = Yii::$app->request;
         $mode = $request->get('mode');
         $data = [
@@ -108,7 +78,7 @@ class UserController extends Controller
             'active' => Url::to(['user/change-status', 'status' => 'active'])
         ];
 
-        return $this->render('customer.tpl', [
+        return $this->render('index.tpl', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,

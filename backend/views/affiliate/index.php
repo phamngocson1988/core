@@ -60,9 +60,7 @@ use common\components\helpers\FormatConverter;
               <th style="width: 10%;"> Số điện thoại </th>
               <th style="width: 5%;"> Preferred IM </th>
               <th style="width: 10%;"> IM Account </th>
-              <th style="width: 10%;"> Company </th>
               <th style="width: 10%;"> Channel </th>
-              <th style="width: 5%;"> Channel Type </th>
               <th style="width: 10%;"> Ngày duyệt </th>
               <th style="width: 5%;"> Số lượng thành viên </th>
               <th style="width: 5%;"> Hoa hồng được phép dùng </th>
@@ -82,9 +80,7 @@ use common\components\helpers\FormatConverter;
                 <td style="vertical-align: middle;"><?=sprintf("(%s) %s", $model->user->country_code, $model->user->phone);?></td>
                 <td style="vertical-align: middle;"><?=$model->preferred_im;?></td>
                 <td style="vertical-align: middle;"><?=$model->im_account;?></td>
-                <td style="vertical-align: middle;"><?=$model->company;?></td>
                 <td style="vertical-align: middle;"><?=$model->channel;?></td>
-                <td style="vertical-align: middle;"><?=$model->channel_type;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->user->getAffiliateChildren()->count());?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->user->getReadyCommission()->count());?></td>

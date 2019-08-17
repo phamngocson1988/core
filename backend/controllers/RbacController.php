@@ -13,6 +13,7 @@ use backend\forms\FetchUserByRoleForm;
 use yii\helpers\Url;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
+use backend\forms\FetchUserForm;
 
 class RbacController extends Controller
 {
@@ -167,6 +168,29 @@ class RbacController extends Controller
     }
 
     //=============== ROLE ===============
+    public function actionIndex()
+    {
+        $this->view->params['main_menu_active'] = 'rbac.index';
+        $request = Yii::$app->request;
+        $q = $request->get('q');
+        $status = $request->get('status', '');
+        $form = new FetchUserForm(['q' => $q, 'status' => $status]);
+        $managerRoles = $form->getManagerRoles();
+        $role = $request->get('role');
+        $role = ($role) ? $role : array_keys($managerRoles);
+        $form->role = $role;
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('index.tpl', [
+            'models' => $models,
+            'pages' => $pages,
+            'form' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
     public function actionRole()
     {
         $this->view->params['main_menu_active'] = 'rbac.role';

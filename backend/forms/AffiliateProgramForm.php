@@ -26,4 +26,11 @@ class AffiliateProgramForm extends Model
             ['min_member', 'safe']
         ];
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'content' => 'Terms and conditions'
+        ];
+    }
 }

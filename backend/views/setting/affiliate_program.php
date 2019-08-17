@@ -36,7 +36,11 @@ use yii\widgets\ActiveForm;
       </div>
       <div class="portlet-body">
         <div class="tabbable-bordered">
-          <?php echo $this->render('@backend/views/setting/_widget_tabs.php', ['tab' => 'affiliate_program']);?>
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
+            </li>
+          </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">

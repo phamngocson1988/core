@@ -27,6 +27,7 @@
         <h3 class="uppercase">{Yii::t('app', 'features')}</h3>
       </li>
       
+      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-lock"></i>
@@ -34,25 +35,31 @@
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if Yii::$app->user->can('admin')}
           <li class="nav-item">
-            <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
+            <a href="{url route='/rbac/index'}" class="nav-link " code='rbac.index'>
             <span class="title">Nhà quản trị</span>
             </a>
           </li>
-          {/if}
-          <li class="nav-item">
-            <a href="{url route='/user/customer'}" class="nav-link " code='user.customer'>
-            <span class="title">Khách hàng</span>
-            </a>
-          </li>
-          {if Yii::$app->user->can('admin')}
           <li class="nav-item">
             <a href="{url route='/rbac/role'}" class="nav-link" code='rbac.role'>
             <span class="title">{Yii::t('app', 'role')}</span>
             </a>
           </li>
-          {/if}
+        </ul>
+      </li>
+      {/if}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user-following"></i>
+        <span class="title">Khách hàng</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
+            <span class="title">Tất cả</span>
+            </a>
+          </li>
         </ul>
       </li>
       {if Yii::$app->user->can('admin')}
@@ -80,9 +87,14 @@
             <span class="badge badge-success">{$this->params['new_commission_withdraw']}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/setting/affiliate_program'}" class="nav-link " code='affiliate.setting'>
+            <span class="title">Cài đặt</span>
+            </a>
+          </li>
         </ul>
       </li>
-      <li class="nav-item  ">
+      <!-- <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user-following"></i>
         <span class="title">{Yii::t('app', 'staffs')}</span>
@@ -100,8 +112,8 @@
             </a>
           </li>
         </ul>
-      </li>
-      <li class="nav-item  ">
+      </li> -->
+      <!-- <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-clock"></i>
         <span class="title">{Yii::t('app', 'tasks')}</span>
@@ -114,7 +126,7 @@
             </a>
           </li>
         </ul>
-      </li>
+      </li> -->
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
