@@ -12,7 +12,7 @@ class OfflinePayment extends PaymentGateway
     public $identifier = 'offline';
     public $type = 'offline';
 
-    protected function loadConfig()
+    public function loadConfig()
     {
         $settings = Yii::$app->settings;
     }

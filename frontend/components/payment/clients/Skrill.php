@@ -19,7 +19,7 @@ class Skrill extends PaymentGateway
     protected $_server = 'https://pay.skrill.com';
     public $identifier = 'skrill';
 
-    protected function loadConfig()
+    public function loadConfig()
     {
         $settings = Yii::$app->settings;
         $config['pay_to_email'] = $settings->get('SkrillSettingForm', 'pay_to_email');

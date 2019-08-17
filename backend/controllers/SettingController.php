@@ -11,6 +11,7 @@ use backend\forms\HeaderScriptSettingForm;
 use backend\forms\GallerySettingForm;
 use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
+use backend\forms\WechatSettingForm;
 use backend\forms\SkrillSettingForm;
 use backend\forms\ImportSettingForm;
 use backend\forms\OfflinePaymentSettingForm;
@@ -72,6 +73,12 @@ class SettingController extends Controller
                 'modelClass' => AlipaySettingForm::class,
                 'view' => 'alipay.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.alipay']
+            ],
+            'wechat' => [
+                'class' => SettingsAction::class,
+                'modelClass' => WechatSettingForm::class,
+                'view' => 'wechat.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.wechat']
             ],
             'skrill' => [
                 'class' => SettingsAction::class,

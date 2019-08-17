@@ -17,7 +17,7 @@ class Order extends \common\models\Order
             self::SCENARIO_CREATE => ['game_id', 'customer_id', 'quantity', 'username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
             self::SCENARIO_VERIFYING => ['game_id', 'customer_id', 'total_unit', 'username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
             self::SCENARIO_PENDING => ['username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
-            self::SCENARIO_GO_PENDING => ['payment_method', 'payment_data'],
+            self::SCENARIO_GO_PENDING => ['payment_method', 'payment_id'],
         ]);
     }
 
@@ -28,7 +28,7 @@ class Order extends \common\models\Order
             [['game_id', 'customer_id', 'total_unit'], 'required', 'on' => self::SCENARIO_VERIFYING],
             [['username', 'password', 'platform', 'login_method', 'character_name'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
             [['recover_code', 'server', 'note'], 'trim', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
-            [['payment_method', 'payment_data'], 'required', 'on' => self::SCENARIO_GO_PENDING],
+            [['payment_method', 'payment_id'], 'required', 'on' => self::SCENARIO_GO_PENDING],
         ];
     }
 

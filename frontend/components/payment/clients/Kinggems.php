@@ -37,7 +37,7 @@ class Kinggems extends PaymentGateway
             $refKey = $this->getReferenceId();
             $order = Order::findOne([
                 'payment_method' => $this->identifier,
-                'payment_id' => $refKey,
+                'auth_key' => $refKey,
                 'status' => Order::STATUS_VERIFYING
             ]);
             if (!$order) throw new Exception("Order is not exist", 1);
@@ -54,7 +54,7 @@ class Kinggems extends PaymentGateway
             $wallet->status = UserWallet::STATUS_COMPLETED;
             $wallet->payment_at = date('Y-m-d H:i:s');
             if ($wallet->save()) {
-                return $this->redirect($this->getConfirmUrl());
+                return $this->redirect($this->getConfirmUrl(['paymentId' => $wallet->id]));
             }
         } catch (\Exception $e) {
             return $this->redirect($this->getErrorUrl());
@@ -63,6 +63,9 @@ class Kinggems extends PaymentGateway
     
     protected function verify($response)
     {
+        extract($response); // now can use $paymentId, $PayerID, $token
+        if (!$paymentId) return false;
+        $this->setPaymentId($paymentId);
         return true;
     }
 

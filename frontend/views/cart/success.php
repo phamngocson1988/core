@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 $setting = Yii::$app->settings;
 ?>
 <section class="topup-page">
@@ -28,10 +29,20 @@ $setting = Yii::$app->settings;
               </div>
               <?php if ($order->payment_type == 'offline') : ?>
               <div class="order-info-email-note">
-                <p>Bank name: <?=$setting->get('AlipaySettingForm', 'bank_name');?></p>
-                <p>Account number: <?=$setting->get('AlipaySettingForm', 'account_number');?></p>
-                <p>Account Holder: <?=$setting->get('AlipaySettingForm', 'account_holder');?></p>
-                <p>Note: "KINGGEMS_GAME_<?=$order->auth_key;?>"</h3></p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <?php $data = $gateway->loadConfig();?>
+                    <?php $logo = ArrayHelper::remove($data, 'logo');?>
+                    <?php foreach ($data as $key => $value) : ?>
+                    <p><?=$key;?>: <?=$value;?></p>
+                    <?php endforeach;?>
+                    <p>Note: "KINGGEMS_GAME_<?=$order->auth_key;?>"</h3></p>
+                  </div>
+                  <div class="col-md-6">
+                    <img src="<?=$logo;?>" width="150">
+                  </div>
+                </div>
+                
               </div>
               <?php endif;?>
             </div>

@@ -21,6 +21,9 @@ class PaymentGatewayFactory extends Model
         'alipay' => [
             'class' => '\frontend\components\payment\clients\Alipay',
         ],
+        'wechat' => [
+            'class' => '\frontend\components\payment\clients\Wechat',
+        ],
         'kinggems' => [
             'class' => '\frontend\components\payment\clients\Kinggems',
         ]

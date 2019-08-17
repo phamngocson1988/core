@@ -27,13 +27,7 @@ class Paypal extends PaymentGateway
     public $identifier = 'paypal';
     public $type = 'online';
 
-    protected $confirmParams = [
-        'paymentId',
-        'PayerID',
-        'token',
-    ];
-
-    protected function loadConfig()
+    public function loadConfig()
     {
         $settings = Yii::$app->settings;
         $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
@@ -137,7 +131,7 @@ class Paypal extends PaymentGateway
     {
         extract($response); // now can use $paymentId, $PayerID, $token
         if (!$paymentId || !$PayerID || !$token) throw new BadRequestHttpException("The request is invalid", 1);
-
+        $this->setPaymentId($paymentId);
         $apiContext = $this->loadConfig();
         $payment = Payment::get($paymentId, $apiContext);
         if (self::PAYMENT_STATE_CREATED != strtolower($payment->state)) throw new BadRequestHttpException("Transaction #$paymentId : status is invalid", 1);

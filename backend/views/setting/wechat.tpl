@@ -10,13 +10,13 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Alipay</span>
+      <span>Wechat</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thiết lập cho Alipay</h1>
+<h1 class="page-title">Thiết lập cho Wechat</h1>
 <!-- END PAGE TITLE-->
 {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
 <div class="row">
@@ -33,27 +33,8 @@
     </div>
   </div>
 </div>
-{*<div class="panel panel-default">
-  <div class="panel-heading">Tài khoản Alipay Offline</div>
-  <div class="panel-body">
-    <div class="row">
-        {$form->field($model, 'partner', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-        {$form->field($model, 'seller_email', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-        {$form->field($model, 'key', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-    </div>
-  </div>
-</div>*}
 <div class="panel panel-default">
-  <div class="panel-heading">Thông tin tài khoản alipay</div>
+  <div class="panel-heading">Thông tin tài khoản wechat</div>
   <div class="panel-body">
     <div class="row">
         {$form->field($model, 'bank_name', [
@@ -65,10 +46,6 @@
         'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
         ])->textInput()}
         {$form->field($model, 'account_holder', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-        {$form->field($model, 'nickname', [
         'labelOptions' => ['class' => 'col-md-2 control-label'],
         'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
         ])->textInput()}

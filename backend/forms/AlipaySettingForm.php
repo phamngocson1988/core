@@ -14,12 +14,15 @@ class AlipaySettingForm extends Model
     public $bank_name;
     public $account_number;
     public $account_holder;
+    public $nickname;
+    public $region;
+    public $logo;
 
     public function rules()
     {
         return [
             [['partner', 'seller_email', 'key'], 'trim'],
-            [['bank_name', 'account_number', 'account_holder'], 'trim'],
+            [['bank_name', 'account_number', 'account_holder', 'nickname', 'region', 'logo'], 'trim'],
         ];
     }
 }

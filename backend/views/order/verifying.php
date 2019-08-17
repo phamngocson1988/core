@@ -197,7 +197,7 @@ use backend\models\Order;
       <div class="modal-body"> 
           <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
           <?=$nextForm->field($order, 'payment_method')->textInput();?>
-          <?=$nextForm->field($order, 'payment_data')->textInput();?>
+          <?=$nextForm->field($order, 'payment_id')->textInput();?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>

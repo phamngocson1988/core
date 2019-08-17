@@ -25,11 +25,11 @@ class PaymentGateway extends Model
 
     public $identifier;
 
+    /** @var string the id of transaction returned by paygate */
+    protected $payment_id;
+
     /** @var <any> unique ID for every payment request */
     protected $reference_id;
-
-    /** @var array include parameter names of confirm request */
-    protected $confirmParams = [];
 
     /** @var PaymentCart */
     protected $cart;
@@ -53,7 +53,7 @@ class PaymentGateway extends Model
     public function confirm()
     {
         $this->initResponseParams();
-        $response = $this->getConfirmParams();
+        $response = $this->getQueryParams();
         $result = $this->verify($response);
         return $result;
     }
@@ -71,6 +71,21 @@ class PaymentGateway extends Model
     {
         if (!$this->reference_id) $this->reference_id = md5(date('YmdHis') . Yii::$app->user->id);
         return $this->reference_id;
+    }
+
+    public function setReferenceId($id) 
+    {
+        $this->reference_id = $id;
+    }
+
+    public function getPaymentId()
+    {
+        return $this->payment_id;
+    }
+
+    public function setPaymentId($id)
+    {
+        $this->payment_id = $id;
     }
 
     protected function getQueryParam($name, $defaultValue = null)
@@ -93,20 +108,6 @@ class PaymentGateway extends Model
     protected function initResponseParams()
     {
         $this->reference_id = $this->getQueryParam('ref');
-    }
-
-    protected function getConfirmParams()
-    {
-        $params = (array)$this->confirmParams;
-
-        // Return all query param if not declare confirm params
-        if (empty($params)) return $this->getQueryParams();
-
-        $response = [];
-        foreach ($params as $name) {
-            $response[$name] = $this->getQueryParam($name);
-        }
-        return $response;
     }
 
     protected function redirect($link)

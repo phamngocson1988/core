@@ -233,7 +233,7 @@ class CartController extends Controller
             $order = new Order();
             $order->payment_method = $identifier;
             $order->payment_type = $gateway->type;
-            $order->payment_id = $gateway->getReferenceId();
+            // $order->payment_id = $gateway->getReferenceId();
             $order->sub_total_price = $subTotalPrice;
             $order->total_discount = $promotionCoin;
             $order->total_price = $totalPrice;
@@ -262,6 +262,7 @@ class CartController extends Controller
             $order->recover_code = $cartItem->recover_code;
             $order->server = $cartItem->server;
             $order->note = $cartItem->note;
+            $gateway->setReferenceId($order->auth_key);
             
             if ($cartItem->saler_code) {
                 $invitor = User::findOne(['saler_code' => $cartItem->saler_code]);
@@ -289,7 +290,7 @@ class CartController extends Controller
                 $user = Yii::$app->user->getIdentity();
                 $order = Order::find()->where([
                     'payment_method' => $identifier,
-                    'payment_id' => $refId,
+                    'auth_key' => $refId,
                     'status' => Order::STATUS_VERIFYING,
                 ])->one();
                 if (!$order) throw new \Exception('Order is not exist');
@@ -298,6 +299,7 @@ class CartController extends Controller
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
                 $order->status = Order::STATUS_PENDING;
                 $order->payment_at = date('Y-m-d H:i:s');
+                $order->payment_id = $gateway->getPaymentId();
                 $order->save();
                 return $gateway->doSuccess();
             } else {
@@ -313,11 +315,13 @@ class CartController extends Controller
     {
         $this->view->params['main_menu_active'] = 'shop.index';
         $refId = Yii::$app->request->get('ref');
-        $order = Order::findOne(['payment_id' => $refId]);
+        $order = Order::findOne(['auth_key' => $refId]);
+        $gateway = PaymentGatewayFactory::getClient($order->payment_method);
         $user = Yii::$app->user->getIdentity();
         return $this->render('success', [
             'order' => $order,
-            'user' => $user
+            'user' => $user,
+            'gateway' => $gateway
         ]);
     }
 

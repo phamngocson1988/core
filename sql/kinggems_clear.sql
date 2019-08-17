@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `process_duration_time` int(11) DEFAULT NULL,
   `provider_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16868688 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 -- Dumping structure for table kinggems.order_comments

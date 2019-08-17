@@ -290,6 +290,11 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{url route='setting/wechat'}" class="nav-link" code='setting.wechat'>
+                  <i class="cc-alipay"></i> Wechat
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{url route='setting/skrill'}" class="nav-link" code='setting.skrill'>
                   <i class="cc-alipay"></i> Skrill
                 </a>
