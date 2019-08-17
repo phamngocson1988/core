@@ -23,7 +23,7 @@ return [
         ],
         'view' => [
             'class' => 'frontend\components\web\View',
-            'title' => 'Kinggems',
+            'title' => 'Kinggems-Top Up Mobile Game Service',
             'on afterRender' => function($event) {
                 $view = $event->sender;
                 $view->registerMetaTag(['property' => 'og:type', 'content' => 'website'], 'og:type');

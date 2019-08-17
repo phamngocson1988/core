@@ -1,7 +1,5 @@
 <?php
 use yii\helpers\Url;
-
-$this->title = 'Home Page';
 ?>
 <section class="product-listing">
   <div class="container">
