@@ -69,7 +69,7 @@ class OrderController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['assign'],
-                        'roles' => ['admin'],
+                        'roles' => ['orderteam_manager'],
                     ],
                     [
                         'allow' => true,

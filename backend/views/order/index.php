@@ -16,12 +16,12 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstra
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
+$orderTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('orderteam_manager');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
-$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
+$orderTeamIds = array_merge($orderTeamIds, $orderTeamManagerIds, $adminTeamIds);
 $orderTeamIds = array_unique($orderTeamIds);
 $orderTeamObjects = User::findAll($orderTeamIds);
-$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
-
+$orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 ?>
 
 <style>
@@ -170,7 +170,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               'inputOptions' => ['class' => 'bs-select form-control']
             ])->dropDownList([])->label('Nhà cung cấp');?>
 
-            <?=$form->field($search, 'start_date', [
+            <?php /*$form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
             ])->widget(DateTimePicker::className(), [
@@ -181,9 +181,9 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày tạo từ');?>
+            ])->label('Ngày tạo từ'); */;?>
 
-            <?=$form->field($search, 'end_date', [
+            <?php /*$form->field($search, 'end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
             ])->widget(DateTimePicker::className(), [
@@ -195,7 +195,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày tạo đến');?>
+            ])->label('Ngày tạo đến')*/;?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -272,8 +272,8 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   <?php if (Yii::$app->user->can('delete_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
-                  <?php if (Yii::$app->user->can('admin') && !$model->isDeletedOrder()) :?>
-                  <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips hide" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                  <?php if (Yii::$app->user->can('orderteam_manager') && !$model->isDeletedOrder() && !$model->isVerifyingOrder()) :?>
+                  <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -287,7 +287,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                             <div class="col-md-12">
                               <?= kartik\select2\Select2::widget([
                                 'name' => 'user_id',
-                                'data' => $orderTeam,
+                                'data' => $orderTeams,
                                 'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
                               ]); ?>
                             </div>
