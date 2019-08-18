@@ -182,7 +182,7 @@ class TopupController extends Controller
         $trn = new PaymentTransaction();
         $trn->user_id = $user->id;
         $trn->payment_method = $identifier;
-        $trn->payment_id = $gateway->getReferenceId();
+        // $trn->payment_id = $gateway->getReferenceId();
         // Price
         $trn->price = $cart->getSubTotalPrice();
         $trn->discount_price = $cart->hasPromotion() ? $cart->getPromotionMoney() : 0;
@@ -201,6 +201,7 @@ class TopupController extends Controller
             $trn->promotion_code = $promotion->code;
         }
         $trn->save();
+        $gateway->setReferenceId($trn->auth_key);
         $cart->clear();
         $gateway->setCart($paymentCart);
         $paygateData = $gateway->request();
@@ -223,12 +224,13 @@ class TopupController extends Controller
                 $refId = $gateway->getReferenceId();
                 $user = Yii::$app->user->getIdentity();
                 $trn = PaymentTransaction::find()->where([
-                    'payment_id' => $refId, 
+                    'auth_key' => $refId, 
                     'status' => PaymentTransaction::STATUS_PENDING
                 ])->one();
                 if (!$trn) throw new Exception("Can not find out the transaction #$refId");
                 $trn->on(PaymentTransaction::EVENT_AFTER_UPDATE, [TopupEventHandler::className(), 'applyReferGift']);
                 $trn->status = PaymentTransaction::STATUS_COMPLETED;
+                $trn->payment_id = $gateway->getPaymentId();
                 $trn->payment_at = date('Y-m-d H:i:s');
                 $trn->save();
         
@@ -258,7 +260,7 @@ class TopupController extends Controller
     {
         $this->view->params['main_menu_active'] = 'topup.index';
         $refId = Yii::$app->request->get('ref');
-        $trn = PaymentTransaction::findOne(['payment_id' => $refId]);
+        $trn = PaymentTransaction::findOne(['auth_key' => $refId]);
         $user = Yii::$app->user->getIdentity();
         return $this->render('success', [
             'trn' => $trn,
