@@ -19,6 +19,8 @@ return [
         'signup' => 'site/signup',
         'activate' => 'site/activate',
         'faq' => 'site/question',
+        'faq/cat/<id:\d+>-<slug:[\w\-]+>' => 'site/question-category',
+        'faq/detail/<id:\d+>-<slug:[\w\-]+>' => 'site/question-detail',
         'request-password-reset' => 'site/request-password-reset',
         'reset-password' => 'site/reset-password',
         'subscribe' => 'subscriber/create',

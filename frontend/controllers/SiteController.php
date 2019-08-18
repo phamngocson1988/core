@@ -22,6 +22,8 @@ use frontend\models\User;
 use frontend\models\Game;
 use frontend\models\Promotion;
 use frontend\models\UserRefer;
+use frontend\models\QuestionCategory;
+use frontend\models\Question;
 use frontend\events\SignupEventHandler;
 
 /**
@@ -378,7 +380,30 @@ class SiteController extends Controller
     {
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'site.question';
-        return $this->render('question');
+        $categories = QuestionCategory::find()->all();
+        return $this->render('question', [
+            'categories' => $categories,
+        ]);
+    }
+
+    public function actionQuestionCategory($id, $slug)
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'site.question';
+        $category = QuestionCategory::findOne($id);
+        return $this->render('question-category', [
+            'category' => $category,
+        ]);
+    }
+
+    public function actionQuestionDetail($id, $slug) 
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'site.question';
+        $question = Question::findOne($id);
+        return $this->render('question-detail', [
+            'question' => $question,
+        ]);
     }
 
     public function actionTerm($slug)

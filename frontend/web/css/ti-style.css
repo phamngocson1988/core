@@ -325,7 +325,8 @@ ol li {
       .profile-right .profile-info-right .tag-rate svg .cls-2 {
         fill-rule: evenodd; }
     .profile-right .profile-info-right .tag-rate a:hover svg .cls-1,
-    .profile-right .profile-info-right .tag-rate a:hover svg .cls-2 {
+    .profile-right .profile-info-right .tag-rate a:hover svg .cls-2, .profile-right .profile-info-right .tag-rate a.red svg .cls-1,
+    .profile-right .profile-info-right .tag-rate a.red svg .cls-2 {
       stroke: #ff3600; }
     .profile-right .profile-info-right .tag-rate .text-rate {
       font-size: 14px;
@@ -412,16 +413,19 @@ ol li {
   width: 260px;
   background-color: #cccccc;
   padding: 15px;
-  padding-right: 50px;
   height: 84px;
   text-align: right; }
   .login-box .right-login-box .name-box-login {
     font-weight: bold;
     font-size: 20px;
-    position: relative; }
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 20px; }
     .login-box .right-login-box .name-box-login i {
       position: absolute;
-      right: -20px; }
+      right: 0px; }
   .login-box .right-login-box .info-k-coin {
     font-size: 18px; }
     .login-box .right-login-box .info-k-coin span {
@@ -551,5 +555,41 @@ ol li {
     .modal .btn-modal-wallet {
       width: 25%;
       right: 14%; } }
+
+.qa-item .qa-group ul {
+  font-size: 18px;
+  color: #000; }
+  .qa-item .qa-group ul li a {
+    color: #ff3600;
+    opacity: 0.7; }
+    .qa-item .qa-group ul li a:hover {
+      opacity: 1; }
+  .qa-item .qa-group ul li i {
+    color: #ff3600;
+    opacity: 0.7;
+    margin-right: 10px; }
+
+.qa-listing {
+  margin-bottom: 50px; }
+
+.qa-section-title {
+  margin-bottom: 0;
+  border-bottom: 1px solid #ff3600;
+  border-left: none; }
+
+.qa-section-list {
+  background: #fff;
+  padding: 20px 30px; }
+
+.qa-section .btn-see-all {
+  padding-left: 15px;
+  font-size: 18px;
+  color: #ff3600;
+  opacity: 0.5;
+  margin-top: -30px; }
+  .qa-section .btn-see-all:hover {
+    opacity: 1; }
+  .qa-section .btn-see-all i {
+    margin-right: 10px; }
 
 /*# sourceMappingURL=ti-style.css.map */

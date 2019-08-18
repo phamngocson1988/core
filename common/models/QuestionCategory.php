@@ -38,4 +38,9 @@ class QuestionCategory extends ActiveRecord
             'title' => Yii::t('app', 'title'),
         ];
     }
+
+    public function getQuestions() 
+    {
+        return $this->hasMany(Question::className(), ['category_id' => 'id']);
+    }
 }

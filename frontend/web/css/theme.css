@@ -272,3 +272,7 @@ input[type=number] {
 #reward-feed .profit-filter select {
     font-weight: normal;
 }
+
+.qa-item .qa-group ul li a {
+    color: #ce4c27;
+}
