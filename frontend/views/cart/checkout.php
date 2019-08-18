@@ -46,9 +46,9 @@ $cart->applyPromotion();
                       <div class="method-line">
                         <input type="radio" name="identifier" value="wechat"><span>Wechat</span>
                       </div>
-                      <!-- <div class="method-line">
-                        <input type="radio" name="abc" id=""><span>Skrill</span>
-                      </div> -->
+                      <div class="method-line">
+                        <input type="radio" name="identifier" value="skrill"><span>Skrill</span>
+                      </div>
                     </div>
                     <div class="is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart']) ?>

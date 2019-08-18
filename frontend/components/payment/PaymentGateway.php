@@ -124,6 +124,7 @@ class PaymentGateway extends Model
 
     protected function getSuccessUrl($params = [])
     {
+        $params['ref'] = $this->getReferenceId();
         return Url::to(array_merge([$this->success_url], $params), true);
     }
 

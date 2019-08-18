@@ -18,7 +18,8 @@ class Skrill extends PaymentGateway
 {
     protected $_server = 'https://pay.skrill.com';
     public $identifier = 'skrill';
-
+    public $type = 'online';
+    
     public function loadConfig()
     {
         $settings = Yii::$app->settings;
@@ -60,6 +61,7 @@ class Skrill extends PaymentGateway
         $checkout->setCancelUrlTarget(QuickCheckout::URL_TARGET_SELF);
         
         $checkout->setStatusUrl($this->getConfirmUrl());
+        // $checkout->setMerchantFields(Yii::$app->request->csrfParam);
         return $checkout;
     }
 
@@ -70,6 +72,7 @@ class Skrill extends PaymentGateway
         $checkout->setPrepareOnly(1);
         $server = $this->getServer();
         $params = $checkout->asArray();
+        // $params[Yii::$app->request->csrfParam] = Yii::$app->request->getCsrfToken();
         $ch = curl_init(); 
         curl_setopt($ch, CURLOPT_URL, $server); 
         curl_setopt($ch, CURLOPT_POST, TRUE); 
@@ -81,13 +84,13 @@ class Skrill extends PaymentGateway
         // Example {"code":"BAD_REQUEST","message":"Missing%20pay_to_email%20or%20merchant_id%20parameter"}
         if (!json_last_error()) throw new SkrillException($sidError['message']);
 
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
+        // $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
 
-        function isJson($string) {
-            return ((is_string($string) &&
-                    (is_object(json_decode($string)) ||
-                    is_array(json_decode($string))))) ? true : false;
-        }
+        // function isJson($string) {
+        //     return ((is_string($string) &&
+        //             (is_object(json_decode($string)) ||
+        //             is_array(json_decode($string))))) ? true : false;
+        // }
 
         curl_close($ch); 
         // $this->setReferenceId($checkout->getTransactionId());
@@ -100,6 +103,7 @@ class Skrill extends PaymentGateway
         try {
             $response = new SkrillStatusResponse($responseParams);
             $allParams = $response->getRaw();
+            $this->setPaymentId($response->getTransactionId());
             $settings = Yii::$app->settings;
             $secret = $settings->get('SkrillSettingForm', 'secret_word');
             return $response->verifySignature($secret) && $response->isProcessed();
@@ -128,13 +132,13 @@ class Skrill extends PaymentGateway
         return $this->_server;
     }
 
-    protected function doSuccess()
+    public function doSuccess()
     {
         Yii::$app->response->statusCode = 200;
         return;
     }
 
-    protected function doError()
+    public function doError()
     {
         throw new SkrillException('Error');
     }

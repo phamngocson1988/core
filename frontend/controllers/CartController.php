@@ -65,6 +65,15 @@ class CartController extends Controller
         ];
     }
 
+    public function beforeAction($action)
+    {            
+        if ($action->id == 'verify') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
         $request = Yii::$app->request;
