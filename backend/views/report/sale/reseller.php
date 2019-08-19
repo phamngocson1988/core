@@ -4,7 +4,7 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use dosamigos\datetimepicker\DateTimePicker;
+use backend\components\datetimepicker\DateTimePicker;
 use common\models\Order;
 use yii\helpers\ArrayHelper;
 

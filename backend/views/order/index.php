@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use dosamigos\datetimepicker\DateTimePicker;
+use backend\components\datetimepicker\DateTimePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
@@ -170,7 +170,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               'inputOptions' => ['class' => 'bs-select form-control']
             ])->dropDownList([])->label('Nhà cung cấp');?>
 
-            <?php /*$form->field($search, 'start_date', [
+            <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
             ])->widget(DateTimePicker::className(), [
@@ -181,9 +181,9 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày tạo từ'); */;?>
+            ])->label('Ngày tạo từ');?>
 
-            <?php /*$form->field($search, 'end_date', [
+            <?=$form->field($search, 'end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
             ])->widget(DateTimePicker::className(), [
@@ -195,7 +195,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày tạo đến')*/;?>
+            ])->label('Ngày tạo đến');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">

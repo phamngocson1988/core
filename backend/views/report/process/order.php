@@ -9,7 +9,7 @@ use yii\web\JsExpression;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
-use dosamigos\datetimepicker\DateTimePicker;
+use backend\components\datetimepicker\DateTimePicker;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);

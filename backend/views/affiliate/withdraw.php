@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use dosamigos\datetimepicker\DateTimePicker;
+use backend\components\datetimepicker\DateTimePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
