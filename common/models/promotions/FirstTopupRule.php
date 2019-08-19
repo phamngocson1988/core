@@ -3,12 +3,14 @@ namespace common\models\promotions;
 
 use Yii;
 use common\models\PaymentTransaction;
+use common\models\PromotionApply;
 
 /**
  * SpecifiedGamesRule model
  */
 class FirstTopupRule extends PromotionRuleAbstract implements PromotionRuleInterface
 {
+    public $object = self::EFFECT_USER;
     public function render($form, $attr, $options = [])
     {
         
@@ -18,7 +20,8 @@ class FirstTopupRule extends PromotionRuleAbstract implements PromotionRuleInter
     {
         return PaymentTransaction::find()->where([
             'user_id' => $userId,
-            'status' => PaymentTransaction::STATUS_COMPLETED
-        ])->count == 0;
+            'status' => PaymentTransaction::STATUS_COMPLETED,
+            'promotion_id' => $this->promotion_id
+        ])->count() == 0;
     }
 }

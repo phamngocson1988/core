@@ -199,6 +199,7 @@ class TopupController extends Controller
         if ($cart->hasPromotion()) {
             $promotion = $cart->getPromotionItem();
             $trn->promotion_code = $promotion->code;
+            $trn->promotion_id = $promotion->id;
         }
         $trn->save();
         $gateway->setReferenceId($trn->auth_key);
