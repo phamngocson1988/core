@@ -1,5 +1,6 @@
 <?php
-if (!Yii::$app->user->can('view_customer')) return '';
+// if (!Yii::$app->user->can('view_customer')) return '';
+if (!Yii::$app->user->can('accounting')) return '';
 ?>
 <div class="portlet blue-hoki box">
   <div class="portlet-title">

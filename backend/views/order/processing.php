@@ -50,7 +50,7 @@ use backend\models\OrderFile;
                 <a href="#images" data-toggle="tab"> Hình ảnh</a>
               </li>
               <li>
-                <a href="#complain" data-toggle="tab"> Phản hồi</a>
+                <a href="#complain" data-toggle="tab"> Trợ giúp</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -130,7 +130,7 @@ use backend\models\OrderFile;
               <div class="tab-pane" id="images">
                 <div class="row" style="margin-bottom: 20px">
                   <div class=col-md-12>
-                    <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh</a>
+                    <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh trước khi hoàn thành</a>
                     <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple/>
                   </div>
                 </div>

@@ -8,6 +8,7 @@ use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use backend\models\Game;
 use backend\models\Order;
+use backend\models\OrderFile;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -47,11 +48,11 @@ use backend\models\Order;
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
-              <!-- <li>
-                <a href="#images" data-toggle="tab"> Hình ảnh</a>
-              </li> -->
               <li>
-                <a href="#complain" data-toggle="tab"> Phản hồi</a>
+                <a href="#images" data-toggle="tab"> Hình ảnh</a>
+              </li>
+              <li>
+                <a href="#complain" data-toggle="tab"> Trợ giúp</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -197,6 +198,27 @@ use backend\models\Order;
                     <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
                     <?php echo $this->render('@backend/views/order/_customer.php', ['order' => $order]);?>
                   </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="images">
+                <div class="row" style="margin-bottom: 20px">
+                  <div class=col-md-12>
+                    <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh trước khi hoàn thành</a>
+                    <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple/>
+                  </div>
+                </div>
+                <div class="row" id="evidences">
+                  <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE), 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
+                </div>
+                <hr/>
+                <div class="row" style="margin-bottom: 20px">
+                  <div class=col-md-12>
+                    <a class="btn red btn-outline sbold" id="uploadElementAfter">Tải hình ảnh sau khi hoàn thành</a>
+                    <input type="file" id="uploadEvidenceAfter" name="uploadEvidenceAfter[]" style="display: none" multiple/>
+                  </div>
+                </div>
+                <div class="row" id="evidences_after">
+                  <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER), 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
                 </div>
               </div>
               <div class="tab-pane" id="complain">
@@ -465,10 +487,32 @@ upload.callback = function(result) {
   });
 }
 
+var uploadAfter = new AjaxUploadFile({trigger_element: '#uploadElementAfter', file_element: '#uploadEvidenceAfter'});
+uploadAfter.callback = function(result) {
+  result.forEach(function(element) {
+    $.ajax({
+      url: '###ADD_EVIDENCE_AFTER_URL###',
+      type: 'POST',
+      dataType : 'json',
+      data: {'OrderFile[file_id]': element.id},
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            alert('Error occur with #' + element.id);
+            return false;
+        } else {
+          $('#evidences_after').html(result.data.html);
+        }
+      },
+    });
+  });
+}
+
 JS;
 $redirect = Url::to(['order/add-unit', 'id' => $order->id]);
 $script = str_replace('###UPDATE_UNIT###', $redirect, $script);
 $addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
-$script = str_replace('###UPDATE_UNIT###', $addEvidenceUrl, $script);
+$script = str_replace('###ADD_EVIDENCE_URL###', $addEvidenceUrl, $script);
+$addEvidenceAfterUrl = Url::to(['order/add-evidence-image', 'id' => $order->id, 'type' => 'after']);
+$script = str_replace('###ADD_EVIDENCE_AFTER_URL###', $addEvidenceAfterUrl, $script);
 $this->registerJs($script);
 ?>

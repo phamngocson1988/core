@@ -336,7 +336,7 @@
           {if Yii::$app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/order/new-verifying-order'}" class="nav-link " code='order.new-verifying'>
-            <span class="title">Đơn hàng tạm</span>
+            <span class="title">Đơn hàng chờ thanh toán</span>
             <span class="badge badge-success">{$this->params['new_verifying_order']}</span>
             </a>
           </li>

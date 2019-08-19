@@ -10,7 +10,7 @@ use common\components\helpers\FormatConverter;
   <div class="portlet-body">
     <div class="row static-info">
       <div class="col-md-5"> Mã đơn hàng: </div>
-      <div class="col-md-7"> <?=$order->auth_key;?></div>
+      <div class="col-md-7"> <?=$order->id;?></div>
     </div>
     <div class="row static-info">
       <div class="col-md-5"> Thời gian tạo: </div>

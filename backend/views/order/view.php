@@ -7,7 +7,8 @@ use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\models\Game;
-use common\models\Product;
+use backend\models\OrderFile;
+
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -51,7 +52,7 @@ use common\models\Product;
                 <a href="#images" data-toggle="tab"> Hình ảnh</a>
               </li>
               <li>
-                <a href="#complain" data-toggle="tab"> Phản hồi</a>
+                <a href="#complain" data-toggle="tab"> Trợ giúp</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -130,7 +131,37 @@ use common\models\Product;
               </div>
               <div class="tab-pane" id="images">
                 <div class="row" id="evidences">
-                  <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->evidences, 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
+                <?php foreach ($order->evidences as $image) : ?>
+                <div class="col-md-2 col-sm-3 mt-element-overlay image-item">
+                    <div class="mt-overlay-1">
+                        <img src="<?=$image->getUrl();?>" height="200" width="200">
+                        <div class="mt-overlay">
+                        <ul class="mt-info">
+                            <li>
+                            <a class="btn default btn-outline" href="<?=$image->getUrl();?>" target="_blank"><i class="icon-link"></i></a>
+                            </li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach;?>
+                </div>
+                <hr/>
+                <div class="row" id="evidences_after">
+                  <?php foreach ($order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER) as $image) : ?>
+                  <div class="col-md-2 col-sm-3 mt-element-overlay image-item">
+                      <div class="mt-overlay-1">
+                          <img src="<?=$image->getUrl();?>" height="200" width="200">
+                          <div class="mt-overlay">
+                          <ul class="mt-info">
+                              <li>
+                              <a class="btn default btn-outline" href="<?=$image->getUrl();?>" target="_blank"><i class="icon-link"></i></a>
+                              </li>
+                          </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <?php endforeach;?>
                 </div>
               </div>
               <div class="tab-pane" id="complain">
