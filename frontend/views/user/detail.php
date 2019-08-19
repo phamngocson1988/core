@@ -248,6 +248,8 @@ $('#like').ajax_action({
   callback: function(data) {
     $('#rating').remove();
     alert('Thank for your rating!');
+    $('#dislike').removeClass('red');
+    $('#like').addClass('red');
   },
 });
 JS;
