@@ -58,13 +58,13 @@ use yii\helpers\Url;
     </div>
   </div>
 </section>
+<?php if (Yii::$app->session->get('popup-topup')) : ?>
 <div class="modal" id="topupModal">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-wrap">
               <button type="button" class="close" data-dismiss="modal">×</button>
-              <!-- <img src="images/close-icon.png" alt=""> -->
-              <a href="">
+              <a href="<?=Url::to(['topup/index']);?>">
                   <img class="btn-modal-topup" src="/images/btn-topup-now.png" alt="">
               </a>
               <img class="bg-modal" src="/images/bg-popup-topup-now.png" alt="">
@@ -73,13 +73,20 @@ use yii\helpers\Url;
       </div>
   </div>
 </div>
+<?php
+$script = <<< JS
+$("#topupModal").modal();
+JS;
+$this->registerJs($script);
+?>
+<?php endif;?>
+<?php if (Yii::$app->session->get('popup-joinnow')) : ?>
 <div class="modal" id="joinModal">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-wrap">
               <button type="button" class="close" data-dismiss="modal">×</button>
-              <!-- <img src="images/close-icon.png" alt=""> -->
-              <a href="">
+              <a href="<?=Url::to(['site/signup', '#' => 'page-title']);?>">
                   <img class="btn-modal-join" src="/images/btn-join-now.png" alt="">
               </a>
               <img class="bg-modal" src="/images/bg-popup-join-now.png" alt="">
@@ -88,13 +95,20 @@ use yii\helpers\Url;
       </div>
   </div>
 </div>
+<?php
+$script = <<< JS
+$("#joinModal").modal();
+JS;
+$this->registerJs($script);
+?>
+<?php endif;?>
+<?php if (Yii::$app->session->get('popup-welcome')) : ?>
 <div class="modal" id="walletModal">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-wrap">
               <button type="button" class="close" data-dismiss="modal">×</button>
-              <!-- <img src="images/close-icon.png" alt=""> -->
-              <a href="">
+              <a href="<?=Url::to(['user/wallet']);?>">
                   <img class="btn-modal-wallet" src="/images/btn-wallet-now.png" alt="">
               </a>
               <img class="bg-modal" src="/images/bg-popup-wallet-now.png" alt="">
@@ -102,3 +116,10 @@ use yii\helpers\Url;
       </div>
   </div>
 </div>
+<?php
+$script = <<< JS
+$("#walletModal").modal();
+JS;
+$this->registerJs($script);
+?>
+<?php endif;?>
