@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use backend\components\datetimepicker\DateTimePicker;
+use dosamigos\datepicker\DateRangePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
@@ -14,14 +14,19 @@ use common\components\helpers\FormatConverter;
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/table-bootstrap.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
-$orderTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('orderteam_manager');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
-$orderTeamIds = array_merge($orderTeamIds, $orderTeamManagerIds, $adminTeamIds);
+$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
 $orderTeamIds = array_unique($orderTeamIds);
 $orderTeamObjects = User::findAll($orderTeamIds);
-$orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
+$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 ?>
 
 <style>
@@ -41,13 +46,13 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Quản lý đơn hàng</span>
+      <span>Đơn hàng chưa có nhân viên xử lý</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Quản lý đơn hàng</h1>
+<h1 class="page-title">Đơn hàng chưa có nhân viên xử lý</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -56,19 +61,15 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng chưa có nhân viên xử lý</span>
         </div>
         <div class="actions">
-          <?php if (Yii::$app->user->can('saler')) :?>
-          <!-- <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['order/create', 'ref' => $ref])?>"><?=Yii::t('app', 'add_new')?></a>
-          </div> -->
-          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>
+      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/new-pending-order']]);?>
         <div class="row margin-bottom-10">
+               
             <?php $customer = $search->getCustomer();?>
             <?=$form->field($search, 'q', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -92,110 +93,15 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               ]
             ])->label('Khách hàng')?>
 
-            <?php if (Yii::$app->user->can('admin')) :?>
-            <?php $saler = $search->getSaler();?>
             <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->saler_id) ? sprintf("%s - %s", $saler->username, $saler->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhân viên sale',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhân viên sale')?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
+            ])->dropDownList($search->fetchSalers(), ['prompt' => 'Tìm theo nhân viên bán hàng'])->label('Nhân viên bán hàng');?>
 
-            <?php $orderTeam = $search->getOrderteam();?>
-            <?=$form->field($search, 'orderteam_id', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($orderTeam) ? sprintf("%s - %s", $orderTeam->username, $orderTeam->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'orderteam_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhân viên đơn hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhân viên đơn hàng')?>
-            <?php elseif (Yii::$app->user->can('saler')):?>
-              <?=$form->field($search, 'saler_id', [
-                'template' => '{input}', 
-                'options' => ['container' => false],
-                'inputOptions' => ['name' => 'saler_id']
-              ])->hiddenInput()->label(false);?>
-            <?php elseif (Yii::$app->user->can('orderteam')):?>
-              <?=$form->field($search, 'orderteam_id', [
-                'template' => '{input}', 
-                'options' => ['container' => false],
-                'inputOptions' => ['name' => 'orderteam_id']
-              ])->hiddenInput()->label(false);?>
-            <?php endif;?>
-
-            <?=$form->field($search, 'status', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
-            ])->dropDownList($search->getStatus())->label('Trạng thái');?>
-
-            <?php $game = $search->getGame();?>   
             <?=$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($game) ? $game->title : '',
-              'options' => ['class' => 'form-control', 'name' => 'game_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn game',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['game/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Tên game')?>
-          
-            <?=$form->field($search, 'provider_id', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control']
-            ])->dropDownList([])->label('Nhà cung cấp');?>
-
-            <?= $form->field($search, 'start_date', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
-            ])->widget(DateTimePicker::className(), [
-              'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd hh:00',
-                'minuteStep' => 1,
-                'endDate' => date('Y-m-d H:i'),
-                'minView' => '1'
-              ],
-            ])->label('Ngày tạo từ');?>
-
-            <?=$form->field($search, 'end_date', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
-            ])->widget(DateTimePicker::className(), [
-                'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:59',
-                  'todayBtn' => true,
-                  'minuteStep' => 1,
-                  'endDate' => date('Y-m-d H:i'),
-                  'minView' => '1'
-                ],
-            ])->label('Ngày tạo đến');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -203,9 +109,10 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               </button>
             </div>
         </div>
+        
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+        <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
               <th style="width: 5%;"> STT </th>
@@ -234,19 +141,11 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?> minutes</td>
+                <td style="vertical-align: middle;"><?=$model->process_duration_time;?></td>
                 
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;">
-                  <?=$model->getStatusLabel();?>
-                  <?php if ($model->hasCancelRequest()) :?>
-                  <span class="label label-danger">Có yêu cầu hủy</span>
-                  <?php endif;?>
-                  <?php if ($model->tooLongProcess()) :?>
-                  <span class="label label-warning">Xử lý chậm</span>
-                  <?php endif;?>
-                </td>
+                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <?php if (Yii::$app->user->can('edit_order', ['order' => $model])) :?>
@@ -260,8 +159,9 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                     case Order::STATUS_PROCESSING :
                       $editUrl = Url::to(['order/processing', 'id' => $model->id]);
                       break;
+                    
                     default:
-                      $editUrl = Url::to(['order/view', 'id' => $model->id]);
+                      $editUrl = '';
                       break;
                   };?>
                   <a href='<?=$editUrl;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
@@ -272,7 +172,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   <?php if (Yii::$app->user->can('delete_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
-                  <?php if (Yii::$app->user->can('orderteam_manager') && !$model->isDeletedOrder() && !$model->isVerifyingOrder()) :?>
+                  <?php if (Yii::$app->user->can('orderteam_manager')) :?>
                   <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">
@@ -287,7 +187,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                             <div class="col-md-12">
                               <?= kartik\select2\Select2::widget([
                                 'name' => 'user_id',
-                                'data' => $orderTeams,
+                                'data' => $orderTeam,
                                 'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
                               ]); ?>
                             </div>
@@ -311,22 +211,6 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
-        <?php if ($models) :?>
-        <div class="row">
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
-          </div>
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-warning">Tổng số lượng nạp: <?=number_format($search->getCommand()->sum('total_unit'));?></span>
-          </div>
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-success">Tổng số gói: <?=round($search->getCommand()->sum('quantity'), 1);?></span>
-          </div>
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-default">Thời gian trung bình: <?=round(($search->getCommand()->sum('process_duration_time') / 60) / $search->getCommand()->sum('quantity'), 1);?></span>
-          </div>
-        </div>
-        <?php endif;?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
@@ -353,15 +237,7 @@ $('.delete').ajax_action({
   callback: function(data) {
     location.reload();
   },
-  error: function(element, errors) {
-    location.reload();
-  }
 });
-
-var sendForm = new AjaxFormSubmit({element: '.assign-form'});
-sendForm.success = function (data, form) {
-  location.reload();
-}
 JS;
 $this->registerJs($script);
 ?>

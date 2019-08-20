@@ -353,9 +353,6 @@ $('.delete').ajax_action({
   callback: function(data) {
     location.reload();
   },
-  error: function(element, errors) {
-    location.reload();
-  }
 });
 
 var sendForm = new AjaxFormSubmit({element: '.assign-form'});

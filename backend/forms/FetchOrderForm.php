@@ -25,8 +25,8 @@ class FetchOrderForm extends Model
 
     public function init()
     {
-        if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
-        if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
+        // if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
+        // if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
     }
     
     public function rules()
@@ -34,8 +34,8 @@ class FetchOrderForm extends Model
         return [
             ['q', 'trim'],
             [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'start_date', 'end_date', 'status'], 'safe'],
-            ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
-            ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
+            // ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
+            // ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
             [['start_date', 'end_date'], 'required'],
             [['provider_id', 'agency_id', 'is_reseller'], 'safe'],
         ];

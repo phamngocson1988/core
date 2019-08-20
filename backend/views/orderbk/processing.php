@@ -6,8 +6,6 @@ use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
-use backend\models\Game;
-use backend\models\Order;
 use backend\models\OrderFile;
 ?>
 <!-- BEGIN PAGE BAR -->
@@ -68,22 +66,10 @@ use backend\models\OrderFile;
                       <div class="portlet-body">
                         <?php echo $this->render('@backend/views/order/_unit.php', ['order' => $order]);?>
                         <div class="row static-info">
-                          <div class="col-md-6">
-                              <div class="input-group">
-                                  <input type="number" id="doing_unit" class="form-control">
-                                  <span class="input-group-btn">
-                                      <button class="btn btn-default" id="update_unit" type="button">Nạp game</button>
-                                  </span>
-                              </div><!-- /input-group -->
+                          <div class="col-md-12">
+                            <strong>Số game đã nạp: <?=$order->doing_unit;?></strong>
                           </div>
-                          <div class="col-md-6">
-                              <div class="progress progress-striped active">
-                                  <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$order->doing_unit;?>" aria-valuemin="0" aria-valuemax="<?=$order->total_unit;?>" style="width: <?=$order->getPercent();?>%">
-                                      <span id='current_doing_unit'><?=$order->doing_unit;?></span> / <?=$order->total_unit;?>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -91,6 +77,7 @@ use backend\models\OrderFile;
                 
                 <div class="row">
                   <div class="col-md-6 col-sm-12">
+                    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated form']]);?>
                     <div class="portlet blue-hoki box">
                       <div class="portlet-title">
                         <div class="caption">
@@ -99,57 +86,40 @@ use backend\models\OrderFile;
                       </div>
                       <div class="portlet-body" id="game_account">
                         <div class="row static-info">
-                          <div class="col-md-5">Username: </div>
-                          <div class="col-md-7"><?=$order->username;?></div>
+                          <div class="col-md-5"> Username: </div>
+                          <div class="col-md-7"> <?=$order->username;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Password: </div>
+                          <div class="col-md-5"> Password: </div>
                           <div class="col-md-7"><?=$order->password;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Tên nhân vật: </div>
-                          <div class="col-md-7"><?=$order->character_name;?></div>
+                          <div class="col-md-5"> Tên nhân vật: </div>
+                          <div class="col-md-7"> <?=$order->character_name;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Platform: </div>
-                          <div class="col-md-7"><?=$order->platform;?></div>
+                          <div class="col-md-5"> Platform: </div>
+                          <div class="col-md-7"> <?=$order->platform;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Login method: </div>
-                          <div class="col-md-7"><?=$order->login_method;?></div>
+                          <div class="col-md-5"> Login method: </div>
+                          <div class="col-md-7"> <?=$order->login_method;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Recover Code: </div>
-                          <div class="col-md-7"><?=$order->recover_code;?></div>
+                          <div class="col-md-5"> Recover Code: </div>
+                          <div class="col-md-7"> <?=$order->recover_code;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Server: </div>
-                          <div class="col-md-7"><?=$order->server;?></div>
+                          <div class="col-md-5"> Server: </div>
+                          <div class="col-md-7"> <?=$order->server;?></div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Ghi chú: </div>
-                          <div class="col-md-7"><?=$order->note;?></div>
+                          <div class="col-md-5"> Ghi chú: </div>
+                          <div class="col-md-7"> <?=$order->note;?></div>
                         </div>
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-offset-3 col-md-9">
-                                    <a href="<?=Url::to(['order/index']);?>" class="btn default"><i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-                                    <a class="btn red btn-outline sbold" data-toggle="modal" href="#next"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Pending</a>
-                                </div>
-                            </div>
-                        </div>
-                        <?php if ($order->hasCancelRequest()) :?>
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-offset-3 col-md-9">
-                                    <a href="<?=Url::to(['order/approve', 'id' => $order->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
-                                    <a class="btn red btn-outline sbold" data-toggle="modal" href="#disapprove"><i class="fa fa-ban"></i> Không chấp nhận</a>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endif;?>
                       </div>
                     </div>
+                    <?php ActiveForm::end()?>
                   </div>
                   <div class="col-md-6 col-sm-12">
                     <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
@@ -232,32 +202,6 @@ use backend\models\OrderFile;
       </div>
   </div>
 </div>
-<div class="modal fade" id="next" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Chuyển tới trạng thái Processing</h4>
-      </div>
-      <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated', 'id' => 'next-form'], 'action' => Url::to(['order/move-to-processing'])]);?>
-      <?=$nextForm->field($updateStatusForm, 'id', [
-        'template' => '{input}', 
-        'options' => ['container' => false]
-      ])->hiddenInput(['value' => $order->id])->label(false);?>
-      <div class="modal-body"> 
-          <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
-          <p id="doing_unit_notice" style="display: none">Số đơn vị game của bạn vẫn chưa được cập nhật đủ, nếu chuyển qua trạng thái "Processing", toàn bộ số đơn vị game đang thực hiện sẽ được cập nhật đúng bằng số đơn vị game cần nhập của đơn hàng.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn green">Xác nhận</button>
-      </div>
-      <?php ActiveForm::end();?>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
 
 <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog">
@@ -300,105 +244,12 @@ use backend\models\OrderFile;
   </div>
   <!-- /.modal-dialog -->
 </div>
-
-<div class="modal fade" id="disapprove" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Lý do không chấp nhận hủy đơn hàng</h4>
-      </div>
-      <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col" width="5%">#</th>
-              <th scope="col" width="90%">Nội dung</th>
-              <th scope="col" width="5%">Chọn</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($template_list as $template_item) :;?>
-            <tr>
-              <td><?=$template_item->id;?></td>
-              <td><?=$template_item->content;?></td>
-              <td>
-                <?= Html::beginForm(['order/disapprove', 'id' => $order->id], 'POST', ['class' => 'send-form']); ?>
-                  <?= Html::hiddenInput('template_id', $template_item->id); ?>
-                  <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
-                <?= Html::endForm(); ?>
-              </td>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-
 <?php
 $script = <<< JS
-var nextForm = new AjaxFormSubmit({element: '#next-form'});
-nextForm.success = function (data, form) {
-  window.location.href = data.next;
-}
-
 var sendForm = new AjaxFormSubmit({element: '.send-form'});
 sendForm.success = function (data, form) {
   location.reload();
 }
-
-// Update doing unit
-$('#update_unit').on('click', function(e) {
-  console.log($('#doing_unit').val());
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  $.ajax({
-    url: '###UPDATE_UNIT###',
-    type: 'POST',
-    dataType : 'json',
-    data: {doing_unit: $('#doing_unit').val()},
-    success: function (result, textStatus, jqXHR) {
-      if (result.status == false) {
-          alert(result.errors);
-          return false;
-      } else {
-        var cur = $('#doing_unit_progress').attr('aria-valuemax');
-        var newpc = (result.data.total / cur) * 100;
-        $('#doing_unit_progress').css('width', newpc + '%');
-        $('#doing_unit_progress span').html(result.data.total + '(Complete)');
-        $('#current_doing_unit').html(result.data.total);
-        $('#doing_unit').val('');
-      }
-    },
-  });
-  return false;
-});
-
-$('#cancel_order').on('click', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  $.ajax({
-    url: $(this).prop('href'),
-    type: 'POST',
-    dataType : 'json',
-    success: function (result, textStatus, jqXHR) {
-      if (result.status == false) {
-          alert(result.errors);
-          return false;
-      } else {
-        window.location.href = result.data.view_url;
-      }
-    },
-  });
-  return false;
-});
 
 // delete
 $('body').on('click', '.delete', function(e) {
@@ -463,10 +314,7 @@ uploadAfter.callback = function(result) {
     });
   });
 }
-
 JS;
-$redirect = Url::to(['order/add-unit', 'id' => $order->id]);
-$script = str_replace('###UPDATE_UNIT###', $redirect, $script);
 $addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
 $script = str_replace('###ADD_EVIDENCE_URL###', $addEvidenceUrl, $script);
 $addEvidenceAfterUrl = Url::to(['order/add-evidence-image', 'id' => $order->id, 'type' => 'after']);

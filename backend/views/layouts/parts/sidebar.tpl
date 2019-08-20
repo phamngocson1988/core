@@ -332,6 +332,33 @@
             <span class="badge badge-success">{$this->params['new_pending_order']}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/pending-order'}" class="nav-link " code='order.pending'>
+            <span class="title">Đơn hàng đang xử lý</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/processing-order'}" class="nav-link " code='order.processing'>
+            <span class="title">Đơn hàng đã thực hiện</span>
+            <span class="badge badge-success">{$this->params['processing_order']}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/completed-order'}" class="nav-link " code='order.completed'>
+            <span class="title">Đơn hàng đã hoàn thành</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/cancelling-order'}" class="nav-link " code='order.cancelling'>
+            <span class="title">Đơn hàng yêu cầu hủy</span>
+            <span class="badge badge-success">{$this->params['cancelling_order']}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/cancelled-order'}" class="nav-link " code='order.cancelled'>
+            <span class="title">Đơn hàng đã hủy</span>
+            </a>
+          </li>
           {/if}
           {if Yii::$app->user->can('accounting')}
           <li class="nav-item  ">

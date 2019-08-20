@@ -72,6 +72,7 @@ use backend\models\Order;
                 
                 <div class="row">
                   <div class="col-md-6 col-sm-12">
+                    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated form']]);?>
                     <div class="portlet blue-hoki box">
                       <div class="portlet-title">
                         <div class="caption">
@@ -80,41 +81,82 @@ use backend\models\Order;
                       </div>
                       <div class="portlet-body" id="game_account">
                         <div class="row static-info">
-                          <div class="col-md-5">Username: </div>
-                          <div class="col-md-7"><?=$order->username;?></div>
+                          <div class="col-md-5"> Username: </div>
+                          <div class="col-md-7"> 
+                            <?=$form->field($order, 'username', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Password: </div>
-                          <div class="col-md-7"><?=$order->password;?></div>
+                          <div class="col-md-5"> Password: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'password', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Tên nhân vật: </div>
-                          <div class="col-md-7"><?=$order->character_name;?></div>
+                          <div class="col-md-5"> Tên nhân vật: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'character_name', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Platform: </div>
-                          <div class="col-md-7"><?=$order->platform;?></div>
+                          <div class="col-md-5"> Platform: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'platform', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->dropDownList(['ios' => 'Ios', 'android' => 'Android'])->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Login method: </div>
-                          <div class="col-md-7"><?=$order->login_method;?></div>
+                          <div class="col-md-5"> Login method: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'login_method', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->dropDownList(Order::getLoginMethodList())->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Recover Code: </div>
-                          <div class="col-md-7"><?=$order->recover_code;?></div>
+                          <div class="col-md-5"> Recover Code: </div>
+                          <div class="col-md-7"> 
+                            <?=$form->field($order, 'recover_code', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Server: </div>
-                          <div class="col-md-7"><?=$order->server;?></div>
+                          <div class="col-md-5"> Server: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'server', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="row static-info">
-                          <div class="col-md-5">Ghi chú: </div>
-                          <div class="col-md-7"><?=$order->note;?></div>
+                          <div class="col-md-5"> Ghi chú: </div>
+                          <div class="col-md-7">
+                            <?=$form->field($order, 'note', [
+                              'options' => ['class' => ''],
+                              'inputOptions' => ['class' => 'form-control']
+                            ])->textInput()->label(false);?>
+                          </div>
                         </div>
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
                                     <a href="<?=Url::to(['order/index']);?>" class="btn default"><i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
+                                    <button type="submit" class="btn green">Cập nhật</button>
                                     <a class="btn red btn-outline sbold" data-toggle="modal" href="#next"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Pending</a>
                                 </div>
                             </div>
@@ -123,14 +165,14 @@ use backend\models\Order;
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <a href="<?=Url::to(['order/approve', 'id' => $order->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
-                                    <a class="btn red btn-outline sbold" data-toggle="modal" href="#disapprove"><i class="fa fa-ban"></i> Không chấp nhận</a>
+                                    <a href="<?=Url::to(['order/delete', 'id' => $order->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
                                 </div>
                             </div>
                         </div>
                         <?php endif;?>
                       </div>
                     </div>
+                    <?php ActiveForm::end()?>
                   </div>
                   <div class="col-md-6 col-sm-12">
                     <?php echo $this->render('@backend/views/order/_detail.php', ['order' => $order]);?>
