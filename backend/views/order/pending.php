@@ -134,7 +134,7 @@ use backend\models\OrderFile;
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
                                     <a href="<?=Url::to(['order/index']);?>" class="btn default"><i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-                                    <a class="btn red btn-outline sbold" data-toggle="modal" href="#next"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Pending</a>
+                                    <a class="btn red btn-outline sbold" data-toggle="modal" href="#next"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Processing</a>
                                 </div>
                             </div>
                         </div>
