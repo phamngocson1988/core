@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use common\models\UserWallet;
 use common\behaviors\UserCommissionBehavior;
 use common\behaviors\UserWalletBehavior;
+use common\behaviors\UserResellerBehavior;
 
 /**
  * User model
@@ -62,6 +63,9 @@ class User extends ActiveRecord implements IdentityInterface
             ],
             [
                 'class' => UserWalletBehavior::className(),
+            ],
+            [
+                'class' => UserResellerBehavior::className(),
             ],
         ];
     }

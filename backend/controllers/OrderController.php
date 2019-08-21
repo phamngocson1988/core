@@ -82,6 +82,31 @@ class OrderController extends Controller
     //     ];
     // }
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    // [
+                    //     'allow' => true,
+                    //     'actions' => ['new-verifying-order', 'verifying', 'move-to-pending', 'delete'],
+                    //     'roles' => ['accounting'],
+                    // ],
+                    // [
+                    //     'allow' => true,
+                    //     'actions' => ['pending', 'processing', 'new-pending-order', 'move-to-processing', 'taken', 'assign', 'add-unit', 'approve', 'disapprove', 'add-evidence-image', 'remove-evidence-image'],
+                    //     'roles' => ['orderteam'],
+                    // ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * Show the list of orders
      */
@@ -172,8 +197,6 @@ class OrderController extends Controller
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
-
-    
 
     public function actionCancellingOrder()
     {
@@ -266,9 +289,6 @@ class OrderController extends Controller
             'order' => $order,
         ]);
     }
-
-
-
 
     public function actionVerifying($id)
     {

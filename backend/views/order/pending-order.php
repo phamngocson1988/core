@@ -129,13 +129,10 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   };?>
                   <a href='<?=$editUrl;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php endif;?>
-                  <?php if (Yii::$app->user->can('taken_order', ['order' => $model])) :?>
+                  <?php if (Yii::$app->user->can('orderteam')) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>
                   <?php endif;?>
-                  <?php if (Yii::$app->user->can('delete_order', ['order' => $model])) :?>
-                  <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
-                  <?php endif;?>
-                  <?php if (Yii::$app->user->can('orderteam_manager') && !$model->isDeletedOrder() && !$model->isVerifyingOrder()) :?>
+                  <?php if (Yii::$app->user->can('orderteam_manager')) :?>
                   <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">

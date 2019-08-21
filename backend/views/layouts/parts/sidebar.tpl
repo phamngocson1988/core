@@ -312,7 +312,6 @@
 
       {$roles = $app->authManager->getRolesByUser($app->user->id)}
       {$roles = array_keys($roles)}
-      {if (array_intersect($roles, ['admin', 'orderteam', 'orderteam_manager', 'saler', 'sale_manager', 'accounting']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
@@ -325,7 +324,6 @@
             <span class="title">Đơn hàng</span>
             </a>
           </li>
-          {if Yii::$app->user->can('saler') || Yii::$app->user->can('orderteam')}
           <li class="nav-item  ">
             <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.new'>
             <span class="title">Đơn hàng mới</span>
@@ -359,7 +357,6 @@
             <span class="title">Đơn hàng đã hủy</span>
             </a>
           </li>
-          {/if}
           {if Yii::$app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/order/new-verifying-order'}" class="nav-link " code='order.new-verifying'>
@@ -370,7 +367,6 @@
           {/if}
         </ul>
       </li>
-      {/if}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-line-chart"></i>

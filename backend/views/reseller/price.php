@@ -22,13 +22,17 @@ use yii\widgets\ActiveForm;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Giá dành cho nhân viên bán lẻ</span>
+      <a href="<?=Url::to(['reseller/index']);?>">Reseller</a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Giá sỉ</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Giá dành cho nhân viên bán lẻ</h1>
+<h1 class="page-title">Giá sỉ</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -37,7 +41,7 @@ use yii\widgets\ActiveForm;
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Giá dành cho nhân viên bán lẻ</span>
+          <span class="caption-subject bold uppercase"> Giá sỉ</span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">

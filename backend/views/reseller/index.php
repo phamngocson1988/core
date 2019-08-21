@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 
@@ -22,13 +23,13 @@ use yii\widgets\ActiveForm;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Nhân viên bán lẻ</span>
+      <span>Reseller</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Nhân viên bán lẻ</h1>
+<h1 class="page-title">Reseller</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -37,11 +38,11 @@ use yii\widgets\ActiveForm;
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Nhân viên bán lẻ</span>
+          <span class="caption-subject bold uppercase"> Reseller</span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="#new" data-toggle="modal"><?=Yii::t('app', 'add_new')?></a>
+            <a class="btn green" href="<?=Url::to(['reseller/create']);?>" data-toggle="modal"><?=Yii::t('app', 'add_new')?></a>
           </div>
         </div>
       </div>
@@ -55,7 +56,6 @@ use yii\widgets\ActiveForm;
               <th style="width: 15%;"> Tên đăng nhập </th>
               <th style="width: 20%;"> Email </th>
               <th style="width: 15%;"> Phone </th>
-              <th style="width: 15%;">  </th>
               <th style="width: 15%;" class="dt-center"> Tác vụ </th>
             </tr>
           </thead>
@@ -70,7 +70,6 @@ use yii\widgets\ActiveForm;
                 <td style="vertical-align: middle;"><?=$model->username;?></td>
                 <td style="vertical-align: middle;"><?=$model->email;?></td>
                 <td style="vertical-align: middle;"><?=$model->phone;?></td>
-                <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['reseller/price', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Giá game"><i class="fa fa-dollar"></i></a>
                   <a href='<?=Url::to(['reseller/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Gỡ bỏ nhà bán lẻ"><i class="fa fa-trash"></i></a>
@@ -86,13 +85,12 @@ use yii\widgets\ActiveForm;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-
 <?php
 $script = <<< JS
 
 // delete
 $('.delete').ajax_action({
-  method: 'DELETE',
+  method: 'POST',
   confirm: true,
   confirm_text: 'Bạn có muốn gỡ tính năng nhà bán lẻ của người dùng này không?',
   callback: function(data) {

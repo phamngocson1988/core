@@ -208,9 +208,9 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th style="width: 5%;"> STT </th>
-              <th style="width: 10%;"> Mã đơn hàng </th>
+              <th style="width: 5%;"> Mã đơn hàng </th>
               <th style="width: 10%;"> Tên game </th>
+              <th style="width: 10%;"> Ngày tạo </th>
               <th style="width: 5%;"> Số lượng nạp </th>
               <th style="width: 5%;"> Số gói </th>
               <th style="width: 10%;"> Thời gian nhận đơn </th>
@@ -228,9 +228,9 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
+                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>

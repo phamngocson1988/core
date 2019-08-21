@@ -32,13 +32,9 @@ class ResellerController extends Controller
     {
         $this->view->params['main_menu_active'] = 'game.reseller';
         $request = Yii::$app->request;
-        $q = $request->get('q');
         $command = User::find()->where([
             'is_reseller' => User::IS_RESELLER,
         ]);
-        if ($q) {
-            $command->andWhere(['like', 'email', $q]);
-        }
         $command->orderBy(['id' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -47,8 +43,23 @@ class ResellerController extends Controller
         return $this->render('index.php', [
             'models' => $models,
             'pages' => $pages,
-            'q' => $q,
             'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCreate()
+    {
+        $this->view->params['main_menu_active'] = 'game.reseller';
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $userId = $request->post('user_id');
+            $user = User::findOne($userId);
+            $user->is_reseller = User::IS_RESELLER;
+            $user->save(false, ['is_reseller']);
+            return $this->redirect(['reseller/index']);
+        }
+        return $this->render('create.php', [
+            'model' => new User
         ]);
     }
 
@@ -105,5 +116,15 @@ class ResellerController extends Controller
         } else {
             return $this->asJson(['status' => false, 'errors' => $model->getErrorSummary(true)]);
         }
+    }
+
+    public function actionDelete($id)
+    {
+        $user = User::findOne($id);
+        $user->is_reseller = User::IS_NOT_RESELLER;
+        $user->save(false, ['is_reseller']);
+        $user->removeGameResellers();
+        Yii::$app->session->setFlash('success', 'Success');
+        return $this->asJson(['status' => true]);
     }
 }
