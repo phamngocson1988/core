@@ -84,10 +84,11 @@ class SignupEventHandler extends Model
     {
         $user = $event->sender;
         if (!$user) return;
-        $admin = Yii::$app->params['email_admin'];
+        $admin = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
         $siteName = Yii::$app->name;
         $email = Yii::$app->mailer->compose('welcome_newcomer', [
-            'user' => $user
+            'user' => $user,
+            'contact_email' => $admin
         ])
         ->setTo($user->email)
         ->setFrom([$admin => $siteName])

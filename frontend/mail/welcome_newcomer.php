@@ -1,12 +1,19 @@
 <?php
 use yii\helpers\Url;
 ?>
-Dear <?=$user->name;?>,<br/>
-Thank you for your creating a Kinggems Account. <br/>
-* How to <a href='<?=Url::to(['topup/index'], true);?>' target='_blank'>top up money?</a><br/>
-* How to <a href='<?=Url::to(['game/index'], true);?>' target='_blank'>order / buy gems?</a> <br/>
-<br/>
-We hope you enjoy your new account!<br/>
-The Kinggems community team,<br/>
-<br/>
-<!-- Để 1 tấm hình khuyến mãi bên dưới<br/> -->
+<p style="margin: 4px 0 10px;">Dear <?=$user->name;?></p>
+<p style="margin: 4px 0 10px;">Thank you for your creating a Kinggems Account. </p>
+<p style="margin: 4px 0 10px;">* How to <a href='<?=Url::to(['site/question'], true);?>' target='_blank' style='text-decoration: none; color: #ffc107'>top up money?</a></p>
+<p style="margin: 4px 0 10px;">* How to <a href='<?=Url::to(['site/question'], true);?>' target='_blank' style='text-decoration: none; color: #ffc107'>order / buy gems?</a></p>
+
+<p style="margin: 4px 0 10px;">We hope you enjoy your new account!</p>
+<p style="margin: 4px 0 10px;">The Kinggems community team,</p>
+<div style="text-align: center;">
+<img src="<?=Yii::$app->params['frontend_url'];?>/images/bg-popup-wallet-now.png" width="300px" height="200px" style="border: solid 3px #ffc107">
+</div>
+<p style="margin: 4px 0 10px;">Contact us for more support.</p>
+<ul>
+<li>Email: <?=$customer_service_email;?></li>
+<li>Whatsaap / Wechat / Telegram: +84774.818.001</li>
+</ul>
+<p style="margin: 4px 0 10px;">Best Regards!</p>

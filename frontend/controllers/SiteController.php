@@ -419,17 +419,18 @@ class SiteController extends Controller
 
     public function actionTestPhone($phone)
     {
-        $provider = Yii::createObject([
-            'class' => '\common\components\telecom\SpeedSms',
-            'demo_mode' => false
-        ]);
-        print_r($provider);
-        if (!$provider->sms($phone)) {
-            print_r($provider->getErrors());
-        } else {
-            print_r('Success');
-
-        }
-        die;
+        $user = Yii::$app->user->identity;
+        $admin = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+        $siteName = Yii::$app->name;
+        $email = Yii::$app->mailer->compose('welcome_newcomer', [
+            'user' => $user,
+            'customer_service_email' => $admin
+        ])
+        ->setTo($user->email)
+        ->setFrom([$admin => $siteName])
+        ->setSubject('Registration Confirmation')
+        ->setTextBody("Welcome to Kinggems")
+        ->send();
+        die('Success');
     }
 }
