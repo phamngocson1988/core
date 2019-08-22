@@ -59,6 +59,14 @@ button:hover {
 	cursor: pointer;
 }
 
+/* overlay */
+html, body{
+  min-height: 100%;
+}
+body{
+  position: relative;
+}
+
 .top-header .right-box .main-nav ul li a {
 	font-weight: inherit;
 }

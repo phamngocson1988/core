@@ -63,7 +63,7 @@ use yii\bootstrap\ActiveForm;
               <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion_code;?>">
               <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
               <?php endif;?>
-              <a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false class="cus-btn yellow fl-right topup-cart-submit-btn">Check Out</a>
+              <a href="<?=Url::to(['topup/checkout']);?>" data-pjax=false class="cus-btn yellow fl-right topup-cart-submit-btn" onClick='showLoader()'>Check Out</a>
             </div>
           </div>
         </div>

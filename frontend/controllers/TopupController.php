@@ -291,7 +291,11 @@ class TopupController extends Controller
                 'status' => PaymentTransaction::STATUS_PENDING
             ])->one();
             if ($trn) $trn->delete();
-            die('You have cancelled the order successfully');
+            return $this->render('/site/error', [           
+                'name' => 'Canncel transaction',
+                'message' => "Your transaction #$refId have been cancelled"
+            ]);
+
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), 1);
         }

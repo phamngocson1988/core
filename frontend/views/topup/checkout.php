@@ -62,7 +62,7 @@ $total = $cart->getTotalPrice();
               <div class="text-right">
                 <?php $form = ActiveForm::begin(['action' => Url::to(['topup/purchase'])]); ?>
                 <?=Html::hiddenInput('identifier', 'paypal');?>
-                <?= Html::submitButton('Submit', ['class' => 'btn-product-detail-add-to-cart']) ?>
+                <?= Html::submitButton('Submit', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
                 <?php ActiveForm::end();?>
               </div>
             </div>

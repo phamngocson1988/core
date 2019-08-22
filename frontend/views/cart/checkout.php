@@ -51,7 +51,7 @@ $cart->applyPromotion();
                       </div>
                     </div>
                     <div class="is-desktop">
-                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart']) ?>
+                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
                     </div>
                   </div>
                   <div class="checkout-cart-total">
@@ -83,7 +83,7 @@ $cart->applyPromotion();
                       </div>
                     </div>
                     <div class="is-mobile">
-                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart']) ?>
+                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
                     </div>
                   </div>
                 <?php ActiveForm::end();?>

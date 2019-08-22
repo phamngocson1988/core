@@ -33,6 +33,7 @@ AppAsset::register($this);
 <body>
 <?= NotificationFlash::widget() ?>
 <?php $this->beginBody() ?>
+<div class="overlay"></div>
 <div class="wrapper">
   <section class="header">
     <?php require_once(Yii::$app->basePath . '/views/layouts/top-header.php');?>

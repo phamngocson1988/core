@@ -43,7 +43,7 @@ use yii\helpers\Html;
                   ])->textInput() ?>
                 </div>
                 <p>code expires in: <span class="red" id="time">00:00</span></p>
-                <?= Html::submitButton('continue', ['class' => 'btn-product-detail-add-to-cart has-shadow', 'name' => 'Signup']) ?>
+                <?= Html::submitButton('continue', ['class' => 'btn-product-detail-add-to-cart has-shadow', 'name' => 'Signup', 'onClick' => 'showLoader()']) ?>
               <?php ActiveForm::end(); ?>
               <p>Didn’t get the code? <a href="" class="red">Resend code</a></p>
             </div>

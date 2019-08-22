@@ -38,6 +38,7 @@ $bodyClass = isset($this->params['body_class']) ? $this->params['body_class'] : 
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.3&appId=734107406647333&autoLogAppEvents=1"></script>
 <?= NotificationFlash::widget() ?>
 <?php $this->beginBody() ?>
+<div class="overlay"></div>
 <div class="wrapper">
   <section class="header no-home">
     <?php require_once(Yii::$app->basePath . '/views/layouts/top-header.php');?>

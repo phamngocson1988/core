@@ -31,7 +31,7 @@ function showLoader() {
 function hideLoader() {
     $(".overlay").hide();
 }
-
+hideLoader();
 // _y, _m, _d : jQuery object
 function correctDate(_y, _m, _d) {
     var year, month, day;
