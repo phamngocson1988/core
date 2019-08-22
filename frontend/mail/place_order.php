@@ -4,10 +4,10 @@ $setting = Yii::$app->settings;
 <img src="<?=$setting->get('ApplicationSettingForm', 'logo', 'https://kinggems.us/images/logo.png');?>" target="_blank"/>
 <h1>VERIFY YOUR ORDERS</h1>
 <p>Order code: <?=$order->id;?></p>
-<p>Dear Thu Chu, </p>
+<p>Dear <?=$order->customer->name;?>, </p>
 <p>Thank you for buying at www.kinggems.us !</p>
 <p>Your order has accepted, We will deliver as soon as possible.</p>
-<p>Estimated delivery time: ???????</p>
+<!-- <p>Estimated delivery time: ???????</p> -->
 <h3>Order information: </h3>
 <ul>
     <li>Order code: <?=$order->id;?></li>

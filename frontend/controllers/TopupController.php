@@ -239,6 +239,7 @@ class TopupController extends Controller
                 $trn->save();
         
                 $wallet = new UserWallet();
+                $wallet->on(UserWallet::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'sendNotificationEmail']);
                 $wallet->coin = $trn->total_coin;
                 $wallet->balance = $user->getWalletAmount() + $wallet->coin;
                 $wallet->type = UserWallet::TYPE_INPUT;

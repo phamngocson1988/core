@@ -51,4 +51,21 @@ class TopupEventHandler extends Model
         $refer->save();
         return;
     }
+
+    public static function sendNotificationEmail($event)
+    {
+        $wallet = $event->sender; //wallet
+        $user = $wallet->user;
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        if ($adminEmail) {
+            $email = Yii::$app->mailer->compose('order_kingcoin', ['wallet' => $wallet])
+            ->setTo($user->email)
+            ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+            ->setSubject(sprintf("SUCCESSFUL DEPOSIT - %s", $wallet->id))
+            ->setTextBody("Thanks for your deposit")
+            ->send();
+        }
+
+    }
 }

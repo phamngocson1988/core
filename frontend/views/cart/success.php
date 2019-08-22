@@ -24,7 +24,7 @@ $setting = Yii::$app->settings;
                 You can review <a class="review-order-btn" href="<?=Url::to(['user/detail', 'id' => $order->id]);?>">Your Order</a>
               </div>
               <div class="order-info-email-note">
-                <p>Details of the order have been sent to <?=$user->email;?></p>
+                <p>Details of the order have been sent to <?=$order->customer_email;?></p>
                 <p>If not found please check in Spam or Junk Folder mailbox.</p>
               </div>
               <?php if ($order->payment_type == 'offline') : ?>
