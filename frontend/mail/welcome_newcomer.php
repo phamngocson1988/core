@@ -11,9 +11,3 @@ use yii\helpers\Url;
 <div style="text-align: center;">
 <img src="<?=Yii::$app->params['frontend_url'];?>/images/bg-popup-wallet-now.png" width="300px" height="200px" style="border: solid 3px #ffc107">
 </div>
-<p style="margin: 4px 0 10px;">Contact us for more support.</p>
-<ul>
-<li>Email: <?=$customer_service_email;?></li>
-<li>Whatsaap / Wechat / Telegram: +84774.818.001</li>
-</ul>
-<p style="margin: 4px 0 10px;">Best Regards!</p>

@@ -276,3 +276,7 @@ input[type=number] {
 .qa-item .qa-group ul li a {
     color: #ce4c27;
 }
+
+.profile-page .profile-right .left-coin span:last-child {
+    font-weight: normal;
+}

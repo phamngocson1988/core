@@ -45,7 +45,7 @@ class PasswordResetRequestForm extends Model
         }
 
         $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
         return Yii::$app
             ->mailer
             ->compose(
@@ -54,7 +54,7 @@ class PasswordResetRequestForm extends Model
             )
             ->setFrom([$adminEmail => Yii::$app->name])
             ->setTo($this->email)
-            ->setSubject('Yêu cầu cập nhật lại mật khẩu từ ' . Yii::$app->name)
+            ->setSubject('Reset password Kinggems')
             ->send();
     }
 }

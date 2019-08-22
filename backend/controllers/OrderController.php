@@ -350,12 +350,24 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $model->setScenario(Order::SCENARIO_GO_PENDING);
         $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
+            // Save a complain
             $order = $event->sender;
             $user = Yii::$app->user->getIdentity();
             $complain = new OrderComplains();
             $complain->order_id = $order->id;
             $complain->content = sprintf("%s (#%s) move order to pending. The payment data is %s", $user->name, $user->id, $order->payment_data);
             $complain->save();
+
+            // // Send mail notification
+            // $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+            // if ($adminEmail) {
+            //     Yii::$app->mailer->compose('admin_send_pending_order', ['order' => $order])
+            //     ->setTo($order->customer_email)
+            //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+            //     ->setSubject(sprintf("Order confirmation - %s", $order->id))
+            //     ->setTextBody("Your order is moved to pending status")
+            //     ->send();
+            // }
         });
         if (!$model->auth_key) $model->generateAuthKey();
         $model->payment_type = 'offline';

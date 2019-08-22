@@ -38,7 +38,7 @@ class OrderEventHandler extends Model
          // Send mail notification
          $admin = Yii::$app->params['email_admin'];
          $siteName = Yii::$app->name;
-         $email = Yii::$app->mailer->compose('cancel_order', [
+         Yii::$app->mailer->compose('cancel_order', [
              'order' => $order
          ])
          ->setTo($order->customer_email)
@@ -53,6 +53,15 @@ class OrderEventHandler extends Model
         $order = $event->sender; //order
         $user = $order->customer;
         $user->topup($order->sub_total_price, $order->id, $description = 'Refund from cancelling order #' . $order->id);
+
+        $admin = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+        $siteName = Yii::$app->name;
+        Yii::$app->mailer->compose('refund_email', ['order' => $order])
+         ->setTo($order->customer_email)
+         ->setFrom([$admin => $siteName])
+         ->setSubject(sprintf("Kinggem.us has refunded money: The order # %s", $order->id))
+         ->setTextBody(sprintf("Kinggem.us has refunded money: The order # %s", $order->id))
+         ->send();
     }
 
     public static function removeCommission($event) 

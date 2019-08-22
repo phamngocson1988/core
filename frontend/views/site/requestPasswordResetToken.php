@@ -31,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
               <?= $form->field($model, 'email')->textInput()->label('Email <span class="required">*</span>') ?>
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Send</button>
-                <div class="reg-login-now"><a href="<?=Url::to(['site/login', '#' => 'page-title']);?>">Login now</a></div>
               </div>
             <?php ActiveForm::end(); ?>
           </div>

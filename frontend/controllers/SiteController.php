@@ -324,6 +324,7 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+        $this->view->params['body_class'] = 'global-bg';
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
