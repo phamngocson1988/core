@@ -72,7 +72,7 @@ use backend\models\OrderFile;
                               <div class="input-group">
                                   <input type="number" id="doing_unit" class="form-control">
                                   <span class="input-group-btn">
-                                      <button class="btn btn-default" id="update_unit" type="button">Nạp game</button>
+                                      <button class="btn btn-default" id="update_unit" type="button">Xác nhận</button>
                                   </span>
                               </div><!-- /input-group -->
                           </div>

@@ -6,7 +6,6 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 ?>
 
-<?php Pjax::begin(); ?>
 <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true', 'autocomplete' => 'off']]); ?>
 <?= $form->field($item, 'scenario', [
   'options' => ['tag' => false],
@@ -73,7 +72,6 @@ use yii\bootstrap\ActiveForm;
   </div>
 </section>
 <?php ActiveForm::end(); ?>
-<?php Pjax::end(); ?>
 
 <?php
 $script = <<< JS

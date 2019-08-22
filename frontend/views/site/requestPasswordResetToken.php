@@ -1,38 +1,46 @@
 <?php
-
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \common\models\LoginForm */
-
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
-$this->title = 'Login';
+$this->title = 'Forgot password';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="section-lg text-center">
-  <div class="container">
-    <h3>Forgot password</h3>
-    <div class="row row-fix justify-content-sm-center">
-      <div class="col-md-8 col-lg-6 col-xl-4">
-        <!-- RD Mailform-->
-        <?php $form = ActiveForm::begin(['id' => 'form-reset-password', 'class' => 'rd-mailform form-fix']); ?>
-          <?= $form->field($model, 'email', [
-            'options' => ['class' => 'form-wrap form-wrap-validation'],
-            'inputOptions' => ['class' => 'form-input'],
-            'labelOptions' => ['class' => 'form-label'],
-            'errorOptions' => ['tag' => 'span', 'class' => 'form-validation'],
-            'template' => '{input}{label}{hint}{error}'
-          ])->textInput(['autofocus' => true]) ?>
 
-          <div class="form-button">
-            <?= Html::submitButton('Send', ['class' => 'button button-block button-secondary button-nina', 'name' => 'Send']) ?>
-          </div>
-        <?php ActiveForm::end(); ?>
+<section class="page-title" id="page-title">
+  <div class="container">
+    <div class="row">
+      <div class="col col-sm-12">
+        <div class="page-title-content text-center pad-bot">
+          <img src="/images/text-register.png" alt="">
+          <p>Forgot password</p>
+        </div>
       </div>
     </div>
-    <p class="offset-custom-1 text-gray-light"><a href="<?=Url::to(['site/login']);?>" style="color: white">Login</a> | <a href="<?=Url::to(['site/signup']);?>" style="color: white">Register now</a></p>
-    <div class="group-xs group-middle"><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-facebook" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-twitter" href="#"></a><a class="icon icon-md-smaller icon-circle icon-filled mdi mdi-google" href="#"></a></div>
   </div>
-</div>
+</section>
+
+<section class="register-page">
+  <div class="container">
+    <div class="small-container">
+      <div class="row">
+        <div class="col col-12 col-lg-7 col-md-7 col-sm-12">
+          <div class="register-block">
+            <?php $form = ActiveForm::begin(['id' => 'form-login', 'options' => ['autocomplete' => 'off']]); ?>
+              <p>We will send an email to you.</p>
+              <?= $form->field($model, 'email')->textInput()->label('Email <span class="required">*</span>') ?>
+              <div class="register-action">
+                <button type="submit" class="cus-btn yellow has-shadow">Send</button>
+                <div class="reg-login-now"><a href="<?=Url::to(['site/login', '#' => 'page-title']);?>">Login now</a></div>
+              </div>
+            <?php ActiveForm::end(); ?>
+          </div>
+        </div>
+        <div class="col col-12 col-lg-1 col-md-1 col-sm-12"></div>
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-12">
+          <?php echo $this->render('@frontend/views/site/_reg_deposit.php');?>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

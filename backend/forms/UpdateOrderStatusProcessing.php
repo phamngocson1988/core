@@ -39,7 +39,6 @@ class UpdateOrderStatusProcessing extends Model
         $order->process_end_time = date('Y-m-d H:i:s');
         $order->process_duration_time = strtotime($order->process_end_time) - strtotime($order->process_start_time);
         if ($order->save()) {
-            $customer = $order->customer;
             $settings = Yii::$app->settings;
             $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
             Yii::$app->urlManagerFrontend->setHostInfo('https://kinggems.us');
@@ -48,7 +47,7 @@ class UpdateOrderStatusProcessing extends Model
                 'order' => $this->getOrder(),
                 'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
             ])
-            ->setTo($customer->email)
+            ->setTo($order->customer_email)
             ->setFrom([$adminEmail => Yii::$app->name])
             ->setSubject("[Kinggems][Order #$this->id] Order Completed Notification")
             ->setTextBody("Your order #<?=$this->id;?> has been completed now. Please review it")

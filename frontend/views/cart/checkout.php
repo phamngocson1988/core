@@ -95,3 +95,11 @@ $cart->applyPromotion();
     </div>
   </div>
 </section>
+<?php
+$script = <<< JS
+$('form').submit(function(){
+    $('input[type=submit]', this).attr('disabled', 'disabled');
+});
+JS;
+$this->registerJs($script);
+?>

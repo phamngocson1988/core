@@ -80,6 +80,9 @@ $('#digit_2').on('input', function() {
 $('#digit_3').on('input', function() {
   if ($(this).val()) $('#digit_4').focus();
 });
+$('form').submit(function(){
+    $('input[type=submit]', this).attr('disabled', 'disabled');
+});
 JS;
 $this->registerJs($script);
 ?>

@@ -111,7 +111,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                                 </div>
                                 <div class="login-submit fl-left">
                                     <input type="submit" value="Login">
-                                    <div class="forgot-password"><a href="javascript:void;" id="ajax-login-error"></a></div>
+                                    <div class="forgot-password"><a href="<?=Url::to(['site/request-password-reset']);?>" id="ajax-login-error">Forgot password?</a></div>
                                 </div>
                             </div>
                             <?php ActiveForm::end(); ?>
@@ -196,7 +196,9 @@ ajaxLoginForm.success = function (data, form) {
 }
 ajaxLoginForm.error = function (errors) {
     $('.captcha-image').yiiCaptcha('refresh');
-    $('#ajax-login-error').html(errors[0]);
+    // $('#ajax-login-error').html(errors[0]);
+    console.log('toastr', errors);
+    toastr.error(errors);
     return false;
 }
 JS;
