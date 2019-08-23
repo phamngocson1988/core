@@ -26,7 +26,7 @@ use yii\helpers\Html;
                 <p style="margin: 4px 0 10px;">Contact us for more support.</p>
                     <ul>
                         <li>Email: <?=Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');?></li>
-                        <li>Whatsaap / Wechat / Telegram: +84774.818.001</li>
+                        <li>Whatsaap / Wechat / Telegram: +8477.488.001 / +84-9799-97559</li>
                     </ul>
                 <p style="margin: 4px 0 10px;">Best Regards!</p>
     		</div>

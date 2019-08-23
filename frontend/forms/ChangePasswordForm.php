@@ -30,8 +30,17 @@ class ChangePasswordForm extends Model
             $user = $this->getUser();
             $user->setPassword($this->new_password);
             $user->removePasswordResetToken();
-
-            return $user->save(false);
+            if ($user->save(false)) {
+                $toEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+                $siteName = Yii::$app->name;
+                Yii::$app->mailer->compose('change_password', ['user' => $user])
+                ->setTo($user->email)
+                ->setFrom([$toEmail => $siteName])
+                ->setSubject('[Kinggems.us]- Changed password Successfully')
+                ->setTextBody("[Kinggems.us]- Changed password Successfully")
+                ->send();
+                return true;
+            }
         }
         return false;
     }

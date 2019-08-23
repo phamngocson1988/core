@@ -118,7 +118,9 @@ class TopupController extends Controller
                     $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
                     $discount->user_id = Yii::$app->user->id;
                     if (!$discount->validate())  {
-                        Yii::$app->session->setFlash('error', reset($discount->getErrorSummary(false)));
+                        $errors = $discount->getErrorSummary(false);
+                        $errorMessage = reset($errors);
+                        Yii::$app->session->setFlash('error', $errorMessage);
                         $cart->removePromotionItem();                            
                     } else {
                         $cart->setPromotionItem($discount);

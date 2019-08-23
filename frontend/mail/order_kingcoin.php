@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Url;
 ?>
-<p style="margin: 4px 0 10px;">Dear Sir/ Madam,</p>
+<p style="margin: 4px 0 10px;">Dear <?=$wallet->user->name;?>,</p>
 <p style="margin: 4px 0 10px;">We are glad to inform that your deposit money has been creditted into your account on Kinggems.us. Kindly check the balance our website.</p>
 <ul>
 <li>The remainning balance: <?=$wallet->balance;?> Kcoins</li>
