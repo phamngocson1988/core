@@ -38,16 +38,24 @@ $total = $cart->getTotalPrice();
                 </thead>
                 <tbody>
                   <tr>
-                    <td><?=$item->getLabel();?> - <b><?=number_format($cart->getTotalCoin());?> King Coins</b></td>
-                    <td><?=number_format($item->getCoin());?> x <?=$item->quantity;?><?php if ($cart->getPromotionUnit()) echo sprintf("(+ %s)", number_format($cart->getPromotionUnit()));?></td>
+                    <td><?=$item->getLabel();?> - <b><?=number_format($item->getCoin());?> King Coins</b></td>
+                    <td><?=number_format($item->getCoin());?> x <?=$item->quantity;?></td>
                     <td>$<?=number_format($item->getPrice());?> x <?=$item->quantity;?></td>
                   </tr>
                 </tbody>
               </table>
               <div class="game-totals">
                 <div class="product-grand-total">
+                  <?php if ($cart->getPromotionCoin()) : ?>
                   <div class="grand-line">
-                    <span>Subtotal:</span><span>$<?=number_format($sub, 1);?></span>
+                    <span>Promotion coin:</span><span><?=number_format($cart->getPromotionCoin());?> King Coins</span>
+                  </div>
+                  <?php endif;?>
+                  <div class="grand-line">
+                    <span>Total coin:</span><span><?=number_format($cart->getTotalCoin());?> King Coins</span>
+                  </div>
+                  <div class="grand-line">
+                    <span>Subtotal price:</span><span>$<?=number_format($sub, 1);?></span>
                   </div>
                   <?php if ($cart->getPromotionMoney()) :?>
                   <div class="grand-line">
@@ -55,7 +63,7 @@ $total = $cart->getTotalPrice();
                   </div>
                   <?php endif;?>
                   <div class="grand-line last-line">
-                    <span>Grand Total:</span><span>$<?=number_format($total, 1);?></span>
+                    <span>Grand Total price:</span><span>$<?=number_format($total, 1);?></span>
                   </div>
                 </div>
               </div>

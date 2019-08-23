@@ -210,8 +210,8 @@ class Promotion extends ActiveRecord
         $rule = self::pickRule($this->rule_name);
         if (!$rule) return null;
         $attrs = (array)$this->getRuleData();
-        $attrs['promotion_id'] = $this->id;
         $rule->attributes = $attrs;
+        $rule->promotion_id = $this->id;
         return $rule;
     }
 
@@ -247,8 +247,8 @@ class Promotion extends ActiveRecord
         $benefit = self::pickBenefit($this->benefit_name);
         if (!$benefit) return null;
         $attrs = (array)$this->getBenefitData();
-        $attrs['promotion_id'] = $this->id;
         $benefit->attributes = $attrs;
+        $benefit->promotion_id = $this->id;
         return $benefit;
     }
 
