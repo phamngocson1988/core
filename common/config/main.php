@@ -6,10 +6,8 @@ return [
     ],
     'name' => 'Kinggems',
     'timeZone' => 'Asia/Bangkok',
-    'modules' => [
-        // 'shop' => [
-        //     'class' => 'common\modules\shop\Module',
-        // ],
+    'bootstrap' => [
+        'queue', // The component registers its own console commands
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -66,6 +64,13 @@ return [
                 'file_path' => '@common/uploads/files',
                 // 'file_url' => 'http://file.kinggerm.com',
             ]
+        ],
+        'queue' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db', // DB connection component or its config 
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'default', // Queue channel key
+            'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
         ],
     ],
 ];

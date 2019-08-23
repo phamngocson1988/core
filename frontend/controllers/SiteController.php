@@ -418,20 +418,12 @@ class SiteController extends Controller
         return $this->render('term', ['content' => $content]);
     }
 
-    public function actionTestPhone($phone)
+    public function actionTest()
     {
         $user = Yii::$app->user->identity;
-        $admin = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
-        $siteName = Yii::$app->name;
-        $email = Yii::$app->mailer->compose('welcome_newcomer', [
-            'user' => $user,
-            'customer_service_email' => $admin
-        ])
-        ->setTo($user->email)
-        ->setFrom([$admin => $siteName])
-        ->setSubject('Registration Confirmation')
-        ->setTextBody("Welcome to Kinggems")
-        ->send();
-        die('Success');
+        Yii::$app->queue->push(new \console\queue\SignupEmail([
+            'user' => $user
+        ]));
+        die($user->email);
     }
 }
