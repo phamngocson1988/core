@@ -2,6 +2,9 @@
 use yii\helpers\Url;
 ?>
 <ul class="nav nav-tabs">
+  <li <?php if ($tab == 'application') echo 'class="active"' ;?> >
+    <a href="<?=Url::to(['setting/application']);?>">Thông tin chung</a>
+  </li>
   <li <?php if ($tab == 'flash_announcement') echo 'class="active"' ;?> >
     <a href="<?=Url::to(['setting/flash_announcement']);?>">Thông báo nhanh</a>
   </li>

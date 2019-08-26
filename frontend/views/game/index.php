@@ -54,6 +54,9 @@ $this->title = 'Shop';
 			      <div class="col col-lg-20-per col-sm-12 prod-item">
 			        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>">
 			        <img src="<?=$model->getImageUrl('300x300');?>" alt="">
+              <?php if(false):?>
+			        <img src="./images/gift.png" style="position: absolute; right: 0; top: 0; width: 30%;" alt="">
+              <?php endif;?>
 			        </a>
 			        <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>"><?=$model->title;?></a>
 			        <div class="prod-price">

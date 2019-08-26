@@ -245,11 +245,6 @@
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='/setting/flash_announcement'}" class="nav-link " code='setting.widgets'>
-            <span class="title">Widgets</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
             <a href="{url route='/setting/social'}" class="nav-link " code='setting.social'>
             <span class="title">{Yii::t('app', 'social_networks')}</span>
             </a>

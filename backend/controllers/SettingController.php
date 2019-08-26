@@ -41,7 +41,7 @@ class SettingController extends Controller
             'application' => [
                 'class' => SettingsAction::class,
                 'modelClass' => ApplicationSettingForm::class,
-                'view' => 'application.tpl',
+                'view' => 'application',
                 'layoutParams' => ['main_menu_active' => 'setting.application'],
             ],
             'social' => [
@@ -112,13 +112,13 @@ class SettingController extends Controller
                 'class' => SettingsAction::class,
                 'modelClass' => FlashAnnouncementForm::class,
                 'view' => 'flash_announcement.php',
-                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
             ],
             'welcome_bonus' => [
                 'class' => SettingsAction::class,
                 'modelClass' => WelcomeBonusForm::class,
                 'view' => 'welcome_bonus.php',
-                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
             ],
             'affiliate_program' => [
                 'class' => SettingsAction::class,
@@ -130,13 +130,13 @@ class SettingController extends Controller
                 'class' => SettingsAction::class,
                 'modelClass' => ReferProgramForm::class,
                 'view' => 'refer_program.php',
-                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
             ],
             'terms' => [
                 'class' => SettingsAction::class,
                 'modelClass' => TermsConditionForm::class,
                 'view' => 'terms.php',
-                'layoutParams' => ['main_menu_active' => 'setting.widgets'],
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
             ]
         ];
     }
