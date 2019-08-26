@@ -4,6 +4,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use backend\models\QuestionCategory;
+use common\widgets\TinyMce;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -57,7 +58,7 @@ use backend\models\QuestionCategory;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textArea()?>
+                  ])->widget(TinyMce::className(), ['options' => ['rows' => 20]])?>
                   <?=$form->field($model, 'category_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],

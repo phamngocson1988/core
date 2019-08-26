@@ -610,12 +610,13 @@ section.highlight {
 }
 
 .highlight .hightlight-inner .hl-item .hl-item-top span {
-    font-size: 30px;
     font-weight: bold;
     text-transform: uppercase;
-    position: absolute;
-    bottom: 0;
     line-height: 35px;
+    white-space: nowrap;
+    float: left;
+    text-align: left;
+    margin-top: 13%;
 }
 
 .highlight .hightlight-inner .hl-item .hl-item-top img {
@@ -625,16 +626,15 @@ section.highlight {
 
 .highlight .hightlight-inner .hl-item .hl-item-top {
     display: inline-block;
-    width: 100%;
     position: relative;
 }
 
-.highlight .hightlight-inner .hl-item .hl-item-bot {
-    margin-top: 5px;
+.highlight .hightlight-inner .hl-item.hl-item-costsavings {
+    text-align: center;
 }
 
-.highlight .hightlight-inner .hl-item .hl-item-bot p {
-    font-size: 14px;
+.highlight .hightlight-inner .hl-item-multichoices .hl-item-top {
+    float: right;
 }
 
 /* Product Detail */
@@ -1761,6 +1761,18 @@ span.required {
     padding: 8px 0;
 }
 
+th.thead-pagination {
+    width: 190px;
+}
+
+.affiliate-paging .pagination {
+    display: inline-block;
+}
+
+.affiliate-paging .pagination li {
+    float: left;
+}
+
 /* End Affiliate Page */
 
 
@@ -2257,18 +2269,6 @@ span.required {
     .highlight .hightlight-inner .hl-item .hl-item-top span {
         font-size: 25px;
     }
-
-    .highlight .hightlight-inner .hl-item.hl-item-topup img {
-        width: 48%;
-    }
-
-    .highlight .hightlight-inner .hl-item.hl-item-costsavings img {
-        width: 24%;
-    }
-
-    .highlight .hightlight-inner .hl-item.hl-item-multichoices img {
-        width: 19%;
-    }
 }
 
 @media (max-width: 1500px) {
@@ -2415,8 +2415,12 @@ span.required {
         min-height: 30px;
     }
 
-    .highlight .hightlight-inner .hl-item.hl-item-topup img {
-        width: 46%;
+    .highlight .hightlight-inner .hl-item .hl-item-top img {
+        height: 70px;
+    }
+
+    .highlight .hightlight-inner .hl-item .hl-item-top span {
+        margin-top: 0;
     }
 
     .highlight .hightlight-inner .hl-item {
@@ -3219,6 +3223,15 @@ span.required {
     /* Affiliate Page */
     .affiliate-top .has-left-border a {
         float: left;
+    }
+
+    .highlight .hightlight-inner .hl-item {
+        text-align: center;
+    }
+
+    .highlight .hightlight-inner .hl-item-multichoices .hl-item-top {
+        float: none;
+        display: inline-block;
     }
 }
 
