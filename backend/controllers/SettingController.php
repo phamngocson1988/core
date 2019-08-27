@@ -21,6 +21,7 @@ use backend\forms\WelcomeBonusForm;
 use backend\forms\AffiliateProgramForm;
 use backend\forms\ReferProgramForm;
 use backend\forms\TermsConditionForm;
+use backend\forms\EventForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
 use yii\data\Pagination;
@@ -137,7 +138,13 @@ class SettingController extends Controller
                 'modelClass' => TermsConditionForm::class,
                 'view' => 'terms.php',
                 'layoutParams' => ['main_menu_active' => 'setting.application'],
-            ]
+            ],
+            'event' => [
+                'class' => SettingsAction::class,
+                'modelClass' => EventForm::class,
+                'view' => 'event.php',
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
+            ],
         ];
     }
 
