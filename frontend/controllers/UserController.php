@@ -269,6 +269,7 @@ class UserController extends Controller
     	$request = Yii::$app->request;
         $today = date('Y-m-d');
         $firstOfMonth = date('Y-m-01');
+        $promotion = $request->get('pro');
         $filter = [
             'user_id' => Yii::$app->user->id,
             'start_date' => $request->get('start_date', $firstOfMonth),
@@ -286,6 +287,7 @@ class UserController extends Controller
             'pages' => $pages,
             'filterForm' => $form,
             'coin' => $user->getWalletAmount(),
+            'promotion' => $promotion
         ]);
     }
 
@@ -294,7 +296,7 @@ class UserController extends Controller
     	$request = Yii::$app->request;
         if ($request->isPost) {
             $transaction = PaymentTransaction::findOne($id);
-            $files = Yii::$app->file->upload('evidence', "evidence/$id");
+            $files = Yii::$app->file->upload('evidence', "evidence/$id", true);
             $inputFile = reset($files);
             $transaction->evidence = $inputFile;
             $transaction->save();

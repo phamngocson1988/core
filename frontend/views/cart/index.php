@@ -44,10 +44,12 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
                     <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
                     <?= $form->field($item, 'server')->textInput()->label('Server');?>
-                    <?php $saler_code = Yii::$app->session->get('saler_code');?>
+                    <?php //$saler_code = Yii::$app->session->get('saler_code');?>
                     <?= $form->field($item, 'saler_code', [
-                      'inputOptions' => ['value' => $saler_code, 'readonly' => (boolean)$saler_code],
-                    ])->textInput()->label('Saler code') ?>
+                      'options' => ['tag' => false],
+                      'inputOptions' => ['id' => 'saler_code'],
+                      'template' => '{input}'
+                    ])->hiddenInput(); ?>
                     <?= $form->field($item, 'recover_code', [
                       'inputOptions' => ['id' => 'recover_code'],
                       'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; text-align: right']
@@ -61,7 +63,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                             The recovery code is very necessary, kindly support!
                         </div><br/>
                         <div class="bottom">
-                            <div>How to get?</div>
+                            <div>How to?</div>
                             <div>Get Google code, <a href="https://youtu.be/F3xMAXFRHNE" target="_blank" style="color: blue;">click here</a></div>
                             <div>Get Facebook code, <a href="https://youtu.be/sG1GAcsslzs" target="_blank" style="color: blue;">click here</a></div>
                         </div>
@@ -74,13 +76,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                   <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
                   <?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
                   <?php $item->setScenario(CartItem::SCENARIO_EDIT_CART);?>
-                  <div class="checkout-cart-total">
-                    <div class="game-name">
-                      <div class="game-image">
-                        <img src="<?=$item->getImageUrl('300x300');?>" alt="">
-                      </div>
-                      <h2><?=$item->getLabel();?></h2>
-                    </div>
+                  <div class="checkout-cart-total" style="padding-top: 70px">
                     <div class="game-totals">
                       <div class="product-temple-total">
                         <table>
@@ -149,6 +145,15 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                           <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
                           <?php endif;?>
                         </div>
+                        <div class="cart-coupon">
+                          <?php $saler_code = Yii::$app->session->get('saler_code');?>
+                          <?=Html::input('text', 'saler_code', $saler_code, [
+                            'readonly' => (boolean)$saler_code, 
+                            'placeholder' => 'Enter saler code',
+                            'class' => 'fl-left',
+                            'id' => 'saler_code_value'
+                          ]);?>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -166,7 +171,6 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
     </div>
   </div>
 </section>
-
 
 <?php
 $script = <<< JS
@@ -212,6 +216,10 @@ $('.product-temple-total .quantity-box button.quantity-minus').click(function(){
     } 
 });
 $("#quantity").trigger('change');
+$("#ck-cart-box").on('blur', '#saler_code_value', function(){
+  console.log($(this).val());
+  $('#saler_code').val($(this).val());
+});
 JS;
 $this->registerJs($script);
 ?>

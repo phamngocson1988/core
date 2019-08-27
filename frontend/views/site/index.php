@@ -54,33 +54,10 @@ use yii\helpers\Url;
     </div>
     <div class="prod-listing-viewmore">
       <a href="<?=Url::to(['game/index']);?>" class="main-btn">See More</a>
-      <!-- <a href="#" class="main-btn" data-toggle="modal" data-target="#joinModal">join now</a> -->
     </div>
   </div>
 </section>
-<?php if (Yii::$app->session->get('popup-topup')) : ?>
-<div class="modal" id="topupModal">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-wrap">
-              <button type="button" class="close" data-dismiss="modal">×</button>
-              <a href="<?=Url::to(['topup/index']);?>">
-                  <img class="btn-modal-topup" src="/images/btn-topup-now.png" alt="">
-              </a>
-              <img class="bg-modal" src="/images/bg-popup-topup-now.png" alt="">
-          </div>
-
-      </div>
-  </div>
-</div>
-<?php
-$script = <<< JS
-$("#topupModal").modal();
-JS;
-$this->registerJs($script);
-?>
-<?php endif;?>
-<?php if (Yii::$app->session->get('popup-joinnow')) : ?>
+<?php if (Yii::$app->user->isGuest) : ?>
 <div class="modal" id="joinModal">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -97,7 +74,11 @@ $this->registerJs($script);
 </div>
 <?php
 $script = <<< JS
-$("#joinModal").modal();
+var joinModal = getCookie("joinModal");
+if (joinModal != "") {
+  $("#joinModal").modal();
+}
+setCookie('joinModal', 'open', 10);
 JS;
 $this->registerJs($script);
 ?>
@@ -108,7 +89,7 @@ $this->registerJs($script);
       <div class="modal-content">
           <div class="modal-wrap">
               <button type="button" class="close" data-dismiss="modal">×</button>
-              <a href="<?=Url::to(['user/wallet']);?>">
+              <a href="<?=Url::to(['user/wallet', 'pro' => 'true']);?>">
                   <img class="btn-modal-wallet" src="/images/btn-wallet-now.png" alt="">
               </a>
               <img class="bg-modal" src="/images/bg-popup-wallet-now.png" alt="">
@@ -116,9 +97,27 @@ $this->registerJs($script);
       </div>
   </div>
 </div>
+<div class="modal" id="topupModal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-wrap">
+              <button type="button" class="close" data-dismiss="modal">×</button>
+              <a href="<?=Url::to(['topup/index']);?>">
+                  <img class="btn-modal-topup" src="/images/btn-topup-now.png" alt="">
+              </a>
+              <img class="bg-modal" src="/images/bg-popup-topup-now.png" alt="">
+          </div>
+
+      </div>
+  </div>
+</div>
 <?php
 $script = <<< JS
 $("#walletModal").modal();
+setTimeout(function() {
+  $("#walletModal").modal('hide');
+  $("#topupModal").modal();
+}, 15000);
 JS;
 $this->registerJs($script);
 ?>

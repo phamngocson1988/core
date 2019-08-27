@@ -64,7 +64,7 @@ use frontend\models\Order;
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td><a href="<?=Url::to(['user/detail', 'id' => $model->id]);?>" data-pjax="0"><?=$model->id;?></a></td>
+                <td><a href="<?=Url::to(['user/detail', 'id' => $model->id]);?>" data-pjax="0" style="color:#007bff; text-decoration: underline"><?=$model->id;?></a></td>
                 <td><?=$model->game_title;?></td>
                 <td>$<?=number_format($model->total_price);?></td>
                 <td><?=$model->created_at;?></td>

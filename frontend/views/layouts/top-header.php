@@ -141,7 +141,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                     </div>
                 </div>
                 <div class="header-time-box display-ib">
-                    <span class="fl-left"><?=date('d/m/Y | H:i');?>(GTM+7)</span>
+                    <span class="fl-left" id="top_realtime_datetime"></span>
                     <?php
                     $top_notice = $setting->get('TopNoticeSettingForm', 'top_notice');
                     $top_notice = @unserialize($top_notice);
@@ -201,6 +201,17 @@ ajaxLoginForm.error = function (errors) {
     toastr.error(errors);
     return false;
 }
+function realtimeDatetime()
+{
+    var content = '';
+    var event = new Date();
+    var date = event.toLocaleDateString('en-US');
+    var time = event.toLocaleTimeString('en-US', {timeZoneName:'short', hour12: false});
+    //d/m/Y | H:i
+    content = [date, time].join(' | ');
+    $('#top_realtime_datetime').html(content);
+}
+setInterval(realtimeDatetime, 1000);
 JS;
 $this->registerJs($script);
 ?>

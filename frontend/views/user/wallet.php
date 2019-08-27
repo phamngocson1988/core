@@ -82,6 +82,28 @@ use yii\helpers\Html;
     </div>
   </div>
 </section>
+<?php if ($promotion) : ?>
+<div class="modal" id="topupModal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-wrap">
+              <button type="button" class="close" data-dismiss="modal">×</button>
+              <a href="<?=Url::to(['topup/index']);?>">
+                  <img class="btn-modal-topup" src="/images/btn-topup-now.png" alt="">
+              </a>
+              <img class="bg-modal" src="/images/bg-popup-topup-now.png" alt="">
+          </div>
+
+      </div>
+  </div>
+</div>
+<?php
+$script = <<< JS
+$("#topupModal").modal();
+JS;
+$this->registerJs($script);
+?>
+<?php endif;?>
 <?php
 $script = <<< JS
 $('#type').on('change', function(){
