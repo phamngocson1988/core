@@ -3,12 +3,12 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use common\models\User;
 use common\models\Customer;
 use common\models\OrderItems;
 use common\models\OrderComments;
 use common\models\OrderComplains;
-// use common\models\OrderFee;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -68,6 +68,12 @@ class Order extends ActiveRecord
             'ios' => 'Ios', 
 
         ];
+    }
+
+    public function getLoginMethod()
+    {
+        $list = self::getLoginMethodList();
+        return ArrayHelper::getValue($list, $this->login_method);
     }
 
     public function getSaler()

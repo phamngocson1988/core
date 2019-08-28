@@ -81,7 +81,7 @@ use backend\models\OrderFile;
                     <div class="portlet blue-hoki box">
                       <div class="portlet-title">
                         <div class="caption">
-                          <i class="fa fa-cogs"></i>Thông tin nạp game
+                          <i class="fa fa-cogs"></i>Order Details
                         </div>
                       </div>
                       <div class="portlet-body" id="game_account">
@@ -103,7 +103,7 @@ use backend\models\OrderFile;
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5"> Login method: </div>
-                          <div class="col-md-7"> <?=$order->login_method;?></div>
+                          <div class="col-md-7"> <?=$order->getLoginMethod();?></div>
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5"> Recover Code: </div>

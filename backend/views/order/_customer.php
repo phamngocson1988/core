@@ -1,11 +1,11 @@
 <?php
 // if (!Yii::$app->user->can('view_customer')) return '';
-if (!Yii::$app->user->can('accounting')) return '';
+if (!Yii::$app->user->can('saler')) return '';
 ?>
 <div class="portlet blue-hoki box">
   <div class="portlet-title">
     <div class="caption">
-      <i class="fa fa-cogs"></i>Customer Information 
+      <i class="fa fa-cogs"></i>Buyer info
     </div>
   </div>
   <?php $customer = $order->customer;?>

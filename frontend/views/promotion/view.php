@@ -37,7 +37,7 @@ use yii\widgets\Pjax;
                 <a href="#">Hot Product</a>
               </div>
               <h1><?=$model->title;?></h1>
-              <a href="#" class="main-btn">Claim now</a>
+              <a href="javascript:;" id="claim" class="main-btn" code='<?=$model->code;?>'>Claim now</a>
             </div>
             <div class="col-12 ti-main-content">
               <?=$model->content;?>
@@ -48,3 +48,13 @@ use yii\widgets\Pjax;
     </div>
   </div>
 </section>
+<?php
+$script = <<< JS
+$('#claim').on('click', function(){
+  var code = $(this).attr('code');
+  toastr.options.positionClass = 'toast-top-center';
+  toastr.success('Promotion code is: ' + code);
+})
+JS;
+$this->registerJs($script);
+?>

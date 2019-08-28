@@ -1,10 +1,13 @@
 <?php
 use common\components\helpers\FormatConverter;
+
+// Hide this information for orderteam
+if (!Yii::$app->user->can('saler') && !Yii::$app->user->can('accounting')) return '';
 ?>
 <div class="portlet blue-hoki box">
   <div class="portlet-title">
     <div class="caption">
-      <i class="fa fa-cogs"></i>Order Details 
+      <i class="fa fa-cogs"></i>Payment info
     </div>
   </div>
   <div class="portlet-body">

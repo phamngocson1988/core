@@ -166,6 +166,11 @@ $script = <<< JS
 $('.info-box-fix').click(function () {
     $('.info-box-show').toggleClass('show-box');
 });
+$('body').on('click',function(event){
+   if(!$(event.target).is('.login-box *')){
+     $(".info-box-show").removeClass("show-box");
+   }
+});
 $('.top-header .right-box a.ico-user-login').click(function () {
     $(this).parent().toggleClass('active');
     $(this).toggleClass('active');
