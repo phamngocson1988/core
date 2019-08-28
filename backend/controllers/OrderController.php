@@ -296,6 +296,12 @@ class OrderController extends Controller
     public function actionEdit($id)
     {
         $order = Order::findOne($id);
+        $this->view->params['main_menu_active'] = 'order.index';
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        return $this->render('edit', [
+            'order' => $order,
+        ]);
     }
 
     public function actionView($id)
