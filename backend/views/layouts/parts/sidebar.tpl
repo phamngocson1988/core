@@ -352,6 +352,11 @@
             <span class="title">Đơn hàng đã hủy</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/dislike-order'}" class="nav-link " code='order.dislike'>
+            <span class="title">Đơn hàng bị dislike</span>
+            </a>
+          </li>
           {if Yii::$app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/order/new-verifying-order'}" class="nav-link " code='order.new-verifying'>

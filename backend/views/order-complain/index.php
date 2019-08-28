@@ -78,8 +78,9 @@ use yii\widgets\ActiveForm;
                           <div class="row">
                             <div class="col-md-12">
                               <?=$editForm->field($model, 'content', [
-                                'options' => ['style' => 'margin: 10px']
-                              ])->textArea()->label('Nội dung');?>
+                                'options' => ['style' => 'margin: 10px'],
+                                'inputOptions' => ['class' => 'form-control', 'id' => 'content' . $model->id]
+                              ])->widget(\common\widgets\TinyMce::className(), ['options' => ['rows' => 10]])->label('Nội dung');?>
                             </div>
                           </div>
                         </div>
@@ -118,8 +119,9 @@ use yii\widgets\ActiveForm;
         <div class="row">
           <div class="col-md-12">
             <?=$newForm->field($template, 'content', [
-              'options' => ['style' => 'margin: 10px']
-            ])->textArea()->label('Nội dung');?>
+              'options' => ['style' => 'margin: 10px'],
+              'inputOptions' => ['class' => 'form-control', 'id' => 'new-content']
+              ])->widget(\common\widgets\TinyMce::className(), ['options' => ['rows' => 10]])->label('Nội dung');?>
           </div>
         </div>
       </div>

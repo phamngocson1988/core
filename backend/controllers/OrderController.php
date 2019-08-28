@@ -275,6 +275,24 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionDislikeOrder()
+    {
+        $this->view->params['main_menu_active'] = 'order.dislike';
+        $request = Yii::$app->request;
+        $command = Order::find()->where(['rating' => -1]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->all();
+
+        return $this->render('dislike-order', [
+            'models' => $models,
+            'pages' => $pages,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
     public function actionEdit($id)
     {
         $order = Order::findOne($id);
