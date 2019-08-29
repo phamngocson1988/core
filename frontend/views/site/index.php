@@ -16,7 +16,7 @@ use yii\helpers\Url;
         <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>">
         <img src="<?=$game->getImageUrl('300x300');?>" alt="">
         <?php if (Yii::$app->settings->get('EventForm', 'status')) : ?>
-        <img src="<?=Yii::$app->settings->get('EventForm', 'image');?>" style="position: absolute; right: 0; top: 0; width: 30%;" alt="">
+        <img src="<?=Yii::$app->settings->get('EventForm', 'image');?>" style="position: absolute; right: 15px; top: 0; width: 25%;" alt="">
         <?php endif;?>
         </a>
         <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>"><?=$game->title;?></a>

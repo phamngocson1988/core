@@ -55,7 +55,7 @@ $this->title = 'Shop';
 			        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>">
 			        <img src="<?=$model->getImageUrl('300x300');?>" alt="">
               <?php if (Yii::$app->settings->get('EventForm', 'status')) : ?>
-			        <img src="<?=Yii::$app->settings->get('EventForm', 'image');?>" style="position: absolute; right: 0; top: 0; width: 30%;" alt="">
+			        <img src="<?=Yii::$app->settings->get('EventForm', 'image');?>" style="position: absolute; right: 15px; top: 0; width: 25%;" alt="">
               <?php endif;?>
 			        </a>
 			        <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>"><?=$model->title;?></a>
