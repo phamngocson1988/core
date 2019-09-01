@@ -6,10 +6,20 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use backend\components\datetimepicker\DateTimePicker;
+use dosamigos\datepicker\DateRangePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
+
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/table-bootstrap.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
 $orderTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('orderteam_manager');
@@ -37,13 +47,13 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Đơn hàng đang xử lý</span>
+      <span>Đơn hàng chưa có nhân viên xử lý</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Đơn hàng đang xử lý</h1>
+<h1 class="page-title">Đơn hàng chưa có nhân viên xử lý</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -52,66 +62,43 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng chưa có nhân viên xử lý</span>
         </div>
         <div class="actions">
-          <?php if (Yii::$app->user->can('saler')) :?>
-          <!-- <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['order/create', 'ref' => $ref])?>"><?=Yii::t('app', 'add_new')?></a>
-          </div> -->
-          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+        <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 5%;"> Mã đơn hàng </th>
-              <th style="width: 10%;"> Tên game </th>
-              <th style="width: 10%;"> Ngày tạo </th>
-              <th style="width: 5%;"> Số lượng nạp </th>
-              <th style="width: 5%;"> Số gói </th>
-              <th style="width: 10%;"> Thời gian nhận đơn </th>
-              <th style="width: 5%;"> Thời gian chờ </th>
-              <th style="width: 10%;"> Người bán hàng </th>
-              <th style="width: 10%;"> Người quản lý đơn hàng </th>
-              <th style="width: 10%;"> Trạng thái </th>
-              <th style="width: 10%;"> Nhà cung cấp </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th> Mã đơn hàng </th>
+              <th> Tên game </th>
+              <th> Ngày tạo </th>
+              <th> Số lượng nạp </th>
+              <th> Số gói </th>
+              <th> Người bán hàng </th>
+              <th> Trạng thái </th>
+              <th> Nhà cung cấp </th>
+              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
-                <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?> minutes</td>
-                
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;">
-                  <?=$model->getStatusLabel();?>
-                  <?php if ($model->hasCancelRequest()) :?>
-                  <span class="label label-danger">Có yêu cầu hủy</span>
-                  <?php endif;?>
-                  <?php if ($model->tooLongProcess()) :?>
-                  <span class="label label-warning">Xử lý chậm</span>
-                  <?php endif;?>
-                </td>
+                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
-                  <?php if (!$model->isDeletedOrder()) :?>
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                  <?php endif;?>
-                  <?php if (Yii::$app->user->can('orderteam')) :?>
+                  <?php if (Yii::$app->user->can('orderteam', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>
                   <?php endif;?>
                   <?php if (Yii::$app->user->can('orderteam_manager')) :?>
@@ -171,19 +158,7 @@ $(".ajax-link").ajax_action({
   }
 });
 
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    location.reload();
-  }
-});
-
+// assign
 var sendForm = new AjaxFormSubmit({element: '.assign-form'});
 sendForm.success = function (data, form) {
   location.reload();

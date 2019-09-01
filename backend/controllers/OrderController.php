@@ -299,8 +299,10 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
         $order = Order::findOne($id);
+        $templateList = OrderComplainTemplate::find()->all();
         return $this->render('edit', [
             'order' => $order,
+            'template_list' => $templateList
         ]);
     }
 
@@ -374,24 +376,28 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $model->setScenario(Order::SCENARIO_GO_PENDING);
         $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
+            $order = $event->sender;
+            $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+            if ($adminEmail) {
+                Yii::$app->mailer->compose('admin_send_pending_order', [
+                    'order' => $order,
+                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+                ])
+                ->setTo($order->customer_email)
+                ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+                ->setSubject(sprintf("Order confirmation - %s", $order->id))
+                ->setTextBody("Your order is moved to pending status")
+                ->send();
+            }
+        });
+        $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             // Save a complain
             $order = $event->sender;
             $user = Yii::$app->user->getIdentity();
             $complain = new OrderComplains();
             $complain->order_id = $order->id;
-            $complain->content = sprintf("%s (#%s) move order to pending. The payment data is %s", $user->name, $user->id, $order->payment_data);
+            $complain->content = sprintf("%s move order to pending. The payment data is %s", $user->name, $order->payment_data);
             $complain->save();
-
-            // // Send mail notification
-            // $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
-            // if ($adminEmail) {
-            //     Yii::$app->mailer->compose('admin_send_pending_order', ['order' => $order])
-            //     ->setTo($order->customer_email)
-            //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
-            //     ->setSubject(sprintf("Order confirmation - %s", $order->id))
-            //     ->setTextBody("Your order is moved to pending status")
-            //     ->send();
-            // }
         });
         if (!$model->auth_key) $model->generateAuthKey();
         $model->payment_type = 'offline';
@@ -403,17 +409,51 @@ class OrderController extends Controller
         }
     }
 
-    public function actionMoveToProcessing()
+    public function actionMoveToProcessing($id)
     {
+        // $request = Yii::$app->request;
+        // if ($request->isPost && $request->isAjax) {
+        //     $form = new UpdateOrderStatusProcessing();
+        //     if ($form->load($request->post()) && $form->save()) {
+        //         return $this->renderJson(true, ['next' => Url::to(['order/processing', 'id' => $form->id])]);
+        //     } else {
+        //         return $this->renderJson(false, [], $form->getErrorSummary(true));
+        //     }
+        // }
+        $model = Order::findOne($id);
+        if (!$model) return $this->asJson(['status' => false, 'error' => 'Đơn hàng không tồn tại']);
+        if (!$model->isPendingOrder()) return $this->asJson(['status' => false, 'error' => 'Không thể chuyển trạng thái']);
         $request = Yii::$app->request;
-        if ($request->isPost && $request->isAjax) {
-            $form = new UpdateOrderStatusProcessing();
-            if ($form->load($request->post()) && $form->save()) {
-                return $this->renderJson(true, ['next' => Url::to(['order/processing', 'id' => $form->id])]);
-            } else {
-                return $this->renderJson(false, [], $form->getErrorSummary(true));
-            }
-        }
+        $model->setScenario(Order::SCENARIO_GO_PROCESSING);
+        $model->status = Order::STATUS_PROCESSING;
+        $model->doing_unit = $model->total_unit;
+        $model->process_end_time = date('Y-m-d H:i:s');
+        $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
+        $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
+            $order = $event->sender;
+            $settings = Yii::$app->settings;
+            $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+            $frontend = Yii::$app->params['frontend_url'];
+            Yii::$app->urlManagerFrontend->setHostInfo($frontend);
+            Yii::$app->mailer->compose('admin_send_complete_order', [
+                'order' => $order,
+                'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            ])
+            ->setTo($order->customer_email)
+            ->setFrom([$adminEmail => Yii::$app->name])
+            ->setSubject(sprintf("[KingGems] - Completed Order - Order #%s", $order->id))
+            ->setTextBody("Your order #<?=$this->id;?> has been completed now. Please review it")
+            ->send();
+        });
+        $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
+            $order = $event->sender;
+            $user = Yii::$app->user->getIdentity();
+            $complain = new OrderComplains();
+            $complain->order_id = $order->id;
+            $complain->content = sprintf("%s moved the order to processing.", $user->name);
+            $complain->save();
+        });
+        return $this->renderJson($model->save());
     }
 
     public function actionTaken($id)
@@ -515,20 +555,28 @@ class OrderController extends Controller
     public function actionDisapprove($id)
     {
         $request = Yii::$app->request;
-        if ($request->isPost && $request->isAjax) {
-            $order = Order::findOne($id);
-            $order->request_cancel = 0;
-            $order->save();
-            $form = new SendComplainForm([
-                'order_id' => $id,
-                'template_id' => $request->post('template_id')
-            ]);
-            if ($form->send()) {
-                return $this->renderJson(true, []);
-            } else {
-                return $this->renderJson(false, [], $form->getErrorSummary(true));
-            }
-        }
+            $model = Order::findOne($id);
+            $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
+                // Save a complain
+                $order = $event->sender;
+                $user = Yii::$app->user->getIdentity();
+                $complain = new OrderComplains();
+                $complain->order_id = $order->id;
+                $complain->content = sprintf("Your order is cancelled by %s", $user->name);
+                $complain->save();
+            });
+            $model->request_cancel = 0;
+            return $this->renderJson($model->save());
+            // $order->save();
+            // $form = new SendComplainForm([
+            //     'order_id' => $id,
+            //     'template_id' => $request->post('template_id')
+            // ]);
+            // if ($form->send()) {
+            //     return $this->renderJson(true, []);
+            // } else {
+            //     return $this->renderJson(false, [], $form->getErrorSummary(true));
+            // }
     }
 
     public function actionAddEvidenceImage($id)

@@ -46,13 +46,13 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Đơn hàng có yêu cầu hủy</span>
+      <span>Đơn hàng đã hủy</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Đơn hàng có yêu cầu hủy</h1>
+<h1 class="page-title">Đơn hàng đã hủy</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -61,7 +61,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Đơn hàng có yêu cầu hủy</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng đã hủy</span>
         </div>
         <div class="actions">
         </div>
@@ -79,17 +79,16 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <th style="width: 10%;"> Người bán hàng </th>
               <th style="width: 10%;"> Trạng thái </th>
               <th style="width: 10%;"> Nhà cung cấp </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
@@ -97,9 +96,6 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
                 <td style="vertical-align: middle;"></td>
-                <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                </td>
               </tr>
               <?php endforeach;?>
           </tbody>

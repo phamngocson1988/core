@@ -10,23 +10,6 @@ use dosamigos\datepicker\DateRangePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
-
-$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerCssFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerJsFile('vendor/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js', ['depends' => '\backend\assets\AppAsset']);
-
-$this->registerCssFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerJsFile('vendor/assets/global/plugins/bootstrap-table/bootstrap-table.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerJsFile('vendor/assets/pages/scripts/table-bootstrap.min.js', ['depends' => '\backend\assets\AppAsset']);
-
-$orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
-$adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
-$orderTeamIds = array_merge($orderTeamIds, $adminTeamIds);
-$orderTeamIds = array_unique($orderTeamIds);
-$orderTeamObjects = User::findAll($orderTeamIds);
-$orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 ?>
 
 <style>
@@ -88,7 +71,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
@@ -98,7 +81,9 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/processing', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php if (!$model->isDeletedOrder()) :?>
+                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>

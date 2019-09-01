@@ -58,7 +58,7 @@ $.fn.ajax_action = function(opts) {
         collectData: function(){},
         loading: function(){},
         complete: function(){},
-        callback: function(data) {},
+        callback: function(el, data) {},
         error: function(element, errors) {
             alert(errors);
         },

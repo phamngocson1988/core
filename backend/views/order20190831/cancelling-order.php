@@ -89,7 +89,7 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
@@ -98,7 +98,21 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php switch ($model->status) {
+                    case Order::STATUS_VERIFYING :
+                      $editUrl = Url::to(['order/verifying', 'id' => $model->id]);
+                      break;
+                    case Order::STATUS_PENDING :
+                      $editUrl = Url::to(['order/pending', 'id' => $model->id]);
+                      break;
+                    case Order::STATUS_PROCESSING :
+                      $editUrl = Url::to(['order/processing', 'id' => $model->id]);
+                      break;
+                    default:
+                      $editUrl = Url::to(['order/view', 'id' => $model->id]);
+                      break;
+                  };?>
+                  <a href='<?=$editUrl;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>

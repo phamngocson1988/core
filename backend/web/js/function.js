@@ -70,3 +70,7 @@ function initDatePicker() {
         disableTouchKeyboard: true,
     });
 }
+
+$('.nav-tabs > li > a').on('click', function() {
+    window.location.hash = $(this).attr('href');
+})

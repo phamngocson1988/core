@@ -11,6 +11,10 @@ use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
 
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
 $orderTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('orderteam_manager');
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
@@ -87,7 +91,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
@@ -108,8 +112,22 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 </td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
-                  <?php if (!$model->isDeletedOrder()) :?>
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php if (Yii::$app->user->can('edit_order', ['order' => $model])) :?>
+                  <?php switch ($model->status) {
+                    case Order::STATUS_VERIFYING :
+                      $editUrl = Url::to(['order/verifying', 'id' => $model->id]);
+                      break;
+                    case Order::STATUS_PENDING :
+                      $editUrl = Url::to(['order/pending', 'id' => $model->id]);
+                      break;
+                    case Order::STATUS_PROCESSING :
+                      $editUrl = Url::to(['order/processing', 'id' => $model->id]);
+                      break;
+                    default:
+                      $editUrl = Url::to(['order/view', 'id' => $model->id]);
+                      break;
+                  };?>
+                  <a href='<?=$editUrl;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php endif;?>
                   <?php if (Yii::$app->user->can('orderteam')) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>

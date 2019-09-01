@@ -3,15 +3,15 @@ use yii\helpers\Url;
 $setting = Yii::$app->settings;
 ?>
 <h1 style="font-size:17px;font-weight:bold;color:#444;padding:0 0 5px 0;margin:0">VERIFY YOUR ORDERS</h1>
-<p style="margin: 4px 0 10px;">Order code: <?=$order->id;?></p>
 <p style="margin: 4px 0 10px;">Dear <?=$order->customer->name;?>, </p>
-<p style="margin: 4px 0 10px;">Thank you for buying at www.kinggems.us !</p>
-<p style="margin: 4px 0 10px;">Your order has been accepted, our team will try to complete it as soon as possible. </p>
-<h3>Order information: </h3>
+<p style="margin: 4px 0 10px;">Thank you for shopping at www.kinggems.us !</p>
+<p style="margin: 4px 0 10px;">Kindly be informed that your order has been accepted, It has been processed since now. We will inform you when It's done </p>
+<p style="margin: 4px 0 10px;">That's our pleasure for supporting you! </p>
+<h3>Order detail: </h3>
 <ul>
-    <li>Order code: <?=$order->id;?></li>
-    <li>Date: <?=$order->created_at;?></li>
-    <li>Game name: <?=$order->game_title;?></li>
+    <li>Order no: <?=$order->id;?></li>
+    <li>Time: <?=$order->created_at;?></li>
+    <li>Estimated delivery time: 60-90mins </li>
 </ul> 
 <h3 style="font-size:13px;font-weight:bold;color:#ffc107;text-transform:uppercase;margin:20px 0 0 0;border-bottom:1px solid #ddd">Details: </h3>
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#ffc107; margin: 20px 0">
@@ -33,7 +33,7 @@ $setting = Yii::$app->settings;
     </tr>
   </tbody>
 </table>
-<p style="margin: 4px 0 10px;">You can check your order by click <a href="<?=Yii::$app->params['frontend_url'];?><?=Url::to(['user/detail', 'id' => $order->id]);?>" target="_blank" style='text-decoration: none; color: #ffc107'>here</a>.</p>
+<p style="margin: 4px 0 10px;">You can check your order by click <a href="<?=$order_link;?>" target="_blank" style='text-decoration: none; color: #ffc107'>here</a>.</p>
 <p style="margin: 4px 0 10px;">We hope you will be satisfied with the shopping experience and selected products at Kinggems! See you again soon!</p>
 <p style="margin: 4px 0 10px;">By placing your order, you agree to Kinggems.us’s Privacy Notice and Conditions of Use. Unless otherwise noted, items sold by Kinggems.us </p>
 <hr/>
