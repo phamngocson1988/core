@@ -4,6 +4,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use frontend\components\cart\CartItem;
+use common\components\helpers\FormatConverter;
 
 $this->registerMetaTag(['property' => 'og:image', 'content' => $game->getImageUrl('150x150')], 'og:image');
 $this->registerMetaTag(['property' => 'og:title', 'content' => $game->getMetaTitle()], 'og:title');
@@ -43,7 +44,7 @@ $gamePromotion = reset($gamePromotions);
                             </div>
                             <div class="prod-code-right">
                                 <p>+<?=$gamePromotion->apply($game->pack);?> <?=strtoupper($game->unit_name);?></p>
-                                <p>cho HFKEJK</p>
+                                <!-- <p>cho HFKEJK</p> -->
                             </div>
                         </div>
                         <?php endif;?>
@@ -74,22 +75,30 @@ $gamePromotion = reset($gamePromotions);
                                             <?php if ($showOriginPrice) : ?>
                                             <div class="origin-price">
                                                 $<span id="origin-price"><?=number_format($game->getOriginalPrice());?></span>
+                                                / CNY <span id="origin-price-cny"><?=FormatConverter::convertCurrencyToCny($game->getOriginalPrice());?></span>
                                             </div>
                                             <?php endif;?>
                                             <div class="sale-price">
                                                 $<span id="price"><?=number_format($game->getTotalPrice());?></span>
+                                                / NCY <span id="price-cny"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr class="instant-total">
                                         <td colspan="3">Instant Total:</td>
-                                        <td class="instant-total-number">$<span id="instant-price"><?=number_format($game->getTotalPrice());?></span></td>
+                                        <td class="instant-total-number">
+                                            $<span id="instant-price"><?=number_format($game->getTotalPrice());?></span>
+                                            / NCY <span id="instant-price-ncy"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
+                                        </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="3">Subtotal:</td>
-                                        <td>$<span class="subtotal-num" id="sub-price"><?=number_format($game->getTotalPrice());?></span></td>
+                                        <td>
+                                            $<span class="subtotal-num" id="sub-price"><?=number_format($game->getTotalPrice());?></span>
+                                            / NCY <span class="subtotal-num" id="sub-price-ncy"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
+                                        </td>
                                     </tr>
                                     <?php if ($showOriginPrice) : ?>
                                     <tr>
@@ -99,7 +108,10 @@ $gamePromotion = reset($gamePromotions);
                                     <?php endif;?>
                                     <tr class="tr-grand-total">
                                         <td colspan="3">Grand Total:</td>
-                                        <td>$<span id="total-price"><?=number_format($game->getTotalPrice());?></span></td>
+                                        <td>
+                                            $<span id="total-price"><?=number_format($game->getTotalPrice());?></span>
+                                            / NCY <span id="total-price-ncy"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
+                                        </td>
                                     </tr>
                                 </tfoot>
                             </table>

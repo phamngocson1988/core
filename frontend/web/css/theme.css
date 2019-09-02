@@ -288,3 +288,21 @@ input[type=number] {
 .profile-page .profile-right .left-coin span:last-child {
     font-weight: normal;
 }
+
+.prod-price .price-usd {
+    float: none;
+}
+
+.prod-price span.price-cny {
+    font-size: 14px;
+    font-weight: normal;
+    color: #808080;
+    font-style: italic;
+    padding: 0 10px;
+}
+
+@media (max-width: 1400px) {
+    .product-listing .prod-title {
+        min-height: 25px
+    }
+}

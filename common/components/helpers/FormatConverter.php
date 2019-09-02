@@ -7,6 +7,7 @@
 
 namespace common\components\helpers;
 
+use Yii;
 use yii\helpers\FormatConverter as BaseFormatConverter;
 /**
  * File system helper
@@ -96,5 +97,13 @@ class FormatConverter extends BaseFormatConverter
         $fromQuarterDate = date("Y-$fromQuarterMonth-01", strtotime($from));
         $toQuarterDate = date("Y-$toQuarterMonth-01", strtotime($from));
         return self::getDateRange($fromQuarterDate, $toQuarterDate, 3, 'month');
+    }
+
+    public static function convertCurrencyToCny($amount = 0, $decimal = 1)
+    {
+        $rate = Yii::$app->settings->get('ApplicationSettingForm', 'exchange_rate_cny', 1);
+        $cny = $amount * $rate;
+        $decimal = is_int($cny) ? 0 : $decimal;
+        return number_format($cny, $decimal);
     }
 }

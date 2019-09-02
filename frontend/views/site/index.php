@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use common\components\helpers\FormatConverter;
 ?>
 <section class="product-listing">
   <div class="container">
@@ -25,7 +26,7 @@ use yii\helpers\Url;
           <span style="color:#ffdd00; font-size:11px;">OUT OF STOCK. COMING BACK SOON!</span>
           <?php else :?>
           <span><?=number_format($game->pack);?></span> <?=$game->unit_name;?>
-          <div class="price-usd">Only <span>$<?=number_format($game->price);?></span></div>
+          <div class="price-usd">Only <span>$<?=number_format($game->price);?></span><span class="price-cny">/ CNY <?=FormatConverter::convertCurrencyToCny($game->price);?></span></div>
           <?php endif;?>
         </div>
         <?php 

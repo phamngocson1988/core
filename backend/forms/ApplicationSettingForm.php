@@ -14,7 +14,7 @@ class ApplicationSettingForm extends Model
     public $admin_email;
     public $customer_service_email;
     public $enable_subscribe;
-    public $exchange_rate_usd; 
+    public $exchange_rate_cny; 
     public $sign_on_bonus;
     public $logo;
 
@@ -29,10 +29,9 @@ class ApplicationSettingForm extends Model
     public function rules()
     {
         return [
-            [['contact_phone', 'contact_email', 'admin_email', 'enable_subscribe', 'exchange_rate_usd'], 'trim'],
+            [['contact_phone', 'contact_email', 'admin_email', 'enable_subscribe', 'exchange_rate_cny'], 'trim'],
             [['admin_email', 'contact_email'], 'email'],
-            ['exchange_rate_usd', 'number'],
-            ['exchange_rate_usd', 'default', 'value' => '22000'],
+            ['exchange_rate_cny', 'number'],
             [['sign_on_bonus', 'logo', 'customer_service_email'], 'safe'],
         ];
     }
@@ -48,7 +47,7 @@ class ApplicationSettingForm extends Model
             'customer_service_email' => 'Email chăm sóc khách hàng',
             'admin_email' => Yii::t('app', 'admin_email'),
             'enable_subscribe' => 'Show subscribe Popup',
-            'exchange_rate_usd' => 'Tỷ giá USD',
+            'exchange_rate_cny' => 'Tỷ giá CNY',
             'sign_on_bonus' => 'Khuyến mãi khi đăng ký',
             'logo' => 'Logo',
         ];
