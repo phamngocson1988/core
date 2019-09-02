@@ -176,11 +176,6 @@ $('.top-header .right-box a.ico-user-login').click(function () {
     $(this).toggleClass('active');
 });
 
-$('.top-header .right-box a.ico-user-login').click(function(){
-    $(this).parent().toggleClass('active');
-    $(this).toggleClass('active');
-});
-
 $('.mobile-nav a.mobile-nav-ico').click(function(){
     $(this).parent().toggleClass('active');
     $(this).toggleClass('active');

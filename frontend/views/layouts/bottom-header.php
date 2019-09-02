@@ -85,26 +85,6 @@ $('.main-slider-bxslider').bxSlider({
         }, 500);
     },
 });
-
-$('.top-header .right-box a.ico-user-login').click(function () {
-    $(this).parent().toggleClass('active');
-    $(this).toggleClass('active');
-});
-
-$('.mobile-nav a.mobile-nav-ico').click(function () {
-    $(this).parent().toggleClass('active');
-    $(this).toggleClass('active');
-});
-
-$('body').on('click', function (e) {
-    if ($(e.target).closest('#mobile-nav-wrapper').length == 0) {
-        $('#mobile-nav-wrapper, .mobile-nav a.mobile-nav-ico').removeClass('active');
-    }
-
-    if ($(e.target).closest('#login-box-wrapper').length == 0) {
-        $('#login-box-wrapper, #login-box-wrapper a.ico-user-login').removeClass('active');
-    }
-});
 JS;
 $this->registerJs($script);
 ?>
