@@ -101,6 +101,12 @@ section.header {
     /* background-size: auto 100%; */
 }
 
+section.header .top-header-outter {
+    background: rgba(0, 0, 0, 0.9);
+    position: relative;
+    z-index: 2;
+}
+
 section.header.no-home {
     height: auto !important;
 }
@@ -111,24 +117,23 @@ section.header .top-header {
 }
 
 .header .top-header .top-header-inner {
-    background: rgba(0, 0, 0, 0.9);
     float: left;
     padding-bottom: 15px;
 }
 
 .top-header .logo {
-    margin: 14px 0 0 24px;
+    /* margin: 14px 0 0 24px; */
     position: relative;
 }
 
 .top-header .logo a {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 24px;
+    top: 14px;
 }
 
 .top-header .right-box {
-    width: 90%;
+    width: 100%;
 }
 
 .top-header .right-box .login-box {
@@ -280,17 +285,23 @@ section.header .top-header {
     width: 100%;
 }
 
-.top-header .header-time-box {
-    background: #ffdd00de;
-    line-height: 40px;
+.top-header .header-time-box, .header-time-box {
+    background: rgba(255, 221, 0, 0.87);
+    height: 40px;
     font-size: 15px;
     font-family: AndaleMono;
     padding: 0 20px;
     float: left;
     width: 100%;
+    z-index: 2;
+    position: relative;
 }
 
-.top-header .header-time-box span:last-child {
+.header-time-box span {
+    line-height: 40px;
+}
+
+.top-header .header-time-box span:last-child, .header-time-box span:last-child {
     width: 73.5%;
 }
 
@@ -444,7 +455,7 @@ section.header .top-header {
 
 .main-slider .slider-text-box {
     position: absolute;
-    top: 15%;
+    bottom: 20%;
     left: 0;
     margin-left: 25px;
 }
@@ -2276,10 +2287,6 @@ th.thead-pagination {
         width: 250px;
     }
 
-    .top-header .right-box {
-        width: 75%;
-    }
-
     .footer .bot-footer .footer-security {
         width: 20%;
     }
@@ -2958,6 +2965,15 @@ th.thead-pagination {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    .main-slider .slider-text-box {
+        bottom: auto;
+        top: 15%;
+    }
+
+    .header-time-box {
+        height: auto;
     }
 
     .col-lg-20-per {
