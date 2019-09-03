@@ -29,6 +29,17 @@ AppAsset::register($this);
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NP4585Q');</script>
     <!-- End Google Tag Manager -->
+    <script>
+    var hm = hm || [];
+    hm.push('setClient', 'HM-001068');
+    (function() {
+        var dom = document.createElement('script'); dom.type = 'text/javascript';
+        dom.async = true;
+        dom.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dashboard.heatmap.vn/js/tracker.production.js?id=1141db4bf944362a9fb7';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(dom, s);
+    })();
+    </script>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name='robots' content='noindex,follow' />
