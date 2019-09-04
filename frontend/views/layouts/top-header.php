@@ -23,7 +23,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                                         <li><a href="<?=Url::to(['game/index']);?>" code='game.index'>Shop</a></li>
                                         <li><a href="<?=Url::to(['promotion/index']);?>" code='promotion.index'>Promotion</a></li>
                                         <li><a href="<?=Url::to(['refer/index']);?>" code='refer.index'>Refer Friend</a></li>
-                                        <li><a href="<?=Url::to(['affiliate/index']);?>" code='affiliate.index'>Afiliate</a></li>
+                                        <li><a href="<?=Url::to(['affiliate/index']);?>" code='affiliate.index'>Affiliate</a></li>
                                         <li><a href="<?=Url::to(['site/question']);?>" code='site.question'>Q&A</a></li>
                                     </ul>
                                 </nav>
@@ -126,7 +126,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                                         <li><a href="<?=Url::to(['game/index']);?>" code='game.index'>Shop</a></li>
                                         <li><a href="<?=Url::to(['promotion/index']);?>" code='promotion.index'>Promotion</a></li>
                                         <li><a href="<?=Url::to(['refer/index']);?>" code='refer.index'>Refer Friend</a></li>
-                                        <li><a href="<?=Url::to(['affiliate/index']);?>" code='affiliate.index'>Afiliate</a></li>
+                                        <li><a href="<?=Url::to(['affiliate/index']);?>" code='affiliate.index'>Affiliate</a></li>
                                         <li><a href="<?=Url::to(['site/question']);?>" code='site.question'>Q&A</a></li>
                                     </ul>
                                 </nav>
