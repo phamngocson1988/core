@@ -47,16 +47,16 @@ if (!Yii::$app->user->can('saler') && !Yii::$app->user->can('accounting')) retur
     <?php if ($order->total_discount) :?>
     <div class="row static-info">
       <div class="col-md-5"> Sub total: </div>
-      <div class="col-md-7"> <?=number_format($order->sub_total_price);?> </div>
+      <div class="col-md-7"> <?=number_format($order->sub_total_price, 1);?> </div>
     </div>
     <div class="row static-info">
       <div class="col-md-5"> Discount: </div>
-      <div class="col-md-7"> <?=number_format($order->total_discount);?> </div>
+      <div class="col-md-7"> <?=number_format($order->total_discount, 1);?> </div>
     </div>
     <?php endif;?>
     <div class="row static-info">
       <div class="col-md-5"> Total price: </div>
-      <div class="col-md-7"> <?=number_format($order->total_price);?> </div>
+      <div class="col-md-7"> <?=number_format($order->total_price, 1);?> </div>
     </div>
     <?php endif;?>
     <div class="row static-info">

@@ -100,20 +100,20 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                               </td>
                               <td id="unit"><?=number_format($item->getTotalUnit());?></td>
                               <td>
-                                  <?php $showOriginPrice = ($item->original_price && $item->original_price > $item->price);?>
+                                  <?php $showOriginPrice = ($item->original_price && $item->original_price > $item->getPrice());?>
                                   <?php if ($showOriginPrice) : ?>
                                   <div class="origin-price">
-                                      $<span id="origin-price"><?=number_format($item->getOriginalPrice() * $item->quantity);?></span>
+                                      $<span id="origin-price"><?=number_format($item->getOriginalPrice() * $item->quantity, 1);?></span>
                                   </div>
                                   <?php endif;?>
                                   <div class="sale-price">
-                                      $<span id="price"><?=number_format($item->getTotalPrice());?></span>
+                                      $<span id="price"><?=number_format($item->getTotalPrice(), 1);?></span>
                                   </div>
                               </td>
                             </tr>
                             <tr class="instant-total">
                               <td colspan="3">Instant Total:</td>
-                              <td class="instant-total-number">$<span id="instant-price"><?=number_format($item->getTotalPrice());?></span></td>
+                              <td class="instant-total-number">$<span id="instant-price"><?=number_format($item->getTotalPrice(), 1);?></span></td>
                             </tr>
                           </tbody>
                           <tfoot>

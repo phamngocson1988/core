@@ -65,7 +65,7 @@ $this->title = 'Shop';
                 <span style="color:#ffdd00; font-size:11px;">OUT OF STOCK. COMING BACK SOON!</span>
                 <?php else :?>
                 <span><?=number_format($model->pack);?></span> <?=$model->unit_name;?>
-                <div class="price-usd">Only <span>$<?=number_format($model->price);?></span><span class="price-cny">/ CNY <?=FormatConverter::convertCurrencyToCny($model->price);?></span></div>
+                <div class="price-usd">Only <span>$<?=number_format($model->getPrice(), 1);?></span><span class="price-cny">/ CNY <?=FormatConverter::convertCurrencyToCny($model->getPrice(), 1);?></span></div>
                 <?php endif;?>
 			        </div>
 			        <?php 

@@ -127,17 +127,31 @@ class Game extends ActiveRecord
             return substr($excerpt, 0, $number);
         }
         return $excerpt;
+    }
+
+    public function getCogs() // Cost of goods sold: giá vốn
+    {
+        return round(array_sum([$this->price1, $this->price2, $this->price3]) / 3, 1);
+    }
+
+    public function getPrice()
+    {
+        $cogs = $this->getCogs();
+        $desired_profit = Yii::$app->settings->get('ApplicationSettingForm', 'desired_profit', 0);
+        $managing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'managing_cost_rate', 0);
+        $investing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'investing_cost_rate', 0);
+        return ($cogs + $desired_profit) * (100 + $managing_cost_rate + $investing_cost_rate) / 100;
     }   
 
     public function getOriginalPrice()
     {
-        return ($this->original_price) ? $this->original_price : $this->price;
+        return ($this->original_price) ? $this->original_price : $this->getPrice();
     }
 
     public function getSavedPrice()
     {
         $ori = $this->getOriginalPrice();
-        return round(($this->price - $ori) * 100/ $ori, 2);
+        return round(($this->getPrice() - $ori) * 100/ $ori, 2);
     }
 
     public function getImages()

@@ -81,6 +81,9 @@
                 <li class="active">
                   <a href="#tab_1_1" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
+                <li>
+                  <a href="#tab_1_2" data-toggle="tab">Thành phần giá</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -92,6 +95,11 @@
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
+                </div>
+                <div class="tab-pane" id="tab_1_2">
+                  {$form->field($model, 'price1')->textInput()}
+                  {$form->field($model, 'price2')->textInput()}
+                  {$form->field($model, 'price3')->textInput()}
                 </div>
               </div>
             </div>

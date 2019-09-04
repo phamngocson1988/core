@@ -57,8 +57,8 @@ class GameController extends Controller
         if ($game->load($request->post()) && $game->validate()) {
             if ($request->isAjax) {
                 return $this->asJson(['status' => true, 'data' => [
-                    'origin' => number_format($game->getTotalOriginalPrice()),
-                    'price' => number_format($game->getTotalPrice()),
+                    'origin' => number_format($game->getTotalOriginalPrice(), 1),
+                    'price' => number_format($game->getTotalPrice(), 1),
                     'unit' => number_format($game->getTotalUnit()),
                 ]]);
             }

@@ -243,9 +243,12 @@ class CartController extends Controller
             $order->payment_method = $identifier;
             $order->payment_type = $gateway->type;
             // $order->payment_id = $gateway->getReferenceId();
+            $order->price = $cartItem->getPrice();
+            $order->cogs_price = $cartItem->getCogs();
             $order->sub_total_price = $subTotalPrice;
             $order->total_discount = $promotionCoin;
             $order->total_price = $totalPrice;
+            $order->total_cogs_price = $cartItem->getCogs() * (float)$cartItem->quantity;
             $order->customer_id = $user->id;
             $order->customer_name = $user->name;
             $order->customer_email = $cartItem->reception_email;

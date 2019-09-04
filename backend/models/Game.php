@@ -13,8 +13,8 @@ class Game extends \common\models\Game
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout'],
+            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'price1', 'price2', 'price3'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'price1', 'price2', 'price3'],
         ];
     }
 
@@ -47,6 +47,7 @@ class Game extends \common\models\Game
             ['pin', 'default', 'value' => self::UNPIN],
             ['soldout', 'default', 'value' => 0],
             [['original_price'], 'trim'],
+            [['price1', 'price2', 'price3'], 'safe']
         ];
     }
 

@@ -50,12 +50,6 @@ class CartItem extends Game implements CartItemInterface
         50 => 50,
     ];
 
-    // public function behaviors()
-    // {
-    //     return [
-    //         CartItemImportBehavior::className(),
-    //     ];
-    // }
     public function init()
     {
         $this->quantity = ($this->quantity > 0) ? $this->quantity : 1;
@@ -119,10 +113,11 @@ class CartItem extends Game implements CartItemInterface
     }
 
     // ============== implement interface ===========//
-    public function getPrice() : int
-    {
-        return (int)$this->price;
-    }
+    // public function getPrice()
+    // {
+    //     // return (int)$this->price;
+    //     return $this->getPrice();
+    // }
 
     public function getLabel()
     {

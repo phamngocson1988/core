@@ -71,21 +71,21 @@ $gamePromotion = reset($gamePromotions);
                                         </td>
                                         <td><span id="unit"><?=number_format($game->getTotalUnit());?></span></td>
                                         <td>
-                                            <?php $showOriginPrice = ($game->original_price && $game->original_price > $game->price);?>
+                                            <?php $showOriginPrice = ($game->original_price && $game->original_price > $game->getPrice());?>
                                             <?php if ($showOriginPrice) : ?>
                                             <div class="origin-price">
-                                                $<span id="origin-price"><?=number_format($game->getOriginalPrice());?></span>
+                                                $<span id="origin-price"><?=number_format($game->getOriginalPrice(), 1);?></span>
                                             </div>
                                             <?php endif;?>
                                             <div class="sale-price">
-                                                $<span id="price"><?=number_format($game->getTotalPrice());?></span>
+                                                $<span id="price"><?=number_format($game->getTotalPrice(), 1);?></span>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr class="instant-total">
                                         <td colspan="3">Instant Total:</td>
                                         <td class="instant-total-number">
-                                            $<span id="instant-price"><?=number_format($game->getTotalPrice());?></span>
+                                            $<span id="instant-price"><?=number_format($game->getTotalPrice(), 1);?></span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -93,19 +93,19 @@ $gamePromotion = reset($gamePromotions);
                                     <tr>
                                         <td colspan="3">Subtotal:</td>
                                         <td>
-                                            $<span class="subtotal-num" id="sub-price"><?=number_format($game->getTotalPrice());?></span>
+                                            $<span class="subtotal-num" id="sub-price"><?=number_format($game->getTotalPrice(), 1);?></span>
                                         </td>
                                     </tr>
                                     <?php if ($showOriginPrice) : ?>
                                     <tr>
                                         <td colspan="3">Saving:</td>
-                                        <td><span class="saving-number"><?=number_format($game->getSavedPrice());?></span>%</td>
+                                        <td><span class="saving-number"><?=number_format($game->getSavedPrice(), 1);?></span>%</td>
                                     </tr>
                                     <?php endif;?>
                                     <tr class="tr-grand-total">
                                         <td colspan="3">Grand Total:</td>
                                         <td>
-                                            $<span id="total-price"><?=number_format($game->getTotalPrice());?></span>
+                                            $<span id="total-price"><?=number_format($game->getTotalPrice(), 1);?></span>
                                         </td>
                                     </tr>
                                 </tfoot>

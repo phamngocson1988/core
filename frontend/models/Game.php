@@ -24,7 +24,7 @@ class Game extends \common\models\Game
 		$forGames = $this->findAvailablePromotions($promotions);
 		if (empty($forGames)) return null;
 		$quantity = 0.5;
-		$amount = $this->price * $quantity;
+		$amount = $this->getPrice() * $quantity;
 		usort($forGames, function($p1, $p2) use ($amount) {
 			$a1 = $p1->calculateBenifit($amount);
 			$a2 = $p2->calculateBenifit($amount);

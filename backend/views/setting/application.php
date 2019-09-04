@@ -71,6 +71,30 @@ use yii\helpers\Url;
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
+                <?=$form->field($model, 'exchange_rate_vnd', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput();?>
+
+                <?=$form->field($model, 'managing_cost_rate', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput();?>
+
+                <?=$form->field($model, 'investing_cost_rate', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput();?>
+
+                <?=$form->field($model, 'desired_profit', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput();?>
+
                 <?=$form->field($model, 'sign_on_bonus', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],

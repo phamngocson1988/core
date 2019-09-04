@@ -50,7 +50,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                                         class="fas fa-sort-down"></i></p>
                                       <p class="info-k-coin"><img src="/images/logo-kc-box.png"
                                         alt=""><span
-                                        class="red font-weight-bold"><?=number_format($user->getWalletAmount());?></span></p>
+                                        class="red font-weight-bold"><?=number_format($user->getWalletAmount(), 1);?></span></p>
                                     </div>
                                   </div>
                                   <div class="info-box-show">

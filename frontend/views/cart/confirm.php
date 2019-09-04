@@ -66,7 +66,7 @@ $cart->applyPromotion();
                         <span>Total Unit:</span><span><?=number_format($item->getTotalUnit());?></span>
                       </div>
                       <div class="grand-line last-line">
-                        <span>Total Price:</span><span>$<?=number_format($item->getTotalPrice());?></span>
+                        <span>Total Price:</span><span>$<?=number_format($item->getTotalPrice(), 1);?></span>
                       </div>
                     </div>
                   </div>

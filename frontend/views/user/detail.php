@@ -41,8 +41,8 @@ use frontend\models\OrderFile;
             <tbody>
               <tr>
                 <td><?=$model->game_title;?></td>
-                <td><?=number_format($model->quantity);?></td>
-                <td>$<?=number_format($model->total_price);?></td>
+                <td><?=number_format($model->quantity, 1);?></td>
+                <td>$<?=number_format($model->total_price, 1);?></td>
                 <td><?=number_format($model->total_unit);?> <?=$model->unit_name;?></td>
                 <td><?=$model->created_at;?></td>
                 <td><?=$model->getStatusLabel();?></td>

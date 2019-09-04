@@ -56,9 +56,10 @@ class m180517_025826_create_product_schema extends Migration
         ], $tableOptions);
 
         $this->createTable('{{%game_price}}', [
+            'id' => $this->primaryKey(),
             'game_id' => $this->integer()->notNull(),
-            'quantity' => $this->float(1),
-            'unit' => $this->integer(),
+            'provider_id' => $this->integer(),
+            'price' => $this->integer()->notNull(),
         ], $tableOptions);
     }
 

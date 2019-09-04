@@ -12,7 +12,6 @@ use frontend\components\acf\ResellerAccessRule;
 use yii\helpers\Url;
 
 use frontend\components\cart\Cart;
-use frontend\components\cart\CartItemImportBehavior;
 use frontend\components\cart\CartItem;
 use frontend\components\cart\CartItemReseller;
 use frontend\components\cart\CartPromotion;

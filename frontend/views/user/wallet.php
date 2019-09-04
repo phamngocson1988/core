@@ -61,15 +61,15 @@ use yii\helpers\Html;
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6">No data found</td></tr>
+              <tr><td colspan="7">No data found</td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td>#<?=$model->id?></td>
                 <td><?=$model->payment_at;?></td>
                 <td><?=$model->getTypeLabel();?></td>
-                <td><?=number_format($model->coin);?></td>
-                <td><?=number_format($model->balance);?></td>
+                <td><?=number_format($model->coin, 1);?></td>
+                <td><?=number_format($model->balance, 1);?></td>
                 <td><?=$model->description;?></td>
                 <td><?=$model->status;?></td>
               </tr>

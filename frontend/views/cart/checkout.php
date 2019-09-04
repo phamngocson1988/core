@@ -79,7 +79,7 @@ $cart->applyPromotion();
                           <span>Total Unit:</span><span><?=$cart->getTotalUnit();?></span>
                         </div>
                         <div class="grand-line last-line price" currency='usd' style="display: none">
-                          <span>Total Price:</span><span>$<?=$cart->getTotalPrice();?></span>
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                         <div class="grand-line last-line price" currency='cny' style="display: none">
                           <span>Total Price:</span><span>CNY<?=FormatConverter::convertCurrencyToCny($cart->getTotalPrice());?></span>
