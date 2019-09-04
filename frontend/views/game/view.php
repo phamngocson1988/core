@@ -75,12 +75,10 @@ $gamePromotion = reset($gamePromotions);
                                             <?php if ($showOriginPrice) : ?>
                                             <div class="origin-price">
                                                 $<span id="origin-price"><?=number_format($game->getOriginalPrice());?></span>
-                                                / CNY <span id="origin-price-cny"><?=FormatConverter::convertCurrencyToCny($game->getOriginalPrice());?></span>
                                             </div>
                                             <?php endif;?>
                                             <div class="sale-price">
                                                 $<span id="price"><?=number_format($game->getTotalPrice());?></span>
-                                                / NCY <span id="price-cny"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
                                             </div>
                                         </td>
                                     </tr>
@@ -88,7 +86,6 @@ $gamePromotion = reset($gamePromotions);
                                         <td colspan="3">Instant Total:</td>
                                         <td class="instant-total-number">
                                             $<span id="instant-price"><?=number_format($game->getTotalPrice());?></span>
-                                            / NCY <span id="instant-price-ncy"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -97,7 +94,6 @@ $gamePromotion = reset($gamePromotions);
                                         <td colspan="3">Subtotal:</td>
                                         <td>
                                             $<span class="subtotal-num" id="sub-price"><?=number_format($game->getTotalPrice());?></span>
-                                            / NCY <span class="subtotal-num" id="sub-price-ncy"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
                                         </td>
                                     </tr>
                                     <?php if ($showOriginPrice) : ?>
@@ -110,7 +106,6 @@ $gamePromotion = reset($gamePromotions);
                                         <td colspan="3">Grand Total:</td>
                                         <td>
                                             $<span id="total-price"><?=number_format($game->getTotalPrice());?></span>
-                                            / NCY <span id="total-price-ncy"><?=FormatConverter::convertCurrencyToCny($game->getTotalPrice());?></span>
                                         </td>
                                     </tr>
                                 </tfoot>
