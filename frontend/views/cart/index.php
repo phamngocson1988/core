@@ -149,7 +149,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                           <?php $saler_code = Yii::$app->session->get('saler_code');?>
                           <?=Html::input('text', 'saler_code', $saler_code, [
                             'readonly' => (boolean)$saler_code, 
-                            'placeholder' => 'Enter saler code',
+                            'placeholder' => "Enter supporter's code",
                             'class' => 'fl-left',
                             'id' => 'saler_code_value'
                           ]);?>

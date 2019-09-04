@@ -306,3 +306,17 @@ input[type=number] {
         min-height: 25px
     }
 }
+
+.content > p {
+    margin-bottom: 10px
+}
+
+.content ul {
+    list-style: unset;
+    margin-left: 10px;
+}
+
+.content ol {
+    list-style: decimal;
+    margin-left: 10px;
+}

@@ -68,7 +68,9 @@
                   {ActiveForm assign='form'}
                     {$form->field($model, 'saler_code', ['inputOptions' => ['readonly' => true, 'class' => 'form-control', 'id' => 'saler-code']])}
                     <div class="margiv-top-10">
+                      {if !$model->saler_code}
                       <button type="submit" class="btn green"> Generate </button>
+                      {/if}
                       <a class="btn success" href="javascript:;" id="copy_code"> Copy code </a>
                       <a class="btn success" href="javascript:;" id="copy_link"> Copy link </a>
                     </div>
