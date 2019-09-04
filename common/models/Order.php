@@ -215,6 +215,16 @@ class Order extends ActiveRecord
         return $this->rating == 1;
     }
 
+    public function getNetProfit()
+    {
+        $managing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'managing_cost_rate', 0);
+        $investing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'investing_cost_rate', 0);
+        $total_price = $this->total_price;
+        $total_cogs_price = $this->total_cogs_price;
+        $quantity = $this->quantity;
+        return $total_price - $total_cogs_price - ($managing_cost_rate + $investing_cost_rate) * $total_price / 100;
+    }
+
     public function delete()
     {
         if ($this->isVerifyingOrder()) return parent::delete();

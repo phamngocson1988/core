@@ -48,10 +48,11 @@ class ShoppingEventHandler extends Model
         $createdDate = new \DateTime();
         $validDate = $createdDate->add(new \DateInterval(sprintf("P%sD", $duration)))->format($format);
 
-        $totalPrice = $order->total_price;
+        // $totalPrice = $order->total_price;
+        $netProfit = $order->getNetProfit();
         $value = $setting->get('AffiliateProgramForm', 'value', 0);
         $type = $setting->get('AffiliateProgramForm', 'type', 'fix');
-        $commission = ($type == 'percent') ? ($totalPrice * $value) / 100 : $value;
+        $commission = ($type == 'percent') ? ($netProfit * $value) / 100 : $value;
         // save to affiliate table
         $userAff = new UserCommission();
         $userAff->user_id = $user->affiliated_with;
