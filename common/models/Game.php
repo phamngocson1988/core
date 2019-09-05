@@ -140,7 +140,8 @@ class Game extends ActiveRecord
         $desired_profit = Yii::$app->settings->get('ApplicationSettingForm', 'desired_profit', 0);
         $managing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'managing_cost_rate', 0);
         $investing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'investing_cost_rate', 0);
-        return ($cogs + $desired_profit) * (100 + $managing_cost_rate + $investing_cost_rate) / 100;
+        $price = ($cogs + $desired_profit) * (100 + $managing_cost_rate + $investing_cost_rate) / 100;
+        return ceil($price);
     }   
 
     public function getOriginalPrice()
