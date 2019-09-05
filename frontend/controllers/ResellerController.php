@@ -186,5 +186,9 @@ class ResellerController extends Controller
         ]);
     }
 
-
+    public function actionBulk()
+    {
+        $models = [new \frontend\models\Order()];
+        return $this->render('bulk', ['models' => $models]);
+    }
 }
