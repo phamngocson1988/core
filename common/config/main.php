@@ -4,10 +4,11 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'name' => 'Kinggems',
+    'name' => 'Reservation Backend',
     'timeZone' => 'Asia/Bangkok',
     'bootstrap' => [
         'queue', // The component registers its own console commands
+        'log', 
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [

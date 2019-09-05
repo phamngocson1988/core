@@ -11,20 +11,6 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
-    'defaultRoute' => 'order',
-    'bootstrap' => [
-        'log', 
-    ],
-    'modules' => [
-        'notifications' => [
-            'class' => 'webzop\notifications\Module',
-            'channels' => [
-                'screen' => [
-                    'class' => 'webzop\notifications\channels\ScreenChannel',
-                ],
-            ],
-        ],
-    ],
 	'language' => 'vi',
 	'sourceLanguage' => 'en-US',
     'components' => [
@@ -32,7 +18,7 @@ return [
             'csrfParam' => '_csrf-backend',            
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'backend\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
