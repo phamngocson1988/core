@@ -62,6 +62,10 @@
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput()->label('Secret (Mã bí mật) thử nghiệm')}
+                {$form->field($model, 'fee', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->textInput()->label('Phần trăm phí thanh toán')}
                 {$form->field($model, 'status', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

@@ -165,30 +165,7 @@
           </li>
         </ul>
       </li>
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-note"></i>
-        <span class="title">{Yii::t('app', 'games')}</span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item  ">
-            <a href="{url route='/game'}" class="nav-link " code='game.index'>
-            <span class="title">{Yii::t('app', 'games')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
-            <span class="title">Khuyến mãi</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/reseller'}" class="nav-link " code='game.reseller'>
-            <span class="title">Giá bán sỉ</span>
-            </a>
-          </li>
-        </ul>
-      </li>
+      
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="icon-tag"></i>
@@ -304,7 +281,34 @@
         </ul>
       </li>
       {/if}
-
+      {if $app->user->can('sale_manager') || $app->user->can('orderteam_manager')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-note"></i>
+        <span class="title">{Yii::t('app', 'games')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/game'}" class="nav-link " code='game.index'>
+            <span class="title">{Yii::t('app', 'games')}</span>
+            </a>
+          </li>
+          {if $app->user->can('orderteam_manager')}
+          <li class="nav-item  ">
+            <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
+            <span class="title">Khuyến mãi</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/reseller'}" class="nav-link " code='game.reseller'>
+            <span class="title">Giá bán sỉ</span>
+            </a>
+          </li>
+          {/if}
+        </ul>
+      </li>
+      {/if}
       {$roles = $app->authManager->getRolesByUser($app->user->id)}
       {$roles = array_keys($roles)}
       <li class="nav-item  ">

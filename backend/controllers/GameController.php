@@ -24,13 +24,13 @@ class GameController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['suggestion'],
                         'roles' => ['@'],
                     ],
+                    // [
+                    //     'allow' => true,
+                    //     'actions' => ['suggestion'],
+                    //     'roles' => ['@'],
+                    // ],
                 ],
             ],
         ];
