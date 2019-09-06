@@ -31,14 +31,19 @@ class Paypal extends PaymentGateway
     {
         $settings = Yii::$app->settings;
         $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
+        $config = [];
         if ($paypalMode == 'live') {
             $clientId = $settings->get('PaypalSettingForm', 'client_id');
             $clientSecret = $settings->get('PaypalSettingForm', 'client_secret');
+            $config = ['mode' => 'LIVE'];
         } else {
             $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
             $clientSecret = $settings->get('PaypalSettingForm', 'sandbox_client_secret');
+            $config = ['mode' => 'SANDBOX'];
         }
-        return new ApiContext(new OAuthTokenCredential($clientId, $clientSecret));
+        $context = new ApiContext(new OAuthTokenCredential($clientId, $clientSecret));
+        $context->setConfig($config);
+        return $context;
     }
 
     protected function loadData()
