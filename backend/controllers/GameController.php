@@ -190,4 +190,40 @@ class GameController extends Controller
             return $this->renderJson(true, ['items' => $items]);
         }
     }
+
+    public function actionPrices()
+    {
+        $this->view->params['main_menu_active'] = 'game.prices';
+        $request = Yii::$app->request;
+        $q = $request->get('q');
+        $status = $request->get('status');
+        $command = Game::find();
+        $command->where(['<>', 'status', Game::STATUS_DELETE]);
+        if ($status) {
+            $command->andWhere(['status' => $status]);
+        }
+        if ($q) {
+            $command->andWhere(['like', 'title', $q]);
+        }
+        $command->orderBy(['id' => SORT_DESC]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('prices.tpl', [
+            'models' => $models,
+            'pages' => $pages,
+            'q' => $q,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionUpdatePrice($id)
+    {
+        $game = Game::findOne($id);
+        $game->setScenario(Game::SCENARIO_CREATE);
+        $game->load(Yii::$app->request->post());
+        return $this->asJson(['result' => $game->save()]);
+    }
 }

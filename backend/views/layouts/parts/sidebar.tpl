@@ -296,6 +296,11 @@
           </li>
           {if $app->user->can('orderteam_manager')}
           <li class="nav-item  ">
+            <a href="{url route='game/prices'}" class="nav-link " code='game.prices'>
+            <span class="title">Giá nhà cung cấp</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
             <span class="title">Khuyến mãi</span>
             </a>

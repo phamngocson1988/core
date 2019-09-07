@@ -7,6 +7,7 @@ class Game extends \common\models\Game
 {
     const SCENARIO_CREATE = 'create';
     const SCENARIO_EDIT = 'edit';
+    const SCENARIO_UPDATE_PRICE = 'price';
 
     public $units = [];
     
@@ -14,7 +15,8 @@ class Game extends \common\models\Game
     {
         return [
             self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'price1', 'price2', 'price3'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'price1', 'price2', 'price3'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout'],
+            self::SCENARIO_UPDATE_PRICE => ['price1', 'price2', 'price3'],
         ];
     }
 
@@ -33,6 +35,9 @@ class Game extends \common\models\Game
             'pack' => 'Số đơn vị game trong gói',
             'pin' => 'Ưu tiên hiển thị',
             'soldout' => 'Hết hàng',
+            'price1' => 'Giá nhà cung cấp 1',
+            'price2' => 'Giá nhà cung cấp 2',
+            'price3' => 'Giá nhà cung cấp 3',
         ];
     }
 
@@ -47,7 +52,7 @@ class Game extends \common\models\Game
             ['pin', 'default', 'value' => self::UNPIN],
             ['soldout', 'default', 'value' => 0],
             [['original_price'], 'trim'],
-            [['price1', 'price2', 'price3'], 'safe']
+            [['price1', 'price2', 'price3'], 'safe'],
         ];
     }
 
