@@ -51,6 +51,8 @@ class Paypal extends PaymentGateway
         $cart = $this->cart;
         $totalPrice = $cart->getTotalPrice();
         $currency = "USD";
+        $fee = $this->getServiceFee($totalPrice);
+        $totalPrice += $fee;
 
         $itemList = [];
         foreach ($cart->getItems() as $cartItem) {
@@ -80,6 +82,15 @@ class Paypal extends PaymentGateway
             ->setPrice(($cart->getTotalDiscount()) * (-1));
             $itemList[] = $discountItem;
         }
+
+        // Paypal service fee
+        $feeItem = new Item();
+        $feeItem->setName('Paypal service fee')
+        ->setCurrency($currency)
+        ->setQuantity(1)
+        ->setSku('PPFEE')
+        ->setPrice($fee);
+        $itemList[] = $feeItem;
 
         $ppitemList = new ItemList();
         $ppitemList->setItems($itemList);
@@ -113,6 +124,12 @@ class Paypal extends PaymentGateway
             ->setRedirectUrls($redirectUrls)
             ->setTransactions(array($transaction));
         return $payment;
+    }
+
+    protected function getServiceFee($totalPrice)
+    {
+        $percent = Yii::$app->settings->get('PaypalSettingForm', 'fee', 0);
+        return $totalPrice * $percent / 100;
     }
 
     protected function sendRequest()

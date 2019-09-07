@@ -224,6 +224,7 @@ class GameController extends Controller
         $game = Game::findOne($id);
         $game->setScenario(Game::SCENARIO_CREATE);
         $game->load(Yii::$app->request->post());
+        Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $game->title);
         return $this->asJson(['result' => $game->save()]);
     }
 }

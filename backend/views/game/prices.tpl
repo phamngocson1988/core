@@ -78,7 +78,7 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h4 class="modal-title">Cập nhật giá</h4>
+                          <h4 class="modal-title">Cập nhật giá cho game {$model->title}</h4>
                         </div>
                         {ActiveForm assign='nextForm' action={url route='game/update-price' id=$model->id} options=['class' => 'form-row-seperated update-price-form']}
                         <div class="modal-body"> 

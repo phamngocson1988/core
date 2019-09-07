@@ -36,19 +36,19 @@ $cart->applyPromotion();
                         <input type="radio" name="abc" id=""><span>Visa/Master Card</span>
                       </div> -->
                       <div class="method-line">
-                        <input type="radio" name="identifier" value="paypal" checked="" currency='usd' class="paygate"><span>Paypal</span>
+                        <input type="radio" name="identifier" value="paypal" checked="" class="paygate"><span>Paypal</span><div style="display: inline;font-size: medium;font-style: italic;color: #696767;"> (+<?=Yii::$app->settings->get('PaypalSettingForm', 'fee');?>% for Paypal fee)</div>
                       </div>
                       <div class="method-line">
-                        <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?>  currency='usd' class="paygate"><span>King Coins - Balance <?=(!$can_place_order) ? Html::a(' - Go to Topup', Url::to(['topup/index']), ['style' => 'color: #ff3600']) : '';?></span>
+                        <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?>  class="paygate"><span>King Coins - Balance <?=(!$can_place_order) ? Html::a(' - Go to Topup', Url::to(['topup/index']), ['style' => 'color: #ff3600']) : '';?></span>
                       </div>
                       <div class="method-line">
-                        <input type="radio" name="identifier" value="alipay" currency='cny' class="paygate"><span>Alipay</span>
+                        <input type="radio" name="identifier" value="alipay" class="paygate"><span>Alipay</span>
                       </div>
                       <div class="method-line">
-                        <input type="radio" name="identifier" value="wechat" currency='cny' class="paygate"><span>Wechat</span>
+                        <input type="radio" name="identifier" value="wechat" class="paygate"><span>Wechat</span>
                       </div>
                       <div class="method-line">
-                        <input type="radio" name="identifier" value="skrill" currency='usd' class="paygate"><span>Skrill</span>
+                        <input type="radio" name="identifier" value="skrill" class="paygate"><span>Skrill</span>
                       </div>
                     </div>
                     <div class="is-desktop">
@@ -78,11 +78,20 @@ $cart->applyPromotion();
                         <div class="grand-line">
                           <span>Total Unit:</span><span><?=$cart->getTotalUnit();?></span>
                         </div>
-                        <div class="grand-line last-line price" currency='usd' style="display: none">
-                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
+                        <div class="grand-line last-line price" paygate='paypal' style="display: none">
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?><div style="display: inline;font-size: medium;font-style: italic;color: #696767;"> (+<?=number_format(Yii::$app->settings->get('PaypalSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);?>% for Paypal fee)</div></span>
                         </div>
-                        <div class="grand-line last-line price" currency='cny' style="display: none">
+                        <div class="grand-line last-line price" paygate='kinggems' style="display: none">
+                          <span>Total Price:</span><span><?=number_format($cart->getTotalPrice(), 1);?></span>
+                        </div>
+                        <div class="grand-line last-line price" paygate='alipay' style="display: none">
                           <span>Total Price:</span><span>CNY<?=FormatConverter::convertCurrencyToCny($cart->getTotalPrice());?></span>
+                        </div>
+                        <div class="grand-line last-line price" paygate='wechat' style="display: none">
+                          <span>Total Price:</span><span>CNY<?=FormatConverter::convertCurrencyToCny($cart->getTotalPrice());?></span>
+                        </div>
+                        <div class="grand-line last-line price" paygate='skrill' style="display: none">
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                       </div>
                     </div>
@@ -105,10 +114,9 @@ $('form').submit(function(){
     $('input[type=submit]', this).attr('disabled', 'disabled');
 });
 $('.paygate').on('click', function(){
-  var _c = $(this).attr('currency');
-  console.log(_c);
+  var _c = $(this).attr('value');
   $('.price').hide();
-  $('.price[currency=' + _c).show();
+  $('.price[paygate=' + _c).show();
 });
 $('.paygate:checked').trigger('click');
 JS;
