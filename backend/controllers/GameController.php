@@ -221,10 +221,23 @@ class GameController extends Controller
 
     public function actionUpdatePrice($id)
     {
-        $game = Game::findOne($id);
-        $game->setScenario(Game::SCENARIO_CREATE);
-        $game->load(Yii::$app->request->post());
-        Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $game->title);
-        return $this->asJson(['result' => $game->save()]);
+        $this->view->params['main_menu_active'] = 'game.prices';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+        $request = Yii::$app->request;
+        $model = Game::findOne($id);
+        $model->setScenario(Game::SCENARIO_CREATE);
+        if ($request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
+                $ref = $request->get('ref', Url::to(['game/prices']));
+                return $this->redirect($ref);    
+            } else {
+                $errors = $model->getErrorSummary(false);
+                $message = reset($errors);
+                Yii::$app->session->setFlash('error', $message);
+            }
+        }
+
+        return $this->render('update-price.tpl', ['model' => $model]);
     }
 }
