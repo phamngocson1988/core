@@ -47,21 +47,19 @@
               <th> Mã game </th>
               <th> {Yii::t('app', 'image')} </th>
               <th> {Yii::t('app', 'title')} </th>
-              <th> {Yii::t('app', 'price')} </th>
               <th> {Yii::t('app', 'status')} </th>
               <th class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
           <tbody>
               {if (!$models) }
-              <tr><td colspan="6">{Yii::t('app', 'no_data_found')}</td></tr>
+              <tr><td colspan="5">{Yii::t('app', 'no_data_found')}</td></tr>
               {/if}
               {foreach $models as $key => $model}
               <tr>
                 <td style="vertical-align: middle;">{$model->id}</td>
                 <td style="vertical-align: middle;"><img src="{$model->getImageUrl('50x50')}" width="50px;" /></td>
                 <td style="vertical-align: middle;">{$model->title}</td>
-                <td style="vertical-align: middle;">${$model->getPrice()|number_format}</td>
                 <td style="vertical-align: middle;">
                   {if $model->status == 'Y'}
                   <span class="label label-success">{Yii::t('app', 'visible')}</span>
