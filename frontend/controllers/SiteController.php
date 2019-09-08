@@ -248,7 +248,7 @@ class SiteController extends Controller
         if ($model->status == VerifyAccountViaPhoneForm::STATUS_INACTIVE) {
             $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'referApplyingEvent']);
             $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
-            $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'signonBonus']);
+            // $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'signonBonus']);
         }
 
         if ($model->load($request->post()) && $model->verify()) {

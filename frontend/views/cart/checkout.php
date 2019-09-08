@@ -36,7 +36,7 @@ $cart->applyPromotion();
                         <input type="radio" name="abc" id=""><span>Visa/Master Card</span>
                       </div> -->
                       <div class="method-line">
-                        <input type="radio" name="identifier" value="paypal" checked="" class="paygate"><span>Paypal</span><div style="display: inline;font-size: medium;font-style: italic;color: #696767;"> (+<?=Yii::$app->settings->get('PaypalSettingForm', 'fee');?>% for Paypal fee)</div>
+                        <input type="radio" name="identifier" value="paypal" checked="" class="paygate"><span>Paypal</span>
                       </div>
                       <div class="method-line">
                         <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?>  class="paygate"><span>King Coins - Balance <?=(!$can_place_order) ? Html::a(' - Go to Topup', Url::to(['topup/index']), ['style' => 'color: #ff3600']) : '';?></span>
@@ -79,7 +79,16 @@ $cart->applyPromotion();
                           <span>Total Unit:</span><span><?=$cart->getTotalUnit();?></span>
                         </div>
                         <div class="grand-line last-line price" paygate='paypal' style="display: none">
-                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?><div style="display: inline;font-size: medium;font-style: italic;color: #696767;"> (+<?=number_format(Yii::$app->settings->get('PaypalSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);?>% for Paypal fee)</div></span>
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
+                        </div>
+                        <?php
+                        $fee = number_format(Yii::$app->settings->get('PaypalSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
+                        ?>
+                        <div class="grand-line price" paygate='paypal' style="display: none">
+                          <span>Payment fee:</span><span>$<?=number_format($fee, 1);?></span>
+                        </div>
+                        <div class="grand-line price" paygate='paypal' style="display: none">
+                          <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $fee, 1);?></span>
                         </div>
                         <div class="grand-line last-line price" paygate='kinggems' style="display: none">
                           <span>Total Price:</span><span><?=number_format($cart->getTotalPrice(), 1);?></span>

@@ -103,7 +103,6 @@ class FormatConverter extends BaseFormatConverter
     {
         $rate = Yii::$app->settings->get('ApplicationSettingForm', 'exchange_rate_cny', 1);
         $cny = $amount * $rate;
-        $decimal = is_int($cny) ? 0 : $decimal;
-        return number_format($cny, $decimal);
+        return number_format(ceil($cny));
     }
 }

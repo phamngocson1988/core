@@ -19,13 +19,11 @@ class TopupEventHandler extends Model
         // refer gift just be applied only if the transaction is completed
         if ($model->status != PaymentTransaction::STATUS_COMPLETED) return;
         // refer gift just be applied for user who was invited by another account
-        $user = Yii::$app->user->getIdentity();
+        $user = $model->user;
         if (!$user->referred_by) return;
         // refer gift just be applied for the first transaction
-        $command = PaymentTransaction::find();
-        $command->where(['user_id' => $user->id]);
-        $command->andWhere(['status' => PaymentTransaction::STATUS_COMPLETED]);
-        if ($command->count() > 1) return;
+        $command = $user->getTransactions();
+        if ($command->count() > 1) return; 
         
         // Apply
         $refer = UserRefer::findOne([
@@ -51,6 +49,25 @@ class TopupEventHandler extends Model
         $refer->save();
         return;
     }
+
+    public static function welcomeBonus($event) 
+    {
+        $setting = Yii::$app->settings;
+        // Apply when this program is active
+        if (!$setting->get('WelcomeBonusForm', 'status')) return;
+
+        // Apply for the first topup
+        $transaction = $event->sender; //transaction
+        $user = $transaction->user;
+        $command = $user->getTransactions();
+        if ($command->count() > 1) return; 
+
+        // Apply bonus
+        $value = $setting->get('WelcomeBonusForm', 'value', 0);
+        if ($value) {
+            $user->topup($value, null, 'Signon Bonus');
+        }        
+    }    
 
     public static function sendNotificationEmail($event)
     {

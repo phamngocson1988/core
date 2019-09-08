@@ -235,6 +235,7 @@ class TopupController extends Controller
                 ])->one();
                 if (!$trn) throw new Exception("Can not find out the transaction #$refId");
                 $trn->on(PaymentTransaction::EVENT_AFTER_UPDATE, [TopupEventHandler::className(), 'applyReferGift']);
+                $trn->on(PaymentTransaction::EVENT_AFTER_UPDATE, [TopupEventHandler::className(), 'welcomeBonus']);
                 $trn->status = PaymentTransaction::STATUS_COMPLETED;
                 $trn->payment_id = $gateway->getPaymentId();
                 $trn->payment_at = date('Y-m-d H:i:s');
@@ -245,7 +246,7 @@ class TopupController extends Controller
                 $wallet->coin = $trn->total_coin;
                 $wallet->balance = $user->getWalletAmount() + $wallet->coin;
                 $wallet->type = UserWallet::TYPE_INPUT;
-                $wallet->description = "Transaction #$trn->auth_key";
+                $wallet->description = "Transaction #$trn->id";
                 $wallet->ref_name = PaymentTransaction::className();
                 $wallet->ref_key = $trn->auth_key;
                 $wallet->created_by = $user->id;
