@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Event;
 use yii\base\Model;
 use frontend\models\UserRefer;
+use frontend\models\UserWallet;
 use frontend\models\PaymentTransaction;
 
 class TopupEventHandler extends Model
@@ -63,10 +64,11 @@ class TopupEventHandler extends Model
         if ($command->count() > 1) return; 
 
         // Apply bonus
-        $value = $setting->get('WelcomeBonusForm', 'value', 0);
-        if ($value) {
-            $user->topup($value, null, 'Signon Bonus');
-        }        
+        $waiting = UserWallet::findOne(['user_id' => $user->id, 'status' => UserWallet::STATUS_WAITING]);
+        if ($waiting) {
+            $waiting->status = UserWallet::STATUS_COMPLETED;
+            $waiting->save();
+        }
     }    
 
     public static function sendNotificationEmail($event)
