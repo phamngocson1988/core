@@ -115,7 +115,7 @@ class SignupEventHandler extends Model
         }        
         if ($setting->get('WelcomeBonusForm', 'value')) {
             $user = $event->sender;
-            $user->topup((int)$setting->get('WelcomeBonusForm', 'value', 0), null, 'Signon Bonus', UserWallet::STATUS_WAITING);
+            $user->topup((int)$setting->get('WelcomeBonusForm', 'value', 0), null, 'WELCOME GIFT', UserWallet::STATUS_WAITING);
         }        
     }    
 }
