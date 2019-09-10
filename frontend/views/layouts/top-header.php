@@ -147,7 +147,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
         </div>
     </div>
 </div>
-<div class="container">
+<div class="container is-desktop header-time-box-outter">
     <div class="row">
         <div class="col col-sm-12">
             <div class="header-time-box display-ib">

@@ -114,11 +114,13 @@ section.header.no-home {
 section.header .top-header {
     position: relative;
     z-index: 2;
+    width: 100%;
 }
 
 .header .top-header .top-header-inner {
     float: left;
     padding-bottom: 15px;
+    width: 100%;
 }
 
 .top-header .logo {
@@ -813,11 +815,11 @@ section.product-description {
     padding: 50px 0;
 }
 
-/* section.product-description h3 {
+section.product-description h3 {
     font-size: 17px;
     font-weight: bold;
     margin-bottom: 10px;
-} */
+}
 
 /* End Product Detail */
 
@@ -2515,7 +2517,6 @@ th.thead-pagination {
         position: relative;
         z-index: 9999;
         max-width: 100%;
-        padding: 0;
     }
 
     .top-header .right-box .main-nav {
@@ -2556,6 +2557,7 @@ th.thead-pagination {
     .header .top-header .top-header-inner {
         display: flex;
         justify-content: space-between;
+        padding-bottom: 0;
     }
 
     .top-header .logo {
@@ -2565,6 +2567,8 @@ th.thead-pagination {
 
     .top-header .logo a {
         position: relative;
+        left: 0;
+        top: 0;
     }
 
     .mobile-nav-block {
@@ -2593,9 +2597,9 @@ th.thead-pagination {
     }
 
     a.mobile-nav-ico {
-        color: #fff;
+        color: #fff !important;
         font-size: 30px;
-        margin: 20px 0 20px 20px;
+        margin: 20px 0;
         display: inline-block;
     }
 
@@ -2603,7 +2607,7 @@ th.thead-pagination {
         color: #fff;
         font-size: 30px;
         display: inline-block;
-        margin: 20px 20px 20px 0;
+        margin: 20px 0;
     }
 
     a.ico-user-login.active,
@@ -2668,6 +2672,10 @@ th.thead-pagination {
 
     .main-slider .bx-wrapper {
         height: 64vh;
+    }
+
+    .header-time-box-outter {
+        display: none;
     }
 
     /* Product Detail */
@@ -2873,6 +2881,14 @@ th.thead-pagination {
     .refer-page-title .page-title-image img {
         width: 80%;
     }
+
+    .main-slider .slider-text-box {
+        bottom: 40%;
+    }
+
+    .main-slider .slider-text-box p:first-child, .main-slider .slider-text-box p:last-child {
+        width: 80%;
+    }
 }
 
 @media(max-width: 736px) {
@@ -2944,6 +2960,10 @@ th.thead-pagination {
         width: 70vw;
     }
 
+    .header .top-header .top-header-inner {
+        padding-bottom: 0;
+    }
+
     .top-header .right-box .login-box {
         width: 95vw;
     }
@@ -2954,6 +2974,10 @@ th.thead-pagination {
 
     .top-header .right-box .login-box form>.login-form .login-control {
         max-width: 40%;
+    }
+
+    .top-header .right-box .login-box form>.login-form .login-submit {
+        max-width: 68px;
     }
 
     .top-header .header-time-box {
