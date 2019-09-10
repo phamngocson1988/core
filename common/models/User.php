@@ -34,9 +34,11 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 1;
     const STATUS_ACTIVE = 10;
 
-    CONST IS_NOT_RESELLER = 1;
+    const IS_NOT_RESELLER = 1;
     const IS_RESELLER = 2;
-
+    const RESELLER_LEVEL_1 = 1;
+    const RESELLER_LEVEL_2 = 2;
+    const RESELLER_LEVEL_3 = 3;
 
     /**
      * @inheritdoc
@@ -326,6 +328,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function isReseller() 
     {
         return $this->is_reseller == self::IS_RESELLER;
+    }
+
+    public function getResellerLabel()
+    {
+        $labels = [
+            self::RESELLER_LEVEL_1 => 'level 1',
+            self::RESELLER_LEVEL_2 => 'level 2',
+            self::RESELLER_LEVEL_3 => 'level 3',
+        ];
+        return ArrayHelper::getValue($labels, $this->reseller_level);
     }
 
     public function getAffiliateChildren()

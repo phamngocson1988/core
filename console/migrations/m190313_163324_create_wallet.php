@@ -76,7 +76,7 @@ class m190313_163324_create_wallet extends Migration
             $command = $this->db->createCommand($alter);
             $command->execute();
 
-            $alter1 = "ALTER TABLE {{%user_wallet}} MODIFY `status` ENUM('pending', 'completed') NOT NULL";
+            $alter1 = "ALTER TABLE {{%user_wallet}} MODIFY `status` ENUM('pending', 'completed', 'waiting') NOT NULL";
             $command1 = $this->db->createCommand($alter1);
             $command1->execute();
 

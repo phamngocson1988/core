@@ -66,6 +66,20 @@
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
+          <span class="title">Reseller</span>
+          <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/reseller/index'}" class="nav-link " code='reseller.index'>
+            <span class="title">Tất cả</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+          <i class="fa fa-link"></i>
           <span class="title">Affiliate</span>
           <span class="arrow"></span>
         </a>
@@ -303,11 +317,6 @@
           <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
             <span class="title">Khuyến mãi</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/reseller'}" class="nav-link " code='game.reseller'>
-            <span class="title">Giá bán sỉ</span>
             </a>
           </li>
           {/if}

@@ -51,12 +51,13 @@ use yii\widgets\ActiveForm;
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 5%;"> STT </th>
-              <th style="width: 15%;"> Tên </th>
-              <th style="width: 15%;"> Tên đăng nhập </th>
-              <th style="width: 20%;"> Email </th>
-              <th style="width: 15%;"> Phone </th>
-              <th style="width: 15%;" class="dt-center"> Tác vụ </th>
+              <th> STT </th>
+              <th> Tên </th>
+              <th> Tên đăng nhập </th>
+              <th> Email </th>
+              <th> Phone </th>
+              <th> Level </th>
+              <th class="dt-center"> Tác vụ </th>
             </tr>
           </thead>
           <tbody>
@@ -70,9 +71,10 @@ use yii\widgets\ActiveForm;
                 <td style="vertical-align: middle;"><?=$model->username;?></td>
                 <td style="vertical-align: middle;"><?=$model->email;?></td>
                 <td style="vertical-align: middle;"><?=$model->phone;?></td>
+                <td style="vertical-align: middle;"><?=$model->getResellerLabel();?></td>
                 <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['reseller/price', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Giá game"><i class="fa fa-dollar"></i></a>
-                  <a href='<?=Url::to(['reseller/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Gỡ bỏ nhà bán lẻ"><i class="fa fa-trash"></i></a>
+                  <a href="<?=Url::to(['reseller/delete', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i> Remove </a>
+                  <a href="<?=Url::to(['reseller/upgrade', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Nâng cấp nhà bán lẻ này"><i class="fa fa-arrow-up"></i> Nâng cấp </a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -89,7 +91,7 @@ use yii\widgets\ActiveForm;
 $script = <<< JS
 
 // delete
-$('.delete').ajax_action({
+$('.action-link').ajax_action({
   method: 'POST',
   confirm: true,
   confirm_text: 'Bạn có muốn gỡ tính năng nhà bán lẻ của người dùng này không?',
