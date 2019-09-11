@@ -4,6 +4,7 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use backend\models\User;
 ?>
 
 <style>
@@ -74,7 +75,12 @@ use yii\widgets\ActiveForm;
                 <td style="vertical-align: middle;"><?=$model->getResellerLabel();?></td>
                 <td style="vertical-align: middle;">
                   <a href="<?=Url::to(['reseller/delete', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i> Remove </a>
-                  <a href="<?=Url::to(['reseller/upgrade', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Nâng cấp nhà bán lẻ này"><i class="fa fa-arrow-up"></i> Nâng cấp </a>
+                  <?php if ($model->reseller_level != User::RESELLER_LEVEL_3) : ?>
+                  <a href="<?=Url::to(['reseller/upgrade', 'id' => $model->id]);?>" class="btn btn-sm red link-action tooltips action-link" data-container="body" data-original-title="Nâng cấp nhà bán lẻ này"><i class="fa fa-arrow-up"></i> Nâng cấp </a>
+                  <?php endif; ?>
+                  <?php if ($model->reseller_level != User::RESELLER_LEVEL_1) : ?>
+                  <a href="<?=Url::to(['reseller/downgrade', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Giảm cấp nhà bán lẻ này"><i class="fa fa-arrow-down"></i> Giảm cấp </a>
+                  <?php endif; ?>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -94,7 +100,7 @@ $script = <<< JS
 $('.action-link').ajax_action({
   method: 'POST',
   confirm: true,
-  confirm_text: 'Bạn có muốn gỡ tính năng nhà bán lẻ của người dùng này không?',
+  confirm_text: 'Bạn có muốn thực hiện hành động này?',
   callback: function(data) {
     location.reload();
   },

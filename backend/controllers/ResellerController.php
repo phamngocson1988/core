@@ -57,6 +57,16 @@ class ResellerController extends Controller
         return $this->asJson(['status' => true]);
     }
 
+    public function actionDowngrade($id)
+    {
+        $user = User::findOne($id);
+        $nextLevel = in_array($user->reseller_level - 1, [User::RESELLER_LEVEL_1, User::RESELLER_LEVEL_2, User::RESELLER_LEVEL_3]) ? $user->reseller_level - 1 : $user->reseller_level;
+        $user->reseller_level = $nextLevel;
+        $user->save(false, ['reseller_level']);
+        Yii::$app->session->setFlash('success', sprintf("User %s have downgraded to level %s", $user->name, $user->getResellerLabel()));
+        return $this->asJson(['status' => true]);
+    }
+
     public function actionDelete($id)
     {
         $user = User::findOne($id);
@@ -83,35 +93,28 @@ class ResellerController extends Controller
     //     ]);
     // }
 
-    // public function actionPrice($id)
-    // {
-    //     $this->view->params['main_menu_active'] = 'game.reseller';
-    //     $request = Yii::$app->request;
-    //     $user = User::findOne($id);
-    //     if (!$user) throw new NotFoundHttpException('Not found');
-        
-    //     // Fetch all reseller prices
-    //     $command = GameReseller::find()->where(['reseller_id' => $id])->with('game');
-    //     $pages = new Pagination(['totalCount' => $command->count()]);
-    //     $models = $command->offset($pages->offset)
-    //                         ->limit($pages->limit)
-    //                         ->all();
-
-    //     // Fetch all games
-    //     $games = Game::find()->select(['id', 'title', 'pack', 'unit_name'])->all();
-    //     $games = array_map(function($game) {
-    //         $game->title = sprintf("%s (%s %s)", $game->title, $game->pack, $game->unit_name);
-    //         return $game;
-    //     }, $games);
-    //     $games = ArrayHelper::map($games, 'id', 'title');
-    //     return $this->render('price', [
-    //         'models' => $models,
-    //         'pages' => $pages,
-    //         'id' => $id,
-    //         'games' => $games,
-    //         'newModel' => new GameReseller()
-    //     ]);
-    // }
+    public function actionPrice()
+    {
+        $this->view->params['main_menu_active'] = 'reseller.price';
+        $request = Yii::$app->request;
+        $q = $request->get('q');
+        $command = Game::find();
+        $command->where(['<>', 'status', Game::STATUS_DELETE]);
+        if ($q) {
+            $command->andWhere(['like', 'title', $q]);
+        }
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('price', [
+            'models' => $models,
+            'pages' => $pages,
+            'q' => $q,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
 
     // public function actionCreatePrice($id)
     // {

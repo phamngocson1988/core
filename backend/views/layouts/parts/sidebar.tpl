@@ -72,7 +72,12 @@
         <ul class="sub-menu">
           <li class="nav-item  ">
             <a href="{url route='/reseller/index'}" class="nav-link " code='reseller.index'>
-            <span class="title">Tất cả</span>
+            <span class="title">Danh sách reseller</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/reseller/price'}" class="nav-link " code='reseller.price'>
+            <span class="title">Bảng giá cho reseller</span>
             </a>
           </li>
         </ul>
