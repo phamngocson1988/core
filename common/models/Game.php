@@ -144,6 +144,19 @@ class Game extends ActiveRecord
         return ceil($price);
     }   
 
+    public function getResellerPrice($level = User::RESELLER_LEVEL_1)
+    {
+        $cogs = $this->getCogs();
+        $desired_profit = Yii::$app->settings->get('ApplicationSettingForm', 'reseller_desired_profit', 0);
+        $managing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'managing_cost_rate', 0);
+        $investing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'investing_cost_rate', 0);
+        $price = ($cogs + $desired_profit) * (100 + $managing_cost_rate + $investing_cost_rate) / 100;
+        $price = ceil($price);
+        if ($level == User::RESELLER_LEVEL_1) return $price + 1.5;
+        if ($level == User::RESELLER_LEVEL_3) return $price - 1.5;
+        return $level;
+    }
+
     public function getOriginalPrice()
     {
         return ($this->original_price) ? $this->original_price : $this->getPrice();

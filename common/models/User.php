@@ -333,9 +333,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function getResellerLabel()
     {
         $labels = [
-            self::RESELLER_LEVEL_1 => 'level 1',
-            self::RESELLER_LEVEL_2 => 'level 2',
-            self::RESELLER_LEVEL_3 => 'level 3',
+            self::RESELLER_LEVEL_1 => 'Silver',
+            self::RESELLER_LEVEL_2 => 'Gold',
+            self::RESELLER_LEVEL_3 => 'Diamond',
         ];
         return ArrayHelper::getValue($labels, $this->reseller_level);
     }

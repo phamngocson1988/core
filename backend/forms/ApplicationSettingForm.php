@@ -19,7 +19,7 @@ class ApplicationSettingForm extends Model
     public $managing_cost_rate; 
     public $investing_cost_rate; 
     public $desired_profit; 
-    public $sign_on_bonus;
+    public $reseller_desired_profit; 
     public $logo;
 
     public function init()
@@ -36,8 +36,8 @@ class ApplicationSettingForm extends Model
             [['contact_phone', 'contact_email', 'admin_email', 'enable_subscribe', 'exchange_rate_cny', 'exchange_rate_vnd'], 'trim'],
             [['admin_email', 'contact_email'], 'email'],
             ['exchange_rate_cny', 'number'],
-            [['sign_on_bonus', 'logo', 'customer_service_email'], 'safe'],
-            [['managing_cost_rate', 'investing_cost_rate', 'desired_profit'], 'number'],
+            [['logo', 'customer_service_email'], 'safe'],
+            [['managing_cost_rate', 'investing_cost_rate', 'desired_profit', 'reseller_desired_profit'], 'number'],
         ];
     }
 
@@ -57,28 +57,8 @@ class ApplicationSettingForm extends Model
             'managing_cost_rate' => 'Tỷ lệ chi phí quản lý',
             'investing_cost_rate' => 'Tỷ lệ chi phí đầu tư',
             'desired_profit' => 'Lợi nhuận mong muốn',
-            'sign_on_bonus' => 'Khuyến mãi khi đăng ký',
+            'reseller_desired_profit' => 'Lợi nhuận mong muốn từ nhà bán lẻ',
             'logo' => 'Logo',
         ];
-    }
-
-    public function getPromotions()
-    {
-        $command = Promotion::find();
-        $command->select(['id', 'title']);
-        $now = date('Y-m-d');
-        $command->where([
-            'status' => Promotion::STATUS_VISIBLE,
-            'is_valid' => Promotion::IS_VALID,
-        ]);
-        $command->andWhere(['OR', 
-            ['<=', 'from_date', $now],
-            ['from_date' => null]
-        ]);
-        $command->andWhere(['OR', 
-            ['>=', 'to_date', $now],
-            ['to_date' => null]
-        ]);
-        return ArrayHelper::map($command->all(), 'id', 'title');
     }
 }

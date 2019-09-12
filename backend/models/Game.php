@@ -14,8 +14,8 @@ class Game extends \common\models\Game
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'price1', 'price2', 'price3'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'price', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout'],
+            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'price1', 'price2', 'price3'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout'],
             self::SCENARIO_UPDATE_PRICE => ['price1', 'price2', 'price3'],
         ];
     }
@@ -29,7 +29,6 @@ class Game extends \common\models\Game
             'unit_name' => 'Tên đơn vị game',
             'status' => 'Trạng thái sản phẩm',
             'image_id' => 'Hình ảnh',
-            'price' => 'Giá bán (Kcoin) / gói game',
             'reseller_price' => 'Giá dành cho đại lý',
             'original_price' => 'Giá gốc (Kcoin) / gói game',
             'pack' => 'Số đơn vị game trong gói',

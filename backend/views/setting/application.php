@@ -95,11 +95,11 @@ use yii\helpers\Url;
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
-                <?=$form->field($model, 'sign_on_bonus', [
+                <?=$form->field($model, 'reseller_desired_profit', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                ])->dropDownList($model->getPromotions(), ['prompt' => '- Chọn chương trình khuyến mãi -']);?>
+                ])->textInput();?>
 
                 <?=$form->field($model, 'logo', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],

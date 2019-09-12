@@ -3,6 +3,7 @@ use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use backend\models\User;
 ?>
 
 <style>
@@ -66,9 +67,9 @@ use yii\widgets\ActiveForm;
               <tr>
                 <td><?=$key + $pages->offset + 1;?></td>
                 <td style="vertical-align: middle;"><?=$model->title;?></td>
-                <td style="vertical-align: middle;"><?=$model->title;?></td>
-                <td style="vertical-align: middle;"><?=$model->title;?></td>
-                <td style="vertical-align: middle;"><?=$model->title;?></td>
+                <td style="vertical-align: middle;"><?=$model->getResellerPrice(User::RESELLER_LEVEL_1);?></td>
+                <td style="vertical-align: middle;"><?=$model->getResellerPrice(User::RESELLER_LEVEL_2);?></td>
+                <td style="vertical-align: middle;"><?=$model->getResellerPrice(User::RESELLER_LEVEL_3);?></td>
               </tr>
               <?php endforeach;?>
           </tbody>

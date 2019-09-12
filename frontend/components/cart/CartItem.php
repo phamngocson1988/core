@@ -1,6 +1,7 @@
 <?php
 namespace frontend\components\cart;
 
+use Yii;
 use yii2mod\cart\models\CartItemInterface;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -98,6 +99,14 @@ class CartItem extends Game implements CartItemInterface
     public function getTotalPrice()
     {
         return $this->getPrice() * (float)$this->quantity;
+    }
+
+    public function getPrice()
+    {
+        if (Yii::$app->user->isGuest) return parent::getPrice();
+        $user = Yii::$app->user->getIdentity();
+        if (!$user->isReseller()) return parent::getPrice();
+        return $this->getResellerPrice($user->reseller_level);
     }
 
     public function getTotalOriginalPrice()
