@@ -62,7 +62,7 @@
           </li>
         </ul>
       </li>
-      {if Yii::$app->user->can('admin')}
+      {if $app->user->can('sale_manager')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -70,11 +70,13 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
+          {if $app->user->can('admin')}
           <li class="nav-item  ">
             <a href="{url route='/reseller/index'}" class="nav-link " code='reseller.index'>
             <span class="title">Danh sách reseller</span>
             </a>
           </li>
+          {/if}
           <li class="nav-item  ">
             <a href="{url route='/reseller/price'}" class="nav-link " code='reseller.price'>
             <span class="title">Bảng giá cho reseller</span>
@@ -82,6 +84,8 @@
           </li>
         </ul>
       </li>
+      {/if}
+      {if $app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
