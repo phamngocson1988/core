@@ -154,7 +154,7 @@ class Game extends ActiveRecord
         $price = ceil($price);
         if ($level == User::RESELLER_LEVEL_1) return $price + 1.5;
         if ($level == User::RESELLER_LEVEL_3) return $price - 1.5;
-        return $level;
+        return $price;
     }
 
     public function getOriginalPrice()

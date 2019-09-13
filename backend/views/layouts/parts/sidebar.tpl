@@ -62,7 +62,7 @@
           </li>
         </ul>
       </li>
-      {if $app->user->can('sale_manager')}
+      {if $app->user->can('saler')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -70,7 +70,7 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->can('admin')}
+          {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/reseller/index'}" class="nav-link " code='reseller.index'>
             <span class="title">Danh sách reseller</span>
@@ -304,7 +304,7 @@
         </ul>
       </li>
       {/if}
-      {if $app->user->can('sale_manager') || $app->user->can('orderteam_manager')}
+      {if $app->user->can('saler') || $app->user->can('orderteam_manager')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
@@ -323,12 +323,12 @@
             <span class="title">Giá nhà cung cấp</span>
             </a>
           </li>
+          {/if}
           <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
             <span class="title">Khuyến mãi</span>
             </a>
           </li>
-          {/if}
         </ul>
       </li>
       {/if}
