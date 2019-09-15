@@ -18,7 +18,7 @@ class CartItem extends Game implements CartItemInterface
     public $note;
     public $platform;
     public $login_method;
-
+    public $raw;
     public $reception_email;
     /* Saler */
     public $saler_code;
@@ -28,6 +28,7 @@ class CartItem extends Game implements CartItemInterface
     const SCENARIO_INFO_CART = 'info_cart';
     const SCENARIO_RECEPTION_CART = 'reception_cart';
     const SCENARIO_IMPORT_CART = 'import_cart';
+    const SCENARIO_IMPORT_RAW = 'import_raw';
 
     public static $quantites = [
         '0.5' => 0.5, 
@@ -63,7 +64,8 @@ class CartItem extends Game implements CartItemInterface
             self::SCENARIO_EDIT_CART => ['id', 'quantity'],
             self::SCENARIO_INFO_CART => ['id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note', 'saler_code'],
             self::SCENARIO_IMPORT_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
-            self::SCENARIO_RECEPTION_CART => ['id', 'reception_email']
+            self::SCENARIO_RECEPTION_CART => ['id', 'reception_email'],
+            self::SCENARIO_IMPORT_RAW => ['id', 'raw', 'quantity'],
         ];
     }
 
@@ -71,7 +73,7 @@ class CartItem extends Game implements CartItemInterface
     {
         return [
             [['id'], 'required'],
-            [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT_CART, self::SCENARIO_ADD_CART, self::SCENARIO_IMPORT_CART]],
+            [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT_CART, self::SCENARIO_ADD_CART, self::SCENARIO_IMPORT_CART, self::SCENARIO_IMPORT_RAW]],
             ['quantity', 'number'],
 
             [['username', 'password', 'character_name', 'platform'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
@@ -88,6 +90,7 @@ class CartItem extends Game implements CartItemInterface
 
             ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART],
             ['saler_code', 'trim', 'on' => self::SCENARIO_INFO_CART],
+            ['raw', 'trim', 'on' => self::SCENARIO_IMPORT_RAW],
         ];
     }
 

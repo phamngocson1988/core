@@ -5,6 +5,7 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use unclead\multipleinput\MultipleInput;
 use unclead\multipleinput\TabularInput;
+use frontend\components\cart\CartItem;
 ?>
 <section class="topup-page">
   <div class="container">
@@ -36,19 +37,31 @@ use unclead\multipleinput\TabularInput;
             
           ],
           'columns' => [
-              [
-                  'name'  => 'game_title',
-                  'title' => 'Raw account data',
-                  'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_TEXT_INPUT,
-              ],
-              [
-                  'name'  => 'quantity',
-                  'title' => 'Quantity',
-                  'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_TEXT_INPUT,
-              ],
+            [
+              'name'  => 'raw',
+              'title' => 'Raw account data',
+              'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_TEXT_INPUT,
+            ],
+            [
+              'name'  => 'quantity',
+              'title' => 'Quantity',
+              'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_DROPDOWN,
+              'defaultValue' => 1,
+              'items' => CartItem::$quantites
+            ],
+            [
+              'title' => 'Price',
+              'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_STATIC,
+              'value' => function($data) {
+                  return Html::tag('span', $data->getPrice(), ['class' => 'label label-info']);
+              },
+              'headerOptions' => [
+              ]
+            ],
           ],
           ]); ?>
         </div>
+        <input type="submit" value="Send"/>
       </div>
     </div>
   </div>

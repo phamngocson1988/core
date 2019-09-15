@@ -29,140 +29,147 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
             <div class="checkout-tabs-content">
               <div class="ck-tab-content active" id="ck-cart-box">
                 <?php $form = ActiveForm::begin(['id' => 'infor-form', 'action' => ['cart/index']]); ?>
-                  <?=Html::hiddenInput('scenario', CartItem::SCENARIO_INFO_CART);?>
-                  <?php $item->setScenario(CartItem::SCENARIO_INFO_CART);?>
-                  <div class="game-info">
-                    <div class="form-group">
-                      <label>Game</label>
-                      <span><?=$item->title;?></span>
-                    </div>
-                    <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios'], ['class' => 'radio-form-control']) ?>
-                    <?= $form->field($item, 'character_name')->textInput()->label('Character Name');?>
-                    <?= $form->field($item, 'login_method', [
-                      'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem']
-                    ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'])->label('Login Method');?>
-                    <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
-                    <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
-                    <?= $form->field($item, 'server')->textInput()->label('Server');?>
-                    <?php //$saler_code = Yii::$app->session->get('saler_code');?>
-                    <?= $form->field($item, 'saler_code', [
-                      'options' => ['tag' => false],
-                      'inputOptions' => ['id' => 'saler_code'],
-                      'template' => '{input}'
-                    ])->hiddenInput(); ?>
-                    <?= $form->field($item, 'recover_code', [
-                      'inputOptions' => ['id' => 'recover_code'],
-                      'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; text-align: right']
-                    ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 6 or 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 13456578 12252546');?>
-                    <?= $form->field($item, 'note')->textInput()->label('Special note (optional)');?>
+                <?=Html::hiddenInput('scenario', CartItem::SCENARIO_INFO_CART);?>
+                <?php $item->setScenario(CartItem::SCENARIO_INFO_CART);?>
+                <div class="game-info">
+                  <div class="form-group">
+                    <label>Game</label>
+                    <span><?=$item->title;?></span>
+                  </div>
+                  <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios'], ['class' => 'radio-form-control']) ?>
+                  <?= $form->field($item, 'character_name')->textInput()->label('Character Name');?>
+                  <?= $form->field($item, 'login_method', [
+                    'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem']
+                  ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'])->label('Login Method');?>
+                  <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
+                  <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
+                  <?= $form->field($item, 'server')->textInput()->label('Server');?>
+                  <?php //$saler_code = Yii::$app->session->get('saler_code');?>
+                  <?= $form->field($item, 'saler_code', [
+                    'options' => ['tag' => false],
+                    'inputOptions' => ['id' => 'saler_code'],
+                    'template' => '{input}'
+                  ])->hiddenInput(); ?>
+                  <?= $form->field($item, 'recover_code', [
+                    'inputOptions' => ['id' => 'recover_code'],
+                    'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; text-align: right']
+                  ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 6 or 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 13456578 12252546');?>
+                  <?= $form->field($item, 'note')->textInput()->label('Special note (optional)');?>
 
-                    <div class="form-group">
-                      <label class="control-label" for="cartitem-note"></label>
-                      <div class="recovery-code-hint-box1" style="font-size: 12px;color: #6f5e5e;text-align: left;width: 63%;float: left;">
-                        <div class="top">
-                            The recovery code is very necessary, kindly support!
-                        </div><br/>
-                        <div class="bottom">
-                            <div>How to?</div>
-                            <div>Get Google code, <a href="https://youtu.be/F3xMAXFRHNE" target="_blank" style="color: blue;">click here</a></div>
-                            <div>Get Facebook code, <a href="https://youtu.be/sG1GAcsslzs" target="_blank" style="color: blue;">click here</a></div>
-                        </div>
+                  <div class="form-group">
+                    <label class="control-label" for="cartitem-note"></label>
+                    <div class="recovery-code-hint-box1" style="font-size: 12px;color: #6f5e5e;text-align: left;width: 63%;float: left;">
+                      <div class="top">
+                          The recovery code is very necessary, kindly support!
+                      </div><br/>
+                      <div class="bottom">
+                          <div>How to?</div>
+                          <div>Get Google code, <a href="https://youtu.be/F3xMAXFRHNE" target="_blank" style="color: blue;">click here</a></div>
+                          <div>Get Facebook code, <a href="https://youtu.be/sG1GAcsslzs" target="_blank" style="color: blue;">click here</a></div>
                       </div>
                     </div>
                   </div>
-                  <?php ActiveForm::end(); ?>
+                </div>
+                <?php ActiveForm::end(); ?>
 
-                  <?php Pjax::begin(); ?>
-                  <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
-                  <?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
-                  <?php $item->setScenario(CartItem::SCENARIO_EDIT_CART);?>
-                  <div class="checkout-cart-total" style="padding-top: 70px">
-                    <div class="game-totals">
-                      <div class="product-temple-total">
-                        <table>
-                          <thead>
-                            <tr>
-                              <th>Unit</th>
-                              <th>Quantity</th>
-                              <th>Unit Total</th>
-                              <th>Price</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td><?=number_format($item->pack);?> <?=strtoupper($item->unit_name);?></td>
-                              <td>
-                                <?= $form->field($item, 'quantity', [
-                                'options' => ['tag' => false],
-                                'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
-                                'template' => '{input}'
-                                ])->dropDownList(CartItem::$quantites);?>
-                              </td>
-                              <td id="unit"><?=number_format($item->getTotalUnit());?></td>
-                              <td>
-                                  <?php $showOriginPrice = ($item->original_price && $item->original_price > $item->getPrice());?>
-                                  <?php if ($showOriginPrice) : ?>
-                                  <div class="origin-price">
-                                      $<span id="origin-price"><?=number_format($item->getOriginalPrice() * $item->quantity, 1);?></span>
-                                  </div>
-                                  <?php endif;?>
-                                  <div class="sale-price">
-                                      $<span id="price"><?=number_format($item->getTotalPrice(), 1);?></span>
-                                  </div>
-                              </td>
-                            </tr>
-                            <tr class="instant-total">
-                              <td colspan="3">Instant Total:</td>
-                              <td class="instant-total-number">$<span id="instant-price"><?=number_format($item->getTotalPrice(), 1);?></span></td>
-                            </tr>
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <td colspan="3">Sub Total Unit:</td>
-                              <td><span class="subtotal-num"><?=number_format($cart->getSubTotalUnit());?></span></td>
-                            </tr>
-                            <?php if ($cart->hasPromotion()) : ?>
-                            <tr>
-                              <td colspan="3">Promotion:</td>
-                              <td>+<span class="saving-number"><?=$cart->getPromotionUnit();?></span></td>
-                            </tr>
-                            <?php endif;?>
-                            <tr class="tr-grand-total">
-                              <td colspan="3">Grand Total Unit:</td>
-                              <td><span><?=number_format($cart->getTotalUnit());?></span></td>
-                            </tr>
-                          </tfoot>
-                        </table>
-                      </div>
-                      <div class="cart-table">
-                        <div class="cart-coupon">
+                <?php Pjax::begin(); ?>
+                <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
+                <?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
+                <?php $item->setScenario(CartItem::SCENARIO_EDIT_CART);?>
+                <div class="checkout-cart-total" style="padding-top: 70px">
+                  <div class="game-totals">
+                    <div class="product-temple-total">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Unit</th>
+                            <th>Quantity</th>
+                            <th>Unit Total</th>
+                            <th>Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><?=number_format($item->pack);?> <?=strtoupper($item->unit_name);?></td>
+                            <td>
+                              <?= $form->field($item, 'quantity', [
+                              'options' => ['tag' => false],
+                              'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
+                              'template' => '{input}'
+                              ])->dropDownList(CartItem::$quantites);?>
+                            </td>
+                            <td id="unit"><?=number_format($item->getTotalUnit());?></td>
+                            <td>
+                                <?php $showOriginPrice = ($item->original_price && $item->original_price > $item->getPrice());?>
+                                <?php if ($showOriginPrice) : ?>
+                                <div class="origin-price">
+                                    $<span id="origin-price"><?=number_format($item->getOriginalPrice() * $item->quantity, 1);?></span>
+                                </div>
+                                <?php endif;?>
+                                <div class="sale-price">
+                                    $<span id="price"><?=number_format($item->getTotalPrice(), 1);?></span>
+                                </div>
+                            </td>
+                          </tr>
+                          <tr class="instant-total">
+                            <td colspan="3">Instant Total:</td>
+                            <td class="instant-total-number">$<span id="instant-price"><?=number_format($item->getTotalPrice(), 1);?></span></td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="3">Sub Total Unit:</td>
+                            <td><span class="subtotal-num"><?=number_format($cart->getSubTotalUnit());?></span></td>
+                          </tr>
                           <?php if ($cart->hasPromotion()) : ?>
-                          <?php $promotion = $cart->getPromotionItem();?>
-                          <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion->code;?>" readonly>
-                          <button class="cus-btn yellow fl-left apply-coupon-btn" id="clear_voucher" type="button">Clear</button>
-                          <?php else : ?>
-                          <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion_code;?>">
-                          <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
+                          <tr>
+                            <td colspan="3">Promotion:</td>
+                            <td>+<span class="saving-number"><?=$cart->getPromotionUnit();?></span></td>
+                          </tr>
                           <?php endif;?>
-                        </div>
-                        <div class="cart-coupon">
-                          <?php $saler_code = Yii::$app->session->get('saler_code');?>
-                          <?=Html::input('text', 'saler_code', $saler_code, [
-                            'readonly' => (boolean)$saler_code, 
-                            'placeholder' => "Enter supporter's code",
-                            'class' => 'fl-left',
-                            'id' => 'saler_code_value'
-                          ]);?>
-                        </div>
+                          <tr class="tr-grand-total">
+                            <td colspan="3">Grand Total Unit:</td>
+                            <td><span><?=number_format($cart->getTotalUnit());?></span></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    <div class="cart-table">
+                      <div class="cart-coupon">
+                        <?php if ($cart->hasPromotion()) : ?>
+                        <?php $promotion = $cart->getPromotionItem();?>
+                        <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion->code;?>" readonly>
+                        <button class="cus-btn yellow fl-left apply-coupon-btn" id="clear_voucher" type="button">Clear</button>
+                        <?php else : ?>
+                        <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion_code;?>">
+                        <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
+                        <?php endif;?>
+                      </div>
+                      <div class="cart-coupon">
+                        <?php $saler_code = Yii::$app->session->get('saler_code');?>
+                        <?=Html::input('text', 'saler_code', $saler_code, [
+                          'readonly' => (boolean)$saler_code, 
+                          'placeholder' => "Enter supporter's code",
+                          'class' => 'fl-left',
+                          'id' => 'saler_code_value'
+                        ]);?>
                       </div>
                     </div>
                   </div>
-                  <?php ActiveForm::end(); ?>
-                  <?php Pjax::end(); ?>
-                  <div class="ck-submit-form">
-                    <a class="btn-product-detail-add-to-cart" href="javascript:;" id="update-cart-button">Submit</a>
+                </div>
+                <?php ActiveForm::end(); ?>
+                <?php Pjax::end(); ?>
+                <div class="ck-submit-form" style="text-align: left;margin-left: 17%;margin-top: 0px;font-size: 13;color: #6f5e5e;">
+                  <div class="terms-row">
+                      <input type="checkbox" style="margin-right: 7px;margin-top: 4px;" id="policy_risk"><span>I confirm that by making this purchase I understand and agree with the <a href="<?=Url::to(['site/term', 'slug' => 'risk']);?>" target="_blank" style="color: blue">lossing sharing term</a></span>
                   </div>
-                </form>
+                  <div class="terms-row">
+                      <input type="checkbox" style="margin-right: 7px;margin-top: 4px;" id="policy_no_refund"><span>By making this purchase, I'm confirming that I totally understand <a href="<?=Url::to(['site/term', 'slug' => 'no_refund']);?>" target="_blank" style="color: blue">no refund policy</a></span>
+                  </div>
+                </div>
+                <div class="ck-submit-form">
+                  <a class="btn-product-detail-add-to-cart" href="javascript:;" id="update-cart-button">Submit</a>
+                </div>
               </div>
             </div>
           </div>
@@ -175,6 +182,14 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
 <?php
 $script = <<< JS
 $('body').on('click', "#update-cart-button", function(){
+  if (!$('#policy_risk').is(':checked')) {
+    alert('You need to agree with our lossing sharing term.');
+    return false;
+  }
+  if (!$('#policy_no_refund').is(':checked')) {
+    alert('You need to agree with our no refund policy.');
+    return false;
+  }
   $('form#infor-form').submit();
 });
 
@@ -220,6 +235,7 @@ $("#ck-cart-box").on('blur', '#saler_code_value', function(){
   console.log($(this).val());
   $('#saler_code').val($(this).val());
 });
+
 JS;
 $this->registerJs($script);
 ?>

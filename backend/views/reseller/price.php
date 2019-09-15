@@ -4,6 +4,7 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use backend\models\User;
+use common\components\helpers\FormatConverter;
 ?>
 
 <style>
@@ -48,6 +49,18 @@ use backend\models\User;
         </div>
       </div>
       <div class="portlet-body">
+        <div class="row margin-bottom-10">
+          <form method="GET">
+            <div class="form-group col-md-4">
+              <label>Tìm kiếm theo tên game: </label> <input type="search" class="form-control" placeholder="Nhập tên game" name="q" value="<?=$q;?>">
+            </div>
+            <div class="form-group col-md-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> Tìm kiếm
+              </button>
+            </div>
+          </form>
+        </div>
         <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
@@ -67,9 +80,9 @@ use backend\models\User;
               <tr>
                 <td><?=$key + $pages->offset + 1;?></td>
                 <td style="vertical-align: middle;"><?=$model->title;?></td>
-                <td style="vertical-align: middle;"><?=$model->getResellerPrice(User::RESELLER_LEVEL_1);?></td>
-                <td style="vertical-align: middle;"><?=$model->getResellerPrice(User::RESELLER_LEVEL_2);?></td>
-                <td style="vertical-align: middle;"><?=$model->getResellerPrice(User::RESELLER_LEVEL_3);?></td>
+                <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_1);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_1));?></td>
+                <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_2);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_2));?></td>
+                <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_3);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_3));?></td>
               </tr>
               <?php endforeach;?>
           </tbody>

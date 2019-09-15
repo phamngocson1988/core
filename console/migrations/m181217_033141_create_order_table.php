@@ -66,6 +66,7 @@ class m181217_033141_create_order_table extends Migration
             'recover_code' => $this->string(255),
             'server' => $this->string(255),
             'note' => $this->string(255),
+            'raw' => $this->text(),
 
             // time process
             'process_start_time' => $this->dateTime(),
