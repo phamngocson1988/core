@@ -329,6 +329,13 @@
             <span class="title">Khuyến mãi</span>
             </a>
           </li>
+          {if $app->user->can('sale_manager')}
+          <li class="nav-item  ">
+            <a href="{url route='game/log'}" class="nav-link " code='game.log'>
+            <span class="title">Lịch sử thay đổi giá</span>
+            </a>
+          </li>
+          {/if}
         </ul>
       </li>
       {/if}

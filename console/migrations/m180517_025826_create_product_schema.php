@@ -61,6 +61,15 @@ class m180517_025826_create_product_schema extends Migration
             'provider_id' => $this->integer(),
             'price' => $this->integer()->notNull(),
         ], $tableOptions);
+
+        $this->createTable('{{%game_price_log}}', [
+            'id' => $this->primaryKey(),
+            'game_id' => $this->integer()->notNull(),
+            'price' => $this->float()->notNull(),
+            'config' => $this->text(),
+            'updated_by' => $this->integer()->notNull()
+            'updated_at' => $this->dateTime()->notNull(),
+        ], $tableOptions);
     }
 
     public function down()

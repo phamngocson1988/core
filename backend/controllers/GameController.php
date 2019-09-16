@@ -10,6 +10,8 @@ use backend\models\Game;
 use backend\models\Product;
 use common\models\GameImage;
 use backend\models\GameUnit;
+use backend\models\GamePriceLog;
+use backend\forms\FetchPriceLogForm;
 
 class GameController extends Controller
 {
@@ -227,6 +229,22 @@ class GameController extends Controller
         $model = Game::findOne($id);
         $model->setScenario(Game::SCENARIO_CREATE);
         if ($request->isPost) {
+            // Write log
+            $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
+                $game = $event->sender; //game
+                $setting = Yii::$app->settings;
+                $config = [
+                    'managing_cost_rate' => $setting->get('ApplicationSettingForm', 'managing_cost_rate', 0),
+                    'investing_cost_rate' => $setting->get('ApplicationSettingForm', 'investing_cost_rate', 0),
+                    'desired_profit' => $setting->get('ApplicationSettingForm', 'desired_profit', 0),
+                    'reseller_desired_profit' => $setting->get('ApplicationSettingForm', 'reseller_desired_profit', 0),
+                ];
+                $log = new GamePriceLog();
+                $log->game_id = $game->id;
+                $log->price = $game->getPrice();
+                $log->config = json_encode($config);
+                $log->save();
+            });
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
                 $ref = $request->get('ref', Url::to(['game/prices']));
@@ -239,5 +257,23 @@ class GameController extends Controller
         }
 
         return $this->render('update-price.tpl', ['model' => $model]);
+    }
+
+    public function actionLog()
+    {
+        $this->view->params['main_menu_active'] = 'game.log';
+        $request = Yii::$app->request;
+        $form = new FetchPriceLogForm(['game_id' => $request->get('game_id')]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('log', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form
+        ]);
     }
 }
