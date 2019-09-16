@@ -193,9 +193,9 @@ class GameController extends Controller
         }
     }
 
-    public function actionPrices()
+    public function actionProvider()
     {
-        $this->view->params['main_menu_active'] = 'game.prices';
+        $this->view->params['main_menu_active'] = 'game.provider';
         $request = Yii::$app->request;
         $q = $request->get('q');
         $status = $request->get('status');
@@ -213,7 +213,7 @@ class GameController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['id' => SORT_DESC])
                             ->all();
-        return $this->render('prices.tpl', [
+        return $this->render('provider.tpl', [
             'models' => $models,
             'pages' => $pages,
             'q' => $q,
@@ -223,7 +223,7 @@ class GameController extends Controller
 
     public function actionUpdatePrice($id)
     {
-        $this->view->params['main_menu_active'] = 'game.prices';
+        $this->view->params['main_menu_active'] = 'game.provider';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = Game::findOne($id);
@@ -232,6 +232,8 @@ class GameController extends Controller
             // Write log
             $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
                 $game = $event->sender; //game
+                $oldGame = clone $game;
+                $oldGame->attributes = $event->changedAttributes;
                 $setting = Yii::$app->settings;
                 $config = [
                     'managing_cost_rate' => $setting->get('ApplicationSettingForm', 'managing_cost_rate', 0),
@@ -239,15 +241,19 @@ class GameController extends Controller
                     'desired_profit' => $setting->get('ApplicationSettingForm', 'desired_profit', 0),
                     'reseller_desired_profit' => $setting->get('ApplicationSettingForm', 'reseller_desired_profit', 0),
                 ];
+                $newPrice = $game->getPrice();
+                $oldPrice = $oldGame->getPrice();
                 $log = new GamePriceLog();
                 $log->game_id = $game->id;
-                $log->price = $game->getPrice();
-                $log->config = json_encode($config);
+                $log->old_price = $oldPrice;
+                $log->new_price = $newPrice;
+                $log->change = $newPrice - $oldPrice;
+                $log->config = json_encode($event->changedAttributes);
                 $log->save();
             });
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
-                $ref = $request->get('ref', Url::to(['game/prices']));
+                $ref = $request->get('ref', Url::to(['game/provider']));
                 return $this->redirect($ref);    
             } else {
                 $errors = $model->getErrorSummary(false);
@@ -263,7 +269,10 @@ class GameController extends Controller
     {
         $this->view->params['main_menu_active'] = 'game.log';
         $request = Yii::$app->request;
-        $form = new FetchPriceLogForm(['game_id' => $request->get('game_id')]);
+        $form = new FetchPriceLogForm([
+            'game_id' => $request->get('game_id'),
+            'date_range' => $request->get('date_range'),
+        ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -274,6 +283,29 @@ class GameController extends Controller
             'models' => $models,
             'pages' => $pages,
             'search' => $form
+        ]);
+    }
+
+    public function actionPrice()
+    {
+        $this->view->params['main_menu_active'] = 'game.price';
+        $request = Yii::$app->request;
+        $q = $request->get('q');
+        $command = Game::find();
+        $command->where(['<>', 'status', Game::STATUS_DELETE]);
+        if ($q) {
+            $command->andWhere(['like', 'title', $q]);
+        }
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('price', [
+            'models' => $models,
+            'pages' => $pages,
+            'q' => $q,
+            'ref' => Url::to($request->getUrl(), true),
         ]);
     }
 }

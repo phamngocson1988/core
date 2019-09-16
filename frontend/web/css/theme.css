@@ -324,3 +324,7 @@ input[type=number] {
 .top-header .header-time-box, .header-time-box {
     z-index: 1;
 }
+
+.pack-item {
+    margin-bottom: 20px;
+}

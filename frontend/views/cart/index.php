@@ -52,7 +52,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                   ])->hiddenInput(); ?>
                   <?= $form->field($item, 'recover_code', [
                     'inputOptions' => ['id' => 'recover_code'],
-                    'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; text-align: right']
+                    'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; padding-left: 37%']
                   ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 6 or 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 13456578 12252546');?>
                   <?= $form->field($item, 'note')->textInput()->label('Special note (optional)');?>
 

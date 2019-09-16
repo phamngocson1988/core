@@ -77,11 +77,6 @@
             </a>
           </li>
           {/if}
-          <li class="nav-item  ">
-            <a href="{url route='/reseller/price'}" class="nav-link " code='reseller.price'>
-            <span class="title">Bảng giá cho reseller</span>
-            </a>
-          </li>
         </ul>
       </li>
       {/if}
@@ -319,7 +314,7 @@
           </li>
           {if $app->user->can('orderteam_manager')}
           <li class="nav-item  ">
-            <a href="{url route='game/prices'}" class="nav-link " code='game.prices'>
+            <a href="{url route='game/provider'}" class="nav-link " code='game.provider'>
             <span class="title">Giá nhà cung cấp</span>
             </a>
           </li>
@@ -329,10 +324,15 @@
             <span class="title">Khuyến mãi</span>
             </a>
           </li>
-          {if $app->user->can('sale_manager')}
+          {if $app->user->can('saler')}
           <li class="nav-item  ">
             <a href="{url route='game/log'}" class="nav-link " code='game.log'>
             <span class="title">Lịch sử thay đổi giá</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='game/price'}" class="nav-link " code='game.price'>
+            <span class="title">Tổng hợp giá bán</span>
             </a>
           </li>
           {/if}

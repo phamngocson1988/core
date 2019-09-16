@@ -65,7 +65,9 @@ class m180517_025826_create_product_schema extends Migration
         $this->createTable('{{%game_price_log}}', [
             'id' => $this->primaryKey(),
             'game_id' => $this->integer()->notNull(),
-            'price' => $this->float()->notNull(),
+            'old_price' => $this->float()->notNull(),
+            'new_price' => $this->float()->notNull(),
+            'change' => $this->float()->notNull(),
             'config' => $this->text(),
             'updated_by' => $this->integer()->notNull()
             'updated_at' => $this->dateTime()->notNull(),
