@@ -67,9 +67,18 @@ class m180517_025826_create_product_schema extends Migration
             'game_id' => $this->integer()->notNull(),
             'old_price' => $this->float()->notNull(),
             'new_price' => $this->float()->notNull(),
-            'change' => $this->float()->notNull(),
+
+            'old_reseller_1' => $this->float()->notNull(),
+            'new_reseller_1' => $this->float()->notNull(),
+
+            'old_reseller_2' => $this->float()->notNull(),
+            'new_reseller_2' => $this->float()->notNull(),
+
+            'old_reseller_3' => $this->float()->notNull(),
+            'new_reseller_3' => $this->float()->notNull(),
+
             'config' => $this->text(),
-            'updated_by' => $this->integer()->notNull()
+            'updated_by' => $this->integer()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
         ], $tableOptions);
     }

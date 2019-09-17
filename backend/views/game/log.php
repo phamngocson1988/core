@@ -80,30 +80,78 @@ use common\components\helpers\FormatConverter;
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th>Tên game</th>
-              <th>Ngày thay đổi</th>
-              <th>Người thực hiện</th>
-              <th>Giá cũ</th>
-              <th>Giá đã thay đổi</th>
-              <th>Tăng giảm</th>
+              <th rowspan='2' class="dt-center">Tên game</th>
+              <th rowspan='2' class="dt-center">Ngày thay đổi</th>
+              <th rowspan='2' class="dt-center">Người thực hiện</th>
+              <th colspan='4' class="dt-center">Giá cũ</th>
+              <th colspan='4' class="dt-center">Giá đã thay đổi</th>
+              <th colspan='4' class="dt-center">Tăng giảm</th>
+            </tr>
+            <tr>
+              <th class="dt-center">Giá bán</th>
+              <th class="dt-center">Giá reseller 1</th>
+              <th class="dt-center">Giá reseller 2</th>
+              <th class="dt-center">Giá reseller 3</th>
+              <th class="dt-center">Giá bán</th>
+              <th class="dt-center">Giá reseller 1</th>
+              <th class="dt-center">Giá reseller 2</th>
+              <th class="dt-center">Giá reseller 3</th>
+              <th class="dt-center">Giá bán</th>
+              <th class="dt-center">Giá reseller 1</th>
+              <th class="dt-center">Giá reseller 2</th>
+              <th class="dt-center">Giá reseller 3</th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="15"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td style="vertical-align: middle;"><?=$model->game->title;?></td>
                 <td style="vertical-align: middle;"><?=$model->updated_at;?></td>
                 <td style="vertical-align: middle;"><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
+                
                 <td style="vertical-align: middle;">$<?=$model->old_price;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->old_price);?></td>
+                <td style="vertical-align: middle;">$<?=$model->old_reseller_1;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->old_reseller_1);?></td>
+                <td style="vertical-align: middle;">$<?=$model->old_reseller_2;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->old_reseller_2);?></td>
+                <td style="vertical-align: middle;">$<?=$model->old_reseller_3;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->old_reseller_3);?></td>
+
                 <td style="vertical-align: middle;">$<?=$model->new_price;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->new_price);?></td>
+                <td style="vertical-align: middle;">$<?=$model->new_reseller_1;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->new_reseller_1);?></td>
+                <td style="vertical-align: middle;">$<?=$model->new_reseller_2;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->new_reseller_2);?></td>
+                <td style="vertical-align: middle;">$<?=$model->new_reseller_3;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->new_reseller_3);?></td>
+
                 <td style="vertical-align: middle;">
-                  <?php if ($model->change < 0) : ?>
-                  <span style="color:red"><?=$model->change;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->change);?></span>
+                  <?php $change = $model->new_price - $model->old_price;?>
+                  <?php if ($change < 0) : ?>
+                  <span style="color:red"><?=$change;?> | CNY <?=FormatConverter::convertCurrencyToCny($change);?></span>
                   <?php else : ?>
-                  <span style="color:blue"><?=$model->change;?> | CNY <?=FormatConverter::convertCurrencyToCny($model->change);?></span>
+                  <span style="color:blue"><?=$change;?> | CNY <?=FormatConverter::convertCurrencyToCny($change);?></span>
+                  <?php endif;?>
+                </td>
+                <td style="vertical-align: middle;">
+                  <?php $change1 = $model->new_reseller_1 - $model->old_reseller_1;?>
+                  <?php if ($change1 < 0) : ?>
+                  <span style="color:red"><?=$change1;?> | CNY <?=FormatConverter::convertCurrencyToCny($change1);?></span>
+                  <?php else : ?>
+                  <span style="color:blue"><?=$change1;?> | CNY <?=FormatConverter::convertCurrencyToCny($change1);?></span>
+                  <?php endif;?>
+                </td>
+                <td style="vertical-align: middle;">
+                  <?php $change2 = $model->new_reseller_2 - $model->old_reseller_2;?>
+                  <?php if ($change2 < 0) : ?>
+                  <span style="color:red"><?=$change2;?> | CNY <?=FormatConverter::convertCurrencyToCny($change2);?></span>
+                  <?php else : ?>
+                  <span style="color:blue"><?=$change2;?> | CNY <?=FormatConverter::convertCurrencyToCny($change2);?></span>
+                  <?php endif;?>
+                </td>
+                <td style="vertical-align: middle;">
+                  <?php $change3 = $model->new_reseller_3 - $model->old_reseller_3;?>
+                  <?php if ($change3 < 0) : ?>
+                  <span style="color:red"><?=$change3;?> | CNY <?=FormatConverter::convertCurrencyToCny($change3);?></span>
+                  <?php else : ?>
+                  <span style="color:blue"><?=$change3;?> | CNY <?=FormatConverter::convertCurrencyToCny($change3);?></span>
                   <?php endif;?>
                 </td>
               </tr>

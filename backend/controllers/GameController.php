@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\data\Pagination;
 use backend\models\Game;
+use backend\models\User;
 use backend\models\Product;
 use common\models\GameImage;
 use backend\models\GameUnit;
@@ -247,7 +248,15 @@ class GameController extends Controller
                 $log->game_id = $game->id;
                 $log->old_price = $oldPrice;
                 $log->new_price = $newPrice;
-                $log->change = $newPrice - $oldPrice;
+
+                $log->old_reseller_1 = $oldGame->getResellerPrice(User::RESELLER_LEVEL_1);
+                $log->new_reseller_1 = $game->getResellerPrice(User::RESELLER_LEVEL_1);
+
+                $log->old_reseller_2 = $oldGame->getResellerPrice(User::RESELLER_LEVEL_2);
+                $log->new_reseller_2 = $game->getResellerPrice(User::RESELLER_LEVEL_2);
+
+                $log->old_reseller_3 = $oldGame->getResellerPrice(User::RESELLER_LEVEL_3);
+                $log->new_reseller_3 = $game->getResellerPrice(User::RESELLER_LEVEL_3);
                 $log->config = json_encode($event->changedAttributes);
                 $log->save();
             });

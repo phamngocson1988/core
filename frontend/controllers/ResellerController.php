@@ -194,58 +194,58 @@ class ResellerController extends Controller
         $user = Yii::$app->user->identity;
         if (Model::loadMultiple($models, Yii::$app->request->post())) {
             foreach ($models as $cartItem) {
-            $cartItem->setScenario(CartItemReseller::SCENARIO_IMPORT_RAW);
-            $totalPrice = $cartItem->getTotalPrice();
-            $balance = $user->getWalletAmount();
-            if ($totalPrice > $balance) {
-                $errors[] = 'Not enough balance in your wallet';
-                break;
-            } elseif ($cartItem->validate()) {
-                $totalUnit = $cartItem->getTotalUnit();
-                
-                // Order detail
-                $order = new Order();
-                $order->sub_total_price = $totalPrice;
-                $order->price = $totalPrice;
-                $order->cogs_price = $totalPrice;
-                $order->total_discount = 0;
-                $order->total_price = $totalPrice;
-                $order->customer_id = $user->id;
-                $order->customer_name = $user->name;
-                $order->customer_email = $user->email;
-                $order->customer_phone = $user->phone;
-                $order->status = Order::STATUS_PENDING;
-                $order->payment_at = date('Y-m-d H:i:s');
-                $order->raw = $cartItem->raw;
-                $order->generateAuthKey();
-    
-                // Item detail
-                $order->game_id = $id;
-                $order->game_title = $cartItem->getLabel();
-                $order->quantity = $cartItem->quantity;
-                $order->unit_name = $cartItem->unit_name;
-                $order->sub_total_unit = $totalUnit;
-                $order->promotion_unit = 0;
-                $order->total_unit = $totalUnit;
-                $order->save();
-    
-                $wallet = new UserWallet();
-                $wallet->coin = (-1) * $totalPrice;
-                $wallet->balance = $user->getWalletAmount() + $wallet->coin;
-                $wallet->type = UserWallet::TYPE_OUTPUT;
-                $wallet->description = "Pay for order #$order->id";
-                $wallet->ref_name = Order::classname();
-                $wallet->ref_key = $order->id;
-                $wallet->created_by = $user->id;
-                $wallet->user_id = $user->id;
-                $wallet->status = UserWallet::STATUS_COMPLETED;
-                $wallet->payment_at = date('Y-m-d H:i:s');
-                $wallet->save();    
-            } else {
-                $error = $cartItem->getErrorSummary(true);
-                $errors[] = $error[0];
+                $cartItem->setScenario(CartItemReseller::SCENARIO_IMPORT_RAW);
+                $totalPrice = $cartItem->getTotalPrice();
+                $balance = $user->getWalletAmount();
+                if ($totalPrice > $balance) {
+                    $errors[] = 'Not enough balance in your wallet';
+                    break;
+                } elseif ($cartItem->validate()) {
+                    $totalUnit = $cartItem->getTotalUnit();
+                    
+                    // Order detail
+                    $order = new Order();
+                    $order->sub_total_price = $totalPrice;
+                    $order->price = $totalPrice;
+                    $order->cogs_price = $totalPrice;
+                    $order->total_discount = 0;
+                    $order->total_price = $totalPrice;
+                    $order->customer_id = $user->id;
+                    $order->customer_name = $user->name;
+                    $order->customer_email = $user->email;
+                    $order->customer_phone = $user->phone;
+                    $order->status = Order::STATUS_PENDING;
+                    $order->payment_at = date('Y-m-d H:i:s');
+                    $order->raw = $cartItem->raw;
+                    $order->generateAuthKey();
+        
+                    // Item detail
+                    $order->game_id = $id;
+                    $order->game_title = $cartItem->getLabel();
+                    $order->quantity = $cartItem->quantity;
+                    $order->unit_name = $cartItem->unit_name;
+                    $order->sub_total_unit = $totalUnit;
+                    $order->promotion_unit = 0;
+                    $order->total_unit = $totalUnit;
+                    $order->save();
+        
+                    $wallet = new UserWallet();
+                    $wallet->coin = (-1) * $totalPrice;
+                    $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+                    $wallet->type = UserWallet::TYPE_OUTPUT;
+                    $wallet->description = "Pay for order #$order->id";
+                    $wallet->ref_name = Order::classname();
+                    $wallet->ref_key = $order->id;
+                    $wallet->created_by = $user->id;
+                    $wallet->user_id = $user->id;
+                    $wallet->status = UserWallet::STATUS_COMPLETED;
+                    $wallet->payment_at = date('Y-m-d H:i:s');
+                    $wallet->save();    
+                } else {
+                    $error = $cartItem->getErrorSummary(true);
+                    $errors[] = $error[0];
+                }
             }
-        }
         }
 
 
