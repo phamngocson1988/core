@@ -87,7 +87,7 @@ class AffiliateController extends Controller
         $user = Yii::$app->user->identity;
         $aff = UserAffiliate::findOne($user->id);
         if ($aff) $aff->delete();
-        return $this->asJson(['status' => true]);
+        return $this->redirect(['affiliate/index']);
     }
 
     public function actionIndex()

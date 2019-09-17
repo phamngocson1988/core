@@ -52,11 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
               </div>
             <?php ActiveForm::end(); ?>
             <?php else : ?>
-            <?php $form = ActiveForm::begin(['id' => 'form-signup', 'options' => ['autocomplete' => 'off']]); ?>
-              <div class="register-action">
-                <a href="<?=Url::to(['affiliate/cancel-request']);?>" role="button" class="cus-btn yellow has-shadow f20" id="cancel-request">CANCEL REQUEST</a>
-              </div>
-            <?php ActiveForm::end(); ?>
+            <div class="register-action">
+              <a href="<?=Url::to(['affiliate/cancel-request']);?>" role="button" class="cus-btn yellow has-shadow f20" id="cancel-request">CANCEL REQUEST</a>
+            </div>
             <?php endif; ?>
           </div>
         </div>
@@ -68,17 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
   </div>
 </section>
-
-
 <?php
 $script = <<< JS
-$("#cancel-request").ajax_action({
-  confirm: true,
-  confirm_text: 'Do you really want cancel this request?',
-  callback: function(eletement, data) {
-    location.reload();
-  }
-});
 $('#form-signup').on('submit', function(e){
   if (!$('#agree').is(':checked')) {
     alert('You need to agree with our terms & conditions.');
