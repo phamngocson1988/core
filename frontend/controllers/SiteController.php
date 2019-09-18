@@ -419,12 +419,26 @@ class SiteController extends Controller
         return $this->render('term', ['content' => $content]);
     }
 
-    public function actionTest()
+    public function actionQueue()
     {
         $user = Yii::$app->user->identity;
         Yii::$app->queue->push(new \console\queue\SignupEmail([
             'user' => $user
         ]));
         die($user->email);
+    }
+
+    public function actionEmail()
+    {
+        $email = 'phamngocson1988@gmail.com';
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        Yii::$app->mailer->compose('test_mail')
+            ->setTo($email)
+            ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+            ->setSubject(sprintf("TESTING EMAIL"))
+            ->setTextBody("Thanks for your deposit")
+            ->send();
+        var_dump($email);die;
     }
 }
