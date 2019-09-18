@@ -16,8 +16,8 @@ use yii\helpers\Url;
   <div class="container">
     <div class="row">
       <div class="col col-sm-12">
-        <form method="GET" autocomplete='off'>
-          <input type="text" placeholder="Got a question? Find it here...">
+        <form method="GET" autocomplete='off' action="<?=Url::to(['site/question-search']);?>">
+          <input type="text" name="q" placeholder="Got a question? Find it here...">
           <input type="submit" value="">
         </form>
       </div>

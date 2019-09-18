@@ -398,6 +398,20 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionQuestionSearch()
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['main_menu_active'] = 'site.question';
+        $q = Yii::$app->request->get('q');
+        $command = Question::find();
+        $command->where(['like', 'title', $q]);
+        $command->orWhere(['like', 'content', $q]);
+        return $this->render('question-search', [
+            'models' => $command->all(),
+            'q' => $q
+        ]);
+    }
+
     public function actionQuestionDetail($id, $slug) 
     {
         $this->view->params['body_class'] = 'global-bg';

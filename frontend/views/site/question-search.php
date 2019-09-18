@@ -17,7 +17,7 @@ use yii\helpers\Url;
     <div class="row">
       <div class="col col-sm-12">
         <form method="GET" autocomplete='off' action="<?=Url::to(['site/question-search']);?>">
-          <input type="text" name="q" placeholder="Got a question? Find it here...">
+          <input type="text" name="q" value="<?=$q;?>" placeholder="Got a question? Find it here...">
           <input type="submit" value="">
         </form>
       </div>
@@ -32,13 +32,20 @@ use yii\helpers\Url;
           <div class="qa-listing">
             <div class="qa-section">
               <div class="qa-section-title">
-                <?=$question->title;?>
+                Kinggems Knowledge Base
               </div>
               <div class="qa-section-list showing" style="display: block">
                 <div class="row">
                   <div class="qa-item col col-12 col-lg-12">
                     <div class="qa-group">
-                      <?=$question->content;?>
+                      <ul>
+                        <?php foreach ($models as $question) : ?>
+                        <li>
+                          <i class="far fa-question-circle"></i>
+                          <a href="<?=Url::to(['site/question-detail', 'id' => $question->id, 'slug' => $question->slug]);?>"><?=$question->title;?></a>
+                        </li>
+                        <?php endforeach;?>
+                      </ul>
                     </div>
                   </div>
                 </div>

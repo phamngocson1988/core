@@ -65,11 +65,11 @@ $setting = Yii::$app->settings;
                 <div class="footer-socials">
                     <h4>Find Us</h4>
                     <ul>
-                        <li><a href="javascript:void;"><img src="/images/ico-fb.png" alt=""></a></li>
-                        <li><a href="javascript:void;"><img src="/images/ico-viber.png" alt=""></a></li>
-                        <li><a href="javascript:void;"><img src="/images/ico-mb.png" alt=""></a></li>
-                        <li><a href="javascript:void;"><img src="/images/ico-wechat.png" alt=""></a></li>
-                        <li><a href="javascript:void;"><img src="/images/ico-line.png" alt=""></a></li>
+                        <li><a href="https://www.facebook.com/Kinggems.us/" target="_blank"><img src="/images/ico-fb.png" alt=""></a></li>
+                        <li><a href="https://wa.me/84979997559" target="_blank"><img src="/images/ico-viber.png" alt=""></a></li>
+                        <li><a href="https://t.me/KINGGEMS1303" target="_blank"><img src="/images/ico-mb.png" alt=""></a></li>
+                        <li><a href="https://u.wechat.com/IK-OOlb-deUWqmVLUAnz-GA" target="_blank"><img src="/images/ico-wechat.png" alt=""></a></li>
+                        <li><a href="https://line.me/ti/p/6MOHXdDoCg" target="_blank"><img src="/images/ico-line.png" alt=""></a></li>
                     </ul>
                 </div>
             </div>
