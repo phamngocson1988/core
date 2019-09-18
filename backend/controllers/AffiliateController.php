@@ -78,21 +78,19 @@ class AffiliateController extends Controller
         if( $request->isAjax) {
             $userAffiliate = UserAffiliate::findOne($id);
             if (!$userAffiliate) throw new NotFoundHttpException('Not found');
-            $userAffiliate->on('EVENT_AFTER_DELETE', function($event) {
-                $affiliate = $event->sender;
-                // Send mail notification
-                $admin = Yii::$app->params['email_admin'];
-                $siteName = Yii::$app->name;
-                Yii::$app->mailer->compose('cancel_affiliate_request', [
-                 'affiliate' => $affiliate
-                ])
-                ->setTo($affiliate->user->email)
-                ->setFrom([$admin => $siteName])
-                ->setSubject("KINGGEMS.US - Your affiliate request is cancelled")
-                ->setTextBody("Your affiliate request is cancelled")
-                ->send();
-            });
-            return $this->asJson(['status' => $userAffiliate->delete()]);
+            $userAffiliate->delete();
+            // Send mail notification
+            $admin = Yii::$app->params['email_admin'];
+            $siteName = Yii::$app->name;
+            Yii::$app->mailer->compose('cancel_affiliate_request', [
+             'affiliate' => $userAffiliate
+            ])
+            ->setTo($userAffiliate->user->email)
+            ->setFrom([$admin => $siteName])
+            ->setSubject("KINGGEMS.US - Your affiliate request is cancelled")
+            ->setTextBody("Your affiliate request is cancelled")
+            ->send();
+            return $this->asJson(['status' => true]);
         }
     }
 

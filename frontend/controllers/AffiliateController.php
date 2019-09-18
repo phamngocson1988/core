@@ -78,6 +78,7 @@ class AffiliateController extends Controller
         if ($model->load($request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
             $sent = true;
+            return $this->redirect(['affiliate/index']);
         }
         return $this->render('register', ['model' => $model, 'sent' => $sent]);
     }
