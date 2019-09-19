@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 use unclead\multipleinput\MultipleInput;
 use unclead\multipleinput\TabularInput;
 use frontend\components\cart\CartItem;
+use yii\widgets\Pjax;
 ?>
 <section class="topup-page">
   <div class="container">
@@ -23,7 +24,7 @@ use frontend\components\cart\CartItem;
     </div>
   </div>
 </section>
-
+<?php Pjax::begin(); ?>
 <?php $form = ActiveForm::begin(); ?>
 <section class="topup-page">
   <div class="container">
@@ -33,9 +34,6 @@ use frontend\components\cart\CartItem;
           <?= TabularInput::widget([
           'models' => $models,
           'cloneButton' => true,
-          'cloneButtonOptions' => [
-            
-          ],
           'columns' => [
             [
               'name'  => 'raw',
@@ -47,16 +45,24 @@ use frontend\components\cart\CartItem;
               'title' => 'Quantity',
               'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_DROPDOWN,
               'defaultValue' => 1,
-              'items' => CartItem::$quantites
+              'items' => CartItem::$quantites,
+              'options' => ['class' => 'quantity']
             ],
             [
               'title' => 'Price',
               'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_STATIC,
               'value' => function($data) {
-                  return Html::tag('span', $data->getPrice(), ['class' => 'label label-info']);
+                  return $data->getPrice();
               },
-              'headerOptions' => [
-              ]
+              'options' => ['class' => 'price'],
+            ],
+            [
+              'title' => 'Total Price',
+              'type'  => \unclead\multipleinput\MultipleInputColumn::TYPE_STATIC,
+              'value' => function($data) {
+                  return $data->getTotalPrice();
+              },
+              'options' => ['class' => 'total'],
             ],
           ],
           ]); ?>
@@ -67,3 +73,15 @@ use frontend\components\cart\CartItem;
   </div>
 </section>
 <?php ActiveForm::end(); ?>
+<?php Pjax::end(); ?>
+<?php
+$script = <<< JS
+$('body').on('change', ".quantity", function(){
+  var parent = $(this).closest('tr');
+  var _p = parent.find('.price').html();
+  var _q = $(this).val();
+  $(this).closest('tr').find('.total').html(_p * _q);
+});
+JS;
+$this->registerJs($script);
+?>

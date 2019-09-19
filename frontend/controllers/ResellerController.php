@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\components\acf\ResellerAccessRule;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 use frontend\components\cart\Cart;
 use frontend\components\cart\CartItem;
@@ -190,15 +191,16 @@ class ResellerController extends Controller
 
     public function actionBulk($id)
     {
-        $models = [CartItem::findOne($id)];
+        $singleItem = CartItem::findOne($id);
+        $singleItem->setScenario(CartItemReseller::SCENARIO_IMPORT_RAW);
+        $models = [$singleItem];
         $user = Yii::$app->user->identity;
+        $balance = $user->getWalletAmount();
         if (Model::loadMultiple($models, Yii::$app->request->post())) {
             // Validate
             $modelQuantities = ArrayHelper::getColumn($models, 'quantity');
             $totalQuantities = array_sum($modelQuantities);
-            $singleItem = CartItem::findOne($id);
             $singleItem->quantity = $totalQuantities;
-            $balance = $user->getWalletAmount();
             $totalPrice = $singleItem->getTotalPrice();
             if ($balance >= $totalPrice) {
                 foreach ($models as $cartItem) {
@@ -258,6 +260,7 @@ class ResellerController extends Controller
         }
         return $this->render('bulk', [
             'models' => $models,
+            'balance' => $balance
         ]);
     }
 }
