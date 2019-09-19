@@ -5,6 +5,7 @@ use Yii;
 use backend\controllers\Controller;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
 use backend\models\Game;
 use backend\models\User;
@@ -244,21 +245,40 @@ class GameController extends Controller
                 ];
                 $newPrice = $game->getPrice();
                 $oldPrice = $oldGame->getPrice();
+                $attrs = [
+                    'old_price' => $oldPrice,
+                    'new_price' => $newPrice,
+                    'old_reseller_1' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_1),
+                    'new_reseller_1' => $game->getResellerPrice(User::RESELLER_LEVEL_1),
+                    'old_reseller_2' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_2),
+                    'new_reseller_2' => $game->getResellerPrice(User::RESELLER_LEVEL_2),
+                    'old_reseller_3' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_3),
+                    'new_reseller_3' => $game->getResellerPrice(User::RESELLER_LEVEL_3),
+                ];
                 $log = new GamePriceLog();
+                $log->attributes = $attrs;
                 $log->game_id = $game->id;
-                $log->old_price = $oldPrice;
-                $log->new_price = $newPrice;
-
-                $log->old_reseller_1 = $oldGame->getResellerPrice(User::RESELLER_LEVEL_1);
-                $log->new_reseller_1 = $game->getResellerPrice(User::RESELLER_LEVEL_1);
-
-                $log->old_reseller_2 = $oldGame->getResellerPrice(User::RESELLER_LEVEL_2);
-                $log->new_reseller_2 = $game->getResellerPrice(User::RESELLER_LEVEL_2);
-
-                $log->old_reseller_3 = $oldGame->getResellerPrice(User::RESELLER_LEVEL_3);
-                $log->new_reseller_3 = $game->getResellerPrice(User::RESELLER_LEVEL_3);
                 $log->config = json_encode($event->changedAttributes);
                 $log->save();
+
+                // Send mail to saler
+                $salerIds = Yii::$app->authManager->getUserIdsByRole('saler');
+                $saleManagerIds = Yii::$app->authManager->getUserIdsByRole('sale_manager');
+                $salerTeamIds = array_merge($salerIds, $saleManagerIds);
+                $salerTeamIds = array_unique($salerTeamIds);
+                $salerTeams = User::findAll($salerTeamIds);
+                $salerEmails = ArrayHelper::getColumn($salerTeams, 'email');
+                $admin = Yii::$app->params['email_admin'];
+                $siteName = Yii::$app->name;
+                Yii::$app->mailer->compose('notify_updating_game_price', [
+                    'game' => $game,
+                    'changes' => $attrs
+                ])
+                ->setTo($salerEmails)
+                ->setFrom([$admin => $siteName])
+                ->setSubject(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
+                ->setTextBody(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
+                ->send();
             });
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
