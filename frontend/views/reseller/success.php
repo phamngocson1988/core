@@ -35,7 +35,7 @@ use yii\helpers\Url;
               <tbody>
                 <?php foreach ($orders as $model) :?>
                 <tr>
-                  <td><?=$model->id;?></td>
+                  <td><a href="<?=Url::to(['user/detail', 'id' => $model->id]);?>" class="normal-link"><?=$model->id;?></a></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->quantity;?></td>
                   <td><?=$model->total_price;?></td>

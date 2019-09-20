@@ -264,7 +264,8 @@ class ResellerController extends Controller
         return $this->render('bulk', [
             'models' => $models,
             'balance' => $balance,
-            'post' => $request->post()
+            'default_price' => $singleItem->getPrice(),
+            'title' => $singleItem->title,
         ]);
     }
 

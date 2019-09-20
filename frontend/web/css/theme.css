@@ -332,3 +332,8 @@ input[type=number] {
 a.cus-btn, .cus-btn {
     font-weight: normal;
 }
+
+a.normal-link {
+    color: #007bff;
+    text-decoration: underline;
+}
