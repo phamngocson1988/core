@@ -27,29 +27,39 @@ $cart->applyPromotion();
             <div class="checkout-tabs-content">
               <div class="ck-tab-content active" id="ck-cart-box">
                 <?php $form = ActiveForm::begin(['id' => 'form-signup', 'action' => Url::to(['cart/purchase'])]); ?>
-                  <div class="game-confirm">
-                    <div class="ck-confirm-note">
-                      <span class="note-ico">!</span><span>Your information is committed to security by <strong>Kinggems.us!</strong></span>
+                  <div class="game-confirm t-payment">
+                    <div class="t-flex-item-center t-warning-text">
+                      <img src="/images/warning-icon.png" alt="">
+                      <p class="t-text-right">Your information is committed to
+                        security by
+                        <strong>Kinggems.us!</strong>
+                      </p>
                     </div>
-                    <div class="method-chooser">
-                      <!-- <div class="method-line">
-                        <input type="radio" name="abc" id=""><span>Visa/Master Card</span>
-                      </div> -->
-                      <div class="method-line">
-                        <input type="radio" name="identifier" value="paypal" checked="" class="paygate"><span>Paypal</span>
+                    <div class="t-flex-item-center t-use-kcoins">
+                      <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?>  class="paygate">
+                      <img src="/images/logo-kcoins-sm.png" alt="">
+                      <div class="t-text-right">
+                        Balance - <span class="t-red-bold"><?=number_format($balance);?></span> Kcoins
+                        <span class="t-need-topup">Need to top up?
+                        <a href="<?=Url::to(['topup/index']);?>">Click here</a>
+                        </span>
                       </div>
-                      <div class="method-line">
-                        <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?>  class="paygate"><span>King Coins - Balance <?=(!$can_place_order) ? Html::a(' - Go to Topup', Url::to(['topup/index']), ['style' => 'color: #ff3600']) : '';?></span>
-                      </div>
-                      <div class="method-line">
-                        <input type="radio" name="identifier" value="alipay" class="paygate"><span>Alipay</span>
-                      </div>
-                      <div class="method-line">
-                        <input type="radio" name="identifier" value="wechat" class="paygate"><span>Wechat</span>
-                      </div>
-                      <div class="method-line">
-                        <input type="radio" name="identifier" value="skrill" class="paygate"><span>Skrill</span>
-                      </div>
+                    </div>
+                    <div class="t-flex-item-center t-choose-payment">
+                      <input type="radio" name="identifier" value="skrill" class="paygate">
+                      <img src="/images/skrill.png" alt="">
+                    </div>
+                    <div class="t-flex-item-center t-choose-payment">
+                      <input type="radio" name="identifier" value="paypal" checked="" class="paygate">
+                      <img src="/images/paypal.png" alt="">
+                    </div>
+                    <div class="t-flex-item-center t-choose-payment">
+                      <input type="radio" name="identifier" value="alipay" class="paygate">
+                      <img src="/images/alipay.png" alt="">
+                    </div>
+                    <div class="t-flex-item-center t-choose-payment">
+                      <input type="radio" name="identifier" value="wechat" class="paygate">
+                      <img src="/images/we.png" alt="">
                     </div>
                     <div class="is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
