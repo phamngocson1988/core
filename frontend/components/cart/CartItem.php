@@ -90,7 +90,7 @@ class CartItem extends Game implements CartItemInterface
 
             ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART],
             ['saler_code', 'trim', 'on' => self::SCENARIO_INFO_CART],
-            ['raw', 'trim', 'on' => self::SCENARIO_IMPORT_RAW],
+            ['raw', 'required', 'on' => self::SCENARIO_IMPORT_RAW],
         ];
     }
 

@@ -67,6 +67,7 @@ class m181217_033141_create_order_table extends Migration
             'server' => $this->string(255),
             'note' => $this->string(255),
             'raw' => $this->text(),
+            'bulk' => $this->integer(11),
 
             // time process
             'process_start_time' => $this->dateTime(),

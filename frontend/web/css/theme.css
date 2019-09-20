@@ -328,3 +328,7 @@ input[type=number] {
 .pack-item {
     margin-bottom: 20px;
 }
+
+a.cus-btn, .cus-btn {
+    font-weight: normal;
+}

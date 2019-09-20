@@ -191,28 +191,29 @@ class ResellerController extends Controller
 
     public function actionBulk($id)
     {
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->identity;
         $singleItem = CartItem::findOne($id);
         $singleItem->setScenario(CartItemReseller::SCENARIO_IMPORT_RAW);
-        $models = [$singleItem];
-        $user = Yii::$app->user->identity;
+        $models = [];
         $balance = $user->getWalletAmount();
-        if (Model::loadMultiple($models, Yii::$app->request->post())) {
-            // Validate
-            $modelQuantities = ArrayHelper::getColumn($models, 'quantity');
-            $totalQuantities = array_sum($modelQuantities);
-            $singleItem->quantity = $totalQuantities;
-            $totalPrice = $singleItem->getTotalPrice();
-            if ($balance >= $totalPrice) {
-                foreach ($models as $cartItem) {
-                    $cartItem->setScenario(CartItemReseller::SCENARIO_IMPORT_RAW);
-                    $totalPrice = $cartItem->getTotalPrice();
-                    $balance = $user->getWalletAmount();
-                    if ($totalPrice > $balance) {
-                        $errors[] = 'Not enough balance in your wallet';
-                        break;
-                    } elseif ($cartItem->validate()) {
+        if ($request->isPost) {
+            $data = Yii::$app->request->post('CartItem', []);
+            foreach ($data as $attr) {
+                $item = clone $singleItem;
+                $item->attributes = $attr;
+                $models[] = $item;
+            }
+            if (Model::validateMultiple($models)) {
+                $modelQuantities = ArrayHelper::getColumn($models, 'quantity');
+                $totalQuantities = array_sum($modelQuantities);
+                $singleItem->quantity = $totalQuantities;
+                $totalPrice = $singleItem->getTotalPrice();
+                if ($balance >= $totalPrice) {
+                    $bulk = strtotime('now');
+                    foreach ($models as $cartItem) {
+                        $totalPrice = $cartItem->getTotalPrice();
                         $totalUnit = $cartItem->getTotalUnit();
-                        
                         // Order detail
                         $order = new Order();
                         $order->sub_total_price = $totalPrice;
@@ -228,6 +229,7 @@ class ResellerController extends Controller
                         $order->payment_at = date('Y-m-d H:i:s');
                         $order->raw = $cartItem->raw;
                         $order->generateAuthKey();
+                        $order->bulk = $bulk;
             
                         // Item detail
                         $order->game_id = $id;
@@ -251,16 +253,28 @@ class ResellerController extends Controller
                         $wallet->status = UserWallet::STATUS_COMPLETED;
                         $wallet->payment_at = date('Y-m-d H:i:s');
                         $wallet->save();    
-                    } else {
-                        $error = $cartItem->getErrorSummary(true);
-                        $errors[] = $error[0];
                     }
+                    return $this->redirect(['reseller/success', 'bulk' => $bulk]);
+                } else {
+                    Yii::$app->session->setFlash('error', 'You have not enough Kcoin.');
                 }
             }
         }
+        
         return $this->render('bulk', [
             'models' => $models,
-            'balance' => $balance
+            'balance' => $balance,
+            'post' => $request->post()
+        ]);
+    }
+
+    public function actionSuccess($bulk)
+    {
+        $orders = Order::find()->where(['bulk' => $bulk])->all();
+        $user = Yii::$app->user->getIdentity();
+        return $this->render('success', [
+            'orders' => $orders,
+            'user' => $user,
         ]);
     }
 }
