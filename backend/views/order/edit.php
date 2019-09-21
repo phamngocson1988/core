@@ -81,6 +81,12 @@ use backend\models\OrderFile;
                       </div>
                     </div>
                     <div class="portlet-body" id="game_account">
+                      <?php if ($order->bulk) : ?>
+                      <div class="row static-info">
+                        <div class="col-md-5">Order detail: </div>
+                        <div class="col-md-7"><?=$order->raw;?></div>
+                      </div>
+                      <?php else : ?>
                       <div class="row static-info">
                         <div class="col-md-5">Username: </div>
                         <div class="col-md-7"><?=$order->username;?></div>
@@ -113,6 +119,7 @@ use backend\models\OrderFile;
                         <div class="col-md-5">Ghi chú: </div>
                         <div class="col-md-7"><?=$order->note;?></div>
                       </div>
+                      <?php endif;?>
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
