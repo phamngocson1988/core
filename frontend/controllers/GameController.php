@@ -71,9 +71,16 @@ class GameController extends Controller
             return $this->asJson(['status' => false, 'game' => $game, 'error' => $game->getErrorSummary(true)]);
         }
         $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
+        $is_reseller = false;
+        if (!Yii::$app->user->isGuest) {
+            $user = Yii::$app->user->identity;
+            $is_reseller = $user->isReseller();
+        }
+
     	return $this->render('view', [
             'game' => $game,
             'promotions' => $promotions,
+            'is_reseller' => $is_reseller
         ]);
     }
 }

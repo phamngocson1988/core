@@ -113,7 +113,9 @@ $gamePromotion = reset($gamePromotions);
                         </div>
                         <?php if (!$game->isSoldout()) : ?>
                         <?= Html::submitButton('Add To Cart', ['class' => 'btn-product-detail-add-to-cart', 'data-pjax' => 'false', 'id' => 'add-cart-button', 'onClick' => 'showLoader()']) ?>
+                        <?php if ($is_reseller) : ?>
                         <a class="btn-product-detail-add-to-cart" href="<?=Url::to(['reseller/bulk', 'id' => $game->id]);?>">For Bulk of orders</a>
+                        <?php endif;?>
                         <?php endif;?>
                         <?php ActiveForm::end(); ?>
                     </div>

@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use common\components\helpers\FormatConverter;
 
 $cart = Yii::$app->kingcoin;
 $item = $cart->getItem();
@@ -34,24 +35,20 @@ $total = $cart->getTotalPrice();
                   </p>
                 </div>
                 <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="paypal">
-                  <img src="/images/paypal.png" alt="">
+                  <input type="radio" name="identifier" value="paypal" checked class="paygate">
+                  <img src="/images/paypal.png" class="paygate-logo" alt="">
                 </div>
                 <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="skrill">
-                  <img src="/images/skrill.png" alt="">
+                  <input type="radio" name="identifier" value="skrill" class="paygate">
+                  <img src="/images/skrill.png" class="paygate-logo" alt="">
                 </div>
                 <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="payoneer">
-                  <img src="/images/payoneer.png" alt="">
+                  <input type="radio" name="identifier" value="alipay" class="paygate">
+                  <img src="/images/alipay.png" class="paygate-logo" alt="">
                 </div>
                 <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="alipay">
-                  <img src="/images/alipay.png" alt="">
-                </div>
-                <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="wechat">
-                  <img src="/images/we.png" alt="">
+                  <input type="radio" name="identifier" value="wechat" class="paygate">
+                  <img src="/images/we.png" class="paygate-logo" alt="">
                 </div>
                 <div class="is-desktop">
                   <!-- <a class="btn-product-detail-add-to-cart" href="javascript:;">PAYMENT</a> -->
@@ -68,11 +65,38 @@ $total = $cart->getTotalPrice();
                   <p>Total King Coins: <span class="t-red-bold"><?=number_format($item->getTotalCoin());?></span></p>
                 </div>
               </div>
-              <div class="t-flex-between t-sub-total" paygate="paypal">
+              <div class="t-flex-between t-sub-total price" paygate="paypal" style="display: none">
                 <p>Subtotal:</p>
                 <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
               </div>
-              <div class="t-flex-between t-payment-total" paygate="paypal">
+              <div class="t-flex-between t-payment-total price" paygate="paypal" style="display: none">
+                <p>Grand Total:</p>
+                <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
+              </div>
+
+              <div class="t-flex-between t-sub-total price" paygate="alipay" style="display: none">
+                <p>Subtotal:</p>
+                <p>CNY<?=FormatConverter::convertCurrencyToCny($item->getPrice() * $item->quantity);?></p>
+              </div>
+              <div class="t-flex-between t-payment-total price" paygate="alipay" style="display: none">
+                <p>Grand Total:</p>
+                <p><span class="t-red-bold">CNY<?=FormatConverter::convertCurrencyToCny($item->getTotalPrice());?></span></p>
+              </div>
+
+              <div class="t-flex-between t-sub-total price" paygate="wechat" style="display: none">
+                <p>Subtotal:</p>
+                <p>CNY<?=FormatConverter::convertCurrencyToCny($item->getPrice() * $item->quantity);?></p>
+              </div>
+              <div class="t-flex-between t-payment-total price" paygate="wechat" style="display: none">
+                <p>Grand Total:</p>
+                <p><span class="t-red-bold">CNY<?=FormatConverter::convertCurrencyToCny($item->getTotalPrice());?></span></p>
+              </div>
+
+              <div class="t-flex-between t-sub-total price" paygate="skrill" style="display: none">
+                <p>Subtotal:</p>
+                <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
+              </div>
+              <div class="t-flex-between t-payment-total price" paygate="skrill" style="display: none">
                 <p>Grand Total:</p>
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div>
@@ -158,6 +182,17 @@ $script = <<< JS
 $('form').submit(function(){
     $('input[type=submit]', this).attr('disabled', 'disabled');
 });
+$('.paygate-logo').on('click', function(){
+  var parent = $(this).closest('div');
+  parent.find('input').prop('checked', true);
+  parent.find('input').trigger('change');
+});
+$('.paygate').change(function(){
+  var _c = $(this).attr('value');
+  $('.price').hide();
+  $('.price[paygate=' + _c).show();
+});
+$('.paygate:checked').trigger('change');
 JS;
 $this->registerJs($script);
 ?>

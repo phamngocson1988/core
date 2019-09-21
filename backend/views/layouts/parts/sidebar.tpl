@@ -224,6 +224,26 @@
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-wallet"></i>
+        <span class="title">Giao dịch nạp tiền</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='payment-transaction/index'}" class="nav-link " code='transaction.index'>
+            <span class="title">Tất cả</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='payment-transaction/offline'}" class="nav-link " code='transaction.offline'>
+            <span class="title">Chưa thanh toán</span>
+            <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
         <span class="title">{Yii::t('app', 'settings')}</span>
         <span class="arrow"></span>

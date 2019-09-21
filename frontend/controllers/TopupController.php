@@ -187,6 +187,7 @@ class TopupController extends Controller
         $trn = new PaymentTransaction();
         $trn->user_id = $user->id;
         $trn->payment_method = $identifier;
+        $trn->payment_type = $gateway->type;
         // $trn->payment_id = $gateway->getReferenceId();
         // Price
         $trn->price = $cart->getSubTotalPrice();
@@ -270,9 +271,12 @@ class TopupController extends Controller
         $refId = Yii::$app->request->get('ref');
         $trn = PaymentTransaction::findOne(['auth_key' => $refId]);
         $user = Yii::$app->user->getIdentity();
+        $gateway = PaymentGatewayFactory::getClient($trn->payment_method);
+        // print_r($gateway);die;
         return $this->render('success', [
             'trn' => $trn,
-            'user' => $user
+            'user' => $user,
+            'gateway' => $gateway
         ]);
     }
 

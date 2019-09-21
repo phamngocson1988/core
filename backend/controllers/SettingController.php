@@ -188,46 +188,6 @@ class SettingController extends Controller
         ]);
     }
 
-    public function actionPayOffline($id) 
-    {
-        $request = Yii::$app->request;
-        $transaction = PaymentTransaction::findOne($id);
-        $transaction->setScenario(PaymentTransaction::SCENARIO_CONFIRM_OFFLINE_PAYMENT);
-        if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
-        if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Giao dịch đã được thanh toán']);
-        if ($transaction->load($request->post()) && $transaction->save()) {
-            $user = $transaction->user;
-            $wallet = new UserWallet();
-            $wallet->coin = $transaction->total_coin;
-            $wallet->balance = $user->getWalletAmount() + $wallet->coin;
-            $wallet->type = UserWallet::TYPE_INPUT;
-            $wallet->description = "Transaction #$transaction->auth_key";
-            $wallet->ref_name = PaymentTransaction::className();
-            $wallet->ref_key = $transaction->auth_key;
-            $wallet->created_by = Yii::$app->user->id;
-            $wallet->user_id = $user->id;
-            $wallet->status = UserWallet::STATUS_COMPLETED;
-            $wallet->payment_at = date('Y-m-d H:i:s');
-            $wallet->save();
-            return $this->asJson(['status' => true]);
-        }
-        else {
-            $errors = $transaction->getErrorSummary(true);
-            return $this->asJson(['status' => false, 'errors' => reset($errors)]);
-        }
-    }
-
-    public function actionDeleteOffline($id)
-    {
-        $request = Yii::$app->request;
-        $transaction = PaymentTransaction::findOne($id);
-        if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
-        if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Không thể xóa giao dịch']);
-        if ($transaction->delete()) return $this->asJson(['status' => true]);
-        else {
-            $errors = $transaction->getErrorSummary(true);
-            return $this->asJson(['status' => false, 'errors' => reset($errors)]);
-        }
-    }
+    
     
 }

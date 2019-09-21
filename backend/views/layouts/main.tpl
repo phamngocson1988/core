@@ -2,6 +2,7 @@
 {use class='yii\helpers\Url'}
 {use class='backend\assets\AppAsset'}
 {use class='common\widgets\Alert'}
+{use class='\lavrentiev\widgets\toastr\NotificationFlash'}
 {AppAsset::register($this)|void}
 {$this->beginPage()}
 <!DOCTYPE html>

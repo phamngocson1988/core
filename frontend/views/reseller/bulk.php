@@ -58,7 +58,7 @@ use frontend\components\cart\CartItem;
                   [
                       'name' => 'raw',
                       'title' => 'Order detail',
-                      'type' => TabularColumn::TYPE_TEXT_INPUT,
+                      'type' => 'textarea', //TabularColumn::TYPE_TEXT_INPUT,
                       'headerOptions' => ['width' => '50%'],
                       'columnOptions' => ['style' => 'padding-left:20px; padding-right: 20px;'],
                       'attributeOptions' => [
@@ -68,6 +68,7 @@ use frontend\components\cart\CartItem;
                       'value' => function($data) {
                           return $data->raw;
                       },
+                      'options' => ['rows' => "3"],
                       'enableError' => true
                   ],
                   [

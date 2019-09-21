@@ -7,7 +7,7 @@ use yii\web\Response;
 use backend\models\UserAffiliate;
 use backend\models\UserCommissionWithdraw;
 use backend\models\Order;
-
+use backend\forms\FetchTransactionForm;
 /**
  * Controller
  */
@@ -46,6 +46,15 @@ class Controller extends BaseController
             $command = UserCommissionWithdraw::find()->where(['status' => UserCommissionWithdraw::STATUS_REQUEST]);
 	        $commissionTotal = $command->count();
             $this->view->params['new_commission_withdraw'] = $commissionTotal ? $commissionTotal : '';
+
+            // Show number of offline transaction
+	        $offlineTransactionForm = new FetchTransactionForm([
+	            'payment_type' => 'offline',
+	            'status' => 'pending',
+	        ]);
+	        $offlineTransactionCommand = $offlineTransactionForm->getCommand();
+	        $offlineTransactionCount = $offlineTransactionCommand->count();
+            $this->view->params['new_offline_transaction'] = $offlineTransactionCount ? $offlineTransactionCount : '';
             return true;
         }
 

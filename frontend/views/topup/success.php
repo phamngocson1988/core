@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 ?>
 <section class="topup-page">
   <div class="container">
@@ -25,6 +26,24 @@ use yii\helpers\Url;
                 <p>Details of the order have been sent to <?=$user->email;?></p>
                 <p>If not found please check in Spam or Junk Folder mailbox.</p>
               </div>
+              <?php if ($trn->payment_type == 'offline') : ?>
+              <div class="order-info-email-note">
+                <div class="row">
+                  <div class="col-md-6">
+                    <?php $data = $gateway->loadConfig();?>
+                    <?php $logo = ArrayHelper::remove($data, 'logo');?>
+                    <?php foreach ($data as $key => $value) : ?>
+                    <p><?=$key;?>: <?=$value;?></p>
+                    <?php endforeach;?>
+                    <p>Note: "KINGGEMS_GAME_<?=$trn->id;?>"</h3></p>
+                  </div>
+                  <div class="col-md-6">
+                    <img src="<?=$logo;?>" width="150">
+                  </div>
+                </div>
+                
+              </div>
+              <?php endif;?>
             </div>
           </div>
         </div>

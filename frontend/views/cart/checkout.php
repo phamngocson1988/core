@@ -37,7 +37,7 @@ $cart->applyPromotion();
                     </div>
                     <div class="t-flex-item-center t-use-kcoins">
                       <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?>  class="paygate">
-                      <img src="/images/logo-kcoins-sm.png" alt="">
+                      <img src="/images/logo-kcoins-sm.png" class="paygate-logo" alt="">
                       <div class="t-text-right">
                         Balance - <span class="t-red-bold"><?=number_format($balance);?></span> Kcoins
                         <span class="t-need-topup">Need to top up?
@@ -47,19 +47,19 @@ $cart->applyPromotion();
                     </div>
                     <div class="t-flex-item-center t-choose-payment">
                       <input type="radio" name="identifier" value="skrill" class="paygate">
-                      <img src="/images/skrill.png" alt="">
+                      <img src="/images/skrill.png" class="paygate-logo" alt="">
                     </div>
                     <div class="t-flex-item-center t-choose-payment">
                       <input type="radio" name="identifier" value="paypal" checked="" class="paygate">
-                      <img src="/images/paypal.png" alt="">
+                      <img src="/images/paypal.png" class="paygate-logo" alt="">
                     </div>
                     <div class="t-flex-item-center t-choose-payment">
                       <input type="radio" name="identifier" value="alipay" class="paygate">
-                      <img src="/images/alipay.png" alt="">
+                      <img src="/images/alipay.png" class="paygate-logo" alt="">
                     </div>
                     <div class="t-flex-item-center t-choose-payment">
                       <input type="radio" name="identifier" value="wechat" class="paygate">
-                      <img src="/images/we.png" alt="">
+                      <img src="/images/we.png" class="paygate-logo" alt="">
                     </div>
                     <div class="is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
@@ -88,6 +88,7 @@ $cart->applyPromotion();
                         <div class="grand-line">
                           <span>Total Unit:</span><span><?=$cart->getTotalUnit();?></span>
                         </div>
+
                         <div class="grand-line last-line price" paygate='paypal' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
@@ -132,12 +133,17 @@ $script = <<< JS
 $('form').submit(function(){
     $('input[type=submit]', this).attr('disabled', 'disabled');
 });
-$('.paygate').on('click', function(){
+$('.paygate-logo').on('click', function(){
+  var parent = $(this).closest('div');
+  parent.find('input').prop('checked', true);
+  parent.find('input').trigger('change');
+});
+$('.paygate').change(function(){
   var _c = $(this).attr('value');
   $('.price').hide();
   $('.price[paygate=' + _c).show();
 });
-$('.paygate:checked').trigger('click');
+$('.paygate:checked').trigger('change');
 JS;
 $this->registerJs($script);
 ?>

@@ -84,7 +84,7 @@ use backend\models\OrderFile;
                       <?php if ($order->bulk) : ?>
                       <div class="row static-info">
                         <div class="col-md-5">Order detail: </div>
-                        <div class="col-md-7"><?=$order->raw;?></div>
+                        <div class="col-md-7"><?=nl2br($order->raw);?></div>
                       </div>
                       <?php else : ?>
                       <div class="row static-info">
