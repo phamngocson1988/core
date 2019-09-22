@@ -87,6 +87,77 @@
       </li>
       {/if}
 
+      <!-- Affiliate -->
+      {if $app->user->can('sale_manager')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+          <i class="fa fa-link"></i>
+          <span class="title">Affiliate</span>
+          <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/index'}" class="nav-link " code='affiliate.index'>
+            <span class="title">Tất cả</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/request'}" class="nav-link " code='affiliate.request'>
+            <span class="title">Yêu cầu hợp tác</span>
+            <span class="badge badge-success">{$this->params['new_affiliate_request']}</span>
+            </a>
+          </li>
+          {if $app->user->can('admin')}
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/withdraw'}" class="nav-link " code='affiliate.withdraw'>
+            <span class="title">Yêu cầu rút tiền</span>
+            <span class="badge badge-success">{$this->params['new_commission_withdraw']}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/setting/affiliate_program'}" class="nav-link " code='affiliate.setting'>
+            <span class="title">Cài đặt</span>
+            </a>
+          </li>
+          {/if}
+        </ul>
+      </li>
+      {/if}
+
+      <!-- <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user-following"></i>
+        <span class="title">{Yii::t('app', 'staffs')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/staff/index'}" class="nav-link " code='staff.index'>
+            <span class="title">{Yii::t('app', 'staffs')}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/department/index'}" class="nav-link " code='department.index'>
+            <span class="title">{Yii::t('app', 'department')}</span>
+            </a>
+          </li>
+        </ul>
+      </li> -->
+      <!-- <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-clock"></i>
+        <span class="title">{Yii::t('app', 'tasks')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/task/index'}" class="nav-link " code='task.index'>
+            <span class="title">{Yii::t('app', 'tasks')}</span>
+            </a>
+          </li>
+        </ul>
+      </li> -->
+
       <!-- Bài viết -->
       {if $app->user->can('saler')}
       <li class="nav-item  ">
@@ -307,7 +378,6 @@
             </a>
           </li>
           {/if}
-
           {if $app->user->can('orderteam_manager')}
           <li class="nav-item  ">
             <a href="{url route='game/provider'}" class="nav-link " code='game.provider'>
@@ -315,14 +385,12 @@
             </a>
           </li>
           {/if}
-          
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
             <span class="title">Khuyến mãi</span>
             </a>
           </li>
-          {/if}
           {if $app->user->can('saler')}
           <li class="nav-item  ">
             <a href="{url route='game/log'}" class="nav-link " code='game.log'>
@@ -340,7 +408,7 @@
       {/if}
 
       <!-- Đơn hàng -->
-      {if $app->user->can('saler') || $app->user->can('orderteam')}
+      
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
@@ -386,24 +454,19 @@
             <span class="title">Đơn hàng đã hủy</span>
             </a>
           </li>
-          {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/order/dislike-order'}" class="nav-link " code='order.dislike'>
-            <span class="title">Đơn hàng có feedback</span>
+            <span class="title">Đơn hàng bị dislike</span>
             </a>
           </li>
-          {/if}
-          {if $app->user->can('saler')}
           <li class="nav-item  ">
             <a href="{url route='/order/new-verifying-order'}" class="nav-link " code='order.new-verifying'>
             <span class="title">Đơn hàng chờ thanh toán</span>
             <span class="badge badge-success">{$this->params['new_verifying_order']}</span>
             </a>
           </li>
-          {/if}
         </ul>
       </li>
-      {/if}
 
       <!-- Thống kê -->
       {$roles = $app->authManager->getRolesByUser($app->user->id)}
@@ -415,7 +478,7 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->can('accounting')}
+          {if (array_intersect($roles, ['admin', 'accounting']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê dòng tiền</span>
@@ -445,59 +508,48 @@
             </ul>
           </li>
           {/if}
-          {if $app->user->can('sale_manager') || $app->user->can('orderteam')}
+          {if (array_intersect($roles, ['admin', 'orderteam_manager']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê thực hiện đơn hàng</span>
               <span class="arrow"></span>
             </a>
             <ul class="sub-menu">
-              {if $app->user->can('orderteam')}
               <li class="nav-item  ">
                 <a href="{url route='/report/process-order'}" class="nav-link nav-toggle" code="report.process.order">
                   <span class="title">Theo đơn hàng</span>
                 </a>
               </li>
-              {/if}
-              {if $app->user->can('sale_manager') || $app->user->can('orderteam_manager')}
               <li class="nav-item  ">
                 <a href="{url route='/report/process-game'}" class="nav-link nav-toggle" code="report.process.game">
                   <span class="title">Theo game</span>
                 </a>
               </li>
-              {/if}
-              {if $app->user->can('sale_manager') || $app->user->can('orderteam_manager')}
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
-                  <span class="title">Theo reseller</span>
+                  <span class="title">Theo đại lý</span>
                 </a>
               </li>
-              {/if}
-              {if $app->user->can('orderteam_manager')}
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo nhà cung cấp</span>
                 </a>
               </li>
-              {/if}
-              {if $app->user->can('orderteam')}
               <li class="nav-item  ">
                 <a href="{url route='/report/process-user'}" class="nav-link nav-toggle" code="report.process.user">
                   <span class="title">Theo nhân viên</span>
                 </a>
               </li>
-              {/if}
             </ul>
           </li>
           {/if}
-          {if $app->user->can('saler')}
+          {if (array_intersect($roles, ['admin', 'orderteam']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê bán hàng</span>
               <span class="arrow"></span>
             </a>
             <ul class="sub-menu">
-              {if $app->user->can('orderteam_manager')}
               <li class="nav-item  ">
                 <a href="{url route='/report/sale-order'}" class="nav-link " code='report.sale.order'>
                   <span class="title">Doanh số theo đơn hàng</span>
@@ -508,7 +560,11 @@
                   <span class="title">Doanh số theo game</span>
                 </a>
               </li>
-              {/if}
+              {* <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                  <span class="title">Doanh số theo đại lý</span>
+                </a>
+              </li> *}
               <li class="nav-item  ">
                 <a href="{url route='/report/sale-user'}" class="nav-link " code='report.sale.user'>
                   <span class="title">Doanh số theo nhân viên</span>
@@ -522,7 +578,7 @@
             </ul>
           </li>
           {/if}
-          {if $app->user->can('accounting')}
+          {if (array_intersect($roles, ['admin', 'accounting']))}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê chi phí lợi nhuận</span>

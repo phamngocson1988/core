@@ -26,7 +26,7 @@ $total = $cart->getTotalPrice();
             </div>
           </div>
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6" style="margin-top: 50px;">
               <?php ActiveForm::begin(['action' => Url::to(['topup/purchase'])]); ?>
                 <div class="t-flex-item-center t-warning-text">
                   <img src="/images/warning-icon.png" alt="">
