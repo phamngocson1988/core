@@ -184,8 +184,8 @@ class Order extends ActiveRecord
 
     public function getPercent()
     {
-        if (!$this->total_unit) return 0;
-        return floor(min(1, $this->doing_unit / $this->total_unit) * 100);
+        if (!$this->quantity) return 0;
+        return floor(min(1, $this->doing_unit / $this->quantity) * 100);
     }
 
     public function getProcessDurationTime()

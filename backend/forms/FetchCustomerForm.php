@@ -190,8 +190,6 @@ class FetchCustomerForm extends User
             $command->andWhere(['<=', "{$orderTable}.created_at", $this->purchase_end . " 23:59:59"]);
         }
 
-        
-
         if ($this->country_code) {
             $command->andWhere(["{$userTable}.country_code" => $this->country_code]);
         }
@@ -206,6 +204,10 @@ class FetchCustomerForm extends User
 
         if ($this->is_reseller) {
             $command->andWhere(["{$userTable}.is_reseller" => $this->is_reseller]);
+        }
+
+        if ($this->email) {
+            $command->andWhere(["LIKE", "{$userTable}.email", $this->email]);
         }
 
         // Having

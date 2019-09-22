@@ -293,6 +293,24 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionFeedbackOrder()
+    {
+        $this->view->params['main_menu_active'] = 'order.feedback';
+        $request = Yii::$app->request;
+        $command = Order::find()->where(['<>', 'rating', 0]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->all();
+
+        return $this->render('feedback-order', [
+            'models' => $models,
+            'pages' => $pages,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
     public function actionEdit($id)
     {
         $order = Order::findOne($id);
@@ -526,7 +544,7 @@ class OrderController extends Controller
         if ($model) {
             $unit = $request->post('doing_unit', 0);
             $model->doing_unit += $unit;
-            if ($model->doing_unit > $model->total_unit) return $this->renderJson(false, [], 'Bạn không thể nạp quá số game của đơn hàng này');
+            if ($model->doing_unit > $model->quantity) return $this->renderJson(false, [], 'Bạn không thể nạp quá số gói game của đơn hàng này');
             $model->save();
             return $this->renderJson(true, ['total' => $model->doing_unit]);
         } else {

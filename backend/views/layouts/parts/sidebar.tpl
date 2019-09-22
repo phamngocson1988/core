@@ -388,7 +388,7 @@
           </li>
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
-            <a href="{url route='/order/dislike-order'}" class="nav-link " code='order.dislike'>
+            <a href="{url route='/order/feedback-order'}" class="nav-link " code='order.feedback'>
             <span class="title">Đơn hàng có feedback</span>
             </a>
           </li>

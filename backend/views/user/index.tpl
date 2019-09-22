@@ -40,6 +40,11 @@
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           {ActiveForm assign='form' id='filter-form' method='get'}
+            {$form->field($search, 'email', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'email']
+            ])->textInput()->label('Email khách hàng')}
+
             {$form->field($search, 'created_start', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'created_start']

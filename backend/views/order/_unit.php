@@ -32,8 +32,8 @@ use yii\helpers\Html;
   </div>
   <div class="col-md-6">
       <div class="progress progress-striped active">
-          <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$order->doing_unit;?>" aria-valuemin="0" aria-valuemax="<?=$order->total_unit;?>" style="width: <?=$order->getPercent();?>%">
-              <span id='current_doing_unit'><?=$order->doing_unit;?></span> / <?=$order->total_unit;?>
+          <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$order->doing_unit;?>" aria-valuemin="0" aria-valuemax="<?=$order->quantity;?>" style="width: <?=$order->getPercent();?>%">
+              <span id='current_doing_unit'><?=$order->doing_unit;?></span> / <?=$order->quantity;?>
           </div>
       </div>
   </div>

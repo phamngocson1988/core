@@ -64,6 +64,7 @@ class UserController extends Controller
             'last_purchase_end' => $request->get('last_purchase_end'),
             'total_topup_start' => $request->get('total_topup_start'),
             'total_topup_end' => $request->get('total_topup_end'),
+            'email' => $request->get('email'),
         ];
         $form = new FetchCustomerForm($data);
         if ($mode === 'export') {
