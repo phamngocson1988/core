@@ -1,6 +1,6 @@
 {use class='yii\widgets\LinkPager'}
 {use class='yii\widgets\Pjax' type='block'}
-{use class='dosamigos\datepicker\DatePicker'}
+{use class='backend\components\datepicker\DatePicker'}
 {use class='common\models\User'}
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='yii\helpers\Url'}

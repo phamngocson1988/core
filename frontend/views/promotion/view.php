@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
+use frontend\models\Promotion;
 ?>
 <section class="promotion-page">
   <div class="container">
@@ -11,15 +12,11 @@ use yii\widgets\Pjax;
       <div class="col col-lg-3 col-md-3 col-sm-12 col-12">
         <div class="product-category">
           <ul>
+            <?php foreach (Promotion::getCategories() as $categoryKey => $categoryTitle): ?>
             <li>
-              <a class="cus-btn gray-btn" href="#">New Member</a>
+              <a class="cus-btn gray-btn <?php if ($categoryKey == $model->category) : ?>active<?php endif;?>" href="<?=Url::to(['promotion/index', 'cat' => $categoryKey]);?>"><?=$categoryTitle;?></a>
             </li>
-            <li>
-              <a class="cus-btn gray-btn active" href="#">Hot Product</a>
-            </li>
-            <li>
-              <a class="cus-btn gray-btn" href="#">VIP Member</a>
-            </li>
+            <?php endforeach;?>
           </ul>
         </div>
       </div>
@@ -33,8 +30,8 @@ use yii\widgets\Pjax;
             </div>
             <div class="col col-sm-12 col-md-6 ti-title-content">
               <div class="ti-breadcrumb">
-                <a href="#">Promotion</a>
-                <a href="#">Hot Product</a>
+                <a href="<?=Url::to(['promotion/index']);?>">Promotion</a>
+                <a href="javascript:void(0)">Hot Product</a>
               </div>
               <h1><?=$model->title;?></h1>
               <a href="javascript:;" id="claim" class="main-btn" code='<?=$model->code;?>'>Claim now</a>

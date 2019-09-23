@@ -31,6 +31,10 @@ use yii\helpers\Url;
         <div class="col col-12 col-sm-12 col-md-9 col-lg-9">
           <div class="qa-listing">
             <div class="qa-section">
+              <ul class="page-breadcrumb">
+                <li><a href="<?=Url::to(['site/question']);?>">Kinggems Knowledge Base</a> \ </li>
+                <li><a href="javascript:void(0);">Search</a></li>
+              </ul>
               <div class="qa-section-title">
                 Kinggems Knowledge Base
               </div>
