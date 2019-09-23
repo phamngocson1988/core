@@ -980,4 +980,16 @@ ol li {
   height: 27px;
   margin-right: 10px;
 }
+.top-header .right-box .login-box form .reg-link span{
+  height: 84px;
+}
+.product-temple-total #quantity{
+  text-align: center;
+  text-align-last: center;
+}
+@media screen and (min-width: 1400px) {
+  .top-header .right-box .login-box form .reg-link span{
+    height: 96px;
+  }
+}
 /*# sourceMappingURL=ti-style.css.map */

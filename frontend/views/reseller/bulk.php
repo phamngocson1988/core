@@ -78,7 +78,7 @@ use frontend\components\cart\CartItem;
                     'headerOptions' => ['width' => '20%'],
                     'columnOptions' => ['style' => 'padding-left:20px; padding-right: 20px;'],
                     'items' => CartItem::$quantites,
-                    'options' => ['class' => 'quantity'],
+                    'options' => ['class' => 'quantity', 'style' => 'text-align: center; text-align-last: center;'],
                     'value' => function($data) {
                         return $data->quantity;
                     },

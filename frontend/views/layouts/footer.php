@@ -2,7 +2,7 @@
 $setting = Yii::$app->settings;
 ?>
 <section class="footer">
-    <div class="top-footer">
+    <!-- <div class="top-footer">
         <div class="container">
             <div class="small-container footer-accept">
                 <div class="logo-item">
@@ -25,7 +25,7 @@ $setting = Yii::$app->settings;
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="bot-footer">
         <div class="container">
             <div class="small-container">

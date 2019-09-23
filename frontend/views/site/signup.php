@@ -86,7 +86,7 @@ $years = array_combine($rangeYears, $rangeYears);
                 'template' => '{input}<div class="captcha-image">{image}</div>',
               ])->label('Validation Code <span class="required">*</span>') ?>
 
-              <p>By clicking <b>Register Now!</b>, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim </p>
+              <p>By clicking <b>Register Now!</b>, You agree accessing & using the Services, you acknowledge that you have read, understood and agreed to Kinggems's Conditions and Terms. </p>
                <div class="terms">
                   <div class="terms-row">
                       <input type="checkbox"><span>I would like to receive details of special offers, free bets and other promotions.</span>

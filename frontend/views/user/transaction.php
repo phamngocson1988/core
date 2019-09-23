@@ -75,10 +75,10 @@ use yii\helpers\Html;
                       'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
                   ]); ?>
                   <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
-                  <?=Html::a('Upload invoice', 'javascript:;', ['class' => 'action-link']);?>
+                  <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'action-link normal-link']);?>
                   <?php ActiveForm::end(); ?>
                   <?php elseif ($model->evidence) : ?>
-                  <a href="<?=$model->evidence;?>" target="_blank">Invoice Image</a>
+                  <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">View Receipt</a>
                   <?php endif;?>
                   </td>
                   <td><?=$model->status;?></td>
