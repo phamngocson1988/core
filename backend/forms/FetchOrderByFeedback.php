@@ -127,6 +127,8 @@ class FetchOrderByFeedback extends Order
         $command = Order::find();
         if ($this->rating) {
             $command->andWhere(['IN', 'rating', (array)$this->rating]);
+        } else {
+            $command->andWhere(['<>', 'rating', '0']);
         }
         if ($this->created_at_start) {
             $command->andWhere(['>=', 'created_at', $this->created_at_start]);
