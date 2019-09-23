@@ -3,6 +3,11 @@ use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use backend\models\Order;
+use backend\components\datepicker\DatePicker;
+use yii\widgets\ActiveForm;
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 ?>
 
 <style>
@@ -40,9 +45,44 @@ use backend\models\Order;
           <span class="caption-subject bold uppercase"> Đơn hàng có feedback</span>
         </div>
         <div class="actions">
+          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a>
         </div>
       </div>
       <div class="portlet-body">
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/feedback-order']]);?>
+        <div class="row margin-bottom-10">
+            <?=$form->field($search, 'rating', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'rating[]']
+            ])->dropDownList(['1' => 'Like', '-1' => 'Dislike'])->label('Loại feedback');?>
+
+            <?=$form->field($search, 'created_at_start', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'created_at_start', 'id' => 'created_at_start']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                  'autoclose' => true,
+                  'format' => 'yyyy-mm-dd',
+                ],
+            ])->label('Ngày tạo từ');?>
+
+            <?=$form->field($search, 'created_at_end', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'created_at_end', 'id' => 'created_at_end']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                  'autoclose' => true,
+                  'format' => 'yyyy-mm-dd',
+                ],
+            ])->label('Ngày tạo đến');?>
+
+            <div class="form-group col-md-4 col-lg-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
+        </div>
+        <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>

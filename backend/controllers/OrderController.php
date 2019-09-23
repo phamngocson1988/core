@@ -22,6 +22,7 @@ use backend\forms\SendComplainForm;
 use common\models\OrderComplainTemplate;
 use backend\forms\MyCustomerReportForm;
 use backend\forms\CancelOrderForm;
+use backend\forms\FetchOrderByFeedback;
 
 
 use backend\events\OrderEventHandler;
@@ -297,7 +298,17 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.feedback';
         $request = Yii::$app->request;
-        $command = Order::find()->where(['<>', 'rating', 0]);
+        $mode = $request->get('mode');
+        $form = new FetchOrderByFeedback([
+            'rating' => $request->get('rating'),
+            'created_at_start' => $request->get('created_at_start'),
+            'created_at_end' => $request->get('created_at_end'),
+        ]);
+        $command = $form->getCommand();
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'don-hang-co-feedback.xls';
+            return $form->export($fileName);
+        }
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -308,6 +319,7 @@ class OrderController extends Controller
             'models' => $models,
             'pages' => $pages,
             'ref' => Url::to($request->getUrl(), true),
+            'search' => $form
         ]);
     }
 
