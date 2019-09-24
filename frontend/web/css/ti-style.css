@@ -948,6 +948,7 @@ ol li {
   color: #ff3600;
 }
 .t-payment .is-desktop{
+  width: 100%;
   display: inline-block;
 }
 .t-payment .btn-product-detail-add-to-cart{
