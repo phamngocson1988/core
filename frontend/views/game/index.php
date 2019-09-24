@@ -52,7 +52,7 @@ $this->title = 'Shop';
         <div class="product-listing">
           <div class="row">
             <?php foreach ($models as $model) :?>
-			      <div class="col col-lg-20-per col-sm-12 prod-item">
+			      <div class="col-6 col-lg-20-per col-md-4 prod-item">
 			        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>">
 			        <img src="<?=$model->getImageUrl('300x300');?>" alt="">
               <?php if (Yii::$app->settings->get('EventForm', 'status')) : ?>

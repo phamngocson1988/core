@@ -910,8 +910,10 @@ ol li {
 .t-text-right{
   margin-left: 25px;
 }
+
 .t-choose-payment{
-  display: inline-block;
+  /* display: inline-block; */
+  margin-bottom: 0;
   float: left;
   width: 33.333%;
   margin-top: 30px;
@@ -923,8 +925,14 @@ ol li {
   margin-right: 10px;
   margin-left: 10px;
 }
-.t-choose-payment img{
+.t-img-wrap-logo-payment{
   margin-left: 10px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #fff;
+  min-width: 126px;
+  text-align: center;
+  border-radius: 5px;
 }
 .t-red-bold{
   font-weight: bold;
@@ -987,9 +995,119 @@ ol li {
   text-align: center;
   text-align-last: center;
 }
+.footer .bot-footer .footer-logo{
+  width: 20%;
+  
+}
+.footer .bot-footer .footer-security{
+  width: 100%;
+  margin-top: 30px;
+}
+.footer .bot-footer .footer-about {
+  width: 30%;
+  text-align: justify;
+}
+.footer-payment{
+  width: 27%;
+}
+.footer .t-img-wrap-logo-payment{
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 90px;
+  min-width: 90px;
+}
+.t-wrap-first-payment{
+  width: 100%;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  align-items: center;
+  margin-top: 30px;
+}
+.t-first-payment{
+  width: unset;
+  margin: 0;
+  
+}
+.t-first-payment img{
+  margin-left: 10px;
+}
+/* Custom radio button  */
+.radio {
+  position: relative;
+  cursor: pointer;
+  /* line-height: 20px; */
+  /* font-size: 14px; */
+  /* margin: 15px; */
+}
+.radio .label {
+  position: relative;
+  display: block;
+  float: left;
+  /* margin-right: 10px; */
+  width: 16px;
+  height: 16px;
+  border: 2px solid #4f4f4f;
+  border-radius: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+.radio .label:after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  background: #000;
+  transform: scale(0);
+  transition: all 0.2s ease;
+  opacity: 0.08;
+  pointer-events: none;
+}
+.radio:hover .label:after {
+  transform: scale(3.6);
+}
+input[type="radio"]:checked + .label {
+  border-color: #4f4f4f;
+}
+input[type="radio"]:checked + .label:after {
+  transform: scale(1);
+  transition: all 0.2s cubic-bezier(0.35, 0.9, 0.4, 0.9);
+  opacity: 1;
+}
+.hidden {
+  display: none;
+}
+.credit {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  transition: all 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+  opacity: 0.6;
+}
+.credit img {
+  width: 72px;
+}
+.credit:hover {
+  transform: scale(0.95);
+}
+/* End Custom radio button  */
+
+
 @media screen and (min-width: 1400px) {
   .top-header .right-box .login-box form .reg-link span{
     height: 96px;
   }
 }
+@media screen and (max-width: 414px) {
+  .btn-product-detail-add-to-cart{
+    width: 100%;
+  }
+}
+
+
 /*# sourceMappingURL=ti-style.css.map */

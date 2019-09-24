@@ -104,7 +104,7 @@ class TopupController extends Controller
         $cart = Yii::$app->kingcoin;
         $promotion_code = $request->post('promotion_code');
         $item = $cart->getItem();
-        if (!$item) return $this->redirect(['site/index']);
+        if (!$item) return $this->redirect(['topup/index']);
         $item->setScenario(CartItem::SCENARIO_EDIT_CART);
         if ($request->isPost) {
             if ($item->load($request->post()) && $item->validate()) {

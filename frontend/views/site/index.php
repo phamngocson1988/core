@@ -13,7 +13,7 @@ use common\components\helpers\FormatConverter;
     </div>
     <div class="row">
       <?php foreach ($games as $game) :?>
-      <div class="col col-lg-20-per col-sm-12 prod-item">
+      <div class="col-6 col-lg-20-per col-md-4 prod-item">
         <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>">
         <img src="<?=$game->getImageUrl('300x300');?>" alt="">
         <?php if (Yii::$app->settings->get('EventForm', 'status')) : ?>

@@ -35,32 +35,52 @@ $cart->applyPromotion();
                         <strong>Kinggems.us!</strong>
                       </p>
                     </div>
-                    <div class="t-flex-item-center t-use-kcoins">
-                      <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?>  class="paygate">
-                      <img src="/images/logo-kcoins-sm.png" class="paygate-logo" alt="">
+                    
+                    <div class="t-wrap-first-payment">
+                      <label for="opt0" class="t-flex-item-center t-choose-payment radio t-first-payment">
+                          <input type="radio" name="identifier" value="kinggems" <?=(!$can_place_order) ? 'disabled="true"' : "";?> id="opt0" class="hidden paygate" />
+                          <span class="label"></span>
+                          <img src="/images/logo-kcoins-sm.png" alt="" class="paygate-logo">
+                      </label>
                       <div class="t-text-right">
-                        Balance - <span class="t-red-bold"><?=number_format($balance);?></span> Kcoins
-                        <span class="t-need-topup">Need to top up?
-                        <a href="<?=Url::to(['topup/index']);?>">Click here</a>
-                        </span>
+                          Balance - <span class="t-red-bold">20</span> Kcoins
+                          <span class="t-need-topup">Need to top up?
+                              <a href="#">
+                                  Click here
+                              </a>
+                          </span>
                       </div>
                     </div>
-                    <div class="t-flex-item-center t-choose-payment">
-                      <input type="radio" name="identifier" value="skrill" class="paygate">
-                      <img src="/images/skrill.png" class="paygate-logo" alt="">
-                    </div>
-                    <div class="t-flex-item-center t-choose-payment">
-                      <input type="radio" name="identifier" value="paypal" checked="" class="paygate">
-                      <img src="/images/paypal.png" class="paygate-logo" alt="">
-                    </div>
-                    <div class="t-flex-item-center t-choose-payment">
-                      <input type="radio" name="identifier" value="alipay" class="paygate">
-                      <img src="/images/alipay.png" class="paygate-logo" alt="">
-                    </div>
-                    <div class="t-flex-item-center t-choose-payment">
-                      <input type="radio" name="identifier" value="wechat" class="paygate">
-                      <img src="/images/we.png" class="paygate-logo" alt="">
-                    </div>
+                    <label for="opt2" class="t-flex-item-center t-choose-payment radio">
+                      <input type="radio" name="identifier" id="opt2" value="skrill" class="hidden paygate" />
+                      <span class="label"></span>
+                      <div class="t-img-wrap-logo-payment">
+                          <img src="/images/skrill.png" class="paygate-logo" alt="">
+                      </div>
+                    </label>
+
+                    <label for="opt4" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt4" checked value="paypal" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/paypal.png" class="paygate-logo" alt="">
+                        </div>
+                    </label>
+                    <label for="opt5" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt5" value="alipay" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/alipay.png" class="paygate-logo" alt="">
+                        </div>
+                    </label>
+                    <label for="opt6" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt6" value="wechat" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/we.png" class="paygate-logo" alt="">
+                        </div>
+                    </label>
+                    
                     <div class="is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
                     </div>
@@ -135,7 +155,7 @@ $('form').submit(function(){
 });
 $('.paygate-logo').on('click', function(){
   var parent = $(this).closest('div');
-  parent.find('input').prop('checked', true);
+  parent.find('input:not(:disabled)').prop('checked', true);
   parent.find('input').trigger('change');
 });
 $('.paygate').change(function(){

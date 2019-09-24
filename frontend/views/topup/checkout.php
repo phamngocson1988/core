@@ -16,7 +16,7 @@ $total = $cart->getTotalPrice();
     <div class="small-container">
       <div class="row">
         <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
-          <div class="affiliate-top no-mar-bot">
+          <div class="affiliate-top">
             <div class="has-left-border has-shadow no-mar-top t-flex-between">
               <p>YOUR ORDER <span>(1 Product)</span></p>
               <a href="<?=Url::to(['topup/index']);?>" class="t-flex-item-center">
@@ -34,22 +34,37 @@ $total = $cart->getTotalPrice();
                     <strong>Kinggems.us!</strong>
                   </p>
                 </div>
-                <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="paypal" checked class="paygate">
-                  <img src="/images/paypal.png" class="paygate-logo" alt="">
-                </div>
-                <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="skrill" class="paygate">
-                  <img src="/images/skrill.png" class="paygate-logo" alt="">
-                </div>
-                <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="alipay" class="paygate">
-                  <img src="/images/alipay.png" class="paygate-logo" alt="">
-                </div>
-                <div class="t-flex-item-center t-choose-payment">
-                  <input type="radio" name="identifier" value="wechat" class="paygate">
-                  <img src="/images/we.png" class="paygate-logo" alt="">
-                </div>
+
+                <label for="opt2" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt2" value="skrill" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/skrill.png" class="paygate-logo" alt="">
+                    </div>
+                </label>
+
+                <label for="opt4" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt4" checked value="paypal" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/paypal.png" class="paygate-logo" alt="">
+                    </div>
+                </label>
+                <label for="opt5" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt5" value="alipay" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/alipay.png" class="paygate-logo" alt="">
+                    </div>
+                </label>
+                <label for="opt6" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt6" value="wechat" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/we.png" class="paygate-logo" alt="">
+                    </div>
+                </label>
+                
                 <div class="is-desktop">
                   <!-- <a class="btn-product-detail-add-to-cart" href="javascript:;">PAYMENT</a> -->
                   <?= Html::submitButton('PAYMENT', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
@@ -107,76 +122,6 @@ $total = $cart->getTotalPrice();
     </div>
   </div>
 </section>
-<!-- <section class="topup-page">
-  <div class="container">
-    <div class="small-container">
-      <div class="row">
-        <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
-          <div class="affiliate-top no-mar-bot">
-            <div class="has-left-border has-shadow no-mar-top">
-              Your Order <span>(1 Product)</span>
-              <div class="top-bar-action">
-                <a class="edit-btn" href="<?=Url::to(['topup/index']);?>">Edit</a>
-              </div>
-            </div>
-          </div>
-          <div class="top-up-confirm">
-            <div class="kingcoins-logo">
-              <img src="//images/logo-king-coins.png" alt="">
-            </div>
-            <div class="cart-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Pricing Package</th>
-                    <th>King Coins</th>
-                    <th>USD</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><?=$item->getLabel();?> - <b><?=number_format($item->getCoin());?> King Coins</b></td>
-                    <td><?=number_format($item->getCoin());?> x <?=$item->quantity;?></td>
-                    <td>$<?=number_format($item->getPrice());?> x <?=$item->quantity;?></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="game-totals">
-                <div class="product-grand-total">
-                  <?php if ($cart->getPromotionCoin()) : ?>
-                  <div class="grand-line">
-                    <span>Promotion coin:</span><span><?=number_format($cart->getPromotionCoin());?> King Coins</span>
-                  </div>
-                  <?php endif;?>
-                  <div class="grand-line">
-                    <span>Total coin:</span><span><?=number_format($cart->getTotalCoin());?> King Coins</span>
-                  </div>
-                  <div class="grand-line">
-                    <span>Subtotal price:</span><span>$<?=number_format($sub, 1);?></span>
-                  </div>
-                  <?php if ($cart->getPromotionMoney()) :?>
-                  <div class="grand-line">
-                    <span>Saving:</span><span>-$<?=$cart->getPromotionMoney();?></span>
-                  </div>
-                  <?php endif;?>
-                  <div class="grand-line last-line">
-                    <span>Grand Total price:</span><span>$<?=number_format($total, 1);?></span>
-                  </div>
-                </div>
-              </div>
-              <div class="text-right">
-                <?php $form = ActiveForm::begin(['action' => Url::to(['topup/purchase'])]); ?>
-                <?=Html::hiddenInput('identifier', 'paypal');?>
-                <?= Html::submitButton('Submit', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
-                <?php ActiveForm::end();?>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
 <?php
 $script = <<< JS
 $('form').submit(function(){
