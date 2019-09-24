@@ -44,7 +44,7 @@ return [
         'image' => [
             'class' => 'common\components\filesystem\ImageSystemManager',
             'generate_thumbnail' => true,
-            'thumbnails' => ['50x50', '100x100', '150x150', '300x300', '500x500', '420x550', '71x71', '188x246', '270x400'],
+            'thumbnails' => ['50x50', '100x100', '150x150', '300x300', '500x500', '420x550', '71x71', '188x246', '270x400', '420x210'],
             'dependency' => [
                 'class' => 'common\components\filesystem\local\LocalImageSystem',
                 // 'image_path' => '@common/uploads/images',

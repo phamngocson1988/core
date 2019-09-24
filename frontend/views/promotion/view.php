@@ -25,7 +25,7 @@ use frontend\models\Promotion;
           <div class="row">
             <div class="col col-sm-12 col-md-6">
               <div class="img-wrap">
-                <img src="<?=$model->getImageUrl('300x300');?>" alt="">
+                <img src="<?=$model->getImageUrl('420x210');?>" alt="">
               </div>
             </div>
             <div class="col col-sm-12 col-md-6 ti-title-content">

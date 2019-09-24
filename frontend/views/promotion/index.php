@@ -54,7 +54,7 @@ use frontend\models\Promotion;
                 <div class="overlay">
                   <span class="main-btn">More Info</span>
                 </div>
-                <img src="<?=$model->getImageUrl('300x300');?>" alt="<?=$model->title;?>">
+                <img src="<?=$model->getImageUrl('420x210');?>" alt="<?=$model->title;?>">
               </a>
               <a class="product-name" href="<?=Url::to(['promotion/view', 'id' => $model->id]);?>"><?=$model->title;?></a>
             </div>
