@@ -38,7 +38,7 @@ class ReportController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['accounting'],
+                        'roles' => ['@'],
                     ],
                 ],
             ],
