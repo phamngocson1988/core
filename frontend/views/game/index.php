@@ -26,7 +26,7 @@ $this->title = 'Shop';
               <input type="text" placeholder="Search" name="q" value="<?=$q;?>">
               <input type="submit" value="">
             </div>
-            <div class="shop-search-paging is-desktop">
+            <div class="shop-search-paging t-wrap-btn">
               <?=LinkPager::widget(['pagination' => $pages, 'maxButtonCount' => 1, 'hideOnSinglePage' => false]);?>
             </div>
             <div class="shop-search-filter">

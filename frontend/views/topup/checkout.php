@@ -65,7 +65,7 @@ $total = $cart->getTotalPrice();
                     </div>
                 </label>
                 
-                <div class="is-desktop">
+                <div class="t-wrap-btn">
                   <!-- <a class="btn-product-detail-add-to-cart" href="javascript:;">PAYMENT</a> -->
                   <?= Html::submitButton('PAYMENT', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
                 </div>

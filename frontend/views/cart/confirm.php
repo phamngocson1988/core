@@ -18,13 +18,13 @@ $cart->applyPromotion();
         <div class="row">
           <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="checkout-navigation-tabs has-shadow">
-              <div class="ck-tab-cart">
+              <div class="ck-tab ck-tab-cart">
                 <span class="done"><i class="fa fa-check"></i></span><span>Cart</span>
               </div>
-              <div class="ck-tab-payment-confirm active">
+              <div class="ck-tab ck-tab-payment-confirm active">
                 <span>2</span><span>Payment Confirm</span>
               </div>
-              <div class="ck-tab-payment-method">
+              <div class="ck-tab ck-tab-payment-method">
                 <span>3</span><span>Payment Methods</span>
               </div>
             </div>
@@ -37,11 +37,7 @@ $cart->applyPromotion();
                     <span class="note-ico">!</span><span>Your information is committed to security by <span style="color:#ff3600">Kinggems.us!</span></span>
                   </div>
                   <?= $form->field($item, 'reception_email')->textInput();?>
-                  <!-- <div class="form-group">
-                    <label>Reception email</label>
-                    <input class="form-control" type="text">
-                  </div> -->
-                  <div class="is-desktop">
+                  <div class="t-wrap-btn is-desktop">
                     <?= Html::submitButton('Next', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'update-cart-button']) ?>
                   </div>
                 </div>

@@ -16,13 +16,13 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
         <div class="row">
           <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="checkout-navigation-tabs has-shadow">
-              <div class="ck-tab-cart active">
+              <div class="ck-tab ck-tab-cart active">
                 <span>1</span><span>Cart</span>
               </div>
-              <div class="ck-tab-payment-confirm">
+              <div class="ck-tab ck-tab-payment-confirm">
                 <span>2</span><span>Payment Confirm</span>
               </div>
-              <div class="ck-tab-payment-method">
+              <div class="ck-tab ck-tab-payment-method">
                 <span>3</span><span>Payment Methods</span>
               </div>
             </div>
@@ -36,25 +36,80 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     <label>Game</label>
                     <span><?=$item->title;?></span>
                   </div>
-                  <?= $form->field($item, 'platform')->radioList(['android' => 'Android', 'ios' => 'Ios'], ['class' => 'radio-form-control']) ?>
-                  <?= $form->field($item, 'character_name')->textInput()->label('Character Name');?>
+                  <div class="form-group">
+                      <label class="control-label">Platform</label>
+                      <div id="" class="radio-form-control">
+                          <label for="opt1" class="t-flex-item-center radio">
+                              <input type="radio" name="CartItem[platform]" checked id="opt1" class="hidden" />
+                              <span class="label"></span>
+                             <span>Android</span>
+                          </label>
+
+                          <label for="opt2"
+                              class="t-flex-item-center radio">
+                              <input type="radio" name="CartItem[platform]" id="opt2" class="hidden" />
+                              <span class="label"></span>
+                              <span>IOS</span>
+                          </label>
+                      </div>
+                      <p class="help-block help-block-error"></p>
+                  </div>
+
+                  <?= $form->field($item, 'character_name', [
+                    'template' => '{input}{label}{error}',
+                    'options' => ['class' => 'form-group t-input'],
+                    'labelOptions' => ['class' => 'placeholder'],
+                    'inputOptions' => ['placeholder' => ' ']
+                  ])->textInput()->label('Character Name');?>
+                  
+                 
                   <?= $form->field($item, 'login_method', [
-                    'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem']
-                  ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'])->label('Login Method');?>
-                  <?= $form->field($item, 'username')->textInput()->label('Account Login');?>
-                  <?= $form->field($item, 'password')->textInput()->label('Account Password');?>
-                  <?= $form->field($item, 'server')->textInput()->label('Server');?>
-                  <?php //$saler_code = Yii::$app->session->get('saler_code');?>
+                    'options' => ['class' => 'form-group t-input t-select'],
+                    'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem'],
+                    'labelOptions' => ['class' => 'mobile-hide']
+                  ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'], ['prompt' => 'Login Method'])->label('Login Method');?>
+
+                  <?= $form->field($item, 'username', [
+                    'template' => '{input}{label}{error}',
+                    'options' => ['class' => 'form-group t-input'],
+                    'labelOptions' => ['class' => 'placeholder'],
+                    'inputOptions' => ['placeholder' => ' ']
+                  ])->textInput()->label('Account Login');?>
+
+                  <?= $form->field($item, 'password', [
+                    'template' => '{input}{label}{error}',
+                    'options' => ['class' => 'form-group t-input'],
+                    'labelOptions' => ['class' => 'placeholder'],
+                    'inputOptions' => ['placeholder' => ' ']
+                  ])->textInput()->label('Account Password');?>
+
+                  <?= $form->field($item, 'server', [
+                    'template' => '{input}{label}{error}',
+                    'options' => ['class' => 'form-group t-input'],
+                    'labelOptions' => ['class' => 'placeholder'],
+                    'inputOptions' => ['placeholder' => ' ']
+                  ])->textInput()->label('Server');?>
+
                   <?= $form->field($item, 'saler_code', [
                     'options' => ['tag' => false],
                     'inputOptions' => ['id' => 'saler_code'],
                     'template' => '{input}'
                   ])->hiddenInput(); ?>
+
                   <?= $form->field($item, 'recover_code', [
-                    'inputOptions' => ['id' => 'recover_code'],
+                    'template' => '{input}{label}{error}',
+                    'options' => ['class' => 'form-group t-input'],
+                    'labelOptions' => ['class' => 'placeholder'],
+                    'inputOptions' => ['placeholder' => ' ', 'id' => 'recover_code'],
                     'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; padding-left: 37%']
                   ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 6 or 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 13456578 12252546');?>
-                  <?= $form->field($item, 'note')->textInput()->label('Special note (optional)');?>
+
+                  <?= $form->field($item, 'note', [
+                    'template' => '{input}{label}{error}',
+                    'options' => ['class' => 'form-group t-input'],
+                    'labelOptions' => ['class' => 'placeholder'],
+                    'inputOptions' => ['placeholder' => ' ']
+                  ])->textInput()->label('Special note (optional)');?>
 
                   <div class="form-group">
                     <label class="control-label" for="cartitem-note"></label>
@@ -70,6 +125,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     </div>
                   </div>
                 </div>
+
                 <?php ActiveForm::end(); ?>
 
                 <?php Pjax::begin(); ?>
@@ -136,6 +192,15 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     </div>
                     <div class="cart-table">
                       <div class="cart-coupon">
+                        <?php $saler_code = Yii::$app->session->get('saler_code');?>
+                        <?=Html::input('text', 'saler_code', $saler_code, [
+                          'readonly' => (boolean)$saler_code, 
+                          'placeholder' => "Enter supporter's code",
+                          'class' => 'fl-left',
+                          'id' => 'saler_code_value'
+                        ]);?>
+                      </div>
+                      <div class="cart-coupon">
                         <?php if ($cart->hasPromotion()) : ?>
                         <?php $promotion = $cart->getPromotionItem();?>
                         <input type="text" name="promotion_code" id="voucher" class="fl-left" placeholder="Enter your voucher" value="<?=$promotion->code;?>" readonly>
@@ -145,15 +210,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                         <button class="cus-btn yellow fl-left apply-coupon-btn" id="apply_voucher" type="button">Apply</button>
                         <?php endif;?>
                       </div>
-                      <div class="cart-coupon">
-                        <?php $saler_code = Yii::$app->session->get('saler_code');?>
-                        <?=Html::input('text', 'saler_code', $saler_code, [
-                          'readonly' => (boolean)$saler_code, 
-                          'placeholder' => "Enter supporter's code",
-                          'class' => 'fl-left',
-                          'id' => 'saler_code_value'
-                        ]);?>
-                      </div>
+                      
                     </div>
                   </div>
                 </div>
@@ -167,6 +224,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                       <input type="checkbox" style="margin-right: 7px;margin-top: 4px;" id="policy_no_refund"><span>By making this purchase, I'm confirming that I totally understand <a href="<?=Url::to(['site/term', 'slug' => 'no_refund']);?>" target="_blank" style="color: blue">no refund policy</a></span>
                   </div>
                 </div>
+
                 <div class="ck-submit-form">
                   <a class="btn-product-detail-add-to-cart" href="javascript:;" id="update-cart-button">Submit</a>
                 </div>

@@ -947,7 +947,7 @@ ol li {
   text-decoration: underline;
   color: #ff3600;
 }
-.t-payment .is-desktop{
+.t-payment .t-wrap-btn{
   width: 100%;
   display: inline-block;
 }
@@ -1097,11 +1097,154 @@ input[type="radio"]:checked + .label:after {
   transform: scale(0.95);
 }
 /* End Custom radio button  */
-
-
+.game-info .radio-form-control .radio:first-child{
+  width: 60%;
+}
+.game-info .label{
+  margin-bottom: 3px;
+  margin-right: 10px;
+}
+.t-input{
+  display: flex;
+  display: -webkit-flex;
+}
+.t-input input{
+  -ms-flex-order: 1;
+  order: 1;
+}
+.t-input label{
+  -ms-flex-order: 0;
+  order: 0;
+}
+.checkout-cart-total .cart-table .cart-coupon .cus-btn{
+  float: left;
+}
+.mobile-show{
+  display: none;
+  visibility: hidden;
+}
+.mobile-hide{
+  display: block;
+  visibility: visible;
+}
 @media screen and (min-width: 1400px) {
   .top-header .right-box .login-box form .reg-link span{
     height: 96px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .t-choose-payment{
+    width: 50%;
+    margin-top: 30px;
+  }
+  .t-first-payment{
+    margin-top: 0;
+  }
+  .t-img-wrap-logo-payment{
+    width: 80px;
+    min-width: 80px;
+  }
+  .t-img-wrap-logo-payment img{
+    width: 100%;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  .mobile-show{
+    display: block;
+    visibility: visible;
+  }
+  .mobile-hide{
+    display: none;
+    visibility: hidden;
+  }
+  .ck-tab{
+    display: none;
+  }
+  .ck-tab.active{
+    display: block;
+  }
+  .product-detail .product-image, .product-temple-total table tbody td .origin-price, .product-detail .product-info .product-detail-price{
+    display: none;
+  }
+  section.product-detail{
+    padding-top: 32px;
+  }
+  .t-select::before{
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 13px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #4b4b4b;
+  }
+  .checkout-tabs-content .game-info{
+    padding-right: 0;
+  }
+  .game-info .t-input.form-group .form-control{
+    width: 100%;
+    float: unset;
+  }
+  
+  .t-input select{
+    padding: 0 5px;
+  }
+  .t-input input{
+    -ms-flex-order: 0;
+    order: 0;
+  }
+  .t-input label{
+    -ms-flex-order: 1;
+    order: 1;
+  }
+  .t-input{
+    position: relative;
+    margin-bottom: 30px;
+  }
+  .t-input input {
+    border: none;
+    border-radius: 0;
+  }
+  .t-input input:focus {
+    box-shadow: unset;
+  }
+  .t-input input:focus + .placeholder, .t-input input:not(:placeholder-shown) ~ .placeholder {
+    top: -24px;
+    left: 0;
+    /* font-size: 18px; */
+  }
+  .t-input textarea:focus + .placeholder, .t-input textarea:not(:placeholder-shown) ~ .placeholder {
+    top: -24px;
+    left: 0;
+    /* font-size: 18px; */
+  }
+  .t-input input:focus + .placeholder, .t-input textarea:focus + .placeholder {
+    opacity: 1;
+  }
+  .t-input .placeholder {
+    pointer-events: none;
+    /* opacity: 0.2; */
+    margin-bottom: 0;
+    font-size: 14px;
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    transition: 0.5s;
+  }
+  .checkout-cart-total .cart-table{
+    text-align: center;
+  }
+  .checkout-cart-total .cart-table .cart-coupon input[type="text"]{
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .checkout-cart-total .cart-table .cart-coupon .cus-btn{
+    float: unset;
+    margin-bottom: 30px;
   }
 }
 @media screen and (max-width: 414px) {

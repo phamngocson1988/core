@@ -14,13 +14,13 @@ $cart->applyPromotion();
         <div class="row">
           <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="checkout-navigation-tabs has-shadow">
-              <div class="ck-tab-cart">
+              <div class="ck-tab ck-tab-cart">
                 <span class="done"><i class="fa fa-check"></i></span><span>Cart</span>
               </div>
-              <div class="ck-tab-payment-confirm bg-white">
-                <span class="done"><i class="fa fa-check"></i></span><span>Payment Confirm</span>
+              <div class="ck-tab ck-tab-payment-confirm">
+                <span>2</span><span>Payment Confirm</span>
               </div>
-              <div class="ck-tab-payment-method active">
+              <div class="ck-tab ck-tab-payment-method active">
                 <span>3</span><span>Payment Methods</span>
               </div>
             </div>
@@ -81,7 +81,7 @@ $cart->applyPromotion();
                         </div>
                     </label>
                     
-                    <div class="is-desktop">
+                    <div class="t-wrap-btn is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
                     </div>
                   </div>
