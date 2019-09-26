@@ -104,7 +104,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
 
                   <div class="form-group">
                     <label class="control-label" for="cartitem-note"></label>
-                    <div class="recovery-code-hint-box1" style="font-size: 12px;color: #6f5e5e;text-align: left;width: 63%;float: left;">
+                    <div class="recovery-code-guid-box">
                       <div class="top">
                           The recovery code is very necessary, kindly support!
                       </div><br/>
@@ -123,7 +123,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                 <?php $form = ActiveForm::begin(['options' => ['data-pjax' => 'true']]); ?>
                 <?=Html::hiddenInput('scenario', CartItem::SCENARIO_EDIT_CART);?>
                 <?php $item->setScenario(CartItem::SCENARIO_EDIT_CART);?>
-                <div class="checkout-cart-total" style="padding-top: 70px">
+                <div class="checkout-cart-total">
                   <div class="game-totals">
                     <div class="product-temple-total">
                       <table>

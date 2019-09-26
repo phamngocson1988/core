@@ -359,3 +359,11 @@ a.normal-link {
     font-size: 13;
     color: #6f5e5e;
 }
+
+.recovery-code-guid-box {
+    font-size: 12px;
+    color: #6f5e5e;
+    text-align: left;
+    width: 63%;
+    float: left;
+}
