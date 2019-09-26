@@ -1104,7 +1104,7 @@ input[type="radio"]:checked + .label:after {
   margin-bottom: 3px;
   margin-right: 10px;
 }
-.t-input{
+.register-block .t-input, .t-input{
   display: flex;
   display: -webkit-flex;
 }
@@ -1185,7 +1185,7 @@ input[type="radio"]:checked + .label:after {
   .checkout-tabs-content .game-info{
     padding-right: 0;
   }
-  .game-info .t-input.form-group .form-control{
+  .game-info .t-input.form-group .form-control, .register-block .t-input.form-group .form-control{
     width: 100%;
     float: unset;
   }
@@ -1202,6 +1202,7 @@ input[type="radio"]:checked + .label:after {
     order: 1;
   }
   .t-input{
+    flex-direction: column;
     position: relative;
     margin-bottom: 30px;
   }
@@ -1213,12 +1214,12 @@ input[type="radio"]:checked + .label:after {
     box-shadow: unset;
   }
   .t-input input:focus + .placeholder, .t-input input:not(:placeholder-shown) ~ .placeholder {
-    top: -24px;
+    top: -30px;
     left: 0;
     /* font-size: 18px; */
   }
   .t-input textarea:focus + .placeholder, .t-input textarea:not(:placeholder-shown) ~ .placeholder {
-    top: -24px;
+    top: -30px;
     left: 0;
     /* font-size: 18px; */
   }
@@ -1245,6 +1246,9 @@ input[type="radio"]:checked + .label:after {
   .checkout-cart-total .cart-table .cart-coupon .cus-btn{
     float: unset;
     margin-bottom: 30px;
+  }
+  .register-block .t-input .placeholder{
+    top: 0;
   }
 }
 @media screen and (max-width: 414px) {

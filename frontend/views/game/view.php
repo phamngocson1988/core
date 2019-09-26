@@ -24,7 +24,7 @@ $gamePromotion = reset($gamePromotions);
         <div class="small-container">
             <div class="row">
                 <div class="col col-sm-12">
-                    <div class="product-image">
+                    <div class="product-image is-desktop">
                         <img src="<?=$game->getImageUrl('300x300');?>" alt="">
                     </div>
                     <div class="product-info">
@@ -73,7 +73,7 @@ $gamePromotion = reset($gamePromotions);
                                         <td>
                                             <?php $showOriginPrice = ($game->original_price && $game->original_price > $game->getPrice());?>
                                             <?php if ($showOriginPrice) : ?>
-                                            <div class="origin-price">
+                                            <div class="origin-price is-desktop">
                                                 $<span id="origin-price"><?=number_format($game->getOriginalPrice(), 1);?></span>
                                             </div>
                                             <?php endif;?>
@@ -97,7 +97,7 @@ $gamePromotion = reset($gamePromotions);
                                         </td>
                                     </tr>
                                     <?php if ($showOriginPrice) : ?>
-                                    <tr>
+                                    <tr class="is-desktop">
                                         <td colspan="3">Saving:</td>
                                         <td><span class="saving-number"><?=number_format($game->getSavedPrice(), 1);?></span>%</td>
                                     </tr>
