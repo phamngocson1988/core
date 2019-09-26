@@ -19,6 +19,7 @@ class AppAsset extends AssetBundle
         'css/ti-style.css',
         'css/theme.css',
         'css/overlay.css',
+        'css/media.css',
     ];
     public $js = [
         'js/jquery.bxslider.min.js',

@@ -41,12 +41,43 @@ $years = array_combine($rangeYears, $rangeYears);
           <div class="register-block">
             <?php $form = ActiveForm::begin(['id' => 'form-signup', 'options' => ['autocomplete' => 'off']]); ?>
               <p>Please note that we do not permit members to own more than (1) account.</p>
-              <?= $form->field($model, 'firstname')->textInput()->label('Firstname <span class="required">*</span>') ?>
-              <?= $form->field($model, 'lastname')->textInput()->label('Lastname <span class="required">*</span>') ?>
-              <?= $form->field($model, 'username')->textInput()->label('Username <span class="required">*</span>') ?>
-              <?= $form->field($model, 'password')->passwordInput()->label('Password <span class="required">*</span>') ?>
-              <?= $form->field($model, 'repassword')->passwordInput()->label('Confirm Password <span class="required">*</span>') ?>
-              <?= $form->field($model, 'email')->textInput()->label('Email <span class="required">*</span>') ?>
+              <?= $form->field($model, 'firstname', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->textInput()->label('Firstname <span class="required">*</span>') ?>
+              
+              <?= $form->field($model, 'lastname', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->textInput()->label('Lastname <span class="required">*</span>') ?>
+              <?= $form->field($model, 'username', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->textInput()->label('Username <span class="required">*</span>') ?>
+              <?= $form->field($model, 'password', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->passwordInput()->label('Password <span class="required">*</span>') ?>
+              <?= $form->field($model, 'repassword', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->passwordInput()->label('Confirm Password <span class="required">*</span>') ?>
+              <?= $form->field($model, 'email', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->textInput()->label('Email <span class="required">*</span>') ?>
               <div class="form-group">
                 <label>Date of Birth <span class="required">*</span></label>
                 <?= $form->field($model, 'birth_date', [

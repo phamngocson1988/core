@@ -6,6 +6,8 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use frontend\components\cart\CartItem;
 use frontend\components\cart\Cart;
+use frontend\widgets\RadioListInput;
+
 $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js', ['depends' => '\frontend\assets\AppAsset']);
 ?>
 
@@ -36,24 +38,13 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     <label>Game</label>
                     <span><?=$item->title;?></span>
                   </div>
-                  <div class="form-group">
-                      <label class="control-label">Platform</label>
-                      <div id="" class="radio-form-control">
-                          <label for="opt1" class="t-flex-item-center radio">
-                              <input type="radio" name="CartItem[platform]" checked id="opt1" class="hidden" />
-                              <span class="label"></span>
-                             <span>Android</span>
-                          </label>
 
-                          <label for="opt2"
-                              class="t-flex-item-center radio">
-                              <input type="radio" name="CartItem[platform]" id="opt2" class="hidden" />
-                              <span class="label"></span>
-                              <span>IOS</span>
-                          </label>
-                      </div>
-                      <p class="help-block help-block-error"></p>
-                  </div>
+                  <?=$form->field($item, 'platform', [
+                      'labelOptions' => ['class' => 't-flex-item-center radio'],
+                    ])->widget(RadioListInput::className(), [
+                    'items' => ['android' => 'Android', 'ios' => 'IOS'],
+                    'options' => ['class' => 'radio-form-control']
+                  ])?>
 
                   <?= $form->field($item, 'character_name', [
                     'template' => '{input}{label}{error}',
@@ -216,7 +207,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                 </div>
                 <?php ActiveForm::end(); ?>
                 <?php Pjax::end(); ?>
-                <div class="ck-submit-form" style="text-align: left;margin-left: 17%;margin-top: 0px;font-size: 13;color: #6f5e5e;">
+                <div class="ck-submit-form cart-term-condition">
                   <div class="terms-row">
                       <input type="checkbox" style="margin-right: 7px;margin-top: 4px;" id="policy_risk"><span>I confirm that by making this purchase I understand and agree with the <a href="<?=Url::to(['site/term', 'slug' => 'risk']);?>" target="_blank" style="color: blue">lossing sharing term</a></span>
                   </div>

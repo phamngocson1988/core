@@ -351,3 +351,11 @@ a.normal-link {
 .page-breadcrumb>li {
     display: inline-block;
 }
+
+.cart-term-condition {
+    text-align: left;
+    margin-left: 17%;
+    margin-top: 0px;
+    font-size: 13;
+    color: #6f5e5e;
+}
