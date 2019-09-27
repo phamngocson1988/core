@@ -28,7 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
           <div class="register-block">
             <?php $form = ActiveForm::begin(['id' => 'form-login', 'options' => ['autocomplete' => 'off']]); ?>
               <p>Type new password.</p>
-              <?= $form->field($model, 'password')->passwordInput(['autofocus' => true])->label('Password <span class="required">*</span>') ?>
+              <?= $form->field($model, 'password', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->passwordInput(['autofocus' => true])->label('Password <span class="required">*</span>') ?>
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Submit</button>
                 <div class="reg-login-now"><a href="<?=Url::to(['site/login', '#' => 'page-title']);?>">Login now</a></div>

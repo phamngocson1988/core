@@ -62,4 +62,8 @@
   .recovery-code-guid-box {
     width: 100%;
   }
+
+  .register-block .form-group .form-control, .game-info .form-group .form-control, .game-confirm .form-group .form-control {
+    width: 100%;
+  }
 }

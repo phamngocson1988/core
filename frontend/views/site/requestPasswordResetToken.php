@@ -28,7 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
           <div class="register-block">
             <?php $form = ActiveForm::begin(['id' => 'form-login', 'options' => ['autocomplete' => 'off']]); ?>
               <p>We will send an email to you.</p>
-              <?= $form->field($model, 'email')->textInput()->label('Email <span class="required">*</span>') ?>
+              <?= $form->field($model, 'email', [
+                'template' => '{input}{label}{error}',
+                'options' => ['class' => 'form-group t-input'],
+                'labelOptions' => ['class' => 'placeholder'],
+                'inputOptions' => ['placeholder' => ' ']
+              ])->textInput()->label('Email <span class="required">*</span>') ?>
               <div class="register-action">
                 <button type="submit" class="cus-btn yellow has-shadow">Send</button>
               </div>

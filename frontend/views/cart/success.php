@@ -36,7 +36,7 @@ $setting = Yii::$app->settings;
                     <?php foreach ($data as $key => $value) : ?>
                     <p><?=$key;?>: <?=$value;?></p>
                     <?php endforeach;?>
-                    <p>Note: "KINGGEMS_GAME_<?=$order->auth_key;?>"</h3></p>
+                    <p>Note: "KINGGEMS_GAME_<?=$order->id;?>"</h3></p>
                   </div>
                   <div class="col-md-6">
                     <img src="<?=$logo;?>" width="150">

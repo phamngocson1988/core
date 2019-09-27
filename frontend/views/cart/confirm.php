@@ -36,7 +36,12 @@ $cart->applyPromotion();
                   <div class="ck-confirm-note">
                     <span class="note-ico">!</span><span>Your information is committed to security by <span style="color:#ff3600">Kinggems.us!</span></span>
                   </div>
-                  <?= $form->field($item, 'reception_email')->textInput();?>
+                  <?= $form->field($item, 'reception_email', [
+                    'template' => '{input}{label}{error}',
+                    'options' => ['class' => 'form-group t-input'],
+                    'labelOptions' => ['class' => 'placeholder'],
+                    'inputOptions' => ['placeholder' => ' ']
+                  ])->textInput();?>
                   <div class="t-wrap-btn is-desktop">
                     <?= Html::submitButton('Next', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'update-cart-button']) ?>
                   </div>
