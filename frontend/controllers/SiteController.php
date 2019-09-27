@@ -433,13 +433,15 @@ class SiteController extends Controller
         return $this->render('term', ['content' => $content]);
     }
 
-    public function actionQueue()
+    public function actionQueue($id)
     {
-        $user = Yii::$app->user->identity;
-        Yii::$app->queue->push(new \console\queue\SignupEmail([
-            'user' => $user
-        ]));
-        die($user->email);
+        // $queue = new \console\queue\SignupEmail(['id' => Yii::$app->user->id]);
+        $queue = new \console\queue\DeleteOrder(['id' => $id]);
+        Yii::$app->queue->push($queue);
+        echo '<pre>';
+        print_r($queue);
+        echo '</pre>';
+        die;
     }
 
     public function actionEmail()

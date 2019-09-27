@@ -66,4 +66,21 @@
   .register-block .form-group .form-control, .game-info .form-group .form-control, .game-confirm .form-group .form-control {
     width: 100%;
   }
+
+  .affiliate-top .has-left-border {
+    font-size: 15px;
+  }
+  
+  .affiliate-top .has-left-border span {
+    font-size: 15px;
+  }
+
+  .topup-paygates {
+    margin-top: 0px;
+  }
+
+  .t-right-payment {
+    margin-top: 50px;
+  }
+
 }
