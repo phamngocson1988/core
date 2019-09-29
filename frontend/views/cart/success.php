@@ -28,7 +28,7 @@ $setting = Yii::$app->settings;
                 <p>If not found please check in Spam or Junk Folder mailbox.</p>
               </div>
               <?php if ($order->payment_type == 'offline') : ?>
-              <div class="order-info-email-note">
+              <div class="order-info-email-note offline-success">
                 <div class="row">
                   <div class="col-md-6">
                     <?php $data = $gateway->loadConfig();?>
@@ -38,7 +38,7 @@ $setting = Yii::$app->settings;
                     <?php endforeach;?>
                     <p>Note: "KINGGEMS_GAME_<?=$order->id;?>"</h3></p>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 paygate-logo">
                     <img src="<?=$logo;?>" width="150">
                   </div>
                 </div>

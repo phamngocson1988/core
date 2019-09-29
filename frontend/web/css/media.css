@@ -83,4 +83,8 @@
     margin-top: 50px;
   }
 
+  .offline-success .paygate-logo {
+    text-align: center;
+  }
+
 }
