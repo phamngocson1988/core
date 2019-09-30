@@ -2,8 +2,10 @@
 {use class='yii\widgets\Pjax' type='block'}
 {use class='backend\components\datepicker\DatePicker'}
 {use class='common\models\User'}
+{use class='common\models\Country'}
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='yii\helpers\Url'}
+{use class='yii\helpers\ArrayHelper'}
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -115,7 +117,7 @@
             {$form->field($search, 'country_code', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'country_code']
-            ])->dropDownList(Yii::$app->params['country_code'], ['prompt' => 'Quốc gia'])->label('Tên quốc gia')}
+            ])->dropDownList(ArrayHelper::map(Country::fetchAll(), 'country_code', 'country_name'), ['prompt' => 'Quốc gia'])->label('Tên quốc gia')}
 
             {$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -187,7 +189,7 @@
               <td>{$model->name}</td>
               <td>{$model->birthday}</td>
               <td>{$model->email}</td>
-              <td>{$model->country_code} {$model->phone}</td>
+              <td>{$model->phone}</td>
               <td>{$model->created_at}</td>
               <td>{$model->getCountryName()}</td>
               <td>{$model->last_order_date}</td>

@@ -5,6 +5,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\User;
+use common\models\Country;
 use backend\models\Game;
 use backend\models\Order;
 use yii\helpers\ArrayHelper;
@@ -18,7 +19,6 @@ class FetchCustomerForm extends User
     public $created_end;
     public $birthday_start;
     public $birthday_end;
-    // public $country_code;
     public $game_id;
     public $purchase_start;
     public $purchase_end;
@@ -76,12 +76,13 @@ class FetchCustomerForm extends User
         $saler = User::findOne($this->saler_id);
         $resellerStatus = self::getResellerStatus();
         $customerType = ArrayHelper::getValue($resellerStatus, $this->is_reseller, '');
+        $country = Country::findOne($this->country_code);
         $header = [
             'A2:L2' => sprintf('Ngày tham gia: %s - %s', $this->created_start, $this->created_end),
             'A3:L3' => sprintf('Sinh nhật: %s - %s', $this->birthday_start, $this->birthday_end),
             'A4:L4' => sprintf('Có đơn hàng trong khoảng: %s - %s', $this->purchase_start, $this->purchase_end),
             'A5:L5' => sprintf('Tổng giá trị đơn hàng: %s - %s', $this->total_purchase_start, $this->total_purchase_end),
-            'A6:L6' => sprintf('Quốc gia: %s', ArrayHelper::getValue(Yii::$app->params['country_code'], $this->country_code, '')),
+            'A6:L6' => sprintf('Quốc gia: %s', ($country) ? $country->country_name : ''),
             'A7:L7' => sprintf('Đã từng mua game: %s', ($game) ? $game->title : ''),
             'A8:L8' => sprintf('Nhân viên bán hàng: %s', ($saler) ? $saler->name : ''),
             'A9:L9' => sprintf('Loại người dùng: %s', $customerType),
@@ -99,7 +100,7 @@ class FetchCustomerForm extends User
                 $model->name,
                 $model->birthday, 
                 $model->email,
-                sprintf("%s %s", $model->country_code, $model->phone),
+                $model->phone,
                 $model->created_at,
                 $model->getCountryName(),
                 $model->last_order_date,

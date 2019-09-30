@@ -103,7 +103,7 @@ $years = array_combine($rangeYears, $rangeYears);
                   'options' => ['tag' => false],
                   'inputOptions' => ['class' => 'form-control phone-code', 'id' => 'country_code'],
                   'template' => '{input}'
-                ])->dropDownList(Yii::$app->params['country_code']) ?>
+                ])->dropDownList($model->listCountries(), ['options' => $model->listCountryAttributes()]) ?>
                 <?= $form->field($model, 'phone', [
                   'options' => ['tag' => false],
                   'inputOptions' => ['class' => 'form-control phone-number', 'id' => 'phone'],
@@ -150,7 +150,7 @@ $('#birth_year, #birth_month, #birth_date').on('change', function() {
   console.log('date trigger');
 });
 $('#country_code').on('change', function(){
-  $('#phone').val($(this).val());
+  $('#phone').val($(this).find('option:selected').attr('data-dialling'));
 });
 if (!$('#phone').val()) {
   $('#country_code').trigger('change');

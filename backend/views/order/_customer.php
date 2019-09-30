@@ -20,7 +20,7 @@ if (!Yii::$app->user->can('saler')) return '';
     </div>
     <div class="row static-info">
       <div class="col-md-5"> Phone Number: </div>
-      <div class="col-md-7"> <?=sprintf("(%s)%s", $customer->country_code, $customer->phone);?> </div>
+      <div class="col-md-7"> <?=$customer->phone;?> </div>
     </div>
   </div>
 </div>

@@ -1,6 +1,8 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='dosamigos\datepicker\DatePicker'}
+{use class='yii\helpers\ArrayHelper'}
+{use class='common\models\Country'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -82,7 +84,7 @@
                   {$form->field($model, 'country_code', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList(Yii::$app->params['country_code'])}
+                  ])->dropDownList(ArrayHelper::map(Country::fetchAll(), 'country_code', 'country_name'))}
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

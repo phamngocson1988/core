@@ -77,7 +77,7 @@ use common\components\helpers\FormatConverter;
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
                 <td style="vertical-align: middle;"><?=$model->user->name;?></td>
                 <td style="vertical-align: middle;"><?=$model->user->email;?></td>
-                <td style="vertical-align: middle;"><?=sprintf("(%s) %s", $model->user->country_code, $model->user->phone);?></td>
+                <td style="vertical-align: middle;"><?=$model->user->phone;?></td>
                 <td style="vertical-align: middle;"><?=$model->preferred_im;?></td>
                 <td style="vertical-align: middle;"><?=$model->im_account;?></td>
                 <td style="vertical-align: middle;"><?=$model->channel;?></td>

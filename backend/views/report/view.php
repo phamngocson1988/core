@@ -148,7 +148,7 @@ use common\models\File;
                         </div>
                         <div class="row static-info">
                           <div class="col-md-5 name"> Phone Number: </div>
-                          <div class="col-md-7 value"> <?=sprintf("(%s)%s", $customer->country_code, $customer->phone);?> </div>
+                          <div class="col-md-7 value"> <?=$customer->phone;?> </div>
                         </div>
                       </div>
                     </div>

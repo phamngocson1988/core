@@ -322,7 +322,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getCountryName()
     {
-        return ArrayHelper::getValue(Yii::$app->params['country_code'], $this->country_code, '');
+        $country = Country::findOne($this->country_code);
+        if ($country) return $country->country_name;
     }
 
     public function isReseller() 

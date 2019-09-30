@@ -173,7 +173,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
-            ])->widget(DatePicker::className(), [
+            ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
                 'format' => 'yyyy-mm-dd hh:00',

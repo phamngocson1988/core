@@ -7,7 +7,7 @@ use frontend\models\User;
 use frontend\models\Game;
 use yii\helpers\ArrayHelper;
 use frontend\events\AfterSignupEvent;
-
+use common\models\Country;
 /**
  * Signup form
  */
@@ -101,6 +101,20 @@ class SignupForm extends Model
             return $user;
         }
         return null;
+    }
+
+    public function listCountries()
+    {
+        return ArrayHelper::map(Country::fetchAll(), 'country_code', 'country_name');
+    }
+
+    public function listCountryAttributes()
+    {
+        $attrs = [];
+        foreach (Country::fetchAll() as $country) {
+            $attrs[$country->country_code] = ['data-dialling' => $country->dialling_code];
+        }
+        return $attrs;
     }
 
 }

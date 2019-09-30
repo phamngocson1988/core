@@ -80,7 +80,7 @@ use dosamigos\datepicker\DatePicker;
                 <th scope="col">#</th>
                 <th scope="col">Game</th>
                 <th scope="col">Amount</th>
-                <th scope="col">Created date</th>
+                <th scope="col">No. of Packages</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
@@ -90,19 +90,22 @@ use dosamigos\datepicker\DatePicker;
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td><a href="<?=Url::to(['user/detail', 'id' => $model->id]);?>" data-pjax="0" style="color:#007bff; text-decoration: underline"><?=$model->id;?></a></td>
+                <td>
+                  <a href="<?=Url::to(['user/detail', 'id' => $model->id]);?>" data-pjax="0" class="normal-link" style="display:block; clear: left; line-height: 10px;"><?=$model->id;?></a>
+                  <i style="font-size:13px; color:#CCC"><?=$model->created_at;?></i>
+                </td>
                 <td><?=$model->game_title;?></td>
                 <td>$<?=number_format($model->total_price);?></td>
-                <td><?=$model->created_at;?></td>
+                <td><?=number_format($model->quantity);?></td>
                 <td><?=$model->getStatusLabel();?></td>
               </tr>
               <?php endforeach;?>
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="2">Total Amount:</td>
+                <td colspan="2">Total:</td>
                 <td>$<?=number_format($filterForm->getCommand()->sum('total_price'), 1);?></td>
-                <td></td>
+                <td><?=number_format($filterForm->getCommand()->sum('quantity'), 1);?></td>
                 <td></td>
               </tr>
             </tfoot>

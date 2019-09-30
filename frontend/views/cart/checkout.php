@@ -43,7 +43,7 @@ $cart->applyPromotion();
                           <img src="/images/logo-kcoins-sm.png" alt="" class="paygate-logo">
                       </label>
                       <div class="t-text-right">
-                          Balance - <span class="t-red-bold">20</span> Kcoins
+                          Balance - <span class="t-red-bold"><?=number_format($balance);?></span> Kcoins
                           <span class="t-need-topup">Need to top up?
                               <a href="#">
                                   Click here
