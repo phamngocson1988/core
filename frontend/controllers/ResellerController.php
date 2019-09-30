@@ -21,6 +21,8 @@ use frontend\models\Game;
 use frontend\models\UserWallet;
 use frontend\models\PromotionApply;
 use yii\base\Model;
+use frontend\forms\FetchHistoryOrderForm;
+use yii\data\Pagination;
 
 /**
  * ResellerController
@@ -277,5 +279,31 @@ class ResellerController extends Controller
             'orders' => $orders,
             'user' => $user,
         ]);
+    }
+
+    public function actionOrder() 
+    {
+        $request = Yii::$app->request;
+        $status = $request->get('status');
+
+        $this->view->params['body_class'] = 'global-bg';
+        $this->view->params['user_menu_active'] = "reseller.$status";
+        $filter = [
+            'customer_id' => Yii::$app->user->id,
+            'status' => $status
+        ];
+        $form = new FetchHistoryOrderForm($filter);
+
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('orders', [
+            'models' => $models,
+            'pages' => $pages,
+            'filterForm' => $form,
+        ]);
+
+        return $this->render('orders');
     }
 }
