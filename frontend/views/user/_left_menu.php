@@ -21,7 +21,9 @@ $user = Yii::$app->user->getIdentity();
         <div class="qa-answer showing" style="display: block">
           <a href="<?=Url::to(['user/transaction']);?>" class="sub-btn" code='user.transaction'>Transaction</a>
           <a href="<?=Url::to(['user/wallet']);?>" class="sub-btn" code='user.wallet'>Wallet</a>
+          <?php if (!$user->isReseller()) : ?>
           <a href="<?=Url::to(['user/orders']);?>" class="sub-btn" code='user.order'>Order</a>
+          <?php endif;?>
         </div>
       </li>
       <?php if ($user->isReseller()) : ?>
@@ -31,6 +33,7 @@ $user = Yii::$app->user->getIdentity();
           <a href="<?=Url::to(['reseller/order', 'status' => 'pending']);?>" class="sub-btn" code='reseller.pending'>Pending</a>
           <a href="<?=Url::to(['reseller/order', 'status' => 'processing']);?>" class="sub-btn" code='reseller.processing'>Processing</a>
           <a href="<?=Url::to(['reseller/order', 'status' => 'completed']);?>" class="sub-btn" code='reseller.completed'>Completed</a>
+          <a href="<?=Url::to(['reseller/order', 'status' => 'deleted']);?>" class="sub-btn" code='reseller.completed'>Canncelled</a>
         </div>
       </li>
       <?php endif;?>

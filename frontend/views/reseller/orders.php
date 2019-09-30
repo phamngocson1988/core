@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Order;
 use dosamigos\datepicker\DatePicker;
+
 ?>
 <section class="page-title">
   <div class="container">
@@ -40,10 +41,11 @@ use dosamigos\datepicker\DatePicker;
                 'linkOptions' => ['class' => 'page-link'],
                 'pageCssClass' => 'page-item',
               ]);?>
-              <?php $form = ActiveForm::begin(['method' => 'get']); ?>
-              <?php /*$form->field($filterForm, 'start_date', [
-                'labelOptions' => ['class' => 'col-md-6 control-label'],
-                'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+              <?php $formOpt = ($showFilter) ? [] : ['style' => 'display:none'];?>
+              <?php $form = ActiveForm::begin(['method' => 'get', 'options' => $formOpt]); ?>
+              <?= $form->field($filterForm, 'start_date', [
+                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
               ])->widget(DatePicker::className(), [
                 'inline' => false, 
                 'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
@@ -51,7 +53,24 @@ use dosamigos\datepicker\DatePicker;
                     'autoclose' => true,
                     'format' => 'yyyy-mm-dd'
                 ]
-              ]); */v?>
+              ]);?>
+              <?= $form->field($filterForm, 'end_date', [
+                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
+              ])->widget(DatePicker::className(), [
+                'inline' => false, 
+                'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+              ]);?>
+              <?= $form->field($filterForm, 'status', [
+                'inputOptions' => ['class' => 'form-control', 'name' => 'status', 'id' => 'status']
+              ])->dropDownList($filterForm->fetchStatusList(), ['prompt' => 'All']);?>
+              <?= $form->field($filterForm, 'status', [
+                'inputOptions' => ['class' => 'form-control', 'name' => 'status', 'id' => 'status']
+              ])->textInput();?>
               <?php $form = ActiveForm::end(); ?>
             </div>
           </div>

@@ -302,6 +302,7 @@ class ResellerController extends Controller
             'models' => $models,
             'pages' => $pages,
             'filterForm' => $form,
+            'showFilter' => $request->get('filter')
         ]);
 
         return $this->render('orders');
