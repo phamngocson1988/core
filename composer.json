@@ -44,7 +44,8 @@
         "2amigos/yii2-chartjs-widget" : "~2.0",
         "izyue/yii2-alipay": "*",
         "zvook/php-skrill-quick-checkout": "*",
-        "lavrentiev/yii2-toastr": "^2.0"
+        "lavrentiev/yii2-toastr": "^2.0",
+        "yii2mod/yii2-sweet-alert": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
