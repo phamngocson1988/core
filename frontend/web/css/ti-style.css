@@ -1208,9 +1208,9 @@ input[type="radio"]:checked+.label:after {
         min-width: 80px;
     }
 
-    .t-img-wrap-logo-payment img {
+    /*.t-img-wrap-logo-payment img {
         width: 100%;
-    }
+    }*/
 }
 
 
