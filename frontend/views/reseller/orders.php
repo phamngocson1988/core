@@ -51,7 +51,7 @@ use dosamigos\datepicker\DatePicker;
                     'autoclose' => true,
                     'format' => 'yyyy-mm-dd'
                 ]
-              ]); */?>
+              ]); */v?>
               <?php $form = ActiveForm::end(); ?>
             </div>
           </div>
