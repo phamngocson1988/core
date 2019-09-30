@@ -5,6 +5,8 @@ use Yii;
 
 class Alipay extends OfflinePayment
 {
+	public $currency = 'CNY';
+	
     public function loadConfig()
     {
         $settings = Yii::$app->settings;

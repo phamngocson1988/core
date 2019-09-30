@@ -34,6 +34,8 @@ class m181217_033141_create_order_table extends Migration
             'total_tax' => $this->integer(11)->defaultValue(0),
             'total_price' => $this->float(1)->defaultValue(0),
             'total_cogs_price' => $this->float(1)->defaultValue(0),
+            'total_price_by_currency' => $this->float(1)->defaultValue(0),
+            'currency' => $this->string(10)->defaultValue('USD'),
             'customer_id' => $this->integer(11)->notNull(),
             'customer_name' => $this->string(255),
             'customer_email' => $this->string(255),

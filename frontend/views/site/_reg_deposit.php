@@ -24,7 +24,7 @@ use yii\helpers\Url;
     </div>
     <div class="has-left-border gray has-shadow">
         <img src="/images/ico-how-to-play.png" alt="">
-        <p class="small-txt">How to</p>
+        <p class="small-txt">How to place an</p>
         <p class="large-txt"><a href="<?=Url::to(['site/question-detail', 'id' => 17, 'slug' => 'how-to-place-an-order']);?>">Order</a></p>
     </div>
 </div>

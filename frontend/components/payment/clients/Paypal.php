@@ -26,6 +26,7 @@ class Paypal extends PaymentGateway
     
     public $identifier = 'paypal';
     public $type = 'online';
+	public $currency = 'USD';
 
     public function loadConfig()
     {
@@ -50,7 +51,7 @@ class Paypal extends PaymentGateway
     {
         $cart = $this->cart;
         $totalPrice = $cart->getTotalPrice();
-        $currency = "USD";
+        $currency = $this->currency;
         $fee = $this->getServiceFee($totalPrice);
         $totalPrice += $fee;
 

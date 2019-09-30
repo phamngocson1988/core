@@ -132,7 +132,7 @@ $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
               Have any futher questions?
             </div>
             <div class="qa-answer">
-              <p>Call us on <b>98635927</b> or email to <b>help@kinggems.us</b></p>
+              <p>Call us on <b>+84979997559</b> or email to <b>customerservice.kinggems@gmail.com</b></p>
             </div>
           </div>
         </div>

@@ -25,6 +25,8 @@ class PaymentGateway extends Model
 
     public $identifier;
 
+    public $currency;
+
     /** @var string the id of transaction returned by paygate */
     protected $payment_id;
 

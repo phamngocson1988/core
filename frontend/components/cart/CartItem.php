@@ -55,6 +55,7 @@ class CartItem extends Game implements CartItemInterface
     public function init()
     {
         $this->quantity = ($this->quantity > 0) ? $this->quantity : 1;
+        $this->platform = ($this->platform) ? $this->platform : 'android';
     }
 
     public function scenarios()

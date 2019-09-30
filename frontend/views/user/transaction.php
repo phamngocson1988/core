@@ -50,7 +50,7 @@ use yii\helpers\Html;
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col">#</th>
+                <th scope="col">No</th>
                 <th scope="col">Date</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Method</th>

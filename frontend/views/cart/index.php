@@ -58,7 +58,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     'options' => ['class' => 'form-group t-input t-select'],
                     'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem'],
                     'labelOptions' => ['class' => 'mobile-hide']
-                  ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'], ['prompt' => 'Login Method'])->label('Login Method');?>
+                  ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'])->label('Login Method');?>
 
                   <?= $form->field($item, 'username', [
                     'template' => '{input}{label}{error}',

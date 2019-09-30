@@ -5,6 +5,7 @@ use Yii;
 
 class Wechat extends OfflinePayment
 {
+	public $currency = 'CNY';
     public function loadConfig()
     {
         $settings = Yii::$app->settings;

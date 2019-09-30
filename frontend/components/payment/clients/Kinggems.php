@@ -14,6 +14,7 @@ class Kinggems extends PaymentGateway
 {
     public $identifier = 'kinggems';
     public $type = 'online';
+	public $currency = 'KINGGEMS';
 
     public function validatePayment()
     {

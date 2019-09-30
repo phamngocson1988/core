@@ -5,6 +5,7 @@ use Yii;
 
 class SkrillOffline extends OfflinePayment
 {
+	public $currency = 'USD';
     public function loadConfig()
     {
         $settings = Yii::$app->settings;

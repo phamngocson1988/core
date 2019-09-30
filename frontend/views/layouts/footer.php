@@ -6,7 +6,7 @@ $setting = Yii::$app->settings;
     <div class="container">
       <div class="small-container">
         <div class="footer-logo">
-          <a href="javascript:void(0)">
+          <a href="/">
           <img src="<?=$setting->get('ApplicationSettingForm', 'logo', '/images/logo.png');?>" alt="">
           </a>
           <div class="footer-security">

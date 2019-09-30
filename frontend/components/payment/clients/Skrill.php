@@ -19,6 +19,7 @@ class Skrill extends PaymentGateway
     protected $_server = 'https://pay.skrill.com';
     public $identifier = 'skrill';
     public $type = 'online';
+	public $currency = 'USD';
     
     public function loadConfig()
     {

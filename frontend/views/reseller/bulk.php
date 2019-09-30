@@ -14,7 +14,7 @@ use frontend\components\cart\CartItem;
         <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="affiliate-top no-mar-bot">
             <div class="has-left-border has-shadow no-mar-top">
-              Bulk for "<?=$title;?>" Orders
+              Bulk of "<?=$title;?>" Order
             </div>
           </div>
           

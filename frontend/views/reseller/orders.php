@@ -77,7 +77,7 @@ use dosamigos\datepicker\DatePicker;
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col">#</th>
+                <th scope="col">No</th>
                 <th scope="col">Game</th>
                 <th scope="col">Amount</th>
                 <th scope="col">No. of Packages</th>
@@ -95,7 +95,12 @@ use dosamigos\datepicker\DatePicker;
                   <i style="font-size:13px; color:#CCC"><?=$model->created_at;?></i>
                 </td>
                 <td><?=$model->game_title;?></td>
-                <td>$<?=number_format($model->total_price);?></td>
+                <td>
+                  $<?=number_format($model->total_price);?>
+                  <?php if (!in_array($model->currency, ['USD', 'KINGGEMS'])) : ?>
+                  <i style="font-size:13px; color: #CCC"><?=$model->currency;?>/<?=number_format($model->total_price_by_currency, 1);?></i>
+                  <?php endif; ?>
+                </td>
                 <td><?=number_format($model->quantity);?></td>
                 <td><?=$model->getStatusLabel();?></td>
               </tr>

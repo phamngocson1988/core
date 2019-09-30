@@ -20,6 +20,7 @@ use frontend\components\payment\cart\PaymentCart;
 use frontend\components\payment\cart\PaymentPromotion;
 use frontend\components\payment\PaymentGateway;
 use frontend\components\payment\PaymentGatewayFactory;
+use common\components\helpers\FormatConverter;
 
 /**
  * CartController
@@ -252,6 +253,8 @@ class CartController extends Controller
             $order->sub_total_price = $subTotalPrice;
             $order->total_discount = $promotionCoin;
             $order->total_price = $totalPrice;
+            $order->total_price_by_currency = FormatConverter::convertCurrencyToCny($totalPrice);
+            $order->currency = $gateway->currency;
             $order->total_cogs_price = $cartItem->getCogs() * (float)$cartItem->quantity;
             $order->customer_id = $user->id;
             $order->customer_name = $user->name;
