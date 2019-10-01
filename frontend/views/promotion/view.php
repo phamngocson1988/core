@@ -49,8 +49,9 @@ use frontend\models\Promotion;
 $script = <<< JS
 $('#claim').on('click', function(){
   var code = $(this).attr('code');
-  toastr.options.positionClass = 'toast-top-center';
-  toastr.success('Promotion code is: ' + code);
+  copyToClipboard(code);
+  swal("Promotion code is copied to clipboard.", "", "success");
+
 })
 JS;
 $this->registerJs($script);

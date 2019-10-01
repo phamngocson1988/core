@@ -25,6 +25,7 @@ class AppAsset extends AssetBundle
         'js/jquery.bxslider.min.js',
         'js/ajax_action.js',
         'js/jquery.fancybox.min.js',
+        'js/sweetalert.min.js',
         'js/function.js',
     ];
     public $depends = [

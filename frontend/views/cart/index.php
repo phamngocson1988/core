@@ -232,11 +232,13 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
 $script = <<< JS
 $('body').on('click', "#update-cart-button", function(){
   if (!$('#policy_risk').is(':checked')) {
-    alert('You need to agree with our lossing sharing term.');
+    // alert('You need to agree with our lossing sharing term.');
+    swal("", "You need to agree with our lossing sharing term.", "warning");
     return false;
   }
   if (!$('#policy_no_refund').is(':checked')) {
-    alert('You need to agree with our no refund policy.');
+    // alert('You need to agree with our no refund policy.');
+    swal("", "You need to agree with our no refund policy.", "warning");
     return false;
   }
   $('form#infor-form').submit();

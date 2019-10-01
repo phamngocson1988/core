@@ -175,7 +175,7 @@ $('#email').on('blur', function(){
 });
 $('#form-signup').on('submit', function(e){
   if (!$('#agree').is(':checked')) {
-    alert('You need to agree with our terms & conditions.');
+    swal("", "You need to agree with our terms & conditions.", "warning");
     return false;
   }
 });
