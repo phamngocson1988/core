@@ -69,7 +69,7 @@ use common\widgets\TinyMce;
                     'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->widget(TinyMce::className(), [
-                    'options' => ['rows' => 10]
+                    'options' => ['rows' => 50]
                   ]);?>
 
                   <?=$form->field($model, 'category', [

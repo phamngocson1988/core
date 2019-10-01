@@ -380,3 +380,16 @@ a.normal-link {
     width: 60px;
     height: 20px;
 }
+
+
+.product-promo-detail .ti-main-content p:has(code) {
+    margin-top: 38px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-promo-detail .ti-main-content p>code {
+    padding: 18px 21px;
+    color: #ffdd00;
+    background-color: #707070;
+}
