@@ -59,7 +59,7 @@ use frontend\components\cart\CartItem;
                       'name' => 'raw',
                       'title' => 'Order detail',
                       'type' => 'textarea', //TabularColumn::TYPE_TEXT_INPUT,
-                      'headerOptions' => ['width' => '50%'],
+                      // 'headerOptions' => ['width' => '50%'],
                       'columnOptions' => ['style' => 'padding-left:20px; padding-right: 20px;'],
                       'attributeOptions' => [
                           'enableClientValidation' => true,
@@ -87,12 +87,12 @@ use frontend\components\cart\CartItem;
                     'name' => 'unit_price',
                     'title' => 'Unit Price',
                     'type'  => TabularColumn::TYPE_STATIC,
-                    'headerOptions' => ['width' => '10%'],
+                    'headerOptions' => ['width' => '10%', 'class' => 'is-desktop'],
                     // 'value' => function($data) {
                     //   return $data->getPrice();
                     // },
                     'defaultValue' => $default_price,
-                    'options' => ['class' => 'price'],
+                    'options' => ['class' => 'price is-desktop'],
                   ],
                   [
                     'name' => 'amount',
@@ -110,10 +110,10 @@ use frontend\components\cart\CartItem;
             <table style="border-right: 0">
               <thead>
                 <tr>
-                  <td width="50%" style="border: 0"><strong>Total Amount:</td>
+                  <td style="border: 0"><strong>Total Amount:</td>
                   <td width="20%" style="border: 0"><span id="total-quantity"></span></td>
                   <td width="10%" style="border: 0"></td>
-                  <td width="10%" style="border: 0"><span id="total-price"></span></td>
+                  <td width="10%" style="border: 0"><span id="total-price is-desktop"></span></td>
                   <td width="10%" style="border: 0"></td>
                 </tr>
               </thead>
