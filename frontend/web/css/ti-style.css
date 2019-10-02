@@ -1149,14 +1149,15 @@ input[type="radio"]:checked+.label:after {
 
 .register-block .t-input,
 .t-input {
+    flex-wrap: wrap;
     display: flex;
     display: -webkit-flex;
     position: relative;
 }
 
 .t-input input {
-    -ms-flex-order: 1;
-    order: 1;
+    -ms-flex-order: 2;
+    order: 2;
 }
 
 .t-input label {
@@ -1169,14 +1170,19 @@ input[type="radio"]:checked+.label:after {
 }
 
 .form-group.has-error .help-block-error {
-    height: unset;
+    /* height: unset;
     width: unset;
     margin: 0;
     position: absolute;
     right: 10px;
-    top: 8px;
+    top: 8px; */
+    -ms-flex-order: 3;
+    order: 3;
 }
-
+.register-block .form-group .captcha-image{
+    -ms-flex-order: 1;
+    order: 1;
+}
 .mobile-show {
     display: none;
     visibility: hidden;
@@ -1208,9 +1214,9 @@ input[type="radio"]:checked+.label:after {
         min-width: 80px;
     }
 
-    /*.t-img-wrap-logo-payment img {
+    .t-img-wrap-logo-payment img {
         width: 100%;
-    }*/
+    }
 }
 
 
@@ -1224,11 +1230,15 @@ input[type="radio"]:checked+.label:after {
         display: none;
         visibility: hidden;
     }
-
+    #form-login > p{
+        margin-bottom: 50px;
+    }
     .cart-table table.responsive-table .quantity-box input {
         width: 44px;
     }
-
+    .register-block .form-group label{
+        width: 100%;
+    }
     .cart-table table.responsive-table td {
         padding-top: 0;
         padding-bottom: 0;
@@ -1305,7 +1315,23 @@ input[type="radio"]:checked+.label:after {
         position: relative;
         margin-bottom: 30px;
     }
+    .t-input.field-loginform-captcha,
+    .register-block .t-input.field-loginform-captcha.form-group,
+    .form-group.t-input.field-loginform-captcha {
+        flex-direction: unset;
+    }
 
+    .t-input.field-loginform-captcha input,
+    .register-block .t-input.field-loginform-captcha.form-group input,
+    .form-group.t-input.field-loginform-captcha input{
+        width: calc(100% - 80px);
+        margin: 0;
+    }
+    .t-input.field-loginform-captcha .captcha-image,
+    .register-block .t-input.field-loginform-captcha.form-group .captcha-image,
+    .form-group.t-input.field-loginform-captcha .captcha-image{
+        width: 80px;
+    }
     .t-input input {
         border: none;
         border-radius: 0;

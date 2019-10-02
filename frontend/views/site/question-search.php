@@ -58,7 +58,7 @@ use yii\helpers\Url;
           </div>
         </div>
         <div class="col col-12 col-sm-12 col-md-3 col-lg-3">
-          <div class="fb-page" data-href="https://www.facebook.com/KhoaHocKyNang.org/" data-tabs="like" data-width="" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/KhoaHocKyNang.org/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/KhoaHocKyNang.org/">Khóa Học Kỹ Năng</a></blockquote></div>
+          <?php echo $this->render('@frontend/views/site/_facebook_fanpage.php');?>
         </div>
       </div>
     </div>

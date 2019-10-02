@@ -118,4 +118,21 @@ return [
         ],
     ],
     'params' => $params,
+    'on beforeRequest' => function($event){ 
+        $application = $event->sender;
+        $request = $application->request;
+        $clientIp = $request->userIP;
+        $blocklist = Yii::$app->params['blocklist_ips'];
+        $whitelist = Yii::$app->params['whitelist_ips'];
+        $validator = new yii\validators\IpValidator();
+        // check whitelist
+        $validator->setRanges($whitelist);
+        if (!$validator->validate($clientIp)) {
+            // check blocklist
+            $validator->setRanges($blocklist);
+            if ($validator->validate($clientIp)) {
+                die('Service die');
+            }
+        }
+    }
 ];

@@ -76,7 +76,7 @@ use common\widgets\TinyMce;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control', 'id' => 'rules'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
-                  ])->dropDownList(Promotion::getCategories(), ['prompt' => 'Phân loại khuyến mãi'])->label('Quy định áp dụng');?>
+                  ])->dropDownList(Promotion::getCategories(), ['prompt' => 'Phân loại khuyến mãi'])->label('Phân loại khuyến mãi');?>
 
                   <?=$form->field($model, 'image_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -84,7 +84,7 @@ use common\widgets\TinyMce;
                   ])->widget(common\widgets\ImageInputWidget::className(), [
                     'template' => '<div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">{image}{input}</div>{choose_button}{cancel_button}',
                     'imageOptions' => ['width' => 150, 'height' => 150]
-                  ])->label('Hình ảnh');?>
+                  ])->label('Hình ảnh (ít nhất 420x210)');?>
 
                   <?=$form->field($model, 'user_using', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

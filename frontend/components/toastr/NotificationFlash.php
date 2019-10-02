@@ -19,7 +19,6 @@ class NotificationFlash extends \lavrentiev\widgets\toastr\NotificationFlash
         $this->session = \Yii::$app->session;
 
         $flashes = $this->session->getAllFlashes();
-
         foreach ($flashes as $type => $data) {
             $data = (array) $data;
             if (!in_array($type, $this->types)) continue;
