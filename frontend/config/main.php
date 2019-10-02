@@ -121,7 +121,8 @@ return [
     'on beforeRequest' => function($event){ 
         $application = $event->sender;
         //Check whether system allow this transaction before.
-        if ($application->session->get('allow_ip')) return;
+        $session = $application->session;
+        if ($session->get('allow_ip')) return;
 
         $request = $application->request;
         $clientIp = $request->userIP;

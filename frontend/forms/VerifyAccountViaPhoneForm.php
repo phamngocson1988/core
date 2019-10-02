@@ -16,7 +16,7 @@ class VerifyAccountViaPhoneForm extends User
     public $digit_4;
     public $provider = [
         'class' => '\common\components\telecom\SpeedSms',
-        'demo_mode' => true
+        'demo_mode' => false
     ];
 
     public function rules()
