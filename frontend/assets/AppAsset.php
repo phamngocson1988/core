@@ -13,6 +13,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/font-awesome-all.css',
+        'css/reset.css',
         'css/layout.css',
         'css/jquery.bxslider.css',
         'css/jquery.fancybox.min.css',

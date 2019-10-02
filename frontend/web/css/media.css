@@ -87,4 +87,39 @@
     text-align: center;
   }
 
+  .register-block .form-group .form-control.date-day {
+      margin-right: 18px;
+      width: calc((100% - 40px) / 3);
+  }
+
+  .register-block .form-group .form-control.date-month {
+      width: calc((100% - 40px) / 3);
+      margin-right: 17px;
+  }
+
+  .register-block .form-group .form-control.date-year {
+      width: calc((100% - 40px) / 3);
+  }
+
+  .register-block .form-group .form-control.phone-code {
+      width: calc((100% - 20px) / 2);
+      margin-right: 16px;
+  }
+
+  .register-block .form-group .form-control.phone-number {
+      width: calc((100% - 20px) / 2);
+  }
+
+  .register-block .form-group .form-control.captcha-code {
+    width: calc((100% - 20px) / 2);
+    margin-right: 19px;
+  }
+
+  .register-block .form-group .captcha-image {
+      float: left;
+  }
+
+  .register-block .form-group .captcha-image img {
+      height: 33px;
+  }
 }

@@ -28,6 +28,7 @@ return [
         ],
         'settings' => [
             'class' => 'yii2mod\settings\components\Settings',
+            'modelClass' => 'backend\components\actions\SettingModel',
             'cache' => [
                 'class' => 'yii\caching\FileCache',
                 'cachePath' => '@common/runtime/cache'

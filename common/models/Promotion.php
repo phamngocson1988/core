@@ -85,7 +85,7 @@ class Promotion extends ActiveRecord
     {
         return [
             'new-member' => 'New member',
-            'hot-product' => 'Hot product',
+            'hot-promotion' => 'Hot promotion',
             'vip-member' => 'Vip member'
         ];
     }

@@ -28,13 +28,15 @@ class GameController extends Controller
         if ($q) {
             $command->andWhere(['like', 'title', $q]);
         }
+        $orderBy = ['soldout' => SORT_ASC];
         if ($sort == 'desc') {
-            $command->orderBy(['title' => SORT_DESC]);
+            $orderBy['title'] = SORT_DESC;
         } elseif ($sort == 'asc') {
-            $command->orderBy(['title' => SORT_ASC]);
+            $orderBy['title'] = SORT_ASC;
         } else {
-            $command->orderBy(['id' => SORT_DESC]);
+            $orderBy['id'] = SORT_DESC;
         }
+        $command->orderBy($orderBy);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)

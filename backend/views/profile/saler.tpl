@@ -66,11 +66,9 @@
                 <!-- PERSONAL INFO TAB -->
                 <div class="tab-pane active" id="tab_1_2">
                   {ActiveForm assign='form'}
-                    {$form->field($model, 'saler_code', ['inputOptions' => ['readonly' => true, 'class' => 'form-control', 'id' => 'saler-code']])}
+                    {$form->field($model, 'saler_code', ['inputOptions' => ['class' => 'form-control', 'id' => 'saler-code']])}
                     <div class="margiv-top-10">
-                      {if !$model->saler_code}
-                      <button type="submit" class="btn green"> Generate </button>
-                      {/if}
+                      <button type="submit" class="btn green"> Save </button>
                       <a class="btn success" href="javascript:;" id="copy_code"> Copy code </a>
                       <a class="btn success" href="javascript:;" id="copy_link"> Copy link </a>
                     </div>

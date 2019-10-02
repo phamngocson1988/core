@@ -131,7 +131,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_DESC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('index', [
@@ -150,7 +150,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('new-verifying-order', [
@@ -169,7 +169,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('new-pending-order', [
@@ -189,7 +189,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_DESC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('pending-order', [
@@ -209,7 +209,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('cancelling-order', [
@@ -228,7 +228,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('processing-order', [
@@ -247,7 +247,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('completed-order', [
@@ -266,7 +266,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('cancelled-order', [
@@ -284,7 +284,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('dislike-order', [
@@ -312,7 +312,7 @@ class OrderController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_ASC])
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
         return $this->render('feedback-order', [

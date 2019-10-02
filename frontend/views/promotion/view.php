@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
 use frontend\models\Promotion;
 ?>
-<section class="promotion-page">
+<section class="promotion-page product-listing">
   <div class="container">
     <div class="row">
       <div class="col col-lg-3 col-md-3 col-sm-12 col-12">
@@ -34,10 +34,12 @@ use frontend\models\Promotion;
                 <a href="javascript:void(0)">Hot Product</a>
               </div>
               <h1><?=$model->title;?></h1>
-              <a href="javascript:;" id="claim" class="main-btn" code='<?=$model->code;?>'>Claim now</a>
+              <!-- <a href="javascript:;" id="claim" class="main-btn" code='<?=$model->code;?>'>Claim now</a> -->
             </div>
-            <div class="col-12 ti-main-content">
+            <div class="col-12 ti-main-content content">
               <?=$model->content;?>
+              <hr/>
+              <?=Yii::$app->settings->get('TermsConditionForm', 'promotion');?>
             </div>
           </div>
         </div>
