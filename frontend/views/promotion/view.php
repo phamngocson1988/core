@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
 use frontend\models\Promotion;
 ?>
-<section class="promotion-page">
+<section class="promotion-page product-listing">
   <div class="container">
     <div class="row">
       <div class="col col-lg-3 col-md-3 col-sm-12 col-12">
