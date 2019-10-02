@@ -120,19 +120,23 @@ return [
     'params' => $params,
     'on beforeRequest' => function($event){ 
         $application = $event->sender;
+        //Check whether system allow this transaction before.
+        if ($application->session->get('allow_ip')) return;
+
         $request = $application->request;
         $clientIp = $request->userIP;
-        $blocklist = Yii::$app->params['blocklist_ips'];
         $whitelist = Yii::$app->params['whitelist_ips'];
-        $validator = new yii\validators\IpValidator();
-        // check whitelist
-        $validator->setRanges($whitelist);
-        if (!$validator->validate($clientIp)) {
-            // check blocklist
-            $validator->setRanges($blocklist);
-            if ($validator->validate($clientIp)) {
-                die('Service die');
-            }
-        }
+        // Check whether it's in white list ips
+        if (in_array($clientIp, $whitelist)) return $session->set('allow_ip', true);
+
+        // Check whether it's in VN ips
+        $url = "ipinfo.io/$clientIp";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        $response = curl_exec($ch);
+        $payload = json_decode($response, true);
+        curl_close($ch);
+        if (!isset($payload['country']) || $payload['country'] == 'VN') die('Service die');
     }
 ];

@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use backend\forms\EditProfileForm;
 use backend\forms\ChangePasswordForm;
 use backend\forms\ChangeAvatarForm;
+use backend\models\User;
 
 /**
  * ProfileController
@@ -110,10 +111,11 @@ class ProfileController extends Controller
         $this->view->registerCssFile('vendor/assets/pages/css/profile.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
         $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 
-        $model = Yii::$app->user->identity;
-        if ($request->isPost) {
-            $model->generateSalerCode();
-            $model->save(true, ['saler_code']);
+        $model = User::findOne(Yii::$app->user->id);
+        $model->setScenario(User::SCENARIO_UPDATE_SALER_CODE);
+        if ($model->load($request->post()) && $model->validate()) {
+            // $model->generateSalerCode();
+            $model->save();
         }
         $links = [
             'profile' => Url::to(['profile/index']),

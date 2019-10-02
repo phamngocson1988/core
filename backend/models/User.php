@@ -11,12 +11,14 @@ class User extends CommonUser
 {
 	const SCENARIO_CREATE = 'create';
     const SCENARIO_EDIT = 'edit';
+    const SCENARIO_UPDATE_SALER_CODE = 'update_saler_code';
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_CREATE] = ['name', 'country_code', 'phone', 'address', 'birthday', 'status', 'password'];
         $scenarios[self::SCENARIO_EDIT] = ['id', 'name', 'country_code', 'phone', 'address', 'birthday', 'status'];
+        $scenarios[self::SCENARIO_UPDATE_SALER_CODE] = ['id', 'saler_code'];
         return $scenarios;
     }
 
@@ -51,6 +53,7 @@ class User extends CommonUser
 
             [['phone', 'address', 'birthday'], 'trim'],
             ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
+            ['saler_code', 'required', 'on' => self::SCENARIO_UPDATE_SALER_CODE]
         ];
     }
 
