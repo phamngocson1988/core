@@ -63,6 +63,22 @@ class SignupEventHandler extends Model
         Yii::$app->session->remove('saler_code');
     }
 
+    public static function sendActivationEmail(AfterSignupEvent $event) 
+    {
+        $user = $event->user;
+        if (!$user) return;
+        $admin = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+        $siteName = Yii::$app->name;
+        $email = Yii::$app->mailer->compose('signup_mail', [
+            'user' => $user,
+        ])
+        ->setTo($user->email)
+        ->setFrom([$admin => $siteName])
+        ->setSubject('Verify your email')
+        ->setTextBody("Verify your email")
+        ->send();
+    }
+
     public static function assignRole($event)
     {
         $form = $event->sender;
@@ -88,6 +104,8 @@ class SignupEventHandler extends Model
             $referModel->save();
         }
     }
+
+    
 
     public static function notifyWelcomeEmail($event) 
     {

@@ -208,6 +208,7 @@ class SiteController extends Controller
         // Register an event
         $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'salerCheckingEvent']);
         $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'assignRole']);
+        // $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'sendActivationEmail']);
         if ($request->get('refer')) {
             $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
             $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
@@ -296,6 +297,31 @@ class SiteController extends Controller
         $user = User::findOne(['email' => $email]);
         $result = ($user instanceOf User);
         return $this->renderJson($result);
+    }
+
+    public function actionVerifyEmail($id)
+    {
+        $request = Yii::$app->request;
+        return $this->render('verify-email');
+        // $model = User::findOne($id);
+        // if (!$model) throw new NotFoundHttpException("User #$id not found.");
+
+        // // Register an event
+        // if ($model->status == VerifyAccountViaPhoneForm::STATUS_INACTIVE) {
+        //     $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'referApplyingEvent']);
+        //     $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
+        //     $model->on(VerifyAccountViaPhoneForm::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'signonBonus']);
+        // }
+
+        // if ($model->load($request->post()) && $model->verify()) {
+        //     // Yii::$app->getSession()->setFlash('success', 'Your account is activated successfully');
+        //     Yii::$app->user->login($model, 3600 * 24 * 30);
+        //     Yii::$app->getSession()->setFlash('popup-welcome', true);
+        //     return $this->redirect(['site/index']);
+        // } else { 
+        //     Yii::$app->getSession()->setFlash('error', $model->getErrorSummary(false));
+        // }
+        // return $this->render('verify-phone', ['model' => $model]);
     }
 
     public function actionActivate()
