@@ -212,6 +212,12 @@
                 <a class="btn btn-xs grey-salsa active-user tooltips" href="{url route='user/change-status' id=$model->id status='active'}" data-container="body" data-original-title="{Yii::t('app', 'enable_user')}"><i class="fa fa-check-square"></i></a>
                 {/if}
                 {/if} *}
+                {if $model->isActive()}
+                <a class="btn btn-xs default tooltips link-action" href="{url route='user/inactive' id=$model->id}" data-container="body" data-original-title="Inactive"><i class="fa fa-arrow-down"></i></a>
+                {/if}
+                {if $model->isInactive()}
+                <a class="btn btn-xs purple tooltips link-action" href="{url route='user/active' id=$model->id}" data-container="body" data-original-title="Active"><i class="fa fa-arrow-up"></i></a>
+                {/if}
               </td>
             </tr>
             {/foreach}

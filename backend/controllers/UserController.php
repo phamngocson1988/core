@@ -29,7 +29,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller', 'active', 'inactive'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -73,6 +73,7 @@ class UserController extends Controller
         }
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
+        $command->orderBy(['id' => SORT_DESC]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
         $links = [
             'delete' => Url::to(['user/change-status', 'status' => 'delete']),
@@ -202,6 +203,28 @@ class UserController extends Controller
                     break;
             }
             return $this->renderJson($result, null, $form->getErrors());
+        }
+    }
+
+    public function actionActive($id) 
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->status = User::STATUS_ACTIVE;
+            return $this->asJson(['status' => $user->save(true, ['status'])]);
+        }
+    }
+
+    public function actionInactive($id) 
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->status = User::STATUS_INACTIVE;
+            return $this->asJson(['status' => $user->save(true, ['status'])]);
         }
     }
 
