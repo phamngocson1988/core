@@ -208,7 +208,7 @@ class SiteController extends Controller
         // Register an event
         $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'salerCheckingEvent']);
         $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'assignRole']);
-        // $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'sendActivationEmail']);
+        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'sendActivationEmail']);
         if ($request->get('refer')) {
             $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
             $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
@@ -226,13 +226,14 @@ class SiteController extends Controller
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
         if ($model->load($request->post()) && ($user = $model->signup())) {
-            $verify = VerifyAccountViaPhoneForm::findOne($user->id);
-            if (!$verify->send()) {
-                Yii::$app->getSession()->setFlash('error', $verify->getErrorSummary(true));
-            } else {
-                Yii::$app->getSession()->setFlash('success', 'A verification code is sent to your phone, type it to form below to active your account.');
-            }
-            return $this->redirect(['site/verify-phone', 'id' => $user->id]);
+            // $verify = VerifyAccountViaPhoneForm::findOne($user->id);
+            // if (!$verify->send()) {
+            //     Yii::$app->getSession()->setFlash('error', $verify->getErrorSummary(true));
+            // } else {
+            //     Yii::$app->getSession()->setFlash('success', 'A verification code is sent to your phone, type it to form below to active your account.');
+            // }
+            // return $this->redirect(['site/verify-phone', 'id' => $user->id]);
+            return $this->redirect(['site/verify-email', 'id' => $user->id]);
         }
         return $this->render('signup', [
             'model' => $model,
@@ -276,22 +277,6 @@ class SiteController extends Controller
         return $this->redirect(['site/verify-phone', 'auth' => $auth]);
     }
 
-    // public function actionVerifyEmail($id, $key)
-    // {
-    //     $confirmForm = new ActiveCustomerForm([
-    //         'id'=>$id,
-    //         'auth_key'=>$key,
-    //     ]);
-    //     if ($user = $confirmForm->confirm()) {
-    //         Yii::$app->getSession()->setFlash('success','Success!');
-    //         Yii::$app->getUser()->login($user);
-    //     } else{
-    //         Yii::$app->getSession()->setFlash('warning','Failed!');
-    //     }
-        
-    //     return $this->goHome();
-    // }
-
     public function actionFindEmail($email)
     {
         $user = User::findOne(['email' => $email]);
@@ -302,7 +287,10 @@ class SiteController extends Controller
     public function actionVerifyEmail($id)
     {
         $request = Yii::$app->request;
-        return $this->render('verify-email');
+        $model = User::findOne($id);
+        if (!$model) throw new NotFoundHttpException("User #$id not found.");
+        if ($model->status != User::STATUS_INACTIVE) throw new Exception("Your request is invalid", 1);
+        return $this->render('verify-email', ['user' => $model]);
         // $model = User::findOne($id);
         // if (!$model) throw new NotFoundHttpException("User #$id not found.");
 
@@ -329,16 +317,27 @@ class SiteController extends Controller
         $request = Yii::$app->request;
         $id = $request->get('id');
         $key = $request->get('key');
-        $confirmForm = new ActiveCustomerForm([
-            'id'=>$id,
-            'auth_key'=>$key,
-        ]);
+        // $confirmForm = new ActiveCustomerForm([
+        //     'id'=>$id,
+        //     'auth_key'=>$key,
+        // ]);
 
-        if ($user = $confirmForm->confirm()) {
-            Yii::$app->getSession()->setFlash('success','Success!');
-            Yii::$app->getUser()->login($user);
+        $model = User::find()->where([
+            'id' => $id,
+            'auth_key' => $key,
+        ])->one();
+        if (!$model) throw new NotFoundHttpException("User #$id not found.");
+        if ($model->status != User::STATUS_INACTIVE) throw new Exception("Your request is invalid", 1);
+        $model->on(User::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'referApplyingEvent']);
+        $model->on(User::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
+        $model->on(User::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'signonBonus']);
+        $model->status = User::STATUS_ACTIVE;
+
+        if ($model->save()) {
+            Yii::$app->getSession()->setFlash('success','You have activated your account successfully!');
+            Yii::$app->getUser()->login($model);
         } else{
-            Yii::$app->getSession()->setFlash('warning','Failed!');
+            Yii::$app->getSession()->setFlash('warning','There is something wrong. Please contact with our customer service!');
         }
         
         return $this->goHome();
