@@ -33,10 +33,12 @@
           <span class="caption-subject bold uppercase"> Quản lý khách hàng</span>
         </div>
         <div class="actions">
+          {if ($app->user->can('admin'))}
           <a role="button" class="btn btn-warning" href="{Url::current(['mode'=>'export'])}"><i class="fa fa-file-excel-o"></i> Export</a>
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="{url route='user/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
           </div>
+          {/if}
         </div>
       </div>
       <div class="portlet-body">
@@ -213,10 +215,10 @@
                 {/if}
                 {/if} *}
                 {if $model->isActive()}
-                <a class="btn btn-xs default tooltips link-action" href="{url route='user/inactive' id=$model->id}" data-container="body" data-original-title="Inactive"><i class="fa fa-arrow-down"></i></a>
+                <a class="btn btn-xs red tooltips link-action" href="{url route='user/inactive' id=$model->id}" data-container="body" data-original-title="Inactive this user"><i class="fa fa-times"></i></a>
                 {/if}
                 {if $model->isInactive()}
-                <a class="btn btn-xs purple tooltips link-action" href="{url route='user/active' id=$model->id}" data-container="body" data-original-title="Active"><i class="fa fa-arrow-up"></i></a>
+                <a class="btn btn-xs green tooltips link-action" href="{url route='user/active' id=$model->id}" data-container="body" data-original-title="Active this user"><i class="fa fa-check"></i></a>
                 {/if}
               </td>
             </tr>

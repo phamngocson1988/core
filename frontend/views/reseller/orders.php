@@ -45,7 +45,7 @@ use dosamigos\datepicker\DatePicker;
               <?php $form = ActiveForm::begin(['method' => 'get', 'options' => $formOpt]); ?>
               <?= $form->field($filterForm, 'start_date', [
                 'labelOptions' => ['class' => 'col-md-4 control-label'],
-                'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
+                // 'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
               ])->widget(DatePicker::className(), [
                 'inline' => false, 
                 'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
@@ -56,7 +56,7 @@ use dosamigos\datepicker\DatePicker;
               ]);?>
               <?= $form->field($filterForm, 'end_date', [
                 'labelOptions' => ['class' => 'col-md-4 control-label'],
-                'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
+                // 'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
               ])->widget(DatePicker::className(), [
                 'inline' => false, 
                 'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
