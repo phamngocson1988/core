@@ -274,6 +274,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->status == self::STATUS_ACTIVE;
     }
 
+    public function isVerifyPhone()
+    {
+        return (int)$this->is_verify_phone;
+    }
+
     public function isInactive()
     {
         return $this->status == self::STATUS_INACTIVE;
