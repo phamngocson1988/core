@@ -64,7 +64,7 @@ class SignupForm extends Model
             [['birth_date', 'birth_month', 'birth_year'], 'number'],
 
             ['phone', 'trim'],
-            // [['country_code', 'phone'], 'required'],
+            [['country_code', 'phone'], 'safe'],
             // ['phone', 'unique', 'targetClass' => User::className(), 'message' => 'This phone has already been taken.'],
 
             ['captcha', 'required'],
