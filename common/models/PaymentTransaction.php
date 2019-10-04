@@ -46,6 +46,11 @@ class PaymentTransaction extends ActiveRecord
         return $this->status == self::STATUS_COMPLETED;
     }
 
+    public function isPending()
+    {
+        return $this->status == self::STATUS_PENDING;
+    }
+
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);

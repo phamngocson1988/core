@@ -56,6 +56,7 @@ class m190313_163324_create_wallet extends Migration
             'promotion_code' => $this->string(50),
             'promotion_id' => $this->integer(11),
             'evidence' => $this->string(255),
+            'remark' => $this->string(255),
             'status' => $this->string(10)->notNull()->defaultValue('pending'),
         ]);
 

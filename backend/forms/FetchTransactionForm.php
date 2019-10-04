@@ -31,6 +31,9 @@ class FetchTransactionForm extends PaymentTransaction
         if ($this->user_id) {
             $command->andWhere(['user_id' => $this->user_id]);
         }
+        if ($this->remark) {
+            $command->andWhere(['remark' => trim($this->remark)]);
+        }
         if ($this->status) {
             $command->andWhere(['status' => $this->status]);
         }

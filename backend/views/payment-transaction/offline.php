@@ -42,12 +42,17 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['payment-transaction/index'])]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['payment-transaction/offline'])]);?>
         <div class="row margin-bottom-10">
             <?=$form->field($search, 'id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'id']
             ])->textInput()->label('Mã giao dịch');?>
+
+            <?=$form->field($search, 'remark', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'remark']
+            ])->textInput()->label('Remark');?>
 
             <?php $customer = $search->user;?>
             <?=$form->field($search, 'user_id', [
@@ -109,6 +114,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th>Ngày tạo</th>
               <th>Số tiền</th>
               <th>Phương thức thanh toán</th>
+              <th>Remark</th>
               <th>Loại thanh toán</th>
               <th>Trạng thái</th>
               <th>Khách hàng</th>
@@ -117,7 +123,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </thead>
           <tbody>
             <?php if (!$models) :?>
-            <tr><td colspan="8">No data found</td></tr>
+            <tr><td colspan="9">No data found</td></tr>
             <?php endif;?>
             <?php foreach ($models as $model) :?>
             <tr>
@@ -125,12 +131,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td><?=$model->created_at;?></td>
               <td>$<?=number_format($model->total_price);?></td>
               <td><?=$model->payment_method;?></td>
+              <td><?=$model->remark;?></td>
               <td><?=$model->payment_type;?></td>
               <td><?=$model->status;?></td>
-              <td><?=sprintf("%s (<a href='javascript:void;'>#%s</a>)", $model->user->name, $model->user->id);?></td>
+              <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
               <td>
-                <a href='#confirm-pay<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
-                <a href='<?=Url::to(['payment-transaction/delete-offline', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xóa giao dịch" ><i class="fa fa-trash-o"></i></a>
+                <a href='#confirm-pay<?=$model->id;?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-times"></i></a>
                 <div class="modal fade" id="confirm-pay<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -208,7 +215,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
 <?php
 $script = <<< JS
 // delete
-$('.delete').ajax_action({
+$('.link-action').ajax_action({
   method: 'POST',
   confirm: true,
   confirm_text: 'Bạn có muốn xóa giao dịch này không? Nó sẽ không thể phục hồi',

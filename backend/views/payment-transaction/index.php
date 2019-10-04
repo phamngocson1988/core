@@ -122,11 +122,12 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th>Loại thanh toán</th>
               <th>Trạng thái</th>
               <th>Khách hàng</th>
+              <th>Tác vụ</th>
             </tr>
           </thead>
           <tbody>
             <?php if (!$models) :?>
-            <tr><td colspan="7">No data found</td></tr>
+            <tr><td colspan="8">No data found</td></tr>
             <?php endif;?>
             <?php foreach ($models as $model) :?>
             <tr>
@@ -136,7 +137,12 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td><?=$model->payment_method;?></td>
               <td><?=$model->payment_type;?></td>
               <td><?=$model->status;?></td>
-              <td><?=sprintf("%s (<a href='javascript:void;'>#%s</a>)", $model->user->name, $model->user->id);?></td>
+              <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
+              <td>
+                <?php if ($model->isPending()) : ?>
+                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-times"></i></a>
+                <?php endif;?>
+              </td>
             </tr>
             <?php endforeach;?>
           </tbody>
@@ -148,3 +154,15 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$script = <<< JS
+$(".link-action").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có chắc muốn thực hiện xóa giao dịch này?',
+  callback: function(eletement, data) {
+    location.reload();
+  }
+});
+JS;
+$this->registerJs($script);
+?>

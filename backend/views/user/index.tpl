@@ -168,7 +168,7 @@
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 2%;"> {Yii::t('app', 'no')} </th>
+              <th style="width: 2%;"> ID </th>
               <th style="width: 5%;"> Khách hàng </th>
               <th style="width: 5%;"> Ngày sinh </th>
               <th style="width: 10%;"> Email </th>
@@ -187,7 +187,7 @@
             {if $models}
             {foreach $models as $key => $model}
             <tr>
-              <td>{$key + $pages->offset + 1}</td>
+              <td>{$model->id}</td>
               <td>{$model->name}</td>
               <td>{$model->birthday}</td>
               <td>{$model->email}</td>

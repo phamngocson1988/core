@@ -63,6 +63,7 @@ class PaymentTransactionController extends Controller
             'created_at_from' => $request->get('created_at_from'),
             'created_at_to' => $request->get('created_at_to'),
             'id' => $request->get('id'),
+            'remark' => $request->get('remark'),
             'user_id' => $request->get('user_id'),
             'payment_type' => 'offline',
             'status' => 'pending',
@@ -109,12 +110,12 @@ class PaymentTransactionController extends Controller
         }
     }
 
-    public function actionDeleteOffline($id)
+    public function actionDelete($id)
     {
         $request = Yii::$app->request;
         $transaction = PaymentTransaction::findOne($id);
         if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
-        if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Không thể xóa giao dịch']);
+        if ($transaction->isCompleted()) return $this->asJson(['status' => false, 'errors' => 'Không thể xóa giao dịch']);
         if ($transaction->delete()) return $this->asJson(['status' => true]);
         else {
             $errors = $transaction->getErrorSummary(true);
