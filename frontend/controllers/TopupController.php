@@ -64,7 +64,7 @@ class TopupController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'topup.index';
         $request = Yii::$app->request;
-        $items = CartItem::find()->indexBy('id')->all();
+        $items = CartItem::find()->orderBy(['amount' => SORT_ASC])->indexBy('id')->all();
     	return $this->render('index', [
             // 'package' => $package,
             'items' => $items
