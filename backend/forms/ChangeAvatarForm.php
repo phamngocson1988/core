@@ -35,7 +35,7 @@ class ChangeAvatarForm extends Model
             }
             $user->avatar = $this->image_id;
             $user->updated_at = strtotime('now');
-            return $user->save();
+            return $user->save(false, ['avatar', 'updated_at']);
         }
         return false;
     }

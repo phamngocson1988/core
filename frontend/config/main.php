@@ -138,6 +138,6 @@ return [
         $response = curl_exec($ch);
         $payload = json_decode($response, true);
         curl_close($ch);
-        if (!isset($payload['country']) || $payload['country'] == 'VN') die('Service is not available for ' . $clientIp);
+        if (isset($payload['country']) && $payload['country'] == 'VN') die('Service is not available for ' . $clientIp);
     }
 ];

@@ -87,6 +87,43 @@
       </li>
       {/if}
 
+      <!-- Affiliate -->
+      {if $app->user->can('sale_manager')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+          <i class="fa fa-link"></i>
+          <span class="title">Affiliate</span>
+          <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/index'}" class="nav-link " code='affiliate.index'>
+            <span class="title">Tất cả</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/request'}" class="nav-link " code='affiliate.request'>
+            <span class="title">Yêu cầu hợp tác</span>
+            <span class="badge badge-success">{$this->params['new_affiliate_request']}</span>
+            </a>
+          </li>
+          {if $app->user->can('admin')}
+          <li class="nav-item  ">
+            <a href="{url route='/affiliate/withdraw'}" class="nav-link " code='affiliate.withdraw'>
+            <span class="title">Yêu cầu rút tiền</span>
+            <span class="badge badge-success">{$this->params['new_commission_withdraw']}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/setting/affiliate_program'}" class="nav-link " code='affiliate.setting'>
+            <span class="title">Cài đặt</span>
+            </a>
+          </li>
+          {/if}
+        </ul>
+      </li>
+      {/if}
+
       <!-- Bài viết -->
       {if $app->user->can('saler')}
       <li class="nav-item  ">

@@ -296,7 +296,7 @@ class TopupController extends Controller
         try {
             $refId = $gateway->getReferenceId();
             $trn = PaymentTransaction::find()->where([
-                'payment_id' => $refId, 
+                'auth_key' => $refId, 
                 'status' => PaymentTransaction::STATUS_PENDING
             ])->one();
             if ($trn) $trn->delete();

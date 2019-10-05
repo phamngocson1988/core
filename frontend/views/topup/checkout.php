@@ -88,6 +88,15 @@ $total = $cart->getTotalPrice();
                 <p>Grand Total:</p>
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div>
+              <?php
+              $fee = number_format(Yii::$app->settings->get('PaypalSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
+              ?>
+              <div class="t-flex-between t-sub-total price" paygate='paypal' style="display: none">
+                <span>Payment fee:</span><span>$<?=number_format($fee, 1);?></span>
+              </div>
+              <div class="t-flex-between t-sub-total price" paygate='paypal' style="display: none">
+                <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $fee, 1);?></span>
+              </div>
 
               <div class="t-flex-between t-sub-total price" paygate="alipay" style="display: none">
                 <p>Subtotal:</p>

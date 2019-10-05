@@ -571,11 +571,14 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         if ($request->isAjax) {
             $order = Order::findOne($id);
+            $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
             if ($order->isPendingOrder()) {
                 $order->status = Order::STATUS_DELETED;
-                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
+                return $this->renderJson($order->save(), ['view_url' => Url::to(['order/view', 'id' => $id])], []);
+            } elseif ($order->isVerifyingOrder()) {
+                $order->status = Order::STATUS_DELETED;
                 return $this->renderJson($order->save(), ['view_url' => Url::to(['order/view', 'id' => $id])], []);
             }
         }

@@ -225,10 +225,10 @@ class Order extends ActiveRecord
         return $total_price - $total_cogs_price - ($managing_cost_rate + $investing_cost_rate) * $total_price / 100;
     }
 
-    public function delete()
-    {
-        if ($this->isVerifyingOrder()) return parent::delete();
-        $this->status = self::STATUS_DELETED;
-        return $this->save();
-    }
+    // public function delete()
+    // {
+    //     if ($this->isVerifyingOrder()) return parent::delete();
+    //     $this->status = self::STATUS_DELETED;
+    //     return $this->save();
+    // }
 }
