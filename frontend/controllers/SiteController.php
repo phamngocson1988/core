@@ -289,7 +289,7 @@ class SiteController extends Controller
         $request = Yii::$app->request;
         $model = User::findOne($id);
         if (!$model) throw new NotFoundHttpException("User #$id not found.");
-        if ($model->status != User::STATUS_INACTIVE) throw new Exception("Your request is invalid", 1);
+        if ($model->status != User::STATUS_INACTIVE) throw new BadRequestHttpException("Your account was activated. You can not active it again.", 1);
         return $this->render('verify-email', ['user' => $model]);
         // $model = User::findOne($id);
         // if (!$model) throw new NotFoundHttpException("User #$id not found.");
@@ -327,7 +327,7 @@ class SiteController extends Controller
             'auth_key' => $key,
         ])->one();
         if (!$model) throw new NotFoundHttpException("User #$id not found.");
-        if ($model->status != User::STATUS_INACTIVE) throw new Exception("Your request is invalid", 1);
+        if ($model->status != User::STATUS_INACTIVE) throw new BadRequestHttpException("Your request is invalid", 1);
         $model->on(User::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'referApplyingEvent']);
         $model->on(User::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'notifyWelcomeEmail']);
         $model->on(User::EVENT_AFTER_UPDATE, [SignupEventHandler::className(), 'signonBonus']);
