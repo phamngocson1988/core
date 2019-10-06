@@ -355,4 +355,14 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(UserAffiliate::className(), ['user_id' => 'id']);
     }
+
+    /**
+     * Active member: là tài khoản có ít nhất 1 giao dịch (top up or mua hàng)
+     */
+    public function isActiveMember()
+    {
+        $transaction = $this->getTransactions();
+        $order = $this->getOrders();
+        return $transaction->count() || $order->count();
+    }
 }

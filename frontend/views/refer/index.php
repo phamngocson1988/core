@@ -20,6 +20,7 @@ $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
           </div>
           <p>invite a friend to join kinggems<br>& get $<?=$gift_value;?> bonus!</p>
           <p class="small">Share your unique referral link</p>
+          <?php if ($user->isActiveMember()) :?>
           <div class="refer-link-copy">
             <input type="text" value="<?=$link;?>">
             <button class="click-to-copy-btn" type="button">Copy</button>
@@ -32,6 +33,7 @@ $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
 						   target="_blank" title="Share on Twitter">
 						</a>
           </div>
+          <?php endif;?>
         </div>
       </div>
     </div>

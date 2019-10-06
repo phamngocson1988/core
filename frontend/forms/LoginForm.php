@@ -14,6 +14,7 @@ class LoginForm extends Model
     public $password;
     public $rememberMe = true;
     public $captcha;
+    private $_roles = ['customer'];
     private $_user;
 
 
@@ -32,6 +33,7 @@ class LoginForm extends Model
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
             ['captcha', 'captcha', 'message' => 'Captcha is not match'],
+            ['username', 'isCustomer', 'message' => 'You are not allowed to login'],
         ];
     }
 
@@ -54,6 +56,22 @@ class LoginForm extends Model
                     $this->addError('username', Yii::t('frontend', 'customer_is_deleted'));
                     return false;    
                 }
+            }
+        }
+    }
+
+    public function isCustomer($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $auth = Yii::$app->authManager;
+            $user = $this->getUser();
+            $roles = $auth->getRolesByUser($user->id);
+            $roleNames = array_keys($roles);
+            $allowedRoles = $this->_roles;
+            $matches = array_intersect($roleNames, $allowedRoles);
+            if (count($matches) < 1) {
+                $this->addError($attribute, 'You are not allowed to login');
+                return false;
             }
         }
     }

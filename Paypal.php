@@ -26,7 +26,6 @@ class Paypal extends PaymentGateway
     
     public $identifier = 'paypal';
     public $type = 'online';
-	public $currency = 'USD';
 
     public function loadConfig()
     {
@@ -51,7 +50,7 @@ class Paypal extends PaymentGateway
     {
         $cart = $this->cart;
         $totalPrice = $cart->getTotalPrice();
-        $currency = $this->currency;
+        $currency = "USD";
         $fee = $this->getServiceFee($totalPrice);
         $totalPrice += $fee;
 
@@ -166,9 +165,6 @@ class Paypal extends PaymentGateway
         try {
             $payment->execute($execution, $apiContext);
             return self::PAYMENT_STATE_APPROVED == strtolower($payment->state);
-        } catch (PayPalConnectionException $ex) {
-            throw $ex;
-            
         } catch (Exception $e) {
             throw $e;
         }
