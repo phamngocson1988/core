@@ -217,12 +217,16 @@
       {/if}
 
       <!-- Giao dịch nạp tiền -->
-      {if $app->user->can('sale_manager')}
+      {if $app->user->can('accounting')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-wallet"></i>
         <span class="title">Giao dịch nạp tiền</span>
+        {if $this->params['new_offline_transaction']}
+        <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
+        {else}
         <span class="arrow"></span>
+        {/if}
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">

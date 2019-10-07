@@ -65,6 +65,12 @@ use yii\helpers\Url;
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
+                <?=$form->field($model, 'accountant_email', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput();?>
+
                 <?=$form->field($model, 'exchange_rate_cny', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],

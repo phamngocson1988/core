@@ -172,6 +172,7 @@
               <th style="width: 5%;"> Khách hàng </th>
               <th style="width: 5%;"> Ngày sinh </th>
               <th style="width: 10%;"> Email </th>
+              <th style="width: 10%;"> Username </th>
               <th style="width: 5%;"> Số điện thoại </th>
               <th style="width: 10%;"> Ngày đăng ký </th>
               <th style="width: 8%;"> Quốc tịch </th>
@@ -191,6 +192,7 @@
               <td>{$model->name}</td>
               <td>{$model->birthday}</td>
               <td>{$model->email}</td>
+              <td>{$model->username}</td>
               <td>{$model->phone}</td>
               <td>{$model->created_at}</td>
               <td>{$model->getCountryName()}</td>

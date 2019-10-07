@@ -12,6 +12,7 @@ class ApplicationSettingForm extends Model
     public $contact_phone;
     public $contact_email;
     public $admin_email;
+    public $accountant_email;
     public $customer_service_email;
     public $enable_subscribe;
     public $exchange_rate_cny; 
@@ -34,7 +35,7 @@ class ApplicationSettingForm extends Model
     {
         return [
             [['contact_phone', 'contact_email', 'admin_email', 'enable_subscribe', 'exchange_rate_cny', 'exchange_rate_vnd'], 'trim'],
-            [['admin_email', 'contact_email'], 'email'],
+            [['admin_email', 'contact_email', 'accountant_email'], 'email'],
             ['exchange_rate_cny', 'number'],
             [['logo', 'customer_service_email'], 'safe'],
             [['managing_cost_rate', 'investing_cost_rate', 'desired_profit', 'reseller_desired_profit'], 'number'],
@@ -59,6 +60,7 @@ class ApplicationSettingForm extends Model
             'desired_profit' => 'Lợi nhuận mong muốn',
             'reseller_desired_profit' => 'Lợi nhuận mong muốn từ nhà bán lẻ',
             'logo' => 'Logo',
+            'accountant_email' => 'Email kế toán',
         ];
     }
 }

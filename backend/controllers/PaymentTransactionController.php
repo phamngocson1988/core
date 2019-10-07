@@ -8,6 +8,7 @@ use yii\data\Pagination;
 use backend\forms\FetchTransactionForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
+use backend\events\PaymentTransactionEvent;
 
 class PaymentTransactionController extends Controller
 {
@@ -89,6 +90,7 @@ class PaymentTransactionController extends Controller
         $transaction->setScenario(PaymentTransaction::SCENARIO_CONFIRM_OFFLINE_PAYMENT);
         if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
         if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Giao dịch đã được thanh toán']);
+        $transaction->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'welcomeBonus']);
         if ($transaction->load($request->post()) && $transaction->save()) {
             $user = $transaction->user;
             $wallet = new UserWallet();
