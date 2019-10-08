@@ -486,14 +486,11 @@ class SiteController extends Controller
     public function actionSms()
     {
         $result = Yii::$app->sms->compose()
-            ->setTo('+8618579911814')
-            ->setMessage("Hey Son. this is a test!")
+            ->setTo('+84907877310')
+            ->setMessage("Kinggems: send test sms from trail account")
             ->send();
+        print_r($result);
+        die;
         
-        if ( $result === true ) {
-            echo 'SMS was sent!';
-        } else {
-            echo 'Error sending SMS!';
-        }
     }
 }
