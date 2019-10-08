@@ -482,4 +482,18 @@ class SiteController extends Controller
             ->send();
         var_dump($email);die;
     }
+
+    public function actionSms()
+    {
+        $result = Yii::$app->sms->compose()
+            ->setTo('+8618579911814')
+            ->setMessage("Hey Son. this is a test!")
+            ->send();
+        
+        if ( $result === true ) {
+            echo 'SMS was sent!';
+        } else {
+            echo 'Error sending SMS!';
+        }
+    }
 }
