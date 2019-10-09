@@ -200,10 +200,12 @@
               <td>{$model->getWalletTopupAmount()}</td>
               <td>{$model->getWalletWithdrawAmount()}</td>
               <td>
+                {if ($app->user->can('sale_manager'))}
                 {if $model->isReseller()}
                 <a href="{url route='user/downgrade-reseller' id=$model->id}" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i> Reseller </a>
                 {else}
                 <a href="{url route='user/upgrade-reseller' id=$model->id}" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="fa fa-arrow-up"></i> Khách hàng </a>
+                {/if}
                 {/if}
               </td>
               <td></td>
