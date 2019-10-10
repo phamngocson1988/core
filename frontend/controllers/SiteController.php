@@ -26,6 +26,9 @@ use frontend\models\QuestionCategory;
 use frontend\models\Question;
 use frontend\events\SignupEventHandler;
 
+// Test new solution
+use frontend\forms\RegisterForm;
+
 /**
  * Site controller
  */
@@ -493,4 +496,50 @@ class SiteController extends Controller
         die;
         
     }
+
+    public function actionRegister()
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $request = Yii::$app->request;
+        $session = Yii::$app->session;
+        $scenario = $request->post('scenario', RegisterForm::SCENARIO_VALIDATE);
+        $model = new RegisterForm();
+        $model->setScenario($scenario);
+        if ($model->load($request->post()) && $model->validate()) {
+            if ($scenario == RegisterForm::SCENARIO_VALIDATE) {
+                $session->set('user_phone', $model->phone);
+                $model->sendVerification();
+                return $this->render('register', ['model' => $model, 'scenario' => RegisterForm::SCENARIO_INFORMATION]);
+            }
+            if ($scenario == RegisterForm::SCENARIO_INFORMATION) {
+                if ($model->verify()) {
+                    $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'salerCheckingEvent']);
+                    $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'assignRole']);
+                    $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'sendActivationEmail']);
+                    if ($request->get('refer')) {
+                        $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
+                        $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+                        $this->view->registerMetaTag(['property' => 'og:title', 'content' => $referTitle], 'og:title');
+                        $this->view->registerMetaTag(['property' => 'og:description', 'content' => $referContent], 'og:description');
+                        $model->refer = $request->get('refer');
+                        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'referCheckingEvent']);
+                    }
+                    if ($request->get('affiliate')) {
+                        $affTitle = Html::encode("WELCOME TO KINGGEMS.US");
+                        $affContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+                        $this->view->registerMetaTag(['property' => 'og:title', 'content' => $affTitle], 'og:title');
+                        $this->view->registerMetaTag(['property' => 'og:description', 'content' => $affContent], 'og:description');
+                        $model->affiliate = $request->get('affiliate');
+                        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
+                    }
+                    $model->phone = $session->get('user_phone');
+                    $model->signup();
+                    return $this->redirect(['site/index']);    
+                }
+                return $this->render('register', ['model' => $model, 'scenario' => RegisterForm::SCENARIO_INFORMATION]);
+            }
+        }
+        return $this->render('register', ['model' => $model, 'scenario' => RegisterForm::SCENARIO_VALIDATE]);
+    }
+
 }

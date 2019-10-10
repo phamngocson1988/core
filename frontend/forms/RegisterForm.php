@@ -14,6 +14,8 @@ class RegisterForm extends Model
     const SCENARIO_INFORMATION = 'information';
     const SCENARIO_VALIDATE = 'validate';
 
+    const EVENT_AFTER_SIGNUP = 'EVENT_AFTER_SIGNUP';
+    
     protected $verifier;
 
     public $firstname;
@@ -27,7 +29,6 @@ class RegisterForm extends Model
     public $birth_year;
     public $country_code;
     public $phone;
-    public $currency;
     public $captcha;
 
     // In case refer
@@ -39,13 +40,20 @@ class RegisterForm extends Model
     // Saler code
     public $saler_code;
 
+    // Verify code
+    public $digit_1;
+    public $digit_2;
+    public $digit_3;
+    public $digit_4;
+
     public function scenarios()
     {
         return [
-            self::SCENARIO_INFORMATION => ['firstname', 'lastname', 'username', 'password', 'repassword', 'email', 
-            'birth_date', 'birth_month', 'birth_year', 'country_code', 'phone', 'currency', 'captcha', 'refer', 'affiliate', 'saler_code'],
             self::SCENARIO_VALIDATE => ['firstname', 'lastname', 'username', 'password', 'repassword', 'email', 
-            'birth_date', 'birth_month', 'birth_year', 'country_code', 'phone', 'currency', 'captcha', 'refer', 'affiliate', 'saler_code'],
+            'birth_date', 'birth_month', 'birth_year', 'country_code', 'phone', 'captcha', 'refer', 'affiliate', 'saler_code'],
+            self::SCENARIO_INFORMATION => ['firstname', 'lastname', 'username', 'password', 'repassword', 'email', 
+            'birth_date', 'birth_month', 'birth_year', 'country_code', 'refer', 'affiliate', 'saler_code', 'digit_1', 'digit_2', 'digit_3', 'digit_4'],
+            
         ];
     }
 
@@ -74,23 +82,20 @@ class RegisterForm extends Model
             [['birth_date', 'birth_month', 'birth_year'], 'required'],
             [['birth_date', 'birth_month', 'birth_year'], 'number'],
 
-            ['phone', 'trim'],
-            [['country_code', 'phone'], 'safe'],
-            // ['phone', 'unique', 'targetClass' => User::className(), 'message' => 'This phone has already been taken.'],
+            [['country_code', 'phone'], 'trim', 'on' => self::SCENARIO_VALIDATE],
+            ['phone', 'unique', 
+            'targetClass' => User::className(), 
+            'message' => 'This phone has already been taken.', 
+            'on' => self::SCENARIO_VALIDATE],
 
-            ['captcha', 'required'],
-            ['captcha', 'captcha', 'message' => 'Captcha is not match'],
+            ['captcha', 'required', 'on' => self::SCENARIO_VALIDATE],
+            ['captcha', 'captcha', 'message' => 'Captcha is not match', 'on' => self::SCENARIO_VALIDATE],
 
             // Saler
             ['saler_code', 'trim'],
         ];
     }
 
-    /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
-     */
     public function signup()
     {
         if (!$this->validate())  return null;
@@ -128,21 +133,13 @@ class RegisterForm extends Model
         return $attrs;
     }
 
-    public function setVerifier($verifier)
-    {
-        $this->verifier = $verifier;
-    }
-
     public function sendVerification()
     {
-        if (!$this->verifier) throw \Exception('You have not added verifier service');
-        $service = $this->verifier; //sms
-        $service->compose()
-            ->setTo('+84907877310')
-            ->setMessage("Kinggems: send test sms from trail account")
-            ->send();
-        print_r($result);
-        die;
+        return true;
     }
 
+    public function verify()
+    {
+        return true;
+    }
 }

@@ -122,33 +122,4 @@ return [
         ],
     ],
     'params' => $params,
-    'on beforeRequest' => function($event){ 
-        $application = $event->sender;
-        if (!$application->request->isSecureConnection) {
-            $url = $application->request->getAbsoluteUrl();
-            $url = str_replace('http:', 'https:', $url);
-            $application->getResponse()->redirect($url);
-            $application->end();
-        }
-
-        //Check whether system allow this transaction before.
-        $session = $application->session;
-        if ($session->get('allow_ip')) return;
-
-        $request = $application->request;
-        $clientIp = $request->userIP;
-        $whitelist = Yii::$app->params['whitelist_ips'];
-        // Check whether it's in white list ips
-        if (in_array($clientIp, $whitelist)) return $session->set('allow_ip', true);
-
-        // Check whether it's in VN ips
-        $url = "ipinfo.io/$clientIp";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        $response = curl_exec($ch);
-        $payload = json_decode($response, true);
-        curl_close($ch);
-        if (isset($payload['country']) && $payload['country'] == 'VN') die('Service is not available for ' . $clientIp);
-    }
 ];
