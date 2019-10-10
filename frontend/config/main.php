@@ -100,10 +100,10 @@ return [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@frontend/mail',
         ],
-        'sms' => [
-            'class' => 'wadeshuler\sms\twilio\Sms',
-            'viewPath' => '@frontend/mail',
-        ],
+        // 'sms' => [
+        //     'class' => 'wadeshuler\sms\twilio\Sms',
+        //     'viewPath' => '@frontend/mail',
+        // ],
     ],
     'modules' => [
         'notifications' => [
@@ -124,6 +124,13 @@ return [
     'params' => $params,
     'on beforeRequest' => function($event){ 
         $application = $event->sender;
+        if (!$application->request->isSecureConnection) {
+            $url = $application->request->getAbsoluteUrl();
+            $url = str_replace('http:', 'https:', $url);
+            $application->getResponse()->redirect($url);
+            $application->end();
+        }
+
         //Check whether system allow this transaction before.
         $session = $application->session;
         if ($session->get('allow_ip')) return;

@@ -33,10 +33,10 @@ class UserController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'profile', 'password'],
+                'only' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence'],
+                        'actions' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
