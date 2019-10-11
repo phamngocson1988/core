@@ -42,25 +42,25 @@ $setting = Yii::$app->settings;
         </div>
         <div class="footer-payment">
           <div class="t-img-wrap-logo-payment">
-            <img src="/images/visa-foot.png" alt="">
+            <a href="https://kinggems.us/faq/detail/27-how-to-pay-via-visa-master-card.html"><img src="/images/visa-foot.png" alt=""></a>
           </div>
           <div class="t-img-wrap-logo-payment">
-            <img src="/images/master.png" alt="">
+            <a href="https://kinggems.us/faq/detail/27-how-to-pay-via-visa-master-card.html"><img src="/images/master.png" alt=""></a>
           </div>
           <div class="t-img-wrap-logo-payment">
-            <img src="/images/skrill.png" alt="">
+            <a href="https://kinggems.us/faq/detail/31-how-to-pay-via-skrill.html"><img src="/images/skrill.png" alt=""></a>
           </div>
           <div class="t-img-wrap-logo-payment">
-            <img src="/images/payoneer.png" alt="">
+            <a href="javascript:void(0);"><img src="/images/payoneer.png" alt=""></a>
           </div>
           <div class="t-img-wrap-logo-payment">
-            <img src="/images/paypal.png" alt="">
+            <a href="https://kinggems.us/faq/detail/28-how-to-pay-via-paypal.html"><img src="/images/paypal.png" alt=""></a>
           </div>
           <div class="t-img-wrap-logo-payment">
-            <img src="/images/alipay.png" alt="">
+            <a href="https://kinggems.us/faq/detail/30-how-to-pay-via-alipay.html"><img src="/images/alipay.png" alt=""></a>
           </div>
           <div class="t-img-wrap-logo-payment">
-            <img src="/images/we.png" alt="">
+            <a href="https://kinggems.us/faq/detail/29-how-to-pay-via-wechat.html"><img src="/images/we.png" alt=""></a>
           </div>
         </div>
         <div class="footer-socials">

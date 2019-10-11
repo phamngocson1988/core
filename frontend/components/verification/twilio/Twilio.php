@@ -14,8 +14,10 @@ class Twilio
         return $pin;
     }
 
-    public function send()
+    public function send($phone, $content, $params = [])
     {
+        $params['{pin}'] = $this->createCode();
+        $newContent = str_replace(array_keys($params), array_values($params), $content);
         $service = Yii::createObject([
             'class' => 'wadeshuler\sms\twilio\Sms',
             'useFileTransport' => false,
@@ -28,10 +30,9 @@ class Twilio
                 return 'testsms.txt';
             }
         ]);
-        $pin = $this->createCode();
         $service->compose()
-        ->setTo('+84907877310')
-        ->setMessage("Your validation code is: $pin")
+        ->setTo($phone)
+        ->setMessage($newContent)
         ->send();
     }
 

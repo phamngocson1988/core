@@ -486,13 +486,14 @@ class SiteController extends Controller
         var_dump($email);die;
     }
 
-    public function actionSms()
+    public function actionSms($phone)
     {
+        if (!$phone) die('no phone');
         $result = Yii::$app->sms->compose()
-            ->setTo('+84907877310')
-            ->setMessage("Kinggems: send test sms from trail account")
+            ->setTo("+" . $phone) //+8618579804779
+            ->setMessage("Kinggems.us: send test sms from trail account")
             ->send();
-        print_r($result);
+        var_dump($result);
         die;
         
     }

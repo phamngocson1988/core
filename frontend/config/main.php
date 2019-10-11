@@ -100,10 +100,9 @@ return [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@frontend/mail',
         ],
-        // 'sms' => [
-        //     'class' => 'wadeshuler\sms\twilio\Sms',
-        //     'viewPath' => '@frontend/mail',
-        // ],
+        'sms' => [
+            'viewPath' => '@frontend/sms',
+        ],
     ],
     'modules' => [
         'notifications' => [

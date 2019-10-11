@@ -190,15 +190,15 @@ $years = array_combine($rangeYears, $rangeYears);
                 </div>
                 <p>code expires in: <span class="red" id="time">00:00</span></p>
                 <?= Html::submitButton('continue', ['class' => 'btn-product-detail-add-to-cart has-shadow', 'name' => 'Signup', 'onClick' => 'showLoader()']) ?>
-                <?= $form->field($model, 'firstname', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'lastname', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'username', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'password', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'email', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'birth_date', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'birth_month', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'birth_year', ['template' => '{input}'])->hiddenInput();?>
-                <?= $form->field($model, 'country_code', ['template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'firstname', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'lastname', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'username', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'password', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'email', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'birth_date', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'birth_month', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'birth_year', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
+                <?= $form->field($model, 'country_code', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
               <?php ActiveForm::end(); ?>
               <p>Didn’t get the code? <a href="" class="red">Resend code</a></p>
             </div>
