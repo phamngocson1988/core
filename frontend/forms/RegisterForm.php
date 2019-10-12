@@ -50,9 +50,9 @@ class RegisterForm extends Model
     {
         return [
             self::SCENARIO_VALIDATE => ['firstname', 'lastname', 'username', 'password', 'repassword', 'email', 
-            'birth_date', 'birth_month', 'birth_year', 'country_code', 'phone', 'captcha', 'refer', 'affiliate', 'saler_code'],
+            'birth_date', 'birth_month', 'birth_year', 'country_code', 'phone', 'captcha'],
             self::SCENARIO_INFORMATION => ['firstname', 'lastname', 'username', 'password', 'repassword', 'email', 
-            'birth_date', 'birth_month', 'birth_year', 'country_code', 'refer', 'affiliate', 'saler_code', 'digit_1', 'digit_2', 'digit_3', 'digit_4'],
+            'birth_date', 'birth_month', 'birth_year', 'country_code', 'digit_1', 'digit_2', 'digit_3', 'digit_4'],
             
         ];
     }
@@ -90,9 +90,6 @@ class RegisterForm extends Model
 
             ['captcha', 'required', 'on' => self::SCENARIO_VALIDATE],
             ['captcha', 'captcha', 'message' => 'Captcha is not match', 'on' => self::SCENARIO_VALIDATE],
-
-            // Saler
-            ['saler_code', 'trim'],
         ];
     }
 
@@ -109,7 +106,7 @@ class RegisterForm extends Model
         $user->refer_code = Yii::$app->security->generateRandomString(6);
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->status = User::STATUS_INACTIVE;
+        $user->status = User::STATUS_ACTIVE;
         if ($user->save()) {
             $event = new AfterSignupEvent();
             $event->user = $user;
@@ -133,13 +130,20 @@ class RegisterForm extends Model
         return $attrs;
     }
 
+    public function setVerifier($verifier) 
+    {
+        $this->verifier = $verifier;
+    }
+
     public function sendVerification()
     {
-        return true;
+        $content = "Your activation code is: {pin}";
+        return $this->verifier->send($this->phone, $content);
     }
 
     public function verify()
     {
-        return true;
+        $pin = sprintf("%s%s%s%s", $this->digit_1, $this->digit_2, $this->digit_3, $this->digit_4);
+        return $this->verifier->verify($pin);
     }
 }

@@ -1183,6 +1183,17 @@ input[type="radio"]:checked+.label:after {
     -ms-flex-order: 1;
     order: 1;
 }
+.t-form-wrap select,
+.t-form-wrap input{
+    width: 100%;
+    margin: 0;
+}
+.pd-lr-30{
+    padding: 0 30px;
+}
+.t-wrap-number-pagination{
+    line-height: 38px;
+}
 .mobile-show {
     display: none;
     visibility: hidden;

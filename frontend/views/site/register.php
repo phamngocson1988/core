@@ -200,7 +200,7 @@ $years = array_combine($rangeYears, $rangeYears);
                 <?= $form->field($model, 'birth_year', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
                 <?= $form->field($model, 'country_code', ['options' => ['tag' => false], 'template' => '{input}'])->hiddenInput();?>
               <?php ActiveForm::end(); ?>
-              <p>Didn’t get the code? <a href="" class="red">Resend code</a></p>
+              <!-- <p>Didn’t get the code? <a href="" class="red">Resend code</a></p> -->
             </div>
           </div>
         </div>
@@ -243,6 +243,35 @@ $('#form-signup').on('submit', function(e){
     swal("", "You need to agree with our terms & conditions.", "warning");
     return false;
   }
+});
+
+var counter = null;
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    counter = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.text(minutes + ":" + seconds);
+        if (--timer < 0) {
+          clearInterval(counter);
+        }
+    }, 1000);
+}
+startTimer(60, $('#time'));
+
+$('#digit_1').on('input', function() {
+  if ($(this).val()) $('#digit_2').focus();
+});
+$('#digit_2').on('input', function() {
+  if ($(this).val()) $('#digit_3').focus();
+});
+$('#digit_3').on('input', function() {
+  if ($(this).val()) $('#digit_4').focus();
+});
+$('#verify-form').on('submit', function(e){
+    $('input[type=submit]', this).attr('disabled', 'disabled');
 });
 JS;
 $checkEmail = Url::to(['site/find-email']);

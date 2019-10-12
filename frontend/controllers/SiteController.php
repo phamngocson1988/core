@@ -28,6 +28,8 @@ use frontend\events\SignupEventHandler;
 
 // Test new solution
 use frontend\forms\RegisterForm;
+use frontend\events\RegisterEventHandler;
+use frontend\components\verification\twilio\Sms;
 
 /**
  * Site controller
@@ -503,8 +505,29 @@ class SiteController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $request = Yii::$app->request;
         $session = Yii::$app->session;
+
+        // Register metadata
+        if ($request->get('refer')) {
+            $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
+            $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $referTitle], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $referContent], 'og:description');
+            $model->refer = $request->get('refer');
+            $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'referCheckingEvent']);
+        }
+        if ($request->get('affiliate')) {
+            $affTitle = Html::encode("WELCOME TO KINGGEMS.US");
+            $affContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $affTitle], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $affContent], 'og:description');
+            $model->affiliate = $request->get('affiliate');
+            $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'affiliateCheckingEvent']);
+        }
+
         $scenario = $request->post('scenario', RegisterForm::SCENARIO_VALIDATE);
         $model = new RegisterForm();
+        $service = new Sms(['testing_mode' => false]);
+        $model->setVerifier($service);
         $model->setScenario($scenario);
         if ($model->load($request->post()) && $model->validate()) {
             if ($scenario == RegisterForm::SCENARIO_VALIDATE) {
@@ -514,25 +537,11 @@ class SiteController extends Controller
             }
             if ($scenario == RegisterForm::SCENARIO_INFORMATION) {
                 if ($model->verify()) {
-                    $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'salerCheckingEvent']);
-                    $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'assignRole']);
-                    $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'sendActivationEmail']);
-                    if ($request->get('refer')) {
-                        $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
-                        $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
-                        $this->view->registerMetaTag(['property' => 'og:title', 'content' => $referTitle], 'og:title');
-                        $this->view->registerMetaTag(['property' => 'og:description', 'content' => $referContent], 'og:description');
-                        $model->refer = $request->get('refer');
-                        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'referCheckingEvent']);
-                    }
-                    if ($request->get('affiliate')) {
-                        $affTitle = Html::encode("WELCOME TO KINGGEMS.US");
-                        $affContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
-                        $this->view->registerMetaTag(['property' => 'og:title', 'content' => $affTitle], 'og:title');
-                        $this->view->registerMetaTag(['property' => 'og:description', 'content' => $affContent], 'og:description');
-                        $model->affiliate = $request->get('affiliate');
-                        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
-                    }
+                    $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'salerCheckingEvent']);
+                    $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'assignRole']);
+                    $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'referApplyingEvent']);
+                    $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'notifyWelcomeEmail']);
+                    $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'signonBonus']);
                     $model->phone = $session->get('user_phone');
                     $model->signup();
                     return $this->redirect(['site/index']);    

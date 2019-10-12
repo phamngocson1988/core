@@ -11,8 +11,13 @@ use frontend\models\UserWallet;
 
 class RegisterEventHandler extends Model
 {
-    public static function referCheckingEvent(AfterSignupEvent $event) 
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
+    public static function referCheckingEvent($event) 
     {
+        /** @var $form RegisterForm **/
         $form = $event->sender;
         if (!$form->refer) return;
         $invitor = User::findOne(['refer_code' => $form->refer]);
@@ -35,8 +40,13 @@ class RegisterEventHandler extends Model
         $referModel->save();
     }
 
-    public static function affiliateCheckingEvent(AfterSignupEvent $event) 
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
+    public static function affiliateCheckingEvent($event) 
     {
+        /** @var $form RegisterForm **/
         $form = $event->sender;
         if (!$form->affiliate) return;
         $invitor = UserAffiliate::findOne(['code' => $form->affiliate]);
@@ -49,8 +59,13 @@ class RegisterEventHandler extends Model
         $user->save();
     }
 
-    public static function salerCheckingEvent(AfterSignupEvent $event) 
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
+    public static function salerCheckingEvent($event) 
     {
+        /** @var $form RegisterForm **/
         $form = $event->sender;
         if (!$form->saler_code) return;
         $invitor = User::findOne(['saler_code' => $form->saler_code]);
@@ -63,7 +78,23 @@ class RegisterEventHandler extends Model
         Yii::$app->session->remove('saler_code');
     }
 
-    public static function sendActivationEmail(AfterSignupEvent $event) 
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
+    public static function assignRole($event)
+    {
+        $user = $event->user;
+        $auth = Yii::$app->authManager;
+        $customer = $auth->getRole('customer');
+        $auth->assign($customer, $user->id);
+    }
+
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
+    public static function sendActivationEmail($event) 
     {
         $user = $event->user;
         if (!$user) return;
@@ -79,18 +110,13 @@ class RegisterEventHandler extends Model
         ->send();
     }
 
-    public static function assignRole($event)
-    {
-        $form = $event->sender;
-        $user = $event->user;
-        $auth = Yii::$app->authManager;
-        $customer = $auth->getRole('customer');
-        $auth->assign($customer, $user->id);
-    }
-
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
     public static function referApplyingEvent($event) 
     {
-        $user = $event->sender;
+        $user = $event->user;
         if (!$user) return;
         if (!$user->referred_by) return;
         // Process in user refer table
@@ -105,11 +131,13 @@ class RegisterEventHandler extends Model
         }
     }
 
-    
-
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
     public static function notifyWelcomeEmail($event) 
     {
-        $user = $event->sender;
+        $user = $event->user;
         if (!$user) return;
         $admin = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
         $siteName = Yii::$app->name;
@@ -124,15 +152,16 @@ class RegisterEventHandler extends Model
         ->send();
     }
 
+    /**
+     * @param AfterSignupEvent $event
+     * @see AfterSignupEvent
+     */
     public static function signonBonus($event) 
     {
         $setting = Yii::$app->settings;
         if (!$setting->get('WelcomeBonusForm', 'status')) return;
-        if ($setting->get('WelcomeBonusForm', 'content')) {
-
-        }        
         if ($setting->get('WelcomeBonusForm', 'value')) {
-            $user = $event->sender;
+            $user = $event->user;
             $user->topup((int)$setting->get('WelcomeBonusForm', 'value', 0), null, 'WELCOME GIFT', UserWallet::STATUS_WAITING);
         }        
     }    

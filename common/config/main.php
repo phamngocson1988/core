@@ -74,17 +74,5 @@ return [
             'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
             'as log' => \yii\queue\LogBehavior::class,
         ],
-        'sms' => [
-            'class' => 'wadeshuler\sms\twilio\Sms',
-            'useFileTransport' => false,
-            'messageConfig' => [
-                'from' => '+13345181969',
-            ],
-            'sid' => 'AC4fe59143825d5f20f27fb1b0fd65f468',
-            'token' => '97f1c1148dae6321de52efefc9d86bbb',
-            'fileTransportCallback' => function ($service, $message) {
-                return 'testsms.txt';
-            }
-        ],
     ],
 ];

@@ -1,6 +1,5 @@
 <?php
 use yii\widgets\LinkPager;
-use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -48,7 +47,6 @@ use backend\models\User;
         </div>
       </div>
       <div class="portlet-body">
-        <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
@@ -87,7 +85,6 @@ use backend\models\User;
           </tbody>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
