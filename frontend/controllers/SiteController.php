@@ -548,6 +548,10 @@ class SiteController extends Controller
                 }
                 return $this->render('register', ['model' => $model, 'scenario' => RegisterForm::SCENARIO_INFORMATION]);
             }
+        } else {
+            if ($model->hasErrors('phone')) {
+                Yii::$app->session->setFlash('error', $model->getErrors('phone'));
+            }
         }
         return $this->render('register', ['model' => $model, 'scenario' => RegisterForm::SCENARIO_VALIDATE]);
     }

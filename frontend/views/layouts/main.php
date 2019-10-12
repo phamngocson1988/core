@@ -10,7 +10,8 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 // use common\widgets\Alert;
-use frontend\components\toastr\NotificationFlash;
+// use frontend\components\toastr\NotificationFlash;
+use frontend\components\sweetalert\Alert;
 
 AppAsset::register($this);
 ?>
@@ -67,7 +68,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.3&appId=734107406647333&autoLogAppEvents=1"></script>
-<?= NotificationFlash::widget() ?>
+<?= Alert::widget() ?>
 <?php $this->beginBody() ?>
 <div class="overlay"></div>
 <div class="wrapper">

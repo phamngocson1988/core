@@ -224,6 +224,9 @@
                 {if $model->isInactive()}
                 <a class="btn btn-xs green tooltips link-action" href="{url route='user/active' id=$model->id}" data-container="body" data-original-title="Active this user"><i class="fa fa-check"></i></a>
                 {/if}
+                {if $app->user->can('admin')}
+                <a class="btn btn-xs purple tooltips" href="{url route='wallet/topup' id=$model->id}" data-container="body" data-original-title="Go to wallet" target="_blank"><i class="fa fa-credit-card"></i></a>
+                {/if}
               </td>
             </tr>
             {/foreach}

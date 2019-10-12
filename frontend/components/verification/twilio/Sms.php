@@ -7,7 +7,7 @@ use yii\base\Model;
 
 class Sms extends Model
 {
-    public $testing_mode = true;
+    public $testing_mode = false;
 
     protected function createCode()
     {
@@ -23,7 +23,7 @@ class Sms extends Model
         $newContent = str_replace(array_keys($params), array_values($params), $content);
         $service = Yii::$app->sms;
         // Testing: 
-        if ($this->testing_mode) $phone = "+84986803325";
+        // if ($this->testing_mode) $phone = "+84986803325";
 
         return $service->compose()
         ->setTo($phone)

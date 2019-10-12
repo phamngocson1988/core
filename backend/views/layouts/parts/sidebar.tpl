@@ -216,6 +216,24 @@
       </li>
       {/if}
 
+      <!-- Ví Kingcoin -->
+      {if $app->user->can('admin')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-wallet"></i>
+        <span class="title">Ví Kingcoin</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='wallet/index'}" class="nav-link " code='wallet.index'>
+            <span class="title">Tất cả</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {/if}
+
       <!-- Giao dịch nạp tiền -->
       {if $app->user->can('accounting')}
       <li class="nav-item  ">

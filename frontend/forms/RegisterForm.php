@@ -104,6 +104,7 @@ class RegisterForm extends Model
         $user->phone = $this->phone;
         $user->birthday = sprintf("%s-%s-%s", $this->birth_year, $this->birth_month, $this->birth_date);
         $user->refer_code = Yii::$app->security->generateRandomString(6);
+        $user->is_verify_phone = 1;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->status = User::STATUS_ACTIVE;
