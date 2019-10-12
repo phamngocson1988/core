@@ -81,7 +81,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                             <?php else :?>
                             <div class="login-box">
                                 <?php $form = ActiveForm::begin(['action' => ['site/ajax-login'], 'options' => ['id' => 'top-login', 'autocomplete' => 'off']]); ?>
-                                <a href="<?=Url::to(['site/signup', '#' => 'page-title']);?>" class="reg-link">
+                                <a href="<?=Url::to(['site/register', '#' => 'page-title']);?>" class="reg-link">
                                     <span class="fl-left">Join Now</span>
                                 </a>
                                 <div class="login-form fl-left">

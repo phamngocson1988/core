@@ -67,7 +67,7 @@ use common\components\helpers\FormatConverter;
       <div class="modal-content">
           <div class="modal-wrap">
               <button type="button" class="close" data-dismiss="modal">×</button>
-              <a href="<?=Url::to(['site/signup', '#' => 'page-title']);?>">
+              <a href="<?=Url::to(['site/register', '#' => 'page-title']);?>">
                   <img class="btn-modal-join" src="/images/btn-join-now.png" alt="">
               </a>
               <img class="bg-modal" src="/images/bg-popup-join-now.png" alt="">

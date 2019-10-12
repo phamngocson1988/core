@@ -7,7 +7,7 @@ if (!$user->refer_code) {
   $user->refer_code = Yii::$app->security->generateRandomString(6);
   $user->save();
 }
-$link = Url::to(['site/signup', 'refer' => $user->refer_code], true);
+$link = Url::to(['site/register', 'refer' => $user->refer_code], true);
 $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
 ?>
 
