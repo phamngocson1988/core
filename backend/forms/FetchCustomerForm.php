@@ -211,6 +211,18 @@ class FetchCustomerForm extends User
             $command->andWhere(["LIKE", "{$userTable}.email", $this->email]);
         }
 
+        if ($this->username) {
+            $command->andWhere(["LIKE", "{$userTable}.username", $this->username]);
+        }
+
+        if ($this->name) {
+            $command->andWhere(["LIKE", "{$userTable}.name", $this->name]);
+        }
+
+        if ($this->phone) {
+            $command->andWhere(["LIKE", "{$userTable}.phone", $this->phone]);
+        }
+
         // Having
         if ($this->total_purchase_start) {
             $command->andHaving(['>=', 'total_price_purchase', $this->total_purchase_start]);

@@ -57,8 +57,8 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                   <?= $form->field($item, 'login_method', [
                     'options' => ['class' => 'form-group t-input t-select'],
                     'inputOptions' => ['id' => 'login_method', 'style' => 'padding: .375rem .30rem'],
-                    'labelOptions' => ['class' => 'mobile-hide']
-                  ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'])->label('Login Method');?>
+                    'labelOptions' => ['class' => 'mobile-hide placeholder']
+                  ])->dropDownList(['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'], ['prompt' => 'Choose a login method'])->label('Login Method');?>
 
                   <?= $form->field($item, 'username', [
                     'template' => '{input}{label}{error}',
@@ -102,7 +102,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     'inputOptions' => ['placeholder' => ' ', 'id' => 'recover_code'],
                     'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; padding-left: 37%']
                   ])->widget(\yii\widgets\MaskedInput::className(), [
-                    'mask' => '99999999 99999999 99999999',
+                    "mask" => "[99999999 ]{0,3}",
                   ])->label('Recovery Code')->hint('The recovery code should contain 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 12345678 12345678');?>
 
                   <?= $form->field($item, 'note', [
@@ -241,6 +241,10 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
 <?php
 $script = <<< JS
 $('body').on('click', "#update-cart-button", function(){
+  if (!$('#login_method').val()) {
+    swal("", "Login method cannot be blank.", "warning");
+    return false;
+  }
   if (!$('#policy_risk').is(':checked')) {
     // alert('You need to agree with our lossing sharing term.');
     swal("", "You need to agree with our lossing sharing term.", "warning");

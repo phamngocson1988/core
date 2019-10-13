@@ -36,7 +36,7 @@ class FetchOrderForm extends Model
             [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'start_date', 'end_date', 'status'], 'safe'],
             // ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
             // ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
-            [['start_date', 'end_date'], 'required'],
+            [['start_date', 'end_date'], 'safe'],
             [['provider_id', 'agency_id', 'is_reseller'], 'safe'],
         ];
     }

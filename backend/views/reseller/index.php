@@ -47,6 +47,35 @@ use backend\models\User;
         </div>
       </div>
       <div class="portlet-body">
+        <?php $form = ActiveForm::begin(['method' => 'GET']);?>
+        <div class="row margin-bottom-10">
+          <?=$form->field($search, 'email', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'email']
+          ])->textInput()->label('Email');?>
+
+          <?=$form->field($search, 'username', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'username']
+          ])->textInput()->label('Tên đăng nhập');?>
+
+          <?=$form->field($search, 'name', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'name']
+          ])->textInput()->label('Tên');?>
+
+          <?=$form->field($search, 'phone', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'phone']
+          ])->textInput()->label('Điện thoại');?>
+
+          <div class="form-group col-md-4 col-lg-3">
+            <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+              <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+            </button>
+          </div>
+        </div>
+        <?php ActiveForm::end()?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>

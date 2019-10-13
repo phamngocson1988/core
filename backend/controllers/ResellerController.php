@@ -10,6 +10,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use backend\models\Game;
 use backend\models\GameReseller;
+use backend\forms\FetchCustomerForm;
 
 class ResellerController extends Controller
 {
@@ -32,16 +33,22 @@ class ResellerController extends Controller
     {
         $this->view->params['main_menu_active'] = 'reseller.index';
         $request = Yii::$app->request;
-        $command = User::find()->where([
-            'is_reseller' => User::IS_RESELLER,
-        ]);
-        $command->orderBy(['id' => SORT_DESC]);
+
+        $data = [
+            'email' => $request->get('email'),
+            'username' => $request->get('username'),
+            'name' => $request->get('name'),
+            'phone' => $request->get('phone'),
+        ];
+        $form = new FetchCustomerForm($data);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->all();
+        $command->orderBy(['id' => SORT_DESC]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
         return $this->render('index.php', [
             'models' => $models,
+            'search' => $form,
             'pages' => $pages,
             'ref' => Url::to($request->getUrl(), true),
         ]);
