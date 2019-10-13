@@ -56,6 +56,7 @@ use frontend\models\Order;
                 <th scope="col">Amount</th>
                 <th scope="col">No. of Packages</th>
                 <th scope="col">Status</th>
+                <th scope="col">Bank Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -77,6 +78,19 @@ use frontend\models\Order;
                 </td>
                 <td><?=number_format($model->quantity);?></td>
                 <td><?=$model->getStatusLabel();?></td>
+                <td>
+                  <?php if (!$model->evidence) : ?>
+                  <?php $form = ActiveForm::begin([
+                      'action' => ['user/order-evidence', 'id' => $model->id],
+                      'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
+                  ]); ?>
+                  <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
+                  <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'action-link normal-link']);?>
+                  <?php ActiveForm::end(); ?>
+                  <?php else : ?>
+                  <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">View Receipt</a>
+                  <?php endif;?>
+                </td>
               </tr>
               <?php endforeach;?>
             </tbody>
@@ -91,7 +105,18 @@ use frontend\models\Order;
 $script = <<< JS
 $('#status').on('change', function(){
   $(this).closest('form').submit();
-})
+});
+
+// Upload evidence
+$('.file_upload').on('change', function() {
+  $(this).closest('form').submit();
+});
+$('.action-link').on('click', function() {
+  $(this).closest('form').find('.file_upload').trigger('click');
+});
+$('#status').on('change', function(){
+  $(this).closest('form').submit();
+});
 JS;
 $this->registerJs($script);
 ?>

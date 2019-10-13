@@ -303,4 +303,17 @@ class UserController extends Controller
             return $this->redirect($request->getReferrer());
         }
     }
+
+    public function actionOrderEvidence($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $order = Order::findOne($id);
+            $files = Yii::$app->file->upload('evidence', "order-evidence/$id", true);
+            $inputFile = reset($files);
+            $order->evidence = $inputFile;
+            $order->save();
+            return $this->redirect($request->getReferrer());
+        }
+    }
 }

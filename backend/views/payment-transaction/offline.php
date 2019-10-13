@@ -118,6 +118,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th>Loại thanh toán</th>
               <th>Trạng thái</th>
               <th>Khách hàng</th>
+              <th>Hóa đơn</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -135,6 +136,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td><?=$model->payment_type;?></td>
               <td><?=$model->status;?></td>
               <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
+              <td>
+                <?php if ($model->evidence) : ?>
+                <a href="<?=$model->evidence;?>" target="_blank">Xem</a>
+                <?php endif;?>
+              </td>
               <td>
                 <a href='#confirm-pay<?=$model->id;?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                 <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-times"></i></a>

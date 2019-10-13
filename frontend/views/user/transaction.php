@@ -69,7 +69,7 @@ use yii\helpers\Html;
                   <td>$<?=number_format($model->total_price);?></td>
                   <td><?=$model->payment_method;?></td>
                   <td>
-                  <?php if (!$model->isCompleted() && !$model->evidence) : ?>
+                  <?php if (!$model->evidence) : ?>
                   <?php $form = ActiveForm::begin([
                       'action' => ['user/evidence', 'id' => $model->id],
                       'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
@@ -77,7 +77,7 @@ use yii\helpers\Html;
                   <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
                   <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'action-link normal-link']);?>
                   <?php ActiveForm::end(); ?>
-                  <?php elseif ($model->evidence) : ?>
+                  <?php else : ?>
                   <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">View Receipt</a>
                   <?php endif;?>
                   </td>

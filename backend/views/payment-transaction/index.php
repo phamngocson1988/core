@@ -122,12 +122,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th>Loại thanh toán</th>
               <th>Trạng thái</th>
               <th>Khách hàng</th>
+              <th>Hóa đơn</th>
               <th>Tác vụ</th>
             </tr>
           </thead>
           <tbody>
             <?php if (!$models) :?>
-            <tr><td colspan="8">No data found</td></tr>
+            <tr><td colspan="9">No data found</td></tr>
             <?php endif;?>
             <?php foreach ($models as $model) :?>
             <tr>
@@ -138,6 +139,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td><?=$model->payment_type;?></td>
               <td><?=$model->status;?></td>
               <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
+              <td>
+                <?php if ($model->evidence) : ?>
+                <a href="<?=$model->evidence;?>" target="_blank">Xem</a>
+                <?php endif;?>
+              </td>
               <td>
                 <?php if ($model->isPending()) : ?>
                 <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-times"></i></a>
