@@ -105,7 +105,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <thead>
             <tr>
               <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 30%;"> Mã GD/Mã đơn hàng</th>
+              <th style="width: 30%;"> Mô tả</th>
               <th style="width: 10%;"> Loại giao dịch </th>
               <th style="width: 25%;"> Thời gian hoàn thành </th>
               <th style="width: 10%;"> Kcoin </th>
@@ -121,23 +121,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <tr>
                 <td>#<?=($pages->offset + $no + 1)?></td>
                 <td style="vertical-align: middle;">
-                  <?php switch ($model->ref_name) { 
-                    case PaymentTransaction::className():
-                      $object = PaymentTransaction::findOne(['auth_key' => $model->ref_key]);
-                      if (!$object) break;
-                      echo sprintf("Transaction <a href='%s'>#%s</a>", 'javascript:void(0)', $model->ref_key);
-                      break;
-                    case Order::className():
-                      $object = Order::findOne(['auth_key' => $model->ref_key]);
-                      if (!$object) break;
-                      echo sprintf("Pay for order <a href='%s'>#%s</a>", Url::to(['order/view', 'id' => $object->id]), $object->auth_key);
-                      break;
-                    case Promotion::className():
-                      $object = Promotion::findOne(['code' => $model->ref_key]);
-                      if (!$object) break;
-                      echo sprintf("Transaction <a href='%s'>#%s</a>", 'javascript:void(0)', $object->code);
-                      break;
-                  }?>
+                  <?=$model->description;?>
                 </td>
                 <td style="vertical-align: middle;">
                   <?php if ($model->type == UserWallet::TYPE_INPUT) : ?>

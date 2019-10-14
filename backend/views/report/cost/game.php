@@ -17,7 +17,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstra
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $settings = Yii::$app->settings;
-$rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
+$rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 22000);
 
 $gameReports = [];
 $dates = array_keys($models);

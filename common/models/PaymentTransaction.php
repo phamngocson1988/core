@@ -28,6 +28,11 @@ class PaymentTransaction extends ActiveRecord
         return '{{%payment_transaction}}';
     }
 
+    public function getId()
+    {
+        return "T" . $this->id;
+    }
+
     public function generateAuthKey()
     {
         $this->auth_key = "TR" . Yii::$app->security->generateRandomString(8);

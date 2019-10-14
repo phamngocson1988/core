@@ -157,7 +157,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->user->name;?></td>
                 <td style="vertical-align: middle;"><?=($model->user->isReseller()) ? 'Reseller' : 'Customer';?></td>
-                <td style="vertical-align: middle;"><?=$model->auth_key;?></td>
+                <td style="vertical-align: middle;"><?=$model->id;?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->promotion_coin);?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->total_coin);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($model->discount_price);?></td>

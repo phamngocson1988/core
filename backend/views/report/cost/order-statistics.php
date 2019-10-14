@@ -17,7 +17,7 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstra
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $settings = Yii::$app->settings;
-$rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
+$rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 22000);
 ?>
 
 <style>
@@ -144,7 +144,7 @@ $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
           }, $models);
           $total_prices = array_map(function($model) { 
               $settings = Yii::$app->settings;
-              $rate = (int)$settings->get('ApplicationSettingForm', 'exchange_rate', 22000);
+              $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 22000);
               return $model['total_price'] * $rate / 1000;
             }, $models);
           $labels = array_column($models, 'date');

@@ -271,7 +271,7 @@ class TopupController extends Controller
         $refId = Yii::$app->request->get('ref');
         $trn = PaymentTransaction::findOne(['auth_key' => $refId]);
         $user = Yii::$app->user->getIdentity();
-        $trn->remark = sprintf("%s %s'", $user->username, $trn->id);
+        $trn->remark = sprintf("%s %s", $user->username, $trn->id);
         $trn->save();
         $gateway = PaymentGatewayFactory::getClient($trn->payment_method);
         // print_r($gateway);die;

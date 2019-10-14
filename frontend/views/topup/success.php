@@ -35,7 +35,7 @@ use yii\helpers\ArrayHelper;
                     <?php foreach ($data as $key => $value) : ?>
                     <p><?=$key;?>: <?=$value;?></p>
                     <?php endforeach;?>
-                    <p>Note: "<?=$user->username;?> <?=$trn->id;?>"</h3></p>
+                    <p>Note: <?=$trn->remark;?></p>
                   </div>
                   <div class="col-md-6 paygate-logo">
                     <img src="<?=$logo;?>" width="150">
