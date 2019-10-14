@@ -8,8 +8,10 @@ use Yii;
  */
 class Order extends \common\models\Order
 {
+    const SCENARIO_CREATE = 'create';
     const SCENARIO_GO_PENDING = 'go_pending';
     const SCENARIO_GO_PROCESSING = 'go_processing';
+    const SCENARIO_GO_COMPLETED = 'go_completed';
 
     public function scenarios()
     {
@@ -20,6 +22,7 @@ class Order extends \common\models\Order
             self::SCENARIO_PENDING => ['username', 'password', 'platform', 'login_method', 'character_name', 'recover_code', 'server', 'note'],
             self::SCENARIO_GO_PENDING => ['payment_method', 'payment_id'],
             self::SCENARIO_GO_PROCESSING => [],
+            self::SCENARIO_GO_COMPLETED => [],
         ]);
     }
 

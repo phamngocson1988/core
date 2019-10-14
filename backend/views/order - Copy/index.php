@@ -7,13 +7,9 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
+use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
-
-
-
-use backend\models\Order;
-
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -28,6 +24,15 @@ $orderTeamObjects = User::findAll($orderTeamIds);
 $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 ?>
 
+<style>
+.hide-text {
+    white-space: nowrap;
+    width: 100%;
+    max-width: 500px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+</style>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -52,6 +57,13 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
           <span class="caption-subject bold uppercase"> Đơn hàng</span>
+        </div>
+        <div class="actions">
+          <?php if (Yii::$app->user->can('saler')) :?>
+          <!-- <div class="btn-group btn-group-devided">
+            <a class="btn green" href="<?=Url::to(['order/create', 'ref' => $ref])?>"><?=Yii::t('app', 'add_new')?></a>
+          </div> -->
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
@@ -133,11 +145,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
             <?=$form->field($search, 'status', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
-            ])->dropDownList([
-                Order::STATUS_PENDING => 'Pending',
-                Order::STATUS_PROCESSING => 'Processing',
-                Order::STATUS_COMPLETED => 'Completed',
-            ])->label('Trạng thái');?>
+            ])->dropDownList($search->getStatus())->label('Trạng thái');?>
 
             <?php $game = $search->getGame();?>   
             <?=$form->field($search, 'game_id', [
@@ -220,13 +228,14 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                 <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
                 <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?> minutes</td>
+                
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                 <td style="vertical-align: middle;">
@@ -240,14 +249,16 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 </td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
+                  <?php if (!$model->isDeletedOrder()) :?>
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                  <?php if (Yii::$app->user->can('orderteam') && !$model->orderteam_id) :?>
+                  <?php endif;?>
+                  <?php if (Yii::$app->user->can('taken_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>
                   <?php endif;?>
-                  <?php /* if (Yii::$app->user->can('delete_order', ['order' => $model])) :?>
+                  <?php if (Yii::$app->user->can('delete_order', ['order' => $model])) :?>
                   <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
-                  <?php endif; */?>
-                  <?php if (Yii::$app->user->can('orderteam_manager')) :?>
+                  <?php endif;?>
+                  <?php if (Yii::$app->user->can('orderteam_manager') && !$model->isDeletedOrder() && !$model->isVerifyingOrder()) :?>
                   <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">

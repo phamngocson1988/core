@@ -22,7 +22,6 @@ class Order extends ActiveRecord
     const STATUS_COMPLETED = 'completed';
     const STATUS_CONFIRMED = 'confirmed';
     const STATUS_DELETED = 'deleted';
-    const STATUS_CANCELLED = 'cancelled';
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_VERIFYING = self::STATUS_VERIFYING;
@@ -58,9 +57,7 @@ class Order extends ActiveRecord
             self::STATUS_PENDING => 'Pending',
             self::STATUS_PROCESSING => 'Processing',
             self::STATUS_COMPLETED => 'Completed',
-            self::STATUS_CONFIRMED => 'Confirmed',
-            self::STATUS_DELETED => 'Deleted',
-            self::STATUS_CANCELLED => 'Cancelled',
+            self::STATUS_DELETED => 'Deleted'
         ];
     }
 
@@ -131,6 +128,26 @@ class Order extends ActiveRecord
         return $this->hasMany(OrderComplains::className(), ['order_id' => 'id']);
     }
 
+    // public function getDiscounts() 
+    // {
+    //     return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_DISCOUNT]);
+    // }
+
+    // public function getPromotions() 
+    // {
+    //     return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_PROMOTION]);
+    // }
+
+    // public function getFees() 
+    // {
+    //     return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_FEE]);
+    // }
+
+    // public function getTaxes() 
+    // {
+    //     return $this->hasMany(OrderFee::className(), ['order_id' => 'id'])->where(['type' => OrderFee::TYPE_TAX]);
+    // }
+
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString(10);
@@ -156,19 +173,9 @@ class Order extends ActiveRecord
         return $this->status === self::STATUS_COMPLETED;
     }
 
-    public function isConfirmedOrder()
-    {
-        return $this->status === self::STATUS_CONFIRMED;
-    }
-
     public function isDeletedOrder()
     {
         return $this->status === self::STATUS_DELETED;
-    }
-
-    public function isCancelledOrder()
-    {
-        return $this->status === self::STATUS_CANCELLED;
     }
 
     public function isRating()
@@ -218,4 +225,11 @@ class Order extends ActiveRecord
         $quantity = $this->quantity;
         return $total_price - $total_cogs_price - ($managing_cost_rate + $investing_cost_rate) * $total_price / 100;
     }
+
+    // public function delete()
+    // {
+    //     if ($this->isVerifyingOrder()) return parent::delete();
+    //     $this->status = self::STATUS_DELETED;
+    //     return $this->save();
+    // }
 }

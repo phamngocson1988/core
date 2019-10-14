@@ -182,6 +182,7 @@ $this->registerJs($movePendingJs)
                                 <?= Html::beginForm(['order/move-to-processing', 'id' => $order->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-processing-form']) ?>
                                 <div class="modal-body"> 
                                   <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
+                                  <p id="doing_unit_notice" style="display: none">Số đơn vị game của bạn vẫn chưa được cập nhật đủ, nếu chuyển qua trạng thái "Processing", toàn bộ số đơn vị game đang thực hiện sẽ được cập nhật đúng bằng số đơn vị game cần nhập của đơn hàng.</p>
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
@@ -199,45 +200,6 @@ moveProcessingForm.success = function (data, form) {
 };
 JS;
 $this->registerJs($moveProcessingJs)
-?>
-                        </div>
-                      </div>
-                      <?php endif;?>
-
-                      <?php if ($order->isProcessingOrder() && Yii::$app->user->can('orderteam')) : ?>
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_processing"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
-                          </div>
-                          <div class="modal fade" id="go_processing" tabindex="-1" role="basic" aria-hidden="true">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                  <h4 class="modal-title">Chuyển tới trạng thái Completed</h4>
-                                </div>
-                                <?= Html::beginForm(['order/move-to-completed', 'id' => $order->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-completed-form']) ?>
-                                <div class="modal-body"> 
-                                  <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed"</p>
-                                  <p id="doing_unit_notice" style="display: none">Số đơn vị game của bạn vẫn chưa được cập nhật đủ, nếu chuyển qua trạng thái "Completed", toàn bộ số đơn vị game đang thực hiện sẽ được cập nhật đúng bằng số đơn vị game cần nhập của đơn hàng.</p>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn green">Xác nhận</button>
-                                </div>
-                                <?= Html::endForm();?>
-                              </div>
-                            </div>
-                          </div>
-<?php
-$moveCompletedJs = <<< JS
-var moveCompletedForm = new AjaxFormSubmit({element: '#move-completed-form'});
-moveCompletedForm.success = function (data, form) {
-  location.reload();
-};
-JS;
-$this->registerJs($moveCompletedJs)
 ?>
                         </div>
                       </div>
