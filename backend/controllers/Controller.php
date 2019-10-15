@@ -17,7 +17,7 @@ class Controller extends BaseController
 	{
 		if (parent::beforeAction($action)) {
 			// Show number of new pending orders
-			$newPendingOrderCommand = Order::find()->where(['status' => Order::STATUS_PENDING, 'orderteam_id' => null]);
+			$newPendingOrderCommand = Order::find()->where(['status' => Order::STATUS_PENDING]);
 	        $newPendingOrderTotal = $newPendingOrderCommand->count();
 			$this->view->params['new_pending_order'] = $newPendingOrderTotal ? $newPendingOrderTotal : '';
 			

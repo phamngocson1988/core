@@ -45,9 +45,6 @@ class OrderController extends Controller
         ];
     }
 
-    /**
-     * Show the list of orders
-     */
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'order.index';
@@ -83,59 +80,157 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionNewVerifyingOrder()
+    public function actionVerifying()
     {
-        $this->view->params['main_menu_active'] = 'order.new-verifying';
+        $this->view->params['main_menu_active'] = 'order.verifying';
         $request = Yii::$app->request;
-        $command = Order::find()->where(['status' => Order::STATUS_VERIFYING]);
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => Order::STATUS_VERIFYING,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();
 
-        return $this->render('new-verifying-order', [
+        return $this->render('verifying', [
             'models' => $models,
             'pages' => $pages,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
 
-    public function actionNewPendingOrder()
-    {
-        $this->view->params['main_menu_active'] = 'order.new';
-        $request = Yii::$app->request;
-        $command = Order::find();
-        $command->where(['status' => Order::STATUS_PENDING, 'orderteam_id' => null]);
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
-
-        return $this->render('new-pending-order', [
-            'models' => $models,
-            'pages' => $pages,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
-    public function actionPendingOrder()
+    public function actionPending()
     {
         $this->view->params['main_menu_active'] = 'order.pending';
         $request = Yii::$app->request;
-        $command = Order::find();
-        $command->where(['status' => Order::STATUS_PENDING]);
-        $command->andWhere(['IS NOT', 'orderteam_id', null]);
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => Order::STATUS_PENDING,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
+                            ->all();                    
 
-        return $this->render('pending-order', [
+        return $this->render('pending', [
             'models' => $models,
             'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionProcessing()
+    {
+        $this->view->params['main_menu_active'] = 'order.processing';
+        $request = Yii::$app->request;
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => Order::STATUS_PROCESSING,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();                    
+
+        return $this->render('processing', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCompleted()
+    {
+        $this->view->params['main_menu_active'] = 'order.completed';
+        $request = Yii::$app->request;
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => Order::STATUS_COMPLETED,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();                    
+
+        return $this->render('completed', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionConfirmed()
+    {
+        $this->view->params['main_menu_active'] = 'order.confirmed';
+        $request = Yii::$app->request;
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => Order::STATUS_CONFIRMED,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();                    
+
+        return $this->render('confirmed', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -144,56 +239,31 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.cancelling';
         $request = Yii::$app->request;
-        $command = Order::find();
-        $command->where(['<>', 'status', Order::STATUS_DELETED]);
-        $command->andWhere(['request_cancel' => 1]);
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED],
+            'request_cancel' => 1
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
+                            ->all();                    
+                            
 
-        return $this->render('cancelling-order', [
+        return $this->render('cancelling', [
             'models' => $models,
             'pages' => $pages,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
-    public function actionProcessingOrder()
-    {
-        $this->view->params['main_menu_active'] = 'order.processing';
-        $request = Yii::$app->request;
-        $command = Order::find();
-        $command->where(['status' => Order::STATUS_PROCESSING]);
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
-
-        return $this->render('processing-order', [
-            'models' => $models,
-            'pages' => $pages,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
-    public function actionCompletedOrder()
-    {
-        $this->view->params['main_menu_active'] = 'order.completed';
-        $request = Yii::$app->request;
-        $command = Order::find();
-        $command->where(['status' => Order::STATUS_COMPLETED]);
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
-
-        return $this->render('completed-order', [
-            'models' => $models,
-            'pages' => $pages,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -202,35 +272,29 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.cancelled';
         $request = Yii::$app->request;
-        $command = Order::find();
-        $command->where(['status' => Order::STATUS_DELETED]);
+        $data = [
+            'q' => $request->get('q'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'provider_id' => $request->get('provider_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => Order::STATUS_CANCELLED,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
+                            ->all();                    
 
-        return $this->render('cancelled-order', [
+        return $this->render('cancelled', [
             'models' => $models,
             'pages' => $pages,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
-    public function actionDislikeOrder()
-    {
-        $this->view->params['main_menu_active'] = 'order.dislike';
-        $request = Yii::$app->request;
-        $command = Order::find()->where(['rating' => -1]);
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
-
-        return $this->render('dislike-order', [
-            'models' => $models,
-            'pages' => $pages,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -456,21 +520,19 @@ class OrderController extends Controller
         }
     }
 
-    
-
     public function actionApprove($id)
     {
         $request = Yii::$app->request;
         if ($request->isAjax) {
             $order = Order::findOne($id);
             $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
-            if ($order->isPendingOrder()) {
-                $order->status = Order::STATUS_DELETED;
+            if ($order->isPendingOrder() || $order->isProcessingOrder()) {
+                $order->status = Order::STATUS_CANCELLED;
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
                 return $this->renderJson($order->save(), ['view_url' => Url::to(['order/view', 'id' => $id])], []);
             } elseif ($order->isVerifyingOrder()) {
-                $order->status = Order::STATUS_DELETED;
+                $order->status = Order::STATUS_CANCELLED;
                 return $this->renderJson($order->save(), ['view_url' => Url::to(['order/view', 'id' => $id])], []);
             }
         }
@@ -484,24 +546,13 @@ class OrderController extends Controller
             $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
                 // Save a complain
                 $order = $event->sender;
-                $user = Yii::$app->user->getIdentity();
                 $complain = new OrderComplains();
                 $complain->order_id = $order->id;
-                $complain->content = sprintf("Your order is cancelled by %s", $user->name);
+                $complain->content = sprintf("Your request is cancelled by admin");
                 $complain->save();
             });
             $model->request_cancel = 0;
             return $this->renderJson($model->save());
-            // $order->save();
-            // $form = new SendComplainForm([
-            //     'order_id' => $id,
-            //     'template_id' => $request->post('template_id')
-            // ]);
-            // if ($form->send()) {
-            //     return $this->renderJson(true, []);
-            // } else {
-            //     return $this->renderJson(false, [], $form->getErrorSummary(true));
-            // }
     }
 
     public function actionAddEvidenceImage($id)

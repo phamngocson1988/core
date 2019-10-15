@@ -22,6 +22,7 @@ class FetchOrderForm extends Model
     public $status;
     public $agency_id;
     public $is_reseller;
+    public $request_cancel;
 
     public function rules()
     {
@@ -62,6 +63,9 @@ class FetchOrderForm extends Model
         }
         if ($this->saler_id) {
             $command->andWhere(["$table.saler_id" => $this->saler_id]);
+        }
+        if ($this->request_cancel) {
+            $command->andWhere(["$table.request_cancel" => $this->request_cancel]);
         }
         if ($this->orderteam_id) {
             if ($this->orderteam_id == -1) {

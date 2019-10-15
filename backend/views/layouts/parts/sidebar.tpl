@@ -412,37 +412,45 @@
             <span class="title">Đơn hàng</span>
             </a>
           </li>
+          {if $app->user->can('saler')}
           <li class="nav-item  ">
-            <a href="{url route='/order/new-pending-order'}" class="nav-link " code='order.new'>
-            <span class="title">Đơn hàng mới</span>
+            <a href="{url route='/order/verifying'}" class="nav-link " code='order.verifying'>
+            <span class="title">Đơn hàng verifying</span>
+            <span class="badge badge-success">{$this->params['new_verifying_order']}</span>
+            </a>
+          </li>
+          {/if}
+          <li class="nav-item  ">
+            <a href="{url route='/order/pending'}" class="nav-link " code='order.pending'>
+            <span class="title">Đơn hàng pending</span>
             <span class="badge badge-success">{$this->params['new_pending_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='/order/pending-order'}" class="nav-link " code='order.pending'>
-            <span class="title">Đơn hàng đang xử lý</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/order/processing-order'}" class="nav-link " code='order.processing'>
-            <span class="title">Đơn hàng đã thực hiện</span>
+            <a href="{url route='/order/processing'}" class="nav-link " code='order.processing'>
+            <span class="title">Đơn hàng processing</span>
             <span class="badge badge-success">{$this->params['processing_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="{url route='/order/completed-order'}" class="nav-link " code='order.completed'>
-            <span class="title">Đơn hàng đã hoàn thành</span>
+            <a href="{url route='/order/completed'}" class="nav-link " code='order.completed'>
+            <span class="title">Đơn hàng completed</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/confirmed'}" class="nav-link " code='order.confirmed'>
+            <span class="title">Đơn hàng confirmed</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='/order/cancelling-order'}" class="nav-link " code='order.cancelling'>
-            <span class="title">Đơn hàng yêu cầu hủy</span>
+            <span class="title">Đơn hàng cancelling</span>
             <span class="badge badge-success">{$this->params['cancelling_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='/order/cancelled-order'}" class="nav-link " code='order.cancelled'>
-            <span class="title">Đơn hàng đã hủy</span>
+            <span class="title">Đơn hàng cancelled</span>
             </a>
           </li>
           {if $app->user->can('sale_manager')}
@@ -452,14 +460,7 @@
             </a>
           </li>
           {/if}
-          {if $app->user->can('saler')}
-          <li class="nav-item  ">
-            <a href="{url route='/order/new-verifying-order'}" class="nav-link " code='order.new-verifying'>
-            <span class="title">Đơn hàng chờ thanh toán</span>
-            <span class="badge badge-success">{$this->params['new_verifying_order']}</span>
-            </a>
-          </li>
-          {/if}
+          
         </ul>
       </li>
       {/if}
