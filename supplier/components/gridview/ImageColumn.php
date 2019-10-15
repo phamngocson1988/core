@@ -1,5 +1,5 @@
 <?php
-namespace backend\components\gridview;
+namespace supplier\components\gridview;
 
 use Yii;
 use yii\grid\DataColumn;
@@ -15,7 +15,7 @@ use common\models\Image;
  * 'columns' => [
  *     // ...
  *     [
- *         'class' => 'backend\components\gridview\ImageColumn',
+ *         'class' => 'supplier\components\gridview\ImageColumn',
  *         // you may configure additional properties here
  *     ],
  * ]

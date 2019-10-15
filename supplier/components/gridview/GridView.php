@@ -1,5 +1,5 @@
 <?php
-namespace backend\components\gridview;
+namespace supplier\components\gridview;
 
 use yii\grid\GridView as BaseGridView;
 use yii\helpers\Html;

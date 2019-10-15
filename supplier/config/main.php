@@ -11,7 +11,6 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'supplier\controllers',
     'layout' => 'main.tpl',
-    'defaultRoute' => 'order',
     'bootstrap' => [
         'log', 
     ],

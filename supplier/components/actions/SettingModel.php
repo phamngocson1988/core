@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\components\actions;
+namespace supplier\components\actions;
 
 use Yii;
 use yii2mod\settings\models\enumerables\SettingStatus;

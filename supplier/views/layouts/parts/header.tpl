@@ -1,5 +1,5 @@
 {$user = Yii::$app->user->getIdentity()}
-{use class='backend\components\notifications\Notifications'}
+{use class='supplier\components\notifications\Notifications'}
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
   <!-- BEGIN HEADER INNER -->

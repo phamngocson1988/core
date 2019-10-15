@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'inputOptions' => ['placeholder' => ' ']
               ])->passwordInput()->label('Password <span class="required">*</span>');?>
               <?= $form->field($model, 'captcha', [
-                'template' => '{label}{input}{error}',
+                'template' => '{input}{label}{error}',
                 'options' => ['class' => 'form-group t-input'],
                 'labelOptions' => ['class' => 'placeholder'],
                 'inputOptions' => ['placeholder' => ' ', 'class' => 'form-control captcha-code', 'autocomplete' => false]

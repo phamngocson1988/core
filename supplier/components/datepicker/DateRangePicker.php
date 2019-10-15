@@ -4,7 +4,7 @@
  * @link http://2amigos.us
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-namespace backend\components\datepicker;
+namespace supplier\components\datepicker;
 
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;

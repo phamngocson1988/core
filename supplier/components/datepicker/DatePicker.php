@@ -4,7 +4,7 @@
  * @link http://2amigos.us
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-namespace backend\components\datepicker;
+namespace supplier\components\datepicker;
 
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -16,7 +16,7 @@ use yii\widgets\InputWidget;
  * @author Antonio Ramirez <amigo.cobos@gmail.com>
  * @link http://www.ramirezcobos.com/
  * @link http://www.2amigos.us/
- * @package backend\components\datepicker
+ * @package supplier\components\datepicker
  */
 class DatePicker extends InputWidget
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace backend\assets;
+namespace supplier\assets;
 
 use yii\web\AssetBundle;
 
 /**
- * Main backend application asset bundle.
+ * Main supplier application asset bundle.
  */
 class AppAsset extends AssetBundle
 {

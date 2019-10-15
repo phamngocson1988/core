@@ -1,9 +1,9 @@
 <?php
 
-namespace backend\components\logs;
+namespace supplier\components\logs;
 
 use Yii;
-use backend\forms\CreateSystemLogForm;
+use supplier\forms\CreateSystemLogForm;
 use yii\base\Model;
 
 class SystemLog extends Model

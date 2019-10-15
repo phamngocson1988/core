@@ -4,7 +4,7 @@
  * @link http://2amigos.us
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-namespace backend\components\datetimepicker;
+namespace supplier\components\datetimepicker;
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;

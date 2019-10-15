@@ -4,7 +4,7 @@
  * @link http://2amigos.us
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-namespace backend\components\datepicker;
+namespace supplier\components\datepicker;
 
 use yii\web\AssetBundle;
 
@@ -21,6 +21,6 @@ class DatePickerLanguageAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $depends = [
-        'backend\components\datepicker\DateRangePickerAsset'
+        'supplier\components\datepicker\DateRangePickerAsset'
     ];
 }

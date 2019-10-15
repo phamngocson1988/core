@@ -1,5 +1,5 @@
 <?php
-namespace backend\components\gridview;
+namespace supplier\components\gridview;
 
 use Yii;
 use yii\grid\ActionColumn as BaseActionColumn;

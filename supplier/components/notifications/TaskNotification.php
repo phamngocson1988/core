@@ -1,5 +1,5 @@
 <?php
-namespace backend\components\notifications;
+namespace supplier\components\notifications;
 
 use Yii;
 use webzop\notifications\Notification;
