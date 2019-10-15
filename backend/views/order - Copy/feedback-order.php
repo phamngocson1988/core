@@ -90,7 +90,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th> Mã đơn hàng </th>
               <th> Ngày tạo </th>
               <th> Người bán hàng </th>
-              <th> Người xử lý đơn </th>
+              <th> Nhân viên đơn hàng </th>
               <th> Nhà cung cấp </th>
               <th> Khách hàng</th>
               <th> Số điện thoại</th>

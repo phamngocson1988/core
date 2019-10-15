@@ -68,9 +68,8 @@ class FetchOrderForm extends Model
             $command->andWhere(["$table.request_cancel" => $this->request_cancel]);
         }
         if ($this->orderteam_id) {
-            if ($this->orderteam_id == -1) {
-                $command->andWhere(["$table.orderteam_id" => null]);
-                $this->orderteam_id = '';
+            if ($this->orderteam_id == '-1') {
+                $command->andWhere(["IS", "$table.orderteam_id", null]);
             } else {
                 $command->andWhere(["$table.orderteam_id" => $this->orderteam_id]);
             }

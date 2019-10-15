@@ -85,6 +85,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'saler_id']
             ])->dropDownList($salerTeams, ['prompt' => 'Chọn nhân viên sale'])->label('Nhân viên sale');?>
 
+            <?php $orderTeams['-1'] = 'Chưa có người xử lý';?>
             <?=$form->field($search, 'orderteam_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'orderteam_id']
@@ -157,7 +158,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               <th> Số lượng nạp </th>
               <th> Số gói </th>
               <th> Người bán hàng </th>
-              <th> Người xử lý đơn </th>
+              <th> Nhân viên đơn hàng </th>
               <th> Trạng thái </th>
               <th> Nhà cung cấp </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
@@ -179,6 +180,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
+                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php if (Yii::$app->user->can('orderteam')) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>
                   <?php endif;?>

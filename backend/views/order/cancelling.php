@@ -157,7 +157,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               <th> Số lượng nạp </th>
               <th> Số gói </th>
               <th> Người bán hàng </th>
-              <th> Người xử lý </th>
+              <th> Nhân viên đơn hàng </th>
               <th> Trạng thái </th>
               <th> Nhà cung cấp </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>

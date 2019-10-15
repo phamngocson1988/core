@@ -51,7 +51,7 @@ use backend\models\Order;
               <th style="width: 10%;"> Tên game </th>
               <th style="width: 10%;"> Ngày tạo </th>
               <th style="width: 10%;"> Người bán hàng </th>
-              <th style="width: 10%;"> Người xử lý đơn </th>
+              <th style="width: 10%;"> Nhân viên đơn hàng </th>
               <th style="width: 10%;"> Nhà cung cấp </th>
               <th style="width: 10%;"> Trạng thái </th>
               <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>

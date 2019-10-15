@@ -208,7 +208,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <th> Thời gian nhận đơn </th>
               <th> Thời gian chờ </th>
               <th> Người bán hàng </th>
-              <th> Người quản lý đơn hàng </th>
+              <th> Nhân viên đơn hàng </th>
               <th> Trạng thái </th>
               <th> Nhà cung cấp </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
