@@ -248,7 +248,7 @@ class OrderController extends Controller
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
-            'status' => [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED],
+            'status' => [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING],
             'request_cancel' => 1
         ];
         $form = new FetchOrderForm($data);

@@ -27,7 +27,7 @@ class Controller extends BaseController
             $this->view->params['new_verifying_order'] = $verifyingTotal ? $verifyingTotal : '';
 
             // Show number of new cancelling orders
-			$cancellingCommand = Order::find()->where(['<>', 'status', Order::STATUS_DELETED]);
+			$cancellingCommand = Order::find()->where(['IN', 'status', [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING]]);
         	$cancellingCommand->andWhere(['request_cancel' => 1]);
 	        $cancellingTotal = $cancellingCommand->count();
             $this->view->params['cancelling_order'] = $cancellingTotal ? $cancellingTotal : '';

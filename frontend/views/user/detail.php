@@ -55,6 +55,16 @@ use frontend\models\OrderFile;
             <p class="profile-name">
               ORDER DETAIL <span>#<?=$model->id;?></span>
             </p>
+            <?php if ($model->bulk) : ?>
+            <div class="left-coin">
+              <span>
+                <p>Order detail:</p>
+              </span>
+              <span class="red">
+                <p><?=nl2br($model->raw);?></p>
+              </span>
+            </div>
+            <?php else :?>
             <div class="left-coin">
               <span>
                 <p>Platform:</p>
@@ -77,6 +87,7 @@ use frontend\models\OrderFile;
                 <p><?=$model->note;?></p>
               </span>
             </div>
+            <?php endif;?>
           </div>
           <div class="profile-info-right">
             <p class="profile-name">DELIVERY STATUS<span><?=$model->doing_unit;?>/<?=$model->total_unit;?> <?=$model->getStatusLabel(null);?></span> </p>
