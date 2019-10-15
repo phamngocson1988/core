@@ -1,7 +1,7 @@
 {use class='yii\helpers\Html'}
 {use class='yii\helpers\Url'}
 {use class='common\widgets\Alert'}
-{use class='backend\assets\LoginAsset'}
+{use class='supplier\assets\LoginAsset'}
 {LoginAsset::register($this)|void}
 {$this->beginPage()}
 <!DOCTYPE html>

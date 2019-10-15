@@ -7,9 +7,9 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-backend',
+    'id' => 'app-supplier',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'backend\controllers',
+    'controllerNamespace' => 'supplier\controllers',
     'layout' => 'main.tpl',
     'defaultRoute' => 'order',
     'bootstrap' => [
@@ -29,16 +29,16 @@ return [
 	'sourceLanguage' => 'en-US',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-backend',            
+            'csrfParam' => '_csrf-supplier',            
         ],
         'user' => [
-            'identityClass' => 'backend\models\User',
+            'identityClass' => 'supplier\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-supplier', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the backend
-            'name' => 'advanced-backend',
+            // this is the name of the session cookie used for login on the supplier
+            'name' => 'advanced-supplier',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -85,26 +85,9 @@ return [
         ],
 
         'urlManager' => require('router.php'),
-        'urlManagerFrontend' => require('../../frontend/config/router.php'),
-        'i18n' => [
-            'translations' => [
-                'app*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@backend/messages',
-                    'sourceLanguage' => 'en-US',
-                    'fileMap' => [
-                        'app' => 'app.php',
-                        'app/error' => 'error.php',
-                    ],
-                ],
-            ],
-        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@backend/mail',
-        ],
-        'syslog' => [
-            'class' => 'backend\components\logs\SystemLog',
+            'viewPath' => '@supplier/mail',
         ],
     ],
     'params' => $params,
