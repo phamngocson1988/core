@@ -238,7 +238,7 @@ cancelForm.error = function (errors) {
 }
 
 $('#complete').ajax_action({
-  method: 'POST',
+  // method: 'POST',
   callback: function(data) {
     location.reload();
   },

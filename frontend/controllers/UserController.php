@@ -45,7 +45,7 @@ class UserController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'confirm' => ['post'],
+                    // 'confirm' => ['post'],
                     'like' => ['post'],
                     'dislike' => ['post'],
                 ],
@@ -155,9 +155,9 @@ class UserController extends Controller
             'user_id' => Yii::$app->user->id,
         ]);
         if ($model->save()) {
-            return $this->renderJson(true, []);
+            return $this->asJson(['status' => true]);
         } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
+            return $this->asJson(['status' => false, 'error' => $model->getErrorSummary(true)]);
         }
     }
 

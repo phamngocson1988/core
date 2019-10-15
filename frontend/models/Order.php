@@ -33,6 +33,8 @@ class Order extends \common\models\Order
             self::STATUS_PENDING => 'text-primary',
             self::STATUS_PROCESSING => 'text-secondary',
             self::STATUS_COMPLETED => 'text-secondary-3',
+            self::STATUS_CONFIRMED => 'text-secondary-3',
+            self::STATUS_CANCELLED => 'text-gray-1',
             self::STATUS_DELETED => 'text-gray-1'
         ];
         $labels = self::getStatusList();

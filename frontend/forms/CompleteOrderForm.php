@@ -24,7 +24,7 @@ class CompleteOrderForm extends Model
         $order = $this->getOrder();
         if (!$order) {
             $this->addError($attribute, 'Đơn hàng không tồn tại');
-        } elseif (!$order->isProcessingOrder()) {
+        } elseif (!$order->isCompletedOrder()) {
             $this->addError($attribute, 'Không thể chuyển trạng thái của đơn hàng hiện tại');
         } elseif ($order->customer_id != $this->user_id) {
             $this->addError($attribute, 'You cannot vote this order');
