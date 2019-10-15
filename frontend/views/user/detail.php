@@ -120,14 +120,14 @@ use frontend\models\OrderFile;
                 <p><?=$model->getStatusLabel(null);?>.</p>
               </div>
               
-              <?php if ($model->isPendingOrder() || $model->isVerifyingOrder()) :?>
+              <?php if ($model->isPendingOrder() || $model->isVerifyingOrder() || $model->isProcessingOrder()) :?>
                 <?php if ($model->request_cancel) :?>
                 <a class="btn-product-detail-add-to-cart" href="javascript:;">Request was sent</a>
                 <?php else:?>
                 <a class="btn-product-detail-add-to-cart" href="javascript:;" data-toggle="modal" data-target="#cancel-modal">Cancel order</a>
                 <?php endif;?>
               <?php endif;?>
-              <?php if ($model->isProcessingOrder()) :?>
+              <?php if ($model->isCompletedOrder()) :?>
               <a href="<?=Url::to(['user/confirm', 'key' => $model->auth_key]);?>" id="complete" class="btn-product-detail-add-to-cart">Confirm Delivery</a>
               <?php endif;?>
             </div>

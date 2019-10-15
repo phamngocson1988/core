@@ -35,7 +35,7 @@ class CompleteOrderForm extends Model
     {
         if (!$this->validate()) return false;
         $order = $this->getOrder();
-        $order->status = Order::STATUS_COMPLETED;
+        $order->status = Order::STATUS_CONFIRMED;
         return $order->save();
     }
 
