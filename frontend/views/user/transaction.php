@@ -64,7 +64,7 @@ use yii\helpers\Html;
               <?php endif;?>
               <?php foreach ($models as $model) :?>
                 <tr>
-                  <td>#<?=$model->id;?></td>
+                  <td><?=$model->getId();?></td>
                   <td><?=$model->created_at;?></td>
                   <td>$<?=number_format($model->total_price);?></td>
                   <td><?=$model->payment_method;?></td>
