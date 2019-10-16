@@ -87,15 +87,15 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     'template' => '{input}'
                   ])->hiddenInput(); ?>
 
-                  <?=$form->field($item, 'recover_code', [
+                  <?php /*$form->field($item, 'recover_code', [
                     'template' => '{input}{label}{error}',
                     'options' => ['class' => 'form-group t-input'],
                     'labelOptions' => ['class' => 'placeholder'],
                     'inputOptions' => ['placeholder' => ' ', 'id' => 'recover_code'],
                     'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; padding-left: 37%']
-                  ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 6 or 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 13456578 12252546');?>
+                  ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 6 or 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 13456578 12252546'); */?>
 
-                  <?php /* $form->field($item, 'recover_code', [
+                  <?php echo $form->field($item, 'recover_code', [
                     'template' => '{input}{label}{error}',
                     'options' => ['class' => 'form-group t-input'],
                     'labelOptions' => ['class' => 'placeholder'],
@@ -103,7 +103,8 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; padding-left: 37%']
                   ])->widget(\yii\widgets\MaskedInput::className(), [
                     "mask" => "[99999999 ]{0,3}",
-                  ])->label('Recovery Code')->hint('The recovery code should contain 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 12345678 12345678'); */?>
+                    'clientOptions' => ['greedy' => false]
+                  ])->label('Recovery Code')->hint('The recovery code should contain 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 12345678 12345678'); ?>
 
                   <?= $form->field($item, 'note', [
                     'template' => '{input}{label}{error}',
