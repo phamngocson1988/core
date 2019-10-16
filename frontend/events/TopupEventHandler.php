@@ -8,7 +8,7 @@ use frontend\models\UserRefer;
 use frontend\models\UserWallet;
 use frontend\models\PaymentTransaction;
 
-class TopupEventHandler extends Model
+class TopupEventHandler extends \common\events\PaymentTransactionEvent
 {
     public static function applyReferGift($event) 
     {
@@ -50,26 +50,6 @@ class TopupEventHandler extends Model
         $refer->save();
         return;
     }
-
-    public static function welcomeBonus($event) 
-    {
-        $setting = Yii::$app->settings;
-        // Apply when this program is active
-        if (!$setting->get('WelcomeBonusForm', 'status')) return;
-
-        // Apply for the first topup
-        $transaction = $event->sender; //transaction
-        $user = $transaction->user;
-        $command = $user->getTransactions();
-        if ($command->count() > 1) return; 
-
-        // Apply bonus
-        $waiting = UserWallet::findOne(['user_id' => $user->id, 'status' => UserWallet::STATUS_WAITING]);
-        if ($waiting) {
-            $waiting->status = UserWallet::STATUS_COMPLETED;
-            $waiting->save();
-        }
-    }    
 
     public static function sendNotificationEmail($event)
     {

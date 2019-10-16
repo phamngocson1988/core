@@ -54,6 +54,12 @@ use yii\widgets\ActiveForm;
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput()->label('Số coin tặng');?>
 
+                <?=$form->field($model, 'topup_value', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput()->label('Giá trị topup nhỏ nhất ($)');?>
+
                 <?=$form->field($model, 'status', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'

@@ -10,12 +10,12 @@ class WelcomeBonusForm extends Model
     public $content;
     public $value; // King coin
     public $status;
+    public $topup_value;
 
     public function rules()
     {
         return [
-            [['content'], 'trim'],
-            [['value'], 'trim'],
+            [['content', 'value', 'topup_value'], 'trim'],
             [['status'], 'default', 'value' => 0],
         ];
     }
