@@ -33,7 +33,7 @@ $user = Yii::$app->user->getIdentity();
           <a href="<?=Url::to(['reseller/order', 'status' => 'pending']);?>" class="sub-btn" code='reseller.pending'>Pending</a>
           <a href="<?=Url::to(['reseller/order', 'status' => 'processing']);?>" class="sub-btn" code='reseller.processing'>Processing</a>
           <a href="<?=Url::to(['reseller/order', 'status' => 'completed']);?>" class="sub-btn" code='reseller.completed'>Completed</a>
-          <a href="<?=Url::to(['reseller/order', 'status' => 'deleted']);?>" class="sub-btn" code='reseller.completed'>Canncelled</a>
+          <a href="<?=Url::to(['reseller/order', 'status' => 'deleted']);?>" class="sub-btn" code='reseller.deleted'>Canncelled</a>
         </div>
       </li>
       <?php endif;?>

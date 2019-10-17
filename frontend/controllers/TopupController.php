@@ -247,7 +247,7 @@ class TopupController extends Controller
                 $wallet->coin = $trn->total_coin;
                 $wallet->balance = $user->getWalletAmount() + $wallet->coin;
                 $wallet->type = UserWallet::TYPE_INPUT;
-                $wallet->description = "Transaction #$trn->id";
+                $wallet->description = "Transaction " . $trn->getId();
                 $wallet->ref_name = PaymentTransaction::className();
                 $wallet->ref_key = $trn->auth_key;
                 $wallet->created_by = $user->id;

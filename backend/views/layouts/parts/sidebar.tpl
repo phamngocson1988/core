@@ -235,7 +235,7 @@
       {/if}
 
       <!-- Giao dịch nạp tiền -->
-      {if $app->user->can('accounting')}
+      {if ($app->user->can('accounting') || $app->user->can('saler'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-wallet"></i>

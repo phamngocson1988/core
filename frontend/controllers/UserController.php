@@ -36,7 +36,7 @@ class UserController extends Controller
                 // 'only' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail', 'confirm'],
+                        // 'actions' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail', 'confirm'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
