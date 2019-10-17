@@ -5,17 +5,15 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 
-class SkrillSettingForm extends Model
+class PostalSavingsBankOfChinaSettingForm extends Model
 {
-    public $pay_to_email;
-    public $secret_word;
     public $content;
     public $logo;
 
     public function rules()
     {
         return [
-            [['pay_to_email', 'secret_word', 'content', 'logo'], 'trim'],
+            [['content', 'logo'], 'trim'],
         ];
     }
 }

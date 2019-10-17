@@ -33,9 +33,8 @@ $setting = Yii::$app->settings;
                   <div class="col-md-6">
                     <?php $data = $gateway->loadConfig();?>
                     <?php $logo = ArrayHelper::remove($data, 'logo');?>
-                    <?php foreach ($data as $key => $value) : ?>
-                    <p><?=$key;?>: <?=$value;?></p>
-                    <?php endforeach;?>
+                    <?php $content = ArrayHelper::remove($data, 'content');?>
+                    <?=$content;?>
                     <p>Note: "<?=$user->username;?>_<?=$order->id;?>"</h3></p>
                   </div>
                   <div class="col-md-6 paygate-logo">

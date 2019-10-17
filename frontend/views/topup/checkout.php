@@ -64,7 +64,14 @@ $total = $cart->getTotalPrice();
                         <img src="/images/we.png" class="paygate-logo" alt="">
                     </div>
                 </label>
-                
+                <label for="opt7" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt7" value="postal-savings-bank-of-china" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
+                    </div>
+                </label>
+
                 <div class="t-wrap-btn">
                   <!-- <a class="btn-product-detail-add-to-cart" href="javascript:;">PAYMENT</a> -->
                   <?= Html::submitButton('PAYMENT', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
@@ -103,6 +110,15 @@ $total = $cart->getTotalPrice();
                 <p>CNY<?=FormatConverter::convertCurrencyToCny($item->getPrice() * $item->quantity);?></p>
               </div>
               <div class="t-flex-between t-payment-total price" paygate="alipay" style="display: none">
+                <p>Grand Total:</p>
+                <p><span class="t-red-bold">CNY<?=FormatConverter::convertCurrencyToCny($item->getTotalPrice());?></span></p>
+              </div>
+
+              <div class="t-flex-between t-sub-total price" paygate="postal-savings-bank-of-china" style="display: none">
+                <p>Subtotal:</p>
+                <p>CNY<?=FormatConverter::convertCurrencyToCny($item->getPrice() * $item->quantity);?></p>
+              </div>
+              <div class="t-flex-between t-payment-total price" paygate="postal-savings-bank-of-china" style="display: none">
                 <p>Grand Total:</p>
                 <p><span class="t-red-bold">CNY<?=FormatConverter::convertCurrencyToCny($item->getTotalPrice());?></span></p>
               </div>

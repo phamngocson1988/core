@@ -339,8 +339,8 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{url route='setting/offline'}" class="nav-link" code='setting.offline'>
-                  <i class="cc-offline"></i> Offline
+                <a href="{url route='setting/postal-savings-bank-of-china'}" class="nav-link" code='setting.postal-savings-bank-of-china'>
+                  <i class="cc-alipay"></i> Postal Savings Bank of China
                 </a>
               </li>
             </ul

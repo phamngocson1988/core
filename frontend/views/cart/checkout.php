@@ -80,6 +80,13 @@ $cart->applyPromotion();
                             <img src="/images/we.png" class="paygate-logo" alt="">
                         </div>
                     </label>
+                    <label for="opt7" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt7" value="postal-savings-bank-of-china" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
+                        </div>
+                    </label>
                     
                     <div class="t-wrap-btn is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
@@ -125,6 +132,9 @@ $cart->applyPromotion();
                           <span>Total Price:</span><span><?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                         <div class="grand-line last-line price" paygate='alipay' style="display: none">
+                          <span>Total Price:</span><span>CNY<?=FormatConverter::convertCurrencyToCny($cart->getTotalPrice());?></span>
+                        </div>
+                        <div class="grand-line last-line price" paygate='postal-savings-bank-of-china' style="display: none">
                           <span>Total Price:</span><span>CNY<?=FormatConverter::convertCurrencyToCny($cart->getTotalPrice());?></span>
                         </div>
                         <div class="grand-line last-line price" paygate='wechat' style="display: none">

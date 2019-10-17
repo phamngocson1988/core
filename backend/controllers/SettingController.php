@@ -14,6 +14,7 @@ use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
 use backend\forms\WechatSettingForm;
 use backend\forms\SkrillSettingForm;
+use backend\forms\PostalSavingsBankOfChinaSettingForm;
 use backend\forms\ImportSettingForm;
 use backend\forms\OfflinePaymentSettingForm;
 use backend\forms\TopNoticeSettingForm;
@@ -93,6 +94,12 @@ class SettingController extends Controller
                 'modelClass' => AlipaySettingForm::class,
                 'view' => 'alipay.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.alipay']
+            ],
+            'postal-savings-bank-of-china' => [
+                'class' => SettingsAction::class,
+                'modelClass' => PostalSavingsBankOfChinaSettingForm::class,
+                'view' => 'postal-savings-bank-of-china.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.postal-savings-bank-of-china']
             ],
             'wechat' => [
                 'class' => SettingsAction::class,

@@ -1,4 +1,5 @@
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='common\widgets\TinyMce' type='block'}
 <div class="page-bar">
   <ul class="page-breadcrumb">
     <li>
@@ -53,6 +54,13 @@
         'labelOptions' => ['class' => 'col-md-2 control-label'],
         'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
         ])->textInput()}
+        {$form->field($model, 'content', [
+          'labelOptions' => ['class' => 'col-md-2 control-label'],
+          'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
+          'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+        ])->widget(TinyMce::className(), [
+          'options' => ['rows' => 10]
+        ])}
         {$form->field($model, 'logo', [
           'labelOptions' => ['class' => 'col-md-2 control-label'],
           'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="logo_upload">Upload</button><input type="file" id="file_logo_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',

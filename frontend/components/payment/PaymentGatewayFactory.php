@@ -26,7 +26,10 @@ class PaymentGatewayFactory extends Model
         ],
         'kinggems' => [
             'class' => '\frontend\components\payment\clients\Kinggems',
-        ]
+        ],
+        'postal-savings-bank-of-china' => [
+            'class' => '\frontend\components\payment\clients\PostalSavingsBankOfChina',
+        ],
     ];
 
     public static function getClient($identifier)

@@ -288,16 +288,13 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <?php Pjax::end(); ?>
         <?php if ($models) :?>
         <div class="row">
-          <div class="col-md-2 col-sm-2">
+          <div class="col-md-2 col-sm-4">
             <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
           </div>
-          <div class="col-md-2 col-sm-2">
-            <span class="label label-warning">Tổng số lượng nạp: <?=number_format($search->getCommand()->sum('total_unit'));?></span>
-          </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-md-2 col-sm-4">
             <span class="label label-success">Tổng số gói: <?=round($search->getCommand()->sum('quantity'), 1);?></span>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-md-2 col-sm-4">
             <span class="label label-default" data-time="<?=$search->getCommand()->sum('process_duration_time');?>" data-quantity="<?=$search->getCommand()->sum('quantity');?>">Thời gian trung bình: <?=FormatConverter::countDuration(round($search->getCommand()->sum('process_duration_time') / $search->getCommand()->sum('quantity')));?></span>
           </div>
         </div>

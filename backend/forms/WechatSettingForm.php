@@ -11,12 +11,13 @@ class WechatSettingForm extends Model
     public $account_number;
     public $account_holder;
     public $region;
+    public $content;
     public $logo;
 
     public function rules()
     {
         return [
-            [['bank_name', 'account_number', 'account_holder', 'region', 'logo'], 'trim'],
+            [['bank_name', 'account_number', 'account_holder', 'region', 'content', 'logo'], 'trim'],
         ];
     }
 }

@@ -15,7 +15,8 @@ class Alipay extends OfflinePayment
     		"Alipay account's number" => $settings->get('AlipaySettingForm', 'account_number'),
     		"Alipay account's name" => $settings->get('AlipaySettingForm', 'account_holder'),
     		"Nick name" => $settings->get('AlipaySettingForm', 'nickname'),
-    		"Region" => $settings->get('AlipaySettingForm', 'region'),
+            "Region" => $settings->get('AlipaySettingForm', 'region'),
+    		"content" => $settings->get('AlipaySettingForm', 'content'),
     		"logo" => $settings->get('AlipaySettingForm', 'logo'),
     	];
     }
