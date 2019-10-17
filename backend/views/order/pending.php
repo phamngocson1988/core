@@ -85,7 +85,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'saler_id']
             ])->dropDownList($salerTeams, ['prompt' => 'Chọn nhân viên sale'])->label('Nhân viên sale');?>
 
-            <?php $orderTeams['-1'] = 'Chưa có người xử lý';?>
+            <?php $orderTeams['-1'] = 'Chưa có người quản lý';?>
             <?=$form->field($search, 'orderteam_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'orderteam_id']
@@ -182,16 +182,16 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php if (Yii::$app->user->can('orderteam')) :?>
-                  <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-cogs"></i></a>
+                  <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>
                   <?php endif;?>
                   <?php if (Yii::$app->user->can('orderteam_manager')) :?>
-                  <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền xử lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                  <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h4 class="modal-title">Gửi đơn hàng cho nhân viên xử lý</h4>
+                          <h4 class="modal-title">Gửi đơn hàng cho nhân viên quản lý</h4>
                         </div>
                         <?= Html::beginForm(['order/assign', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
                         <div class="modal-body"> 

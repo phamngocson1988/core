@@ -102,7 +102,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                     'inputOptions' => ['placeholder' => ' ', 'id' => 'recover_code'],
                     'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; padding-left: 37%']
                   ])->widget(\yii\widgets\MaskedInput::className(), [
-                    "mask" => "[99999999 ]{0,3}",
+                    "mask" => "[99999999 ]{0,20}",
                     'clientOptions' => ['greedy' => false]
                   ])->label('Recovery Code')->hint('The recovery code should contain 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 12345678 12345678'); ?>
 

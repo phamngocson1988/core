@@ -85,7 +85,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'saler_id']
             ])->dropDownList($salerTeams, ['prompt' => 'Chọn nhân viên sale'])->label('Nhân viên sale');?>
 
-            <?php $orderTeams['-1'] = 'Chưa có người xử lý';?>
+            <?php $orderTeams['-1'] = 'Chưa có người quản lý';?>
             <?=$form->field($search, 'orderteam_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'orderteam_id']
