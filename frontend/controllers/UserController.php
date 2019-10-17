@@ -33,23 +33,23 @@ class UserController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail'],
+                // 'only' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail'],
+                        'actions' => ['index', 'profile', 'password', 'orders', 'order-detail', 'evidence', 'transaction', 'wallet', 'detail', 'confirm'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    // 'confirm' => ['post'],
-                    'like' => ['post'],
-                    'dislike' => ['post'],
-                ],
-            ],
+            // 'verbs' => [
+            //     'class' => VerbFilter::className(),
+            //     'actions' => [
+            //         'confirm' => ['post'],
+            //         'like' => ['post'],
+            //         'dislike' => ['post'],
+            //     ],
+            // ],
         ];
     }
 

@@ -44,7 +44,8 @@ class Order extends \common\models\Order
             self::STATUS_PENDING => 'info',
             self::STATUS_PROCESSING => 'primary',
             self::STATUS_COMPLETED => 'success',
-            self::STATUS_DELETED => 'default'
+            self::STATUS_DELETED => 'default',
+            self::STATUS_CANCELLED => 'default'
         ];
         $labels = self::getStatusList();
         $color = $list[$this->status];

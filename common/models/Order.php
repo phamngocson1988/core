@@ -196,7 +196,7 @@ class Order extends ActiveRecord
     
     public function hasCancelRequest()
     {
-        return $this->request_cancel && ($this->isPendingOrder() || $this->isVerifyingOrder());
+        return $this->request_cancel && ($this->isPendingOrder() || $this->isVerifyingOrder() || $this->isProcessingOrder());
     }
 
     public function tooLongProcess()
