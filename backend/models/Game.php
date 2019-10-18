@@ -14,8 +14,9 @@ class Game extends \common\models\Game
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'price1', 'price2', 'price3'],
-            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout'],
+            self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 
+            'pack', 'pin', 'soldout', 'price1', 'price2', 'price3', 'meta_title', 'meta_keyword', 'meta_description'],
+            self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'meta_title', 'meta_keyword', 'meta_description'],
             self::SCENARIO_UPDATE_PRICE => ['price1', 'price2', 'price3'],
         ];
     }
@@ -52,6 +53,7 @@ class Game extends \common\models\Game
             ['soldout', 'default', 'value' => 0],
             [['original_price'], 'trim'],
             [['price1', 'price2', 'price3'], 'safe'],
+            [['meta_title', 'meta_keyword', 'meta_description'], 'trim']
         ];
     }
 

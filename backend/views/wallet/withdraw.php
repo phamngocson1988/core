@@ -14,20 +14,20 @@ use yii\web\JsExpression;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Nạp tiền vào ví</span>
+      <span>Rút tiền khỏi ví</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Nạp tiền vào ví</h1>
+<h1 class="page-title">Rút tiền khỏi ví</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
     <div class="portlet">
       <div class="portlet-title">
-        <div class="caption">Nạp tiền vào ví</div>
+        <div class="caption">Rút tiền khỏi ví</div>
         <div class="actions btn-set">
           <a href="<?=Url::to(['wallet/index'])?>" class="btn default">
           <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
@@ -82,7 +82,7 @@ use yii\web\JsExpression;
                 </div>
 
                 <div class="form-group">
-                  <label class="col-md-2 control-label">Số lượng nạp</label>
+                  <label class="col-md-2 control-label">Số lượng rút</label>
                   <div class="col-md-6">
                     <input type="number" class="form-control" name="coin">
                   </div>

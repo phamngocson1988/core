@@ -81,6 +81,9 @@
                 <li class="active">
                   <a href="#tab_1_1" data-toggle="tab">{Yii::t('app', 'main_content')}</a>
                 </li>
+                <li>
+                  <a href="#tab_1_2" data-toggle="tab">Meta data</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -91,6 +94,11 @@
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
+                </div>
+                <div class="tab-pane" id="tab_1_2">
+                  {$form->field($model, 'meta_title')->textInput()}
+                  {$form->field($model, 'meta_keyword')->textInput()}
+                  {$form->field($model, 'meta_description')->textInput()}
                 </div>
               </div>
             </div>

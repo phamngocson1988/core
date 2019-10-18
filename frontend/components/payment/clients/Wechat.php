@@ -10,10 +10,6 @@ class Wechat extends OfflinePayment
     {
         $settings = Yii::$app->settings;
     	return [
-    		"Payment method" => $settings->get('WechatSettingForm', 'bank_name'),
-    		"Wechatpay account's number" => $settings->get('WechatSettingForm', 'account_number'),
-    		"Wechatpay account's name" => $settings->get('WechatSettingForm', 'account_holder'),
-    		"Region" => $settings->get('WechatSettingForm', 'region'),
             "content" => $settings->get('WechatSettingForm', 'content'),
     		"logo" => $settings->get('WechatSettingForm', 'logo'),
     	];

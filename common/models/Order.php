@@ -66,12 +66,7 @@ class Order extends ActiveRecord
 
     public static function getLoginMethodList()
     {
-        return [
-            'account' => 'Game account',
-            'android' => 'Android',
-            'ios' => 'Ios', 
-
-        ];
+        return ['account' => 'Game account', 'facebook' => 'Facebook', 'google' => 'Google'];
     }
 
     public function getLoginMethod()
