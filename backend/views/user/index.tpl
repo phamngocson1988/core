@@ -226,6 +226,9 @@
                 <a class="btn btn-xs green tooltips link-action" href="{url route='user/active' id=$model->id}" data-container="body" data-original-title="Active this user"><i class="fa fa-check"></i></a>
                 {/if}
                 {/if}
+                {if $app->user->can('admin')}
+                <a class="btn btn-xs default tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="Edit user"><i class="fa fa-pencil"></i></a>
+                {/if}
               </td>
             </tr>
             {/foreach}

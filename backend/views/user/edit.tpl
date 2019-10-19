@@ -58,17 +58,15 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
-                  {$form->field($model, 'password', [
+                  {$form->field($model, 'country_code', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                    'inputOptions' => ['id' => 'country_code', 'class' => 'form-control phone-code']
+                  ])->dropDownList($model->listCountries(), ['options' => $model->listCountryAttributes()])}
                   {$form->field($model, 'phone', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()}
-                  {$form->field($model, 'address', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control phone-number', 'id' => 'phone']
                   ])->textInput()}
                   {$form->field($model, 'birthday', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -94,3 +92,13 @@
     {/ActiveForm}
   </div>
 </div>
+{registerJs}
+{literal}
+$('#country_code').on('change', function(){
+  $('#phone').val($(this).find('option:selected').attr('data-dialling'));
+});
+if (!$('#phone').val()) {
+  $('#country_code').trigger('change');
+}
+{/literal}
+{/registerJs}

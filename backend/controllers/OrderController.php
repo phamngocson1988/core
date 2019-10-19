@@ -578,4 +578,12 @@ class OrderController extends Controller
         $model = OrderFile::findOne($id);
         return $this->renderJson($model->delete());
     }
+
+    public function actionStop($id)
+    {
+        $request = Yii::$app->request;
+        $model = \backend\forms\StopOrderForm::findOne($id);
+        $model->stop();
+
+    }
 }

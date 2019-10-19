@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\forms\AssignRoleForm;
 use common\models\User;
+use common\models\Country;
 
 class EditUserForm extends Model
 {
@@ -15,6 +16,7 @@ class EditUserForm extends Model
     public $username;
     public $password;
     public $email;
+    public $country_code;
     public $phone;
     public $address;
     public $birthday;
@@ -40,7 +42,8 @@ class EditUserForm extends Model
 
             ['status', 'in', 'range' => array_keys(User::getUserStatus())],
             [['phone', 'address', 'birthday'], 'trim'],
-            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
+            ['country_code', 'required'],
+            // ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
         ];
     }
 
@@ -64,6 +67,7 @@ class EditUserForm extends Model
 	        $user = $this->getUser();
             $user->name = $this->name;    
             $user->email = $this->email;    
+            $user->country_code = $this->country_code;
             $user->phone = $this->phone;
             $user->address = $this->address;
             $user->birthday = $this->birthday;
@@ -94,6 +98,7 @@ class EditUserForm extends Model
         $this->name = $user->name;
         $this->username = $user->username;
         $this->email = $user->email;
+        $this->country_code = $user->country_code;
         $this->phone = $user->phone;
         $this->address = $user->address;
         $this->birthday = $user->birthday;
@@ -106,5 +111,19 @@ class EditUserForm extends Model
             $this->_user = User::findOne($this->id);
         }
         return $this->_user;
+    }
+
+    public function listCountries()
+    {
+        return ArrayHelper::map(Country::fetchAll(), 'country_code', 'country_name');
+    }
+
+    public function listCountryAttributes()
+    {
+        $attrs = [];
+        foreach (Country::fetchAll() as $country) {
+            $attrs[$country->country_code] = ['data-dialling' => $country->dialling_code];
+        }
+        return $attrs;
     }
 }
