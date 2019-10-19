@@ -1,51 +1,89 @@
 <?php
-
 namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
 use backend\models\Order;
 
-class StopOrderForm extends Order
+class StopOrderForm extends Model
 {
-    protected $_user;
+    public $id;
+    public $description;
+    public $quantity;
+
+    protected $_order;
 
 	public function rules()
     {
         return [
-            ['status', 'compare', 'compareValue' => Order::STATUS_PROCESSING, 'operator' => '==', 'type' => 'string'],
+            [['id', 'description', 'quantity'], 'required'],
+            ['id', 'validateOrder'],
+            ['description', 'trim'],
+            ['quantity', 'validateQuantity'],
         ];
+    }
+
+    public function validateOrder($attribute, $params)
+    {
+        $order = $this->getOrder();
+        if (!$order) {
+            $this->addError('id', 'This order is not exist.');
+        }
+        if (!$order->isProcessingOrder()) {
+            $this->addError('id', 'This order cannot be stopped');
+        }
+    }
+
+    public function validateQuantity($attribute, $params) 
+    {
+        $order = $this->getOrder();
+        if ($this->quantity >= $order->quantity) {
+            $this->addError('quantity', 'The quantity must be less than order quantity');
+        }
+    }
+
+    public function getOrder()
+    {
+        if (!$this->_order) {
+            $this->_order = Order::findOne($this->id);
+        }
+        return $this->_order;
     }
 
     public function stop()
     {
         if (!$this->validate()) return false;
+        $order = $this->getOrder();
         // Calculate percent of work
-        $percent = ceil($this->doing_unit / $this->quantity * 100);
-        // Calculate percent of money
-        $newTotalPrice = number_format($this->total_price * $percent / 100, 1);
-        // Calculate remaining money
-        $remainingPrice = $this->total_price - $newTotalPrice;
+        $percent = ceil($this->quantity / $order->quantity * 100);
+        
         // Calculate percent of coin
-        // $newTotalUnit = $this->
+        $newTotalUnit = number_format($order->sub_total_unit * $percent / 100);
+
+        // Calculate remaining money
+        $newTotalPrice = number_format($order->total_price * $percent / 100, 1);
+        $remainingPrice = $order->total_price - $newTotalPrice;
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
             // Update order total price, status
-            $this->total_price = $newTotalPrice;
-            $this->status = Order::STATUS_COMPLETED;
-            $this->quantity = $this->doing_unit;
-            $this->sub_total_unit = $this->doing_unit;
-            $this->total_unit = $this->doing_unit;
-            $this->save();
-            // Add to complain
+            $order->status = Order::STATUS_COMPLETED;
+            $order->doing_unit = $this->quantity;
+            $order->quantity = $this->quantity;
+            $order->sub_total_unit = $newTotalUnit;
+            $order->total_unit = $newTotalUnit;
+            $order->save();
             // Topup user wallet
-            $user = $this->customer;
-            $user->topup($remainingPrice, null, "Refund for stopping order when it is in $percent percent");
+            $user = $order->customer;
+            $user->topup($remainingPrice, null, sprintf("Refund for stopping order %s when it is in %s percent", $order->id, $percent));
+            // Add to complain
             // Send mail notification
             $transaction->commit();
+            return true;
         } catch(Exception $e) {
             $transaction->rollback();
+            $this->addError('id', 'This order has some errors.');
+            return false;
         }
     }
 }
