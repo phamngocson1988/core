@@ -4,6 +4,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Order;
+use backend\behaviors\OrderLogBehavior;
 
 class StopOrderForm extends Model
 {
@@ -67,6 +68,8 @@ class StopOrderForm extends Model
         $transaction = Yii::$app->db->beginTransaction();
         try {
             // Update order total price, status
+            $order->attachBehavior('log', OrderLogBehavior::className());
+
             $order->status = Order::STATUS_COMPLETED;
             $order->doing_unit = $this->quantity;
             $order->quantity = $this->quantity;
@@ -76,7 +79,8 @@ class StopOrderForm extends Model
             // Topup user wallet
             $user = $order->customer;
             $user->topup($remainingPrice, null, sprintf("Refund for stopping order %s when it is in %s percent", $order->id, $percent));
-            // Add to complain
+            // Add to log
+            $order->log(sprintf("Stop order when it is in %s percent and refund %s", $percent, $remainingPrice));
             // Send mail notification
             $transaction->commit();
             return true;
