@@ -124,7 +124,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th style="width: 15%;"> Số tiền mua hàng</th>
               <th style="width: 15%;"> Số dư ban đầu</th>
               <th style="width: 15%;"> Số dư hiện tại </th>
-              <th style="width: 10%;"> Lịch sử giao dịch </th>
+              <th style="width: 10%;"> Tác vụ </th>
             </tr>
           </thead>
           <tbody>
@@ -140,7 +140,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><?=number_format($report[$userId]['withdraw']);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_start']);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_end']);?></td>
-                <td style="vertical-align: middle;"><a href="<?=Url::to(['report/finance-balance-detail', 'id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" target="_blank" data-pjax="0"> Xem chi tiết</a></td>
+                <td style="vertical-align: middle;">
+                  <a class="btn btn-xs green tooltips" href="<?=Url::to(['report/finance-balance-detail', 'id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
+                  <?php if (Yii::$app->user->can('admin')) : ?>
+                  <a class="btn btn-xs purple tooltips" href="<?=Url::to(['wallet/topup', 'id' => $userId]);?>" data-container="body" data-original-title="Topup wallet" target="_blank" data-pjax="0"><i class="fa fa-plus"></i></a>
+                  <a class="btn btn-xs grey tooltips" href="<?=Url::to(['wallet/withdraw', 'id' => $userId]);?>" data-container="body" data-original-title="Withdraw wallet" target="_blank" data-pjax="0"><i class="fa fa-minus"></i></a>
+                  <?php endif;?>
+                </td>
               </tr>
               <?php endforeach;?>
           </tbody>

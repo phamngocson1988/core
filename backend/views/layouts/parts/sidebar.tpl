@@ -399,7 +399,7 @@
       {/if}
 
       <!-- Đơn hàng -->
-      {if $app->user->can('saler') || $app->user->can('orderteam')}
+      {if $app->user->can('saler') || $app->user->can('orderteam') || $app->user->can('accounting')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
@@ -412,7 +412,7 @@
             <span class="title">Đơn hàng</span>
             </a>
           </li>
-          {if $app->user->can('saler')}
+          {if $app->user->can('saler') || $app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/order/verifying'}" class="nav-link " code='order.verifying'>
             <span class="title">Đơn hàng verifying</span>

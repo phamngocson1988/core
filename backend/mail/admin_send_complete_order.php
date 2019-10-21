@@ -5,7 +5,7 @@ $setting = Yii::$app->settings;
 <h1 style="font-size:17px;font-weight:bold;color:#444;padding:0 0 5px 0;margin:0">CONFIRMED YOUR ORDERS</h1>
 <p style="margin: 4px 0 10px;">Order code: <?=$order->id;?></p>
 <p style="margin: 4px 0 10px;">Dear <?=$order->customer->name;?>, </p>
-<p style="margin: 4px 0 10px;">We would like to inform that your order #<?=$order->id;?> has been processed as follow</p>
+<p style="margin: 4px 0 10px;">We would like to inform that your order #<?=$order->id;?> has been completed as follow</p>
 <ul>
     <li>Game: <?=$order->game_title;?></li>
     <li>Quantity/ loaded amount: <?=number_format($order->total_unit);?></li>

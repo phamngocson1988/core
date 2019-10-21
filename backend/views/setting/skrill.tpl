@@ -43,20 +43,12 @@
           <div class="tab-content repeater">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">
-                {$form->field($model, 'pay_to_email', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textInput()}
-                {$form->field($model, 'secret_word', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textInput()}
                 {$form->field($model, 'content', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->widget(TinyMce::className(), [
-                  'options' => ['rows' => 10]
+                  'options' => ['rows' => 20]
                 ])}
                 {$form->field($model, 'logo', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],

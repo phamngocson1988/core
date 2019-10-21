@@ -38,32 +38,12 @@
   <div class="panel-heading">Thông tin tài khoản alipay</div>
   <div class="panel-body">
     <div class="row">
-        {$form->field($model, 'bank_name', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-        {$form->field($model, 'account_number', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-        {$form->field($model, 'account_holder', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-        {$form->field($model, 'nickname', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
-        {$form->field($model, 'region', [
-        'labelOptions' => ['class' => 'col-md-2 control-label'],
-        'template' => '{label}<div class="col-md-5">{input}{hint}{error}</div>'
-        ])->textInput()}
         {$form->field($model, 'content', [
           'labelOptions' => ['class' => 'col-md-2 control-label'],
           'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
           'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
         ])->widget(TinyMce::className(), [
-          'options' => ['rows' => 10]
+          'options' => ['rows' => 20]
         ])}
         {$form->field($model, 'logo', [
           'labelOptions' => ['class' => 'col-md-2 control-label'],

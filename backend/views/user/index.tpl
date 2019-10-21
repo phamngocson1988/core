@@ -168,20 +168,21 @@
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 2%;"> ID </th>
-              <th style="width: 5%;"> Khách hàng </th>
-              <th style="width: 5%;"> Ngày sinh </th>
-              <th style="width: 10%;"> Email </th>
-              <th style="width: 10%;"> Username </th>
-              <th style="width: 5%;"> Số điện thoại </th>
-              <th style="width: 10%;"> Ngày đăng ký </th>
-              <th style="width: 8%;"> Quốc tịch </th>
-              <th style="width: 10%;"> Đơn hàng cuối cùng </th>
-              <th style="width: 10%;"> Tổng tiền nạp </th>
-              <th style="width: 10%;"> Tổng tiền mua hàng </th>
-              <th style="width: 10%;"> Reseller/Khách hàng </th>
-              <th style="width: 10%;"> Đại lý/người bán </th>
-              <th style="width: 5%;"> Tác vụ </th>
+              <th> ID </th>
+              <th> Khách hàng </th>
+              <th> Ngày sinh </th>
+              <th> Email </th>
+              <th> Username </th>
+              <th> Số điện thoại </th>
+              <th> Ngày đăng ký </th>
+              <th> Quốc tịch </th>
+              <th> Đơn hàng cuối cùng </th>
+              <th> Tổng tiền nạp </th>
+              <th> Tổng tiền mua hàng </th>
+              <th> Số dư hiện tại</th>
+              <th> Reseller/Khách hàng </th>
+              <th> Đại lý/người bán </th>
+              <th> Tác vụ </th>
             </tr>
           </thead>
           <tbody>
@@ -199,6 +200,7 @@
               <td>{$model->last_order_date}</td>
               <td>{$model->getWalletTopupAmount()}</td>
               <td>{$model->getWalletWithdrawAmount()}</td>
+              <td>{$model->getWalletAmount()}</td>
               <td>
                 {if ($app->user->can('sale_manager'))}
                 {if $model->isReseller()}
@@ -227,14 +229,14 @@
                 {/if}
                 {/if}
                 {if $app->user->can('admin')}
-                <a class="btn btn-xs purple tooltips" href="{url route='wallet/topup' id=$model->id}" data-container="body" data-original-title="Go to wallet" target="_blank"><i class="fa fa-credit-card"></i></a>
+                <a class="btn btn-xs default tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="Edit user"><i class="fa fa-pencil"></i></a>
                 {/if}
               </td>
             </tr>
             {/foreach}
             {else}
             <tr>
-              <td colspan="12">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="15">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>

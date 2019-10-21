@@ -337,6 +337,7 @@ class OrderController extends Controller
         $templateList = OrderComplainTemplate::find()->all();
         return $this->render('edit', [
             'order' => $order,
+            'stopModel' => new \backend\forms\StopOrderForm(),
             'template_list' => $templateList
         ]);
     }
@@ -577,5 +578,20 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $model = OrderFile::findOne($id);
         return $this->renderJson($model->delete());
+    }
+
+    public function actionStop()
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\StopOrderForm();
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->validate()) {
+                $model->stop();
+                return $this->renderJson(true);
+            } else {
+                $this->renderJson(fasle, $model->getErrors());
+            }
+        }
+
     }
 }
