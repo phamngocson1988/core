@@ -162,7 +162,7 @@ class CartController extends Controller
     public function actionConfirm()
     {
         $request = Yii::$app->request;
-        $user = Yii::$app->user->getIdentity();
+        $user = User::findOne(Yii::$app->user->id);
         $cart = Yii::$app->cart;
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
