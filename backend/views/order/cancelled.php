@@ -55,6 +55,98 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         </div>
       </div>
       <div class="portlet-body">
+        <?php $form = ActiveForm::begin(['method' => 'GET']);?>
+        <div class="row margin-bottom-10">
+            <?php $customer = $search->getCustomer();?>
+            <?=$form->field($search, 'q', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+            ])->textInput()->label('Mã đơn hàng');?>
+
+            <?=$form->field($search, 'customer_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
+
+            <?=$form->field($search, 'saler_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'saler_id']
+            ])->dropDownList($salerTeams, ['prompt' => 'Chọn nhân viên sale'])->label('Nhân viên sale');?>
+
+            <?=$form->field($search, 'orderteam_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'orderteam_id']
+            ])->dropDownList($orderTeams, ['prompt' => 'Chọn nhân viên đơn hàng'])->label('Nhân viên đơn hàng');?>
+
+            <?php $game = $search->getGame();?>   
+            <?=$form->field($search, 'game_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($game) ? $game->title : '',
+              'options' => ['class' => 'form-control', 'name' => 'game_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn game',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['game/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Tên game')?>
+          
+            <?=$form->field($search, 'provider_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control']
+            ])->dropDownList([])->label('Nhà cung cấp');?>
+
+            <?= $form->field($search, 'start_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+            ])->widget(DateTimePicker::className(), [
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:00',
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
+            ])->label('Ngày tạo từ');?>
+
+            <?=$form->field($search, 'end_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+            ])->widget(DateTimePicker::className(), [
+                'clientOptions' => [
+                  'autoclose' => true,
+                  'format' => 'yyyy-mm-dd hh:59',
+                  'todayBtn' => true,
+                  'minuteStep' => 1,
+                  'endDate' => date('Y-m-d H:i'),
+                  'minView' => '1'
+                ],
+            ])->label('Ngày tạo đến');?>
+
+            <div class="form-group col-md-4 col-lg-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
+        </div>
+        <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>

@@ -180,7 +180,7 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $user = Yii::$app->user->getIdentity();
         $balance = $user->getWalletAmount();
-        $canPlaceOrder = $balance > $cart->getTotalPrice();
+        $canPlaceOrder = $balance >= $cart->getTotalPrice();
         return $this->render('checkout', [
             'can_place_order' => $canPlaceOrder,
             'balance' => $balance
