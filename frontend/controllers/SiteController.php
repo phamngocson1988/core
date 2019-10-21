@@ -506,6 +506,7 @@ class SiteController extends Controller
         $request = Yii::$app->request;
         $session = Yii::$app->session;
 
+        $model = new RegisterForm();
         // Register metadata
         if ($request->get('refer')) {
             $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
@@ -525,7 +526,6 @@ class SiteController extends Controller
         }
 
         $scenario = $request->post('scenario', RegisterForm::SCENARIO_VALIDATE);
-        $model = new RegisterForm();
         $service = new Sms(['testing_mode' => false]);
         $model->setVerifier($service);
         $model->setScenario($scenario);

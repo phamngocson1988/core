@@ -22,9 +22,8 @@ class FetchHistoryOrderForm extends Order
     {
         return [
             ['customer_id', 'required'],
-            ['start_date', 'default', 'value' => date('Y-m-01')],
-            ['end_date', 'default', 'value' => date('Y-m-d')],
-            [['game_id', 'status'],'trim']
+            [['game_id', 'status'],'trim'],
+            [['start_date', 'end_date'], 'safe']
         ];
     }
     

@@ -142,9 +142,11 @@ class UserController extends Controller
         $order = Order::findOne($id);
         if (!$order) throw new NotFoundHttpException("The order not found", 1);
         $complainModel = new OrderComplains();
+        $complains = OrderComplains::find()->where(['order_id' => $id])->all();
         return $this->render('detail', [
             'model' => $order,
-            'complainModel' => $complainModel
+            'complainModel' => $complainModel,
+            'complains' => $complains
         ]);
     }
 
@@ -227,6 +229,9 @@ class UserController extends Controller
         $model = new OrderComplains();
         $model->order_id = $request->post('order_id');
         $model->content = $request->post('content');
+        if (!$model->order_id || !$model->content) {
+            return $this->renderJson(false, [], ['error' => 'Empty content.']);
+        }
         $model->created_by = Yii::$app->user->id;
         if ($model->save()) {
             return $this->renderJson(true, []);

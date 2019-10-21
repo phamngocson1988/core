@@ -369,3 +369,11 @@ a.normal-link {
 .register-block .form-group .form-control.phone-number {
     width: calc((64% - 20px) / 2);
 }
+
+.t-hint {
+    padding-left: 37%; 
+}
+
+.t-wrap-text-report {
+    width: 100%;
+}

@@ -122,4 +122,8 @@
   .register-block .form-group .captcha-image img {
       height: 33px;
   }
+
+  .t-hint {
+    padding-left: 0px; 
+  }
 }

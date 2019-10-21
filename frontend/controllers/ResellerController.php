@@ -290,7 +290,9 @@ class ResellerController extends Controller
         $this->view->params['user_menu_active'] = "reseller.$status";
         $filter = [
             'customer_id' => Yii::$app->user->id,
-            'status' => $status
+            'status' => $status,
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
         ];
         $form = new FetchHistoryOrderForm($filter);
 
@@ -302,6 +304,7 @@ class ResellerController extends Controller
             'models' => $models,
             'pages' => $pages,
             'filterForm' => $form,
+            'status' => $status,
             'showFilter' => $request->get('filter')
         ]);
 

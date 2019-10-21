@@ -1194,6 +1194,85 @@ input[type="radio"]:checked+.label:after {
 .t-wrap-number-pagination{
     line-height: 38px;
 }
+
+.btn-product-detail-add-to-cart-small{
+    font-size: 14px;
+    height: 30px;
+    margin-top: 0;
+    line-height: 30px;
+    float: right;
+}
+
+/* Report modal */
+.report-modal button.close{
+    top: 20px;
+    right: 20px;
+}
+.t-wrap-text-report{
+    padding: 20px;
+    display: inline-block;
+}
+.t-wrap-text-report h3{
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+.t-wrap-text-report-top{
+    padding-right: 20px;
+    display: block;
+    overflow: hidden;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.t-wrap-text-report-top::-webkit-scrollbar {
+    background: transparent; 
+    border: none;
+    width: 8px;
+}
+.t-wrap-text-report-top::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+.t-report-text{
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.t-report-me{
+    background-color: #ffdd0069;
+    float: left;
+}
+.t-report-you{
+    background-color: #94949459;
+    float: right;
+}
+.t-wrap-text-report-bottom .t-report-text-area{
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+    padding: 10px 15px;
+    margin-top: 20px;
+}
+.t-wrap-text-report-bottom .t-report-text-area:focus{
+   outline: none;
+}
+.t-wrap-text-report-bottom .t-btn-send{
+    background-color: #ffdd00;
+    border-radius: 5px;
+    float: right;
+    padding: 10px 30px;
+    margin-top: 10px;
+    font-weight: bold; 
+    cursor: pointer;
+}
+div.chat-now{
+    bottom: 0;
+    right: 0;
+    top: unset;
+    transform: none;
+}
 .mobile-show {
     display: none;
     visibility: hidden;
@@ -1203,10 +1282,29 @@ input[type="radio"]:checked+.label:after {
     display: block;
     visibility: visible;
 }
-
+.t-hint{
+    font-size: 12px;
+    color: #6f5e5e;
+    width: 100%;
+    order: 3;
+    text-align: right;
+    margin-top: 5px;
+    padding-left: 40%;
+    padding-right: 5px;
+}
 @media screen and (min-width: 1400px) {
     .top-header .right-box .login-box form .reg-link span {
         height: 96px;
+    }
+}
+@media screen and (max-width: 960px){
+    .bottom-header {
+        position: relative;
+        height: 50vw;
+    }
+    .main-slider .main-slider-blurred img, .main-slider .slider-image-box img{
+        height: auto;
+        width: 100%;
     }
 }
 

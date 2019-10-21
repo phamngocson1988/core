@@ -96,11 +96,11 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                   ])->textInput()->label('Recovery Code')->hint('The recovery code should contain 6 or 8 digits, and kindly provide at cleast 3 codes. Ex: 12345678 13456578 12252546'); */?>
 
                   <?php echo $form->field($item, 'recover_code', [
-                    'template' => '{input}{label}{error}',
+                    'template' => '{input}{label}{error}{hint}',
                     'options' => ['class' => 'form-group t-input'],
                     'labelOptions' => ['class' => 'placeholder'],
                     'inputOptions' => ['placeholder' => ' ', 'id' => 'recover_code'],
-                    'hintOptions' => ['style' => 'font-size: 12px; color: #6f5e5e; padding-left: 37%']
+                    'hintOptions' => ['class' => 't-hint']
                   ])->widget(\yii\widgets\MaskedInput::className(), [
                     "mask" => "[99999999 ]{0,20}",
                     'clientOptions' => ['greedy' => false]

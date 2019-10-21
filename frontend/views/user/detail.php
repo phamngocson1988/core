@@ -172,6 +172,7 @@ use frontend\models\OrderFile;
                 </svg>
               </a>
             </div>
+            <a class="btn-product-detail-add-to-cart btn-product-detail-add-to-cart-small" data-toggle="modal" data-target="#reportModal" href="javascript:;">File Report</a>
           </div>
         </div>
       </div>
@@ -204,20 +205,47 @@ use frontend\models\OrderFile;
 <div class="modal modal-custom fade" id="cancel-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-        <h4 class="modal-title">Do you want to cancel this order?</h4>
-      </div>
-      <div class="modal-body">
-        <p>Your order is in progress. Your cancel request will be sent to our system and be considered by us.</p>
-        <?= Html::beginForm(Url::to(['user/cancel', 'key' => $model->auth_key]), 'POST', ['class' => 'rd-mailform rd-mailform-inline rd-mailform-sm', 'id' => 'cancelForm']); ?>
-          <div class="rd-mailform-inline-inner">
-            <div class="form-wrap">
-              <input class="form-input" type="text" name="content" placeholder="Leave your complain">
-            </div>
-            <button class="button form-button button-sm button-secondary button-nina" type="submit">Send</button>
+      <div class="modal-wrap">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <div class="t-wrap-text-report">
+          <h3>Do you want to cancel this order?</h3>
+          <p>Your order is in progress. Your cancel request will be sent to our system and be considered by us.</p>
+          <div class="t-wrap-text-report-bottom">
+            <?= Html::beginForm(Url::to(['user/cancel', 'key' => $model->auth_key]), 'POST', ['id' => 'cancelForm']); ?>
+              <textarea class="t-report-text-area" name="content" rows="3"></textarea>
+              <input type="hidden" name="order_id" value="<?=$model->id;?>">
+              <button type="submit" class="t-btn-send">Send</button>
+            <?= Html::endForm(); ?>
           </div>
-        <?= Html::endForm(); ?>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal report-modal" id="reportModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-wrap">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <!-- <img src="images/close-icon.png" alt=""> -->
+        <div class="t-wrap-text-report">
+          <h3>File Report</h3>
+          <div class="t-wrap-text-report-top">
+            <?php foreach ($complains as $complain) : ?>
+              <?php $complainClass = $complain->created_by == Yii::$app->user->id ? 't-report-me' : 't-report-you';?>
+              <span class="t-report-text <?=$complainClass;?>"><?=$complain->content;?></span>
+            <?php endforeach;?>
+          </div>
+          <div class="t-wrap-text-report-bottom">
+            <?= Html::beginForm(Url::to(['user/send-complain']), 'POST', ['id' => 'send-complain']); ?>
+              <textarea class="t-report-text-area" name="content" rows="3"></textarea>
+              <input type="hidden" name="order_id" value="<?=$model->id;?>">
+              <button type="submit" class="t-btn-send">Send</button>
+            <?= Html::endForm(); ?>
+          </div>
+        </div>
       </div>
     </div>
   </div>

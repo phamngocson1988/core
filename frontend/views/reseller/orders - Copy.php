@@ -28,40 +28,12 @@ use dosamigos\datepicker\DatePicker;
       <?php require_once(Yii::$app->basePath . '/views/user/_left_menu.php');?>
       <div class="wrap-profile-right col col-lg-8 col-md-9 col-sm-12 col-12">
         <div class="profile-list">
-          <?php $form = ActiveForm::begin(['method' => 'get', 'action' => Url::to(['reseller/order', 'status' => $status]), 'options' => ['class' => 't-form-wrap pd-lr-30 row', 'id' => 'filter-form']]); ?>
-          <?= $form->field($filterForm, 'start_date', [
-            'options' => ['class' => 'form-group col-md-6'],
-            'inputOptions' => ['name' => 'start_date', 'autocomplete' => 'off', 'readonly' => 'true']
-          ])->widget(DatePicker::className(), [
-            'inline' => false, 
-            'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
-            'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd'
-            ]
-          ]);?>
-          <?= $form->field($filterForm, 'end_date', [
-            'options' => ['class' => 'form-group col-md-6'],
-            'inputOptions' => ['name' => 'end_date', 'autocomplete' => 'off', 'readonly' => 'true']
-          ])->widget(DatePicker::className(), [
-            'inline' => false, 
-            'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
-            'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd'
-            ]
-          ]);?>
-          
-          <?php $form = ActiveForm::end(); ?>
-          <div class="pd-lr-30 mb-3 float-right d-inline-block">
-              <button class="btn-product-detail-add-to-cart" id="filter-button">Search</button>
-          </div>
-          <div class="pd-lr-30 mb-3 t-flex-between">
-            <div class="t-wrap-number-pagination">
+          <div class="top-profile-list">
+            <div class="left-top-profile-list">
               <span class="number-page font-weight-bold"><?=$pages->offset + 1;?> - <?=min($pages->offset + $pages->limit, $pages->totalCount);?></span>
               <span class="text-page">of <?=number_format($pages->totalCount);?> Orders</span>
             </div>
-            <div class="t-wrap-pagination">
+            <div class="right-top-profile-list">
               <?=LinkPager::widget([
                 'pagination' => $pages, 
                 'maxButtonCount' => 1, 
@@ -69,9 +41,39 @@ use dosamigos\datepicker\DatePicker;
                 'linkOptions' => ['class' => 'page-link'],
                 'pageCssClass' => 'page-item',
               ]);?>
+              <?php $formOpt = ($showFilter) ? [] : ['style' => 'display:none'];?>
+              <?php $form = ActiveForm::begin(['method' => 'get', 'options' => $formOpt]); ?>
+              <?= $form->field($filterForm, 'start_date', [
+                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                // 'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
+              ])->widget(DatePicker::className(), [
+                'inline' => false, 
+                'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+              ]);?>
+              <?= $form->field($filterForm, 'end_date', [
+                'labelOptions' => ['class' => 'col-md-4 control-label'],
+                // 'template' => '{label}<div class="col-md-col-md-4">{input}{hint}{error}</div>'
+              ])->widget(DatePicker::className(), [
+                'inline' => false, 
+                'template' => '<div class="input-group date" data-provide="datepicker">{input}<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div>',
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+              ]);?>
+              <?= $form->field($filterForm, 'status', [
+                'inputOptions' => ['class' => 'form-control', 'name' => 'status', 'id' => 'status']
+              ])->dropDownList($filterForm->fetchStatusList(), ['prompt' => 'All']);?>
+              <?= $form->field($filterForm, 'status', [
+                'inputOptions' => ['class' => 'form-control', 'name' => 'status', 'id' => 'status']
+              ])->textInput();?>
+              <?php $form = ActiveForm::end(); ?>
             </div>
           </div>
-
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -94,7 +96,7 @@ use dosamigos\datepicker\DatePicker;
                 </td>
                 <td><?=$model->game_title;?></td>
                 <td>
-                  $<?=number_format($model->total_price, 1);?>
+                  $<?=number_format($model->total_price);?>
                   <?php if (!in_array($model->currency, ['USD', 'KINGGEMS'])) : ?>
                   <i style="font-size:13px; color: #CCC"><?=$model->currency;?>/<?=number_format($model->total_price_by_currency, 1);?></i>
                   <?php endif; ?>
@@ -114,15 +116,15 @@ use dosamigos\datepicker\DatePicker;
             </tfoot>
           </table>
         </div>
-        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <?php
 $script = <<< JS
-$('#filter-button').on('click', function(){
-  $('#filter-form').submit();
+$('#status').on('change', function(){
+  $(this).closest('form').submit();
 })
 JS;
 $this->registerJs($script);
