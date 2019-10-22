@@ -11,7 +11,9 @@ class SkrillOffline extends OfflinePayment
         $settings = Yii::$app->settings;
     	return [
             "content" => $settings->get('SkrillSettingForm', 'content'),
-    		"logo" => $settings->get('SkrillSettingForm', 'logo'),
+            "logo" => $settings->get('SkrillSettingForm', 'logo'),
+            "logo_width" => $settings->get('SkrillSettingForm', 'logo_width'),
+    		"logo_height" => $settings->get('SkrillSettingForm', 'logo_height'),
     	];
     }
 }

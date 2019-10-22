@@ -13,12 +13,15 @@ class AlipaySettingForm extends Model
 
     public $content;
     public $logo;
+    public $logo_width;
+    public $logo_height;
 
     public function rules()
     {
         return [
             [['partner', 'seller_email', 'key'], 'trim'],
             [['content', 'logo'], 'trim'],
+            [['logo_width', 'logo_height'], 'number']
         ];
     }
 }

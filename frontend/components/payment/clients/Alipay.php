@@ -13,6 +13,8 @@ class Alipay extends OfflinePayment
     	return [
     		"content" => $settings->get('AlipaySettingForm', 'content'),
     		"logo" => $settings->get('AlipaySettingForm', 'logo'),
+    		"logo_width" => $settings->get('AlipaySettingForm', 'logo_width'),
+    		"logo_height" => $settings->get('AlipaySettingForm', 'logo_height'),
     	];
     }
 }

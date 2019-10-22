@@ -31,13 +31,15 @@ use yii\helpers\ArrayHelper;
                 <div class="row">
                   <div class="col-md-6">
                     <?php $data = $gateway->loadConfig();?>
-                    <?php $logo = ArrayHelper::remove($data, 'logo');?>
-                    <?php $content = ArrayHelper::remove($data, 'content');?>
+                    <?php $logo = ArrayHelper::getValue($data, 'logo');?>
+                    <?php $content = ArrayHelper::getValue($data, 'content');?>
+                    <?php $logo_width = ArrayHelper::getValue($data, 'logo_width', 150);?>
+                    <?php $logo_height = ArrayHelper::getValue($data, 'logo_height', 150);?>
                     <?=$content;?>
                     <p>Note: <?=$trn->remark;?></p>
                   </div>
                   <div class="col-md-6 paygate-logo">
-                    <img src="<?=$logo;?>" width="150">
+                    <img src="<?=$logo;?>" width="<?=$logo_width;?>" height="<?=$logo_height;?>">
                   </div>
                 </div>
                 

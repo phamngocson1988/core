@@ -11,7 +11,9 @@ class Wechat extends OfflinePayment
         $settings = Yii::$app->settings;
     	return [
             "content" => $settings->get('WechatSettingForm', 'content'),
-    		"logo" => $settings->get('WechatSettingForm', 'logo'),
+            "logo" => $settings->get('WechatSettingForm', 'logo'),
+            "logo_width" => $settings->get('WechatSettingForm', 'logo_width'),
+    		"logo_height" => $settings->get('WechatSettingForm', 'logo_height'),
     	];
     }
 }

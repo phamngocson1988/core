@@ -12,7 +12,9 @@ class PostalSavingsBankOfChina extends OfflinePayment
         $settings = Yii::$app->settings;
     	return [
     		"content" => $settings->get('PostalSavingsBankOfChinaSettingForm', 'content'),
-    		"logo" => $settings->get('PostalSavingsBankOfChinaSettingForm', 'logo'),
+			"logo" => $settings->get('PostalSavingsBankOfChinaSettingForm', 'logo'),
+			"logo_width" => $settings->get('PostalSavingsBankOfChinaSettingForm', 'logo_width'),
+    		"logo_height" => $settings->get('PostalSavingsBankOfChinaSettingForm', 'logo_height'),
     	];
     }
 }
