@@ -172,7 +172,7 @@ use frontend\models\OrderFile;
                 </svg>
               </a>
             </div>
-            <a class="btn-product-detail-add-to-cart btn-product-detail-add-to-cart-small" data-toggle="modal" data-target="#reportModal" href="javascript:;">File Report</a>
+            <a class="btn-product-detail-add-to-cart btn-product-detail-add-to-cart-small" data-toggle="modal" data-target="#reportModal" href="javascript:;">Chat Admin</a>
           </div>
         </div>
       </div>
@@ -231,12 +231,12 @@ use frontend\models\OrderFile;
         <button type="button" class="close" data-dismiss="modal">×</button>
         <!-- <img src="images/close-icon.png" alt=""> -->
         <div class="t-wrap-text-report">
-          <h3>File Report</h3>
+          <h3>Chat Admin</h3>
           <div class="t-wrap-text-report-top">
             <?php foreach ($complains as $complain) : ?>
               <?php $complainClass = $complain->created_by == Yii::$app->user->id ? 't-report-me' : 't-report-you';?>
               <span class="t-report-row">
-                <p class="t-report-text <?=$complainClass;?>"><?=$complain->content;?></p>                           
+                <p class="t-report-text <?=$complainClass;?>"><?=strip_tags($complain->content);?></p>                           
               </span>
             <?php endforeach;?>
           </div>
