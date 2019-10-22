@@ -235,7 +235,9 @@ use frontend\models\OrderFile;
           <div class="t-wrap-text-report-top">
             <?php foreach ($complains as $complain) : ?>
               <?php $complainClass = $complain->created_by == Yii::$app->user->id ? 't-report-me' : 't-report-you';?>
-              <span class="t-report-text <?=$complainClass;?>"><?=$complain->content;?></span>
+              <span class="t-report-row">
+                <p class="t-report-text <?=$complainClass;?>"><?=$complain->content;?></p>                           
+              </span>
             <?php endforeach;?>
           </div>
           <div class="t-wrap-text-report-bottom">
