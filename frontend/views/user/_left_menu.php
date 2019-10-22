@@ -30,6 +30,7 @@ $user = Yii::$app->user->getIdentity();
       <li class="qa-item">
         <a class="cus-btn gray-btn qa-question" href="javascript:;">Reseller</a>
         <div class="qa-answer showing" style="display: block">
+          <a href="<?=Url::to(['reseller/order', 'status' => 'verifying']);?>" class="sub-btn" code='reseller.verifying'>Verifying</a>
           <a href="<?=Url::to(['reseller/order', 'status' => 'pending']);?>" class="sub-btn" code='reseller.pending'>Pending</a>
           <a href="<?=Url::to(['reseller/order', 'status' => 'processing']);?>" class="sub-btn" code='reseller.processing'>Processing</a>
           <a href="<?=Url::to(['reseller/order', 'status' => 'completed']);?>" class="sub-btn" code='reseller.completed'>Completed</a>

@@ -18,7 +18,6 @@ use backend\models\Game;
 use backend\models\OrderFile;
 use backend\forms\UpdateOrderStatusProcessing;
 use backend\forms\AssignManageOrder;
-use backend\forms\SendComplainForm;
 use common\models\OrderComplainTemplate;
 use backend\forms\MyCustomerReportForm;
 use backend\forms\CancelOrderForm;
@@ -476,20 +475,13 @@ class OrderController extends Controller
         }
     }
 
-    public function actionSendComplain()
+    public function actionComplain($id)
     {
         $request = Yii::$app->request;
-        if ($request->isPost && $request->isAjax) {
-            $form = new SendComplainForm([
-                'order_id' => $request->post('order_id'),
-                'template_id' => $request->post('template_id')
-            ]);
-            if ($form->send()) {
-                return $this->renderJson(true, []);
-            } else {
-                return $this->renderJson(false, [], $form->getErrorSummary(true));
-            }
-        }
+        $order = Order::findOne($id);
+        $content = $request->post('content');
+        if (trim($content)) return $this->renderJson($order->complain($content));
+        return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);
     }
 
     public function actionDelete($id)

@@ -410,9 +410,11 @@ $this->registerJs($imageJs);
                         <i class="icon-microphone font-green"></i>
                         <span class="caption-subject bold font-green uppercase"> Phản hồi từ khách hàng </span>
                       </div>
-                      <?php if (Yii::$app->user->can('orderteam') || Yii::$app->user->can('saler')) : ?>
+                      <?php if (Yii::$app->user->can('saler')) : ?>
                       <div class="actions">
-                        <a href="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi</a>
+                        <a href="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
+                        <a href="#complain_custom" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi nội dung tùy chọn</a>
+
                         <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -435,9 +437,8 @@ $this->registerJs($imageJs);
                                       <td><?=$template_item->id;?></td>
                                       <td><?=$template_item->content;?></td>
                                       <td>
-                                        <?= Html::beginForm(['order/send-complain'], 'POST', ['class' => 'complain-form']); ?>
-                                          <?= Html::hiddenInput('order_id', $order->id); ?>
-                                          <?= Html::hiddenInput('template_id', $template_item->id); ?>
+                                        <?= Html::beginForm(['order/complain', 'id' => $order->id], 'POST', ['class' => 'complain-form']); ?>
+                                          <?= Html::hiddenInput('content', $template_item->content); ?>
                                           <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
                                         <?= Html::endForm(); ?>
                                       </td>
@@ -454,11 +455,39 @@ $this->registerJs($imageJs);
                           </div>
                           <!-- /.modal-dialog -->
                         </div>
+                        <div class="modal fade" id="complain_custom" tabindex="-1" role="basic" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title">Gửi nội dung phản hồi cho khách hàng</h4>
+                              </div>
+                              <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
+                                <?= Html::beginForm(['order/complain', 'id' => $order->id], 'POST', ['class' => 'complain-form']); ?>
+                                  <div class="form-group">
+                                      <label>Gửi nội dung tùy chọn</label>
+                                      <?= Html::textArea('content', '', ['class' => 'form-control']); ?>
+                                  </div>
+                                  <button type="submit" class="btn btn-default" data-toggle="modal"> Gửi</button>
+                                <?= Html::endForm(); ?>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                            <!-- /.modal-content -->
+                          </div>
+                          <!-- /.modal-dialog -->
+                        </div>
 <?php
 $complainJs = <<< JS
 var complainForm = new AjaxFormSubmit({element: '.complain-form'});
 complainForm.success = function (data, form) {
   location.reload();
+};
+complainForm.error = function (errors) {
+  alert(errors.error);
+  return false;
 }
 JS;
 $this->registerJs($complainJs);

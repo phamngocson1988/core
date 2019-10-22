@@ -10,6 +10,7 @@ use common\models\OrderItems;
 use common\models\OrderComments;
 use common\models\OrderComplains;
 use yii\behaviors\TimestampBehavior;
+use common\behaviors\OrderComplainBehavior;
 
 /**
  * Order model
@@ -47,6 +48,9 @@ class Order extends ActiveRecord
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
+            ],
+            [
+                'class' => OrderComplainBehavior::className()
             ],
         ];
     }
