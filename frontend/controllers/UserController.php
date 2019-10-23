@@ -17,7 +17,6 @@ use frontend\forms\FetchHistoryOrderForm;
 use frontend\forms\FetchHistoryTransactionForm;
 use frontend\forms\FetchHistoryWalletForm;
 use frontend\forms\CompleteOrderForm;
-use frontend\forms\RatingOrderForm;
 use frontend\models\Order;
 use frontend\models\UserWallet;
 use common\models\PaymentTransaction;
@@ -163,41 +162,33 @@ class UserController extends Controller
         }
     }
 
-    public function actionLike($key)
-    {
-        $model = new RatingOrderForm([
-            'auth_key' => $key,
-            'user_id' => Yii::$app->user->id,
-            'value' => 1
-        ]);
-        if ($model->save()) {
-            return $this->renderJson(true, []);
-        } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
-        }
-    }
-
-    public function actionDislike($key)
+    public function actionLike($id)
     {
         $request = Yii::$app->request;
-        $model = new RatingOrderForm([
-            'auth_key' => $key,
-            'user_id' => Yii::$app->user->id,
-            'value' => -1,
-            'comment_rating' => $request->post('comment_rating')
-        ]);
+        $order = Order::findOne($id);
+        if (!$order) return $this->renderJson(false, [], ['error' => 'Order not found']);
+        $comment = trim($request->post('comment_rating'));
+        $order->rating = 1;
+        if ($comment) {
+            $order->comment_rating = $comment;
+        }
+        $order->save();
+        return $this->renderJson(true, []);
+    }
 
-        if ($model->save()) {
-            // Send content as complain
-            $order = $model->getOrder();
-            $complain = new OrderComplains();
-            $complain->order_id = $order->id;
-            $complain->content = $request->post('comment_rating');
-            $complain->created_by = Yii::$app->user->id;
-            $complain->save();
+    public function actionDislike($id)
+    {
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        if (!$order) return $this->renderJson(false, [], ['error' => 'Order not found']);
+        $comment = trim($request->post('comment_rating'));
+        if ($comment) {
+            $order->rating = -1;
+            $order->comment_rating = $comment;
+            $order->save();
             return $this->renderJson(true, []);
         } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
+            return $this->renderJson(false, [], ['error' => 'For improving our service, please leave your message. Thank you.']);
         }
     }
 

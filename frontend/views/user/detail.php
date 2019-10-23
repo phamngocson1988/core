@@ -150,7 +150,8 @@ use frontend\models\OrderFile;
               </svg>
               <p class="text-rate"><span>Rate this order!</span> How would you rate this buyer?</p>
 
-              <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" id='like' <?php if ($model->rating == 1): ?>class="red"<?php endif;?> >
+              <!-- <a href="<?=Url::to(['user/like', 'key' => $model->auth_key]);?>" id='like' <?php if ($model->rating == 1): ?>class="red"<?php endif;?> > -->
+              <a href="javascript:;" data-toggle="modal" data-target="#like-modal" id='like' <?php if ($model->rating == 1): ?>class="red"<?php endif;?>>
                 <svg id="like" xmlns="http://www.w3.org/2000/svg" width="31" height="31"
                   viewBox="0 0 31 31">
                   <circle id="Ellipse_5_copy_4" data-name="Ellipse 5 copy 4" class="cls-1"
@@ -184,20 +185,36 @@ use frontend\models\OrderFile;
 <div class="modal modal-custom fade" id="show-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-        <h4 class="modal-title">Sorry for this disadvantage</h4>
-      </div>
-      <div class="modal-body">
-        <p>What's the problems?</p>
-        <?= Html::beginForm(Url::to(['user/dislike', 'key' => $model->auth_key]), 'POST', ['class' => 'rd-mailform rd-mailform-inline rd-mailform-sm', 'id' => 'dislikeForm']); ?>
-          <div class="rd-mailform-inline-inner">
-            <div class="form-wrap">
-              <input class="form-input" type="text" name="comment_rating" placeholder="Leave your complain">
-            </div>
-            <button class="button form-button button-sm button-secondary button-nina" type="submit">Send</button>
+      <div class="modal-wrap">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <div class="t-wrap-text-report">
+          <h3>Sorry for this disadvantage</h3>
+          <div class="t-wrap-text-report-bottom">
+            <?= Html::beginForm(Url::to(['user/dislike', 'id' => $model->id]), 'POST', ['class' => 'rd-mailform rd-mailform-inline rd-mailform-sm', 'id' => 'dislikeForm']); ?>
+              <textarea class="t-report-text-area" name="comment_rating" rows="3"></textarea>
+              <button type="submit" class="t-btn-send">Leave your comment</button>
+            <?= Html::endForm(); ?>
           </div>
-        <?= Html::endForm(); ?>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal modal-custom fade" id="like-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-wrap">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <div class="t-wrap-text-report">
+          <h3>Thank for your rating</h3>
+          <div class="t-wrap-text-report-bottom">
+            <?= Html::beginForm(Url::to(['user/like', 'id' => $model->id]), 'POST', ['id' => 'likeForm']); ?>
+              <textarea class="t-report-text-area" name="comment_rating" rows="3"></textarea>
+              <button type="submit" class="t-btn-send">Leave your comment</button>
+            <?= Html::endForm(); ?>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -267,7 +284,15 @@ dislikeForm.success = function (data, form) {
   location.reload();
 }
 dislikeForm.error = function (errors) {
-  console.log(errors);
+  swal("", errors.error, "warning");
+}
+
+var likeForm = new AjaxFormSubmit({element: 'form#likeForm'});
+likeForm.success = function (data, form) {
+  location.reload();
+}
+likeForm.error = function (errors) {
+  swal("", errors.error, "warning");
 }
 
 var cancelForm = new AjaxFormSubmit({element: 'form#cancelForm'});
@@ -282,15 +307,6 @@ $('#complete').ajax_action({
   // method: 'POST',
   callback: function(data) {
     location.reload();
-  },
-});
-$('#like').ajax_action({
-  method: 'POST',
-  callback: function(data) {
-    $('#rating').remove();
-    alert('Thank for your rating!');
-    $('#dislike').removeClass('red');
-    $('#like').addClass('red');
   },
 });
 JS;
