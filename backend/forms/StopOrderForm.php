@@ -59,10 +59,11 @@ class StopOrderForm extends Model
         $percent = ceil($this->quantity / $order->quantity * 100);
         
         // Calculate percent of coin
-        $newTotalUnit = number_format($order->sub_total_unit * $percent / 100);
+        $oldUnit = $order->sub_total_unit;
+        $newTotalUnit = ceil($order->sub_total_unit * $percent / 100);
 
         // Calculate remaining money
-        $newTotalPrice = number_format($order->total_price * $percent / 100, 1);
+        $newTotalPrice = ceil($order->total_price * $percent / 100);
         $remainingPrice = $order->total_price - $newTotalPrice;
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -78,7 +79,7 @@ class StopOrderForm extends Model
             $order->save();
             // Topup user wallet
             $user = $order->customer;
-            $user->topup($remainingPrice, null, sprintf("Refund for stopping order %s when it is in %s percent", $order->id, $percent));
+            $user->topup($remainingPrice, null, sprintf("Completed partially: %s/%s >>> Refund %s &percnt; of the charge", $newTotalUnit, $oldUnit, $percent));
             // Add to log
             $order->log(sprintf("Stop order when it is in %s percent and refund %s", $percent, $remainingPrice));
             // Send mail notification

@@ -59,7 +59,7 @@ class m181217_033141_create_order_table extends Migration
             'promotion_unit' => $this->integer(11)->defaultValue(0),
             'promotion_id' => $this->integer(11),
             'total_unit' => $this->integer(11)->defaultValue(0),
-            'doing_unit' => $this->integer(11)->defaultValue(0),
+            'doing_unit' => $this->float(),
             'username' => $this->string(255),
             'password' => $this->string(255),
             'platform' => $this->string(20),
