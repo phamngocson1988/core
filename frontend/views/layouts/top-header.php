@@ -19,7 +19,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                                 <nav>
                                     <ul class="page-sidebar-menu" main_menu_active='<?=$main_menu_active;?>'>
                                         <li><a href="/" code='site.index'>Home</a></li>
-                                        <li><a href="<?=Url::to(['topup/index']);?>" code='topup.index'>Top up</a></li>
+                                        <li><a href="<?=Url::to(['topup/index']);?>" code='topup.index'>Deposit</a></li>
                                         <li><a href="<?=Url::to(['game/index']);?>" code='game.index'>Shop</a></li>
                                         <li><a href="<?=Url::to(['promotion/index']);?>" code='promotion.index'>Promotion</a></li>
                                         <li><a href="<?=Url::to(['refer/index']);?>" code='refer.index'>Refer Friend</a></li>
@@ -122,7 +122,7 @@ $main_menu_active = ArrayHelper::getValue($this->params, 'main_menu_active');
                                 <nav>
                                     <ul class="page-sidebar-menu" main_menu_active='<?=$main_menu_active;?>'>
                                         <li><a href="/" code='site.index'>Home</a></li>
-                                        <li><a href="<?=Url::to(['topup/index']);?>" code='topup.index'>Top up</a></li>
+                                        <li><a href="<?=Url::to(['topup/index']);?>" code='topup.index'>Deposit</a></li>
                                         <li><a href="<?=Url::to(['game/index']);?>" code='game.index'>Shop</a></li>
                                         <li><a href="<?=Url::to(['promotion/index']);?>" code='promotion.index'>Promotion</a></li>
                                         <li><a href="<?=Url::to(['refer/index']);?>" code='refer.index'>Refer Friend</a></li>
