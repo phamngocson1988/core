@@ -12,7 +12,11 @@ class Sms extends Model
     protected function createCode()
     {
         $session = Yii::$app->session;
-        $pin = mt_rand(1000, 9999);
+        if ($this->testing_mode) {
+            $pin = 1111;
+        } else {
+            $pin = mt_rand(1000, 9999);
+        }
         $session->set('pin', $pin);
         return $pin;
     }
@@ -22,8 +26,6 @@ class Sms extends Model
         $params['{pin}'] = $this->createCode();
         $newContent = str_replace(array_keys($params), array_values($params), $content);
         $service = Yii::$app->sms;
-        // Testing: 
-        // if ($this->testing_mode) $phone = "+84986803325";
 
         return $service->compose()
         ->setTo($phone)

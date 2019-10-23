@@ -5,7 +5,8 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 $user = Yii::$app->user->identity;
-$link = Url::to(['site/register', 'affiliate' => $user->affiliate->code], true);
+$link = Url::to(['site/register'], true);
+$code = $user->affiliate->code; //affiliate
 ?>
 
 <section class="page-title">
@@ -34,8 +35,9 @@ $link = Url::to(['site/register', 'affiliate' => $user->affiliate->code], true);
               <p>By creating a reflink, you are indicating that you have read and agreed to the <a style="color: #ff3600;" href="#">Terms of Service.</a></p>
             </div>
             <div class="affiliate-create-reflink">
-              <input type="text" readonly="true" value="<?=$link;?>" id="affiliate_link"/>
-              <button type="button" class="cus-btn yellow has-shadow f20 click-to-copy-btn">COPY LINK</button>
+              <input type="hidden" value="<?=$code;?>" id="affiliate_code"/>
+              <input type="text" value="<?=$link;?>" id="affiliate_link"/>
+              <button type="button" class="cus-btn yellow has-shadow f20 click-to-copy-btn">SHOW LINK</button>
             </div>
             <div class="has-left-border has-shadow">
               Your Members: <?=number_format($member);?>
@@ -127,9 +129,20 @@ $link = Url::to(['site/register', 'affiliate' => $user->affiliate->code], true);
 <?php
 $script = <<< JS
 $('.click-to-copy-btn').click(function(){
-    var _tempElement = $("<input>");
-    $(this).parent().find('input').val($(this).parent().find('input').val()).select();
-    document.execCommand("copy");
+  var link = $('#affiliate_link').val();
+  var code = $('#affiliate_code').val();
+  var url = new URL(link);
+  if (url.searchParams) {
+    link += '&affiliate=' + code;
+  } else {
+    link += '?affiliate=' + code;
+  }
+  console.log(link);
+  swal("Your affiliate link:", link, "info");
+
+    // var _tempElement = $("<input>");
+    // $(this).parent().find('input').val($(this).parent().find('input').val()).select();
+    // document.execCommand("copy");
 });
 $('.aff-tabs .aff-tabs-nav span').click(function(){
   var _tabContentId = $(this).attr('tab-content');

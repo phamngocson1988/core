@@ -516,12 +516,12 @@ class SiteController extends Controller
             $model->refer = $request->get('refer');
             $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'referCheckingEvent']);
         }
-        if ($request->get('affiliate')) {
+        if ($session->get('affiliate')) {
             $affTitle = Html::encode("WELCOME TO KINGGEMS.US");
             $affContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
             $this->view->registerMetaTag(['property' => 'og:title', 'content' => $affTitle], 'og:title');
             $this->view->registerMetaTag(['property' => 'og:description', 'content' => $affContent], 'og:description');
-            $model->affiliate = $request->get('affiliate');
+            $model->affiliate = $session->get('affiliate');
             $model->on(RegisterForm::EVENT_AFTER_SIGNUP, [RegisterEventHandler::className(), 'affiliateCheckingEvent']);
         }
 
