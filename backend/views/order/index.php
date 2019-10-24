@@ -63,6 +63,11 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
 
+            <?=$form->field($search, 'customer_phone', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'customer_phone']
+            ])->textInput()->label('Số điện thoại');?>
+
             <?=$form->field($search, 'customer_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [

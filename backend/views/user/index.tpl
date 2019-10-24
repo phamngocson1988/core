@@ -49,6 +49,21 @@
               'inputOptions' => ['class' => 'form-control', 'name' => 'email']
             ])->textInput()->label('Email khách hàng')}
 
+            {$form->field($search, 'phone', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'phone']
+            ])->textInput()->label('Số điện thoại')}
+
+            {$form->field($search, 'country_code', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'country_code']
+            ])->dropDownList(ArrayHelper::map(Country::fetchAll(), 'country_code', 'country_name'), ['prompt' => 'Quốc gia'])->label('Tên quốc gia')}
+
+            {$form->field($search, 'game_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game')}
+
             {$form->field($search, 'created_start', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'created_start']
@@ -115,16 +130,6 @@
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'total_purchase_end']
             ])->textInput()->label('Tổng giá trị đơn hàng đến')}
-
-            {$form->field($search, 'country_code', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'country_code']
-            ])->dropDownList(ArrayHelper::map(Country::fetchAll(), 'country_code', 'country_name'), ['prompt' => 'Quốc gia'])->label('Tên quốc gia')}
-
-            {$form->field($search, 'game_id', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-            ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo game'])->label('Tên game')}
 
             {$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],

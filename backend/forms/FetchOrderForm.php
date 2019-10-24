@@ -23,11 +23,12 @@ class FetchOrderForm extends Model
     public $agency_id;
     public $is_reseller;
     public $request_cancel;
+    public $customer_phone;
 
     public function rules()
     {
         return [
-            ['q', 'trim'],
+            [['q', 'customer_phone'], 'trim'],
             [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'start_date', 'end_date', 'status'], 'safe'],
             [['start_date', 'end_date'], 'safe'],
             [['provider_id', 'agency_id', 'is_reseller'], 'safe'],
@@ -57,6 +58,9 @@ class FetchOrderForm extends Model
         }
         if ($this->customer_id) {
             $command->andWhere(["$table.customer_id" => $this->customer_id]);
+        }
+        if ($this->customer_phone) {
+            $command->andWhere(["LIKE", "$table.customer_phone", $this->customer_phone]);
         }
         if ($this->game_id) {
             $command->andWhere(["$table.game_id" => $this->game_id]);

@@ -50,6 +50,7 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $data = [
             'q' => $request->get('q'),
+            'customer_phone' => $request->get('customer_phone'),
             'customer_id' => $request->get('customer_id'),
             'saler_id' => $request->get('saler_id'),
             'provider_id' => $request->get('provider_id'),

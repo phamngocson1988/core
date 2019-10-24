@@ -57,6 +57,7 @@ class StopOrderForm extends Model
         $order = $this->getOrder();
         // Calculate percent of work
         $percent = ceil($this->quantity / $order->quantity * 100);
+        $remainingPercent = 100 - $percent;
         
         // Calculate percent of coin
         $oldUnit = $order->sub_total_unit;
@@ -79,7 +80,7 @@ class StopOrderForm extends Model
             $order->save();
             // Topup user wallet
             $user = $order->customer;
-            $user->topup($remainingPrice, null, sprintf("Completed partially: %s/%s >>> Refund %s &percnt; of the charge", $newTotalUnit, $oldUnit, $percent));
+            $user->topup($remainingPrice, null, sprintf("Completed partially: %s/%s >>> Refund %s &percnt; of the charge", $newTotalUnit, $oldUnit, $remainingPercent));
             // Add to log
             $order->log(sprintf("Stop order when it is in %s percent and refund %s", $percent, $remainingPrice));
             // Send mail notification
