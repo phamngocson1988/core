@@ -18,8 +18,8 @@ class UserCommission extends ActiveRecord
             [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_at',
-                'value' => date('Y-m-d H:i:s')
+                'updatedAtAttribute' => false,
+                'value' => date('Y-m-d')
             ],
         ];
     }

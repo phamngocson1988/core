@@ -79,8 +79,7 @@ class m130524_201442_init extends Migration
             'order_id' => $this->integer()->notNull(),
             'member_id' => $this->integer()->notNull(),
             'description' => $this->string(255),
-            'created_at' => $this->dateTime(),
-            'updated_at' => $this->dateTime(),
+            'created_at' => $this->date(),
             'valid_from_date' => $this->date(),
             'valid_to_date' => $this->date(),
             'status' => $this->integer()->notNull()->defaultValue(1), // set 1: pending, 2: completed

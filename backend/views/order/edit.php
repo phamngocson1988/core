@@ -410,10 +410,11 @@ $this->registerJs($imageJs);
                         <i class="icon-microphone font-green"></i>
                         <span class="caption-subject bold font-green uppercase"> Phản hồi từ khách hàng </span>
                       </div>
-                      <?php if (Yii::$app->user->can('saler')) : ?>
                       <div class="actions">
                         <a href="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
+                        <?php if (Yii::$app->user->can('saler')) : ?>
                         <a href="#complain_custom" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi nội dung tùy chọn</a>
+                        <?php endif;?>
 
                         <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
                           <div class="modal-dialog">
@@ -493,7 +494,6 @@ JS;
 $this->registerJs($complainJs);
 ?>
                       </div>
-                      <?php endif;?>
                     </div>
                     <div class="portlet-body">
                       <div class="timeline">

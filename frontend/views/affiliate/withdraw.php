@@ -8,7 +8,9 @@ $user = Yii::$app->user->identity;
 $link = Url::to(['site/register'], true);
 $code = $user->affiliate->code; //affiliate
 ?>
-
+<style type="text/css">
+  .swal-button--copy {background-color: #ffdd00}
+</style>
 <section class="page-title">
   <div class="container">
     <div class="row">
@@ -102,12 +104,23 @@ $('.click-to-copy-btn').click(function(){
   } else {
     link += '?affiliate=' + code;
   }
-  console.log(link);
-  swal("Your affiliate link:", link, "info");
-
-    // var _tempElement = $("<input>");
-    // $(this).parent().find('input').val($(this).parent().find('input').val()).select();
-    // document.execCommand("copy");
+  swal({
+    title: "Your affiliate link",
+    text: link,
+    icon: "info",
+    buttons: {
+      copy: {text: "Copy", value: "copy"},
+      ok: "OK"
+    },
+  }).then((value) => {
+    if (value == 'copy') {
+      copyToClipboard(link);
+      swal({
+        title: "Copied",
+        icon: "success",
+      });
+    }
+  });
 });
 $('.aff-tabs .aff-tabs-nav span').click(function(){
   var _tabContentId = $(this).attr('tab-content');

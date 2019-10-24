@@ -95,6 +95,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th> Khách hàng</th>
               <th> Số điện thoại</th>
               <th> Feedback </th>
+              <th> Comment </th>
               <th> Trạng thái </th>
             </tr>
           </thead>
@@ -118,6 +119,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <span class="label label-default">Dislike</span>
                   <?php endif;?>
                 </td>
+                <td style="vertical-align: middle;"><?=$model->comment_rating;?></td>
                 <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
               </tr>
               <?php endforeach;?>

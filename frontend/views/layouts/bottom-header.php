@@ -21,6 +21,26 @@ $gallery = [
         'title' => $setting->get('GallerySettingForm', 'title4'),
         'content' => $setting->get('GallerySettingForm', 'content4'),
         'link' => $setting->get('GallerySettingForm', 'link4'),
+    ],
+    [
+        'title' => $setting->get('GallerySettingForm', 'title5'),
+        'content' => $setting->get('GallerySettingForm', 'content5'),
+        'link' => $setting->get('GallerySettingForm', 'link5'),
+    ],
+    [
+        'title' => $setting->get('GallerySettingForm', 'title6'),
+        'content' => $setting->get('GallerySettingForm', 'content6'),
+        'link' => $setting->get('GallerySettingForm', 'link6'),
+    ],
+    [
+        'title' => $setting->get('GallerySettingForm', 'title7'),
+        'content' => $setting->get('GallerySettingForm', 'content7'),
+        'link' => $setting->get('GallerySettingForm', 'link7'),
+    ],
+    [
+        'title' => $setting->get('GallerySettingForm', 'title8'),
+        'content' => $setting->get('GallerySettingForm', 'content8'),
+        'link' => $setting->get('GallerySettingForm', 'link8'),
     ]
 ];
 $gallery = array_filter($gallery, function($data) {

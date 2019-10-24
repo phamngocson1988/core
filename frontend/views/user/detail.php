@@ -207,7 +207,7 @@ use frontend\models\OrderFile;
       <div class="modal-wrap">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <div class="t-wrap-text-report">
-          <h3>Thank for your rating</h3>
+          <h3>What makes you satisfied on our website</h3>
           <div class="t-wrap-text-report-bottom">
             <?= Html::beginForm(Url::to(['user/like', 'id' => $model->id]), 'POST', ['id' => 'likeForm']); ?>
               <textarea class="t-report-text-area" name="comment_rating" rows="3"></textarea>

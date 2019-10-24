@@ -169,9 +169,7 @@ class UserController extends Controller
         if (!$order) return $this->renderJson(false, [], ['error' => 'Order not found']);
         $comment = trim($request->post('comment_rating'));
         $order->rating = 1;
-        if ($comment) {
-            $order->comment_rating = $comment;
-        }
+        $order->comment_rating = $comment;
         $order->save();
         return $this->renderJson(true, []);
     }
