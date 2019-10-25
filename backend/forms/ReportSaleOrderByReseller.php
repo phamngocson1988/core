@@ -132,10 +132,11 @@ class ReportSaleOrderByReseller extends Model
     public function availabelStatus()
     {
         return [
-            Order::STATUS_VERIFYING,
+            // Order::STATUS_VERIFYING,
             Order::STATUS_PENDING, 
             Order::STATUS_PROCESSING, 
-            Order::STATUS_COMPLETED
+            Order::STATUS_COMPLETED,
+            Order::STATUS_CONFIRMED
         ];
     }
 }
