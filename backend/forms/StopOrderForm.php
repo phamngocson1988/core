@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use backend\models\Order;
 use backend\behaviors\OrderLogBehavior;
+use backend\behaviors\OrderMailBehavior;
 
 class StopOrderForm extends Model
 {
@@ -71,6 +72,7 @@ class StopOrderForm extends Model
         try {
             // Update order total price, status
             $order->attachBehavior('log', OrderLogBehavior::className());
+            $order->attachBehavior('mail', OrderMailBehavior::className());
 
             $order->status = Order::STATUS_COMPLETED;
             $order->doing_unit = $this->quantity;
@@ -83,6 +85,14 @@ class StopOrderForm extends Model
             $user->topup($remainingPrice, null, sprintf("Completed partially: %s/%s >>> Refund %s &percnt; of the charge", $newTotalUnit, $oldUnit, $remainingPercent));
             // Add to log
             $order->log(sprintf("Stop order when it is in %s percent and refund %s", $percent, $remainingPrice));
+            $order->send(
+                'admin_notify_stop_order', 
+                sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
+                    'old_unit' => $oldUnit, 
+                    'new_unit' => $newTotalUnit, 
+                    'refund_coin' => $remainingPrice,
+                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true)
+                ]);
             // Send mail notification
             $transaction->commit();
             return true;

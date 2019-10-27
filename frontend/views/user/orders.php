@@ -76,7 +76,7 @@ use frontend\models\Order;
                   <i style="font-size:13px; color: #CCC"><?=$model->currency;?>/<?=number_format($model->total_price_by_currency, 1);?></i>
                   <?php endif; ?>
                 </td>
-                <td><?=number_format($model->quantity);?></td>
+                <td><?=number_format($model->quantity, 1);?></td>
                 <td><?=$model->getStatusLabel();?></td>
                 <td>
                   <?php if (!$model->evidence) : ?>
