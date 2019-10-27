@@ -13,6 +13,7 @@ use frontend\models\UserCommissionWithdraw;
 use frontend\models\UserAffiliate;
 use frontend\models\User;
 use frontend\behaviors\UserCommissionBehavior;
+use frontend\behaviors\UserAffiliateBehavior;
 
 /**
  * AffiliateController
@@ -96,7 +97,8 @@ class AffiliateController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $user = Yii::$app->user->getIdentity();
-        $user->attachBehavior('UserCommissionBehavior', UserCommissionBehavior::className(), ['id' => $user->id]);
+        $user->attachBehavior('commission', UserCommissionBehavior::className());
+        $user->attachBehavior('affiliate', UserAffiliateBehavior::className());
         $request = Yii::$app->request;
         $status = $request->get('status');
         switch ($status) {
@@ -116,7 +118,7 @@ class AffiliateController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['id' => SORT_DESC])
                             ->all();
-        $member = $user->getAffiliateChildren()->count();
+        $member = $user->getAffiliateMembers()->count();
         return $this->render('index', [
             'member' => $member,
             'models' => $models,
@@ -131,8 +133,9 @@ class AffiliateController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $user = Yii::$app->user->getIdentity();
+        $user->attachBehavior('affiliate', UserAffiliateBehavior::className());
         $request = Yii::$app->request;
-        $command = $user->getAffiliateChildren();
+        $command = $user->getAffiliateMembers();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -150,13 +153,14 @@ class AffiliateController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $user = Yii::$app->user->getIdentity();
+        $user->attachBehavior('affiliate', UserAffiliateBehavior::className());
         $command = UserCommissionWithdraw::find()->where(['user_id' =>$user->id]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();
-        $member = $user->getAffiliateChildren()->count();
+        $member = $user->getAffiliateMembers()->count();
         return $this->render('withdraw', [
             'member' => $member,
             'models' => $models,

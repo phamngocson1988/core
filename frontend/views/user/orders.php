@@ -88,7 +88,8 @@ use frontend\models\Order;
                   <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'action-link normal-link']);?>
                   <?php ActiveForm::end(); ?>
                   <?php else : ?>
-                  <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">View Receipt</a>
+                  <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">View Receipt</a> | 
+                  <a href="<?=Url::to(['user/remove-order-evidence', 'id' => $model->id]);?>" class="normal-link remove-link">Remove</a>
                   <?php endif;?>
                 </td>
               </tr>
@@ -116,6 +117,14 @@ $('.action-link').on('click', function() {
 });
 $('#status').on('change', function(){
   $(this).closest('form').submit();
+});
+$('.remove-link').ajax_action({
+  method: 'POST',
+  confirm: true,
+  confirm_text: 'Do you want to remove this receipt?',
+  callback: function(eletement, data) {
+    location.reload();
+  }
 });
 JS;
 $this->registerJs($script);

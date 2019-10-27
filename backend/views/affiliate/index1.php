@@ -11,9 +11,17 @@ use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\UserAffiliateBehavior;
-use backend\behaviors\UserCommissionBehavior;
-
 ?>
+
+<style>
+.hide-text {
+    white-space: nowrap;
+    width: 100%;
+    max-width: 500px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+</style>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -47,16 +55,18 @@ use backend\behaviors\UserCommissionBehavior;
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th> STT </th>
-              <th> Tên </th>
-              <th> Email </th>
-              <th> Thành viên </th>
-              <th> Doanh số (số gói) </th>
-              <th> Hoa hồng tích lũy </th>
-              <th> Hoa hồng khả dụng </th>
-              <th> Tổng số tiền rút </th>
-              <th> Tổng hoa hồng </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th style="width: 5%;"> STT </th>
+              <th style="width: 5%;"> Tên </th>
+              <th style="width: 10%;"> Email </th>
+              <th style="width: 10%;"> Số điện thoại </th>
+              <th style="width: 5%;"> Preferred IM </th>
+              <th style="width: 10%;"> IM Account </th>
+              <th style="width: 10%;"> Channel Url </th>
+              <th style="width: 10%;"> Ngày duyệt </th>
+              <th style="width: 5%;"> Số lượng thành viên </th>
+              <th style="width: 5%;"> Hoa hồng được phép dùng </th>
+              <th style="width: 5%;"> Hoa hồng đang chờ nhận </th>
+              <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
@@ -65,49 +75,19 @@ use backend\behaviors\UserCommissionBehavior;
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <?php $user = $model->user;?>
-              <?php $user->attachBehavior('commission', UserCommissionBehavior::className());?>
               <?php $user->attachBehavior('affiliate', UserAffiliateBehavior::className());?>
-              <?php 
-              $commission = $user->getCommission();
-              // pending
-              $pending = clone $commission;
-              if ($form->report_start_date) {
-                  $pending->andWhere(['>=', 'created_at', $form->report_start_date]);
-              }
-              if ($form->report_end_date) {
-                  $pending->andWhere(['<=', 'created_at', $form->report_end_date]);
-              }
-              $quantities = array_map(function($c) {
-                $order = $c->order;
-                return $order->quantity;
-              }, $pending->all());
-              $orderQuantities = number_format(array_sum($quantities), 1);
-              $pendingCommission = number_format($pending->sum('commission'), 1);
-
-              // available 
-              $available = clone $commission;
-              if ($form->report_start_date) {
-                  $available->andWhere(['>=', 'valid_from_date', $form->report_start_date]);
-              }
-              if ($form->report_end_date) {
-                  $available->andWhere(['<=', 'valid_from_date', $form->report_end_date]);
-              }
-              $availableCommission = number_format($pending->sum('commission'), 1);
-              ?>
-              <?php
-              $withdraw = $user->getCommissionWithdraw();
-              $withdrawAmount = number_format($withdraw->sum('amount'), 1);
-              ?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$user->name;?></td>
-                <td style="vertical-align: middle;"><?=$user->email;?></td>
+                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
+                <td style="vertical-align: middle;"><?=$model->user->email;?></td>
+                <td style="vertical-align: middle;"><?=$model->user->phone;?></td>
+                <td style="vertical-align: middle;"><?=$model->preferred_im;?></td>
+                <td style="vertical-align: middle;"><?=$model->im_account;?></td>
+                <td style="vertical-align: middle;"><?=$model->channel;?></td>
+                <td style="vertical-align: middle;"><?=date('Y-m-d', strtotime($model->created_at));?></td>
                 <td style="vertical-align: middle;"><?=number_format($user->getAffiliateMembers()->count());?></td>
-                <td style="vertical-align: middle;"><?=$orderQuantities;?></td>
-                <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
-                <td style="vertical-align: middle;"><?=$availableCommission;?></td>
-                <td style="vertical-align: middle;"><?=$withdrawAmount;?></td>
-                <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->user->getReadyCommission()->count());?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->user->getPendingCommission()->count());?></td>
                 <td style="vertical-align: middle;">
                   <a href="<?=Url::to(['affiliate/downgrade', 'id' => $model->user_id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
                 </td>

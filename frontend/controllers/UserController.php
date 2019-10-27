@@ -298,6 +298,17 @@ class UserController extends Controller
         }
     }
 
+    public function actionRemoveEvidence($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $transaction = PaymentTransaction::findOne($id);
+            $transaction->evidence = '';
+            $transaction->save();
+            return $this->redirect($request->getReferrer());
+        }
+    }
+
     public function actionOrderEvidence($id)
     {
         $request = Yii::$app->request;
@@ -306,6 +317,17 @@ class UserController extends Controller
             $files = Yii::$app->file->upload('evidence', "order-evidence/$id", true);
             $inputFile = reset($files);
             $order->evidence = $inputFile;
+            $order->save();
+            return $this->redirect($request->getReferrer());
+        }
+    }
+
+    public function actionRemoveOrderEvidence($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $order = Order::findOne($id);
+            $order->evidence = '';
             $order->save();
             return $this->redirect($request->getReferrer());
         }

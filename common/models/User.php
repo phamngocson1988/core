@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
 use common\models\UserWallet;
-use common\behaviors\UserCommissionBehavior;
+// use common\behaviors\UserCommissionBehavior;
 use common\behaviors\UserWalletBehavior;
 use common\behaviors\UserResellerBehavior;
 
@@ -60,9 +60,9 @@ class User extends ActiveRecord implements IdentityInterface
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
             ],
-            [
-                'class' => UserCommissionBehavior::className(),
-            ],
+            // [
+            //     'class' => UserCommissionBehavior::className(),
+            // ],
             [
                 'class' => UserWalletBehavior::className(),
             ],
@@ -344,11 +344,6 @@ class User extends ActiveRecord implements IdentityInterface
             self::RESELLER_LEVEL_3 => 'Diamond',
         ];
         return ArrayHelper::getValue($labels, $this->reseller_level);
-    }
-
-    public function getAffiliateChildren()
-    {
-        return $this->hasMany(self::className(), ['affiliated_with' => 'id']);
     }
 
     public function getAffiliate()

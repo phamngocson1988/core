@@ -11,7 +11,7 @@ use yii\helpers\Url;
 use backend\models\User;
 use backend\models\UserAffiliate;
 use backend\models\UserCommissionWithdraw;
-
+use backend\forms\FetchAffiliateForm;
 /**
  * AffiliateController
  */
@@ -25,7 +25,7 @@ class AffiliateController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['@'],
                     ],
                 ],
             ],
@@ -33,6 +33,27 @@ class AffiliateController extends Controller
     }
 
     public function actionIndex()
+    {
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        $request = Yii::$app->request;
+        $form = new FetchAffiliateForm([
+            'user_id' => $request->get('user_id'), 
+            'status' => UserAffiliate::STATUS_ENABLE,
+            'report_start_date' => $request->get('report_start_date'),
+            'report_end_date' => $request->get('report_end_date'),
+        ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('index', [
+            'models' => $models,
+            'pages' => $pages,
+            'form' => $form
+        ]);
+    }
+
+    public function actionIndex1()
     {
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $command = UserAffiliate::find()->where(['status' => UserAffiliate::STATUS_ENABLE]);

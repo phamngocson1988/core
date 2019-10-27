@@ -33,4 +33,9 @@ class UserCommission extends ActiveRecord
     {
         return strtotime('now') >= strtotime($this->valid_from_date);
     }
+
+    public function getOrder()
+    {
+        return $this->hasOne(Order::className(), ['id' => 'order_id']);
+    }
 }

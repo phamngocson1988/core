@@ -100,7 +100,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             <tr>
               <td><?=$model->id;?></td>
               <td><?=$model->created_at;?></td>
-              <td><?=number_format($model->coin);?></td>
+              <td><?=number_format($model->coin, 1);?></td>
               <td><?=$model->description;?></td>
               <td>
                 <?php if ($model->type == UserWallet::TYPE_INPUT) :?>
