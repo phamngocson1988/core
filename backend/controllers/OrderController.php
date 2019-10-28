@@ -26,6 +26,8 @@ use backend\forms\FetchOrderByFeedback;
 
 use backend\events\OrderEventHandler;
 use backend\models\OrderComplains;
+use backend\behaviors\OrderLogBehavior;
+use backend\behaviors\OrderMailBehavior;
 
 class OrderController extends Controller
 {
@@ -361,6 +363,9 @@ class OrderController extends Controller
         $model->setScenario(Order::SCENARIO_GO_PENDING);
         $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             $order = $event->sender;
+            $order->attachBehavior('log', OrderLogBehavior::className());
+            $order->log("Moved to pending");
+
             $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
             if ($adminEmail) {
                 Yii::$app->mailer->compose('admin_send_pending_order', [
@@ -397,6 +402,8 @@ class OrderController extends Controller
         // $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;
+            $order->attachBehavior('log', OrderLogBehavior::className());
+            $order->log("Moved to processing");
             $settings = Yii::$app->settings;
             $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
             $frontend = Yii::$app->params['frontend_url'];
@@ -426,6 +433,8 @@ class OrderController extends Controller
         $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;
+            $order->attachBehavior('log', OrderLogBehavior::className());
+            $order->log("Moved to completed");
             $settings = Yii::$app->settings;
             $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
             $frontend = Yii::$app->params['frontend_url'];
@@ -489,6 +498,8 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $model = Order::findOne($id);
+        $model->attachBehavior('log', OrderLogBehavior::className());
+        $model->log("Delete order");
         if ($model && $model->delete()) {
             Yii::$app->session->setFlash('success', "You have deleted order #$id successfully.");
             return $this->renderJson(true, ['url' => Url::to(['order/index'])]);
