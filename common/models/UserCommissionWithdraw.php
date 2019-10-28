@@ -34,7 +34,7 @@ class UserCommissionWithdraw extends ActiveRecord
             [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_at',
+                'updatedAtAttribute' => false,
                 'value' => date('Y-m-d H:i:s')
             ],
         ];

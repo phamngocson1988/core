@@ -12,6 +12,7 @@ use common\models\User;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\UserAffiliateBehavior;
 use backend\behaviors\UserCommissionBehavior;
+use backend\models\UserCommissionWithdraw;
 
 ?>
 <!-- BEGIN PAGE BAR -->
@@ -143,6 +144,13 @@ use backend\behaviors\UserCommissionBehavior;
               ?>
               <?php
               $withdraw = $user->getCommissionWithdraw();
+              $withdraw->where(['status' => UserCommissionWithdraw::STATUS_EXECUTED]);
+              if ($search->report_start_date) {
+                  $withdraw->andWhere(['>=', 'executed_at', $search->report_start_date . ' 00:00:00']);
+              }
+              if ($search->report_end_date) {
+                  $withdraw->andWhere(['<=', 'executed_at', $search->report_end_date . ' 23:59:59']);
+              }
               $withdrawAmount = number_format($withdraw->sum('amount'), 1);
               ?>
               <tr>

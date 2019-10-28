@@ -4,9 +4,11 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use frontend\models\UserAffiliate;
 use yii\captcha\Captcha;
+use frontend\behaviors\UserCommissionBehavior;
 
 $this->title = 'Request withdraw commission';
 $this->params['breadcrumbs'][] = $this->title;
+$user->attachBehavior('commission', UserCommissionBehavior::className());
 ?>
 
 <section class="page-title">

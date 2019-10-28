@@ -52,23 +52,24 @@ use common\components\helpers\FormatConverter;
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 5%;"> STT </th>
-              <th style="width: 10%;"> Tên </th>
-              <th style="width: 10%;"> Email </th>
-              <th style="width: 10%;"> Số điện thoại </th>
-              <th style="width: 10%;"> Sô tiền </th>
-              <th style="width: 10%;"> Ngày gửi yêu cầu </th>
-              <th style="width: 10%;"> Ngày xử lý yêu cầu </th>
-              <th style="width: 10%;"> Người phê duyệt </th>
-              <th style="width: 10%;"> Người thực hiện </th>
-              <th style="width: 10%;"> Ghi chú </th>
-              <th style="width: 10%;"> Ảnh đính kèm </th>
-              <th style="width: 5%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th> STT </th>
+              <th> Tên </th>
+              <th> Email </th>
+              <th> Số điện thoại </th>
+              <th> Sô tiền </th>
+              <th> Ngày gửi yêu cầu </th>
+              <th> Người phê duyệt </th>
+              <th> Ngày phê duyệt </th>
+              <th> Người thực hiện </th>
+              <th> Ngày thực hiện </th>
+              <th> Ghi chú </th>
+              <th> Ảnh đính kèm </th>
+              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="13"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
@@ -78,9 +79,10 @@ use common\components\helpers\FormatConverter;
                 <td style="vertical-align: middle;"><?=$model->user->phone;?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->amount);?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->updated_at;?></td>
                 <td style="vertical-align: middle;"><?=($model->acceptor) ? $model->acceptor->name : '';?></td>
+                <td style="vertical-align: middle;"><?=$model->approved_at;?></td>
                 <td style="vertical-align: middle;"><?=($model->executor) ? $model->executor->name : '';?></td>
+                <td style="vertical-align: middle;"><?=$model->executed_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->note;?></td>
                 <td style="vertical-align: middle;"><?=$model->evidence;?></td>
                 <td style="vertical-align: middle;">
