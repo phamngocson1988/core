@@ -49,7 +49,7 @@ class AffiliateController extends Controller
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
-            'form' => $form
+            'search' => $form
         ]);
     }
 

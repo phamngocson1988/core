@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use backend\components\datetimepicker\DateTimePicker;
+use backend\components\datepicker\DatePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
@@ -43,6 +43,53 @@ use backend\behaviors\UserCommissionBehavior;
         </div>
       </div>
       <div class="portlet-body">
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['affiliate/index']]);?>
+        <div class="row margin-bottom-10">
+            <?php $customer = $search->getUser();?>
+            <?=$form->field($search, 'user_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->user_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'user_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn affiliate',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Tìm theo affiliate')?>
+
+            <?= $form->field($search, 'report_start_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'report_start_date', 'id' => 'report_start_date']
+            ])->widget(DatePicker::className(), [
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd',
+              ],
+            ])->label('Thống kê từ ngày');?>
+
+            <?=$form->field($search, 'report_end_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'report_end_date', 'id' => 'report_end_date']
+            ])->widget(DatePicker::className(), [
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd',
+              ],
+            ])->label('Thống kê đến ngày');?>
+
+            <div class="form-group col-md-4 col-lg-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
+        </div>
+        <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
@@ -71,11 +118,11 @@ use backend\behaviors\UserCommissionBehavior;
               $commission = $user->getCommission();
               // pending
               $pending = clone $commission;
-              if ($form->report_start_date) {
-                  $pending->andWhere(['>=', 'created_at', $form->report_start_date]);
+              if ($search->report_start_date) {
+                  $pending->andWhere(['>=', 'created_at', $search->report_start_date]);
               }
-              if ($form->report_end_date) {
-                  $pending->andWhere(['<=', 'created_at', $form->report_end_date]);
+              if ($search->report_end_date) {
+                  $pending->andWhere(['<=', 'created_at', $search->report_end_date]);
               }
               $quantities = array_map(function($c) {
                 $order = $c->order;
@@ -86,11 +133,11 @@ use backend\behaviors\UserCommissionBehavior;
 
               // available 
               $available = clone $commission;
-              if ($form->report_start_date) {
-                  $available->andWhere(['>=', 'valid_from_date', $form->report_start_date]);
+              if ($search->report_start_date) {
+                  $available->andWhere(['>=', 'valid_from_date', $search->report_start_date]);
               }
-              if ($form->report_end_date) {
-                  $available->andWhere(['<=', 'valid_from_date', $form->report_end_date]);
+              if ($search->report_end_date) {
+                  $available->andWhere(['<=', 'valid_from_date', $search->report_end_date]);
               }
               $availableCommission = number_format($pending->sum('commission'), 1);
               ?>

@@ -53,4 +53,9 @@ class FetchAffiliateForm extends Model
         return $this->_command;
     }
 
+    public function getUser()
+    {
+        if ($this->user_id) return User::findOne($this->user_id);
+        return null;
+    }
 }
