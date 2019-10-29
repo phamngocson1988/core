@@ -98,10 +98,9 @@ $script = <<< JS
 $('.click-to-copy-btn').click(function(){
   var link = $('#affiliate_link').val();
   var code = $('#affiliate_code').val();
-  var url = new URL(link);
-  if (url.searchParams) {
+  if (link.indexOf("?") != -1) { //have params
     link += '&affiliate=' + code;
-  } else {
+  } else { // dont have params
     link += '?affiliate=' + code;
   }
   swal({
