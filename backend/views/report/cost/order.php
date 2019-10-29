@@ -222,9 +222,9 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
               <td></td>
               <td></td>
               <td></td>
-              <td>Tổng: <?=round($search->getCommand()->sum('quantity'), 1);?></td>
+              <td>Tổng: <?=number_format($search->getCommand()->sum('quantity'), 1);?></td>
               <td></td>
-              <td></td>
+              <td>Tổng: <?=number_format($search->getCommand()->sum('total_price') * $rate, 1);?></td>
               <td></td>
               <td></td>
               <td></td>
