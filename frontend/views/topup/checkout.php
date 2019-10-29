@@ -72,6 +72,14 @@ $total = $cart->getTotalPrice();
                     </div>
                 </label>
 
+                <label for="opt8" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt8" value="payoneer" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/payoneer.png" class="paygate-logo" alt="">
+                    </div>
+                </label>
+
                 <div class="t-wrap-btn">
                   <!-- <a class="btn-product-detail-add-to-cart" href="javascript:;">PAYMENT</a> -->
                   <?= Html::submitButton('PAYMENT', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
@@ -137,6 +145,15 @@ $total = $cart->getTotalPrice();
                 <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
               </div>
               <div class="t-flex-between t-payment-total price" paygate="skrill" style="display: none">
+                <p>Grand Total:</p>
+                <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
+              </div>
+
+              <div class="t-flex-between t-sub-total price" paygate="payoneer" style="display: none">
+                <p>Subtotal:</p>
+                <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
+              </div>
+              <div class="t-flex-between t-payment-total price" paygate="payoneer" style="display: none">
                 <p>Grand Total:</p>
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div>

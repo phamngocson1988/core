@@ -136,11 +136,13 @@ use backend\models\UserCommissionWithdraw;
               $available = clone $commission;
               if ($search->report_start_date) {
                   $available->andWhere(['>=', 'valid_from_date', $search->report_start_date]);
-              }
+              } 
               if ($search->report_end_date) {
                   $available->andWhere(['<=', 'valid_from_date', $search->report_end_date]);
+              } else {
+                  $available->andWhere(['<=', 'valid_from_date', date('Y-m-d')]);
               }
-              $availableCommission = number_format($pending->sum('commission'), 1);
+              $availableCommission = number_format($available->sum('commission'), 1);
               ?>
               <?php
               $withdraw = $user->getCommissionWithdraw();

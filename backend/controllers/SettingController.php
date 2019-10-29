@@ -14,6 +14,7 @@ use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
 use backend\forms\WechatSettingForm;
 use backend\forms\SkrillSettingForm;
+use backend\forms\PayoneerSettingForm;
 use backend\forms\PostalSavingsBankOfChinaSettingForm;
 use backend\forms\ImportSettingForm;
 use backend\forms\OfflinePaymentSettingForm;
@@ -112,6 +113,12 @@ class SettingController extends Controller
                 'modelClass' => SkrillSettingForm::class,
                 'view' => 'skrill.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.skrill']
+            ],
+            'payoneer' => [
+                'class' => SettingsAction::class,
+                'modelClass' => PayoneerSettingForm::class,
+                'view' => 'payoneer.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.payoneer']
             ],
             'offline' => [
                 'class' => SettingsAction::class,

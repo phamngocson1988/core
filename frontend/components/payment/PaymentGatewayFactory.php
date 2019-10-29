@@ -30,6 +30,9 @@ class PaymentGatewayFactory extends Model
         'postal-savings-bank-of-china' => [
             'class' => '\frontend\components\payment\clients\PostalSavingsBankOfChina',
         ],
+        'payoneer' => [
+            'class' => '\frontend\components\payment\clients\Payoneer',
+        ],
     ];
 
     public static function getClient($identifier)

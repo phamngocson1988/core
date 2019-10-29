@@ -105,7 +105,7 @@ $code = $user->affiliate->code; //affiliate
                           <span class="label label-default"><?=sprintf("Waiting");?><span>
                           <?php else : ?>
                             <?php if ($model->isPending()) : ?>
-                            <span class="label label-default"><?=sprintf("Pending up to %s", $model->valid_from_date);?><span>
+                            <span class="label label-default"><?=sprintf("Pending until %s", $model->valid_from_date);?><span>
                             <?php elseif ($model->isReady()) : ?>
                             <span class="label label-success"><?=sprintf("Ready");?><span>
                             <?php endif; ?>
