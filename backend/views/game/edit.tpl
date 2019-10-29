@@ -106,7 +106,7 @@
                   {$form->field($model, 'original_price')->textInput()}
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
-                  {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 10]])}
+                  {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 30]])}
                 </div>
                 <div class="tab-pane" id="tab_1_2">
                   {$form->field($model, 'meta_title')->textInput()}
