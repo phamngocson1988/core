@@ -334,7 +334,7 @@ $this->registerJs($cancelOrderJs)
                 </div>
               </div>
               <div class="row" id="evidences">
-                <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE), 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
+                <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE), 'can_edit' => true]);?>
               </div>
               <hr/>
               <div class="row" style="margin-bottom: 20px">
@@ -348,7 +348,7 @@ $this->registerJs($cancelOrderJs)
                 </div>
               </div>
               <div class="row" id="evidences_after">
-                <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER), 'can_edit' => Yii::$app->user->can('edit_order', ['order' => $order])]);?>
+                <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER), 'can_edit' => true]);?>
               </div>
 <?php
 if (Yii::$app->user->can('orderteam')) {
