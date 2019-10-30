@@ -200,7 +200,9 @@ use backend\components\datetimepicker\DateTimePicker;
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php if (Yii::$app->user->can('admin')) :?>
                   <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
+                  <?php endif;?>
                   <?php if ($model->evidence): ?>
                   <a href='<?=$model->evidence;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem hóa đơn" target="_blank"><i class="fa fa-file"></i></a>
                   <?php endif;?>

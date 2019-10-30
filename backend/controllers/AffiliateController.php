@@ -12,6 +12,8 @@ use backend\models\User;
 use backend\models\UserAffiliate;
 use backend\models\UserCommissionWithdraw;
 use backend\forms\FetchAffiliateForm;
+use backend\forms\FetchAffiliateCommissionForm;
+
 /**
  * AffiliateController
  */
@@ -53,17 +55,26 @@ class AffiliateController extends Controller
         ]);
     }
 
-    public function actionIndex1()
+    public function actionView($id)
     {
         $this->view->params['main_menu_active'] = 'affiliate.index';
-        $command = UserAffiliate::find()->where(['status' => UserAffiliate::STATUS_ENABLE]);
-        $command->with('user');
-        $command->orderBy(['created_at' => SORT_DESC]);
+        $affiliate = UserAffiliate::find()->where(['user_id' => $id])->with('user')->one();
+
+        $request = Yii::$app->request;
+        $form = new FetchAffiliateCommissionForm([
+            'user_id' => $id, 
+            'member_id' => $request->get('member_id'), 
+            'report_start_date' => $request->get('report_start_date'),
+            'report_end_date' => $request->get('report_end_date'),
+        ]);
+        $command = $form->getCommand()->groupBy('member_id');
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
-        return $this->render('index', [
+        return $this->render('view', [
+            'affiliate' => $affiliate,
             'models' => $models,
-            'pages' => $pages
+            'pages' => $pages,
+            'search' => $form,
         ]);
     }
 

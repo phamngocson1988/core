@@ -12,9 +12,16 @@ use common\models\User;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\UserAffiliateBehavior;
 use backend\behaviors\UserCommissionBehavior;
-use backend\models\UserCommissionWithdraw;
 
+$user = $affiliate->user;
+$user->attachBehavior('commission', UserCommissionBehavior::className());
+$commission = $user->getCommission();
+$totalQuantity = 0;
+$totalPending = 0;
+$totalAvailable = 0;
+$total = 0;
 ?>
+
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -23,13 +30,13 @@ use backend\models\UserCommissionWithdraw;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Quản lý nhà bán hàng liên kết</span>
+      <span>Thông tin chi tiết affiliate</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Quản lý nhà bán hàng liên kết</h1>
+<h1 class="page-title">Thông tin chi tiết affiliate</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -38,22 +45,48 @@ use backend\models\UserCommissionWithdraw;
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase">Nhà bán hàng liên kết</span>
+          <span class="caption-subject bold uppercase">Thông tin chi tiết affiliate</span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['affiliate/index']]);?>
+        <table class="table table-striped table-bordered table-hover table-checkable">
+          <thead>
+            <tr>
+              <th> ID</th>
+              <th> Tên </th>
+              <th> Email </th>
+              <th> Số điện thoại </th>
+              <th> Preferred IM </th>
+              <th> IM Account </th>
+              <th> Channel Url </th>
+              <th> Ngày duyệt </th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td style="vertical-align: middle;"><?=$affiliate->user_id;?></td>
+                <td style="vertical-align: middle;"><?=$user->name;?></td>
+                <td style="vertical-align: middle;"><?=$user->email;?></td>
+                <td style="vertical-align: middle;"><?=$user->phone;?></td>
+                <td style="vertical-align: middle;"><?=$affiliate->preferred_im;?></td>
+                <td style="vertical-align: middle;"><?=$affiliate->im_account;?></td>
+                <td style="vertical-align: middle;"><?=$affiliate->channel;?></td>
+                <td style="vertical-align: middle;"><?=date('Y-m-d', strtotime($affiliate->updated_at));?></td>
+              </tr>
+          </tbody>
+        </table>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['affiliate/view', 'id' => $affiliate->user_id]]);?>
         <div class="row margin-bottom-10">
-            <?php $customer = $search->getUser();?>
-            <?=$form->field($search, 'user_id', [
+            <?php $member = $search->getMember();?>
+            <?=$form->field($search, 'member_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->user_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'user_id'],
+              'initValueText' => ($search->member_id) ? sprintf("%s - %s", $member->username, $member->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'member_id'],
               'pluginOptions' => [
-                'placeholder' => 'Chọn affiliate',
+                'placeholder' => 'Tìm khách hàng',
                 'allowClear' => true,
                 'minimumInputLength' => 3,
                 'ajax' => [
@@ -62,7 +95,7 @@ use backend\models\UserCommissionWithdraw;
                     'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
                 ]
               ]
-            ])->label('Tìm theo affiliate')?>
+            ])->label('Tìm khách hàng')?>
 
             <?= $form->field($search, 'report_start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -91,33 +124,32 @@ use backend\models\UserCommissionWithdraw;
             </div>
         </div>
         <?php ActiveForm::end()?>
+        <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
               <th> STT </th>
-              <th> Tên </th>
-              <th> Email </th>
-              <th> Thành viên </th>
-              <th> Doanh số (số gói) </th>
+              <th> Mã KH </th>
+              <th> Khách hàng </th>
+              <th> Ngày đăng ký </th>
+              <th> Doanh số (gói) </th>
               <th> Hoa hồng tích lũy </th>
               <th> Hoa hồng khả dụng </th>
-              <th> Tổng số tiền rút </th>
               <th> Tổng hoa hồng </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th> Tác vụ </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
-              <?php $user = $model->user;?>
-              <?php $user->attachBehavior('commission', UserCommissionBehavior::className());?>
-              <?php $user->attachBehavior('affiliate', UserAffiliateBehavior::className());?>
-              <?php 
-              $commission = $user->getCommission();
-              // pending
-              $pending = clone $commission;
+              <?php $member = $model->member;?>
+              <?php
+              $memCommission = clone $commission;
+              $memCommission->with('order');
+              $memCommission->andWhere(['member_id' => $model->member_id]);
+              $pending = clone $memCommission;
               if ($search->report_start_date) {
                   $pending->andWhere(['>=', 'created_at', $search->report_start_date]);
               }
@@ -131,7 +163,6 @@ use backend\models\UserCommissionWithdraw;
               $orderQuantities = number_format(array_sum($quantities), 1);
               $pendingCommission = number_format($pending->sum('commission'), 1);
 
-              // available 
               $available = clone $commission;
               if ($search->report_start_date) {
                   $available->andWhere(['>=', 'valid_from_date', $search->report_start_date]);
@@ -142,51 +173,41 @@ use backend\models\UserCommissionWithdraw;
                   $available->andWhere(['<=', 'valid_from_date', date('Y-m-d')]);
               }
               $availableCommission = number_format($available->sum('commission'), 1);
-              ?>
-              <?php
-              $withdraw = $user->getCommissionWithdraw();
-              $withdraw->where(['status' => UserCommissionWithdraw::STATUS_EXECUTED]);
-              if ($search->report_start_date) {
-                  $withdraw->andWhere(['>=', 'executed_at', $search->report_start_date . ' 00:00:00']);
-              }
-              if ($search->report_end_date) {
-                  $withdraw->andWhere(['<=', 'executed_at', $search->report_end_date . ' 23:59:59']);
-              }
-              $withdrawAmount = number_format($withdraw->sum('amount'), 1);
+
+              $totalQuantity += $orderQuantities;
+              $totalPending += $pendingCommission;
+              $totalAvailable += $availableCommission;
+              $total += $pendingCommission;
               ?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$user->name;?></td>
-                <td style="vertical-align: middle;"><?=$user->email;?></td>
-                <td style="vertical-align: middle;"><?=number_format($user->getAffiliateMembers()->count());?></td>
+                <td style="vertical-align: middle;"><?=$model->member_id;?></td>
+                <td style="vertical-align: middle;"><?=$member->name;?></td>
+                <td style="vertical-align: middle;"><?=date('Y-m-d', strtotime($member->created_at));?></td>
                 <td style="vertical-align: middle;"><?=$orderQuantities;?></td>
                 <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
                 <td style="vertical-align: middle;"><?=$availableCommission;?></td>
-                <td style="vertical-align: middle;"><?=$withdrawAmount;?></td>
                 <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
-                <td style="vertical-align: middle;">
-                  <a href="<?=Url::to(['affiliate/view', 'id' => $model->user_id]);?>" class="btn btn-sm green tooltips" data-container="body" data-original-title="Chi tiết affiliate"><i class="fa fa-eye"></i> Xem </a>
-                  <a href="<?=Url::to(['affiliate/downgrade', 'id' => $model->user_id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Bỏ tư cách affiliate"><i class="fa fa-times"></i> Affiliate </a>
-                </td>
+                <td style="vertical-align: middle;"></td>
               </tr>
               <?php endforeach;?>
           </tbody>
+          <tfooter>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->count());?></td>
+            <td style="vertical-align: middle;">Tổng: <?=number_format($totalQuantity, 1);?></td>
+            <td style="vertical-align: middle;">Tổng: <?=number_format($totalPending, 1);?></td>
+            <td style="vertical-align: middle;">Tổng: <?=number_format($totalAvailable, 1);?></td>
+            <td style="vertical-align: middle;">Tổng: <?=number_format($total, 1);?></td>
+            <td></td>
+          </tfooter>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
+        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<?php
-$script = <<< JS
-$(".link-action").ajax_action({
-  confirm: true,
-  confirm_text: 'Bạn có chắc muốn thực hiện tác vụ này?',
-  callback: function(eletement, data) {
-    location.reload();
-  }
-});
-JS;
-$this->registerJs($script);
-?>

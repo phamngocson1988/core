@@ -38,4 +38,9 @@ class UserCommission extends ActiveRecord
     {
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
+
+    public function getMember()
+    {
+        return $this->hasOne(User::className(), ['id' => 'member_id']);
+    }
 }
