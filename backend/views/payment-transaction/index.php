@@ -116,29 +116,37 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         <thead>
             <tr>
               <th>Mã giao dịch</th>
+              <th>Khách hàng</th>
               <th>Ngày tạo</th>
+              <th>Số Kcoin</th>
+              <th>Khuyến mãi</th>
               <th>Số tiền</th>
               <th>Phương thức thanh toán</th>
               <th>Loại thanh toán</th>
               <th>Trạng thái</th>
-              <th>Khách hàng</th>
               <th>Hóa đơn</th>
               <th>Tác vụ</th>
             </tr>
           </thead>
           <tbody>
             <?php if (!$models) :?>
-            <tr><td colspan="9">No data found</td></tr>
+            <tr><td colspan="11">No data found</td></tr>
             <?php endif;?>
             <?php foreach ($models as $model) :?>
             <tr>
               <td>T<?=$model->id;?></td>
+              <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
               <td><?=$model->created_at;?></td>
+              <td><?=number_format($model->coin);?></td>
+              <td>
+              <?php if ($model->promotion_coin) : ?>
+              <?=sprintf("%s (%s)", number_format($model->promotion_coin), $model->promotion_code);?>
+              <?php endif;?>
+              </td>
               <td>$<?=number_format($model->total_price);?></td>
               <td><?=$model->payment_method;?></td>
               <td><?=$model->payment_type;?></td>
               <td><?=$model->status;?></td>
-              <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
               <td>
                 <?php if ($model->evidence) : ?>
                 <a href="<?=$model->evidence;?>" target="_blank">Xem</a>

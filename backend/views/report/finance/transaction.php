@@ -1,6 +1,5 @@
 <?php
 use yii\widgets\LinkPager;
-use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
@@ -131,7 +130,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <?php ActiveForm::end()?>
         </div>
         
-        <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
@@ -157,7 +155,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->user->name;?></td>
                 <td style="vertical-align: middle;"><?=($model->user->isReseller()) ? 'Reseller' : 'Customer';?></td>
-                <td style="vertical-align: middle;"><?=$model->getId();?></td>
+                <td style="vertical-align: middle;"><a href="<?=Url::to(['payment-transaction/index', 'id' => $model->id]);?>" target="_blank"><?=$model->getId();?></a></td>
                 <td style="vertical-align: middle;"><?=number_format($model->promotion_coin);?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->total_coin);?></td>
                 <td style="vertical-align: middle;">$<?=number_format($model->discount_price);?></td>
@@ -182,7 +180,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </tfoot>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
