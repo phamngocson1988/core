@@ -164,8 +164,8 @@ class ReportByTransactionForm extends PaymentTransaction
             $command->andWhere(["$table.promotion_code" => $this->promotion_code]);
         }
 
-        if ($this->auth_key) {
-            $command->andWhere(["$table.auth_key" => $this->auth_key]);
+        if ($this->id) {
+            $command->andWhere(["$table.id" => $this->id]);
         }
 
         if ($this->is_reseller) {

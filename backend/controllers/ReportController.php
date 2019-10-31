@@ -56,7 +56,7 @@ class ReportController extends Controller
             'end_date' => $request->get('end_date'),
             'promotion_code' => $request->get('promotion_code'),
             'user_id' => $request->get('user_id'),
-            'auth_key' => $request->get('auth_key'),
+            'id' => $request->get('id'),
             'is_reseller' => $request->get('is_reseller'),
         ];
         $form = new ReportByTransactionForm($data);

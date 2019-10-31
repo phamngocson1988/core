@@ -86,9 +86,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               'inputOptions' => ['class' => 'form-control', 'name' => 'promotion_code']
             ])->textInput()->label('Mã khuyến mãi');?>
 
-            <?=$form->field($search, 'auth_key', [
+            <?=$form->field($search, 'id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'auth_key']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
             ])->textInput()->label('Mã giao dịch');?>
 
             <?=$form->field($search, 'is_reseller', [

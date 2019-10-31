@@ -8,6 +8,7 @@ use backend\components\datetimepicker\DateTimePicker;
 use backend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use common\components\helpers\FormatConverter;
 
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 // order team
@@ -157,6 +158,8 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               <th> Ngày tạo </th>
               <th> Số lượng nạp </th>
               <th> Số gói </th>
+              <th> Thời gian nhận đơn </th>
+              <th> Thời gian chờ </th>
               <th> Người bán hàng </th>
               <th> Nhân viên đơn hàng </th>
               <th> Trạng thái </th>
@@ -166,7 +169,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
@@ -175,9 +178,19 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
+                <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
+                <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
+                <td style="vertical-align: middle;">
+                  <?=$model->getStatusLabel();?>
+                  <?php if ($model->hasCancelRequest()) :?>
+                  <span class="label label-danger">Có yêu cầu hủy</span>
+                  <?php endif;?>
+                  <?php if ($model->tooLongProcess()) :?>
+                  <span class="label label-warning">Xử lý chậm</span>
+                  <?php endif;?>
+                </td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
