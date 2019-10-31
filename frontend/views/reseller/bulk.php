@@ -151,7 +151,11 @@ $('.quantity').trigger('change');
 $('#checkout-form').on('submit', function() {
   var wallet = $('#checkout').data('price');
   var totalPrice = getTotalPrice();
-  if (!totalPrice) return;
+  if (!totalPrice) {
+    swal("Empty", "You need to add at least 1 record", "error");
+    hideLoader();
+    return false;
+  }
   if (totalPrice > wallet) {
     // show popup
     $("#alert").modal({backdrop:false});

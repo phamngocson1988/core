@@ -53,14 +53,14 @@ class ReportByBalanceForm extends Model
 
             // find balance
             $balanceAtStart = UserWallet::find();
-            $balanceAtStart->orderBy(['payment_at' => SORT_DESC]);
+            $balanceAtStart->orderBy(['id' => SORT_ASC]);
             $balanceAtStart->where(['user_id' => $userId]);
-            $balanceAtStart->andWhere(['<=', 'payment_at', $this->start_date . " 23:59:59"]);
+            $balanceAtStart->andWhere(['>=', 'payment_at', $this->start_date . " 00:00:00"]);
             $balanceAtStartModel = $balanceAtStart->one();
             $balanceAtStartNumber = ($balanceAtStartModel) ? $balanceAtStartModel->balance : 0;
 
             $balanceAtEnd = UserWallet::find();
-            $balanceAtEnd->orderBy(['payment_at' => SORT_DESC]);
+            $balanceAtEnd->orderBy(['id' => SORT_DESC]);
             $balanceAtEnd->where(['user_id' => $userId]);
             $balanceAtEnd->andWhere(['<=', 'payment_at', $this->end_date . " 23:59:59"]);
             $balanceAtEndModel = $balanceAtEnd->one();

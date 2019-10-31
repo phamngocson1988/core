@@ -45,7 +45,7 @@ use yii\helpers\Url;
               </tbody>
             </table>
             <div class="cart-coupon" style="text-align: center;">
-              <a href="<?=Url::to(['site/index']);?>" class="cus-btn yellow fl-right">Go home</a>
+              <a href="<?=Url::to(['site/index']);?>" class="cus-btn yellow fl-right">Home Page</a>
           </div>
           </div>
         </div>

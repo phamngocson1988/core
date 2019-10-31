@@ -122,6 +122,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th>Khuyến mãi</th>
               <th>Số tiền</th>
               <th>Phương thức thanh toán</th>
+              <th>Payment ID</th>
               <th>Loại thanh toán</th>
               <th>Trạng thái</th>
               <th>Hóa đơn</th>
@@ -145,6 +146,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               </td>
               <td>$<?=number_format($model->total_price);?></td>
               <td><?=$model->payment_method;?></td>
+              <td><?=$model->payment_id;?></td>
               <td><?=$model->payment_type;?></td>
               <td><?=$model->status;?></td>
               <td>
