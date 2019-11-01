@@ -17,12 +17,16 @@ class OrderMailBehavior extends AttributeBehavior
         $fromName = sprintf("%s Administrator", Yii::$app->name);
 		if (!$from) return;
         $to = $order->customer_email;
-        Yii::$app->mailer->compose($template, array_merge(['order' => $order], $params))
-        ->setTo($to)
-        ->setFrom([$from => $fromName])
-        ->setSubject($title)
-        ->setTextBody($title)
-        ->send();
+        try {
+            return Yii::$app->mailer->compose($template, array_merge(['order' => $order], $params))
+            ->setTo($to)
+            ->setFrom([$from => $fromName])
+            ->setSubject($title)
+            ->setTextBody($title)
+            ->send();
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
 }

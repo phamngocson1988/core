@@ -490,7 +490,17 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $order = Order::findOne($id);
         $content = $request->post('content');
-        if (trim($content)) return $this->renderJson($order->complain($content));
+        if (trim($content)) {
+            $order->attachBehavior('mail', OrderMailBehavior::className());
+            $order->complain($content);
+            $order->send(
+                'admin_complain_order', 
+                sprintf("[KingGems] - Your have a notification for order #%s", $order->id), [
+                    'content' => $content, 
+                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true)
+            ]);
+            return $this->renderJson(true);
+        }
         return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);
     }
 
