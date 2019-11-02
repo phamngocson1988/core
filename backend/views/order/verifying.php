@@ -206,6 +206,7 @@ use backend\components\datetimepicker\DateTimePicker;
                   <?php if ($model->evidence): ?>
                   <a href='<?=$model->evidence;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem hóa đơn" target="_blank"><i class="fa fa-file"></i></a>
                   <?php endif;?>
+                  <a href='<?=Url::to(['order/send-mail-verifying-order', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -227,6 +228,19 @@ $('.delete').ajax_action({
   confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
   callback: function(data) {
     location.reload();
+  },
+  error: function(element, errors) {
+    location.reload();
+  }
+});
+
+// mail
+$('.send-mail').ajax_action({
+  method: 'POST',
+  confirm: true,
+  confirm_text: 'Gửi mail đến khách hàng?',
+  callback: function(data) {
+    alert('Thành công');
   },
   error: function(element, errors) {
     location.reload();

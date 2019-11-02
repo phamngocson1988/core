@@ -608,4 +608,14 @@ class OrderController extends Controller
         }
 
     }
+
+    public function actionSendMailVerifyingOrder($id)
+    {
+        $order = Order::findOne($id);
+        if ($order) {
+            $order->attachBehavior('mail', OrderMailBehavior::className());
+            $order->send('admin_notify_order_failure', '[KINGGEMS]-FAILED TRANSACTION');
+        }
+        return $this->renderJson(true);
+    }
 }

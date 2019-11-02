@@ -127,10 +127,28 @@ $orderTeam = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               ])->hiddenInput()->label(false);?>
             <?php endif;?>
 
+            <?php $customer = $search->getCustomer();?>
+            <?=$form->field($search, 'customer_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
+
             <?=$form->field($search, 'status', [
-            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
-          ])->dropDownList([Order::STATUS_COMPLETED => 'Completed', Order::STATUS_DELETED => 'Deleted'])->label('Trạng thái');?>
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
+            ])->dropDownList([Order::STATUS_COMPLETED => 'Completed', Order::STATUS_DELETED => 'Deleted'])->label('Trạng thái');?>
 
           <?php $game = $search->getGame();?>   
           <?=$form->field($search, 'game_id', [

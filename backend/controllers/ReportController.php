@@ -169,6 +169,7 @@ class ReportController extends Controller
             'q' => $request->get('q'),
             'saler_id' => $request->get('saler_id'),
             'orderteam_id' => $request->get('orderteam_id'),
+            'customer_id' => $request->get('customer_id'),
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),

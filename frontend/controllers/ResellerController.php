@@ -118,6 +118,7 @@ class ResellerController extends Controller
         if (!$game) throw new NotFoundHttpException("Not found", 1);
         $imports = $request->post('import', []);
         $errors = [];
+        $balance = $user->getWalletAmount();
         foreach ($imports as $importData) {
             $cartItem = clone $game;
             $cartItem->quantity = $importData['quantity'];
@@ -131,7 +132,6 @@ class ResellerController extends Controller
             $cartItem->login_method = $importData['login_method'];
             $cartItem->setScenario(CartItemReseller::SCENARIO_IMPORT_CART);
             $totalPrice = $cartItem->getTotalPrice();
-            $balance = $user->getWalletAmount();
             if ($totalPrice > $balance) {
                 $errors[] = 'Not enough balance in your wallet';
                 break;
@@ -169,9 +169,10 @@ class ResellerController extends Controller
                 $order->note = $cartItem->note;
                 $order->save();
     
+                $balance -= $totalPrice;
                 $wallet = new UserWallet();
                 $wallet->coin = (-1) * $totalPrice;
-                $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+                $wallet->balance = $balance; //$user->getWalletAmount() + $wallet->coin;
                 $wallet->type = UserWallet::TYPE_OUTPUT;
                 $wallet->description = "Pay for order #$order->id";
                 $wallet->ref_name = Order::classname();
@@ -243,9 +244,10 @@ class ResellerController extends Controller
                         $order->total_unit = $totalUnit;
                         $order->save();
             
+                        $balance -= $totalPrice;
                         $wallet = new UserWallet();
                         $wallet->coin = (-1) * $totalPrice;
-                        $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+                        $wallet->balance = $balance;
                         $wallet->type = UserWallet::TYPE_OUTPUT;
                         $wallet->description = "Pay for order #$order->id";
                         $wallet->ref_name = Order::classname();

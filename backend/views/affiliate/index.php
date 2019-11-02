@@ -162,7 +162,7 @@ use backend\models\UserCommissionWithdraw;
                 <td style="vertical-align: middle;"><?=$orderQuantities;?></td>
                 <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
                 <td style="vertical-align: middle;"><?=$availableCommission;?></td>
-                <td style="vertical-align: middle;"><?=$withdrawAmount;?></td>
+                <td style="vertical-align: middle;"><a href="<?=Url::to(['affiliate/completed', 'user_id' => $user->id]);?>"><?=$withdrawAmount;?></a></td>
                 <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
                 <td style="vertical-align: middle;">
                   <a href="<?=Url::to(['affiliate/view', 'id' => $model->user_id]);?>" class="btn btn-sm green tooltips" data-container="body" data-original-title="Chi tiết affiliate"><i class="fa fa-eye"></i> Xem </a>

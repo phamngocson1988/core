@@ -19,6 +19,11 @@ class UserCommissionWithdraw extends ActiveRecord
         return '{{%user_commission_withdraw}}';
     }
 
+    public function getId()
+    {
+        return "R" . $this->id;
+    }
+    
     public static function getStatusList()
     {
         return [

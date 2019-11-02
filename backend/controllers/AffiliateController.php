@@ -13,6 +13,7 @@ use backend\models\UserAffiliate;
 use backend\models\UserCommissionWithdraw;
 use backend\forms\FetchAffiliateForm;
 use backend\forms\FetchAffiliateCommissionForm;
+use backend\forms\FetchCommissionWithdrawForm;
 
 /**
  * AffiliateController
@@ -130,16 +131,40 @@ class AffiliateController extends Controller
     public function actionWithdraw()
     {
         $this->view->params['main_menu_active'] = 'affiliate.withdraw';
-        $command = UserCommissionWithdraw::find();
-        $command->with('user');
-        $command->with('executor');
-        $command->with('acceptor');
-        $command->orderBy(['created_at' => SORT_DESC]);
+        $request = Yii::$app->request;
+        $form = new FetchCommissionWithdrawForm([
+            'user_id' => $request->get('user_id'), 
+            'status' => $request->get('status'), 
+            'created_start_date' => $request->get('created_start_date'),
+            'created_end_date' => $request->get('created_end_date'),
+        ]);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('withdraw', [
             'models' => $models,
-            'pages' => $pages
+            'pages' => $pages,
+            'search' => $form,
+        ]);
+    }
+
+    public function actionCompleted($user_id)
+    {
+        $this->view->params['main_menu_active'] = 'affiliate.withdraw';
+        $request = Yii::$app->request;
+        $form = new FetchCommissionWithdrawForm([
+            'user_id' => $request->get('user_id'), 
+            'status' => UserCommissionWithdraw::STATUS_EXECUTED, 
+            'created_start_date' => $request->get('created_start_date'),
+            'created_end_date' => $request->get('created_end_date'),
+        ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('completed', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
         ]);
     }
 
@@ -158,6 +183,7 @@ class AffiliateController extends Controller
                 return $this->asJson(['status' => $model->disapprove()]);
                 break;
             case 'execute':
+                $model->note = $request->post('note');
                 return $this->asJson(['status' => $model->execute()]);
                 break;
             default:
