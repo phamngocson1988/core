@@ -208,7 +208,7 @@ use backend\components\datetimepicker\DateTimePicker;
                   <?php endif;?>
                   <a href='<?=Url::to(['order/send-mail-verifying-order', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
 
-                  <a href='#go_pending<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips approve" data-pjax="0" data-container="body" data-original-title="Send mail" data-toggle="modal" ><i class="fa fa-check"></i></a>
+                  <a href='#go_pending<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips approve" data-pjax="0" data-container="body" data-original-title="Duyệt thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="go_pending<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">

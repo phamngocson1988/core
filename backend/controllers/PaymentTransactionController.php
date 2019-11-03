@@ -9,6 +9,7 @@ use backend\forms\FetchTransactionForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
 use backend\events\PaymentTransactionEvent;
+use backend\behaviors\PaymentTransactionMailBehavior;
 
 class PaymentTransactionController extends Controller
 {
@@ -123,5 +124,15 @@ class PaymentTransactionController extends Controller
             $errors = $transaction->getErrorSummary(true);
             return $this->asJson(['status' => false, 'errors' => reset($errors)]);
         }
+    }
+
+    public function actionSendMailOfflinePayment($id)
+    {
+        $model = PaymentTransaction::findOne($id);
+        if ($model) {
+            $model->attachBehavior('mail', PaymentTransactionMailBehavior::className());
+            $model->send('admin_notify_offline_payment', '[KINGGEMS]-FAILED TRANSACTION');
+        }
+        return $this->renderJson(true);
     }
 }
