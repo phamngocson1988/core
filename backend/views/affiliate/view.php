@@ -180,15 +180,17 @@ $total = 0;
               $total += $pendingCommission;
               ?>
               <tr>
-                <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$model->member_id;?></td>
-                <td style="vertical-align: middle;"><?=$member->name;?></td>
-                <td style="vertical-align: middle;"><?=date('Y-m-d', strtotime($member->created_at));?></td>
-                <td style="vertical-align: middle;"><?=$orderQuantities;?></td>
-                <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
-                <td style="vertical-align: middle;"><?=$availableCommission;?></td>
-                <td style="vertical-align: middle;"><?=$pendingCommission;?></td>
-                <td style="vertical-align: middle;"></td>
+                <td><?=$no + $pages->offset + 1;?></td>
+                <td><?=$model->member_id;?></td>
+                <td><?=$member->name;?></td>
+                <td><?=date('Y-m-d', strtotime($member->created_at));?></td>
+                <td><?=$orderQuantities;?></td>
+                <td><?=$pendingCommission;?></td>
+                <td><?=$availableCommission;?></td>
+                <td><?=$pendingCommission;?></td>
+                <td>
+                  <a href='<?=Url::to(['affiliate/member', 'member_id' => $model->member_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chi tiết giao dịch"><i class="fa fa-eye"></i></a>
+                </td>
               </tr>
               <?php endforeach;?>
           </tbody>
@@ -196,11 +198,11 @@ $total = 0;
             <td></td>
             <td></td>
             <td></td>
-            <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->count());?></td>
-            <td style="vertical-align: middle;">Tổng: <?=number_format($totalQuantity, 1);?></td>
-            <td style="vertical-align: middle;">Tổng: <?=number_format($totalPending, 1);?></td>
-            <td style="vertical-align: middle;">Tổng: <?=number_format($totalAvailable, 1);?></td>
-            <td style="vertical-align: middle;">Tổng: <?=number_format($total, 1);?></td>
+            <td>Tổng: <?=number_format($search->getCommand()->count());?></td>
+            <td>Tổng: <?=number_format($totalQuantity, 1);?></td>
+            <td>Tổng: <?=number_format($totalPending, 1);?></td>
+            <td>Tổng: <?=number_format($totalAvailable, 1);?></td>
+            <td>Tổng: <?=number_format($total, 1);?></td>
             <td></td>
           </tfooter>
         </table>

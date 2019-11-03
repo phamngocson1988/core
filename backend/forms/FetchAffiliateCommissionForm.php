@@ -37,6 +37,13 @@ class FetchAffiliateCommissionForm extends Model
             $command->andWhere(["member_id" => $this->member_id]);
         }
 
+        if ($this->report_start_date) {
+            $command->andWhere(['>=', "created_at", $this->report_start_date . " 00:00:00"]);
+        }
+        if ($this->report_end_date) {
+            $command->andWhere(['<=', "created_at", $this->report_end_date . " 23:59:59"]);
+        }
+
         $orderBy = ["created_at" => SORT_DESC];
         $command->orderBy($orderBy);
         $this->_command = $command;

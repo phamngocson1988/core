@@ -48,6 +48,7 @@ class UserController extends Controller
         $request = Yii::$app->request;
         $mode = $request->get('mode');
         $data = [
+            'user_id' => $request->get('user_id'),
             'created_start' => $request->get('created_start'),
             'created_end' => $request->get('created_end'),
             'birthday_start' => $request->get('birthday_start'),
@@ -81,7 +82,7 @@ class UserController extends Controller
             'active' => Url::to(['user/change-status', 'status' => 'active'])
         ];
 
-        return $this->render('index.tpl', [
+        return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,

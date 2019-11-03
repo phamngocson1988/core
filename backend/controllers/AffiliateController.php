@@ -168,6 +168,25 @@ class AffiliateController extends Controller
         ]);
     }
 
+    public function actionMember($member_id) 
+    {
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        $request = Yii::$app->request;
+        $form = new FetchAffiliateCommissionForm([
+            'member_id' => $member_id, 
+            'report_start_date' => $request->get('report_start_date'),
+            'report_end_date' => $request->get('report_end_date'),
+        ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('member', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+        ]);
+    }
+
     public function actionExecuteWithdraw($id)
     {
         $request = Yii::$app->request;

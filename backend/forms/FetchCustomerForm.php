@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
  */
 class FetchCustomerForm extends User
 {
+    public $user_id;
     public $created_start;
     public $created_end;
     public $birthday_start;
@@ -33,6 +34,8 @@ class FetchCustomerForm extends User
 
     public $last_order_date;
     public $total_purchase;
+
+    protected $_customer;
     private $_command;
 
     public function fetch()
@@ -207,8 +210,8 @@ class FetchCustomerForm extends User
             $command->andWhere(["{$userTable}.is_reseller" => $this->is_reseller]);
         }
 
-        if ($this->email) {
-            $command->andWhere(["LIKE", "{$userTable}.email", $this->email]);
+        if ($this->user_id) {
+            $command->andWhere(["{$userTable}.id" =>  $this->user_id]);
         }
 
         if ($this->username) {
@@ -263,5 +266,13 @@ class FetchCustomerForm extends User
         $salerTeamObjects = User::findAll($salerTeamIds);
         $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         return $salerTeam;
+    }
+
+    public function getCustomer()
+    {
+        if (!$this->_customer) {
+            $this->_customer = User::findOne($this->user_id);
+        }
+        return $this->_customer;
     }
 }

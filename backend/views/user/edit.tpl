@@ -58,6 +58,10 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
+                  {$form->field($model, 'password', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()}
                   {$form->field($model, 'country_code', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
