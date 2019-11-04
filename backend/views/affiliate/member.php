@@ -46,6 +46,11 @@ use backend\models\UserCommissionWithdraw;
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['affiliate/member', 'member_id' => $search->member_id]]);?>
         <div class="row margin-bottom-10">
+            <?=$form->field($search, 'id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
+            ])->textInput()->label('Mã giao dịch');?>
+
             <?= $form->field($search, 'report_start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'report_start_date', 'id' => 'report_start_date']
@@ -65,6 +70,11 @@ use backend\models\UserCommissionWithdraw;
                 'format' => 'yyyy-mm-dd',
               ],
             ])->label('Thống kê đến ngày');?>
+
+            <?=$form->field($search, 'status', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'status']
+            ])->dropDownList($search->getStatusList(), ['prompt' => 'Chọn trạng thái'])->label('Trạng thái');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -106,6 +116,10 @@ use backend\models\UserCommissionWithdraw;
                   <?php endif ;?>
                 </td>
                 <td>
+                  <a href='<?=Url::to(['affiliate/delete-commission', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Thu hồi hoa hồng"><i class="fa fa-trash"></i></a>
+                  <?php if ($model->isPending()) : ?>
+                  <a href='<?=Url::to(['affiliate/ready-commission', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips move-to-ready" data-pjax="0" data-container="body" data-original-title="Chuyển trạng thái sẵn sàng"><i class="icon-wallet"></i></a>
+                  <?php endif ;?>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -119,9 +133,16 @@ use backend\models\UserCommissionWithdraw;
 </div>
 <?php
 $script = <<< JS
-$(".link-action").ajax_action({
+$(".delete").ajax_action({
   confirm: true,
-  confirm_text: 'Bạn có chắc muốn thực hiện tác vụ này?',
+  confirm_text: 'Bạn có chắc muốn thu hồi hoa hồng? Tác vụ này không thể được phục hồi.',
+  callback: function(eletement, data) {
+    location.reload();
+  }
+});
+$(".move-to-ready").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có chắc muốn chuyển hoa hồng này sang trạng thái "Sẵn sàng"?',
   callback: function(eletement, data) {
     location.reload();
   }

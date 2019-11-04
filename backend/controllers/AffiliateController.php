@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use backend\models\User;
 use backend\models\UserAffiliate;
+use backend\models\UserCommission;
 use backend\models\UserCommissionWithdraw;
 use backend\forms\FetchAffiliateForm;
 use backend\forms\FetchAffiliateCommissionForm;
@@ -173,9 +174,11 @@ class AffiliateController extends Controller
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $request = Yii::$app->request;
         $form = new FetchAffiliateCommissionForm([
+            'id' => $request->get('id'), 
             'member_id' => $member_id, 
             'report_start_date' => $request->get('report_start_date'),
             'report_end_date' => $request->get('report_end_date'),
+            'status' => $request->get('status'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -185,6 +188,32 @@ class AffiliateController extends Controller
             'pages' => $pages,
             'search' => $form,
         ]);
+    }
+
+    public function actionDeleteCommission($id)
+    {
+        $request = Yii::$app->request;
+        $model = UserCommission::findOne($id);
+        if ($model && $model->delete()) {
+            return $this->renderJson(true);
+        } else {
+            $message = ($model) ? reset($form->getErrorSummary(false)) : "Record #$id not found";
+            return $this->renderJson(false, [], $message);
+        }
+    }
+
+    public function actionReadyCommission($id)
+    {
+        $request = Yii::$app->request;
+        $model = UserCommission::findOne($id);
+        if ($model) {
+            $model->valid_from_date = date('Y-m-d');
+            $model->save();
+            return $this->renderJson(true);
+        } else {
+            $message = ($model) ? reset($form->getErrorSummary(false)) : "Record #$id not found";
+            return $this->renderJson(false, [], $message);
+        }
     }
 
     public function actionExecuteWithdraw($id)

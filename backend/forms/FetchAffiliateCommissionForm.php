@@ -13,10 +13,12 @@ use backend\models\Order;
 
 class FetchAffiliateCommissionForm extends Model
 {
+    public $id;
     public $user_id;
     public $member_id;
     public $report_start_date;
     public $report_end_date;
+    public $status;
 
     private $_command;
 
@@ -28,7 +30,13 @@ class FetchAffiliateCommissionForm extends Model
 
     protected function createCommand()
     {
+        // $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 30);
+        $today = date('Y-m-d H:i:s');
         $command = UserCommission::find();
+        if ($this->id) {
+            $command->andWhere(["id" => $this->id]);
+        }
+
         if ($this->user_id) {
             $command->andWhere(["user_id" => $this->user_id]);
         }
@@ -42,6 +50,15 @@ class FetchAffiliateCommissionForm extends Model
         }
         if ($this->report_end_date) {
             $command->andWhere(['<=', "created_at", $this->report_end_date . " 23:59:59"]);
+        }
+
+        switch ($this->status) {
+            case 'pending':
+                $command->andWhere(['>', "valid_from_date", $today]);
+                break;
+            case 'ready':
+                $command->andWhere(['<=', "valid_from_date", $today]);
+                break;
         }
 
         $orderBy = ["created_at" => SORT_DESC];
@@ -61,5 +78,13 @@ class FetchAffiliateCommissionForm extends Model
     {
         if ($this->member_id) return User::findOne($this->member_id);
         return null;
+    }
+
+    public function getStatusList()
+    {
+        return [
+            'pending' => 'Pending',
+            'ready' => 'Ready',
+        ];
     }
 }
