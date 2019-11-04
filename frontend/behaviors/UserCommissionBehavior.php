@@ -13,6 +13,7 @@ class UserCommissionBehavior extends \common\behaviors\UserCommissionBehavior
         if (!$condition) return true;
         $command = UserCommission::find()->select('member_id')->where([
             'user_id' => $owner->id,
+            'status' => UserCommission::STATUS_VALID
         ])->distinct();
         return (int)$condition > $command->count();
     }

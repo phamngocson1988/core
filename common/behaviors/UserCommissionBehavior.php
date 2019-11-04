@@ -13,9 +13,16 @@ class UserCommissionBehavior extends AttributeBehavior
         return $owner->hasMany(UserCommission::className(), ['user_id' => 'id']);
     }
 
-    public function getReadyCommission()
+    public function getValidCommission()
     {
         $command = $this->getCommission();
+        $command->andWhere(['status' => UserCommission::STATUS_VALID]);
+        return $command;
+    }
+
+    public function getReadyCommission()
+    {
+        $command = $this->getValidCommission();
         return $command->andWhere(['<=', 'valid_from_date', date('Y-m-d')]);
     }
 
@@ -26,7 +33,7 @@ class UserCommissionBehavior extends AttributeBehavior
 
     public function getPendingCommission()
     {
-        $command = $this->getCommission();
+        $command = $this->getValidCommission();
         return $command->andWhere(['>', 'valid_from_date', date('Y-m-d')]);
     }
 

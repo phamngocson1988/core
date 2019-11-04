@@ -109,7 +109,7 @@ class AffiliateController extends Controller
                 $command = $user->getReadyCommission();
                 break;
             default :
-                $command = $user->getCommission();
+                $command = $user->getValidCommission();
                 break;
         }
 

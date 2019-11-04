@@ -15,6 +15,8 @@ use backend\models\UserCommissionWithdraw;
 use backend\forms\FetchAffiliateForm;
 use backend\forms\FetchAffiliateCommissionForm;
 use backend\forms\FetchCommissionWithdrawForm;
+use backend\behaviors\UserAffiliateBehavior;
+use backend\behaviors\UserCommissionBehavior;
 
 /**
  * AffiliateController
@@ -61,6 +63,9 @@ class AffiliateController extends Controller
     {
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $affiliate = UserAffiliate::find()->where(['user_id' => $id])->with('user')->one();
+        $user = $affiliate->user;
+        $user->attachBehavior('affiliate', UserAffiliateBehavior::className());
+        $user->attachBehavior('commission', UserCommissionBehavior::className());
 
         $request = Yii::$app->request;
         $form = new FetchAffiliateCommissionForm([
@@ -77,6 +82,7 @@ class AffiliateController extends Controller
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
+            'user' => $user,
         ]);
     }
 
@@ -194,7 +200,9 @@ class AffiliateController extends Controller
     {
         $request = Yii::$app->request;
         $model = UserCommission::findOne($id);
-        if ($model && $model->delete()) {
+        if ($model) {
+            $model->status = UserCommission::STATUS_WITHDRAWED;
+            $model->save();
             return $this->renderJson(true);
         } else {
             $message = ($model) ? reset($form->getErrorSummary(false)) : "Record #$id not found";

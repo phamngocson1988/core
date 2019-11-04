@@ -7,6 +7,9 @@ use yii\behaviors\TimestampBehavior;
 
 class UserCommission extends ActiveRecord
 {
+    const STATUS_VALID = 1;
+    const STATUS_WITHDRAWED = 2;
+
 	public static function tableName()
     {
         return '{{%user_commission}}';
@@ -26,12 +29,17 @@ class UserCommission extends ActiveRecord
 
     public function isPending()
     {
-        return strtotime('now') < strtotime($this->valid_from_date);
+        return ($this->status == self::STATUS_VALID) && (strtotime('now') < strtotime($this->valid_from_date));
     }
 
     public function isReady()
     {
-        return strtotime('now') >= strtotime($this->valid_from_date);
+        return ($this->status == self::STATUS_VALID) && (strtotime('now') >= strtotime($this->valid_from_date));
+    }
+
+    public function isWithdrawed()
+    {
+        return $this->status == self::STATUS_WITHDRAWED;
     }
 
     public function getOrder()

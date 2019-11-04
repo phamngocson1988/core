@@ -10,12 +10,8 @@ use backend\components\datepicker\DatePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
-use backend\behaviors\UserAffiliateBehavior;
-use backend\behaviors\UserCommissionBehavior;
 
-$user = $affiliate->user;
-$user->attachBehavior('commission', UserCommissionBehavior::className());
-$commission = $user->getCommission();
+$commission = $user->getValidCommission();
 $totalQuantity = 0;
 $totalPending = 0;
 $totalAvailable = 0;

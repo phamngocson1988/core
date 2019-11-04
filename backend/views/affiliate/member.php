@@ -114,11 +114,16 @@ use backend\models\UserCommissionWithdraw;
                   <?php if ($model->isReady()) : ?>
                     Ready
                   <?php endif ;?>
+                  <?php if ($model->isWithdrawed()) : ?>
+                    Withdrawed
+                  <?php endif ;?>
                 </td>
                 <td>
-                  <a href='<?=Url::to(['affiliate/delete-commission', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Thu hồi hoa hồng"><i class="fa fa-trash"></i></a>
+                  <?php if (!$model->isWithdrawed()) : ?>
+                  <a href='<?=Url::to(['affiliate/delete-commission', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Thu hồi hoa hồng"><i class="fa fa-close"></i></a>
+                  <?php endif ;?>
                   <?php if ($model->isPending()) : ?>
-                  <a href='<?=Url::to(['affiliate/ready-commission', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips move-to-ready" data-pjax="0" data-container="body" data-original-title="Chuyển trạng thái sẵn sàng"><i class="icon-wallet"></i></a>
+                  <a href='<?=Url::to(['affiliate/ready-commission', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips move-to-ready" data-pjax="0" data-container="body" data-original-title="Chuyển trạng thái sẵn sàng"><i class="fa fa-exchange"></i></a>
                   <?php endif ;?>
                 </td>
               </tr>

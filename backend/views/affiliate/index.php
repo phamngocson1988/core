@@ -115,7 +115,7 @@ use backend\models\UserCommissionWithdraw;
               <?php $user->attachBehavior('commission', UserCommissionBehavior::className());?>
               <?php $user->attachBehavior('affiliate', UserAffiliateBehavior::className());?>
               <?php 
-              $commission = $user->getCommission();
+              $commission = $user->getValidCommission();
               // pending
               $pending = clone $commission;
               if ($search->report_start_date) {

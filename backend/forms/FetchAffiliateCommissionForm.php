@@ -55,10 +55,19 @@ class FetchAffiliateCommissionForm extends Model
         switch ($this->status) {
             case 'pending':
                 $command->andWhere(['>', "valid_from_date", $today]);
+                $command->andWhere(["status" => UserCommission::STATUS_VALID]);
                 break;
             case 'ready':
                 $command->andWhere(['<=', "valid_from_date", $today]);
+                $command->andWhere(["status" => UserCommission::STATUS_VALID]);
                 break;
+            case 'withdrawed':
+                $command->andWhere(["status" => UserCommission::STATUS_WITHDRAWED]);
+                break;
+            default:
+                $command->andWhere(["status" => UserCommission::STATUS_VALID]);
+                break;
+            
         }
 
         $orderBy = ["created_at" => SORT_DESC];
@@ -85,6 +94,7 @@ class FetchAffiliateCommissionForm extends Model
         return [
             'pending' => 'Pending',
             'ready' => 'Ready',
+            'withdrawed' => 'Withdrawed'
         ];
     }
 }

@@ -82,7 +82,7 @@ class m130524_201442_init extends Migration
             'created_at' => $this->date(),
             'valid_from_date' => $this->date(),
             'valid_to_date' => $this->date(),
-            'status' => $this->integer()->notNull()->defaultValue(1), // set 1: pending, 2: completed
+            'status' => $this->integer()->notNull()->defaultValue(1), // set 1: valid, 2: withdrawed
         ], $tableOptions);
 
         $this->createTable('{{%user_commission_withdraw}}', [
