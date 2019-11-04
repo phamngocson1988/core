@@ -1304,11 +1304,15 @@ div.chat-now{
 @media screen and (max-width: 960px){
     .bottom-header {
         position: relative;
-        height: 50vw;
+        height: 45vw;
     }
     .main-slider .main-slider-blurred img, .main-slider .slider-image-box img{
         height: auto;
         width: 100%;
+    }
+
+    .bottom-header .container {
+        padding: 0;
     }
 }
 
