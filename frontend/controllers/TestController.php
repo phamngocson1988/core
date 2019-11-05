@@ -8,11 +8,6 @@ class TestController extends Controller
 {
     public function actionIndex() 
     {
-        $settings = Yii::$app->settings;
-        $adminEmail =  $settings->get('ApplicationSettingForm', 'admin_email', null);
-        $contactEmail =  $settings->get('ApplicationSettingForm', 'contact_email', null);
-        echo $contactEmail;
-        die($adminEmail);
         return $this->render('index');
     }
 }

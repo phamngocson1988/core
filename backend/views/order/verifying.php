@@ -201,14 +201,14 @@ use backend\components\datetimepicker\DateTimePicker;
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php if (Yii::$app->user->can('admin')) :?>
-                  <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
+                  <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs red tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
                   <?php if ($model->evidence): ?>
                   <a href='<?=$model->evidence;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem hóa đơn" target="_blank"><i class="fa fa-file"></i></a>
                   <?php endif;?>
                   <a href='<?=Url::to(['order/send-mail-verifying-order', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
 
-                  <a href='#go_pending<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips approve" data-pjax="0" data-container="body" data-original-title="Duyệt thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                  <a href='#go_pending<?=$model->id;?>' class="btn btn-xs blue tooltips approve" data-pjax="0" data-container="body" data-original-title="Duyệt thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="go_pending<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
