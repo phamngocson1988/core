@@ -368,6 +368,7 @@ class OrderController extends Controller
 
             $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
             if ($adminEmail) {
+                Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                 Yii::$app->mailer->compose('admin_send_pending_order', [
                     'order' => $order,
                     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
@@ -491,6 +492,7 @@ class OrderController extends Controller
         $order = Order::findOne($id);
         $content = $request->post('content');
         if (trim($content)) {
+            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->complain($content);
             $order->send(
@@ -603,7 +605,7 @@ class OrderController extends Controller
                 $model->stop();
                 return $this->renderJson(true);
             } else {
-                $this->renderJson(fasle, $model->getErrors());
+                $this->renderJson(false, $model->getErrors());
             }
         }
 

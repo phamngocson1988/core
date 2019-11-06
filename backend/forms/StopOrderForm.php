@@ -70,6 +70,7 @@ class StopOrderForm extends Model
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
+            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             // Update order total price, status
             $order->attachBehavior('log', OrderLogBehavior::className());
             $order->attachBehavior('mail', OrderMailBehavior::className());

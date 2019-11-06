@@ -31,6 +31,7 @@ class OrderLogController extends Controller
         $request = Yii::$app->request;
         $command = OrderLog::find();
         $command->with('user');
+        $command->orderBy(['id' => SORT_DESC]);
         if ($request->get('order_id')) {
             $command->andWhere(['order_id' => $request->get('order_id')]);
         }
