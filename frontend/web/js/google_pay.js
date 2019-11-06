@@ -64,7 +64,11 @@ function onGooglePayLoaded() {
   // Initialize the client and determine readiness to pay with Google Pay:
   // 1. Instantiate the client using the 'TEST' environment.
   googlePayClient = new google.payments.api.PaymentsClient({
-    environment: 'TEST'
+    environment: 'PRODUCTION',
+    MerchantInfo: {
+      merchantId: '10084939671907201386',
+      merchantName: 'Kinggems US'
+    }
   });
   // 2. Call the isReadyToPay method passing in the necessary configuration.
   googlePayClient.isReadyToPay(googlePayBaseConfiguration)
