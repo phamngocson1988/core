@@ -35,9 +35,7 @@ class ResellerController extends Controller
         $request = Yii::$app->request;
 
         $data = [
-            'email' => $request->get('email'),
-            'username' => $request->get('username'),
-            'name' => $request->get('name'),
+            'user_id' => $request->get('user_id'),
             'phone' => $request->get('phone'),
         ];
         $form = new FetchCustomerForm($data);
