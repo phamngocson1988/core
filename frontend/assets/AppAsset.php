@@ -28,8 +28,6 @@ class AppAsset extends AssetBundle
         'js/jquery.fancybox.min.js',
         'js/sweetalert.min.js',
         'js/function.js',
-        'js/google_pay.js',
-        ["https://pay.google.com/gp/p/js/pay.js", "onload" => "onGooglePayLoaded()", "async" => "async"]
     ];
     public $depends = [
         'yii\web\YiiAsset',
