@@ -3,6 +3,8 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
+use frontend\components\verification\twilio\Sms;
+use Twilio\Rest\Client;
 
 class TestController extends Controller
 {
@@ -12,5 +14,36 @@ class TestController extends Controller
         $this->view->registerJsFile("https://pay.google.com/gp/p/js/pay.js", ['depends' => ['\yii\web\JqueryAsset'], "onload" => "onGooglePayLoaded()", "async" => "async"]);
         
         return $this->render('index');
+    }
+
+    public function actionWhatsapp()
+    {
+    	$service = new Sms(['testing_mode' => false, 'useWhatsapp' => true]);
+    	$result = $service->send("+84986803325", "Hello {pin}");
+    	var_dump($result);
+    	die;
+    }
+
+    public function actionTwilio()
+    {
+		// Your Account SID and Auth Token from twilio.com/console
+		$account_sid = 'AC832ee066e528304ba0669d955746025b';
+		$auth_token = '27abb57f640a9f4d20145606e6215e7e';
+		// In production, these should be environment variables. E.g.:
+		// $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
+
+		// A Twilio number you own with SMS capabilities
+		$twilio_number = "+19105503850";
+
+		$client = new Client($account_sid, $auth_token);
+		$message = $client->messages
+		->create("whatsapp:+15005550006", // to
+		       array(
+		           "from" => "whatsapp:+14155238886",
+		           "body" => "Hello there!"
+		       )
+		);
+
+		print($message->sid);
     }
 }
