@@ -80,11 +80,12 @@ use dosamigos\datepicker\DatePicker;
                 <th scope="col">Amount</th>
                 <th scope="col">No. of Packages</th>
                 <th scope="col">Status</th>
+                <th scope="col">Bank Invoice</th>
               </tr>
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="5">No data found</td></tr>
+              <tr><td colspan="6">No data found</td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
@@ -101,6 +102,20 @@ use dosamigos\datepicker\DatePicker;
                 </td>
                 <td><?=number_format($model->quantity, 1);?></td>
                 <td><?=$model->getStatusLabel();?></td>
+                <td>
+                  <?php if (!$model->evidence) : ?>
+                  <?php $form = ActiveForm::begin([
+                      'action' => ['user/order-evidence', 'id' => $model->id],
+                      'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
+                  ]); ?>
+                  <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
+                  <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'action-link normal-link']);?>
+                  <?php ActiveForm::end(); ?>
+                  <?php else : ?>
+                  <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">View Receipt</a> | 
+                  <a href="<?=Url::to(['user/remove-order-evidence', 'id' => $model->id]);?>" class="normal-link remove-link">Remove</a>
+                  <?php endif;?>
+                </td>
               </tr>
               <?php endforeach;?>
             </tbody>
@@ -123,7 +138,22 @@ use dosamigos\datepicker\DatePicker;
 $script = <<< JS
 $('#filter-button').on('click', function(){
   $('#filter-form').submit();
-})
+});
+// Upload evidence
+$('.file_upload').on('change', function() {
+  $(this).closest('form').submit();
+});
+$('.action-link').on('click', function() {
+  $(this).closest('form').find('.file_upload').trigger('click');
+});
+$('.remove-link').ajax_action({
+  method: 'POST',
+  confirm: true,
+  confirm_text: 'Do you want to remove this receipt?',
+  callback: function(eletement, data) {
+    location.reload();
+  }
+});
 JS;
 $this->registerJs($script);
 ?>

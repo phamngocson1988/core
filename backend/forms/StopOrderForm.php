@@ -22,6 +22,7 @@ class StopOrderForm extends Model
             ['id', 'validateOrder'],
             ['description', 'trim'],
             ['quantity', 'validateQuantity'],
+            ['quantity', 'number']
         ];
     }
 

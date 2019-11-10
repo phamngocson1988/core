@@ -8,6 +8,7 @@ use Twilio\Rest\Client;
 
 class TestController extends Controller
 {
+	public $layout = 'test';
     public function actionIndex() 
     {
         $this->view->registerJsFile('js/google_pay.js', ['depends' => ['\frontend\assets\AppAsset']]);
@@ -45,5 +46,26 @@ class TestController extends Controller
 		);
 
 		print($message->sid);
+    }
+
+    public function actionVerifyPhone()
+    {
+        $this->view->registerJsFile("https://sdk.accountkit.com/en_US/sdk.js", ['position' => \yii\web\View::POS_HEAD]);
+        // Initialize variables
+		$app_id = '734107406647333';
+		$secret = 'c662746780d36a5440b104db49d976b7';
+		$version = 'v1.0'; // 'v1.1' for example
+        return $this->render('verify-phone', []);
+    }
+
+    public function actionAccountKit()
+    {
+    	return $this->render('account-kit', []);
+    }
+
+    public function actionPaypal()
+    {
+        $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
+        return $this->render('paypal', []);
     }
 }

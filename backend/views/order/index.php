@@ -292,17 +292,20 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
         <?php if ($models) :?>
+        <?php $sumQuantity = $search->getCommand()->sum('quantity');?>
+        <?php if ($sumQuantity) : ?>
         <div class="row">
           <div class="col-md-2 col-sm-4">
             <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
           </div>
           <div class="col-md-2 col-sm-4">
-            <span class="label label-success">Tổng số gói: <?=round($search->getCommand()->sum('quantity'), 1);?></span>
+            <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
           </div>
           <div class="col-md-2 col-sm-4">
-            <span class="label label-default" data-time="<?=$search->getCommand()->sum('process_duration_time');?>" data-quantity="<?=$search->getCommand()->sum('quantity');?>">Thời gian trung bình: <?=FormatConverter::countDuration(round($search->getCommand()->sum('process_duration_time') / $search->getCommand()->sum('quantity')));?></span>
+            <span class="label label-default" data-time="<?=$search->getCommand()->sum('process_duration_time');?>" data-quantity="<?=$search->getCommand()->sum('quantity');?>">Thời gian trung bình: <?=FormatConverter::countDuration(round($search->getCommand()->sum('process_duration_time') / $sumQuantity));?></span>
           </div>
         </div>
+        <?php endif;?>
         <?php endif;?>
       </div>
     </div>
