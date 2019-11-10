@@ -28,8 +28,8 @@ class TestController extends Controller
     public function actionTwilio()
     {
 		// Your Account SID and Auth Token from twilio.com/console
-		$account_sid = 'AC832ee066e528304ba0669d955746025b';
-		$auth_token = '27abb57f640a9f4d20145606e6215e7e';
+		$account_sid = '';
+		$auth_token = '';
 		// In production, these should be environment variables. E.g.:
 		// $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
 
