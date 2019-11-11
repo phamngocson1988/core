@@ -141,6 +141,7 @@ class TopupController extends Controller
 
     public function actionCheckout()
     {
+        $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
         $this->view->params['main_menu_active'] = 'topup.index';
         $cart = Yii::$app->kingcoin;
         if (!$cart->getItem()) throw new NotFoundHttpException("You have not added any pricing package", 1);
@@ -307,6 +308,54 @@ class TopupController extends Controller
 
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), 1);
+        }
+    }
+
+    public function actionPaypalCapture()
+    {
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
+        if ($request->isPost) {
+            $data = $request->getPost();
+            $paymentId = ArrayHelper::remove($data, 'id');
+            $intent = ArrayHelper::remove($data, 'intent');
+            $payer = ArrayHelper::remove($data, 'payer');
+            $status = ArrayHelper::remove($data, 'status');
+            /**
+             * create_time: "2019-11-11T11:08:34Z"
+             *   id: "04X98260XH6900543"
+             *   intent: "CAPTURE"
+             *   links: [{…}]
+             *   payer: {email_address: "kinggems_richkid@gmail.com", payer_id: "XN62AK3SNLXZA", address: {…}, name: {…}}
+             *   purchase_units: [{…}]
+             *   status: "COMPLETED"
+             *   update_time: "2019-11-11T11:16:17Z"
+             */
+            // Create payment transaction
+            $trn = new PaymentTransaction();
+            $trn->user_id = $user->id;
+            $trn->payment_method = 'paypal';
+            $trn->payment_type = 'online';
+            // Price
+            $trn->price = $cart->getSubTotalPrice();
+            $trn->discount_price = $cart->hasPromotion() ? $cart->getPromotionMoney() : 0;
+            $trn->total_price = $cart->getTotalPrice();
+            // Coin
+            $trn->coin = $cart->getSubTotalCoin();
+            $trn->promotion_coin = $cart->getPromotionCoin();
+            $trn->total_coin = $cart->getTotalCoin();
+            $trn->description = 'paypal';
+            $trn->created_by = $user->id;
+            $trn->status = PaymentTransaction::STATUS_COMPLETED;
+            $trn->payment_at = date('Y-m-d H:i:s');
+            $trn->generateAuthKey();
+            if ($cart->hasPromotion()) {
+                $promotion = $cart->getPromotionItem();
+                $trn->promotion_code = $promotion->code;
+                $trn->promotion_id = $promotion->id;
+            }
+            $trn->save();
+            // Top up
         }
     }
 }

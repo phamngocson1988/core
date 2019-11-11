@@ -11,6 +11,11 @@ $cart->applyPromotion();
 $sub = $cart->getSubTotalPrice();
 $total = $cart->getTotalPrice(); 
 ?>
+<style>
+.hide {
+  display: none;
+}
+</style>
 <section class="topup-page t-payment">
   <div class="container">
     <div class="small-container">
@@ -82,7 +87,8 @@ $total = $cart->getTotalPrice();
 
                 <div class="t-wrap-btn">
                   <!-- <a class="btn-product-detail-add-to-cart" href="javascript:;">PAYMENT</a> -->
-                  <?= Html::submitButton('PAYMENT', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
+                  <?= Html::submitButton('PAYMENT', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'paygate-button-container', 'onClick' => 'showLoader()']) ?>
+                  <div id="paypal-button-container" class="hide" style="margin-top: 50px; width:50px; height: 30px"></div>	
                 </div>
               <?php ActiveForm::end();?>
             </div>
@@ -176,10 +182,52 @@ $('.paygate-logo').on('click', function(){
 });
 $('.paygate').change(function(){
   var _c = $(this).attr('value');
+  // Show/hide value
   $('.price').hide();
   $('.price[paygate=' + _c).show();
+  // Show/hide payment button
+  if (_c == 'paypal') {
+    $('#paypal-button-container').removeClass('hide');
+    $('#paygate-button-container').addClass('hide');
+  } else {
+    $('#paygate-button-container').removeClass('hide');
+    $('#paypal-button-container').addClass('hide');
+  }
 });
 $('.paygate:checked').trigger('change');
+
+paypal.Buttons({
+createOrder: function(data, actions) {
+  console.log('Paypal createOrder data', data);
+  console.log('Paypal createOrder actions', actions);
+  return actions.order.create({
+    purchase_units: [{
+      amount: {
+        value: '0.01'
+      }
+    }]
+  });
+},
+onApprove: function(data, actions) {
+  console.log('Paypal onApprove data', data);
+  console.log('Paypal onApprove actions', actions);
+  return actions.order.capture().then(function(details) {
+    console.log('Paypal details', details);
+
+    alert('Transaction completed by ' + details.payer.name.given_name);
+    // Call your server to save the transaction
+    // return fetch('/paypal-transaction-complete', {
+    //   method: 'post',
+    //   headers: {
+    //     'content-type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     orderID: data.orderID
+    //   })
+    // });
+  });
+}
+}).render('#paypal-button-container');
 JS;
 $this->registerJs($script);
 ?>
