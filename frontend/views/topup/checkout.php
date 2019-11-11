@@ -198,36 +198,42 @@ $('.paygate:checked').trigger('change');
 
 paypal.Buttons({
 createOrder: function(data, actions) {
-  console.log('Paypal createOrder data', data);
-  console.log('Paypal createOrder actions', actions);
   return actions.order.create({
     purchase_units: [{
       amount: {
-        value: '0.01'
+        value: '###AMOUNT###'
       }
     }]
   });
 },
 onApprove: function(data, actions) {
-  console.log('Paypal onApprove data', data);
-  console.log('Paypal onApprove actions', actions);
   return actions.order.capture().then(function(details) {
-    console.log('Paypal details', details);
-
-    alert('Transaction completed by ' + details.payer.name.given_name);
-    // Call your server to save the transaction
-    // return fetch('/paypal-transaction-complete', {
-    //   method: 'post',
-    //   headers: {
-    //     'content-type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     orderID: data.orderID
-    //   })
-    // });
+    if (details.status == "COMPLETED") {
+      $.ajax({
+        url: '###LINK###',
+        type: 'POST',
+        dataType : 'json',
+        data: details,
+        success: function (result, textStatus, jqXHR) {
+          console.log(result);
+          if (result['status']) {
+            window.location.href = result['success_link'];
+          } else {
+            swal("Payment fail.", "Transaction ID: " + result['transaction'], "warning");
+          }
+        },
+      });
+    } else {
+      swal("Payment fail.", "Payment ID: " + details.id, "warning");
+    }
+    
   });
 }
 }).render('#paypal-button-container');
 JS;
+$paypalCapture = Url::to(['topup/paypal-capture']);
+$paypalAmount = round($cart->getTotalPrice() + $fee, 1);
+$script = str_replace('###LINK###', $paypalCapture, $script);
+$script = str_replace('###AMOUNT###', $paypalAmount, $script);
 $this->registerJs($script);
 ?>

@@ -141,7 +141,15 @@ class TopupController extends Controller
 
     public function actionCheckout()
     {
-        $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=AQK-NCCq492D7OEICMTiFzyWPskls32NEhwZ9t7eERBk2kHuhjywMFA8BjMkj1XqFvQTtok6Srs1R-OF&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
+        $settings = Yii::$app->settings;
+        $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
+        if ($paypalMode == 'live') {
+            $clientId = $settings->get('PaypalSettingForm', 'client_id');
+        } else {
+            $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
+        }
+
+        $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=$clientId&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
         $this->view->params['main_menu_active'] = 'topup.index';
         $cart = Yii::$app->kingcoin;
         if (!$cart->getItem()) throw new NotFoundHttpException("You have not added any pricing package", 1);
@@ -315,32 +323,30 @@ class TopupController extends Controller
     {
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
+        $cart = Yii::$app->kingcoin;
+
+        // return $this->asJson(['status' => true, 'post' => $request->post()]);
         if ($request->isPost) {
-            $data = $request->getPost();
-            $paymentId = ArrayHelper::remove($data, 'id');
-            $intent = ArrayHelper::remove($data, 'intent');
-            $payer = ArrayHelper::remove($data, 'payer');
-            $status = ArrayHelper::remove($data, 'status');
-            /**
-             * create_time: "2019-11-11T11:08:34Z"
-             *   id: "04X98260XH6900543"
-             *   intent: "CAPTURE"
-             *   links: [{…}]
-             *   payer: {email_address: "kinggems_richkid@gmail.com", payer_id: "XN62AK3SNLXZA", address: {…}, name: {…}}
-             *   purchase_units: [{…}]
-             *   status: "COMPLETED"
-             *   update_time: "2019-11-11T11:16:17Z"
-             */
+            $paymentId = $request->post('id');
+            $status = $request->post('status');
+            if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
+
             // Create payment transaction
             $trn = new PaymentTransaction();
-            $trn->user_id = $user->id;
+            $trn->on(PaymentTransaction::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'applyReferGift']);
+            $trn->on(PaymentTransaction::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'welcomeBonus']);
+            $trn->status = PaymentTransaction::STATUS_COMPLETED;
+            $trn->payment_id = $paymentId;
+            $trn->payment_at = date('Y-m-d H:i:s');
             $trn->payment_method = 'paypal';
             $trn->payment_type = 'online';
-            // Price
+            $trn->payment_data = json_encode($request->post());
+            $trn->user_id = $user->id;
+            // // Price
             $trn->price = $cart->getSubTotalPrice();
             $trn->discount_price = $cart->hasPromotion() ? $cart->getPromotionMoney() : 0;
             $trn->total_price = $cart->getTotalPrice();
-            // Coin
+            // // Coin
             $trn->coin = $cart->getSubTotalCoin();
             $trn->promotion_coin = $cart->getPromotionCoin();
             $trn->total_coin = $cart->getTotalCoin();
@@ -356,6 +362,27 @@ class TopupController extends Controller
             }
             $trn->save();
             // Top up
+            $wallet = new UserWallet();
+            $wallet->on(UserWallet::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'sendNotificationEmail']);
+            $wallet->coin = $trn->total_coin;
+            $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+            $wallet->type = UserWallet::TYPE_INPUT;
+            $wallet->description = "Transaction " . $trn->getId();
+            $wallet->ref_name = PaymentTransaction::className();
+            $wallet->ref_key = $trn->auth_key;
+            $wallet->created_by = $user->id;
+            $wallet->user_id = $user->id;
+            $wallet->status = UserWallet::STATUS_COMPLETED;
+            $wallet->payment_at = date('Y-m-d H:i:s');
+            $wallet->save();
+
+            $cart->clear();
+            return $this->asJson([
+                'status' => true, 
+                'transaction' => $trn->id, 
+                'wallet' => $wallet->id,
+                'success_link' => Url::to(['topup/success', 'ref' => $trn->auth_key], true),
+            ]);
         }
     }
 }
