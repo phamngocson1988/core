@@ -7,6 +7,11 @@ $cart = Yii::$app->cart;
 $item = $cart->getItem();
 $cart->applyPromotion();
 ?>
+<style>
+.hide {
+  display: none;
+}
+</style>
 <section class="checkout-page">
   <div class="container">
     <div class="checkout-block">
@@ -97,7 +102,8 @@ $cart->applyPromotion();
                     </label>
                     
                     <div class="t-wrap-btn is-desktop">
-                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
+                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'paygate-button-container', 'onClick' => 'showLoader()']) ?>
+                      <div id="paypal-button-container" class="hide" style="margin-top: 50px; width:50px; height: 30px"></div>  
                     </div>
                   </div>
                   <div class="checkout-cart-total">
@@ -183,8 +189,57 @@ $('.paygate').change(function(){
   var _c = $(this).attr('value');
   $('.price').hide();
   $('.price[paygate=' + _c).show();
+
+  // Show/hide payment button
+  if (_c == 'paypal') {
+    $('#paypal-button-container').removeClass('hide');
+    $('#paygate-button-container').addClass('hide');
+  } else {
+    $('#paygate-button-container').removeClass('hide');
+    $('#paypal-button-container').addClass('hide');
+  }
 });
 $('.paygate:checked').trigger('change');
+
+paypal.Buttons({
+createOrder: function(data, actions) {
+  return actions.order.create({
+    purchase_units: [{
+      amount: {
+        value: '###AMOUNT###'
+      }
+    }]
+  });
+},
+onApprove: function(data, actions) {
+  return actions.order.capture().then(function(details) {
+    if (details.status == "COMPLETED") {
+      $.ajax({
+        url: '###LINK###',
+        type: 'POST',
+        dataType : 'json',
+        data: details,
+        success: function (result, textStatus, jqXHR) {
+          console.log(result);
+          if (result['status']) {
+            showLoader();
+            window.location.href = result['success_link'];
+          } else {
+            swal("Payment fail.", "Transaction ID: " + result['transaction'], "warning");
+          }
+        },
+      });
+    } else {
+      swal("Payment fail.", "Payment ID: " + details.id, "warning");
+    }
+    
+  });
+}
+}).render('#paypal-button-container');
 JS;
+$paypalCapture = Url::to(['cart/paypal-capture']);
+$paypalAmount = round($cart->getTotalPrice() + $fee, 1);
+$script = str_replace('###LINK###', $paypalCapture, $script);
+$script = str_replace('###AMOUNT###', $paypalAmount, $script);
 $this->registerJs($script);
 ?>

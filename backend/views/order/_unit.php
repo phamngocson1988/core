@@ -24,7 +24,7 @@ use yii\helpers\Html;
   <?= Html::beginForm(['order/add-unit', 'id' => $order->id], 'post', ['id' => 'update-unit-form']) ?>
   <div class="col-md-6">
       <div class="input-group">
-          <input type="number" id="doing_unit" name="doing_unit" class="form-control">
+          <input type="text" id="doing_unit" name="doing_unit" class="form-control">
           <span class="input-group-btn">
             <button class="btn btn-default" id="update_unit" type="submit">Xác nhận</button>
           </span>

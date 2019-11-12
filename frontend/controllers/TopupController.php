@@ -326,7 +326,7 @@ class TopupController extends Controller
         $cart = Yii::$app->kingcoin;
 
         // return $this->asJson(['status' => true, 'post' => $request->post()]);
-        if ($request->isPost) {
+        if ($request->isPost && $request->isAjax) {
             $paymentId = $request->post('id');
             $status = $request->post('status');
             if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
