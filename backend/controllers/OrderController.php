@@ -363,22 +363,29 @@ class OrderController extends Controller
         $model->setScenario(Order::SCENARIO_GO_PENDING);
         $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             $order = $event->sender;
+            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->log("Moved to pending");
-
-            $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
-            if ($adminEmail) {
-                Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-                Yii::$app->mailer->compose('admin_send_pending_order', [
-                    'order' => $order,
+            $order->send(
+                'admin_send_pending_order', 
+                sprintf("Order confirmation - %s", $order->id), [
                     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-                ])
-                ->setTo($order->customer_email)
-                ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
-                ->setSubject(sprintf("Order confirmation - %s", $order->id))
-                ->setTextBody("Your order is moved to pending status")
-                ->send();
-            }
+            ]);
+            $order->log(sprintf("Moved to pending with payment_id: %s", $order->payment_id));
+
+            // $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+            // if ($adminEmail) {
+            //     Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+            //     Yii::$app->mailer->compose('admin_send_pending_order', [
+            //         'order' => $order,
+            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            //     ])
+            //     ->setTo($order->customer_email)
+            //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+            //     ->setSubject(sprintf("Order confirmation - %s", $order->id))
+            //     ->setTextBody("Your order is moved to pending status")
+            //     ->send();
+            // }
         });
         if (!$model->auth_key) $model->generateAuthKey();
         $model->payment_type = 'offline';
@@ -399,27 +406,36 @@ class OrderController extends Controller
         $model->setScenario(Order::SCENARIO_GO_PROCESSING);
         $model->status = Order::STATUS_PROCESSING;
         $model->process_start_time = date('Y-m-d H:i:s');
-        // $model->process_end_time = date('Y-m-d H:i:s');
-        // $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;
+            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             $order->attachBehavior('log', OrderLogBehavior::className());
+            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->log("Moved to processing");
-            $settings = Yii::$app->settings;
-            $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
-            $frontend = Yii::$app->params['frontend_url'];
-            Yii::$app->urlManagerFrontend->setHostInfo($frontend);
-            Yii::$app->mailer->compose('admin_send_processing_order', [
-                'order' => $order,
-                'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            ])
-            ->setTo($order->customer_email)
-            ->setFrom([$adminEmail => Yii::$app->name])
-            ->setSubject(sprintf("[KingGems] - Processing Order - Order #%s", $order->id))
-            ->setTextBody("Your order #<?=$this->id;?> has been processed now. Please review it")
-            ->send();
+            $order->send(
+                'admin_send_processing_order', 
+                sprintf("[KingGems] - Processing Order - Order #%s", $order->id), [
+                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            ]);
+
+            // $settings = Yii::$app->settings;
+            // $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+            // $frontend = Yii::$app->params['frontend_url'];
+            // Yii::$app->urlManagerFrontend->setHostInfo($frontend);
+            // Yii::$app->mailer->compose('admin_send_processing_order', [
+            //     'order' => $order,
+            //     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            // ])
+            // ->setTo($order->customer_email)
+            // ->setFrom([$adminEmail => Yii::$app->name])
+            // ->setSubject(sprintf("[KingGems] - Processing Order - Order #%s", $order->id))
+            // ->setTextBody("Your order " . $order->id . " has been processed now. Please review it")
+            // ->send()
+            // ;
         });
+
         return $this->renderJson($model->save());
+
     }
 
     public function actionMoveToCompleted($id)
@@ -434,21 +450,29 @@ class OrderController extends Controller
         $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;
+            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             $order->attachBehavior('log', OrderLogBehavior::className());
+            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->log("Moved to completed");
-            $settings = Yii::$app->settings;
-            $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
-            $frontend = Yii::$app->params['frontend_url'];
-            Yii::$app->urlManagerFrontend->setHostInfo($frontend);
-            Yii::$app->mailer->compose('admin_send_complete_order', [
-                'order' => $order,
-                'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            ])
-            ->setTo($order->customer_email)
-            ->setFrom([$adminEmail => Yii::$app->name])
-            ->setSubject(sprintf("[KingGems] - Completed Order - Order #%s", $order->id))
-            ->setTextBody("Your order #<?=$this->id;?> has been completed now. Please review it")
-            ->send();
+            $order->send(
+                'admin_send_complete_order', 
+                sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
+                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            ]);
+
+            // $settings = Yii::$app->settings;
+            // $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+            // $frontend = Yii::$app->params['frontend_url'];
+            // Yii::$app->urlManagerFrontend->setHostInfo($frontend);
+            // Yii::$app->mailer->compose('admin_send_complete_order', [
+            //     'order' => $order,
+            //     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            // ])
+            // ->setTo($order->customer_email)
+            // ->setFrom([$adminEmail => Yii::$app->name])
+            // ->setSubject(sprintf("[KingGems] - Completed Order - Order #%s", $order->id))
+            // ->setTextBody("Your order " . $order->id . " has been completed now. Please review it")
+            // ->send();
         });
         return $this->renderJson($model->save());
     }
@@ -511,7 +535,7 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $model = Order::findOne($id);
         $model->attachBehavior('log', OrderLogBehavior::className());
-        $model->log("Delete order");
+        $model->log("Delete order. Current Status is %s", $model->status);
         if ($model && $model->delete()) {
             Yii::$app->session->setFlash('success', "You have deleted order #$id successfully.");
             return $this->renderJson(true, ['url' => Url::to(['order/index'])]);
@@ -543,6 +567,11 @@ class OrderController extends Controller
         if ($request->isAjax) {
             $order = Order::findOne($id);
             $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
+            $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
+                $model = $event->sender;
+                $model->attachBehavior('log', OrderLogBehavior::className());
+                $model->log(sprintf("Approved to be cancelled when status is %s", $model->status));
+            });
             if ($order->isPendingOrder() || $order->isProcessingOrder()) {
                 $order->status = Order::STATUS_CANCELLED;
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
@@ -567,6 +596,11 @@ class OrderController extends Controller
                 $complain->order_id = $order->id;
                 $complain->content = sprintf("Your request is cancelled by admin");
                 $complain->save();
+            });
+            $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
+                $order = $event->sender;
+                $order->attachBehavior('log', OrderLogBehavior::className());
+                $order->log(sprintf("Disapproved to be cancelled when status is %s", $order->status));
             });
             $model->request_cancel = 0;
             return $this->renderJson($model->save());

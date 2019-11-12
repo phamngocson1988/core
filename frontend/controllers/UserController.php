@@ -21,6 +21,7 @@ use frontend\models\Order;
 use frontend\models\UserWallet;
 use common\models\PaymentTransaction;
 use common\models\OrderComplains;
+use frontend\behaviors\OrderLogBehavior;
 
 /**
  * UserController
@@ -196,6 +197,11 @@ class UserController extends Controller
         if (!$order) throw new yii\web\NotFoundHttpException('Order is invalid');
         // Save cancel request
         $request = Yii::$app->request;
+        $order->on(Order::EVENT_AFTER_UPDATE, function ($event) {
+            $o = $event->sender;
+            $o->attachBehavior('log', OrderLogBehavior::className());
+            $o->log(sprintf("Sent cancel request"));
+        });
         $order->setScenario(Order::SCENARIO_CANCELORDER);
         $order->request_cancel = 1;
         $order->request_cancel_time = date('Y-m-d H:i:s');

@@ -13,7 +13,7 @@ class OrderMailBehavior extends AttributeBehavior
     {
         $order = $this->owner; // the model which attached this behavior
         $settings = Yii::$app->settings;
-        $from = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
         $fromName = sprintf("%s Administrator", Yii::$app->name);
 		if (!$from) return;
         $to = $order->customer_email;
