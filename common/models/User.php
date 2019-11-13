@@ -336,6 +336,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->is_reseller == self::IS_RESELLER;
     }
 
+    public function getReseller()
+    {
+        return $this->hasOne(UserReseller::className(), ['user_id' => 'id']);
+    }
+
     public function getResellerLabel()
     {
         $labels = [

@@ -99,6 +99,16 @@ class m130524_201442_init extends Migration
             'status' => $this->integer()->notNull()->defaultValue(1), // set 1: request, 2: approved, 3: executed
         ], $tableOptions);
 
+        $this->createTable('{{%user_reseller}}', [
+            'user_id' => $this->integer()->notNull(),
+            'level' => $this->integer()->notNull(),
+            'created_at' => $this->dateTime()->notNull(),
+            'created_by' => $this->integer()->notNull(),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(),
+            'manager_id' => $this->integer(),
+        ], $tableOptions);
+
 
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
@@ -187,5 +197,6 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%image}}');
         $this->dropTable('{{%user_commission}}');
         $this->dropTable('{{%user_commission_withdraw}}');
+        $this->dropTable('{{%user_reseller}}');
     }
 }

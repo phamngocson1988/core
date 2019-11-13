@@ -15,6 +15,7 @@ use backend\forms\ChangeUserStatusForm;
 use backend\forms\InviteUserForm;
 use backend\forms\FetchCustomerForm;
 use backend\models\User;
+use backend\behaviors\UserResellerBehavior;
 
 /**
  * UserController
@@ -236,6 +237,11 @@ class UserController extends Controller
         if( $request->isAjax) {
             $user = User::findOne($id);
             if (!$user) throw new NotFoundHttpException('Not found');
+            $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
+                $model = $event->sender;
+                $model->attachBehavior('reseller', UserResellerBehavior::className());
+                $model->createReseller();
+            });
             $user->is_reseller = User::IS_RESELLER;
             return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
         }
@@ -247,6 +253,11 @@ class UserController extends Controller
         if( $request->isAjax) {
             $user = User::findOne($id);
             if (!$user) throw new NotFoundHttpException('Not found');
+            $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
+                $model = $event->sender;
+                $model->attachBehavior('reseller', UserResellerBehavior::className());
+                $model->deleteReseller();
+            });
             $user->is_reseller = User::IS_NOT_RESELLER;
             return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
         }
