@@ -333,6 +333,28 @@ class ReportController extends Controller
         ]);
     }
 
+    public function actionSaleUserOrder()
+    {
+        $request = Yii::$app->request;
+        $data = [
+            'saler_id' => $request->get('saler_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => $request->get('status', [
+                Order::STATUS_PENDING,
+                Order::STATUS_PROCESSING,
+                Order::STATUS_COMPLETED,
+                Order::STATUS_CONFIRMED,
+            ]),
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $models = $command->all();
+        return $this->renderPartial('sale/partial/order', [
+            'models' => $models,
+        ]);
+    }
+
     public function actionSaleReseller()
     {
         $this->view->params['main_menu_active'] = 'report.sale.reseller';

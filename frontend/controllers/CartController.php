@@ -202,6 +202,7 @@ class CartController extends Controller
     {
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
+        $reseller = $user->reseller; 
         $identifier = $request->post('identifier');
         if (!$identifier) {
             Yii::$app->session->setFlash('error', 'You must choose a payment gateway');
@@ -295,7 +296,9 @@ class CartController extends Controller
             $order->note = $cartItem->note;
             $gateway->setReferenceId($order->auth_key);
             
-            if ($cartItem->saler_code) {
+            if ($reseller) {
+                $order->saler_id = $reseller->manager_id;
+            } elseif ($cartItem->saler_code && !$order->saler_id) {
                 $invitor = User::findOne(['saler_code' => $cartItem->saler_code]);
                 $order->saler_id = ($invitor) ? $invitor->id : null;
             }
@@ -380,6 +383,7 @@ class CartController extends Controller
     {
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
+        $reseller = $user->reseller;
         $cart = Yii::$app->cart;
         $cartItem = $cart->getItem();
         $totalPrice = $cart->getTotalPrice();
@@ -435,7 +439,9 @@ class CartController extends Controller
             $order->recover_code = $cartItem->recover_code;
             $order->server = $cartItem->server;
             $order->note = $cartItem->note;
-            if ($cartItem->saler_code) {
+            if ($reseller) {
+                $order->saler_id = $reseller->manager_id;
+            } elseif ($cartItem->saler_code && !$order->saler_id) {
                 $invitor = User::findOne(['saler_code' => $cartItem->saler_code]);
                 $order->saler_id = ($invitor) ? $invitor->id : null;
             }

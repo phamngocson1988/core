@@ -60,6 +60,7 @@ class ReportSaleOrderByUser extends Model
                 $salerInfo = reset($reportBySaler);
                 $totalPackage = array_sum(array_column($reportBySaler, 'quantity'));
                 $totalPrice = array_sum(array_column($reportBySaler, 'total_price'));
+                $orders[$date][$salerId]['saler_id'] = $salerId;
                 $orders[$date][$salerId]['name'] = $salerInfo['saler']['name'];
                 $orders[$date][$salerId]['quantity'] = $totalPackage;
                 $orders[$date][$salerId]['total_price'] = $totalPrice;

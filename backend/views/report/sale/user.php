@@ -16,6 +16,7 @@ $userReports = [];
 $dates = array_keys($models);
 foreach ($models as $date => $records) {
   foreach ($records as $userId => $record) {
+    $userReports[$userId]['saler_id'] = $record['saler_id'];
     $userReports[$userId]['name'] = $record['name'];
     $userReports[$userId]['dates'][$date]['quantity'] = $record['quantity'];
     $userReports[$userId]['dates'][$date]['total_price'] = $record['total_price'];
@@ -154,8 +155,12 @@ foreach ($models as $date => $records) {
                   <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$record['name'];?></td>
                   <?php if ($search->period == 'day') : ?>
                   <?php $reportData = $record['dates']; ?>
-                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'quantity')), 1);?></td>
-                  <td style="vertical-align: middle; text-align: center"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></td>
+                  <td style="vertical-align: middle; text-align: center">
+                    <a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id']]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round(array_sum(array_column($reportData, 'quantity')), 1);?></a>
+                  </td>
+                  <td style="vertical-align: middle; text-align: center">
+                    <a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id']]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></a>
+                  </td>
                   <?php else : ?>
                   <?php foreach ($dates as $date): ?>
                   <?php $reportData = ArrayHelper::getValue($record['dates'], $date, ['quantity' => 0, 'total_price' => 0]);?>
@@ -174,3 +179,29 @@ foreach ($models as $date => $records) {
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<!-- Default bootstrap modal example -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Chi tiết đơn hàng</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php
+$script = <<< JS
+$("#myModal").on("show.bs.modal", function(e) {
+    var link = $(e.relatedTarget);
+    $(this).find(".modal-body").load(link.attr("href"));
+});
+JS;
+$this->registerJs($script);
+?>

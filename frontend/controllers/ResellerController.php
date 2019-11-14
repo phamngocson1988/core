@@ -113,6 +113,7 @@ class ResellerController extends Controller
     public function actionPurchase($id)
     {
         $user = Yii::$app->user->getIdentity();
+        $reseller = $user->reseller;
         $request = Yii::$app->request;
         $game = CartItemReseller::findOne($id);
         if (!$game) throw new NotFoundHttpException("Not found", 1);
@@ -167,6 +168,7 @@ class ResellerController extends Controller
                 $order->recover_code = $cartItem->recover_code;
                 $order->server = $cartItem->server;
                 $order->note = $cartItem->note;
+                $order->saler_id = ($reseller) ? $reseller->manager_id : null;
                 $order->save();
     
                 $balance -= $totalPrice;
@@ -196,6 +198,7 @@ class ResellerController extends Controller
     {
         $request = Yii::$app->request;
         $user = Yii::$app->user->identity;
+        $reseller = $user->reseller;
         $singleItem = CartItem::findOne($id);
         $singleItem->setScenario(CartItemReseller::SCENARIO_IMPORT_RAW);
         $models = [];
@@ -242,6 +245,7 @@ class ResellerController extends Controller
                         $order->sub_total_unit = $totalUnit;
                         $order->promotion_unit = 0;
                         $order->total_unit = $totalUnit;
+                        $order->saler_id = ($reseller) ? $reseller->manager_id : null;
                         $order->save();
             
                         $balance -= $totalPrice;
