@@ -154,18 +154,19 @@ foreach ($models as $date => $records) {
                   <td style="vertical-align: middle; text-align: center"><?=++$no;?></td>
                   <td style="vertical-align: middle; text-align: left; padding-left: 8px"><?=$record['name'];?></td>
                   <?php if ($search->period == 'day') : ?>
-                  <?php $reportData = $record['dates']; ?>
+                  <?php $reportData = $record['dates'];?>
                   <td style="vertical-align: middle; text-align: center">
-                    <a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id']]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round(array_sum(array_column($reportData, 'quantity')), 1);?></a>
+                    <a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round(array_sum(array_column($reportData, 'quantity')), 1);?></a>
                   </td>
                   <td style="vertical-align: middle; text-align: center">
-                    <a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id']]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></a>
+                    <a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round(array_sum(array_column($reportData, 'total_price')), 1);?></a>
                   </td>
                   <?php else : ?>
                   <?php foreach ($dates as $date): ?>
                   <?php $reportData = ArrayHelper::getValue($record['dates'], $date, ['quantity' => 0, 'total_price' => 0]);?>
-                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['quantity'], 1);?></td>
-                  <td style="vertical-align: middle; text-align: center"><?=round($reportData['total_price'], 1);?></td>
+                  <?php $range = $search->getRangeByPeriod($date);?>
+                  <td style="vertical-align: middle; text-align: center"><a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id'], 'start_date' => $range['start_date'], 'end_date' => $range['end_date']]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round($reportData['quantity'], 1);?></a></td>
+                  <td style="vertical-align: middle; text-align: center"><a href="<?=Url::to(['report/sale-user-order', 'saler_id' => $record['saler_id'], 'start_date' => $range['start_date'], 'end_date' => $range['end_date']]);?>" data-remote="false" data-toggle="modal" data-target="#myModal"><?=round($reportData['total_price'], 1);?></a></td>
                   <?php endforeach;?>
                   <?php endif;?>
                 </tr>

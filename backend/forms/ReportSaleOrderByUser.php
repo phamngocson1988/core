@@ -121,7 +121,48 @@ class ReportSaleOrderByUser extends Model
                 list($year, $month, $day) = explode("-", $label);
                 return sprintf("%s-%s-%s", $year, str_pad($month, 2, "0", STR_PAD_LEFT), str_pad($day, 2, "0", STR_PAD_LEFT));
         }
-        return $group;
+    }
+
+    public function getRangeByPeriod($label)
+    {
+        $start = strtotime($this->start_date);
+        $end = strtotime($this->end_date);
+        switch ($this->period) {
+            case 'quarter':
+                list($year, $quarter) = explode("-", $label);
+                $firstMonth = 3 * ($quarter - 1) + 1;
+                $lastMonth = 3 * ($quarter - 1) + 3;
+                $firstDate = sprintf("%s-%s-%s 00:00:00", $year, $firstMonth, "01");
+                $lastDate = date("Y-m-t 23:59:59", strtotime(sprintf("%s-%s-%s", $year, $lastMonth, "01")));
+                $first = strtotime($firstDate);
+                $last = strtotime($lastDate);
+                break;
+            case 'month':
+                list($year, $month) = explode("-", $label);
+                $firstDate = sprintf("%s-%s-%s 00:00:00", $year, $month, "01");
+                $lastDate = date("Y-m-t 23:59:59", strtotime($firstDate));
+                $first = strtotime($firstDate);
+                $last = strtotime($lastDate);
+                break;
+            case 'week': 
+                list($year, $week) = explode("-", $label);
+                $dto = new \DateTime();
+                $dto->setISODate($year, $week + 1);
+                $firstDate = $dto->format('Y-m-d 00:00:00');
+                $dto->modify('+6 days');
+                $lastDate = $dto->format('Y-m-d 23:59:59');
+                $first = strtotime($firstDate);
+                $last = strtotime($lastDate);
+                break;
+            default: //day
+                $first = $start;
+                $last = $end;
+                break;
+        }
+        return [
+            'start_date' => date("Y-m-d 00:00:00", max($first, $start)),
+            'end_date' => date("Y-m-d 23:59:59", min($last, $end)),
+        ];
     }
 
     public function getSelectByPeriod()
