@@ -352,6 +352,7 @@ class ReportController extends Controller
         $models = $command->all();
         return $this->renderPartial('sale/partial/order', [
             'models' => $models,
+            'data' => $data
         ]);
     }
 
