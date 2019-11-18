@@ -333,11 +333,52 @@ class ReportController extends Controller
         ]);
     }
 
+    public function actionSaleUserCustomer()
+    {
+        $this->view->params['main_menu_active'] = 'report.sale.user';
+        $request = Yii::$app->request;
+        $salerId = $request->get('saler_id');
+        $data = [
+            'saler_id' => $salerId,
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => $request->get('status', [
+                Order::STATUS_PENDING,
+                Order::STATUS_PROCESSING,
+                Order::STATUS_COMPLETED,
+                Order::STATUS_CONFIRMED,
+            ]),
+        ];
+        $form = new FetchOrderForm($data);
+        $table = Order::tableName();
+        $command = $form->getCommand();
+        $command->groupBy("$table.customer_id");
+        $command->select([
+            "$table.customer_id",
+            "$table.customer_name",
+            "$table.saler_id",
+            "COUNT(*) as total_order",
+            "SUM($table.quantity) as quantity",
+            "SUM($table.total_price) as total_price",
+        ]);
+        $models = $command->asArray()->all();
+        $saler = User::findOne($salerId);
+        return $this->render('sale/partial/user/customer', [
+            'models' => $models,
+            'search' => $form,
+            'saler' => $saler
+        ]);
+    }
+
     public function actionSaleUserOrder()
     {
+        $this->view->params['main_menu_active'] = 'report.sale.user';
         $request = Yii::$app->request;
+        $salerId = $request->get('saler_id');
+        $customerId = $request->get('customer_id');
         $data = [
-            'saler_id' => $request->get('saler_id'),
+            'customer_id' => $customerId,
+            'saler_id' => $salerId,
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
             'status' => $request->get('status', [
@@ -350,9 +391,13 @@ class ReportController extends Controller
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();
         $models = $command->all();
-        return $this->renderPartial('sale/partial/order', [
+        $saler = User::findOne($salerId);
+        $customer = User::findOne($customerId);
+        return $this->render('sale/partial/user/order', [
             'models' => $models,
-            'data' => $data
+            'search' => $form,
+            'saler' => $saler,
+            'customer' => $customer
         ]);
     }
 

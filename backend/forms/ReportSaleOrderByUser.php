@@ -41,6 +41,7 @@ class ReportSaleOrderByUser extends Model
         $command->with('saler');
         $command->orderBy(['created_at' => SORT_ASC]);
         $command->groupBy([$this->getGroupByPeriod(), 'saler_id']);
+        // echo $command->createCommand()->getRawSql();
         $reports = $command->asArray()->all();
         $filterColumn = $this->filter_column;
         $reportDates = array_unique(array_column($reports, $filterColumn));
@@ -147,7 +148,7 @@ class ReportSaleOrderByUser extends Model
             case 'week': 
                 list($year, $week) = explode("-", $label);
                 $dto = new \DateTime();
-                $dto->setISODate($year, $week + 1);
+                $dto->setISODate($year, $week + 1, 0);
                 $firstDate = $dto->format('Y-m-d 00:00:00');
                 $dto->modify('+6 days');
                 $lastDate = $dto->format('Y-m-d 23:59:59');
