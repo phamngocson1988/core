@@ -105,31 +105,6 @@ class m181217_033141_create_order_table extends Migration
             'description' => $this->string(255)->notNull(),
             'created_at' => $this->dateTime()->notNull(),
         ]);
-        // $this->createTable('{{%order_items}}', [
-        //     'id' => $this->primaryKey(),
-        //     'item_title' => $this->string(255)->notNull(),
-        //     'order_id' => $this->integer(11)->notNull(),
-        //     'type' => $this->integer(11)->notNull(),
-        //     'product_id' => $this->integer(11),
-        //     'game_id' => $this->integer(11),
-        //     'price' => $this->integer(11)->notNull(),
-        //     'quantity' => $this->integer(11)->notNull(),
-        //     'total' => $this->integer(11)->notNull(),
-        //     'unit_name' => $this->string(50)->notNull(),
-        //     'unit' => $this->integer(11),
-        //     'total_unit' => $this->integer(11)->defaultValue(0),
-        //     'doing_unit' => $this->integer(11)->defaultValue(0),
-        //     'username' => $this->string(255),
-        //     'password' => $this->string(255),
-        //     'platform' => $this->string(20),
-        //     'login_method' => $this->string(20),
-        //     'character_name' => $this->string(255),
-        //     'recover_code' => $this->string(255),
-        //     'server' => $this->string(255),
-        //     'note' => $this->string(255),
-        //     'image_before_payment' => $this->integer(11),
-        //     'image_after_payment' => $this->integer(11),
-        // ]);
 
         if ($this->db->driverName === 'mysql') {
             $type = "ALTER TABLE {{%order_items}} MODIFY `type` ENUM('product','payment_fee') NOT NULL DEFAULT 'product'";
@@ -159,20 +134,12 @@ class m181217_033141_create_order_table extends Migration
             'created_by' => $this->integer(11)->notNull(),
         ]);
 
-        // $this->createTable('{{%order_fee}}', [
-        //     'id' => $this->primaryKey(),
-        //     'order_id' => $this->integer(11)->notNull(),
-        //     'type' => $this->string(50)->notNull(),
-        //     'description' => $this->string(100),
-        //     'reference' => $this->string(50),
-        //     'amount' => $this->integer(11)->notNull()->defaultValue(0),
-        // ]);
-
-        // if ($this->db->driverName === 'mysql') {
-        //     $type = "ALTER TABLE {{%order_fee}} MODIFY `type` ENUM('discount','fee','tax') NOT NULL";
-        //     $command = $this->db->createCommand($type);
-        //     $command->execute();
-        // }
+        $this->createTable('{{%order_reseller}}', [
+            'order_id' => $this->integer(11)->notNull(),
+            'raw_price' => $this->float()->notNull(),
+            'customer_email' => $this->string(255)->notNull(),
+            'status' => $this->integer(11)->notNull()->defaultValue(1),
+        ]);
     }
 
     /**

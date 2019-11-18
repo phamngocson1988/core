@@ -217,4 +217,9 @@ class Order extends ActiveRecord
         $quantity = $this->quantity;
         return $total_price - $total_cogs_price - ($managing_cost_rate + $investing_cost_rate) * $total_price / 100;
     }
+
+    public function getReseller()
+    {
+        return $this->hasOne(OrderReseller::className(), ['order_id' => 'id']);
+    }
 }
