@@ -33,6 +33,9 @@ class PaymentGatewayFactory extends Model
         'payoneer' => [
             'class' => '\frontend\components\payment\clients\Payoneer',
         ],
+        'bitcoin' => [
+            'class' => '\frontend\components\payment\clients\Bitcoin',
+        ],
     ];
 
     public static function getClient($identifier)

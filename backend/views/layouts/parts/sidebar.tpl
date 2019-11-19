@@ -344,6 +344,11 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{url route='setting/bitcoin'}" class="nav-link" code='setting.bitcoin'>
+                  <i class="cc-bitcoin"></i> Bitcoin
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{url route='setting/postal-savings-bank-of-china'}" class="nav-link" code='setting.postal-savings-bank-of-china'>
                   <i class="cc-alipay"></i> Postal Savings Bank of China
                 </a>

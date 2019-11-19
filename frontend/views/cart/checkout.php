@@ -85,20 +85,29 @@ $cart->applyPromotion();
                             <img src="/images/we.png" class="paygate-logo" alt="">
                         </div>
                     </label>
-                    <label for="opt7" class="t-flex-item-center t-choose-payment radio">
-                        <input type="radio" name="identifier" id="opt7" value="postal-savings-bank-of-china" class="hidden paygate" />
-                        <span class="label"></span>
-                        <div class="t-img-wrap-logo-payment">
-                            <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
-                        </div>
-                    </label>
 
+                    <label for="opt7" class="t-flex-item-center t-choose-payment radio">
+                      <input type="radio" name="identifier" id="opt7" value="bitcoin" class="hidden paygate" />
+                      <span class="label"></span>
+                      <div class="t-img-wrap-logo-payment">
+                          <img src="/images/bitcoin.png" class="paygate-logo" alt="">
+                      </div>
+                    </label>
+                    
                     <label for="opt8" class="t-flex-item-center t-choose-payment radio">
                       <input type="radio" name="identifier" id="opt8" value="payoneer" class="hidden paygate" />
                       <span class="label"></span>
                       <div class="t-img-wrap-logo-payment">
                           <img src="/images/payoneer.png" class="paygate-logo" alt="">
                       </div>
+                    </label>
+
+                    <label for="opt9" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt9" value="postal-savings-bank-of-china" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
+                        </div>
                     </label>
                     
                     <div class="t-wrap-btn is-desktop">
@@ -158,6 +167,9 @@ $cart->applyPromotion();
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                         <div class="grand-line last-line price" paygate='payoneer' style="display: none">
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
+                        </div>
+                        <div class="grand-line last-line price" paygate='bitcoin' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                       </div>

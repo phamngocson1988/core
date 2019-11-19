@@ -13,6 +13,7 @@ use backend\forms\GallerySettingForm;
 use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
 use backend\forms\WechatSettingForm;
+use backend\forms\BitcoinSettingForm;
 use backend\forms\SkrillSettingForm;
 use backend\forms\PayoneerSettingForm;
 use backend\forms\PostalSavingsBankOfChinaSettingForm;
@@ -119,6 +120,12 @@ class SettingController extends Controller
                 'modelClass' => PayoneerSettingForm::class,
                 'view' => 'payoneer.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.payoneer']
+            ],
+            'bitcoin' => [
+                'class' => SettingsAction::class,
+                'modelClass' => BitcoinSettingForm::class,
+                'view' => 'bitcoin.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.bitcoin']
             ],
             'offline' => [
                 'class' => SettingsAction::class,

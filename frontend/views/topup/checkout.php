@@ -69,19 +69,29 @@ $total = $cart->getTotalPrice();
                         <img src="/images/we.png" class="paygate-logo" alt="">
                     </div>
                 </label>
+
                 <label for="opt7" class="t-flex-item-center t-choose-payment radio">
-                    <input type="radio" name="identifier" id="opt7" value="postal-savings-bank-of-china" class="hidden paygate" />
+                    <input type="radio" name="identifier" id="opt7" value="bitcoin" class="hidden paygate" />
                     <span class="label"></span>
                     <div class="t-img-wrap-logo-payment">
-                        <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
+                        <img src="/images/bitcoin.png" class="paygate-logo" alt="">
                     </div>
                 </label>
+                
 
                 <label for="opt8" class="t-flex-item-center t-choose-payment radio">
                     <input type="radio" name="identifier" id="opt8" value="payoneer" class="hidden paygate" />
                     <span class="label"></span>
                     <div class="t-img-wrap-logo-payment">
                         <img src="/images/payoneer.png" class="paygate-logo" alt="">
+                    </div>
+                </label>
+
+                <label for="opt9" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt9" value="postal-savings-bank-of-china" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
                     </div>
                 </label>
 
@@ -160,6 +170,15 @@ $total = $cart->getTotalPrice();
                 <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
               </div>
               <div class="t-flex-between t-payment-total price" paygate="payoneer" style="display: none">
+                <p>Grand Total:</p>
+                <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
+              </div>
+
+              <div class="t-flex-between t-sub-total price" paygate="bitcoin" style="display: none">
+                <p>Subtotal:</p>
+                <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
+              </div>
+              <div class="t-flex-between t-payment-total price" paygate="bitcoin" style="display: none">
                 <p>Grand Total:</p>
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div>

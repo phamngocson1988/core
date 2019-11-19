@@ -11,20 +11,20 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Payoneer</span>
+      <span>Bitcoin</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thiết lập cho Payoneer</h1>
+<h1 class="page-title">Thiết lập cho Bitcoin</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
     <div class="portlet">
       <div class="portlet-title">
-        <div class="caption">Thiết lập cho Payoneer</div>
+        <div class="caption">Thiết lập cho Bitcoin</div>
         <div class="actions btn-set">
           <button type="reset" class="btn default">
           <i class="fa fa-angle-left"></i> {Yii::t('app', 'reset')}
