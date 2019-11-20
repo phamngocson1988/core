@@ -125,7 +125,7 @@
       {/if}
 
       <!-- Bài viết -->
-      {if $app->user->can('saler')}
+      {if ($app->user->can('saler') || $app->user->can('marketing_officer'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
@@ -148,7 +148,7 @@
       {/if}
 
       <!-- Trung tâm hổ trợ -->
-      {if $app->user->can('saler')}
+      {if ($app->user->can('saler') || $app->user->can('marketing_officer'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-question"></i>
@@ -263,7 +263,7 @@
       {/if}
 
       <!-- Cấu hình -->
-      {if $app->user->can('saler')}
+      {if ($app->user->can('saler') || $app->user->can('marketing_officer'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
@@ -283,7 +283,7 @@
             <span class="title">Thông báo ở đầu trang</span>
             </a>
           </li>
-          {if $app->user->can('sale_manager')}
+          {if ($app->user->can('sale_manager') || $app->user->can('marketing_officer'))}
           <li class="nav-item  ">
             <a href="{url route='/setting/social'}" class="nav-link " code='setting.social'>
             <span class="title">{Yii::t('app', 'social_networks')}</span>
@@ -361,7 +361,7 @@
       {/if}
 
       <!-- Game -->
-      {if $app->user->can('saler') || $app->user->can('orderteam_manager')}
+      {if ($app->user->can('saler') || $app->user->can('orderteam_manager') || $app->user->can('marketing_officer'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
