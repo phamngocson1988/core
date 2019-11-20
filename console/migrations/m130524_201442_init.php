@@ -102,6 +102,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%user_reseller}}', [
             'user_id' => $this->integer()->notNull(),
             'level' => $this->integer()->notNull(),
+            'code' => $this->string(50)->notNull(),
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer()->notNull(),
             'updated_at' => $this->dateTime(),

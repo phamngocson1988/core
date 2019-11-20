@@ -1,0 +1,129 @@
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+  
+  
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  
+  
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  
+  
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  
+  
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+  
+  
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .cart-term-condition {
+    margin-left: 0px;
+  }
+  
+  .recovery-code-guid-box {
+    width: 100%;
+  }
+
+  .register-block .form-group .form-control, .game-info .form-group .form-control, .game-confirm .form-group .form-control {
+    width: 100%;
+  }
+
+  .affiliate-top .has-left-border {
+    font-size: 15px;
+  }
+  
+  .affiliate-top .has-left-border span {
+    font-size: 15px;
+  }
+
+  .topup-paygates {
+    margin-top: 0px;
+  }
+
+  .t-right-payment {
+    margin-top: 50px;
+  }
+
+  .offline-success .paygate-logo {
+    text-align: center;
+  }
+
+  .register-block .form-group .form-control.date-day {
+      margin-right: 18px;
+      width: calc((100% - 40px) / 3);
+  }
+
+  .register-block .form-group .form-control.date-month {
+      width: calc((100% - 40px) / 3);
+      margin-right: 17px;
+  }
+
+  .register-block .form-group .form-control.date-year {
+      width: calc((100% - 40px) / 3);
+  }
+
+  .register-block .form-group .form-control.phone-code {
+      width: calc((100% - 20px) / 2);
+      margin-right: 16px;
+  }
+
+  .register-block .form-group .form-control.phone-number {
+      width: calc((100% - 20px) / 2);
+  }
+
+  .register-block .form-group .form-control.captcha-code {
+    width: calc((100% - 20px) / 2);
+    margin-right: 19px;
+  }
+
+  .register-block .form-group .captcha-image {
+      float: left;
+  }
+
+  .register-block .form-group .captcha-image img {
+      height: 33px;
+  }
+
+  .t-hint {
+    padding-left: 0px; 
+  }
+}
