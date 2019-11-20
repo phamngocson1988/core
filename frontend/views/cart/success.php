@@ -40,7 +40,7 @@ $setting = Yii::$app->settings;
                     <p>Note: "<?=$user->username;?>_<?=$order->id;?>"</h3></p>
                   </div>
                   <div class="col-md-6 paygate-logo">
-                    <img src="<?=$logo;?>" width="<?=$logo_width;?>" height="<?=$logo_height;?>">
+                    <img style="float: right" src="<?=$logo;?>" width="<?=$logo_width;?>" height="<?=$logo_height;?>">
                   </div>
                 </div>
                 

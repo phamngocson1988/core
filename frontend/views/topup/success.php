@@ -39,7 +39,7 @@ use yii\helpers\ArrayHelper;
                     <p>Note: <?=$trn->remark;?></p>
                   </div>
                   <div class="col-md-6 paygate-logo">
-                    <img src="<?=$logo;?>" width="<?=$logo_width;?>" height="<?=$logo_height;?>">
+                    <img style="float: right" src="<?=$logo;?>" width="<?=$logo_width;?>" height="<?=$logo_height;?>">
                   </div>
                 </div>
                 
