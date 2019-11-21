@@ -369,7 +369,7 @@
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->can('saler')}
+          {if ($app->user->can('saler') || $app->user->can('marketing_officer'))}
           <li class="nav-item  "> 
             <a href="{url route='/game'}" class="nav-link " code='game.index'>
             <span class="title">{Yii::t('app', 'games')}</span>

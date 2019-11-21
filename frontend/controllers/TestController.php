@@ -76,4 +76,14 @@ class TestController extends Controller
         $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=$clientId&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
         return $this->render('paypal', []);
     }
+
+    public function actionPaypalCapture()
+    {
+        $request = Yii::$app->request;
+        return $this->asJson([
+            'status' => true, 
+            'post' => $request->post(),
+            'referer' => Yii::$app->request->referrer
+        ]);
+    }
 }

