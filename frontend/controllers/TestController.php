@@ -66,12 +66,7 @@ class TestController extends Controller
     public function actionPaypal()
     {
         $settings = Yii::$app->settings;
-        $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
-        if ($paypalMode == 'live') {
-            $clientId = $settings->get('PaypalSettingForm', 'client_id');
-        } else {
-            $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
-        }
+        $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
 
         $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=$clientId&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
         return $this->render('paypal', []);
@@ -80,6 +75,7 @@ class TestController extends Controller
     public function actionPaypalCapture()
     {
         $request = Yii::$app->request;
+        var_dump($request->post());
         return $this->asJson([
             'status' => true, 
             'post' => $request->post(),

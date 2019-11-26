@@ -70,6 +70,15 @@
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->dropDownList(['0' => 'Chưa kích hoạt', '1' => 'Đã kích hoạt'])->label('Trạng thái kích hoạt')}
+                <hr/>
+                {$form->field($model, 'username', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->textInput()->label('Tài khoản mail paypal')}
+                {$form->field($model, 'password', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->textInput()->label('Mật khẩu mail paypal')}
               </div>   
             </div>
           </div>

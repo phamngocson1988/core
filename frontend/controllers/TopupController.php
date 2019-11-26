@@ -329,6 +329,17 @@ class TopupController extends Controller
         if ($request->isPost && $request->isAjax) {
             $paymentId = $request->post('id');
             $status = $request->post('status');
+            $payer = $request->post('payer', []);
+            $email_address = ArrayHelper::getValue($payer, 'email_address');
+            $payer_id = ArrayHelper::getValue($payer, 'payer_id');
+            $purchase_units = $request->post('purchase_units', []);
+            $purchase_unit = reset($purchase_units);
+            $amount = ArrayHelper::getValue($purchase_unit, 'amount', []);
+            $value = ArrayHelper::getValue($amount, 'value', 0);
+            $currency_code = ArrayHelper::getValue($amount, 'currency_code', 'USD');
+            $payee = ArrayHelper::getValue($purchase_unit, 'payee', []);
+            $merchant_email_address = ArrayHelper::getValue($payee, 'email_address');
+            $merchant_id = ArrayHelper::getValue($payee, 'merchant_id');
             if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
 
             // Create payment transaction

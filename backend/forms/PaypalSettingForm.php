@@ -16,12 +16,16 @@ class PaypalSettingForm extends Model
     public $fee;
     public $status;
 
+    public $username;
+    public $password;
+
     public function rules()
     {
         return [
             [['client_id', 'client_secret', 'currency', 'sandbox_client_id', 'sandbox_client_secret', 'fee'], 'trim'],
             ['status', 'boolean'],
             ['mode', 'in', 'range' => ['sandbox', 'live']],
+            [['username', 'password'], 'required'],
         ];
     }
 }

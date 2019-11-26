@@ -30,7 +30,7 @@
  * Google Pay API Configuration
  */
 const allowedNetworks = ['VISA','MASTERCARD'];
-const allowedAuthMethods = ['PAN_ONLY','CRYPTOGRAM_3DS'] ;
+const allowedAuthMethods = ['PAN_ONLY'] ;
 
 const baseCardPaymentMethod = {
   type: 'CARD',
@@ -65,10 +65,10 @@ function onGooglePayLoaded() {
   // 1. Instantiate the client using the 'TEST' environment.
   googlePayClient = new google.payments.api.PaymentsClient({
     environment: 'PRODUCTION',
-    MerchantInfo: {
-      merchantId: '10084939671907201386',
-      merchantName: 'Kinggems US'
-    }
+    // MerchantInfo: {
+    //   merchantId: '10084939671907201386',
+    //   merchantName: 'Kinggems US'
+    // }
   });
   // 2. Call the isReadyToPay method passing in the necessary configuration.
   googlePayClient.isReadyToPay(googlePayBaseConfiguration)
@@ -122,8 +122,8 @@ function onGooglePaymentsButtonClicked() {
   const tokenizationSpecification = {
     type: 'PAYMENT_GATEWAY',
     parameters: {
-      gateway: 'example',
-      gatewayMerchantId: 'gatewayMerchantId'
+      gateway: 'ecard',
+      gatewayMerchantId: '[Identyfikator Akceptanta (10084939671907201386)]'
     }
   };
   // 2. Add information about the transaction.
@@ -132,24 +132,21 @@ function onGooglePaymentsButtonClicked() {
     tokenizationSpecification: tokenizationSpecification,
     parameters: {
       allowedCardNetworks: ['VISA','MASTERCARD'],
-      allowedAuthMethods: ['PAN_ONLY','CRYPTOGRAM_3DS'],
-      billingAddressRequired: true,
-      billingAddressParameters: {
-        format: 'FULL',
-        phoneNumberRequired: true
-      }
+      allowedAuthMethods: ['PAN_ONLY']
     }
   };
   
   const transactionInfo = {
     totalPriceStatus: 'FINAL',
-    totalPrice: '1',
+    totalPrice: '0.1',
     currencyCode: 'USD'
   };
   // 3. Add information about the merchant.
   const merchantInfo = {
-    merchantId: '01234567890123456789',
-    merchantName: 'Example Merchant Name'
+    // merchantId: '01234567890123456789',
+    // merchantName: 'Example Merchant Name',
+    merchantId: '10084939671907201386',
+    merchantName: 'Kinggems US'
   };
   // 4. Call loadPaymentData.
   const paymentDataRequest = Object.assign({}, googlePayBaseConfiguration, {

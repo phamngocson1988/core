@@ -15,6 +15,7 @@ use yii\helpers\Url;
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
+          console.log("details", details);
           if (details.status == "COMPLETED") {
             $.ajax({
               url: "<?=Url::to(['test/paypal-capture']);?>",
