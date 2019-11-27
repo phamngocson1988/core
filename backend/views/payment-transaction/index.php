@@ -74,8 +74,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
 
             <?=$form->field($search, 'status', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'status']
-            ])->dropDownList(PaymentTransaction::getStatusList(), ['prompt' => 'All Status'])->label('Trạng thái');?>
+              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
+            ])->dropDownList([
+                PaymentTransaction::STATUS_PENDING => 'Pending',
+                PaymentTransaction::STATUS_COMPLETED => 'Completed',
+            ])->label('Trạng thái');?>
           
             <?= $form->field($search, 'created_at_from', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],

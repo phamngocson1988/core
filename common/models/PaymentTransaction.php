@@ -10,6 +10,7 @@ class PaymentTransaction extends ActiveRecord
 {
     CONST STATUS_PENDING = "pending";
     const STATUS_COMPLETED = "completed";
+    const STATUS_DELETED = "deleted";
 
     public function behaviors()
     {
@@ -54,6 +55,11 @@ class PaymentTransaction extends ActiveRecord
     public function isPending()
     {
         return $this->status == self::STATUS_PENDING;
+    }
+
+    public function isDeleted()
+    {
+        return $this->status == self::STATUS_DELETED;
     }
 
     public function getUser()

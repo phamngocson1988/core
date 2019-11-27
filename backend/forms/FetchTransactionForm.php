@@ -35,7 +35,7 @@ class FetchTransactionForm extends PaymentTransaction
             $command->andWhere(['remark' => trim($this->remark)]);
         }
         if ($this->status) {
-            $command->andWhere(['status' => $this->status]);
+            $command->andWhere(['IN', 'status', (array)$this->status]);
         }
         if ($this->created_at_from) {
             $command->andWhere(['>=', "created_at", $this->created_at_from]);

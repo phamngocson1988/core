@@ -40,6 +40,7 @@ class m181217_033141_create_order_table extends Migration
             'customer_name' => $this->string(255),
             'customer_email' => $this->string(255),
             'customer_phone' => $this->string(20),
+            'user_ip' => $this->string(50),
             'saler_id' => $this->integer(11),
             'orderteam_id' => $this->integer(11),
             'rating' => $this->integer(2)->defaultValue(0),

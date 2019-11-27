@@ -41,7 +41,7 @@ class PaymentTransactionController extends Controller
             'id' => $request->get('id'),
             'user_id' => $request->get('user_id'),
             'payment_type' => $request->get('payment_type'),
-            'status' => $request->get('status'),
+            'status' => $request->get('status', [PaymentTransaction::STATUS_COMPLETED, PaymentTransaction::STATUS_PENDING]),
         ];
         $search = new FetchTransactionForm($data);
         $command = $search->getCommand();
@@ -68,7 +68,7 @@ class PaymentTransactionController extends Controller
             'remark' => $request->get('remark'),
             'user_id' => $request->get('user_id'),
             'payment_type' => 'offline',
-            'status' => 'pending',
+            'status' => PaymentTransaction::STATUS_PENDING,
         ];
         $search = new FetchTransactionForm($data);
         $command = $search->getCommand();
@@ -78,6 +78,32 @@ class PaymentTransactionController extends Controller
                             ->orderBy(['id' => SORT_DESC])
                             ->all();
         return $this->render('offline', [
+            'search' => $search,
+            'models' => $models,
+            'pages' => $pages
+        ]);
+    }
+
+    public function actionTrash()
+    {
+        $this->view->params['main_menu_active'] = 'transaction.trash';
+        $request = Yii::$app->request;
+        $data = [
+            'created_at_from' => $request->get('created_at_from'),
+            'created_at_to' => $request->get('created_at_to'),
+            'id' => $request->get('id'),
+            'remark' => $request->get('remark'),
+            'user_id' => $request->get('user_id'),
+            'status' => PaymentTransaction::STATUS_DELETED,
+        ];
+        $search = new FetchTransactionForm($data);
+        $command = $search->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+        return $this->render('trash', [
             'search' => $search,
             'models' => $models,
             'pages' => $pages
@@ -113,14 +139,30 @@ class PaymentTransactionController extends Controller
         }
     }
 
-    public function actionDelete($id)
+    public function actionMoveToTrash($id)
     {
         $request = Yii::$app->request;
         $transaction = PaymentTransaction::findOne($id);
         if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
         if ($transaction->isCompleted()) return $this->asJson(['status' => false, 'errors' => 'Không thể xóa giao dịch']);
-        if ($transaction->delete()) return $this->asJson(['status' => true]);
-        else {
+        $transaction->status = PaymentTransaction::STATUS_DELETED;
+        if ($transaction->save(false, ['status'])) {
+            return $this->asJson(['status' => true]);
+        } else {
+            $errors = $transaction->getErrorSummary(true);
+            return $this->asJson(['status' => false, 'errors' => reset($errors)]);
+        }
+    }
+
+    public function actionDelete($id)
+    {
+        $request = Yii::$app->request;
+        $transaction = PaymentTransaction::findOne($id);
+        if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
+        if (!$transaction->isDeleted()) return $this->asJson(['status' => false, 'errors' => 'Không thể xóa giao dịch']);
+        if ($transaction->delete()) {
+            return $this->asJson(['status' => true]);
+        } else {
             $errors = $transaction->getErrorSummary(true);
             return $this->asJson(['status' => false, 'errors' => reset($errors)]);
         }

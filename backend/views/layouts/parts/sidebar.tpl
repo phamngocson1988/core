@@ -258,6 +258,11 @@
             <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='payment-transaction/trash'}" class="nav-link " code='transaction.trash'>
+            <span class="title">Thùng rác</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

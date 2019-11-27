@@ -21,13 +21,17 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Giao dịch nạp tiền</span>
+      <a href="<?=Url::to(['payment-transaction/index']);?>">Giao dịch nạp tiền</a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Giao dịch đã xóa</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Giao dịch nạp tiền</h1>
+<h1 class="page-title">Giao dịch đã xóa</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -36,13 +40,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Giao dịch nạp tiền</span>
+          <span class="caption-subject bold uppercase"> Giao dịch đã xóa</span>
         </div>
         <div class="actions">
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['payment-transaction/offline'])]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['payment-transaction/trash'])]);?>
         <div class="row margin-bottom-10">
             <?=$form->field($search, 'id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -144,7 +148,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td>
                 <a href='#confirm-pay<?=$model->id;?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                 <a href='<?=Url::to(['payment-transaction/send-mail-offline-payment', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
-                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/move-to-trash', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
+                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa vĩnh viễn"><i class="fa fa-times"></i></a>
                 <div class="modal fade" id="confirm-pay<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -225,7 +229,7 @@ $script = <<< JS
 $('.link-action').ajax_action({
   method: 'POST',
   confirm: true,
-  confirm_text: 'Bạn có muốn xóa giao dịch này không?',
+  confirm_text: 'Bạn có muốn xóa giao dịch này không? Nó sẽ không thể phục hồi',
   callback: function(data) {
     location.reload();
   },
