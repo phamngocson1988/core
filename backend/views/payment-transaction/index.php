@@ -159,7 +159,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               </td>
               <td>
                 <?php if ($model->isPending()) : ?>
-                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-times"></i></a>
+                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/move-to-trash', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-trash"></i></a>
                 <?php endif;?>
               </td>
             </tr>
