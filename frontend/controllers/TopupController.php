@@ -195,6 +195,7 @@ class TopupController extends Controller
         // Save transaction
         $trn = new PaymentTransaction();
         $trn->user_id = $user->id;
+        $trn->user_ip = $request->userIP;
         $trn->payment_method = $identifier;
         $trn->payment_type = $gateway->type;
         // $trn->payment_id = $gateway->getReferenceId();
