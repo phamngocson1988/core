@@ -328,19 +328,26 @@ class TopupController extends Controller
 
         // return $this->asJson(['status' => true, 'post' => $request->post()]);
         if ($request->isPost && $request->isAjax) {
-            $paymentId = $request->post('id');
-            $status = $request->post('status');
-            $payer = $request->post('payer', []);
-            $email_address = ArrayHelper::getValue($payer, 'email_address');
-            $payer_id = ArrayHelper::getValue($payer, 'payer_id');
-            $purchase_units = $request->post('purchase_units', []);
+            $data = $request->post();
+            // $paymentId = ArrayHelper::getValue($data, 'id');
+            $status = ArrayHelper::getValue($data, 'status');
+            // $payer = ArrayHelper::getValue($data, 'payer', []);
+            // $payer_email_address = ArrayHelper::getValue($payer, 'email_address');
+
+            // Payer information
+            $payer = ArrayHelper::getValue($data, 'payer', []);
+            $payer_email_address = ArrayHelper::getValue($payer, 'email_address');
+
+            // purchase information
+            $purchase_units = ArrayHelper::getValue($data, 'purchase_units', []);
             $purchase_unit = reset($purchase_units);
-            $amount = ArrayHelper::getValue($purchase_unit, 'amount', []);
-            $value = ArrayHelper::getValue($amount, 'value', 0);
-            $currency_code = ArrayHelper::getValue($amount, 'currency_code', 'USD');
-            $payee = ArrayHelper::getValue($purchase_unit, 'payee', []);
-            $merchant_email_address = ArrayHelper::getValue($payee, 'email_address');
-            $merchant_id = ArrayHelper::getValue($payee, 'merchant_id');
+
+            // payment information
+            $payments = ArrayHelper::getValue($purchase_unit, 'payments', []);
+            $captures = ArrayHelper::getValue($payments, 'captures', []);
+            $capture = reset($captures);
+            $captureId = ArrayHelper::getValue($capture, 'id');
+
             if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
 
             // Create payment transaction
@@ -348,11 +355,11 @@ class TopupController extends Controller
             $trn->on(PaymentTransaction::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'applyReferGift']);
             $trn->on(PaymentTransaction::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'welcomeBonus']);
             $trn->status = PaymentTransaction::STATUS_COMPLETED;
-            $trn->payment_id = $paymentId;
+            $trn->payment_id = $captureId;
             $trn->payment_at = date('Y-m-d H:i:s');
             $trn->payment_method = 'paypal';
             $trn->payment_type = 'online';
-            $trn->payment_data = json_encode($request->post());
+            $trn->payment_data = json_encode($data);
             $trn->user_id = $user->id;
             // // Price
             $trn->price = $cart->getSubTotalPrice();
@@ -389,6 +396,21 @@ class TopupController extends Controller
             $wallet->save();
 
             $cart->clear();
+
+            // $username = $settings->get('PaypalSettingForm', 'username');
+            // $password = $settings->get('PaypalSettingForm', 'password');
+            $settings = Yii::$app->settings;
+            $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+            $fromName = sprintf("%s Administrator", Yii::$app->name);
+            if ($from) {
+                Yii::$app->mailer->compose('paypal_confirm_mail', ['data' => $data])
+                ->setTo($payer_email_address)
+                ->setFrom([$from => $fromName])
+                ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
+                ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
+                ->send();
+            }
+            
             return $this->asJson([
                 'status' => true, 
                 'transaction' => $trn->id, 

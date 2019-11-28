@@ -5,6 +5,7 @@ use Yii;
 use yii\web\Controller;
 use frontend\components\verification\twilio\Sms;
 use Twilio\Rest\Client;
+use yii\helpers\ArrayHelper;
 
 class TestController extends Controller
 {
@@ -75,7 +76,39 @@ class TestController extends Controller
     public function actionPaypalCapture()
     {
         $request = Yii::$app->request;
-        var_dump($request->post());
+        if ($request->isPost && $request->isAjax) {
+            $data = $request->post();
+            $status = ArrayHelper::getValue($data, 'status');
+            // Payer information
+            $payer = ArrayHelper::getValue($data, 'payer', []);
+            $payer_email_address = ArrayHelper::getValue($payer, 'email_address');
+
+            // purchase information
+            $purchase_units = ArrayHelper::getValue($data, 'purchase_units', []);
+            $purchase_unit = reset($purchase_units);
+
+            // payment information
+            $payments = ArrayHelper::getValue($purchase_unit, 'payments', []);
+            $captures = ArrayHelper::getValue($payments, 'captures', []);
+            $capture = reset($captures);
+            $captureId = ArrayHelper::getValue($capture, 'id');
+
+            if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
+
+            $settings = Yii::$app->settings;
+            $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+            $fromName = sprintf("%s Administrator", Yii::$app->name);
+            if ($from) {
+                $payer_email_address = Yii::$app->user->identity->email;
+                Yii::$app->mailer->compose('paypal_confirm_mail', ['data' => $data])
+                ->setTo($payer_email_address)
+                ->setFrom([$from => $fromName])
+                ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
+                ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
+                ->send();
+            }
+        }
+
         return $this->asJson([
             'status' => true, 
             'post' => $request->post(),

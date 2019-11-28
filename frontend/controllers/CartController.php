@@ -7,6 +7,7 @@ use yii\web\BadRequestHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 use frontend\components\cart\Cart;
 use frontend\components\cart\CartItem;
@@ -394,8 +395,23 @@ class CartController extends Controller
 
         // return $this->asJson(['status' => true, 'post' => $request->post()]);
         if ($request->isPost && $request->isAjax) {
-            $paymentId = $request->post('id');
-            $status = $request->post('status');
+            $data = $request->post();
+            $status = ArrayHelper::getValue($data, 'status');
+
+            // Payer information
+            $payer = ArrayHelper::getValue($data, 'payer', []);
+            $payer_email_address = ArrayHelper::getValue($payer, 'email_address');
+
+            // purchase information
+            $purchase_units = ArrayHelper::getValue($data, 'purchase_units', []);
+            $purchase_unit = reset($purchase_units);
+
+            // payment information
+            $payments = ArrayHelper::getValue($purchase_unit, 'payments', []);
+            $captures = ArrayHelper::getValue($payments, 'captures', []);
+            $capture = reset($captures);
+            $captureId = ArrayHelper::getValue($capture, 'id');
+
             if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
 
             // Order detail
@@ -421,7 +437,7 @@ class CartController extends Controller
             $order->user_ip = $request->userIP;
             $order->status = Order::STATUS_PENDING;
             $order->payment_at = date('Y-m-d H:i:s');
-            $order->payment_id = $paymentId;
+            $order->payment_id = $captureId;
             $order->generateAuthKey();
 
             // Item detail
@@ -450,6 +466,21 @@ class CartController extends Controller
             if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
             $order->log(sprintf("Created and captured by Paypal. Status is %s", $order->id, $order->status));
             $cart->clear();
+
+            // $username = $settings->get('PaypalSettingForm', 'username');
+            // $password = $settings->get('PaypalSettingForm', 'password');
+            $settings = Yii::$app->settings;
+            $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+            $fromName = sprintf("%s Administrator", Yii::$app->name);
+            if ($from) {
+                Yii::$app->mailer->compose('paypal_confirm_mail', ['data' => $data])
+                ->setTo($payer_email_address)
+                ->setFrom([$from => $fromName])
+                ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
+                ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
+                ->send();
+            }
+
             return $this->asJson([
                 'status' => true, 
                 'order' => $order->id, 
