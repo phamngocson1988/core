@@ -45,7 +45,7 @@ $currency_code = ArrayHelper::getValue($amount, 'currency_code', 'USD');
 </ul>
 <p style="margin: 4px 0 10px;">1. The transaction was authorized by the owner of paypal account: "<?=$payer_email_address;?>"</p>
 <p style="margin: 4px 0 10px;">2. You completely understand and agree with Kinggems's Policy: The payment was made, will be not refundable and being cancelled with any reason. </p>
-<p style="margin: 4px 0 10px;">By clicking on "CONFIRM" , you agree with the said term, and will never send a request for refund the said transaction thru paypal in the future.</p>
+<p style="margin: 4px 0 10px;">By replying <strong style="color:red">CONFIRM</strong> , you agree with the said term, and will never send a request for refund the said transaction thru paypal in the future.</p>
 <p style="margin: 4px 0 10px;">Ps: Please be awared of that  your order will not be processed until we receive your confirmation email. </p>
 <p style="margin: 4px 0 10px;">Thanks for the cooperation to help us to create a proper shopping enviroment and prevent the scammers.</p>
 <p style="margin: 4px 0 10px;">Regards,</p>

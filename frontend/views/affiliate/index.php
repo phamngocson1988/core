@@ -35,7 +35,7 @@ $code = $user->affiliate->code; //affiliate
           <div class="affiliate-top">
             <div class="affiliate-terms">
               <h3>This will help you earn more profit. Start now!</h3>
-              <p>By creating a reflink, you are indicating that you have read and agreed to the <a style="color: #ff3600;" href="#">Terms of Service.</a></p>
+              <p>By creating a reflink, you are indicating that you have read and agreed to the <a style="color: #ff3600;" href="<?=Url::to(['site/term', 'slug' => 'affiliate']);?>">Terms of Service.</a></p>
             </div>
             <div class="affiliate-create-reflink">
               <input type="hidden" value="<?=$code;?>" id="affiliate_code"/>

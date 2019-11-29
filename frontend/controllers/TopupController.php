@@ -397,17 +397,30 @@ class TopupController extends Controller
 
             $cart->clear();
 
-            // $username = $settings->get('PaypalSettingForm', 'username');
-            // $password = $settings->get('PaypalSettingForm', 'password');
             $settings = Yii::$app->settings;
-            $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
-            $fromName = sprintf("%s Administrator", Yii::$app->name);
-            if ($from) {
-                Yii::$app->mailer->compose('paypal_confirm_mail', ['data' => $data])
+            $username = $settings->get('PaypalSettingForm', 'username');
+            $password = $settings->get('PaypalSettingForm', 'password');
+            if ($username && $password) {
+                Yii::error(sprintf("Mail send from %s to %s", $username, $payer_email_address), __METHOD__);
+                $fromName = sprintf("%s Administrator", Yii::$app->name);
+                $mailer = Yii::createObject([
+                    'class' => 'yii\swiftmailer\Mailer',
+                    'viewPath' => '@frontend/mail',
+                    'transport' => [
+                        'class' => 'Swift_SmtpTransport',
+                        'host' => 'smtp.gmail.com',
+                        'username' => $username,
+                        'password' => $password,
+                        'port' => '587',
+                        'encryption' => 'tls',
+                    ],            
+                    'useFileTransport' => false,
+                ]);
+                $mailer->compose('paypal_confirm_mail', ['data' => $data])
                 ->setTo($payer_email_address)
-                ->setFrom([$from => $fromName])
-                ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
-                ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
+                ->setFrom([$username => $fromName])
+                ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
+                ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
                 ->send();
             }
             

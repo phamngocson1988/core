@@ -96,13 +96,28 @@ class TestController extends Controller
             if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
 
             $settings = Yii::$app->settings;
-            $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
-            $fromName = sprintf("%s Administrator", Yii::$app->name);
-            if ($from) {
+            $username = $settings->get('PaypalSettingForm', 'username');
+            $password = $settings->get('PaypalSettingForm', 'password');
+            if ($username && $password) {
+                Yii::error(sprintf("Mail send from %s to %s", $username, $payer_email_address), __METHOD__);
+                $fromName = sprintf("%s Administrator", Yii::$app->name);
+                $mailer = Yii::createObject([
+                    'class' => 'yii\swiftmailer\Mailer',
+                    'viewPath' => '@frontend/mail',
+                    'transport' => [
+                        'class' => 'Swift_SmtpTransport',
+                        'host' => 'smtp.gmail.com',
+                        'username' => $username,
+                        'password' => $password,
+                        'port' => '587',
+                        'encryption' => 'tls',
+                    ],            
+                    'useFileTransport' => false,
+                ]);
                 $payer_email_address = Yii::$app->user->identity->email;
-                Yii::$app->mailer->compose('paypal_confirm_mail', ['data' => $data])
+                $mailer->compose('paypal_confirm_mail', ['data' => $data])
                 ->setTo($payer_email_address)
-                ->setFrom([$from => $fromName])
+                ->setFrom([$username => $fromName])
                 ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
                 ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s", $captureId))
                 ->send();
