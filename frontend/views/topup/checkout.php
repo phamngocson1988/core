@@ -4,7 +4,8 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\FormatConverter;
-
+use alexandernst\devicedetect\DeviceDetect;
+$detector = new DeviceDetect();
 $cart = Yii::$app->kingcoin;
 $item = $cart->getItem();
 $cart->applyPromotion();

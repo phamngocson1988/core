@@ -47,7 +47,8 @@
         "lavrentiev/yii2-toastr": "^2.0",
         "yii2mod/yii2-sweet-alert": "*",
         "wadeshuler/yii2-sms-twilio": "^1.0",
-        "twilio/sdk": "*"
+        "twilio/sdk": "*",
+        "alexandernst/yii2-device-detect": "0.0.12"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

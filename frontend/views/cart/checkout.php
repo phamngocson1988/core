@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\FormatConverter;
+use alexandernst\devicedetect\DeviceDetect;
+$detector = new DeviceDetect();
 $cart = Yii::$app->cart;
 $item = $cart->getItem();
 $cart->applyPromotion();
@@ -109,11 +111,12 @@ $cart->applyPromotion();
                             <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
                         </div>
                     </label>
-                    
+                    <?php if (!$detector->isMobile()): ?>
                     <div class="t-wrap-btn is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'paygate-button-container', 'onClick' => 'showLoader()']) ?>
                       <div id="paypal-button-container" class="hide" style="margin-top: 50px; width:50px; height: 30px"></div>  
                     </div>
+                    <?php endif;?>
                   </div>
                   <div class="checkout-cart-total">
                     <div class="order-quantity">
@@ -174,9 +177,12 @@ $cart->applyPromotion();
                         </div>
                       </div>
                     </div>
+                    <?php if ($detector->isMobile()): ?>
                     <div class="is-mobile">
-                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'onClick' => 'showLoader()']) ?>
+                      <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'paygate-button-container', 'onClick' => 'showLoader()']) ?>
+                      <div id="paypal-button-container" class="hide" style="margin-top: 50px; width:50px; height: 30px"></div> 
                     </div>
+                    <?php endif;?>
                   </div>
                 <?php ActiveForm::end();?>
               </div>
@@ -200,7 +206,7 @@ $('.paygate-logo').on('click', function(){
 $('.paygate').change(function(){
   var _c = $(this).attr('value');
   $('.price').hide();
-  $('.price[paygate=' + _c).show();
+  $('.price[paygate=' + _c + ']').show();
 
   // Show/hide payment button
   if (_c == 'paypal') {

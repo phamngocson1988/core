@@ -274,7 +274,7 @@ class CartController extends Controller
             $order->customer_name = $user->name;
             $order->customer_email = $cartItem->reception_email;
             $order->customer_phone = $user->phone;
-            $order->user_ip = $request->userIP;
+            // $order->user_ip = $request->userIP;
             $order->status = Order::STATUS_VERIFYING;
             $order->payment_at = date('Y-m-d H:i:s');
             $order->generateAuthKey();
@@ -396,6 +396,7 @@ class CartController extends Controller
         // return $this->asJson(['status' => true, 'post' => $request->post()]);
         if ($request->isPost && $request->isAjax) {
             $data = $request->post();
+            Yii::error($data, __METHOD__);
             $status = ArrayHelper::getValue($data, 'status');
 
             // Payer information
@@ -434,7 +435,7 @@ class CartController extends Controller
             $order->customer_name = $user->name;
             $order->customer_email = $cartItem->reception_email;
             $order->customer_phone = $user->phone;
-            $order->user_ip = $request->userIP;
+            // $order->user_ip = $request->userIP;
             $order->status = Order::STATUS_PENDING;
             $order->payment_at = date('Y-m-d H:i:s');
             $order->payment_id = $captureId;
@@ -471,7 +472,6 @@ class CartController extends Controller
             $username = $settings->get('PaypalSettingForm', 'username');
             $password = $settings->get('PaypalSettingForm', 'password');
             if ($username && $password) {
-                Yii::error(sprintf("Mail send from %s to %s", $username, $payer_email_address), __METHOD__);
                 $fromName = sprintf("%s Administrator", Yii::$app->name);
                 $mailer = Yii::createObject([
                     'class' => 'yii\swiftmailer\Mailer',
@@ -486,12 +486,16 @@ class CartController extends Controller
                     ],            
                     'useFileTransport' => false,
                 ]);
-                $mailer->compose('paypal_confirm_mail', ['data' => $data])
-                ->setTo($payer_email_address)
-                ->setFrom([$username => $fromName])
-                ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $order->id, $captureId))
-                ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $order->id, $captureId))
-                ->send();
+                try {
+                    $mailer->compose('paypal_confirm_mail', ['data' => $data])
+                    ->setTo($payer_email_address)
+                    ->setFrom([$username => $fromName])
+                    ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $order->id, $captureId))
+                    ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $order->id, $captureId))
+                    ->send();
+                } catch (\Exception $e) {
+                    Yii::error($e, __METHOD__);
+                }
             }
 
             return $this->asJson([

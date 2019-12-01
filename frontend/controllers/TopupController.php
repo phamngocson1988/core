@@ -329,6 +329,7 @@ class TopupController extends Controller
         // return $this->asJson(['status' => true, 'post' => $request->post()]);
         if ($request->isPost && $request->isAjax) {
             $data = $request->post();
+            Yii::error($data, __METHOD__);
             // $paymentId = ArrayHelper::getValue($data, 'id');
             $status = ArrayHelper::getValue($data, 'status');
             // $payer = ArrayHelper::getValue($data, 'payer', []);
@@ -401,7 +402,6 @@ class TopupController extends Controller
             $username = $settings->get('PaypalSettingForm', 'username');
             $password = $settings->get('PaypalSettingForm', 'password');
             if ($username && $password) {
-                Yii::error(sprintf("Mail send from %s to %s", $username, $payer_email_address), __METHOD__);
                 $fromName = sprintf("%s Administrator", Yii::$app->name);
                 $mailer = Yii::createObject([
                     'class' => 'yii\swiftmailer\Mailer',
@@ -416,12 +416,16 @@ class TopupController extends Controller
                     ],            
                     'useFileTransport' => false,
                 ]);
-                $mailer->compose('paypal_confirm_mail', ['data' => $data])
-                ->setTo($payer_email_address)
-                ->setFrom([$username => $fromName])
-                ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
-                ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
-                ->send();
+                try {
+                    $mailer->compose('paypal_confirm_mail', ['data' => $data])
+                    ->setTo($payer_email_address)
+                    ->setFrom([$username => $fromName])
+                    ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
+                    ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
+                    ->send();
+                } catch (\Exception $e) {
+                    Yii::error($e, __METHOD__);
+                }
             }
             
             return $this->asJson([
