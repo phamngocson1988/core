@@ -67,6 +67,10 @@ if (!Yii::$app->user->can('saler') && !Yii::$app->user->can('accounting')) retur
       <div class="col-md-5"> Phương thức thanh toán: </div>
       <div class="col-md-7"> <?=$order->payment_type;?> </div>
     </div>
+    <div class="row static-info">
+      <div class="col-md-5"> IP Address: </div>
+      <div class="col-md-7"> <?=$order->user_ip;?> </div>
+    </div>
     <?php if ($order->evidence) : ?>
     <div class="row static-info">
       <div class="col-md-5"> Hóa đơn chuyển tiền: </div>

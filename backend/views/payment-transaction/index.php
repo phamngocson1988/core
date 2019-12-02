@@ -148,7 +148,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <?php endif;?>
               </td>
               <td>$<?=number_format($model->total_price);?></td>
-              <td><?=$model->payment_method;?></td>
+              <td><?=sprintf("%s (%s)", $model->payment_method, $model->user_ip);?></td>
               <td><?=$model->payment_id;?></td>
               <td><?=$model->payment_type;?></td>
               <td><?=$model->status;?></td>

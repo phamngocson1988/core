@@ -362,6 +362,7 @@ class TopupController extends Controller
             $trn->payment_type = 'online';
             $trn->payment_data = json_encode($data);
             $trn->user_id = $user->id;
+            $trn->user_ip = $request->userIP;
             // // Price
             $trn->price = $cart->getSubTotalPrice();
             $trn->discount_price = $cart->hasPromotion() ? $cart->getPromotionMoney() : 0;
