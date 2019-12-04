@@ -10,11 +10,6 @@ use backend\forms\UploadImageForm;
 use backend\forms\DeleteImageForm;
 use common\forms\SendmailForm;
 
-
-
-
-
-
 /**
  * TestController
  */
@@ -28,7 +23,11 @@ class TestController extends Controller
 				'class' => 'backend\controllers\actions\AutocompleteAction',
 				'tableName' => \common\models\Game::tableName(),
 				'field' => 'title'
-			]
+			],
+			'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
 		];
 	}
 
@@ -107,4 +106,14 @@ class TestController extends Controller
 		}
 		return $this->render('email', ['model' => $form]);
 	}
+
+	public function onAuthSuccess($client)
+    {
+        print_r($client);
+    }
+
+    public function actionGoogle()
+    {
+    	return $this->render('google');
+    }
 }
