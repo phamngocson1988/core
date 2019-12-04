@@ -369,7 +369,7 @@ class CartController extends Controller
             $order->customer_name = $user->name;
             $order->customer_email = $cartItem->reception_email;
             $order->customer_phone = $user->phone;
-            $order->status = Order::STATUS_PENDING;
+            $order->status = Order::STATUS_VERIFYING;
             $order->payment_at = date('Y-m-d H:i:s');
             $order->payment_id = $paymentId;
             $order->generateAuthKey();

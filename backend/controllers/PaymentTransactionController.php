@@ -118,20 +118,8 @@ class PaymentTransactionController extends Controller
         if (!$transaction) return $this->asJson(['status' => false, 'errors' => 'Không tim thấy giao dịch']);
         if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Giao dịch đã được thanh toán']);
         $transaction->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'welcomeBonus']);
+        $transaction->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'topupUserWallet']);
         if ($transaction->load($request->post()) && $transaction->save()) {
-            $user = $transaction->user;
-            $wallet = new UserWallet();
-            $wallet->coin = $transaction->total_coin;
-            $wallet->balance = $user->getWalletAmount() + $wallet->coin;
-            $wallet->type = UserWallet::TYPE_INPUT;
-            $wallet->description = "Transaction #$transaction->id";
-            $wallet->ref_name = PaymentTransaction::className();
-            $wallet->ref_key = $transaction->auth_key;
-            $wallet->created_by = Yii::$app->user->id;
-            $wallet->user_id = $user->id;
-            $wallet->status = UserWallet::STATUS_COMPLETED;
-            $wallet->payment_at = date('Y-m-d H:i:s');
-            $wallet->save();
             return $this->asJson(['status' => true]);
         } else {
             $errors = $transaction->getErrorSummary(true);

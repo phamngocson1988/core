@@ -355,7 +355,6 @@ class TopupController extends Controller
             $trn = new PaymentTransaction();
             $trn->on(PaymentTransaction::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'applyReferGift']);
             $trn->on(PaymentTransaction::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'welcomeBonus']);
-            $trn->status = PaymentTransaction::STATUS_COMPLETED;
             $trn->payment_id = $captureId;
             $trn->payment_at = date('Y-m-d H:i:s');
             $trn->payment_method = 'paypal';
@@ -373,7 +372,7 @@ class TopupController extends Controller
             $trn->total_coin = $cart->getTotalCoin();
             $trn->description = 'paypal';
             $trn->created_by = $user->id;
-            $trn->status = PaymentTransaction::STATUS_COMPLETED;
+            $trn->status = PaymentTransaction::STATUS_PENDING;
             $trn->payment_at = date('Y-m-d H:i:s');
             $trn->generateAuthKey();
             if ($cart->hasPromotion()) {
@@ -383,19 +382,19 @@ class TopupController extends Controller
             }
             $trn->save();
             // Top up
-            $wallet = new UserWallet();
-            $wallet->on(UserWallet::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'sendNotificationEmail']);
-            $wallet->coin = $trn->total_coin;
-            $wallet->balance = $user->getWalletAmount() + $wallet->coin;
-            $wallet->type = UserWallet::TYPE_INPUT;
-            $wallet->description = "Transaction " . $trn->getId();
-            $wallet->ref_name = PaymentTransaction::className();
-            $wallet->ref_key = $trn->auth_key;
-            $wallet->created_by = $user->id;
-            $wallet->user_id = $user->id;
-            $wallet->status = UserWallet::STATUS_COMPLETED;
-            $wallet->payment_at = date('Y-m-d H:i:s');
-            $wallet->save();
+            // $wallet = new UserWallet();
+            // $wallet->on(UserWallet::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'sendNotificationEmail']);
+            // $wallet->coin = $trn->total_coin;
+            // $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+            // $wallet->type = UserWallet::TYPE_INPUT;
+            // $wallet->description = "Transaction " . $trn->getId();
+            // $wallet->ref_name = PaymentTransaction::className();
+            // $wallet->ref_key = $trn->auth_key;
+            // $wallet->created_by = $user->id;
+            // $wallet->user_id = $user->id;
+            // $wallet->status = UserWallet::STATUS_COMPLETED;
+            // $wallet->payment_at = date('Y-m-d H:i:s');
+            // $wallet->save();
 
             $cart->clear();
 
@@ -432,7 +431,7 @@ class TopupController extends Controller
             return $this->asJson([
                 'status' => true, 
                 'transaction' => $trn->id, 
-                'wallet' => $wallet->id,
+                // 'wallet' => $wallet->id,
                 'success_link' => Url::to(['topup/success', 'ref' => $trn->auth_key], true),
             ]);
         }

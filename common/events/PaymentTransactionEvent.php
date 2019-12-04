@@ -28,4 +28,11 @@ class PaymentTransactionEvent extends Model
             $waiting->delete();
         }
     }    
+
+    public static function topupUserWallet($event)
+    {
+        $transaction = $event->sender; //transaction
+        $user = $transaction->user;
+        $user->topup($transaction->total_coin, $transaction->auth_key, "Transaction #$transaction->id");
+    }
 }
