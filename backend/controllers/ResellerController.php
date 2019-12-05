@@ -37,6 +37,7 @@ class ResellerController extends Controller
 
         $data = [
             'user_id' => $request->get('user_id'),
+            'manager_id' => $request->get('manager_id'),
             'phone' => $request->get('phone'),
         ];
         $form = new FetchResellerForm($data);

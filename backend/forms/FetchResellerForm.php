@@ -12,6 +12,7 @@ class FetchResellerForm extends Model
 {
     public $user_id;
     public $phone;
+    public $manager_id;
     private $_command;
     protected $_customer;
 
@@ -33,6 +34,10 @@ class FetchResellerForm extends Model
 
         if ($this->user_id) {
             $command->andWhere(["{$resellerTable}.user_id" =>  $this->user_id]);
+        }
+
+        if ($this->manager_id) {
+            $command->andWhere(["{$resellerTable}.manager_id" =>  $this->manager_id]);
         }
 
         if ($this->phone) {

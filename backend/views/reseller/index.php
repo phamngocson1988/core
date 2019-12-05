@@ -66,6 +66,11 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               ]
           ])->label('Tìm reseller')?>
 
+          <?=$form->field($search, 'manager_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'manager_id']
+          ])->dropdownList($salerTeams, ['prompt' => 'Chọn quản lý'])->label('Người quản lý');?>
+
           <?=$form->field($search, 'phone', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             'inputOptions' => ['class' => 'form-control', 'name' => 'phone']
