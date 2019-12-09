@@ -24,6 +24,27 @@
           <span class="arrow open"></span>
         </a>
       </li>
+      <!-- Game -->
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-note"></i>
+        <span class="title">{Yii::t('app', 'games')}</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  "> 
+            <a href="{url route='/game'}" class="nav-link " code='game.index'>
+            <span class="title">{Yii::t('app', 'games')}</span>
+            </a>
+          </li>
+
+          <li class="nav-item  ">
+            <a href="{url route='game/my-game'}" class="nav-link " code='game.my-game'>
+            <span class="title">Game của tôi</span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>
