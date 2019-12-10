@@ -17,7 +17,6 @@ class Game extends ActiveRecord
     const UNPIN = 0;
     const PIN = 1;
 
-
     const SOLDOUT = 1;
 
     /**
@@ -176,5 +175,20 @@ class Game extends ActiveRecord
     public function isSoldout()
     {
         return $this->soldout == self::SOLDOUT;
+    }
+
+    public function isVisible()
+    {
+        return $this->status == self::STATUS_VISIBLE;
+    }
+
+    public function isInvisible()
+    {
+        return $this->status == self::STATUS_INVISIBLE;
+    }
+
+    public function isDeleted()
+    {
+        return $this->status == self::STATUS_DELETE;
     }
 }

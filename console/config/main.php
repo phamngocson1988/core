@@ -20,20 +20,20 @@ return [
             'class' => 'yii\console\controllers\FixtureController',
             'namespace' => 'common\fixtures',
         ],
-        'migrate' => [
-            'class' => 'yii\console\controllers\MigrateController',
-            'migrationPath' => null,
-            'migrationNamespaces' => [
-                'yii\queue\db\migrations',
-            ],
-        ],
+        // 'migrate' => [
+        //     'class' => 'yii\console\controllers\MigrateController',
+        //     'migrationPath' => null,
+        //     'migrationNamespaces' => [
+        //         'yii\queue\db\migrations',
+        //     ],
+        // ],
     ],
     'components' => [
         'log' => [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'debug', 'info'],
+                    'levels' => ['error', 'warning', 'info'],
                 ],
             ],
         ],

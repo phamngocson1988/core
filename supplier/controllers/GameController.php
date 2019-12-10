@@ -45,7 +45,6 @@ class GameController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
                             ->all();
         return $this->render('index', [
             'models' => $models,
@@ -56,20 +55,19 @@ class GameController extends Controller
 
     public function actionMyGame()
     {
-        $this->view->params['main_menu_active'] = 'game.index';
+        $this->view->params['main_menu_active'] = 'game.my-game';
         $supplier = Yii::$app->user->getIdentity();
         $supplier->attachBehavior('supplier', new UserSupplierBehavior);
         $command = $supplier->getSupplierGames();
+        $command->with('game');
         $command->orderBy(['created_at' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
                             ->all();
-        return $this->render('index', [
+        return $this->render('my-game', [
             'models' => $models,
             'pages' => $pages,
-            'form' => $form,
         ]); 
     }
 
@@ -98,6 +96,56 @@ class GameController extends Controller
             ]);
             if (!$model) throw new Exception("Supplier chưa đăng ký game này", 1);
             return $this->asJson(['status' => $model->delete(), 'errors' => 'Error']);
+        } catch (\Exception $e) {
+            return $this->asJson(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
+    public function actionEnable($id) 
+    {
+        try {
+            $model = SupplierGame::findOne([
+                'supplier_id' => Yii::$app->user->id,
+                'game_id' => $id
+            ]);
+            if (!$model) throw new Exception("Supplier chưa đăng ký game này", 1);
+            $model->setScenario(SupplierGame::SCENARIO_STATUS);
+            $model->status = SupplierGame::STATUS_ENABLED;
+            return $this->asJson(['status' => $model->save(), 'errors' => 'Error']);
+        } catch (\Exception $e) {
+            return $this->asJson(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
+    public function actionDisable($id) 
+    {
+        try {
+            $model = SupplierGame::findOne([
+                'supplier_id' => Yii::$app->user->id,
+                'game_id' => $id
+            ]);
+            if (!$model) throw new Exception("Supplier chưa đăng ký game này", 1);
+            $model->setScenario(SupplierGame::SCENARIO_STATUS);
+            $model->status = SupplierGame::STATUS_DISABLED;
+            return $this->asJson(['status' => $model->save(), 'errors' => 'Error']);
+        } catch (\Exception $e) {
+            return $this->asJson(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
+    public function actionPrice($id) 
+    {
+        $request = Yii::$app->request;
+        try {
+            $model = SupplierGame::findOne([
+                'supplier_id' => Yii::$app->user->id,
+                'game_id' => $id
+            ]);
+            if (!$model) throw new Exception("Supplier chưa đăng ký game này", 1);
+            $model->setScenario(SupplierGame::SCENARIO_EDIT);
+            if ($model->load($request->post())) {
+                return $this->asJson(['status' => $model->save(), 'errors' => 'Error']);
+            }
         } catch (\Exception $e) {
             return $this->asJson(['status' => false, 'errors' => $e->getMessage()]);
         }

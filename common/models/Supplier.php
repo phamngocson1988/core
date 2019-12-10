@@ -8,8 +8,8 @@ use yii\behaviors\BlameableBehavior;
 
 class Supplier extends ActiveRecord
 {
-    const STATUS_DISABLE = 'disable';
-    const STATUS_ENABLE = 'enable';
+    const STATUS_DISABLED = 'disabled';
+    const STATUS_ENABLED = 'enabled';
 
     public function behaviors()
     {

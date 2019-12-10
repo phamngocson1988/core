@@ -47,11 +47,11 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 10%;"> <?=Yii::t('app', 'image');?> </th>
-              <th style="width: 25%;"> <?=Yii::t('app', 'title');?> </th>
-              <th style="width: 15%;"> <?=Yii::t('app', 'status');?> </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th> <?=Yii::t('app', 'no');?> </th>
+              <th> <?=Yii::t('app', 'image');?> </th>
+              <th> <?=Yii::t('app', 'title');?> </th>
+              <th> Trạng thái ở Kinggems </th>
+              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>

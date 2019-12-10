@@ -8,8 +8,8 @@ use yii\behaviors\BlameableBehavior;
 
 class SupplierGame extends ActiveRecord
 {
-    const STATUS_DISABLE = 'disable';
-    const STATUS_ENABLE = 'enable';
+    const STATUS_DISABLED = 'disabled';
+    const STATUS_ENABLED = 'enabled';
 
     public function behaviors()
     {
@@ -43,4 +43,23 @@ class SupplierGame extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'supplier_id']);
     }
 
+    public function getGame()
+    {
+        return $this->hasOne(Game::className(), ['id' => 'game_id']);
+    }
+
+    public function isEnabled()
+    {
+        return $this->status == self::STATUS_ENABLED;
+    }
+
+    public function isDisabled()
+    {
+        return $this->status == self::STATUS_DISABLED;
+    }
+
+    public function isAvailable()
+    {
+        return $this->isEnabled() && $this->price;
+    }
 }
