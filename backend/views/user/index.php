@@ -8,6 +8,8 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
+use backend\behaviors\UserSupplierBehavior;
+
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -189,6 +191,7 @@ use yii\web\JsExpression;
           <tbody>
             <?php if ($models) : ?>
             <?php foreach ($models as $model) : ?>
+            <?php $model->attachBehavior('supplier', new UserSupplierBehavior);?>
             <tr>
               <td><?=$model->id;?></td>
               <td><?=$model->name;?></td>
@@ -207,7 +210,13 @@ use yii\web\JsExpression;
                 <?php if ($model->isReseller()) : ?>
                 <a href="<?=Url::to(['user/downgrade-reseller', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i> Reseller </a>
                 <?php else : ?>
-                <a href="<?=Url::to(['user/upgrade-reseller', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="fa fa-arrow-up"></i> Khách hàng </a>
+                <a href="<?=Url::to(['user/upgrade-reseller', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="fa fa-arrow-up"></i> Reseller </a>
+                <?php endif; ?>
+
+                <?php if ($model->isSupplier()) : ?>
+                <a href="<?=Url::to(['supplier/remove', 'id' => $model->id]);?>" class="btn btn-sm blue link-action tooltips" data-container="body" data-original-title="Bỏ tư cách nhà cung cấp"><i class="fa fa-times"></i> Supplier </a>
+                <?php else : ?>
+                <a href="<?=Url::to(['supplier/create', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà cung cấp"><i class="fa fa-arrow-up"></i> Supplier </a>
                 <?php endif; ?>
                 <?php endif; ?>
               </td>

@@ -87,6 +87,24 @@
       </li>
       {/if}
 
+      <!-- Supplier -->
+      {if $app->user->can('admin')}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+          <i class="fa fa-link"></i>
+          <span class="title">Nhà cung cấp</span>
+          <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/supplier/index'}" class="nav-link " code='supplier.index'>
+            <span class="title">Danh sách</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {/if}
+
       <!-- Affiliate -->
       {if $app->user->can('sale_manager')}
       <li class="nav-item  ">
