@@ -30,7 +30,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller', 'active', 'inactive'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller', 'active', 'inactive', 'update-trust', 'update-not-trust'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -260,6 +260,28 @@ class UserController extends Controller
             });
             $user->is_reseller = User::IS_NOT_RESELLER;
             return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
+        }
+    }
+
+    public function actionUpdateTrust($id)
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->trust = User::IS_TRUST;
+            return $this->asJson(['status' => $user->save(true, ['trust'])]);
+        }
+    }
+
+    public function actionUpdateNotTrust($id)
+    {
+        $request = Yii::$app->request;
+        if( $request->isAjax) {
+            $user = User::findOne($id);
+            if (!$user) throw new NotFoundHttpException('Not found');
+            $user->trust = User::IS_NOT_TRUST;
+            return $this->asJson(['status' => $user->save(true, ['trust'])]);
         }
     }
 }

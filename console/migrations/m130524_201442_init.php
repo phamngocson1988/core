@@ -37,9 +37,15 @@ class m130524_201442_init extends Migration
             'saler_id' => $this->integer(),
             'saler_code' => $this->string(50),
             'marketing_id' => $this->integer(),
-            'created_at' => $this->dateTime(),
+            'trust' => $this->string(1),
+            'created_at' => $this->dateTime()->defaultValue('N'),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterUserTrust = "ALTER TABLE {{%user}} MODIFY `trust` ENUM('Y', 'N') NOT NULL DEFAULT 'N'";
+            $command = $this->db->createCommand($alterUserTrust);
+            $command->execute();
+        }
 
         $this->createTable('{{%user_favorite}}', [
             'id' => $this->primaryKey(),

@@ -40,6 +40,9 @@ class User extends ActiveRecord implements IdentityInterface
     const RESELLER_LEVEL_2 = 2;
     const RESELLER_LEVEL_3 = 3;
 
+    const IS_TRUST = 'Y';
+    const IS_NOT_TRUST = 'N';
+
     /**
      * @inheritdoc
      */
@@ -364,5 +367,10 @@ class User extends ActiveRecord implements IdentityInterface
         $transaction = $this->getTransactions();
         $order = $this->getOrders();
         return $transaction->count() || $order->count();
+    }
+
+    public function isTrust()
+    {
+        return $this->trust == self::IS_TRUST;
     }
 }

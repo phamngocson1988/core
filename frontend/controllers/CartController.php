@@ -436,7 +436,7 @@ class CartController extends Controller
             $order->customer_email = $cartItem->reception_email;
             $order->customer_phone = $user->phone;
             $order->user_ip = $request->userIP;
-            $order->status = Order::STATUS_PENDING;
+            $order->status = $user->isTrust() ? Order::STATUS_PENDING : Order::STATUS_VERIFYING;
             $order->payment_at = date('Y-m-d H:i:s');
             $order->payment_id = $captureId;
             $order->generateAuthKey();

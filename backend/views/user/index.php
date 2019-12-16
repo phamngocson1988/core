@@ -218,6 +218,7 @@ use backend\behaviors\UserSupplierBehavior;
                 <?php else : ?>
                 <a href="<?=Url::to(['supplier/create', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà cung cấp"><i class="fa fa-arrow-up"></i> Supplier </a>
                 <?php endif; ?>
+
                 <?php endif; ?>
               </td>
               <td></td>
@@ -233,6 +234,13 @@ use backend\behaviors\UserSupplierBehavior;
                 <?php if (Yii::$app->user->can('admin')) : ?>
                 <a class="btn btn-xs default tooltips" href="<?=Url::to(['user/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Edit user"><i class="fa fa-pencil"></i></a>
                 <?php endif;?>
+
+                <!-- trust -->
+                <?php if ($model->isTrust()) : ?>
+                <a href="<?=Url::to(['user/update-trust', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Bạn đang tín nhiệm khách hàng này"><i class="fa fa-shield"></i></a>
+                <?php else : ?>
+                <a href="<?=Url::to(['user/update-trust', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Khách này chưa được tín nhiệm"><i class="fa fa-shield"></i> </a>
+                <?php endif; ?>
               </td>
             </tr>
             <?php endforeach;?>
