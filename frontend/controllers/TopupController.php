@@ -419,12 +419,12 @@ class TopupController extends Controller
                     'useFileTransport' => false,
                 ]);
                 try {
-                    // $mailer->compose('paypal_confirm_mail', ['data' => $data])
-                    // ->setTo($payer_email_address)
-                    // ->setFrom([$username => $fromName])
-                    // ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
-                    // ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
-                    // ->send();
+                    $mailer->compose('paypal_confirm_mail', ['data' => $data])
+                    ->setTo($payer_email_address)
+                    ->setFrom([$username => $fromName])
+                    ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
+                    ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
+                    ->send();
                 } catch (\Exception $e) {
                     Yii::error($e, __METHOD__);
                 }
