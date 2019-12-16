@@ -372,7 +372,7 @@ class TopupController extends Controller
             $trn->total_coin = $cart->getTotalCoin();
             $trn->description = 'paypal';
             $trn->created_by = $user->id;
-            $trn->status = PaymentTransaction::STATUS_PENDING;
+            $trn->status = $user->isTrust() ? PaymentTransaction::STATUS_COMPLETED : PaymentTransaction::STATUS_PENDING;
             $trn->payment_at = date('Y-m-d H:i:s');
             $trn->generateAuthKey();
             if ($cart->hasPromotion()) {
@@ -382,19 +382,21 @@ class TopupController extends Controller
             }
             $trn->save();
             // Top up
-            // $wallet = new UserWallet();
-            // $wallet->on(UserWallet::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'sendNotificationEmail']);
-            // $wallet->coin = $trn->total_coin;
-            // $wallet->balance = $user->getWalletAmount() + $wallet->coin;
-            // $wallet->type = UserWallet::TYPE_INPUT;
-            // $wallet->description = "Transaction " . $trn->getId();
-            // $wallet->ref_name = PaymentTransaction::className();
-            // $wallet->ref_key = $trn->auth_key;
-            // $wallet->created_by = $user->id;
-            // $wallet->user_id = $user->id;
-            // $wallet->status = UserWallet::STATUS_COMPLETED;
-            // $wallet->payment_at = date('Y-m-d H:i:s');
-            // $wallet->save();
+            if ($trn->isCompleted()) {
+                $wallet = new UserWallet();
+                $wallet->on(UserWallet::EVENT_AFTER_INSERT, [TopupEventHandler::className(), 'sendNotificationEmail']);
+                $wallet->coin = $trn->total_coin;
+                $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+                $wallet->type = UserWallet::TYPE_INPUT;
+                $wallet->description = "Transaction " . $trn->getId();
+                $wallet->ref_name = PaymentTransaction::className();
+                $wallet->ref_key = $trn->auth_key;
+                $wallet->created_by = $user->id;
+                $wallet->user_id = $user->id;
+                $wallet->status = UserWallet::STATUS_COMPLETED;
+                $wallet->payment_at = date('Y-m-d H:i:s');
+                $wallet->save();
+            }
 
             $cart->clear();
 
@@ -417,12 +419,12 @@ class TopupController extends Controller
                     'useFileTransport' => false,
                 ]);
                 try {
-                    $mailer->compose('paypal_confirm_mail', ['data' => $data])
-                    ->setTo($payer_email_address)
-                    ->setFrom([$username => $fromName])
-                    ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
-                    ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
-                    ->send();
+                    // $mailer->compose('paypal_confirm_mail', ['data' => $data])
+                    // ->setTo($payer_email_address)
+                    // ->setFrom([$username => $fromName])
+                    // ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
+                    // ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $trn->getId(), $captureId))
+                    // ->send();
                 } catch (\Exception $e) {
                     Yii::error($e, __METHOD__);
                 }

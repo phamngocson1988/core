@@ -277,6 +277,11 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='payment-transaction/paypal'}" class="nav-link " code='transaction.paypal'>
+            <span class="title">Paypal</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='payment-transaction/trash'}" class="nav-link " code='transaction.trash'>
             <span class="title">Thùng rác</span>
             </a>

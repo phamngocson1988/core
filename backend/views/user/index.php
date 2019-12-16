@@ -237,7 +237,7 @@ use backend\behaviors\UserSupplierBehavior;
 
                 <!-- trust -->
                 <?php if ($model->isTrust()) : ?>
-                <a href="<?=Url::to(['user/update-trust', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Bạn đang tín nhiệm khách hàng này"><i class="fa fa-shield"></i></a>
+                <a href="<?=Url::to(['user/update-not-trust', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Bạn đang tín nhiệm khách hàng này"><i class="fa fa-shield"></i></a>
                 <?php else : ?>
                 <a href="<?=Url::to(['user/update-trust', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Khách này chưa được tín nhiệm"><i class="fa fa-shield"></i> </a>
                 <?php endif; ?>
