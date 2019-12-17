@@ -42,20 +42,20 @@ $total = $cart->getTotalPrice();
                 </div>
 
                 <label for="opt2" class="t-flex-item-center t-choose-payment radio">
-                    <input type="radio" name="identifier" id="opt2" value="skrill" class="hidden paygate" />
+                    <input type="radio" name="identifier" checked id="opt2" value="skrill" class="hidden paygate" />
                     <span class="label"></span>
                     <div class="t-img-wrap-logo-payment">
                         <img src="/images/skrill.png" class="paygate-logo" alt="">
                     </div>
                 </label>
 
-                <label for="opt4" class="t-flex-item-center t-choose-payment radio">
+                <!-- <label for="opt4" class="t-flex-item-center t-choose-payment radio">
                     <input type="radio" name="identifier" id="opt4" checked value="paypal" class="hidden paygate" />
                     <span class="label"></span>
                     <div class="t-img-wrap-logo-payment">
                         <img src="/images/paypal.png" class="paygate-logo" alt="">
                     </div>
-                </label>
+                </label> -->
                 <label for="opt5" class="t-flex-item-center t-choose-payment radio">
                     <input type="radio" name="identifier" id="opt5" value="alipay" class="hidden paygate" />
                     <span class="label"></span>
