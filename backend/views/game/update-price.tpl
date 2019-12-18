@@ -66,6 +66,9 @@
                 <li class="active">
                   <a href="#main" data-toggle="tab">{$model->title} (#{$model->id})</a>
                 </li>
+                <li>
+                  <a href="#provider" data-toggle="tab">Nhà cung cấp</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -74,6 +77,30 @@
                   {$form->field($model, 'price1')->textInput()}
                   {$form->field($model, 'price2')->textInput()}
                   {$form->field($model, 'price3')->textInput()}
+                </div>
+
+                <div class="tab-pane" id="provider">
+                  <table class="table table-striped table-bordered table-hover table-checkable">
+                    <thead>
+                      <tr>
+                        <th> Mã nhà cung cấp </th>
+                        <th> Nhà cung cấp </th>
+                        <th> Giá bán </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {if !$suppliers}
+                        <tr><td colspan="3"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                        {/if}
+                        {foreach $suppliers as $supplier}
+                        <tr>
+                          <td>{$supplier->supplier_id}</td>
+                          <td>{$supplier->user->name}</td>
+                          <td>{$supplier->price}</td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

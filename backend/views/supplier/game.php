@@ -45,6 +45,7 @@ use yii\widgets\ActiveForm;
               <th> <?=Yii::t('app', 'price');?> </th>
               <th> Trạng thái ở Kinggems </th>
               <th> Trạng thái của nhà cung cấp </th>
+              <th> Tác vụ </th>
             </tr>
           </thead>
           <tbody>
@@ -54,11 +55,11 @@ use yii\widgets\ActiveForm;
               <?php foreach ($models as $supplierGame) : ?>
               <?php $model = $supplierGame->game;?>
               <tr>
-                <td style="vertical-align: middle;"><?=$model->id;?></td>
-                <td style="vertical-align: middle;"><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
-                <td style="vertical-align: middle;"><?=$model->title;?></td>
-                <td style="vertical-align: middle;"><?=number_format($supplierGame->price, 1);?></td>
-                <td style="vertical-align: middle;">
+                <td><?=$model->id;?></td>
+                <td><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
+                <td><?=$model->title;?></td>
+                <td><?=number_format($supplierGame->price, 1);?></td>
+                <td>
                   <?php if ($model->isVisible()) : ?>
                   <span class="label label-success"><?=Yii::t('app', 'visible');?></span>
                   <?php elseif ($model->isInvisible()) : ?>
@@ -73,6 +74,9 @@ use yii\widgets\ActiveForm;
                   <?php elseif ($supplierGame->isDisabled()) : ?>
                   <span class="label label-warning">Disabled</span>
                   <?php endif;?>
+                </td>
+                <td>
+                  <a href="<?=Url::to(['game/update-price', 'id' => $model->id, '#' => 'provider']);?>" target="_blank" class="btn btn-sm blue tooltips" data-container="body" data-original-title="Giá nhà cung cấp khác"><i class="fa fa-list"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>

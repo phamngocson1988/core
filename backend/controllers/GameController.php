@@ -14,6 +14,7 @@ use common\models\GameImage;
 use backend\models\GameUnit;
 use backend\models\GamePriceLog;
 use backend\forms\FetchPriceLogForm;
+use backend\models\SupplierGame;
 
 class GameController extends Controller
 {
@@ -230,6 +231,9 @@ class GameController extends Controller
         $request = Yii::$app->request;
         $model = Game::findOne($id);
         $model->setScenario(Game::SCENARIO_CREATE);
+
+        // Load suppliers
+        $suppliers = SupplierGame::find()->where(['game_id' => $id])->with('user')->all();
         if ($request->isPost) {
             // Write log
             $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
@@ -291,7 +295,10 @@ class GameController extends Controller
             }
         }
 
-        return $this->render('update-price.tpl', ['model' => $model]);
+        return $this->render('update-price.tpl', [
+            'model' => $model,
+            'suppliers' => $suppliers,
+        ]);
     }
 
     public function actionLog()
