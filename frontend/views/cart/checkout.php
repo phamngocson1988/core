@@ -120,6 +120,14 @@ $cart->applyPromotion();
                         </div>
                     </label>
 
+                    <label for="opt11" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt11" value="neteller" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/neteller.png" class="paygate-logo" alt="">
+                        </div>
+                    </label>
+
                     <?php if (!$detector->isMobile()): ?>
                     <div class="t-wrap-btn is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'paygate-button-container', 'onClick' => 'showLoader()']) ?>
@@ -186,6 +194,10 @@ $cart->applyPromotion();
                         </div>
 
                         <div class="grand-line last-line price" paygate='western_union' style="display: none">
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
+                        </div>
+
+                        <div class="grand-line last-line price" paygate='neteller' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                       </div>

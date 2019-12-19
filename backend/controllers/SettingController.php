@@ -14,6 +14,7 @@ use backend\forms\PaypalSettingForm;
 use backend\forms\AlipaySettingForm;
 use backend\forms\WechatSettingForm;
 use backend\forms\BitcoinSettingForm;
+use backend\forms\NetellerSettingForm;
 use backend\forms\SkrillSettingForm;
 use backend\forms\WesternUnionSettingForm;
 use backend\forms\PayoneerSettingForm;
@@ -133,6 +134,12 @@ class SettingController extends Controller
                 'modelClass' => WesternUnionSettingForm::class,
                 'view' => 'western_union.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.western_union']
+            ],
+            'neteller' => [
+                'class' => SettingsAction::class,
+                'modelClass' => NetellerSettingForm::class,
+                'view' => 'neteller.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.neteller']
             ],
             
             'offline' => [

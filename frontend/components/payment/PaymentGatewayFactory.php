@@ -39,6 +39,9 @@ class PaymentGatewayFactory extends Model
         'western_union' => [
             'class' => '\frontend\components\payment\clients\WesternUnion',
         ],
+        'neteller' => [
+            'class' => '\frontend\components\payment\clients\Neteller',
+        ],
     ];
 
     public static function getClient($identifier)

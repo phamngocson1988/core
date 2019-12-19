@@ -386,6 +386,11 @@
                   <i class="cc-western_union"></i> Western Union
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{url route='setting/neteller'}" class="nav-link" code='setting.neteller'>
+                  <i class="cc-neteller"></i> Neteller
+                </a>
+              </li>
             </ul
           </li>
           {/if}
