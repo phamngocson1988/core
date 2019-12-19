@@ -6,11 +6,13 @@ use Yii;
 use yii\base\Model;
 use backend\models\User;
 use backend\models\Supplier;
+use backend\models\SupplierGame;
 
 class FetchSupplierForm extends Model
 {
     public $user_id;
     public $status;
+    public $game_id;
     private $_command;
     protected $_customer;
 
@@ -37,6 +39,15 @@ class FetchSupplierForm extends Model
 
         if ($this->status) {
             $command->andWhere(["{$supplierTable}.status" => $this->status]);
+        }
+
+        if ($this->game_id) {
+            $gameTable = SupplierGame::tableName();
+            $command->innerJoin($gameTable, "{$supplierTable}.user_id = {$gameTable}.supplier_id");
+            $command->andWhere([
+                "{$gameTable}.game_id" => $this->game_id,
+                "{$gameTable}.status" => SupplierGame::STATUS_ENABLED,
+            ]);
         }
         $this->_command = $command;
     }

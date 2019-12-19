@@ -36,6 +36,9 @@ class PaymentGatewayFactory extends Model
         'bitcoin' => [
             'class' => '\frontend\components\payment\clients\Bitcoin',
         ],
+        'western_union' => [
+            'class' => '\frontend\components\payment\clients\WesternUnion',
+        ],
     ];
 
     public static function getClient($identifier)

@@ -27,6 +27,7 @@ $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 ?>
+<!-- jQuery Modal -->
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -228,6 +229,9 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                     </div>
                     <!-- /.modal-dialog -->
                   </div>
+
+                  <!-- Assign to supplier -->
+                  <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
                   <?php endif;?>
                 </td>
               </tr>
@@ -240,6 +244,15 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
+</div>
+
+<div class="modal fade" id="assign-supplier" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
 <?php
 $script = <<< JS

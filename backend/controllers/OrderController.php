@@ -22,6 +22,9 @@ use common\models\OrderComplainTemplate;
 use backend\forms\MyCustomerReportForm;
 use backend\forms\CancelOrderForm;
 use backend\forms\FetchOrderByFeedback;
+use backend\models\SupplierGame;
+use backend\models\Supplier;
+use backend\forms\FetchSupplierForm;
 
 
 use backend\events\OrderEventHandler;
@@ -653,5 +656,28 @@ class OrderController extends Controller
             $order->send('admin_notify_order_failure', '[KINGGEMS]-FAILED TRANSACTION');
         }
         return $this->renderJson(true);
+    }
+
+    public function actionAssignSupplier($id) 
+    {
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        if ($request->isPost) {
+
+        }
+        $form = new FetchSupplierForm([
+            'game_id' => $id,
+            'status' => Supplier::STATUS_ENABLED,
+        ]);
+        $suppliers = $form->getCommand()->all();
+        $supplierList = [];
+        foreach ($suppliers as $supplier) {
+            $supplierList[$supplier->user_id] = $supplier->user->name;
+        }
+        return $this->renderPartial('assign-supplier', [
+            'id' => $id,
+            'suppliers' => $supplierList,
+            'order' => $order
+        ]);
     }
 }

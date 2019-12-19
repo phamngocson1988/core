@@ -15,6 +15,7 @@ use backend\forms\AlipaySettingForm;
 use backend\forms\WechatSettingForm;
 use backend\forms\BitcoinSettingForm;
 use backend\forms\SkrillSettingForm;
+use backend\forms\WesternUnionSettingForm;
 use backend\forms\PayoneerSettingForm;
 use backend\forms\PostalSavingsBankOfChinaSettingForm;
 use backend\forms\ImportSettingForm;
@@ -127,6 +128,13 @@ class SettingController extends Controller
                 'view' => 'bitcoin.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.bitcoin']
             ],
+            'western_union' => [
+                'class' => SettingsAction::class,
+                'modelClass' => WesternUnionSettingForm::class,
+                'view' => 'western_union.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.western_union']
+            ],
+            
             'offline' => [
                 'class' => SettingsAction::class,
                 'modelClass' => OfflinePaymentSettingForm::class,

@@ -381,6 +381,11 @@
                   <i class="cc-alipay"></i> Postal Savings Bank of China
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{url route='setting/western_union'}" class="nav-link" code='setting.western_union'>
+                  <i class="cc-western_union"></i> Western Union
+                </a>
+              </li>
             </ul
           </li>
           {/if}

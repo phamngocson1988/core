@@ -111,6 +111,15 @@ $cart->applyPromotion();
                             <img src="/images/postal-savings-bank-of-china.png" class="paygate-logo" alt="">
                         </div>
                     </label>
+
+                    <label for="opt10" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt10" value="western_union" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/western_union.png" class="paygate-logo" alt="">
+                        </div>
+                    </label>
+
                     <?php if (!$detector->isMobile()): ?>
                     <div class="t-wrap-btn is-desktop">
                       <?= Html::submitButton('Payment', ['class' => 'btn-product-detail-add-to-cart', 'id' => 'paygate-button-container', 'onClick' => 'showLoader()']) ?>
@@ -173,6 +182,10 @@ $cart->applyPromotion();
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                         <div class="grand-line last-line price" paygate='bitcoin' style="display: none">
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
+                        </div>
+
+                        <div class="grand-line last-line price" paygate='western_union' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                       </div>

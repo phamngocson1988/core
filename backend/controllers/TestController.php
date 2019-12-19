@@ -116,4 +116,11 @@ class TestController extends Controller
     {
     	return $this->render('google');
     }
+
+    public function actionModal() 
+    {
+    	$request = Yii::$app->request;
+    	$id = $request->get('id');
+    	return $this->renderPartial('modal', ['id' => $id]);
+    }
 }
