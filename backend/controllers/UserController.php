@@ -14,6 +14,7 @@ use backend\forms\FetchUserForm;
 use backend\forms\ChangeUserStatusForm;
 use backend\forms\InviteUserForm;
 use backend\forms\FetchCustomerForm;
+use backend\forms\FetchCustomerNotOrderForm;
 use backend\models\User;
 use backend\behaviors\UserResellerBehavior;
 
@@ -30,7 +31,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller', 'active', 'inactive', 'update-trust', 'update-not-trust'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller', 'active', 'inactive', 'update-trust', 'update-not-trust', 'no-order'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -84,6 +85,44 @@ class UserController extends Controller
         ];
 
         return $this->render('index', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+            'links' => $links
+        ]);
+    }
+
+    public function actionNoOrder()
+    {
+        $this->view->params['main_menu_active'] = 'user.no-order';
+        $request = Yii::$app->request;
+        $mode = $request->get('mode');
+        $data = [
+            'user_id' => $request->get('user_id'),
+            'created_start' => $request->get('created_start'),
+            'created_end' => $request->get('created_end'),
+            // 'country_code' => $request->get('country_code'),
+            'not_purchase_start' => $request->get('not_purchase_start'),
+            'not_purchase_end' => $request->get('not_purchase_end'),
+            'saler_id' => $request->get('saler_id'),
+            // 'is_reseller' => $request->get('is_reseller'),
+        ];
+        $form = new FetchCustomerNotOrderForm($data);
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'danh-sach-khach-hang.xls';
+            return $form->export($fileName);
+        }
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $command->orderBy(['id' => SORT_DESC]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        $links = [
+            'delete' => Url::to(['user/change-status', 'status' => 'delete']),
+            'active' => Url::to(['user/change-status', 'status' => 'active'])
+        ];
+
+        return $this->render('no-order', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,

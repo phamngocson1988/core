@@ -63,6 +63,11 @@
             <span class="title">Tất cả</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/user/no-order'}" class="nav-link " code='user.no-order'>
+            <span class="title">Chưa có giao dịch</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}
