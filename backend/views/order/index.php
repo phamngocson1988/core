@@ -9,7 +9,7 @@ use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
 use common\models\User;
 use common\components\helpers\FormatConverter;
-
+use backend\behaviors\OrderSupplierBehavior;
 
 
 use backend\models\Order;
@@ -224,6 +224,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
               <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
+              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
               <tr>
                 <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
@@ -243,7 +244,13 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                   <span class="label label-warning">Xử lý chậm</span>
                   <?php endif;?>
                 </td>
-                <td style="vertical-align: middle;"></td>
+                <td style="vertical-align: middle;">
+                  <?php
+                  if ($model->supplier_id) {
+                    echo $model->supplier->user->name;
+                  } 
+                  ?>
+                </td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php if (Yii::$app->user->can('orderteam') && !$model->orderteam_id) :?>

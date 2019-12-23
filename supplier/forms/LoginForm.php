@@ -4,6 +4,7 @@ namespace supplier\forms;
 use Yii;
 use yii\base\Model;
 use supplier\models\User;
+use supplier\behaviors\UserSupplierBehavior;
 
 class LoginForm extends Model
 {
@@ -53,14 +54,25 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $auth = Yii::$app->authManager;
             $user = $this->getUser();
-            $roles = $auth->getRolesByUser($user->id);
-            $roleNames = array_keys($roles);
-            $allowedRoles = $this->_roles;
-            $matches = array_intersect($roleNames, $allowedRoles);
-            if (count($matches) < 1) {
+            $user->attachBehavior('supplier', new UserSupplierBehavior);
+            if (!$user->isSupplier()) {
                 $this->addError($attribute, Yii::t('app', 'you_are_not_allowed_to_login'));
                 return false;
+            } else {
+                $supplier = $user->getSupplier();
+                if (!$supplier->isEnabled()) {
+                    $this->addError($attribute, 'Tài khoản này chưa được kích hoạt');
+                    return false;
+                }
             }
+            // $roles = $auth->getRolesByUser($user->id);
+            // $roleNames = array_keys($roles);
+            // $allowedRoles = $this->_roles;
+            // $matches = array_intersect($roleNames, $allowedRoles);
+            // if (count($matches) < 1) {
+            //     $this->addError($attribute, Yii::t('app', 'you_are_not_allowed_to_login'));
+            //     return false;
+            // }
         }
     }
 

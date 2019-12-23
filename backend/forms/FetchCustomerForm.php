@@ -106,7 +106,8 @@ class FetchCustomerForm extends User
                 $model->phone,
                 $model->created_at,
                 $model->getCountryName(),
-                $model->last_order_date,
+                ($model->order) ? $model->order->created_at : '',
+                // $model->last_order_date,
                 $model->getWalletTopupAmount(),
                 $model->getWalletWithdrawAmount(),
                 ($model->isReseller()) ? 'Reseller' : 'Customer',
@@ -170,6 +171,7 @@ class FetchCustomerForm extends User
         $orderTable = Order::tableName();
         $orderStatus = [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED];
         $command = self::find();
+        $command->with('order');
         $command->select(["{$userTable}.*", "{$orderTable}.game_title", "{$orderTable}.created_at as last_order_date", "SUM({$orderTable}.total_price) as total_price_purchase", "SUM({$orderTable}.total_unit) as total_unit_purchase"]);
         $command->leftJoin($orderTable, "{$orderTable}.customer_id = {$userTable}.id");
 

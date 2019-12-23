@@ -103,8 +103,8 @@ class UserController extends Controller
             'created_start' => $request->get('created_start'),
             'created_end' => $request->get('created_end'),
             // 'country_code' => $request->get('country_code'),
-            'not_purchase_start' => $request->get('not_purchase_start'),
-            'not_purchase_end' => $request->get('not_purchase_end'),
+            'no_purchase_start' => $request->get('no_purchase_start'),
+            'no_purchase_end' => $request->get('no_purchase_end'),
             'saler_id' => $request->get('saler_id'),
             // 'is_reseller' => $request->get('is_reseller'),
         ];

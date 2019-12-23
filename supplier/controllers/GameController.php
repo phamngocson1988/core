@@ -78,7 +78,9 @@ class GameController extends Controller
             if (!$game) throw new Exception("Game không tồn tại", 1);
             $model = new SupplierGame([
                 'supplier_id' => Yii::$app->user->id,
-                'game_id' => $id
+                'game_id' => $id,
+                'price' => $game->getPrice(),
+                'status' => SupplierGame::STATUS_DISABLED
             ]);
             $model->setScenario(SupplierGame::SCENARIO_CREATE);
             return $this->asJson(['status' => $model->save(), 'errors' => 'Error']);

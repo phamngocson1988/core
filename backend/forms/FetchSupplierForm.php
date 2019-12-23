@@ -49,6 +49,7 @@ class FetchSupplierForm extends Model
                 "{$gameTable}.status" => SupplierGame::STATUS_ENABLED,
             ]);
         }
+        // echo $command->createCommand()->getRawSql();die;
         $this->_command = $command;
     }
 

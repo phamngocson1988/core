@@ -307,6 +307,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Order::className(), ['customer_id' => 'id']);
     }
 
+    public function getOrder()
+    {
+        return $this->hasOne(Order::className(), ['customer_id' => 'id'])->orderBy(['order.created_at' => SORT_DESC]);
+    }
+
     public function getWalletAmount()
     {
         $wallets = $this->wallet;

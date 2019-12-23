@@ -15,8 +15,8 @@ class FetchCustomerNotOrderForm extends Model
     public $user_id;
     public $created_start;
     public $created_end;
-    public $not_purchase_start;
-    public $not_purchase_end;
+    public $no_purchase_start;
+    public $no_purchase_end;
     public $saler_id;
     public $is_reseller;
     protected $_customer;
@@ -40,9 +40,14 @@ class FetchCustomerNotOrderForm extends Model
             'E' => 'Số điện thoại',
             'F' => 'Ngày đăng ký',
             'G' => 'Quốc tịch',
+            'H' => 'Đơn hàng cuối cùng',
+            'I' => 'Tổng tiền nạp',
+            'J' => 'Tổng tiền mua',
+            'K' => 'Reseller / Khách hàng',
+            'L' => 'Đại lý / Người bán hàng',
         ];
         $totalRow = $command->count();
-        $startRow = 10;
+        $startRow = 5;
         $endRow = $startRow + $totalRow;
         $footerRow = $endRow + 1;
         $columns = array_keys($titles);
@@ -54,14 +59,23 @@ class FetchCustomerNotOrderForm extends Model
         $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
 
         $heading = 'CUSTOMER LIST';
-        $saler = User::findOne($this->saler_id);
-        $resellerStatus = self::getResellerStatus();
-        $customerType = ArrayHelper::getValue($resellerStatus, $this->is_reseller, '');
+        // $game = Game::findOne($this->game_id);
+        // $saler = User::findOne($this->saler_id);
+        // $resellerStatus = User::getResellerStatus();
+        // $customerType = ArrayHelper::getValue($resellerStatus, $this->is_reseller, '');
         // $country = Country::findOne($this->country_code);
+
+        $from = ($this->no_purchase_start) ? $this->no_purchase_start : '~';
+        $to = ($this->no_purchase_end) ? $this->no_purchase_end : date('Y-m-d');
         $header = [
-            'A2:G2' => sprintf('Ngày tham gia: %s - %s', $this->created_start, $this->created_end),
-            'A3:G3' => sprintf('Sinh nhật: %s - %s', $this->birthday_start, $this->birthday_end),
-            'A4:G4' => sprintf('Không có đơn hàng: %s - %s', $this->not_purchase_start, $this->not_purchase_end),
+            'A2:L2' => "Không có đơn hàng từ $from đến $to",
+            // 'A3:L3' => sprintf('Sinh nhật: %s - %s', $this->birthday_start, $this->birthday_end),
+            // 'A4:L4' => sprintf('Có đơn hàng trong khoảng: %s - %s', $this->purchase_start, $this->purchase_end),
+            // 'A5:L5' => sprintf('Tổng giá trị đơn hàng: %s - %s', $this->total_purchase_start, $this->total_purchase_end),
+            // 'A6:L6' => sprintf('Quốc gia: %s', ($country) ? $country->country_name : ''),
+            // 'A7:L7' => sprintf('Đã từng mua game: %s', ($game) ? $game->title : ''),
+            // 'A8:L8' => sprintf('Nhân viên bán hàng: %s', ($saler) ? $saler->name : ''),
+            // 'A9:L9' => sprintf('Loại người dùng: %s', $customerType),
         ];
         // $footer = [
         //     "F$footerRow" => sprintf('Tổng: %s', $command->sum('total_unit_purchase')),
@@ -79,6 +93,10 @@ class FetchCustomerNotOrderForm extends Model
                 $model->phone,
                 $model->created_at,
                 $model->getCountryName(),
+                ($model->order) ? $model->order->created_at : '',
+                $model->getWalletTopupAmount(),
+                $model->getWalletWithdrawAmount(),
+                ($model->isReseller()) ? 'Reseller' : 'Customer',
             ];
         }
 
@@ -140,14 +158,14 @@ class FetchCustomerNotOrderForm extends Model
         $orderStatus = [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_COMPLETED];
 
         $orderCommand = Order::find()->select(['customer_id'])->groupBy(['customer_id']);
-        if ($this->not_purchase_start && $this->not_purchase_end) {
-            $orderCommand->where(['BETWEEN', 'created_at', $this->not_purchase_start . ' 00:00:00', $this->not_purchase_end . ' 23:59:59']);
+        if ($this->no_purchase_start && $this->no_purchase_end) {
+            $orderCommand->where(['BETWEEN', 'created_at', $this->no_purchase_start . ' 00:00:00', $this->no_purchase_end . ' 23:59:59']);
         } else {
-            if ($this->not_purchase_start) {
-                $orderCommand->where(['>=', 'created_at', $this->not_purchase_start . ' 00:00:00']);
+            if ($this->no_purchase_start) {
+                $orderCommand->where(['>=', 'created_at', $this->no_purchase_start . ' 00:00:00']);
             }
-            if ($this->not_purchase_end) {
-                $orderCommand->where(['<=', 'created_at', $this->not_purchase_end . ' 23:59:59']);
+            if ($this->no_purchase_end) {
+                $orderCommand->where(['<=', 'created_at', $this->no_purchase_end . ' 23:59:59']);
             }
         }
         // echo $orderCommand->createCommand()->getRawSql();die;
@@ -155,7 +173,8 @@ class FetchCustomerNotOrderForm extends Model
         $customerIds = array_column($orders, 'customer_id');
 
         $command = User::find()
-        ->where(['NOT IN', 'id', $customerIds]);
+        ->where(['NOT IN', 'id', $customerIds])
+        ->with('order');
         // echo $command->createCommand()->getRawSql();die;
         $this->_command = $command;
     }

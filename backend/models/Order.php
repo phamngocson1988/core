@@ -12,6 +12,7 @@ class Order extends \common\models\Order
     const SCENARIO_GO_PENDING = 'go_pending';
     const SCENARIO_GO_PROCESSING = 'go_processing';
     const SCENARIO_GO_COMPLETED = 'go_completed';
+    const SCENARIO_ASSIGN_SUPPLIER = 'SCENARIO_ASSIGN_SUPPLIER';
 
     public function scenarios()
     {
@@ -23,6 +24,7 @@ class Order extends \common\models\Order
             self::SCENARIO_GO_PENDING => ['payment_method', 'payment_id'],
             self::SCENARIO_GO_PROCESSING => [],
             self::SCENARIO_GO_COMPLETED => [],
+            self::SCENARIO_ASSIGN_SUPPLIER => ['supplier_id'],
         ]);
     }
 
@@ -34,6 +36,7 @@ class Order extends \common\models\Order
             [['username', 'password', 'platform', 'login_method', 'character_name'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
             [['recover_code', 'server', 'note'], 'trim', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
             [['payment_method', 'payment_id'], 'required', 'on' => self::SCENARIO_GO_PENDING],
+            ['supplier_id', 'required', 'on' => self::SCENARIO_ASSIGN_SUPPLIER],
         ];
     }
 

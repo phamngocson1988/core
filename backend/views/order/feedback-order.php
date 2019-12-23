@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use backend\models\Order;
 use backend\components\datepicker\DatePicker;
 use yii\widgets\ActiveForm;
+use backend\behaviors\OrderSupplierBehavior;
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -104,12 +105,19 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
+              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
               <tr>
                 <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;"></td>
+                <td style="vertical-align: middle;">
+                  <?php
+                  if ($model->supplier_id) {
+                    echo $model->supplier->user->name;
+                  } 
+                  ?>
+                </td>
                 <td style="vertical-align: middle;"><?=$model->customer_email;?></td>
                 <td style="vertical-align: middle;"><?=$model->customer_phone;?></td>
                 <td style="vertical-align: middle;">

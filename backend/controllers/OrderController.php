@@ -133,6 +133,7 @@ class OrderController extends Controller
         ];
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();
+        $command->with('game');
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -663,21 +664,35 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $order = Order::findOne($id);
         if ($request->isPost) {
+            $order->setScenario(Order::SCENARIO_ASSIGN_SUPPLIER);
+            if ($order->load($request->post()) && $order->save('supplier_id')) {
+                $ref = $request->get('ref', Url::to(['order/pending']));
+                // return $this->redirect($ref);
+                return $this->asJson(['status' => true]);
+            }
 
         }
         $form = new FetchSupplierForm([
-            'game_id' => $id,
+            'game_id' => $order->game_id,
             'status' => Supplier::STATUS_ENABLED,
         ]);
-        $suppliers = $form->getCommand()->all();
+        $gameTable = SupplierGame::tableName();
+        $command = $form->getCommand();
+        $command->addSelect(["{$gameTable}.price"]);
+        $command->asArray();
+        $suppliers = $command->all();
         $supplierList = [];
+
+        // $game = Game::findOne($order->game_id);
+        // $game->attachBehavior('supplier', new \common\behaviors\GameSupplierBehavior);
         foreach ($suppliers as $supplier) {
-            $supplierList[$supplier->user_id] = $supplier->user->name;
+            $supplierList[$supplier['user_id']] = sprintf("%s ($%s)", $supplier['user']['name'], $supplier['price']);
         }
         return $this->renderPartial('assign-supplier', [
             'id' => $id,
             'suppliers' => $supplierList,
-            'order' => $order
+            'order' => $order,
+            'ref' => Url::to($request->getUrl(), true)
         ]);
     }
 }

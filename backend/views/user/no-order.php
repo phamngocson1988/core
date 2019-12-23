@@ -53,9 +53,9 @@ use backend\behaviors\UserSupplierBehavior;
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['user/no-order']]);?>
-            <?=$form->field($search, 'not_purchase_start', [
+            <?=$form->field($search, 'no_purchase_start', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'not_purchase_start']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'no_purchase_start']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
                     'autoclose' => true,
@@ -63,9 +63,9 @@ use backend\behaviors\UserSupplierBehavior;
                 ]
             ])->label('Không có đơn hàng từ');?>
 
-            <?=$form->field($search, 'not_purchase_end', [
+            <?=$form->field($search, 'no_purchase_end', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'not_purchase_end']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'no_purchase_end']
             ])->widget(DatePicker::className(), [
                 'clientOptions' => [
                     'autoclose' => true,
@@ -93,6 +93,11 @@ use backend\behaviors\UserSupplierBehavior;
               <th> Username </th>
               <th> Số điện thoại </th>
               <th> Ngày đăng ký </th>
+              <th> Quốc tịch </th>
+              <th> Đơn hàng cuối cùng </th>
+              <th> Tổng tiền nạp </th>
+              <th> Tổng tiền mua hàng </th>
+              <th> Số dư hiện tại</th>
               <th> Reseller/Khách hàng </th>
               <th> Đại lý/người bán </th>
               <th> Tác vụ </th>
@@ -110,6 +115,11 @@ use backend\behaviors\UserSupplierBehavior;
               <td><?=$model->username;?></td>
               <td><?=$model->phone;?></td>
               <td><?=$model->created_at;?></td>
+              <td><?=$model->getCountryName();?></td>
+              <td><?=($model->order) ? $model->order->created_at : '';?></td>
+              <td><?=$model->getWalletTopupAmount();?></td>
+              <td><?=$model->getWalletWithdrawAmount();?></td>
+              <td><?=$model->getWalletAmount();?></td>
               <td>
                 <?php if (Yii::$app->user->can('sale_manager')) : ?>
                 <?php if ($model->isReseller()) : ?>

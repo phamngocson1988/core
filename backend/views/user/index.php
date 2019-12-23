@@ -201,7 +201,7 @@ use backend\behaviors\UserSupplierBehavior;
               <td><?=$model->phone;?></td>
               <td><?=$model->created_at;?></td>
               <td><?=$model->getCountryName();?></td>
-              <td><?=$model->last_order_date;?></td>
+              <td><?=($model->order) ? $model->order->created_at : '';?></td>
               <td><?=$model->getWalletTopupAmount();?></td>
               <td><?=$model->getWalletWithdrawAmount();?></td>
               <td><?=$model->getWalletAmount();?></td>
