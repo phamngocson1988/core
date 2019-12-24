@@ -33,7 +33,7 @@ class SupplierController extends Controller
 
     public function actionIndex()
     {
-        $this->view->params['main_menu_active'] = 'reseller.index';
+        $this->view->params['main_menu_active'] = 'supplier.index';
         $request = Yii::$app->request;
 
         $data = [

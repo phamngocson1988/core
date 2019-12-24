@@ -665,12 +665,13 @@ class OrderController extends Controller
         $order = Order::findOne($id);
         if ($request->isPost) {
             $order->setScenario(Order::SCENARIO_ASSIGN_SUPPLIER);
+            $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
+                $model = $event->sender;
+                $model->touch('supplier_assign_time');
+            });
             if ($order->load($request->post()) && $order->save('supplier_id')) {
-                $ref = $request->get('ref', Url::to(['order/pending']));
-                // return $this->redirect($ref);
                 return $this->asJson(['status' => true]);
             }
-
         }
         $form = new FetchSupplierForm([
             'game_id' => $order->game_id,

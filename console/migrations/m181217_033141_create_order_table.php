@@ -79,6 +79,8 @@ class m181217_033141_create_order_table extends Migration
             'provider_id' => $this->integer(11)
             'supplier_id' => $this->integer(11)
             'supplier_accept' => $this->string(1)
+            'supplier_assign_time' => $this->dateTime(),
+            'supplier_accept_time' => $this->dateTime(),
         ]);//16868688
 
         if ($this->db->driverName === 'mysql') {

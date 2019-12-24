@@ -45,6 +45,27 @@
           </li>
         </ul>
       </li>
+      <!-- Order -->
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-note"></i>
+        <span class="title">Đơn hàng</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  "> 
+            <a href="{url route='/order'}" class="nav-link " code='order.index'>
+            <span class="title">Đơn hàng của tôi</span>
+            </a>
+          </li>
+
+          <li class="nav-item  ">
+            <a href="{url route='order/waiting'}" class="nav-link " code='order.waiting'>
+            <span class="title">Đơn hàng chờ</span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>

@@ -232,8 +232,6 @@ class GameController extends Controller
         $model = Game::findOne($id);
         $model->setScenario(Game::SCENARIO_CREATE);
 
-        // Load suppliers
-        $suppliers = SupplierGame::find()->where(['game_id' => $id])->with('user')->all();
         if ($request->isPost) {
             // Write log
             $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
@@ -294,6 +292,12 @@ class GameController extends Controller
                 Yii::$app->session->setFlash('error', $message);
             }
         }
+
+        // Load suppliers
+        $suppliers = SupplierGame::find()
+        ->where(['game_id' => $id])
+        ->orderBy(['price' => SORT_ASC])
+        ->with('user')->all();
 
         return $this->render('update-price.tpl', [
             'model' => $model,
