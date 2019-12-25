@@ -19,7 +19,7 @@ use yii\helpers\Html;
     </tbody>
   </table>
 </div>
-<?php if (Yii::$app->user->can('orderteam') && $order->isProcessingOrder()) :?>
+<?php if ($order->isProcessingOrder()) :?>
 <div class="row static-info">
   <?= Html::beginForm(['order/add-unit', 'id' => $order->id], 'post', ['id' => 'update-unit-form']) ?>
   <div class="col-md-6">

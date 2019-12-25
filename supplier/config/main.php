@@ -84,6 +84,7 @@ return [
         ],
 
         'urlManager' => require('router.php'),
+        'urlManagerFrontend' => require('../../frontend/config/router.php'),
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@supplier/mail',
