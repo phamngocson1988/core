@@ -115,12 +115,6 @@ class m181217_033141_create_order_table extends Migration
             'created_at' => $this->dateTime()->notNull(),
         ]);
 
-        if ($this->db->driverName === 'mysql') {
-            $type = "ALTER TABLE {{%order_items}} MODIFY `type` ENUM('product','payment_fee') NOT NULL DEFAULT 'product'";
-            $command = $this->db->createCommand($type);
-            $command->execute();
-        }
-
         $this->createTable('{{%order_comments}}', [
             'id' => $this->primaryKey(),
             'order_id' => $this->integer(11)->notNull(),
@@ -157,10 +151,8 @@ class m181217_033141_create_order_table extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%order}}');
-        // $this->dropTable('{{%order_items}}');
         $this->dropTable('{{%order_image}}');
         $this->dropTable('{{%order_comments}}');
-        // $this->dropTable('{{%order_fee}}');
         $this->dropTable('{{%order_file}}');
         $this->dropTable('{{%order_log}}');
     }
