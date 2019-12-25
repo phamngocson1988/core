@@ -59,7 +59,7 @@ class LoginForm extends Model
                 $this->addError($attribute, Yii::t('app', 'you_are_not_allowed_to_login'));
                 return false;
             } else {
-                $supplier = $user->getSupplier();
+                $supplier = $user->supplier;
                 if (!$supplier->isEnabled()) {
                     $this->addError($attribute, 'Tài khoản này chưa được kích hoạt');
                     return false;
