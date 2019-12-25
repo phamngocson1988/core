@@ -76,9 +76,9 @@ class m181217_033141_create_order_table extends Migration
             'process_start_time' => $this->dateTime(),
             'process_end_time' => $this->dateTime(),
             'process_duration_time' => $this->integer(11),
-            'provider_id' => $this->integer(11)
-            'supplier_id' => $this->integer(11)
-            'supplier_accept' => $this->string(1)
+            'provider_id' => $this->integer(11),
+            'supplier_id' => $this->integer(11),
+            'supplier_accept' => $this->string(1),
             'supplier_assign_time' => $this->dateTime(),
             'supplier_accept_time' => $this->dateTime(),
         ]);//16868688
