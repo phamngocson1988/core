@@ -38,7 +38,7 @@ class m130524_201442_init extends Migration
             'saler_code' => $this->string(50),
             'marketing_id' => $this->integer(),
             'trust' => $this->string(1),
-            'created_at' => $this->dateTime()->defaultValue('N'),
+            'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
