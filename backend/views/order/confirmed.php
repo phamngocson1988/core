@@ -150,62 +150,64 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> Mã đơn hàng </th>
-              <th> Tên game </th>
-              <th> Ngày tạo </th>
-              <th> Số lượng nạp </th>
-              <th> Số gói </th>
-              <th> Thời gian nhận đơn </th>
-              <th> Thời gian chờ </th>
-              <th> Người bán hàng </th>
-              <th> Nhân viên đơn hàng </th>
-              <th> Trạng thái </th>
-              <th> Nhà cung cấp </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
               <tr>
-                <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
-                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
-                <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;">
-                  <?=$model->getStatusLabel();?>
-                  <?php if ($model->hasCancelRequest()) :?>
-                  <span class="label label-danger">Có yêu cầu hủy</span>
-                  <?php endif;?>
-                  <?php if ($model->tooLongProcess()) :?>
-                  <span class="label label-warning">Xử lý chậm</span>
-                  <?php endif;?>
-                </td>
-                <td style="vertical-align: middle;">
-                  <?php
-                  if ($model->supplier_id) {
-                    echo $model->supplier->user->name;
-                  } 
-                  ?>
-                </td>
-                <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                </td>
+                <th> Mã đơn hàng </th>
+                <th> Tên game </th>
+                <th> Ngày tạo </th>
+                <th> Số lượng nạp </th>
+                <th> Số gói </th>
+                <th class="hidden-xs"> Thời gian nhận đơn </th>
+                <th> Thời gian chờ </th>
+                <th class="hidden-xs"> Người bán hàng </th>
+                <th class="hidden-xs"> Nhân viên đơn hàng </th>
+                <th> Trạng thái </th>
+                <th> Nhà cung cấp </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+                <tr>
+                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td><?=$model->game_title;?></td>
+                  <td><?=$model->created_at;?></td>
+                  <td><?=$model->total_unit;?></td>
+                  <td><?=$model->quantity;?></td>
+                  <td class="hidden-xs"><?=$model->process_start_time;?></td>
+                  <td><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
+                  <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td>
+                    <?=$model->getStatusLabel();?>
+                    <?php if ($model->hasCancelRequest()) :?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                    <?php endif;?>
+                    <?php if ($model->tooLongProcess()) :?>
+                    <span class="label label-warning">Xử lý chậm</span>
+                    <?php endif;?>
+                  </td>
+                  <td>
+                    <?php
+                    if ($model->supplier) {
+                      echo $model->supplier->user->name;
+                    } 
+                    ?>
+                  </td>
+                  <td>
+                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

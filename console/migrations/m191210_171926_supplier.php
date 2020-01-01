@@ -49,6 +49,30 @@ class m191210_171926_supplier extends Migration
             $command = $this->db->createCommand($alterGame);
             $command->execute();
         }
+
+        $this->createTable('{{%order_supplier}}', [
+            'id' => $this->primaryKey(),
+            'order_id' => $this->integer()->notNull(),
+            'supplier_id' => $this->integer()->notNull(),
+            'price' => $this->float(),
+            'quantity' => $this->float()->defaultValue(0),
+            'total_price' => $this->float()->defaultValue(0),
+            'status' => $this->string(10)->notNull(),
+            'created_at' => $this->dateTime(),            
+            'updated_at' => $this->dateTime(),    
+            'requested_at' => $this->dateTime(),  
+            'requested_by' => $this->integer(),         
+            'approved_at' => $this->dateTime(),           
+            'rejected_at' => $this->dateTime(),           
+            'stopped_at' => $this->dateTime(),           
+            'retaken_at' => $this->dateTime(),           
+            'retaken_by' => $this->integer(),           
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $orderSupplierStatus = "ALTER TABLE {{%order_supplier}} MODIFY `status` ENUM('request','approve','reject','retake','stop') NOT NULL DEFAULT 'request'";
+            $command = $this->db->createCommand($orderSupplierStatus);
+            $command->execute();
+        }
     }
 
     /**
@@ -59,6 +83,7 @@ class m191210_171926_supplier extends Migration
         echo "m191210_171926_supplier cannot be reverted.\n";
         $this->dropTable('{{%supplier}}');
         $this->dropTable('{{%supplier_game}}');
+        $this->dropTable('{{%order_supplier}}');
         return false;
     }
 }

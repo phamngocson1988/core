@@ -176,6 +176,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+              <?php $supplier = $model->supplier;?>
               <tr>
                 <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
@@ -196,11 +197,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   <?php endif;?>
                 </td>
                 <td style="vertical-align: middle;">
-                  <?php
-                  if ($model->supplier_id) {
-                    echo $model->supplier->user->name;
-                  } 
-                  ?>
+                  <?=($supplier) ? sprintf("%s (%s)", $model->supplier->user->name, $model->supplier->status) : '';?>
                 </td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
@@ -244,9 +241,14 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   $game = $model->game;
                   $game->attachBehavior('supplier', new GameSupplierBehavior); 
                   ?>
-                  <?php if ($game->countSupplier() && !$model->isSupplierAccept()) :?>
+                  <?php if ($game->countSupplier() && !$model->supplier) :?>
                   <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
                   <?php endif;?>
+                  <?php endif;?>
+
+                  <!-- Remove supplier -->
+                  <?php if ($supplier && $supplier->isRequest()) : ?>
+                  <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Xóa nhà cung cấp"><i class="fa fa-user-times"></i></a>
                   <?php endif;?>
                 </td>
               </tr>
@@ -300,8 +302,10 @@ $(document).on('submit', 'body #assign-supplier', function(e) {
     dataType : 'json',
     data: form.serialize(),
     success: function (result, textStatus, jqXHR) {
-      location.reload();
-      return false;
+      if (!result.status)
+       alert(result.error);
+      else 
+        location.reload();
     },
   });
   return false;

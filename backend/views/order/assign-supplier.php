@@ -18,7 +18,7 @@ use yii\helpers\Url;
     	<?php if (!$suppliers) : ?>
     	<label>Không có nhà cung cấp nào</label>
     	<?php else : ?>
-    	<?=$form->field($order, 'supplier_id', [
+    	<?=$form->field($model, 'supplier_id', [
         'options' => ['class' => 'form-group col-md-12 col-lg-12'],
       ])->dropdownList($suppliers)->label('Chọn nhà cung cấp');?>
   	<?php endif; ?>

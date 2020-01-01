@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\helpers\ArrayHelper;
 
 class Supplier extends ActiveRecord
 {
@@ -51,6 +52,26 @@ class Supplier extends ActiveRecord
     public function isEnabled()
     {
         return $this->status == self::STATUS_ENABLED;
+    }
+
+    public function getGames()
+    {
+        return $this->hasMany(SupplierGame::className(), ['supplier_id' => 'user_id']);
+    }
+
+    public function getActiveGames()
+    {
+        $command = $this->getGames();
+        $supplierGameTable = SupplierGame::tableName();
+        $command->andOnCondition(["{$supplierGameTable}.status" => SupplierGame::STATUS_ENABLED]);
+        return $command;
+    }
+
+    public function hasGame($gameId) 
+    {
+        $games = $this->activeGames();
+        $gameIds = ArrayHelper::getColumn($games, 'game_id');
+        return in_array($gameId, $gameIds);
     }
 
 }

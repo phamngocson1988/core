@@ -76,11 +76,11 @@ class m181217_033141_create_order_table extends Migration
             'process_start_time' => $this->dateTime(),
             'process_end_time' => $this->dateTime(),
             'process_duration_time' => $this->integer(11),
-            'provider_id' => $this->integer(11),
-            'supplier_id' => $this->integer(11),
-            'supplier_accept' => $this->string(1),
-            'supplier_assign_time' => $this->dateTime(),
-            'supplier_accept_time' => $this->dateTime(),
+            // 'provider_id' => $this->integer(11),
+            // 'supplier_id' => $this->integer(11),
+            // 'supplier_accept' => $this->string(1),
+            // 'supplier_assign_time' => $this->dateTime(),
+            // 'supplier_accept_time' => $this->dateTime(),
         ]);//16868688
 
         if ($this->db->driverName === 'mysql') {
@@ -88,9 +88,9 @@ class m181217_033141_create_order_table extends Migration
             $command = $this->db->createCommand($status);
             $command->execute();
 
-            $supplierAccept = "ALTER TABLE {{%order}} MODIFY `supplier_accept` ENUM('Y','N') NOT NULL DEFAULT 'N'";
-            $commandSupplier = $this->db->createCommand($supplierAccept);
-            $commandSupplier->execute();
+            // $supplierAccept = "ALTER TABLE {{%order}} MODIFY `supplier_accept` ENUM('Y','N') NOT NULL DEFAULT 'N'";
+            // $commandSupplier = $this->db->createCommand($supplierAccept);
+            // $commandSupplier->execute();
         }
 
         $this->createTable('{{%order_image}}', [

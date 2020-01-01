@@ -25,6 +25,8 @@ use backend\forms\FetchOrderByFeedback;
 use backend\models\SupplierGame;
 use backend\models\Supplier;
 use backend\forms\FetchSupplierForm;
+use backend\forms\AssignOrderSupplierForm;
+use backend\forms\RetakeOrderSupplierForm;
 
 
 use backend\events\OrderEventHandler;
@@ -663,16 +665,19 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $order = Order::findOne($id);
+        $model = new AssignOrderSupplierForm();
         if ($request->isPost) {
-            $order->setScenario(Order::SCENARIO_ASSIGN_SUPPLIER);
-            $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
-                $model = $event->sender;
-                $model->touch('supplier_assign_time');
-            });
-            if ($order->load($request->post()) && $order->save('supplier_id')) {
+            $model->load($request->post());
+            $model->order_id = $id;
+            $model->requester = Yii::$app->user->id;
+            if ($model->validate() && $model->assign()) {
                 return $this->asJson(['status' => true]);
             }
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'error' => $error]);
         }
+        // Fetch all supplier and game prices
         $form = new FetchSupplierForm([
             'game_id' => $order->game_id,
             'status' => Supplier::STATUS_ENABLED,
@@ -684,16 +689,30 @@ class OrderController extends Controller
         $suppliers = $command->all();
         $supplierList = [];
 
-        // $game = Game::findOne($order->game_id);
-        // $game->attachBehavior('supplier', new \common\behaviors\GameSupplierBehavior);
         foreach ($suppliers as $supplier) {
             $supplierList[$supplier['user_id']] = sprintf("%s ($%s)", $supplier['user']['name'], $supplier['price']);
         }
         return $this->renderPartial('assign-supplier', [
             'id' => $id,
             'suppliers' => $supplierList,
-            'order' => $order,
+            'model' => $model,
             'ref' => Url::to($request->getUrl(), true)
         ]);
+    }
+
+    public function actionRemoveSupplier($id)
+    {
+        $request = Yii::$app->request;
+        $model = new RetakeOrderSupplierForm([
+            'order_id' => $id,
+            'requester' => Yii::$app->user->id
+        ]);
+        if ($model->validate() && $model->retake()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'error' => $error]);
+        }
     }
 }

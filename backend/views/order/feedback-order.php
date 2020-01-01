@@ -85,54 +85,56 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> Mã đơn hàng </th>
-              <th> Ngày tạo </th>
-              <th> Người bán hàng </th>
-              <th> Nhân viên đơn hàng </th>
-              <th> Nhà cung cấp </th>
-              <th> Khách hàng</th>
-              <th> Số điện thoại</th>
-              <th> Feedback </th>
-              <th> Comment </th>
-              <th> Trạng thái </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
               <tr>
-                <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;">
-                  <?php
-                  if ($model->supplier_id) {
-                    echo $model->supplier->user->name;
-                  } 
-                  ?>
-                </td>
-                <td style="vertical-align: middle;"><?=$model->customer_email;?></td>
-                <td style="vertical-align: middle;"><?=$model->customer_phone;?></td>
-                <td style="vertical-align: middle;">
-                  <?php if ($model->rating == 1) : ?>
-                    <span class="label label-primary">Like</span>
-                  <?php elseif ($model->rating == -1) :?>
-                    <span class="label label-default">Dislike</span>
-                  <?php endif;?>
-                </td>
-                <td style="vertical-align: middle;"><?=$model->comment_rating;?></td>
-                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
+                <th> Mã đơn hàng </th>
+                <th> Ngày tạo </th>
+                <th class="hidden-xs"> Người bán hàng </th>
+                <th class="hidden-xs"> Nhân viên đơn hàng </th>
+                <th> Nhà cung cấp </th>
+                <th> Khách hàng</th>
+                <th class="hidden-xs"> Số điện thoại</th>
+                <th> Feedback </th>
+                <th> Comment </th>
+                <th> Trạng thái </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+                <tr>
+                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td><?=$model->created_at;?></td>
+                  <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td>
+                    <?php
+                    if ($model->supplier) {
+                      echo $model->supplier->user->name;
+                    } 
+                    ?>
+                  </td>
+                  <td><?=$model->customer_email;?></td>
+                  <td class="hidden-xs"><?=$model->customer_phone;?></td>
+                  <td>
+                    <?php if ($model->rating == 1) : ?>
+                      <span class="label label-primary">Like</span>
+                    <?php elseif ($model->rating == -1) :?>
+                      <span class="label label-default">Dislike</span>
+                    <?php endif;?>
+                  </td>
+                  <td><?=$model->comment_rating;?></td>
+                  <td><?=$model->getStatusLabel();?></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

@@ -168,7 +168,8 @@ use backend\behaviors\UserSupplierBehavior;
             </div>
           <?php ActiveForm::end()?>
         </div>
-        <table class="table table-striped table-bordered table-hover table-checkable">
+        <div class="table-responsive">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th> ID </th>
@@ -179,9 +180,9 @@ use backend\behaviors\UserSupplierBehavior;
               <th> Số điện thoại </th>
               <th> Ngày đăng ký </th>
               <th> Quốc tịch </th>
-              <th> Đơn hàng cuối cùng </th>
-              <th> Tổng tiền nạp </th>
-              <th> Tổng tiền mua hàng </th>
+              <th class="hidden-xs"> Đơn hàng cuối cùng </th>
+              <th class="hidden-xs"> Tổng tiền nạp </th>
+              <th class="hidden-xs"> Tổng tiền mua hàng </th>
               <th> Số dư hiện tại</th>
               <th> Reseller/Khách hàng </th>
               <th> Đại lý/người bán </th>
@@ -201,9 +202,9 @@ use backend\behaviors\UserSupplierBehavior;
               <td><?=$model->phone;?></td>
               <td><?=$model->created_at;?></td>
               <td><?=$model->getCountryName();?></td>
-              <td><?=($model->order) ? $model->order->created_at : '';?></td>
-              <td><?=$model->getWalletTopupAmount();?></td>
-              <td><?=$model->getWalletWithdrawAmount();?></td>
+              <td class="hidden-xs"><?=($model->order) ? $model->order->created_at : '';?></td>
+              <td class="hidden-xs"><?=$model->getWalletTopupAmount();?></td>
+              <td class="hidden-xs"><?=$model->getWalletWithdrawAmount();?></td>
               <td><?=$model->getWalletAmount();?></td>
               <td>
                 <?php if (Yii::$app->user->can('sale_manager')) : ?>
@@ -251,6 +252,7 @@ use backend\behaviors\UserSupplierBehavior;
             <?php endif;?>
           </tbody>
         </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages]);?>
       </div>
     </div>
