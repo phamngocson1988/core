@@ -7,11 +7,16 @@ use yii\filters\VerbFilter;
 use supplier\models\Order;
 use supplier\models\OrderFile;
 use supplier\models\OrderComplainTemplate;
+use supplier\models\OrderSupplier;
 use supplier\forms\FetchOrderForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use supplier\behaviors\OrderLogBehavior;
 use supplier\behaviors\OrderMailBehavior;
+use supplier\behaviors\OrderSupplierBehavior;
+use supplier\forms\TakeOrderSupplierForm;
+use supplier\forms\RejectOrderSupplierForm;
+use supplier\forms\StopOrderSupplierForm;
 
 class OrderController extends Controller
 {
@@ -47,7 +52,7 @@ class OrderController extends Controller
                 Order::STATUS_COMPLETED,
             ]),
             'supplier_id' => Yii::$app->user->id,
-            'supplier_accept' => 'Y'
+            'supplier_status' => OrderSupplier::STATUS_APPROVE,
         ];
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();
@@ -82,7 +87,7 @@ class OrderController extends Controller
                 Order::STATUS_COMPLETED,
             ]),
             'supplier_id' => Yii::$app->user->id,
-            'supplier_accept' => 'N'
+            'supplier_status' => OrderSupplier::STATUS_REQUEST
         ];
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();
@@ -102,25 +107,47 @@ class OrderController extends Controller
 
     public function actionAccept($id)
     {
-        $order = Order::findOne($id);
-        if (!$order) throw new Exception("Not found", 1);
-        $order->setScenario(Order::SCENARIO_ACCEPT);
-        $order->supplier_accept = 'Y';
-        $order->supplier_accept_time = date('Y-m-d H:i:s');
-        return $this->asJson(['status' => $order->save()]);
+        $form = new TakeOrderSupplierForm([
+            'order_id' => $id,
+            'supplier_id' => Yii::$app->user->id
+
+        ]);
+        if ($form->validate()) {
+            return $this->asJson(['status' => $form->approve()]);
+        }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'error' => $error]);
     }
 
     public function actionReject($id)
     {
-        $order = Order::findOne($id);
-        if (!$order) throw new Exception("Not found", 1);
-        $order->setScenario(Order::SCENARIO_REJECT);
-        $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
-            $model = $event->sender;
-            // send mail to admin
-        });
-        $order->supplier_id = null;
-        return $this->asJson(['status' => $order->save()]);
+        $form = new RejectOrderSupplierForm([
+            'order_id' => $id,
+            'supplier_id' => Yii::$app->user->id
+
+        ]);
+        if ($form->validate()) {
+            return $this->asJson(['status' => $form->reject()]);
+        }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'error' => $error]);
+    }
+
+    public function actionStop($id)
+    {
+        $form = new StopOrderSupplierForm([
+            'order_id' => $id,
+            'supplier_id' => Yii::$app->user->id
+
+        ]);
+        if ($form->validate()) {
+            return $this->asJson(['status' => $form->stop()]);
+        }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'error' => $error]);
     }
 
     public function actionEdit($id)
@@ -196,7 +223,19 @@ class OrderController extends Controller
                     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
             ]);
         });
-        return $this->renderJson($model->save());
+
+        if ($model->save()) {
+            $model->attachBehavior('supplier', OrderSupplierBehavior::className());
+            $supplier = $order->supplier;
+            if ($supplier) {
+                $unit = $model->quantity - $model->doing_unit;
+                $supplier->quantity = (float)$supplier->quantity + $unit;
+                $supplier->total_price = $supplier->price * $supplier->quantity;
+                $supplier->save();
+            }
+        }
+
+        return $this->renderJson(true);
     }
 
     public function actionAddUnit($id)
@@ -206,9 +245,19 @@ class OrderController extends Controller
         if ($model) {
             $unit = $request->post('doing_unit', 0);
             $model->doing_unit += $unit;
-            if ($model->doing_unit > $model->quantity) return $this->renderJson(false, [], 'Bạn không thể nạp quá số gói game của đơn hàng này');
-            $model->save();
-            return $this->renderJson(true, ['total' => $model->save(null, ['doing_unit'])]);
+            if ($model->doing_unit > $model->quantity) {
+                return $this->renderJson(false, [], 'Bạn không thể nạp quá số gói game của đơn hàng này');
+            } 
+            if ($model->save(null, ['doing_unit'])) {
+                $model->attachBehavior('supplier', OrderSupplierBehavior::className());
+                $supplier = $order->supplier;
+                if ($supplier) {
+                  $supplier->quantity = (float)$supplier->quantity + $unit;
+                  $supplier->total_price = $supplier->price * $supplier->quantity;
+                  $supplier->save();
+                }
+                return $this->renderJson(true, ['total' => $model->doing_unit]);
+            }
         } else {
             return $this->renderJson(false, [], 'Error');
         }
@@ -257,4 +306,6 @@ class OrderController extends Controller
         }
         return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);
     }
+
+
 }

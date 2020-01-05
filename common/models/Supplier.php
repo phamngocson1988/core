@@ -69,7 +69,7 @@ class Supplier extends ActiveRecord
 
     public function hasGame($gameId) 
     {
-        $games = $this->activeGames();
+        $games = $this->activeGames;
         $gameIds = ArrayHelper::getColumn($games, 'game_id');
         return in_array($gameId, $gameIds);
     }

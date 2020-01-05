@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use supplier\models\Order;
+use supplier\models\OrderSupplier;
 use supplier\models\User;
 use supplier\models\Game;
 
@@ -20,12 +21,12 @@ class FetchOrderForm extends Model
     public $request_cancel;
     public $customer_phone;
     public $supplier_id;
-    public $supplier_accept;
+    public $supplier_status;
 
     public function rules()
     {
         return [
-            [['supplier_id', 'supplier_accept'], 'required'],
+            [['supplier_id', 'supplier_status'], 'required'],
             [['q', 'customer_phone'], 'trim'],
             [['game_id', 'customer_id', 'start_date', 'end_date', 'status'], 'safe'],
             [['start_date', 'end_date'], 'safe'],
@@ -44,7 +45,11 @@ class FetchOrderForm extends Model
     {
         $command = Order::find();
         $table = Order::tableName();
-        
+        $supplierTable = OrderSupplier::tableName();
+        $command->innerJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
+        $command->where(["$supplierTable.supplier_id" => $this->supplier_id]);
+        $supplierStatus = (array)$this->supplier_status;
+        $command->andWhere(["IN", "{$supplierTable}.status", $supplierStatus]);
         if ($this->q) {
             $command->andWhere(['OR',
                 ["$table.id" => $this->q],
@@ -53,8 +58,9 @@ class FetchOrderForm extends Model
             $this->_command = $command;
             return;
         }
-        $command->andWhere(["$table.supplier_id" => $this->supplier_id]);
-        $command->andWhere(["$table.supplier_accept" => $this->supplier_accept]);
+
+
+        
         if ($this->customer_id) {
             $command->andWhere(["$table.customer_id" => $this->customer_id]);
         }

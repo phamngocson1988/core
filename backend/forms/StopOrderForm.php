@@ -84,7 +84,7 @@ class StopOrderForm extends Model
             $order->save();
             // Topup user wallet
             $user = $order->customer;
-            $user->topup($remainingPrice, $order->id, sprintf("Completed partially: %s/%s >>> Refund %s &percnt; of the charge", $newTotalUnit, $oldUnit, $remainingPercent));
+            $user->topup($remainingPrice, $order->id, sprintf("[Order #%s] Completed partially: %s/%s >>> Refund %s &percnt; of the charge", $order->id, $newTotalUnit, $oldUnit, $remainingPercent));
             // Add to log
             $order->log(sprintf("Stop order when it is in %s percent and refund %s", $percent, $remainingPrice));
             $order->send(

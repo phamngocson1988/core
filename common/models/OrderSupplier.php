@@ -47,4 +47,9 @@ class OrderSupplier extends ActiveRecord
     {
         return $this->status == self::STATUS_REQUEST;
     }
+
+    public function isApprove()
+    {
+        return $this->status == self::STATUS_APPROVE;
+    }
 }

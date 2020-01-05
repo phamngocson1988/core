@@ -202,49 +202,6 @@ $this->registerJs($moveCompletedJs)
 ?>
                         </div>
                       </div>
-
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#stop_order"><i class="fa fa-angle-right"></i> Dừng đơn hàng</a>
-                          </div>
-                          <div class="modal fade" id="stop_order" tabindex="-1" role="basic" aria-hidden="true">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                  <h4 class="modal-title">Ngưng thực hiện đơn hàng</h4>
-                                </div>
-                                <?php $stopOrderForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated', 'id' => 'stop-order-form'], 'action' => Url::to(['order/stop'])]);?>
-                                <div class="modal-body"> 
-                                  <p>Bạn có chắc chắn muốn ngưng thực hiện đơn hàng? Hệ thống sẽ cập nhật lại số gói của đơn hàng, chuyển đơn hàng sang trạng thái Completed và chuyển trả số tiền chưa hoàn thành vào ví khách hàng</p>
-                                  <?=$stopOrderForm->field($stopModel, 'id', [
-                                    'template' => '{input}',
-                                    'options' => ['tag' => false],
-                                    'inputOptions' => ['value' => $order->id]
-                                  ])->hiddenInput();?>
-                                  <?=$stopOrderForm->field($stopModel, 'quantity')->textInput();?>
-                                  <?=$stopOrderForm->field($stopModel, 'description')->textInput();?>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn green">Xác nhận</button>
-                                </div>
-                                <?php ActiveForm::end();?>
-                              </div>
-                            </div>
-                          </div>
-<?php
-$stopOrderJs = <<< JS
-var stopOrderForm = new AjaxFormSubmit({element: '#stop-order-form'});
-stopOrderForm.success = function (data, form) {
-  location.reload();
-};
-JS;
-$this->registerJs($stopOrderJs)
-?>
-                        </div>
-                      </div>
                       <?php endif;?>
                       
                       <?php if ($order->hasCancelRequest()) :?>
