@@ -120,11 +120,19 @@ $cart->applyPromotion();
                         </div>
                     </label>
 
-                    <label for="opt11" class="t-flex-item-center t-choose-payment radio">
+                    <!-- <label for="opt11" class="t-flex-item-center t-choose-payment radio">
                         <input type="radio" name="identifier" id="opt11" value="neteller" class="hidden paygate" />
                         <span class="label"></span>
                         <div class="t-img-wrap-logo-payment">
                             <img src="/images/neteller.png" class="paygate-logo" alt="">
+                        </div>
+                    </label> -->
+
+                     <label for="opt12" class="t-flex-item-center t-choose-payment radio">
+                        <input type="radio" name="identifier" id="opt12" value="standard_chartered" class="hidden paygate" />
+                        <span class="label"></span>
+                        <div class="t-img-wrap-logo-payment">
+                            <img src="/images/standard_chartered.png" class="paygate-logo" alt="">
                         </div>
                     </label>
 
@@ -197,7 +205,11 @@ $cart->applyPromotion();
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
 
-                        <div class="grand-line last-line price" paygate='neteller' style="display: none">
+                        <!-- <div class="grand-line last-line price" paygate='neteller' style="display: none">
+                          <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
+                        </div> -->
+
+                        <div class="grand-line last-line price" paygate='standard_chartered' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
                       </div>

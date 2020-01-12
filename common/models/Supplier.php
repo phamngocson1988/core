@@ -74,4 +74,9 @@ class Supplier extends ActiveRecord
         return in_array($gameId, $gameIds);
     }
 
+    public function getBanks()
+    {
+        return $this->hasMany(SupplierBank::className(), ['supplier_id' => 'user_id']);
+    }
+
 }

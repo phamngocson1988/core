@@ -66,6 +66,22 @@
           </li>
         </ul>
       </li>
+
+      <!-- Ngân hàng -->
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-bank"></i>
+        <span class="title">Tài khoản</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  "> 
+            <a href="{url route='/bank'}" class="nav-link " code='bank.index'>
+            <span class="title">Tài khoản ngân hàng</span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>

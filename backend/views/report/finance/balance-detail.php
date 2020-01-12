@@ -14,6 +14,7 @@ use common\models\Promotion;
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$user = $search->getUser();
 ?>
 
 <style>
@@ -56,7 +57,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
+          <?php if ($user) : ?>
           <span class="caption-subject bold uppercase">Khách hàng <span style="color:red"><?=$user->name;?></span></span>
+          <?php else : ?>
+          <span class="caption-subject bold uppercase">Khách hàng</span>
+          <?php endif;?>
         </div>
         <div class="actions">
           <!-- <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a> -->
@@ -64,7 +69,32 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-balance-detail', 'id' => $search->user_id]]);?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-balance-detail']]);?>
+            <?=$form->field($search, 'user_id', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->user_id) ? sprintf("%s - %s", $user->username, $user->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'user_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
+
+            <?=$form->field($search, 'type', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'type']
+            ])->dropDownList([
+                UserWallet::TYPE_INPUT => 'Nạp tiền',
+                UserWallet::TYPE_OUTPUT => 'Rút tiền',
+            ], ['prompt' => 'Chọn'])->label('Loại giao dịch');?>
+
             <?=$form->field($search, 'start_date', [    
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']

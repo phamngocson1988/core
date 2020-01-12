@@ -73,6 +73,64 @@ class m191210_171926_supplier extends Migration
             $command = $this->db->createCommand($orderSupplierStatus);
             $command->execute();
         }
+
+        $this->createTable('{{%supplier_bank}}', [
+            'id' => $this->primaryKey(),
+            'supplier_id' => $this->integer()->notNull(),
+            'bank_code' => $this->string(50)->notNull(),
+            'province' => $this->string(128),
+            'city' => $this->string(128),
+            'branch' => $this->string(128),
+            'account_number' => $this->string(50)->notNull(),
+            'account_name' => $this->string(50)->notNull()
+        ], $tableOptions);
+
+        $this->createTable('{{%supplier_wallet}}', [
+            'id' => $this->primaryKey(),
+            'type' => $this->string(1)->notNull(),
+            'supplier_id' => $this->integer(11)->notNull(),
+            'amount' => $this->float()->notNull()->defaultValue(0),
+            'balance' => $this->float()->notNull()->defaultValue(0),
+            'ref_name' => $this->string(100), 
+            'ref_key' => $this->string(100), 
+            'description' => $this->string(100), 
+            'created_by' => $this->integer(11),
+            'created_at' => $this->dateTime()->notNull(),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+            'status' => $this->string(10)->notNull()->defaultValue('pending'),
+        ]);
+        if ($this->db->driverName === 'mysql') {
+            $walletStatus = "ALTER TABLE {{%supplier_wallet}} MODIFY `status` ENUM('pending','completed') NOT NULL DEFAULT 'pending'";
+            $command = $this->db->createCommand($walletStatus);
+            $command->execute();
+
+            $walletType = "ALTER TABLE {{%supplier_wallet}} MODIFY `status` ENUM('I','O') NOT NULL";
+            $command = $this->db->createCommand($walletType);
+            $command->execute();
+        }
+
+        $this->createTable('{{%supplier_withdraw_request}}', [
+            'id' => $this->primaryKey(),
+            'supplier_id' => $this->integer(11)->notNull(),
+            'bank_id' => $this->integer(11)->notNull(),
+            'amount' => $this->float()->notNull()->defaultValue(0),
+            'requested_at' => $this->dateTime()->notNull(),
+            'approved_at' => $this->dateTime(), 
+            'approved_by' => $this->integer(11), 
+            'executed_at' => $this->dateTime(), 
+            'executed_by' => $this->integer(11),
+            'cancelled_at' => $this->dateTime(), 
+            'cancelled_by' => $this->integer(11),
+            'note' => $this->dateTime()->notNull(),
+            'evidence' => $this->dateTime(),
+            'status' => $this->string(10)->notNull()->defaultValue('request'),
+        ]);
+        if ($this->db->driverName === 'mysql') {
+            $requestStatus = "ALTER TABLE {{%supplier_withdraw_request}} MODIFY `status` ENUM('request','approve','execute','cancel') NOT NULL DEFAULT 'request'";
+            $command = $this->db->createCommand($requestStatus);
+            $command->execute();
+        }
     }
 
     /**
@@ -84,6 +142,9 @@ class m191210_171926_supplier extends Migration
         $this->dropTable('{{%supplier}}');
         $this->dropTable('{{%supplier_game}}');
         $this->dropTable('{{%order_supplier}}');
+        $this->dropTable('{{%supplier_bank}}');
+        $this->dropTable('{{%supplier_wallet}}');
+        $this->dropTable('{{%supplier_withdraw_request}}');
         return false;
     }
 }

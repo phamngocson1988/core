@@ -392,8 +392,8 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{url route='setting/neteller'}" class="nav-link" code='setting.neteller'>
-                  <i class="cc-neteller"></i> Neteller
+                <a href="{url route='setting/standard_chartered'}" class="nav-link" code='setting.standard_chartered'>
+                  <i class="cc-standard_chartered"></i> Standard Chartered
                 </a>
               </li>
             </ul

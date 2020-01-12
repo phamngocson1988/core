@@ -15,6 +15,7 @@ use backend\forms\AlipaySettingForm;
 use backend\forms\WechatSettingForm;
 use backend\forms\BitcoinSettingForm;
 use backend\forms\NetellerSettingForm;
+use backend\forms\StandardCharteredSettingForm;
 use backend\forms\SkrillSettingForm;
 use backend\forms\WesternUnionSettingForm;
 use backend\forms\PayoneerSettingForm;
@@ -140,6 +141,12 @@ class SettingController extends Controller
                 'modelClass' => NetellerSettingForm::class,
                 'view' => 'neteller.tpl',
                 'layoutParams' => ['main_menu_active' => 'setting.neteller']
+            ],
+            'standard_chartered' => [
+                'class' => SettingsAction::class,
+                'modelClass' => StandardCharteredSettingForm::class,
+                'view' => 'standard_chartered.tpl',
+                'layoutParams' => ['main_menu_active' => 'setting.standard_chartered']
             ],
             
             'offline' => [

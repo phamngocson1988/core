@@ -44,6 +44,27 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['wallet/index'])]);?>
         <div class="row margin-bottom-10">
+            <?=$form->field($search, 'user_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->user_id) ? sprintf("%s - %s", $search->getCustomer()->username, $search->getCustomer()->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'user_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng');?>
+
+            <?=$form->field($search, 'id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
+            ])->textInput()->label('Mã giao dịch');?>
 
             <?= $form->field($search, 'created_at_from', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],

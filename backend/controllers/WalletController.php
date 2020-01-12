@@ -40,6 +40,7 @@ class WalletController extends Controller
         //     'created_at_from' => $request->get('created_at_from'),
         //     'created_at_to' => $request->get('created_at_to'),
         //     'id' => $request->get('id'),
+            'id' => $request->get('id'),
             'user_id' => $request->get('user_id'),
         //     'payment_type' => $request->get('payment_type'),
         //     'status' => $request->get('status'),

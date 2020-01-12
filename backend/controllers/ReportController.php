@@ -129,18 +129,20 @@ class ReportController extends Controller
         ]);   
     }
 
-    public function actionFinanceBalanceDetail($id)
+    public function actionFinanceBalanceDetail($user_id)
     {
         $this->view->params['main_menu_active'] = 'report.finance.balance';
         $request = Yii::$app->request;
 
         $start_date = $request->get('start_date', date('Y-m-01'));
         $end_date = $request->get('end_date', date('Y-m-t'));
+        $type = $request->get('type', '');
         $mode = $request->get('mode');
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
-            'user_id' => $id,
+            'user_id' => $user_id,
+            'type' => $type,
         ];
         $form = new ReportByBalanceForm($data);
         if ($mode === 'export') {
@@ -152,12 +154,10 @@ class ReportController extends Controller
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->all();
-        $user = User::findOne($id);
         return $this->render('finance/balance-detail', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
-            'user' => $user
         ]);   
     }
 

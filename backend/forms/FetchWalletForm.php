@@ -6,14 +6,18 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\UserWallet;
+use backend\models\User;
 
 class FetchWalletForm extends Model
 {
+    public $id;
     public $user_id;
     public $status;
     public $created_at_from;
     public $created_at_to;
     private $_command;
+
+    protected $_customer;
 
     public function fetch()
     {
@@ -24,6 +28,9 @@ class FetchWalletForm extends Model
     protected function createCommand()
     {
         $command = UserWallet::find();
+        if ($this->id) {
+            $command->andWhere(['id' => $this->id]);
+        }
         if ($this->user_id) {
             $command->andWhere(['user_id' => $this->user_id]);
         }
@@ -47,5 +54,13 @@ class FetchWalletForm extends Model
             $this->createCommand();
         }
         return $this->_command;
+    }
+
+    public function getCustomer()
+    {
+        if (!$this->_customer) {
+            $this->_customer = User::findOne($this->user_id);
+        }
+        return $this->_customer;
     }
 }

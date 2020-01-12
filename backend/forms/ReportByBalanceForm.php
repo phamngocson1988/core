@@ -12,6 +12,7 @@ class ReportByBalanceForm extends Model
     public $start_date;
     public $end_date;
     public $user_id;
+    public $type;
     private $_user;
     private $_command;
 
@@ -278,6 +279,10 @@ class ReportByBalanceForm extends Model
 
         if ($this->user_id) {
             $command->andWhere(['user_id' => $this->user_id]);
+        }
+
+        if ($this->type) {
+            $command->andWhere(['type' => $this->type]);
         }
 
         $this->_command = $command;

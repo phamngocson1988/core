@@ -104,11 +104,19 @@ $total = $cart->getTotalPrice();
                     </div>
                 </label>
 
-                <label for="opt11" class="t-flex-item-center t-choose-payment radio">
+                <!-- <label for="opt11" class="t-flex-item-center t-choose-payment radio">
                     <input type="radio" name="identifier" id="opt11" value="neteller" class="hidden paygate" />
                     <span class="label"></span>
                     <div class="t-img-wrap-logo-payment">
                         <img src="/images/neteller.png" class="paygate-logo" alt="">
+                    </div>
+                </label> -->
+
+                <label for="opt12" class="t-flex-item-center t-choose-payment radio">
+                    <input type="radio" name="identifier" id="opt12" value="standard_chartered" class="hidden paygate" />
+                    <span class="label"></span>
+                    <div class="t-img-wrap-logo-payment">
+                        <img src="/images/standard_chartered.png" class="paygate-logo" alt="">
                     </div>
                 </label>
 
@@ -209,11 +217,20 @@ $total = $cart->getTotalPrice();
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div>
 
-              <div class="t-flex-between t-sub-total price" paygate="neteller" style="display: none">
+              <!-- <div class="t-flex-between t-sub-total price" paygate="neteller" style="display: none">
                 <p>Subtotal:</p>
                 <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
               </div>
               <div class="t-flex-between t-payment-total price" paygate="neteller" style="display: none">
+                <p>Grand Total:</p>
+                <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
+              </div> -->
+
+              <div class="t-flex-between t-sub-total price" paygate="standard_chartered" style="display: none">
+                <p>Subtotal:</p>
+                <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
+              </div>
+              <div class="t-flex-between t-payment-total price" paygate="standard_chartered" style="display: none">
                 <p>Grand Total:</p>
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div>

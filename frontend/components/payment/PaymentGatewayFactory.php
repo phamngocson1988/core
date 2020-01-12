@@ -42,6 +42,9 @@ class PaymentGatewayFactory extends Model
         'neteller' => [
             'class' => '\frontend\components\payment\clients\Neteller',
         ],
+        'standard_chartered' => [
+            'class' => '\frontend\components\payment\clients\StandardChartered',
+        ],
     ];
 
     public static function getClient($identifier)
