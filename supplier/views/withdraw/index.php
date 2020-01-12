@@ -28,7 +28,7 @@ use yii\helpers\Url;
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['bank/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn green" href="<?=Url::to(['withdraw/create']);?>"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
       </div>
@@ -36,32 +36,30 @@ use yii\helpers\Url;
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th> Mã ngân hàng </th>
-              <th> Tên ngân hàng </th>
-              <th> Số tài khoản </th>
-              <th> Tên tài khoản </th>
-              <th> Tỉnh </th>
-              <th> Thành phố </th>
-              <th> Chi nhánh </th>
+              <th> Mã yêu cầu </th>
+              <th> Số tiền </th>
+              <th> Thông tin tài khoản </th>
+              <th> Ngày tạo </th>
+              <th> Trạng thái </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
-              <?php $bank = $model->bank;?>
+              <?php $bankAccount = $model->bankAccount;?>
               <tr>
-                <td><?=$bank->code;?></td>
-                <td><?=$bank->short_name;?></td>
-                <td><?=$model->account_number;?></td>
-                <td><?=$model->account_name;?></td>
-                <td><?=$model->province;?></td>
-                <td><?=$model->city;?></td>
-                <td><?=$model->branch;?></td>
+                <td><?=$model->id;?></td>
+                <td><?=number_format($model->amount);?></td>
+                <td><?=sprintf("(%s) %s - %s", $bankAccount->bank_code, $bankAccount->account_number, $bankAccount->account_name);?></td>
+                <td><?=$model->created_at;?></td>
+                <td><?=$model->status;?></td>
                 <td>
-                  <a href="<?=Url::to(['bank/delete', 'id' => $model->id]);?>" class="btn btn-sm purple delete tooltips" data-container="body" data-original-title="Xóa tài khoản"><i class="fa fa-times"></i> Xóa tài khoản </a>
+                  <?php if ($model->isRequest()) :?>
+                  <a href="<?=Url::to(['withdraw/cancel', 'id' => $model->id]);?>" class="btn btn-sm purple delete tooltips" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+                  <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>

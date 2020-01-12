@@ -14,17 +14,17 @@ use common\widgets\TinyMce;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['bank/index'])?>">Tài khoản ngân hàng</a>
+      <a href="<?=Url::to(['bank/index'])?>">Yêu cầu rút tiền</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo tài khoản ngân hàng</span>
+      <span>Tạo yêu cầu rút tiền</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Tạo tài khoản ngân hàng</h1>
+<h1 class="page-title">Tạo yêu cầu rút tiền</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -49,37 +49,13 @@ use common\widgets\TinyMce;
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
-                  <?=$form->field($model, 'bank_code', [
+                  <?=$form->field($model, 'bank_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList($banks);?>
 
-                  <?=$form->field($model, 'account_number', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-
-                  <?=$form->field($model, 'account_name', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-
-                  <?=$form->field($model, 'province', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-
-                  <?=$form->field($model, 'city', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
-
-                  <?=$form->field($model, 'branch', [
+                  <?=$form->field($model, 'amount', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

@@ -80,6 +80,11 @@
             <span class="title">Tài khoản ngân hàng</span>
             </a>
           </li>
+          <li class="nav-item  "> 
+            <a href="{url route='/withdraw'}" class="nav-link " code='withdraw.index'>
+            <span class="title">Yêu cầu rút tiền</span>
+            </a>
+          </li>
         </ul>
       </li>
     </ul>
