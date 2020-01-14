@@ -64,7 +64,8 @@ use yii\widgets\LinkPager;
                 <td><?=$model->getCreatedAt();?></td>
                 <td><?=$model->getStatusLabel();?></td>
                 <td>
-                  <a href="<?=Url::to(['suggest/delete', 'id' => $model->id]);?>" class="btn btn-sm purple delete tooltips" data-container="body" data-original-title="Xóa yêu cầu"><i class="fa fa-times"></i></a>
+                  <a href="<?=Url::to(['suggest/delete', 'id' => $model->id]);?>" class="btn btn-sm red delete tooltips" data-container="body" data-original-title="Xóa yêu cầu"><i class="fa fa-times"></i></a>
+                  <a href="<?=Url::to(['suggest/edit', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>
