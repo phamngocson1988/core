@@ -106,6 +106,11 @@
             <span class="title">Danh sách</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/supplier/withdraw'}" class="nav-link " code='supplier.withdraw'>
+            <span class="title">Yêu cầu rút tiền</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

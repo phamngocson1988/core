@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use common\behaviors\SupplierWalletBehavior;
 use yii\helpers\ArrayHelper;
 
 class Supplier extends ActiveRecord
@@ -25,6 +26,9 @@ class Supplier extends ActiveRecord
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
+            ],
+            [
+                'class' => SupplierWalletBehavior::className(),
             ],
         ];
     }

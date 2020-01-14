@@ -49,13 +49,12 @@ use yii\helpers\Url;
               <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
-              <?php $bankAccount = $model->bankAccount;?>
               <tr>
                 <td><?=$model->id;?></td>
                 <td><?=number_format($model->amount);?></td>
-                <td><?=sprintf("(%s) %s - %s", $bankAccount->bank_code, $bankAccount->account_number, $bankAccount->account_name);?></td>
+                <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
                 <td><?=$model->created_at;?></td>
-                <td><?=$model->status;?></td>
+                <td><?=$model->getStatusLabel();?></td>
                 <td>
                   <?php if ($model->isRequest()) :?>
                   <a href="<?=Url::to(['withdraw/cancel', 'id' => $model->id]);?>" class="btn btn-sm purple delete tooltips" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>

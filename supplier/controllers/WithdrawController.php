@@ -66,13 +66,9 @@ class WithdrawController extends Controller
         $user->attachBehavior('supplier', new UserSupplierBehavior);
         $supplier = $user->supplier;
         $banks = $supplier->banks;
-        $bankList = [];
-        foreach ($banks as $bank) {
-            $bankList[$bank->id] = sprintf("(%s) %s - %s", $bank->bank_code, $bank->account_name, $bank->account_number);
-        }
         return $this->render('create', [
             'model' => $model,
-            'banks' => $bankList
+            'banks' => $banks
         ]);
     }
 

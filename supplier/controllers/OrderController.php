@@ -8,6 +8,7 @@ use supplier\models\Order;
 use supplier\models\OrderFile;
 use supplier\models\OrderComplainTemplate;
 use supplier\models\OrderSupplier;
+use supplier\models\Supplier;
 use supplier\forms\FetchOrderForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
@@ -226,12 +227,15 @@ class OrderController extends Controller
 
         if ($model->save()) {
             $model->attachBehavior('supplier', OrderSupplierBehavior::className());
-            $supplier = $order->supplier;
-            if ($supplier) {
+            $orderSupplier = $model->supplier;
+            if ($orderSupplier) {
                 $unit = $model->quantity - $model->doing_unit;
-                $supplier->quantity = (float)$supplier->quantity + $unit;
-                $supplier->total_price = $supplier->price * $supplier->quantity;
-                $supplier->save();
+                $orderSupplier->quantity = (float)$orderSupplier->quantity + $unit;
+                $orderSupplier->total_price = $orderSupplier->price * $orderSupplier->quantity;
+                $orderSupplier->save();
+
+                $supplier = Supplier::findOne($orderSupplier->supplier_id);
+                $supplier->topup($orderSupplier->total_price, sprintf("Commission for processing order #%s", $orderSupplier->order_id));
             }
         }
 
@@ -250,7 +254,7 @@ class OrderController extends Controller
             } 
             if ($model->save(null, ['doing_unit'])) {
                 $model->attachBehavior('supplier', OrderSupplierBehavior::className());
-                $supplier = $order->supplier;
+                $supplier = $model->supplier;
                 if ($supplier) {
                   $supplier->quantity = (float)$supplier->quantity + $unit;
                   $supplier->total_price = $supplier->price * $supplier->quantity;

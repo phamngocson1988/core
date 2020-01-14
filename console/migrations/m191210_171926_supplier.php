@@ -114,13 +114,16 @@ class m191210_171926_supplier extends Migration
             'id' => $this->primaryKey(),
             'supplier_id' => $this->integer(11)->notNull(),
             'bank_id' => $this->integer(11)->notNull(),
+            'bank_code' => $this->string(50)->notNull(),
+            'account_number' => $this->string(50)->notNull(),
+            'account_name' => $this->string(50)->notNull()
             'amount' => $this->float()->notNull()->defaultValue(0),
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer(11),
             'approved_at' => $this->dateTime(), 
             'approved_by' => $this->integer(11), 
-            'executed_at' => $this->dateTime(), 
-            'executed_by' => $this->integer(11),
+            'done_at' => $this->dateTime(), 
+            'done_by' => $this->integer(11),
             'cancelled_at' => $this->dateTime(), 
             'cancelled_by' => $this->integer(11),
             'note' => $this->dateTime()->notNull(),
@@ -128,7 +131,7 @@ class m191210_171926_supplier extends Migration
             'status' => $this->string(10)->notNull()->defaultValue('request'),
         ]);
         if ($this->db->driverName === 'mysql') {
-            $requestStatus = "ALTER TABLE {{%supplier_withdraw_request}} MODIFY `status` ENUM('request','approve','execute','cancel') NOT NULL DEFAULT 'request'";
+            $requestStatus = "ALTER TABLE {{%supplier_withdraw_request}} MODIFY `status` ENUM('request','approve','done','cancel') NOT NULL DEFAULT 'request'";
             $command = $this->db->createCommand($requestStatus);
             $command->execute();
         }

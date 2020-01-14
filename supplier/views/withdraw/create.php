@@ -49,15 +49,38 @@ use common\widgets\TinyMce;
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
-                  <?=$form->field($model, 'bank_id', [
+                  <div class="form-group field-bank_id">
+                    <label class="col-md-2 control-label" for="bank_id">Bank Id</label>
+                    <div class="col-md-6">
+                      <select id="bank_id" class="slug form-control">
+                        <?php foreach ($banks as $bank) : ?>
+                        <option value="4" data-bank_code="<?=$bank->bank_code;?>" data-account_number="<?=$bank->account_number;?>" data-account_name="<?=$bank->account_name;?>"><?=sprintf("(%s) %s - %s", $bank->bank_code, $bank->account_name, $bank->account_number);?></option>
+                        <?php endforeach;?>
+                      </select>
+                    </div>
+                  </div>
+
+                  <?=$form->field($model, 'bank_code', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'slug form-control'],
+                    'inputOptions' => ['id' => 'bank_code', 'class' => 'form-control', 'readonly' => true],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($banks);?>
+                  ])->textInput()?>
+
+                  <?=$form->field($model, 'account_number', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'account_number', 'class' => 'form-control', 'readonly' => true],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
+
+                  <?=$form->field($model, 'account_name', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'account_name', 'class' => 'form-control', 'readonly' => true],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
 
                   <?=$form->field($model, 'amount', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
+                    'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
                   
@@ -70,3 +93,15 @@ use common\widgets\TinyMce;
       <?php ActiveForm::end()?>
   </div>
 </div>
+<?php
+$script = <<< JS
+$('#bank_id').on('change', function(){
+  var option = $(this).find(":selected");
+  $('#account_name').val(option.data('account_name'));
+  $('#account_number').val(option.data('account_number'));
+  $('#bank_code').val(option.data('bank_code'));
+});
+$('#bank_id').trigger('change');
+JS;
+$this->registerJs($script);
+?>

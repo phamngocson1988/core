@@ -85,6 +85,11 @@
             <span class="title">Yêu cầu rút tiền</span>
             </a>
           </li>
+          <li class="nav-item  "> 
+            <a href="{url route='/wallet'}" class="nav-link " code='wallet.index'>
+            <span class="title">Ví tiền</span>
+            </a>
+          </li>
         </ul>
       </li>
     </ul>

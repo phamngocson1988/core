@@ -8,9 +8,9 @@ use yii\behaviors\BlameableBehavior;
 
 class SupplierWithdrawRequest extends ActiveRecord
 {
-    CONST STATUS_REQUEST = "request";
+    const STATUS_REQUEST = "request";
     const STATUS_APPROVE = "approve";
-    const STATUS_EXECUTE = "execute";
+    const STATUS_DONE = "done";
     const STATUS_CANCEL = "cancel";
 
     public static function tableName()
@@ -35,13 +35,38 @@ class SupplierWithdrawRequest extends ActiveRecord
         ];
     }
 
-    public function getBankAccount()
+    public static function getStatusList()
     {
-    	return $this->hasOne(SupplierBank::className(), ['id' => 'bank_id']);
+        return [
+            self::STATUS_REQUEST => "Gửi yêu cầu",
+            self::STATUS_APPROVE => "Đã phê duyệt",
+            self::STATUS_DONE => "Đã hoàn tất",
+            self::STATUS_CANCEL => "Hủy bỏ",
+        ];
+    }
+
+    public function getSupplier()
+    {
+    	return $this->hasOne(Supplier::className(), ['user_id' => 'supplier_id']);
     }
 
     public function isRequest()
     {
     	return $this->status == self::STATUS_REQUEST;
+    }
+
+    public function isApprove()
+    {
+        return $this->status == self::STATUS_APPROVE;
+    }
+
+    public function isDone()
+    {
+        return $this->status == self::STATUS_DONE;
+    }
+
+    public function isCancel()
+    {
+        return $this->status == self::STATUS_CANCEL;
     }
 }
