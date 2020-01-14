@@ -43,6 +43,12 @@
             <span class="title">Game của tôi</span>
             </a>
           </li>
+
+          <li class="nav-item  ">
+            <a href="{url route='suggest/index'}" class="nav-link " code='suggest.index'>
+            <span class="title">Yêu cầu game mới</span>
+            </a>
+          </li>
         </ul>
       </li>
       <!-- Order -->

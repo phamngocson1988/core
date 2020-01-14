@@ -135,6 +135,24 @@ class m191210_171926_supplier extends Migration
             $command = $this->db->createCommand($requestStatus);
             $command->execute();
         }
+
+        $this->createTable('{{%supplier_game_suggestion}}', [
+            'id' => $this->primaryKey(),
+            'title' => $this->string(255)->notNull(),
+            'description' => $this->text(),
+            'image_id' => $this->integer(11),
+            'status' => $this->string(10)->notNull()->defaultValue('new'),
+            'game_id' => $this->integer(11), 
+            'created_at' => $this->dateTime(), 
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(), 
+            'updated_by' => $this->integer(11),
+        ]);
+        if ($this->db->driverName === 'mysql') {
+            $suggestStatus = "ALTER TABLE {{%supplier_game_suggestion}} MODIFY `status` ENUM('new','done') NOT NULL DEFAULT 'new'";
+            $command = $this->db->createCommand($suggestStatus);
+            $command->execute();
+        }
     }
 
     /**
@@ -149,6 +167,7 @@ class m191210_171926_supplier extends Migration
         $this->dropTable('{{%supplier_bank}}');
         $this->dropTable('{{%supplier_wallet}}');
         $this->dropTable('{{%supplier_withdraw_request}}');
+        $this->dropTable('{{%supplier_game_suggestion}}');
         return false;
     }
 }

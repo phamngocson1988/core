@@ -84,7 +84,7 @@ use yii\web\JsExpression;
                 <div class="form-group">
                   <label class="col-md-2 control-label">Số lượng nạp</label>
                   <div class="col-md-6">
-                    <input type="number" class="form-control" name="coin">
+                    <input type="text" class="form-control" name="coin">
                   </div>
                 </div>
 

@@ -40,7 +40,8 @@ class ImageController extends Controller
             $limit = $request->get('limit', 8);
             $data = [
                 'offset' => $offset,
-                'limit' => $limit
+                'limit' => $limit,
+                'user_id' => Yii::$app->user_id
             ];
             $form = new FetchImageForm($data);
             $models = $form->fetch();
