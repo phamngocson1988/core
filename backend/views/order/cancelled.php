@@ -194,7 +194,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 </td>
                 <td style="vertical-align: middle;">
                   <?php
-                  if ($model->supplier_id) {
+                  if ($model->supplier) {
                     echo $model->supplier->user->name;
                   } 
                   ?>
