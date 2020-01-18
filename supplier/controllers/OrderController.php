@@ -4,6 +4,7 @@ namespace supplier\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 use supplier\models\Order;
 use supplier\models\OrderFile;
 use supplier\models\OrderComplainTemplate;
@@ -285,10 +286,14 @@ class OrderController extends Controller
 
     public function actionEdit($id)
     {
-        $order = Order::findOne($id);
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
         $order = Order::findOne($id);
+        if (!$order) throw new NotFoundHttpException('Not found');
+        
+        $supplier = $order->supplier;
+        if (!$supplier || $supplier->supplier_id != Yii::$app->user->id) throw new NotFoundHttpException('Not found');
+
         $templateList = OrderComplainTemplate::find()->all();
         return $this->render('edit', [
             'order' => $order,
@@ -302,6 +307,9 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
         $order = Order::findOne($id);
+        if (!$order) throw new NotFoundHttpException('Not found');
+        $supplier = $order->supplier;
+        if (!$supplier || $supplier->supplier_id != Yii::$app->user->id) throw new NotFoundHttpException('Not found');
         return $this->render('view', [
             'order' => $order,
         ]);
