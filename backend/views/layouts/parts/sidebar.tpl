@@ -111,6 +111,11 @@
             <span class="title">Yêu cầu rút tiền</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/supplier/suggest'}" class="nav-link " code='supplier.suggest'>
+            <span class="title">Yêu cầu game mới</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

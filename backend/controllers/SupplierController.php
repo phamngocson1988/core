@@ -13,6 +13,7 @@ use backend\forms\FetchSupplierGameForm;
 use backend\models\Supplier;
 use backend\models\User;
 use backend\models\SupplierWithdrawRequest;
+use backend\models\SupplierGameSuggestion;
 use backend\behaviors\UserSupplierBehavior;
 
 class SupplierController extends Controller
@@ -110,7 +111,7 @@ class SupplierController extends Controller
     public function actionGame($id)
     {
         $request = Yii::$app->request;
-        $this->view->params['main_menu_active'] = 'game.my-game';
+        $this->view->params['main_menu_active'] = 'supplier.index';
         $user = User::findOne($id);
         if (!$user) throw new NotFoundHttpException('Not found');
         $user->attachBehavior('supplier', new UserSupplierBehavior);
@@ -229,5 +230,31 @@ class SupplierController extends Controller
             $model->save();
             return $this->redirect($request->getReferrer());
         }
+    }
+
+    public function actionSuggest()
+    {
+        $this->view->params['main_menu_active'] = 'supplier.suggest';
+        $request = Yii::$app->request;
+        $command = SupplierGameSuggestion::find();
+        $command->orderBy(['created_at' => SORT_DESC]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+
+        return $this->render('suggest.php', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionDeleteSuggest($id)
+    {
+        $request = Yii::$app->request;
+        $model = SupplierGameSuggestion::findOne($id);
+        if (!$model) throw new Exception("Not found", 1);
+        return $this->asJson(['status' => $model->delete()]);
+        
     }
 }
