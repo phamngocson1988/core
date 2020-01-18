@@ -54,7 +54,7 @@
       <!-- Order -->
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-note"></i>
+        <i class="icon-basket"></i>
         <span class="title">Đơn hàng</span>
         <span class="arrow"></span>
         </a>
@@ -67,16 +67,37 @@
 
           <li class="nav-item  ">
             <a href="{url route='order/waiting'}" class="nav-link " code='order.waiting'>
-            <span class="title">Đơn hàng chờ</span>
+            <span class="title">Đơn hàng mới</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='order/pending'}" class="nav-link " code='order.pending'>
+            <span class="title">Đơn hàng pending</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='order/processing'}" class="nav-link " code='order.processing'>
+            <span class="title">Đơn hàng processing</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='order/completed'}" class="nav-link " code='order.completed'>
+            <span class="title">Đơn hàng completed</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='order/confirmed'}" class="nav-link " code='order.confirmed'>
+            <span class="title">Đơn hàng confirmed</span>
+            </a>
+          </li>
+
         </ul>
       </li>
 
       <!-- Ngân hàng -->
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-bank"></i>
+        <i class="icon-wallet"></i>
         <span class="title">Tài khoản</span>
         <span class="arrow"></span>
         </a>

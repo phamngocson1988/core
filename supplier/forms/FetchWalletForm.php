@@ -12,6 +12,7 @@ class FetchWalletForm extends Model
 {
     public $id;
     public $supplier_id;
+    public $type;
     public $status;
     public $created_at_from;
     public $created_at_to;
@@ -36,6 +37,9 @@ class FetchWalletForm extends Model
         }
         if ($this->status) {
             $command->andWhere(['status' => $this->status]);
+        }
+        if ($this->type) {
+            $command->andWhere(['type' => $this->type]);
         }
         if ($this->created_at_from) {
             $command->andWhere(['>=', "created_at", $this->created_at_from]);

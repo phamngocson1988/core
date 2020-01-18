@@ -21,13 +21,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Ví Kingcoin</span>
+      <span>Ví của tôi</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Ví Kingcoin</h1>
+<h1 class="page-title">Ví của tôi</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -36,7 +36,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Ví Kingcoin</span>
+          <span class="caption-subject bold uppercase"> Ví của tôi</span>
         </div>
         <div class="actions">
         </div>
@@ -70,6 +70,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   'minView' => '1'
                 ],
             ])->label('Ngày tạo đến');?>
+
+            <?=$form->field($search, 'type', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'type']
+            ])->dropDownList(['I' => 'Nạp tiền', 'O' => 'Rút tiền'], ['prompt' => 'Chọn loại giao dịch'])->label('Chọn loại giao dịch');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -111,6 +116,17 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </tr>
             <?php endforeach;?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Tổng: $<?=number_format($search->getCommand()->sum('amount'));?></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>

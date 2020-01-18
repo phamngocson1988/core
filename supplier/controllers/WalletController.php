@@ -33,6 +33,7 @@ class WalletController extends Controller
         $request = Yii::$app->request;
         $search = new FetchWalletForm([
             'supplier_id' => Yii::$app->user->id,
+            'type' => $request->get('type'),
             'created_at_from' => $request->get('created_at_from'),
             'created_at_to' => $request->get('created_at_to'),
         ]);
