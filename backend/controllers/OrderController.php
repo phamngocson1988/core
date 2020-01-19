@@ -12,6 +12,7 @@ use backend\forms\EditOrderForm;
 use backend\forms\EditOrderItemForm;
 use yii\data\Pagination;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use backend\models\Order;
 use backend\models\User;
 use backend\models\Game;
@@ -677,21 +678,72 @@ class OrderController extends Controller
             $error = reset($errors);
             return $this->asJson(['status' => false, 'error' => $error]);
         }
-        // Fetch all supplier and game prices
-        $form = new FetchSupplierForm([
+        // Fetch all supplier register this game
+        $supplierGames = SupplierGame::find()
+        ->where([
             'game_id' => $order->game_id,
-            'status' => Supplier::STATUS_ENABLED,
-        ]);
-        $gameTable = SupplierGame::tableName();
-        $command = $form->getCommand();
-        $command->addSelect(["{$gameTable}.price"]);
-        $command->asArray();
-        $suppliers = $command->all();
-        $supplierList = [];
+            'status' => SupplierGame::STATUS_ENABLED,
+        ])
+        ->select(['supplier_id', 'price'])
+        ->asArray()
+        ->all();
+        $supplierIds = ArrayHelper::getColumn($supplierGames, 'supplier_id');
+        $suppliers = Supplier::find()
+        ->where(['status' => Supplier::STATUS_ENABLED])
+        ->andWhere(['in', 'user_id', $supplierIds])
+        ->with('user')
+        ->all();
 
+        // Mapping price
+        $supplierPrice = ArrayHelper::map($supplierGames, 'supplier_id', 'price');
+        
+        // Find processing order
+        $processingOrders = Order::find()
+        ->where(['status' => Order::STATUS_PROCESSING])
+        ->andWhere(['in', 'supplier_id', $supplierIds])
+        ->groupBy('supplier_id')
+        ->select(['supplier_id', 'COUNT(*) as count'])
+        ->asArray()
+        ->all();
+        $processingOrder = ArrayHelper::map($processingOrders, 'supplier_id', 'count');
+
+        // Find duration time
+        $completedOrders = Order::find()
+        ->where(['status' => Order::STATUS_COMPLETED])
+        ->andWhere(['in', 'supplier_id', $supplierIds])
+        ->groupBy('supplier_id')
+        ->select(['supplier_id', 'AVG(process_duration_time) as count'])
+        ->asArray()
+        ->all();
+        $completedOrder = ArrayHelper::map($completedOrders, 'supplier_id', 'count');
+
+
+        $supplierList = [];
         foreach ($suppliers as $supplier) {
-            $supplierList[$supplier['user_id']] = sprintf("%s ($%s)", $supplier['user']['name'], $supplier['price']);
+            $supplierId = $supplier->user_id;
+            $supplierName = $supplier->user->name;
+            $price = ArrayHelper::getValue($supplierPrice, $supplierId, 0);
+            $count = ArrayHelper::getValue($processingOrder, $supplierId, 0);
+            $avgTime = ArrayHelper::getValue($completedOrders, $supplierId, 0);
+            $supplierList[$supplierId] = sprintf("%s - Price %s - Processing %s - Average %s (s)", $supplierName, $price, $count, $avgTime);
         }
+
+
+        // Fetch all supplier and game prices
+        // $form = new FetchSupplierForm([
+        //     'game_id' => $order->game_id,
+        //     'status' => Supplier::STATUS_ENABLED,
+        // ]);
+        // $gameTable = SupplierGame::tableName();
+        // $command = $form->getCommand();
+        // $command->addSelect(["{$gameTable}.price"]);
+        // $command->asArray();
+        // $suppliers = $command->all();
+        // $supplierList = [];
+
+        // foreach ($suppliers as $supplier) {
+        //     $supplierList[$supplier['user_id']] = sprintf("%s ($%s)", $supplier['user']['name'], $supplier['price']);
+        // }
         return $this->renderPartial('assign-supplier', [
             'id' => $id,
             'suppliers' => $supplierList,

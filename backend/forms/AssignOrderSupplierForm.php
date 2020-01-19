@@ -77,18 +77,30 @@ class AssignOrderSupplierForm extends Model
 
     public function assign()
     {
-        $game = $this->getSupplierGame();
-        $orderSupplier = new OrderSupplier([
-            'order_id' => $this->order_id,
-            'supplier_id' => $this->supplier_id,
-            'price' => $game->price,
-            'quantity' => 0,
-            'total_price' => 0,
-            'status' => OrderSupplier::STATUS_REQUEST,
-            'requested_by' => $this->requester,
-            'requested_at' => date('Y-m-d H:i:s')
-        ]);
-        return $orderSupplier->save();
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $game = $this->getSupplierGame();
+            $order = $this->getOrder();
+            $order->supplier_id = $this->supplier_id;
+            $order->save();
+            $orderSupplier = new OrderSupplier([
+                'order_id' => $this->order_id,
+                'supplier_id' => $this->supplier_id,
+                'price' => $game->price,
+                'quantity' => 0,
+                'total_price' => 0,
+                'status' => OrderSupplier::STATUS_REQUEST,
+                'requested_by' => $this->requester,
+                'requested_at' => date('Y-m-d H:i:s')
+            ]);
+            $orderSupplier->save();
+            $transaction->commit();
+            return true;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            return false;
+        }
     }
 
 }

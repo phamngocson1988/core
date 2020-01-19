@@ -55,11 +55,25 @@ class RetakeOrderSupplierForm extends Model
 
     public function retake()
     {
-        $supplier = $this->getSupplier();
-        $supplier->status = OrderSupplier::STATUS_RETAKE;
-        $supplier->retaken_at = date('Y-m-d H:i:s');
-        $supplier->retaken_by = $this->requester;
-        return $supplier->save();
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $order = $this->getOrder();
+            $order->supplier_id = null;
+            $order->save();
+
+            $supplier = $this->getSupplier();
+            $supplier->status = OrderSupplier::STATUS_RETAKE;
+            $supplier->retaken_at = date('Y-m-d H:i:s');
+            $supplier->retaken_by = $this->requester;
+            $supplier->save();
+
+            $transaction->commit();
+            return true;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            return false;
+        }
     }
 
 }

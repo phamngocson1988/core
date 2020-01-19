@@ -241,7 +241,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   $game = $model->game;
                   $game->attachBehavior('supplier', new GameSupplierBehavior); 
                   ?>
-                  <?php if ($game->countSupplier() && !$model->supplier) :?>
+                  <?php if (!$model->supplier_id) :?>
                   <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
                   <?php endif;?>
                   <?php endif;?>
