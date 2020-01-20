@@ -11,8 +11,8 @@ class SupplierGameSuggestion extends \common\models\SupplierGameSuggestion
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['title', 'description', 'image_id'],
-            self::SCENARIO_EDIT => ['id', 'title', 'description', 'image_id'],
+            self::SCENARIO_CREATE => ['title', 'link', 'description', 'image_id'],
+            self::SCENARIO_EDIT => ['id', 'title', 'link', 'description', 'image_id'],
         ];
     }
 	public function rules()
@@ -20,7 +20,7 @@ class SupplierGameSuggestion extends \common\models\SupplierGameSuggestion
         return [
             ['title', 'required'],
             ['id', 'required', 'on' => self::SCENARIO_EDIT],
-            [['description', 'image_id'], 'safe'],
+            [['description', 'image_id', 'link'], 'safe'],
         ];
     }
 

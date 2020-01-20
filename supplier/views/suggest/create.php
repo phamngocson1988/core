@@ -58,6 +58,12 @@ use common\widgets\TinyMce;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Tên game')?>
 
+                  <?=$form->field($model, 'link', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()->label('Link tải game')?>
+
                   <?=$form->field($model, 'description', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'content', 'class' => 'form-control'],

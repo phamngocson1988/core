@@ -42,6 +42,7 @@ use yii\widgets\LinkPager;
                 <th>Mã yêu cầu</th>
                 <th>Hình ảnh</th>
                 <th>Tên game</th>
+                <th>Link tải</th>
                 <th>Ngày tạo</th>
                 <th>Trạng thái</th>
                 <th>Tác vụ</th>
@@ -49,13 +50,14 @@ use yii\widgets\LinkPager;
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6">No data found</td></tr>
+              <tr><td colspan="7">No data found</td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
                 <td><?=$model->id;?></td>
                 <td><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
                 <td><?=$model->title;?></td>
+                <td><a href="<?=$model->link;?>" target="_blank">Link tải</a></td>
                 <td><?=$model->getCreatedAt();?></td>
                 <td><?=$model->getStatusLabel();?></td>
                 <td>
