@@ -179,7 +179,6 @@ use backend\components\datetimepicker\DateTimePicker;
               <th> Tổng tiền </th>
               <th> Người bán hàng </th>
               <th> Trạng thái </th>
-              <th> Nhà cung cấp </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -197,7 +196,6 @@ use backend\components\datetimepicker\DateTimePicker;
                 <td style="vertical-align: middle;"><?=number_format($model->total_price, 1);?></td>
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
-                <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <?php if (Yii::$app->user->can('admin')) :?>

@@ -27,6 +27,7 @@ $salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds, $adminTeamIds);
 $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
+$user = Yii::$app->user;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -164,7 +165,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
-                <th> Nhà cung cấp </th>
+                <th <?=$user->can('orderteam') ? 'class="hide"' : '';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -193,7 +194,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                     <span class="label label-warning">Xử lý chậm</span>
                     <?php endif;?>
                   </td>
-                  <td>
+                  <td <?=$user->can('orderteam') ? 'class="hide"' : '';?>>
                     <?php
                     if ($model->supplier) {
                       echo $model->supplier->user->name;

@@ -28,6 +28,8 @@ $salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds, $adminTeamIds);
 $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
+
+$user = Yii::$app->user;
 ?>
 <!-- jQuery Modal -->
 <!-- BEGIN PAGE BAR -->
@@ -166,7 +168,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               <th> Người bán hàng </th>
               <th> Nhân viên đơn hàng </th>
               <th> Trạng thái </th>
-              <th> Nhà cung cấp </th>
+              <th <?=$user->can('orderteam') ? 'class="hide"' : '';?>> Nhà cung cấp </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -178,7 +180,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
               <?php $supplier = $model->supplier;?>
               <tr>
-                <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle; max-width:none;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
@@ -196,8 +198,8 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   <span class="label label-warning">Xử lý chậm</span>
                   <?php endif;?>
                 </td>
-                <td style="vertical-align: middle;">
-                  <?=($supplier) ? sprintf("%s (%s)", $model->supplier->user->name, $model->supplier->status) : '';?>
+                <td style="vertical-align: middle;" <?=$user->can('orderteam') ? 'class="hide"' : '';?>>
+                  <?=($supplier) ? sprintf("%s (%s)", $model->supplier->user->name, $model->supplier->getStatusLabel()) : '';?>
                 </td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
