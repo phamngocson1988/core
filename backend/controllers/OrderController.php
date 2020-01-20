@@ -28,6 +28,7 @@ use backend\models\Supplier;
 use backend\forms\FetchSupplierForm;
 use backend\forms\AssignOrderSupplierForm;
 use backend\forms\RetakeOrderSupplierForm;
+use common\components\helpers\FormatConverter;
 
 
 use backend\events\OrderEventHandler;
@@ -724,26 +725,12 @@ class OrderController extends Controller
             $supplierName = $supplier->user->name;
             $price = ArrayHelper::getValue($supplierPrice, $supplierId, 0);
             $count = ArrayHelper::getValue($processingOrder, $supplierId, 0);
-            $avgTime = ArrayHelper::getValue($completedOrders, $supplierId, 0);
-            $supplierList[$supplierId] = sprintf("%s - Price %s - Processing %s - Average %s (s)", $supplierName, $price, $count, $avgTime);
+            $avgTime = ArrayHelper::getValue($completedOrder, $supplierId, 0);
+            $avgTimeFormat = FormatConverter::countDuration((int)$avgTime);
+            $supplierList[$supplierId] = sprintf("%s - Price %s - Time %s - Average %s", $supplierName, number_format($price), $count, $avgTimeFormat);
         }
 
 
-        // Fetch all supplier and game prices
-        // $form = new FetchSupplierForm([
-        //     'game_id' => $order->game_id,
-        //     'status' => Supplier::STATUS_ENABLED,
-        // ]);
-        // $gameTable = SupplierGame::tableName();
-        // $command = $form->getCommand();
-        // $command->addSelect(["{$gameTable}.price"]);
-        // $command->asArray();
-        // $suppliers = $command->all();
-        // $supplierList = [];
-
-        // foreach ($suppliers as $supplier) {
-        //     $supplierList[$supplier['user_id']] = sprintf("%s ($%s)", $supplier['user']['name'], $supplier['price']);
-        // }
         return $this->renderPartial('assign-supplier', [
             'id' => $id,
             'suppliers' => $supplierList,

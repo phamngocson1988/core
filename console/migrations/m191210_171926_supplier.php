@@ -139,6 +139,7 @@ class m191210_171926_supplier extends Migration
         $this->createTable('{{%supplier_game_suggestion}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
+            'link' => $this->string(255),
             'description' => $this->text(),
             'image_id' => $this->integer(11),
             'status' => $this->string(10)->notNull()->defaultValue('new'),
