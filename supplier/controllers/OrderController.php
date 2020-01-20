@@ -375,7 +375,7 @@ class OrderController extends Controller
                 $orderSupplier->save();
 
                 $supplier = Supplier::findOne($orderSupplier->supplier_id);
-                $supplier->topup($orderSupplier->total_price, sprintf("Commission for processing order #%s", $orderSupplier->order_id));
+                $supplier->topup($orderSupplier->total_price, sprintf("Thanh toán cho đơn hàng #%s", $orderSupplier->order_id));
             }
         }
 

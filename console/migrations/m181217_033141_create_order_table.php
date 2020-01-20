@@ -133,9 +133,15 @@ class m181217_033141_create_order_table extends Migration
             'order_id' => $this->integer(11)->notNull(),
             'content' => $this->string(500)->notNull(),
             'is_read' => $this->integer(1)->defaultValue(0),
+            'is_customer' => $this->string(1)->defaultValue('N'),
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer(11)->notNull(),
         ]);
+        if ($this->db->driverName === 'mysql') {
+            $isCustomer = "ALTER TABLE {{%order_complains}} MODIFY `is_customer` ENUM('Y','N') DEFAULT 'N'";
+            $command = $this->db->createCommand($isCustomer);
+            $command->execute();
+        }
 
         $this->createTable('{{%order_reseller}}', [
             'order_id' => $this->integer(11)->notNull(),

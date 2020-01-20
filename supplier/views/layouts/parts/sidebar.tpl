@@ -68,26 +68,31 @@
           <li class="nav-item  ">
             <a href="{url route='order/waiting'}" class="nav-link " code='order.waiting'>
             <span class="title">Đơn hàng mới</span>
+            <span class="badge badge-success">{$this->params['new_request_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='order/pending'}" class="nav-link " code='order.pending'>
             <span class="title">Đơn hàng pending</span>
+            <span class="badge badge-success">{$this->params['new_pending_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='order/processing'}" class="nav-link " code='order.processing'>
             <span class="title">Đơn hàng processing</span>
+            <span class="badge badge-success">{$this->params['new_processing_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='order/completed'}" class="nav-link " code='order.completed'>
             <span class="title">Đơn hàng completed</span>
+            <span class="badge badge-success">{$this->params['new_completed_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='order/confirmed'}" class="nav-link " code='order.confirmed'>
             <span class="title">Đơn hàng confirmed</span>
+            <span class="badge badge-success">{$this->params['new_confirmed_order']}</span>
             </a>
           </li>
 
