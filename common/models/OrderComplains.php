@@ -11,9 +11,9 @@ use yii\behaviors\BlameableBehavior;
  */
 class OrderComplains extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    const IS_CUSTOMER = 'Y';
+    const IS_NOT_CUSTOMER = 'N';
+
     public static function tableName()
     {
         return '{{%order_complains}}';
@@ -44,5 +44,10 @@ class OrderComplains extends ActiveRecord
     public function getSenderName()
     {
     	return $this->sender->name;
+    }
+
+    public function isCustomer()
+    {
+        return $this->is_customer == self::IS_CUSTOMER;
     }
 }

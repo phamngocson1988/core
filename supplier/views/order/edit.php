@@ -320,9 +320,6 @@ $this->registerJs($imageJs);
                       </div>
                       <div class="actions">
                         <a href="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
-                        <?php if (Yii::$app->user->can('saler')) : ?>
-                        <a href="#complain_custom" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi nội dung tùy chọn</a>
-                        <?php endif;?>
 
                         <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
                           <div class="modal-dialog">
@@ -364,30 +361,6 @@ $this->registerJs($imageJs);
                           </div>
                           <!-- /.modal-dialog -->
                         </div>
-                        <div class="modal fade" id="complain_custom" tabindex="-1" role="basic" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                <h4 class="modal-title">Gửi nội dung phản hồi cho khách hàng</h4>
-                              </div>
-                              <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
-                                <?= Html::beginForm(['order/complain', 'id' => $order->id], 'POST', ['class' => 'complain-form']); ?>
-                                  <div class="form-group">
-                                      <label>Gửi nội dung tùy chọn</label>
-                                      <?= Html::textArea('content', '', ['class' => 'form-control']); ?>
-                                  </div>
-                                  <button type="submit" class="btn btn-default" data-toggle="modal"> Gửi</button>
-                                <?= Html::endForm(); ?>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                            <!-- /.modal-content -->
-                          </div>
-                          <!-- /.modal-dialog -->
-                        </div>
 <?php
 $complainJs = <<< JS
 var complainForm = new AjaxFormSubmit({element: '.complain-form'});
@@ -420,7 +393,7 @@ $this->registerJs($complainJs);
                             <div class="timeline-body-arrow"> </div>
                             <div class="timeline-body-head">
                               <div class="timeline-body-head-caption">
-                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->sender->name;?></a>
+                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->isCustomer() ? 'Khách hàng' : $complain->sender->name;?></a>
                                 <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
                               </div>
                             </div>
