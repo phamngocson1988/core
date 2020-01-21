@@ -26,6 +26,8 @@ $orderTeamIds = array_merge($orderTeamIds, $orderTeamManagerIds, $adminTeamIds);
 $orderTeamIds = array_unique($orderTeamIds);
 $orderTeamObjects = User::findAll($orderTeamIds);
 $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
+$user = Yii::$app->user;
+
 ?>
 
 <!-- BEGIN PAGE BAR -->

@@ -191,7 +191,7 @@ $user = Yii::$app->user;
                 <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                 <td style="vertical-align: middle;">
-                  <?=$model->getStatusLabel();?>
+                  
                   <?php if ($model->hasCancelRequest()) :?>
                   <span class="label label-danger">Có yêu cầu hủy</span>
                   <?php endif;?>
@@ -201,10 +201,12 @@ $user = Yii::$app->user;
 
                   <?php if ($supplier) :?>
                     <?php if ($supplier->status == OrderSupplier::STATUS_REQUEST) : ?>
-                  <span class="label label-warning">Đã chuyển nhà cung cấp</span>
+                  <span class="label label-warning">Pending</span>
                     <?php elseif ($supplier->status == OrderSupplier::STATUS_APPROVE) : ?>
-                  <span class="label label-success">Nhà cung cấp đã nhận</span>
+                  <span class="label label-success">Pending</span>
                   <?php endif;?>
+                  <?php else :?>
+                    <?=$model->getStatusLabel();?>
                   <?php endif;?>
                 </td>
                 <td style="vertical-align: middle;" <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
