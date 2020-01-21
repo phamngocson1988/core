@@ -36,6 +36,7 @@ class m130524_201442_init extends Migration
             'reseller_level' => $this->smallInteger()->defaultValue(1),
             'saler_id' => $this->integer(),
             'saler_code' => $this->string(50),
+            'is_supplier' => $this->smallInteger()->defaultValue(1),
             'marketing_id' => $this->integer(),
             'trust' => $this->string(1),
             'created_at' => $this->dateTime(),

@@ -64,6 +64,8 @@ class SupplierController extends Controller
             $supplier = new Supplier();
             $supplier->setScenario(Supplier::SCENARIO_CREATE);
             $supplier->user_id = $id;
+            $user->is_supplier = true;
+            $user->save();
             return $this->asJson(['status' => $supplier->save()]);
         }
     }

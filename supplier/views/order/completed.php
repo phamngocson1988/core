@@ -53,27 +53,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
 
-            <?=$form->field($search, 'customer_phone', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'customer_phone']
-            ])->textInput()->label('Số điện thoại');?>
-
-            <?=$form->field($search, 'customer_id', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->customer_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn khách hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Khách hàng')?>
 
             <?=$form->field($search, 'status', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],

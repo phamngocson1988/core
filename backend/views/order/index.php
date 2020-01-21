@@ -216,7 +216,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
-                <th> Nhà cung cấp </th>
+                <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -245,7 +245,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                     <span class="label label-warning">Xử lý chậm</span>
                     <?php endif;?>
                   </td>
-                  <td>
+                  <td <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
                     <?php
                     if ($model->supplier) {
                       echo $model->supplier->user->name;

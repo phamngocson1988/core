@@ -79,7 +79,6 @@ class GameController extends Controller
             $model = new SupplierGame([
                 'supplier_id' => Yii::$app->user->id,
                 'game_id' => $id,
-                'price' => $game->getPrice(),
                 'status' => SupplierGame::STATUS_DISABLED
             ]);
             $model->setScenario(SupplierGame::SCENARIO_CREATE);

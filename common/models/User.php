@@ -40,6 +40,10 @@ class User extends ActiveRecord implements IdentityInterface
     const RESELLER_LEVEL_2 = 2;
     const RESELLER_LEVEL_3 = 3;
 
+    const IS_NOT_SUPPLIER = 1;
+    const IS_SUPPLIER = 2;
+
+
     const IS_TRUST = 'Y';
     const IS_NOT_TRUST = 'N';
 

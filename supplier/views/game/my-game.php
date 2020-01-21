@@ -82,7 +82,9 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
                   <?php if ($supplierGame->isEnabled()) : ?>
                   <a href="<?=Url::to(['game/disable', 'id' => $model->id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Tạm ngưng"><i class="fa fa-arrow-down"></i> Tạm ngưng </a>
                   <?php else :?>
+                  <?php if ($supplierGame->price > 0) : ?>
                   <a href="<?=Url::to(['game/enable', 'id' => $model->id]);?>" class="btn btn-sm red link-action tooltips" data-container="body" data-original-title="Kích hoạt"><i class="fa fa-arrow-up"></i> Kích hoạt </a>
+                  <?php endif;?>
                   <?php endif;?>
                   <a href="#price-modal-<?=$model->id;?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Cập nhật giá" data-toggle="modal"><i class="fa fa-arrow-up"></i> Cập nhật giá </a>
                   <div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">

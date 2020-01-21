@@ -727,7 +727,7 @@ class OrderController extends Controller
             $count = ArrayHelper::getValue($processingOrder, $supplierId, 0);
             $avgTime = ArrayHelper::getValue($completedOrder, $supplierId, 0);
             $avgTimeFormat = FormatConverter::countDuration((int)$avgTime);
-            $supplierList[$supplierId] = sprintf("%s - Price %s - Time %s - Average %s", $supplierName, number_format($price), $count, $avgTimeFormat);
+            $supplierList[$supplierId] = sprintf("%s - Price %s - Completed %s - Average %s", $supplierName, number_format($price), $count, $avgTimeFormat);
         }
 
 

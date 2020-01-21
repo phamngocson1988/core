@@ -69,6 +69,7 @@ class UserController extends Controller
             'total_topup_end' => $request->get('total_topup_end'),
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
+            'supplier_id' => User::IS_NOT_SUPPLIER
         ];
         $form = new FetchCustomerForm($data);
         if ($mode === 'export') {

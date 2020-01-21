@@ -165,7 +165,7 @@ $user = Yii::$app->user;
               <th> Người bán hàng </th>
               <th> Nhân viên đơn hàng </th>
               <th> Trạng thái </th>
-              <th <?=$user->can('orderteam') ? 'class="hide"' : '';?>> Nhà cung cấp </th>
+              <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -194,7 +194,7 @@ $user = Yii::$app->user;
                   <span class="label label-warning">Xử lý chậm</span>
                   <?php endif;?>
                 </td>
-                <td <?=$user->can('orderteam') ? 'class="hide"' : '';?>>
+                <td <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
                   <?php
                   if ($model->supplier) {
                     echo $model->supplier->user->name;

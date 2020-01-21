@@ -94,7 +94,7 @@ $user = Yii::$app->user;
                 <th> Ngày tạo </th>
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
-                <th <?=$user->can('orderteam') ? 'class="hide"' : '';?>> Nhà cung cấp </th>
+                <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th> Khách hàng</th>
                 <th class="hidden-xs"> Số điện thoại</th>
                 <th> Feedback </th>
@@ -113,7 +113,7 @@ $user = Yii::$app->user;
                   <td><?=$model->created_at;?></td>
                   <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
                   <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                  <td <?=$user->can('orderteam') ? 'class="hide"' : '';?>>
+                  <td <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
                     <?php
                     if ($model->supplier) {
                       echo $model->supplier->user->name;

@@ -11,6 +11,7 @@ use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\GameSupplierBehavior;
 use backend\behaviors\OrderSupplierBehavior;
+use backend\models\OrderSupplier;
 
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 // order team
@@ -168,7 +169,7 @@ $user = Yii::$app->user;
               <th> Người bán hàng </th>
               <th> Nhân viên đơn hàng </th>
               <th> Trạng thái </th>
-              <th <?=$user->can('orderteam') ? 'class="hide"' : '';?>> Nhà cung cấp </th>
+              <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -197,9 +198,17 @@ $user = Yii::$app->user;
                   <?php if ($model->tooLongProcess()) :?>
                   <span class="label label-warning">Xử lý chậm</span>
                   <?php endif;?>
+
+                  <?php if ($supplier) :?>
+                    <?php if ($supplier->status == OrderSupplier::STATUS_REQUEST) : ?>
+                  <span class="label label-warning">Đã chuyển nhà cung cấp</span>
+                    <?php elseif ($supplier->status == OrderSupplier::STATUS_APPROVE) : ?>
+                  <span class="label label-success">Nhà cung cấp đã nhận</span>
+                  <?php endif;?>
+                  <?php endif;?>
                 </td>
-                <td style="vertical-align: middle;" <?=$user->can('orderteam') ? 'class="hide"' : '';?>>
-                  <?=($supplier) ? sprintf("%s (%s)", $model->supplier->user->name, $model->supplier->getStatusLabel()) : '';?>
+                <td style="vertical-align: middle;" <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
+                  <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
                 </td>
                 <td style="vertical-align: middle;">
                   <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
@@ -250,7 +259,7 @@ $user = Yii::$app->user;
 
                   <!-- Remove supplier -->
                   <?php if ($supplier && $supplier->isRequest()) : ?>
-                  <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Xóa nhà cung cấp"><i class="fa fa-user-times"></i></a>
+                  <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
                   <?php endif;?>
                 </td>
               </tr>
