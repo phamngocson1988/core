@@ -206,7 +206,7 @@ $user = Yii::$app->user;
                   <?php if (Yii::$app->user->can('orderteam')) :?>
                   <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>
                   <?php endif;?>
-                  <?php if (Yii::$app->user->can('orderteam_manager')) :?>
+                  <?php if (Yii::$app->user->can('orderteam')) :?>
                   <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">

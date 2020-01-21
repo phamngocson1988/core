@@ -36,9 +36,16 @@ class Controller extends BaseController
 
 			// Count new order
 			$requesting = OrderSupplier::find()->where([
-				'supplier_id' => $userId,
-				'status' => OrderSupplier::STATUS_REQUEST
-			])->count();
+				'order_supplier.supplier_id' => $userId,
+				'order_supplier.status' => OrderSupplier::STATUS_REQUEST
+			])
+			->joinWith('order')
+			->andWhere(['in', 'order.status', [
+				Order::STATUS_PENDING,
+				Order::STATUS_PROCESSING,
+				Order::STATUS_COMPLETED,
+			]])
+			->count();
 			$this->view->params['new_request_order'] = $requesting ? $requesting : '';
 			return true;
         }
