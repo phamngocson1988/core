@@ -64,8 +64,8 @@ class SupplierController extends Controller
             $supplier = new Supplier();
             $supplier->setScenario(Supplier::SCENARIO_CREATE);
             $supplier->user_id = $id;
-            $user->is_supplier = true;
-            $user->save();
+            $user->is_supplier = User::IS_SUPPLIER;
+            $user->save(false, ['is_supplier']);
             return $this->asJson(['status' => $supplier->save()]);
         }
     }
@@ -75,6 +75,8 @@ class SupplierController extends Controller
         $request = Yii::$app->request;
         if( $request->isAjax) {
             $user = User::findOne($id);
+            $user->is_supplier = User::IS_NOT_SUPPLIER;
+            $user->save(false, ['is_supplier']);
             if (!$user) throw new NotFoundHttpException('Not found');
             $supplier = Supplier::findOne($id);
             if (!$supplier) throw new NotFoundHttpException('Not found');

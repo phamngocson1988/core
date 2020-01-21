@@ -37,7 +37,7 @@ use yii\web\JsExpression;
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['reseller/index'])]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['supplier/index'])]);?>
         <div class="row margin-bottom-10">
           <?php $customer = $search->getCustomer();?>
             <?=$form->field($search, 'user_id', [

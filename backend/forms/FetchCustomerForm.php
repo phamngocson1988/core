@@ -24,7 +24,7 @@ class FetchCustomerForm extends User
     public $purchase_start;
     public $purchase_end;
     public $saler_id;
-    public $supplier_id;
+    public $is_supplier;
     // public $is_reseller;
     public $last_purchase_start;
     public $last_purchase_end;
@@ -214,9 +214,9 @@ class FetchCustomerForm extends User
             $command->andWhere(["{$userTable}.is_reseller" => $this->is_reseller]);
         }
 
-        // if ($this->supplier_id) {
-        //     $command->andWhere(["{$userTable}.supplier_id" => $this->supplier_id]);
-        // }
+        if ($this->is_supplier) {
+            $command->andWhere(["{$userTable}.is_supplier" => $this->is_supplier]);
+        }
 
         if ($this->user_id) {
             $command->andWhere(["{$userTable}.id" =>  $this->user_id]);
