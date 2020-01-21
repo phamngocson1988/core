@@ -60,7 +60,7 @@ class UserController extends Controller
             'purchase_start' => $request->get('purchase_start'),
             'purchase_end' => $request->get('purchase_end'),
             'saler_id' => $request->get('saler_id'),
-            'is_reseller' => $request->get('is_reseller'),
+            'is_reseller' =>  User::IS_NOT_RESELLER,
             'total_purchase_start' => $request->get('total_purchase_start'),
             'total_purchase_end' => $request->get('total_purchase_end'),
             'last_purchase_start' => $request->get('last_purchase_start'),

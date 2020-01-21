@@ -153,12 +153,6 @@ use backend\behaviors\UserSupplierBehavior;
               'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id']
             ])->dropDownList($search->fetchSalers(),  ['prompt' => 'Tìm nhân viên bán hàng'])->label('Nhân viên bán hàng');?>
 
-            <?=$form->field($search, 'is_reseller', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'is_reseller']
-            ])->dropDownList(User::getResellerStatus(),  ['prompt' => 'Tất cả'])->label('Reseller/Khách hàng');?>
-
-
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
