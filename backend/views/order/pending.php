@@ -156,118 +156,120 @@ $user = Yii::$app->user;
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> Mã đơn hàng </th>
-              <th> Tên game </th>
-              <th> Ngày tạo </th>
-              <th> Số lượng nạp </th>
-              <th> Số gói </th>
-              <th> Thời gian nhận đơn </th>
-              <th> Thời gian chờ </th>
-              <th> Người bán hàng </th>
-              <th> Nhân viên đơn hàng </th>
-              <th> Trạng thái </th>
-              <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
-              <?php $supplier = $model->supplier;?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td style="vertical-align: middle; max-width:none;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
-                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
-                <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;">
-                  
-                  <?php if ($model->hasCancelRequest()) :?>
-                  <span class="label label-danger">Có yêu cầu hủy</span>
-                  <?php endif;?>
-                  <?php if ($model->tooLongProcess()) :?>
-                  <span class="label label-warning">Xử lý chậm</span>
-                  <?php endif;?>
+                <th> Mã đơn hàng </th>
+                <th> Tên game </th>
+                <th> Ngày tạo </th>
+                <th> Số lượng nạp </th>
+                <th> Số gói </th>
+                <th> Thời gian nhận đơn </th>
+                <th> Thời gian chờ </th>
+                <th> Người bán hàng </th>
+                <th> Nhân viên đơn hàng </th>
+                <th> Trạng thái </th>
+                <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              </tr>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+                <?php $supplier = $model->supplier;?>
+                <tr>
+                  <td style="vertical-align: middle; max-width:none;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle;"><?=$model->game_title;?></td>
+                  <td style="vertical-align: middle;"><?=$model->created_at;?></td>
+                  <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
+                  <td style="vertical-align: middle;"><?=$model->quantity;?></td>
+                  <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
+                  <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
+                  <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td style="vertical-align: middle;">
+                    
+                    <?php if ($model->hasCancelRequest()) :?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                    <?php endif;?>
+                    <?php if ($model->tooLongProcess()) :?>
+                    <span class="label label-warning">Xử lý chậm</span>
+                    <?php endif;?>
 
-                  <?php if ($supplier) :?>
-                    <?php if ($supplier->status == OrderSupplier::STATUS_REQUEST) : ?>
-                  <span class="label label-warning">Pending</span>
-                    <?php elseif ($supplier->status == OrderSupplier::STATUS_APPROVE) : ?>
-                  <span class="label label-success">Pending</span>
-                  <?php endif;?>
-                  <?php else :?>
-                    <?=$model->getStatusLabel();?>
-                  <?php endif;?>
-                </td>
-                <td style="vertical-align: middle;" <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
-                  <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
-                </td>
-                <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                  <?php if (Yii::$app->user->can('orderteam')) :?>
-                  <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>
-                  <?php endif;?>
-                  <?php if (Yii::$app->user->can('orderteam')) :?>
-                  <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
-                  <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h4 class="modal-title">Gửi đơn hàng cho nhân viên quản lý</h4>
-                        </div>
-                        <?= Html::beginForm(['order/assign', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
-                        <div class="modal-body"> 
-                          <div class="row">
-                            <div class="col-md-12">
-                              <?= kartik\select2\Select2::widget([
-                                'name' => 'user_id',
-                                'data' => $orderTeams,
-                                'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
-                              ]); ?>
+                    <?php if ($supplier) :?>
+                      <?php if ($supplier->status == OrderSupplier::STATUS_REQUEST) : ?>
+                    <span class="label label-warning">Pending</span>
+                      <?php elseif ($supplier->status == OrderSupplier::STATUS_APPROVE) : ?>
+                    <span class="label label-success">Pending</span>
+                    <?php endif;?>
+                    <?php else :?>
+                      <?=$model->getStatusLabel();?>
+                    <?php endif;?>
+                  </td>
+                  <td style="vertical-align: middle;" <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
+                    <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                    <?php if (Yii::$app->user->can('orderteam')) :?>
+                    <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>
+                    <?php endif;?>
+                    <?php if (Yii::$app->user->can('orderteam')) :?>
+                    <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                    <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Gửi đơn hàng cho nhân viên quản lý</h4>
+                          </div>
+                          <?= Html::beginForm(['order/assign', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
+                          <div class="modal-body"> 
+                            <div class="row">
+                              <div class="col-md-12">
+                                <?= kartik\select2\Select2::widget([
+                                  'name' => 'user_id',
+                                  'data' => $orderTeams,
+                                  'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
+                                ]); ?>
+                              </div>
                             </div>
                           </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Gửi</button>
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                          </div>
+                          <?= Html::endForm(); ?>
                         </div>
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Gửi</button>
-                          <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                        </div>
-                        <?= Html::endForm(); ?>
+                        <!-- /.modal-content -->
                       </div>
-                      <!-- /.modal-content -->
+                      <!-- /.modal-dialog -->
                     </div>
-                    <!-- /.modal-dialog -->
-                  </div>
 
-                  <!-- Assign to supplier -->
-                  <?php
-                  $game = $model->game;
-                  $game->attachBehavior('supplier', new GameSupplierBehavior); 
-                  ?>
-                  <?php if (!$model->supplier_id) :?>
-                  <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
-                  <?php endif;?>
-                  <?php endif;?>
+                    <!-- Assign to supplier -->
+                    <?php
+                    $game = $model->game;
+                    $game->attachBehavior('supplier', new GameSupplierBehavior); 
+                    ?>
+                    <?php if (!$model->supplier_id) :?>
+                    <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
+                    <?php endif;?>
+                    <?php endif;?>
 
-                  <!-- Remove supplier -->
-                  <?php if ($supplier && $supplier->isRequest()) : ?>
-                  <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
-                  <?php endif;?>
-                </td>
-              </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+                    <!-- Remove supplier -->
+                    <?php if ($supplier && $supplier->isRequest()) : ?>
+                    <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
+                    <?php endif;?>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

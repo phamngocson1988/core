@@ -44,41 +44,43 @@ use backend\models\Order;
       </div>
       <div class="portlet-body">
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th style="width: 5%;"> Mã đơn hàng </th>
-              <th style="width: 10%;"> Tên game </th>
-              <th style="width: 10%;"> Ngày tạo </th>
-              <th style="width: 10%;"> Người bán hàng </th>
-              <th style="width: 10%;"> Nhân viên đơn hàng </th>
-              <th style="width: 10%;"> Nhà cung cấp </th>
-              <th style="width: 10%;"> Trạng thái </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;"></td>
-                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
-                <td style="vertical-align: middle;">
-                  <?php if (!$model->isDeletedOrder()) :?>
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                  <?php endif;?>
-                </td>
+                <th style="width: 5%;"> Mã đơn hàng </th>
+                <th style="width: 10%;"> Tên game </th>
+                <th style="width: 10%;"> Ngày tạo </th>
+                <th style="width: 10%;"> Người bán hàng </th>
+                <th style="width: 10%;"> Nhân viên đơn hàng </th>
+                <th style="width: 10%;"> Nhà cung cấp </th>
+                <th style="width: 10%;"> Trạng thái </th>
+                <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <tr>
+                  <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle;"><?=$model->game_title;?></td>
+                  <td style="vertical-align: middle;"><?=$model->created_at;?></td>
+                  <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td style="vertical-align: middle;"></td>
+                  <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
+                  <td style="vertical-align: middle;">
+                    <?php if (!$model->isDeletedOrder()) :?>
+                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                    <?php endif;?>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

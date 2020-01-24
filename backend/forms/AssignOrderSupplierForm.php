@@ -80,6 +80,8 @@ class AssignOrderSupplierForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
+            $settings = Yii::$app->settings;
+            $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
             $game = $this->getSupplierGame();
             $order = $this->getOrder();
             $order->supplier_id = $this->supplier_id;
@@ -90,11 +92,29 @@ class AssignOrderSupplierForm extends Model
                 'price' => $game->price,
                 'quantity' => 0,
                 'total_price' => 0,
+                'rate_usd' => $rate,
                 'status' => OrderSupplier::STATUS_REQUEST,
                 'requested_by' => $this->requester,
                 'requested_at' => date('Y-m-d H:i:s')
             ]);
             $orderSupplier->save();
+
+            $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+            $fromName = sprintf("%s Administrator", Yii::$app->name);
+            $supplier = $orderSupplier->user;
+            $to = $supplier->email;
+            $title = sprintf("You have received new request for processing order #%s", $order->id);
+            Yii::$app->mailer->compose('notify_supplier_new_request', [
+                'order' => $order, 
+                'title' => $title, 
+                'supplier' => $supplier
+            ])
+            ->setTo($to)
+            ->setFrom([$from => $fromName])
+            ->setSubject($title)
+            ->setTextBody($title)
+            ->send();
+
             $transaction->commit();
             return true;
         } catch(Exception $e) {

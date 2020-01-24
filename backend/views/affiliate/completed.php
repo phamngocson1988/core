@@ -96,61 +96,63 @@ use backend\components\datepicker\DatePicker;
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> STT </th>
-              <th> Mã giao dịch </th>
-              <th> Thời gian yêu cầu </th>
-              <th> Sô tiền </th>
-              <th> Phương thức thanh toán </th>
-              <th> Trạng thái giao dịch </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td><?=$no + $pages->offset + 1;?></td>
-                <td>
-                  <a href="#content-modal<?=$model->id;?>" data-toggle="modal"><?=$model->getId();?></a>
-                  <div class="modal fade" id="content-modal<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h4 class="modal-title">Thông tin chi tiết</h4>
-                        </div>
-                        <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
-                          <?=$model->note;?>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                      <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                  </div>
-                </td>
-                <td><?=$model->created_at;?></td>
-                <td><?=number_format($model->amount);?></td>
-                <td>Chuyển khoản</td>
-                <td><span class="label label-default">Completed</span></td>
+                <th> STT </th>
+                <th> Mã giao dịch </th>
+                <th> Thời gian yêu cầu </th>
+                <th> Sô tiền </th>
+                <th> Phương thức thanh toán </th>
+                <th> Trạng thái giao dịch </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-          <tfooter>
-            <td></td>
-            <td></td>
-            <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->count());?></td>
-            <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('amount'));?></td>
-            <td></td>
-            <td></td>
-          </tfooter>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <tr>
+                  <td><?=$no + $pages->offset + 1;?></td>
+                  <td>
+                    <a href="#content-modal<?=$model->id;?>" data-toggle="modal"><?=$model->getId();?></a>
+                    <div class="modal fade" id="content-modal<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Thông tin chi tiết</h4>
+                          </div>
+                          <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
+                            <?=$model->note;?>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                      <!-- /.modal-dialog -->
+                    </div>
+                  </td>
+                  <td><?=$model->created_at;?></td>
+                  <td><?=number_format($model->amount);?></td>
+                  <td>Chuyển khoản</td>
+                  <td><span class="label label-default">Completed</span></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+            <tfooter>
+              <td></td>
+              <td></td>
+              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->count());?></td>
+              <td style="vertical-align: middle;">Tổng: <?=number_format($search->getCommand()->sum('amount'));?></td>
+              <td></td>
+              <td></td>
+            </tfooter>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

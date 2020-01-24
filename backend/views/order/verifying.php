@@ -168,71 +168,73 @@ use backend\components\datetimepicker\DateTimePicker;
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> Mã đơn hàng </th>
-              <th> Tên game </th>
-              <th> Ngày tạo </th>
-              <th> Số lượng nạp </th>
-              <th> Số gói </th>
-              <th> Tổng tiền </th>
-              <th> Người bán hàng </th>
-              <th> Trạng thái </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
-                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->total_price, 1);?></td>
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
-                <td style="vertical-align: middle;">
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                  <?php if (Yii::$app->user->can('admin')) :?>
-                  <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs red tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
-                  <?php endif;?>
-                  <?php if ($model->evidence): ?>
-                  <a href='<?=$model->evidence;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem hóa đơn" target="_blank"><i class="fa fa-file"></i></a>
-                  <?php endif;?>
-                  <a href='<?=Url::to(['order/send-mail-verifying-order', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
+                <th> Mã đơn hàng </th>
+                <th> Tên game </th>
+                <th> Ngày tạo </th>
+                <th> Số lượng nạp </th>
+                <th> Số gói </th>
+                <th> Tổng tiền </th>
+                <th> Người bán hàng </th>
+                <th> Trạng thái </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              </tr>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <tr>
+                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle;"><?=$model->game_title;?></td>
+                  <td style="vertical-align: middle;"><?=$model->created_at;?></td>
+                  <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
+                  <td style="vertical-align: middle;"><?=$model->quantity;?></td>
+                  <td style="vertical-align: middle;"><?=number_format($model->total_price, 1);?></td>
+                  <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
+                  <td style="vertical-align: middle;">
+                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                    <?php if (Yii::$app->user->can('admin')) :?>
+                    <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs red tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
+                    <?php endif;?>
+                    <?php if ($model->evidence): ?>
+                    <a href='<?=$model->evidence;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem hóa đơn" target="_blank"><i class="fa fa-file"></i></a>
+                    <?php endif;?>
+                    <a href='<?=Url::to(['order/send-mail-verifying-order', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
 
-                  <a href='#go_pending<?=$model->id;?>' class="btn btn-xs blue tooltips approve" data-pjax="0" data-container="body" data-original-title="Duyệt thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
-                  <div class="modal fade" id="go_pending<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h4 class="modal-title">Chuyển tới trạng thái Pending</h4>
+                    <a href='#go_pending<?=$model->id;?>' class="btn btn-xs blue tooltips approve" data-pjax="0" data-container="body" data-original-title="Duyệt thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                    <div class="modal fade" id="go_pending<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Chuyển tới trạng thái Pending</h4>
+                          </div>
+                          <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated move-to-pending', 'order-id' => $model->id], 'action' => Url::to(['order/move-to-pending', 'id' => $model->id])]);?>
+                          <div class="modal-body"> 
+                            <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
+                            <?=$nextForm->field($model, 'payment_method', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_method' . $model->id]])->textInput();?>
+                            <?=$nextForm->field($model, 'payment_id', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_id' . $model->id]])->textInput();?>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn green">Xác nhận</button>
+                          </div>
+                          <?php ActiveForm::end();?>
                         </div>
-                        <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated move-to-pending', 'order-id' => $model->id], 'action' => Url::to(['order/move-to-pending', 'id' => $model->id])]);?>
-                        <div class="modal-body"> 
-                          <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
-                          <?=$nextForm->field($model, 'payment_method', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_method' . $model->id]])->textInput();?>
-                          <?=$nextForm->field($model, 'payment_id', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_id' . $model->id]])->textInput();?>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn green">Xác nhận</button>
-                        </div>
-                        <?php ActiveForm::end();?>
                       </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

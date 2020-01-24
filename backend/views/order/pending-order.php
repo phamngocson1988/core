@@ -64,93 +64,95 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
       </div>
       <div class="portlet-body">
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
-          <thead>
-            <tr>
-              <th style="width: 5%;"> Mã đơn hàng </th>
-              <th style="width: 10%;"> Tên game </th>
-              <th style="width: 10%;"> Ngày tạo </th>
-              <th style="width: 5%;"> Số lượng nạp </th>
-              <th style="width: 5%;"> Số gói </th>
-              <th style="width: 10%;"> Thời gian nhận đơn </th>
-              <th style="width: 5%;"> Thời gian chờ </th>
-              <th style="width: 10%;"> Người bán hàng </th>
-              <th style="width: 10%;"> Nhân viên đơn hàng </th>
-              <th style="width: 10%;"> Trạng thái </th>
-              <th style="width: 10%;"> Nhà cung cấp </th>
-              <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+            <thead>
               <tr>
-                <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
-                <td style="vertical-align: middle;"><?=$model->quantity;?></td>
-                <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?> minutes</td>
-                
-                <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td style="vertical-align: middle;">
-                  <?=$model->getStatusLabel();?>
-                  <?php if ($model->hasCancelRequest()) :?>
-                  <span class="label label-danger">Có yêu cầu hủy</span>
-                  <?php endif;?>
-                  <?php if ($model->tooLongProcess()) :?>
-                  <span class="label label-warning">Xử lý chậm</span>
-                  <?php endif;?>
-                </td>
-                <td style="vertical-align: middle;"></td>
-                <td style="vertical-align: middle;">
-                  <?php if (!$model->isDeletedOrder()) :?>
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                  <?php endif;?>
-                  <?php if (Yii::$app->user->can('orderteam')) :?>
-                  <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>
-                  <?php endif;?>
-                  <?php if (Yii::$app->user->can('orderteam_manager')) :?>
-                  <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
-                  <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h4 class="modal-title">Gửi đơn hàng cho nhân viên quản lý</h4>
-                        </div>
-                        <?= Html::beginForm(['order/assign', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
-                        <div class="modal-body"> 
-                          <div class="row">
-                            <div class="col-md-12">
-                              <?= kartik\select2\Select2::widget([
-                                'name' => 'user_id',
-                                'data' => $orderTeams,
-                                'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
-                              ]); ?>
+                <th style="width: 5%;"> Mã đơn hàng </th>
+                <th style="width: 10%;"> Tên game </th>
+                <th style="width: 10%;"> Ngày tạo </th>
+                <th style="width: 5%;"> Số lượng nạp </th>
+                <th style="width: 5%;"> Số gói </th>
+                <th style="width: 10%;"> Thời gian nhận đơn </th>
+                <th style="width: 5%;"> Thời gian chờ </th>
+                <th style="width: 10%;"> Người bán hàng </th>
+                <th style="width: 10%;"> Nhân viên đơn hàng </th>
+                <th style="width: 10%;"> Trạng thái </th>
+                <th style="width: 10%;"> Nhà cung cấp </th>
+                <th style="width: 10%;" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              </tr>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <tr>
+                  <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle;"><?=$model->game_title;?></td>
+                  <td style="vertical-align: middle;"><?=$model->created_at;?></td>
+                  <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
+                  <td style="vertical-align: middle;"><?=$model->quantity;?></td>
+                  <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
+                  <td style="vertical-align: middle;"><?=round($model->getProcessDurationTime() / 60, 1);?> minutes</td>
+                  
+                  <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td style="vertical-align: middle;">
+                    <?=$model->getStatusLabel();?>
+                    <?php if ($model->hasCancelRequest()) :?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                    <?php endif;?>
+                    <?php if ($model->tooLongProcess()) :?>
+                    <span class="label label-warning">Xử lý chậm</span>
+                    <?php endif;?>
+                  </td>
+                  <td style="vertical-align: middle;"></td>
+                  <td style="vertical-align: middle;">
+                    <?php if (!$model->isDeletedOrder()) :?>
+                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                    <?php endif;?>
+                    <?php if (Yii::$app->user->can('orderteam')) :?>
+                    <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>
+                    <?php endif;?>
+                    <?php if (Yii::$app->user->can('orderteam_manager')) :?>
+                    <a href='#assign<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                    <div class="modal fade" id="assign<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Gửi đơn hàng cho nhân viên quản lý</h4>
+                          </div>
+                          <?= Html::beginForm(['order/assign', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
+                          <div class="modal-body"> 
+                            <div class="row">
+                              <div class="col-md-12">
+                                <?= kartik\select2\Select2::widget([
+                                  'name' => 'user_id',
+                                  'data' => $orderTeams,
+                                  'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
+                                ]); ?>
+                              </div>
                             </div>
                           </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Gửi</button>
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                          </div>
+                          <?= Html::endForm(); ?>
                         </div>
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Gửi</button>
-                          <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                        </div>
-                        <?= Html::endForm(); ?>
+                        <!-- /.modal-content -->
                       </div>
-                      <!-- /.modal-content -->
+                      <!-- /.modal-dialog -->
                     </div>
-                    <!-- /.modal-dialog -->
-                  </div>
-                  <?php endif;?>
-                </td>
-              </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+                    <?php endif;?>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>
