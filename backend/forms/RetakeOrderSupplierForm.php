@@ -50,7 +50,7 @@ class RetakeOrderSupplierForm extends Model
 
         $supplier = $this->getSupplier();
         if (!$supplier) return $this->addError($attribute, 'Đơn hàng này chưa có nhà cung cấp');
-        if (!$supplier->isRequest()) return $this->addError($attribute, 'Đơn hàng này không thể bị lấy lại'); 
+        // if (!in_array($supplier->status, [OrderSupplier::STATUS_REQUEST, OrderSupplier::STATUS_APPROVE])) return $this->addError($attribute, 'Đơn hàng này không thể bị lấy lại'); 
     }
 
     public function retake()

@@ -375,7 +375,7 @@ class OrderController extends Controller
                 $orderSupplier->save();
 
                 $supplier = Supplier::findOne($orderSupplier->supplier_id);
-                $topupAmount = $model->quantity * $orderSupplier->rate_usd - $orderSupplier->total_price;
+                $topupAmount = $orderSupplier->total_price;
                 $supplier->topup($topupAmount, sprintf("Thanh toán cho đơn hàng #%s", $orderSupplier->order_id));
             }
         }

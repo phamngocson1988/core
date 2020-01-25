@@ -177,6 +177,7 @@ $user = Yii::$app->user;
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+                <?php $supplier = $model->supplier;?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td><?=$model->game_title;?></td>
@@ -198,13 +199,18 @@ $user = Yii::$app->user;
                   </td>
                   <td <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
                     <?php
-                    if ($model->supplier) {
-                      echo $model->supplier->user->name;
+                    if ($supplier) {
+                      echo $supplier->user->name;
                     } 
                     ?>
                   </td>
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+
+                    <!-- Remove supplier -->
+                    <?php if ($supplier) : ?>
+                    <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa remove-supplier tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -218,3 +224,20 @@ $user = Yii::$app->user;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$script = <<< JS
+$(".remove-supplier").ajax_action({
+  method: 'POST',
+  confirm: true,
+  confirm_text: 'Đơn hàng này đang ở trong trạng thái processing, bạn cần liên hệ với nhà cung cấp trước khi hủy đơn',
+  callback: function(eletement, data) {
+    location.reload();
+  },
+  error: function(element, error) {
+    console.log(error);
+    alert(error);
+  }
+});
+JS;
+$this->registerJs($script);
+?>
