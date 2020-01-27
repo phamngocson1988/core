@@ -261,7 +261,7 @@ $user = Yii::$app->user;
                     <?php endif;?>
 
                     <!-- Remove supplier -->
-                    <?php if ($supplier && $supplier->isRequest()) : ?>
+                    <?php if ($supplier && $supplier->canBeTaken()) : ?>
                     <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
                     <?php endif;?>
                   </td>

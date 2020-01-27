@@ -208,7 +208,7 @@ $user = Yii::$app->user;
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
 
                     <!-- Remove supplier -->
-                    <?php if ($supplier) : ?>
+                    <?php if ($supplier && $supplier->canBeTaken()) : ?>
                     <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa remove-supplier tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
                     <?php endif;?>
                   </td>

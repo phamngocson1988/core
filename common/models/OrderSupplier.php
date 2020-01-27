@@ -52,4 +52,13 @@ class OrderSupplier extends ActiveRecord
     {
         return $this->status == self::STATUS_APPROVE;
     }
+
+    public function canBeTaken()
+    {
+        $order = $this->order;
+        $orderStatus = [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING];
+        $requestStatus = [self::STATUS_REQUEST, self::STATUS_APPROVE];
+        if (in_array($order->status, $orderStatus) && in_array($this->status, $requestStatus)) return true;
+        return false;
+    }
 }
