@@ -12,6 +12,7 @@ use common\components\helpers\FormatConverter;
 use backend\behaviors\GameSupplierBehavior;
 use backend\behaviors\OrderSupplierBehavior;
 use backend\models\OrderSupplier;
+use backend\models\Order;
 
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 // order team
@@ -178,9 +179,11 @@ $user = Yii::$app->user;
                 <?php if (!$models) :?>
                 <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
+                <?php $labels = Order::getStatusList();?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
                 <?php $supplier = $model->supplier;?>
+                <?php $label = $labels[$model->status]; ?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td style="vertical-align: middle;"><?=$model->game_title;?></td>
@@ -202,9 +205,9 @@ $user = Yii::$app->user;
 
                     <?php if ($supplier) :?>
                       <?php if ($supplier->status == OrderSupplier::STATUS_REQUEST) : ?>
-                    <span class="label label-warning">Pending</span>
+                    <span class="label label-warning"><?=$label;?></span>
                       <?php elseif ($supplier->status == OrderSupplier::STATUS_APPROVE) : ?>
-                    <span class="label label-success">Pending</span>
+                    <span class="label label-success"><?=$label;?></span>
                     <?php endif;?>
                     <?php else :?>
                       <?=$model->getStatusLabel();?>
