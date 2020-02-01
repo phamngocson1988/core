@@ -123,9 +123,9 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
             <?php endif;?>
 
-            <?= $form->field($search, 'start_date', [
+            <?= $form->field($search, 'completed_from', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'completed_from', 'id' => 'completed_from']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -134,11 +134,11 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày tạo từ');?>
+            ])->label('Ngày hoàn thành từ');?>
 
-            <?=$form->field($search, 'end_date', [
+            <?=$form->field($search, 'completed_to', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'completed_to', 'id' => 'completed_to']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -148,7 +148,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày tạo đến');?>
+            ])->label('Ngày hoàn thành đến');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">

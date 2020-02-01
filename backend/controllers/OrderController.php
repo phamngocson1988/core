@@ -193,8 +193,8 @@ class OrderController extends Controller
             'supplier_id' => $request->get('supplier_id'),
             'orderteam_id' => $request->get('orderteam_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'completed_from' => $request->get('completed_from'),
+            'completed_to' => $request->get('completed_to'),
             'status' => Order::STATUS_COMPLETED,
         ];
         $form = new FetchOrderForm($data);
@@ -454,6 +454,7 @@ class OrderController extends Controller
         $model->setScenario(Order::SCENARIO_GO_COMPLETED);
         $model->status = Order::STATUS_COMPLETED;
         $model->process_end_time = date('Y-m-d H:i:s');
+        $model->completed_at = date('Y-m-d H:i:s');
         $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;

@@ -417,6 +417,7 @@ class OrderController extends Controller
         $model->setScenario(Order::SCENARIO_GO_COMPLETED);
         $model->status = Order::STATUS_COMPLETED;
         $model->process_end_time = date('Y-m-d H:i:s');
+        $model->completed_at = date('Y-m-d H:i:s');
         $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;

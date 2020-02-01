@@ -25,13 +25,15 @@ class FetchOrderForm extends Model
     public $is_reseller;
     public $request_cancel;
     public $customer_phone;
-
+    public $completed_from;
+    public $completed_to;
     public function rules()
     {
         return [
             [['q', 'customer_phone'], 'trim'],
-            [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'start_date', 'end_date', 'status'], 'safe'],
+            [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'status'], 'safe'],
             [['start_date', 'end_date'], 'safe'],
+            [['completed_from', 'completed_to'], 'safe'],
             [['supplier_id', 'agency_id', 'is_reseller'], 'safe'],
         ];
     }
@@ -88,6 +90,14 @@ class FetchOrderForm extends Model
         if ($this->end_date) {
             $command->andWhere(['<=', "$table.created_at", $this->end_date]);
         }
+
+        if ($this->completed_from) {
+            $command->andWhere(['>=', "$table.completed_at", $this->completed_from]);
+        }
+        if ($this->completed_to) {
+            $command->andWhere(['<=', "$table.completed_at", $this->completed_to]);
+        }
+
         if ($this->status) {
             if (is_array($this->status)) {
                 $command->andWhere(['IN', "$table.status", $this->status]);
