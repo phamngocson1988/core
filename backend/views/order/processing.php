@@ -10,6 +10,11 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\OrderSupplierBehavior;
+use backend\behaviors\GameSupplierBehavior;
+
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 // order team
@@ -29,6 +34,7 @@ $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 
 $user = Yii::$app->user;
+$showSupplier = $user->can('orderteam') || $user->can('accounting');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -113,10 +119,12 @@ $user = Yii::$app->user;
               ]
             ])->label('Tên game')?>
           
-            <?=$form->field($search, 'provider_id', [
+            <?php if ($showSupplier): ?>
+            <?=$form->field($search, 'supplier_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control']
-            ])->dropDownList([])->label('Nhà cung cấp');?>
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'supplier_id'],
+            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
+            <?php endif;?>
 
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -167,7 +175,7 @@ $user = Yii::$app->user;
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
-                <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -197,7 +205,7 @@ $user = Yii::$app->user;
                     <span class="label label-warning">Xử lý chậm</span>
                     <?php endif;?>
                   </td>
-                  <td <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?php
                     if ($supplier) {
                       echo $supplier->user->name;
@@ -206,6 +214,18 @@ $user = Yii::$app->user;
                   </td>
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+
+                    <!-- Assign to supplier -->
+                    <?php
+                    $game = $model->game;
+                    $game->attachBehavior('supplier', new GameSupplierBehavior); 
+                    ?>
+                    <?php if (Yii::$app->user->can('orderteam')) :?>
+                    <?php if (!$model->supplier_id) :?>
+                    <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
+                    <?php endif;?>
+                    <?php endif;?>
+
 
                     <!-- Remove supplier -->
                     <?php if ($supplier && $supplier->canBeTaken()) : ?>
@@ -224,6 +244,14 @@ $user = Yii::$app->user;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<div class="modal fade" id="assign-supplier" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 <?php
 $script = <<< JS
 $(".remove-supplier").ajax_action({
@@ -237,6 +265,26 @@ $(".remove-supplier").ajax_action({
     console.log(error);
     alert(error);
   }
+});
+// supplier
+$(document).on('submit', 'body #assign-supplier', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+       alert(result.error);
+      else 
+        location.reload();
+    },
+  });
+  return false;
 });
 JS;
 $this->registerJs($script);

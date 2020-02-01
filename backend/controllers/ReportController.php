@@ -433,7 +433,7 @@ class ReportController extends Controller
             'end_date' => $request->get('end_date'),
             'status' => $request->get('status'),
             'agency_id' => $request->get('agency_id'),
-            'provider_id' => $request->get('provider_id'),
+            'supplier_id' => $request->get('supplier_id'),
             'is_reseller' => $request->get('is_reseller'),
         ];
         $form = new FetchOrderForm($data);

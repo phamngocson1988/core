@@ -128,11 +128,6 @@ use backend\components\datetimepicker\DateTimePicker;
               ]
             ])->label('Tên game')?>
           
-            <?=$form->field($search, 'provider_id', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control']
-            ])->dropDownList([])->label('Nhà cung cấp');?>
-
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']

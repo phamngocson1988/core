@@ -62,6 +62,7 @@ AppAsset::register($this);
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NP4585Q"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+<?php require_once(Yii::$app->basePath . '/views/layouts/facebook_livechat.php');?>
 <?= NotificationFlash::widget() ?>
 <?php $this->beginBody() ?>
 <div class="overlay"></div>
@@ -76,6 +77,5 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <?php $this->endBody() ?>
 </body>
-<?php require_once(Yii::$app->basePath . '/views/layouts/livechat.php');?>
 </html>
 <?php $this->endPage() ?>

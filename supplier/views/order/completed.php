@@ -45,23 +45,12 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET']);?>
         <div class="row margin-bottom-10">
-            <?php $customer = $search->getCustomer();?>
             <?=$form->field($search, 'q', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
-
-
-            <?=$form->field($search, 'status', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
-            ])->dropDownList([
-                Order::STATUS_PENDING => 'Pending',
-                Order::STATUS_PROCESSING => 'Processing',
-                Order::STATUS_COMPLETED => 'Completed',
-            ])->label('Trạng thái');?>
 
             <?php $game = $search->getGame();?>   
             <?=$form->field($search, 'game_id', [

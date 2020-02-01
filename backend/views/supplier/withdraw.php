@@ -54,6 +54,7 @@ use yii\helpers\Html;
               <?php foreach ($models as $model) :?>
               <?php
               $supplier = $model->supplier;
+              if (!$supplier) continue;
               $user = $supplier->user; 
               ?>
               <tr>

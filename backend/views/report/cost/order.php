@@ -10,6 +10,7 @@ use backend\components\datetimepicker\DateTimePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
+use backend\behaviors\OrderSupplierBehavior;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -137,10 +138,10 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
             'inputOptions' => ['class' => 'form-control', 'name' => 'agency_id']
           ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo đại lý'])->label('Tên đại lý');?>
 
-          <?=$form->field($search, 'provider_id', [
+          <?=$form->field($search, 'supplier_id', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'provider_id']
-          ])->dropDownList($search->fetchGames(), ['prompt' => 'Tìm theo nhà cung cấp'])->label('Tên nhà cung cấp');?>
+            'inputOptions' => ['class' => 'form-control', 'name' => 'supplier_id']
+          ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Tìm theo nhà cung cấp'])->label('Tên nhà cung cấp');?>
 
           <?=$form->field($search, 'start_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -199,6 +200,8 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
               <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
+              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
+              <?php $supplier = $model->supplier;?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>
                 <td style="vertical-align: middle;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'><?=$model->id;?></a></td>
@@ -208,7 +211,9 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
                 <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->sub_total_price * $rate);?></td>
                 <td style="vertical-align: middle;"><?=number_format($model->total_price * $rate);?></td>
-                <td style="vertical-align: middle;"></td>
+                <td style="vertical-align: middle;">
+                  <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
+                </td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;"></td>

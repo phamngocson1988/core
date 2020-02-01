@@ -10,8 +10,6 @@ use backend\components\datetimepicker\DateTimePicker;
 use common\models\User;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\OrderSupplierBehavior;
-
-
 use backend\models\Order;
 
 
@@ -27,6 +25,7 @@ $orderTeamIds = array_unique($orderTeamIds);
 $orderTeamObjects = User::findAll($orderTeamIds);
 $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 $user = Yii::$app->user;
+$showSupplier = $user->can('orderteam') || $user->can('accounting');
 
 ?>
 
@@ -164,10 +163,12 @@ $user = Yii::$app->user;
               ]
             ])->label('Tên game')?>
           
-            <?=$form->field($search, 'provider_id', [
+            <?php if ($showSupplier): ?>
+            <?=$form->field($search, 'supplier_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control']
-            ])->dropDownList([])->label('Nhà cung cấp');?>
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'supplier_id'],
+            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
+            <?php endif;?>
 
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -218,7 +219,7 @@ $user = Yii::$app->user;
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
-                <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -247,7 +248,7 @@ $user = Yii::$app->user;
                     <span class="label label-warning">Xử lý chậm</span>
                     <?php endif;?>
                   </td>
-                  <td <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?php
                     if ($model->supplier) {
                       echo $model->supplier->user->name;

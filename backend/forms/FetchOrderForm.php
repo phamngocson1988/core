@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use backend\models\Order;
 use common\models\User;
 use common\models\Game;
+use backend\models\Supplier;
 
 class FetchOrderForm extends Model
 {
@@ -18,7 +19,7 @@ class FetchOrderForm extends Model
     public $end_date;
     public $saler_id;
     public $orderteam_id;
-    public $provider_id;
+    public $supplier_id;
     public $status;
     public $agency_id;
     public $is_reseller;
@@ -31,7 +32,7 @@ class FetchOrderForm extends Model
             [['q', 'customer_phone'], 'trim'],
             [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'start_date', 'end_date', 'status'], 'safe'],
             [['start_date', 'end_date'], 'safe'],
-            [['provider_id', 'agency_id', 'is_reseller'], 'safe'],
+            [['supplier_id', 'agency_id', 'is_reseller'], 'safe'],
         ];
     }
 
@@ -67,6 +68,9 @@ class FetchOrderForm extends Model
         }
         if ($this->saler_id) {
             $command->andWhere(["$table.saler_id" => $this->saler_id]);
+        }
+        if ($this->supplier_id) {
+            $command->andWhere(["$table.supplier_id" => $this->supplier_id]);
         }
         if ($this->request_cancel) {
             $command->andWhere(["$table.request_cancel" => $this->request_cancel]);
@@ -143,5 +147,16 @@ class FetchOrderForm extends Model
     public function fetchGames()
     {
         return ArrayHelper::map(Game::find()->all(), 'id', 'title');
+    }
+
+    public function fetchSuppliers()
+    {
+        $suppliers = Supplier::find()->all();
+        $mapping = [];
+        foreach ($suppliers as $supplier) {
+            $user = $supplier->user;
+            $mapping[$user->id] = sprintf("%s (%s)", $user->name, $user->email);
+        }
+        return $mapping;
     }
 }

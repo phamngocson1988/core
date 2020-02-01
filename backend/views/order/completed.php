@@ -11,6 +11,10 @@ use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\OrderSupplierBehavior;
 
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 // order team
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
@@ -28,6 +32,7 @@ $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 $user = Yii::$app->user;
+$showSupplier = $user->can('orderteam') || $user->can('accounting');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -111,10 +116,12 @@ $user = Yii::$app->user;
               ]
             ])->label('Tên game')?>
           
-            <?=$form->field($search, 'provider_id', [
+            <?php if ($showSupplier): ?>
+            <?=$form->field($search, 'supplier_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control']
-            ])->dropDownList([])->label('Nhà cung cấp');?>
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'supplier_id'],
+            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
+            <?php endif;?>
 
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -165,7 +172,7 @@ $user = Yii::$app->user;
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
-                <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -194,7 +201,7 @@ $user = Yii::$app->user;
                     <span class="label label-warning">Xử lý chậm</span>
                     <?php endif;?>
                   </td>
-                  <td <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?php
                     if ($model->supplier) {
                       echo $model->supplier->user->name;

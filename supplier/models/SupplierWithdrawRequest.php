@@ -20,7 +20,6 @@ class SupplierWithdrawRequest extends \common\models\SupplierWithdrawRequest
     public function rules()
     {
         return [
-            [['supplier_id', 'bank_code', 'account_name', 'account_number', 'amount'], 'required', 'on' => self::SCENARIO_CREATE],
             [['supplier_id', 'cancelled_at', 'cancelled_by', 'status'], 'required', 'on' => self::SCENARIO_CANCEL],
         ];
     }

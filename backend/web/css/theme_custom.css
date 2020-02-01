@@ -15,3 +15,7 @@
 #image-popup-form .thumbnail.selected {
 	border: solid 1px #000;
 }
+
+.table-checkable tr>td:first-child, .table-checkable tr>th:first-child {
+	max-width: none;
+}

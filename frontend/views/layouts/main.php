@@ -66,6 +66,7 @@ $bodyClass = isset($this->params['body_class']) ? $this->params['body_class'] : 
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NP4585Q"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+<?php require_once(Yii::$app->basePath . '/views/layouts/facebook_livechat.php');?>
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.3&appId=734107406647333&autoLogAppEvents=1"></script>
 <?= Alert::widget() ?>
@@ -80,6 +81,5 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <?php $this->endBody() ?>
 </body>
-<?php require_once(Yii::$app->basePath . '/views/layouts/livechat.php');?>
 </html>
 <?php $this->endPage() ?>

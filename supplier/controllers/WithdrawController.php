@@ -8,6 +8,7 @@ use yii\data\Pagination;
 use supplier\models\SupplierWithdrawRequest;
 use supplier\models\SupplierBank;
 use supplier\behaviors\UserSupplierBehavior;
+use supplier\forms\CreateWithdrawRequestForm;
 
 class WithdrawController extends Controller
 {
@@ -50,25 +51,20 @@ class WithdrawController extends Controller
     {
         $this->view->params['main_menu_active'] = 'withdraw.index';
         $request = Yii::$app->request;
-        $model = new SupplierWithdrawRequest(['scenario' => SupplierWithdrawRequest::SCENARIO_CREATE]);
+        $model = new CreateWithdrawRequestForm();
+        $model->supplier_id = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
-            $model->supplier_id = Yii::$app->user->id;
-            if ($model->save()) {
+            if ($model->create()) {
                 Yii::$app->session->setFlash('success', 'Success!');
                 $ref = $request->get('ref', Url::to(['bank/index']));
                 return $this->redirect(Url::to(['withdraw/index']));
-            } else {
-                $errors = $model->getErrorSummary(true);
-                Yii::$app->session->setFlash('error', reset($errors));
             }
         }
         $user = Yii::$app->user->identity;
         $user->attachBehavior('supplier', new UserSupplierBehavior);
         $supplier = $user->supplier;
-        $banks = $supplier->banks;
         return $this->render('create', [
             'model' => $model,
-            'banks' => $banks
         ]);
     }
 

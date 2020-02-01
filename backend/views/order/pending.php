@@ -14,6 +14,10 @@ use backend\behaviors\OrderSupplierBehavior;
 use backend\models\OrderSupplier;
 use backend\models\Order;
 
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 // order team
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
@@ -32,6 +36,7 @@ $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 
 $user = Yii::$app->user;
+$showSupplier = $user->can('orderteam') || $user->can('accounting');
 ?>
 <!-- jQuery Modal -->
 <!-- BEGIN PAGE BAR -->
@@ -117,10 +122,12 @@ $user = Yii::$app->user;
               ]
             ])->label('Tên game')?>
           
-            <?=$form->field($search, 'provider_id', [
+            <?php if ($showSupplier): ?>
+            <?=$form->field($search, 'supplier_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control']
-            ])->dropDownList([])->label('Nhà cung cấp');?>
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'supplier_id'],
+            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
+            <?php endif;?>
 
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -171,7 +178,7 @@ $user = Yii::$app->user;
                 <th> Người bán hàng </th>
                 <th> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
-                <th <?=$user->can('orderteam') ? '' : 'class="hide"';?>> Nhà cung cấp </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -185,16 +192,16 @@ $user = Yii::$app->user;
                 <?php $supplier = $model->supplier;?>
                 <?php $label = $labels[$model->status]; ?>
                 <tr>
-                  <td style="vertical-align: middle; max-width:none;"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                  <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                  <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                  <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
-                  <td style="vertical-align: middle;"><?=$model->quantity;?></td>
-                  <td style="vertical-align: middle;"><?=$model->process_start_time;?></td>
-                  <td style="vertical-align: middle;"><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
-                  <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                  <td style="vertical-align: middle;"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                  <td style="vertical-align: middle;">
+                  <td><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td><?=$model->game_title;?></td>
+                  <td><?=$model->created_at;?></td>
+                  <td><?=$model->total_unit;?></td>
+                  <td><?=$model->quantity;?></td>
+                  <td><?=$model->process_start_time;?></td>
+                  <td><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
+                  <td><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td>
                     
                     <?php if ($model->hasCancelRequest()) :?>
                     <span class="label label-danger">Có yêu cầu hủy</span>
@@ -213,10 +220,10 @@ $user = Yii::$app->user;
                       <?=$model->getStatusLabel();?>
                     <?php endif;?>
                   </td>
-                  <td style="vertical-align: middle;" <?=$user->can('orderteam') ? '' : 'class="hide"';?>>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
                   </td>
-                  <td style="vertical-align: middle;">
+                  <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                     <?php if (Yii::$app->user->can('orderteam')) :?>
                     <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>

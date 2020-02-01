@@ -115,57 +115,59 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-        <thead>
-            <tr>
-              <th>Mã giao dịch</th>
-              <th>Khách hàng</th>
-              <th>Ngày tạo</th>
-              <th>Số Kcoin</th>
-              <th>Khuyến mãi</th>
-              <th>Số tiền</th>
-              <th>Phương thức thanh toán</th>
-              <th>Payment ID</th>
-              <th>Loại thanh toán</th>
-              <th>Trạng thái</th>
-              <th>Hóa đơn</th>
-              <th>Tác vụ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (!$models) :?>
-            <tr><td colspan="11">No data found</td></tr>
-            <?php endif;?>
-            <?php foreach ($models as $model) :?>
-            <tr>
-              <td>T<?=$model->id;?></td>
-              <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
-              <td><?=$model->created_at;?></td>
-              <td><?=number_format($model->coin);?></td>
-              <td>
-              <?php if ($model->promotion_coin) : ?>
-              <?=sprintf("%s (%s)", number_format($model->promotion_coin), $model->promotion_code);?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
+              <tr>
+                <th>Mã giao dịch</th>
+                <th>Khách hàng</th>
+                <th>Ngày tạo</th>
+                <th>Số Kcoin</th>
+                <th>Khuyến mãi</th>
+                <th>Số tiền</th>
+                <th>Phương thức thanh toán</th>
+                <th>Payment ID</th>
+                <th>Loại thanh toán</th>
+                <th>Trạng thái</th>
+                <th>Hóa đơn</th>
+                <th>Tác vụ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (!$models) :?>
+              <tr><td colspan="11">No data found</td></tr>
               <?php endif;?>
-              </td>
-              <td>$<?=number_format($model->total_price);?></td>
-              <td><?=sprintf("%s (%s)", $model->payment_method, $model->user_ip);?></td>
-              <td><?=$model->payment_id;?></td>
-              <td><?=$model->payment_type;?></td>
-              <td><?=$model->status;?></td>
-              <td>
-                <?php if ($model->evidence) : ?>
-                <a href="<?=$model->evidence;?>" target="_blank">Xem</a>
+              <?php foreach ($models as $model) :?>
+              <tr>
+                <td>T<?=$model->id;?></td>
+                <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
+                <td><?=$model->created_at;?></td>
+                <td><?=number_format($model->coin);?></td>
+                <td>
+                <?php if ($model->promotion_coin) : ?>
+                <?=sprintf("%s (%s)", number_format($model->promotion_coin), $model->promotion_code);?>
                 <?php endif;?>
-              </td>
-              <td>
-                <?php if ($model->isPending()) : ?>
-                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/move-to-trash', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-trash"></i></a>
-                <?php endif;?>
-              </td>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
+                </td>
+                <td>$<?=number_format($model->total_price);?></td>
+                <td><?=sprintf("%s (%s)", $model->payment_method, $model->user_ip);?></td>
+                <td><?=$model->payment_id;?></td>
+                <td><?=$model->payment_type;?></td>
+                <td><?=$model->status;?></td>
+                <td>
+                  <?php if ($model->evidence) : ?>
+                  <a href="<?=$model->evidence;?>" target="_blank">Xem</a>
+                  <?php endif;?>
+                </td>
+                <td>
+                  <?php if ($model->isPending()) : ?>
+                  <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/move-to-trash', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa"><i class="fa fa-trash"></i></a>
+                  <?php endif;?>
+                </td>
+              </tr>
+              <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

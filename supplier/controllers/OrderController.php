@@ -204,6 +204,72 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionCancellingOrder()
+    {
+        $this->view->params['main_menu_active'] = 'order.cancelling';
+        $request = Yii::$app->request;
+        $data = [
+            'q' => $request->get('q'),
+            'customer_phone' => $request->get('customer_phone'),
+            'customer_id' => $request->get('customer_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => [Order::STATUS_PENDING, Order::STATUS_PROCESSING],
+            'supplier_id' => Yii::$app->user->id,
+            'supplier_status' => OrderSupplier::STATUS_APPROVE,
+            'request_cancel' => 1
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();                    
+                            
+
+        return $this->render('cancelling', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCancelledOrder()
+    {
+        $this->view->params['main_menu_active'] = 'order.cancelled';
+        $request = Yii::$app->request;
+        $data = [
+            'q' => $request->get('q'),
+            'customer_phone' => $request->get('customer_phone'),
+            'customer_id' => $request->get('customer_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => $request->get('status', [
+                Order::STATUS_CANCELLED,
+            ]),
+            'supplier_id' => Yii::$app->user->id,
+            'supplier_status' => OrderSupplier::STATUS_APPROVE,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();                    
+
+        return $this->render('cancelled', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
     public function actionWaiting()
     {
         $this->view->params['main_menu_active'] = 'order.waiting';

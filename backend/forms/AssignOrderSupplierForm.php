@@ -99,21 +99,21 @@ class AssignOrderSupplierForm extends Model
             ]);
             $orderSupplier->save();
 
-            $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
-            $fromName = sprintf("%s Administrator", Yii::$app->name);
-            $supplier = $orderSupplier->user;
-            $to = $supplier->email;
-            $title = sprintf("You have received new request for processing order #%s", $order->id);
-            Yii::$app->mailer->compose('notify_supplier_new_request', [
-                'order' => $order, 
-                'title' => $title, 
-                'supplier' => $supplier
-            ])
-            ->setTo($to)
-            ->setFrom([$from => $fromName])
-            ->setSubject($title)
-            ->setTextBody($title)
-            ->send();
+            // $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+            // $fromName = sprintf("%s Administrator", Yii::$app->name);
+            // $supplier = $orderSupplier->user;
+            // $to = $supplier->email;
+            // $title = sprintf("You have received new request for processing order #%s", $order->id);
+            // Yii::$app->mailer->compose('notify_supplier_new_request', [
+            //     'order' => $order, 
+            //     'title' => $title, 
+            //     'supplier' => $supplier
+            // ])
+            // ->setTo($to)
+            // ->setFrom([$from => $fromName])
+            // ->setSubject($title)
+            // ->setTextBody($title)
+            // ->send();
 
             $transaction->commit();
             return true;
