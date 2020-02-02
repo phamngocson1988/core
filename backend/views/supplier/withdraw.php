@@ -40,6 +40,7 @@ use yii\helpers\Html;
               <th> Mã yêu cầu </th>
               <th> Nhà cung cấp </th>
               <th> Số tiền </th>
+              <th> Số dư khả dụng </th>
               <th> Thông tin tài khoản </th>
               <th> Ngày tạo </th>
               <th> Hình ảnh </th>
@@ -49,7 +50,7 @@ use yii\helpers\Html;
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <?php
@@ -61,6 +62,7 @@ use yii\helpers\Html;
                 <td><?=$model->id;?></td>
                 <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
                 <td><?=number_format($model->amount);?></td>
+                <td><?=number_format($supplier->walletTotal());?></td>
                 <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
                 <td><?=$model->created_at;?></td>
                 <td>

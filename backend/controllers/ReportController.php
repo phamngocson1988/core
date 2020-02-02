@@ -12,6 +12,7 @@ use backend\forms\ReportByTransactionForm;
 use backend\forms\ReportByBalanceForm;
 use yii\data\Pagination;
 use backend\models\Order;
+use backend\models\Supplier;
 use common\models\User;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
@@ -24,6 +25,7 @@ use backend\forms\StatisticsByOrderForm;
 use backend\forms\ReportCostOrderBySaler;
 use backend\forms\ReportSaleOrderByUser;
 use backend\forms\ReportSaleOrderByReseller;
+use backend\forms\FetchSupplierForm;
 
 class ReportController extends Controller
 {
@@ -494,6 +496,28 @@ class ReportController extends Controller
             'models' => $models,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCostSupplier()
+    {
+        $this->view->params['main_menu_active'] = 'report.cost.supplier';
+        $request = Yii::$app->request;
+        $data = [
+            'status' => Supplier::STATUS_ENABLED,
+        ];
+        $form = new FetchSupplierForm($data);
+
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('cost/supplier', [
+            'models' => $models,
+            'pages' => $pages,
         ]);
     }
 

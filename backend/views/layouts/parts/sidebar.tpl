@@ -668,7 +668,7 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/cost-supplier'}" class="nav-link nav-toggle" code='report.cost.supplier'>
                   <span class="title">Theo nhà cung cấp</span>
                 </a>
               </li>
