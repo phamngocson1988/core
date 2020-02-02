@@ -257,10 +257,13 @@ class GameController extends Controller
                     'old_reseller_3' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_3),
                     'new_reseller_3' => $game->getResellerPrice(User::RESELLER_LEVEL_3),
                 ];
+                Yii::error($attrs, 'actionUpdatePrice attrs');
                 $log = new GamePriceLog();
-                $log->attributes = $attrs;
+                foreach ($attrs as $key => $value) {
+                    $log->$key = $value;
+                }
                 $log->game_id = $game->id;
-                $log->config = json_encode($event->changedAttributes);
+                $log->config = json_encode(array_merge($event->changedAttributes, $config));
                 $log->save();
 
                 // Send mail to saler
