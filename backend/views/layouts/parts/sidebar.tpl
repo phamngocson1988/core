@@ -93,7 +93,7 @@
       {/if}
 
       <!-- Supplier -->
-      {if $app->user->can('admin')}
+      {if ($app->user->can('accounting') || $app->user->can('orderteam_manager'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -106,6 +106,7 @@
             <span class="title">Danh sách</span>
             </a>
           </li>
+          {if $app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/supplier/withdraw'}" class="nav-link " code='supplier.withdraw'>
             <span class="title">Yêu cầu rút tiền</span>
@@ -116,6 +117,7 @@
             <span class="title">Yêu cầu game mới</span>
             </a>
           </li>
+          {/if}
         </ul>
       </li>
       {/if}

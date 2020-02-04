@@ -47,7 +47,7 @@ class CreateWithdrawRequestForm extends Model
             $model->account_name = $this->account_name;
             $model->account_number = $this->account_number;
             $model->amount = $this->amount;
-            $result = $model->save(fasle);
+            $result = $model->save(false);
             $transaction->commit();
             return $result;
         } catch(Exception $e) {

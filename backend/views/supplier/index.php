@@ -92,12 +92,15 @@ use yii\web\JsExpression;
                 <td style="vertical-align: middle;"><?=$model->user->email;?></td>
                 <td style="vertical-align: middle;"><?=$model->user->phone;?></td>
                 <td style="vertical-align: middle;">
+                
+                  <?php if (Yii::$app->user->can('accounting')) : ?>
                   <a href="<?=Url::to(['supplier/remove', 'id' => $model->user_id]);?>" class="btn btn-sm red link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà cung cấp"><i class="fa fa-trash"></i></a>
 
                   <?php if ($model->isEnabled()) : ?>
                   <a href="<?=Url::to(['supplier/disable', 'id' => $model->user_id]);?>" class="btn btn-sm green link-action tooltips action-link" data-container="body" data-original-title="Tạm ngưng nhà cung cấp"><i class="fa fa-power-off"></i></a>
                   <?php else :?>
                   <a href="<?=Url::to(['supplier/enable', 'id' => $model->user_id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Kích hoạt nhà cung cấp"><i class="fa fa-power-off"></i></a>
+                  <?php endif;?>
                   <?php endif;?>
 
                   <a href="<?=Url::to(['supplier/game', 'id' => $model->user_id]);?>" class="btn btn-sm blue tooltips" data-container="body" data-original-title="Danh sách game"><i class="fa fa-list"></i></a>

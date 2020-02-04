@@ -31,9 +31,8 @@ class WithdrawController extends Controller
     {
         $this->view->params['main_menu_active'] = 'withdraw.index';
         $request = Yii::$app->request;
-        $command = SupplierWithdrawRequest::find([
+        $command = SupplierWithdrawRequest::find()->where([
             'supplier_id' => Yii::$app->user->id,
-            'status' => $request->get('status', '')
         ]);
 
         $pages = new Pagination(['totalCount' => $command->count()]);
