@@ -27,6 +27,7 @@ class FetchOrderForm extends Model
     public $customer_phone;
     public $completed_from;
     public $completed_to;
+    public $payment_method;
     public function rules()
     {
         return [
@@ -34,7 +35,7 @@ class FetchOrderForm extends Model
             [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'status'], 'safe'],
             [['start_date', 'end_date'], 'safe'],
             [['completed_from', 'completed_to'], 'safe'],
-            [['supplier_id', 'agency_id', 'is_reseller'], 'safe'],
+            [['supplier_id', 'agency_id', 'is_reseller', 'payment_method'], 'safe'],
         ];
     }
 
@@ -67,6 +68,9 @@ class FetchOrderForm extends Model
         }
         if ($this->game_id) {
             $command->andWhere(["$table.game_id" => $this->game_id]);
+        }
+        if ($this->payment_method) {
+            $command->andWhere(["$table.payment_method" => $this->payment_method]);
         }
         if ($this->saler_id) {
             $command->andWhere(["$table.saler_id" => $this->saler_id]);
@@ -168,5 +172,23 @@ class FetchOrderForm extends Model
             $mapping[$user->id] = sprintf("%s (%s)", $user->name, $user->email);
         }
         return $mapping;
+    }
+
+    public function fetchPaymentMethods()
+    {
+        return [
+            'kinggems' => 'King Coin',
+            'alipay' => 'Alipay',
+            'skrill' => 'Skrill',
+            'alipay' => 'Alipay',
+            'wechat' => 'Wechat',
+            'postal-savings-bank-of-china' => 'Postal Savings Bank Of China',
+            'payoneer' => 'Payoneer',
+            'bitcoin' => 'Bitcoin',
+            'western_union' => 'Western Union',
+            'neteller' => 'Neteller',
+            'standard_chartered' => 'Standard Chartered',
+            'paypal' => 'Paypal',
+        ];   
     }
 }

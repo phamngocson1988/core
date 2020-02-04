@@ -150,6 +150,11 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 ],
             ])->label('Ngày hoàn thành đến');?>
 
+            <?=$form->field($search, 'payment_method', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'payment_method']
+            ])->dropDownList($search->fetchPaymentMethods(), ['prompt' => 'Chọn phương thức thanh toán'])->label('Phương thức thanh toán');?>
+
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>

@@ -416,14 +416,14 @@ $this->registerJs($imageJs);
                         <a href="#complain_custom" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi nội dung tùy chọn</a>
                         <?php endif;?>
 
-                        <div class="modal fade" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
+                        <div class="modal fade modal-scroll" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                 <h4 class="modal-title">Chọn một câu trả lời để phản hồi đến khách hàng</h4>
                               </div>
-                              <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
+                              <div class="modal-body" style="height: 500px; position: relative; overflow: auto; display: block;"> 
                                 <table class="table">
                                   <thead>
                                     <tr>
