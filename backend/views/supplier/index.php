@@ -77,6 +77,7 @@ use yii\web\JsExpression;
               <th> Tên đăng nhập </th>
               <th> Email </th>
               <th> Phone </th>
+              <th> Số dư khả dụng </th>
               <th class="dt-center"> Tác vụ </th>
             </tr>
           </thead>
@@ -87,11 +88,12 @@ use yii\web\JsExpression;
               <?php foreach ($models as $key => $model) :?>
               <tr>
                 <td><?=$key + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$model->user->name;?></td>
-                <td style="vertical-align: middle;"><?=$model->user->username;?></td>
-                <td style="vertical-align: middle;"><?=$model->user->email;?></td>
-                <td style="vertical-align: middle;"><?=$model->user->phone;?></td>
-                <td style="vertical-align: middle;">
+                <td><?=$model->user->name;?></td>
+                <td><?=$model->user->username;?></td>
+                <td><?=$model->user->email;?></td>
+                <td><?=$model->user->phone;?></td>
+                <td><?=number_format($model->walletTotal());?></td>
+                <td>
                 
                   <?php if (Yii::$app->user->can('accounting')) : ?>
                   <a href="<?=Url::to(['supplier/remove', 'id' => $model->user_id]);?>" class="btn btn-sm red link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà cung cấp"><i class="fa fa-trash"></i></a>
@@ -104,6 +106,9 @@ use yii\web\JsExpression;
                   <?php endif;?>
 
                   <a href="<?=Url::to(['supplier/game', 'id' => $model->user_id]);?>" class="btn btn-sm blue tooltips" data-container="body" data-original-title="Danh sách game"><i class="fa fa-list"></i></a>
+
+
+                  <a href='<?=Url::to(['supplier/wallet', 'id' => $model->user_id]);?>' data-target="#supplier-wallet" class="btn btn-sm grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem chi tiết" data-toggle="modal" ><i class="fa fa-money"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -115,6 +120,14 @@ use yii\web\JsExpression;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+
+<div class="modal fade" id="supplier-wallet" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog portlet box">
+    <div class="modal-content portlet-body">
+    </div>
+  </div>
+</div>
+
 <?php
 $script = <<< JS
 

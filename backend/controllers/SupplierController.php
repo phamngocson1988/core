@@ -261,4 +261,9 @@ class SupplierController extends Controller
         return $this->asJson(['status' => $model->delete()]);
         
     }
+
+    public function actionWallet($id)
+    {
+        return $this->renderPartial('wallet');
+    }
 }
