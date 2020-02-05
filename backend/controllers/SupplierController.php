@@ -12,6 +12,8 @@ use backend\forms\FetchSupplierForm;
 use backend\forms\FetchSupplierGameForm;
 use backend\models\Supplier;
 use backend\models\User;
+use backend\models\Order;
+use backend\models\OrderSupplier;
 use backend\models\SupplierWithdrawRequest;
 use backend\models\SupplierGameSuggestion;
 use backend\behaviors\UserSupplierBehavior;
@@ -264,6 +266,33 @@ class SupplierController extends Controller
 
     public function actionWallet($id)
     {
-        return $this->renderPartial('wallet');
+        $supplier = Supplier::findOne($id);
+        // completed orders
+        $orderTable = Order::tableName();
+        $supplierTable = OrderSupplier::tableName();
+        $command = Order::find()
+        ->innerJoin($supplierTable, "$orderTable.id = $supplierTable.order_id AND $orderTable.supplier_id = $supplierTable.supplier_id")
+        ->where(["iN", "$orderTable.status", [Order::STATUS_COMPLETED, Order::STATUS_CONFIRMED]])  
+        ->andWhere(["$supplierTable.status" => OrderSupplier::STATUS_APPROVE])
+        ->andWhere(["$supplierTable.supplier_id" => $id])
+        ->select(["$orderTable.id", "$supplierTable.quantity", "$orderTable.status", "$orderTable.completed_at", "$supplierTable.total_price"]);
+        $totalAmount = $command->sum("$supplierTable.total_price");
+        $totalQuantity = $command->sum("$supplierTable.quantity");
+        $orders = $command->asArray()->all();
+
+        // completed requests
+        $requestCommand = SupplierWithdrawRequest::find()
+        ->where(['supplier_id' => $id])
+        ->andWhere(['status' => SupplierWithdrawRequest::STATUS_DONE]);
+        $totalWithdraw = $requestCommand->sum('amount');
+        $requests = $requestCommand->all();
+        return $this->renderPartial('wallet', [
+            'orders' => $orders,
+            'totalAmount' => $totalAmount,
+            'totalQuantity' => $totalQuantity,
+            'totalWithdraw' => $totalWithdraw,
+            'requests' => $requests,
+            'supplier' => $supplier
+        ]);
     }
 }

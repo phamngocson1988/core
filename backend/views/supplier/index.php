@@ -121,7 +121,7 @@ use yii\web\JsExpression;
   </div>
 </div>
 
-<div class="modal fade" id="supplier-wallet" tabindex="-1" role="basic" aria-hidden="true">
+<div class="modal fade modal-scroll" id="supplier-wallet" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog portlet box">
     <div class="modal-content portlet-body">
     </div>

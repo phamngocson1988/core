@@ -48,6 +48,11 @@ class Supplier extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public function getName()
+    {
+        return $this->user->name;
+    }
+
     public function isDisabled() 
     {
         return $this->status == self::STATUS_DISABLED;

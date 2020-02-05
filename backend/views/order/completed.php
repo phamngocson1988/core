@@ -173,6 +173,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
                 <th class="hidden-xs"> Thời gian nhận đơn </th>
+                <th class="hidden-xs"> Thời gian hoàn thành </th>
                 <th> Thời gian chờ </th>
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
@@ -183,7 +184,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="13"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
@@ -194,6 +195,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                   <td><?=$model->total_unit;?></td>
                   <td><?=$model->quantity;?></td>
                   <td class="hidden-xs"><?=$model->process_start_time;?></td>
+                  <td class="hidden-xs"><?=$model->completed_at;?></td>
                   <td><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
                   <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
                   <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>

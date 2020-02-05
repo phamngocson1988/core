@@ -54,10 +54,21 @@ class RejectOrderSupplierForm extends Model
 
     public function reject()
     {
-        $supplier = $this->getOrderSupplier();
-        $supplier->status = OrderSupplier::STATUS_REJECT;
-        $supplier->rejected_at = date('Y-m-d H:i:s');
-        return $supplier->save();
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $order = $this->getOrder();
+            $supplier = $this->getOrderSupplier();
+            $supplier->status = OrderSupplier::STATUS_REJECT;
+            $supplier->rejected_at = date('Y-m-d H:i:s');
+            $supplier->save();
+            $order->supplier_id = null;
+            $order->save();
+            $transaction->commit();
+        } catch(Exception $e) {
+            $transaction->rollback();
+            return false;
+        }
     }
 
 }

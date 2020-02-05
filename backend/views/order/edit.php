@@ -81,6 +81,10 @@ use backend\models\OrderFile;
                       </div>
                     </div>
                     <div class="portlet-body" id="game_account">
+                      <div class="row static-info">
+                        <div class="col-md-5">Order ID: </div>
+                        <div class="col-md-7"><?=$order->id;?></div>
+                      </div>
                       <?php if ($order->bulk) : ?>
                       <div class="row static-info">
                         <div class="col-md-5">Order detail: </div>
