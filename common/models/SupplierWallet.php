@@ -35,4 +35,9 @@ class SupplierWallet extends ActiveRecord
     {
         return '{{%supplier_wallet}}';
     }
+
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::className(), ['user_id' => 'supplier_id']);
+    }
 }

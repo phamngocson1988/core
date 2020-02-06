@@ -165,7 +165,6 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             </div>
         </div>
         <?php ActiveForm::end()?>
-        <?php Pjax::begin(); ?>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
@@ -243,7 +242,6 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

@@ -754,4 +754,35 @@ class OrderController extends Controller
             return $this->asJson(['status' => false, 'error' => $error]);
         }
     }
+
+    public function actionAjaxUpload()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) {
+            return;
+        }
+        $attribute = $request->post('name', 'upload_file');
+        $files = Yii::$app->file->save($attribute);
+
+        $result = false;
+        $data = [];
+        $errors = [];
+        if ($files !== false) {
+            $result = true;
+            $fileArray = [];
+            foreach ($files as  $file) {
+                $info = [];
+                $info['id'] = $fileId = $file->getId();
+                $info['src'] = $file->getUrl();
+                $info['path'] = $file->getPath();
+                $fileArray[] = $info;
+            }
+
+            $data = $fileArray;
+        } else {
+            $errors = Yii::$app->file->getErrors($attribute);
+        }
+        
+        return $this->renderJson($result, $data, $errors);
+    }
 }

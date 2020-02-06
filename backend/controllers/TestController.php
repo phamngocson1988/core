@@ -9,7 +9,9 @@ use yii\helpers\Url;
 use backend\forms\UploadImageForm;
 use backend\forms\DeleteImageForm;
 use common\forms\SendmailForm;
-
+use yii\imagine\Image;
+use common\models\File;
+use common\models\OrderFile;
 /**
  * TestController
  */
@@ -122,5 +124,25 @@ class TestController extends Controller
     	$request = Yii::$app->request;
     	$id = $request->get('id');
     	return $this->renderPartial('modal', ['id' => $id]);
+    }
+
+    public function actionImage()
+    {
+    	$request = Yii::$app->request;
+    	$from = $request->get('from');
+    	$to = $request->get('to');
+    	$orderFiles = OrderFile::find()->where(['between', 'id', $from, $to])->all();
+    	echo count($orderFiles) . " files \n";
+    	foreach ($orderFiles as $orderFile) {
+    		$file = $orderFile->file;
+    		$path = $file->getPath();
+    		if (!file_exists($path)) {
+	    		echo sprintf("ORDER ID %s - Path: %s not exist \n", $orderFile->order_id, $path);
+	    		continue;
+    		}
+	    	Image::resize($path, 500, null)->save($path);
+	    	echo sprintf("#%s - ORDER ID %s - Path: %s \n", $orderFile->id, $orderFile->order_id, $path);
+    	}
+    	
     }
 }

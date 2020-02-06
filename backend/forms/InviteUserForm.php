@@ -89,14 +89,14 @@ class InviteUserForm extends Model
 
 	protected function sendEmail($user)
     {
-        $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        $email = $this->email;
-        return Yii::$app->mailer->compose('invite_user', ['mail' => $this, 'activate_link' => Url::to(['site/activate', 'activation_key' => $user->auth_key, 'id' => $user->id])])
-            ->setTo($email)
-            ->setFrom([$adminEmail => Yii::$app->name])
-            ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)
-            ->setTextBody('Bạn nhận được lời mời làm thành viên quản trị từ kinggems.us')
-            ->send();
+        // $settings = Yii::$app->settings;
+        // $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        // $email = $this->email;
+        // return Yii::$app->mailer->compose('invite_user', ['mail' => $this, 'activate_link' => Url::to(['site/activate', 'activation_key' => $user->auth_key, 'id' => $user->id])])
+        //     ->setTo($email)
+        //     ->setFrom([$adminEmail => Yii::$app->name])
+        //     ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)
+        //     ->setTextBody('Bạn nhận được lời mời làm thành viên quản trị từ kinggems.us')
+        //     ->send();
     }
 }

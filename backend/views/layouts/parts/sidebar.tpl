@@ -558,12 +558,12 @@
                 </a>
               </li>
               {* <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="" class="nav-link nav-toggle" code="supplier.balance">
                   <span class="title">Giao dịch rút tiền</span>
                 </a>
               </li> *}
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/supplier/balance'}" class="nav-link nav-toggle" code="supplier.balance">
                   <span class="title">Số dư tài khoản nhà cung cấp</span>
                 </a>
               </li> 
