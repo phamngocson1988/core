@@ -331,7 +331,7 @@ $this->registerJs($cancelOrderJs)
                 <div class=col-md-12>
                   <?php if (Yii::$app->user->can('orderteam')) : ?>
                   <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh trước khi hoàn thành</a>
-                  <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple/>
+                  <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple accept="image/*"/>
                   <?php else : ?>
                   <a class="btn red btn-outline sbold" href="javascript:;">Hình ảnh trước khi hoàn thành</a>
                   <?php endif;?>
@@ -345,7 +345,7 @@ $this->registerJs($cancelOrderJs)
                 <div class=col-md-12>
                   <?php if (Yii::$app->user->can('orderteam')) : ?>
                   <a class="btn red btn-outline sbold" id="uploadElementAfter">Tải hình ảnh sau khi hoàn thành</a>
-                  <input type="file" id="uploadEvidenceAfter" name="uploadEvidenceAfter[]" style="display: none" multiple/>
+                  <input type="file" id="uploadEvidenceAfter" name="uploadEvidenceAfter[]" style="display: none" multiple accept="image/*"/>
                   <?php else : ?>
                   <a class="btn red btn-outline sbold" href="javascript:;">Hình ảnh sau khi hoàn thành</a>
                   <?php endif;?>
@@ -357,7 +357,11 @@ $this->registerJs($cancelOrderJs)
 <?php
 if (Yii::$app->user->can('orderteam')) {
 $imageJs = <<< JS
-var upload = new AjaxUploadFile({trigger_element: '#uploadElement', file_element: '#uploadEvidence'});
+var upload = new AjaxUploadFile({
+  trigger_element: '#uploadElement', 
+  file_element: '#uploadEvidence',
+  file_options: {resize: '500xauto'}
+});
 upload.callback = function(result) {
   result.forEach(function(element) {
     $.ajax({
@@ -376,7 +380,11 @@ upload.callback = function(result) {
     });
   });
 }
-var uploadAfter = new AjaxUploadFile({trigger_element: '#uploadElementAfter', file_element: '#uploadEvidenceAfter'});
+var uploadAfter = new AjaxUploadFile({
+  trigger_element: '#uploadElementAfter', 
+  file_element: '#uploadEvidenceAfter',
+  file_options: {resize: '500xauto'}
+});
 uploadAfter.callback = function(result) {
   result.forEach(function(element) {
     $.ajax({

@@ -132,6 +132,7 @@ class TestController extends Controller
     	$from = $request->get('from');
     	$to = $request->get('to');
     	$orderFiles = OrderFile::find()->where(['between', 'id', $from, $to])->all();
+    	array_shift($orderFiles);
     	echo count($orderFiles) . " files \n";
     	foreach ($orderFiles as $orderFile) {
     		$file = $orderFile->file;

@@ -576,6 +576,7 @@ function AjaxUploadFile(opts) {
     this.options = {
         trigger_element: null,
         file_element: '#file', // seletor of the file element
+        file_options: null
     }; 
     this.links = {
         upload: '/file/ajax-upload',
@@ -606,6 +607,13 @@ function AjaxUploadFile(opts) {
             });
             element_name = element_name.replace(/[ \[\] ]/g, "");
             that.form.append('name', element_name);
+            if (that.options.file_options) {
+                let opts = that.options.file_options || {};
+                console.log('opts', opts);
+                Object.keys(opts).map(k => {
+                    that.form.append(k, opts[k]);
+                });
+            }
             that.upload();
         });
     };
