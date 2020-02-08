@@ -189,4 +189,11 @@ class Paypal extends PaymentGateway
     {
         return $this->redirect($this->getErrorUrl());
     }
+
+     public function getFee($total)
+    {
+        $settings = Yii::$app->settings;
+        $fee = $settings->get('PaypalSettingForm', 'fee', 0);
+        return number_format($fee * $total / 100, 1);
+    }
 }

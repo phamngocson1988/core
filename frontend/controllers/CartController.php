@@ -267,6 +267,7 @@ class CartController extends Controller
             $order->sub_total_price = $subTotalPrice;
             $order->total_discount = $promotionCoin;
             $order->total_price = $totalPrice;
+            $order->total_fee = $gateway->getFee($totalPrice);
             $order->total_price_by_currency = FormatConverter::convertCurrencyToCny($totalPrice);
             $order->currency = $gateway->currency;
             $order->total_cogs_price = $cartItem->getCogs() * (float)$cartItem->quantity;

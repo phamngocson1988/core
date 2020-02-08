@@ -11,12 +11,14 @@ class StandardCharteredSettingForm extends Model
     public $logo;
     public $logo_width;
     public $logo_height;
+    public $fee;
 
     public function rules()
     {
         return [
             [['content', 'logo'], 'trim'],
-            [['logo_width', 'logo_height'], 'number']
+            [['logo_width', 'logo_height'], 'number'],
+            [['fee'], 'number']
         ];
     }
 }

@@ -51,6 +51,7 @@ class m190313_163324_create_wallet extends Migration
             'price' => $this->integer(11)->notNull()->defaultValue(0),
             'discount_price' => $this->integer(11)->notNull()->defaultValue(0),
             'total_price' => $this->integer(11)->notNull()->defaultValue(0),
+            'total_fee' => $this->float(11)->defaultValue(0),
             'coin' => $this->integer(11)->notNull()->defaultValue(0),
             'promotion_coin' => $this->integer(11)->notNull()->defaultValue(0),
             'total_coin' => $this->integer(11)->notNull()->defaultValue(0),

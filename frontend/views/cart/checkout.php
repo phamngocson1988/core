@@ -209,8 +209,17 @@ $cart->applyPromotion();
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div> -->
 
+                        <?php
+                        $standFee = number_format(Yii::$app->settings->get('StandardCharteredSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
+                        ?>
                         <div class="grand-line last-line price" paygate='standard_chartered' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
+                        </div>
+                        <div class="grand-line price" paygate='standard_chartered' style="display: none">
+                          <span>Payment fee:</span><span>$<?=number_format($standFee, 1);?></span>
+                        </div>
+                        <div class="grand-line price" paygate='standard_chartered' style="display: none">
+                          <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $standFee, 1);?></span>
                         </div>
                       </div>
                     </div>

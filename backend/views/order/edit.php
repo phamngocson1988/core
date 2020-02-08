@@ -146,7 +146,12 @@ use backend\models\OrderFile;
                                 </div>
                                 <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated', 'id' => 'move-pending-form'], 'action' => Url::to(['order/move-to-pending', 'id' => $order->id])]);?>
                                 <div class="modal-body"> 
-                                  <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
+                                  <p>Bạn có chắc chắn muốn chuyển đơn hàng <strong>#<?=$order->id;?></strong> sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
+                                  <p>Số tiền phải nạp: $ <?=number_format($order->total_price, 1);?></p>
+                                  <?php if ($order->total_fee) : ?>
+                                  <p>Phí dịch vụ: $ <?=number_format($order->total_fee, 1);?></p>
+                                  <?php endif;?>
+                                  <p>Tổng cộng: $ <?=number_format($order->total_price + $order->total_fee, 1);?></p>
                                   <?=$nextForm->field($order, 'payment_method')->textInput();?>
                                   <?=$nextForm->field($order, 'payment_id')->textInput();?>
                                 </div>

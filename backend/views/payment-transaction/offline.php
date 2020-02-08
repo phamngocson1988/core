@@ -156,14 +156,20 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                       </div>
                       <?php $form = ActiveForm::begin(['options' => ['class' => 'confirm-form'], 'action' => ['payment-transaction/pay-offline', 'id' => $model->id]]);?>
                       <div class="modal-body">
-                          <?=$form->field($model, 'payment_id', [
-                            'labelOptions' => ['class' => 'col-form-label'],
-                          ])->textInput()?>
-                          <?=$form->field($model, 'status', [
-                            'options' => ['tag' => false],
-                            'inputOptions' => ['value' => PaymentTransaction::STATUS_COMPLETED],
-                            'template' => '{input}'
-                          ])->hiddenInput()?>
+                        <p>Xác nhận thanh toán cho giao dịch mã số <?=$model->getId();?></p>
+                        <p>Số tiền phải nạp: $ <?=number_format($model->total_price, 1);?></p>
+                        <?php if ($model->total_fee) : ?>
+                        <p>Phí dịch vụ: $ <?=number_format($model->total_fee, 1);?></p>
+                        <?php endif;?>
+                        <p>Tổng cộng: $ <?=number_format($model->total_price + $model->total_fee, 1);?></p>
+                        <?=$form->field($model, 'payment_id', [
+                          'labelOptions' => ['class' => 'col-form-label'],
+                        ])->textInput()?>
+                        <?=$form->field($model, 'status', [
+                          'options' => ['tag' => false],
+                          'inputOptions' => ['value' => PaymentTransaction::STATUS_COMPLETED],
+                          'template' => '{input}'
+                        ])->hiddenInput()?>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -172,40 +178,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                       <?php ActiveForm::end()?>
                     </div>
                   </div>
-                </div>
-                <div class="modal fade" id="confirm-pay<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title">Xác nhận giao dịch này đã được chuyển khoản</h4>
-                      </div>
-                      <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated confirm-form'], 'action' => ['payment-transaction/pay-offline', 'id' => $model->id]]);?>
-                      <div class="modal-body"> 
-                        <div class="row">
-                          <?=$form->field($model, 'payment_id', [
-                            'labelOptions' => ['class' => 'col-md-2 control-label'],
-                            'inputOptions' => ['id' => 'name', 'class' => 'form-control', 'value' => ''],
-                            'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                          ])->textInput()?>
-                          <?=$form->field($model, 'status', [
-                            'options' => ['tag' => false],
-                            'inputOptions' => ['value' => PaymentTransaction::STATUS_COMPLETED],
-                            'template' => '{input}'
-                          ])->hiddenInput()?>
-                          <div class="col-md-12">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-default" data-toggle="modal">Xác nhận</button>
-                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Đóng</button>
-                      </div>
-                      <?php ActiveForm::end()?>
-                    </div>
-                    <!-- /.modal-content -->
-                  </div>
-                  <!-- /.modal-dialog -->
                 </div>
               </td>
             </tr>

@@ -145,13 +145,13 @@ $total = $cart->getTotalPrice();
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div>
               <?php
-              $fee = number_format(Yii::$app->settings->get('PaypalSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
+              $paypalFee = number_format(Yii::$app->settings->get('PaypalSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
               ?>
               <div class="t-flex-between t-sub-total price" paygate='paypal' style="display: none">
-                <span>Payment fee:</span><span>$<?=number_format($fee, 1);?></span>
+                <span>Payment fee:</span><span>$<?=number_format($paypalFee, 1);?></span>
               </div>
               <div class="t-flex-between t-sub-total price" paygate='paypal' style="display: none">
-                <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $fee, 1);?></span>
+                <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $paypalFee, 1);?></span>
               </div>
 
               <div class="t-flex-between t-sub-total price" paygate="alipay" style="display: none">
@@ -226,6 +226,9 @@ $total = $cart->getTotalPrice();
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
               </div> -->
 
+              <?php
+              $standFee = number_format(Yii::$app->settings->get('StandardCharteredSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
+              ?>
               <div class="t-flex-between t-sub-total price" paygate="standard_chartered" style="display: none">
                 <p>Subtotal:</p>
                 <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
@@ -233,6 +236,12 @@ $total = $cart->getTotalPrice();
               <div class="t-flex-between t-payment-total price" paygate="standard_chartered" style="display: none">
                 <p>Grand Total:</p>
                 <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
+              </div>
+              <div class="t-flex-between t-sub-total price" paygate='standard_chartered' style="display: none">
+                <span>Payment fee:</span><span>$<?=number_format($standFee, 1);?></span>
+              </div>
+              <div class="t-flex-between t-sub-total price" paygate='standard_chartered' style="display: none">
+                <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $standFee, 1);?></span>
               </div>
             </div>
           </div>
@@ -303,7 +312,7 @@ onApprove: function(data, actions) {
 }).render('#paypal-button-container');
 JS;
 $paypalCapture = Url::to(['topup/paypal-capture']);
-$paypalAmount = round($cart->getTotalPrice() + $fee, 1);
+$paypalAmount = round($cart->getTotalPrice() + $paypalFee, 1);
 $script = str_replace('###LINK###', $paypalCapture, $script);
 $script = str_replace('###AMOUNT###', $paypalAmount, $script);
 $this->registerJs($script);

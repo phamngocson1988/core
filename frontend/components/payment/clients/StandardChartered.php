@@ -16,4 +16,11 @@ class StandardChartered extends OfflinePayment
     		"logo_height" => $settings->get('StandardCharteredSettingForm', 'logo_height'),
     	];
     }
+
+    public function getFee($total)
+    {
+        $settings = Yii::$app->settings;
+        $fee = $settings->get('StandardCharteredSettingForm', 'fee', 0);
+        return number_format($fee * $total / 100, 1);
+    }
 }

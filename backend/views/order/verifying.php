@@ -217,7 +217,12 @@ use backend\components\datetimepicker\DateTimePicker;
                           </div>
                           <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated move-to-pending', 'order-id' => $model->id], 'action' => Url::to(['order/move-to-pending', 'id' => $model->id])]);?>
                           <div class="modal-body"> 
-                            <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
+                            <p>Bạn có chắc chắn muốn chuyển đơn hàng <strong>#<?=$model->id;?></strong> sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
+                            <p>Số tiền phải nạp: $ <?=number_format($model->total_price, 1);?></p>
+                            <?php if ($model->total_fee) : ?>
+                            <p>Phí dịch vụ: $ <?=number_format($model->total_fee, 1);?></p>
+                            <?php endif;?>
+                            <p>Tổng cộng: $ <?=number_format($model->total_price + $model->total_fee, 1);?></p>
                             <?=$nextForm->field($model, 'payment_method', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_method' . $model->id]])->textInput();?>
                             <?=$nextForm->field($model, 'payment_id', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_id' . $model->id]])->textInput();?>
                           </div>

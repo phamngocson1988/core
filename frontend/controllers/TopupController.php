@@ -191,7 +191,7 @@ class TopupController extends Controller
             $paymentCart->setPromotion($paymentPromotion);
         }
         $gateway = PaymentGatewayFactory::getClient($identifier);
-
+        $totalPrice = $cart->getTotalPrice();
         // Save transaction
         $trn = new PaymentTransaction();
         $trn->user_id = $user->id;
@@ -202,7 +202,8 @@ class TopupController extends Controller
         // Price
         $trn->price = $cart->getSubTotalPrice();
         $trn->discount_price = $cart->hasPromotion() ? $cart->getPromotionMoney() : 0;
-        $trn->total_price = $cart->getTotalPrice();
+        $trn->total_price = $totalPrice;
+        $trn->total_fee = $gateway->getFee($totalPrice);
         // Coin
         $trn->coin = $cart->getSubTotalCoin();
         $trn->promotion_coin = $cart->getPromotionCoin();
