@@ -443,7 +443,7 @@ class OrderController extends Controller
 
                 $supplier = Supplier::findOne($orderSupplier->supplier_id);
                 $topupAmount = $orderSupplier->total_price;
-                $supplier->topup($topupAmount, sprintf("Thanh toán cho đơn hàng #%s", $orderSupplier->order_id));
+                $supplier->topup($topupAmount, 'order', $id, sprintf("Thanh toán cho đơn hàng #%s", $orderSupplier->order_id));
             }
         }
 

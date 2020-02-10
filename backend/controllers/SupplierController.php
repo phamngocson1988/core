@@ -205,7 +205,7 @@ class SupplierController extends Controller
                 $model->on(SupplierWithdrawRequest::EVENT_AFTER_UPDATE , function($event) {
                     $withdraw = $event->sender;
                     $supplier = $withdraw->supplier;
-                    $supplier->withdraw($withdraw->amount, sprintf("Pay for withdraw request #%s", $withdraw->id));
+                    $supplier->withdraw($withdraw->amount, 'withdraw', $withdraw->id, sprintf("Pay for withdraw request #%s", $withdraw->id));
                 });
                 return $this->asJson(['status' => $model->save()]);
             }

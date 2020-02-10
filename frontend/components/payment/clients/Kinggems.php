@@ -86,4 +86,9 @@ class Kinggems extends PaymentGateway
         return $this->redirect($this->getErrorUrl());
     }
 
+    public function getFee($total)
+    {
+        return 0;
+    }
+
 }

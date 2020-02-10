@@ -6,7 +6,7 @@ use common\models\SupplierWallet;
 
 class SupplierWalletBehavior extends AttributeBehavior
 {
-    public function withdraw($amount, $description = '')
+    public function withdraw($amount, $source, $key, $description = '')
     {
         $user = $this->owner; // Supplier
         $wallet = new SupplierWallet();
@@ -14,11 +14,13 @@ class SupplierWalletBehavior extends AttributeBehavior
         $wallet->type = SupplierWallet::TYPE_OUTPUT;
         $wallet->description = $description;
         $wallet->supplier_id = $user->user_id;
+        $wallet->source = $source;
+        $wallet->key = $key;
         $wallet->status = SupplierWallet::STATUS_COMPLETED;
         $wallet->save();
     }
 
-    public function topup($amount, $description = '', $status = SupplierWallet::STATUS_COMPLETED)
+    public function topup($amount, $source, $key, $description = '', $status = SupplierWallet::STATUS_COMPLETED)
     {
         $user = $this->owner; // Supplier
         $wallet = new SupplierWallet();
@@ -27,6 +29,8 @@ class SupplierWalletBehavior extends AttributeBehavior
         $wallet->description = $description;
         $wallet->supplier_id = $user->user_id;
         $wallet->status = $status;
+        $wallet->source = $source;
+        $wallet->key = $key;
         $wallet->save();
     }
 
