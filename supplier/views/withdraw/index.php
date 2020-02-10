@@ -41,6 +41,7 @@ use yii\helpers\Url;
               <th> Thông tin tài khoản </th>
               <th> Ngày tạo </th>
               <th> Trạng thái </th>
+              <th> Ghi chú </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -55,6 +56,7 @@ use yii\helpers\Url;
                 <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
                 <td><?=$model->created_at;?></td>
                 <td><?=$model->getStatusLabel();?></td>
+                <td><?=$model->note;?></td>
                 <td>
                   <?php if ($model->isRequest()) :?>
                   <a href="<?=Url::to(['withdraw/cancel', 'id' => $model->id]);?>" class="btn btn-sm purple delete tooltips" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>

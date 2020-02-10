@@ -18,6 +18,7 @@ use backend\models\OrderSupplier;
 use backend\models\SupplierWithdrawRequest;
 use backend\models\SupplierGameSuggestion;
 use backend\behaviors\UserSupplierBehavior;
+use backend\forms\CancelSupplierWithdrawRequest;
 
 class SupplierController extends Controller
 {
@@ -160,18 +161,19 @@ class SupplierController extends Controller
     public function actionCancelWithdraw($id)
     {
         $request = Yii::$app->request;
-        if( $request->isAjax) {
-            $model = SupplierWithdrawRequest::findOne($id);
-            if (!$model) throw new NotFoundHttpException('Not found');
-            if ($model->isRequest() || $model->isApprove()) {
-                $model->setScenario(SupplierWithdrawRequest::SCENARIO_CANCEL);
-                $model->cancelled_at = date('Y-m-d H:i:s');
-                $model->cancelled_by = Yii::$app->user->id;
-                $model->status = SupplierWithdrawRequest::STATUS_CANCEL;
-                return $this->asJson(['status' => $model->save()]);
+        $model = new CancelSupplierWithdrawRequest(['id' => $id]);
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->cancel()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                $errors = $model->getErrorSummary(false);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'error' => $error]);
             }
-            return $this->asJson(['status' => false, 'error' => 'Yêu cầu không hợp lệ']);
         }
+        return $this->renderPartial('_cancel_withdraw.php', [
+            'model' => $model
+        ]);
     }
 
     public function actionApproveWithdraw($id)

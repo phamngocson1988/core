@@ -14,7 +14,7 @@ class SupplierWithdrawRequest extends \common\models\SupplierWithdrawRequest
     {
         $parents = parent::scenarios();
         return [
-            self::SCENARIO_CANCEL => ['cancelled_at', 'cancelled_by', 'status'],
+            self::SCENARIO_CANCEL => ['cancelled_at', 'cancelled_by', 'status', 'note'],
             self::SCENARIO_APPROVE => ['approved_at', 'approved_by', 'status'],
             self::SCENARIO_DONE => ['done_at', 'done_by', 'status'],
             self::SCENARIO_EVIDENCE => ['evidence'],

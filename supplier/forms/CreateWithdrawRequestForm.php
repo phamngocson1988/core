@@ -41,12 +41,14 @@ class CreateWithdrawRequestForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
+            $supplier = $this->getSupplier();
             $model = new SupplierWithdrawRequest(['scenario' => SupplierWithdrawRequest::SCENARIO_CREATE]);
             $model->supplier_id = $this->supplier_id;
             $model->bank_code = $this->bank_code;
             $model->account_name = $this->account_name;
             $model->account_number = $this->account_number;
             $model->amount = $this->amount;
+            $model->available_balance = $supplier->walletTotal();
             $result = $model->save(false);
             $transaction->commit();
             return $result;

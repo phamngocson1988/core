@@ -45,6 +45,7 @@ use yii\helpers\Html;
               <th> Ngày tạo </th>
               <th> Hình ảnh </th>
               <th> Trạng thái </th>
+              <th> Ghi chú </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -82,6 +83,7 @@ use yii\helpers\Html;
                   <?php endif;?>
                 </td>
                 <td><?=$model->getStatusLabel();?></td>
+                <td><?=$model->note;?></td>
                 <td>
                   <?php if ($model->isRequest()) :?>
                   <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips action-link" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>
@@ -90,7 +92,8 @@ use yii\helpers\Html;
                   <?php endif;?>
 
                   <?php if ($model->isApprove()) :?>
-                    <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips action-link" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+                    <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" data-target="#cancel-withdraw" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Hủy yêu cầu" data-toggle="modal"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+
                     <a href="<?=Url::to(['supplier/done-withdraw', 'id' => $model->id]);?>" class="btn btn-sm blue tooltips action-link" data-container="body" data-original-title="Hoàn thành yêu cầu"><i class="fa fa-times"></i> Hoàn thành yêu cầu </a>
                   <?php endif;?>
                 </td>
@@ -101,6 +104,12 @@ use yii\helpers\Html;
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
+  </div>
+</div>
+<div class="modal fade" id="cancel-withdraw" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
   </div>
 </div>
 <?php
@@ -132,6 +141,27 @@ $('.remove-link').ajax_action({
   callback: function(eletement, data) {
     location.reload();
   }
+});
+
+// cancel
+$(document).on('submit', 'body #cancel-withdraw-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+       alert(result.error);
+      else 
+        location.reload();
+    },
+  });
+  return false;
 });
 JS;
 $this->registerJs($script);
