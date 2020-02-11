@@ -600,7 +600,7 @@
               {/if}
               {if $app->user->can('orderteam_manager')}
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/process-supplier'}" class="nav-link nav-toggle" code="report.process.supplier">
                   <span class="title">Theo nhà cung cấp</span>
                 </a>
               </li>

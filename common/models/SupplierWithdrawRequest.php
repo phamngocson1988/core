@@ -50,6 +50,11 @@ class SupplierWithdrawRequest extends ActiveRecord
     	return $this->hasOne(Supplier::className(), ['user_id' => 'supplier_id']);
     }
 
+    public function getId()
+    {
+        return 'GD' . $this->id;
+    }
+
     public function isRequest()
     {
     	return $this->status == self::STATUS_REQUEST;

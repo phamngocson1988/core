@@ -25,6 +25,7 @@ use backend\forms\StatisticsByOrderForm;
 use backend\forms\ReportCostOrderBySaler;
 use backend\forms\ReportSaleOrderByUser;
 use backend\forms\ReportSaleOrderByReseller;
+use backend\forms\ReportProcessOrderBySupplier;
 use backend\forms\FetchSupplierForm;
 
 class ReportController extends Controller
@@ -234,6 +235,30 @@ class ReportController extends Controller
             'models' => $models,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionProcessSupplier()
+    {
+        $this->view->params['main_menu_active'] = 'report.process.supplier';
+        $request = Yii::$app->request;
+        $data = [
+            'supplier_id' => $request->get('supplier_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+        ];
+        $form = new ReportProcessOrderBySupplier($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->asArray()
+                            ->all();
+
+        return $this->render('process/supplier', [
+            'models' => $models,
+            'search' => $form,
+            'command' => $command,
         ]);
     }
 

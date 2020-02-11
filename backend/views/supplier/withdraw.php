@@ -60,10 +60,10 @@ use yii\helpers\Html;
               $user = $supplier->user; 
               ?>
               <tr>
-                <td><?=$model->id;?></td>
+                <td><?=$model->getId();?></td>
                 <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
                 <td><?=number_format($model->amount);?></td>
-                <td><?=number_format($supplier->walletTotal());?></td>
+                <td><?=$model->available_balance ? number_format($model->available_balance) : number_format($supplier->walletTotal());?></td>
                 <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
                 <td><?=$model->created_at;?></td>
                 <td>
