@@ -226,7 +226,10 @@ class ResellerController extends Controller
                         $order->price = $totalPrice;
                         $order->cogs_price = $totalPrice;
                         $order->total_discount = 0;
+                        $order->currency = 'USD';
                         $order->total_price = $totalPrice;
+                        $order->payment_type = 'online';
+                        $order->payment_method = 'kinggems';
                         $order->customer_id = $user->id;
                         $order->customer_name = $user->name;
                         $order->customer_email = $user->email;

@@ -175,6 +175,7 @@ use backend\components\datetimepicker\DateTimePicker;
                 <th> Mã đơn hàng </th>
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
+                <th> Cổng thanh toán</th>
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
                 <th> Tổng tiền </th>
@@ -185,13 +186,14 @@ use backend\components\datetimepicker\DateTimePicker;
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                   <td style="vertical-align: middle;"><?=$model->created_at;?></td>
+                  <td style="vertical-align: middle;"><?=$model->payment_method;?></td>
                   <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
                   <td style="vertical-align: middle;"><?=$model->quantity;?></td>
                   <td style="vertical-align: middle;"><?=number_format($model->total_price, 1);?></td>

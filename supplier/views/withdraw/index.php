@@ -47,7 +47,7 @@ use yii\helpers\Url;
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>

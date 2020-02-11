@@ -169,6 +169,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <th> Mã đơn hàng </th>
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
+                <th> Cổng thanh toán </th>
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
                 <th class="hidden-xs"> Thời gian nhận đơn </th>
@@ -182,14 +183,15 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="13"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
                 <tr>
-                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->created_at;?></td>
+                  <td><?=$model->payment_method;?></td>
                   <td><?=$model->total_unit;?></td>
                   <td><?=$model->quantity;?></td>
                   <td class="hidden-xs"><?=$model->process_start_time;?></td>

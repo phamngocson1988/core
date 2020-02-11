@@ -135,7 +135,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->created_at;?></td>
                   <td><?=$model->total_unit;?></td>

@@ -141,6 +141,26 @@ $supplier = $model->getSupplier();
       <?php ActiveForm::end()?>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="m-heading-1 border-green m-bordered">
+      <h4>Quy định rút tiền</h4>
+      <p>
+        - Thời gian phê duyệt giao dịch: 13:00 (GMT+7) Thứ Hai- Thứ Sáu <br/>
+        - Thời gian thanh toán: 17:00 (GMT+7) Thứ Hai- Thứ Sáu <br/>
+        - Transaction fee: 0 <br/>
+      </p><br/>
+      <strong>* Lưu ý: </strong>
+      <p>
+        - Các yêu cầu rút tiền sau 13:00 (GMT+7) ngày thứ Sáu sẽ được xem xét phê duyệt và xử lý vào ngày thứ Hai. <br/>
+        - Giao dịch rút tiền từ 50,000,000 VND (Năm mươi triệu đồng) có thể mất từ 48-72 giờ để xử lý.C33 <br/>
+        - Số tiền tối thiểu có thể rút= 200,000 VND (Hai trăm nghìn đồng) <br/>
+        - Đối với các hình thức nhận tiền qua tài khoản ngân hàng, khoản chuyển sẽ được hoàn tất ngay khi trạng thái lệnh "Hoàn tất". <br/>
+      </p>
+    </div>
+  </div>
+</div>
 <?php
 $script = <<< JS
 $('#bank_id').on('change', function(){

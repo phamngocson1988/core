@@ -123,7 +123,7 @@ use backend\behaviors\OrderSupplierBehavior;
               <?php foreach ($models as $no => $model) :?>
               <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
               <tr>
-                <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
