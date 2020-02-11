@@ -39,9 +39,9 @@ use yii\helpers\Html;
             <tr>
               <th> Mã yêu cầu </th>
               <th> Nhà cung cấp </th>
-              <th> Số tiền </th>
-              <th> Số dư tại thời điểm yêu cầu </th>
-              <th> Số dư khả dụng </th>
+              <th> Số tiền rút </th>
+              <th> Số dư đầu </th>
+              <th> Số dư cuối </th>
               <th> Thông tin tài khoản </th>
               <th> Ngày tạo </th>
               <th> Hình ảnh </th>
