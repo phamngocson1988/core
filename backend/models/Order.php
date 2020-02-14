@@ -34,6 +34,7 @@ class Order extends \common\models\Order
             [['username', 'password', 'platform', 'login_method', 'character_name'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
             [['recover_code', 'server', 'note'], 'trim', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
             [['payment_method', 'payment_id'], 'required', 'on' => self::SCENARIO_GO_PENDING],
+            ['payment_id', 'validatePayment', 'on' => self::SCENARIO_GO_PENDING],
         ];
     }
 
@@ -52,5 +53,16 @@ class Order extends \common\models\Order
         $color = $list[$this->status];
         $label = $labels[$this->status];
         return sprintf($format, $color, $label);
+    }
+
+    public function validatePayment($attribute, $params = []) 
+    {
+        if (!$this->payment_id) return;
+        $count = self::find()
+        ->where(['payment_id' => $this->payment_id])
+        ->andWhere(['payment_method' => $this->payment_method])->count();
+        if ($count) {
+            $this->addError($attribute, 'SỐ LỆNH GIAO DỊCH đã được sử dụng');
+        }
     }
 }

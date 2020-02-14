@@ -408,7 +408,9 @@ class OrderController extends Controller
         if ($model->load($request->post()) && $model->save()) {
             return $this->renderJson(true, ['next' => Url::to(['order/index'])]);
         } else {
-            return $this->asJson(['status' => true, 'error' => $model->getErrorSummary(false)]);
+            $errors = $model->getErrorSummary(false);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
         }
     }
 

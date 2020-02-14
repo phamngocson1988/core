@@ -225,8 +225,8 @@ use backend\components\datetimepicker\DateTimePicker;
                             <p>Phí dịch vụ: $ <?=number_format($model->total_fee, 1);?></p>
                             <?php endif;?>
                             <p>Tổng cộng: $ <?=number_format($model->total_price + $model->total_fee, 1);?></p>
-                            <?=$nextForm->field($model, 'payment_method', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_method' . $model->id]])->textInput();?>
-                            <?=$nextForm->field($model, 'payment_id', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_id' . $model->id]])->textInput();?>
+                            <?=$nextForm->field($model, 'payment_method', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_method' . $model->id]])->textInput()->label('Phương thức giao dịch');?>
+                            <?=$nextForm->field($model, 'payment_id', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_id' . $model->id]])->textInput()->label('Số lệnh giao dịch');?>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
@@ -280,8 +280,13 @@ $('.send-mail').ajax_action({
 // move to pending
 var executeForm = new AjaxFormSubmit({element: '.move-to-pending'});
 executeForm.success = function (data, form) {
+  alert('Thao tác thành công');
   location.reload();
 };
+executeForm.error = function (errors) {
+  alert(errors);
+  return false;
+}
 
 executeForm.validate = function(form) {
   var id = $(form).attr('order-id');
