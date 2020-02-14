@@ -18,7 +18,7 @@ class OrderLogController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['accounting', 'saler', 'admin'],
                     ],
                 ],
             ],
@@ -27,19 +27,21 @@ class OrderLogController extends Controller
 
     public function actionIndex()
     {
-        // $this->view->params['main_menu_active'] = 'order.log';
+        $this->view->params['main_menu_active'] = 'order.log';
         $request = Yii::$app->request;
         $command = OrderLog::find();
         $command->with('user');
         $command->orderBy(['id' => SORT_DESC]);
-        if ($request->get('order_id')) {
-            $command->andWhere(['order_id' => $request->get('order_id')]);
+        $order_id = $request->get('order_id');
+        if ($order_id) {
+            $command->andWhere(['order_id' => $order_id]);
         }
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
+            'order_id' => $order_id
         ]);
     }
 }

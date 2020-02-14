@@ -5,15 +5,6 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 ?>
 
-<style>
-.hide-text {
-    white-space: nowrap;
-    width: 100%;
-    max-width: 500px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-</style>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -43,6 +34,16 @@ use yii\widgets\ActiveForm;
         </div>
       </div>
       <div class="portlet-body">
+      <form method="GET" action="<?=Url::to(['order-log/index']);?>">
+        <div class="form-group col-md-4">
+            <label>Mã đơn hàng: </label> <input type="search" class="form-control" placeholder="Mã đơn hàng" name="order_id" value="<?=$order_id;?>">
+          </div>
+          <div class="form-group col-md-3">
+            <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+              <i class="fa fa-check"></i> <?=Yii::t('app', 'search');?>
+            </button>
+          </div>
+      </form>
         <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>

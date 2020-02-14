@@ -69,51 +69,53 @@ use yii\web\JsExpression;
           </div>
         </div>
         <?php ActiveForm::end()?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> STT </th>
-              <th> Tên </th>
-              <th> Tên đăng nhập </th>
-              <th> Email </th>
-              <th> Phone </th>
-              <th> Số dư khả dụng </th>
-              <th class="dt-center"> Tác vụ </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $key => $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td><?=$key + $pages->offset + 1;?></td>
-                <td><?=$model->user->name;?></td>
-                <td><?=$model->user->username;?></td>
-                <td><?=$model->user->email;?></td>
-                <td><?=$model->user->phone;?></td>
-                <td><?=number_format($model->walletTotal());?></td>
-                <td>
-                
-                  <?php if (Yii::$app->user->can('accounting')) : ?>
-                  <a href="<?=Url::to(['supplier/remove', 'id' => $model->user_id]);?>" class="btn btn-sm red link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà cung cấp"><i class="fa fa-trash"></i></a>
-
-                  <?php if ($model->isEnabled()) : ?>
-                  <a href="<?=Url::to(['supplier/disable', 'id' => $model->user_id]);?>" class="btn btn-sm green link-action tooltips action-link" data-container="body" data-original-title="Tạm ngưng nhà cung cấp"><i class="fa fa-power-off"></i></a>
-                  <?php else :?>
-                  <a href="<?=Url::to(['supplier/enable', 'id' => $model->user_id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Kích hoạt nhà cung cấp"><i class="fa fa-power-off"></i></a>
-                  <?php endif;?>
-                  <?php endif;?>
-
-                  <a href="<?=Url::to(['supplier/game', 'id' => $model->user_id]);?>" class="btn btn-sm blue tooltips" data-container="body" data-original-title="Danh sách game"><i class="fa fa-list"></i></a>
-
-
-                  <a href='<?=Url::to(['supplier/wallet', 'id' => $model->user_id]);?>' data-target="#supplier-wallet" class="btn btn-sm grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem chi tiết" data-toggle="modal" ><i class="fa fa-money"></i></a>
-                </td>
+                <th> STT </th>
+                <th> Tên </th>
+                <th> Tên đăng nhập </th>
+                <th> Email </th>
+                <th> Phone </th>
+                <th> Số dư khả dụng </th>
+                <th class="dt-center"> Tác vụ </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $key => $model) :?>
+                <tr>
+                  <td><?=$key + $pages->offset + 1;?></td>
+                  <td><?=$model->user->name;?></td>
+                  <td><?=$model->user->username;?></td>
+                  <td><?=$model->user->email;?></td>
+                  <td><?=$model->user->phone;?></td>
+                  <td><?=number_format($model->walletTotal());?></td>
+                  <td>
+                  
+                    <?php if (Yii::$app->user->can('accounting')) : ?>
+                    <a href="<?=Url::to(['supplier/remove', 'id' => $model->user_id]);?>" class="btn btn-sm red link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà cung cấp"><i class="fa fa-trash"></i></a>
+
+                    <?php if ($model->isEnabled()) : ?>
+                    <a href="<?=Url::to(['supplier/disable', 'id' => $model->user_id]);?>" class="btn btn-sm green link-action tooltips action-link" data-container="body" data-original-title="Tạm ngưng nhà cung cấp"><i class="fa fa-power-off"></i></a>
+                    <?php else :?>
+                    <a href="<?=Url::to(['supplier/enable', 'id' => $model->user_id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Kích hoạt nhà cung cấp"><i class="fa fa-power-off"></i></a>
+                    <?php endif;?>
+                    <?php endif;?>
+
+                    <a href="<?=Url::to(['supplier/game', 'id' => $model->user_id]);?>" class="btn btn-sm blue tooltips" data-container="body" data-original-title="Danh sách game"><i class="fa fa-list"></i></a>
+
+
+                    <a href='<?=Url::to(['supplier/wallet', 'id' => $model->user_id]);?>' data-target="#supplier-wallet" class="btn btn-sm grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem chi tiết" data-toggle="modal" ><i class="fa fa-money"></i></a>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
       </div>
     </div>

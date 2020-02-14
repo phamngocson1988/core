@@ -93,7 +93,7 @@
       {/if}
 
       <!-- Supplier -->
-      {if ($app->user->can('accounting') || $app->user->can('orderteam_manager'))}
+      {if ($app->user->can('accounting') || $app->user->can('orderteam'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -525,7 +525,13 @@
             </a>
           </li>
           {/if}
-          
+          {if $app->user->can('accounting') || $app->user->can('saler')}
+          <li class="nav-item  ">
+            <a href="{url route='/order-log/index'}" class="nav-link " code='order.log'>
+            <span class="title">Log đơn hàng</span>
+            </a>
+          </li>
+          {/if}
         </ul>
       </li>
       {/if}

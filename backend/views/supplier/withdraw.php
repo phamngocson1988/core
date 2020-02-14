@@ -34,75 +34,77 @@ use yii\helpers\Html;
         </div>
       </div>
       <div class="portlet-body">
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> Mã yêu cầu </th>
-              <th> Nhà cung cấp </th>
-              <th> Số tiền rút </th>
-              <th> Số dư đầu </th>
-              <th> Số dư cuối </th>
-              <th> Thông tin tài khoản </th>
-              <th> Ngày tạo </th>
-              <th> Hình ảnh </th>
-              <th> Trạng thái </th>
-              <th> Ghi chú </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $model) :?>
-              <?php
-              $supplier = $model->supplier;
-              if (!$supplier) continue;
-              $user = $supplier->user; 
-              ?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td><?=$model->getId();?></td>
-                <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
-                <td><?=number_format($model->amount);?></td>
-                <td><?=number_format($model->available_balance);?></td>
-                <td><?=number_format($supplier->walletTotal());?></td>
-                <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
-                <td><?=$model->created_at;?></td>
-                <td>
-                  <?php if ($model->isDone()) : ?>
-                  <?php if (!$model->evidence) : ?>
-                  <?php $form = ActiveForm::begin([
-                      'action' => ['supplier/evidence-withdraw', 'id' => $model->id],
-                      'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
-                  ]); ?>
-                  <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
-                  <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'upload-link normal-link']);?>
-                  <?php ActiveForm::end(); ?>
-                  <?php else : ?>
-                  <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">Xem</a> | 
-                  <a href="<?=Url::to(['supplier/remove-evidence-withdraw', 'id' => $model->id]);?>" class="normal-link remove-link">Xóa</a>
-                  <?php endif;?>
-                  <?php endif;?>
-                </td>
-                <td><?=$model->getStatusLabel();?></td>
-                <td><?=$model->note;?></td>
-                <td>
-                  <?php if ($model->isRequest()) :?>
-                  <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips action-link" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>
-
-                  <a href="<?=Url::to(['supplier/approve-withdraw', 'id' => $model->id]);?>" class="btn btn-sm yellow tooltips action-link" data-container="body" data-original-title="Chấp nhận yêu cầu"><i class="fa fa-times"></i> Chấp nhận yêu cầu </a>
-                  <?php endif;?>
-
-                  <?php if ($model->isApprove()) :?>
-                    <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" data-target="#cancel-withdraw" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Hủy yêu cầu" data-toggle="modal"><i class="fa fa-times"></i> Hủy yêu cầu </a>
-
-                    <a href="<?=Url::to(['supplier/done-withdraw', 'id' => $model->id]);?>" class="btn btn-sm blue tooltips action-link" data-container="body" data-original-title="Hoàn thành yêu cầu"><i class="fa fa-times"></i> Hoàn thành yêu cầu </a>
-                  <?php endif;?>
-                </td>
+                <th> Mã yêu cầu </th>
+                <th> Nhà cung cấp </th>
+                <th> Số tiền rút </th>
+                <th> Số dư đầu </th>
+                <th> Số dư cuối </th>
+                <th> Thông tin tài khoản </th>
+                <th> Ngày tạo </th>
+                <th> Hình ảnh </th>
+                <th> Trạng thái </th>
+                <th> Ghi chú </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $model) :?>
+                <?php
+                $supplier = $model->supplier;
+                if (!$supplier) continue;
+                $user = $supplier->user; 
+                ?>
+                <tr>
+                  <td><?=$model->getId();?></td>
+                  <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
+                  <td><?=number_format($model->amount);?></td>
+                  <td><?=number_format($model->available_balance);?></td>
+                  <td><?=number_format($supplier->walletTotal());?></td>
+                  <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
+                  <td><?=$model->created_at;?></td>
+                  <td>
+                    <?php if ($model->isDone()) : ?>
+                    <?php if (!$model->evidence) : ?>
+                    <?php $form = ActiveForm::begin([
+                        'action' => ['supplier/evidence-withdraw', 'id' => $model->id],
+                        'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
+                    ]); ?>
+                    <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
+                    <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'upload-link normal-link']);?>
+                    <?php ActiveForm::end(); ?>
+                    <?php else : ?>
+                    <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">Xem</a> | 
+                    <a href="<?=Url::to(['supplier/remove-evidence-withdraw', 'id' => $model->id]);?>" class="normal-link remove-link">Xóa</a>
+                    <?php endif;?>
+                    <?php endif;?>
+                  </td>
+                  <td><?=$model->getStatusLabel();?></td>
+                  <td><?=$model->note;?></td>
+                  <td>
+                    <?php if ($model->isRequest()) :?>
+                    <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips action-link" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+
+                    <a href="<?=Url::to(['supplier/approve-withdraw', 'id' => $model->id]);?>" class="btn btn-sm yellow tooltips action-link" data-container="body" data-original-title="Chấp nhận yêu cầu"><i class="fa fa-times"></i> Chấp nhận yêu cầu </a>
+                    <?php endif;?>
+
+                    <?php if ($model->isApprove()) :?>
+                      <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" data-target="#cancel-withdraw" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Hủy yêu cầu" data-toggle="modal"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+
+                      <a href="<?=Url::to(['supplier/done-withdraw', 'id' => $model->id]);?>" class="btn btn-sm blue tooltips action-link" data-container="body" data-original-title="Hoàn thành yêu cầu"><i class="fa fa-times"></i> Hoàn thành yêu cầu </a>
+                    <?php endif;?>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
