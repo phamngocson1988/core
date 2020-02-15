@@ -167,6 +167,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             <thead>
               <tr>
                 <th> Mã đơn hàng </th>
+                <th> Tên khách hàng </th>
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
                 <th> Cổng thanh toán </th>
@@ -190,6 +191,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td><?=$model->getCustomerName();?></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->created_at;?></td>
                   <td><?=$model->payment_method;?></td>

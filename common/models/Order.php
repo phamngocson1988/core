@@ -94,6 +94,12 @@ class Order extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'customer_id']);
     }
 
+    public function getCustomerName()
+    {
+        $customer = $this->customer;
+        return $customer ? $customer->name : '';
+    }
+
     public function getGame()
     {
         return $this->hasOne(Game::className(), ['id' => 'game_id']);

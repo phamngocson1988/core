@@ -173,6 +173,7 @@ use backend\components\datetimepicker\DateTimePicker;
             <thead>
               <tr>
                 <th> Mã đơn hàng </th>
+                <th> Tên khách hàng </th>
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
                 <th> Cổng thanh toán</th>
@@ -186,11 +187,12 @@ use backend\components\datetimepicker\DateTimePicker;
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle;"><?=$model->getCustomerName();?></td>
                   <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                   <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                   <td style="vertical-align: middle;"><?=$model->payment_method;?></td>

@@ -173,6 +173,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             <thead>
               <tr>
                 <th> Mã đơn hàng </th>
+                <th> Tên khách hàng </th>
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
                 <th> Cổng thanh toán </th>
@@ -189,7 +190,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="13"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="14"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php $labels = Order::getStatusList();?>
                 <?php foreach ($models as $no => $model) :?>
@@ -198,6 +199,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <?php $label = $labels[$model->status]; ?>
                 <tr>
                   <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td><?=$model->getCustomerName();?></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->created_at;?></td>
                   <td><?=$model->payment_method;?></td>

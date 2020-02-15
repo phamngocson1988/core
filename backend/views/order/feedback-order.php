@@ -92,6 +92,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             <thead>
               <tr>
                 <th> Mã đơn hàng </th>
+                <th> Tên khách hàng </th>
                 <th> Ngày tạo </th>
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
@@ -105,12 +106,13 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td><?=$model->getCustomerName();?></td>
                   <td><?=$model->created_at;?></td>
                   <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
                   <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
