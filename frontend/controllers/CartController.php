@@ -204,6 +204,8 @@ class CartController extends Controller
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
         $reseller = $user->reseller; 
+        $settings = Yii::$app->settings;
+        $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
         $identifier = $request->post('identifier');
         if (!$identifier) {
             Yii::$app->session->setFlash('error', 'You must choose a payment gateway');
@@ -261,6 +263,7 @@ class CartController extends Controller
             $order->attachBehavior('log', OrderLogBehavior::className());
             $order->payment_method = $identifier;
             $order->payment_type = $gateway->type;
+            $order->rate_usd = $rate;
             // $order->payment_id = $gateway->getReferenceId();
             $order->price = $cartItem->getPrice();
             $order->cogs_price = $cartItem->getCogs();

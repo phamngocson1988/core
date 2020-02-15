@@ -25,6 +25,7 @@ class m181217_033141_create_order_table extends Migration
             'payment_method' => $this->string(50),
             'payment_type' => $this->string(10),
             'payment_data' => $this->text(),
+            'rate_usd' => $this->float()->defaultValue(22000),
             'price' => $this->float()->defaultValue(0),
             'cogs_price' => $this->float(1)->defaultValue(0),
             'quantity' => $this->float(1)->notNull()->defaultValue(1),
