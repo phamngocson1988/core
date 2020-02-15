@@ -161,6 +161,8 @@ class TopupController extends Controller
         $this->view->params['main_menu_active'] = 'topup.index';
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
+        $settings = Yii::$app->settings;
+        $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
         $identifier = $request->post('identifier');
         if (!$identifier) throw new InvalidParamException('You must choose a payment gateway');
         $paymentCart = new PaymentCart([
@@ -198,6 +200,7 @@ class TopupController extends Controller
         $trn->user_ip = $request->userIP;
         $trn->payment_method = $identifier;
         $trn->payment_type = $gateway->type;
+        $trn->rate_usd = $rate;
         // $trn->payment_id = $gateway->getReferenceId();
         // Price
         $trn->price = $cart->getSubTotalPrice();
