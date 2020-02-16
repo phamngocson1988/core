@@ -86,7 +86,7 @@ class m181217_033141_create_order_table extends Migration
         ]);//16868688
 
         if ($this->db->driverName === 'mysql') {
-            $status = "ALTER TABLE {{%order}} MODIFY `status` ENUM('verifying','pending','processing','completed','deleted') NOT NULL DEFAULT 'verifying'";
+            $status = "ALTER TABLE {{%order}} MODIFY `status` ENUM('verifying','pending','processing','partial',completed','deleted') NOT NULL DEFAULT 'verifying'";
             $command = $this->db->createCommand($status);
             $command->execute();
 

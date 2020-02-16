@@ -7,10 +7,9 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
-use common\models\User;
-use common\components\helpers\FormatConverter;
-use backend\behaviors\OrderSupplierBehavior;
+use backend\models\User;
 use backend\models\Order;
+use common\components\helpers\FormatConverter;
 
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -142,6 +141,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             ])->dropDownList([
                 Order::STATUS_PENDING => 'Pending',
                 Order::STATUS_PROCESSING => 'Processing',
+                Order::STATUS_PARTIAL => 'Partial',
                 Order::STATUS_COMPLETED => 'Completed',
             ])->label('Trạng thái');?>
 
@@ -234,7 +234,6 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <tr><td colspan="14"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
-                <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td><?=$model->getCustomerName();?></td>

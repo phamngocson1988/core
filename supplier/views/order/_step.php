@@ -1,8 +1,8 @@
 <?php 
-use backend\models\Order;
-$steps = ['1' => Order::STATUS_VERIFYING, '2' => Order::STATUS_PENDING, '3' => Order::STATUS_PROCESSING, '4' => Order::STATUS_COMPLETED];
+use supplier\models\OrderSupplier;
+$steps = ['1' => OrderSupplier::STATUS_APPROVE, '2' => OrderSupplier::STATUS_PROCESSING, '3' => OrderSupplier::STATUS_COMPLETED];
 $step = array_search($order->status, $steps);
-$percent = $step * 25;
+$percent = $step * 33.3;
 ?>
 <div class="form-wizard">
     <div class="form-body">
@@ -11,29 +11,21 @@ $percent = $step * 25;
             <a href="javasciprt:;" class="step">
             <span class="number"> 1 </span>
             <span class="desc">
-            <i class="fa fa-check"></i> Verifying </span>
-            <p style="color: #CCC">Đơn hàng chưa thanh toán</p> 
+            <i class="fa fa-check"></i> Approve </span>
+            <p style="color: #CCC">Đơn hàng đã nhận xử lý</p> 
             </a>
         </li>
         <li class="<?php if ($step >= 2) echo 'active' ;?>">
             <a href="javasciprt:;" class="step">
             <span class="number"> 2 </span>
             <span class="desc">
-            <i class="fa fa-check"></i> Pending </span>
-            <p style="color: #CCC">Đơn hàng đã thanh toán</p> 
+            <i class="fa fa-check"></i> Processing </span>
+            <p style="color: #CCC">Đơn hàng đang thực hiện</p> 
             </a>
         </li>
         <li class="<?php if ($step >= 3) echo 'active' ;?>">
             <a href="javasciprt:;" class="step">
             <span class="number"> 3 </span>
-            <span class="desc">
-            <i class="fa fa-check"></i> Processing </span>
-            <p style="color: #CCC">Đơn hàng đã thực hiện xong</p> 
-            </a>
-        </li>
-        <li class="<?php if ($step >= 4) echo 'active' ;?>">
-            <a href="javasciprt:;" class="step">
-            <span class="number"> 4 </span>
             <span class="desc">
             <i class="fa fa-check"></i> Completed </span>
             <p style="color: #CCC">Đơn hàng đã hoàn tất</p> 

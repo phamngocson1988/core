@@ -30,6 +30,7 @@ $salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds, $adminTeamIds);
 $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
+
 $user = Yii::$app->user;
 $showSupplier = $user->can('orderteam') || $user->can('accounting');
 ?>
@@ -41,13 +42,13 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Đơn hàng đã hoàn thành</span>
+      <span>Đơn hàng hoàn thành một phần</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Đơn hàng đã hoàn thành</h1>
+<h1 class="page-title">Đơn hàng hoàn thành một phần</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -56,7 +57,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Đơn hàng đã hoàn thành</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng hoàn thành một phần</span>
         </div>
         <div class="actions">
         </div>
@@ -92,6 +93,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'saler_id']
             ])->dropDownList($salerTeams, ['prompt' => 'Chọn nhân viên sale'])->label('Nhân viên sale');?>
 
+            <?php $orderTeams['-1'] = 'Chưa có người quản lý';?>
             <?=$form->field($search, 'orderteam_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'orderteam_id']
@@ -122,9 +124,9 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
             <?php endif;?>
 
-            <?= $form->field($search, 'completed_from', [
+            <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'completed_from', 'id' => 'completed_from']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -133,11 +135,11 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày hoàn thành từ');?>
+            ])->label('Ngày tạo từ');?>
 
-            <?=$form->field($search, 'completed_to', [
+            <?=$form->field($search, 'end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'completed_to', 'id' => 'completed_to']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -147,7 +149,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày hoàn thành đến');?>
+            ])->label('Ngày tạo đến');?>
 
             <?=$form->field($search, 'payment_method', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -170,37 +172,46 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
                 <th> Cổng thanh toán </th>
-                <th> Số lượng nạp </th>
-                <th> Số gói </th>
+                <th> Số lượng cần nạp </th>
+                <th> Số lượng đã nạp </th>
                 <th class="hidden-xs"> Thời gian nhận đơn </th>
-                <th class="hidden-xs"> Thời gian hoàn thành </th>
                 <th> Thời gian chờ </th>
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="13"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="14"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
+                <?php $supplier = $model->supplier;?>
+                <?php $label = $model->getStatusLabel(null); ?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td><?=$model->getCustomerName();?></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->created_at;?></td>
                   <td><?=$model->payment_method;?></td>
-                  <td><?=$model->total_unit;?></td>
                   <td><?=$model->quantity;?></td>
+                  <td><?=$model->doing_unit;?></td>
                   <td class="hidden-xs"><?=$model->process_start_time;?></td>
-                  <td class="hidden-xs"><?=$model->completed_at;?></td>
                   <td><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
                   <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
                   <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                   <td>
-                    <?=$model->getStatusLabel();?>
+                    <?php if ($supplier) :?>
+                      <?php if ($supplier->isRequest()) : ?>
+                    <span class="label label-warning"><?=$label;?></span>
+                      <?php else : ?>
+                    <span class="label label-success"><?=$label;?></span>
+                    <?php endif;?>
+                    <?php else :?>
+                      <?=$model->getStatusLabel();?>
+                    <?php endif;?>
                     <?php if ($model->hasCancelRequest()) :?>
                     <span class="label label-danger">Có yêu cầu hủy</span>
                     <?php endif;?>
@@ -208,8 +219,28 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                     <span class="label label-warning">Xử lý chậm</span>
                     <?php endif;?>
                   </td>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
+                    <?php
+                    if ($supplier) {
+                      echo $supplier->user->name;
+                    } 
+                    ?>
+                  </td>
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+
+                    <!-- Assign to supplier -->
+                    <?php if (Yii::$app->user->can('orderteam')) :?>
+                    <?php if (!$supplier) :?>
+                    <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
+                    <?php endif;?>
+                    <?php endif;?>
+
+
+                    <!-- Remove supplier -->
+                    <?php if ($supplier && $supplier->canBeTaken()) : ?>
+                    <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa remove-supplier tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -222,3 +253,48 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<div class="modal fade" id="assign-supplier" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<?php
+$script = <<< JS
+$(".remove-supplier").ajax_action({
+  method: 'POST',
+  confirm: true,
+  confirm_text: 'Đơn hàng này đang ở trong trạng thái processing, bạn cần liên hệ với nhà cung cấp trước khi hủy đơn',
+  callback: function(eletement, data) {
+    location.reload();
+  },
+  error: function(element, error) {
+    console.log(error);
+    alert(error);
+  }
+});
+// supplier
+$(document).on('submit', 'body #assign-supplier', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+       alert(result.error);
+      else 
+        location.reload();
+    },
+  });
+  return false;
+});
+JS;
+$this->registerJs($script);
+?>

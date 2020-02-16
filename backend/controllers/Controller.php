@@ -37,6 +37,11 @@ class Controller extends BaseController
 	        $processingTotal = $processingCommand->count();
             $this->view->params['processing_order'] = $processingTotal ? $processingTotal : '';
 
+            // Show number of new processing orders
+			$partialCommand = Order::find()->where(['status' => Order::STATUS_PARTIAL]);
+	        $partialTotal = $partialCommand->count();
+            $this->view->params['partial_order'] = $partialTotal ? $partialTotal : '';
+
             // Show number of new affiliate request
 	        $command = UserAffiliate::find()->where(['status' => UserAffiliate::STATUS_DISABLE]);
 	        $affiliateTotal = $command->count();

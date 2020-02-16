@@ -42,7 +42,7 @@ use supplier\models\OrderFile;
         </div>
       </div>
       <div class="portlet-body">
-        <?php echo $this->render('@supplier/views/order/_step.php', ['order' => $order]);?>
+        <?php echo $this->render('@supplier/views/order/_step.php', ['order' => $model]);?>
         <div class="tabbable-bordered">
           <ul class="nav nav-tabs" role="tablist">
             <li class="active">
@@ -66,7 +66,7 @@ use supplier\models\OrderFile;
                       </div>
                     </div>
                     <div class="portlet-body">
-                      <?php echo $this->render('@supplier/views/order/_unit.php', ['order' => $order]);?>
+                      <?php echo $this->render('@supplier/views/order/_unit.php', ['order' => $model]);?>
                     </div>
                   </div>
                 </div>
@@ -127,79 +127,26 @@ use supplier\models\OrderFile;
                           </div>
                         </div>
                       </div>
-                      <?php if ($order->isPendingOrder()) : ?>
+                      <?php if ($model->isApprove()) : ?>
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
                             <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_processing"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Processing</a>
                           </div>
-                          <div class="modal fade" id="go_processing" tabindex="-1" role="basic" aria-hidden="true">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                  <h4 class="modal-title">Chuyển tới trạng thái Processing</h4>
-                                </div>
-                                <?= Html::beginForm(['order/move-to-processing', 'id' => $order->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-processing-form']) ?>
-                                <div class="modal-body"> 
-                                  <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn green">Xác nhận</button>
-                                </div>
-                                <?= Html::endForm();?>
-                              </div>
-                            </div>
-                          </div>
-<?php
-$moveProcessingJs = <<< JS
-var moveProcessingForm = new AjaxFormSubmit({element: '#move-processing-form'});
-moveProcessingForm.success = function (data, form) {
-  location.reload();
-};
-JS;
-$this->registerJs($moveProcessingJs)
-?>
+                          
                         </div>
                       </div>
                       <?php endif;?>
 
-                      <?php if ($order->isProcessingOrder()) : ?>
+                      <?php if ($model->isProcessing()) : ?>
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_processing"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
+                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_completed"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
                           </div>
-                          <div class="modal fade" id="go_processing" tabindex="-1" role="basic" aria-hidden="true">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                  <h4 class="modal-title">Chuyển tới trạng thái Completed</h4>
-                                </div>
-                                <?= Html::beginForm(['order/move-to-completed', 'id' => $order->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-completed-form']) ?>
-                                <div class="modal-body"> 
-                                  <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed"</p>
-                                  <p id="doing_unit_notice" style="display: none">Số đơn vị game của bạn vẫn chưa được cập nhật đủ, nếu chuyển qua trạng thái "Completed", toàn bộ số đơn vị game đang thực hiện sẽ được cập nhật đúng bằng số đơn vị game cần nhập của đơn hàng.</p>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn green">Xác nhận</button>
-                                </div>
-                                <?= Html::endForm();?>
-                              </div>
-                            </div>
+                          <div class="col-md-offset-3 col-md-9">
+                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_partial"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Partial (Hoàn thành một phần)</a>
                           </div>
-<?php
-$moveCompletedJs = <<< JS
-var moveCompletedForm = new AjaxFormSubmit({element: '#move-completed-form'});
-moveCompletedForm.success = function (data, form) {
-  location.reload();
-};
-JS;
-$this->registerJs($moveCompletedJs)
-?>
                         </div>
                       </div>
                       <?php endif;?>
@@ -327,61 +274,7 @@ $this->registerJs($imageJs);
                         <span class="caption-subject bold font-green uppercase"> Phản hồi từ khách hàng </span>
                       </div>
                       <div class="actions">
-                        <a href="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
-
-                        <div class="modal fade modal-scroll" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                <h4 class="modal-title">Chọn một câu trả lời để phản hồi đến khách hàng</h4>
-                              </div>
-                              <div class="modal-body" style="height: 500px; position: relative; overflow: auto; display: block;"> 
-                                <table class="table">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col" width="5%">#</th>
-                                      <th scope="col" width="90%">Nội dung</th>
-                                      <th scope="col" width="5%">Chọn</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <?php foreach ($template_list as $template_item) :?>
-                                    <tr>
-                                      <td><?=$template_item->id;?></td>
-                                      <td><?=$template_item->content;?></td>
-                                      <td>
-                                        <?= Html::beginForm(['order/complain', 'id' => $order->id], 'POST', ['class' => 'complain-form']); ?>
-                                          <?= Html::hiddenInput('content', $template_item->content); ?>
-                                          <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi</button>
-                                        <?= Html::endForm(); ?>
-                                      </td>
-                                    </tr>
-                                    <?php endforeach;?>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                            <!-- /.modal-content -->
-                          </div>
-                          <!-- /.modal-dialog -->
-                        </div>
-<?php
-$complainJs = <<< JS
-var complainForm = new AjaxFormSubmit({element: '.complain-form'});
-complainForm.success = function (data, form) {
-  location.reload();
-};
-complainForm.error = function (errors) {
-  alert(errors.error);
-  return false;
-}
-JS;
-$this->registerJs($complainJs);
-?>
+                        <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
                       </div>
                     </div>
                     <div class="portlet-body">
@@ -424,3 +317,142 @@ $this->registerJs($complainJs);
     </div>
   </div>
 </div>
+
+<!-- Complain template -->
+<div class="modal fade modal-scroll" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<?php
+$complainJs = <<< JS
+$(document).on('submit', 'body .complain-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+       alert(result.errors);
+      else 
+        location.reload();
+    },
+  });
+  return false;
+});
+JS;
+$this->registerJs($complainJs);
+?>
+
+<!-- End complain template -->
+
+<!-- Go processing -->
+<div class="modal fade" id="go_processing" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Chuyển tới trạng thái Processing</h4>
+      </div>
+      <?= Html::beginForm(['order/move-to-processing', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-processing-form']) ?>
+      <div class="modal-body"> 
+        <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn green">Xác nhận</button>
+      </div>
+      <?= Html::endForm();?>
+    </div>
+  </div>
+</div>
+<!-- End Go processing -->
+<?php
+$moveProcessingJs = <<< JS
+var moveProcessingForm = new AjaxFormSubmit({element: '#move-processing-form'});
+moveProcessingForm.success = function (data, form) {
+  location.reload();
+};
+moveProcessingForm.error = function (errors) {
+  alert(errors);
+  return false;
+}
+JS;
+$this->registerJs($moveProcessingJs)
+?>
+
+<!-- End Go completed -->
+<div class="modal fade" id="go_completed" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Chuyển tới trạng thái Completed</h4>
+      </div>
+      <?= Html::beginForm(['order/move-to-completed', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-completed-form']) ?>
+      <div class="modal-body"> 
+        <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed"</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn green">Xác nhận</button>
+      </div>
+      <?= Html::endForm();?>
+    </div>
+  </div>
+</div>
+<?php
+$moveCompletedJs = <<< JS
+var moveCompletedForm = new AjaxFormSubmit({element: '#move-completed-form'});
+moveCompletedForm.success = function (data, form) {
+  location.reload();
+};
+moveCompletedForm.error = function (errors) {
+  alert(errors);
+  return false;
+};
+JS;
+$this->registerJs($moveCompletedJs)
+?>
+<!-- End Go completed -->
+
+<!-- End Go partial -->
+<div class="modal fade" id="go_partial" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Xác nhận hoàn thành một phần đơn hàng</h4>
+      </div>
+      <?= Html::beginForm(['order/move-to-partial', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-partial-form']) ?>
+      <div class="modal-body"> 
+        <p>Bạn có chắc chắn muốn hoàn tất một phần đơn hàng</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn green">Xác nhận</button>
+      </div>
+      <?= Html::endForm();?>
+    </div>
+  </div>
+</div>
+<?php
+$moveCompletedJs = <<< JS
+var moveCompletedForm = new AjaxFormSubmit({element: '#move-partial-form'});
+moveCompletedForm.success = function (data, form) {
+  location.reload();
+};
+moveCompletedForm.error = function (errors) {
+  alert(errors);
+  return false;
+};
+JS;
+$this->registerJs($moveCompletedJs)
+?>
+<!-- End Go partial -->

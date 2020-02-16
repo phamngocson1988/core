@@ -10,7 +10,6 @@ use backend\components\datetimepicker\DateTimePicker;
 use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
-use backend\behaviors\OrderSupplierBehavior;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -200,7 +199,6 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
               <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
-              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
               <?php $supplier = $model->supplier;?>
               <tr>
                 <td style="vertical-align: middle;"><?=$no + $pages->offset + 1;?></td>

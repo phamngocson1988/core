@@ -9,9 +9,6 @@ use backend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
-use backend\behaviors\GameSupplierBehavior;
-use backend\behaviors\OrderSupplierBehavior;
-use backend\models\OrderSupplier;
 use backend\models\Order;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -192,11 +189,9 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <?php if (!$models) :?>
                 <tr><td colspan="14"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
-                <?php $labels = Order::getStatusList();?>
                 <?php foreach ($models as $no => $model) :?>
-                <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
                 <?php $supplier = $model->supplier;?>
-                <?php $label = $labels[$model->status]; ?>
+                <?php $label = $model->getStatusLabel(null); ?>
                 <tr>
                   <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td><?=$model->getCustomerName();?></td>
@@ -219,9 +214,9 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                     <?php endif;?>
 
                     <?php if ($supplier) :?>
-                      <?php if ($supplier->status == OrderSupplier::STATUS_REQUEST) : ?>
+                      <?php if ($supplier->isRequest()) : ?>
                     <span class="label label-warning"><?=$label;?></span>
-                      <?php elseif ($supplier->status == OrderSupplier::STATUS_APPROVE) : ?>
+                      <?php else : ?>
                     <span class="label label-success"><?=$label;?></span>
                     <?php endif;?>
                     <?php else :?>
@@ -269,11 +264,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                     </div>
 
                     <!-- Assign to supplier -->
-                    <?php
-                    $game = $model->game;
-                    $game->attachBehavior('supplier', new GameSupplierBehavior); 
-                    ?>
-                    <?php if (!$model->supplier_id) :?>
+                    <?php if (!$supplier) :?>
                     <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
                     <?php endif;?>
                     <?php endif;?>
@@ -306,6 +297,8 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
 <?php
 $script = <<< JS
 $(".ajax-link").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có muốn thực hiện tác vụ này?',
   method: 'POST',
   callback: function(eletement, data) {
     location.reload();

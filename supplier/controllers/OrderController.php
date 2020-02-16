@@ -11,6 +11,7 @@ use supplier\models\OrderComplainTemplate;
 use supplier\models\OrderSupplier;
 use supplier\models\Supplier;
 use supplier\forms\FetchOrderForm;
+use supplier\forms\FetchOrderForm1;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use supplier\behaviors\OrderLogBehavior;
@@ -18,8 +19,10 @@ use supplier\behaviors\OrderMailBehavior;
 use supplier\behaviors\OrderSupplierBehavior;
 use supplier\forms\TakeOrderSupplierForm;
 use supplier\forms\RejectOrderSupplierForm;
-use supplier\forms\StopOrderSupplierForm;
-
+use supplier\forms\UpdateOrderToProcessingForm;
+use supplier\forms\AddOrderQuantityForm;
+use supplier\forms\UpdateOrderToCompletedForm;
+use supplier\forms\UpdateOrderToPartialForm;
 class OrderController extends Controller
 {
     public function behaviors()
@@ -77,19 +80,16 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.pending';
         $request = Yii::$app->request;
         $data = [
-            'q' => $request->get('q'),
-            'customer_phone' => $request->get('customer_phone'),
-            'customer_id' => $request->get('customer_id'),
+            'order_id' => $request->get('order_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'request_start_date' => $request->get('request_start_date'),
+            'request_end_date' => $request->get('request_end_date'),
             'status' => $request->get('status', [
-                Order::STATUS_PENDING,
+                OrderSupplier::STATUS_APPROVE,
             ]),
             'supplier_id' => Yii::$app->user->id,
-            'supplier_status' => OrderSupplier::STATUS_APPROVE,
         ];
-        $form = new FetchOrderForm($data);
+        $form = new FetchOrderForm1($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -110,19 +110,16 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.processing';
         $request = Yii::$app->request;
         $data = [
-            'q' => $request->get('q'),
-            'customer_phone' => $request->get('customer_phone'),
-            'customer_id' => $request->get('customer_id'),
+            'order_id' => $request->get('order_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'request_start_date' => $request->get('request_start_date'),
+            'request_end_date' => $request->get('request_end_date'),
             'status' => $request->get('status', [
-                Order::STATUS_PROCESSING,
+                OrderSupplier::STATUS_PROCESSING,
             ]),
             'supplier_id' => Yii::$app->user->id,
-            'supplier_status' => OrderSupplier::STATUS_APPROVE,
         ];
-        $form = new FetchOrderForm($data);
+        $form = new FetchOrderForm1($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -143,19 +140,16 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.completed';
         $request = Yii::$app->request;
         $data = [
-            'q' => $request->get('q'),
-            'customer_phone' => $request->get('customer_phone'),
-            'customer_id' => $request->get('customer_id'),
+            'order_id' => $request->get('order_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'request_start_date' => $request->get('request_start_date'),
+            'request_end_date' => $request->get('request_end_date'),
             'status' => $request->get('status', [
-                Order::STATUS_COMPLETED,
+                OrderSupplier::STATUS_COMPLETED,
             ]),
             'supplier_id' => Yii::$app->user->id,
-            'supplier_status' => OrderSupplier::STATUS_APPROVE,
         ];
-        $form = new FetchOrderForm($data);
+        $form = new FetchOrderForm1($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -164,6 +158,36 @@ class OrderController extends Controller
                             ->all();
 
         return $this->render('completed', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionPartial()
+    {
+        $this->view->params['main_menu_active'] = 'order.partial';
+        $request = Yii::$app->request;
+        $data = [
+            'order_id' => $request->get('order_id'),
+            'game_id' => $request->get('game_id'),
+            'request_start_date' => $request->get('request_start_date'),
+            'request_end_date' => $request->get('request_end_date'),
+            'status' => $request->get('status', [
+                OrderSupplier::STATUS_PARTIAL,
+            ]),
+            'supplier_id' => Yii::$app->user->id,
+        ];
+        $form = new FetchOrderForm1($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('partial', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
@@ -275,21 +299,16 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.waiting';
         $request = Yii::$app->request;
         $data = [
-            'q' => $request->get('q'),
-            'customer_phone' => $request->get('customer_phone'),
-            'customer_id' => $request->get('customer_id'),
+            'order_id' => $request->get('order_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'request_start_date' => $request->get('request_start_date'),
+            'request_end_date' => $request->get('request_end_date'),
             'status' => $request->get('status', [
-                Order::STATUS_PENDING,
-                Order::STATUS_PROCESSING,
-                Order::STATUS_COMPLETED,
+                OrderSupplier::STATUS_REQUEST,
             ]),
             'supplier_id' => Yii::$app->user->id,
-            'supplier_status' => OrderSupplier::STATUS_REQUEST
         ];
-        $form = new FetchOrderForm($data);
+        $form = new FetchOrderForm1($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -308,7 +327,7 @@ class OrderController extends Controller
     public function actionAccept($id)
     {
         $form = new TakeOrderSupplierForm([
-            'order_id' => $id,
+            'id' => $id,
             'supplier_id' => Yii::$app->user->id
 
         ]);
@@ -317,13 +336,13 @@ class OrderController extends Controller
         }
         $errors = $form->getErrorSummary(false);
         $error = reset($errors);
-        return $this->asJson(['status' => false, 'error' => $error]);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
     public function actionReject($id)
     {
         $form = new RejectOrderSupplierForm([
-            'order_id' => $id,
+            'id' => $id,
             'supplier_id' => Yii::$app->user->id
 
         ]);
@@ -332,39 +351,22 @@ class OrderController extends Controller
         }
         $errors = $form->getErrorSummary(false);
         $error = reset($errors);
-        return $this->asJson(['status' => false, 'error' => $error]);
-    }
-
-    public function actionStop($id)
-    {
-        $form = new StopOrderSupplierForm([
-            'order_id' => $id,
-            'supplier_id' => Yii::$app->user->id
-
-        ]);
-        if ($form->validate()) {
-            return $this->asJson(['status' => $form->stop()]);
-        }
-        $errors = $form->getErrorSummary(false);
-        $error = reset($errors);
-        return $this->asJson(['status' => false, 'error' => $error]);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
     public function actionEdit($id)
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $order = Order::findOne($id);
-        if (!$order) throw new NotFoundHttpException('Not found');
-        
-        $supplier = $order->supplier;
-        if (!$supplier || $supplier->supplier_id != Yii::$app->user->id) throw new NotFoundHttpException('Not found');
+        $orderSupplier = OrderSupplier::findOne($id);
+        if (!$orderSupplier || $orderSupplier->supplier_id != Yii::$app->user->id) throw new NotFoundHttpException('Not found');
 
-        $templateList = OrderComplainTemplate::find()->all();
+        $order = $orderSupplier->order;
+        if (!$order) throw new NotFoundHttpException('Not found');
+
         return $this->render('edit', [
             'order' => $order,
-            'stopModel' => new \backend\forms\StopOrderForm(),
-            'template_list' => $templateList
+            'model' => $orderSupplier
         ]);
     }
 
@@ -383,96 +385,64 @@ class OrderController extends Controller
 
     public function actionMoveToProcessing($id)
     {
-        $model = Order::findOne($id);
-        if (!$model) return $this->asJson(['status' => false, 'error' => 'Đơn hàng không tồn tại']);
-        if (!$model->isPendingOrder()) return $this->asJson(['status' => false, 'error' => 'Không thể chuyển trạng thái']);
-        $request = Yii::$app->request;
-        $model->setScenario(Order::SCENARIO_GO_PROCESSING);
-        $model->status = Order::STATUS_PROCESSING;
-        $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
-            $order = $event->sender;
-            $order->touch('process_start_time');
-            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->attachBehavior('mail', OrderMailBehavior::className());
-            $order->log("Moved to processing");
-            $order->send(
-                'admin_send_processing_order', 
-                sprintf("[KingGems] - Processing Order - Order #%s", $order->id), [
-                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            ]);
+        $form = new UpdateOrderToProcessingForm([
+            'id' => $id,
+            'supplier_id' => Yii::$app->user->id
 
-        });
+        ]);
+        if ($form->move()) {
+            return $this->asJson(['status' => true]);
+        }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'errors' => $error]);
 
-        return $this->renderJson($model->save());
+    }
 
+    public function actionMoveToPartial($id)
+    {
+        $form = new UpdateOrderToPartialForm([
+            'id' => $id,
+            'supplier_id' => Yii::$app->user->id
+
+        ]);
+        if ($form->move()) {
+            return $this->asJson(['status' => true]);
+        }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
     public function actionMoveToCompleted($id)
     {
-        $model = Order::findOne($id);
-        if (!$model) return $this->asJson(['status' => false, 'error' => 'Đơn hàng không tồn tại']);
-        if (!$model->isProcessingOrder()) return $this->asJson(['status' => false, 'error' => 'Không thể chuyển trạng thái']);
-        $request = Yii::$app->request;
-        $model->setScenario(Order::SCENARIO_GO_COMPLETED);
-        $model->status = Order::STATUS_COMPLETED;
-        $model->process_end_time = date('Y-m-d H:i:s');
-        $model->completed_at = date('Y-m-d H:i:s');
-        $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
-        $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
-            $order = $event->sender;
-            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->attachBehavior('mail', OrderMailBehavior::className());
-            $order->log("Moved to completed");
-            $order->send(
-                'admin_send_complete_order', 
-                sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
-                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            ]);
-        });
+        $form = new UpdateOrderToCompletedForm([
+            'id' => $id,
+            'supplier_id' => Yii::$app->user->id
 
-        if ($model->save()) {
-            $model->attachBehavior('supplier', OrderSupplierBehavior::className());
-            $orderSupplier = $model->supplier;
-            if ($orderSupplier) {
-                $unit = $model->quantity - $model->doing_unit;
-                $orderSupplier->quantity = (float)$orderSupplier->quantity + $unit;
-                $orderSupplier->total_price = $orderSupplier->price * $orderSupplier->quantity;
-                $orderSupplier->save();
-
-                $supplier = Supplier::findOne($orderSupplier->supplier_id);
-                $topupAmount = $orderSupplier->total_price;
-                $supplier->topup($topupAmount, 'order', $id, sprintf("Thanh toán cho đơn hàng #%s", $orderSupplier->order_id));
-            }
+        ]);
+        if ($form->move()) {
+            return $this->asJson(['status' => true]);
         }
-
-        return $this->renderJson(true);
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
-    public function actionAddUnit($id)
+    public function actionAddQuantity($id)
     {
         $request = Yii::$app->request;
-        $model = Order::findOne($id);
-        if ($model) {
-            $unit = $request->post('doing_unit', 0);
-            $model->doing_unit += $unit;
-            if ($model->doing_unit > $model->quantity) {
-                return $this->renderJson(false, [], 'Bạn không thể nạp quá số gói game của đơn hàng này');
-            } 
-            if ($model->save(null, ['doing_unit'])) {
-                $model->attachBehavior('supplier', OrderSupplierBehavior::className());
-                $supplier = $model->supplier;
-                if ($supplier) {
-                  $supplier->quantity = (float)$supplier->quantity + $unit;
-                  $supplier->total_price = $supplier->price * $supplier->quantity;
-                  $supplier->save();
-                }
-                return $this->renderJson(true, ['total' => $model->doing_unit]);
-            }
-        } else {
-            return $this->renderJson(false, [], 'Error');
+        $form = new AddOrderQuantityForm([
+            'id' => $id,
+            'supplier_id' => Yii::$app->user->id,
+            'doing' => $request->post('doing', 0)
+        ]);
+        if ($form->add()) {
+            return $this->asJson(['status' => true, 'data' => ['total' => $form->getFinalDoing()]]);
         }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
     public function actionAddEvidenceImage($id)
@@ -519,5 +489,12 @@ class OrderController extends Controller
         return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);
     }
 
-
+    public function actionTemplate($id) 
+    {
+        $templateList = OrderComplainTemplate::find()->all();
+        return $this->renderPartial('_template', [
+            'template_list' => $templateList,
+            'id' => $id
+        ]);
+    }
 }

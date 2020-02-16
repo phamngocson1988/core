@@ -6,7 +6,6 @@ use Yii;
 use yii\base\Model;
 use backend\models\Order;
 use backend\models\OrderSupplier;
-use backend\behaviors\OrderSupplierBehavior;
 
 class RetakeOrderSupplierForm extends Model
 {
@@ -35,7 +34,6 @@ class RetakeOrderSupplierForm extends Model
         if (!$this->_supplier) {
             $order = $this->getOrder();
             if ($order) {
-                $order->attachBehavior('supplier', OrderSupplierBehavior::className());
                 $this->_supplier = $order->supplier;
             }
         }

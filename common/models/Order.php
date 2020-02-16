@@ -11,7 +11,9 @@ use common\models\OrderComments;
 use common\models\OrderComplains;
 use yii\behaviors\TimestampBehavior;
 use common\behaviors\OrderComplainBehavior;
-
+use common\behaviors\OrderSupplierBehavior;
+use common\behaviors\OrderMailBehavior;
+use common\behaviors\OrderLogBehavior;
 /**
  * Order model
  */
@@ -20,6 +22,7 @@ class Order extends ActiveRecord
     const STATUS_VERIFYING = 'verifying';
     const STATUS_PENDING = 'pending';
     const STATUS_PROCESSING = 'processing';
+    const STATUS_PARTIAL = 'partial';
     const STATUS_COMPLETED = 'completed';
     const STATUS_CONFIRMED = 'confirmed';
     const STATUS_DELETED = 'deleted';
@@ -49,9 +52,10 @@ class Order extends ActiveRecord
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
             ],
-            [
-                'class' => OrderComplainBehavior::className()
-            ],
+            ['class' => OrderComplainBehavior::className()],
+            ['class' => OrderLogBehavior::className()],
+            ['class' => OrderSupplierBehavior::className()],
+            ['class' => OrderMailBehavior::className()],
         ];
     }
 
@@ -61,6 +65,7 @@ class Order extends ActiveRecord
             self::STATUS_VERIFYING => 'Verifying',
             self::STATUS_PENDING => 'Pending',
             self::STATUS_PROCESSING => 'Processing',
+            self::STATUS_PARTIAL => 'Partial',
             self::STATUS_COMPLETED => 'Completed',
             self::STATUS_CONFIRMED => 'Confirmed',
             self::STATUS_DELETED => 'Deleted',
@@ -154,6 +159,11 @@ class Order extends ActiveRecord
     public function isProcessingOrder()
     {
         return $this->status === self::STATUS_PROCESSING;
+    }
+
+    public function isPartialOrder()
+    {
+        return $this->status === self::STATUS_PARTIAL;
     }
 
     public function isCompletedOrder()

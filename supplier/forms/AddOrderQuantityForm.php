@@ -5,25 +5,38 @@ namespace supplier\forms;
 use Yii;
 use yii\base\Model;
 use supplier\models\Order;
-use supplier\models\OrderSupplier;
 use supplier\models\Supplier;
+use supplier\models\OrderSupplier;
 use supplier\behaviors\OrderSupplierBehavior;
 
-class TakeOrderSupplierForm extends Model
+class AddOrderQuantityForm extends Model
 {
     public $id;
     public $supplier_id;
+    public $doing;
 
+    protected $_order_supplier;
     protected $_order;
     protected $_supplier;
-    protected $_order_supplier;
+    protected $_final_doing;
+
     public function rules()
     {
         return [
-            [['id', 'supplier_id'], 'required'],
+            [['id', 'supplier_id', 'doing'], 'required'],
             ['id', 'validateRequest'],
             ['supplier_id', 'validateSupplier'],
+            ['doing', 'number'],
+            ['doing', 'validateQuantity']
         ];
+    }
+
+    public function getOrderSupplier()
+    {
+        if (!$this->_order_supplier) {
+            $this->_order_supplier = OrderSupplier::findOne($this->id);
+        }
+        return $this->_order_supplier;
     }
 
     public function getOrder()
@@ -41,12 +54,21 @@ class TakeOrderSupplierForm extends Model
         return $this->_supplier;
     }
 
+    public function getFinalDoing() 
+    {
+        if (!$this->_final_doing) {
+            $supplier = $this->getOrderSupplier();
+            $this->_final_doing = $supplier->doing + $this->doing;
+        }
+        return $this->_final_doing;
+    }
+
     public function validateRequest($attribute, $params = []) 
     {
         $supplier = $this->getOrderSupplier(); // OrderSupplier
         if (!$supplier) return $this->addError($attribute, 'Yêu cầu không tồn tại');
-        if (!$supplier->isRequest()) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
-        if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
+        if (!$supplier->isProcessing()) return $this->addError($attribute, 'Bạn không thể nạp thêm số lượng cho đơn hàng này');
+        if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Bạn không có quyền xử lý đơn hàng này');
 
         $order = $this->getOrder();
         if (!$order) return $this->addError($attribute, 'Đơn hàng không tồn tại');
@@ -68,36 +90,29 @@ class TakeOrderSupplierForm extends Model
 
     }
 
-    public function getOrderSupplier()
+    public function validateQuantity($attribute, $params = [])
     {
-        if (!$this->_order_supplier) {
-            $this->_order_supplier = OrderSupplier::findOne($this->id);
+        $supplier = $this->getOrderSupplier();
+        if ($this->getFinalDoing() > $supplier->quantity) {
+            $this->addError($attribute, 'Số lượng nạp vượt quá yêu cầu');
         }
-        return $this->_order_supplier;
     }
 
-    public function approve()
+    public function add()
     {
         if (!$this->validate()) return false;
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
-            $orderSupplier = $this->getOrderSupplier();
-            $orderSupplier->status = OrderSupplier::STATUS_APPROVE;
-            $orderSupplier->approved_at = date('Y-m-d H:i:s');
-            $result = $orderSupplier->save();
-
-            $order = $this->getOrder();
-            $supplier = $this->getSupplier();
-            $order->log(sprintf("Nhà cung cấp %s chấp nhận đơn hàng", $supplier->user->name, $this->supplier_id));
+            $supplier = $this->getOrderSupplier();
+            $supplier->doing = $this->getFinalDoing();
+            $supplier->save();
 
             $transaction->commit();
-            return $result;
+            return true;
         } catch(Exception $e) {
             $transaction->rollback();
-            $this->addError('id', $e->getMessage());
             return false;
         }
     }
-
 }

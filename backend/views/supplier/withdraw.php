@@ -66,8 +66,13 @@ use yii\helpers\Html;
                   <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
                   <td><?=number_format($model->amount);?></td>
                   <td><?=number_format($model->available_balance);?></td>
-                  <td><?=number_format($supplier->walletTotal());?></td>
-                  <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
+                  <td>
+                    <?php if ($model->isDone()) : ?>
+                    <?=number_format($model->available_balance - $model->amount);?></td>
+                    <?php endif;?>
+                  <td>
+                    <?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?>
+                  </td>
                   <td><?=$model->created_at;?></td>
                   <td>
                     <?php if ($model->isDone()) : ?>

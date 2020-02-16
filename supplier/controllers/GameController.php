@@ -151,4 +151,29 @@ class GameController extends Controller
             return $this->asJson(['status' => false, 'errors' => $e->getMessage()]);
         }
     }
+
+    public function actionSuggestion()
+    {
+        $request = Yii::$app->request;
+
+        if( $request->isAjax) {
+            $keyword = $request->get('q');
+            $items = [];
+            if ($keyword) {
+                $command = Game::find();
+                $command->where(['<>', 'status', Game::STATUS_DELETE]);
+                if ($keyword) {
+                    $command->andWhere(['like', 'title', $keyword]);
+                }
+                $games = $command->offset(0)->limit(20)->all();
+                foreach ($games as $game) {
+                    $item = [];
+                    $item['id'] = $game->id;
+                    $item['text'] = $game->title;
+                    $items[] = $item;
+                }
+            }
+            return $this->renderJson(true, ['items' => $items]);
+        }
+    }
 }

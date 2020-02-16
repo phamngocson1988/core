@@ -142,10 +142,14 @@ class SupplierController extends Controller
     {
         $this->view->params['main_menu_active'] = 'supplier.withdraw';
         $request = Yii::$app->request;
-        $command = SupplierWithdrawRequest::find([
-            'supplier_id' => $request->get('supplier_id', ''),
-            'status' => $request->get('status', '')
-        ]);
+        $command = SupplierWithdrawRequest::find()
+        // ->where(['supplier_id' => $request->get('supplier_id', '')])
+        ->andWhere(["IN", 'status', [
+            SupplierWithdrawRequest::STATUS_REQUEST,
+            SupplierWithdrawRequest::STATUS_APPROVE,
+            SupplierWithdrawRequest::STATUS_DONE    
+        ]])
+        ;
 
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)

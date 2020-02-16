@@ -10,6 +10,9 @@ class OrderSupplier extends \common\models\OrderSupplier
         return [
             self::STATUS_REQUEST => 'Yêu cầu',
 			self::STATUS_APPROVE => 'Đã nhận',
+			self::STATUS_PROCESSING => 'Đang thực hiện',
+			self::STATUS_COMPLETED => 'Đã hoàn thành',
+			self::STATUS_PARTIAL => 'Đã hoàn thành môt phần',
 			self::STATUS_REJECT => 'Đã từ chối',
 			self::STATUS_RETAKE => 'Đã lấy lại',
 			self::STATUS_STOP => 'Đã dừng',

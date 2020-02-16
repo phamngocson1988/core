@@ -5,11 +5,13 @@ namespace supplier\forms;
 use Yii;
 use yii\base\Model;
 use supplier\models\Order;
-use supplier\models\OrderSupplier;
 use supplier\models\Supplier;
+use supplier\models\OrderSupplier;
 use supplier\behaviors\OrderSupplierBehavior;
+use supplier\behaviors\OrderLogBehavior;
+use supplier\behaviors\OrderMailBehavior;
 
-class TakeOrderSupplierForm extends Model
+class UpdateOrderToCompletedForm extends Model
 {
     public $id;
     public $supplier_id;
@@ -17,6 +19,7 @@ class TakeOrderSupplierForm extends Model
     protected $_order;
     protected $_supplier;
     protected $_order_supplier;
+
     public function rules()
     {
         return [
@@ -24,6 +27,14 @@ class TakeOrderSupplierForm extends Model
             ['id', 'validateRequest'],
             ['supplier_id', 'validateSupplier'],
         ];
+    }
+
+    public function getOrderSupplier()
+    {
+        if (!$this->_order_supplier) {
+            $this->_order_supplier = OrderSupplier::findOne($this->id);
+        }
+        return $this->_order_supplier;
     }
 
     public function getOrder()
@@ -45,8 +56,9 @@ class TakeOrderSupplierForm extends Model
     {
         $supplier = $this->getOrderSupplier(); // OrderSupplier
         if (!$supplier) return $this->addError($attribute, 'Yêu cầu không tồn tại');
-        if (!$supplier->isRequest()) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
+        if (!$supplier->isProcessing()) return $this->addError($attribute, 'Đơn hàng này không thể chuyển thành completed');
         if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
+        if ($supplier->doing < $supplier->quantity) return $this->addError($attribute, 'Bạn chưa nạp đủ số lượng game');
 
         $order = $this->getOrder();
         if (!$order) return $this->addError($attribute, 'Đơn hàng không tồn tại');
@@ -68,36 +80,44 @@ class TakeOrderSupplierForm extends Model
 
     }
 
-    public function getOrderSupplier()
-    {
-        if (!$this->_order_supplier) {
-            $this->_order_supplier = OrderSupplier::findOne($this->id);
-        }
-        return $this->_order_supplier;
-    }
-
-    public function approve()
+    
+    public function move()
     {
         if (!$this->validate()) return false;
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
-            $orderSupplier = $this->getOrderSupplier();
-            $orderSupplier->status = OrderSupplier::STATUS_APPROVE;
-            $orderSupplier->approved_at = date('Y-m-d H:i:s');
-            $result = $orderSupplier->save();
+            $supplier = $this->getOrderSupplier();
+            $supplier->status = OrderSupplier::STATUS_COMPLETED;
+            $supplier->completed_at = date('Y-m-d H:i:s');
+            $supplier->total_price = $supplier->price * $supplier->doing;
+            $supplier->save();
 
             $order = $this->getOrder();
-            $supplier = $this->getSupplier();
-            $order->log(sprintf("Nhà cung cấp %s chấp nhận đơn hàng", $supplier->user->name, $this->supplier_id));
+            $order->status = Order::STATUS_COMPLETED;
+            $order->doing_unit += $supplier->doing;
+            $order->process_end_time = date('Y-m-d H:i:s');
+            $order->completed_at = date('Y-m-d H:i:s');
+            $order->process_duration_time = strtotime($order->process_end_time) - strtotime($order->process_start_time);
+            $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
+                $sender = $event->sender; // Order
+                Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+                $sender->attachBehavior('log', OrderLogBehavior::className());
+                $sender->attachBehavior('mail', OrderMailBehavior::className());
+                $sender->log("Moved to completed");
+                // $sender->send(
+                //     'admin_send_complete_order', 
+                //     sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
+                //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
+                // ]);
+            });
 
+            $order->save();
             $transaction->commit();
-            return $result;
+            return true;
         } catch(Exception $e) {
             $transaction->rollback();
-            $this->addError('id', $e->getMessage());
             return false;
         }
     }
-
 }

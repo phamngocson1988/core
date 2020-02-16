@@ -1,7 +1,9 @@
 <?php 
 use backend\models\Order;
-$steps = ['1' => Order::STATUS_VERIFYING, '2' => Order::STATUS_PENDING, '3' => Order::STATUS_PROCESSING, '4' => Order::STATUS_COMPLETED];
-$step = array_search($order->status, $steps);
+use yii\helpers\ArrayHelper;
+
+$steps = [Order::STATUS_VERIFYING => 1, Order::STATUS_PENDING => 2, Order::STATUS_PROCESSING => 3, Order::STATUS_PARTIAL => 3, Order::STATUS_COMPLETED => 4];
+$step = ArrayHelper::getValue($steps, $order->status);
 $percent = $step * 25;
 ?>
 <div class="form-wizard">
@@ -27,8 +29,13 @@ $percent = $step * 25;
             <a href="javasciprt:;" class="step">
             <span class="number"> 3 </span>
             <span class="desc">
+            <?php if ($order->isProcessingOrder()) : ?>
             <i class="fa fa-check"></i> Processing </span>
-            <p style="color: #CCC">Đơn hàng đã thực hiện xong</p> 
+            <p style="color: #CCC">Đơn hàng đang thực hiện</p>
+            <?php elseif ($order->isPartialOrder()) : ?>
+            <i class="fa fa-check"></i> Partial </span>
+            <p style="color: #CCC">Đơn hàng đã thực hiện một phần</p>
+            <?php endif;?> 
             </a>
         </li>
         <li class="<?php if ($step >= 4) echo 'active' ;?>">

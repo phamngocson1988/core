@@ -11,7 +11,10 @@ use yii\behaviors\TimestampBehavior;
 class OrderSupplier extends ActiveRecord
 {
 	const STATUS_REQUEST = 'request';
-	const STATUS_APPROVE = 'approve';
+    const STATUS_APPROVE = 'approve';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_COMPLETED = 'completed';
+	const STATUS_PARTIAL = 'partial';
 	const STATUS_REJECT = 'reject';
 	const STATUS_RETAKE = 'retake';
 	const STATUS_STOP = 'stop';
@@ -38,6 +41,17 @@ class OrderSupplier extends ActiveRecord
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
 
+    public function getGame() 
+    {
+        return $this->hasOne(Game::className(), ['id' => 'game_id']);
+    }
+
+    public function getGameTitle() 
+    {
+        $game = $this->game;
+        return $game ? $game->title : '';
+    }
+
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'supplier_id']);
@@ -53,12 +67,30 @@ class OrderSupplier extends ActiveRecord
         return $this->status == self::STATUS_APPROVE;
     }
 
+    public function isProcessing()
+    {
+        return $this->status == self::STATUS_PROCESSING;
+    }
+
+    public function isCompleted()
+    {
+        return $this->status == self::STATUS_COMPLETED;
+    }
+
     public function canBeTaken()
     {
-        $order = $this->order;
-        $orderStatus = [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING];
-        $requestStatus = [self::STATUS_REQUEST, self::STATUS_APPROVE];
-        if (in_array($order->status, $orderStatus) && in_array($this->status, $requestStatus)) return true;
-        return false;
+        $requestStatus = [
+            self::STATUS_REQUEST, 
+            self::STATUS_APPROVE, 
+            self::STATUS_PROCESSING,
+            self::STATUS_PARTIAL,
+        ];
+        return in_array($this->status, $requestStatus);
+    }
+
+    public function getPercent()
+    {
+        if (!$this->quantity) return 0;
+        return round($this->doing * 100 / $this->quantity);
     }
 }

@@ -498,6 +498,12 @@
             </a>
           </li>
           <li class="nav-item  ">
+            <a href="{url route='/order/partial'}" class="nav-link " code='order.partial'>
+            <span class="title">Đơn hàng partial</span>
+            <span class="badge badge-success">{$this->params['partial_order']}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/order/completed'}" class="nav-link " code='order.completed'>
             <span class="title">Đơn hàng completed</span>
             </a>

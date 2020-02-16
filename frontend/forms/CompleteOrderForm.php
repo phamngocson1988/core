@@ -3,7 +3,9 @@ namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Order;
+use frontend\models\Order;
+use frontend\models\Supplier;
+use frontend\models\OrderSupplier;
 
 class CompleteOrderForm extends Model
 {
@@ -27,7 +29,7 @@ class CompleteOrderForm extends Model
         } elseif (!$order->isCompletedOrder()) {
             $this->addError($attribute, 'Không thể chuyển trạng thái của đơn hàng hiện tại');
         } elseif ($order->customer_id != $this->user_id) {
-            $this->addError($attribute, 'You cannot vote this order');
+            $this->addError($attribute, 'You cannot confirm this order');
         }
     }
 
@@ -35,8 +37,34 @@ class CompleteOrderForm extends Model
     {
         if (!$this->validate()) return false;
         $order = $this->getOrder();
-        $order->status = Order::STATUS_CONFIRMED;
-        return $order->save();
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $order->status = Order::STATUS_CONFIRMED;
+            $result = $order->save();
+
+            // Update supplier wallet
+            $command = OrderSupplier::find()
+            ->where(['order_id' => $order->id])
+            ->andWhere(['status' => OrderSupplier::STATUS_COMPLETED]);
+            $suppliers = $command->all();
+            foreach ($suppliers as $orderSupplier) {
+                $supplier = Supplier::findOne($orderSupplier->supplier_id);
+                if (!$supplier) continue;
+                $amount = $orderSupplier->total_price;
+                $source = 'order';
+                $key = $order->id;
+                $description = sprintf("Thanh toán cho đơn hàng #%s", $order->id);
+                $supplier->topup($amount, $source, $key, $description);
+            }
+
+            $transaction->commit();
+            return $result;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->addError('id', $e->getMessage());
+            return false;
+        }
     }
 
     public function getOrder()

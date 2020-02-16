@@ -6,15 +6,15 @@ use yii\helpers\Html;
     <thead>
       <tr>
         <th> Tên game </th>
-        <th> Số lượng nạp </th>
-        <th> Số gói </th>
+        <th> Số lượng cần nạp </th>
+        <th> Số lượng đã nạp </th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><?=$order->game_title;?></td>
-        <td><?=$order->total_unit;?></td>
         <td><?=$order->quantity;?></td>
+        <td><?=$order->doing_unit;?></td>
       </tr>
     </tbody>
   </table>

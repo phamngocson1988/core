@@ -27,13 +27,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Quản lý đơn hàng</span>
+      <span>Đơn hàng đang được yêu cầu</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Quản lý đơn hàng</h1>
+<h1 class="page-title">Đơn hàng đang được yêu cầu</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -42,16 +42,15 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Đơn hàng</span>
+          <span class="caption-subject bold uppercase"> Đơn hàng đang được yêu cầu</span>
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/index']]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['order/waiting']]);?>
         <div class="row margin-bottom-10">
-            <?php $customer = $search->getCustomer();?>
-            <?=$form->field($search, 'q', [
+            <?=$form->field($search, 'order_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'order_id']
             ])->textInput()->label('Mã đơn hàng');?>
 
             <?php $game = $search->getGame();?>   
@@ -72,9 +71,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ])->label('Tên game')?>
           
-            <?= $form->field($search, 'start_date', [
+            <?= $form->field($search, 'request_start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'request_start_date', 'id' => 'request_start_date']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -83,11 +82,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày tạo từ');?>
+            ])->label('Ngày yêu cầu từ');?>
 
-            <?=$form->field($search, 'end_date', [
+            <?=$form->field($search, 'request_end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'request_end_date', 'id' => 'request_end_date']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -97,7 +96,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày tạo đến');?>
+            ])->label('Ngày yêu cầu đến');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -110,10 +109,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th> Mã đơn hàng </th>
+              <th> Mã yêu cầu </th>
               <th> Tên game </th>
-              <th> Ngày tạo </th>
-              <th> Số lượng nạp </th>
               <th> Số gói </th>
               <th> Ngày đơn hàng gửi đến </th>
               <th> Trạng thái </th>
@@ -122,23 +119,16 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
-              <?php $supplier = $model->supplier;?>
+              <?php foreach ($models as $model) :?>
               <tr>
-                <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/view', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td><?=$model->game_title;?></td>
-                <td><?=$model->created_at;?></td>
-                <td><?=$model->total_unit;?></td>
+                <td>#<?=$model->id;?></a></td>
+                <td><?=$model->getGameTitle();?></td>
                 <td><?=$model->quantity;?></td>
-                <td><?=$supplier->requested_at;?></td>
+                <td><?=$model->requested_at;?></td>
                 <td>
-                  <?=$model->getStatusLabel();?>
-                  <?php if ($model->hasCancelRequest()) :?>
-                  <span class="label label-danger">Có yêu cầu hủy</span>
-                  <?php endif;?>
+                  <span class="label label-warning">Đang yêu cầu</span>
                 </td>
                 <td>
                   <a href='<?=Url::to(['order/accept', 'id' => $model->id]);?>' class="btn btn-xs blue ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-check"></i></a>

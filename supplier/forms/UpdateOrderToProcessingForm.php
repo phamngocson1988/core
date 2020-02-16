@@ -5,11 +5,13 @@ namespace supplier\forms;
 use Yii;
 use yii\base\Model;
 use supplier\models\Order;
-use supplier\models\OrderSupplier;
 use supplier\models\Supplier;
+use supplier\models\OrderSupplier;
 use supplier\behaviors\OrderSupplierBehavior;
+use supplier\behaviors\OrderLogBehavior;
+use supplier\behaviors\OrderMailBehavior;
 
-class TakeOrderSupplierForm extends Model
+class UpdateOrderToProcessingForm extends Model
 {
     public $id;
     public $supplier_id;
@@ -17,6 +19,7 @@ class TakeOrderSupplierForm extends Model
     protected $_order;
     protected $_supplier;
     protected $_order_supplier;
+
     public function rules()
     {
         return [
@@ -24,6 +27,14 @@ class TakeOrderSupplierForm extends Model
             ['id', 'validateRequest'],
             ['supplier_id', 'validateSupplier'],
         ];
+    }
+
+    public function getOrderSupplier()
+    {
+        if (!$this->_order_supplier) {
+            $this->_order_supplier = OrderSupplier::findOne($this->id);
+        }
+        return $this->_order_supplier;
     }
 
     public function getOrder()
@@ -45,7 +56,7 @@ class TakeOrderSupplierForm extends Model
     {
         $supplier = $this->getOrderSupplier(); // OrderSupplier
         if (!$supplier) return $this->addError($attribute, 'Yêu cầu không tồn tại');
-        if (!$supplier->isRequest()) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
+        if (!$supplier->isApprove()) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
         if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
 
         $order = $this->getOrder();
@@ -54,7 +65,7 @@ class TakeOrderSupplierForm extends Model
             Order::STATUS_PENDING, 
             Order::STATUS_PROCESSING,
             Order::STATUS_PARTIAL
-        ])) return $this->addError($attribute, 'Không thể nhận xử lý đơn hàng này');
+        ])) return $this->addError($attribute, sprintf('Đơn hàng có mã số %s không thể xử lý. Hãy báo lỗi này đến nhân viên đơn hàng.', $order->id));
         
     }
 
@@ -68,36 +79,41 @@ class TakeOrderSupplierForm extends Model
 
     }
 
-    public function getOrderSupplier()
-    {
-        if (!$this->_order_supplier) {
-            $this->_order_supplier = OrderSupplier::findOne($this->id);
-        }
-        return $this->_order_supplier;
-    }
-
-    public function approve()
+    
+    public function move()
     {
         if (!$this->validate()) return false;
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
-            $orderSupplier = $this->getOrderSupplier();
-            $orderSupplier->status = OrderSupplier::STATUS_APPROVE;
-            $orderSupplier->approved_at = date('Y-m-d H:i:s');
-            $result = $orderSupplier->save();
+            $supplier = $this->getOrderSupplier();
+            $supplier->status = OrderSupplier::STATUS_PROCESSING;
+            $supplier->processing_at = date('Y-m-d H:i:s');
+            $supplier->save();
 
             $order = $this->getOrder();
-            $supplier = $this->getSupplier();
-            $order->log(sprintf("Nhà cung cấp %s chấp nhận đơn hàng", $supplier->user->name, $this->supplier_id));
+            if ($order->isPendingOrder()) {
+                $order->status = Order::STATUS_PROCESSING;
+                $order->process_start_time = date('Y-m-d H:i:s');
+                $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
+                    $sender = $event->sender; // Order
+                    Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+                    $sender->log("Moved to processing");
+                    // $sender->send(
+                    //     'admin_send_processing_order', 
+                    //     sprintf("[KingGems] - Processing Order - Order #%s", $sender->id), [
+                    //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
+                    // ]);
 
+                });
+
+                $order->save();
+            }
             $transaction->commit();
-            return $result;
+            return true;
         } catch(Exception $e) {
             $transaction->rollback();
-            $this->addError('id', $e->getMessage());
             return false;
         }
     }
-
 }

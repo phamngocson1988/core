@@ -54,8 +54,10 @@ class m191210_171926_supplier extends Migration
             'id' => $this->primaryKey(),
             'order_id' => $this->integer()->notNull(),
             'supplier_id' => $this->integer()->notNull(),
+            'game_id' => $this->integer()->notNull(),
             'price' => $this->float(),
             'quantity' => $this->float()->defaultValue(0),
+            'doing' => $this->float()->defaultValue(0),
             'total_price' => $this->float()->defaultValue(0),
             'rate_usd' => $this->float(),
             'status' => $this->string(10)->notNull(),
@@ -63,14 +65,16 @@ class m191210_171926_supplier extends Migration
             'updated_at' => $this->dateTime(),    
             'requested_at' => $this->dateTime(),  
             'requested_by' => $this->integer(),         
-            'approved_at' => $this->dateTime(),           
+            'approved_at' => $this->dateTime(),         
+            'processing_at' => $this->dateTime(),  
+            'completed_at' => $this->dateTime(),  
             'rejected_at' => $this->dateTime(),           
             'stopped_at' => $this->dateTime(),           
             'retaken_at' => $this->dateTime(),           
             'retaken_by' => $this->integer(),           
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
-            $orderSupplierStatus = "ALTER TABLE {{%order_supplier}} MODIFY `status` ENUM('request','approve','reject','retake','stop') NOT NULL DEFAULT 'request'";
+            $orderSupplierStatus = "ALTER TABLE {{%order_supplier}} MODIFY `status` ENUM('request','approve','reject','retake','stop','processing','completed','partial') NOT NULL DEFAULT 'request'";
             $command = $this->db->createCommand($orderSupplierStatus);
             $command->execute();
         }

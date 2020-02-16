@@ -9,7 +9,6 @@ use backend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
-use backend\behaviors\OrderSupplierBehavior;
 use backend\behaviors\GameSupplierBehavior;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -190,8 +189,8 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <tr><td colspan="14"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
-                <?php $model->attachBehavior('supplier', new OrderSupplierBehavior);?>
                 <?php $supplier = $model->supplier;?>
+                <?php $label = $model->getStatusLabel(null); ?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td><?=$model->getCustomerName();?></td>
@@ -205,7 +204,15 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                   <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
                   <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                   <td>
-                    <?=$model->getStatusLabel();?>
+                    <?php if ($supplier) :?>
+                      <?php if ($supplier->isRequest()) : ?>
+                    <span class="label label-warning"><?=$label;?></span>
+                      <?php else : ?>
+                    <span class="label label-success"><?=$label;?></span>
+                    <?php endif;?>
+                    <?php else :?>
+                      <?=$model->getStatusLabel();?>
+                    <?php endif;?>
                     <?php if ($model->hasCancelRequest()) :?>
                     <span class="label label-danger">Có yêu cầu hủy</span>
                     <?php endif;?>
@@ -224,12 +231,8 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
 
                     <!-- Assign to supplier -->
-                    <?php
-                    $game = $model->game;
-                    $game->attachBehavior('supplier', new GameSupplierBehavior); 
-                    ?>
                     <?php if (Yii::$app->user->can('orderteam')) :?>
-                    <?php if (!$model->supplier_id) :?>
+                    <?php if (!$supplier) :?>
                     <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
                     <?php endif;?>
                     <?php endif;?>

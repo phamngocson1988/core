@@ -7,7 +7,6 @@ use yii\base\Model;
 use backend\models\Order;
 use backend\models\Supplier;
 use backend\models\OrderSupplier;
-use backend\behaviors\OrderSupplierBehavior;
 
 class AssignOrderSupplierForm extends Model
 {
@@ -60,9 +59,8 @@ class AssignOrderSupplierForm extends Model
     {
         $order = $this->getOrder();
         if (!$order) $this->addError($attribute, 'Đơn hàng không tồn tại');
-        if (!in_array($order->status, [Order::STATUS_PENDING, Order::STATUS_PROCESSING])) $this->addError($attribute, 'Tác vụ không hợp lệ');
+        if (!in_array($order->status, [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_PARTIAL])) $this->addError($attribute, sprintf("Không thể gửi qua nhà cung cấp vì đơn hàng %s đang ở trạng thái %s", $order->id, $order->status));
 
-        $order->attachBehavior('supplier', OrderSupplierBehavior::className());
         if ($order->supplier) $this->addError($attribute, 'Đơn hàng đã có nhà cung cấp');
     }
 
@@ -84,13 +82,15 @@ class AssignOrderSupplierForm extends Model
             $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
             $game = $this->getSupplierGame();
             $order = $this->getOrder();
+            $supplier = $this->getSupplier();
             $order->supplier_id = $this->supplier_id;
             $order->save();
             $orderSupplier = new OrderSupplier([
                 'order_id' => $this->order_id,
                 'supplier_id' => $this->supplier_id,
+                'game_id' => $order->game_id,
                 'price' => $game->price,
-                'quantity' => 0,
+                'quantity' => $order->quantity - $order->doing_unit,
                 'total_price' => 0,
                 'rate_usd' => $rate,
                 'status' => OrderSupplier::STATUS_REQUEST,
@@ -98,6 +98,7 @@ class AssignOrderSupplierForm extends Model
                 'requested_at' => date('Y-m-d H:i:s')
             ]);
             $orderSupplier->save();
+            $order->log(sprintf("Chuyển đến nhà cung cấp %s (#%s)", $supplier->user->name, $this->supplier_id));
 
             // $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
             // $fromName = sprintf("%s Administrator", Yii::$app->name);
