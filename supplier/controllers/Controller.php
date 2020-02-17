@@ -42,7 +42,7 @@ class Controller extends BaseController
 			$this->view->params['new_pending_order'] = $pending ? $pending : '';
 			$this->view->params['new_processing_order'] = $processing ? $processing : '';
 			$this->view->params['new_completed_order'] = $completed ? $completed : '';
-			$this->view->params['new_confirmed_order'] = 0;//$confirmed ? $confirmed : '';
+			$this->view->params['new_confirmed_order'] = '';//$confirmed ? $confirmed : '';
 			return true;
         }
 

@@ -44,46 +44,48 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
             </div>
           </form>
         </div>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> <?=Yii::t('app', 'no');?> </th>
-              <th> <?=Yii::t('app', 'image');?> </th>
-              <th> <?=Yii::t('app', 'title');?> </th>
-              <th> Trạng thái ở Kinggems </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) : ?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $model) : ?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td style="vertical-align: middle;"><?=$model->id;?></td>
-                <td style="vertical-align: middle;"><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
-                <td style="vertical-align: middle;"><?=$model->title;?></td>
-                <td style="vertical-align: middle;">
-                  <?php if ($model->status == 'Y') : ?>
-                  <span class="label label-success"><?=Yii::t('app', 'visible');?></span>
-                  <?php elseif ($model->status == 'N') : ?>
-                  <span class="label label-warning"><?=Yii::t('app', 'disable');?></span>
-                  <?php elseif ($model->status == 'D') : ?>
-                  <span class="label label-default"><?=Yii::t('app', 'deleted');?></span>
-                  <?php endif;?>
-                  
-                </td>
-                <td style="vertical-align: middle;">
-                  <?php if (!$supplier->isOwnGame($model->id)) : ?>
-                  <a href="<?=Url::to(['game/add', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Đăng ký game"><i class="fa fa-arrow-up"></i> Đăng ký </a>
-                  <?php else: ?>
-                  <a href="<?=Url::to(['game/remove', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Hủy đăng ký"><i class="fa fa-times"></i> Hủy đăng ký </a>
-                  <?php endif;?>
-                </td>
+                <th> <?=Yii::t('app', 'no');?> </th>
+                <th> <?=Yii::t('app', 'image');?> </th>
+                <th> <?=Yii::t('app', 'title');?> </th>
+                <th> Trạng thái ở Kinggems </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) : ?>
+                <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $model) : ?>
+                <tr>
+                  <td><?=$model->id;?></td>
+                  <td><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
+                  <td><?=$model->title;?></td>
+                  <td>
+                    <?php if ($model->status == 'Y') : ?>
+                    <span class="label label-success"><?=Yii::t('app', 'visible');?></span>
+                    <?php elseif ($model->status == 'N') : ?>
+                    <span class="label label-warning"><?=Yii::t('app', 'disable');?></span>
+                    <?php elseif ($model->status == 'D') : ?>
+                    <span class="label label-default"><?=Yii::t('app', 'deleted');?></span>
+                    <?php endif;?>
+                    
+                  </td>
+                  <td>
+                    <?php if (!$supplier->isOwnGame($model->id)) : ?>
+                    <a href="<?=Url::to(['game/add', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Đăng ký game"><i class="fa fa-arrow-up"></i> Đăng ký </a>
+                    <?php else: ?>
+                    <a href="<?=Url::to(['game/remove', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Hủy đăng ký"><i class="fa fa-times"></i> Hủy đăng ký </a>
+                    <?php endif;?>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages]);?>
       </div>
     </div>

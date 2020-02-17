@@ -499,7 +499,7 @@
           </li>
           <li class="nav-item  ">
             <a href="{url route='/order/partial'}" class="nav-link " code='order.partial'>
-            <span class="title">Đơn hàng partial</span>
+            <span class="title">Đơn hàng completed (P)</span>
             <span class="badge badge-success">{$this->params['partial_order']}</span>
             </a>
           </li>

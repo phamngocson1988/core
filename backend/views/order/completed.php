@@ -210,6 +210,8 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                   </td>
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+
+                    <a href='<?=Url::to(['order/move-to-confirmed', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đơn hàng"><i class="fa fa-check-circle"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -222,3 +224,20 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$script = <<< JS
+$(".ajax-link").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có muốn thực hiện tác vụ này?',
+  method: 'POST',
+  callback: function(eletement, data) {
+    location.reload();
+  },
+  error: function(element, errors) {
+    console.log(errors);
+    alert(errors);
+  }
+});
+JS;
+$this->registerJs($script);
+?>

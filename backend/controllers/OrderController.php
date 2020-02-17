@@ -33,6 +33,7 @@ use common\components\helpers\FormatConverter;
 
 use backend\events\OrderEventHandler;
 use backend\models\OrderComplains;
+use backend\forms\ConfirmOrderForm;
 
 
 // use backend\forms\UpdateOrderStatusPending;
@@ -503,8 +504,6 @@ class OrderController extends Controller
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->log("Moved to completed");
             $order->send(
                 'admin_send_complete_order', 
@@ -527,6 +526,18 @@ class OrderController extends Controller
             // ->send();
         });
         return $this->renderJson($model->save());
+    }
+
+    public function actionMoveToConfirmed($id)
+    {
+        $model = new ConfirmOrderForm(['id' => $id]);
+        if ($model->save()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(false);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        }
     }
 
     public function actionTaken($id)

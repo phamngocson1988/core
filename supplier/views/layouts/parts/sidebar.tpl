@@ -95,18 +95,6 @@
             <span class="badge badge-success">{$this->params['new_confirmed_order']}</span>
             </a>
           </li>
-          <li class="nav-item  ">
-            <a href="{url route='/order/cancelling-order'}" class="nav-link " code='order.cancelling'>
-            <span class="title">Đơn hàng cancelling</span>
-            <span class="badge badge-success">{$this->params['new_confirmed_order']}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/order/cancelled-order'}" class="nav-link " code='order.cancelled'>
-            <span class="title">Đơn hàng cancelled</span>
-            <span class="badge badge-success">{$this->params['new_confirmed_order']}</span>
-            </a>
-          </li>
         </ul>
       </li>
 

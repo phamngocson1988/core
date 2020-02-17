@@ -1,23 +1,22 @@
 <?php
-namespace frontend\forms;
+namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use frontend\models\Order;
-use frontend\models\Supplier;
-use frontend\models\OrderSupplier;
+use backend\models\Order;
+use backend\models\Supplier;
+use backend\models\OrderSupplier;
 
-class CompleteOrderForm extends Model
+class ConfirmOrderForm extends Model
 {
-    public $auth_key;
-    public $user_id;
+    public $id;
     private $_order;
 
     public function rules()
     {
         return [
-            [['auth_key', 'user_id'], 'required'],
-            ['auth_key', 'validateOrder']
+            ['id', 'required'],
+            ['id', 'validateOrder']
         ];
     }
 
@@ -27,9 +26,7 @@ class CompleteOrderForm extends Model
         if (!$order) {
             $this->addError($attribute, 'Đơn hàng không tồn tại');
         } elseif (!$order->isCompletedOrder()) {
-            $this->addError($attribute, 'Không thể chuyển trạng thái của đơn hàng hiện tại');
-        } elseif ($order->customer_id != $this->user_id) {
-            $this->addError($attribute, 'You cannot confirm this order');
+            $this->addError($attribute, 'Không thể chuyển trạng thái của đơn hàng hiện tại sang confirm');
         }
     }
 
@@ -63,7 +60,7 @@ class CompleteOrderForm extends Model
             return $result;
         } catch(Exception $e) {
             $transaction->rollback();
-            $this->addError('user_id', $e->getMessage());
+            $this->addError('id', $e->getMessage());
             return false;
         }
     }
@@ -71,7 +68,7 @@ class CompleteOrderForm extends Model
     public function getOrder()
     {
         if ($this->_order === null) {
-            $this->_order = Order::findOne(['auth_key' => $this->auth_key]);
+            $this->_order = Order::findOne($this->id);
         }
         return $this->_order;
     }
