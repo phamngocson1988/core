@@ -95,7 +95,7 @@ class UpdateOrderToCompletedForm extends Model
 
             $order = $this->getOrder();
             $order->status = Order::STATUS_COMPLETED;
-            $order->doing_unit += $supplier->doing;
+            // $order->doing_unit += $supplier->doing;
             $order->process_end_time = date('Y-m-d H:i:s');
             $order->completed_at = date('Y-m-d H:i:s');
             $order->process_duration_time = strtotime($order->process_end_time) - strtotime($order->process_start_time);
