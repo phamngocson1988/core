@@ -5,6 +5,8 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
+$user = Yii::$app->user;
+$showCustomer = $user->can('saler') || $user->can('accounting');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -173,10 +175,10 @@ use backend\components\datetimepicker\DateTimePicker;
             <thead>
               <tr>
                 <th> Mã đơn hàng </th>
-                <th> Tên khách hàng </th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Tên khách hàng </th>
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
-                <th> Cổng thanh toán</th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Cổng thanh toán</th>
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
                 <th> Tổng tiền </th>
@@ -191,17 +193,17 @@ use backend\components\datetimepicker\DateTimePicker;
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                  <td style="vertical-align: middle;"><?=$model->getCustomerName();?></td>
-                  <td style="vertical-align: middle;"><?=$model->game_title;?></td>
-                  <td style="vertical-align: middle;"><?=$model->created_at;?></td>
-                  <td style="vertical-align: middle;"><?=$model->payment_method;?></td>
-                  <td style="vertical-align: middle;"><?=$model->total_unit;?></td>
-                  <td style="vertical-align: middle;"><?=$model->quantity;?></td>
-                  <td style="vertical-align: middle;"><?=number_format($model->total_price, 1);?></td>
-                  <td style="vertical-align: middle;"><?=($model->saler) ? $model->saler->name : '';?></td>
-                  <td style="vertical-align: middle;"><?=$model->getStatusLabel();?></td>
-                  <td style="vertical-align: middle;">
+                  <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->getCustomerName();?></td>
+                  <td><?=$model->game_title;?></td>
+                  <td><?=$model->created_at;?></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->payment_method;?></td>
+                  <td><?=$model->total_unit;?></td>
+                  <td><?=$model->quantity;?></td>
+                  <td><?=number_format($model->total_price, 1);?></td>
+                  <td><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td><?=$model->getStatusLabel();?></td>
+                  <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                     <?php if (Yii::$app->user->can('admin')) :?>
                     <a href='<?=Url::to(['order/delete', 'id' => $model->id]);?>' class="btn btn-xs red tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>

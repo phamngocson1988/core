@@ -32,6 +32,7 @@ $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 $user = Yii::$app->user;
 $showSupplier = $user->can('orderteam') || $user->can('accounting');
+$showCustomer = $user->can('saler') || $user->can('accounting');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -166,10 +167,10 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
             <thead>
               <tr>
                 <th> Mã đơn hàng </th>
-                <th> Tên khách hàng </th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Tên khách hàng </th>
                 <th> Tên game </th>
                 <th> Ngày tạo </th>
-                <th> Cổng thanh toán </th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Cổng thanh toán </th>
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
                 <th class="hidden-xs"> Thời gian nhận đơn </th>
@@ -188,10 +189,10 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
                   <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                  <td><?=$model->getCustomerName();?></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->getCustomerName();?></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->created_at;?></td>
-                  <td><?=$model->payment_method;?></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->payment_method;?></td>
                   <td><?=$model->total_unit;?></td>
                   <td><?=$model->quantity;?></td>
                   <td class="hidden-xs"><?=$model->process_start_time;?></td>
