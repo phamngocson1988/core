@@ -88,6 +88,15 @@ class OrderSupplier extends ActiveRecord
         return in_array($this->status, $requestStatus);
     }
 
+    public function canBeRejected()
+    {
+        $requestStatus = [
+            self::STATUS_REQUEST, 
+            self::STATUS_APPROVE, 
+        ];
+        return in_array($this->status, $requestStatus);
+    }
+
     public function getPercent()
     {
         if (!$this->quantity) return 0;

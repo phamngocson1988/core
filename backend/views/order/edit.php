@@ -213,7 +213,7 @@ $this->registerJs($moveProcessingJs)
                       </div>
                       <?php endif;?>
 
-                      <?php if ($order->isProcessingOrder() && Yii::$app->user->can('orderteam')) : ?>
+                      <?php if (($order->isProcessingOrder() || $order->isPartialOrder()) && Yii::$app->user->can('orderteam')) : ?>
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
@@ -244,6 +244,10 @@ $moveCompletedJs = <<< JS
 var moveCompletedForm = new AjaxFormSubmit({element: '#move-completed-form'});
 moveCompletedForm.success = function (data, form) {
   location.reload();
+};
+moveCompletedForm.error = function (errors) {
+  alert(errors);
+  return false;
 };
 JS;
 $this->registerJs($moveCompletedJs)

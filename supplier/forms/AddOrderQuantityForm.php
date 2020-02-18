@@ -104,10 +104,13 @@ class AddOrderQuantityForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
+            $order = $this->getOrder();
             $supplier = $this->getOrderSupplier();
             $supplier->doing = $this->getFinalDoing();
             $supplier->save();
 
+            $order->doing_unit += $this->doing;
+            $order->save();
             $transaction->commit();
             return true;
         } catch(Exception $e) {

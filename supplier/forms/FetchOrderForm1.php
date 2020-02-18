@@ -39,8 +39,11 @@ class FetchOrderForm1 extends Model
     protected function createCommand()
     {
         $table = OrderSupplier::tableName();
+        $orderTable = Order::tableName();
         $command = OrderSupplier::find();
-
+        $command->innerJoin($orderTable, "$orderTable.id = $table.order_id");
+        $command->select(["$table.*"]);
+        
         if ($this->supplier_id) {
             $command->andWhere(["$table.supplier_id" => $this->supplier_id]);
         }

@@ -133,7 +133,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   </td>
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                    <a href='<?=Url::to(['order/reject', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Từ chối đơn hàng"><i class="fa fa-times"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -146,20 +145,3 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<?php
-$script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  confirm_text: 'Bạn có muốn thực hiện tác vụ này?',
-  confirm: true,
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-JS;
-$this->registerJs($script);
-?>

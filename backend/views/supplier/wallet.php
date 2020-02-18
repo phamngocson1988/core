@@ -18,8 +18,8 @@ use yii\helpers\Url;
             <tr>
               <th> Mã đơn </th>
               <th> Ngày hoàn thành </th>
-              <th> Số gói </th>
               <th> Số tiền nhận được </th>
+              <th> Ghi chú </th>
               <th> Trạng thái </th>
             </tr>
           </thead>
@@ -29,20 +29,19 @@ use yii\helpers\Url;
             <?php else : ?>
             <?php foreach ($orders as $order) : ?>
             <tr>
-              <td><a href="<?=Url::to(['order/view', 'id' => $order['id']]);?>" target="_blank"><?=$order['id'];?></a></td>
-              <td><?=$order['completed_at'];?></td>
-              <td><?=$order['quantity'];?></td>
-              <td><?=$order['total_price'];?></td>
-              <td><?=$order['status'];?></td>
+              <td><a href="<?=Url::to(['order/view', 'id' => $order->key]);?>" target="_blank"><?=$order->key;?></a></td>
+              <td><?=$order->updated_at;?></td>
+              <td><?=$order->amount;?></td>
+              <td><?=$order->description;?></td>
+              <td><?=$order->status;?></td>
             </tr>
             <?php endforeach;?>
             <?php endif;?>
           </tbody>
           <tfoot>
             <td colspan="2"></td>
-            <td><?=number_format($totalQuantity);?></td>
             <td><?=number_format($totalAmount);?></td>
-            <td></td>
+            <td colspan="2"></td>
           </tfoot>
         </table>
       </div>

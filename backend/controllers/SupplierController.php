@@ -19,6 +19,7 @@ use backend\models\SupplierWithdrawRequest;
 use backend\models\SupplierGameSuggestion;
 use backend\behaviors\UserSupplierBehavior;
 use backend\forms\CancelSupplierWithdrawRequest;
+use backend\models\SupplierWallet;
 
 class SupplierController extends Controller
 {
@@ -274,18 +275,12 @@ class SupplierController extends Controller
     public function actionWallet($id)
     {
         $supplier = Supplier::findOne($id);
-        // completed orders
-        $orderTable = Order::tableName();
-        $supplierTable = OrderSupplier::tableName();
-        $command = Order::find()
-        ->innerJoin($supplierTable, "$orderTable.id = $supplierTable.order_id AND $orderTable.supplier_id = $supplierTable.supplier_id")
-        ->where(["iN", "$orderTable.status", [Order::STATUS_COMPLETED, Order::STATUS_CONFIRMED]])  
-        ->andWhere(["$supplierTable.status" => OrderSupplier::STATUS_APPROVE])
-        ->andWhere(["$supplierTable.supplier_id" => $id])
-        ->select(["$orderTable.id", "$supplierTable.quantity", "$orderTable.status", "$orderTable.completed_at", "$supplierTable.total_price"]);
-        $totalAmount = $command->sum("$supplierTable.total_price");
-        $totalQuantity = $command->sum("$supplierTable.quantity");
-        $orders = $command->asArray()->all();
+        $command = SupplierWallet::find()
+        ->where(["supplier_id" => $id])
+        ->andWhere(["type" => SupplierWallet::TYPE_INPUT])
+        ->andWhere(["status" => SupplierWallet::STATUS_COMPLETED]);
+        $totalAmount = $command->sum("amount");
+        $orders = $command->all();
 
         // completed requests
         $requestCommand = SupplierWithdrawRequest::find()
@@ -296,7 +291,6 @@ class SupplierController extends Controller
         return $this->renderPartial('wallet', [
             'orders' => $orders,
             'totalAmount' => $totalAmount,
-            'totalQuantity' => $totalQuantity,
             'totalWithdraw' => $totalWithdraw,
             'requests' => $requests,
             'supplier' => $supplier

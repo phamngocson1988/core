@@ -34,6 +34,8 @@ use common\components\helpers\FormatConverter;
 use backend\events\OrderEventHandler;
 use backend\models\OrderComplains;
 use backend\forms\ConfirmOrderForm;
+use backend\forms\AddOrderQuantityForm;
+use backend\forms\UpdateOrderToCompletedForm;
 
 
 // use backend\forms\UpdateOrderStatusPending;
@@ -461,29 +463,12 @@ class OrderController extends Controller
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->log("Moved to processing");
             $order->send(
                 'admin_send_processing_order', 
                 sprintf("[KingGems] - Processing Order - Order #%s", $order->id), [
                     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
             ]);
-
-            // $settings = Yii::$app->settings;
-            // $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
-            // $frontend = Yii::$app->params['frontend_url'];
-            // Yii::$app->urlManagerFrontend->setHostInfo($frontend);
-            // Yii::$app->mailer->compose('admin_send_processing_order', [
-            //     'order' => $order,
-            //     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            // ])
-            // ->setTo($order->customer_email)
-            // ->setFrom([$adminEmail => Yii::$app->name])
-            // ->setSubject(sprintf("[KingGems] - Processing Order - Order #%s", $order->id))
-            // ->setTextBody("Your order " . $order->id . " has been processed now. Please review it")
-            // ->send()
-            // ;
         });
 
         return $this->renderJson($model->save());
@@ -492,40 +477,15 @@ class OrderController extends Controller
 
     public function actionMoveToCompleted($id)
     {
-        $model = Order::findOne($id);
-        if (!$model) return $this->asJson(['status' => false, 'error' => 'Đơn hàng không tồn tại']);
-        if (!$model->isProcessingOrder()) return $this->asJson(['status' => false, 'error' => 'Không thể chuyển trạng thái']);
-        $request = Yii::$app->request;
-        $model->setScenario(Order::SCENARIO_GO_COMPLETED);
-        $model->status = Order::STATUS_COMPLETED;
-        $model->process_end_time = date('Y-m-d H:i:s');
-        $model->completed_at = date('Y-m-d H:i:s');
-        $model->process_duration_time = strtotime($model->process_end_time) - strtotime($model->process_start_time);
-        $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
-            $order = $event->sender;
-            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->log("Moved to completed");
-            $order->send(
-                'admin_send_complete_order', 
-                sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
-                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            ]);
-
-            // $settings = Yii::$app->settings;
-            // $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
-            // $frontend = Yii::$app->params['frontend_url'];
-            // Yii::$app->urlManagerFrontend->setHostInfo($frontend);
-            // Yii::$app->mailer->compose('admin_send_complete_order', [
-            //     'order' => $order,
-            //     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            // ])
-            // ->setTo($order->customer_email)
-            // ->setFrom([$adminEmail => Yii::$app->name])
-            // ->setSubject(sprintf("[KingGems] - Completed Order - Order #%s", $order->id))
-            // ->setTextBody("Your order " . $order->id . " has been completed now. Please review it")
-            // ->send();
-        });
-        return $this->renderJson($model->save());
+        $form = new UpdateOrderToCompletedForm([
+            'id' => $id,
+        ]);
+        if ($form->move()) {
+            return $this->asJson(['status' => true]);
+        }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
     public function actionMoveToConfirmed($id)
@@ -609,19 +569,19 @@ class OrderController extends Controller
         }
     }
 
-    public function actionAddUnit($id)
+    public function actionAddQuantity($id)
     {
         $request = Yii::$app->request;
-        $model = Order::findOne($id);
-        if ($model) {
-            $unit = $request->post('doing_unit', 0);
-            $model->doing_unit += $unit;
-            if ($model->doing_unit > $model->quantity) return $this->renderJson(false, [], 'Bạn không thể nạp quá số gói game của đơn hàng này');
-            $model->save();
-            return $this->renderJson(true, ['total' => $model->doing_unit]);
-        } else {
-            return $this->renderJson(false, [], 'Error');
+        $form = new AddOrderQuantityForm([
+            'id' => $id,
+            'doing' => $request->post('doing_unit', 0)
+        ]);
+        if ($form->add()) {
+            return $this->asJson(['status' => true, 'data' => ['total' => $form->getFinalDoing()]]);
         }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
     public function actionApprove($id)

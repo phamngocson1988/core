@@ -19,9 +19,9 @@ use yii\helpers\Html;
     </tbody>
   </table>
 </div>
-<?php if (Yii::$app->user->can('orderteam') && $order->isProcessingOrder()) :?>
+<?php if (Yii::$app->user->can('orderteam') && ($order->isProcessingOrder() || $order->isPartialOrder())) :?>
 <div class="row static-info">
-  <?= Html::beginForm(['order/add-unit', 'id' => $order->id], 'post', ['id' => 'update-unit-form']) ?>
+  <?= Html::beginForm(['order/add-quantity', 'id' => $order->id], 'post', ['id' => 'update-quantity-form']) ?>
   <div class="col-md-6">
       <div class="input-group">
           <input type="text" id="doing_unit" name="doing_unit" class="form-control">
@@ -40,15 +40,19 @@ use yii\helpers\Html;
   <?= Html::endForm();?>
 <?php
 $progress = <<< JS
-var updateUnitForm = new AjaxFormSubmit({element: '#update-unit-form'});
+var updateUnitForm = new AjaxFormSubmit({element: '#update-quantity-form'});
 updateUnitForm.success = function (data, form) {
-var cur = $('#doing_unit_progress').attr('aria-valuemax');
-var newpc = (data.total / cur) * 100;
-$('#doing_unit_progress').css('width', newpc + '%');
-$('#doing_unit_progress span').html(data.total + '(Complete)');
-$('#current_doing_unit').html(data.total);
-$('#doing_unit').val('');
+  var cur = $('#doing_unit_progress').attr('aria-valuemax');
+  var newpc = (data.total / cur) * 100;
+  $('#doing_unit_progress').css('width', newpc + '%');
+  $('#doing_unit_progress span').html(data.total + '(Complete)');
+  $('#current_doing_unit').html(data.total);
+  $('#doing_unit').val('');
 };
+updateUnitForm.error = function (errors) {
+  alert(errors);
+  return false;
+}
 JS;
 $this->registerJs($progress);
 ?>                        

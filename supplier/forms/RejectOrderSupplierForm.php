@@ -45,16 +45,16 @@ class RejectOrderSupplierForm extends Model
     {
         $supplier = $this->getOrderSupplier(); // OrderSupplier
         if (!$supplier) return $this->addError($attribute, 'Yêu cầu không tồn tại');
-        if (!$supplier->canBeTaken()) return $this->addError($attribute, 'Không thể từ chối đơn hàng');
+        if (!$supplier->canBeRejected()) return $this->addError($attribute, 'Không thể từ chối đơn hàng');
         if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Yêu cầu không hợp lệ cho nhà cung cấp');
 
         $order = $this->getOrder();
         if (!$order) return $this->addError($attribute, 'Đơn hàng không tồn tại');
-        if (!in_array($order->status, [
-            Order::STATUS_PENDING, 
-            Order::STATUS_PROCESSING,
-            Order::STATUS_PARTIAL
-        ])) return $this->addError($attribute, 'Không thể từ chối xử lý đơn hàng này');
+        // if (!in_array($order->status, [
+        //     Order::STATUS_PENDING, 
+        //     Order::STATUS_PROCESSING,
+        //     Order::STATUS_PARTIAL
+        // ])) return $this->addError($attribute, 'Không thể từ chối xử lý đơn hàng này');
         
     }
 
