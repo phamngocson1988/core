@@ -142,10 +142,7 @@ use supplier\models\OrderFile;
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_completed"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
-                          </div>
-                          <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_partial"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Partial (Hoàn thành một phần)</a>
+                            <a class="btn red btn-outline sbold" id="completeBtn"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
                           </div>
                         </div>
                       </div>
@@ -432,7 +429,7 @@ $this->registerJs($moveCompletedJs)
       </div>
       <?= Html::beginForm(['order/move-to-partial', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-partial-form']) ?>
       <div class="modal-body"> 
-        <p>Bạn có chắc chắn muốn hoàn tất một phần đơn hàng</p>
+        <p>Bạn chưa nhập đủ số lượng game cho đơn hàng. Nếu hoàn tất lúc này, hệ thống sẽ ghi nhận số lượng hoàn thành của bạn là <strong class="doing"></strong> / <strong class="quantity"></strong>. Bạn có chắc chắn muốn thực hiện điều này?</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
@@ -456,3 +453,22 @@ JS;
 $this->registerJs($moveCompletedJs)
 ?>
 <!-- End Go partial -->
+
+<?php
+$completeModalJs = <<< JS
+$('body').on('click', '#completeBtn', function() {
+  var quantity = $('#doing_unit_progress').attr('aria-valuemax');
+  var doing = $('#current_doing_unit').text();
+  quantity = parseInt(quantity);
+  doing = parseInt(doing);
+  if (doing == quantity) {
+    $('#go_completed').modal('show');
+  } else {
+    $('#go_partial').find('.doing').text(doing);
+    $('#go_partial').find('.quantity').text(quantity);
+    $('#go_partial').modal('show');
+  }
+});
+JS;
+$this->registerJs($completeModalJs)
+?>

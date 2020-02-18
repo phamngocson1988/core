@@ -8,6 +8,8 @@ use yii\helpers\Html;
         <th> Tên game </th>
         <th> Số lượng cần nạp </th>
         <th> Số lượng đã nạp </th>
+        <th> Số tiền cho game </th>
+        <th> Số tiền nhận được </th>
       </tr>
     </thead>
     <tbody>
@@ -15,6 +17,8 @@ use yii\helpers\Html;
         <td><?=$order->getGameTitle();?></td>
         <td><?=$order->quantity;?></td>
         <td><?=$order->doing;?></td>
+        <td><?=number_format($order->price);?></td>
+        <td><?=number_format($order->total_price);?></td>
       </tr>
     </tbody>
   </table>

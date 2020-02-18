@@ -58,7 +58,7 @@ class UpdateOrderToPartialForm extends Model
         if (!$supplier) return $this->addError($attribute, 'Yêu cầu không tồn tại');
         if (!$supplier->isProcessing()) return $this->addError($attribute, 'Đơn hàng này không thể chuyển thành partial');
         if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
-        if (!$supplier->doing == $supplier->quantity) return $this->addError($attribute, 'Đơn hàng cần được chuyển qua trạng thái completed');
+        if ($supplier->doing == $supplier->quantity) return $this->addError($attribute, 'Đơn hàng cần được chuyển qua trạng thái completed');
 
         $order = $this->getOrder();
         if (!$order) return $this->addError($attribute, 'Đơn hàng không tồn tại');
