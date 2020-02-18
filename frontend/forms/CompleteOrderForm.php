@@ -52,6 +52,9 @@ class CompleteOrderForm extends Model
             foreach ($suppliers as $orderSupplier) {
                 $supplier = Supplier::findOne($orderSupplier->supplier_id);
                 if (!$supplier) continue;
+                $orderSupplier->status = OrderSupplier::STATUS_CONFIRMED;
+                $orderSupplier->save();
+                
                 $amount = $orderSupplier->total_price;
                 $source = 'order';
                 $key = $order->id;

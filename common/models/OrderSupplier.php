@@ -14,7 +14,7 @@ class OrderSupplier extends ActiveRecord
     const STATUS_APPROVE = 'approve';
     const STATUS_PROCESSING = 'processing';
     const STATUS_COMPLETED = 'completed';
-	const STATUS_PARTIAL = 'partial';
+    const STATUS_CONFIRMED = 'confirmed';
 	const STATUS_REJECT = 'reject';
 	const STATUS_RETAKE = 'retake';
 	const STATUS_STOP = 'stop';
@@ -83,7 +83,6 @@ class OrderSupplier extends ActiveRecord
             self::STATUS_REQUEST, 
             self::STATUS_APPROVE, 
             self::STATUS_PROCESSING,
-            self::STATUS_PARTIAL,
         ];
         return in_array($this->status, $requestStatus);
     }

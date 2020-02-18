@@ -74,7 +74,7 @@ class m191210_171926_supplier extends Migration
             'retaken_by' => $this->integer(),           
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
-            $orderSupplierStatus = "ALTER TABLE {{%order_supplier}} MODIFY `status` ENUM('request','approve','reject','retake','stop','processing','completed','partial') NOT NULL DEFAULT 'request'";
+            $orderSupplierStatus = "ALTER TABLE {{%order_supplier}} MODIFY `status` ENUM('request','approve','reject','retake','stop','processing','completed','confirmed') NOT NULL DEFAULT 'request'";
             $command = $this->db->createCommand($orderSupplierStatus);
             $command->execute();
         }

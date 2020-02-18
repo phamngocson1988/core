@@ -212,7 +212,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
 
-                    <a href='<?=Url::to(['order/move-to-confirmed', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đơn hàng"><i class="fa fa-check-circle"></i></a>
+                    <a href='<?=Url::to(['order/move-to-confirmed', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa move-to-confirm tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đơn hàng"><i class="fa fa-check-circle"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -227,9 +227,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
 </div>
 <?php
 $script = <<< JS
-$(".ajax-link").ajax_action({
+$(".move-to-confirm").ajax_action({
   confirm: true,
-  confirm_text: 'Bạn có muốn thực hiện tác vụ này?',
+  confirm_text: 'Xác nhận hoàn thành?',
   method: 'POST',
   callback: function(eletement, data) {
     location.reload();

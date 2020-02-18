@@ -22,7 +22,6 @@ class Controller extends BaseController
 				OrderSupplier::STATUS_APPROVE, 
 				OrderSupplier::STATUS_PROCESSING, 
 				OrderSupplier::STATUS_COMPLETED, 
-				OrderSupplier::STATUS_PARTIAL, 
 			];
 			$groupStatus = OrderSupplier::find()->where(['supplier_id' => $userId])
 			->andWhere(['in', 'status', $status])
@@ -36,7 +35,6 @@ class Controller extends BaseController
 			$pending = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_APPROVE, 0);
 			$processing = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_PROCESSING, 0);
 			$completed = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_COMPLETED, 0);
-			// $confirmed = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_CONFIRMED, 0);
 
 			$this->view->params['new_request_order'] = $requesting ? $requesting : '';
 			$this->view->params['new_pending_order'] = $pending ? $pending : '';
