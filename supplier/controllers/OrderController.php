@@ -45,21 +45,18 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
         $data = [
-            'q' => $request->get('q'),
-            'customer_phone' => $request->get('customer_phone'),
-            'customer_id' => $request->get('customer_id'),
+            'order_id' => $request->get('order_id'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'request_start_date' => $request->get('request_start_date'),
+            'request_end_date' => $request->get('request_end_date'),
             'status' => $request->get('status', [
-                Order::STATUS_PENDING,
-                Order::STATUS_PROCESSING,
-                Order::STATUS_COMPLETED,
+                OrderSupplier::STATUS_APPROVE,
+                OrderSupplier::STATUS_PROCESSING,
+                OrderSupplier::STATUS_COMPLETED,
             ]),
             'supplier_id' => Yii::$app->user->id,
-            'supplier_status' => OrderSupplier::STATUS_APPROVE,
         ];
-        $form = new FetchOrderForm($data);
+        $form = new FetchOrderForm1($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)

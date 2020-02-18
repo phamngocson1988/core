@@ -15,7 +15,8 @@ class RejectOrderSupplierForm extends Model
 
     protected $_order;
     protected $_order_supplier;
-
+    protected $_supplier;
+    
     public function rules()
     {
         return [
@@ -44,7 +45,7 @@ class RejectOrderSupplierForm extends Model
     {
         $supplier = $this->getOrderSupplier(); // OrderSupplier
         if (!$supplier) return $this->addError($attribute, 'Yêu cầu không tồn tại');
-        if (!$supplier->isRequest()) return $this->addError($attribute, 'Không thể từ chối đơn hàng');
+        if (!$supplier->canBeTaken()) return $this->addError($attribute, 'Không thể từ chối đơn hàng');
         if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Yêu cầu không hợp lệ cho nhà cung cấp');
 
         $order = $this->getOrder();

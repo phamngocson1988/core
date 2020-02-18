@@ -109,7 +109,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
           <thead>
             <tr>
-              <th> Mã yêu cầu </th>
+              <th> Mã đơn hàng </th>
               <th> Tên game </th>
               <th> Số gói </th>
               <th> Ngày đơn hàng gửi đến </th>
@@ -123,7 +123,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td>#<?=$model->id;?></a></td>
+                <td>#<?=$model->order_id;?></a></td>
                 <td><?=$model->getGameTitle();?></td>
                 <td><?=$model->quantity;?></td>
                 <td><?=$model->requested_at;?></td>
