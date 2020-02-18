@@ -84,7 +84,7 @@ use frontend\models\Order;
                       'action' => ['user/order-evidence', 'id' => $model->id],
                       'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
                   ]); ?>
-                  <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
+                  <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none', 'accept' =>"image/*"]);?>
                   <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'action-link normal-link']);?>
                   <?php ActiveForm::end(); ?>
                   <?php else : ?>

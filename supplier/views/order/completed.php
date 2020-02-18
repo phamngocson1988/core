@@ -132,7 +132,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <span class="label label-default">Completed</span>
                   </td>
                   <td>
-                    <a href='<?=Url::to(['order/edit', 'id' => $model->order_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>
