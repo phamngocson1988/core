@@ -4,8 +4,6 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Order;
-use backend\behaviors\OrderLogBehavior;
-use backend\behaviors\OrderMailBehavior;
 
 class StopOrderForm extends Model
 {
@@ -32,8 +30,10 @@ class StopOrderForm extends Model
         if (!$order) {
             $this->addError('id', 'This order is not exist.');
         }
-        if (!$order->isProcessingOrder() || !$order->isPartialOrder()) {
-            $this->addError('id', 'This order cannot be stopped');
+
+        $stopStatus = [Order::STATUS_PROCESSING, Order::STATUS_PARTIAL];
+        if (!in_array($order->status, $stopStatus)) {
+            $this->addError('id', sprintf("Đơn hàng đang ở trạng thái %s nên không thể dừng", $order->status));
         }
     }
 
@@ -72,9 +72,6 @@ class StopOrderForm extends Model
         $transaction = Yii::$app->db->beginTransaction();
         try {
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            // Update order total price, status
-            $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->attachBehavior('mail', OrderMailBehavior::className());
 
             $order->status = Order::STATUS_COMPLETED;
             $order->doing_unit = $this->quantity;

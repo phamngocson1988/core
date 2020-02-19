@@ -102,14 +102,12 @@ class UpdateOrderToCompletedForm extends Model
             $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $sender = $event->sender; // Order
                 Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-                $sender->attachBehavior('log', OrderLogBehavior::className());
-                $sender->attachBehavior('mail', OrderMailBehavior::className());
                 $sender->log("Moved to completed");
-                // $sender->send(
-                //     'admin_send_complete_order', 
-                //     sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
-                //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
-                // ]);
+                $sender->send(
+                    'admin_send_complete_order', 
+                    sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
+                        'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
+                ]);
             });
 
             $order->save();

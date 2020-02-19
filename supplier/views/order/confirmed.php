@@ -124,7 +124,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <tr>
                   <td>#<?=$model->order_id;?></td>
                   <td><?=$model->getGameTitle();?></td>
-                  <td><?=$model->quantity;?></td>
+                  <td><?=$model->doing;?></td>
                   <td><?=$model->approved_at;?></td>
                   <td><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->approved_at));?></td>
                   <td>

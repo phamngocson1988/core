@@ -416,8 +416,6 @@ class OrderController extends Controller
         $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             $order = $event->sender;
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->attachBehavior('mail', OrderMailBehavior::className());
-            $order->attachBehavior('log', OrderLogBehavior::className());
             $order->send(
                 'admin_send_pending_order', 
                 sprintf("Order confirmation - %s", $order->id), [
@@ -540,7 +538,6 @@ class OrderController extends Controller
         $content = $request->post('content');
         if (trim($content)) {
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->complain($content);
             $order->send(
                 'admin_complain_order', 
@@ -557,7 +554,6 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $model = Order::findOne($id);
-        $model->attachBehavior('log', OrderLogBehavior::className());
         $model->log("Delete order. Current Status is %s", $model->status);
         if ($model && $model->delete()) {
             Yii::$app->session->setFlash('success', "You have deleted order #$id successfully.");
@@ -592,7 +588,6 @@ class OrderController extends Controller
             $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
             $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $model = $event->sender;
-                $model->attachBehavior('log', OrderLogBehavior::className());
                 $model->log(sprintf("Approved to be cancelled when status is %s", $model->status));
             });
             if ($order->isPendingOrder() || $order->isProcessingOrder()) {
@@ -622,7 +617,6 @@ class OrderController extends Controller
             });
             $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $order = $event->sender;
-                $order->attachBehavior('log', OrderLogBehavior::className());
                 $order->log(sprintf("Disapproved to be cancelled when status is %s", $order->status));
             });
             $model->request_cancel = 0;
@@ -657,21 +651,19 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $model = new \backend\forms\StopOrderForm();
-        if ($request->isPost) {
-            if ($model->load($request->post()) && $model->stop()) {
-                return $this->renderJson(true);
-            } else {
-                $this->renderJson(false, $model->getErrors());
-            }
+        if ($model->load($request->post()) && $model->stop()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(false);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
         }
-
     }
 
     public function actionSendMailVerifyingOrder($id)
     {
         $order = Order::findOne($id);
         if ($order) {
-            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->send('admin_notify_order_failure', '[KINGGEMS]-FAILED TRANSACTION');
         }
         return $this->renderJson(true);

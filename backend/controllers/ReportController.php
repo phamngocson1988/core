@@ -156,6 +156,7 @@ class ReportController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
                             ->all();
         return $this->render('finance/balance-detail', [
             'models' => $models,
