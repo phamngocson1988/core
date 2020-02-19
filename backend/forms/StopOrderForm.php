@@ -32,7 +32,7 @@ class StopOrderForm extends Model
         if (!$order) {
             $this->addError('id', 'This order is not exist.');
         }
-        if (!$order->isProcessingOrder()) {
+        if (!$order->isProcessingOrder() || !$order->isPartialOrder()) {
             $this->addError('id', 'This order cannot be stopped');
         }
     }

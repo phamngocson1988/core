@@ -211,8 +211,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   </td>
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-
+                    <?php if (Yii::$app->user->can('saler') || Yii::$app->user->can('accounting')) :?>
                     <a href='<?=Url::to(['order/move-to-confirmed', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa move-to-confirm tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đơn hàng"><i class="fa fa-check-circle"></i></a>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <?php endforeach;?>

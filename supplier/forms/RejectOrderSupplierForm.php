@@ -64,7 +64,7 @@ class RejectOrderSupplierForm extends Model
         $order = $this->getOrder();
         if (!$supplier) return $this->addError($attribute, 'Nhà cung cấp không tồn tại');
         if ($supplier->isDisabled()) return $this->addError($attribute, 'Nhà cung cấp hiện đang ngưng hoạt động');
-        if (!$supplier->hasGame($order->game_id)) return $this->addError($attribute, 'Nhà cung cấp hiện không thể xử lý cho game này');
+        if (!$supplier->hasGame($order->game_id)) return $this->addError($attribute, 'Bạn cần đăng ký game này trước khi xử lý');
 
     }
 

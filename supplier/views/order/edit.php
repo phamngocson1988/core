@@ -362,7 +362,7 @@ $this->registerJs($complainJs);
         <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Hủy</button>
         <button type="submit" class="btn green">Xác nhận</button>
       </div>
       <?= Html::endForm();?>
@@ -397,7 +397,7 @@ $this->registerJs($moveProcessingJs)
         <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed"</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Hủy</button>
         <button type="submit" class="btn green">Xác nhận</button>
       </div>
       <?= Html::endForm();?>
@@ -432,7 +432,7 @@ $this->registerJs($moveCompletedJs)
         <p>Bạn chưa nhập đủ số lượng game cho đơn hàng. Nếu hoàn tất lúc này, hệ thống sẽ ghi nhận số lượng hoàn thành của bạn là <strong class="doing"></strong> / <strong class="quantity"></strong>. Bạn có chắc chắn muốn thực hiện điều này?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Hủy</button>
         <button type="submit" class="btn green">Xác nhận</button>
       </div>
       <?= Html::endForm();?>

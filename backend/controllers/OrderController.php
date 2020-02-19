@@ -658,8 +658,7 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $model = new \backend\forms\StopOrderForm();
         if ($request->isPost) {
-            if ($model->load($request->post()) && $model->validate()) {
-                $model->stop();
+            if ($model->load($request->post()) && $model->stop()) {
                 return $this->renderJson(true);
             } else {
                 $this->renderJson(false, $model->getErrors());

@@ -111,6 +111,8 @@ class AddOrderQuantityForm extends Model
 
             $order->doing_unit += $this->doing;
             $order->save();
+
+            $order->log(sprintf("Nạp game: %s", $this->doing));
             $transaction->commit();
             return true;
         } catch(Exception $e) {

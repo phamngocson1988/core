@@ -95,7 +95,7 @@ class UpdateOrderToPartialForm extends Model
 
             $order = $this->getOrder();
             $order->status = Order::STATUS_PARTIAL;
-            $order->doing_unit += $supplier->doing;
+            // $order->doing_unit += $supplier->doing;
             $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $sender = $event->sender; // Order
                 Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);

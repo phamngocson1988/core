@@ -235,14 +235,13 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                     <?php if (Yii::$app->user->can('orderteam')) :?>
                     <?php if (!$supplier) :?>
                     <a href='<?=Url::to(['order/assign-supplier', 'id' => $model->id]);?>' data-target="#assign-supplier" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chuyển đến nhà cung cấp" data-toggle="modal" ><i class="fa fa-rocket"></i></a>
-                    <?php endif;?>
-                    <?php endif;?>
-
+                    <?php endif;?> <!-- end if supplier -->
 
                     <!-- Remove supplier -->
                     <?php if ($supplier && $supplier->canBeTaken()) : ?>
                     <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa remove-supplier tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
-                    <?php endif;?>
+                    <?php endif;?> <!-- end if canBeTaken -->
+                    <?php endif;?> <!-- end if orderteam -->
                   </td>
                 </tr>
                 <?php endforeach;?>

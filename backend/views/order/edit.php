@@ -292,6 +292,10 @@ var stopOrderForm = new AjaxFormSubmit({element: '#stop-order-form'});
 stopOrderForm.success = function (data, form) {
   location.reload();
 };
+stopOrderJs.error = function (errors) {
+  alert(errors);
+  return false;
+};
 JS;
 $this->registerJs($stopOrderJs)
 ?>
