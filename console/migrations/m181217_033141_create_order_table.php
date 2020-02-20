@@ -48,6 +48,7 @@ class m181217_033141_create_order_table extends Migration
             'comment_rating' => $this->string(100),
             'created_at' => $this->dateTime(),
             'completed_at' => $this->dateTime(),
+            'confirmed_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),
             'status' => $this->integer(11),

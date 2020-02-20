@@ -267,8 +267,8 @@ class OrderController extends Controller
             'orderteam_id' => $request->get('orderteam_id'),
             'payment_method' => $request->get('payment_method'),
             'game_id' => $request->get('game_id'),
-            'start_date' => $request->get('start_date'),
-            'end_date' => $request->get('end_date'),
+            'confirmed_from' => $request->get('confirmed_from'),
+            'confirmed_to' => $request->get('confirmed_to'),
             'status' => Order::STATUS_CONFIRMED,
         ];
         $form = new FetchOrderForm($data);

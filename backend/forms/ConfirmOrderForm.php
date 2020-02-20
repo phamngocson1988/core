@@ -38,6 +38,7 @@ class ConfirmOrderForm extends Model
         $transaction = $connection->beginTransaction();
         try {
             $order->status = Order::STATUS_CONFIRMED;
+            $order->confirmed_at = date('Y-m-d H:i:s');
             $result = $order->save();
             $order->log("Moved to confirmed");
 

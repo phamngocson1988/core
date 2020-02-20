@@ -27,6 +27,8 @@ class FetchOrderForm extends Model
     public $customer_phone;
     public $completed_from;
     public $completed_to;
+    public $confirmed_from;
+    public $confirmed_to;
     public $payment_method;
     public function rules()
     {
@@ -35,6 +37,7 @@ class FetchOrderForm extends Model
             [['game_id', 'customer_id', 'saler_id', 'orderteam_id', 'status'], 'safe'],
             [['start_date', 'end_date'], 'safe'],
             [['completed_from', 'completed_to'], 'safe'],
+            [['confirmed_from', 'confirmed_to'], 'safe'],
             [['supplier_id', 'agency_id', 'is_reseller', 'payment_method'], 'safe'],
         ];
     }
@@ -100,6 +103,13 @@ class FetchOrderForm extends Model
         }
         if ($this->completed_to) {
             $command->andWhere(['<=', "$table.completed_at", $this->completed_to]);
+        }
+
+        if ($this->confirmed_from) {
+            $command->andWhere(['>=', "$table.confirmed_at", $this->confirmed_from]);
+        }
+        if ($this->confirmed_to) {
+            $command->andWhere(['<=', "$table.confirmed_at", $this->confirmed_to]);
         }
 
         if ($this->status) {

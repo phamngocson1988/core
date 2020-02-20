@@ -123,9 +123,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
             <?php endif;?>
 
-            <?= $form->field($search, 'start_date', [
+            <?= $form->field($search, 'completed_from', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'completed_from', 'id' => 'completed_from']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -134,11 +134,11 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày tạo từ');?>
+            ])->label('Ngày xác nhận từ');?>
 
-            <?=$form->field($search, 'end_date', [
+            <?=$form->field($search, 'confirmed_to', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'confirmed_to', 'id' => 'confirmed_to']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -148,7 +148,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày tạo đến');?>
+            ])->label('Ngày xác nhận đến');?>
 
             <?=$form->field($search, 'payment_method', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -169,7 +169,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th> Mã đơn hàng </th>
                 <th <?=$showCustomer ? '' : 'class="hide"';?>> Tên khách hàng </th>
                 <th> Tên game </th>
-                <th> Ngày tạo </th>
+                <th> Ngày xác nhận </th>
                 <th <?=$showCustomer ? '' : 'class="hide"';?>> Cổng thanh toán </th>
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
@@ -191,7 +191,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->getCustomerName();?></td>
                   <td><?=$model->game_title;?></td>
-                  <td><?=$model->created_at;?></td>
+                  <td><?=$model->confirmed_at;?></td>
                   <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->payment_method;?></td>
                   <td><?=$model->total_unit;?></td>
                   <td><?=$model->quantity;?></td>
