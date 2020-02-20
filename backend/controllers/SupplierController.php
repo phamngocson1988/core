@@ -11,6 +11,7 @@ use yii\helpers\Url;
 use backend\forms\FetchSupplierForm;
 use backend\forms\FetchSupplierGameForm;
 use backend\forms\FetchSupplierWalletForm;
+use backend\forms\ReportSupplierBalanceForm;
 use backend\models\Supplier;
 use backend\models\User;
 use backend\models\Order;
@@ -299,23 +300,19 @@ class SupplierController extends Controller
 
     public function actionBalance()
     {
+        $this->view->params['main_menu_active'] = 'supplier.balance';
         $request = Yii::$app->request;
-        $form = new FetchSupplierWalletForm([
+        $form = new ReportSupplierBalanceForm([
             'supplier_id' => $request->get('supplier_id'),
-            'type' => $request->get('type'),
-            'created_at_from' => $request->get('created_at_from'),
-            'created_at_to' => $request->get('created_at_to'),
+            'report_from' => $request->get('report_from'),
+            'report_to' => $request->get('report_to'),
         ]);
-        $command = $form->getCommand();
-        $command->groupBy('supplier_id');
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        $models = $form->getReport();
 
         return $this->render('balance.php', [
             'models' => $models,
             'search' => $form,
-            'command' => $command,
-            'pages' => $pages,
+            'pages' => $form->getPage(),
         ]);
     }
 }

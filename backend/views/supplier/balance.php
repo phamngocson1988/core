@@ -61,9 +61,9 @@ use backend\components\datetimepicker\DateTimePicker;
                 ]
               ]
             ])->label('Nhà cung cấp')?>
-            <?=$form->field($search, 'created_at_from', [    
+            <?=$form->field($search, 'report_from', [    
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'created_at_from', 'id' => 'created_at_from']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'report_from', 'id' => 'report_from']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -72,11 +72,11 @@ use backend\components\datetimepicker\DateTimePicker;
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày tạo từ');?>
+            ])->label('Ngày thống kê từ');?>
 
-            <?=$form->field($search, 'created_at_to', [
+            <?=$form->field($search, 'report_to', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'created_at_to', 'id' => 'created_at_to']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'report_to', 'id' => 'report_to']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -86,7 +86,7 @@ use backend\components\datetimepicker\DateTimePicker;
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày tạo đến');?>
+            ])->label('Ngày thống kê đến');?>
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -100,24 +100,32 @@ use backend\components\datetimepicker\DateTimePicker;
             <tr>
               <th> ID </th>
               <th> Nhà cung cấp </th>
-              <th> Số dư đầu kỳ</th>
+              <th> Số tiền nạp vào</th>
+              <th> Số tiền rút ra </th>
+              <th> Số dư đầu kỳ </th>
               <th> Số dư cuối kỳ </th>
-              <th> Số tiền đã rút trong kỳ </th>
               <th> Tác vụ </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <?php $supplier = $model->supplier;?>
+              <?php foreach ($models as $id => $model) :?>
               <tr>
-                <td>#<?=$model->supplier_id?></td>
-                <td><?=$supplier->getName();?></td>
-                <td></td>
-                <td></td>
-                <td><?=number_format($command->sum('amount'));?></td>
+                <td>#<?=$id?></td>
+                <td><?=$model['name']?></td>
+                <td><?=number_format($model['period_income']);?></td>
+                <td><?=number_format(abs($model['period_outcome']));?></td>
+                <td><?=number_format($model['beginning_total']);?></td>
+                <td><?=number_format($model['ending_total']);?></td>
+                <td>
+                  <a class="btn btn-xs green tooltips" href="#" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
+                  <?php if (Yii::$app->user->can('admin')) : ?>
+                  <a class="btn btn-xs purple tooltips" href="#" data-container="body" data-original-title="Topup wallet" target="_blank" data-pjax="0"><i class="fa fa-plus"></i></a>
+                  <a class="btn btn-xs grey tooltips" href="#" data-container="body" data-original-title="Withdraw wallet" target="_blank" data-pjax="0"><i class="fa fa-minus"></i></a>
+                  <?php endif;?>
+                </td>
               </tr>
               <?php endforeach;?>
           </tbody>
