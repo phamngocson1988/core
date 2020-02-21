@@ -20,6 +20,7 @@ use backend\models\SupplierWithdrawRequest;
 use backend\models\SupplierGameSuggestion;
 use backend\behaviors\UserSupplierBehavior;
 use backend\forms\CancelSupplierWithdrawRequest;
+use backend\forms\ReportSupplierBalanceDetailForm;
 use backend\models\SupplierWallet;
 
 class SupplierController extends Controller
@@ -315,4 +316,67 @@ class SupplierController extends Controller
             'pages' => $form->getPage(),
         ]);
     }
+
+    public function actionBalanceDetail($id)
+    {
+        $this->view->params['main_menu_active'] = 'supplier.balance';
+        $request = Yii::$app->request;
+        $form = new ReportSupplierBalanceDetailForm([
+            'supplier_id' => $id,
+            'report_from' => $request->get('report_from'),
+            'report_to' => $request->get('report_to'),
+            'type' => $request->get('type'),
+        ]);
+
+        return $this->render('balance-detail.php', [
+            'search' => $form,
+            'pages' => $form->getPage(),
+        ]);
+    }
+
+    public function actionTopup($id)
+    {
+        $this->view->params['main_menu_active'] = 'wallet.index';
+        $supplier = Supplier::findOne($id);
+        if (!$supplier) throw new NotFoundHttpException('Not found');
+        $balance = $supplier->walletTotal();
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $amount = ArrayHelper::getValue($request->post(), 'amount');
+            $description = ArrayHelper::getValue($request->post(), 'description');
+            if ($amount) {
+                $admin = Yii::$app->user->identity;
+                $supplier->topup($amount, 'manual', $admin->id, sprintf("%s (ID: %s) đã nạp tiền vào ví với mô tả: %s", $admin->username, $admin->id, $description));
+                return $this->redirect(['supplier/balance', 'supplier_id' => $id]); 
+            }
+            Yii::$app->session->setFlash('error', 'Số tiền nạp vào không được để trống');
+        }
+        return $this->render('topup', [
+            'supplier' => $supplier,
+            'balance' => $balance
+        ]);
+    }
+
+    // public function actionWithdraw($id)
+    // {
+    //     $this->view->params['main_menu_active'] = 'wallet.index';
+    //     $user = User::findOne($id);
+    //     if (!$user) throw new NotFoundHttpException('Not found');
+    //     $balance = $user->getWalletAmount();
+    //     $request = Yii::$app->request;
+    //     if ($request->isPost) {
+    //         $coin = ArrayHelper::getValue($request->post(), 'coin');
+    //         $description = ArrayHelper::getValue($request->post(), 'description');
+    //         if ($coin && $coin <= $balance) {
+    //             $admin = Yii::$app->user->identity;
+    //             $user->withdraw($coin, null, sprintf("%s (ID: %s) have done this withdraw with description: %s", $admin->username, $admin->id, $description));
+    //             return $this->redirect(['wallet/index', 'user_id' => $id]);   
+    //         }
+    //         Yii::$app->session->setFlash('error', 'Số coin rút ra không hợp lệ');
+    //     }
+    //     return $this->render('withdraw', [
+    //         'user' => $user,
+    //         'balance' => $balance
+    //     ]);
+    // }
 }

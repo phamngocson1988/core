@@ -1,12 +1,19 @@
 <?php
 use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
-?>
+use backend\models\SupplierWallet;
 
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$user = $search->getSupplier();
+$models = $search->fetch();
+?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -38,29 +45,23 @@ use backend\components\datetimepicker\DateTimePicker;
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase">Thống kê số dư tài khoản nhà cung cấp</span>
+          <span class="caption-subject bold uppercase">Nhà cung cấp <span style="color:red"><?=$user->name;?></span></span>
+        </div>
+        <div class="actions">
+          <!-- <a role="button" class="btn btn-warning" href="<?=Url::current(['mode'=>'export']);?>"><i class="fa fa-file-excel-o"></i> Export</a> -->
         </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['supplier/balance']]);?>
-            <?php $user = $search->getCustomer();?>
-            <?=$form->field($search, 'supplier_id', [
-            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->supplier_id) ? sprintf("%s - %s", $user->username, $user->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'supplier_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn nhà cung cấp',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Nhà cung cấp')?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['supplier/balance-detail', 'id' => $search->supplier_id]]);?>
+            <?=$form->field($search, 'type', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'type']
+            ])->dropDownList([
+                SupplierWallet::TYPE_INPUT => 'Nạp tiền',
+                SupplierWallet::TYPE_OUTPUT => 'Rút tiền',
+            ], ['prompt' => 'Chọn'])->label('Loại giao dịch');?>
+
             <?=$form->field($search, 'report_from', [    
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'report_from', 'id' => 'report_from']
@@ -72,7 +73,7 @@ use backend\components\datetimepicker\DateTimePicker;
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày thống kê từ');?>
+            ])->label('Ngày tạo từ');?>
 
             <?=$form->field($search, 'report_to', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -86,7 +87,8 @@ use backend\components\datetimepicker\DateTimePicker;
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày thống kê đến');?>
+            ])->label('Ngày tạo đến');?>
+
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
@@ -95,42 +97,46 @@ use backend\components\datetimepicker\DateTimePicker;
           <?php ActiveForm::end()?>
         </div>
         
+        <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th> ID </th>
-              <th> Nhà cung cấp </th>
-              <th> Số tiền nạp vào</th>
-              <th> Số tiền rút ra </th>
-              <th> Số dư đầu kỳ </th>
-              <th> Số dư cuối kỳ </th>
-              <th> Tác vụ </th>
+              <th> Ngày thực hiện </th>
+              <th> Mô tả</th>
+              <th> Loại giao dịch </th>
+              <th> Số tiền </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
-              <?php foreach ($models as $id => $model) :?>
+              <?php foreach ($models as $no => $model) :?>
               <tr>
-                <td>#<?=$id?></td>
-                <td><?=$model['name']?></td>
-                <td><?=number_format($model['period_income']);?></td>
-                <td><?=number_format(abs($model['period_outcome']));?></td>
-                <td><?=number_format($model['beginning_total']);?></td>
-                <td><?=number_format($model['ending_total']);?></td>
+                <td><?=$model->created_at;?></td>
+                <td><?=$model->description;?></td>
                 <td>
-                  <a class="btn btn-xs green tooltips" href="<?=Url::to(['supplier/balance-detail', 'id' => $id]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
-                  <?php if (Yii::$app->user->can('admin')) : ?>
-                  <a class="btn btn-xs purple tooltips" href="<?=Url::to(['supplier/topup', 'id' => $id]);?>" data-container="body" data-original-title="Topup wallet" target="_blank" data-pjax="0"><i class="fa fa-plus"></i></a>
-                  <a class="btn btn-xs grey tooltips" href="#" data-container="body" data-original-title="Withdraw wallet" target="_blank" data-pjax="0"><i class="fa fa-minus"></i></a>
-                  <?php endif;?>
+                  <?php if ($model->type == SupplierWallet::TYPE_INPUT) : ?>
+                    <span class="label label-success">Nạp tiền</span>
+                  <?php else : ?> 
+                    <span class="label label-default">Rút tiền</span>
+                  <?php endif; ?>
                 </td>
+                <td><?=number_format($model->amount);?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Tổng cộng: <?=number_format($search->getCommand()->sum('amount'));?></td>
+            </tr>
+          </tfoot>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
+        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
