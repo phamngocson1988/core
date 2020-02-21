@@ -460,7 +460,7 @@ $('body').on('click', '#completeBtn', function() {
   var quantity = $('#doing_unit_progress').attr('aria-valuemax');
   var doing = $('#current_doing_unit').text();
   quantity = parseInt(quantity);
-  doing = parseInt(doing);
+  doing = parseFloat(doing);
   if (doing == quantity) {
     $('#go_completed').modal('show');
   } else {

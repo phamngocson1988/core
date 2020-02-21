@@ -47,7 +47,11 @@ class FetchHistoryOrderForm extends Order
             $command->andWhere(['game_id' => $this->game_id]);
         }
         if ($this->status) {
-            $command->andWhere(['status' => $this->status]);
+            if ($this->status != Order::STATUS_PROCESSING) {
+                $command->andWhere(['status' => $this->status]);
+            } else {
+                $command->andWhere(['in', 'status', [Order::STATUS_PROCESSING, Order::STATUS_PARTIAL]]);
+            }
         }
         $command->orderBy(['created_at' => SORT_DESC]);
         $this->_command = $command;

@@ -179,6 +179,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -208,6 +209,14 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                     <?php if ($model->tooLongProcess()) :?>
                     <span class="label label-warning">Xử lý chậm</span>
                     <?php endif;?>
+                  </td>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
+                    <?php
+                    $suppliers = $model->suppliers;
+                    foreach ($suppliers as $supplier) {
+                      echo sprintf('%s (%s)<br/>', $supplier->user->name, $supplier->doing);
+                    }
+                    ?>
                   </td>
                   <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>

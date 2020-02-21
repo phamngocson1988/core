@@ -19,4 +19,15 @@ class OrderSupplierBehavior extends AttributeBehavior
             OrderSupplier::STATUS_PROCESSING,
         ]]);
     }
+
+    public function getSuppliers()
+    {
+        $owner = $this->owner;
+        $supplierTable = OrderSupplier::tableName();
+        return $owner->hasMany(OrderSupplier::className(), ['order_id' => 'id'])
+        ->andOnCondition(["IN", "{$supplierTable}.status", [
+            OrderSupplier::STATUS_COMPLETED,
+            OrderSupplier::STATUS_CONFIRMED, 
+        ]]);
+    }
 }

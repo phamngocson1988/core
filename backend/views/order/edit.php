@@ -217,41 +217,8 @@ $this->registerJs($moveProcessingJs)
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_processing"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
+                            <a class="btn red btn-outline sbold" id="completeBtn"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
                           </div>
-                          <div class="modal fade" id="go_processing" tabindex="-1" role="basic" aria-hidden="true">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                  <h4 class="modal-title">Chuyển tới trạng thái Completed</h4>
-                                </div>
-                                <?= Html::beginForm(['order/move-to-completed', 'id' => $order->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-completed-form']) ?>
-                                <div class="modal-body"> 
-                                  <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed"</p>
-                                  <p id="doing_unit_notice" style="display: none">Số đơn vị game của bạn vẫn chưa được cập nhật đủ, nếu chuyển qua trạng thái "Completed", toàn bộ số đơn vị game đang thực hiện sẽ được cập nhật đúng bằng số đơn vị game cần nhập của đơn hàng.</p>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn green">Xác nhận</button>
-                                </div>
-                                <?= Html::endForm();?>
-                              </div>
-                            </div>
-                          </div>
-<?php
-$moveCompletedJs = <<< JS
-var moveCompletedForm = new AjaxFormSubmit({element: '#move-completed-form'});
-moveCompletedForm.success = function (data, form) {
-  location.reload();
-};
-moveCompletedForm.error = function (errors) {
-  alert(errors);
-  return false;
-};
-JS;
-$this->registerJs($moveCompletedJs)
-?>
                         </div>
                       </div>
 
@@ -560,3 +527,93 @@ $this->registerJs($complainJs);
     </div>
   </div>
 </div>
+
+<!-- Go partial -->
+<div class="modal fade" id="go_partial" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Xác nhận hoàn thành một phần đơn hàng</h4>
+      </div>
+      <?= Html::beginForm(['order/move-to-partial', 'id' => $order->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-partial-form']) ?>
+      <div class="modal-body"> 
+        <p>Bạn chưa nhập đủ số lượng game cho đơn hàng. Nếu hoàn tất lúc này, hệ thống sẽ ghi nhận số lượng hoàn thành của bạn là <strong class="doing"></strong> / <strong class="quantity"></strong>. Bạn có chắc chắn muốn thực hiện điều này?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn green">Xác nhận</button>
+      </div>
+      <?= Html::endForm();?>
+    </div>
+  </div>
+</div>
+
+<!-- Go completed -->
+<div class="modal fade" id="go_completed" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Chuyển tới trạng thái Completed</h4>
+      </div>
+      <?= Html::beginForm(['order/move-to-completed', 'id' => $order->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-completed-form']) ?>
+      <div class="modal-body"> 
+        <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed"</p>
+        <p id="doing_unit_notice" style="display: none">Số đơn vị game của bạn vẫn chưa được cập nhật đủ, nếu chuyển qua trạng thái "Completed", toàn bộ số đơn vị game đang thực hiện sẽ được cập nhật đúng bằng số đơn vị game cần nhập của đơn hàng.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn green">Xác nhận</button>
+      </div>
+      <?= Html::endForm();?>
+    </div>
+  </div>
+</div>
+
+<?php
+$moveCompletedJs = <<< JS
+var moveCompletedForm = new AjaxFormSubmit({element: '#move-completed-form'});
+moveCompletedForm.success = function (data, form) {
+  location.reload();
+};
+moveCompletedForm.error = function (errors) {
+  alert(errors);
+  return false;
+};
+JS;
+$this->registerJs($moveCompletedJs)
+?>
+
+<?php
+$movePartialJs = <<< JS
+var moveCompletedForm = new AjaxFormSubmit({element: '#move-partial-form'});
+moveCompletedForm.success = function (data, form) {
+  location.reload();
+};
+moveCompletedForm.error = function (errors) {
+  alert(errors);
+  return false;
+};
+JS;
+$this->registerJs($movePartialJs)
+?>
+
+<?php
+$completeModalJs = <<< JS
+$('body').on('click', '#completeBtn', function() {
+  var quantity = $('#doing_unit_progress').attr('aria-valuemax');
+  var doing = $('#current_doing_unit').text();
+  quantity = parseInt(quantity);
+  doing = parseFloat(doing);
+  if (doing == quantity) {
+    $('#go_completed').modal('show');
+  } else {
+    $('#go_partial').find('.doing').text(doing);
+    $('#go_partial').find('.quantity').text(quantity);
+    $('#go_partial').modal('show');
+  }
+});
+JS;
+$this->registerJs($completeModalJs)
+?>

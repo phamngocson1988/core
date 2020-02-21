@@ -36,7 +36,8 @@ use backend\models\OrderComplains;
 use backend\forms\ConfirmOrderForm;
 use backend\forms\AddOrderQuantityForm;
 use backend\forms\UpdateOrderToCompletedForm;
-
+use backend\forms\UpdateOrderToPartialForm;
+use backend\forms\StopOrderForm;
 
 // use backend\forms\UpdateOrderStatusPending;
 
@@ -391,7 +392,7 @@ class OrderController extends Controller
         $templateList = OrderComplainTemplate::find()->all();
         return $this->render('edit', [
             'order' => $order,
-            'stopModel' => new \backend\forms\StopOrderForm(),
+            'stopModel' => new StopOrderForm(),
             'template_list' => $templateList
         ]);
     }
@@ -470,7 +471,20 @@ class OrderController extends Controller
         });
 
         return $this->renderJson($model->save());
+    }
 
+    public function actionMoveToPartial($id)
+    {
+        $form = new UpdateOrderToPartialForm([
+            'id' => $id,
+
+        ]);
+        if ($form->move()) {
+            return $this->asJson(['status' => true]);
+        }
+        $errors = $form->getErrorSummary(false);
+        $error = reset($errors);
+        return $this->asJson(['status' => false, 'errors' => $error]);
     }
 
     public function actionMoveToCompleted($id)
@@ -650,7 +664,7 @@ class OrderController extends Controller
     public function actionStop()
     {
         $request = Yii::$app->request;
-        $model = new \backend\forms\StopOrderForm();
+        $model = new StopOrderForm();
         if ($model->load($request->post()) && $model->stop()) {
             return $this->asJson(['status' => true]);
         } else {

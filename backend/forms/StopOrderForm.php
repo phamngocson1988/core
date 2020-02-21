@@ -4,6 +4,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Order;
+use backend\models\OrderSupplier;
 
 class StopOrderForm extends Model
 {
@@ -73,12 +74,24 @@ class StopOrderForm extends Model
         try {
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
 
+            $diff = $this->quantity - $order->doing_unit;
             $order->status = Order::STATUS_COMPLETED;
-            $order->doing_unit = $this->quantity;
+            $order->doing_unit += $diff;
             $order->quantity = $this->quantity;
             $order->sub_total_unit = $newTotalUnit;
             $order->total_unit = $newTotalUnit;
             $order->save();
+
+            // Complete supplier
+            $supplier = $order->supplier;
+            if ($supplier && !$supplier->isRequest()) {
+                $supplier->status = OrderSupplier::STATUS_COMPLETED;
+                $supplier->completed_at = date('Y-m-d H:i:s');
+                $supplier->doing += $diff;
+                $supplier->total_price = $supplier->price * $supplier->doing;
+                $supplier->save();
+            }
+
             // Topup user wallet
             $user = $order->customer;
             $user->topup($remainingPrice, $order->id, sprintf("[Order #%s] Completed partially: %s/%s >>> Refund %s &percnt; of the charge", $order->id, $newTotalUnit, $oldUnit, $remainingPercent));

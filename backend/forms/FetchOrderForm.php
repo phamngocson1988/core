@@ -6,9 +6,10 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\Order;
-use common\models\User;
-use common\models\Game;
+use backend\models\User;
+use backend\models\Game;
 use backend\models\Supplier;
+use backend\models\OrderSupplier;
 
 class FetchOrderForm extends Model
 {
@@ -54,14 +55,11 @@ class FetchOrderForm extends Model
     {
         $command = Order::find();
         $table = Order::tableName();
+        $command->select(["$table.*"]);
+        $supplierTable = OrderSupplier::tableName();
         
         if ($this->q) {
-            $command->andWhere(['OR',
-                ["$table.id" => $this->q],
-                ["$table.auth_key" =>  $this->q]
-            ]);
-            $this->_command = $command;
-            return;
+            $command->andWhere(["$table.id" => $this->q]);
         }
         if ($this->customer_id) {
             $command->andWhere(["$table.customer_id" => $this->customer_id]);
@@ -79,7 +77,12 @@ class FetchOrderForm extends Model
             $command->andWhere(["$table.saler_id" => $this->saler_id]);
         }
         if ($this->supplier_id) {
-            $command->andWhere(["$table.supplier_id" => $this->supplier_id]);
+            $command->innerJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
+            $command->andWhere(["$supplierTable.supplier_id" => $this->supplier_id]);
+            $command->andWhere(["IN", "$supplierTable.status", [
+                OrderSupplier::STATUS_COMPLETED,
+                OrderSupplier::STATUS_CONFIRMED,
+            ]]);
         }
         if ($this->request_cancel) {
             $command->andWhere(["$table.request_cancel" => $this->request_cancel]);

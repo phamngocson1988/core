@@ -123,9 +123,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
             <?php endif;?>
 
-            <?= $form->field($search, 'completed_from', [
+            <?= $form->field($search, 'confirmed_from', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'completed_from', 'id' => 'completed_from']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'confirmed_from', 'id' => 'confirmed_from']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -210,9 +210,10 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   </td>
                   <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?php
-                    if ($model->supplier) {
-                      echo $model->supplier->user->name;
-                    } 
+                    $suppliers = $model->suppliers;
+                    foreach ($suppliers as $supplier) {
+                      echo sprintf('%s (%s)<br/>', $supplier->user->name, $supplier->doing);
+                    }
                     ?>
                   </td>
                   <td>
