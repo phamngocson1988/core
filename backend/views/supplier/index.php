@@ -109,7 +109,9 @@ use yii\web\JsExpression;
                     <a href="<?=Url::to(['supplier/game', 'id' => $model->user_id]);?>" class="btn btn-sm blue tooltips" data-container="body" data-original-title="Danh sách game"><i class="fa fa-list"></i></a>
 
 
-                    <a href='<?=Url::to(['supplier/wallet', 'id' => $model->user_id]);?>' data-target="#supplier-wallet" class="btn btn-sm grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem chi tiết" data-toggle="modal" ><i class="fa fa-money"></i></a>
+                    <!-- <a href='<?=Url::to(['supplier/wallet', 'id' => $model->user_id]);?>' data-target="#supplier-wallet" class="btn btn-sm grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xem chi tiết" data-toggle="modal" ><i class="fa fa-money"></i></a> -->
+
+                    <a href='<?=Url::to(['supplier/balance-detail', 'id' => $model->user_id]);?>' class="btn btn-sm grey-salsa tooltips" data-container="body" data-original-title="Xem chi tiết" target="_blank" ><i class="fa fa-money"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>

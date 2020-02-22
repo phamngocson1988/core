@@ -62,31 +62,33 @@ use common\components\helpers\FormatConverter;
           </form>
         </div>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th> STT </th>
-              <th> Tên game </th>
-              <th> Giá reseller cấp 1 </th>
-              <th> Giá reseller cấp 2 </th>
-              <th> Giá reseller cấp 3 </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $key => $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td><?=$key + $pages->offset + 1;?></td>
-                <td style="vertical-align: middle;"><?=$model->title;?></td>
-                <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_1);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_1));?></td>
-                <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_2);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_2));?></td>
-                <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_3);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_3));?></td>
+                <th> STT </th>
+                <th> Tên game </th>
+                <th> Giá reseller cấp 1 </th>
+                <th> Giá reseller cấp 2 </th>
+                <th> Giá reseller cấp 3 </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $key => $model) :?>
+                <tr>
+                  <td><?=$key + $pages->offset + 1;?></td>
+                  <td style="vertical-align: middle;"><?=$model->title;?></td>
+                  <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_1);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_1));?></td>
+                  <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_2);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_2));?></td>
+                  <td style="vertical-align: middle;">$<?=$model->getResellerPrice(User::RESELLER_LEVEL_3);?> | CNY <?=FormatConverter::convertCurrencyToCny($model->getResellerPrice(User::RESELLER_LEVEL_3));?></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

@@ -1,9 +1,9 @@
-<?php
+<?php 
+use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Html;
+use yii\web\JsExpression;
+$user = $supplier->user;
 ?>
-<!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
     <li>
@@ -11,167 +11,96 @@ use yii\helpers\Html;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['supplier/index']);?>">Nhà cung cấp</a>
+      <a href="<?=Url::to(['supplier/index'])?>">Nhà cung cấp</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Yêu cầu rút tiền</span>
+      <span>Trừ tiền trong ví</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Yêu cầu rút tiền</h1>
+<h1 class="page-title">Trừ tiền trong ví</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
-    <!-- BEGIN EXAMPLE TABLE PORTLET-->
-    <div class="portlet light bordered">
+    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
+    <div class="portlet">
       <div class="portlet-title">
-        <div class="caption font-dark">
-          <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Các yêu cầu rút tiền</span>
+        <div class="caption">Trừ tiền trong ví</div>
+        <div class="actions btn-set">
+          <a href="<?=Url::to(['wallet/index'])?>" class="btn default">
+          <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
+          <button type="submit" class="btn btn-success">
+          <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
+          </button>
         </div>
       </div>
       <div class="portlet-body">
-        <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable">
-            <thead>
-              <tr>
-                <th> Mã yêu cầu </th>
-                <th> Nhà cung cấp </th>
-                <th> Số tiền rút </th>
-                <th> Số dư đầu </th>
-                <th> Số dư cuối </th>
-                <th> Thông tin tài khoản </th>
-                <th> Ngày tạo </th>
-                <th> Hình ảnh </th>
-                <th> Trạng thái </th>
-                <th> Ghi chú </th>
-                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-              </tr>
-            </thead>
-            <tbody>
-                <?php if (!$models) :?>
-                <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
-                <?php endif;?>
-                <?php foreach ($models as $model) :?>
-                <?php
-                $supplier = $model->supplier;
-                if (!$supplier) continue;
-                $user = $supplier->user; 
-                ?>
-                <tr>
-                  <td><?=$model->getId();?></td>
-                  <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
-                  <td><?=number_format($model->amount);?></td>
-                  <td><?=number_format($model->available_balance);?></td>
-                  <td>
-                    <?php if ($model->isDone()) : ?>
-                    <?=number_format($model->available_balance - $model->amount);?></td>
-                    <?php endif;?>
-                  <td>
-                    <?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?>
-                  </td>
-                  <td><?=$model->created_at;?></td>
-                  <td>
-                    <?php if ($model->isDone()) : ?>
-                    <?php if (!$model->evidence) : ?>
-                    <?php $form = ActiveForm::begin([
-                        'action' => ['supplier/evidence-withdraw', 'id' => $model->id],
-                        'options' => ['enctype' => 'multipart/form-data', 'class' => 'upload-form']
-                    ]); ?>
-                    <?=Html::fileInput("evidence", null, ['class' => 'file_upload', 'id' => 'evidence' . $model->id, 'style' => 'display:none']);?>
-                    <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'upload-link normal-link']);?>
-                    <?php ActiveForm::end(); ?>
-                    <?php else : ?>
-                    <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">Xem</a> | 
-                    <a href="<?=Url::to(['supplier/remove-evidence-withdraw', 'id' => $model->id]);?>" class="normal-link remove-link">Xóa</a>
-                    <?php endif;?>
-                    <?php endif;?>
-                  </td>
-                  <td><?=$model->getStatusLabel();?></td>
-                  <td><?=$model->note;?></td>
-                  <td>
-                    <?php if ($model->isRequest()) :?>
-                    <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips action-link" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+        <div class="tabbable-bordered">
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab_general">
+              <div class="form-body">
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Mã nhà cung cấp</label>
+                  <div class="col-md-6">
+                    <input type="text" disabled="true" class="form-control" value="<?=$user->id;?>">
+                  </div>
+                </div>
 
-                    <a href="<?=Url::to(['supplier/approve-withdraw', 'id' => $model->id]);?>" class="btn btn-sm yellow tooltips action-link" data-container="body" data-original-title="Chấp nhận yêu cầu"><i class="fa fa-times"></i> Chấp nhận yêu cầu </a>
-                    <?php endif;?>
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Username</label>
+                  <div class="col-md-6">
+                    <input type="text" disabled="true" class="form-control" value="<?=$user->username;?>">
+                  </div>
+                </div>
 
-                    <?php if ($model->isApprove()) :?>
-                      <a href="<?=Url::to(['supplier/cancel-withdraw', 'id' => $model->id]);?>" data-target="#cancel-withdraw" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Hủy yêu cầu" data-toggle="modal"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+                <div class="form-group">
+                  <label class="col-md-2 control-label">User email</label>
+                  <div class="col-md-6">
+                    <input type="text" disabled="true" class="form-control" value="<?=$user->email;?>">
+                  </div>
+                </div>
 
-                      <a href="<?=Url::to(['supplier/done-withdraw', 'id' => $model->id]);?>" class="btn btn-sm blue tooltips action-link" data-container="body" data-original-title="Hoàn thành yêu cầu"><i class="fa fa-times"></i> Hoàn thành yêu cầu </a>
-                    <?php endif;?>
-                  </td>
-                </tr>
-                <?php endforeach;?>
-            </tbody>
-          </table>
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Name</label>
+                  <div class="col-md-6">
+                    <input type="text" disabled="true" class="form-control" value="<?=$user->name;?>">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Ví hiện tại</label>
+                  <div class="col-md-6">
+                    <input type="text" disabled="true" class="form-control" value="<?=number_format($balance);?>">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Số lượng rút</label>
+                  <div class="col-md-6">
+                    <input type="text" class="form-control" name="amount">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Mô tả</label>
+                  <div class="col-md-6">
+                    <input type="text" class="form-control" name="description">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- END EXAMPLE TABLE PORTLET-->
+    <?php ActiveForm::end()?>
   </div>
 </div>
-<div class="modal fade" id="cancel-withdraw" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    </div>
-  </div>
-</div>
-<?php
-$script = <<< JS
-// action-link
-$('.action-link').ajax_action({
-  method: 'POST',
-  confirm: true,
-  confirm_text: 'Bạn có muốn thực hiện tác vụ này không?',
-  callback: function(data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    location.reload();
-  }
-});
-
-// Upload evidence
-$('.file_upload').on('change', function() {
-  $(this).closest('form').submit();
-});
-$('.upload-link').on('click', function() {
-  $(this).closest('form').find('.file_upload').trigger('click');
-});
-$('.remove-link').ajax_action({
-  method: 'POST',
-  confirm: true,
-  confirm_text: 'Do you want to remove this receipt?',
-  callback: function(eletement, data) {
-    location.reload();
-  }
-});
-
-// cancel
-$(document).on('submit', 'body #cancel-withdraw-form', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  form.unbind('submit');
-  $.ajax({
-    url: form.attr('action'),
-    type: form.attr('method'),
-    dataType : 'json',
-    data: form.serialize(),
-    success: function (result, textStatus, jqXHR) {
-      if (!result.status)
-       alert(result.error);
-      else 
-        location.reload();
-    },
-  });
-  return false;
-});
-JS;
-$this->registerJs($script);
-?>

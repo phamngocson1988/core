@@ -141,9 +141,9 @@ class SupplierController extends Controller
         ]); 
     }
 
-    public function actionWithdraw()
+    public function actionWithdrawRequest()
     {
-        $this->view->params['main_menu_active'] = 'supplier.withdraw';
+        $this->view->params['main_menu_active'] = 'supplier.withdraw-request';
         $request = Yii::$app->request;
         $command = SupplierWithdrawRequest::find()
         // ->where(['supplier_id' => $request->get('supplier_id', '')])
@@ -159,7 +159,7 @@ class SupplierController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();
-        return $this->render('withdraw', [
+        return $this->render('withdraw-request', [
             'models' => $models,
             'pages' => $pages,
         ]);
@@ -175,7 +175,7 @@ class SupplierController extends Controller
             } else {
                 $errors = $model->getErrorSummary(false);
                 $error = reset($errors);
-                return $this->asJson(['status' => false, 'error' => $error]);
+                return $this->asJson(['status' => false, 'errors' => $error]);
             }
         }
         return $this->renderPartial('_cancel_withdraw.php', [
@@ -336,7 +336,7 @@ class SupplierController extends Controller
 
     public function actionTopup($id)
     {
-        $this->view->params['main_menu_active'] = 'wallet.index';
+        $this->view->params['main_menu_active'] = 'supplier.index';
         $supplier = Supplier::findOne($id);
         if (!$supplier) throw new NotFoundHttpException('Not found');
         $balance = $supplier->walletTotal();
@@ -357,26 +357,26 @@ class SupplierController extends Controller
         ]);
     }
 
-    // public function actionWithdraw($id)
-    // {
-    //     $this->view->params['main_menu_active'] = 'wallet.index';
-    //     $user = User::findOne($id);
-    //     if (!$user) throw new NotFoundHttpException('Not found');
-    //     $balance = $user->getWalletAmount();
-    //     $request = Yii::$app->request;
-    //     if ($request->isPost) {
-    //         $coin = ArrayHelper::getValue($request->post(), 'coin');
-    //         $description = ArrayHelper::getValue($request->post(), 'description');
-    //         if ($coin && $coin <= $balance) {
-    //             $admin = Yii::$app->user->identity;
-    //             $user->withdraw($coin, null, sprintf("%s (ID: %s) have done this withdraw with description: %s", $admin->username, $admin->id, $description));
-    //             return $this->redirect(['wallet/index', 'user_id' => $id]);   
-    //         }
-    //         Yii::$app->session->setFlash('error', 'Số coin rút ra không hợp lệ');
-    //     }
-    //     return $this->render('withdraw', [
-    //         'user' => $user,
-    //         'balance' => $balance
-    //     ]);
-    // }
+    public function actionWithdraw($id)
+    {
+        $this->view->params['main_menu_active'] = 'supplier.index';
+        $supplier = Supplier::findOne($id);
+        if (!$supplier) throw new NotFoundHttpException('Not found');
+        $balance = $supplier->walletTotal();
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $amount = ArrayHelper::getValue($request->post(), 'amount');
+            $description = ArrayHelper::getValue($request->post(), 'description');
+            if ($amount) {
+                $admin = Yii::$app->user->identity;
+                $supplier->withdraw($amount, 'manual', $admin->id, sprintf("%s (ID: %s) đã trừ tiền trong ví với mô tả: %s", $admin->username, $admin->id, $description));
+                return $this->redirect(['supplier/balance', 'supplier_id' => $id]); 
+            }
+            Yii::$app->session->setFlash('error', 'Số tiền trừ vào ví không được để trống');
+        }
+        return $this->render('withdraw', [
+            'supplier' => $supplier,
+            'balance' => $balance
+        ]);
+    }
 }

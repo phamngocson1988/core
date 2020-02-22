@@ -108,7 +108,7 @@
           </li>
           {if $app->user->can('accounting')}
           <li class="nav-item  ">
-            <a href="{url route='/supplier/withdraw'}" class="nav-link " code='supplier.withdraw'>
+            <a href="{url route='/supplier/withdraw-request'}" class="nav-link " code='supplier.withdraw-request'>
             <span class="title">Yêu cầu rút tiền</span>
             </a>
           </li>
