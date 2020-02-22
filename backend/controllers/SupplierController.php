@@ -22,6 +22,7 @@ use backend\behaviors\UserSupplierBehavior;
 use backend\forms\CancelSupplierWithdrawRequest;
 use backend\forms\ReportSupplierBalanceDetailForm;
 use backend\models\SupplierWallet;
+use backend\forms\SupplierFastReportForm;
 
 class SupplierController extends Controller
 {
@@ -329,6 +330,21 @@ class SupplierController extends Controller
         ]);
 
         return $this->render('balance-detail.php', [
+            'search' => $form,
+            'pages' => $form->getPage(),
+        ]);
+    }
+
+    public function actionFastReport()
+    {
+        $this->view->params['main_menu_active'] = 'supplier.fast-report';
+        $request = Yii::$app->request;
+        $form = new SupplierFastReportForm([
+            'report_from' => $request->get('report_from'),
+            'report_to' => $request->get('report_to'),
+        ]);
+
+        return $this->render('fast-report.php', [
             'search' => $form,
             'pages' => $form->getPage(),
         ]);

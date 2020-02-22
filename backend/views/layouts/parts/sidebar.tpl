@@ -687,6 +687,11 @@
                 </a>
               </li>
               <li class="nav-item  ">
+                <a href="{url route='/supplier/fast-report'}" class="nav-link nav-toggle" code='supplier.fast-report'>
+                  <span class="title">Báo cáo nhanh</span>
+                </a>
+              </li>
+              <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo reseller</span>
                 </a>
