@@ -27,6 +27,7 @@ use backend\forms\ReportSaleOrderByUser;
 use backend\forms\ReportSaleOrderByReseller;
 use backend\forms\ReportProcessOrderBySupplier;
 use backend\forms\FetchSupplierForm;
+use backend\forms\ReportCostOrderBySupplier;
 
 class ReportController extends Controller
 {
@@ -530,20 +531,13 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.cost.supplier';
         $request = Yii::$app->request;
         $data = [
-            'status' => Supplier::STATUS_ENABLED,
+            'report_from' => $request->get('report_from'),
+            'report_to' => $request->get('report_to'),
         ];
-        $form = new FetchSupplierForm($data);
-
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
+        $form = new ReportCostOrderBySupplier($data);
 
         return $this->render('cost/supplier', [
-            'models' => $models,
-            'pages' => $pages,
+            'search' => $form,
         ]);
     }
 

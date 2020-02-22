@@ -20,3 +20,7 @@
 	max-width: none;
 	min-width: 90px;
 }
+
+.table td.number {
+	text-align: center !important;
+}
