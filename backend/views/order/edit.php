@@ -606,6 +606,10 @@ $('body').on('click', '#completeBtn', function() {
   var doing = $('#current_doing_unit').text();
   quantity = parseFloat(quantity);
   doing = parseFloat(doing);
+  if (doing == 0) {
+    alert('Vui lòng nhập số lượng game mà bạn đã nạp.');
+    return false;
+  }
   if (doing == quantity) {
     $('#go_completed').modal('show');
   } else {
