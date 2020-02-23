@@ -1,6 +1,5 @@
 <?php
 use yii\widgets\LinkPager;
-use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -106,86 +105,86 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </div>
         </div>
         <?php ActiveForm::end()?>
-        <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-        <thead>
-            <tr>
-              <th>Mã giao dịch</th>
-              <th>Ngày tạo</th>
-              <th>Số tiền</th>
-              <th>Phương thức thanh toán</th>
-              <th>Remark</th>
-              <th>Loại thanh toán</th>
-              <th>Trạng thái</th>
-              <th>Khách hàng</th>
-              <th>Hóa đơn</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (!$models) :?>
-            <tr><td colspan="9">No data found</td></tr>
-            <?php endif;?>
-            <?php foreach ($models as $model) :?>
-            <tr>
-              <td>T<?=$model->id;?></td>
-              <td><?=$model->created_at;?></td>
-              <td>$<?=number_format($model->total_price);?></td>
-              <td><?=sprintf("%s (%s)", $model->payment_method, $model->user_ip);?></td>
-              <td><?=$model->remark;?></td>
-              <td><?=$model->payment_type;?></td>
-              <td><?=$model->status;?></td>
-              <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
-              <td>
-                <?php if ($model->evidence) : ?>
-                <a href="<?=$model->evidence;?>" target="_blank">Xem</a>
-                <?php endif;?>
-              </td>
-              <td>
-                <a href='#confirm-pay<?=$model->id;?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
-                <a href='<?=Url::to(['payment-transaction/send-mail-offline-payment', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
-                <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/move-to-trash', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
-                <div class="modal fade" id="confirm-pay<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Xác nhận giao dịch này đã được chuyển khoản</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
+              <tr>
+                <th>Mã giao dịch</th>
+                <th>Ngày tạo</th>
+                <th>Số tiền</th>
+                <th>Phương thức thanh toán</th>
+                <th>Remark</th>
+                <th>Loại thanh toán</th>
+                <th>Trạng thái</th>
+                <th>Khách hàng</th>
+                <th>Hóa đơn</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (!$models) :?>
+              <tr><td colspan="9">No data found</td></tr>
+              <?php endif;?>
+              <?php foreach ($models as $model) :?>
+              <tr>
+                <td>T<?=$model->id;?></td>
+                <td><?=$model->created_at;?></td>
+                <td>$<?=number_format($model->total_price);?></td>
+                <td><?=sprintf("%s (%s)", $model->payment_method, $model->user_ip);?></td>
+                <td><?=$model->remark;?></td>
+                <td><?=$model->payment_type;?></td>
+                <td><?=$model->status;?></td>
+                <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
+                <td>
+                  <?php if ($model->evidence) : ?>
+                  <a href="<?=$model->evidence;?>" target="_blank">Xem</a>
+                  <?php endif;?>
+                </td>
+                <td>
+                  <a href='#confirm-pay<?=$model->id;?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                  <a href='<?=Url::to(['payment-transaction/send-mail-offline-payment', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
+                  <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/move-to-trash', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
+                  <div class="modal fade" id="confirm-pay<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Xác nhận giao dịch này đã được chuyển khoản</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <?php $form = ActiveForm::begin(['options' => ['class' => 'confirm-form'], 'action' => ['payment-transaction/pay-offline', 'id' => $model->id]]);?>
+                        <div class="modal-body">
+                          <p>Xác nhận thanh toán cho giao dịch mã số <?=$model->getId();?></p>
+                          <p>Số tiền phải nạp: $ <?=number_format($model->total_price, 1);?></p>
+                          <?php if ($model->total_fee) : ?>
+                          <p>Phí dịch vụ: $ <?=number_format($model->total_fee, 1);?></p>
+                          <?php endif;?>
+                          <p>Tổng cộng: $ <?=number_format($model->total_price + $model->total_fee, 1);?></p>
+                          <?=$form->field($model, 'payment_id', [
+                            'labelOptions' => ['class' => 'col-form-label'],
+                          ])->textInput()?>
+                          <?=$form->field($model, 'status', [
+                            'options' => ['tag' => false],
+                            'inputOptions' => ['value' => PaymentTransaction::STATUS_COMPLETED],
+                            'template' => '{input}'
+                          ])->hiddenInput()?>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" data-toggle="modal">Xác nhận</button>
+                        </div>
+                        <?php ActiveForm::end()?>
                       </div>
-                      <?php $form = ActiveForm::begin(['options' => ['class' => 'confirm-form'], 'action' => ['payment-transaction/pay-offline', 'id' => $model->id]]);?>
-                      <div class="modal-body">
-                        <p>Xác nhận thanh toán cho giao dịch mã số <?=$model->getId();?></p>
-                        <p>Số tiền phải nạp: $ <?=number_format($model->total_price, 1);?></p>
-                        <?php if ($model->total_fee) : ?>
-                        <p>Phí dịch vụ: $ <?=number_format($model->total_fee, 1);?></p>
-                        <?php endif;?>
-                        <p>Tổng cộng: $ <?=number_format($model->total_price + $model->total_fee, 1);?></p>
-                        <?=$form->field($model, 'payment_id', [
-                          'labelOptions' => ['class' => 'col-form-label'],
-                        ])->textInput()?>
-                        <?=$form->field($model, 'status', [
-                          'options' => ['tag' => false],
-                          'inputOptions' => ['value' => PaymentTransaction::STATUS_COMPLETED],
-                          'template' => '{input}'
-                        ])->hiddenInput()?>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" data-toggle="modal">Xác nhận</button>
-                      </div>
-                      <?php ActiveForm::end()?>
                     </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
+                </td>
+              </tr>
+              <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
