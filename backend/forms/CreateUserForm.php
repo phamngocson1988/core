@@ -87,7 +87,7 @@ class CreateUserForm extends BaseSignupForm
 				$form->save();
 			}	
 			$transaction->commit();
-			$this->sendEmail();
+			// $this->sendEmail();
             Yii::$app->syslog->log('create_user', 'create new user', $user);
 			return $user;
 		} catch (\Exception $e) {
