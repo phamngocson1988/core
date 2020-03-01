@@ -111,12 +111,10 @@ class UserController extends Controller
         $this->view->params['body_class'] = 'global-bg';
         $this->view->params['user_menu_active'] = 'user.order';
         $request = Yii::$app->request;
-        $today = date('Y-m-d');
-        $firstOfMonth = date('Y-m-01');
         $filter = [
             'customer_id' => Yii::$app->user->id,
-            'start_date' => $request->get('start_date', $firstOfMonth),
-            'end_date' => $request->get('end_date', $today),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'game_id' => $request->get('game_id'),
             'status' => $request->get('status')
         ];

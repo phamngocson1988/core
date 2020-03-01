@@ -35,7 +35,7 @@ class FetchHistoryOrderForm extends Order
 
     protected function createCommand()
     {
-        $command = self::find();
+        $command = Order::find();
         $command->where(['customer_id' => $this->customer_id]);
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
