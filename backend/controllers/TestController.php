@@ -84,29 +84,23 @@ class TestController extends Controller
 
 	public function actionEmail()
 	{
-		$request = Yii::$app->request;
-		$form = new SendmailForm();
-		if ($request->isPost) {
-			$mailer = Yii::createObject([
-				'class' => '\yii\swiftmailer\Mailer',
-				'viewPath' => '@common/mail',
-				'transport' => [
-					'class' => 'Swift_SmtpTransport',
-					'host' => 'smtp.gmail.com',
-					'username' => 'customerservice.kinggems@gmail.com', //'info.globalprepaidcard@gmail.com',
-					'password' => 'K12345678$', //'huynhgia072017',
-					'port' => '587',
-					'encryption' => 'tls',
-				],            
-				'useFileTransport' => false,
-			]);
-			$form->setMailer($mailer);
-			$form->subject = 'Test cation';
-			$form->body = 'Test body';
-			$form->send($request->post('email'));
-            Yii::$app->session->setFlash('success', 'Success!');
-		}
-		return $this->render('email', ['model' => $form]);
+		$mailer = Yii::$app->mailer;
+		$mailer->viewPath = '@backend/supplier_mail';
+		$settings = Yii::$app->settings;
+		$title = 'Test';
+        $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+        $fromName = sprintf("%s Administrator", Yii::$app->name);
+        try {
+            return $mailer->compose('new_order', [])
+            ->setTo('phamngocson1988@gmail.com')
+            ->setFrom([$from => $fromName])
+            ->setSubject($title)
+            ->setTextBody($title)
+            ->send();
+            die('Send');
+        } catch (\Exception $e) {
+            throw $e;
+        }
 	}
 
 	public function onAuthSuccess($client)

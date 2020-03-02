@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 ?>
 <p>Kính gửi quý khách,</p>
-<p>Chúng tôi rất tiếc phải thông báo rằng đơn hàng (Mã đơn hàng #<?=$order->id;?>)  đã bị hủy vì yêu cầu của người mua hoặc lý do bất khả kháng. Quý khách vui lòng ngừng thực hiện bất kỳ thao tác này trên tài khoản nói trên, và thực hiện việc đăng xuất hoàn toàn trên các thiết bị của quý khách. Xin chân thành cảm ơn sự hợp tác của quý khách.</p>
+<p>Xin thông báo, đơn hàng (Mã đơn hàng #<?=$order->id;?>) đã được người mua xác nhận: ĐÃ NHẬN HÀNG thành công. </p>
 <p>Thông tin chi tiết đơn hàng: </p>
 <p>
   <strong>Mã đơn hàng:</strong> <span><?=$order->id;?></span><br>
@@ -11,4 +11,6 @@ use yii\helpers\Url;
   <strong>Phí thực hiện đơn hàng:</strong> <span><?=number_format($orderSupplier->total_price);?></span><br>
 </p>
 <p>Quý khách có thể kiểm tra thêm thông tin chi tiết đơn hàng theo đường link sau: [......]</p>
-<p>Phí thực hiện đơn hàng này sẽ KHÔNG được tính vào doanh thu của quý khách.</p>
+<p>Phí thực hiện đơn hàng đã được cập nhật vào số dư trên tài khoản quý khách tại hoanggianapgame.vn. Xin vui lòng kiểm tra!</p>
+<p>Xin cảm ơn sự nỗ lực của quý khách trong việc hoàn thành đơn hàng! </p>
+<p>Xin lưu ý đây là email mang tính chất thông báo, xin vui lòng không phản hồi lại email này.</p>
