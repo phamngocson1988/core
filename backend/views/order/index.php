@@ -142,8 +142,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             ])->dropDownList([
                 Order::STATUS_PENDING => 'Pending',
                 Order::STATUS_PROCESSING => 'Processing',
-                Order::STATUS_PARTIAL => 'Partial',
+                Order::STATUS_PARTIAL => 'Completed (P)',
                 Order::STATUS_COMPLETED => 'Completed',
+                Order::STATUS_CONFIRMED => 'Confirmed'
             ])->label('Trạng thái');?>
 
             <?php $game = $search->getGame();?>   
@@ -258,9 +259,12 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   </td>
                   <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?php
-                    if ($model->supplier) {
-                      echo $model->supplier->user->name;
-                    } 
+                    $suppliers = $model->suppliers;
+                    if ($suppliers) {
+                      foreach ($suppliers as $supplier) {
+                        echo sprintf('%s (%s)<br/>', $supplier->user->name, $supplier->doing);
+                      }
+                    }
                     ?>
                   </td>
                   <td>

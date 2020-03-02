@@ -78,6 +78,7 @@ class OrderController extends Controller
                 Order::STATUS_PROCESSING,
                 Order::STATUS_PARTIAL,
                 Order::STATUS_COMPLETED,
+                Order::STATUS_CONFIRMED,
             ]),
         ];
         $form = new FetchOrderForm($data);
@@ -771,7 +772,7 @@ class OrderController extends Controller
         } else {
             $errors = $model->getErrorSummary(true);
             $error = reset($errors);
-            return $this->asJson(['status' => false, 'error' => $error]);
+            return $this->asJson(['status' => false, 'errors' => $error]);
         }
     }
 }

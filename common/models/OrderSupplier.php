@@ -77,6 +77,11 @@ class OrderSupplier extends ActiveRecord
         return $this->status == self::STATUS_COMPLETED;
     }
 
+    public function isConfirmed()
+    {
+        return $this->status == self::STATUS_CONFIRMED;
+    }
+
     public function canBeTaken()
     {
         $requestStatus = [

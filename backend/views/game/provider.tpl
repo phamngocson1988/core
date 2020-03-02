@@ -26,6 +26,11 @@
           <i class="icon-settings font-dark"></i>
           <span class="caption-subject bold uppercase"> Giá nhà cung cấp</span>
         </div>
+        <div class="actions">
+          <div class="btn-group btn-group-devided">
+            <a class="btn green" href="{url route='game/create' ref=$ref}">{Yii::t('app', 'add_new')}</a>
+          </div>
+        </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
@@ -70,7 +75,8 @@
                   {/if}
                 </td>
                 <td style="vertical-align: middle;">
-                  <a href='{url route="game/update-price" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-pjax="0"><i class="fa fa-pencil"></i></a>
+                  <a href='{url route="game/update-price" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="Cập nhật giá" data-pjax="0"><i class="fa fa-money"></i></a>
+                  <a href='{url route="game/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="Chỉnh sửa game" data-pjax="0"><i class="fa fa-pencil"></i></a>
                   {*<a class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-pjax="0" data-toggle="modal" href="#prices-model{$model->id}"><i class="fa fa-pencil"></i></a>*}
                   <div class="modal fade" tabindex="-1" role="basic" aria-hidden="true" id="prices-model{$model->id}">
                     <div class="modal-dialog">

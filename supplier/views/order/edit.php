@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use supplier\models\Game;
 use supplier\models\Order;
 use supplier\models\OrderFile;
+use supplier\models\OrderSupplier;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -57,6 +58,7 @@ use supplier\models\OrderFile;
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
+              <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
               <div class="row">
                 <div class="col-md-12 col-sm-12">
                   <div class="portlet grey-cascade box">
@@ -71,7 +73,7 @@ use supplier\models\OrderFile;
                   </div>
                 </div>
               </div>
-              
+              <?php endif;?>
               <div class="row">
                 <div class="col-md-12 col-sm-12">
                   <div class="portlet blue-hoki box">
@@ -131,7 +133,7 @@ use supplier\models\OrderFile;
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_processing"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Processing</a>
+                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận LOG IN THÀNH CÔNG</a>
                           </div>
                           
                         </div>

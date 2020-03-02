@@ -147,6 +147,7 @@ class PaymentTransactionController extends Controller
         if ($transaction->status == PaymentTransaction::STATUS_COMPLETED) return $this->asJson(['status' => false, 'errors' => 'Giao dịch đã được thanh toán']);
         $transaction->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'welcomeBonus']);
         $transaction->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'topupUserWallet']);
+        $transaction->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'applyReferGift']);
         if ($transaction->load($request->post()) && $transaction->save()) {
             return $this->asJson(['status' => true]);
         } else {

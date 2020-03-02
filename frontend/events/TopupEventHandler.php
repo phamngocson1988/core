@@ -7,6 +7,7 @@ use yii\base\Model;
 use frontend\models\UserRefer;
 use frontend\models\UserWallet;
 use frontend\models\PaymentTransaction;
+use frontend\models\User;
 
 class TopupEventHandler extends \common\events\PaymentTransactionEvent
 {
@@ -46,6 +47,8 @@ class TopupEventHandler extends \common\events\PaymentTransactionEvent
             $refer->status = UserRefer::STATUS_PAYMENT;
             $refer->payment_at = date('Y-m-d H:i:s');
             $refer->note = "You have gifted $gift_value coins.";
+            $invitor = User::findOne($user->referred_by);
+            $invitor->topup($gift_value, $user->id, "You have gifted $gift_value coins for inviting $user->name via refer friend program");
         }
         $refer->save();
         return;

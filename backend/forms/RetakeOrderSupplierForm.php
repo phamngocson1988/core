@@ -44,7 +44,11 @@ class RetakeOrderSupplierForm extends Model
     {
         $order = $this->getOrder();
         if (!$order) return $this->addError($attribute, 'Đơn hàng không tồn tại');
-        if (!in_array($order->status, [Order::STATUS_PENDING, Order::STATUS_PROCESSING])) return $this->addError($attribute, 'Không thể lấy lại đơn hàng từ nhà cung cấp');
+        if (!in_array($order->status, [
+            Order::STATUS_PENDING, 
+            Order::STATUS_PROCESSING,
+            Order::STATUS_PARTIAL,
+        ])) return $this->addError($attribute, 'Không thể lấy lại đơn hàng từ nhà cung cấp');
 
         $supplier = $this->getSupplier();
         if (!$supplier) return $this->addError($attribute, 'Đơn hàng này chưa có nhà cung cấp');
