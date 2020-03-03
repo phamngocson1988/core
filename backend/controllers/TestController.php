@@ -84,14 +84,13 @@ class TestController extends Controller
 
 	public function actionEmail()
 	{
-		$mailer = Yii::$app->mailer;
-		$mailer->viewPath = '@backend/supplier_mail';
+		$mailer = Yii::$app->supplier_mailer;
 		$settings = Yii::$app->settings;
 		$title = 'Test';
-        $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+        $from = $settings->get('ApplicationSettingForm', 'supplier_service_email', null);
         $fromName = sprintf("%s Administrator", Yii::$app->name);
         try {
-            return $mailer->compose('new_order', [])
+            return $mailer->compose('support_order', [])
             ->setTo('phamngocson1988@gmail.com')
             ->setFrom([$from => $fromName])
             ->setSubject($title)

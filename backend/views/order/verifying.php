@@ -1,6 +1,5 @@
 <?php
 use yii\widgets\LinkPager;
-use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
@@ -169,7 +168,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             </div>
         </div>
         <?php ActiveForm::end()?>
-        <?php Pjax::begin(); ?>
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
@@ -247,7 +245,20 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
+
+        <?php if ($models) :?>
+        <?php $sumQuantity = $search->getCommand()->sum('quantity');?>
+        <?php if ($sumQuantity) : ?>
+        <div class="row">
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
+          </div>
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
+          </div>
+        </div>
+        <?php endif;?>
+        <?php endif;?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

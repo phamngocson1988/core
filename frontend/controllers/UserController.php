@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use common\components\Controller;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
@@ -139,6 +140,7 @@ class UserController extends Controller
         $this->view->params['user_menu_active'] = 'user.order';
         $order = Order::findOne($id);
         if (!$order) throw new NotFoundHttpException("The order not found", 1);
+        if ($order->customer_id != Yii::$app->user->id) throw new NotFoundHttpException("The order not found", 1);
         $complainModel = new OrderComplains();
         $complains = OrderComplains::find()->where(['order_id' => $id])->all();
         return $this->render('detail', [
@@ -192,7 +194,7 @@ class UserController extends Controller
     public function actionCancel($key)
     {
         $order = Order::findOne(['auth_key' => $key]);
-        if (!$order) throw new yii\web\NotFoundHttpException('Order is invalid');
+        if (!$order) throw new NotFoundHttpException('Order is invalid');
         // Save cancel request
         $request = Yii::$app->request;
         $order->on(Order::EVENT_AFTER_UPDATE, function ($event) {
