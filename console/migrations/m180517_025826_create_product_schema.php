@@ -41,6 +41,13 @@ class m180517_025826_create_product_schema extends Migration
             'updated_by' => $this->integer(),
             'deleted_at' => $this->dateTime(),
             'deleted_by' => $this->integer(),
+            'price1' => $this->float(),
+            'price2' => $this->float(),
+            'price3' => $this->float(),
+            'average_speed' => $this->int(), // seconds
+            'number_supplier' => $this->int(),
+            'remark' => $this->text(),
+            'google_ads' => $this->text(),
         ], $tableOptions);
 
         if ($this->db->driverName === 'mysql') {

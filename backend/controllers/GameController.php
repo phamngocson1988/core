@@ -15,6 +15,7 @@ use backend\models\GameUnit;
 use backend\models\GamePriceLog;
 use backend\forms\FetchPriceLogForm;
 use backend\models\SupplierGame;
+use backend\forms\FetchGameForm;
 
 class GameController extends Controller
 {
@@ -45,26 +46,21 @@ class GameController extends Controller
     {
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
-        $q = $request->get('q');
-        $status = $request->get('status');
-        $command = Game::find();
-        $command->where(['<>', 'status', Game::STATUS_DELETE]);
-        if ($status) {
-            $command->andWhere(['status' => $status]);
-        }
-        if ($q) {
-            $command->andWhere(['like', 'title', $q]);
-        }
-        $command->orderBy(['id' => SORT_DESC]);
+        
+        $form = new FetchGameForm([
+            'q' => $request->get('q'),
+            'status' => $request->get('status')
+        ]);
+        $command = $form->getCommand();
+        $command->orderBy(['updated_at' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
                             ->all();
-        return $this->render('index.tpl', [
+        return $this->render('index.php', [
             'models' => $models,
             'pages' => $pages,
-            'q' => $q,
+            'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -103,9 +99,12 @@ class GameController extends Controller
         } else {
             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
         }
-        return $this->render('edit.tpl', [
+        $numSupplier = SupplierGame::find()->where(['game_id' => $id])->count();
+        return $this->render('edit.php', [
+            'id' => $id,
             'model' => $model,
-            'back' => $request->get('ref', Url::to(['game/index']))
+            'back' => $request->get('ref', Url::to(['game/index'])),
+            'numSupplier' => $numSupplier
         ]);
     }
 

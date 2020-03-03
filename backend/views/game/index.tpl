@@ -48,11 +48,12 @@
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
-              <th style="width: 5%;"> {Yii::t('app', 'no')} </th>
-              <th style="width: 10%;"> {Yii::t('app', 'image')} </th>
-              <th style="width: 25%;"> {Yii::t('app', 'title')} </th>
-              <th style="width: 15%;"> {Yii::t('app', 'status')} </th>
-              <th style="width: 10%;" class="dt-center"> {Yii::t('app', 'actions')} </th>
+              <th> {Yii::t('app', 'no')} </th>
+              <th> {Yii::t('app', 'image')} </th>
+              <th> {Yii::t('app', 'title')} </th>
+              <th> Tốc độ </th>
+              <th> {Yii::t('app', 'status')} </th>
+              <th class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
           <tbody>
@@ -72,8 +73,8 @@
                   {elseif $model->status == 'D'}
                   <span class="label label-default">{Yii::t('app', 'deleted')}</span>
                   {/if}
-                  
                 </td>
+                <td style="vertical-align: middle;">{$model->average_speed}</td>
                 <td style="vertical-align: middle;">
                     <a href='{url route="game/edit" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="{Yii::t('app', 'edit')}" data-pjax="0"><i class="fa fa-pencil"></i></a>
                     <a href='{url route="game/delete" id=$model->id ref=$ref}' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="{Yii::t('app', 'delete')}" data-pjax="0"><i class="fa fa-trash-o"></i></a>

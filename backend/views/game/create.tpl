@@ -64,6 +64,18 @@
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(CheckboxInput::className())->label(false)}
 
+        {$form->field($model, 'average_speed', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->textInput()}
+
+        {$form->field($model, 'number_supplier', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->textInput()}
+
+        {$form->field($model, 'remark', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->textArea()}
+
         {Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green'])}
         {Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default'])}
         <!-- END MENU -->
@@ -94,6 +106,7 @@
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 30]])}
+                  {$form->field($model, 'google_ads')->widget(TinyMce::className(), ['options' => ['rows' => 30]])}
                 </div>
                 <div class="tab-pane" id="tab_1_2">
                   {$form->field($model, 'meta_title')->textInput()}
