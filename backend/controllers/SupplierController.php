@@ -9,7 +9,6 @@ use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use backend\forms\FetchSupplierForm;
-use backend\forms\FetchSupplierGameForm;
 use backend\forms\FetchSupplierWalletForm;
 use backend\forms\ReportSupplierBalanceForm;
 use backend\models\Supplier;

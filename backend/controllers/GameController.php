@@ -16,6 +16,9 @@ use backend\models\GamePriceLog;
 use backend\forms\FetchPriceLogForm;
 use backend\models\SupplierGame;
 use backend\forms\FetchGameForm;
+use backend\forms\FetchSupplierGameForm;
+
+use backend\models\OrderSupplier;
 
 class GameController extends Controller
 {
@@ -223,6 +226,45 @@ class GameController extends Controller
         ]);
     }
 
+    public function actionSuppliers($id)
+    {
+        $this->view->params['main_menu_active'] = 'game.provider';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+        $request = Yii::$app->request;
+        $model = Game::findOne($id);
+
+        $form = new FetchSupplierGameForm([
+            'game_id' => $id,
+            'supplier_id' => $request->get('supplier_id'),
+            'price_from' => $request->get('price_from'),
+            'price_to' => $request->get('price_to'),
+            'speed_from' => $request->get('speed_from'),
+            'speed_to' => $request->get('speed_to'),
+        ]);
+        $command = $form->getCommand();
+        $suppliers = $command->all();
+        $supplierIds = array_column($suppliers, 'supplier_id');
+        $orderSuppliers = OrderSupplier::find()
+        ->where(['game_id' => $id])
+        ->andWhere(['in', 'supplier_id', $supplierIds])
+        ->andWhere(['in', 'status', [OrderSupplier::STATUS_COMPLETED, OrderSupplier::STATUS_CONFIRMED]])
+        ->groupBy(['supplier_id'])
+        ->select(['supplier_id', 'COUNT(*) as count_order', 'AVG(TIMESTAMPDIFF(SECOND, processing_at, completed_at)) as duration'])
+        ->asArray()
+        ->all();
+        $countOrders = array_column($orderSuppliers, 'count_order', 'supplier_id');
+        $avgSpeeds = array_column($orderSuppliers, 'duration', 'supplier_id');
+
+        return $this->render('suppliers.php', [
+            'model' => $model,
+            'suppliers' => $suppliers,
+            'id' => $id,
+            'search' => $form,
+            'countOrders' => $countOrders,
+            'avgSpeeds' => $avgSpeeds,
+        ]);
+    }
+
     public function actionUpdatePrice($id)
     {
         $this->view->params['main_menu_active'] = 'game.provider';
@@ -301,9 +343,10 @@ class GameController extends Controller
         ->orderBy(['price' => SORT_ASC])
         ->with('user')->all();
 
-        return $this->render('update-price.tpl', [
+        return $this->render('suppliers.php', [
             'model' => $model,
             'suppliers' => $suppliers,
+            'id' => $id,
         ]);
     }
 

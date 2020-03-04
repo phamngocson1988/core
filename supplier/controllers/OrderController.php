@@ -23,6 +23,7 @@ use supplier\forms\UpdateOrderToProcessingForm;
 use supplier\forms\AddOrderQuantityForm;
 use supplier\forms\UpdateOrderToCompletedForm;
 use supplier\forms\UpdateOrderToPartialForm;
+
 class OrderController extends Controller
 {
     public function behaviors()
@@ -308,14 +309,14 @@ class OrderController extends Controller
         $form = new RejectOrderSupplierForm([
             'id' => $id,
             'supplier_id' => Yii::$app->user->id
-
         ]);
+        $pendingUrl = Url::to(['order/pending'], true);
         if ($form->validate()) {
-            return $this->asJson(['status' => $form->reject()]);
+            return $this->asJson(['status' => $form->reject(), 'pendingUrl' => $pendingUrl]);
         }
         $errors = $form->getErrorSummary(false);
         $error = reset($errors);
-        return $this->asJson(['status' => false, 'errors' => $error]);
+        return $this->asJson(['status' => false, 'errors' => $error, 'pendingUrl' => $pendingUrl]);
     }
 
     public function actionEdit($id)
@@ -327,6 +328,11 @@ class OrderController extends Controller
 
         $order = $orderSupplier->order;
         if (!$order) throw new NotFoundHttpException('Not found');
+
+        if ($order->hasCancelRequest() && 
+            in_array($orderSupplier->status, [OrderSupplier::STATUS_APPROVE, OrderSupplier::STATUS_PROCESSING])) {
+            Yii::$app->session->setFlash('error', 'Đơn hàng đã có yêu cầu hủy từ người dùng.');
+        }
 
         return $this->render('edit', [
             'order' => $order,

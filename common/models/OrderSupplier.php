@@ -17,7 +17,7 @@ class OrderSupplier extends ActiveRecord
     const STATUS_CONFIRMED = 'confirmed';
 	const STATUS_REJECT = 'reject';
 	const STATUS_RETAKE = 'retake';
-	const STATUS_STOP = 'stop';
+    const STATUS_STOP = 'stop';
 
     public static function tableName()
     {

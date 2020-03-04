@@ -38,6 +38,7 @@ use backend\forms\AddOrderQuantityForm;
 use backend\forms\UpdateOrderToCompletedForm;
 use backend\forms\UpdateOrderToPartialForm;
 use backend\forms\StopOrderForm;
+use backend\forms\ApproveCancelOrder;
 
 // use backend\forms\UpdateOrderStatusPending;
 
@@ -599,23 +600,17 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         if ($request->isAjax) {
-            $order = Order::findOne($id);
-            $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
-            $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
-                $model = $event->sender;
-                $model->log(sprintf("Approved to be cancelled when status is %s", $model->status));
-            });
-            if ($order->isPendingOrder() || $order->isProcessingOrder()) {
-                $order->status = Order::STATUS_CANCELLED;
-                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
-                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
-                return $this->renderJson($order->save(), ['view_url' => Url::to(['order/view', 'id' => $id])], []);
-            } elseif ($order->isVerifyingOrder()) {
-                $order->status = Order::STATUS_CANCELLED;
-                return $this->renderJson($order->save(), ['view_url' => Url::to(['order/view', 'id' => $id])], []);
+            $form = new ApproveCancelOrder(['id' => $id]);
+            $viewUrl = Url::to(['order/view', 'id' => $id]);
+            if ($form->validate() && $form->approve()) {
+                return $this->asJson(['status' => true, 'view_url' => $viewUrl]);
+            } else {
+                $errors = $form->getErrorSummary(false);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'errors' => $error]);
             }
         }
-        return $this->renderJson(false, null, ['error' => 'Không thể cancel đơn hàng']);
+        return $this->asJson(['status' => false, 'errors' => 'Not found']);
     }
 
     public function actionDisapprove($id)

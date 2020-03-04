@@ -133,7 +133,7 @@ use supplier\models\OrderSupplier;
                           </div>
                         </div>
                       </div>
-                      <?php if ($model->isApprove()) : ?>
+                      <?php if ($model->isApprove() && !$order->hasCancelRequest()) : ?>
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
@@ -158,8 +158,9 @@ use supplier\models\OrderSupplier;
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
-                            <a href="<?=Url::to(['order/approve', 'id' => $order->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
-                            <a href="<?=Url::to(['order/disapprove', 'id' => $order->id]);?>" class="btn red btn-outline sbold" id="disaprove_cancel_order"><i class="fa fa-ban"></i> Không đồng ý hủy đơn</a>
+                            <?php if ($model->isApprove()) : ?>
+                            <a href="<?=Url::to(['order/reject', 'id' => $model->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
+                            <?php endif;?>
                           </div>
 <?php
 $cancelOrderJs = <<< JS
@@ -167,12 +168,8 @@ $('#cancel_order').ajax_action({
   confirm: true,
   confirm_text: 'Bạn có chắc muốn hủy đơn hàng?',
   callback: function(element, data) {
-    location.reload();
-  }
-});
-$('#disaprove_cancel_order').ajax_action({
-  callback: function(element, data) {
-    location.reload();
+    console.log('data', data);
+    window.location.href = data.pendingUrl;
   }
 });
 JS;

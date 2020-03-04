@@ -3,28 +3,35 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use backend\models\Game;
+use backend\models\SupplierGame;
 
 class FetchSupplierGameForm extends Model
 {
     public $q;
-    public $status;
+    public $supplier_id;
+    public $game_id;
+    public $price_from;
+    public $price_to;
+    public $speed_from;
+    public $speed_to;
 
     private $_command;
     
     protected function createCommand()
     {
-        $q = $this->q;
-        $status = $this->status;
-        $command = Game::find();
-        $command->where(['<>', 'status', Game::STATUS_DELETE]);
-        if ($status) {
-            $command->andWhere(['status' => $status]);
+        $command = SupplierGame::find();
+        if ($this->supplier_id) {
+            $command->andWhere(['supplier_id' => $this->supplier_id]);
         }
-        if ($q) {
-            $command->andWhere(['like', 'title', $q]);
+        if ($this->game_id) {
+            $command->andWhere(['game_id' => $this->game_id]);
         }
-
+        if ($this->price_from) {
+            $command->andWhere(['>=', 'price', $this->price_from]);
+        }
+        if ($this->price_to) {
+            $command->andWhere(['<=', 'price', $this->price_to]);
+        }
         $this->_command = $command;
     }
 

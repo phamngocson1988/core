@@ -226,7 +226,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php if ($models) :?>
-        <?php $sumQuantity = $search->getCommand()->sum('quantity');?>
+        <?php $sumQuantity = $search->getCommand()->sum('order.quantity');?>
         <?php if ($sumQuantity) : ?>
         <div class="row">
           <div class="col-md-2 col-sm-4">

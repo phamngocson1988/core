@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\widgets\TinyMce;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 use unclead\multipleinput\MultipleInput;
 use common\widgets\ImageInputWidget;
 use common\widgets\RadioListInput;
@@ -21,15 +22,11 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
 <div class="page-bar">
   <ul class="page-breadcrumb">
     <li>
-      <a href="/"><?=Yii::t('app', 'home');?></a>
+      <a href="<?=Url::to(['game/edit', 'id' => $id]);?>">Cập nhật game</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='game/index'}">Quản lý game</a>
-      <i class="fa fa-circle"></i>
-    </li>
-    <li>
-      <span>Chỉnh sửa game</span>
+      <a href="<?=Url::to(['game/suppliers', 'id' => $id]);?>">Giá nhà cung cấp</a>
     </li>
   </ul>
 </div>

@@ -83,11 +83,12 @@ $.fn.ajax_action = function(opts) {
             dataType : options.dataType,
             data: data,
             success: function (result, textStatus, jqXHR) {
+                console.log('result', result);
                 if (result.status == false) {
                     options.error(element, result.errors);
                     return false;
                 } else {
-                    options.callback(element, result.data);
+                    options.callback(element, result);
                 }
             },
             complete: function() {

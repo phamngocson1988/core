@@ -20,6 +20,27 @@ class OrderSupplierBehavior extends AttributeBehavior
         ]]);
     }
 
+    public function getWorkingSupplier()
+    {
+        $owner = $this->owner;
+        $supplierTable = OrderSupplier::tableName();
+        return $owner->hasOne(OrderSupplier::className(), ['order_id' => 'id'])
+        ->andOnCondition(["IN", "{$supplierTable}.status", [
+            OrderSupplier::STATUS_APPROVE, 
+            OrderSupplier::STATUS_PROCESSING,
+        ]]);
+    }
+
+    public function getRequestingSupplier()
+    {
+        $owner = $this->owner;
+        $supplierTable = OrderSupplier::tableName();
+        return $owner->hasOne(OrderSupplier::className(), ['order_id' => 'id'])
+        ->andOnCondition(["IN", "{$supplierTable}.status", [
+            OrderSupplier::STATUS_REQUEST, 
+        ]]);
+    }
+
     public function getSuppliers()
     {
         $owner = $this->owner;
