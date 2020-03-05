@@ -143,8 +143,12 @@ class GameController extends Controller
                 'game_id' => $id
             ]);
             if (!$model) throw new Exception("Supplier chưa đăng ký game này", 1);
+            $oldPrice = $model->price;
             $model->setScenario(SupplierGame::SCENARIO_EDIT);
             if ($model->load($request->post())) {
+                 if ($oldPrice != $model->price) {
+                    $model->old_price = $oldPrice;
+                }
                 return $this->asJson(['status' => $model->save(), 'errors' => 'Error']);
             }
         } catch (\Exception $e) {

@@ -122,6 +122,7 @@ function AjaxFormSubmit(opts) {
                 type: form.attr('method'),
                 dataType : 'json',
                 data: form.serialize(),
+                // async : false,
                 beforeSend: that.beforeSend(form),
                 success: function (result, textStatus, jqXHR) {
                     if (result.status == false) {
@@ -138,7 +139,7 @@ function AjaxFormSubmit(opts) {
     }
 
     this.error = function (errors) {
-        alert('Fail');
+        alert(errors);
         console.log(errors);
         return false;
     }

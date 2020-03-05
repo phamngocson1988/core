@@ -36,6 +36,7 @@ class m191210_171926_supplier extends Migration
         $this->createTable('{{%supplier_game}}', [
             'supplier_id' => $this->integer()->notNull(),
             'game_id' => $this->integer()->notNull(),
+            'old_price' => $this->float(),
             'price' => $this->float(),
             'status' => $this->string(10),
             'created_by' => $this->integer(),  

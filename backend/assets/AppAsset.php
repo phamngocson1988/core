@@ -30,6 +30,7 @@ class AppAsset extends AssetBundle
         'vendor/assets/layouts/layout/css/custom.min.css',
         'css/theme_custom.css',
         'vendor/assets/global/plugins/bootstrap-sweetalert/sweetalert.css',
+        'vendor/assets/global/plugins/bootstrap-toastr/toastr.min.css'
     ];
     public $js = [
         ['vendor/assets/global/plugins/respond.min.js', 'condition' => 'lt IE 9'],
@@ -40,6 +41,7 @@ class AppAsset extends AssetBundle
         'vendor/assets/global/plugins/js.cookie.min.js',
         'vendor/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
         'vendor/assets/global/plugins/jquery.blockui.min.js',
+        'vendor/assets/global/plugins/bootstrap-toastr/toastr.min.js',
         'vendor/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
 
         //BEGIN PAGE LEVEL PLUGINS

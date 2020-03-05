@@ -431,11 +431,11 @@
           </li>
 
           {if $app->user->can('orderteam_manager')}
-          <li class="nav-item  ">
+          <!--<li class="nav-item  ">
             <a href="{url route='game/provider'}" class="nav-link " code='game.provider'>
             <span class="title">Giá nhà cung cấp</span>
             </a>
-          </li>
+          </li>-->
           {/if}
           
           {if $app->user->can('sale_manager')}

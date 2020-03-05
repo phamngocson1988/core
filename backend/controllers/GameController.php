@@ -228,7 +228,7 @@ class GameController extends Controller
 
     public function actionSuppliers($id)
     {
-        $this->view->params['main_menu_active'] = 'game.provider';
+        $this->view->params['main_menu_active'] = 'game.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = Game::findOne($id);
@@ -244,16 +244,30 @@ class GameController extends Controller
         $command = $form->getCommand();
         $suppliers = $command->all();
         $supplierIds = array_column($suppliers, 'supplier_id');
-        $orderSuppliers = OrderSupplier::find()
+        $speedCommand = OrderSupplier::find()
         ->where(['game_id' => $id])
         ->andWhere(['in', 'supplier_id', $supplierIds])
         ->andWhere(['in', 'status', [OrderSupplier::STATUS_COMPLETED, OrderSupplier::STATUS_CONFIRMED]])
         ->groupBy(['supplier_id'])
         ->select(['supplier_id', 'COUNT(*) as count_order', 'AVG(TIMESTAMPDIFF(SECOND, processing_at, completed_at)) as duration'])
-        ->asArray()
-        ->all();
+        ->asArray();
+        if ($form->speed_from) {
+            $speedCommand->andHaving(['>=', 'duration', $form->speed_from * 60]);
+        }
+        if ($form->speed_to) {
+            $speedCommand->andHaving(['<=', 'duration', $form->speed_to * 60]);
+        }
+        // echo $speedCommand->createCommand()->getRawSql(); die;
+        $orderSuppliers = $speedCommand->all();
+        if ($form->speed_from || $form->speed_to) {
+            $filterSupplierIds = array_column($orderSuppliers, 'supplier_id');
+            $suppliers = array_filter($suppliers, function($s) use ($filterSupplierIds) {
+                return in_array($s->supplier_id, $filterSupplierIds);
+            });
+        }
         $countOrders = array_column($orderSuppliers, 'count_order', 'supplier_id');
         $avgSpeeds = array_column($orderSuppliers, 'duration', 'supplier_id');
+        $lastPrice = $model->lastChange;
 
         return $this->render('suppliers.php', [
             'model' => $model,
@@ -262,6 +276,7 @@ class GameController extends Controller
             'search' => $form,
             'countOrders' => $countOrders,
             'avgSpeeds' => $avgSpeeds,
+            'lastPrice' => $lastPrice
         ]);
     }
 
@@ -272,7 +287,6 @@ class GameController extends Controller
         $request = Yii::$app->request;
         $model = Game::findOne($id);
         $model->setScenario(Game::SCENARIO_CREATE);
-
         if ($request->isPost) {
             // Write log
             $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
@@ -291,6 +305,12 @@ class GameController extends Controller
                 $attrs = [
                     'old_price' => $oldPrice,
                     'new_price' => $newPrice,
+                    'old_price_1' => $oldGame->price1,
+                    'old_price_2' => $oldGame->price2,
+                    'old_price_3' => $oldGame->price3,
+                    'new_price_1' => $game->price1,
+                    'new_price_2' => $game->price2,
+                    'new_price_3' => $game->price3,
                     'old_reseller_1' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_1),
                     'new_reseller_1' => $game->getResellerPrice(User::RESELLER_LEVEL_1),
                     'old_reseller_2' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_2),
@@ -326,14 +346,21 @@ class GameController extends Controller
                 ->setTextBody(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
                 ->send();
             });
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
-                $ref = $request->get('ref', Url::to(['game/provider']));
-                return $this->redirect($ref);    
+            if ($model->load($request->post()) && $model->save()) {
+                if ($request->isAjax) {
+                    return $this->asJson(['status' => true]);
+                } else {
+                    Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
+                    $ref = $request->get('ref', Url::to(['game/provider']));
+                    return $this->redirect($ref);    
+                }
             } else {
                 $errors = $model->getErrorSummary(false);
                 $message = reset($errors);
                 Yii::$app->session->setFlash('error', $message);
+                if ($request->isAjax) {
+                    return $this->asJson(['status' => false, 'errors' => $message]);
+                }
             }
         }
 
@@ -343,7 +370,7 @@ class GameController extends Controller
         ->orderBy(['price' => SORT_ASC])
         ->with('user')->all();
 
-        return $this->render('suppliers.php', [
+        return $this->render('update-price.tpl', [
             'model' => $model,
             'suppliers' => $suppliers,
             'id' => $id,

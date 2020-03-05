@@ -4,6 +4,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\SupplierGame;
+use backend\models\Supplier;
 
 class FetchSupplierGameForm extends Model
 {
@@ -43,4 +44,20 @@ class FetchSupplierGameForm extends Model
         return $this->_command;
     }
 
+    public function getSupplier()
+    {
+        if (!$this->supplier_id) return null;
+        return Supplier::findOne($this->supplier_id)->user;
+    }
+
+    public function getSuppliers()
+    {
+        $data = SupplierGame::find()->where(['game_id' => $this->game_id])->with('user')->all();
+        $suppliers = [];
+        foreach ($data as $supplier) {
+            $user = $supplier->user;
+            $suppliers[$user->id] = $user->name;
+        }
+        return $suppliers;
+    }
 }
