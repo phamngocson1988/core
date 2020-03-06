@@ -42,14 +42,21 @@ class FormatConverter extends BaseFormatConverter
         return date($format, $timestamp);
     }
 
-    public static function countDuration($seconds)
+    public static function countDuration($seconds, $format = 'h:i:s')
     {
         $hourSecond = 3600;
         $minuteSecond = 60;
         $hour = floor($seconds / $hourSecond);
         $minute = floor(($seconds % $hourSecond) / $minuteSecond);
         $second = $seconds - ($hour * $hourSecond) - ($minute * $minuteSecond);
-        return sprintf("%s:%s:%s", str_pad($hour, 2, "0", STR_PAD_LEFT), str_pad($minute, 2, "0", STR_PAD_LEFT), str_pad($second, 2, "0", STR_PAD_LEFT));
+        $timeList = ['h' => str_pad($hour, 2, "0", STR_PAD_LEFT), 'i' => str_pad($minute, 2, "0", STR_PAD_LEFT), 's' => str_pad($second, 2, "0", STR_PAD_LEFT)];
+        $formatList = explode(":", $format);
+
+        $finalList = [];
+        if (in_array('h', $formatList)) $finalList[] = $timeList['h'];
+        if (in_array('i', $formatList)) $finalList[] = $timeList['i'];
+        if (in_array('s', $formatList)) $finalList[] = $timeList['s'];
+        return implode(":", $finalList);
     }
 
     /**

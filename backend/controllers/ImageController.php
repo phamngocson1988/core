@@ -111,7 +111,7 @@ class ImageController extends Controller
     {
         $request = Yii::$app->request;
         $result = ['status' => false];
-        $defaultThumbnail = '150x150';
+        $defaultThumbnail = $request->get('thumbnail', '500x500');
         return $this->renderPartial('popup.tpl', ['default_thumbnail' => $defaultThumbnail]);
     }
 

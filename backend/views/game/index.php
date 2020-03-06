@@ -77,20 +77,21 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th> Tốc độ </th>
               <th> Nhà cung cấp </th>
               <th> Giá </th>
+              <th> Số đơn hàng </th>
               <th> Cập nhật lần cuối </th>
               <th class="dt-center"> Tác vụ </th>
             </tr>
           </thead>
             <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="9" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td><?=$model->id;?></td>
-                <td><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
-                <td><?=$model->title;?></td>
-                <td>
+                <td class="center"><?=$model->id;?></td>
+                <td class="center"><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
+                <td class="left"><?=$model->title;?></td>
+                <td  class="center">
                   <?php if ($model->status == 'Y') :  ?>
                   <span class="label label-success"><?=Yii::t('app', 'visible');?></span>
                   <?php elseif ($model->status == 'N') : ?>
@@ -99,21 +100,21 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <span class="label label-default"><?=Yii::t('app', 'deleted');?></span>
                   <?php endif;?>
                 </td>
-                <td>
+                <td  class="center">
                   <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
                   ---
                   <?php else :?>
-                  <?=FormatConverter::countDuration($model->average_speed);?>
+                  <?=FormatConverter::countDuration($model->average_speed, 'h:i');?>
                   <?php endif;?>
                 </td>
-                <td>
+                <td class="center">
                   <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
                   ---
                   <?php else :?>
                   <?=number_format($model->number_supplier);?>
                   <?php endif;?>
                 </td>
-                <td>
+                <td class="center">
                   <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
                   ---
                   <?php else :?>
@@ -129,11 +130,14 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <?php endif;?>
                   <?php endif;?>
                 </td>
-                <td><?=$model->updated_at;?></td>
+                <td class="center">
+                  <?= isset($orders[$model->id]) ? number_format($orders[$model->id]) : 0;?>
+                </td>
+                <td class="center"><?=date('d/m/Y H:i', strtotime($model->updated_at));?></td>
                 
-                <td>
-                    <a href='<?=Url::to(['game/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa tooltips" data-container="body" data-original-title="Chỉnh sửa" data-pjax="0"><i class="fa fa-pencil"></i></a>
-                    <a href='<?=Url::to(['game/delete', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa delete-action tooltips" data-container="body" data-original-title="Xóa" data-pjax="0"><i class="fa fa-trash-o"></i></a>
+                <td class="center">
+                    <a href='<?=Url::to(['game/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-sm grey-salsa tooltips" data-container="body" data-original-title="Chỉnh sửa" data-pjax="0"><i class="fa fa-pencil"></i></a>
+                    <a href='<?=Url::to(['game/delete', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-sm grey-salsa delete-action tooltips" data-container="body" data-original-title="Xóa" data-pjax="0"><i class="fa fa-trash-o"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>

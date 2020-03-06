@@ -72,6 +72,7 @@ $canShowPrice = $user->can('orderteam');
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(CheckboxInput::className())->label(false);?>
 
+        <?php if (Yii::$app->user->can('orderteam')) : ?>
         <?=$form->field($model, 'average_speed', [
           'options' => ['class' => 'list-separated profile-stat']
         ])->textInput();?>
@@ -83,6 +84,7 @@ $canShowPrice = $user->can('orderteam');
         <?=$form->field($model, 'remark', [
           'options' => ['class' => 'list-separated profile-stat']
         ])->textArea();?>
+        <?php endif;?>
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
         <?=Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default']);?>

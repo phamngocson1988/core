@@ -17,7 +17,7 @@ class Game extends \common\models\Game
             self::SCENARIO_CREATE => ['title', 'excerpt', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 
             'pack', 'pin', 'soldout', 'price1', 'price2', 'price3', 'meta_title', 'meta_keyword', 'meta_description', 'average_speed', 'number_supplier', 'remark', 'google_ads'],
             self::SCENARIO_EDIT => ['id', 'excerpt', 'title', 'content', 'unit_name', 'status', 'image_id', 'reseller_price', 'original_price', 'pack', 'pin', 'soldout', 'meta_title', 'meta_keyword', 'meta_description', 'average_speed', 'number_supplier', 'remark', 'google_ads'],
-            self::SCENARIO_UPDATE_PRICE => ['price1', 'price2', 'price3'],
+            self::SCENARIO_UPDATE_PRICE => ['price1', 'price2', 'price3', 'remark'],
         ];
     }
 
@@ -38,7 +38,7 @@ class Game extends \common\models\Game
             'price1' => 'Giá nhà cung cấp 1',
             'price2' => 'Giá nhà cung cấp 2',
             'price3' => 'Giá nhà cung cấp 3',
-            'average_speed' => 'Tốc độ xử lý',
+            'average_speed' => 'Tốc độ xử lý (phút)',
             'number_supplier' => 'Số nhà cung cấp',
             'remark' => 'Remark',
             'google_ads' => 'Google Ads'

@@ -43,21 +43,29 @@ $canUpdatePrice = Yii::$app->user->can('orderteam_manager');
         <?php if ($canUpdatePrice) : ?>
         <?=$form->field($model, 'price1', [
           'options' => ['class' => 'list-separated profile-stat'],
-          'parts' => ['{log}' => $lastPrice->old_price_1 ],
-          'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
+          'labelOptions' => ['style' => 'font-weight: 900'],
+          'parts' => ['{log}' => $lastPrice->old_price_1, '{hint}' => sprintf('%s - %s', date('d/m/Y H:i', strtotime($lastPrice->updated_at)), date('d/m/Y H:i', strtotime('now')))  ],
+          'template' => '<strong>{label}</strong><div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 1 (USD)');?>
         
         <?=$form->field($model, 'price2', [
           'options' => ['class' => 'list-separated profile-stat'],
-          'parts' => ['{log}' => $lastPrice->old_price_2 ],
+          'labelOptions' => ['style' => 'font-weight: 900'],
+          'parts' => ['{log}' => $lastPrice->old_price_2, '{hint}' => sprintf('%s - %s', date('d/m/Y H:i', strtotime($lastPrice->updated_at)), date('d/m/Y H:i', strtotime('now')))  ],
           'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 2 (USD)');?>
 
         <?=$form->field($model, 'price3', [
           'options' => ['class' => 'list-separated profile-stat'],
-          'parts' => ['{log}' => $lastPrice->old_price_3 ],
+          'labelOptions' => ['style' => 'font-weight: 900'],
+          'parts' => ['{log}' => $lastPrice->old_price_3, '{hint}' => sprintf('%s - %s', date('d/m/Y H:i', strtotime($lastPrice->updated_at)), date('d/m/Y H:i', strtotime('now')))  ],
           'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 3 (USD)');?>
+
+        <?=$form->field($model, 'remark', [
+          'options' => ['class' => 'list-separated profile-stat'],
+          'labelOptions' => ['style' => 'font-weight: 900'],
+        ])->textArea();?>
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
         <?=Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default']);?>
@@ -127,13 +135,18 @@ $canUpdatePrice = Yii::$app->user->can('orderteam_manager');
                       <?php endif;?>
                       <?php foreach ($suppliers as $supplier) : ?>
                       <tr>
-                        <td><?=$supplier->supplier_id;?></td>
-                        <td><?=$supplier->user->name;?></td>
-                        <th <?=$showPrice ? '' : 'class="hide"';?>><?=$supplier->old_price ? number_format($supplier->old_price) : '';?></td>
-                        <th <?=$showPrice ? '' : 'class="hide"';?>><?=number_format($supplier->price);?></td>
-                        <td><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
-                        <td><?=isset($avgSpeeds[$supplier->supplier_id]) ? FormatConverter::countDuration(round($avgSpeeds[$supplier->supplier_id])) : FormatConverter::countDuration(0) ;?></td>
-                        <td></td>
+                        <td class="center"><?=$supplier->supplier_id;?></td>
+                        <td class="left"><?=$supplier->user->name;?></td>
+                        <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
+                          <div><?=$supplier->old_price ? number_format($supplier->old_price) : '';?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/Y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
+                        </td>
+                        <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
+                          <div><?=number_format($supplier->price);?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->updated_at ? date('d/m/Y H:i', strtotime($supplier->updated_at)) : '';?></div>
+                        </td>
+                        <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
+                        <td class="center"><?=isset($avgSpeeds[$supplier->supplier_id]) ? FormatConverter::countDuration(round($avgSpeeds[$supplier->supplier_id]), 'h:i') : FormatConverter::countDuration(0, 'h:i') ;?></td>
                       </tr>
                       <?php endforeach;?>
                   </tbody>

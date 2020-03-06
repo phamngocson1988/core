@@ -11,6 +11,7 @@ use yii\data\Pagination;
 use backend\models\Game;
 use backend\models\User;
 use backend\models\Product;
+use backend\models\Order;
 use common\models\GameImage;
 use backend\models\GameUnit;
 use backend\models\GamePriceLog;
@@ -56,10 +57,21 @@ class GameController extends Controller
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->all();
+
+        $gameIds = array_column($models, 'id');
+        $orders = Order::find()
+        ->where(['in', 'game_id', $gameIds])
+        ->andWhere(['status' => Order::STATUS_CONFIRMED])
+        ->select(['game_id', 'COUNT(*) as total'])
+        ->groupBy(['game_id'])
+        ->asArray()->all();
+        $orders = array_column($orders, 'total', 'game_id');
+
         return $this->render('index.php', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
+            'orders' => $orders,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
