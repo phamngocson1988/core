@@ -14,6 +14,8 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js
 $this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
+$showPrice = Yii::$app->user->can('orderteam');
+$canUpdatePrice = Yii::$app->user->can('orderteam_manager');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -38,6 +40,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
       <?php $form = ActiveForm::begin(['action' => ['game/update-price', 'id' => $id], 'options' => ['class' => 'form-horizontal form-row-seperated form', 'id' => 'update-price-form']]);?>
       <div class="portlet light">
         <img id="image_game-image_id" class="img-responsive" src="<?=$model->getImageUrl('500x500');?>">
+        <?php if ($canUpdatePrice) : ?>
         <?=$form->field($model, 'price1', [
           'options' => ['class' => 'list-separated profile-stat'],
           'parts' => ['{log}' => $lastPrice->old_price_1 ],
@@ -58,6 +61,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
         <?=Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default']);?>
+        <?php endif;?>
       </div>
       <?php ActiveForm::end()?>
     </div>
@@ -74,58 +78,59 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   'options' => ['class' => 'form-group col-md-4 col-lg-3'],
                     'inputOptions' => ['class' => 'form-control', 'name' => 'supplier_id']
                 ])->dropdownList($search->getSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp')?>
+                <?php if ($showPrice) : ?>
+                <?=$form->field($search, 'price_from', [
+                  'options' => ['class' => 'form-group col-md-1 col-lg-1'],
+                  'inputOptions' => ['class' => 'form-control', 'name' => 'price_from']
+                ])->textInput()->label('Giá từ');?>
 
-                  <?=$form->field($search, 'price_from', [
-                    'options' => ['class' => 'form-group col-md-1 col-lg-1'],
-                    'inputOptions' => ['class' => 'form-control', 'name' => 'price_from']
-                  ])->textInput()->label('Giá từ');?>
+                <?=$form->field($search, 'price_to', [
+                  'options' => ['class' => 'form-group col-md-1 col-lg-1'],
+                  'inputOptions' => ['class' => 'form-control', 'name' => 'price_to']
+                ])->textInput()->label('Giá đến');?>
+                <?php endif;?>
+                <?=$form->field($search, 'speed_from', [
+                  'options' => ['class' => 'form-group col-md-1 col-lg-1'],
+                  'inputOptions' => ['class' => 'form-control', 'name' => 'speed_from']
+                ])->textInput()->label('Tốc độ từ');?>
 
-                  <?=$form->field($search, 'price_to', [
-                    'options' => ['class' => 'form-group col-md-1 col-lg-1'],
-                    'inputOptions' => ['class' => 'form-control', 'name' => 'price_to']
-                  ])->textInput()->label('Giá đến');?>
+                <?=$form->field($search, 'speed_to', [
+                  'options' => ['class' => 'form-group col-md-1 col-lg-1'],
+                  'inputOptions' => ['class' => 'form-control', 'name' => 'speed_to']
+                ])->textInput()->label('Tốc độ đến');?>
 
-                  <?=$form->field($search, 'speed_from', [
-                    'options' => ['class' => 'form-group col-md-1 col-lg-1'],
-                    'inputOptions' => ['class' => 'form-control', 'name' => 'speed_from']
-                  ])->textInput()->label('Tốc độ từ');?>
-
-                  <?=$form->field($search, 'speed_to', [
-                    'options' => ['class' => 'form-group col-md-1 col-lg-1'],
-                    'inputOptions' => ['class' => 'form-control', 'name' => 'speed_to']
-                  ])->textInput()->label('Tốc độ đến');?>
-
-                  <div class="form-group col-md-2 col-lg-2">
-                    <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
-                      <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
-                    </button>
-                  </div>
+                <div class="form-group col-md-2 col-lg-2">
+                  <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                    <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+                  </button>
+                </div>
               </div>
               <?php ActiveForm::end()?>
 
-
+              <?php $numCols = 6;?>
+              <?php if (!$showPrice) $numCols = $numCols - 2;?>
               <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover table-checkable">
                   <thead>
                     <tr>
                       <th> Mã nhà cung cấp </th>
                       <th> Nhà cung cấp </th>
-                      <th> Giá cũ (VNĐ) </th>
-                      <th> Giá hiện tại (VNĐ) </th>
+                      <th <?=$showPrice ? '' : 'class="hide"';?>> Giá cũ (VNĐ) </th>
+                      <th <?=$showPrice ? '' : 'class="hide"';?>> Giá hiện tại (VNĐ) </th>
                       <th> Số đơn hoàng thành </th>
                       <th> Tốc độ trung bình </th>
                     </tr>
                   </thead>
                   <tbody>
                       <?php if (!$suppliers) : ?>
-                      <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                      <tr><td colspan="<?=$numCols;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                       <?php endif;?>
                       <?php foreach ($suppliers as $supplier) : ?>
                       <tr>
                         <td><?=$supplier->supplier_id;?></td>
                         <td><?=$supplier->user->name;?></td>
-                        <td><?=$supplier->old_price ? number_format($supplier->old_price) : '';?></td>
-                        <td><?=number_format($supplier->price);?></td>
+                        <th <?=$showPrice ? '' : 'class="hide"';?>><?=$supplier->old_price ? number_format($supplier->old_price) : '';?></td>
+                        <th <?=$showPrice ? '' : 'class="hide"';?>><?=number_format($supplier->price);?></td>
                         <td><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
                         <td><?=isset($avgSpeeds[$supplier->supplier_id]) ? FormatConverter::countDuration(round($avgSpeeds[$supplier->supplier_id])) : FormatConverter::countDuration(0) ;?></td>
                         <td></td>

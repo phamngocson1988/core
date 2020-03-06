@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 use backend\controllers\Controller;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -35,11 +36,6 @@ class GameController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    // [
-                    //     'allow' => true,
-                    //     'actions' => ['suggestion'],
-                    //     'roles' => ['@'],
-                    // ],
                 ],
             ],
         ];
@@ -230,6 +226,7 @@ class GameController extends Controller
     {
         $this->view->params['main_menu_active'] = 'game.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+        if (!Yii::$app->user->can('orderteam')) throw new NotFoundHttpException('Not found');
         $request = Yii::$app->request;
         $model = Game::findOne($id);
 

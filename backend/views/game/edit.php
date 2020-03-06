@@ -16,6 +16,9 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/boo
 $this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$user = Yii::$app->user;
+$canShowPrice = $user->can('orderteam');
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -25,9 +28,11 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
       <a href="<?=Url::to(['game/edit', 'id' => $id]);?>">Cập nhật game</a>
       <i class="fa fa-circle"></i>
     </li>
+    <?php if ($canShowPrice) :?>
     <li>
       <a href="<?=Url::to(['game/suppliers', 'id' => $id]);?>">Giá nhà cung cấp</a>
     </li>
+    <?php endif;?>
   </ul>
 </div>
 <!-- END PAGE BAR -->
