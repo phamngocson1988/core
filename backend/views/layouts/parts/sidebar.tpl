@@ -416,7 +416,7 @@
       {/if}
 
       <!-- Game -->
-      {if ($app->user->can('saler') || $app->user->can('orderteam_manager') || $app->user->can('marketing_officer'))}
+      {if ($app->user->can('saler') || $app->user->can('orderteam') || $app->user->can('marketing_officer'))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
@@ -426,18 +426,10 @@
         <ul class="sub-menu">
           <li class="nav-item  "> 
             <a href="{url route='/game'}" class="nav-link " code='game.index'>
-            <span class="title">{Yii::t('app', 'games')}</span>
+            <span class="title">Game status</span>
             </a>
           </li>
 
-          {if $app->user->can('orderteam_manager')}
-          <!--<li class="nav-item  ">
-            <a href="{url route='game/provider'}" class="nav-link " code='game.provider'>
-            <span class="title">Giá nhà cung cấp</span>
-            </a>
-          </li>-->
-          {/if}
-          
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
