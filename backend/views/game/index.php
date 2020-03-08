@@ -104,7 +104,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
                   ---
                   <?php else :?>
-                  <?=FormatConverter::countDuration($model->average_speed, 'h:i');?>
+                  <?=FormatConverter::countDuration($model->average_speed * 60, 'h:i');?>
                   <?php endif;?>
                 </td>
                 <td class="center">

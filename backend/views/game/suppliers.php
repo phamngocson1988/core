@@ -16,6 +16,8 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
 
 $showPrice = Yii::$app->user->can('orderteam');
 $canUpdatePrice = Yii::$app->user->can('orderteam_manager');
+$lastSupplierPriceUpdate = $lastPrice ? date('d/m/Y H:i', strtotime($lastPrice->updated_at)) : '';
+$toDay = date('d/m/Y H:i', strtotime('now'));
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -44,21 +46,21 @@ $canUpdatePrice = Yii::$app->user->can('orderteam_manager');
         <?=$form->field($model, 'price1', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
-          'parts' => ['{log}' => $lastPrice->old_price_1, '{hint}' => sprintf('%s - %s', date('d/m/Y H:i', strtotime($lastPrice->updated_at)), date('d/m/Y H:i', strtotime('now')))  ],
+          'parts' => ['{log}' => $lastPrice ? $lastPrice->old_price_1 : 0, '{hint}' => sprintf('%s - %s', $lastSupplierPriceUpdate, $toDay)  ],
           'template' => '<strong>{label}</strong><div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 1 (USD)');?>
         
         <?=$form->field($model, 'price2', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
-          'parts' => ['{log}' => $lastPrice->old_price_2, '{hint}' => sprintf('%s - %s', date('d/m/Y H:i', strtotime($lastPrice->updated_at)), date('d/m/Y H:i', strtotime('now')))  ],
+          'parts' => ['{log}' => $lastPrice ? $lastPrice->old_price_2 : 0, '{hint}' => sprintf('%s - %s', $lastSupplierPriceUpdate, $toDay)  ],
           'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 2 (USD)');?>
 
         <?=$form->field($model, 'price3', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
-          'parts' => ['{log}' => $lastPrice->old_price_3, '{hint}' => sprintf('%s - %s', date('d/m/Y H:i', strtotime($lastPrice->updated_at)), date('d/m/Y H:i', strtotime('now')))  ],
+          'parts' => ['{log}' => $lastPrice ? $lastPrice->old_price_3 : 0, '{hint}' => sprintf('%s - %s', $lastSupplierPriceUpdate, $toDay)  ],
           'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 3 (USD)');?>
 
