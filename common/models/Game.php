@@ -19,7 +19,7 @@ class Game extends ActiveRecord
     const PIN = 1;
 
     const SOLDOUT = 1;
-
+    const INSTOCK = 0;
     /**
      * @inheritdoc
      */

@@ -5,6 +5,7 @@ use common\widgets\TinyMce;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use unclead\multipleinput\MultipleInput;
+use backend\models\Game;
 use common\widgets\ImageInputWidget;
 use common\widgets\RadioListInput;
 use common\widgets\CheckboxInput;
@@ -60,7 +61,7 @@ $canShowPrice = $user->can('orderteam');
         <?=$form->field($model, 'status', [
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(RadioListInput::className(), [
-          'items' => $model->getStatusList(),
+          'items' => [Game::STATUS_INVISIBLE => 'Tạm ẩn', Game::STATUS_VISIBLE => 'Hiển thị'],
           'options' => ['class' => 'mt-radio-list']
         ]);?>
 
@@ -82,12 +83,13 @@ $canShowPrice = $user->can('orderteam');
         ])->textInput()->label(sprintf('Số nhà cung cấp (Hiện có %s)', $numSupplier));?>
 
         <?=$form->field($model, 'remark', [
-          'options' => ['class' => 'list-separated profile-stat']
+          'options' => ['class' => 'list-separated profile-stat'],
+          'inputOptions' => ['style' => 'resize: vertical', 'class' => 'form-control']
         ])->textArea();?>
         <?php endif;?>
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
-        <?=Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default']);?>
+        <?=Html::a(Yii::t('app', 'cancel'), $back, ['class' => 'btn default']);?>
         <!-- END MENU -->
       </div>
       <!-- END PORTLET MAIN -->

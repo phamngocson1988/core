@@ -9,6 +9,7 @@ class FetchGameForm extends Model
 {
     public $q;
     public $status;
+    public $soldout;
 
     private $_command;
     
@@ -24,6 +25,9 @@ class FetchGameForm extends Model
             } else {
                 $command->andWhere(['status' => $status]);
             }
+        }
+        if ($this->soldout !== null) {
+            $command->andWhere(['soldout' => $this->soldout]);
         }
         if ($q) {
             $command->andWhere(['like', 'title', $q]);

@@ -16,8 +16,8 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
 
 $showPrice = Yii::$app->user->can('orderteam');
 $canUpdatePrice = Yii::$app->user->can('orderteam_manager');
-$lastSupplierPriceUpdate = $lastPrice ? date('d/m/Y H:i', strtotime($lastPrice->updated_at)) : '';
-$toDay = date('d/m/Y H:i', strtotime('now'));
+$lastSupplierPriceUpdate = $lastPrice ? date('d/m/y H:i', strtotime($lastPrice->updated_at)) : '';
+$toDay = date('d/m/y H:i', strtotime('now'));
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -67,6 +67,7 @@ $toDay = date('d/m/Y H:i', strtotime('now'));
         <?=$form->field($model, 'remark', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
+          'inputOptions' => ['style' => 'resize: vertical', 'class' => 'form-control']
         ])->textArea();?>
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
@@ -141,11 +142,11 @@ $toDay = date('d/m/Y H:i', strtotime('now'));
                         <td class="left"><?=$supplier->user->name;?></td>
                         <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
                           <div><?=$supplier->old_price ? number_format($supplier->old_price) : '';?></div>
-                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/Y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
                         </td>
                         <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
                           <div><?=number_format($supplier->price);?></div>
-                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->updated_at ? date('d/m/Y H:i', strtotime($supplier->updated_at)) : '';?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->updated_at ? date('d/m/y H:i', strtotime($supplier->updated_at)) : '';?></div>
                         </td>
                         <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
                         <td class="center"><?=isset($avgSpeeds[$supplier->supplier_id]) ? FormatConverter::countDuration(round($avgSpeeds[$supplier->supplier_id]), 'h:i') : FormatConverter::countDuration(0, 'h:i') ;?></td>

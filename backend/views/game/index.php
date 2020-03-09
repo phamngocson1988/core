@@ -35,6 +35,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
           <span class="caption-subject bold uppercase"> Quản lý game</span>
+          <span class="label label-info">Đang hiển thị: <?=number_format($visibleCount);?></span>
+          <span class="label label-warning">Tạm ẩn: <?=number_format($invisibleCount);?></span>
+          <span class="label label-danger">Hết hàng: <?=number_format($soldoutCount);?></span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
@@ -58,6 +61,14 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 Game::STATUS_VISIBLE => 'Hiển thị',
             ])->label('Trạng thái');?>
 
+            <?=$form->field($search, 'soldout', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'soldout']
+            ])->dropDownList([
+                Game::SOLDOUT => 'Hết hàng',
+                Game::INSTOCK => 'Còn hàng',
+            ], ['prompt' => 'Chọn trạng thái kho'])->label('Trạng thái kho');?>
+
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -74,6 +85,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th> Hình ảnh </th>
               <th> Tên game </th>
               <th> Trạng thái </th>
+              <th> Kho </th>
               <th> Tốc độ </th>
               <th> Nhà cung cấp </th>
               <th> Giá </th>
@@ -84,7 +96,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </thead>
             <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="9" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="10" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
@@ -99,6 +111,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <?php elseif ($model->status == 'D') : ?>
                   <span class="label label-default"><?=Yii::t('app', 'deleted');?></span>
                   <?php endif;?>
+                </td>
+                <td  class="center">
+                  <?php if ($model->isSoldout()) : ?>
+                    <span class="label label-default">Hết hàng</span>
+                    <?php else : ?>
+                    <span class="label label-success">Còn hàng</span>
+                    <?php endif;?>
                 </td>
                 <td  class="center">
                   <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
@@ -154,7 +173,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
 $script = <<< JS
 $(".delete-action").ajax_action({
   confirm: true,
-  confirm_text: '{/literal}{Yii::t('app', 'confirm_delete_game')}{literal}',
+  confirm_text: 'Bạn có chắc muốn xóa game này?',
   callback: function(eletement, data) {
     location.reload();
   }

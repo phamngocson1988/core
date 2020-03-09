@@ -49,7 +49,8 @@ class GameController extends Controller
         
         $form = new FetchGameForm([
             'q' => $request->get('q'),
-            'status' => $request->get('status')
+            'status' => $request->get('status'),
+            'soldout' => $request->get('soldout')
         ]);
         $command = $form->getCommand();
         $command->orderBy(['updated_at' => SORT_DESC]);
@@ -67,12 +68,20 @@ class GameController extends Controller
         ->asArray()->all();
         $orders = array_column($orders, 'total', 'game_id');
 
+        // statictis
+        $visibleCount = Game::find()->where(['status' => Game::STATUS_VISIBLE])->count();
+        $invisibleCount = Game::find()->where(['status' => Game::STATUS_INVISIBLE])->count();
+        $soldoutCount = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->andWhere(['soldout' => 1])->count();
+
         return $this->render('index.php', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
             'orders' => $orders,
             'ref' => Url::to($request->getUrl(), true),
+            'visibleCount' => $visibleCount,
+            'invisibleCount' => $invisibleCount,
+            'soldoutCount' => $soldoutCount,
         ]);
     }
 

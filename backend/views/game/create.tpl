@@ -2,6 +2,7 @@
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='common\widgets\TinyMce' type='block'}
 {use class='unclead\multipleinput\MultipleInput'}
+{use class='backend\models\Game'}
 {use class='common\widgets\ImageInputWidget'}
 {use class='common\widgets\RadioListInput'}
 {use class='common\widgets\CheckboxInput'}
@@ -52,7 +53,7 @@
         {$form->field($model, 'status', [
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(RadioListInput::className(), [
-          'items' => $model->getStatusList(),
+          'items' => [Game::STATUS_INVISIBLE => 'Invisible', Game::STATUS_VISIBLE => 'Visible'],
           'options' => ['class' => 'mt-radio-list']
         ])}
 
@@ -74,7 +75,8 @@
         ])->textInput()}
 
         {$form->field($model, 'remark', [
-          'options' => ['class' => 'list-separated profile-stat']
+          'options' => ['class' => 'list-separated profile-stat'],
+          'inputOptions' => ['style' => 'resize: vertical', 'class' => 'form-control']
         ])->textArea()}
         {/if}
         {Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green'])}
