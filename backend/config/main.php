@@ -11,7 +11,6 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.tpl',
-    'bootstrap' => ['log'],
     'language' => 'vi',
     'sourceLanguage' => 'en-US',
     'components' => [
@@ -19,7 +18,7 @@ return [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'backend\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],

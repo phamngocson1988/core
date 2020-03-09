@@ -1,7 +1,7 @@
 {use class='yii\helpers\Html'}
 {use class='yii\helpers\Url'}
 {use class='backend\assets\AppAsset'}
-{use class='common\widgets\Alert'}
+{use class='backend\widgets\Alert'}
 {AppAsset::register($this)|void}
 {$this->beginPage()}
 <!DOCTYPE html>

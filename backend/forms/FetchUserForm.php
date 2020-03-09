@@ -5,6 +5,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\User;
+use yii\helpers\ArrayHelper;
 
 /**
  * FetchUserForm
@@ -13,6 +14,7 @@ class FetchUserForm extends Model
 {
     public $q;
     public $status;
+    public $role;
     private $_command;
 
     public function rules()
@@ -33,11 +35,18 @@ class FetchUserForm extends Model
         $command = User::find();
 
         if ($this->q) {
+            $command->orWhere(['like', 'name', $this->q]);
             $command->orWhere(['like', 'username', $this->q]);
             $command->orWhere(['like', 'email', $this->q]);
         }
         if ((string)$this->status !== "") {
             $command->andWhere(['status' => $this->status]);
+        }
+
+        if ($this->role) {
+            $authManager = Yii::$app->authManager;
+            $filterRole = sprintf("%s.%s = %s.%s", $authManager->assignmentTable, 'user_id', User::tableName(), 'id');
+            $command->join('LEFT JOIN', $authManager->assignmentTable, $filterRole)->andWhere(["IN", "$authManager->assignmentTable.item_name", (array)$this->role]);
         }
         $this->_command = $command;
     }
@@ -53,5 +62,18 @@ class FetchUserForm extends Model
     public function getUserStatus()
     {
         return User::getUserStatus();
+    }
+
+    public function getRoles()
+    {
+        $roles = Yii::$app->authManager->getRoles();
+        return ArrayHelper::map($roles, 'name', 'description');
+    }
+
+    public function getManagerRoles()
+    {
+        $roles = $this->getRoles();
+        unset($roles['customer']);
+        return $roles;
     }
 }

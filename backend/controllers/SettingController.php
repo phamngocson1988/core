@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use yii\web\Controller;
 use backend\components\actions\SettingsAction;
 use backend\forms\ApplicationSettingForm;
 use backend\forms\SocialSettingForm;

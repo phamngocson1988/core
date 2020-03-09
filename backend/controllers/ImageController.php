@@ -2,7 +2,6 @@
 namespace backend\controllers;
 
 use Yii;
-use common\components\Controller;
 use yii\filters\AccessControl;
 use backend\forms\FetchImageForm;
 use yii\helpers\Url;

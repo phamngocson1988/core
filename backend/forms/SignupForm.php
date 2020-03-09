@@ -1,38 +1,65 @@
 <?php
-
 namespace backend\forms;
 
 use Yii;
-use common\forms\SignupForm as BaseSignupForm;
-use yii\helpers\ArrayHelper;
-use backend\forms\AssignRoleForm;
+use yii\base\Model;
+use backend\models\User;
 
-class SignupForm extends BaseSignupForm
+/**
+ * Signup form
+ */
+class SignupForm extends Model
 {
-	public $role;
+    public $name;
+    public $username;
+    public $email;
+    public $password;
 
-	public function rules()
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
     {
-        $rules = parent::rules();
-        $rules[] = ['role', 'trim'];
-        return $rules;
+        return [
+            ['name', 'trim'],
+            ['name', 'required'],
+            ['name', 'string', 'min' => 2, 'max' => 255],
+
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => Yii::t('app', 'validate_username_unique')],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => Yii::t('app', 'validate_email_unique')],
+
+            ['password', 'required'],
+            ['password', 'string', 'min' => 6],
+        ];
     }
 
-	public function getRoles()
+    /**
+     * Signs user up.
+     *
+     * @return User|null the saved model or null if saving fails
+     */
+    public function signup()
     {
-        $auth = Yii::$app->authManager;
-        $roles = $auth->getRoles();
-        $names = ArrayHelper::map($roles, 'name', 'description');
-        return $names;
+        if (!$this->validate()) {
+            return null;
+        }
+        
+        $user = new User();
+        $user->name = $this->name;        
+        $user->username = $this->username;
+        $user->email = $this->email;
+        $user->setPassword($this->password);
+        $user->generateAuthKey();
+        
+        return $user->save() ? $user : null;
     }
-	
-	public function signup()
-	{
-		$user = parent::signup();
-		if ($this->role && ($user instanceof \common\models\User)) {
-			$form = new AssignRoleForm(['user_id' => $user->id, 'role' => $this->role]);
-			$form->save();
-		}
-		return $user;
-	}
 }
