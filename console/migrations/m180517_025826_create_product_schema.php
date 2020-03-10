@@ -47,6 +47,7 @@ class m180517_025826_create_product_schema extends Migration
             'average_speed' => $this->int(), // seconds
             'number_supplier' => $this->int(),
             'remark' => $this->text(),
+            'price_remark' => $this->text(),
             'google_ads' => $this->text(),
         ], $tableOptions);
 

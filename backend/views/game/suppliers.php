@@ -16,8 +16,25 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
 
 $showPrice = Yii::$app->user->can('orderteam');
 $canUpdatePrice = Yii::$app->user->can('orderteam_manager');
-$lastSupplierPriceUpdate = $lastPrice ? date('d/m/y H:i', strtotime($lastPrice->updated_at)) : '';
-$toDay = date('d/m/y H:i', strtotime('now'));
+$dateTimeFormat = 'd/m/y H:i';
+$today = date($dateTimeFormat, strtotime('now'));
+$old_price_1 = $old_price_2 = $old_price_3 = 0;
+if (!count($lastPrices)) {
+  $supplierPriceRangeTime = sprintf('%s - %s', $today, $today);
+} elseif (count($lastPrices) == 1) {
+  $lastPrice = reset($lastPrices);
+  $lastPriceDate = date($dateTimeFormat, strtotime($lastPriceDate->updated_at));
+  $supplierPriceRangeTime = sprintf('%s - %s', $lastPriceDate, $today);
+} else {
+  $newestPrice = $lastPrices[0];
+  $lastPrice = $lastPrices[1];
+  $newestPriceDate = date($dateTimeFormat, strtotime($newestPrice->updated_at));
+  $lastPriceDate = date($dateTimeFormat, strtotime($lastPrice->updated_at));
+  $supplierPriceRangeTime = sprintf('%s - %s', $lastPriceDate, $newestPriceDate);
+  $old_price_1 = $newestPrice->old_price_1;
+  $old_price_2 = $newestPrice->old_price_2;
+  $old_price_3 = $newestPrice->old_price_3;
+}
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -46,25 +63,25 @@ $toDay = date('d/m/y H:i', strtotime('now'));
         <?=$form->field($model, 'price1', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
-          'parts' => ['{log}' => $lastPrice ? $lastPrice->old_price_1 : 0, '{hint}' => sprintf('%s - %s', $lastSupplierPriceUpdate, $toDay)  ],
+          'parts' => ['{log}' => $old_price_1, '{hint}' => $supplierPriceRangeTime],
           'template' => '<strong>{label}</strong><div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 1 (USD)');?>
         
         <?=$form->field($model, 'price2', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
-          'parts' => ['{log}' => $lastPrice ? $lastPrice->old_price_2 : 0, '{hint}' => sprintf('%s - %s', $lastSupplierPriceUpdate, $toDay)  ],
+          'parts' => ['{log}' => $old_price_2, '{hint}' => $supplierPriceRangeTime],
           'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 2 (USD)');?>
 
         <?=$form->field($model, 'price3', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
-          'parts' => ['{log}' => $lastPrice ? $lastPrice->old_price_3 : 0, '{hint}' => sprintf('%s - %s', $lastSupplierPriceUpdate, $toDay)  ],
+          'parts' => ['{log}' => $old_price_3, '{hint}' => $supplierPriceRangeTime],
           'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 3 (USD)');?>
 
-        <?=$form->field($model, 'remark', [
+        <?=$form->field($model, 'price_remark', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
           'inputOptions' => ['style' => 'resize: vertical', 'class' => 'form-control']

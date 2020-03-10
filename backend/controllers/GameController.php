@@ -285,7 +285,7 @@ class GameController extends Controller
         }
         $countOrders = array_column($orderSuppliers, 'count_order', 'supplier_id');
         $avgSpeeds = array_column($orderSuppliers, 'duration', 'supplier_id');
-        $lastPrice = $model->lastChange;
+        $lastPrices = GamePriceLog::find()->where(['game_id' => $id])->orderBy(['updated_at' => SORT_DESC])->limit(2)->all();
 
         return $this->render('suppliers.php', [
             'model' => $model,
@@ -294,7 +294,7 @@ class GameController extends Controller
             'search' => $form,
             'countOrders' => $countOrders,
             'avgSpeeds' => $avgSpeeds,
-            'lastPrice' => $lastPrice
+            'lastPrices' => $lastPrices
         ]);
     }
 
@@ -304,7 +304,7 @@ class GameController extends Controller
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = Game::findOne($id);
-        $model->setScenario(Game::SCENARIO_CREATE);
+        $model->setScenario(Game::SCENARIO_UPDATE_PRICE);
         if ($request->isPost) {
             // Write log
             $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
