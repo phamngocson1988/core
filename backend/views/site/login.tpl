@@ -14,6 +14,10 @@
     'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
     'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => Yii::t('app', 'password')]
   ])->passwordInput()}
+  {$form->field($model, 'role', [
+    'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
+    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => 'Vai trò']
+  ])->dropdownList($model->getRoles(), ['prompt' => 'Chọn vai trò đăng nhập'])}
   
   <div class="form-actions">
     <button type="submit" class="btn green uppercase">{Yii::t('app', 'login')}</button>

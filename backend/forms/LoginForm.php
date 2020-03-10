@@ -3,6 +3,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use backend\models\User;
 
 /**
@@ -12,25 +13,32 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
-    public $rememberMe = true;
+    public $role;
+    public $rememberMe = false;
 
     private $_user;
-    private $_roles = ['admin'];
+    protected $_unchangable_roles = ['admin', 'manager'];
 
     /**
      * @inheritdoc
      */
     public function rules()
     {
+        $roles = $this->getRoles();
         return [
-            // username and password are both required
             [['username', 'password'], 'required'],
-            // user must be a staff
-            // ['username', 'isStaff', 'message' => 'You are not allowed to login'],
-            // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['role', 'required', 'message' => 'Hãy chọn vai trò đăng nhập'],
+            ['role', 'in', 'range' => array_keys($roles), 'message' => 'Vai trò không hợp lệ'],
+            ['role', 'validateRole'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'rememberMe' => 'Nhớ đăng nhập',
         ];
     }
 
@@ -51,18 +59,13 @@ class LoginForm extends Model
         }
     }
 
-    public function isStaff($attribute, $params)
+    public function validateRole($attribute, $params)
     {
-        if (!$this->hasErrors()) {
-            $auth = Yii::$app->authManager;
-            $user = $this->getUser();
-            $roles = $auth->getRolesByUser($user->id);
-            $roleNames = array_keys($roles);
-            $allowedRoles = $this->_roles;
-            $matches = array_intersect($roleNames, $allowedRoles);
-            if (count($matches) < 1) {
-                $this->addError($attribute, Yii::t('app', 'you_are_not_allowed_to_login'));
-                return false;
+        $userRoles = $this->getUserRoles();
+        $intersectRoles = array_intersect($this->_unchangable_roles, $userRoles);
+        if (!count($intersectRoles)) { // user is not admin/manager
+            if (in_array($this->role, $this->_unchangable_roles)) {
+                $this->addError($attribute, 'Bạn không được quyền đăng nhập quyền này');
             }
         }
     }
@@ -75,7 +78,19 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+            $auth = Yii::$app->authManager; 
+            $user = $this->getUser();
+            $userRoles = $this->getUserRoles();
+            $intersectRoles = array_intersect($this->_unchangable_roles, $userRoles);
+            if (!count($intersectRoles)) { // user is not admin/manager
+                foreach ($userRoles as $userRoleName) {
+                    $userRole = $auth->getRole($userRoleName);
+                    $auth->revoke($userRole, $user->id);
+                }
+                $role = $auth->getRole($this->role);
+                $auth->assign($role, $user->id);
+            }
+            return Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;
         }
@@ -93,5 +108,20 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    public function getRoles()
+    {
+        $auth = Yii::$app->authManager; 
+        $roles = $auth->getRoles();
+        $list = ArrayHelper::map($roles, 'name', 'description');
+        return $list;
+    }
+
+    public function getUserRoles()
+    {
+        $user = $this->getUser();
+        $roleNames = Yii::$app->authManager->getRolesByUser($user->id);
+        return array_keys($roleNames);
     }
 }

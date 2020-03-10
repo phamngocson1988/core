@@ -18,7 +18,8 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'test'],
+                        'actions' => ['login'],
+                        'roles' => ['?'],
                         'allow' => true,
                     ],
                     [
@@ -26,14 +27,15 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['error', 'test'],
+                        'allow' => true
+                    ]
                 ],
             ],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function actions()
     {
         return [
@@ -43,33 +45,19 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
-        return $this->render('index.tpl');
+        return $this->render('index.php');
     }
 
-    /**
-     * Login action.
-     *
-     * @return string
-     */
     public function actionLogin()
     {
         $this->layout = 'login.tpl';
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-            return $this->render('login.tpl', [
+            return $this->render('login.php', [
                 'model' => $model,
             ]);
         }

@@ -6,30 +6,33 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use common\widgets\CheckboxInput;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Đăng nhập';
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-</div>
+<?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+  <h3 class="form-title font-green">Đăng nhập</h3>
+  <div class="alert alert-danger display-hide">
+    <button class="close" data-close="alert"></button>
+    <span> Nhập tài khoản và mật khẩu </span>
+  </div>
+  <?=$form->field($model, 'username', [
+    'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
+    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'autofocus' => true, 'placeholder' => Yii::t('app', 'username')]
+  ])->textInput();?>
+  <?=$form->field($model, 'password', [
+    'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
+    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => Yii::t('app', 'password')]
+  ])->passwordInput();?>
+  <?=$form->field($model, 'role', [
+    'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
+    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => 'Vai trò']
+  ])->dropdownList($model->getRoles(), ['prompt' => 'Chọn vai trò đăng nhập']);?>
+  
+  <div class="form-actions">
+    <button type="submit" class="btn green uppercase">Đăng nhập</button>
+    <?=$form->field($model, 'rememberMe', [
+      'options' => ['tag' => false]
+    ])->widget(CheckboxInput::className())->label(false);?>
+  </div>
+<?php ActiveForm::end(); ?>
