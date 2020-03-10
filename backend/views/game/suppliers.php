@@ -71,7 +71,7 @@ $toDay = date('d/m/y H:i', strtotime('now'));
         ])->textArea();?>
 
         <?=Html::submitButton(Yii::t('app', 'save'), ['class' => 'btn green']);?>
-        <?=Html::resetButton(Yii::t('app', 'cancel'), ['class' => 'btn default']);?>
+        <?=Html::a(Yii::t('app', 'cancel'), Url::to(['game/index']), ['class' => 'btn default']);?>
         <?php endif;?>
       </div>
       <?php ActiveForm::end()?>
