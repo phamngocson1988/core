@@ -353,20 +353,42 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionMoveToProcessing($id)
+    // public function actionMoveToProcessing1($id)
+    // {
+    //     $form = new UpdateOrderToProcessingForm([
+    //         'id' => $id,
+    //         'supplier_id' => Yii::$app->user->id
+
+    //     ]);
+    //     if ($form->move()) {
+    //         return $this->asJson(['status' => true]);
+    //     }
+    //     $errors = $form->getErrorSummary(false);
+    //     $error = reset($errors);
+    //     return $this->asJson(['status' => false, 'errors' => $error]);
+
+    // }
+
+    public function actionMoveToProcessing($id) 
     {
-        $form = new UpdateOrderToProcessingForm([
-            'id' => $id,
-            'supplier_id' => Yii::$app->user->id
-
-        ]);
-        if ($form->move()) {
-            return $this->asJson(['status' => true]);
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $form = new UpdateOrderToProcessingForm([
+                'id' => $id,
+                'supplier_id' => Yii::$app->user->id
+            ]);
+            if ($form->move()) {
+                return $this->asJson(['status' => true, 'editUrl' => Url::to(['order/edit', 'id' => $id])]);
+            } else {
+                $errors = $form->getErrorSummary(false);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'errors' => $error]);
+            }
+        } else {
+            return $this->renderPartial('_move_processing_modal', [
+                'id' => $id,
+            ]);    
         }
-        $errors = $form->getErrorSummary(false);
-        $error = reset($errors);
-        return $this->asJson(['status' => false, 'errors' => $error]);
-
     }
 
     public function actionMoveToPartial($id)

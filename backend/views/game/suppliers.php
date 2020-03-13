@@ -23,7 +23,7 @@ if (!count($lastPrices)) {
   $supplierPriceRangeTime = sprintf('%s - %s', $today, $today);
 } elseif (count($lastPrices) == 1) {
   $lastPrice = reset($lastPrices);
-  $lastPriceDate = date($dateTimeFormat, strtotime($lastPriceDate->updated_at));
+  $lastPriceDate = date($dateTimeFormat, strtotime($lastPrice->updated_at));
   $supplierPriceRangeTime = sprintf('%s - %s', $lastPriceDate, $today);
 } else {
   $newestPrice = $lastPrices[0];

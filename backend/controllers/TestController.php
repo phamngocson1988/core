@@ -139,4 +139,32 @@ class TestController extends Controller
     	}
     	
     }
+
+    public function actionFolderPermission()
+    {
+    	$filePath = Yii::getAlias('@common/uploads/images');
+    	$items = scandir($filePath);
+    	foreach ($items as $item) {
+    		if (strpos($item, '.') === false) {
+		    	$folderPath = sprintf('%s/%s', $filePath, $item);
+		    	echo $folderPath . "\n";
+		    	chmod($folderPath, 0771);
+	    	// $this->changePermission($folderPath);
+    		}
+    	}
+    }
+
+    protected function changePermission($folderPath)
+    {
+    	if (strpos($folderPath, '.') !== false) return;
+    	echo 'changePermission';
+    	if (is_dir($folderPath)) {
+    		echo 'is_dir';
+    		$items = scandir($folderPath);
+	    	foreach ($items as $item) {
+				$this->changePermission(sprintf('%s/%s', $folderPath, $item));	    		
+	    	}
+	    	chmod($folderPath, 0771);
+    	}
+    }
 }

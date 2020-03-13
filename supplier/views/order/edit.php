@@ -137,7 +137,7 @@ use supplier\models\OrderSupplier;
                       <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" data-toggle="modal" href="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận LOG IN THÀNH CÔNG</a>
+                            <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn red btn-outline sbold" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận LOG IN THÀNH CÔNG</a>
                           </div>
                           
                         </div>
@@ -356,33 +356,33 @@ $this->registerJs($complainJs);
 <div class="modal fade" id="go_processing" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Chuyển tới trạng thái Processing</h4>
-      </div>
-      <?= Html::beginForm(['order/move-to-processing', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-processing-form']) ?>
-      <div class="modal-body"> 
-        <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Processing"</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn green">Xác nhận</button>
-      </div>
-      <?= Html::endForm();?>
     </div>
   </div>
 </div>
 <!-- End Go processing -->
 <?php
 $moveProcessingJs = <<< JS
-var moveProcessingForm = new AjaxFormSubmit({element: '#move-processing-form'});
-moveProcessingForm.success = function (data, form) {
-  location.reload();
-};
-moveProcessingForm.error = function (errors) {
-  alert(errors);
+// supplier
+$(document).on('submit', 'body #move-processing-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      console.log(result);
+      if (!result.status)
+       alert(result.errors);
+      else 
+        window.location.href = result.editUrl;
+    }
+  });
   return false;
-}
+});
 JS;
 $this->registerJs($moveProcessingJs)
 ?>
