@@ -16,34 +16,44 @@ class LocalFileSystem extends Model implements FileSystemInterface
     {
         $filePath = $this->getPath($fileModel);
         $fileDir = dirname($filePath);
-        FileHelper::createDirectory($fileDir);
+        FileHelper::createDirectory($fileDir, 0771);
         $file->saveAs($filePath);
         return $filePath;
     }
 
-    public function upload($file, $path)
+    public function upload($file, $path, $includeSchema = false)
     {
-        $filePath = sprintf("%s/%s/%s", Yii::getAlias($this->file_path), $path, date('YmdHis') . $file->name);
+        $location = sprintf("%s/%s", $path, date('YmdHis') . $file->name);
+        $filePath = sprintf("%s/%s", Yii::getAlias($this->file_path), $location);
         $fileDir = dirname($filePath);
-        FileHelper::createDirectory($fileDir);
+        FileHelper::createDirectory($fileDir, 0771);
         $file->saveAs($filePath);
-        return $filePath;
+        if (!$includeSchema) return $location;//sprintf("%s/%s", $this->file_url, $location);
+        return sprintf("%s/%s", $this->file_url, $location);
     }
 
     public function getUrl($fileModel)
     {
-        $fileDir = sprintf("%s/%s", $this->file_url, $this->getRelativePath($fileModel->id));
-        $fileUrl = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
-        return $fileUrl;
+        if (!is_object($fileModel)) {
+            return sprintf("%s/%s", $this->file_url, $fileModel);
+        } else {
+            $fileDir = sprintf("%s/%s", $this->file_url, $this->getRelativePath($fileModel->id));
+            $fileUrl = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+            return $fileUrl;
+        }
     }
     
    
 
     public function getPath($fileModel)
     {
-        $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
-        $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
-        return $filePath;
+        if (!is_object($fileModel)) {
+            return sprintf("%s/%s",  Yii::getAlias($this->file_path), $fileModel);
+        } else {
+            $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
+            $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+            return $filePath;
+        }
     }
 
     protected function getRelativePath($id)

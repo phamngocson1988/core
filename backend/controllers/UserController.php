@@ -5,9 +5,13 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
-use backend\forms\SignupForm;
+use backend\forms\CreateUserForm;
+use backend\forms\EditUserForm;
 use backend\forms\FetchUserForm;
+use backend\forms\FetchLoginLogForm;
 use backend\forms\ChangeUserStatusForm;
+
+use backend\components\datepicker\DatePicker;
 
 /**
  * UserController
@@ -22,7 +26,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'change-status'],
+                        'actions' => ['create', 'edit', 'change-status', 'login'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -39,69 +43,60 @@ class UserController extends Controller
     {
         $this->view->params['main_menu_active'] = 'user.index';
         $request = Yii::$app->request;
-        $q = $request->get('q');
-        $status = $request->get('status', '');
-        $form = new FetchUserForm(['q' => $q, 'status' => $status]);
-
+        $form = new FetchUserForm();
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
-
-        $links = [
-            'delete' => Url::to(['user/change-status', 'status' => 'delete']),
-            'active' => Url::to(['user/change-status', 'status' => 'active'])
-        ];
 
         return $this->render('index.tpl', [
             'models' => $models,
             'pages' => $pages,
             'form' => $form,
             'ref' => Url::to($request->getUrl(), true),
-            'links' => $links
         ]);
     }
 
     public function actionCreate()
     {
+        $this->view->params['main_menu_active'] = 'user.index';
         $request = Yii::$app->request;
-        $auth = Yii::$app->authManager;
-        $roles = $auth->getRoles();
-        $model = new SignupForm();
+        $model = new CreateUserForm();
         if ($model->load($request->post())) {
-            if ($user = $model->signup()) {
+            if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['user/index']);
+            } else {
+                $errors = $model->getErrorSummary(false);
+                $error = reset($errors);
+                Yii::$app->session->setFlash('error', $error);
             }
-        }
+        } 
 
         return $this->render('create.tpl', [
             'model' => $model,
-            'roles' => $roles,
             'back' => $request->get('ref', Url::to(['user/index']))
         ]);
-
     }
 
-    public function actionSuggestion()
+    public function actionEdit($id)
     {
+        $this->view->params['main_menu_active'] = 'user.index';        
         $request = Yii::$app->request;
-
-        if( $request->isAjax) {
-            $keyword = $request->get('q');
-            $items = [];
-            if ($keyword) {
-                $form = new FetchUserForm(['q' => $keyword]);
-                $command = $form->getCommand();
-                $users = $command->offset(0)->limit(20)->all();
-                foreach ($users as $user) {
-                    $item = [];
-                    $item['id'] = $user->id;
-                    $item['text'] = sprintf("%s - %s", $user->username, $user->email);
-                    $items[] = $item;
-                }
+        $model = new EditUserForm();
+        $model->loadData($id);
+        if ($model->load($request->post())) {
+            if ($model->validate() && $model->edit()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['user/index']);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
-            return $this->renderJson(true, ['items' => $items]);
         }
+
+        return $this->render('edit.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['user/index']))
+        ]);
     }
 
     public function actionChangeStatus()
@@ -122,7 +117,49 @@ class UserController extends Controller
                     $result = false;
                     break;
             }
-            return $this->renderJson($result, null, $form->getErrors());
+            return $this->asJson(['status' => $result, 'errors' => 'Đã có lỗi xảy ra']);
         // }
+    }
+
+    public function actionSuggestion()
+    {
+        $request = Yii::$app->request;
+
+        if( $request->isAjax) {
+            $keyword = $request->get('q');
+            $items = [];
+            if ($keyword) {
+                $form = new FetchUserForm(['q' => $keyword]);
+                $command = $form->getCommand();
+                $users = $command->offset(0)->limit(20)->all();
+                foreach ($users as $user) {
+                    $item = [];
+                    $item['id'] = $user->id;
+                    $item['text'] = sprintf("%s - %s", $user->username, $user->email);
+                    $items[] = $item;
+                }
+            }
+            return $this->asJson(['status' => true, 'data' => ['items' => $items]]);
+        }
+    }
+
+    public function actionLogin()
+    {
+        $this->view->params['main_menu_active'] = 'user.login';
+        $request = Yii::$app->request;
+        $form = new FetchLoginLogForm([
+            'user_id' => $request->get('user_id'),
+            'date_from' => $request->get('date_from'),
+            'date_to' => $request->get('date_to'),
+        ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('login', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+        ]);
     }
 }

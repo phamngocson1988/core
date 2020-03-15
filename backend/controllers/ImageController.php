@@ -7,6 +7,7 @@ use backend\forms\FetchImageForm;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 use backend\forms\DeleteImageForm;
+use yii\web\Response;
 
 /**
  * ImageController
@@ -172,5 +173,16 @@ class ImageController extends Controller
             echo $e->getMessage();
             http_response_code(404);
         }
+    }
+
+    public function renderJson($status, $data = null, $errors = null)
+    {
+        $response = [
+            'status' => $status,
+            'data' => $data,
+            'errors' => $errors
+        ];
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $response;
     }
 }

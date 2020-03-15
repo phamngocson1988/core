@@ -31,6 +31,16 @@
         <div class="profile-userbuttons">
           <a class="btn btn-circle red btn-sm" action='change-avatar'>{Yii::t('app', 'change_avatar')}</a>
         </div>
+        <div class="profile-usermenu">
+          <ul class="nav">
+            <li class="active">
+              <a href="{url route='profile/index'}"><i class="icon-home"></i> Hồ sơ tài khoản </a>
+            </li>
+            <li>
+              <a href="{url route='profile/password'}"><i class="icon-settings"></i> Đổi mật khẩu </a>
+            </li>
+          </ul>
+        </div>
         <!-- END SIDEBAR BUTTONS -->
         <!-- SIDEBAR MENU -->
         <div class="profile-usermenu">
@@ -50,21 +60,18 @@
                 <i class="icon-globe theme-font hide"></i>
                 <span class="caption-subject font-blue-madison bold uppercase">{Yii::t('app', 'profile_account')}</span>
               </div>
-              <ul class="nav nav-tabs">
-                <li class="active">
-                  <a href="#tab_1_1">{Yii::t('app', 'personal_info')}</a>
-                </li>
-                <li>
-                  <a href="{$links.password}">{Yii::t('app', 'change_password')}</a>
-                </li>
-              </ul>
             </div>
             <div class="portlet-body">
               <div class="tab-content">
                 <!-- PERSONAL INFO TAB -->
                 <div class="tab-pane active" id="tab_1_1">
                   {ActiveForm assign='form'}
+                    
+                    {$form->field($model, 'email', [
+                      'inputOptions' => ['disabled' => true, 'class' => 'form-control']
+                    ])->textInput()}
                     {$form->field($model, 'name')->textInput()}
+                    {$form->field($model, 'phone')->textInput()}
                     <div class="margiv-top-10">
                       <button type="submit" class="btn green"> {Yii::t('app', 'save_changes')} </button>
                       <a href="javascript:;" class="btn default"> {Yii::t('app', 'cancel')} </a>
@@ -72,8 +79,6 @@
                   {/ActiveForm}
                 </div>
                 <!-- END PERSONAL INFO TAB -->
-                <div class="tab-pane" id="tab_1_2">
-                </div>
               </div>
             </div>
           </div>

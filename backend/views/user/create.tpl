@@ -12,20 +12,19 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>{Yii::t('app', 'create_user')}</span>
+      <span>Tạo nhân viên</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">{Yii::t('app', 'create_user')}</h1>
+<h1 class="page-title">Tạo nhân viên</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated'] id='signup-form'}
       <div class="portlet">
         <div class="portlet-title">
-          <div class="caption">{Yii::t('app', 'create_user')}</div>
           <div class="actions btn-set">
             <a href="{$back}" class="btn default">
             <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
@@ -44,6 +43,10 @@
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
+                {$form->field($model, 'name', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()}
                   {$form->field($model, 'username', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -52,14 +55,14 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
+                  {$form->field($model, 'phone', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()}
                   {$form->field($model, 'password', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->passwordInput()}
-                  {$form->field($model, 'role', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($model->getRoles(), ['prompt' => Yii::t('app', 'choose')])}
                 </div>
               </div>
             </div>

@@ -18,9 +18,12 @@ return [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
+            'class' => 'backend\components\User',
+            'fixRoles' => ['admin', 'manager'],
             'identityClass' => 'backend\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'on afterLogin' => ['backend\events\LoginEvent', 'logLogin'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -62,9 +65,7 @@ return [
                 ],
             ],
         ],
-
         'urlManager' => require('router.php'),
-        'urlManagerFrontend' => require('../../frontend/config/router.php'),
         'i18n' => [
             'translations' => [
                 'app*' => [

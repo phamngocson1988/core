@@ -29,6 +29,16 @@
         <div class="profile-userbuttons">
           <a class="btn btn-circle red btn-sm" action='change-avatar'>{Yii::t('app', 'change_avatar')}</a>
         </div>
+        <div class="profile-usermenu">
+          <ul class="nav">
+            <li>
+              <a href="{url route='profile/index'}"><i class="icon-home"></i> Hồ sơ tài khoản </a>
+            </li>
+            <li class="active">
+              <a href="{url route='profile/password'}"><i class="icon-settings"></i> Đổi mật khẩu </a>
+            </li>
+          </ul>
+        </div>
         <!-- END SIDEBAR BUTTONS -->
         <!-- SIDEBAR MENU -->
         <div class="profile-usermenu">
@@ -46,20 +56,11 @@
             <div class="portlet-title tabbable-line">
               <div class="caption caption-md">
                 <i class="icon-globe theme-font hide"></i>
-                <span class="caption-subject font-blue-madison bold uppercase">{Yii::t('app', 'profile_account')}</span>
+                <span class="caption-subject font-blue-madison bold uppercase">Đổi mật khẩu</span>
               </div>
-              <ul class="nav nav-tabs">
-                <li>
-                  <a href="{$links.profile}">{Yii::t('app', 'personal_info')}</a>
-                </li>
-                <li class="active">
-                  <a href="#tab_1_2">{Yii::t('app', 'change_password')}</a>
-                </li>
-              </ul>
             </div>
             <div class="portlet-body">
               <div class="tab-content">
-                <div class="tab-pane" id="tab_1_1"></div>
                 <!-- PERSONAL INFO TAB -->
                 <div class="tab-pane active" id="tab_1_2">
                   {ActiveForm assign='form'}

@@ -13,7 +13,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
 
     public $css = [
-        'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
+        'https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
         'vendor/assets/global/plugins/font-awesome/css/font-awesome.min.css',
         'vendor/assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
         'vendor/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
@@ -21,14 +21,16 @@ class AppAsset extends AssetBundle
         'vendor/assets/global/plugins/morris/morris.css',
         'vendor/assets/global/plugins/fullcalendar/fullcalendar.min.css',
         'vendor/assets/global/plugins/jqvmap/jqvmap/jqvmap.css',
-        'vendor/assets/global/plugins/select2/css/select2.min.css',
-        'vendor/assets/global/plugins/select2/css/select2-bootstrap.min.css',
+        // 'vendor/assets/global/plugins/select2/css/select2.min.css',
+        // 'vendor/assets/global/plugins/select2/css/select2-bootstrap.min.css',
         ['vendor/assets/global/css/components.min.css', 'id' => 'style_components'],
         'vendor/assets/global/css/plugins.min.css',
         'vendor/assets/layouts/layout/css/layout.min.css',
         ['vendor/assets/layouts/layout/css/themes/darkblue.min.css', 'id' => 'style_color'],
         'vendor/assets/layouts/layout/css/custom.min.css',
         'css/theme_custom.css',
+        'vendor/assets/global/plugins/bootstrap-sweetalert/sweetalert.css',
+        'vendor/assets/global/plugins/bootstrap-toastr/toastr.min.css'
     ];
     public $js = [
         ['vendor/assets/global/plugins/respond.min.js', 'condition' => 'lt IE 9'],
@@ -39,6 +41,7 @@ class AppAsset extends AssetBundle
         'vendor/assets/global/plugins/js.cookie.min.js',
         'vendor/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
         'vendor/assets/global/plugins/jquery.blockui.min.js',
+        'vendor/assets/global/plugins/bootstrap-toastr/toastr.min.js',
         'vendor/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
 
         //BEGIN PAGE LEVEL PLUGINS
@@ -72,13 +75,16 @@ class AppAsset extends AssetBundle
         'vendor/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js',
         'vendor/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js',
         'vendor/assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js',
-        'vendor/assets/global/plugins/select2/js/select2.full.min.js',
+        // 'vendor/assets/global/plugins/select2/js/select2.full.min.js',
+        'vendor/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js',
 
         //BEGIN THEME GLOBAL SCRIPTS
         'vendor/assets/global/scripts/app.min.js',
-
+        
         //BEGIN PAGE LEVEL SCRIPTS
         'vendor/assets/pages/scripts/dashboard.min.js',
+        // 'vendor/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+        // 'vendor/assets/pages/scripts/components-date-time-pickers.min.js',
 
         //BEGIN THEME LAYOUT SCRIPTS
         'vendor/assets/layouts/layout/scripts/layout.min.js',

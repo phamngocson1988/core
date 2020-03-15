@@ -25,35 +25,49 @@
       <li class="heading">
         <h3 class="uppercase">{Yii::t('app', 'features')}</h3>
       </li>
+      <!-- Ban quản trị -->
+      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user"></i>
-        <span class="title">{Yii::t('app', 'user')}</span>
+        <i class="icon-lock"></i>
+        <span class="title">Quản lý nhân viên</span>
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          <li class="nav-item  ">
+          <li class="nav-item">
             <a href="{url route='/user/index'}" class="nav-link " code='user.index'>
-            <span class="title">{Yii::t('app', 'users')}</span>
+            <span class="title">Nhân viên</span>
             </a>
           </li>
-          <li class="nav-item  ">
-            <a href="{url route='/rbac/create-role'}" class="nav-link" code='rbac.create-role'>
-            <span class="title">{Yii::t('app', 'create_role')}</span>
+          <li class="nav-item">
+            <a href="{url route='/rbac/role'}" class="nav-link" code='user.role'>
+            <span class="title">Vai trò</span>
             </a>
           </li>
-          <li class="nav-item  ">
-            <a href="{url route='/rbac/assign-role'}" class="nav-link " code='rbac.assign-role'>
-            <span class="title">{Yii::t('app', 'role_permission')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
-            <span class="title">{Yii::t('app', 'customers')}</span>
+          <li class="nav-item">
+            <a href="{url route='/user/login'}" class="nav-link" code='user.login'>
+            <span class="title">Lịch sử đăng nhập</span>
             </a>
           </li>
         </ul>
       </li>
+      {/if}
+
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user"></i>
+        <span class="title">Quản lý khách hàng</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/user/index'}" class="nav-link " code='customer.index'>
+            <span class="title">Khách hàng</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
@@ -78,6 +92,7 @@
           </li>
         </ul>
       </li>
+      {/if}
     </ul>
   </div>
 </div>

@@ -74,7 +74,7 @@ class FileSystemManager extends DynamicModel
         }
     }   
 
-    public function upload($name, $path = '')
+    public function upload($name, $path = '', $includeSchema = false)
     {
         $files = [];
         try {
@@ -85,7 +85,7 @@ class FileSystemManager extends DynamicModel
             }
             $dependency = $this->instanceDependency();
             foreach ($uploadedFiles as $file) {
-                $files[] = $dependency->upload($file, $path);
+                $files[] = $dependency->upload($file, $path, $includeSchema);
             }
             $this->undefineAttribute($name);
             return $files;

@@ -7,6 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use common\widgets\CheckboxInput;
+use yii\helpers\Url;
 
 $this->title = 'Đăng nhập';
 ?>
@@ -24,10 +25,6 @@ $this->title = 'Đăng nhập';
     'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
     'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => Yii::t('app', 'password')]
   ])->passwordInput();?>
-  <?=$form->field($model, 'role', [
-    'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
-    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => 'Vai trò']
-  ])->dropdownList($model->getRoles(), ['prompt' => 'Chọn vai trò đăng nhập']);?>
   
   <div class="form-actions">
     <button type="submit" class="btn green uppercase">Đăng nhập</button>
@@ -36,3 +33,4 @@ $this->title = 'Đăng nhập';
     ])->widget(CheckboxInput::className())->label(false);?>
   </div>
 <?php ActiveForm::end(); ?>
+<a href="<?=Url::to(['site/login-with-role']);?>">Đăng nhập với một vai trò khác</a>

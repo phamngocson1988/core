@@ -5,6 +5,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use backend\forms\LoginForm;
+use backend\forms\LoginWithRoleForm;
 
 /**
  * Site controller
@@ -18,7 +19,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login'],
+                        'actions' => ['login', 'login-with-role'],
                         'roles' => ['?'],
                         'allow' => true,
                     ],
@@ -58,6 +59,19 @@ class SiteController extends Controller
             return $this->goBack();
         } else {
             return $this->render('login.php', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionLoginWithRole()
+    {
+        $this->layout = 'login.tpl';
+        $model = new LoginWithRoleForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            return $this->render('login-with-role.php', [
                 'model' => $model,
             ]);
         }

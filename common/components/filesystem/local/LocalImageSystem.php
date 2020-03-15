@@ -18,7 +18,7 @@ class LocalImageSystem extends Model implements ImageSystemInterface
     {
         $filePath = $this->getFilePath($fileModel);
         $fileDir = dirname($filePath);
-        FileHelper::createDirectory($fileDir);
+        FileHelper::createDirectory($fileDir, 0771);
         $file->saveAs($filePath);
         return $filePath;
     }
@@ -33,7 +33,7 @@ class LocalImageSystem extends Model implements ImageSystemInterface
         $filePath = $this->getFilePath($fileModel);        
         $thumbPath = $this->getFilePath($fileModel, $thumbnail);
         $thumbDir = dirname($thumbPath);
-        FileHelper::createDirectory($thumbDir);
+        FileHelper::createDirectory($thumbDir, 0771);
         $thumbWidth = ArrayHelper::getValue($sizes, 0);
         $thumbHeight = ArrayHelper::getValue($sizes, 1);
         $thumb = Image::thumbnail($filePath, $thumbWidth, $thumbHeight);

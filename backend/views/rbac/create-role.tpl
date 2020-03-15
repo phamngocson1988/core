@@ -6,7 +6,7 @@
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="{url route='rbac/roles'}">{Yii::t('app', 'manage_roles')}</a>
+      <a href="{url route='rbac/role'}">{Yii::t('app', 'manage_roles')}</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
@@ -23,9 +23,8 @@
     {ActiveForm assign='form' options=['class' => 'form-horizontal form-row-seperated']}
     <div class="portlet">
       <div class="portlet-title">
-        <div class="caption">{Yii::t('app', 'create_role')}</div>
         <div class="actions btn-set">
-          <a href="/" class="btn default">
+          <a href="{url route='rbac/role'}" class="btn default">
           <i class="fa fa-angle-left"></i> {Yii::t('app', 'back')}</a>
           <button type="submit" class="btn btn-success">
           <i class="fa fa-check"></i> {Yii::t('app', 'save')}
@@ -45,12 +44,17 @@
                 {$form->field($model, 'name', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textInput()}
+                ])->textInput()->label('Mã vai trò')}
 
                 {$form->field($model, 'description', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->textInput()}
+                ])->textInput()->label('Tên vai trò')}
+
+                {$form->field($model, 'parent_role', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->dropDownList($model->getAvailableParent(), ['prompt' => 'Chọn cấp trên'])->label('Vai trò cấp trên')}
               </div>
             </div>
           </div>
