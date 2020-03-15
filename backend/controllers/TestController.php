@@ -12,6 +12,7 @@ use common\forms\SendmailForm;
 use yii\imagine\Image;
 use common\models\File;
 use common\models\OrderFile;
+use common\models\Order;
 /**
  * TestController
  */
@@ -166,5 +167,21 @@ class TestController extends Controller
 	    	}
 	    	chmod($folderPath, 0771);
     	}
+    }
+
+    public function actionConfirm()
+    {
+    	$orders = Order::find()->where(['<=', 'created_at', '2020-03-10 23:59:59'])->andWhere(['status' => Order::STATUS_COMPLETED])->all();
+    	foreach ($orders as $order) {
+    		$model = new \backend\forms\ConfirmOrderForm(['id' => $order->id]);
+	        if ($model->save()) {
+	            echo sprintf("ORDER %s have done\n", $order->id);
+	        } else {
+	            $errors = $model->getErrorSummary(false);
+	            $error = reset($errors);
+	            echo sprintf("======= ERROR: Order %s error %s\n", $order->id, $error);
+	        }
+    	}
+    	
     }
 }

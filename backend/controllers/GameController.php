@@ -62,7 +62,7 @@ class GameController extends Controller
         $gameIds = array_column($models, 'id');
         $orders = Order::find()
         ->where(['in', 'game_id', $gameIds])
-        ->andWhere(['status' => Order::STATUS_CONFIRMED])
+        ->andWhere(['in', 'status', [Order::STATUS_CONFIRMED, Order::STATUS_COMPLETED]])
         ->select(['game_id', 'COUNT(*) as total'])
         ->groupBy(['game_id'])
         ->asArray()->all();

@@ -111,7 +111,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <th> Mã đơn hàng </th>
                 <th> Tên game </th>
                 <th> Số gói </th>
-                <th> TG chờ nhận đơn </th>
+                <th> Chờ nhận đơn </th>
                 <th> Thời gian chờ </th>
                 <th> Trạng thái </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
@@ -123,7 +123,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <tr>
-                  <td><a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>'>#<?=$model->order_id;?></a></td>
+                  <td>#<?=$model->order_id;?></td>
                   <td><?=$model->getGameTitle();?></td>
                   <td><?=$model->quantity;?></td>
                   <td><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
@@ -132,7 +132,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <span class="label label-default">Pending</span>
                   </td>
                   <td>
-                    <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Bắt đầu xử lý" data-toggle="modal" data-target="#go_processing"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý </a>
+                    <a href="<?=Url::to(['order/edit', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Bắt đầu xử lý"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý </a>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -145,39 +145,3 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-
-<!-- Go processing -->
-<div class="modal fade" id="go_processing" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    </div>
-  </div>
-</div>
-<!-- End Go processing -->
-
-<?php
-$moveProcessingJs = <<< JS
-// supplier
-$(document).on('submit', 'body #move-processing-form', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  form.unbind('submit');
-  $.ajax({
-    url: form.attr('action'),
-    type: form.attr('method'),
-    dataType : 'json',
-    data: form.serialize(),
-    success: function (result, textStatus, jqXHR) {
-      console.log(result);
-      if (!result.status)
-       alert(result.errors);
-      else 
-        window.location.href = result.editUrl;
-    }
-  });
-  return false;
-});
-JS;
-$this->registerJs($moveProcessingJs)
-?>

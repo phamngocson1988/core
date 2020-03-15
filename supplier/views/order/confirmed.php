@@ -111,22 +111,26 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <th> Mã đơn hàng </th>
                 <th> Tên game </th>
                 <th> Số gói </th>
-                <th> Thời gian nhận đơn </th>
-                <th> Thời gian chờ </th>
+                <th> Chờ nhận đơn </th>
+                <th> Chờ Login </th>
+                <th> Thời gian xử lý </th>
+                <th> Tổng thời gian </th>
                 <th> Trạng thái </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
                   <td>#<?=$model->order_id;?></td>
                   <td><?=$model->getGameTitle();?></td>
                   <td><?=$model->doing;?></td>
-                  <td><?=$model->approved_at;?></td>
-                  <td><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->approved_at));?></td>
+                  <td><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
+                  <td><?=FormatConverter::countDuration(strtotime($model->processing_at) - strtotime($model->approved_at), 'h:i');?></td>
+                  <td><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->processing_at), 'h:i');?></td>
+                  <td><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->created_at), 'h:i');?></td>
                   <td>
                     <span class="label label-default">Confirmed</span>
                   </td>

@@ -13,6 +13,5 @@ use yii\helpers\Url;
   <strong>Server (nếu có):</strong> <span><?=$order->server;?></span><br>
   <strong>Recovery Code (nếu có):</strong> <span><?=$order->recover_code;?></span><br>
 </p>
-<p>Chúc quý khách gặp nhiều thuận lợi. Sự hài lòng của khách hàng là thước đo thành công của chúng ta!</p>
-<p>Vui lòng xác nhận đơn hàng đã hoàn thành sau khi hoàn tất theo các bước hướng dẫn. (Xem hướng dẫn- hyperlink hướng dẫn ""Xác nhận đơn hàng hoàn thành"")</p>
+<p>Vui lòng xác nhận đơn hàng đã hoàn thành sau khi hoàn tất theo các bước hướng dẫn.</p>
 

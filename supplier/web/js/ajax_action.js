@@ -590,7 +590,7 @@ function AjaxUploadFile(opts) {
         this.options = $.extend(this.options, opts);
         var that = this;
         if (this.options.trigger_element !== null) {
-            $(that.options.trigger_element).click(function(){
+            $(that.options.trigger_element).on('click', function(){
                 $(that.options.file_element).trigger('click');
             });
         }

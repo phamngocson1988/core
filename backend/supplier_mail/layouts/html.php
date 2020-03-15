@@ -80,7 +80,7 @@ use yii\helpers\Html;
                             <table width="400" border="0" align="center" cellpadding="0" cellspacing="0" class="full">
                               <tr>
                                 <td align="center" valign="top" style="font-family:'Open Sans', sans-serif, Verdana; font-size:30px; font-weight:bold; color:#FFF;" mc:edit="mm-05">
-                                  <multiline><img src="http://kinggems.thienanit.net/wp-content/uploads/2020/02/Logo-hoanggia-game.png" width="220"></multiline>
+                                  <multiline><img src="http://hoanggianapgame.com/images/Logo-hoanggia-game.png" width="220"></multiline>
                                 </td>
                               </tr>
                             </table>
@@ -132,12 +132,12 @@ use yii\helpers\Html;
                                   <multiline>
                                     <?=$content;?>
                                     <hr>
-                                    <p>Mọi thắc mắc hay cần sự trợ giúp, vui lòng liên hệ chúng tôi:</p>
+                                    <!-- <p>Mọi thắc mắc hay cần sự trợ giúp, vui lòng liên hệ chúng tôi:</p>
                                     <p>
                                       <strong>- Zalo:</strong> <span>Kcoins</span><br>
                                       <strong>- Hotline:</strong> <span>Kcoins</span><br>
                                       <strong>- Email:</strong> <span>Kcoins</span><br>
-                                    </p>
+                                    </p> -->
                                     <p>Trân trọng<br>Nạp game Hoàng Gia</p>
                                   </multiline>
                                 </td>
@@ -202,7 +202,7 @@ use yii\helpers\Html;
                                 <td width="220" align="center" valign="middle">
                                   <table width="220" border="0" align="center" cellpadding="0" cellspacing="0">
                                     <tr>
-                                      <td align="center" valign="middle"><img mc:edit="mm-10" editable="true" src="http://kinggems.thienanit.net/wp-content/uploads/2020/02/mail.png" width="57" height="54" alt="" /></td>
+                                      <td align="center" valign="middle"><img mc:edit="mm-10" editable="true" src="http://hoanggianapgame.com/images/mail.png" width="57" height="54" alt="" /></td>
                                     </tr>
                                     <tr>
                                       <td align="left" valign="middle">&nbsp;</td>
@@ -235,10 +235,10 @@ use yii\helpers\Html;
                                 <td align="center" valign="top">
                                   <table width="220" border="0" align="center" cellpadding="0" cellspacing="0">
                                     <tr>
-                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-151" editable="true" src="https://image.flaticon.com/icons/svg/733/733585.svg" width="32" height="32" alt="" /></a></td>
-                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-152" editable="true" src="https://image.flaticon.com/icons/svg/2111/2111646.svg" width="32" height="32" alt="" /></a></td>
-                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-153" editable="true" src="https://image.flaticon.com/icons/svg/2111/2111724.svg" width="32" height="32" alt="" /></a></td>
-                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-154" editable="true" src="https://image.flaticon.com/icons/svg/2111/2111498.svg" width="32" height="32" alt="" /></a></td>
+                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-151" editable="true" src="http://hoanggianapgame.com/images/733585.png" width="32" height="32" alt="" /></a></td>
+                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-152" editable="true" src="http://hoanggianapgame.com/images/2111646.png" width="32" height="32" alt="" /></a></td>
+                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-153" editable="true" src="http://hoanggianapgame.com/images/2111724.png" width="32" height="32" alt="" /></a></td>
+                                      <td width="28" align="center" valign="top"><a href="#"><img mc:edit="mm-154" editable="true" src="http://hoanggianapgame.com/images/2111498.png" width="32" height="32" alt="" /></a></td>
                                     </tr>
                                   </table>
                                 </td>

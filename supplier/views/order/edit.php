@@ -33,283 +33,136 @@ use supplier\models\OrderSupplier;
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
-    <div class="portlet">
+    <div class="portlet light bordered">
       <div class="portlet-title">
         <div class="caption">
-          <i class="icon-settings font-dark"></i>
-          <span class="caption-subject font-dark sbold uppercase"> Order #<?=$order->id;?>
-            <span class="hidden-xs">| <?=$order->created_at;?> </span>
-          </span>
+          <i class="icon-bubble font-green-sharp"></i>
+          <span class="caption-subject font-green-sharp sbold">Order #<?=$order->id;?> <span class="hidden-xs">| <?=$order->created_at;?> </span> </span>
         </div>
       </div>
       <div class="portlet-body">
         <?php echo $this->render('@supplier/views/order/_step.php', ['order' => $model]);?>
-        <div class="tabbable-bordered">
-          <ul class="nav nav-tabs" role="tablist">
-            <li class="active">
-              <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
-            </li>
-            <li>
-              <a href="#images" data-toggle="tab"> Hình ảnh</a>
-            </li>
-            <li>
-              <a href="#complain" data-toggle="tab"> Trợ giúp</a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="tab_general">
-              <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
-              <div class="row">
-                <div class="col-md-12 col-sm-12">
-                  <div class="portlet grey-cascade box">
-                    <div class="portlet-title">
-                      <div class="caption">
-                        <i class="fa fa-cogs"></i>Game
-                      </div>
-                    </div>
-                    <div class="portlet-body">
-                      <?php echo $this->render('@supplier/views/order/_unit.php', ['order' => $model]);?>
-                    </div>
-                  </div>
-                </div>
+        <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
+        <div class="row" style="display: flex;">
+            <div class="btn-group">
+              <button type="button" class="btn btn-default"> 0% </button>
+              <button type="button" class="btn btn-default"> 30% </button>
+              <button type="button" class="btn btn-default"> 50% </button>
+              <button type="button" class="btn btn-default"> 80% </button>
+              <button type="button" class="btn btn-default"> 100% </button>
+            </div>
+            <div class="progress progress-striped active" style="width: 300px">
+              <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->getPercent();?>%">
+                  <span id='current_doing_unit'><?=$model->doing;?></span> / <?=$model->quantity;?>
               </div>
+            </div>
+          </div>
+        </div>
+        <?php endif;?>
+        <div class="row">
+          <div class="col-md-3 col-sm-6">
+            <table class="table table-hover table-striped table-bordered">
+              <tr>
+                <td> Order ID </td>
+                <td><?=$order->id;?></td>
+              </tr>
+              <?php if ($order->bulk) : ?>
+              <tr>
+                <td> Order detail</td>
+                <td><?=nl2br($order->raw);?></td>
+              </tr>
+              <?php else : ?>
+              <tr>
+                <td> Username </td>
+                <td><?=$order->username;?></td>
+              </tr>
+              <tr>
+                <td> Password </td>
+                <td><?=$order->password;?></td>
+              </tr>
+              <tr>
+                <td> Tên nhân vật </td>
+                <td><?=$order->character_name;?></td>
+              </tr>
+              <tr>
+                <td> Platform </td>
+                <td><?=$order->platform;?></td>
+              </tr>
+              <tr>
+                <td> Login method </td>
+                <td><?=$order->getLoginMethod();?></td>
+              </tr>
+              <tr>
+                <td> Recover Code </td>
+                <td><?=$order->recover_code;?></td>
+              </tr>
+              <tr>
+                <td> Server </td>
+                <td><?=$order->server;?></td>
+              </tr>
+              <tr>
+                <td> Ghi chú </td>
+                <td><?=$order->note;?></td>
+              </tr>
               <?php endif;?>
-              <div class="row">
-                <div class="col-md-12 col-sm-12">
-                  <div class="portlet blue-hoki box">
-                    <div class="portlet-title">
-                      <div class="caption">
-                        <i class="fa fa-cogs"></i>Order Details
-                      </div>
-                    </div>
-                    <div class="portlet-body" id="game_account">
-                      <div class="row static-info">
-                        <div class="col-md-5">Order ID: </div>
-                        <div class="col-md-7"><?=$order->id;?></div>
-                      </div>
-                      <?php if ($order->bulk) : ?>
-                      <div class="row static-info">
-                        <div class="col-md-5">Order detail: </div>
-                        <div class="col-md-7"><?=nl2br($order->raw);?></div>
-                      </div>
-                      <?php else : ?>
-                      <div class="row static-info">
-                        <div class="col-md-5">Username: </div>
-                        <div class="col-md-7"><?=$order->username;?></div>
-                      </div>
-                      <div class="row static-info">
-                        <div class="col-md-5">Password: </div>
-                        <div class="col-md-7"><?=$order->password;?></div>
-                      </div>
-                      <div class="row static-info">
-                        <div class="col-md-5">Tên nhân vật: </div>
-                        <div class="col-md-7"><?=$order->character_name;?></div>
-                      </div>
-                      <div class="row static-info">
-                        <div class="col-md-5">Platform: </div>
-                        <div class="col-md-7"><?=$order->platform;?></div>
-                      </div>
-                      <div class="row static-info">
-                        <div class="col-md-5">Login method: </div>
-                        <div class="col-md-7"><?=$order->getLoginMethod();?></div>
-                      </div>
-                      <div class="row static-info">
-                        <div class="col-md-5">Recover Code: </div>
-                        <div class="col-md-7"><?=$order->recover_code;?></div>
-                      </div>
-                      <div class="row static-info">
-                        <div class="col-md-5">Server: </div>
-                        <div class="col-md-7"><?=$order->server;?></div>
-                      </div>
-                      <div class="row static-info">
-                        <div class="col-md-5">Ghi chú: </div>
-                        <div class="col-md-7"><?=$order->note;?></div>
-                      </div>
-                      <?php endif;?>
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <a href="<?=Url::to(['order/index']);?>" class="btn default"><i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-                          </div>
-                        </div>
-                      </div>
-                      <?php if ($model->isApprove() && !$order->hasCancelRequest()) : ?>
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn red btn-outline sbold" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận LOG IN THÀNH CÔNG</a>
-                          </div>
-                          
-                        </div>
-                      </div>
-                      <?php endif;?>
-
-                      <?php if ($model->isProcessing()) : ?>
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <a class="btn red btn-outline sbold" id="completeBtn"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
-                          </div>
-                        </div>
-                      </div>
-                      <?php endif;?>
-                      
-                      <?php if ($order->hasCancelRequest()) :?>
-                      <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-3 col-md-9">
-                            <?php if ($model->isApprove()) : ?>
-                            <a href="<?=Url::to(['order/reject', 'id' => $model->id]);?>" class="btn green" id="cancel_order"><i class="fa fa-check"></i> Đồng ý hủy đơn</a>
-                            <?php endif;?>
-                          </div>
-<?php
-$cancelOrderJs = <<< JS
-$('#cancel_order').ajax_action({
-  confirm: true,
-  confirm_text: 'Bạn có chắc muốn hủy đơn hàng?',
-  callback: function(element, data) {
-    console.log('data', data);
-    window.location.href = data.pendingUrl;
-  }
-});
-JS;
-$this->registerJs($cancelOrderJs)
-?>
-                        </div>
-                      </div>
-                      <?php endif;?>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                  <?php echo $this->render('@supplier/views/order/_detail.php', ['order' => $order]);?>
-                  <?php echo $this->render('@supplier/views/order/_customer.php', ['order' => $order]);?>
-                </div>
-              </div>
+            </table>
+            <?php if ($model->isApprove() && !$order->hasCancelRequest()) : ?>
+            <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn green" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận login thành công</a>
+            <?php endif;?>
+            <?php if ($model->isProcessing()) : ?>
+              <a class="btn green" id="completeBtn"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
+            <?php endif;?>
+            <?php if ($order->hasCancelRequest() && $model->isApprove()) :?>
+            <button type="button" class="btn btn-outline dark" id="cleartoasts">Đồng ý hủy đơn</button>
+            <?php endif;?>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="dropzone dropzone-file-area" style="margin-bottom: 20px">
+              <a class="sbold" id="uploadElement">Tải hình ảnh cho đơn hàng</a>
+              <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple accept="image/*"/>
             </div>
-            <div class="tab-pane" id="images">
-              <div class="row" style="margin-bottom: 20px">
-                <div class=col-md-12>
-                  <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh trước khi hoàn thành</a>
-                  <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple accept="image/*"/>
-                </div>
-              </div>
-              <div class="row" id="evidences">
+            <div id="evidences">
                 <?php echo $this->render('@supplier/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE), 'can_edit' => true]);?>
-              </div>
-              <hr/>
-              <div class="row" style="margin-bottom: 20px">
-                <div class=col-md-12>
-                  <a class="btn red btn-outline sbold" id="uploadElementAfter">Tải hình ảnh sau khi hoàn thành</a>
-                  <input type="file" id="uploadEvidenceAfter" name="uploadEvidenceAfter[]" style="display: none" multiple accept="image/*"/>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="portlet light portlet-fit bordered">
+              <div class="portlet-title">
+                <div class="caption">
+                  <i class="icon-microphone font-green"></i>
+                  <span class="caption-subject bold font-green uppercase"> Phản hồi từ khách hàng </span>
                 </div>
               </div>
-              <div class="row" id="evidences_after">
-                <?php echo $this->render('@supplier/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER), 'can_edit' => true]);?>
-              </div>
-<?php
-$imageJs = <<< JS
-var upload = new AjaxUploadFile({
-  trigger_element: '#uploadElement', 
-  file_element: '#uploadEvidence',
-  file_options: {resize: '500xauto'}
-});
-upload.callback = function(result) {
-  result.forEach(function(element) {
-    $.ajax({
-      url: '###ADD_EVIDENCE_URL###',
-      type: 'POST',
-      dataType : 'json',
-      data: {'OrderFile[file_id]': element.id},
-      success: function (result, textStatus, jqXHR) {
-        if (result.status == false) {
-            alert('Error occur with #' + element.id);
-            return false;
-        } else {
-          $('#evidences').html(result.data.html);
-        }
-      },
-    });
-  });
-}
-var uploadAfter = new AjaxUploadFile({
-  trigger_element: '#uploadElementAfter', 
-  file_element: '#uploadEvidenceAfter',
-  file_options: {resize: '500xauto'}
-});
-uploadAfter.callback = function(result) {
-  result.forEach(function(element) {
-    $.ajax({
-      url: '###ADD_EVIDENCE_AFTER_URL###',
-      type: 'POST',
-      dataType : 'json',
-      data: {'OrderFile[file_id]': element.id},
-      success: function (result, textStatus, jqXHR) {
-        if (result.status == false) {
-            alert('Error occur with #' + element.id);
-            return false;
-        } else {
-          $('#evidences_after').html(result.data.html);
-        }
-      },
-    });
-  });
-}
-JS;
-$addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
-$imageJs = str_replace('###ADD_EVIDENCE_URL###', $addEvidenceUrl, $imageJs);
-$addEvidenceAfterUrl = Url::to(['order/add-evidence-image', 'id' => $order->id, 'type' => 'after']);
-$imageJs = str_replace('###ADD_EVIDENCE_AFTER_URL###', $addEvidenceAfterUrl, $imageJs);
-$this->registerJs($imageJs);
-?>
-            </div>
-            <div class="tab-pane" id="complain">
-              <!-- Start -->
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="portlet light portlet-fit bordered">
-                    <div class="portlet-title">
-                      <div class="caption">
-                        <i class="icon-microphone font-green"></i>
-                        <span class="caption-subject bold font-green uppercase"> Phản hồi từ khách hàng </span>
-                      </div>
-                      <div class="actions">
-                        <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
-                      </div>
-                    </div>
-                    <div class="portlet-body">
-                      <div class="timeline">
-                        <?php foreach ($order->complains as $complain):?>
-                        <div class="timeline-item">
-                          <div class="timeline-badge">
-                            <?php if ($complain->sender->avatarImage) :?>
-                            <img class="timeline-badge-userpic" src="<?=$complain->sender->getAvatarUrl();?>"> 
-                            <?php else : ?>
-                              <div class="timeline-icon">
-                                <i class="icon-user-following font-green-haze"></i>
-                              </div>
-                            <?php endif; ?>
-                          </div>
-                          <div class="timeline-body">
-                            <div class="timeline-body-arrow"> </div>
-                            <div class="timeline-body-head">
-                              <div class="timeline-body-head-caption">
-                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->isCustomer() ? 'Khách hàng' : $complain->sender->name;?></a>
-                                <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
-                              </div>
-                            </div>
-                            <div class="timeline-body-content">
-                              <span class="font-grey-cascade"><?=$complain->content;?></span>
-                            </div>
-                          </div>
+              <div class="portlet-body">
+                <div class="timeline">
+                  <?php foreach ($order->complains as $complain):?>
+                  <div class="timeline-item">
+                    <div class="timeline-badge">
+                      <?php if ($complain->sender->avatarImage) :?>
+                      <img class="timeline-badge-userpic" src="<?=$complain->sender->getAvatarUrl();?>"> 
+                      <?php else : ?>
+                        <div class="timeline-icon">
+                          <i class="icon-user-following font-green-haze"></i>
                         </div>
-                        <?php endforeach;?>
+                      <?php endif; ?>
+                    </div>
+                    <div class="timeline-body">
+                      <div class="timeline-body-arrow"> </div>
+                      <div class="timeline-body-head">
+                        <div class="timeline-body-head-caption">
+                          <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->isCustomer() ? 'Khách hàng' : $complain->sender->name;?></a>
+                          <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
+                        </div>
+                      </div>
+                      <div class="timeline-body-content">
+                        <span class="font-grey-cascade"><?=$complain->content;?></span>
                       </div>
                     </div>
                   </div>
+                  <?php endforeach;?>
                 </div>
+                <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
               </div>
-              <!-- End -->
             </div>
           </div>
         </div>
@@ -479,3 +332,99 @@ $('body').on('click', '#completeBtn', function() {
 JS;
 $this->registerJs($completeModalJs)
 ?>
+
+<!-- Cancel order -->
+<?php
+$cancelOrderJs = <<< JS
+$('#cancel_order').ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có chắc muốn hủy đơn hàng?',
+  callback: function(element, data) {
+    console.log('data', data);
+    window.location.href = data.pendingUrl;
+  }
+});
+JS;
+$this->registerJs($cancelOrderJs)
+?>
+<!-- End cancel order -->
+
+<!-- Image upload --> 
+<?php
+$imageJs = <<< JS
+var upload = new AjaxUploadFile({
+  trigger_element: '#uploadElement', 
+  file_element: '#uploadEvidence',
+  file_options: {resize: '500xauto'}
+});
+upload.callback = function(result) {
+  result.forEach(function(element) {
+    $.ajax({
+      url: '###ADD_EVIDENCE_URL###',
+      type: 'POST',
+      dataType : 'json',
+      data: {'OrderFile[file_id]': element.id},
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            alert('Error occur with #' + element.id);
+            return false;
+        } else {
+          $('#evidences').html(result.data.html);
+        }
+      },
+    });
+  });
+}
+var uploadAfter = new AjaxUploadFile({
+  trigger_element: '#uploadElementAfter', 
+  file_element: '#uploadEvidenceAfter',
+  file_options: {resize: '500xauto'}
+});
+uploadAfter.callback = function(result) {
+  result.forEach(function(element) {
+    $.ajax({
+      url: '###ADD_EVIDENCE_AFTER_URL###',
+      type: 'POST',
+      dataType : 'json',
+      data: {'OrderFile[file_id]': element.id},
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            alert('Error occur with #' + element.id);
+            return false;
+        } else {
+          $('#evidences_after').html(result.data.html);
+        }
+      },
+    });
+  });
+}
+JS;
+$addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
+$imageJs = str_replace('###ADD_EVIDENCE_URL###', $addEvidenceUrl, $imageJs);
+$addEvidenceAfterUrl = Url::to(['order/add-evidence-image', 'id' => $order->id, 'type' => 'after']);
+$imageJs = str_replace('###ADD_EVIDENCE_AFTER_URL###', $addEvidenceAfterUrl, $imageJs);
+$this->registerJs($imageJs);
+?>
+<!-- end image upload -->
+
+<!-- update percent -->
+<?php
+$progress = <<< JS
+var updateUnitForm = new AjaxFormSubmit({element: '#update-unit-form'});
+updateUnitForm.success = function (data, form) {
+  console.log(data);
+var cur = $('#doing_unit_progress').attr('aria-valuemax');
+var newpc = (data.total / cur) * 100;
+  $('#doing_unit_progress').css('width', newpc + '%');
+  $('#doing_unit_progress span').html(data.total + '(Complete)');
+  $('#current_doing_unit').html(data.total);
+  $('#doing_unit').val('');
+};
+updateUnitForm.error = function (errors) {
+  alert(errors);
+  return false;
+}
+JS;
+$this->registerJs($progress);
+?>       
+<!-- end update percent -->

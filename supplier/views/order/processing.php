@@ -111,7 +111,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <th> Mã đơn hàng </th>
                 <th> Tên game </th>
                 <th> Số gói </th>
-                <th> Thời gian nhận đơn </th>
+                <th> Chờ nhận đơn </th>
                 <th> Thời gian chờ </th>
                 <th> Trạng thái </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
@@ -126,8 +126,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
                   <td><?=$model->getGameTitle();?></td>
                   <td><?=$model->quantity;?></td>
-                  <td><?=$model->approved_at;?></td>
-                  <td><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->approved_at));?></td>
+                  <td><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->processing_at), 'h:i');?></td>
+                  <td><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->created_at), 'h:i');?></td>
                   <td>
                     <span class="label label-default">Processing</span>
                   </td>

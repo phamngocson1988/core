@@ -59,7 +59,7 @@ class OrderSupplierBehavior extends AttributeBehavior
         $from = $settings->get('ApplicationSettingForm', 'supplier_service_email', null);
         $fromName = sprintf("Hoàng gia nạp game");
         if (!$from) return;
-        $orderSupplier = $order->supplier;
+        $orderSupplier = $order->getRequestingSupplier()->one();
         if (!$orderSupplier) return;
         $supplier = $orderSupplier->user;
         $to = $supplier->email;

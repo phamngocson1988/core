@@ -1,7 +1,7 @@
 <?php 
 use yii\helpers\Html;
 ?>
-<div class="table-responsive">
+<!-- <div class="table-responsive">
   <table class="table table-hover table-bordered table-striped">
     <thead>
       <tr>
@@ -22,7 +22,7 @@ use yii\helpers\Html;
       </tr>
     </tbody>
   </table>
-</div>
+</div> -->
 <?php if ($order->isProcessing()) :?>
 <div class="row static-info">
   <?= Html::beginForm(['order/add-quantity', 'id' => $order->id], 'post', ['id' => 'update-unit-form']) ?>
@@ -42,6 +42,7 @@ use yii\helpers\Html;
       </div>
   </div>
   <?= Html::endForm();?>
+</div>
 <?php
 $progress = <<< JS
 var updateUnitForm = new AjaxFormSubmit({element: '#update-unit-form'});
@@ -61,5 +62,4 @@ updateUnitForm.error = function (errors) {
 JS;
 $this->registerJs($progress);
 ?>                        
-</div>
 <?php endif;?>
