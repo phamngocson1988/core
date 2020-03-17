@@ -32,6 +32,7 @@
               <th> {Yii::t('app', 'no')} </th>
               <th> Tên vai trò </th>
               <th> Mã vai trò </th>
+              <th> Số lượng nhân viên </th>
               <th class="dt-center"> {Yii::t('app', 'actions')} </th>
             </tr>
           </thead>
@@ -42,15 +43,17 @@
               <td>{$key + 1}</td>
               <td>{$model->description}</td>
               <td>{$model->name}</td>
+              <td>{if isset($countRoles[$model->name])}{$countRoles[$model->name]}{else}0{/if}</td>
               <td>
                 <a class="btn btn-sm grey-salsa tooltips" href="{url route='rbac/edit-role' name=$model->name}" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
                 <a class="btn yellow-mint btn-sm tooltips" href="{url route='rbac/user-role' name=$model->name}" data-container="body" data-original-title="Danh sách nhân viên"><i class="fa fa-list"></i> Danh sách</a>
+                <a class="btn blue btn-sm tooltips" href="{url route='rbac/assign-role' role=$model->name}" data-container="body" data-original-title="Thêm nhân viên"><i class="fa fa-plus"></i> Thêm nhân viên</a>
               </td>
             </tr>
             {/foreach}
             {else}
             <tr>
-              <td colspan="4">{Yii::t('app', 'no_data_found')}</td>
+              <td colspan="5">{Yii::t('app', 'no_data_found')}</td>
             </tr>
             {/if}
           </tbody>

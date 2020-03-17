@@ -48,7 +48,6 @@ class EditUserForm extends Model
 		try {
 	        $user = $this->getUser();
             $user->name = $this->name;    
-            $user->email = $this->email;    
             $user->phone = $this->phone;
             $user->status = $this->status;
             if ($this->password) {
@@ -94,7 +93,7 @@ class EditUserForm extends Model
         return [
             'name' => 'Tên nhân viên',
             'username' => 'Tên đăng nhập',
-            'email' => 'Email',
+            'email' => 'Thư điện tử',
             'phone' => 'Số điện thoại',
             'password' => 'Mật khẩu',
             'status' => 'Trạng thái',

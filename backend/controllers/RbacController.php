@@ -37,8 +37,16 @@ class RbacController extends Controller
     {
         $this->view->params['main_menu_active'] = 'user.role';
         $roles = Yii::$app->authManager->getRoles();
+
+        $roleNames = array_column($roles, 'name');
+        $countRoles = UserRole::find()->select(['role', 'count(*) as count'])
+        ->where(['in', 'role', $roleNames])
+        ->groupBy('role')
+        ->asArray()->all();
+        $countRoles = array_column($countRoles, 'count', 'role');
         return $this->render('role.tpl', [
             'models' => $roles,
+            'countRoles' => $countRoles,
             'ref' => Url::to(Yii::$app->request->getUrl(), true),
         ]);
         

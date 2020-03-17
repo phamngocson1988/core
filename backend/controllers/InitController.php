@@ -13,7 +13,7 @@ class InitController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'allow' => false,
+                        'allow' => true,
                     ],
                 ],
             ],
@@ -33,7 +33,7 @@ class InitController extends Controller
             'email' => 'phamngocson1988@gmail.com',
             'password' => '123456'
         ]);
-        $user = $form->signup();
+        $user = $form->create();
 
         foreach (Yii::$app->user->fixRoles as $roleName) {
             $role = $auth->createRole($roleName);

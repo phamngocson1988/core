@@ -28,9 +28,9 @@ $this->title = 'Đăng nhập';
   
   <div class="form-actions">
     <button type="submit" class="btn green uppercase">Đăng nhập</button>
-    <?=$form->field($model, 'rememberMe', [
+    <!-- <?=$form->field($model, 'rememberMe', [
       'options' => ['tag' => false]
-    ])->widget(CheckboxInput::className())->label(false);?>
+    ])->widget(CheckboxInput::className())->label(false);?> -->
   </div>
 <?php ActiveForm::end(); ?>
 <a href="<?=Url::to(['site/login-with-role']);?>">Đăng nhập với một vai trò khác</a>

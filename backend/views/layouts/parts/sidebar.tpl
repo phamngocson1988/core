@@ -80,16 +80,6 @@
             <span class="title">{Yii::t('app', 'application')}</span>
             </a>
           </li>
-          <li class="nav-item  ">
-            <a href="{url route='/setting/social'}" class="nav-link " code='setting.social'>
-            <span class="title">{Yii::t('app', 'social_networks')}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='/setting/script'}" class="nav-link " code='setting.script'>
-            <span class="title">{Yii::t('app', 'header_scripts')}</span>
-            </a>
-          </li>
         </ul>
       </li>
       {/if}

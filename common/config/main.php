@@ -44,7 +44,7 @@ return [
             'dependency' => [
                 'class' => 'common\components\filesystem\local\LocalImageSystem',
                 // 'image_path' => '@common/uploads/images',
-                'image_url' => 'http://image.langson.com:8080/',
+                // 'image_url' => 'http://image.langson.com:8080/',
             ]
         ],
         'file' => [

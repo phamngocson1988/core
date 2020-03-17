@@ -24,9 +24,10 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [['username', 'password'], 'required'],
+            [['username', 'password'], 'required', 'message' => 'Bắt buộc nhập'],
             ['rememberMe', 'boolean'],
             ['password', 'validatePassword'],
+            ['username', 'validateRole']
         ];
     }
 
@@ -44,7 +45,18 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'Tên đăng nhập hoặc mật khẩu không đúng');
+            }
+        }
+    }
+
+    public function validateRole($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            $count = UserRole::find()->where(['user_id' => $user->id])->count();
+            if (!$count) {
+                $this->addError($attribute, 'Bạn chưa có vai trò nào trong hệ thống');
             }
         }
     }

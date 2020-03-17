@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\User;
 use common\models\LoginLog;
+use common\models\UserRole;
 
 /**
  * Login form
@@ -29,6 +30,7 @@ class LoginWithRoleForm extends Model
             [['username', 'password'], 'required'],
             ['rememberMe', 'boolean'],
             ['password', 'validatePassword'],
+            ['username', 'validateRole'],
             ['role', 'required', 'message' => 'Hãy chọn vai trò đăng nhập'],
             ['role', 'in', 'range' => array_keys($roles), 'message' => 'Vai trò không hợp lệ'],
         ];
@@ -56,6 +58,17 @@ class LoginWithRoleForm extends Model
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
+            }
+        }
+    }
+
+    public function validateRole($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            $count = UserRole::find()->where(['user_id' => $user->id])->count();
+            if (!$count) {
+                $this->addError($attribute, 'Bạn chưa có vai trò nào trong hệ thống');
             }
         }
     }

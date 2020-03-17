@@ -91,6 +91,7 @@ use backend\behaviors\UserSupplierBehavior;
               <th> Ngày đăng nhập </th>
               <th> Nhân viên </th>
               <th> Quyền hạn khi đăng nhập </th>
+              <th> Quyền hạn mặc định </th>
               <th> IP </th>
             </tr>
           </thead>
@@ -101,12 +102,17 @@ use backend\behaviors\UserSupplierBehavior;
               <td><?=$model->created_at;?></td>
               <td><?=sprintf("%s (MS: %s)", $model->user->name, $model->user_id);?></td>
               <td><?=$model->role;?></td>
+              <td>
+                <?php if (isset($defaultRoles[$model->user_id])) : ?>
+                <?php echo implode(", ", $defaultRoles[$model->user_id]);?>
+                <?php endif;?>
+              </td>
               <td><?=$model->ip;?></td>
             </tr>
             <?php endforeach;?>
             <?php else : ?>
             <tr>
-              <td colspan="3"><?=Yii::t('app', 'no_data_found');?></td>
+              <td colspan="5"><?=Yii::t('app', 'no_data_found');?></td>
             </tr>
             <?php endif;?>
           </tbody>

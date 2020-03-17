@@ -12,6 +12,7 @@ use backend\forms\FetchLoginLogForm;
 use backend\forms\ChangeUserStatusForm;
 
 use backend\components\datepicker\DatePicker;
+use common\models\UserRole;
 
 /**
  * UserController
@@ -156,10 +157,23 @@ class UserController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
 
+        // Find default roles 
+        $auth = Yii::$app->authManager;
+        $userIds = array_column($models, 'user_id');
+        $userRoles = UserRole::find()->where(['in', 'user_id', $userIds])->all();
+        $defaultRoles = [];
+        foreach ($userRoles as $userRole) {
+            $authRole = $auth->getRole($userRole->role);
+            if (!$authRole) continue;
+            $defaultRoles[$userRole->user_id][] = $authRole->description;
+        }
+        // print_r($defaultRoles);die;
+
         return $this->render('login', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
+            'defaultRoles' => $defaultRoles
         ]);
     }
 }
