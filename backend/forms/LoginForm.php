@@ -5,7 +5,6 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\User;
-use common\models\UserRole;
 
 /**
  * Login form
@@ -54,8 +53,9 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            $count = UserRole::find()->where(['user_id' => $user->id])->count();
-            if (!$count) {
+            $auth = Yii::$app->authManager;
+            $roles = $auth->getRolesByUser($user->id);
+            if (!count($roles)) {
                 $this->addError($attribute, 'Bạn chưa có vai trò nào trong hệ thống');
             }
         }
@@ -66,15 +66,7 @@ class LoginForm extends Model
         if ($this->validate()) {
             $auth = Yii::$app->authManager; 
             $user = $this->getUser();
-            $auth->revokeAll($user->id);
-            $userRoles = UserRole::find()->where(['user_id' => $user->id])->all();
-            foreach ($userRoles as $userRole) {
-                $role = $auth->getRole($userRole->role);
-                if (!$role) continue;
-                $auth->assign($role, $user->id);
-            }
-            $result = Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
-            return $result;
+            return Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;
         }

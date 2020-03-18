@@ -33,4 +33,3 @@ $this->title = 'Đăng nhập';
     ])->widget(CheckboxInput::className())->label(false);?> -->
   </div>
 <?php ActiveForm::end(); ?>
-<a href="<?=Url::to(['site/login-with-role']);?>">Đăng nhập với một vai trò khác</a>

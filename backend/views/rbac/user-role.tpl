@@ -50,16 +50,16 @@
             {foreach $models as $key => $model}
             <tr>
               <td>{$key + 1}</td>
-              <td>{$model->user->name}</td>
-              <td>{$model->user->username}</td>
-              <td>{$model->user->email}</td>
+              <td>{$model->name}</td>
+              <td>{$model->username}</td>
+              <td>{$model->email}</td>
               <td>
                 <button type="button" class="btn green btn-outline">{$role->name}</button>
               </td>
-              <td>{$model->user->getStatusLabel()}</td>
+              <td>{$model->getStatusLabel()}</td>
               <td>
-                {if $app->user->id != $model->user->id}
-                <a class="btn btn-sm grey-salsa popovers" href="{url route='/rbac/revoke-role' user_id=$model->user->id role=$role->name}" data-toggle="modal" data-target="#revoke-role-modal" data-container="body" data-trigger="hover" data-content="Loại bỏ vài trò '{$role->name}' khỏi nhân viên {$model->user->name}"><i class="fa fa-ban"></i> Loại bỏ</a>
+                {if $app->user->id != $model->id}
+                <a class="btn btn-sm grey-salsa popovers" href="{url route='/rbac/revoke-role' user_id=$model->id role=$role->name}" data-toggle="modal" data-target="#revoke-role-modal" data-container="body" data-trigger="hover" data-content="Loại bỏ vài trò '{$role->name}' khỏi nhân viên {$model->name}"><i class="fa fa-ban"></i> Loại bỏ</a>
                 {/if}
               </td>
             </tr>

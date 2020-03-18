@@ -5,7 +5,6 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\User;
-use common\models\UserRole;
 /**
  * RevokeRoleForm
  */
@@ -31,14 +30,7 @@ class RevokeRoleForm extends Model
         if ($this->validate()) {
             $role = $this->getRole();
             $auth = Yii::$app->authManager;
-            if ($auth->revoke($role, $this->user_id)) {
-                $userRole = UserRole::find()
-                ->where(['user_id' => $this->user_id])
-                ->andWhere(['role' => $this->role])
-                ->one();
-                if ($userRole) $userRole->delete();
-                return true;
-            }
+            return $auth->revoke($role, $this->user_id);
         }
         return false;
     }

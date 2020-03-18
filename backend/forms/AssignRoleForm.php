@@ -5,7 +5,6 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\User;
-use common\models\UserRole;
 use yii\helpers\ArrayHelper;
 /**
  * AssignRoleForm
@@ -35,9 +34,6 @@ class AssignRoleForm extends Model
             $user = $this->getUser();
             $auth = Yii::$app->authManager;
             $auth->assign($role, $this->user_id);
-
-            $userRole = new UserRole(['user_id' => $this->user_id, 'role' => $this->role]);
-            $userRole->save();
             return true;
         }
         return false;

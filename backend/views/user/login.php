@@ -1,14 +1,9 @@
 <?php 
 use yii\widgets\LinkPager;
-use yii\widgets\Pjax;
 use backend\components\datepicker\DatePicker;
-use common\models\User;
-use common\models\Country;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
-use backend\behaviors\UserSupplierBehavior;
 
 ?>
 
@@ -91,7 +86,6 @@ use backend\behaviors\UserSupplierBehavior;
               <th> Ngày đăng nhập </th>
               <th> Nhân viên </th>
               <th> Quyền hạn khi đăng nhập </th>
-              <th> Quyền hạn mặc định </th>
               <th> IP </th>
             </tr>
           </thead>
@@ -102,11 +96,6 @@ use backend\behaviors\UserSupplierBehavior;
               <td><?=$model->created_at;?></td>
               <td><?=sprintf("%s (MS: %s)", $model->user->name, $model->user_id);?></td>
               <td><?=$model->role;?></td>
-              <td>
-                <?php if (isset($defaultRoles[$model->user_id])) : ?>
-                <?php echo implode(", ", $defaultRoles[$model->user_id]);?>
-                <?php endif;?>
-              </td>
               <td><?=$model->ip;?></td>
             </tr>
             <?php endforeach;?>

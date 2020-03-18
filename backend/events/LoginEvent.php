@@ -13,33 +13,18 @@ class LoginEvent extends Model
     public static function logLogin($event) 
     {
         $identity = $event->identity; // User
-        $roles = $identity->getRoles();
-        $role = reset($roles);
         $request = Yii::$app->request;
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRolesByUser($identity->id);
+        $roleNames = array_column($roles, 'name');
         $log = new LoginLog([
             'user_id' => $identity->id,
-            'role' => $role,
+            'role' => implode(", ", $roleNames),
             'ip' => $request->userIP,
             'browser' => '',
             'device' => '',
             'location' => '',
         ]);
         $log->save();
-    }
-
-	/**
-	 * @param $event UserEvent
-	 */
-    public static function afterLogout($event)
-    {
-    	$sender = $event->sender; // web\User;
-        $identity = $event->identity; // User
-        $fixRoles = $sender->fixRoles;
-        $userRoles = $identity->getRoles();
-        $intersect = array_intersect($fixRoles, $userRoles);
-        if (!count($intersect)) {
-            $auth = Yii::$app->authManager;
-	        $auth->revokeAll($identity->id);
-        }
     }
 }

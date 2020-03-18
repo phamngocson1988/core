@@ -7,7 +7,6 @@ use yii\web\NotFoundHttpException;
 use yii\helpers\Url;
 
 use backend\models\User;
-use common\models\UserRole;
 
 use backend\forms\CreateRoleForm;
 use backend\forms\EditRoleForm;
@@ -35,21 +34,18 @@ class RbacController extends Controller
 
     public function actionRole()
     {
-        $this->view->params['main_menu_active'] = 'user.role';
-        $roles = Yii::$app->authManager->getRoles();
-
-        $roleNames = array_column($roles, 'name');
-        $countRoles = UserRole::find()->select(['role', 'count(*) as count'])
-        ->where(['in', 'role', $roleNames])
-        ->groupBy('role')
-        ->asArray()->all();
-        $countRoles = array_column($countRoles, 'count', 'role');
+        $this->view->params['main_menu_active'] = 'rbac.role';
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRoles();
+        $countRoles = [];
+        foreach ($roles as $role) {
+            $countRoles[$role->name] = count($auth->getUserIdsByRole($role->name));
+        }
         return $this->render('role.tpl', [
             'models' => $roles,
             'countRoles' => $countRoles,
             'ref' => Url::to(Yii::$app->request->getUrl(), true),
         ]);
-        
     }
 
     public function actionCreateRole()
@@ -94,9 +90,10 @@ class RbacController extends Controller
         $this->view->params['main_menu_active'] = 'user.role';
         $name = Yii::$app->request->get('name');
         if (!$name) throw new NotFoundHttpException('Not found');
-        $role = Yii::$app->authManager->getRole($name);
-        $models = UserRole::find()->where(['role' => $name])->with('user')->all();
-
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole($name);
+        $userIds = $auth->getUserIdsByRole($role->name);
+        $models = User::findAll($userIds);
         return $this->render('user-role.tpl', [
             'role' => $role,
             'models' => $models,
