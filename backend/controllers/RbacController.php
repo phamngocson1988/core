@@ -140,7 +140,9 @@ class RbacController extends Controller
             }    
         } else {
             $role = $request->get('role');
+            $user_id = $request->get('user_id');
             $model->role = $role;
+            $model->user_id = $user_id;
         }
 
         $links = [

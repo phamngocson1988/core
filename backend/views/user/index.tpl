@@ -54,6 +54,7 @@
               <td>{$model->getStatusLabel()}</td>
               <td>
                 <a class="btn btn-sm grey-salsa tooltips" href="{url route='user/edit' id=$model->id}" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
+                <a class="btn btn-sm grey-salsa tooltips" href="{url route='rbac/assign-role' user_id=$model->id}" data-container="body" data-original-title="Thêm vai trò"><i class="fa fa-plus"></i> Thêm vai trò</a>
                 {if $app->user->id != $model->id}
                 {if $model->isActive()}
                 <a class="btn btn-sm grey-salsa delete-user tooltips" href="{url route='user/change-status' id=$model->id status='delete'}" data-container="body" data-original-title="Tạm khóa"><i class="fa fa-minus-circle"></i> Tạm khóa</a>
