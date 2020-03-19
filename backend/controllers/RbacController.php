@@ -23,7 +23,11 @@ class RbacController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['role', 'create-role', 'edit-role', 'assign-role', 'revoke-role', 'user-role'],
+                        'actions' => ['role', 'assign-role', 'revoke-role', 'user-role'],
+                        'allow' => true,
+                        'roles' => ['manager'],
+                    ],
+                    [
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -34,7 +38,7 @@ class RbacController extends Controller
 
     public function actionRole()
     {
-        $this->view->params['main_menu_active'] = 'rbac.role';
+        $this->view->params['main_menu_active'] = 'user.role';
         $auth = Yii::$app->authManager;
         $roles = $auth->getRoles();
         $countRoles = [];

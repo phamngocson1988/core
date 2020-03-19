@@ -101,9 +101,8 @@ $(document).on('submit', 'body #revoke-role-form', function(e) {
     data: form.serialize(),
     success: function (result, textStatus, jqXHR) {
       if (!result.status) {
-        toastr.alert(result.error);
+        toastr.error(result.error);
         return false;
-
       } else {
         toastr.success('Thực hiện thành công');
         location.reload();

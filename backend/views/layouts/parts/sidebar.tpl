@@ -26,7 +26,7 @@
         <h3 class="uppercase">{Yii::t('app', 'features')}</h3>
       </li>
       <!-- Ban quản trị -->
-      {if Yii::$app->user->can('admin')}
+      {if Yii::$app->user->can('manager')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-lock"></i>

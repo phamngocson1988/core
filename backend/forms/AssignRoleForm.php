@@ -45,6 +45,11 @@ class AssignRoleForm extends Model
             $role = $this->getRole();
             if (!$role) {
                 $this->addError($attribute, Yii::t('app', 'role_not_exist', ['role' => $role]));
+                return;
+            }
+            if (!Yii::$app->user->can($this->role)) {
+                $this->addError($attribute, sprintf('Bạn không có đủ quyền hạn để thêm vai trò %s cho nhân viên khác', $this->role));
+                return;
             }
         }
     }
