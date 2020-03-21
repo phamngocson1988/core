@@ -49,25 +49,12 @@ use yii\web\JsExpression;
                 <?=$form->field($model, 'user_id', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->widget(kartik\select2\Select2::classname(), [
-                  'initValueText' => ($user) ? sprintf("%s - %s", $user->username, $user->email) : '',
-                  'options' => ['class' => 'form-control'],
-                  'pluginOptions' => [
-                    'placeholder' => 'Tìm nhân viên',
-                    'allowClear' => true,
-                    'minimumInputLength' => 3,
-                    'ajax' => [
-                        'url' => Url::to(['user/suggestion']),
-                        'dataType' => 'json',
-                        'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                    ]
-                  ]
-                ])->label('Nhân viên')?>
+                ])->dropDownList($model->getUsers(), ['prompt' => 'Chọn nhân viên'])->label('Nhân viên');?>
 
                 <?=$form->field($model, 'role', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->dropDownList($model->getRoles(), ['prompt' => Yii::t('app', 'choose')]);?>
+                ])->dropDownList($model->getRoles(), ['prompt' => 'Chọn vai trò'])->label('Vai trò');?>
               </div>
             </div>
           </div>

@@ -77,6 +77,7 @@ class AppAsset extends AssetBundle
         'vendor/assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js',
         // 'vendor/assets/global/plugins/select2/js/select2.full.min.js',
         'vendor/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js',
+        'vendor/assets/global/plugins/bootbox/bootbox.min.js',
 
         //BEGIN THEME GLOBAL SCRIPTS
         'vendor/assets/global/scripts/app.min.js',

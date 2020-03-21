@@ -33,3 +33,13 @@ $this->title = 'Đăng nhập';
     ])->widget(CheckboxInput::className())->label(false);?> -->
   </div>
 <?php ActiveForm::end(); ?>
+<?php
+$jsScript = <<< JS
+$('#login-form input').keyup(function (event) {
+  if (event.which == 13) {
+    $('form#login-form').submit();
+  }
+});
+JS;
+$this->registerJs($jsScript);
+?>       

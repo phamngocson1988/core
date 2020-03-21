@@ -81,6 +81,16 @@ class AssignRoleForm extends Model
         return $this->_user;
     }
 
+    public function getUsers()
+    {
+        $users = User::find()->where(['status' => User::STATUS_ACTIVE])->all();
+        $mapping = [];
+        foreach ($users as $user) {
+            $mapping[$user->id] = sprintf('%s - %s', $user->name, $user->email);
+        }
+        return $mapping;
+    }
+
     public function getRole()
     {
         if (!$this->_role) {
