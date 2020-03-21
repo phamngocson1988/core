@@ -6,4 +6,5 @@ interface FileSystemInterface
 	public function save($file, $fileModel);
 	public function getUrl($fileModel);
 	public function getPath($fileModel);
+	public function getThumb($fileModel, $thumbnail = null);
 }

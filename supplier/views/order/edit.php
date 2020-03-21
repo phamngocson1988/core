@@ -169,8 +169,8 @@ use supplier\models\OrderSupplier;
               <a class="sbold" id="uploadElement">Tải hình ảnh cho đơn hàng</a>
               <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple accept="image/*"/>
             </div>
-            <div id="evidences">
-                <?php echo $this->render('@supplier/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE), 'can_edit' => true]);?>
+            <div class="row" id="evidences">
+                <?php echo $this->render('@supplier/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE)]);?>
             </div>
             <div>
               <span class="label label-success"><i class="fa fa-lightbulb-o"></i></span>

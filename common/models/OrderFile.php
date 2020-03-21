@@ -29,6 +29,15 @@ class OrderFile extends ActiveRecord
         return $file->getUrl();
     }
 
+    public function getImageUrl($size = null) 
+    {
+        // return 'https://www.w3schools.com/w3css/img_lights.jpg';
+
+        $file = $this->file;
+        if (!$file) return '';
+        return $file->getImageUrl($size);
+    }
+
     public function afterDelete()
     {
         $file = $this->file;

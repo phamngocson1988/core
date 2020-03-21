@@ -127,7 +127,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <tr>
                   <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
                   <td><?=$model->getGameTitle();?></td>
-                  <td><?=$model->quantity;?></td>
+                  <td><?=$model->doing;?></td>
                   <td><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
                   <td><?=FormatConverter::countDuration(strtotime($model->processing_at) - strtotime($model->approved_at), 'h:i');?></td>
                   <td><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->processing_at), 'h:i');?></td>

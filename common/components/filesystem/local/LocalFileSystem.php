@@ -6,6 +6,7 @@ use yii\base\Model;
 use common\components\filesystem\FileSystemInterface;
 use yii\helpers\FileHelper;
 use yii\helpers\ArrayHelper;
+use yii\imagine\Image;
 
 class LocalFileSystem extends Model implements FileSystemInterface
 {
@@ -70,4 +71,39 @@ class LocalFileSystem extends Model implements FileSystemInterface
         }
         return implode($separator, $directory);
     }
+
+    public function getThumb($fileModel, $thumbnail = null) 
+    {
+        if (!$thumbnail) return $this->getUrl($fileModel);
+        else {
+            // create thumb
+            $thumbPath = $this->saveThumbnail($fileModel, $thumbnail);
+            if (!$thumbPath) return $this->getUrl($fileModel);
+            // If thumbnail file is exist
+            $fileDir = sprintf("%s/%s", $this->file_url, $this->getRelativePath($fileModel->id));
+            $fileUrl = sprintf("%s/%s-%s.%s", $fileDir, $fileModel->getName(), $thumbnail, $fileModel->getExtension());
+            return $fileUrl;
+        }
+    }
+
+    public function saveThumbnail($fileModel, $thumbnail) 
+    {
+        $sizes = explode("x", $thumbnail);
+        if (count($sizes) < 2) {
+            return;
+        }
+        try {
+            $filePath = $this->getPath($fileModel);        
+            $fileDir = dirname($filePath);
+            $thumbPath = sprintf("%s/%s-%s.%s", $fileDir, $fileModel->getName(), $thumbnail, $fileModel->getExtension());
+            if (file_exists($thumbPath)) return $thumbPath;
+            $thumbWidth = ArrayHelper::getValue($sizes, 0);
+            $thumbHeight = ArrayHelper::getValue($sizes, 1);
+            $thumb = Image::thumbnail($filePath, $thumbWidth, $thumbHeight);
+            $thumb->save($thumbPath);
+            return $thumbPath;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }    
 }

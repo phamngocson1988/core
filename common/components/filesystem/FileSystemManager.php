@@ -102,6 +102,13 @@ class FileSystemManager extends DynamicModel
         return $fileUrl;
     }
 
+    public function getImageUrl($fileModel, $size = null) 
+    {
+        $dependency = $this->instanceDependency();
+        $fileUrl = $dependency->getThumb($fileModel, $size);
+        return $fileUrl;
+    }
+
     public function getPath($fileModel)
     {
         $dependency = $this->instanceDependency();

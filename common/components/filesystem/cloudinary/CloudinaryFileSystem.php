@@ -75,4 +75,9 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
         }
         return implode($separator, $directory);
     }
+
+    public function getThumb($fileModel, $thumbnail = null)
+    {
+        return $this->getUrl($fileModel);
+    }
 }

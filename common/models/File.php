@@ -48,6 +48,11 @@ class File extends ActiveRecord
 		return (int)$this->size;
 	}
 
+	public function getImageUrl($size = null) 
+	{
+		return Yii::$app->file->getImageUrl($this, $size);
+	}
+
 	public function getUrl()
 	{
 		return Yii::$app->file->getUrl($this);

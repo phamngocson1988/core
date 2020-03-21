@@ -1,27 +1,20 @@
 <?php
 use yii\helpers\Url;
 ?>
-<style type="text/css">
-.image{
-    position:relative;
-    overflow:hidden;
-    padding-bottom:100%;
-}
-.image img{
-    position:absolute;
-}
-.btn-delete {
-   position: absolute;
-   cursor: pointer;
-   right: 2px;
-   top: 2px;
-}
-</style>
-<?php foreach ($images as $image) : ?>
-<div class="col-sm-6 image-item"> 
-    <div class="image">
-        <a href="<?=$image->getUrl();?>" class="fancybox" data-fancybox="gallery_before"><img src="<?=$image->getUrl();?>" class="img img-responsive full-width" /></a>
-        <a href="<?=Url::to(['order/remove-evidence-image', 'id' => $image->id])?>" class="delete-image"><img class="btn-delete" src="/images/delete.png"/></a>
+<?php foreach ($images as $index => $image) : ?>
+<div class="col-sm-6 mt-element-overlay image-item" style="margin-bottom: 10px">
+    <div class="mt-overlay-1">
+        <img src="<?=$image->getImageUrl('200x200');?>" class="img img-responsive full-width">
+        <div class="mt-overlay">
+        <ul class="mt-info">
+            <li>
+            <a class="btn default btn-outline delete-image" href="<?=Url::to(['order/remove-evidence-image', 'id' => $image->id])?>"><i class="icon-close"></i></a>
+            </li>
+            <li>
+            <a class="btn default btn-outline fancybox" data-fancybox="gallery_before" href="<?=$image->getUrl();?>" target="_blank"><i class="icon-link"></i></a>
+            </li>
+        </ul>
+        </div>
     </div>
 </div>
 <?php endforeach;?>
