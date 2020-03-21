@@ -164,9 +164,9 @@ $user = $search->getUser();
                   <?php endif;?>
                 </td>
                 <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->coin);?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->balance - $model->coin);?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->balance);?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->coin, 1);?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->balance - $model->coin, 1);?></td>
+                <td style="vertical-align: middle;"><?=number_format($model->balance, 1);?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
@@ -176,7 +176,7 @@ $user = $search->getUser();
               <td></td>
               <td></td>
               <td></td>
-              <td>Tổng cộng: <?=number_format($search->getCommand()->sum('coin'));?></td>
+              <td>Tổng cộng: <?=number_format($search->getCommand()->sum('coin'), 1);?></td>
               <td></td>
               <td></td>
             </tr>

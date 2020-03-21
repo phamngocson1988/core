@@ -10,6 +10,7 @@ use supplier\models\OrderFile;
 use supplier\models\OrderComplainTemplate;
 use supplier\models\OrderSupplier;
 use supplier\models\Supplier;
+use supplier\models\OrderComplains;
 use supplier\forms\FetchOrderForm;
 use supplier\forms\FetchOrderForm1;
 use yii\data\Pagination;
@@ -329,14 +330,16 @@ class OrderController extends Controller
         $order = $orderSupplier->order;
         if (!$order) throw new NotFoundHttpException('Not found');
 
-        if ($order->hasCancelRequest() && 
-            in_array($orderSupplier->status, [OrderSupplier::STATUS_APPROVE, OrderSupplier::STATUS_PROCESSING])) {
-            Yii::$app->session->setFlash('error', 'Đơn hàng đã có yêu cầu hủy từ người dùng.');
-        }
+
+        $countComplain = OrderComplains::find()
+        ->where(['order_id' => $orderSupplier->order_id])
+        ->andWhere(['created_by' => $orderSupplier->supplier_id])
+        ->count();
 
         return $this->render('edit', [
             'order' => $order,
-            'model' => $orderSupplier
+            'model' => $orderSupplier,
+            'countComplain' => $countComplain
         ]);
     }
 
@@ -408,10 +411,11 @@ class OrderController extends Controller
 
     public function actionMoveToCompleted($id)
     {
+        $request = Yii::$app->request;
         $form = new UpdateOrderToCompletedForm([
             'id' => $id,
-            'supplier_id' => Yii::$app->user->id
-
+            'supplier_id' => Yii::$app->user->id,
+            'doing' => $request->post('doing', 0)
         ]);
         if ($form->move()) {
             return $this->asJson(['status' => true]);
@@ -435,6 +439,14 @@ class OrderController extends Controller
         $errors = $form->getErrorSummary(false);
         $error = reset($errors);
         return $this->asJson(['status' => false, 'errors' => $error]);
+    }
+
+    public function actionUpdatePercent($id)
+    {
+        $request = Yii::$app->request;
+        $orderSupplier = OrderSupplier::findOne($id);
+        $orderSupplier->percent = $request->get('percent');
+        return $this->asJson(['status' => $orderSupplier->save()]);
     }
 
     public function actionAddEvidenceImage($id)

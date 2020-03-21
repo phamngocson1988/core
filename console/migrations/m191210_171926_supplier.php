@@ -60,6 +60,7 @@ class m191210_171926_supplier extends Migration
             'price' => $this->float(),
             'quantity' => $this->float()->defaultValue(0),
             'doing' => $this->float()->defaultValue(0),
+            'percent' => $this->integer()->defaultValue(0),
             'total_price' => $this->float()->defaultValue(0),
             'rate_usd' => $this->float(),
             'status' => $this->string(10)->notNull(),

@@ -10,6 +10,7 @@ use supplier\models\Game;
 use supplier\models\Order;
 use supplier\models\OrderFile;
 use supplier\models\OrderSupplier;
+
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -42,23 +43,70 @@ use supplier\models\OrderSupplier;
       </div>
       <div class="portlet-body">
         <?php echo $this->render('@supplier/views/order/_step.php', ['order' => $model]);?>
-        <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
-        <div class="row" style="display: flex;">
-            <div class="btn-group">
-              <button type="button" class="btn btn-default"> 0% </button>
-              <button type="button" class="btn btn-default"> 30% </button>
-              <button type="button" class="btn btn-default"> 50% </button>
-              <button type="button" class="btn btn-default"> 80% </button>
-              <button type="button" class="btn btn-default"> 100% </button>
+
+        <?php if (($model->isApprove() && $countComplain) || $model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered table-striped">
+            <thead>
+              <tr>
+                <th> Tên game </th>
+                <th> Số lượng cần nạp </th>
+                <th> Số lượng đã nạp </th>
+                <th> Số tiền cho game </th>
+                <th> Số tiền nhận được </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><?=$model->getGameTitle();?></td>
+                <td><?=$model->quantity;?></td>
+                <td><?=$model->doing;?></td>
+                <td><?=number_format($model->price, 1);?></td>
+                <td><?=number_format($model->total_price, 1);?></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <?php endif;?>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="note note-warning">
+              <?php if ($model->isApprove()) {
+                $loginStatus = 'Pending';
+                if ($countComplain) $loginStatus = 'Pending Information';
+              } else {
+                $loginStatus = 'Login Successfully';
+              }
+              ?>
+              <p class="block">Login status: <strong style="color: red"><?=$loginStatus;?></strong></p>
             </div>
-            <div class="progress progress-striped active" style="width: 300px">
-              <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->getPercent();?>%">
-                  <span id='current_doing_unit'><?=$model->doing;?></span> / <?=$model->quantity;?>
+          </div>
+          <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
+          <div class="col-md-3">
+            <?php if ($model->isProcessing()) : ?>
+            Updating Progress: 
+            <div class="btn-group">
+              <a type="button" class="btn btn-default btn-lg update-percent" data-value="20" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 20]);?>"> 20% </a>
+              <a type="button" class="btn btn-default btn-lg update-percent" data-value="50" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 50]);?>"> 50% </a>
+              <a type="button" class="btn btn-default btn-lg update-percent" data-value="70" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 70]);?>"> 70% </a>
+            </div>
+            <?php else : ?>
+            <div class="btn-group">
+              <a type="button" class="btn btn-default btn-lg" disabled="true" data-value="20" href="javascript:void()"> 20% </a>
+              <a type="button" class="btn btn-default btn-lg" disabled="true" data-value="50" href="javascript:void()"> 50% </a>
+              <a type="button" class="btn btn-default btn-lg" disabled="true" data-value="70" href="javascript:void()"> 70% </a>
+            </div>
+            <?php endif;?>
+          </div>
+          <div class="col-md-6">
+            <div class="progress progress-striped active">
+              <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->percent;?>%">
+                  <span id='current_doing_unit'><?=$model->percent;?> %</span>
               </div>
             </div>
           </div>
+          <?php endif;?>
         </div>
-        <?php endif;?>
         <div class="row">
           <div class="col-md-3 col-sm-6">
             <table class="table table-hover table-striped table-bordered">
@@ -107,13 +155,13 @@ use supplier\models\OrderSupplier;
               <?php endif;?>
             </table>
             <?php if ($model->isApprove() && !$order->hasCancelRequest()) : ?>
-            <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn green" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận login thành công</a>
+            <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn green btn-block" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận login thành công</a>
             <?php endif;?>
             <?php if ($model->isProcessing()) : ?>
-              <a class="btn green" id="completeBtn"><i class="fa fa-angle-right"></i> Chuyến tới trạng thái Completed</a>
+              <button class="btn green btn-block" id="completedOrderBtn">Chuyến tới trạng thái Completed</button>
             <?php endif;?>
-            <?php if ($order->hasCancelRequest() && $model->isApprove()) :?>
-            <button type="button" class="btn btn-outline dark" id="cleartoasts">Đồng ý hủy đơn</button>
+            <?php if ($order->hasCancelRequest() && $model->isProcessing()) :?>
+            <button type="button" class="btn btn-outline red btn-block" id="cancelOrderBtn">Có yêu cầu hủy</button>
             <?php endif;?>
           </div>
           <div class="col-md-3 col-sm-6">
@@ -123,6 +171,14 @@ use supplier\models\OrderSupplier;
             </div>
             <div id="evidences">
                 <?php echo $this->render('@supplier/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE), 'can_edit' => true]);?>
+            </div>
+            <div>
+              <span class="label label-success"><i class="fa fa-lightbulb-o"></i></span>
+              <span> Vui lòng tải đủ ảnh cần thiết và đúng ảnh account để tránh khiếu kiện từ khách hàng </span>
+              <div class="form-group">
+                <label class="form-label">Password:</label>
+                <input type="number" class="form-control" maxlength="8" placeholder="Tối đa 8 số" id="supplier_password">
+              </div>
             </div>
           </div>
           <div class="col-md-6 col-sm-12">
@@ -150,7 +206,7 @@ use supplier\models\OrderSupplier;
                       <div class="timeline-body-arrow"> </div>
                       <div class="timeline-body-head">
                         <div class="timeline-body-head-caption">
-                          <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->isCustomer() ? 'Khách hàng' : $complain->sender->name;?></a>
+                          <a href="javascript:void()" class="timeline-body-title font-blue-madison"><?=$complain->isCustomer() ? 'Khách hàng' : $complain->sender->name;?></a>
                           <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
                         </div>
                       </div>
@@ -240,114 +296,106 @@ JS;
 $this->registerJs($moveProcessingJs)
 ?>
 
-<!-- End Go completed -->
-<div class="modal fade" id="go_completed" tabindex="-1" role="basic" aria-hidden="true">
+<!-- Update quantity -->
+<div class="modal fade" id="update_quantity" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Chuyển tới trạng thái Completed</h4>
+        <h4 class="modal-title">Xác nhận hoàn thành đơn hàng</h4>
       </div>
-      <?= Html::beginForm(['order/move-to-completed', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-completed-form']) ?>
+      <?= Html::beginForm(['order/move-to-completed', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'update-quantity-form']) ?>
       <div class="modal-body"> 
-        <p>Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed"</p>
+        <strong style="color: red">LƯU Ý:</strong>
+        <ol>
+          <li>Nhập chính xác số lượng gói đã hoàn thành vòa ô "Số lượng gói đã hoàn thành" bên dưới.</li>
+          <li>Đảm bảo đã tải đầy đủ ảnh, tên nhân vật trong ảnh trùng với tên nhân vật được cung cấp trong phần Order detail để tránh khiếu kiện từ khách hàng.</li>
+        </ol>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn green">Xác nhận</button>
+      <div class="modal-footer" style="text-align: center;">
+          <label class="control-label">Số lượng gói đã hoàn thành</label>
+          <input type="text" class="form-control input-inline" name="doing" id="final_quantity" style="width: 100px">
+           / <span class="help-inline" id="quantity"><?=$model->quantity;?></span>
+          <a type="button" class="btn green help-inline confirm_complete" role="completed">Xác nhận</a>
+      </div>
+      <div class="modal-footer" role="cancel">
+        <button type="button" class="btn red btn-outline" data-dismiss="modal">Không đồng ý hủy</button>
+        <a type="button" class="btn btn-success confirm_complete">Đồng ý hủy đơn</a>
       </div>
       <?= Html::endForm();?>
     </div>
   </div>
 </div>
 <?php
-$moveCompletedJs = <<< JS
-var moveCompletedForm = new AjaxFormSubmit({element: '#move-completed-form'});
-moveCompletedForm.success = function (data, form) {
-  location.reload();
-};
-moveCompletedForm.error = function (errors) {
-  alert(errors);
-  return false;
-};
-JS;
-$this->registerJs($moveCompletedJs)
-?>
-<!-- End Go completed -->
-
-<!-- End Go partial -->
-<div class="modal fade" id="go_partial" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Xác nhận hoàn thành một phần đơn hàng</h4>
-      </div>
-      <?= Html::beginForm(['order/move-to-partial', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'move-partial-form']) ?>
-      <div class="modal-body"> 
-        <p>Bạn chưa nhập đủ số lượng game cho đơn hàng. Nếu hoàn tất lúc này, hệ thống sẽ ghi nhận số lượng hoàn thành của bạn là <strong class="doing"></strong> / <strong class="quantity"></strong>. Bạn có chắc chắn muốn thực hiện điều này?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn green">Xác nhận</button>
-      </div>
-      <?= Html::endForm();?>
-    </div>
-  </div>
-</div>
-<?php
-$moveCompletedJs = <<< JS
-var moveCompletedForm = new AjaxFormSubmit({element: '#move-partial-form'});
-moveCompletedForm.success = function (data, form) {
-  location.reload();
-};
-moveCompletedForm.error = function (errors) {
-  alert(errors);
-  return false;
-};
-JS;
-$this->registerJs($moveCompletedJs)
-?>
-<!-- End Go partial -->
-
-<?php
-$completeModalJs = <<< JS
-$('body').on('click', '#completeBtn', function() {
-  var quantity = $('#doing_unit_progress').attr('aria-valuemax');
-  var doing = $('#current_doing_unit').text();
-  quantity = parseFloat(quantity);
-  doing = parseFloat(doing);
-  if (doing == 0) {
-    alert('Vui lòng nhập số lượng game mà bạn đã nạp.');
-    return false;
-  }
-  if (doing == quantity) {
-    $('#go_completed').modal('show');
+$updateQuantityJs = <<< JS
+$('#cancelOrderBtn').on('click', function() {
+  $('[role="completed"]').hide();
+  $('[role="cancel"]').show();
+  $('#update_quantity').modal('show');
+});
+$('#completedOrderBtn').on('click', function() {
+  $('[role="completed"]').show();
+  $('[role="cancel"]').hide();
+  $('#update_quantity').modal('show');
+});
+$('.confirm_complete').click(function(){
+  var _partial = parseFloat($('#final_quantity').val());
+  var _quantity = parseFloat($('#quantity').text());
+  if (isNaN(_partial) || _partial < 0 || _partial > _quantity) {
+    bootbox.dialog({
+      message: '<p class="text-center mb-0">Số lượng chưa hợp lệ</p>',
+      buttons: {
+        cancel: { label: 'OK' },
+      },
+    });
   } else {
-    $('#go_partial').find('.doing').text(doing);
-    $('#go_partial').find('.quantity').text(quantity);
-    $('#go_partial').modal('show');
+    if (_partial < _quantity) {
+      var title = 'Xác nhận một phần đơn hàng';
+      var content = 'Bạn chưa nhập đủ số lượng game cho đơn hàng. Nếu hoàn tất lúc này, hệ thôgns sẽ ghi nhận số lượng hoàn thành của bạn là ' + _partial + ' / ' + _quantity + '. Bạn có chắc muốn thực hiện điều này?';
+      bootbox.confirm({
+        message: content,
+        title: title,
+        buttons: {
+          cancel: { label: '<i class="fa fa-times"></i> Hủy' },
+          confirm: { label: '<i class="fa fa-check"></i> Xác nhận' }
+        },
+        callback: function (result) {
+          if (result === true) {
+            $('form#update-quantity-form').submit();
+          }
+        }
+      });
+    } else if (_partial == _quantity) {
+      var title = 'Chuyển tới trạng thái Completed';
+      var content = 'Bạn có chắc chắn muốn chuyển đơn hàng này sang trạng thái "Completed" ?';
+      bootbox.confirm({
+        message: content,
+        title: title,
+        buttons: {
+          cancel: { label: '<i class="fa fa-times"></i> Hủy' },
+          confirm: { label: '<i class="fa fa-check"></i> Xác nhận' }
+        },
+        callback: function (result) {
+          if (result === true) {
+            $('form#update-quantity-form').submit();
+          }
+        }
+      });
+    }
   }
 });
-JS;
-$this->registerJs($completeModalJs)
-?>
 
-<!-- Cancel order -->
-<?php
-$cancelOrderJs = <<< JS
-$('#cancel_order').ajax_action({
-  confirm: true,
-  confirm_text: 'Bạn có chắc muốn hủy đơn hàng?',
-  callback: function(element, data) {
-    console.log('data', data);
-    window.location.href = data.pendingUrl;
-  }
-});
+var moveCompletedForm = new AjaxFormSubmit({element: '#update-quantity-form'});
+moveCompletedForm.success = function (data, form) {
+  location.reload();
+};
+moveCompletedForm.error = function (errors) {
+  bootbox.alert(errors);    
+};
 JS;
-$this->registerJs($cancelOrderJs)
+$this->registerJs($updateQuantityJs)
 ?>
-<!-- End cancel order -->
+<!-- End Update quantity --> 
 
 <!-- Image upload --> 
 <?php
@@ -410,21 +458,29 @@ $this->registerJs($imageJs);
 <!-- update percent -->
 <?php
 $progress = <<< JS
-var updateUnitForm = new AjaxFormSubmit({element: '#update-unit-form'});
-updateUnitForm.success = function (data, form) {
-  console.log(data);
-var cur = $('#doing_unit_progress').attr('aria-valuemax');
-var newpc = (data.total / cur) * 100;
-  $('#doing_unit_progress').css('width', newpc + '%');
-  $('#doing_unit_progress span').html(data.total + '(Complete)');
-  $('#current_doing_unit').html(data.total);
-  $('#doing_unit').val('');
-};
-updateUnitForm.error = function (errors) {
-  alert(errors);
-  return false;
-}
+$('.update-percent').ajax_action({
+  confirm: false,
+  callback: function(element, data) {
+    var newpc = $(element).attr('data-value');
+    $('#doing_unit_progress').css('width', newpc + '%');
+    $('#doing_unit_progress span').html(newpc + ' %');
+  }
+});
 JS;
 $this->registerJs($progress);
 ?>       
 <!-- end update percent -->
+
+
+<!-- password -->
+<?php
+$passwordJs = <<< JS
+$('#supplier_password').keyup(function (event) {
+  if ($(this).val().length > 8) {
+    $(this).val($(this).val().substring(0, 8));
+  }
+});
+JS;
+$this->registerJs($passwordJs);
+?>       
+<!-- end password -->

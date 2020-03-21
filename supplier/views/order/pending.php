@@ -112,7 +112,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <th> Tên game </th>
                 <th> Số gói </th>
                 <th> Chờ nhận đơn </th>
-                <th> Thời gian chờ </th>
+                <th> Chờ login </th>
                 <th> Trạng thái </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>

@@ -15,7 +15,6 @@ class UpdateOrderToCompletedForm extends Model
 {
     public $id;
     public $supplier_id;
-    public $doing;
 
     protected $_order;
     protected $_supplier;
@@ -27,10 +26,6 @@ class UpdateOrderToCompletedForm extends Model
             [['id', 'supplier_id'], 'required'],
             ['id', 'validateRequest'],
             ['supplier_id', 'validateSupplier'],
-
-            ['doing', 'required'],
-            ['doing', 'number'],
-            ['doing', 'validateQuantity']
         ];
     }
 
@@ -63,6 +58,7 @@ class UpdateOrderToCompletedForm extends Model
         if (!$supplier) return $this->addError($attribute, 'Yêu cầu không tồn tại');
         if (!$supplier->isProcessing()) return $this->addError($attribute, 'Đơn hàng này không thể chuyển thành completed');
         if ($supplier->supplier_id != $this->supplier_id) return $this->addError($attribute, 'Yêu cầu không hợp lệ');
+        if ($supplier->doing < $supplier->quantity) return $this->addError($attribute, 'Bạn chưa nạp đủ số lượng game');
 
         $order = $this->getOrder();
         if (!$order) return $this->addError($attribute, 'Đơn hàng không tồn tại');
@@ -84,59 +80,36 @@ class UpdateOrderToCompletedForm extends Model
 
     }
 
-    public function validateQuantity($attribute, $params = [])
-    {
-        $supplier = $this->getOrderSupplier();
-        if ($this->doing > $supplier->quantity) {
-            $this->addError($attribute, 'Số lượng nạp vượt quá yêu cầu');
-        }
-        if ($this->doing < 0) {
-            $this->addError($attribute, 'Số lượng nạp không hợp lệ');
-        }
-    }
-
     
     public function move()
     {
         if (!$this->validate()) return false;
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
-        $supplier = $this->getOrderSupplier();
         try {
-            $percent = (int)(($this->doing / $supplier->quantity) * 100);
+            $supplier = $this->getOrderSupplier();
             $supplier->status = OrderSupplier::STATUS_COMPLETED;
             $supplier->completed_at = date('Y-m-d H:i:s');
-            $supplier->doing = $this->doing;
-            $supplier->percent = max($supplier->percent, $percent);
-            $supplier->total_price = $supplier->price * $this->doing;
+            $supplier->total_price = $supplier->price * $supplier->doing;
             $supplier->save();
 
             $order = $this->getOrder();
-            $order->doing_unit += $this->doing;
-            $isCompleted = $this->doing === $supplier->quantity;
-            if ($isCompleted) {
-                $order->status = Order::STATUS_COMPLETEDL;
-                $order->process_end_time = date('Y-m-d H:i:s');
-                $order->completed_at = date('Y-m-d H:i:s');
-                $order->process_duration_time = strtotime($order->process_end_time) - strtotime($order->process_start_time);
-                $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
-                    $sender = $event->sender; // Order
-                    Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-                    $sender->log("Moved to completed");
-                    $sender->send(
-                        'admin_send_complete_order', 
-                        sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
-                            'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
-                    ]);
-                });
-            } else {
-                $order->status = Order::STATUS_PARTIAL;
-                $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
-                    $sender = $event->sender; // Order
-                    $sender->log("Moved to partial");
-                });
-            }
-            
+            $order->status = Order::STATUS_COMPLETED;
+            // $order->doing_unit += $supplier->doing;
+            $order->process_end_time = date('Y-m-d H:i:s');
+            $order->completed_at = date('Y-m-d H:i:s');
+            $order->process_duration_time = strtotime($order->process_end_time) - strtotime($order->process_start_time);
+            $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
+                $sender = $event->sender; // Order
+                Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+                $sender->log("Moved to completed");
+                $sender->send(
+                    'admin_send_complete_order', 
+                    sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
+                        'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
+                ]);
+            });
+
             $order->save();
             $transaction->commit();
             return true;

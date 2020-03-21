@@ -117,7 +117,7 @@ class AssignOrderSupplierForm extends Model
             // ->send();
 
             $transaction->commit();
-            $order->notifyNewOrderToSupplier();
+            // $order->notifyNewOrderToSupplier();
             return true;
         } catch(Exception $e) {
             $transaction->rollback();
