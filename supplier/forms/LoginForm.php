@@ -13,7 +13,6 @@ class LoginForm extends Model
     public $rememberMe = true;
 
     private $_user;
-    private $_roles = ['supplier'];
 
     /**
      * @inheritdoc
@@ -65,14 +64,6 @@ class LoginForm extends Model
                     return false;
                 }
             }
-            // $roles = $auth->getRolesByUser($user->id);
-            // $roleNames = array_keys($roles);
-            // $allowedRoles = $this->_roles;
-            // $matches = array_intersect($roleNames, $allowedRoles);
-            // if (count($matches) < 1) {
-            //     $this->addError($attribute, Yii::t('app', 'you_are_not_allowed_to_login'));
-            //     return false;
-            // }
         }
     }
 
