@@ -37,14 +37,10 @@ class InitController extends Controller
 
         foreach (Yii::$app->user->fixRoles as $roleName) {
             $role = $auth->createRole($roleName);
-            $role->description = $roleName;
+            $role->description = ucfirst($roleName);
             $auth->add($role);
 
-            $assignForm = new \backend\forms\AssignRoleForm([
-                'role' => $roleName,
-                'user_id' => $user->id
-            ]);
-            $assignForm->assign();
+            $auth->assign($role, $user->id);
         }
         die('Done');        
 
