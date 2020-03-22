@@ -123,7 +123,7 @@ class m191210_171926_supplier extends Migration
             'bank_id' => $this->integer(11)->notNull(),
             'bank_code' => $this->string(50)->notNull(),
             'account_number' => $this->string(50)->notNull(),
-            'account_name' => $this->string(50)->notNull()
+            'account_name' => $this->string(50)->notNull(),
             'amount' => $this->float()->notNull()->defaultValue(0),
             'available_balance' => $this->float()->notNull()->defaultValue(0),
             'created_at' => $this->dateTime()->notNull(),

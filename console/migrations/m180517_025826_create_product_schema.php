@@ -44,8 +44,8 @@ class m180517_025826_create_product_schema extends Migration
             'price1' => $this->float(),
             'price2' => $this->float(),
             'price3' => $this->float(),
-            'average_speed' => $this->int(), // seconds
-            'number_supplier' => $this->int(),
+            'average_speed' => $this->integer(), // seconds
+            'number_supplier' => $this->integer(),
             'remark' => $this->text(),
             'price_remark' => $this->text(),
             'google_ads' => $this->text(),
