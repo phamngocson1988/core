@@ -67,14 +67,13 @@
                 <div class="tab-pane active" id="tab_1_1">
                   {ActiveForm assign='form'}
                     
-                    {$form->field($model, 'email', [
-                      'inputOptions' => ['disabled' => true, 'class' => 'form-control']
-                    ])->textInput()}
+                    {$form->field($model, 'username')->textInput()}
+                    {$form->field($model, 'email')->textInput()}
                     {$form->field($model, 'name')->textInput()}
                     {$form->field($model, 'phone')->textInput()}
                     <div class="margiv-top-10">
                       <button type="submit" class="btn green"> {Yii::t('app', 'save_changes')} </button>
-                      <a href="javascript:;" class="btn default"> {Yii::t('app', 'cancel')} </a>
+                      <a href="{url route='profile/index'}" class="btn default"> {Yii::t('app', 'cancel')} </a>
                     </div>
                   {/ActiveForm}
                 </div>

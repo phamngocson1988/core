@@ -32,6 +32,12 @@ class EditUserForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
+            ['email', 'uniqueEmail'],
+
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['username', 'uniqueUsername'],
 
             ['password', 'trim'],
             ['password', 'string', 'min' => 6],
@@ -41,6 +47,24 @@ class EditUserForm extends Model
         ];
     }
 
+    public function uniqueUsername($attribute, $params = []) 
+    {
+        $user = $this->getUser();
+        if ($user->username == $this->username) return;
+        if (User::find()->where(['username' => $this->username])->count() > 0) {
+            $this->addError($attribute, 'Tên đăng nhập bị trùng');
+        }
+    }
+
+    public function uniqueEmail($attribute, $params = []) 
+    {
+        $user = $this->getUser();
+        if ($user->email == $this->email) return;
+        if (User::find()->where(['email' => $this->email])->count() > 0) {
+            $this->addError($attribute, 'Hộp thư điện tử bị trùng');
+        }
+    }
+
 	public function edit()
 	{
 		$connection = Yii::$app->db;
@@ -48,6 +72,8 @@ class EditUserForm extends Model
 		try {
 	        $user = $this->getUser();
             $user->name = $this->name;    
+            $user->username = $this->username;    
+            $user->email = $this->email;    
             $user->phone = $this->phone;
             $user->status = $this->status;
             if ($this->password) {
