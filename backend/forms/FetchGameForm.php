@@ -26,13 +26,12 @@ class FetchGameForm extends Model
                 $command->andWhere(['status' => $status]);
             }
         }
-        if ($this->soldout !== null) {
+        if (is_numeric($this->soldout)) {
             $command->andWhere(['soldout' => $this->soldout]);
         }
         if ($q) {
             $command->andWhere(['like', 'title', $q]);
         }
-
         $this->_command = $command;
     }
 
