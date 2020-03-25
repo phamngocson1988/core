@@ -665,7 +665,7 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="{url route='/report/cost-game'}" class="nav-link nav-toggle" code='report.cost.game'>
+                <a href="{url route='/report-profit/game'}" class="nav-link nav-toggle" code='report.cost.game'>
                   <span class="title">Theo game</span>
                 </a>
               </li>

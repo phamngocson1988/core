@@ -56,4 +56,23 @@ class ReportProfitController extends Controller
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
+
+    public function actionGame()
+    {
+        $this->view->params['main_menu_active'] = 'report.cost.game';
+        $request = Yii::$app->request;
+        $data = [
+            'game_ids' => $request->get('game_ids'),
+            'confirmed_from' => $request->get('confirmed_from'),
+            'confirmed_to' => $request->get('confirmed_to'),
+            'limit' => $request->get('limit', '5'),
+            'period' => $request->get('period', 'day'),
+        ];
+        $form = new \backend\forms\ReportGameProfitForm($data);
+        $models = $form->getStatistic();
+        return $this->render('game', [
+            'models' => $models,
+            'search' => $form,
+        ]);
+    }
 }
