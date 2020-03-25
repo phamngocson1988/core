@@ -106,6 +106,7 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
               <tr>
                 <th> Mã đơn hàng </th>
                 <th> Nhà cung cấp </th>
+                <th> Khách hàng </th>
                 <th> Ngày xác nhận </th>
                 <th> Tên game </th>
                 <th> Số gói </th>
@@ -118,7 +119,7 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <?php
@@ -133,6 +134,7 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
                 <tr>
                   <td><a href='<?=Url::to(['order/view', 'id' => $model->order_id]);?>'><?=$model->order_id;?></a></td>
                   <td><?=$model->user->name;?></td>
+                  <td><?=$order->customer_name;?></td>
                   <td><?=$order->confirmed_at;?></td>
                   <td><?=$model->getGameTitle();?></td>
                   <td><?=number_format($model->quantity);?> / <?=number_format($order->quantity);?></td>

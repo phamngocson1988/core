@@ -657,7 +657,10 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item  ">
-                <a href="{url route='/report/cost-order'}" class="nav-link nav-toggle" code='report.cost.order'>
+                <!--<a href="{url route='/report/cost-order'}" class="nav-link nav-toggle" code='report.cost.order'>
+                  <span class="title">Theo đơn hàng</span>
+                </a> -->
+                <a href="{url route='/report-profit/order'}" class="nav-link nav-toggle" code='report.cost.order'>
                   <span class="title">Theo đơn hàng</span>
                 </a>
               </li>
