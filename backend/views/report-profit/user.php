@@ -32,13 +32,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Theo game</span>
+      <span>Theo nhân viên</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Chi phí lợi nhuận theo game</h1>
+<h1 class="page-title">Chi phí lợi nhuận theo nhân viên</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -53,19 +53,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report-profit/game']]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report-profit/user']]);?>
         <div class="row">
-          <?=$form->field($search, 'limit', [
+          <?=$form->field($search, 'saler_id', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'limit', 'id' => 'limit']
-          ])->dropDownList($search->getLimitOptions())->label('Tùy chọn thống kê');?>
+            'inputOptions' => ['class' => 'form-control', 'name' => 'saler_id', 'id' => 'saler_id']
+          ])->dropDownList($search->fetchUsers(), ['prompt' => 'Chọn nhân viên'])->label('Chọn nhân viên');?>
 
-          <?=$form->field($search, 'game_ids', [
-            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-          ])->widget(kartik\select2\Select2::classname(), [
-            'data' => $search->fetchGames(),
-            'options' => ['class' => 'form-control', 'name' => 'game_ids[]', 'multiple' => 'true'],
-          ])->label('Tên game')?>
           
           <?=$form->field($search, 'confirmed_from', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -101,37 +95,94 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </div>
         </div>
         <?php ActiveForm::end()?>
+      </div>
+    </div>
+    <div class="portlet light bordered">
+      <div class="portlet-title">
+        <div class="caption font-dark">
+          <span class="caption-subject bold uppercase"> Theo game</span>
+        </div>
+      </div>
+      <div class="portlet-body">
         <div class="row">
           <div class="col-md-12">
-            <?php Pjax::begin(); ?>
             <table class="table table-striped table-bordered table-hover table-checkable">
               <thead>
                 <tr>
-                  <th> Mã game </th>
-                  <th> Tên game </th>
-                  <th> Số lượng gói </th>
-                  <th> Doanh thu (nghìn VNĐ) </th>
-                  <th> Chi phí (nghìn VNĐ) </th>
-                  <th> Lợi nhuận (nghìn VNĐ) </th>
+                  <th> STT </th>
+                  <th> Game </th>
+                  <th> Số gói </th>
+                  <th> Tỉ lệ </th>
                 </tr>
               </thead>
               <tbody>
-                  <?php if (!$models) :?>
-                  <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                  <?php if (!$games) :?>
+                  <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
                   <?php endif;?>
-                  <?php foreach (array_values($models) as $model):?>
+                  <?php foreach ($games as $no => $game):?>
                   <tr>
-                    <td><?=$model['game_id'];?></td>
-                    <td><?=$model['game']['title'];?></td>
-                    <td><?=number_format($model['sum_doing'], 1);?></td>
-                    <td><?=number_format($model['sum_revenue'] / 1000, 1);?></td>
-                    <td><?=number_format($model['sum_fee'] / 1000, 1);?></td>
-                    <td><?=number_format($model['sum_profit'] / 1000, 1);?></td>
+                    <td><?=($no + 1);?></td>
+                    <td><?=$game['game_title'];?></td>
+                    <td><?=number_format($game['quantity'], 1);?></td>
+                    <td><?=number_format($game['quantity'] * 100 / $sumQuantityGame, 1);?>%</td>
                   </tr>
                   <?php endforeach;?>
               </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2">Tổng: <?=number_format($totalQuantityGame);?></td>
+                  <td><?=number_format($sumQuantityGame, 1);?></td>
+                  <td>100%</td>
+                </tr>
+              </tfoot>
             </table>
-            <?php Pjax::end(); ?>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="portlet light bordered">
+      <div class="portlet-title">
+        <div class="caption font-dark">
+          <span class="caption-subject bold uppercase"> Theo khách hàng</span>
+        </div>
+      </div>
+      <div class="portlet-body">
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover table-checkable">
+              <thead>
+                <tr>
+                  <th> STT </th>
+                  <th> Khách hàng </th>
+                  <th> Thành tiền (VNĐ) </th>
+                  <th> Số gói </th>
+                  <th> Tỉ lệ </th>
+                </tr>
+              </thead>
+              <tbody>
+                  <?php if (!$customers) :?>
+                  <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                  <?php endif;?>
+                  <?php foreach ($customers as $no => $customer):?>
+                  <tr>
+                    <td><?=($no + 1);?></td>
+                    <td><?=$customer['customer_name'];?></td>
+                    <td><?=number_format($customer['total_price']);?></td>
+                    <td><?=number_format($customer['quantity'], 1);?></td>
+                    <td><?=number_format($customer['quantity'] * 100 / $sumQuantityCustomer, 1);?>%</td>
+                  </tr>
+                  <?php endforeach;?>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2">Tổng: <?=number_format($totalQuantityCustomer);?></td>
+                  <td><?=number_format($sumPriceCustomer);?></td>
+                  <td><?=number_format($sumQuantityCustomer, 1);?></td>
+                  <td>100%</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
         </div>
       </div>

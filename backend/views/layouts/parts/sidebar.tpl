@@ -670,7 +670,7 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="{url route='/report/cost-user'}" class="nav-link nav-toggle" code='report.cost.user'>
+                <a href="{url route='/report-profit/user'}" class="nav-link nav-toggle" code='report.cost.user'>
                   <span class="title">Theo nhân viên bán hàng</span>
                 </a>
               </li>

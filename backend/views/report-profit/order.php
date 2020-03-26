@@ -8,11 +8,12 @@ use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
 use backend\models\Order;
-use common\models\User;
+use backend\models\OrderSupplier;
 use common\components\helpers\FormatConverter;
 
 $settings = Yii::$app->settings;
 $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 22000);
+$orderSupplierTable = OrderSupplier::tableName();
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -90,7 +91,7 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
           <?=$form->field($search, 'payment_method', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             'inputOptions' => ['class' => 'form-control', 'name' => 'payment_method', 'id' => 'payment_method']
-          ])->dropDownList($search->fetchPaymentMethods())->label('Cổng thanh toán');?>
+          ])->dropDownList($search->fetchPaymentMethods(), ['prompt' => 'Chọn cổng thanh toán'])->label('Cổng thanh toán');?>
 
           <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -137,7 +138,7 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
                   <td><?=$order->customer_name;?></td>
                   <td><?=$order->confirmed_at;?></td>
                   <td><?=$model->getGameTitle();?></td>
-                  <td><?=number_format($model->quantity);?> / <?=number_format($order->quantity);?></td>
+                  <td><?=number_format($model->doing, 1);?> / <?=number_format($model->quantity, 1);?></td>
                   <td><?=number_format($kinggemsPrice);?></td>
                   <td><?=number_format($totalKinggemsPrice);?></td>
                   <td><?=number_format($supplierPrice);?></td>
@@ -146,6 +147,12 @@ $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 220
                 </tr>
                 <?php endforeach;?>
             </tbody>
+            <tfoot>
+              <td>Tổng đơn: <?=$search->getCommand()->count();?></td>
+              <td colspan="4"></td>
+              <td><?=number_format($search->getCommand()->sum("{$orderSupplierTable}.doing"), 1);?></td>
+              <td colspan="5"></td>
+            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

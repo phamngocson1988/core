@@ -44,7 +44,7 @@
           'options' => ['tag' => false, 'class' => 'profile-userpic'],
           'template' => '{input}{hint}{error}'
         ])->widget(ImageInputWidget::className(), [
-          'template' => '<div class="profile-userpic">{image}{input}</div><div class="profile-userbuttons list-separated profile-stat">{choose_button}{cancel_button}</div>',
+          'template' => '<div class="">{image}{input}</div><div class="profile-userbuttons list-separated profile-stat">{choose_button}{cancel_button}</div>',
           'imageOptions' => ['class' => 'img-responsive'],
           'chooseButtonOptions' => ['tag' => 'span', 'options' => ['class' => 'btn btn-circle green btn-sm']],
           'cancelButtonOptions' => ['tag' => 'button', 'options' => ['class' => 'btn btn-circle red btn-sm']]
