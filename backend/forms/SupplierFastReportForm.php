@@ -42,7 +42,7 @@ class SupplierFastReportForm extends Model
             'type',
             'DATE(created_at) as report_date'
         ]);
-        $command->andWhere(['BETWEEN', 'created_at', $this->report_from, $this->report_to]);
+        $command->andWhere(['BETWEEN', 'created_at', $this->getDateTimeFrom(), $this->getDateTimeTo()]);
         $command->groupBy(['report_date', 'type']);
         $command->orderBy(['created_at' => SORT_DESC]);
         $command->asArray();
@@ -57,7 +57,7 @@ class SupplierFastReportForm extends Model
             'SUM(quantity) as quantity',
             'SUM(total_price * rate_usd) as total_price'
         ]);
-        $command->andWhere(['BETWEEN', 'created_at', $this->report_from, $this->report_to]);
+        $command->andWhere(['BETWEEN', 'confirmed_at', $this->getDateTimeFrom(), $this->getDateTimeTo()]);
         $command->groupBy(['report_date']);
         $command->asArray();
         return $command;
@@ -125,6 +125,16 @@ class SupplierFastReportForm extends Model
 
     public function getFirstIncome()
     {
-        return SupplierWallet::find()->where(['<', 'created_at', $this->report_from])->sum('amount');
+        return SupplierWallet::find()->where(['<', 'created_at', $this->getDateTimeFrom()])->sum('amount');
+    }
+
+    public function getDateTimeFrom()
+    {
+        return sprintf("%s 00:00:00", $this->report_from);
+    }
+
+    public function getDateTimeTo() 
+    {
+        return sprintf("%s 23:59:59", $this->report_to);
     }
 }

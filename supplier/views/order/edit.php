@@ -70,7 +70,7 @@ use supplier\models\OrderSupplier;
         <?php endif;?>
         <div class="row">
           <div class="col-md-3">
-            <div class="note note-warning">
+            <div class="note note-success">
               <?php if ($model->isApprove()) {
                 $loginStatus = 'Pending';
                 if ($countComplain) $loginStatus = 'Pending Information';
@@ -78,7 +78,7 @@ use supplier\models\OrderSupplier;
                 $loginStatus = 'Login Successfully';
               }
               ?>
-              <p class="block">Login status: <strong style="color: red"><?=$loginStatus;?></strong></p>
+              <p class="block"> + Login status: <strong style="color: red"><?=$loginStatus;?></strong></p>
             </div>
           </div>
           <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
@@ -155,13 +155,19 @@ use supplier\models\OrderSupplier;
               <?php endif;?>
             </table>
             <?php if ($model->isApprove() && !$order->hasCancelRequest()) : ?>
-            <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn green btn-block" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> Xác nhận login thành công</a>
+            <div class="box-shadow">
+              <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn blue btn-block" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> >> Xác nhận login thành công << </a>
+            </div>
             <?php endif;?>
             <?php if ($model->isProcessing()) : ?>
-              <button class="btn green btn-block" id="completedOrderBtn">Chuyến tới trạng thái Completed</button>
+              <div class="box-shadow">
+                <button class="btn green btn-block" id="completedOrderBtn"> >> Chuyến tới trạng thái Completed << </button>
+              </div>
             <?php endif;?>
             <?php if ($order->hasCancelRequest() && $model->isProcessing()) :?>
-            <button type="button" class="btn btn-outline red btn-block" id="cancelOrderBtn">Có yêu cầu hủy</button>
+            <div class="box-shadow">
+              <button type="button" class="btn btn-outline red btn-block" id="cancelOrderBtn"> >> Có yêu cầu hủy << </button>
+            </div>
             <?php endif;?>
           </div>
           <div class="col-md-3 col-sm-6">
@@ -176,7 +182,7 @@ use supplier\models\OrderSupplier;
               <span class="label label-success"><i class="fa fa-lightbulb-o"></i></span>
               <span> Vui lòng tải đủ ảnh cần thiết và đúng ảnh account để tránh khiếu kiện từ khách hàng </span>
               <div class="form-group">
-                <label class="form-label">Password:</label>
+                <label class="form-label">Password: [Nếu có]</label>
                 <input type="number" class="form-control" maxlength="8" placeholder="Tối đa 8 số" id="supplier_password">
               </div>
             </div>
@@ -217,7 +223,9 @@ use supplier\models\OrderSupplier;
                   </div>
                   <?php endforeach;?>
                 </div>
-                <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
+                <div class="box-shadow inline">
+                  <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn blue btn-default" data-toggle="modal"> >> Gửi tin nhắn theo mẫu << </a>
+                </div>
               </div>
             </div>
           </div>
@@ -308,7 +316,7 @@ $this->registerJs($moveProcessingJs)
       <div class="modal-body"> 
         <strong style="color: red">LƯU Ý:</strong>
         <ol>
-          <li>Nhập chính xác số lượng gói đã hoàn thành vòa ô "Số lượng gói đã hoàn thành" bên dưới.</li>
+          <li>Nhập chính xác số lượng gói đã hoàn thành vào ô "Số lượng gói đã hoàn thành" bên dưới.</li>
           <li>Đảm bảo đã tải đầy đủ ảnh, tên nhân vật trong ảnh trùng với tên nhân vật được cung cấp trong phần Order detail để tránh khiếu kiện từ khách hàng.</li>
         </ol>
       </div>
@@ -351,7 +359,7 @@ $('.confirm_complete').click(function(){
   } else {
     if (_partial < _quantity) {
       var title = 'Xác nhận một phần đơn hàng';
-      var content = 'Bạn chưa nhập đủ số lượng game cho đơn hàng. Nếu hoàn tất lúc này, hệ thôgns sẽ ghi nhận số lượng hoàn thành của bạn là ' + _partial + ' / ' + _quantity + '. Bạn có chắc muốn thực hiện điều này?';
+      var content = 'Bạn chưa nhập đủ số lượng game cho đơn hàng. Nếu hoàn tất lúc này, hệ thống sẽ ghi nhận số lượng hoàn thành của bạn là ' + _partial + ' / ' + _quantity + '. Bạn có chắc muốn thực hiện điều này?';
       bootbox.confirm({
         message: content,
         title: title,
