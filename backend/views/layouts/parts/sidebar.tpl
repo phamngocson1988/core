@@ -71,6 +71,21 @@
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
+        <span class="title">Quản lý ngân hàng</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/bank/index'}" class="nav-link " code='bank.index'>
+            <span class="title">Quản lý ngân hàng</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-settings"></i>
         <span class="title">{Yii::t('app', 'settings')}</span>
         <span class="arrow"></span>
         </a>

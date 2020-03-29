@@ -1,7 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\helpers\Url'}
 {use class='backend\assets\AppAsset'}
-{use class='backend\widgets\Alert'}
 {AppAsset::register($this)|void}
 {$this->beginPage()}
 <!DOCTYPE html>
@@ -31,8 +30,7 @@
       <div class="page-content-wrapper">
         <!-- BEGIN CONTENT BODY -->
         <div class="page-content">
-        {*include file='./parts/alert.tpl'*}
-        {Alert::widget()}
+        {include file='./parts/alert.tpl'}
         {$content}
         </div>
         <!-- END CONTENT BODY -->
