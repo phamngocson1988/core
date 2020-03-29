@@ -82,26 +82,34 @@ use supplier\models\OrderSupplier;
             </div>
           </div>
           <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
-          <div class="col-md-3">
+          <div class="col-md-9 flex-container">
             <?php if ($model->isProcessing()) : ?>
-            Updating Progress: 
-            <div class="btn-group">
-              <a type="button" class="btn btn-default btn-lg update-percent" data-value="20" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 20]);?>"> 20% </a>
-              <a type="button" class="btn btn-default btn-lg update-percent" data-value="50" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 50]);?>"> 50% </a>
-              <a type="button" class="btn btn-default btn-lg update-percent" data-value="70" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 70]);?>"> 70% </a>
+            <span style="flex-grow: 1; padding-top: 12px"> + Updating Progress: </span>
+            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
+              <a type="button" class="btn btn-default btn-md btn-block update-percent" data-value="20" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 20]);?>"> 20% </a>
+            </div>
+            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
+              <a type="button" class="btn green-haze btn-md btn-block update-percent" data-value="50" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 50]);?>"> 50% </a>
+            </div>
+            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
+              <a type="button" class="btn btn-default btn-md btn-block update-percent" data-value="70" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 70]);?>"> 70% </a>
             </div>
             <?php else : ?>
-            <div class="btn-group">
-              <a type="button" class="btn btn-default btn-lg" disabled="true" data-value="20" href="javascript:void()"> 20% </a>
-              <a type="button" class="btn btn-default btn-lg" disabled="true" data-value="50" href="javascript:void()"> 50% </a>
-              <a type="button" class="btn btn-default btn-lg" disabled="true" data-value="70" href="javascript:void()"> 70% </a>
+            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
+              <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="20" href="javascript:void()"> 20% </a>
+            </div>
+            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
+              <a type="button" class="btn green-haze btn-md btn-block" disabled="true" data-value="50" href="javascript:void()"> 50% </a>
+            </div>
+            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
+              <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="70" href="javascript:void()"> 70% </a>
             </div>
             <?php endif;?>
-          </div>
-          <div class="col-md-6">
-            <div class="progress progress-striped active">
-              <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->percent;?>%">
-                  <span id='current_doing_unit'><?=$model->percent;?> %</span>
+            <div class="inline" style="margin: 0; flex-grow: 8; padding-top: 7px">
+              <div class="progress progress-striped active" style="margin: 0;">
+                <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->percent;?>%">
+                    <span id='current_doing_unit'><?=$model->percent;?> %</span>
+                </div>
               </div>
             </div>
           </div>
