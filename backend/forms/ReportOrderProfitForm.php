@@ -30,12 +30,13 @@ class ReportOrderProfitForm extends Model
     {
         $orderTable = Order::tableName();
         $orderSupplierTable = OrderSupplier::tableName();
-        $command = OrderSupplier::find();
-        $command->innerJoin($orderTable, "{$orderTable}.id = {$orderSupplierTable}.order_id");
-        $command->andWhere(["$orderSupplierTable.status" => OrderSupplier::STATUS_CONFIRMED]);
+        $command = Order::find();
+        $orderSupplierConfirmedStatus = OrderSupplier::STATUS_CONFIRMED;
+        $command->leftJoin($orderTable, "{$orderTable}.id = {$orderSupplierTable}.order_id AND $orderSupplierTable.status = '$orderSupplierConfirmedStatus'");
+        // $command->andWhere(["$orderSupplierTable.status" => OrderSupplier::STATUS_CONFIRMED]);
         
         if ($this->id) {
-            $command->andWhere(["{$orderSupplierTable}.order_id" => $this->id]);
+            $command->andWhere(["{$orderTable}.id" => $this->id]);
         }
         if ($this->confirmed_from) {
             $command->andWhere(['>=', "$orderTable.confirmed_at", $this->confirmed_from]);
