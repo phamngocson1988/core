@@ -14,6 +14,7 @@ use common\components\helpers\FormatConverter;
 $settings = Yii::$app->settings;
 $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 22000);
 $orderSupplierTable = OrderSupplier::tableName();
+$orderTable = Order::tableName();
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -100,7 +101,6 @@ $orderSupplierTable = OrderSupplier::tableName();
           </div>
         </div>
         <?php ActiveForm::end()?>
-        <?php Pjax::begin(); ?>
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
@@ -123,40 +123,33 @@ $orderSupplierTable = OrderSupplier::tableName();
                 <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
-                <?php
-                $order = $model->order;
-                // USD to VND
-                $kinggemsPrice = ($order->quantity) ? $order->total_price * $rate / $order->quantity : 0; 
-                $totalKinggemsPrice = $kinggemsPrice * $model->doing; 
-                // VND
-                $supplierPrice = $model->price;
-                $totalSupplierPrice = $model->price * $model->doing;
-                ?>
                 <tr>
-                  <td><a href='<?=Url::to(['order/view', 'id' => $model->order_id]);?>'><?=$model->order_id;?></a></td>
-                  <td><?=$model->user->name;?></td>
-                  <td><?=$order->customer_name;?></td>
-                  <td><?=$order->confirmed_at;?></td>
-                  <td><?=$model->getGameTitle();?></td>
-                  <td><?=number_format($model->doing, 1);?> / <?=number_format($model->quantity, 1);?></td>
-                  <td><?=number_format($kinggemsPrice);?></td>
-                  <td><?=number_format($totalKinggemsPrice);?></td>
-                  <td><?=number_format($supplierPrice);?></td>
-                  <td><?=number_format($totalSupplierPrice);?></td>
-                  <td><?=number_format($totalKinggemsPrice - $totalSupplierPrice);?></td>
+                  <td><a href='<?=Url::to(['order/view', 'id' => $model['id']]);?>'><?=$model['id'];?></a></td>
+                  <td><?= $model['supplier_id'] ? $suppliers[$model['supplier_id']]->name : '-' ;?></td>
+                  <td><?=$model['customer_name'];?></td>
+                  <td><?=$model['confirmed_at'];?></td>
+                  <td><?=$model['game_title'];?></td>
+                  <td><?= $model['supplier_id'] ? sprintf("%s / %s", number_format($model['supplier_doing'], 1), number_format($model['order_quantity'], 1)) : $model['order_quantity'];?></td>
+                  <td><?=number_format($model['order_price']);?></td>
+                  <td><?=number_format($model['order_total_price']);?></td>
+                  <td><?= $model['supplier_id'] ? number_format($model['supplier_price']) : '-';?></td>
+                  <td><?= $model['supplier_id'] ? number_format($model['supplier_total_price']) : '-';?></td>
+                  <td><?=number_format($model['profit']);?></td>
                 </tr>
                 <?php endforeach;?>
             </tbody>
             <tfoot>
-              <td>Tổng đơn: <?=$search->getCommand()->count();?></td>
+              <td>Tổng đơn: <?=number_format($search->getCommand()->count());?></td>
               <td colspan="4"></td>
-              <td><?=number_format($search->getCommand()->sum("{$orderSupplierTable}.doing"), 1);?></td>
-              <td colspan="5"></td>
-            </tfoot>
+              <td><?=number_format($search->getCommand()->sum("IF({$orderSupplierTable}.supplier_id, {$orderSupplierTable}.doing, {$orderTable}.quantity)"), 1);?></td>
+              <td></td>
+              <td><?=number_format($search->getCommand()->sum("({$orderTable}.total_price * {$orderTable}.rate_usd)"));?></td>
+              <td></td>
+              <td><?=number_format($search->getCommand()->sum("COALESCE({$orderSupplierTable}.total_price, 0)"));?></td>
+              <td><?=number_format($search->getCommand()->sum("({$orderTable}.total_price * {$orderTable}.rate_usd - COALESCE({$orderSupplierTable}.total_price, 0))"));?></td>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

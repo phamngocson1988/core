@@ -6,6 +6,8 @@ use backend\controllers\Controller;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use backend\models\User;
 
 
 class ReportProfitController extends Controller
@@ -40,19 +42,19 @@ class ReportProfitController extends Controller
         ];
         $form = new \backend\forms\ReportOrderProfitForm($data);
         $command = $form->getCommand();
-        $command->with('user');
-        $command->with('order');
-        $command->with('game');
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
+        $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
+        array_filter($supplierIds);
+        $suppliers = User::find()->where(['in', 'id', $supplierIds])->indexBy('id')->all();
 
         return $this->render('order.php', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
+            'suppliers' => $suppliers,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
