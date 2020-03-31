@@ -24,21 +24,20 @@ use supplier\models\OrderSupplier;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Chỉnh sửa đơn hàng</span>
+      <span>Xử lý đơn hàng</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Chỉnh sửa đơn hàng</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
     <div class="portlet light bordered">
       <div class="portlet-title">
         <div class="caption">
-          <i class="icon-bubble font-green-sharp"></i>
-          <span class="caption-subject font-green-sharp sbold">Order #<?=$order->id;?> <span class="hidden-xs">| <?=$order->created_at;?> </span> </span>
+          <i class="icon-settings"></i>
+          <span class="caption-subject sbold">Order #<?=$order->id;?> <span class="hidden-xs">| <?=$order->created_at;?> </span> </span>
         </div>
       </div>
       <div class="portlet-body">
@@ -117,6 +116,13 @@ use supplier\models\OrderSupplier;
         </div>
         <div class="row">
           <div class="col-md-3 col-sm-6">
+            <div class="portlet blue-hoki box" style="margin-bottom: 0">
+              <div class="portlet-title">
+                <div class="caption">
+                  <i class="fa fa-cogs"></i>Order Details
+                </div>
+              </div>
+            </div>
             <table class="table table-hover table-striped table-bordered">
               <tr>
                 <td> Order ID </td>
@@ -179,8 +185,9 @@ use supplier\models\OrderSupplier;
             <?php endif;?>
           </div>
           <div class="col-md-3 col-sm-6">
-            <div class="dropzone dropzone-file-area" style="margin-bottom: 20px">
-              <a class="sbold" id="uploadElement">Tải hình ảnh cho đơn hàng</a>
+            <div class="dropzone dropzone-file-area" style="margin-bottom: 20px; padding: 5px; background-color: #abcaab">
+              <a role="button" class="btn green" id="uploadElement">Select photos</a>
+              <p style="text-align: left; font-size: 1.3rem;">Có thể chọn tối đa 4 ảnh cùng lúc hoặc chuột trái <strong style="color: red">Select photo</strong> sau đó kéo thả từng ảnh từ ứng dụng chat hoặc kéo thả tối đa 4 ảnh từ thư mục máy tính vào cửa sổ Open.</p>
               <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple accept="image/*"/>
             </div>
             <div class="row" id="evidences">
@@ -419,7 +426,8 @@ $imageJs = <<< JS
 var upload = new AjaxUploadFile({
   trigger_element: '#uploadElement', 
   file_element: '#uploadEvidence',
-  file_options: {resize: '500xauto'}
+  file_options: {resize: '500xauto'},
+  max: 2
 });
 upload.callback = function(result) {
   result.forEach(function(element) {
@@ -439,29 +447,29 @@ upload.callback = function(result) {
     });
   });
 }
-var uploadAfter = new AjaxUploadFile({
-  trigger_element: '#uploadElementAfter', 
-  file_element: '#uploadEvidenceAfter',
-  file_options: {resize: '500xauto'}
-});
-uploadAfter.callback = function(result) {
-  result.forEach(function(element) {
-    $.ajax({
-      url: '###ADD_EVIDENCE_AFTER_URL###',
-      type: 'POST',
-      dataType : 'json',
-      data: {'OrderFile[file_id]': element.id},
-      success: function (result, textStatus, jqXHR) {
-        if (result.status == false) {
-            alert('Error occur with #' + element.id);
-            return false;
-        } else {
-          $('#evidences_after').html(result.data.html);
-        }
-      },
-    });
-  });
-}
+// var uploadAfter = new AjaxUploadFile({
+//   trigger_element: '#uploadElementAfter', 
+//   file_element: '#uploadEvidenceAfter',
+//   file_options: {resize: '500xauto'}
+// });
+// uploadAfter.callback = function(result) {
+//   result.forEach(function(element) {
+//     $.ajax({
+//       url: '###ADD_EVIDENCE_AFTER_URL###',
+//       type: 'POST',
+//       dataType : 'json',
+//       data: {'OrderFile[file_id]': element.id},
+//       success: function (result, textStatus, jqXHR) {
+//         if (result.status == false) {
+//             alert('Error occur with #' + element.id);
+//             return false;
+//         } else {
+//           $('#evidences_after').html(result.data.html);
+//         }
+//       },
+//     });
+//   });
+// }
 JS;
 $addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
 $imageJs = str_replace('###ADD_EVIDENCE_URL###', $addEvidenceUrl, $imageJs);

@@ -577,7 +577,8 @@ function AjaxUploadFile(opts) {
     this.options = {
         trigger_element: null,
         file_element: '#file', // seletor of the file element
-        file_options: null
+        file_options: null,
+        max: null
     }; 
     this.links = {
         upload: '/file/ajax-upload',
@@ -587,6 +588,7 @@ function AjaxUploadFile(opts) {
  
     //constructor
     this.init = function (opts) {
+
         this.options = $.extend(this.options, opts);
         var that = this;
         if (this.options.trigger_element !== null) {
@@ -595,6 +597,11 @@ function AjaxUploadFile(opts) {
             });
         }
         $(this.options.file_element).on('change', function(){
+            const max = that.options.max;
+            if (max && this.files.length > max) {
+                alert('Bạn không được tải nhiều hơn ' + max + ' tập tin.');
+                return false;
+            }
             var element_name = $(this).attr('name');
             $.each(this.files, function( index, value ) {
                 var file = value;
