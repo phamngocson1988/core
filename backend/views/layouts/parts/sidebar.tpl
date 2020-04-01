@@ -70,7 +70,7 @@
       {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-settings"></i>
+        <i class="fa fa-bank"></i>
         <span class="title">Quản lý ngân hàng</span>
         <span class="arrow"></span>
         </a>
@@ -78,6 +78,11 @@
           <li class="nav-item  ">
             <a href="{url route='/bank/index'}" class="nav-link " code='bank.index'>
             <span class="title">Quản lý ngân hàng</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/bank-account/index'}" class="nav-link " code='bankaccount.index'>
+            <span class="title">Quản lý tài khoản</span>
             </a>
           </li>
         </ul>

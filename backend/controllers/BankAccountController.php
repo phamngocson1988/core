@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\data\Pagination;
 use yii\web\NotFoundHttpException;
 
-class BankController extends Controller
+class BankAccountController extends Controller
 {
     public function behaviors()
     {
@@ -26,12 +26,13 @@ class BankController extends Controller
 
     public function actionIndex()
     {
-        $this->view->params['main_menu_active'] = 'bank.index';
+        $this->view->params['main_menu_active'] = 'bankaccount.index';
         $request = Yii::$app->request;
-        $form = new \backend\forms\FetchBankForm([
-            'name' => $request->get('name'),
+        $form = new \backend\forms\FetchBankAccountForm([
+            'account_name' => $request->get('account_name'),
             'country' => $request->get('country'),
-            'code' => $request->get('code'),
+            'account_number' => $request->get('account_number'),
+            'bank_id' => $request->get('bank_id'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -45,13 +46,13 @@ class BankController extends Controller
 
     public function actionCreate()
     {
-        $this->view->params['main_menu_active'] = 'bank.index';
+        $this->view->params['main_menu_active'] = 'bankaccount.index';
         $request = Yii::$app->request;
-        $model = new \backend\forms\CreateBankForm();
+        $model = new \backend\forms\CreateBankAccountForm();
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', 'Bạn vừa tạo mới ngân hàng thành công.');
-                return $this->redirect(Url::to(['bank/index']));
+                return $this->redirect(Url::to(['bank-account/index']));
             } else {
                 $errors = $model->getErrorSummary(false);
                 $error = reset($errors);
@@ -65,15 +66,15 @@ class BankController extends Controller
 
     public function actionEdit($id)
     {
-        $this->view->params['main_menu_active'] = 'bank.index';
+        $this->view->params['main_menu_active'] = 'bankaccount.index';
         $request = Yii::$app->request;
-        $model = \backend\forms\EditBankForm::findOne($id);
+        $model = \backend\forms\EditBankAccountForm::findOne($id);
         if (!$model) throw new NotFoundHttpException("Không tìm thấy dữ liệu");
         
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Bạn vừa chỉnh sửa ngân hàng thành công.');
-                return $this->redirect(Url::to(['bank/index']));
+                Yii::$app->session->setFlash('success', 'Bạn vừa chỉnh sửa tài khoản ngân hàng thành công.');
+                return $this->redirect(Url::to(['bank-account/index']));
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrors());
             }

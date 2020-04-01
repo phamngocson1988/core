@@ -11,17 +11,17 @@ use yii\widgets\ActiveForm;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['bank/index'])?>"> Danh sách ngân hàng</a>
+      <a href="<?=Url::to(['bank-account/index'])?>"> Danh sách tài khoản</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Chỉnh sửa ngân hàng</span>
+      <span>Tạo tài khoản</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Chỉnh sửa ngân hàng</h1>
+<h1 class="page-title">Tạo mới tài khoản</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -42,35 +42,30 @@ use yii\widgets\ActiveForm;
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
-                  <?=$form->field($model, 'code', [
+                  <?=$form->field($model, 'account_name', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput();?>
 
-                  <?=$form->field($model, 'name', [
+                  <?=$form->field($model, 'account_number', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
 
-                  <?=$form->field($model, 'country', [
+                  <?=$form->field($model, 'bank_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropdownList($model->fetchCountry())?>
+                  ])->dropdownList($model->fetchBank())?>
 
-                  <?=$form->field($model, 'currency', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropdownList($model->fetchCurrency())?>
-
-                  <?=$form->field($model, 'transfer_cost', [
+                  <?=$form->field($model, 'branch', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
 
-                  <?=$form->field($model, 'transfer_cost_type', [
+                  <?=$form->field($model, 'branch_address', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropdownList($model->fetchTransferCostType())?>
+                  ])->textInput()?>
                   
                 </div>
               </div>

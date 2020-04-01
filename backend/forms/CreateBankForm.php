@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use backend\models\Bank;
 use yii\helpers\ArrayHelper;
+use common\components\helpers\CommonHelper;
 
 class CreateBankForm extends Model
 {
@@ -70,7 +71,7 @@ class CreateBankForm extends Model
 
     public function fetchCountry()
     {
-        return ArrayHelper::getValue(Yii::$app->params, 'country', []);
+        return CommonHelper::fetchCountry();
     }
 
     public function fetchCurrency()

@@ -80,32 +80,32 @@ use yii\web\JsExpression;
           <?php ActiveForm::end()?>
         </div>
         <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th> Ngày đăng nhập </th>
-              <th> Nhân viên </th>
-              <th> Quyền hạn khi đăng nhập </th>
-              <th> IP </th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if ($models) : ?>
-            <?php foreach ($models as $model) : ?>
-            <tr>
-              <td><?=$model->created_at;?></td>
-              <td><?=sprintf("%s (MS: %s)", $model->user->name, $model->user_id);?></td>
-              <td><?=$model->role;?></td>
-              <td><?=$model->ip;?></td>
-            </tr>
-            <?php endforeach;?>
-            <?php else : ?>
-            <tr>
-              <td colspan="5"><?=Yii::t('app', 'no_data_found');?></td>
-            </tr>
-            <?php endif;?>
-          </tbody>
-        </table>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th> Ngày đăng nhập </th>
+                <th> Nhân viên </th>
+                <th> Quyền hạn khi đăng nhập </th>
+                <th> IP </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if ($models) : ?>
+              <?php foreach ($models as $model) : ?>
+              <tr>
+                <td><?=$model->created_at;?></td>
+                <td><?=sprintf("%s (MS: %s)", $model->user->name, $model->user_id);?></td>
+                <td><?=$model->role;?></td>
+                <td><?=$model->ip;?></td>
+              </tr>
+              <?php endforeach;?>
+              <?php else : ?>
+              <tr>
+                <td colspan="5"><?=Yii::t('app', 'no_data_found');?></td>
+              </tr>
+              <?php endif;?>
+            </tbody>
+          </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages]);?>
       </div>

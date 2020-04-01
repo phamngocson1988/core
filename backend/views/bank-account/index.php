@@ -12,13 +12,17 @@ use common\components\helpers\CommonHelper;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Quản lý ngân hàng</span>
+      <a href="<?=Url::to(['bank/index']);?>">Danh sách ngân hàng</a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span>Quản lý tài khoản</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Quản lý ngân hàng</h1>
+<h1 class="page-title">Quản lý tài khoản</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -27,25 +31,29 @@ use common\components\helpers\CommonHelper;
       <div class="portlet-title">
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['bank/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn green" href="<?=Url::to(['bank-account/create']);?>"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['bank/index']]);?>
-          <?=$form->field($search, 'name', [
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['bank-account/index']]);?>
+            <?=$form->field($search, 'bank_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'name']
-            ])->textInput()->label('Tên ngân hàng');?>
-            <?=$form->field($search, 'code', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'code']
-            ])->textInput()->label('Mã ngân hàng');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'bank_id']
+            ])->dropDownList($search->fetchBank(), ['prompt' => 'Chọn ngân hàng'])->label('Ngân hàng');?>
             <?=$form->field($search, 'country', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'country']
             ])->dropDownList($search->fetchCountry(), ['prompt' => 'Chọn quốc gia'])->label('Quốc gia');?>
+            <?=$form->field($search, 'account_name', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'account_name']
+            ])->textInput()->label('Tên tài khoản');?>
+            <?=$form->field($search, 'account_number', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'account_number']
+            ])->textInput()->label('Số tài khoản');?>
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
@@ -63,8 +71,8 @@ use common\components\helpers\CommonHelper;
               <th> Mã ngân hàng </th>
               <th> Tên ngân hàng </th>
               <th> Quốc gia </th>
-              <th> Tiền tệ </th>
-              <th> Phí chuyển khoản </th>
+              <th> Tên tài khoản </th>
+              <th> Số tài khoản </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -74,13 +82,13 @@ use common\components\helpers\CommonHelper;
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td><?=$model->code;?></td>
-                <td><?=$model->name;?></td>
-                <td><?=CommonHelper::getCountry($model->country);?></td>
-                <td><?=$model->currency;?></td>
-                <td><?=$model->transfer_cost;?></td>
+                <td><?=$model->bank->code;?></td>
+                <td><?=$model->bank->name;?></td>
+                <td><?=CommonHelper::getCountry($model->bank->country);?></td>
+                <td><?=$model->account_name;?></td>
+                <td><?=$model->account_number;?></td>
                 <td>
-                  <a class="btn btn-sm grey-salsa tooltips" href="<?=Url::to(['bank/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
+                  <a class="btn btn-sm grey-salsa tooltips" href="<?=Url::to(['bank-account/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
                 </td>
               </tr>
               <?php endforeach;?>

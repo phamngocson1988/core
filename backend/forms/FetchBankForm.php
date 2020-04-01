@@ -3,6 +3,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
+use common\components\helpers\CommonHelper;
 use backend\models\Bank;
 
 class FetchBankForm extends Model
@@ -34,5 +35,10 @@ class FetchBankForm extends Model
             $this->createCommand();
         }
         return $this->_command;
+    }
+    
+    public function fetchCountry()
+    {
+        return CommonHelper::fetchCountry();
     }
 }
