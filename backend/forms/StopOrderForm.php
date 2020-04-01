@@ -80,6 +80,7 @@ class StopOrderForm extends Model
             $order->quantity = $this->quantity;
             $order->sub_total_unit = $newTotalUnit;
             $order->total_unit = $newTotalUnit;
+            $order->total_price = $newTotalPrice;
             $order->save();
 
             // Complete supplier

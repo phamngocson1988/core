@@ -116,6 +116,8 @@ class ResellerController extends Controller
         $reseller = $user->reseller;
         $request = Yii::$app->request;
         $game = CartItemReseller::findOne($id);
+        $settings = Yii::$app->settings;
+        $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
         if (!$game) throw new NotFoundHttpException("Not found", 1);
         $imports = $request->post('import', []);
         $errors = [];
@@ -133,6 +135,7 @@ class ResellerController extends Controller
             $cartItem->login_method = $importData['login_method'];
             $cartItem->setScenario(CartItemReseller::SCENARIO_IMPORT_CART);
             $totalPrice = $cartItem->getTotalPrice();
+            $price = $cartItem->getPrice();
             if ($totalPrice > $balance) {
                 $errors[] = 'Not enough balance in your wallet';
                 break;
@@ -142,8 +145,10 @@ class ResellerController extends Controller
                 // Order detail
                 $order = new Order();
                 $order->sub_total_price = $totalPrice;
+                $order->price = $price;
                 $order->total_discount = 0;
                 $order->total_price = $totalPrice;
+                $order->rate_usd = $rate;
                 $order->customer_id = $user->id;
                 $order->customer_name = $user->name;
                 $order->customer_email = $user->email;
@@ -201,6 +206,8 @@ class ResellerController extends Controller
         $reseller = $user->reseller;
         $singleItem = CartItem::findOne($id);
         $singleItem->setScenario(CartItemReseller::SCENARIO_IMPORT_RAW);
+        $settings = Yii::$app->settings;
+        $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
         $models = [];
         $balance = $user->getWalletAmount();
         if ($request->isPost) {
@@ -215,6 +222,7 @@ class ResellerController extends Controller
                 $totalQuantities = array_sum($modelQuantities);
                 $singleItem->quantity = $totalQuantities;
                 $totalPrice = $singleItem->getTotalPrice();
+                $price = $singleItem->getPrice();
                 if ($balance >= $totalPrice) {
                     $bulk = strtotime('now');
                     foreach ($models as $cartItem) {
@@ -223,10 +231,11 @@ class ResellerController extends Controller
                         // Order detail
                         $order = new Order();
                         $order->sub_total_price = $totalPrice;
-                        $order->price = $totalPrice;
+                        $order->price = $price;
                         $order->cogs_price = $totalPrice;
                         $order->total_discount = 0;
                         $order->currency = 'USD';
+                        $order->rate_usd = $rate;
                         $order->total_price = $totalPrice;
                         $order->payment_type = 'online';
                         $order->payment_method = 'kinggems';

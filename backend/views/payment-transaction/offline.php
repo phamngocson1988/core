@@ -123,7 +123,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="9">No data found</td></tr>
+              <tr><td colspan="10">No data found</td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
