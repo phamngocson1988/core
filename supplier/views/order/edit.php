@@ -12,6 +12,19 @@ use supplier\models\OrderFile;
 use supplier\models\OrderSupplier;
 
 ?>
+<style type="text/css">
+  .update-percent.active {
+    background-color: lightgreen;
+  }
+  .update-percent {
+    border-color: #ccc;
+    background-color: white;
+  }
+  .flex-container {
+    padding: 10px 5px;
+    margin-bottom: 15px;
+  }
+</style>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -69,7 +82,7 @@ use supplier\models\OrderSupplier;
         <?php endif;?>
         <div class="row">
           <div class="col-md-3">
-            <div class="note note-success">
+            <div class="flex-container" style="text-align: center; background-color: #90ee9080;     border: solid 2px #0c965c;">
               <?php if ($model->isApprove()) {
                 $loginStatus = 'Pending';
                 if ($countComplain) $loginStatus = 'Pending Information';
@@ -77,37 +90,41 @@ use supplier\models\OrderSupplier;
                 $loginStatus = 'Login Successfully';
               }
               ?>
-              <p class="block"> + Login status: <strong style="color: red"><?=$loginStatus;?></strong></p>
+              <p style="padding-top: 12px; flex-grow: 1; color: #0c965c;"> + Login status: </p> 
+              <div style="color: red; padding-top: 12px; flex-grow: 2; background-color: beige; font-weight: bold; border: solid 1px #c1dc54;"><?=$loginStatus;?></div>
             </div>
           </div>
           <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
-          <div class="col-md-9 flex-container">
-            <?php if ($model->isProcessing()) : ?>
-            <span style="flex-grow: 1; padding-top: 12px"> + Updating Progress: </span>
-            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
-              <a type="button" class="btn btn-default btn-md btn-block update-percent" data-value="20" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 20]);?>"> 20% </a>
-            </div>
-            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
-              <a type="button" class="btn green-haze btn-md btn-block update-percent" data-value="50" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 50]);?>"> 50% </a>
-            </div>
-            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
-              <a type="button" class="btn btn-default btn-md btn-block update-percent" data-value="70" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 70]);?>"> 70% </a>
-            </div>
-            <?php else : ?>
-            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
-              <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="20" href="javascript:void()"> 20% </a>
-            </div>
-            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
-              <a type="button" class="btn green-haze btn-md btn-block" disabled="true" data-value="50" href="javascript:void()"> 50% </a>
-            </div>
-            <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px">
-              <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="70" href="javascript:void()"> 70% </a>
-            </div>
-            <?php endif;?>
-            <div class="inline" style="margin: 0; flex-grow: 8; padding-top: 7px">
-              <div class="progress progress-striped active" style="margin: 0;">
-                <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->percent;?>%">
-                    <span id='current_doing_unit'><?=$model->percent;?> %</span>
+          <div class="col-md-9">
+            <div class="flex-container" style="text-align: center; background-color: #67b9ff94; border: solid 2px #4d63ff;">
+              <?php if ($model->isProcessing()) : ?>
+              <p style="padding-top: 12px; flex-grow: 1; color: #4d63ff"> + Updating Progress: </p> 
+              <!-- <span style="flex-grow: 1; padding-top: 12px"> + Updating Progress: </span> -->
+              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
+                <a type="button" class="btn btn-md btn-block update-percent <?php if ($model->percent == 20) echo 'active';?>" data-value="20" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 20]);?>"> 20% </a>
+              </div>
+              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
+                <a type="button" class="btn btn-md btn-block update-percent <?php if ($model->percent == 50) echo 'active';?>" data-value="50" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 50]);?>"> 50% </a>
+              </div>
+              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
+                <a type="button" class="btn btn-md btn-block update-percent <?php if ($model->percent == 70) echo 'active';?>" data-value="70" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 70]);?>"> 70% </a>
+              </div>
+              <?php else : ?>
+              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
+                <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="20" href="javascript:void()"> 20% </a>
+              </div>
+              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
+                <a type="button" class="btn green-haze btn-md btn-block" disabled="true" data-value="50" href="javascript:void()"> 50% </a>
+              </div>
+              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
+                <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="70" href="javascript:void()"> 70% </a>
+              </div>
+              <?php endif;?>
+              <div class="inline" style="margin: 0; flex-grow: 8; padding-top: 12px">
+                <div class="progress progress-striped active" style="margin: 0;">
+                  <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->percent;?>%">
+                      <span id='current_doing_unit'><?=$model->percent;?> %</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -174,7 +191,7 @@ use supplier\models\OrderSupplier;
             </div>
             <?php endif;?>
             <?php if ($model->isProcessing()) : ?>
-              <div class="box-shadow">
+              <div class="box-shadow" style="margin-bottom: 10px">
                 <button class="btn green btn-block" id="completedOrderBtn"> >> Chuyến tới trạng thái Completed << </button>
               </div>
             <?php endif;?>
@@ -325,25 +342,35 @@ $this->registerJs($moveProcessingJs)
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Xác nhận hoàn thành đơn hàng</h4>
+        <h4 class="modal-title" role="completed">Xác nhận hoàn thành đơn hàng</h4>
+        <h4 class="modal-title" role="cancel">Xác nhận đồng ý/không đồng ý hủy đơn</h4>
       </div>
-      <?= Html::beginForm(['order/move-to-completed', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'update-quantity-form']) ?>
+      <?= Html::beginForm(['order/move-to-completed', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'update-quantity-form', 'style' => 'padding-bottom: 20px']) ?>
       <div class="modal-body"> 
-        <strong style="color: red">LƯU Ý:</strong>
+        <strong style="color: red">** ĐỒNG Ý HỦY:</strong><br/>
+        <strong style="color: blue">** LƯU Ý:</strong>
         <ol>
           <li>Nhập chính xác số lượng gói đã hoàn thành vào ô "Số lượng gói đã hoàn thành" bên dưới.</li>
           <li>Đảm bảo đã tải đầy đủ ảnh, tên nhân vật trong ảnh trùng với tên nhân vật được cung cấp trong phần Order detail để tránh khiếu kiện từ khách hàng.</li>
         </ol>
-      </div>
-      <div class="modal-footer" style="text-align: center;">
+        <div style="text-align: center;">
           <label class="control-label">Số lượng gói đã hoàn thành</label>
           <input type="text" class="form-control input-inline" name="doing" id="final_quantity" style="width: 100px">
            / <span class="help-inline" id="quantity"><?=$model->quantity;?></span>
-          <a type="button" class="btn green help-inline confirm_complete" role="completed">Xác nhận</a>
+          <button type="submit" class="btn btn-default help-inline">Xác nhận</button>
+        </div>
       </div>
-      <div class="modal-footer" role="cancel">
-        <button type="button" class="btn red btn-outline" data-dismiss="modal">Không đồng ý hủy</button>
-        <a type="button" class="btn btn-success confirm_complete">Đồng ý hủy đơn</a>
+      <hr role="cancel"/>
+      <div class="modal-body" role="cancel"> 
+        <strong style="color: red">** KHÔNG ĐỒNG Ý HỦY:</strong><br/>
+        <strong style="color: blue">** LƯU Ý:</strong>
+        <ol>
+          <li>Xin vui lòng cập nhật tiến độ trong phần "Updating Process".</li>
+          <li>Đảm bảo rằng bạn sẽ hoàn thành đơn hàng trong thời gian sớm nhất.</li>
+        </ol>
+      </div>
+      <div role="cancel" style="text-align: center;">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Không đồng ý hủy</button>
       </div>
       <?= Html::endForm();?>
     </div>
@@ -482,6 +509,12 @@ $this->registerJs($imageJs);
 <!-- update percent -->
 <?php
 $progress = <<< JS
+$('.update-percent').on('click', function(e){ 
+  console.log('update percent click');
+  $('.update-percent').removeClass('active');
+  $(this).addClass('active');
+});
+
 $('.update-percent').ajax_action({
   confirm: false,
   callback: function(element, data) {
@@ -508,3 +541,6 @@ JS;
 $this->registerJs($passwordJs);
 ?>       
 <!-- end password -->
+
+
+
