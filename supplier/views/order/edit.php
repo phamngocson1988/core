@@ -13,16 +13,19 @@ use supplier\models\OrderSupplier;
 
 ?>
 <style type="text/css">
-  .update-percent.active {
-    background-color: lightgreen;
+  .button-percent.active {
+    background-color: #32c5d2;
   }
-  .update-percent {
+  .button-percent {
     border-color: #ccc;
     background-color: white;
+    color: black;
+    border: solid 2px #CCC;
   }
   .flex-container {
-    padding: 10px 5px;
+    padding: 10px;
     margin-bottom: 15px;
+    height: 55px;
   }
 </style>
 <!-- BEGIN PAGE BAR -->
@@ -82,7 +85,7 @@ use supplier\models\OrderSupplier;
         <?php endif;?>
         <div class="row">
           <div class="col-md-3">
-            <div class="flex-container" style="text-align: center; background-color: #90ee9080;     border: solid 2px #0c965c;">
+            <div class="flex-container" style="text-align: center; background-color: #67809F;">
               <?php if ($model->isApprove()) {
                 $loginStatus = 'Pending';
                 if ($countComplain) $loginStatus = 'Pending Information';
@@ -90,40 +93,27 @@ use supplier\models\OrderSupplier;
                 $loginStatus = 'Login Successfully';
               }
               ?>
-              <p style="padding-top: 12px; flex-grow: 1; color: #0c965c;"> + Login status: </p> 
-              <div style="color: red; padding-top: 12px; flex-grow: 2; background-color: beige; font-weight: bold; border: solid 1px #c1dc54;"><?=$loginStatus;?></div>
+              <p style="padding-top: 8px; padding-bottom: 5px; flex-grow: 1; color: white;"> + Login status: </p> 
+              <div style="color: #F1C40F; padding-top: 7px; padding-bottom: 5px; flex-grow: 2; background-color: white; font-weight: bold;"><?=$loginStatus;?></div>
             </div>
           </div>
           <?php if ($model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
           <div class="col-md-9">
-            <div class="flex-container" style="text-align: center; background-color: #67b9ff94; border: solid 2px #4d63ff;">
+            <div class="flex-container" style="text-align: center; background-color: #67809F;">
+              <p style="padding-top: 8px; flex-grow: 1; color: white"> + Cập nhật tiến độ: </p> 
               <?php if ($model->isProcessing()) : ?>
-              <p style="padding-top: 12px; flex-grow: 1; color: #4d63ff"> + Updating Progress: </p> 
-              <!-- <span style="flex-grow: 1; padding-top: 12px"> + Updating Progress: </span> -->
-              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
-                <a type="button" class="btn btn-md btn-block update-percent <?php if ($model->percent == 20) echo 'active';?>" data-value="20" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 20]);?>"> 20% </a>
-              </div>
-              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
-                <a type="button" class="btn btn-md btn-block update-percent <?php if ($model->percent == 50) echo 'active';?>" data-value="50" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 50]);?>"> 50% </a>
-              </div>
-              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
-                <a type="button" class="btn btn-md btn-block update-percent <?php if ($model->percent == 70) echo 'active';?>" data-value="70" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 70]);?>"> 70% </a>
-              </div>
+                <a role="button" style="height: 35px; margin-right: 10px; flex-grow: 1;" class="btn btn-md update-percent button-percent <?php if ($model->percent == 20) echo 'active';?>" data-value="20" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 20]);?>"> 20% </a>
+                <a role="button" style="height: 35px; margin-right: 10px; flex-grow: 1;" class="btn btn-md update-percent button-percent <?php if ($model->percent == 50) echo 'active';?>" data-value="50" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 50]);?>"> 50% </a>
+                <a role="button" style="height: 35px; margin-right: 10px; flex-grow: 1;" class="btn btn-md update-percent button-percent <?php if ($model->percent == 70) echo 'active';?>" data-value="70" href="<?=Url::to(['order/update-percent', 'id' => $model->id, 'percent' => 70]);?>"> 70% </a>
               <?php else : ?>
-              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
-                <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="20" href="javascript:void()"> 20% </a>
-              </div>
-              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
-                <a type="button" class="btn green-haze btn-md btn-block" disabled="true" data-value="50" href="javascript:void()"> 50% </a>
-              </div>
-              <div class="box-shadow inline" style="margin-right: 10px; flex-grow: 1; padding: 2px; height: 40px; background-color: white;">
-                <a type="button" class="btn btn-default btn-md btn-block" disabled="true" data-value="70" href="javascript:void()"> 70% </a>
-              </div>
+              <a role="button" style="height: 35px; margin-right: 10px; flex-grow: 1;" class="btn btn-md button-percent" disabled="true" data-value="20" href="javascript:;"> 20% </a>
+                <a role="button" style="height: 35px; margin-right: 10px; flex-grow: 1;" class="btn btn-md button-percent" disabled="true" data-value="50" href="javascript:;"> 50% </a>
+                <a role="button" style="height: 35px; margin-right: 10px; flex-grow: 1;" class="btn btn-md button-percent" disabled="true" data-value="70" href="javascript:;"> 70% </a>
               <?php endif;?>
-              <div class="inline" style="margin: 0; flex-grow: 8; padding-top: 12px">
+              <div class="inline" style="margin: 0; flex-grow: 8; padding-top: 7px">
                 <div class="progress progress-striped active" style="margin: 0;">
                   <div id="doing_unit_progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?=$model->quantity;?>" aria-valuemin="0" aria-valuemax="<?=$model->quantity;?>" style="width: <?=$model->percent;?>%">
-                      <span id='current_doing_unit'><?=$model->percent;?> %</span>
+                      <span id='current_doing_unit' style="color: black"><?=$model->percent;?> %</span>
                   </div>
                 </div>
               </div>
@@ -202,9 +192,9 @@ use supplier\models\OrderSupplier;
             <?php endif;?>
           </div>
           <div class="col-md-3 col-sm-6">
-            <div class="dropzone dropzone-file-area" style="margin-bottom: 20px; padding: 5px; background-color: #abcaab">
+            <div class="dropzone dropzone-file-area" style="margin-bottom: 20px; padding: 5px;">
               <a role="button" class="btn green" id="uploadElement">Select photos</a>
-              <p style="text-align: left; font-size: 1.3rem;">Có thể chọn tối đa 4 ảnh cùng lúc hoặc chuột trái <strong style="color: red">Select photo</strong> sau đó kéo thả từng ảnh từ ứng dụng chat hoặc kéo thả tối đa 4 ảnh từ thư mục máy tính vào cửa sổ Open.</p>
+              <!-- <p style="text-align: left; font-size: 1.3rem;">Có thể chọn tối đa 4 ảnh cùng lúc hoặc chuột trái <strong style="color: red">Select photo</strong> sau đó kéo thả từng ảnh từ ứng dụng chat hoặc kéo thả tối đa 4 ảnh từ thư mục máy tính vào cửa sổ Open.</p> -->
               <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple accept="image/*"/>
             </div>
             <div class="row" id="evidences">
@@ -256,7 +246,7 @@ use supplier\models\OrderSupplier;
                   <?php endforeach;?>
                 </div>
                 <div class="box-shadow inline">
-                  <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn blue btn-default" data-toggle="modal"> >> Gửi tin nhắn theo mẫu << </a>
+                  <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn green btn-default" data-toggle="modal"> >> Gửi tin nhắn theo mẫu << </a>
                 </div>
               </div>
             </div>
