@@ -61,7 +61,7 @@
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="{url route='/user/index'}" class="nav-link " code='customer.index'>
+            <a href="{url route='/customer/index'}" class="nav-link " code='customer.index'>
             <span class="title">Khách hàng</span>
             </a>
           </li>
@@ -85,9 +85,52 @@
             <span class="title">Quản lý tài khoản</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='bank-transaction/index'}" class="nav-link " code='banktransaction.index'>
+            <span class="title">Các giao dịch ngân hàng</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='bank-transaction/create-input'}" class="nav-link " code='banktransaction.createinput'>
+            <span class="title">Tạo giao dịch nhận tiền</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='bank-transaction/create-output'}" class="nav-link " code='banktransaction.createoutput'>
+            <span class="title">Tạo giao dịch chuyển khoản</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='bank-transaction/report-by-bank'}" class="nav-link " code='banktransaction.reportbank'>
+            <span class="title">Thống kê theo ngân hàng</span>
+            </a>
+          </li>
         </ul>
       </li>
-
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-money"></i>
+        <span class="title">Quản lý quỹ tiền mặt</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='cash/index'}" class="nav-link " code='cash.index'>
+            <span class="title">Quỹ tiền mặt</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='cash-account/index'}" class="nav-link " code='cashaccount.index'>
+            <span class="title">Tài khoản tiền mặt</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='cash-transaction/index'}" class="nav-link " code='cashtransaction.index'>
+            <span class="title">Giao dịch tiền mặt</span>
+            </a>
+          </li>
+        </ul>
+      </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>

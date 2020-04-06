@@ -36,6 +36,7 @@ class FetchBankAccountForm extends Model
             $command->innerJoin($bankTable, "{$bankTable}.id = {$bankAccountTable}.bank_id");
             $command->andWhere(["{$bankTable}.country" => $this->country]);
         }
+        // die ($command->createCommand()->getRawSql());
         $command->with('bank');
         
         $this->_command = $command;

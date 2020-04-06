@@ -65,6 +65,7 @@ class CreateBankForm extends Model
         $bank->currency = $this->currency;
         $bank->transfer_cost = $this->transfer_cost;
         $bank->transfer_cost_type = $this->transfer_cost_type;
+        $bank->bank_type = Bank::BANK_TYPE_BANK;
         
         return $bank->save() ? $bank : null;
     }

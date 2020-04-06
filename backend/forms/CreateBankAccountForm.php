@@ -15,9 +15,8 @@ class CreateBankAccountForm extends Model
     public $branch_address;
     public $bank_id;
 
-    /**
-     * @inheritdoc
-     */
+    protected $_bank;
+
     public function rules()
     {
         return [
@@ -30,7 +29,16 @@ class CreateBankAccountForm extends Model
             [['branch', 'branch_address'], 'trim'],
 
             ['bank_id', 'required', 'message' => 'Bạn hãy chọn ngân hàng tương ứng'],
+            ['bank_id', 'validateBank'],
         ];
+    }
+
+    public function validateBank($attribute, $params) 
+    {
+        $bank = $this->getBank();
+        if (!$bank) {
+            $this->addError($attribute, 'Bạn hãy chọn ngân hàng tương ứng');
+        }
     }
 
     public function attributeLabels()
@@ -46,19 +54,29 @@ class CreateBankAccountForm extends Model
 
     public function create()
     {
-        $bank = new BankAccount();
-        $bank->account_name = $this->account_name;        
-        $bank->account_number = $this->account_number;
-        $bank->branch = $this->branch;
-        $bank->branch_address = $this->branch_address;
-        $bank->bank_id = $this->bank_id;
+        $bank = $this->getBank();
+        $account = new BankAccount();
+        $account->account_name = $this->account_name;        
+        $account->account_number = $this->account_number;
+        $account->branch = $this->branch;
+        $account->branch_address = $this->branch_address;
+        $account->bank_id = $this->bank_id;
+        $account->bank_type = $bank->bank_type;
         
-        return $bank->save() ? $bank : null;
+        return $account->save() ? $account : null;
     }
 
     public function fetchBank()
     {
         $banks = Bank::find()->all();
         return ArrayHelper::map($banks, 'id', 'name');
+    }
+
+    public function getBank()
+    {
+        if (!$this->_bank) {
+            $this->_bank = Bank::findOne($this->bank_id);
+        }
+        return $this->_bank;
     }
 }

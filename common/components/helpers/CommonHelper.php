@@ -16,4 +16,9 @@ class CommonHelper
 		$country = self::fetchCountry();
 		return ArrayHelper::getValue($country, $code, '');
 	}
+
+	public static function fetchCurrency()
+	{
+		return ArrayHelper::getValue(Yii::$app->params, 'currency');
+	}
 }

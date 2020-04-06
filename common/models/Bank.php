@@ -2,34 +2,22 @@
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
-use yii\behaviors\BlameableBehavior;
+use yii\db\ActiveQuery;
 
-class Bank extends ActiveRecord
+class Bank extends BaseBank
 {
-    const TRANSER_COST_TYPE_FIX = 'fix';
-    const TRANSER_COST_TYPE_PERCENT = 'percent';
-    
-    public static function tableName()
+    public static function find()
     {
-        return '{{%bank}}';
+        return new BankQuery(get_called_class());
     }
+}
 
-    public function behaviors()
+class BankQuery extends ActiveQuery
+{
+    public function init()
     {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_at',
-                'value' => date('Y-m-d H:i:s')
-            ],
-            [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'updated_by',
-            ],
-        ];
+    	$table = Bank::tableName();
+        $this->andOnCondition(["{$table}.bank_type" => BaseBank::BANK_TYPE_BANK]);
+        parent::init();
     }
 }
