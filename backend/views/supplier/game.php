@@ -77,6 +77,12 @@ use yii\widgets\ActiveForm;
                 </td>
                 <td>
                   <a href="<?=Url::to(['game/update-price', 'id' => $model->id, '#' => 'provider']);?>" target="_blank" class="btn btn-sm blue tooltips" data-container="body" data-original-title="Giá nhà cung cấp khác"><i class="fa fa-list"></i></a>
+
+                  <?php if ($supplierGame->isEnabled()) : ?>
+                    <a href="<?=Url::to(['supplier-game/disable', 'game_id' => $supplierGame->game_id, 'supplier_id' => $supplierGame->supplier_id]);?>" class="btn btn-sm green link-action tooltips action-link" data-container="body" data-original-title="Tạm ngưng game"><i class="fa fa-power-off"></i></a>
+                    <?php else :?>
+                    <a href="<?=Url::to(['supplier-game/enable', 'game_id' => $supplierGame->game_id, 'supplier_id' => $supplierGame->supplier_id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Kích hoạt game"><i class="fa fa-power-off"></i></a>
+                  <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>

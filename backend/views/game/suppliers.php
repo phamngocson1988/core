@@ -135,7 +135,7 @@ if (!count($lastPrices)) {
               </div>
               <?php ActiveForm::end()?>
 
-              <?php $numCols = 6;?>
+              <?php $numCols = 7;?>
               <?php if (!$showPrice) $numCols = $numCols - 2;?>
               <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover table-checkable">
@@ -147,6 +147,7 @@ if (!count($lastPrices)) {
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá hiện tại (VNĐ) </th>
                       <th> Số đơn hoàng thành </th>
                       <th> Tốc độ trung bình </th>
+                      <th> Tác vụ </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -167,6 +168,13 @@ if (!count($lastPrices)) {
                         </td>
                         <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
                         <td class="center"><?=isset($avgSpeeds[$supplier->supplier_id]) ? FormatConverter::countDuration(round($avgSpeeds[$supplier->supplier_id]), 'h:i') : FormatConverter::countDuration(0, 'h:i') ;?></td>
+                        <td class="center">
+                          <?php if ($supplier->isEnabled()) : ?>
+                          <a href="<?=Url::to(['supplier-game/disable', 'game_id' => $id, 'supplier_id' => $supplier->supplier_id]);?>" class="btn btn-sm green link-action tooltips action-link" data-container="body" data-original-title="Tạm ngưng game"><i class="fa fa-power-off"></i></a>
+                          <?php else :?>
+                          <a href="<?=Url::to(['supplier-game/enable', 'game_id' => $id, 'supplier_id' => $supplier->supplier_id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Kích hoạt game"><i class="fa fa-power-off"></i></a>
+                        <?php endif;?>
+                        </td>
                       </tr>
                       <?php endforeach;?>
                   </tbody>
@@ -194,6 +202,14 @@ sendForm.success = function(data, form) {
   // toastr.success("Cập nhật thành công");
   location.reload();
 }
+// enable/disable game
+$(".link-action").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có chắc muốn thực hiện tác vụ này?',
+  callback: function(eletement, data) {
+    location.reload();
+  }
+});
 JS;
 $redirect = Yii::getAlias('@web/vendor/assets/global/img');
 // die($redirect);//vendor/assets/global/img
