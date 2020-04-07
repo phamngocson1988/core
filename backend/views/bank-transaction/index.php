@@ -97,25 +97,25 @@ use backend\components\datetimepicker\DateTimePicker;
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td><?=$model->created_at;?></td>
-                <td><?=$model->bank->name;?></td>
-                <td><?=sprintf("%s %s", $model->bankAccount->account_name, $model->bankAccount->account_number);?></td>
-                <td>
+                <td class="center"><?=$model->created_at;?></td>
+                <td class="center"><?=$model->bank->name;?></td>
+                <td class="center"><?=sprintf("%s %s", $model->bankAccount->account_name, $model->bankAccount->account_number);?></td>
+                <td class="center">
                   <?php if ($model->isTypeIn()) : ?>
                     <span class="label label-info"> Nạp tiền </span>
                   <?php else :?>
                     <span class="label label-warning"> Chuyển tiền </span>
                   <?php endif;?>
                 </td>
-                <td><?=sprintf("%s (%s)", number_format(abs($model->amount)), $model->currency);?></td>
-                <td>
+                <td class="center"><?=sprintf("%s (%s)", number_format(abs($model->amount)), $model->currency);?></td>
+                <td class="center">
                   <?php if ($model->isPending()) : ?>
                     <span class="label label-default"> Giao dịch tạm </span>
                   <?php else :?>
                     <span class="label label-primary"> Đã hoàn thành </span>
                   <?php endif;?>
                 </td>
-                <td>
+                <td class="center">
                   <?php if ($model->isPending()) : ?>
                   <a class="btn btn-sm grey-salsa tooltips delete-transaction" href="<?=Url::to(['bank-transaction/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xóa giao dịch tạm"><i class="fa fa-times"></i> Xóa</a>
                   <a class="btn btn-sm green tooltips complete-transaction" href="<?=Url::to(['bank-transaction/complete', 'id' => $model->id]);?>" data-container="body" data-original-title="Xác nhận giao dịch tạm"><i class="fa fa-check"></i> Xác nhận</a>

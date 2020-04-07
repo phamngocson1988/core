@@ -72,6 +72,10 @@ class TopupRootCashAccountTransactionForm extends CreateTransactionForm
         $thread->bank_account_id = $this->bank_account_id;
         $thread->description = $this->description;
         $thread->status = $this->status;
+        if ($thread->isCompleted()) {
+            $thread->completed_at = date('Y-m-d H:i:s');
+            $thread->completed_by = Yii::$app->user->id;
+        }
         
         return $thread->save() ? $thread : null;
     }

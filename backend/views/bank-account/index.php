@@ -3,6 +3,10 @@ use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use common\components\helpers\CommonHelper;
+
+$canManageAccount = Yii::$app->user->can('manager');
+$numColumn = 5;
+if ($canManageAccount) $numColumn++;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -73,22 +77,24 @@ use common\components\helpers\CommonHelper;
               <th> Quốc gia </th>
               <th> Tên tài khoản </th>
               <th> Số tài khoản </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th class="dt-center <?=($canManageAccount) ? '' : 'hide';?>"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="<?=$numColumn;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td><?=$model->bank->code;?></td>
-                <td><?=$model->bank->name;?></td>
-                <td><?=CommonHelper::getCountry($model->bank->country);?></td>
-                <td><?=$model->account_name;?></td>
-                <td><?=$model->account_number;?></td>
-                <td>
-                  <a class="btn btn-sm grey-salsa tooltips" href="<?=Url::to(['bank-account/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
+                <td class="center"><?=$model->bank->code;?></td>
+                <td class="center"><?=$model->bank->name;?></td>
+                <td class="center"><?=CommonHelper::getCountry($model->bank->country);?></td>
+                <td class="center"><?=$model->account_name;?></td>
+                <td class="center"><?=$model->account_number;?></td>
+                <td class="center <?=($canManageAccount) ? '' : 'hide';?>">
+                  <a class="btn btn-sm green tooltips" href="<?=Url::to(['bank-account/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
+
+                  <a href='<?=Url::to(['bank-account/assign-role', 'id' => $model->id]);?>' data-target="#assign-role" class="btn btn-sm blue tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý" data-toggle="modal" ><i class="fa fa-rocket"></i> Gán quyền quản lý</a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -100,3 +106,37 @@ use common\components\helpers\CommonHelper;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+
+<div class="modal fade" id="assign-role" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<?php
+$script = <<< JS
+$(document).on('submit', 'body #assign-role-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+       alert(result.errors);
+      else 
+        location.reload();
+    },
+  });
+  return false;
+});
+JS;
+$this->registerJs($script);
+?>

@@ -10,7 +10,7 @@ class BankAccountRole extends ActiveRecord
 {
     public static function tableName()
     {
-        return '{{%bank_account}}';
+        return '{{%bank_account_role}}';
     }
 
     public function behaviors()

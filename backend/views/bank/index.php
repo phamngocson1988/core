@@ -3,6 +3,9 @@ use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use common\components\helpers\CommonHelper;
+$canManageBank = Yii::$app->user->can('manager');
+$numColumn = 5;
+if ($canManageBank) $numColumn++;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -65,21 +68,21 @@ use common\components\helpers\CommonHelper;
               <th> Quốc gia </th>
               <th> Tiền tệ </th>
               <th> Phí chuyển khoản </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+              <th class="dt-center <?=($canManageBank) ? '' : 'hide';?>"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="<?=$numColumn;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
-                <td><?=$model->code;?></td>
-                <td><?=$model->name;?></td>
-                <td><?=CommonHelper::getCountry($model->country);?></td>
-                <td><?=$model->currency;?></td>
-                <td><?=$model->transfer_cost;?></td>
-                <td>
+                <td class="center"><?=$model->code;?></td>
+                <td class="center"><?=$model->name;?></td>
+                <td class="center"><?=CommonHelper::getCountry($model->country);?></td>
+                <td class="center"><?=$model->currency;?></td>
+                <td class="center"><?=number_format($model->transfer_cost);?></td>
+                <td class="center <?=($canManageBank) ? '' : 'hide';?>">
                   <a class="btn btn-sm grey-salsa tooltips" href="<?=Url::to(['bank/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
                 </td>
               </tr>

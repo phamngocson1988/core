@@ -83,4 +83,48 @@ class BankAccountController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionAssignRole($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\AssignBankAccountToRole([
+            'id' => $id
+        ]);
+
+        if ($request->isPost && $request->isAjax) {
+            if ($model->load($request->post()) && $model->validate() && $model->assign()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                $errors = $model->getErrorSummary(false);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'errors' => $error]);
+            }
+
+        }
+        $model->loadCurrentRoles();
+        return $this->renderPartial('assign-role', [
+            'id' => $id,
+            'model' => $model
+        ]);    
+        
+    }
+
+    public function actionReportBalance()
+    {
+        $request = Yii::$app->request;
+        $currency = $request->get('currency');
+        $this->view->params['main_menu_active'] = "bankaccount.{$currency}.reportbalance";
+        $form = new \backend\forms\ReportBankAccountBalanceForm([
+            'currency' => $currency,
+        ]);
+        if (!$form->validate()) {
+            throw new NotFoundHttpException('Không tìm thấy trang');
+        }
+        $command = $form->getCommand();
+        $models = $command->all();
+        return $this->render('report-balance', [
+            'models' => $models,
+            'currency' => $currency,
+        ]);
+    }
 }

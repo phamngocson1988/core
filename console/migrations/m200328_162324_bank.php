@@ -45,6 +45,7 @@ class m200328_162324_bank extends Migration
         $this->createTable('{{%bank_account}}', [
             'id' => $this->primaryKey(),
             'bank_id' => $this->integer()->notNull(),
+            'currency' => $this->string(16),
             'account_name' => $this->string(128)->notNull(),
             'account_number' => $this->string(128),
             'branch' => $this->string(128),

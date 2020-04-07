@@ -94,6 +94,10 @@ class ReturnCashAccountTransactionForm extends CreateTransactionForm
             $thread1->bank_account_id = $bankAccount->id;
             $thread1->description = $this->description ? $this->description : 'Hoàn trả về quỹ';
             $thread1->status = $this->status;
+            if ($thread1->isCompleted()) {
+                $thread1->completed_at = date('Y-m-d H:i:s');
+                $thread1->completed_by = Yii::$app->user->id;
+            }
             $thread1->save();
 
             // topup from root
@@ -107,6 +111,10 @@ class ReturnCashAccountTransactionForm extends CreateTransactionForm
             $thread2->bank_account_id = $rootAccount->id;
             $thread2->description = sprintf("Được hoàn trả từ tài khoản %s", $bankAccount->account_name);
             $thread2->status = $this->status;
+            if ($thread2->isCompleted()) {
+                $thread2->completed_at = date('Y-m-d H:i:s');
+                $thread2->completed_by = Yii::$app->user->id;
+            }
             $thread2->save();
 
             $transaction->commit();

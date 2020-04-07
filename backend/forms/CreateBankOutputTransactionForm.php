@@ -81,6 +81,12 @@ class CreateBankOutputTransactionForm extends CreateTransactionForm
                 $thread->amount = (-1) * ($this->amount + $this->fee);
                 $thread->description = sprintf("%s\nGộp phí %s", $thread->description, number_format($this->fee));
             }
+
+            if ($thread->isCompleted()) {
+                $thread->completed_at = date('Y-m-d H:i:s');
+                $thread->completed_by = Yii::$app->user->id;
+            }
+
             $thread->save(); // Save transaction
 
             if (!$this->apply_fee) {
@@ -94,6 +100,12 @@ class CreateBankOutputTransactionForm extends CreateTransactionForm
                 $feeTransfer->description = sprintf("Phí chuyển khoản cho giao dịch %s", $thread->id);
                 $feeTransfer->amount = (-1) * $this->fee;     
                 $feeTransfer->status = $this->status;
+
+                if ($feeTransfer->isCompleted()) {
+                    $feeTransfer->completed_at = date('Y-m-d H:i:s');
+                    $feeTransfer->completed_by = Yii::$app->user->id;
+                
+                }
                 $feeTransfer->save();   
             }
 

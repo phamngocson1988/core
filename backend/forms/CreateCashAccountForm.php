@@ -71,6 +71,7 @@ class CreateCashAccountForm extends Model
         $account->account_number = $user->id;
         $account->bank_id = $this->bank_id;
         $account->bank_type = CashAccount::BANK_TYPE_CASH;
+        $account->currency = $bank->currency;
         
         return $account->save() ? $account : null;
     }

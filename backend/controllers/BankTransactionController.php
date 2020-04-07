@@ -64,11 +64,20 @@ class BankTransactionController extends Controller
             }
         }
 
-        $bankAccounts = BankAccount::find()->all();
+        if (Yii::$app->user->can('manager')) {
+            $bankAccounts = BankAccount::find()->all();
+        } else {
+            $auth = Yii::$app->authManager;
+            $roles = $auth->getRolesByUser(Yii::$app->user->id);
+            $roleNames = ArrayHelper::getColumn($roles, 'name');
+            $fetchAccountForm = new \backend\forms\FetchBankAccountByRoleForm(['roles' => $roleNames]);
+            $bankAccounts = $fetchAccountForm->fetch();
+        }
         $bankAccounts = ArrayHelper::map($bankAccounts, 'id', function($account, $default) {
             $bank = $account->bank;
             return sprintf("%s - %s - %s - %s", $account->account_name, $account->account_number, $bank->name, $bank->currency);
         });
+        
         return $this->render('create-input', [
             'model' => $model,
             'bankAccounts' => $bankAccounts
@@ -93,8 +102,15 @@ class BankTransactionController extends Controller
                 Yii::$app->session->setFlash('error', $error);
             }
         }
-
-        $bankAccounts = BankAccount::find()->all();
+        if (Yii::$app->user->can('manager')) {
+            $bankAccounts = BankAccount::find()->all();
+        } else {
+            $auth = Yii::$app->authManager;
+            $roles = $auth->getRolesByUser(Yii::$app->user->id);
+            $roleNames = ArrayHelper::getColumn($roles, 'name');
+            $fetchAccountForm = new \backend\forms\FetchBankAccountByRoleForm(['roles' => $roleNames]);
+            $bankAccounts = $fetchAccountForm->fetch();
+        }
         $bankAccounts = ArrayHelper::map($bankAccounts, 'id', function($account, $default) {
             $bank = $account->bank;
             return sprintf("%s - %s - %s - %s", $account->account_name, $account->account_number, $bank->name, $bank->currency);
@@ -143,19 +159,53 @@ class BankTransactionController extends Controller
         throw new NotFoundHttpException("Không tìm thấy trang");
     }
 
+    public function actionReport()
+    {
+        $request = Yii::$app->request;
+        $currency = $request->get('currency');
+        $this->view->params['main_menu_active'] = "banktransaction.{$currency}.report";
+        $mode = $request->get('mode');
+        $form = new \backend\forms\ReportBankTransactionForm([
+            'from_date' => $request->get('from_date'),
+            'to_date' => $request->get('to_date'),
+            'currency' => $currency,
+        ]);
+        if (!$form->validate()) {
+            throw new NotFoundHttpException('Không tìm thấy trang');
+        }
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'thong-ke-giao-dich.xls';
+            return $form->export($fileName);
+        }
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('report', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'currency' => $currency
+        ]);
+    }
+
     public function actionReportByBank()
     {
-        $this->view->params['main_menu_active'] = 'banktransaction.reportbank';
         $request = Yii::$app->request;
+        $currency = $request->get('currency');
+        $this->view->params['main_menu_active'] = "banktransaction.{$currency}.reportbank";
         $mode = $request->get('mode');
         $form = new \backend\forms\ReportBankTransactionForm([
             'from_date' => $request->get('from_date'),
             'to_date' => $request->get('to_date'),
             'bank_id' => $request->get('bank_id'),
+            'currency' => $currency,
         ]);
+        if (!$form->validate()) {
+            throw new NotFoundHttpException('Không tìm thấy trang');
+        }
         if ($mode === 'export') {
             $fileName = date('YmdHis') . 'thong-ke-giao-dich-theo-ngan-hang.xls';
-            return $form->export($fileName);
+            return $form->exportBank($fileName);
         }
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -163,7 +213,68 @@ class BankTransactionController extends Controller
         return $this->render('report-bank', [
             'models' => $models,
             'pages' => $pages,
-            'search' => $form
+            'search' => $form,
+            'currency' => $currency
+        ]);
+    }
+
+    public function actionReportByAccount()
+    {
+        $request = Yii::$app->request;
+        $currency = $request->get('currency');
+        $this->view->params['main_menu_active'] = "banktransaction.{$currency}.reportaccount";
+        $mode = $request->get('mode');
+        $form = new \backend\forms\ReportBankTransactionForm([
+            'from_date' => $request->get('from_date'),
+            'to_date' => $request->get('to_date'),
+            'bank_account_id' => $request->get('bank_account_id'),
+            'currency' => $currency,
+        ]);
+        if (!$form->validate()) {
+            throw new NotFoundHttpException('Không tìm thấy trang');
+        }
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'thong-ke-giao-dich-theo-tai-khoan.xls';
+            return $form->exportAccount($fileName);
+        }
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('report-account', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'currency' => $currency,
+        ]);
+    }
+
+    public function actionReportByUser()
+    {
+        $request = Yii::$app->request;
+        $currency = $request->get('currency');
+        $this->view->params['main_menu_active'] = "banktransaction.{$currency}.reportuser";
+        $mode = $request->get('mode');
+        $form = new \backend\forms\ReportBankTransactionForm([
+            'from_date' => $request->get('from_date'),
+            'to_date' => $request->get('to_date'),
+            'completed_by' => $request->get('completed_by'),
+            'currency' => $currency,
+        ]);
+        if (!$form->validate()) {
+            throw new NotFoundHttpException('Không tìm thấy trang');
+        }
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'thong-ke-giao-dich-theo-nhan-vien.xls';
+            return $form->exportUser($fileName);
+        }
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('report-user', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'currency' => $currency,
         ]);
     }
 }

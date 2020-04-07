@@ -58,7 +58,6 @@ use yii\helpers\ArrayHelper;
           <thead>
             <tr>
               <th> Tên tài khoản </th>
-              <th> Quốc gia </th>
               <th> Quỹ tiền mặt </th>
               <th> Số tiền hiện có </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
@@ -72,7 +71,6 @@ use yii\helpers\ArrayHelper;
               <?php $amount = ArrayHelper::getValue($report, $model->id, 0);?>
               <tr>
                 <td><?=$model->account_name;?></td>
-                <td><?=CommonHelper::getCountry($model->bank->country);?></td>
                 <td><?=$model->bank->name;?></td>
                 <td>
                   <?=number_format($amount);?>

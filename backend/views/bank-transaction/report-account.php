@@ -17,13 +17,13 @@ use backend\components\datetimepicker\DateTimePicker;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Thống kê theo ngân hàng</span>
+      <span>Thống kê theo tài khoản</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Thống kê theo ngân hàng</h1>
+<h1 class="page-title">Thống kê theo tài khoản</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -91,11 +91,11 @@ use backend\components\datetimepicker\DateTimePicker;
 
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['bank-transaction/report-by-bank', 'currency' => $currency]]);?>
-            <?=$form->field($search, 'bank_id', [
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['bank-transaction/report-by-account', 'currency' => $currency]]);?>
+            <?=$form->field($search, 'bank_account_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'bank_id']
-            ])->dropDownList($search->fetchBank(), ['prompt' => 'Chọn ngân hàng'])->label('Ngân hàng');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'bank_account_id']
+            ])->dropDownList($search->fetchBankAccount(), ['prompt' => 'Chọn tài khoản'])->label('Tài khoản ngân hàng');?>
             <?= $form->field($search, 'from_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'from_date', 'id' => 'from_date']
@@ -140,7 +140,7 @@ use backend\components\datetimepicker\DateTimePicker;
               <th> Loại giao dịch </th>
               <th> Số tiền </th>
               <th> Ghi chú </th>
-              <th> Hoàn thành bởi</th>
+              <th> Hoàn thành bởi </th>
               <th> Trạng thái </th>
             </tr>
           </thead>

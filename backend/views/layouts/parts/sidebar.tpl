@@ -67,7 +67,6 @@
           </li>
         </ul>
       </li>
-      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="fa fa-bank"></i>
@@ -100,11 +99,82 @@
             <span class="title">Tạo giao dịch chuyển khoản</span>
             </a>
           </li>
-          <li class="nav-item  ">
-            <a href="{url route='bank-transaction/report-by-bank'}" class="nav-link " code='banktransaction.reportbank'>
-            <span class="title">Thống kê theo ngân hàng</span>
-            </a>
+          {if Yii::$app->user->can('manager')}
+          <li class="nav-item">
+              <a href="javascript:;" class="nav-link nav-toggle">
+                  Thống kê tiền VNĐ
+                  <span class="arrow nav-toggle"></span>
+              </a>
+              <ul class="sub-menu">
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report' currency='VND'}" class="nav-link " code='banktransaction.VND.report'>
+                    <span class="title">Thống kê tất cả</span>
+                    </a>
+                  </li>
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report-by-bank' currency='VND'}" class="nav-link " code='banktransaction.VND.reportbank'>
+                    <span class="title">Thống kê theo ngân hàng</span>
+                    </a>
+                  </li>
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report-by-account' currency='VND'}" class="nav-link " code='banktransaction.VND.reportaccount'>
+                    <span class="title">Thống kê theo tài khoản</span>
+                    </a>
+                  </li>
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report-by-user' currency='VND'}" class="nav-link " code='banktransaction.VND.reportuser'>
+                    <span class="title">Thống kê theo nhân viên</span>
+                    </a>
+                  </li>
+              </ul>
           </li>
+          <li class="nav-item">
+              <a href="javascript:;" class="nav-link nav-toggle">
+                  Thống kê tiền CNY
+                  <span class="arrow nav-toggle"></span>
+              </a>
+              <ul class="sub-menu">
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report' currency='CNY'}" class="nav-link " code='banktransaction.CNY.report'>
+                    <span class="title">Thống kê tất cả</span>
+                    </a>
+                  </li>
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report-by-bank' currency='CNY'}" class="nav-link " code='banktransaction.CNY.reportbank'>
+                    <span class="title">Thống kê theo ngân hàng</span>
+                    </a>
+                  </li>
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report-by-account' currency='CNY'}" class="nav-link " code='banktransaction.CNY.reportaccount'>
+                    <span class="title">Thống kê theo tài khoản</span>
+                    </a>
+                  </li>
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-transaction/report-by-user' currency='CNY'}" class="nav-link " code='banktransaction.CNY.reportuser'>
+                    <span class="title">Thống kê theo nhân viên</span>
+                    </a>
+                  </li>
+              </ul>
+          </li>
+          <li class="nav-item">
+              <a href="javascript:;" class="nav-link nav-toggle">
+                  Thống kê số dư tài khoản
+                  <span class="arrow nav-toggle"></span>
+              </a>
+              <ul class="sub-menu">
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-account/report-balance' currency='VND'}" class="nav-link " code='bankaccount.VND.reportbalance'>
+                    <span class="title">Các tài khoản VND</span>
+                    </a>
+                  </li>
+                  <li class="nav-item  ">
+                    <a href="{url route='bank-account/report-balance' currency='CNY'}" class="nav-link " code='bankaccount.CNY.reportbalance'>
+                    <span class="title">Các tài khoản CNY</span>
+                    </a>
+                  </li>
+              </ul>
+          </li>
+          {/if}
         </ul>
       </li>
       <li class="nav-item  ">
@@ -131,6 +201,7 @@
           </li>
         </ul>
       </li>
+      {if Yii::$app->user->can('admin')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>

@@ -92,6 +92,10 @@ class TopupCashAccountTransactionForm extends CreateTransactionForm
             $thread1->bank_account_id = $bankAccount->id;
             $thread1->description = sprintf("Nhận được từ quỹ tiền mặt với mô tả: %s", $this->description);
             $thread1->status = $this->status;
+            if ($thread1->isCompleted()) {
+                $thread1->completed_at = date('Y-m-d H:i:s');
+                $thread1->completed_by = Yii::$app->user->id;
+            }
             $thread1->save();
 
             // withdraw from root
@@ -105,6 +109,10 @@ class TopupCashAccountTransactionForm extends CreateTransactionForm
             $thread2->bank_account_id = $rootAccount->id;
             $thread2->description = $this->description;
             $thread2->status = $this->status;
+            if ($thread2->isCompleted()) {
+                $thread2->completed_at = date('Y-m-d H:i:s');
+                $thread2->completed_by = Yii::$app->user->id;
+            }
             $thread2->save();
 
             $transaction->commit();

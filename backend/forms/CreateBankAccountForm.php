@@ -62,6 +62,7 @@ class CreateBankAccountForm extends Model
         $account->branch_address = $this->branch_address;
         $account->bank_id = $this->bank_id;
         $account->bank_type = $bank->bank_type;
+        $account->currency = $bank->currency;
         
         return $account->save() ? $account : null;
     }

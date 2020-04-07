@@ -49,25 +49,24 @@ class CashController extends Controller
         ]);
     }
 
-    // public function actionCreate()
-    // {
-    //     $this->view->params['main_menu_active'] = 'cash.index';
-    //     $request = Yii::$app->request;
-    //     $model = new \backend\forms\CreateBankForm();
-    //     if ($request->isPost) {
-    //         if ($model->load($request->post()) && $model->validate() && $model->create()) {
-    //             Yii::$app->session->setFlash('success', 'Bạn vừa tạo mới ngân hàng thành công.');
-    //             return $this->redirect(Url::to(['bank/index']));
-    //         } else {
-    //             $errors = $model->getErrorSummary(false);
-    //             $error = reset($errors);
-    //             Yii::$app->session->setFlash('error', $error);
-    //         }
-    //     }
-    //     return $this->render('create', [
-    //         'model' => $model,
-    //     ]);
-    // }
+    public function actionCreate($currency)
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\CreateCashForm([
+            'currency' => $currency,
+        ]);
+
+        if ($request->isAjax) {
+            if ($model->validate() && $model->create()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                $errors = $model->getErrorSummary(false);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'errors' => $error]);
+            }
+        }
+        throw new NotFoundHttpException("Không tìm thấy trang");
+    }
 
     // public function actionEdit($id)
     // {

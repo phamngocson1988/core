@@ -29,6 +29,8 @@ class m200402_170006_thread_transaction extends Migration
             'created_at' => $this->dateTime()->notNull(),
             'updated_by' => $this->integer(11),
             'updated_at' => $this->dateTime(),
+            'completed_by' => $this->integer(),
+            'completed_at' => $this->dateTime(),
             'status' => $this->string(16)->notNull()->defaultValue('pending'),
         ]);
         if ($this->db->driverName === 'mysql') {

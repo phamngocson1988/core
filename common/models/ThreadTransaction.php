@@ -65,4 +65,9 @@ class ThreadTransaction extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
+
+    public function getExecutor()
+    {
+        return $this->hasOne(User::className(), ['id' => 'completed_by']);
+    }
 }
