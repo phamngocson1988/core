@@ -48,7 +48,7 @@ class CreateCashForm extends Model
             // create cash
             $bank = new Cash();
             $bank->name = sprintf("Quỹ tiền mặt %s", ArrayHelper::getValue($currencyList, $this->currency));        
-            $bank->code = $this->currency;
+            $bank->code = sprintf("CASH%s", $this->currency);
             $bank->country = $this->currency;
             $bank->currency = $this->currency;
             $bank->transfer_cost = 0;
@@ -63,6 +63,7 @@ class CreateCashForm extends Model
             $account->bank_id = $bank->id;
             $account->bank_type = CashAccount::BANK_TYPE_CASH;
             $account->currency = $this->currency;
+            $account->root = CashAccount::ROOT_ACCOUNT;
             $account->save();
             
             $transaction->commit();

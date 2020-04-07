@@ -114,7 +114,7 @@ class ReportBankTransactionForm extends Model
             $command->andWhere(["{$table}.completed_by" => $this->completed_by]);
         }
         if ($this->to_date) {
-            $command->andWhere(["<=", "{$table}.completed_at", sprintf("%s 00:00:00", $this->to_date)]);
+            $command->andWhere(["<=", "{$table}.completed_at", sprintf("%s 23:59:59", $this->to_date)]);
         }
         return $command->sum('amount');
     }
@@ -304,7 +304,7 @@ class ReportBankTransactionForm extends Model
                 $no + 1, 
                 $model->updated_at,
                 $model->bank->name, 
-                sprintf("% - %s", $model->bankAccount->account_name, $model->bankAccount->account_number),
+                sprintf("%s - %s", $model->bankAccount->account_name, $model->bankAccount->account_number),
                 $model->isTypeIn() ? 'Nạp tiền' : 'Chuyển tiền',
                 number_format(abs($model->amount)),
                 $model->description,
@@ -398,7 +398,7 @@ class ReportBankTransactionForm extends Model
         $toDate = $this->from_date ? $this->from_date : '~';
         $header = [
             'A2:I2' => sprintf('Khoản thời gian thống kê: %s - %s', $fromDate, $toDate),
-            'A3:I3' => sprintf('Ngân hàng: %s - Tiền tệ: %s', $bankName, $this->currency),
+            'A3:I3' => sprintf('Tài khoản ngân hàng: %s - Tiền tệ: %s', $accountName, $this->currency),
             'A4:I4' => sprintf('Số lượng giao dịch: %s', number_format($this->getTotalTransaction())),
             'A5:I5' => sprintf('Tổng tiền đầu kỳ: %s', number_format($this->getTotalAmountByFromDate())),
             'A6:I6' => sprintf('Tổng tiền trong kỳ: %s', number_format($this->getTotalAmount())),
@@ -415,7 +415,7 @@ class ReportBankTransactionForm extends Model
                 $no + 1, 
                 $model->updated_at,
                 $model->bank->name, 
-                sprintf("% - %s", $model->bankAccount->account_name, $model->bankAccount->account_number),
+                sprintf("%s - %s", $model->bankAccount->account_name, $model->bankAccount->account_number),
                 $model->isTypeIn() ? 'Nạp tiền' : 'Chuyển tiền',
                 number_format(abs($model->amount)),
                 $model->description,
@@ -509,7 +509,7 @@ class ReportBankTransactionForm extends Model
         $toDate = $this->from_date ? $this->from_date : '~';
         $header = [
             'A2:I2' => sprintf('Khoản thời gian thống kê: %s - %s', $fromDate, $toDate),
-            'A3:I3' => sprintf('Ngân hàng: %s - Tiền tệ: %s', $bankName, $this->currency),
+            'A3:I3' => sprintf('Nhân viên: %s - Tiền tệ: %s', $userName, $this->currency),
             'A4:I4' => sprintf('Số lượng giao dịch: %s', number_format($this->getTotalTransaction())),
             'A5:I5' => sprintf('Tổng tiền đầu kỳ: %s', number_format($this->getTotalAmountByFromDate())),
             'A6:I6' => sprintf('Tổng tiền trong kỳ: %s', number_format($this->getTotalAmount())),
@@ -526,7 +526,7 @@ class ReportBankTransactionForm extends Model
                 $no + 1, 
                 $model->updated_at,
                 $model->bank->name, 
-                sprintf("% - %s", $model->bankAccount->account_name, $model->bankAccount->account_number),
+                sprintf("%s - %s", $model->bankAccount->account_name, $model->bankAccount->account_number),
                 $model->isTypeIn() ? 'Nạp tiền' : 'Chuyển tiền',
                 number_format(abs($model->amount)),
                 $model->description,

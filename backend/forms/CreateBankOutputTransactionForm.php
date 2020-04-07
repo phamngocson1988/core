@@ -34,6 +34,7 @@ class CreateBankOutputTransactionForm extends CreateTransactionForm
             ['amount', 'number', 'min' => 0, 'message' => 'Số tiền không hợp lệ'],
 
             ['fee', 'number', 'min' => 0, 'message' => 'Phí chuyển khoản không hợp lệ'],
+            ['fee', 'default', 'value' => 0],
 
             ['bank_account_id', 'required', 'message' => 'Bạn hãy chọn tài khoản nhận tiền'],
             ['description', 'trim'],
@@ -77,7 +78,7 @@ class CreateBankOutputTransactionForm extends CreateTransactionForm
             $thread->amount = (-1) * $this->amount;
             $thread->status = $this->status;
 
-            if ($this->apply_fee) {
+            if ($this->apply_fee && $this->fee) {
                 $thread->amount = (-1) * ($this->amount + $this->fee);
                 $thread->description = sprintf("%s\nGộp phí %s", $thread->description, number_format($this->fee));
             }

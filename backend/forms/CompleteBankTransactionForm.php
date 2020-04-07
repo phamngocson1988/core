@@ -32,6 +32,8 @@ class CompleteBankTransactionForm extends Model
     {
         $transaction = $this->getBankTransaction();
         if ($transaction->isCompleted()) return true;
+        $transaction->completed_by = Yii::$app->user->id;
+        $transaction->completed_at = date('Y-m-d H:i:s');
         $transaction->status = BankTransaction::STATUS_COMPLETED;
         return $transaction->save();
     }
