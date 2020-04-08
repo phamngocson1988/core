@@ -2,6 +2,10 @@
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -34,6 +38,20 @@ use yii\helpers\Html;
         </div>
       </div>
       <div class="portlet-body">
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['supplier/withdraw-request']]);?>
+        <div class="row margin-bottom-10">
+            <?=$form->field($search, 'status', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
+            ])->dropDownList($search->getStatusList())->label('Trạng thái');?>
+
+            <div class="form-group col-md-4 col-lg-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
+        </div>
+        <?php ActiveForm::end()?>
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
@@ -41,8 +59,9 @@ use yii\helpers\Html;
                 <th> Mã yêu cầu </th>
                 <th> Nhà cung cấp </th>
                 <th> Số tiền rút </th>
-                <th> Số dư đầu </th>
-                <th> Số dư cuối </th>
+                <th> Số dư khả dụng </th>
+                <!-- <th> Số dư đầu </th>
+                <th> Số dư cuối </th> -->
                 <th> Thông tin tài khoản </th>
                 <th> Ngày tạo </th>
                 <th> Hình ảnh </th>
@@ -53,7 +72,7 @@ use yii\helpers\Html;
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <?php
@@ -65,11 +84,22 @@ use yii\helpers\Html;
                   <td><?=$model->getId();?></td>
                   <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
                   <td><?=number_format($model->amount);?></td>
-                  <td><?=number_format($model->available_balance);?></td>
                   <td>
                     <?php if ($model->isDone()) : ?>
-                    <?=number_format($model->available_balance - $model->amount);?></td>
+                    <?=number_format($model->available_balance - $model->amount);?>
+                    <?php elseif ($model->isCancel()) : ?>
+                    <?=number_format($model->available_balance);?>
+                    <?php else : ?>
+                    <?=number_format($supplier->walletTotal());?>
                     <?php endif;?>
+                  </td>
+
+                  <!-- <td><?=number_format($model->available_balance);?></td> -->
+                  <!-- <td>
+                    <?php if ($model->isDone()) : ?>
+                    <?=number_format($model->available_balance - $model->amount);?>
+                    <?php endif;?>
+                  </td> -->
                   <td>
                     <?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?>
                   </td>
