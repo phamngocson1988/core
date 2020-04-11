@@ -4,9 +4,12 @@ namespace supplier\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
 use supplier\models\SupplierWithdrawRequest;
 use supplier\models\SupplierBank;
+use supplier\models\SupplierWallet;
+use supplier\models\OrderSupplier;
 use supplier\behaviors\UserSupplierBehavior;
 use supplier\forms\FetchWalletForm;
 
@@ -43,10 +46,20 @@ class WalletController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['id' => SORT_DESC])
                             ->all();
+
+        // Filter request
+        $orderIncome = array_filter($models, function($model) {
+            return $model->source == 'order' && $model->type == SupplierWallet::TYPE_INPUT && $model->status == SupplierWallet::STATUS_COMPLETED;
+        });
+        $orderIds = ArrayHelper::getColumn($orderIncome, 'key');
+        $supplierRequest = OrderSupplier::find()->where(["IN", "order_id", $orderIds])
+        ->andWhere(["status" => OrderSupplier::STATUS_CONFIRMED])->all();
+        $supplierRequestMapping = ArrayHelper::map($supplierRequest, 'order_id', 'id');
         return $this->render('index', [
             'search' => $search,
             'models' => $models,
-            'pages' => $pages
+            'pages' => $pages,
+            'supplierRequestMapping' => $supplierRequestMapping
         ]);
     }
 }

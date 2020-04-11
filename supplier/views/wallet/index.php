@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
@@ -155,7 +156,14 @@ $supplier = $user->supplier;
               <td><?=$model->id;?></td>
               <td><?=$model->created_at;?></td>
               <td><?=number_format($model->amount, 1);?></td>
-              <td><?=$model->description;?></td>
+              <td>
+                <?php $description = $model->description;?>
+                <?php if ($model->source == 'order') : ?>
+                  <?php $requestId = ArrayHelper::getValue($supplierRequestMapping, $model->key);?>
+                  <?php $description = ($requestId) ? sprintf("Thanh toán cho đơn hàng <a href='%s'>#%s</a>", Url::to(['order/view', 'id' => $requestId]), $model->key) : $description;?>
+                <?php endif;?>
+                <?=$description;?>
+              </td>
               <td>
                 <?php if ($model->type == SupplierWallet::TYPE_INPUT) :?>
                   Nạp tiền

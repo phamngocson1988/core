@@ -347,12 +347,22 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.index';
         $request = Yii::$app->request;
-        $order = Order::findOne($id);
+        $orderSupplier = OrderSupplier::findOne($id);
+        if (!$orderSupplier || $orderSupplier->supplier_id != Yii::$app->user->id) throw new NotFoundHttpException('Not found');
+
+        $order = $orderSupplier->order;
         if (!$order) throw new NotFoundHttpException('Not found');
-        $supplier = $order->supplier;
-        if (!$supplier || $supplier->supplier_id != Yii::$app->user->id) throw new NotFoundHttpException('Not found');
+
+
+        $countComplain = OrderComplains::find()
+        ->where(['order_id' => $orderSupplier->order_id])
+        ->andWhere(['created_by' => $orderSupplier->supplier_id])
+        ->count();
+
         return $this->render('view', [
             'order' => $order,
+            'model' => $orderSupplier,
+            'countComplain' => $countComplain
         ]);
     }
 
