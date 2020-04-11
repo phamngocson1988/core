@@ -106,6 +106,13 @@
             <span class="title">Danh sách</span>
             </a>
           </li>
+          {if ($app->user->can('admin') || $app->user->can('orderteam_manager'))}
+          <li class="nav-item  ">
+            <a href="{url route='/supplier/create-new'}" class="nav-link " code='supplier.create'>
+            <span class="title">Tạo mới</span>
+            </a>
+          </li>
+          {/if}
           {if $app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/supplier/withdraw-request'}" class="nav-link " code='supplier.withdraw-request'>
