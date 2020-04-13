@@ -11,6 +11,7 @@ use common\components\helpers\CommonHelper;
 class FetchCashAccountForm extends Model
 {
     public $bank_id;
+    public $account_number;
 
     private $_command;
 
@@ -22,6 +23,9 @@ class FetchCashAccountForm extends Model
         $command->innerJoin($bankTable, "{$bankTable}.id = {$bankAccountTable}.bank_id");
         if ($this->bank_id) {
             $command->andWhere(["{$bankAccountTable}.bank_id" => $this->bank_id]);
+        }
+        if ($this->account_number) {
+            $command->andWhere(["{$bankAccountTable}.account_number" => $this->account_number]);
         }
         // die($command->createCommand()->getRawSql());
         $command->with('bank');

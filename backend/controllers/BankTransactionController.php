@@ -34,6 +34,7 @@ class BankTransactionController extends Controller
             'from_date' => $request->get('from_date'),
             'to_date' => $request->get('to_date'),
             'bank_id' => $request->get('bank_id'),
+            'completed_by' => $request->get('completed_by'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

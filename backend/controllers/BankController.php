@@ -17,6 +17,11 @@ class BankController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
+                        'roles' => ['manager'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
                         'roles' => ['@'],
                     ],
                 ],

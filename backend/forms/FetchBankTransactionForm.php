@@ -6,10 +6,12 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\BankTransaction;
 use backend\models\Bank;
+use backend\models\User;
 
 class FetchBankTransactionForm extends Model
 {
     public $bank_id;
+    public $completed_by;
     public $from_date;
     public $to_date;
     public $status;
@@ -22,6 +24,9 @@ class FetchBankTransactionForm extends Model
         $command = BankTransaction::find();
         if ($this->bank_id) {
             $command->andWhere(["{$table}.bank_id" => $this->bank_id]);
+        }
+        if ($this->completed_by) {
+            $command->andWhere(["{$table}.completed_by" => $this->completed_by]);
         }
         if ($this->status) {
             $command->andWhere(["{$table}.status" => $this->status]);
@@ -48,5 +53,11 @@ class FetchBankTransactionForm extends Model
     {
         $banks = Bank::find()->all();
         return ArrayHelper::map($banks, 'id', 'name');
+    }
+
+    public function fetchUser()
+    {
+        $users = User::find()->all();
+        return ArrayHelper::map($users, 'id', 'name');
     }
 }

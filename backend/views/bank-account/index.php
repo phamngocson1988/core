@@ -1,11 +1,12 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use common\components\helpers\CommonHelper;
 
 $canManageAccount = Yii::$app->user->can('manager');
-$numColumn = 5;
+$numColumn = 6;
 if ($canManageAccount) $numColumn++;
 ?>
 <!-- BEGIN PAGE BAR -->
@@ -33,11 +34,13 @@ if ($canManageAccount) $numColumn++;
     <!-- BEGIN EXAMPLE TABLE PORTLET-->
     <div class="portlet light">
       <div class="portlet-title">
+        <?php if ($canManageAccount) : ?>
         <div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['bank-account/create']);?>"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
+        <?php endif;?>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
@@ -77,6 +80,7 @@ if ($canManageAccount) $numColumn++;
               <th> Quốc gia </th>
               <th> Tên tài khoản </th>
               <th> Số tài khoản </th>
+              <th> Quản lý bởi </th>
               <th class="dt-center <?=($canManageAccount) ? '' : 'hide';?>"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
@@ -91,6 +95,12 @@ if ($canManageAccount) $numColumn++;
                 <td class="center"><?=CommonHelper::getCountry($model->bank->country);?></td>
                 <td class="center"><?=$model->account_name;?></td>
                 <td class="center"><?=$model->account_number;?></td>
+                <td>
+                  <?php $roles = ArrayHelper::getValue($roleNameByIds, $model->id, []); ?>
+                  <?php foreach ($roles as $roleName) : ?>
+                  <button class="btn green btn-outline"><?=$roleName;?></a>
+                  <?php endforeach;?>
+                </td>
                 <td class="center <?=($canManageAccount) ? '' : 'hide';?>">
                   <a class="btn btn-sm green tooltips" href="<?=Url::to(['bank-account/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
 

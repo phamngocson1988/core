@@ -29,8 +29,20 @@ class EditCustomerForm extends Model
             ['short_name', 'trim'],
             ['short_name', 'string', 'min' => 2, 'max' => 255],
 
-            [['phone'], 'trim'],
+            ['phone', 'trim'],
+            ['phone', 'required'],
+            ['phone', 'string', 'min' => 2, 'max' => 16],
+            ['phone', 'uniquePhone'],
         ];
+    }
+
+    public function uniquePhone($attribute, $params = []) 
+    {
+        $user = $this->getUser();
+        if ($user->phone == $this->phone) return;
+        if (Customer::find()->where(['phone' => $this->phone])->count() > 0) {
+            $this->addError($attribute, 'Số điện thoại bị trùng');
+        }
     }
 
 	public function edit()

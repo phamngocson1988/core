@@ -28,11 +28,13 @@ if ($canManageBank) $numColumn++;
     <!-- BEGIN EXAMPLE TABLE PORTLET-->
     <div class="portlet light">
       <div class="portlet-title">
+        <?php if ($canManageBank) : ?>
         <div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['bank/create']);?>"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
+        <?php endif;?>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">

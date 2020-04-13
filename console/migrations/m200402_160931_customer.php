@@ -18,7 +18,7 @@ class m200402_160931_customer extends Migration
         $this->createTable('{{%customer}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(255)->notNull(),
-            'phone' => $this->string(16),
+            'phone' => $this->string(16)->notNull(),
             'short_name' => $this->string(255),
         ], $tableOptions);
 

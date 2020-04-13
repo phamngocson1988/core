@@ -90,7 +90,7 @@ class CreateBankOutputTransactionForm extends CreateTransactionForm
 
             $thread->save(); // Save transaction
 
-            if (!$this->apply_fee) {
+            if (!$this->apply_fee && $this->fee) {
                 $feeTransfer = new BankTransaction();
                 $feeTransfer->type = BankTransaction::TYPE_OUT;        
                 $feeTransfer->transaction_type = BankTransaction::TRANSACTION_TYPE_BANK;

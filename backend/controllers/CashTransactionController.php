@@ -59,7 +59,7 @@ class CashTransactionController extends Controller
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', 'Bạn vừa nạp tiền vào quỹ thành công.');
-                return $this->redirect(Url::to(['cash-transaction/index']));
+                return $this->redirect(Url::to(['cash-account/index']));
             } else {
                 $errors = $model->getErrorSummary(false);
                 $error = reset($errors);
@@ -109,7 +109,7 @@ class CashTransactionController extends Controller
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', 'Bạn vừa nạp tiền vào quỹ thành công.');
-                return $this->redirect(Url::to(['cash-transaction/index']));
+                return $this->redirect(Url::to(['cash-account/index']));
             } else {
                 $errors = $model->getErrorSummary(false);
                 $error = reset($errors);
@@ -118,6 +118,38 @@ class CashTransactionController extends Controller
         }
 
         return $this->render('return', [
+            'model' => $model,
+            'account' => $account,
+            'root' => $root,
+            'account_amount' => $model->getAccountAmount()
+        ]);
+    }
+
+    public function actionMove($id)
+    {
+        $this->view->params['main_menu_active'] = 'cashtransaction.index';
+        $request = Yii::$app->request;
+        $model = new \backend\forms\MoveCashToAccountTransactionForm([
+            'bank_account_id' => $id,
+            'status' => $request->post('status')
+        ]);
+        $account = $model->getBankAccount();
+        if (!$account) throw new NotFoundHttpException("Không tìm thấy tài khoản tiền mặt của nhân viên này");
+        $root = $model->getRootAccount();
+        if (!$root) throw new NotFoundHttpException("Không tìm thấy quỹ tiền mặt");
+
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->validate() && $model->create()) {
+                Yii::$app->session->setFlash('success', 'Bạn vừa nạp tiền vào quỹ thành công.');
+                return $this->redirect(Url::to(['cash-account/index']));
+            } else {
+                $errors = $model->getErrorSummary(false);
+                $error = reset($errors);
+                Yii::$app->session->setFlash('error', $error);
+            }
+        }
+
+        return $this->render('move', [
             'model' => $model,
             'account' => $account,
             'root' => $root,
@@ -142,7 +174,7 @@ class CashTransactionController extends Controller
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', 'Bạn vừa nạp tiền vào quỹ thành công.');
-                return $this->redirect(Url::to(['cash-transaction/index']));
+                return $this->redirect(Url::to(['cash-account/index']));
             } else {
                 $errors = $model->getErrorSummary(false);
                 $error = reset($errors);

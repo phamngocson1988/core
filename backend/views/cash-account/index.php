@@ -4,6 +4,8 @@ use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use common\components\helpers\CommonHelper;
 use yii\helpers\ArrayHelper;
+
+$canManageAccount = Yii::$app->user->can('manager');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -30,11 +32,13 @@ use yii\helpers\ArrayHelper;
     <!-- BEGIN EXAMPLE TABLE PORTLET-->
     <div class="portlet light">
       <div class="portlet-title">
+        <?php if ($canManageAccount) : ?>
         <div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['cash-account/create']);?>"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
+        <?php endif;?>
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
@@ -79,8 +83,11 @@ use yii\helpers\ArrayHelper;
                   <?php if ($model->isRoot()) : ?>
                   <a class="btn btn-sm blue tooltips" href="<?=Url::to(['cash-transaction/topup-root', 'id' => $model->id]);?>" data-container="body" data-original-title="Nạp tiền vào <?=$model->account_name;?>"><i class="fa fa-arrow-up"></i> Nạp tiền</a>
                   <?php else : ?>
+                  <?php if ($canManageAccount) : ?>
                   <a class="btn btn-sm blue tooltips" href="<?=Url::to(['cash-transaction/topup', 'id' => $model->id]);?>" data-container="body" data-original-title="Nạp tiền vào <?=$model->account_name;?>"><i class="fa fa-arrow-up"></i> Nạp tiền</a>
+                  <?php endif;?>
                   <?php if ($amount > 0) : ?>
+                  <a class="btn btn-sm purple tooltips" href="<?=Url::to(['cash-transaction/move', 'id' => $model->id]);?>" data-container="body" data-original-title="Chuyển tiền đến tài khoản khác"><i class="fa fa-arrow-right"></i> Chuyển cho nhân viên khác</a>
                   <a class="btn btn-sm green tooltips return-all" href="<?=Url::to(['cash-transaction/return-all-to-root', 'id' => $model->id]);?>" data-container="body" data-original-title="Hoàn trả toàn bộ về quỹ"><i class="fa fa-trash"></i> Hoàn trả toàn bộ</a>
                   <a class="btn btn-sm yellow tooltips" href="<?=Url::to(['cash-transaction/return-apart-to-root', 'id' => $model->id]);?>" data-container="body" data-original-title="Hoàn trả toàn bộ về quỹ"><i class="fa fa-trash"></i> Hoàn trả một phần</a>
                   <?php endif; ?>

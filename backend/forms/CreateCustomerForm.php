@@ -25,6 +25,9 @@ class CreateCustomerForm extends Model
             ['short_name', 'string', 'min' => 2, 'max' => 255],
 
             ['phone', 'trim'],
+            ['phone', 'required'],
+            ['phone', 'unique', 'targetClass' => Customer::className(), 'message' => 'Số điện thoại bị trùng với một tài khoản khác'],
+            ['phone', 'string', 'min' => 2, 'max' => 16],
         ];
     }
 

@@ -184,11 +184,13 @@
         <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
+          {if $app->user->can('manager')}
           <li class="nav-item  ">
             <a href="{url route='cash/index'}" class="nav-link " code='cash.index'>
             <span class="title">Quỹ tiền mặt</span>
             </a>
           </li>
+          {/if}
           <li class="nav-item  ">
             <a href="{url route='cash-account/index'}" class="nav-link " code='cashaccount.index'>
             <span class="title">Tài khoản tiền mặt</span>

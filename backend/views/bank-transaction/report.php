@@ -91,7 +91,7 @@ use backend\components\datetimepicker\DateTimePicker;
 
       <div class="portlet-body">
         <div class="row margin-bottom-10">
-          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['bank-transaction/report-by-user', 'currency' => $currency]]);?>
+          <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['bank-transaction/report', 'currency' => $currency]]);?>
             <?= $form->field($search, 'from_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'from_date', 'id' => 'from_date']

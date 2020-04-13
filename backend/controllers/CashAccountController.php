@@ -19,6 +19,11 @@ class CashAccountController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
+                        'roles' => ['manager'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -30,9 +35,12 @@ class CashAccountController extends Controller
     {
         $this->view->params['main_menu_active'] = 'cashaccount.index';
         $request = Yii::$app->request;
-        $form = new \backend\forms\FetchCashAccountForm([
-            'bank_id' => $request->get('bank_id'),
-        ]);
+        $data = ['bank_id' => $request->get('bank_id')];
+        $sessionUser = Yii::$app->user;
+        if (!$sessionUser->can('manager')) {
+            $data['account_number'] = $sessionUser->id;
+        }
+        $form = new \backend\forms\FetchCashAccountForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
@@ -61,7 +69,7 @@ class CashAccountController extends Controller
         $model = new \backend\forms\CreateCashAccountForm();
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->create()) {
-                Yii::$app->session->setFlash('success', 'Bạn vừa tạo mới ngân hàng thành công.');
+                Yii::$app->session->setFlash('success', 'Bạn vừa tạo mới quỹ tiền mặt cho nhân viên.');
                 return $this->redirect(Url::to(['cash-account/index']));
             } else {
                 $errors = $model->getErrorSummary(false);

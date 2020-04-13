@@ -22,6 +22,7 @@ class FetchBankAccountForm extends Model
         $bankTable = Bank::tableName();
         $bankAccountTable = BankAccount::tableName();
         $command = BankAccount::find();
+        $command->innerJoin($bankTable, "{$bankTable}.id = {$bankAccountTable}.bank_id");
         if ($this->bank_id) {
             $command->andWhere(["{$bankAccountTable}.bank_id" => $this->bank_id]);
         }
@@ -33,10 +34,10 @@ class FetchBankAccountForm extends Model
         }
 
         if ($this->country) {
-            $command->innerJoin($bankTable, "{$bankTable}.id = {$bankAccountTable}.bank_id");
             $command->andWhere(["{$bankTable}.country" => $this->country]);
         }
         // die ($command->createCommand()->getRawSql());
+        $command->orderBy(["{$bankTable}.code" => SORT_ASC]);
         $command->with('bank');
         
         $this->_command = $command;

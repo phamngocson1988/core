@@ -19,7 +19,7 @@ class CashController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['manager'],
                     ],
                 ],
             ],
@@ -67,24 +67,4 @@ class CashController extends Controller
         }
         throw new NotFoundHttpException("Không tìm thấy trang");
     }
-
-    // public function actionEdit($id)
-    // {
-    //     $this->view->params['main_menu_active'] = 'cash.index';
-    //     $request = Yii::$app->request;
-    //     $model = \backend\forms\EditBankForm::findOne($id);
-    //     if (!$model) throw new NotFoundHttpException("Không tìm thấy dữ liệu");
-        
-    //     if ($request->isPost) {
-    //         if ($model->load($request->post()) && $model->validate() && $model->save()) {
-    //             Yii::$app->session->setFlash('success', 'Bạn vừa chỉnh sửa ngân hàng thành công.');
-    //             return $this->redirect(Url::to(['bank/index']));
-    //         } else {
-    //             Yii::$app->session->setFlash('error', $model->getErrors());
-    //         }
-    //     }
-    //     return $this->render('edit', [
-    //         'model' => $model,
-    //     ]);
-    // }
 }

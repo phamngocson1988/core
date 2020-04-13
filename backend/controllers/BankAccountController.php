@@ -4,8 +4,10 @@ namespace backend\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
 use yii\web\NotFoundHttpException;
+use backend\models\BankAccountRole;
 
 class BankAccountController extends Controller
 {
@@ -17,6 +19,11 @@ class BankAccountController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
+                        'roles' => ['manager'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -37,10 +44,25 @@ class BankAccountController extends Controller
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        $ids = ArrayHelper::getColumn($models, 'id');
+        // fetch role
+        $auth = Yii::$app->authManager;
+        $roleNames = ArrayHelper::map($auth->getRoles(), 'name', 'description');
+
+        $roles = BankAccountRole::find()->where(['IN', 'bank_account_id', $ids])->select(['id', 'bank_account_id', 'role_id'])->asArray()->all();
+        $roleByIds = ArrayHelper::map($roles, 'id', 'role_id', 'bank_account_id');
+        $roleNameByIds = [];
+        foreach ($roleByIds as $accId => $roles) {
+            foreach ($roles as $roleName) {
+                $roleNameByIds[$accId][] = ArrayHelper::getValue($roleNames, $roleName);
+            }
+        }
+        // print_r($roleNameByIds);die;
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
-            'search' => $form
+            'search' => $form,
+            'roleNameByIds' => $roleNameByIds
         ]);
     }
 

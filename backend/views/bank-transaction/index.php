@@ -44,6 +44,10 @@ use backend\components\datetimepicker\DateTimePicker;
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'bank_id']
             ])->dropDownList($search->fetchBank(), ['prompt' => 'Chọn ngân hàng'])->label('Ngân hàng');?>
+            <?=$form->field($search, 'completed_by', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'completed_by']
+            ])->dropDownList($search->fetchUser(), ['prompt' => 'Chọn nhân viên'])->label('Nhân viên thực hiện');?>
             <?= $form->field($search, 'from_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'from_date', 'id' => 'from_date']
