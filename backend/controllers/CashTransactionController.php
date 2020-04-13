@@ -34,6 +34,7 @@ class CashTransactionController extends Controller
             'from_date' => $request->get('from_date'),
             'to_date' => $request->get('to_date'),
             'bank_id' => $request->get('bank_id'),
+            'bank_account_id' => $request->get('bank_account_id'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

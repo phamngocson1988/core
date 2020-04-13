@@ -30,20 +30,18 @@ use backend\components\datetimepicker\DateTimePicker;
     <!-- BEGIN EXAMPLE TABLE PORTLET-->
     <div class="portlet light">
       <div class="portlet-title">
-        <!-- <div class="actions">
-          <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['cash-transaction/create-input']);?>">Tạo giao dịch nạp tiền</a>
-            <a class="btn blue" href="<?=Url::to(['cash-transaction/create-output']);?>">Tạo giao dịch chuyển tiền</a>
-          </div>
-        </div> -->
       </div>
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['cash-transaction/index']]);?>
             <?=$form->field($search, 'bank_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'bank_id']
-            ])->dropDownList($search->fetchBank(), ['prompt' => 'Chọn ngân hàng'])->label('Ngân hàng');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'bank_id', 'onchange' => 'js:$(this).closest("form").submit();']
+            ])->dropDownList($search->fetchBank(), ['prompt' => 'Chọn quỹ tiền mặt'])->label('Quỹ tiền mặt');?>
+            <?=$form->field($search, 'bank_account_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'bank_account_id']
+            ])->dropDownList($search->fetchBankAccount(), ['prompt' => 'Chọn tài khoản'])->label('Tài khoản');?>
             <?= $form->field($search, 'from_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'from_date', 'id' => 'from_date']
@@ -67,7 +65,7 @@ use backend\components\datetimepicker\DateTimePicker;
                   'endDate' => date('Y-m-d'),
                   'minView' => '2'
                 ],
-            ])->label('Ngày nhận đơn đến');?>
+            ])->label('Ngày tạo đến');?>
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:

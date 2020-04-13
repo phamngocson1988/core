@@ -5,11 +5,13 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\CashTransaction;
+use backend\models\CashAccount;
 use backend\models\Cash;
 
 class FetchCashTransactionForm extends Model
 {
     public $bank_id;
+    public $bank_account_id;
     public $from_date;
     public $to_date;
     public $status;
@@ -22,6 +24,9 @@ class FetchCashTransactionForm extends Model
         $command = CashTransaction::find();
         if ($this->bank_id) {
             $command->andWhere(["{$table}.bank_id" => $this->bank_id]);
+        }
+        if ($this->bank_account_id) {
+            $command->andWhere(["{$table}.bank_account_id" => $this->bank_account_id]);
         }
         if ($this->status) {
             $command->andWhere(["{$table}.status" => $this->status]);
@@ -48,5 +53,15 @@ class FetchCashTransactionForm extends Model
     {
         $banks = Cash::find()->all();
         return ArrayHelper::map($banks, 'id', 'name');
+    }
+
+    public function fetchBankAccount()
+    {
+        $command = CashAccount::find();
+        if ($this->bank_id) {
+            $command->where(['bank_id' => $this->bank_id]);
+        }
+        $accounts = $command->all();
+        return ArrayHelper::map($accounts, 'id', 'account_name');
     }
 }

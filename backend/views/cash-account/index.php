@@ -81,10 +81,11 @@ $canManageAccount = Yii::$app->user->can('manager');
                 </td>
                 <td>
                   <?php if ($model->isRoot()) : ?>
-                  <a class="btn btn-sm blue tooltips" href="<?=Url::to(['cash-transaction/topup-root', 'id' => $model->id]);?>" data-container="body" data-original-title="Nạp tiền vào <?=$model->account_name;?>"><i class="fa fa-arrow-up"></i> Nạp tiền</a>
+                  <a class="btn btn-sm red tooltips" href="<?=Url::to(['cash-transaction/topup-root', 'id' => $model->id]);?>" data-container="body" data-original-title="Nạp tiền vào <?=$model->account_name;?>"><i class="fa fa-arrow-up"></i> Nạp tiền</a>
+                  <a class="btn btn-sm purple tooltips" href="<?=Url::to(['cash-transaction/move', 'id' => $model->id]);?>" data-container="body" data-original-title="Chuyển tiền đến tài khoản khác"><i class="fa fa-arrow-right"></i> Chuyển cho nhân viên khác</a>
                   <?php else : ?>
                   <?php if ($canManageAccount) : ?>
-                  <a class="btn btn-sm blue tooltips" href="<?=Url::to(['cash-transaction/topup', 'id' => $model->id]);?>" data-container="body" data-original-title="Nạp tiền vào <?=$model->account_name;?>"><i class="fa fa-arrow-up"></i> Nạp tiền</a>
+                  <a class="btn btn-sm red tooltips" href="<?=Url::to(['cash-transaction/topup', 'id' => $model->id]);?>" data-container="body" data-original-title="Nạp tiền vào <?=$model->account_name;?>"><i class="fa fa-arrow-up"></i> Nạp tiền</a>
                   <?php endif;?>
                   <?php if ($amount > 0) : ?>
                   <a class="btn btn-sm purple tooltips" href="<?=Url::to(['cash-transaction/move', 'id' => $model->id]);?>" data-container="body" data-original-title="Chuyển tiền đến tài khoản khác"><i class="fa fa-arrow-right"></i> Chuyển cho nhân viên khác</a>
@@ -92,6 +93,7 @@ $canManageAccount = Yii::$app->user->can('manager');
                   <a class="btn btn-sm yellow tooltips" href="<?=Url::to(['cash-transaction/return-apart-to-root', 'id' => $model->id]);?>" data-container="body" data-original-title="Hoàn trả toàn bộ về quỹ"><i class="fa fa-trash"></i> Hoàn trả một phần</a>
                   <?php endif; ?>
                   <?php endif; ?>
+                  <a class="btn btn-md blue tooltips" href="<?=Url::to(['cash-transaction/index', 'bank_id' => $model->bank_id, 'bank_account_id' => $model->id]);?>" data-container="body" data-original-title="Xem chi tiết"><i class="fa fa-eye"></i> Xem</a>
                 </td>
               </tr>
               <?php endforeach;?>
