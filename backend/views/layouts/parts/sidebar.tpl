@@ -106,13 +106,6 @@
             <span class="title">Danh sách</span>
             </a>
           </li>
-          {if ($app->user->can('admin') || $app->user->can('orderteam_manager'))}
-          <li class="nav-item  ">
-            <a href="{url route='/supplier/create-new'}" class="nav-link " code='supplier.create'>
-            <span class="title">Tạo mới</span>
-            </a>
-          </li>
-          {/if}
           {if $app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/supplier/withdraw-request'}" class="nav-link " code='supplier.withdraw-request'>
@@ -486,6 +479,11 @@
             <a href="{url route='/order/pending'}" class="nav-link " code='order.pending'>
             <span class="title">Đơn hàng pending</span>
             <span class="badge badge-success">{$this->params['new_pending_order']}</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/order/pending-information'}" class="nav-link " code='order.pendinginformation'>
+            <span class="title">Pending Information</span>
             </a>
           </li>
           <li class="nav-item  ">

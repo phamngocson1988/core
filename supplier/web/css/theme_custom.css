@@ -28,3 +28,18 @@
   display: flex;
   justify-content: center;
 }
+
+.table td.center {
+	text-align: center !important;
+	vertical-align: middle !important;
+}
+
+.table td.left {
+	text-align: left !important;
+	vertical-align: middle !important;
+}
+
+.table th {
+	text-align: center;
+	vertical-align: middle !important;
+}

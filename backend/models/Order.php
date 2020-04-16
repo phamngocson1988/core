@@ -2,7 +2,7 @@
 namespace backend\models;
 
 use Yii;
-
+use backend\behaviors\OrderComplainBehavior;
 /**
  * Order model
  */
@@ -12,6 +12,13 @@ class Order extends \common\models\Order
     const SCENARIO_GO_PENDING = 'go_pending';
     const SCENARIO_GO_PROCESSING = 'go_processing';
     const SCENARIO_GO_COMPLETED = 'go_completed';
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['complain'] = OrderComplainBehavior::className();
+        return $behaviors;
+    }
 
     public function scenarios()
     {

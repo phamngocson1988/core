@@ -64,7 +64,7 @@ class SupplierController extends Controller
 
     public function actionCreateNew()
     {
-        $this->view->params['main_menu_active'] = 'supplier.create';
+        $this->view->params['main_menu_active'] = 'supplier.index';
         $request = Yii::$app->request;
         $auth = Yii::$app->authManager;
         $model = new \backend\forms\CreateSupplierForm();

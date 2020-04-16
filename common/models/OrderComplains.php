@@ -14,6 +14,10 @@ class OrderComplains extends ActiveRecord
     const IS_CUSTOMER = 'Y';
     const IS_NOT_CUSTOMER = 'N';
 
+    const OBJECT_NAME_CUSTOMER = 'customer';
+    const OBJECT_NAME_ADMIN = 'admin';
+    const OBJECT_NAME_SUPPLIER = 'supplier';
+
     public static function tableName()
     {
         return '{{%order_complains}}';
@@ -48,6 +52,16 @@ class OrderComplains extends ActiveRecord
 
     public function isCustomer()
     {
-        return $this->is_customer == self::IS_CUSTOMER;
+        return $this->object_name == self::OBJECT_NAME_CUSTOMER;
+    }
+
+    public function isAdmin()
+    {
+        return $this->object_name == self::OBJECT_NAME_ADMIN;
+    }
+
+    public function isSupplier()
+    {
+        return $this->object_name == self::OBJECT_NAME_SUPPLIER;
     }
 }

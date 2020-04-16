@@ -162,6 +162,46 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionPendingInformation()
+    {
+        $this->view->params['main_menu_active'] = 'order.pendinginformation';
+        $request = Yii::$app->request;
+        $data = [
+            'id' => $request->get('id'),
+            'supplier_id' => $request->get('supplier_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'saler_id' => $request->get('saler_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => $request->get('status')
+        ];
+        $form = new \backend\forms\FetchPendingOrderForm($data);
+        $command = $form->getCommand();
+        $command->with('game');
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();                    
+        $complains = [];
+        foreach ($models as $model) {
+            if ($model->state) {
+                $complains[] = OrderComplains::find()->select(["order_id", "MAX(created_at) as created_at"])
+                ->where(["order_id" => $model->id])->asArray()->one();
+            }
+        }
+        $complains = $complains ? ArrayHelper::map($complains, 'order_id', 'created_at') : $complains;
+
+        return $this->render('pending-information', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'complains' => $complains,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
     public function actionProcessing()
     {
         $this->view->params['main_menu_active'] = 'order.processing';
@@ -543,6 +583,22 @@ class OrderController extends Controller
         $order->attachBehavior('assign', \backend\behaviors\OrderBehavior::className());
         if ($order->assignOrderTeam($userId)) {
             // Yii::$app->session->setFlash('success', "You have assign order #$id successfully.");
+            return $this->asJson(['status' => true]);
+        }
+    }
+
+    public function actionAssignSaler($id)
+    {
+        $request = Yii::$app->request;
+        $userId = $request->post('user_id');
+        $order = Order::findOne($id);
+        if (!$order) {
+            $message = "Order #id not found";
+            Yii::$app->session->setFlash('error', $message);
+            return $this->asJson(['status' => false, 'error' => $message]);
+        }
+        $order->saler_id = $userId;
+        if ($order->save()) {
             return $this->asJson(['status' => true]);
         }
     }

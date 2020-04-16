@@ -28,6 +28,9 @@ class Order extends ActiveRecord
     const STATUS_DELETED = 'deleted';
     const STATUS_CANCELLED = 'cancelled';
 
+    const STATE_PENDING_INFORMATION = 'pending_information';
+    const STATE_PENDING_CONFIRMATION = 'pending_confirmation';
+
     const SCENARIO_CREATE = 'create';
     const SCENARIO_VERIFYING = self::STATUS_VERIFYING;
     const SCENARIO_PENDING = self::STATUS_PENDING;
@@ -52,7 +55,8 @@ class Order extends ActiveRecord
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
             ],
-            ['class' => OrderComplainBehavior::className()],
+            'complain' => OrderComplainBehavior::className(),
+            // ['class' => OrderComplainBehavior::className()],
             ['class' => OrderLogBehavior::className()],
             ['class' => OrderSupplierBehavior::className()],
             ['class' => OrderMailBehavior::className()],

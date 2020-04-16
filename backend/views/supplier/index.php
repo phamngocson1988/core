@@ -34,6 +34,11 @@ use yii\web\JsExpression;
           <span class="caption-subject bold uppercase"> Nhà cung cấp</span>
         </div>
         <div class="actions">
+          <?php if (Yii::$app->user->can('admin') || Yii::$app->user->can('orderteam_manager')) : ?>
+          <div class="btn-group">
+            <a class="btn green" href="<?=Url::to(['supplier/create-new']);?>"><?=Yii::t('app', 'add_new');?></a>
+          </div>
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
@@ -46,7 +51,7 @@ use yii\web\JsExpression;
               'initValueText' => ($search->user_id) ? sprintf("%s - %s", $customer->username, $customer->email) : '',
               'options' => ['class' => 'form-control', 'name' => 'user_id'],
               'pluginOptions' => [
-                'placeholder' => 'Tìm reseller',
+                'placeholder' => 'Tìm nhà cung cấp',
                 'allowClear' => true,
                 'minimumInputLength' => 3,
                 'ajax' => [

@@ -490,6 +490,12 @@ $this->registerJs($complainJs);
                     <div class="portlet-body">
                       <div class="timeline">
                         <?php foreach ($order->complains as $complain):?>
+                        <?php
+                          $senderName = $complain->sender->name;
+                          if ($complain->isSupplier()) {
+                            $senderName = Yii::$app->user->can('admin') ? $senderName : 'Supplier';
+                          } 
+                        ?>
                         <div class="timeline-item">
                           <div class="timeline-badge">
                             <?php if ($complain->sender->avatarImage) :?>
@@ -504,7 +510,7 @@ $this->registerJs($complainJs);
                             <div class="timeline-body-arrow"> </div>
                             <div class="timeline-body-head">
                               <div class="timeline-body-head-caption">
-                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$complain->sender->name;?></a>
+                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$senderName;?></a>
                                 <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
                               </div>
                             </div>

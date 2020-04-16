@@ -12,9 +12,9 @@ use supplier\models\OrderSupplier;
 use supplier\models\Supplier;
 use supplier\models\OrderComplains;
 use supplier\forms\FetchOrderForm;
-use supplier\forms\FetchOrderForm1;
 use yii\data\Pagination;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use supplier\behaviors\OrderLogBehavior;
 use supplier\behaviors\OrderMailBehavior;
 use supplier\behaviors\OrderSupplierBehavior;
@@ -58,7 +58,7 @@ class OrderController extends Controller
             ]),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm1($data);
+        $form = new FetchOrderForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -83,23 +83,29 @@ class OrderController extends Controller
             'game_id' => $request->get('game_id'),
             'request_start_date' => $request->get('request_start_date'),
             'request_end_date' => $request->get('request_end_date'),
-            'status' => $request->get('status', [
-                OrderSupplier::STATUS_APPROVE,
-            ]),
+            'status' => $request->get('status'),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm1($data);
+        $form = new \supplier\forms\FetchPendingOrderForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();
-
+        $complains = [];
+        foreach ($models as $model) {
+            if ($model->order->state) {
+                $complains[] = OrderComplains::find()->select(["order_id", "MAX(created_at) as created_at"])
+                ->where(["order_id" => $model->order_id])->asArray()->one();
+            }
+        }
+        $complains = $complains ? ArrayHelper::map($complains, 'order_id', 'created_at') : $complains;
         return $this->render('pending', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
+            'complains' => $complains,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -118,7 +124,7 @@ class OrderController extends Controller
             ]),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm1($data);
+        $form = new FetchOrderForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -148,7 +154,7 @@ class OrderController extends Controller
             ]),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm1($data);
+        $form = new FetchOrderForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -178,7 +184,7 @@ class OrderController extends Controller
             ]),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm1($data);
+        $form = new FetchOrderForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -274,7 +280,7 @@ class OrderController extends Controller
             ]),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm1($data);
+        $form = new FetchOrderForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
@@ -490,7 +496,6 @@ class OrderController extends Controller
         $content = $request->post('content');
         if (trim($content)) {
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->attachBehavior('mail', OrderMailBehavior::className());
             $order->complain($content);
             $order->send(
                 'admin_complain_order', 

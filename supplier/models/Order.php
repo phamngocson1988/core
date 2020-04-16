@@ -2,13 +2,20 @@
 namespace supplier\models;
 
 use Yii;
-use supplier\behaviors\OrderSupplierBehavior;
+use supplier\behaviors\OrderComplainBehavior;
 
 /**
  * Order model
  */
 class Order extends \common\models\Order
 {
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['complain'] = OrderComplainBehavior::className();
+        return $behaviors;
+    }
+    
     public function getStatusLabel($format = '<span class="label label-%s">%s</span>')
     {
         $list = [

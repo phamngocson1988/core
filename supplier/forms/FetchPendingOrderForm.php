@@ -10,7 +10,7 @@ use supplier\models\OrderSupplier;
 use supplier\models\User;
 use supplier\models\Game;
 
-class FetchOrderForm1 extends Model
+class FetchPendingOrderForm extends FetchOrderForm
 {
     public $order_id;
     public $game_id;
@@ -28,7 +28,7 @@ class FetchOrderForm1 extends Model
         ];
     }
 
-    private $_command;
+    protected $_command;
     
     public function fetch()
     {
@@ -57,13 +57,16 @@ class FetchOrderForm1 extends Model
         if ($this->request_end_date) {
             $command->andWhere(['<=', "$table.requested_at", $this->request_end_date]);
         }
+        $command->andWhere(["$table.status" => OrderSupplier::STATUS_APPROVE]);
         if ($this->status) {
-            if (is_array($this->status)) {
-                $command->andWhere(['IN', "$table.status", $this->status]);
+            if ($this->status != OrderSupplier::STATUS_APPROVE) {
+                $command->andWhere(["{$orderTable}.state" => $this->status]);
             } else {
-                $command->andWhere(["$table.status" => $this->status]);
+                $command->andWhere(["{$orderTable}.state" => null]);
             }
         }
+
+        $command->with('order');
         $this->_command = $command;
     }
 

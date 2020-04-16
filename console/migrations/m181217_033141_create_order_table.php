@@ -52,8 +52,10 @@ class m181217_033141_create_order_table extends Migration
             'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),
             'status' => $this->integer(11),
+            'state' => $this->integer(11),
             'request_cancel' => $this->integer(4)->defaultValue(0),
             'request_cancel_time' => $this->dateTime(),
+            'request_cancel_description' => $this->string(512),
 
             // Game infor
             'game_id' => $this->integer(11)->notNull(),
@@ -91,9 +93,9 @@ class m181217_033141_create_order_table extends Migration
             $command = $this->db->createCommand($status);
             $command->execute();
 
-            // $supplierAccept = "ALTER TABLE {{%order}} MODIFY `supplier_accept` ENUM('Y','N') NOT NULL DEFAULT 'N'";
-            // $commandSupplier = $this->db->createCommand($supplierAccept);
-            // $commandSupplier->execute();
+            $state = "ALTER TABLE {{%order}} MODIFY `state` ENUM('pending_information', 'pending_confirmation')";
+            $commandState = $this->db->createCommand($state);
+            $commandState->execute();
         }
 
         $this->createTable('{{%order_image}}', [
@@ -137,6 +139,7 @@ class m181217_033141_create_order_table extends Migration
             'content' => $this->string(500)->notNull(),
             'is_read' => $this->integer(1)->defaultValue(0),
             'is_customer' => $this->string(1)->defaultValue('N'),
+            'object_name' => $this->string(10),
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer(11)->notNull(),
         ]);
@@ -144,6 +147,9 @@ class m181217_033141_create_order_table extends Migration
             $isCustomer = "ALTER TABLE {{%order_complains}} MODIFY `is_customer` ENUM('Y','N') DEFAULT 'N'";
             $command = $this->db->createCommand($isCustomer);
             $command->execute();
+            $sysName = "ALTER TABLE {{%order_complains}} MODIFY `object_name` ENUM('customer','admin', 'supplier')";
+            $sysCommand = $this->db->createCommand($sysName);
+            $sysCommand->execute();
         }
 
         $this->createTable('{{%order_reseller}}', [

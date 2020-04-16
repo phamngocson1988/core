@@ -251,16 +251,21 @@ use frontend\models\OrderFile;
           <h3>Chat Admin</h3>
           <div class="t-wrap-text-report-top">
             <?php foreach ($complains as $complain) : ?>
-              <?php $complainClass = $complain->created_by == Yii::$app->user->id ? 't-report-me' : 't-report-you';?>
+              <?php $complainClass = $complain->isCustomer() ? 't-report-me' : 't-report-you';?>
+              <?php $author = $complain->isCustomer() ? Yii::$app->user->identity->name : 'Admin';?>
+              <?php $complainDate = date('Y-m-d') == date('Y-m-d', strtotime($complain->created_at)) ? date('H:i A', strtotime($complain->created_at)) : date('d-m-Y, H:i', strtotime($complain->created_at));?>
               <span class="t-report-row">
-                <p class="t-report-text <?=$complainClass;?>"><?=strip_tags($complain->content);?></p>                           
+                <div class="t-report-text <?=$complainClass;?>">
+                  <div style="color: grey; font-size: 10px; font-style: italic;"><?=$author;?></div>
+                  <div><?=strip_tags($complain->content);?></div>
+                  <div style="color: grey; font-size: 10px; font-style: italic; float: right;"><?=$complainDate;?></div>
+                </div>                           
               </span>
             <?php endforeach;?>
           </div>
           <div class="t-wrap-text-report-bottom">
-            <?= Html::beginForm(Url::to(['user/send-complain']), 'POST', ['id' => 'send-complain']); ?>
+            <?= Html::beginForm(Url::to(['user/send-complain', 'id' => $model->id]), 'POST', ['id' => 'send-complain']); ?>
               <textarea class="t-report-text-area" name="content" rows="3"></textarea>
-              <input type="hidden" name="order_id" value="<?=$model->id;?>">
               <button type="submit" class="t-btn-send">Send</button>
             <?= Html::endForm(); ?>
           </div>
@@ -309,6 +314,8 @@ $('#complete').ajax_action({
     location.reload();
   },
 });
+
+
 JS;
 $this->registerJs($script);
 ?>

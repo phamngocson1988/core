@@ -12,28 +12,23 @@ use supplier\models\Game;
 
 class FetchOrderForm extends Model
 {
-    public $q;
-    public $customer_id;
+    public $order_id;
     public $game_id;
-    public $start_date;
-    public $end_date;
-    public $status;
-    public $request_cancel;
-    public $customer_phone;
+    public $request_start_date;
+    public $request_end_date;
     public $supplier_id;
-    public $supplier_status;
+    public $status;
 
     public function rules()
     {
         return [
-            [['supplier_id', 'supplier_status'], 'required'],
-            [['q', 'customer_phone'], 'trim'],
-            [['game_id', 'customer_id', 'start_date', 'end_date', 'status'], 'safe'],
-            [['start_date', 'end_date'], 'safe'],
+            [['supplier_id'], 'required'],
+            [['order_id', 'game_id', 'request_start_date', 'request_end_date'], 'trim'],
+            ['status', 'safe'],
         ];
     }
 
-    private $_command;
+    protected $_command;
     
     public function fetch()
     {
@@ -43,41 +38,24 @@ class FetchOrderForm extends Model
 
     protected function createCommand()
     {
-        $command = Order::find();
-        $table = Order::tableName();
-        $supplierTable = OrderSupplier::tableName();
-        $command->innerJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
-        $command->where(["$supplierTable.supplier_id" => $this->supplier_id]);
-        $supplierStatus = (array)$this->supplier_status;
-        $command->andWhere(["IN", "{$supplierTable}.status", $supplierStatus]);
-        if ($this->q) {
-            $command->andWhere(['OR',
-                ["$table.id" => $this->q],
-                ["$table.auth_key" =>  $this->q]
-            ]);
-            $this->_command = $command;
-            return;
-        }
-
-
+        $table = OrderSupplier::tableName();
+        $orderTable = Order::tableName();
+        $command = OrderSupplier::find();
+        $command->innerJoin($orderTable, "$orderTable.id = $table.order_id");
+        $command->select(["$table.*"]);
         
-        if ($this->customer_id) {
-            $command->andWhere(["$table.customer_id" => $this->customer_id]);
+        if ($this->supplier_id) {
+            $command->andWhere(["$table.supplier_id" => $this->supplier_id]);
         }
-        if ($this->customer_phone) {
-            $command->andWhere(["LIKE", "$table.customer_phone", $this->customer_phone]);
-        }
+
         if ($this->game_id) {
             $command->andWhere(["$table.game_id" => $this->game_id]);
         }
-        if ($this->request_cancel) {
-            $command->andWhere(["$table.request_cancel" => $this->request_cancel]);
+        if ($this->request_start_date) {
+            $command->andWhere(['>=', "$table.requested_at", $this->request_start_date]);
         }
-        if ($this->start_date) {
-            $command->andWhere(['>=', "$table.created_at", $this->start_date]);
-        }
-        if ($this->end_date) {
-            $command->andWhere(['<=', "$table.created_at", $this->end_date]);
+        if ($this->request_end_date) {
+            $command->andWhere(['<=', "$table.requested_at", $this->request_end_date]);
         }
         if ($this->status) {
             if (is_array($this->status)) {
@@ -95,13 +73,6 @@ class FetchOrderForm extends Model
             $this->createCommand();
         }
         return $this->_command;
-    }
-
-    public function getCustomer()
-    {
-        if ($this->customer_id) {
-            return User::findOne($this->customer_id);
-        }
     }
 
     public function getGame()

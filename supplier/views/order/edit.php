@@ -220,21 +220,18 @@ use supplier\models\OrderSupplier;
               <div class="portlet-body">
                 <div class="timeline">
                   <?php foreach ($order->complains as $complain):?>
+                  <?php $senderName = ($complain->isSupplier() && $complain->created_by == Yii::$app->user->id) ? $complain->sender->name : 'Admin';?>
                   <div class="timeline-item">
                     <div class="timeline-badge">
-                      <?php if ($complain->sender->avatarImage) :?>
-                      <img class="timeline-badge-userpic" src="<?=$complain->sender->getAvatarUrl();?>"> 
-                      <?php else : ?>
-                        <div class="timeline-icon">
-                          <i class="icon-user-following font-green-haze"></i>
-                        </div>
-                      <?php endif; ?>
+                      <div class="timeline-icon">
+                        <i class="icon-user-following font-green-haze"></i>
+                      </div>
                     </div>
                     <div class="timeline-body">
                       <div class="timeline-body-arrow"> </div>
                       <div class="timeline-body-head">
                         <div class="timeline-body-head-caption">
-                          <a href="javascript:void()" class="timeline-body-title font-blue-madison"><?=$complain->isCustomer() ? 'Khách hàng' : $complain->sender->name;?></a>
+                          <a href="javascript:void()" class="timeline-body-title font-blue-madison"><?=$senderName;?></a>
                           <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
                         </div>
                       </div>

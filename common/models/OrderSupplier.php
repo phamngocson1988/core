@@ -57,6 +57,11 @@ class OrderSupplier extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'supplier_id']);
     }
 
+    public function getRequester()
+    {
+        return $this->hasOne(User::className(), ['id' => 'requested_by']);
+    }
+
     public function isRequest()
     {
         return $this->status == self::STATUS_REQUEST;

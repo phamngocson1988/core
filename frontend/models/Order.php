@@ -2,7 +2,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use frontend\behaviors\OrderComplainBehavior;
 /**
  * Order model
  */
@@ -10,11 +10,18 @@ class Order extends \common\models\Order
 {
     const SCENARIO_CANCELORDER = 'cancel_order';
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['complain'] = OrderComplainBehavior::className();
+        return $behaviors;
+    }
+
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $new = [
-            self::SCENARIO_CANCELORDER => ['request_cancel', 'request_cancel_time'],
+            self::SCENARIO_CANCELORDER => ['request_cancel', 'request_cancel_time', 'request_cancel_description'],
         ];
         return array_merge($scenarios, $new);
     }
@@ -23,6 +30,7 @@ class Order extends \common\models\Order
     {
         return [
             [['request_cancel', 'request_cancel_time'], 'required', 'on' => self::SCENARIO_CANCELORDER],
+            ['request_cancel_description', 'trim']
         ];
     }
 

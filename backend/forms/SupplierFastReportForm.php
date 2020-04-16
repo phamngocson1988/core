@@ -33,21 +33,21 @@ class SupplierFastReportForm extends Model
         return $this->_command;
     }
 
-    public function getWalletCommand()
-    {
-        $command = SupplierWallet::find();
-        $command->select([
-            'id',
-            'SUM(amount) as amount',
-            'type',
-            'DATE(created_at) as report_date'
-        ]);
-        $command->andWhere(['BETWEEN', 'created_at', $this->getDateTimeFrom(), $this->getDateTimeTo()]);
-        $command->groupBy(['report_date', 'type']);
-        $command->orderBy(['created_at' => SORT_DESC]);
-        $command->asArray();
-        return $command;
-    }
+    // public function getWalletCommand()
+    // {
+    //     $command = SupplierWallet::find();
+    //     $command->select([
+    //         'id',
+    //         'SUM(amount) as amount',
+    //         'type',
+    //         'DATE(created_at) as report_date'
+    //     ]);
+    //     $command->andWhere(['BETWEEN', 'created_at', $this->getDateTimeFrom(), $this->getDateTimeTo()]);
+    //     $command->groupBy(['report_date', 'type']);
+    //     $command->orderBy(['created_at' => SORT_DESC]);
+    //     $command->asArray();
+    //     return $command;
+    // }
 
     public function getOrderCommand()
     {
@@ -79,31 +79,81 @@ class SupplierFastReportForm extends Model
         }
         return $this->_page;
     }
+    // public function getReport1()
+    // {
+    //     $pages = $this->getPage();
+    //     $range = $this->getRange();
+    //     // wallet report
+    //     $walletCommand = $this->getWalletCommand();
+    //     $walletData = $walletCommand->offset($pages->offset)->limit($pages->limit)->all();
+    //     $income = array_filter($walletData, function($row) {
+    //         return $row['type'] == SupplierWallet::TYPE_INPUT;
+    //     });
+    //     $income = array_column($income, 'amount', 'report_date');
+    //     $outcome = array_filter($walletData, function($row) {
+    //         return $row['type'] == SupplierWallet::TYPE_OUTPUT;
+    //     });
+    //     $outcome = array_column($outcome, 'amount', 'report_date');
+
+    //     // order report
+    //     $orderCommand = $this->getOrderCommand();
+    //     $orders = $orderCommand->all();
+    //     $quantity = array_column($orders, 'quantity', 'report_date');
+    //     $revenue = array_column($orders, 'total_price', 'report_date');
+
+    //     // build report
+    //     $result = [];
+    //     $firstIncome = $this->getFirstIncome();
+    //     foreach ($range as $date) {
+    //         $incomeByDate = ArrayHelper::getValue($income, $date, 0);
+    //         $outcomeByDate = ArrayHelper::getValue($outcome, $date, 0);
+    //         $quantityByDate = ArrayHelper::getValue($quantity, $date, 0);
+    //         $revenueBByDate = ArrayHelper::getValue($revenue, $date, 0);
+    //         $lastIncome = $firstIncome + $incomeByDate + $outcomeByDate;
+    //         $result[$date] = [
+    //             'quantity' => $quantityByDate,
+    //             'revenue' => $revenueBByDate,
+    //             'first_income' => $firstIncome,
+    //             'income' => $incomeByDate,
+    //             'outcome' => $outcomeByDate,
+    //             'last_income' => $lastIncome
+    //         ];
+    //         $firstIncome = $lastIncome;
+    //     }
+    //     return $result;
+    // }
+
     public function getReport()
     {
         $pages = $this->getPage();
         $range = $this->getRange();
-        // wallet report
-        $walletCommand = $this->getWalletCommand();
-        $walletData = $walletCommand->offset($pages->offset)->limit($pages->limit)->all();
-        $income = array_filter($walletData, function($row) {
-            return $row['type'] == SupplierWallet::TYPE_INPUT;
-        });
-        $income = array_column($income, 'amount', 'report_date');
-        $outcome = array_filter($walletData, function($row) {
-            return $row['type'] == SupplierWallet::TYPE_OUTPUT;
-        });
-        $outcome = array_column($outcome, 'amount', 'report_date');
+        /**
+         * Daily income: total supplier incomes each date
+         * Daily outcome: total supplier outcomes each date
+         * @var float $income
+         * @var float $outcome
+         */
+        $income = $this->getDailyIncome();
+        $outcome = $this->getDailyOutcome();
 
-        // order report
+        /**
+         * Quantity & revenue: Calculte total quantity and total price for each day
+         * @var float $quantity
+         * @var float $revenue (in VND) 
+         */
         $orderCommand = $this->getOrderCommand();
         $orders = $orderCommand->all();
         $quantity = array_column($orders, 'quantity', 'report_date');
         $revenue = array_column($orders, 'total_price', 'report_date');
 
+        /**
+         * First income: total supplier incomes up to begining of report
+         * @var float
+         */
+        $firstIncome = $this->getFirstIncome();
+
         // build report
         $result = [];
-        $firstIncome = $this->getFirstIncome();
         foreach ($range as $date) {
             $incomeByDate = ArrayHelper::getValue($income, $date, 0);
             $outcomeByDate = ArrayHelper::getValue($outcome, $date, 0);
@@ -126,6 +176,36 @@ class SupplierFastReportForm extends Model
     public function getFirstIncome()
     {
         return SupplierWallet::find()->where(['<', 'created_at', $this->getDateTimeFrom()])->sum('amount');
+    }
+
+    public function getDailyIncome()
+    {
+        $command = SupplierWallet::find();
+        $command->select([
+            'DATE(created_at) as report_date',
+            'SUM(amount) as amount',
+        ]);
+        $command->andWhere(['BETWEEN', 'created_at', $this->getDateTimeFrom(), $this->getDateTimeTo()]);
+        $command->andWhere(['type' => SupplierWallet::TYPE_INPUT]);
+        $command->groupBy(['report_date']);
+        $command->asArray();
+        $data = $command->all();
+        return array_column($data, 'amount', 'report_date');
+    }
+
+    public function getDailyOutcome()
+    {
+        $command = SupplierWallet::find();
+        $command->select([
+            'DATE(created_at) as report_date',
+            'SUM(amount) as amount',
+        ]);
+        $command->andWhere(['BETWEEN', 'created_at', $this->getDateTimeFrom(), $this->getDateTimeTo()]);
+        $command->andWhere(['type' => SupplierWallet::TYPE_OUTPUT]);
+        $command->groupBy(['report_date']);
+        $command->asArray();
+        $data = $command->all();
+        return array_column($data, 'amount', 'report_date');
     }
 
     public function getDateTimeFrom()

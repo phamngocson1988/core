@@ -199,40 +199,39 @@ class UserController extends Controller
         $request = Yii::$app->request;
         $order->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             $o = $event->sender;
-            $o->attachBehavior('log', OrderLogBehavior::className());
+            // $o->attachBehavior('log', OrderLogBehavior::className());
             $o->log(sprintf("Sent cancel request"));
         });
         $order->setScenario(Order::SCENARIO_CANCELORDER);
         $order->request_cancel = 1;
         $order->request_cancel_time = date('Y-m-d H:i:s');
+        $order->request_cancel_description = $request->post('content');
         if ($order->save()) {
             // Send content as complain
-            $model = new OrderComplains();
-            $model->order_id = $order->id;
-            $model->content = $request->post('content');
-            $model->created_by = Yii::$app->user->id;
-            $model->save();
+            // $model = new OrderComplains();
+            // $model->order_id = $order->id;
+            // $model->content = $request->post('content');
+            // $model->created_by = Yii::$app->user->id;
+            // $model->save();
             return $this->renderJson(true, []);
         } else {
             return $this->renderJson(false, [], $order->getErrorSummary(true));
         }
     }
 
-    public function actionSendComplain()
+    public function actionSendComplain($id)
     {
         $request = Yii::$app->request;
-        $model = new OrderComplains();
-        $model->order_id = $request->post('order_id');
-        $model->content = $request->post('content');
-        if (!$model->order_id || !$model->content) {
-            return $this->renderJson(false, [], ['error' => 'Empty content.']);
+        $order = Order::findOne($id);
+        if (!$order) {
+            return $this->asJson(['status' => false, 'errors' => 'Order is not found.']);
         }
-        $model->created_by = Yii::$app->user->id;
-        if ($model->save()) {
-            return $this->renderJson(true, []);
-        } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
+        $content = $request->post('content');
+        if (!$content) {
+            return $this->asJson(['status' => false, 'errors' => 'Content is required.']);
         }
+        $order->complain($content);
+        return $this->asJson(['status' => true]);
     }
 
     public function actionTransaction()
