@@ -33,10 +33,16 @@ use yii\widgets\ActiveForm;
       <div class="portlet-body">
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer/index']]);?>
-          <?=$form->field($search, 'q', [
+            <?=$form->field($search, 'q', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Nhập tên hoặc số điện thoại');?>
+            <?php if (Yii::$app->user->can('manager')) : ?>
+            <?=$form->field($search, 'manager_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'manager_id']
+            ])->dropdownList($search->fetchManager(), ['prompt' => 'Chọn người quản lý'])->label('Tìm theo người quản lý');?>
+            <?php endif;?>
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
                 style="margin-top:
@@ -55,13 +61,16 @@ use yii\widgets\ActiveForm;
               <th> Họ và tên </th>
               <th> Tên thường gọi </th>
               <th> Số điện thoại </th>
+              <th> Địa chỉ </th>
+              <th> Hộp thư </th>
+              <th> Người quản lý </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
             <?php if (!$models) : ?>
             <tr>
-              <td colspan="5"><?=Yii::t('app', 'no_data_found');?></td>
+              <td colspan="8"><?=Yii::t('app', 'no_data_found');?></td>
             </tr>
             <?php endif;?>
             <?php foreach ($models as $model) : ?>
@@ -70,6 +79,9 @@ use yii\widgets\ActiveForm;
               <td><?=$model->name;?></td>
               <td><?=$model->short_name;?></td>
               <td><?=$model->phone;?></td>
+              <td><?=$model->address;?></td>
+              <td><?=$model->email;?></td>
+              <td><?=$model->manager_id ? $model->manager->name : '';?></td>
               <td>
                 <a class="btn btn-sm grey-salsa tooltips" href="<?=Url::to(['customer/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i> Chỉnh sửa</a>
               </td>

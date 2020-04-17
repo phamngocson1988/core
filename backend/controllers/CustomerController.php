@@ -28,11 +28,12 @@ class CustomerController extends Controller
         $this->view->params['main_menu_active'] = 'customer.index';
         $request = Yii::$app->request;
         $form = new \backend\forms\FetchCustomerForm([
-            'q' => $request->get('q')
+            'q' => $request->get('q'),
+            'manager_id' => $request->get('manager_id')
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        $models = $command->offset($pages->offset)->limit($pages->limit)->orderBy(['manager_id' => SORT_ASC])->all();
 
         return $this->render('index.php', [
             'models' => $models,

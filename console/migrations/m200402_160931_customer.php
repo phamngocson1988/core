@@ -19,6 +19,9 @@ class m200402_160931_customer extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string(255)->notNull(),
             'phone' => $this->string(16)->notNull(),
+            'address' => $this->string(255),
+            'email' => $this->string(255),
+            'manager_id' => $this->integer(),
             'short_name' => $this->string(255),
         ], $tableOptions);
 

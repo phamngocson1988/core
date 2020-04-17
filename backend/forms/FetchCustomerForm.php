@@ -4,20 +4,16 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use backend\models\Customer;
+use backend\models\User;
 
 class FetchCustomerForm extends Model
 {
     public $q;
+    public $manager_id;
 
     private $_command;
-
-    public function rules()
-    {
-        return [
-            ['q', 'trim']
-        ];
-    }
 
     protected function createCommand()
     {
@@ -26,6 +22,9 @@ class FetchCustomerForm extends Model
             $command->orWhere(['like', 'name', $this->q]);
             $command->orWhere(['like', 'short_name', $this->q]);
             $command->orWhere(['like', 'phone', $this->q]);
+        }
+        if ($this->manager_id) {
+            $command->andWhere(['manager_id' => $this->manager_id]);
         }
         // die($command->createCommand()->getRawSql());
         $this->_command = $command;
@@ -37,5 +36,11 @@ class FetchCustomerForm extends Model
             $this->createCommand();
         }
         return $this->_command;
+    }
+
+    public function fetchManager()
+    {
+        $users = User::find()->all();
+        return ArrayHelper::map($users, 'id', 'name');
     }
 }
