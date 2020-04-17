@@ -174,7 +174,7 @@ class OrderController extends Controller
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
-            'status' => $request->get('status')
+            'state' => $request->get('state')
         ];
         $form = new \backend\forms\FetchPendingOrderForm($data);
         $command = $form->getCommand();

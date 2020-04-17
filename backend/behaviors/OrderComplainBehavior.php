@@ -14,6 +14,7 @@ class OrderComplainBehavior extends \common\behaviors\OrderComplainBehavior
         $model->order_id = $owner->id;
         $model->content = $content;
         $model->object_name = OrderComplains::OBJECT_NAME_ADMIN;
+        $model->save();
         $owner->state = Yii::$app->user->can('saler') ? Order::STATE_PENDING_CONFIRMATION : Order::STATE_PENDING_INFORMATION;
         $owner->save();
     }

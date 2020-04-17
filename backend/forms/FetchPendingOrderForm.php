@@ -20,7 +20,7 @@ class FetchPendingOrderForm extends Model
     public $supplier_id;
     public $orderteam_id;
     public $saler_id;
-    public $status;
+    public $state;
 
     private $_command;
     
@@ -60,13 +60,11 @@ class FetchPendingOrderForm extends Model
         }
 
         $command->andWhere(["$table.status" => Order::STATUS_PENDING]);
-        if ($this->status) {
-            if ($this->status != Order::STATUS_PENDING) {
-                $command->andWhere(["{$table}.state" => $this->status]);
-            } else {
-                $command->andWhere(["{$table}.state" => null]);
-            }
+        $command->andWhere(["IS NOT", "$table.state", null]);
+        if ($this->state) {
+            $command->andWhere(["{$table}.state" => $this->state]);
         }
+        // die($command->createCommand()->getRawSql());
         $this->_command = $command;
     }
 

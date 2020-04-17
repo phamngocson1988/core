@@ -71,13 +71,12 @@ $canOrderTeam = $user->can('orderteam');
             ])->dropDownList($orderTeams, ['prompt' => 'Chọn nhân viên phân phối'])->label('NV phân phối');?>
             <?php endif;?>
 
-            <?=$form->field($search, 'status', [
+            <?=$form->field($search, 'state', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status']
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'state']
             ])->dropDownList([
                 Order::STATE_PENDING_CONFIRMATION => 'Incoming Message',
                 Order::STATE_PENDING_INFORMATION => 'Outgoing Message',
-                Order::STATUS_PENDING => 'Pending',
             ], ['prompt' => 'Trạng thái đơn hàng'])->label('Trạng thái');?>
 
             <?php $game = $search->getGame();?>   
