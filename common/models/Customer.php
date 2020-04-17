@@ -11,4 +11,8 @@ class Customer extends ActiveRecord
         return '{{%customer}}';
     }
 
+    public function getManager()
+    {
+        return $this->hasOne(User::className(), ['id' => 'manager_id']);
+    }
 }
