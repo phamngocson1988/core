@@ -531,8 +531,7 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.cost.supplier';
         $request = Yii::$app->request;
         $data = [
-            'report_from' => $request->get('report_from'),
-            'report_to' => $request->get('report_to'),
+            'supplier_id' => $request->get('supplier_id'),
         ];
         $form = new ReportCostOrderBySupplier($data);
 

@@ -22,7 +22,7 @@
     <div class="top-menu">
       <ul class="nav navbar-nav pull-right">
         
-        {*Notifications::widget()*}
+        {Notifications::widget()}
         <li class="dropdown dropdown-user">
           <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
           <img alt="Avatar" global="avatar_{$user->id}" class="img-circle" src="{$user->getAvatarUrl('100x100')}"/>

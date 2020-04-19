@@ -5,35 +5,37 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
-use backend\models\Order;
 use backend\models\OrderSupplier;
 use backend\models\User;
+use backend\models\Supplier;
 use yii\data\Pagination;
 
 class ReportCostOrderBySupplier extends Model
 {
-    public $report_from;
-    public $report_to;
+    public $supplier_id;
 
     private $_command;
     protected $_page;
 
     public function createCommand()
     {
-        $orderTable = Order::tableName();
+        $userTable = User::tableName();
         $orderSupplierTable = OrderSupplier::tableName();
-        $command = Order::find();
-        $command->innerJoin($orderSupplierTable, "$orderSupplierTable.order_id = $orderTable.id");
-        $command->where(["$orderTable.status" => Order::STATUS_CONFIRMED]);
-        $command->andWhere(["$orderSupplierTable.status" => OrderSupplier::STATUS_CONFIRMED]);
-        if ($this->report_from) {
-            $command->andWhere(['>=', "$orderTable.confirmed_at", $this->report_from]);
+        $command = OrderSupplier::find();
+        $command->innerJoin($userTable, "$userTable.id = $orderSupplierTable.supplier_id");
+
+        $command->select([
+            "$userTable.name as supplier_name",
+            "SUM($orderSupplierTable.quantity) as quantity",
+            "SUM($orderSupplierTable.total_price) as total_price",
+        ]);
+        $command->where(["$orderSupplierTable.status" => OrderSupplier::STATUS_CONFIRMED]);
+        if ($this->supplier_id) {
+            $command->andWhere(["$orderSupplierTable.supplier_id" => $this->supplier_id]);
         }
-        if ($this->report_to) {
-            $command->andWhere(['<=', "$orderTable.confirmed_at", $this->report_to]);
-        }
-        $command->orderBy(["$orderTable.confirmed_at" => SORT_DESC]);
-        $command->with('suppliers');
+        $command->groupBy(["$orderSupplierTable.supplier_id"]);
+        $command->orderBy(["total_price" => SORT_DESC]);
+        $command->asArray();
         return $command;
     }
 
@@ -56,34 +58,21 @@ class ReportCostOrderBySupplier extends Model
         return $this->_page;
     }
 
-    public function getOrders()
+    public function getReport()
     {
         $command = $this->getCommand();
         $pages = $this->getPage();
         return $command->offset($pages->offset)->limit($pages->limit)->all();
     }
 
-    public function getReport()
+    public function fetchSuppliers()
     {
-        $orders = $this->getOrders();
-        foreach ($orders as $order) {
-            $suppliers = $order->suppliers;
-            $id = $order->id;
-            $suppliers = array_filter($suppliers, function($s) {
-                return $s->status == orderSupplier::STATUS_CONFIRMED;
-            });
-            $data[$id] = [
-                'id' => $order->id,
-                'game_id' => $order->game_id,
-                'game_title' => $order->game_title,
-                'quantity' => $order->quantity,
-                'total_price' => $order->total_price * $order->rate_usd,
-                'confirmed_at' => $order->confirmed_at,
-                'suppliers' => $suppliers
-            ];
-        }
-        return $data;
-    }
+        $userTable = User::tableName();
+        $supplierTable = Supplier::tableName();
 
+        $users = User::find()->innerJoin($supplierTable, "$userTable.id = $supplierTable.user_id")->select(["$userTable.id", "$userTable.name"])->orderBy(["$userTable.name" => SORT_ASC])->all();
+
+        return ArrayHelper::map($users, 'id', 'name');
+    }
 }
 

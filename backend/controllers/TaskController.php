@@ -12,7 +12,6 @@ use backend\forms\EditTaskForm;
 use backend\forms\DeleteTaskForm;
 use backend\forms\UpdateTaskStatusForm;
 use yii\helpers\Url;
-use backend\components\notifications\TaskNotification;
 
 class TaskController extends Controller
 {
@@ -82,9 +81,6 @@ class TaskController extends Controller
         $model = new CreateTaskForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($task = $model->save()) {
-                if ($model->assignee && $model->assignee != Yii::$app->user->id) {
-                    TaskNotification::create(TaskNotification::KEY_NEW_TASK, ['task' => $task, 'userId' => $model->assignee])->send();
-                }
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 $ref = $request->get('ref', Url::to(['task/index']));
                 return $this->redirect($ref);

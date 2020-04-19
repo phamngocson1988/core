@@ -42,32 +42,11 @@ $pages = $search->getPage();
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/cost-supplier']]);?>
         <div class="row margin-bottom-10">
-            <?= $form->field($search, 'report_from', [
+            
+            <?=$form->field($search, 'supplier_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'report_from', 'id' => 'report_from']
-            ])->widget(DateTimePicker::className(), [
-              'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd hh:00',
-                'minuteStep' => 1,
-                'endDate' => date('Y-m-d H:i'),
-                'minView' => '1'
-              ],
-            ])->label('Ngày tạo từ');?>
-
-            <?=$form->field($search, 'report_to', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'report_to', 'id' => 'report_to']
-            ])->widget(DateTimePicker::className(), [
-                'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:59',
-                  'todayBtn' => true,
-                  'minuteStep' => 1,
-                  'endDate' => date('Y-m-d H:i'),
-                  'minView' => '1'
-                ],
-            ])->label('Ngày tạo đến');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'supplier_id']
+            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Tìm theo nhà cung cấp'])->label('Tên nhà cung cấp');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -80,36 +59,23 @@ $pages = $search->getPage();
           <table class="table table-bordered table-checkable">
             <thead>
               <tr>
-                <th> Ngày thực hiện </th>
-                <th> Mã đơn hàng </th>
-                <th> Tên game </th>
+                <th> STT </th>
+                <th> Nhà cung cấp </th>
                 <th> Số gói </th>
-                <th> Giá Kinggems (VNĐ) </th>
-                <th> Giá nhà cung cấp (VNĐ)</th>
-                <th> Lợi nhuận (VNĐ) </th>
+                <th> Doanh thu </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
-                <?php foreach ($models as $model) :?>
-                <?php $numSuppliers = count($model['suppliers']);?>
-                <?php $suppliers = $model['suppliers'];?>
-                <?php $total_price = $model['total_price'];?>
-                <?php foreach ($suppliers as $no => $supplier) : ?>
+                <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <?php if (!$no) : ?>
-                  <td rowspan="<?=$numSuppliers;?>"><?=$model['confirmed_at'];?></td>
-                  <td rowspan="<?=$numSuppliers;?>"><?=$model['id'];?></td>
-                  <td rowspan="<?=$numSuppliers;?>"><?=sprintf("%s (#%s)", $model['game_title'], $model['game_id']);?></td>
-                  <td rowspan="<?=$numSuppliers;?>"><?=$model['quantity'];?></td>
-                  <td rowspan="<?=$numSuppliers;?>"><?=number_format($model['total_price']);?></td>
-                  <?php endif;?>
-                  <td class="numer"><?=sprintf("%s (Giá: %s, Hoàn thành: %s/%s)", number_format($supplier->total_price), number_format($supplier->price), $supplier->doing, $supplier->quantity);?></td>
-                  <td class="numer"><?=number_format($model['total_price'] - $supplier['total_price']);?></td>
+                  <td class="center"><?=$no + 1;?></td>                  
+                  <td class="left"><?=$model['supplier_name'];?></td>                  
+                  <td class="center"><?=number_format($model['quantity'], 1);?></td>                  
+                  <td class="center"><?=number_format($model['total_price'], 1);?></td>                  
                 </tr>
-                <?php endforeach;?>
                 <?php endforeach;?>
             </tbody>
           </table>
