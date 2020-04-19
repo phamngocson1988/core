@@ -10,6 +10,7 @@ use supplier\models\Game;
 use supplier\models\Order;
 use supplier\models\OrderFile;
 use supplier\models\OrderSupplier;
+$this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>
 <style type="text/css">
@@ -218,29 +219,7 @@ use supplier\models\OrderSupplier;
                 </div>
               </div>
               <div class="portlet-body">
-                <div class="timeline">
-                  <?php foreach ($order->complains as $complain):?>
-                  <?php $senderName = ($complain->isSupplier() && $complain->created_by == Yii::$app->user->id) ? $complain->sender->name : 'Admin';?>
-                  <div class="timeline-item">
-                    <div class="timeline-badge">
-                      <div class="timeline-icon">
-                        <i class="icon-user-following font-green-haze"></i>
-                      </div>
-                    </div>
-                    <div class="timeline-body">
-                      <div class="timeline-body-arrow"> </div>
-                      <div class="timeline-body-head">
-                        <div class="timeline-body-head-caption">
-                          <a href="javascript:void()" class="timeline-body-title font-blue-madison"><?=$senderName;?></a>
-                          <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
-                        </div>
-                      </div>
-                      <div class="timeline-body-content">
-                        <span class="font-grey-cascade"><?=$complain->content;?></span>
-                      </div>
-                    </div>
-                  </div>
-                  <?php endforeach;?>
+                <div class="timeline" id="complain-list" style="max-height: 500px; overflow-y: scroll;">
                 </div>
                 <div class="box-shadow inline">
                   <a href="<?=Url::to(['order/template', 'id' => $order->id]);?>"  data-target="#complain_template" class="btn green btn-default" data-toggle="modal"> >> Gửi tin nhắn theo mẫu << </a>
@@ -530,4 +509,14 @@ $this->registerJs($passwordJs);
 <!-- end password -->
 
 
-
+<?php
+$complainRealtimeJs = <<< JS
+Complains({
+  id: '#complain-list',
+  url: '###COMPALINS_URL###'
+})
+JS;
+$complainListUrl = Url::to(['order-complain/list', 'id' => $order->id]);
+$complainRealtimeJs = str_replace('###COMPALINS_URL###', $complainListUrl, $complainRealtimeJs);
+$this->registerJs($complainRealtimeJs)
+?>

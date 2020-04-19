@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use backend\models\Game;
 use backend\models\Order;
 use backend\models\OrderFile;
+$this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -488,39 +489,7 @@ $this->registerJs($complainJs);
                       </div>
                     </div>
                     <div class="portlet-body">
-                      <div class="timeline">
-                        <?php foreach ($order->complains as $complain):?>
-                        <?php
-                          $senderName = $complain->sender->name;
-                          if ($complain->isSupplier()) {
-                            $senderName = Yii::$app->user->can('admin') ? $senderName : 'Supplier';
-                          } 
-                        ?>
-                        <div class="timeline-item">
-                          <div class="timeline-badge">
-                            <?php if ($complain->sender->avatarImage) :?>
-                            <img class="timeline-badge-userpic" src="<?=$complain->sender->getAvatarUrl();?>"> 
-                            <?php else : ?>
-                              <div class="timeline-icon">
-                                <i class="icon-user-following font-green-haze"></i>
-                              </div>
-                            <?php endif; ?>
-                          </div>
-                          <div class="timeline-body">
-                            <div class="timeline-body-arrow"> </div>
-                            <div class="timeline-body-head">
-                              <div class="timeline-body-head-caption">
-                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$senderName;?></a>
-                                <span class="timeline-body-time font-grey-cascade">Phản hồi vào lúc <?=$complain->created_at;?></span>
-                              </div>
-                            </div>
-                            <div class="timeline-body-content">
-                              <span class="font-grey-cascade"><?=$complain->content;?></span>
-                            </div>
-                          </div>
-                        </div>
-                        <?php endforeach;?>
-                      </div>
+                      <div class="timeline" id="complain-list" style="max-height: 500px; overflow-y: scroll;"></div>
                     </div>
                   </div>
                 </div>
@@ -626,4 +595,16 @@ $('body').on('click', '#completeBtn', function() {
 });
 JS;
 $this->registerJs($completeModalJs)
+?>
+
+<?php
+$complainRealtimeJs = <<< JS
+Complains({
+  id: '#complain-list',
+  url: '###COMPALINS_URL###'
+})
+JS;
+$complainListUrl = Url::to(['order-complain/list', 'id' => $order->id]);
+$complainRealtimeJs = str_replace('###COMPALINS_URL###', $complainListUrl, $complainRealtimeJs);
+$this->registerJs($complainRealtimeJs)
 ?>

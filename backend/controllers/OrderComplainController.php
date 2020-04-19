@@ -9,6 +9,7 @@ use yii\data\Pagination;
 use yii\helpers\Url;
 
 use common\models\OrderComplainTemplate;
+use backend\models\OrderComplains;
 
 /**
  * OrderComplainController
@@ -83,4 +84,26 @@ class OrderComplainController extends Controller
         }
     }
 
+    public function actionList($id)
+    {
+        $request = Yii::$app->request;
+        $models = OrderComplains::find()->where(['order_id' => $id])
+        ->with('sender')->all();
+        $list = array_map(function($model) {
+            $sender = $model->sender;
+            $senderName = $sender->name;
+            if ($model->isSupplier()) {
+                $senderName = Yii::$app->user->can('admin') ? $senderName : 'Supplier';
+            } 
+
+            $object = [];
+            $object['id'] = $model->id;
+            $object['avatar'] = $sender->getAvatarUrl(null, null);
+            $object['senderName'] = $senderName;
+            $object['content'] = $model->content;
+            $object['created_at'] = \common\components\helpers\TimeElapsed::timeElapsed($model->created_at);
+            return $object;
+        }, $models);
+        return $this->asJson(['list' => $list]);
+    }
 }
