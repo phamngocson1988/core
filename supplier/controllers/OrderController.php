@@ -497,12 +497,12 @@ class OrderController extends Controller
         if (trim($content)) {
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             $order->complain($content);
-            $order->send(
-                'admin_complain_order', 
-                sprintf("[KingGems] - Your have a notification for order #%s", $order->id), [
-                    'content' => $content, 
-                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true)
-            ]);
+            // $order->send(
+            //     'admin_complain_order', 
+            //     sprintf("[KingGems] - Your have a notification for order #%s", $order->id), [
+            //         'content' => $content, 
+            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true)
+            // ]);
             return $this->renderJson(true);
         }
         return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);

@@ -256,7 +256,8 @@ $(document).on('submit', 'body .complain-form', function(e) {
       if (!result.status)
        alert(result.errors);
       else 
-        location.reload();
+        // location.reload();
+        $('#complain_template').modal('hide');
     },
   });
   return false;

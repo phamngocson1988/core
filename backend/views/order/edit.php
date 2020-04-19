@@ -477,7 +477,8 @@ $this->registerJs($imageJs);
 $complainJs = <<< JS
 var complainForm = new AjaxFormSubmit({element: '.complain-form'});
 complainForm.success = function (data, form) {
-  location.reload();
+  // location.reload();
+  form.closest('.modal').modal('hide');
 };
 complainForm.error = function (errors) {
   alert(errors.error);
