@@ -66,10 +66,10 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
             <thead>
               <tr>
                 <th> Tên game </th>
-                <th> Số lượng cần nạp </th>
-                <th> Số lượng đã nạp </th>
-                <th> Số tiền cho game </th>
-                <th> Số tiền nhận được </th>
+                <th> Số gói yêu cầu </th>
+                <th> Số gói đã nạp </th>
+                <th> Đơn giá </th>
+                <th> Thành tiền </th>
               </tr>
             </thead>
             <tbody>

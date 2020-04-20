@@ -16,6 +16,7 @@
       <li class="sidebar-search-wrapper">
       </li>
 
+
       <!-- Bảng thông báo -->
       <li class="nav-item start active open">
         <a href="{url route='/site/index'}" class="nav-link nav-toggle" code='dashboard'>
@@ -484,6 +485,7 @@
           <li class="nav-item  ">
             <a href="{url route='/order/pending-information'}" class="nav-link " code='order.pendinginformation'>
             <span class="title">Pending Information</span>
+            <span class="badge badge-success">{$this->params['new_pending_info_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
@@ -690,7 +692,7 @@
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
+                <a href="{url route='/report/cost-reseller'}" class="nav-link nav-toggle" code='report.cost.reseller'>
                   <span class="title">Theo reseller</span>
                 </a>
               </li>

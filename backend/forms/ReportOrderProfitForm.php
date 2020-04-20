@@ -48,11 +48,11 @@ class ReportOrderProfitForm extends Model
             $command->andWhere(["$orderTable.payment_method" => $this->payment_method]);
         }
         $command->select([
-            "{$orderTable}.id", 
+            "{$orderTable}.id as order_id", 
             "{$orderTable}.quantity as order_quantity", 
             "{$orderTable}.doing_unit as order_doing", 
             "({$orderTable}.total_price * {$orderTable}.rate_usd / {$orderTable}.quantity) as order_price",
-            "({$orderTable}.total_price * {$orderTable}.rate_usd) as order_total_price", 
+            "IF({$orderSupplierTable}.supplier_id, {$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderTable}.quantity, {$orderTable}.total_price * {$orderTable}.rate_usd) as order_total_price",
             "{$orderTable}.customer_name", 
             "{$orderTable}.confirmed_at", 
             "{$orderTable}.game_title", 
@@ -62,12 +62,10 @@ class ReportOrderProfitForm extends Model
             "COALESCE({$orderSupplierTable}.doing, 0) as supplier_doing",
             "COALESCE({$orderSupplierTable}.price, 0) as supplier_price",
             "COALESCE({$orderSupplierTable}.total_price, 0) as supplier_total_price",
-            "({$orderTable}.total_price * {$orderTable}.rate_usd - COALESCE({$orderSupplierTable}.total_price, 0)) as profit",
+            "({$orderTable}.total_price * {$orderTable}.rate_usd * IF({$orderSupplierTable}.supplier_id, {$orderSupplierTable}.doing / {$orderTable}.quantity, 1) - COALESCE({$orderSupplierTable}.total_price, 0)) as profit",
         ]);
         $command->orderBy(["{$orderTable}.confirmed_at" => SORT_DESC]);
-
         $command->asArray();
-
         $this->_command = $command;
     }
 

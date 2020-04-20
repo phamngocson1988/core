@@ -46,6 +46,7 @@ class ReportProfitController extends Controller
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->all();
+
         $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
         array_filter($supplierIds);
         $suppliers = User::find()->where(['in', 'id', $supplierIds])->indexBy('id')->all();

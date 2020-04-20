@@ -329,11 +329,16 @@ class CartController extends Controller
         try {
             if ($gateway->confirm()) {
                 $user = Yii::$app->user->getIdentity();
-                $order = Order::find()->where([
+                $order = Order::findOne([
                     'payment_method' => $identifier,
                     'auth_key' => $refId,
-                    'status' => Order::STATUS_VERIFYING,
-                ])->one();
+                    'status' => Order::STATUS_VERIFYING
+                ]);
+                // $order = Order::find()->where([
+                //     'payment_method' => $identifier,
+                //     'auth_key' => $refId,
+                //     'status' => Order::STATUS_VERIFYING,
+                // ])->one();
                 if (!$order) throw new \Exception('Order is not exist');
                 $order->attachBehavior('log', OrderLogBehavior::className());
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
@@ -349,7 +354,7 @@ class CartController extends Controller
                 return $gateway->doError();
             }
         } catch (\Exception $e) {
-            Yii::error($gateway->identifier . $gateway->getReferenceId() . " confirm error " . $e->getMessage());
+            Yii::error($gateway->identifier . $gateway->getReferenceId() . " actionVerify error " . $e->getMessage());
             return $gateway->doError();
         }
     }

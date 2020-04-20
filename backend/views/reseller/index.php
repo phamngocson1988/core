@@ -111,6 +111,10 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   <td style="vertical-align: middle;"><?=$model->user->getResellerLabel();?></td>
                   <td style="vertical-align: middle;"><?=($model->manager) ? $model->manager->name : '';?></td>
                   <td style="vertical-align: middle;">
+                    <?php if (Yii::$app->user->can('admin')) : ?>
+                    <a class="btn btn-sm blue tooltips" target="_blank" href="<?=Url::to(['user/edit', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                    <?php endif;?>
+
                     <a href="<?=Url::to(['reseller/delete', 'id' => $model->user_id]);?>" class="btn btn-sm purple link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i></a>
                     <?php if ($model->user->reseller_level != User::RESELLER_LEVEL_3) : ?>
                     <a href="<?=Url::to(['reseller/upgrade', 'id' => $model->user_id]);?>" class="btn btn-sm red link-action tooltips action-link" data-container="body" data-original-title="Nâng cấp nhà bán lẻ này"><i class="fa fa-arrow-up"></i></a>

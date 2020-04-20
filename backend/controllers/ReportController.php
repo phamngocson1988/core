@@ -540,6 +540,20 @@ class ReportController extends Controller
         ]);
     }
 
+    public function actionCostReseller()
+    {
+        $this->view->params['main_menu_active'] = 'report.cost.reseller';
+        $request = Yii::$app->request;
+        $data = [
+            'reseller_id' => $request->get('reseller_id'),
+        ];
+        $form = new \backend\forms\ReportCostOrderByReseller($data);
+
+        return $this->render('cost/reseller', [
+            'search' => $form,
+        ]);
+    }
+
     public function actionCostUser()
     {
         $this->view->params['main_menu_active'] = 'report.cost.user';
