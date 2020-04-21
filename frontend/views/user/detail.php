@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Game;
 use frontend\models\OrderFile;
+$this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <section class="page-title">
   <div class="container">
@@ -249,19 +250,8 @@ use frontend\models\OrderFile;
         <!-- <img src="images/close-icon.png" alt=""> -->
         <div class="t-wrap-text-report">
           <h3>Chat Admin</h3>
-          <div class="t-wrap-text-report-top">
-            <?php foreach ($complains as $complain) : ?>
-              <?php $complainClass = $complain->isCustomer() ? 't-report-me' : 't-report-you';?>
-              <?php $author = $complain->isCustomer() ? Yii::$app->user->identity->name : 'Admin';?>
-              <?php $complainDate = date('Y-m-d') == date('Y-m-d', strtotime($complain->created_at)) ? date('H:i A', strtotime($complain->created_at)) : date('d-m-Y, H:i', strtotime($complain->created_at));?>
-              <span class="t-report-row">
-                <div class="t-report-text <?=$complainClass;?>">
-                  <div style="color: grey; font-size: 10px; font-style: italic;"><?=$author;?></div>
-                  <div><?=strip_tags($complain->content);?></div>
-                  <div style="color: grey; font-size: 10px; font-style: italic; float: right;"><?=$complainDate;?></div>
-                </div>                           
-              </span>
-            <?php endforeach;?>
+          <div class="t-wrap-text-report-top" id="complain-list" style="overflow-y: scroll;">
+            
           </div>
           <div class="t-wrap-text-report-bottom">
             <?= Html::beginForm(Url::to(['user/send-complain', 'id' => $model->id]), 'POST', ['id' => 'send-complain']); ?>
@@ -278,7 +268,8 @@ use frontend\models\OrderFile;
 $script = <<< JS
 var complainForm = new AjaxFormSubmit({element: 'form#send-complain'});
 complainForm.success = function (data, form) {
-  location.reload();
+  form[0].reset();
+  complain.showList();
 }
 complainForm.error = function (errors) {
   console.log(errors);
@@ -318,4 +309,16 @@ $('#complete').ajax_action({
 
 JS;
 $this->registerJs($script);
+?>
+
+<?php
+$complainRealtimeJs = <<< JS
+var complain = new Complains({
+  id: '#complain-list',
+  url: '###COMPALINS_URL###'
+})
+JS;
+$complainListUrl = Url::to(['order-complain/list', 'id' => $model->id]);
+$complainRealtimeJs = str_replace('###COMPALINS_URL###', $complainListUrl, $complainRealtimeJs);
+$this->registerJs($complainRealtimeJs)
 ?>

@@ -478,7 +478,9 @@ $complainJs = <<< JS
 var complainForm = new AjaxFormSubmit({element: '.complain-form'});
 complainForm.success = function (data, form) {
   // location.reload();
+  form[0].reset();
   form.closest('.modal').modal('hide');
+  complain.showList();
 };
 complainForm.error = function (errors) {
   alert(errors.error);
@@ -600,7 +602,7 @@ $this->registerJs($completeModalJs)
 
 <?php
 $complainRealtimeJs = <<< JS
-Complains({
+var complain = new Complains({
   id: '#complain-list',
   url: '###COMPALINS_URL###'
 })

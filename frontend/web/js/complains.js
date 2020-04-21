@@ -2,11 +2,6 @@
  * complains plugin
  * opts: {url: 'complain/list', 'id' => '#compalin-list'}
  */
-
- /**
- * complains plugin
- * opts: {url: 'complain/list', 'id' => '#compalin-list'}
- */
 function Complains(opts) {
     // default configuration properties
     this.options = {
@@ -35,27 +30,14 @@ function Complains(opts) {
     };
 
     this.renderRow = function (object) {
-        var avatar = '';
-        if (object.avatar) {
-            avatar += '<img class="timeline-badge-userpic" src="'+object.avatar+'">';
-        } else {
-            avatar += '<div class="timeline-icon"><i class="icon-user-following font-green-haze"></i></div>';
-        }
-        var html =  '<div class="timeline-item" data-id="'+object.id+'">' +
-                    '<div class="timeline-badge">' + avatar + '</div>' +
-                    '<div class="timeline-body">' +
-                    '<div class="timeline-body-arrow"> </div>' +
-                    '<div class="timeline-body-head">' +
-                    '<div class="timeline-body-head-caption">' +
-                    '<a href="javascript:;" class="timeline-body-title font-blue-madison">'+object.senderName+'</a>' +
-                    '<span class="timeline-body-time font-grey-cascade">'+object.created_at+'</span>' +
+        var className = object.is_customer ? 't-report-me' : 't-report-you';
+        var html =  '<span class="t-report-row" data-id="'+object.id+'">' +
+                    '<div class="t-report-text '+className+'">' +
+                    '<div style="color: grey; font-size: 10px; font-style: italic;">'+object.senderName+'</div>' +
+                    '<div>'+object.content+'</div>' +
+                    '<div class="timeline-body-time" style="color: grey; font-size: 10px; font-style: italic; float: right;">'+object.created_at+'</div>' +
                     '</div>' +
-                    '</div>' +
-                    '<div class="timeline-body-content">' +
-                    '<span class="font-grey-cascade">'+object.content+'</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';
+                    '</span>';
         return $(html);
     }
 
@@ -69,8 +51,8 @@ function Complains(opts) {
             timeout: opts.xhrTimeout,
             success: function(data) {
                 $.each(data.list, function (index, object) {
-                    if(list.find('>div.timeline-item[data-id="' + object.id + '"]').length){
-                        list.find('>div.timeline-item[data-id="' + object.id + '"]').find('.timeline-body-time').html(object.created_at);
+                    if(list.find('>span.t-report-row[data-id="' + object.id + '"]').length){
+                        list.find('>span.t-report-row[data-id="' + object.id + '"]').find('.timeline-body-time').html(object.created_at);
                         return;
                     }
 

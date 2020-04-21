@@ -257,6 +257,7 @@ $(document).on('submit', 'body .complain-form', function(e) {
        alert(result.errors);
       else 
         // location.reload();
+        complain.showList();
         $('#complain_template').modal('hide');
     },
   });
@@ -512,7 +513,7 @@ $this->registerJs($passwordJs);
 
 <?php
 $complainRealtimeJs = <<< JS
-Complains({
+var complain = new Complains({
   id: '#complain-list',
   url: '###COMPALINS_URL###'
 })
