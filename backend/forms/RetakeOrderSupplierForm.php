@@ -52,7 +52,6 @@ class RetakeOrderSupplierForm extends Model
 
         $supplier = $this->getSupplier();
         if (!$supplier) return $this->addError($attribute, 'Đơn hàng này chưa có nhà cung cấp');
-        // if (!in_array($supplier->status, [OrderSupplier::STATUS_REQUEST, OrderSupplier::STATUS_APPROVE])) return $this->addError($attribute, 'Đơn hàng này không thể bị lấy lại'); 
     }
 
     public function retake()
@@ -61,8 +60,10 @@ class RetakeOrderSupplierForm extends Model
         $transaction = $connection->beginTransaction();
         try {
             $order = $this->getOrder();
-            $order->supplier_id = null;
-            $order->save();
+            if ($order->isProcessingOrder()) {
+                $order->status = Order::STATUS_PENDING;
+                $order->save();
+            }
 
             $supplier = $this->getSupplier();
             $supplier->status = OrderSupplier::STATUS_RETAKE;

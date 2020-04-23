@@ -204,10 +204,14 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
             <div>
               <span class="label label-success"><i class="fa fa-lightbulb-o"></i></span>
               <span> Vui lòng tải đủ ảnh cần thiết và đúng ảnh account để tránh khiếu kiện từ khách hàng </span>
-              <div class="form-group">
-                <label class="form-label">Password: [Nếu có]</label>
-                <input type="number" class="form-control" maxlength="8" placeholder="Tối đa 8 số" id="supplier_password">
-              </div>
+              
+                <div class="form-group">
+                  <label class="form-label">Password: [Nếu có]</label>
+                  <div class="form-inline">
+                    <input type="number" class="form-control" style="width: 69%" maxlength="8" placeholder="Tối đa 8 số" id="supplier_password">
+                    <button type="button" id="enter_password" style="width: 29%" class="btn green">Enter</button>
+                  </div>
+                </div>
             </div>
           </div>
           <div class="col-md-6 col-sm-12">
@@ -501,11 +505,40 @@ $this->registerJs($progress);
 <?php
 $passwordJs = <<< JS
 $('#supplier_password').keyup(function (event) {
+  if (event.keyCode == 13) { // enter
+    sendSupplierCode();
+    return;
+  }
   if ($(this).val().length > 8) {
     $(this).val($(this).val().substring(0, 8));
   }
 });
+$('#enter_password').on('click', function() {
+  sendSupplierCode();
+});
+function sendSupplierCode() {
+  var password = $('#supplier_password').val();
+  if (!$.trim(password)) {
+    return;
+  }
+ $.ajax({
+    url: '###SEND_CUSTOM_COMPLAIN###',
+    type: 'POST',
+    dataType : 'json',
+    data: {content: password},
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          alert('Error occur with #' + element.id);
+      } else {
+        complain.showList();
+        $('#supplier_password').val('');
+      }
+    },
+  });
+}
 JS;
+$addComplainUrl = Url::to(['order/complain', 'id' => $order->id]);
+$passwordJs = str_replace('###SEND_CUSTOM_COMPLAIN###', $addComplainUrl, $passwordJs);
 $this->registerJs($passwordJs);
 ?>       
 <!-- end password -->

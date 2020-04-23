@@ -59,11 +59,17 @@ $canOrderTeam = $user->can('orderteam');
               'inputOptions' => ['class' => 'form-control', 'name' => 'id']
             ])->textInput()->label('Mã đơn hàng');?>
 
+            <?php if ($canOrderTeam) : ?>
             <?=$form->field($search, 'supplier_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'supplier_id'],
-            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
-
+            ])->widget(kartik\select2\Select2::classname(), [
+              'data' => $search->fetchSuppliers(),
+              'options' => ['class' => 'form-control', 'placeholder' => 'Chọn nhà cung cấp', 'name' => 'supplier_id'],
+              'pluginOptions' => [             
+                'allowClear' => true,
+              ]
+            ])->label('Nhà cung cấp')?>
+            <?php endif;?>
             <?php if ($canOrderTeam) :?>
             <?=$form->field($search, 'orderteam_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],

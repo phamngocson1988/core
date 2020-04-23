@@ -73,7 +73,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           
             <?=$form->field($search, 'status', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status']
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status', 'onchange' => 'js:$(this).closest("form").submit();']
             ])->dropDownList([
                 Order::STATE_PENDING_CONFIRMATION => 'Incoming Message',
                 Order::STATE_PENDING_INFORMATION => 'Outgoing Message',

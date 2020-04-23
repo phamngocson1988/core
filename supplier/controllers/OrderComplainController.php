@@ -27,7 +27,12 @@ class OrderComplainController extends Controller
     {
         $request = Yii::$app->request;
         $models = OrderComplains::find()->where(['order_id' => $id])
+        ->andWhere(['OR',
+           ["IN", "object_name", [OrderComplains::OBJECT_NAME_CUSTOMER, OrderComplains::OBJECT_NAME_ADMIN]],
+           ["created_by" => Yii::$app->user->id]
+       ])
         ->with('sender')->all();
+        
         $list = array_map(function($model) {
             $sender = $model->sender;
             $senderName = ($model->isSupplier() && $model->created_by == Yii::$app->user->id) ? $sender->name : 'Admin';
