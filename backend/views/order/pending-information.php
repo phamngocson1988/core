@@ -21,6 +21,9 @@ $salerTeams = $search->fetchSalerTeams();
 $user = Yii::$app->user;
 $canSaler = $user->can('saler');
 $canOrderTeam = $user->can('orderteam');
+$numColumn = 8;
+if ($canOrderTeam) $numColumn += 2;
+if ($canSaler) $numColumn += 1;
 ?>
 <!-- jQuery Modal -->
 <!-- BEGIN PAGE BAR -->
@@ -157,13 +160,13 @@ $canOrderTeam = $user->can('orderteam');
                 <th> Trạng thái </th>
                 <th <?=($canSaler) ? '' : "class='hide'";?>> NV hỗ trợ </th>
                 <th <?=($canOrderTeam) ? '' : "class='hide'";?>> NV phân phối </th>
-                <th> Nhà cung cấp </th>
+                <th <?=($canOrderTeam) ? '' : "class='hide'";?>> Nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="<?=$numColumn;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $supplier = $model->supplier;?>
@@ -193,9 +196,9 @@ $canOrderTeam = $user->can('orderteam');
                     <span class="label label-default">Pending</span>
                     <?php endif;?>
                   </td>
-                  <td class="center"><?=($model->saler) ? $model->saler->name : '--';?></td>
-                  <td class="center"><?=($model->orderteam) ? $model->orderteam->name : '--';?></td>
-                  <td class="center"><?=($supplier) ? sprintf("%s", $supplier->user->name) : '--';?></td>
+                  <td class="center <?=($canSaler) ? '' : 'hide';?>"><?=($model->saler) ? $model->saler->name : '--';?></td>
+                  <td class="center <?=($canOrderTeam) ? '' : 'hide';?>"><?=($model->orderteam) ? $model->orderteam->name : '--';?></td>
+                  <td class="center <?=($canOrderTeam) ? '' : 'hide';?>"><?=($supplier) ? sprintf("%s", $supplier->user->name) : '--';?></td>
                   <td class="center">
                     
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id, '#' => 'complain']);?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Chat" ><i class="fa fa-comments-o"></i></a>
@@ -266,7 +269,7 @@ $canOrderTeam = $user->can('orderteam');
                     <?php endif;?> <!-- end if supplier -->
 
                     <!-- Remove supplier -->
-                    <?php if ($supplier && $supplier->canBeTaken()) : ?>
+                    <?php if ($canOrderTeam && $supplier && $supplier->canBeTaken()) : ?>
                     <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
                     <?php endif;?> <!-- end if canBeTaken -->
                   </td>
