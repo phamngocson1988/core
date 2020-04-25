@@ -14,6 +14,7 @@ use frontend\components\cart\CartItem;
 use frontend\components\cart\CartPromotion;
 use frontend\models\Order;
 use frontend\models\User;
+use frontend\models\Game;
 use frontend\events\ShoppingEventHandler;
 
 use frontend\components\payment\cart\PaymentItem;
@@ -84,6 +85,11 @@ class CartController extends Controller
         $promotion_code = $request->post('promotion_code');
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
+        $game = Game::findOne($item->id);
+        if ($game->isSoldout()) {
+            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
+            return $this->redirect(['site/index']);
+        }
         $item->setScenario($request->post('scenario'));
         if ($request->isPost) {
             if ($item->load($request->post()) && $item->validate()) {
@@ -168,6 +174,11 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $item = $cart->getItem();
         if (!$item) return $this->redirect(['site/index']);
+        $game = Game::findOne($item->id);
+        if ($game->isSoldout()) {
+            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
+            return $this->redirect(['site/index']);
+        }
         $item->setScenario(CartItem::SCENARIO_RECEPTION_CART);
         if ($item->load($request->post()) && $item->validate()) {
             $cart->add($item);
@@ -190,6 +201,13 @@ class CartController extends Controller
         $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=$clientId&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
 
         $cart = Yii::$app->cart;
+        $item = $cart->getItem();
+        if (!$item) return $this->redirect(['site/index']);
+        $game = Game::findOne($item->id);
+        if ($game->isSoldout()) {
+            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
+            return $this->redirect(['site/index']);
+        }
         $user = Yii::$app->user->getIdentity();
         $balance = $user->getWalletAmount();
         $canPlaceOrder = $balance >= $cart->getTotalPrice();
@@ -220,6 +238,11 @@ class CartController extends Controller
             return $this->redirect(['game/index']);
         }
         $cartItem = $cart->getItem();
+        $game = Game::findOne($cartItem->id);
+        if ($game->isSoldout()) {
+            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
+            return $this->redirect(['site/index']);
+        }
         $paymentCartItem = new PaymentItem([
             'id' => $cartItem->getUniqueId(),
             'title' => $cartItem->getLabel(),

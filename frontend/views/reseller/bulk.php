@@ -118,7 +118,9 @@ use frontend\components\cart\CartItem;
                 </tr>
               </thead>
             </table>
+            <?php if (!$is_soldout) : ?>
             <?=Html::submitButton('Check Out', ['id' => 'checkout', 'class' => 'cus-btn yellow fl-right', 'data-price' => $balance, 'onClick' => 'showLoader()']);?>
+            <?php endif;?>
           </div>
         </div>
       </div>

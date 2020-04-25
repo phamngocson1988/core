@@ -286,6 +286,7 @@ class ResellerController extends Controller
             'balance' => $balance,
             'default_price' => $singleItem->getPrice(),
             'title' => $singleItem->title,
+            'is_soldout' => $singleItem->isSoldout(),
         ]);
     }
 
