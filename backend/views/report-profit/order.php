@@ -108,6 +108,7 @@ $orderTable = Order::tableName();
                 <th> Mã đơn hàng </th>
                 <th> Nhà cung cấp </th>
                 <th> Khách hàng </th>
+                <th> Saler </th>
                 <th> Ngày xác nhận </th>
                 <th> Tên game </th>
                 <th> Số gói </th>
@@ -120,13 +121,14 @@ $orderTable = Order::tableName();
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <tr>
                   <td><a href='<?=Url::to(['order/view', 'id' => $model['order_id']]);?>'><?=$model['order_id'];?></a></td>
                   <td><?= $model['supplier_id'] ? $suppliers[$model['supplier_id']]->name : '-' ;?></td>
                   <td><?=$model['customer_name'];?></td>
+                  <td><?= $model['saler_id'] ? $salers[$model['saler_id']]->name : '-' ;?></td>
                   <td><?=$model['confirmed_at'];?></td>
                   <td><?=$model['game_title'];?></td>
                   <td><?= $model['supplier_id'] ? sprintf("%s / %s", number_format($model['supplier_doing'], 1), number_format($model['supplier_quantity'], 1)) : $model['order_quantity'];?></td>

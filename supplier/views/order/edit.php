@@ -525,7 +525,7 @@ function sendSupplierCode() {
     url: '###SEND_CUSTOM_COMPLAIN###',
     type: 'POST',
     dataType : 'json',
-    data: {content: password},
+    data: {content: 'Password: ' + password},
     success: function (result, textStatus, jqXHR) {
       if (result.status == false) {
           alert('Error occur with #' + element.id);

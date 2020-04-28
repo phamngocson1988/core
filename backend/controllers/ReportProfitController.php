@@ -47,15 +47,22 @@ class ReportProfitController extends Controller
                             ->limit($pages->limit)
                             ->all();
 
+        // Supplier
         $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
         array_filter($supplierIds);
         $suppliers = User::find()->where(['in', 'id', $supplierIds])->indexBy('id')->all();
+
+        // Saler
+        $salerIds = ArrayHelper::getColumn($models, 'saler_id');
+        array_filter($salerIds);
+        $salers = User::find()->where(['in', 'id', $salerIds])->indexBy('id')->all();
 
         return $this->render('order.php', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
             'suppliers' => $suppliers,
+            'salers' => $salers,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }

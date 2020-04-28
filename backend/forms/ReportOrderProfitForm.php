@@ -49,6 +49,7 @@ class ReportOrderProfitForm extends Model
         }
         $command->select([
             "{$orderTable}.id as order_id", 
+            "{$orderTable}.saler_id as saler_id", 
             "{$orderTable}.quantity as order_quantity", 
             "{$orderTable}.doing_unit as order_doing", 
             "({$orderTable}.total_price * {$orderTable}.rate_usd / {$orderTable}.quantity) as order_price",
