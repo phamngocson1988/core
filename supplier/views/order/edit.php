@@ -176,20 +176,25 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
               </tr>
               <?php endif;?>
             </table>
-            <?php if ($model->isApprove() && !$order->hasCancelRequest()) : ?>
-            <div class="box-shadow">
-              <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn blue btn-block" data-toggle="modal" data-target="#go_processing"><i class="fa fa-angle-right"></i> >> Xác nhận login thành công << </a>
-            </div>
+            <?php if ($model->isApprove()) : ?>
+              <div class="box-shadow">
+                <a href="<?=Url::to(['order/move-to-processing', 'id' => $model->id]);?>" class="btn blue btn-block" data-toggle="modal" data-target="#go_processing"> >> Xác nhận login thành công << </a>
+              </div>
             <?php endif;?>
             <?php if ($model->isProcessing()) : ?>
               <div class="box-shadow" style="margin-bottom: 10px">
                 <button class="btn green btn-block" id="completedOrderBtn"> >> Chuyến tới trạng thái Completed << </button>
               </div>
             <?php endif;?>
-            <?php if ($order->hasCancelRequest() && $model->isProcessing()) :?>
+            <?php if ($order->hasCancelRequest() && ($model->isApprove() || $model->isProcessing())) :?>
             <div class="box-shadow">
-              <button type="button" class="btn btn-outline red btn-block" id="cancelOrderBtn"> >> Có yêu cầu hủy << </button>
+              <button type="button" class="btn btn-outline red btn-block"> >> Có yêu cầu hủy << </button>
             </div>
+            <?php if ($model->isApprove()) : ?>
+            <div class="box-shadow">
+              <a href="<?=Url::to(['order/reject', 'id' => $model->id]);?>" class="btn grey btn-block ajax-link"> >> Hủy đơn hàng << </a>
+            </div>
+            <?php endif;?>
             <?php endif;?>
           </div>
           <div class="col-md-3 col-sm-6">
@@ -237,6 +242,21 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
   </div>
 </div>
 
+<?php
+$commonJs = <<< JS
+$(".ajax-link").ajax_action({
+  method: 'POST',
+  callback: function(eletement, data) {
+    location.reload();
+  },
+  error: function(element, errors) {
+    console.log(errors);
+    alert(errors);
+  }
+});
+JS;
+$this->registerJs($commonJs);
+?>
 <!-- Complain template -->
 <div class="modal fade modal-scroll" id="complain_template" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog">
@@ -446,29 +466,6 @@ upload.callback = function(result) {
     });
   });
 }
-// var uploadAfter = new AjaxUploadFile({
-//   trigger_element: '#uploadElementAfter', 
-//   file_element: '#uploadEvidenceAfter',
-//   file_options: {resize: '500xauto'}
-// });
-// uploadAfter.callback = function(result) {
-//   result.forEach(function(element) {
-//     $.ajax({
-//       url: '###ADD_EVIDENCE_AFTER_URL###',
-//       type: 'POST',
-//       dataType : 'json',
-//       data: {'OrderFile[file_id]': element.id},
-//       success: function (result, textStatus, jqXHR) {
-//         if (result.status == false) {
-//             alert('Error occur with #' + element.id);
-//             return false;
-//         } else {
-//           $('#evidences_after').html(result.data.html);
-//         }
-//       },
-//     });
-//   });
-// }
 JS;
 $addEvidenceUrl = Url::to(['order/add-evidence-image', 'id' => $order->id]);
 $imageJs = str_replace('###ADD_EVIDENCE_URL###', $addEvidenceUrl, $imageJs);

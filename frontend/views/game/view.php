@@ -67,7 +67,7 @@ $gamePromotion = reset($gamePromotions);
                                             'options' => ['tag' => false],
                                             'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
                                             'template' => '{input}'
-                                            ])->dropDownList(CartItem::$quantites);?>
+                                            ])->textInput();?>
                                         </td>
                                         <td><span id="unit"><?=number_format($game->getTotalUnit());?></span></td>
                                         <td>
@@ -184,6 +184,12 @@ $('.product-temple-total .quantity-box button.quantity-minus').click(function(){
 
 // For update quantity
 $('body').on('change', "#quantity", function(){
+  var num = $("#quantity").val();
+  $("#quantity").val(parseFloat(num));
+  if (!validateQuantity()) {
+    alert('Quantity is not valid');
+    $("#quantity").val(1);
+  }
   $('#action').val('change');
   var form = $(this).closest('form');
   $.ajax({
@@ -202,6 +208,17 @@ $('body').on('change', "#quantity", function(){
       },
   });
 });
+function validateQuantity() {
+    var num = $("#quantity").val();
+    num = parseFloat(num);
+    if (num <= 0) {
+        return false;
+    }
+    if (isNaN(num)) {
+        return false;
+    }
+    return true;
+}
 $("#quantity").trigger('change');
 
 JS;

@@ -188,6 +188,9 @@ if ($canSaler) $numColumn += 1;
                     ?>
                   </td>
                   <td class="center">
+                    <?php if ($model->hasCancelRequest()) :?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                    <?php endif;?>
                     <?php if ($model->state == Order::STATE_PENDING_INFORMATION) : ?>
                     <span class="label label-primary">Outgoing Message</span>
                     <?php elseif ($model->state == Order::STATE_PENDING_CONFIRMATION) : ?>

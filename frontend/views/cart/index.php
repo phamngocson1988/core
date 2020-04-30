@@ -154,7 +154,7 @@ $this->registerJsFile('vendor/assets/global/plugins/jquery-inputmask/jquery.inpu
                               'options' => ['tag' => false],
                               'inputOptions' => ['class' => 'form-control txt-qty', 'id' => 'quantity'],
                               'template' => '{input}'
-                              ])->dropDownList(CartItem::$quantites);?>
+                              ])->textInput();?>
                             </td>
                             <td id="unit"><?=number_format($item->getTotalUnit());?></td>
                             <td>
@@ -260,6 +260,12 @@ $('body').on('click', "#update-cart-button", function(){
 });
 
 $('body').on('change', "#quantity", function(){
+  var num = $("#quantity").val();
+  $("#quantity").val(parseFloat(num));
+  if (!validateQuantity()) {
+    alert('Quantity is not valid');
+    $("#quantity").val(1);
+  }
   $(this).closest('form').submit();
 });
 $('body').on('click', '#apply_voucher', function(e){
@@ -296,6 +302,17 @@ $('.product-temple-total .quantity-box button.quantity-minus').click(function(){
         $("#quantity").trigger('change');
     } 
 });
+function validateQuantity() {
+    var num = $("#quantity").val();
+    num = parseFloat(num);
+    if (num <= 0) {
+        return false;
+    }
+    if (isNaN(num)) {
+        return false;
+    }
+    return true;
+}
 $("#quantity").trigger('change');
 $("#ck-cart-box").on('blur', '#saler_code_value', function(){
   console.log($(this).val());

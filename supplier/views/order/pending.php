@@ -125,6 +125,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     ?>
                   </td>
                   <td class="center">
+                    <?php if ($order->hasCancelRequest()) :?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                    <?php endif;?>
                     <?php if ($order->state == Order::STATE_PENDING_INFORMATION) : ?>
                     <span class="label label-primary">Outgoing Message</span>
                     <?php elseif ($order->state == Order::STATE_PENDING_CONFIRMATION) : ?>
