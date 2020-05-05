@@ -85,6 +85,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
                   <td><?=number_format($model->amount);?></td>
                   <td>
+                    <!--
                     <?php if ($model->isDone()) : ?>
                     <?=number_format($model->available_balance - $model->amount);?>
                     <?php elseif ($model->isCancel()) : ?>
@@ -92,6 +93,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <?php else : ?>
                     <?=number_format($supplier->walletTotal());?>
                     <?php endif;?>
+                    -->
+                    <?php
+                    // $done = ArrayHelper::getValue($doneAmount, $model->supplier_id, 0);
+                    echo number_format($supplier->walletTotal() - $model->amount); 
+                    ?>
                   </td>
 
                   <!-- <td><?=number_format($model->available_balance);?></td> -->

@@ -176,10 +176,20 @@ class SupplierController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();
+        // $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
+        // $statCommand = SupplierWithdrawRequest::find()
+        // ->where(['IN', 'supplier_id', $supplierIds])
+        // ->andWhere(['status' => SupplierWithdrawRequest::STATUS_DONE])
+        // ->select(['supplier_id', 'SUM(amount) as amount'])
+        // ->groupBy(['supplier_id'])
+        // ->asArray()
+        // ->all();
+        // $doneAmount = ArrayHelper::map($statCommand, 'supplier_id', 'amount');
         return $this->render('withdraw-request', [
             'models' => $models,
             'pages' => $pages,
-            'search' => $form
+            'search' => $form,
+            // 'doneAmount' => $doneAmount
         ]);
     }
 

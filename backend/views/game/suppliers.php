@@ -145,7 +145,7 @@ if (!count($lastPrices)) {
                       <th> Nhà cung cấp </th>
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá cũ (VNĐ) </th>
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá hiện tại (VNĐ) </th>
-                      <th> Số đơn hoàng thành </th>
+                      <th> Số đơn hoàn thành </th>
                       <th> Tốc độ trung bình </th>
                       <th> Tác vụ </th>
                     </tr>

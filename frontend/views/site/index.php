@@ -62,7 +62,7 @@ use common\components\helpers\FormatConverter;
   </div>
 </section>
 <?php if (Yii::$app->user->isGuest) : ?>
-<div class="modal" id="joinModal">
+<div class="modal" id="joinModal1">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-wrap">
@@ -88,7 +88,7 @@ $this->registerJs($script);
 ?>
 <?php endif;?>
 <?php if (Yii::$app->session->get('popup-welcome')) : ?>
-<div class="modal" id="walletModal">
+<div class="modal" id="walletModal1">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-wrap">
@@ -101,7 +101,7 @@ $this->registerJs($script);
       </div>
   </div>
 </div>
-<div class="modal" id="topupModal">
+<div class="modal" id="topupModal1">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-wrap">
