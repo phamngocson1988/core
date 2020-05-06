@@ -50,7 +50,7 @@ $supplier = $model->getSupplier();
               <i class="fa fa-briefcase fa-icon-medium"></i>
           </div>
           <div class="details">
-              <div class="number"> <?=number_format($supplier->walletTotal());?> VNĐ</div>
+              <div class="number"> <?=number_format($model->getAvailableAmount());?> VNĐ</div>
               <div class="desc"> Số Dư Khả Dụng </div>
           </div>
           <a class="more" href="<?=Url::to(['wallet/index']);?>"> Xem thêm
@@ -64,7 +64,7 @@ $supplier = $model->getSupplier();
               <i class="fa fa-group fa-icon-medium"></i>
           </div>
           <div class="details">
-              <div class="number"> <?=number_format($supplier->walletTotalOutput());?> VNĐ</div>
+              <div class="number"> <?=number_format(abs($supplier->walletTotalOutput()));?> VNĐ</div>
               <div class="desc"> Tổng tiền rút </div>
           </div>
           <a class="more" href="<?=Url::to(['wallet/index', 'type' => SupplierWallet::TYPE_OUTPUT]);?>"> Xem thêm

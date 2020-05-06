@@ -70,7 +70,7 @@ $supplier = $user->supplier;
               <i class="fa fa-group fa-icon-medium"></i>
           </div>
           <div class="details">
-              <div class="number"> <?=number_format($supplier->walletTotalOutput($search->created_at_from, $search->created_at_to));?> VNĐ</div>
+              <div class="number"> <?=number_format(abs($supplier->walletTotalOutput($search->created_at_from, $search->created_at_to)));?> VNĐ</div>
               <div class="desc"> Tổng tiền rút </div>
           </div>
           <a class="more" href="<?=Url::to(['wallet/index', 'type' => SupplierWallet::TYPE_OUTPUT]);?>"> Xem thêm

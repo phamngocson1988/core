@@ -39,7 +39,7 @@ use frontend\models\Order;
                 'linkOptions' => ['class' => 'page-link'],
                 'pageCssClass' => 'page-item',
               ]);?>
-              <?php $form = ActiveForm::begin(['method' => 'get']); ?>
+              <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['user/orders']]); ?>
                 <?= $form->field($filterForm, 'status', [
                   'options' => ['tag' => false],
                   'template' => '{input}',
@@ -61,7 +61,7 @@ use frontend\models\Order;
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="5">No data found</td></tr>
+              <tr><td colspan="6">No data found</td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>

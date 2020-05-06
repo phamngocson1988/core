@@ -446,7 +446,7 @@ var upload = new AjaxUploadFile({
   trigger_element: '#uploadElement', 
   file_element: '#uploadEvidence',
   file_options: {resize: '500xauto'},
-  max: 2
+  max: 5
 });
 upload.callback = function(result) {
   result.forEach(function(element) {

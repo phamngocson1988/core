@@ -75,6 +75,14 @@ class FetchHistoryOrderForm extends Order
 
     public function fetchStatusList()
     {
-        return self::getStatusList();
+        return [
+            Order::STATUS_VERIFYING => 'Verifying',
+            Order::STATUS_PENDING => 'Pending',
+            Order::STATUS_PROCESSING => 'Processing',
+            Order::STATUS_COMPLETED => 'Completed',
+            Order::STATUS_CONFIRMED => 'Confirmed',
+            Order::STATUS_DELETED => 'Deleted',
+            Order::STATUS_CANCELLED => 'Cancelled',
+        ];
     }
 }

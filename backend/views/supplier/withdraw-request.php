@@ -94,18 +94,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <?=number_format($supplier->walletTotal());?>
                     <?php endif;?>
                     -->
-                    <?php
-                    // $done = ArrayHelper::getValue($doneAmount, $model->supplier_id, 0);
-                    echo number_format($supplier->walletTotal() - $model->amount); 
-                    ?>
+                    <?=number_format($model->available_balance);?>
                   </td>
-
-                  <!-- <td><?=number_format($model->available_balance);?></td> -->
-                  <!-- <td>
-                    <?php if ($model->isDone()) : ?>
-                    <?=number_format($model->available_balance - $model->amount);?>
-                    <?php endif;?>
-                  </td> -->
                   <td>
                     <?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?>
                   </td>

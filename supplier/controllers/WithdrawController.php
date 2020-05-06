@@ -38,7 +38,7 @@ class WithdrawController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
+                            ->orderBy(['created_at' => SORT_ASC])
                             ->all();
         return $this->render('index', [
             'models' => $models,

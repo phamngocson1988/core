@@ -17,6 +17,7 @@ class CreateWithdrawRequestForm extends Model
     public $amount;
 
     protected $supplier;
+    protected $_available;
 
     public function rules()
     {
@@ -28,11 +29,24 @@ class CreateWithdrawRequestForm extends Model
 
     public function validateAmount($attribute, $params = []) 
     {
-        $supplier = $this->getSupplier();
-        $available = $supplier->walletTotal();
+        $available = $this->getAvailableAmount();
         if ($this->amount > $available) {
             $this->addError($attribute, sprintf('Bạn không thể yêu cầu rút số tiền nhiều hơn số dư khả dụng là %s', number_format($available)));
         }
+    }
+
+    public function getAvailableAmount()
+    {
+        if (!$this->_available) {
+            $supplier = $this->getSupplier();
+            $available = $supplier->walletTotal();
+            $pending = SupplierWithdrawRequest::find()
+            ->where(['supplier_id' => $this->supplier_id])
+            ->andWhere(['IN', 'status', [SupplierWithdrawRequest::STATUS_REQUEST, SupplierWithdrawRequest::STATUS_APPROVE]])
+            ->sum('amount');
+            $this->_available = $available - $pending;
+        }
+        return $this->_available;
     }
 
     public function create()
@@ -42,13 +56,14 @@ class CreateWithdrawRequestForm extends Model
         $transaction = $connection->beginTransaction();
         try {
             $supplier = $this->getSupplier();
+            $available = $this->getAvailableAmount();
             $model = new SupplierWithdrawRequest(['scenario' => SupplierWithdrawRequest::SCENARIO_CREATE]);
             $model->supplier_id = $this->supplier_id;
             $model->bank_code = $this->bank_code;
             $model->account_name = $this->account_name;
             $model->account_number = $this->account_number;
             $model->amount = $this->amount;
-            $model->available_balance = $supplier->walletTotal();
+            $model->available_balance = $available - $this->amount;
             $result = $model->save(false);
             $transaction->commit();
             return $result;
