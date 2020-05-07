@@ -8,6 +8,11 @@ $('#notify_me').on('click', function() {
 function notifyMe() {
   // Let's check if the browser supports notifications
   console.log('notifyMe check permission', Notification.permission);
+  var options = {
+    body: 'this is the body of notification',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/1024px-Volkswagen_logo_2019.svg.png',
+    dir: 'ltr'
+  };
   if (!("Notification" in window)) {
     alert("This browser does not support desktop notification");
   }
@@ -16,10 +21,7 @@ function notifyMe() {
   else if (Notification.permission === "granted") {
     // If it's okay let's create a notification
     console.log('Should say hi because of agreeing');
-    var notification = new Notification('hi hi', {
-      body: 'this is the body of notification',
-      icon: 'https://kinggems.us/images/favicon.ico'
-    });
+    var notification = new Notification('hi hi', options);
   }
 
   // Otherwise, we need to ask the user for permission
@@ -28,7 +30,7 @@ function notifyMe() {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
         console.log('Should say hi');
-        var notification = new Notification("Hi there!");
+        var notification = new Notification("Hi there!", options);
       }
     });
   }
