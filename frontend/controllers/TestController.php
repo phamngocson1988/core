@@ -206,4 +206,9 @@ class TestController extends Controller
         }
         return $client;
     }
+
+    public function actionPush()
+    {
+        return $this->render('push');
+    }
 }
