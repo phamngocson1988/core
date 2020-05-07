@@ -22,6 +22,9 @@ return [
                 'screen' => [
                     'class' => 'webzop\notifications\channels\ScreenChannel',
                 ],
+                'desktop' => [
+                    'class' => 'backend\components\notifications\channels\DesktopNotificationChannel'
+                ]
             ],
         ],
     ],
