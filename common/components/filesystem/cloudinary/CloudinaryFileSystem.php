@@ -15,7 +15,7 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
     public $cloud_name;
     public $api_key;
     public $api_secret;
-    public $file_path;
+    public $folder;
 
     public function init()
     {
@@ -51,14 +51,14 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
     protected function getPublicId($fileModel)
     {
         if (!is_object($fileModel)) {
-            return sprintf("%s/%s",  Yii::getAlias($this->file_path), $fileModel);
+            return sprintf("%s/%s",  Yii::getAlias($this->folder), $fileModel);
         } else {
-            $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
+            $fileDir = sprintf("%s/%s", Yii::getAlias($this->folder), $this->getRelativePath($fileModel->id));
             $filePath = sprintf("%s/%s", $fileDir, $fileModel->getName());
             return $filePath;
         }
 
-        // return implode("/", array_filter([$this->file_path, $fileModel->id]));
+        // return implode("/", array_filter([$this->folder, $fileModel->id]));
     }
 
     protected function getRelativePath($id)
