@@ -15,19 +15,6 @@ return [
     'bootstrap' => [
         'log', 
     ],
-    'modules' => [
-        'notifications' => [
-            'class' => 'webzop\notifications\Module',
-            'channels' => [
-                'screen' => [
-                    'class' => 'webzop\notifications\channels\ScreenChannel',
-                ],
-                'desktop' => [
-                    'class' => 'backend\components\notifications\channels\DesktopNotificationChannel'
-                ]
-            ],
-        ],
-    ],
 	'language' => 'vi',
 	'sourceLanguage' => 'en-US',
     'components' => [

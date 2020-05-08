@@ -260,7 +260,7 @@ class GameController extends Controller
             'speed_to' => $request->get('speed_to'),
         ]);
         $command = $form->getCommand();
-        $suppliers = $command->all();
+        $suppliers = $command->orderBy(['status' => SORT_DESC])->all();
         $supplierIds = array_column($suppliers, 'supplier_id');
         $speedCommand = OrderSupplier::find()
         ->where(['game_id' => $id])

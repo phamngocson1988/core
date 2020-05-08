@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\components\notifications\channels;
+namespace common\components\notifications\channels;
 
 use Yii;
 use webzop\notifications\Channel;
