@@ -5,7 +5,10 @@ namespace supplier\components\notifications;
 use Yii;
 use webzop\notifications\widgets\Notifications as BaseNotifications;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
+use supplier\components\notifications\NotificationsAsset;
 
 class Notifications extends BaseNotifications
 {
@@ -46,41 +49,48 @@ class Notifications extends BaseNotifications
         $html .= Html::endTag('a');
         
         // Dropdown
-        $html .= Html::begintag('div', ['class' => 'dropdown-menu']);
-        $header = Html::a(Yii::t('modules/notifications', 'Mark all as read'), '#', ['class' => 'read-all pull-right']);
-        $header .= Yii::t('modules/notifications', 'Notifications');
-        $html .= Html::tag('div', $header, ['class' => 'header']);
+        $html .= Html::begintag('ul', ['class' => 'dropdown-menu']);
+        $headerCountNotification = Html::tag('span', sprintf("%s", number_format($count)), ['class' => 'bold header-notifications-count']);
+        $header = Html::tag('h3', $headerCountNotification . ' tin mới');
+        $header .= Html::a(Yii::t('modules/notifications', 'Đánh dấu đã đọc'), '#', ['class' => 'read-all']);
+        $html .= Html::tag('li', $header, ['class' => 'external']);
 
-        $html .= Html::begintag('div', ['class' => 'notifications-list']);
-        //$html .= Html::tag('div', '<span class="ajax-loader"></span>', ['class' => 'loading-row']);
-        $html .= Html::tag('div', Html::tag('span', Yii::t('modules/notifications', 'There are no notifications to show'), ['style' => 'display: none;']), ['class' => 'empty-row']);
+        $html .= Html::begintag('li');
+        $html .= Html::begintag('div', ['class' => 'slimScrollDiv', 'style' => 'position: relative; overflow: hidden; width: auto; height: 250px;']);
+
+        $html .= Html::begintag('ul', ['class' => 'dropdown-menu-list scroller notifications-list', 'style' => 'height: 250px; overflow: hidden; width: auto;', 'data-handle-color' => '#637283', 'data-initialized' => '1']);
+        $html .= Html::endTag('ul');
+
+        $html .= Html::tag('div', '', ['class' => 'slimScrollBar', 'style' => 'background: rgb(99, 114, 131); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;']);
+        $html .= Html::tag('div', '', ['class' => 'slimScrollRail', 'style' => 'width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(234, 234, 234); opacity: 0.2; z-index: 90; right: 1px;']);
         $html .= Html::endTag('div');
+        $html .= Html::endTag('li');
 
-        $footer = Html::a(Yii::t('modules/notifications', 'View all'), ['/notification/index']);
-        $html .= Html::tag('div', $footer, ['class' => 'footer']);
-        $html .= Html::endTag('div');
-
-
-        // new dropdown
-        // $html .= Html::begintag('ul', ['class' => 'dropdown-menu']);
-
-        // // header 
-        // $markAllLink = Html::a(Yii::t('modules/notifications', 'Mark all as read'), 'javascript:;', ['class' => 'read-all']);
-        // $markAll = Html::tag('h3', Html::tag('span', $markAllLink, ['class' => 'bold']));
-        // $viewAll = Html::a(Yii::t('modules/notifications', 'View all'), ['/notification/index']);
-        // $headerContainer = Html::tag('li', $markAll . $viewAll, ['class' => 'external']);
-        // $html .= $headerContainer;
-
-        // // list notifications
-        // $html .= Html::begintag('li');
-        // $html .= Html::tag('ul', '', ['class' => 'dropdown-menu-list scroller notifications-list', 'style' => 'height: 250px', 'data-handle-color' => '#637283']);
-        // $html .= Html::endTag('li');
+        $html .= Html::endTag('ul');
 
 
-        // $html .= Html::endTag('ul');
-        // End notifications
         $html .= Html::endTag('li');
 
         return $html;
+    }
+
+    public function registerAssets()
+    {
+        $this->clientOptions = array_merge([
+            'id' => $this->options['id'],
+            'url' => Url::to(['/notifications/default/list']),
+            'countUrl' => Url::to(['/notifications/default/count']),
+            'readUrl' => Url::to(['/notifications/default/read']),
+            'readAllUrl' => Url::to(['/notifications/default/read-all']),
+            'xhrTimeout' => Html::encode($this->xhrTimeout),
+            'pollInterval' => Html::encode($this->pollInterval),
+        ], $this->clientOptions);
+
+        $js = 'Notifications(' . Json::encode($this->clientOptions) . ');';
+        $view = $this->getView();
+
+        NotificationsAsset::register($view);
+
+        $view->registerJs($js);
     }
 }

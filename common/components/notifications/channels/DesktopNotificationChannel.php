@@ -13,15 +13,18 @@ class DesktopNotificationChannel extends Channel
         $db = Yii::$app->getDb();
         $className = $notification->className();
         $currTime = time();
-        $db->createCommand()->insert('{{%desktop_notifications}}', [
+        $data = [
             'class' => strtolower(substr($className, strrpos($className, '\\')+1, -12)),
             'key' => $notification->key,
             'title' => (string)$notification->getTitle(),
+            'icon' => method_exists($notification, 'getIcon') ? (string)$notification->getIcon() : '',
             'message' => (string)$notification->getDescription(),
+            'device' => 'desktop',
             'route' => serialize($notification->getRoute()),
             'user_id' => $notification->userId,
             'created_at' => $currTime,
-        ])->execute();
+        ];
+        $db->createCommand()->insert('{{%device_notifications}}', $data)->execute();
     }
 
 }

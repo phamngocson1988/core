@@ -7,13 +7,10 @@ use yii\helpers\ArrayHelper;
 
 class OrderNotification extends Notification
 {
-    const KEY_NEW_ORDER = 'KEY_NEW_ORDER';
-    const KEY_PENDING = 'KEY_PENDING';
-    const KEY_PENDING_INFORMATION = 'KEY_PENDING_INFORMATION';
-    const KEY_REQUEST_CANCEL = 'KEY_REJECT_CANCEL_REQUEST';
-    const KEY_REJECT_CANCEL_REQUEST = 'KEY_REJECT_CANCEL_REQUEST';
-    const KEY_APPROVE_CANCEL_REQUEST = 'KEY_APPROVE_CANCEL_REQUEST';
-    const KEY_COMPLETE = 'KEY_COMPLETE';
+    const NOTIFY_ORDERTEAM_NEW_PENDING = 'NOTIFY_ORDERTEAM_NEW_PENDING';
+    const NOTIFY_SUPPLIER_NEW_ORDER = 'NOTIFY_SUPPLIER_NEW_ORDER';
+    const NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE = 'NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE';
+    const NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE = 'NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE';
 
     /**
      * @var \backend\models\Order the order object
@@ -26,21 +23,41 @@ class OrderNotification extends Notification
     public function getTitle()
     {
         switch($this->key){
-            case self::KEY_NEW_ORDER:
-                return Yii::t('app', 'New account {user} created', ['user' => '#'.$this->userId]);
-            case self::KEY_PENDING:
-                return Yii::t('app', 'Instructions to reset the password');
+            case self::NOTIFY_ORDERTEAM_NEW_PENDING:
+                return sprintf("[Đơn hàng mới] - #%s", $this->order->id);
+            case self::NOTIFY_SUPPLIER_NEW_ORDER:
+                return sprintf("[Đơn hàng mới] - #%s", $this->order->id);
+            case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
+                return sprintf("[Information request] - #%s", $this->order->id);
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                return sprintf("[Tin nhắn mới] - #%s", $this->order->id);
         }
     }
 
     public function getDescription()
     {
-
         switch($this->key){
-            case self::KEY_NEW_ORDER:
-                return Yii::t('app', 'New account {user} created', ['user' => '#'.$this->userId]);
-            case self::KEY_PENDING:
-                return Yii::t('app', 'Instructions to reset the password');
+            case self::NOTIFY_ORDERTEAM_NEW_PENDING:
+                return sprintf("Chờ phân phối");
+            case self::NOTIFY_SUPPLIER_NEW_ORDER:
+                return sprintf("Chờ nhận đơn");
+            case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
+                return sprintf("Waiting for response");
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                return sprintf("Chờ phản hồi");
+        }
+    }
+
+    public function getIcon()
+    {
+        $setting = Yii::$app->settings;
+        switch($this->key){
+            case self::NOTIFY_ORDERTEAM_NEW_PENDING:
+            case self::NOTIFY_SUPPLIER_NEW_ORDER:
+            case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                return $setting->get('ApplicationSettingForm', 'logo', '');
+
         }
     }
 
@@ -48,13 +65,22 @@ class OrderNotification extends Notification
      * @inheritdoc
      */
     public function getRoute(){
-        return ['/users/edit', 'id' => $this->user->id];
+        switch($this->key){
+            case self::NOTIFY_ORDERTEAM_NEW_PENDING:
+                return '';
+            case self::NOTIFY_SUPPLIER_NEW_ORDER:
+                return ['order/waiting'];
+            case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
+                return ['user/detail', 'id' => $this->order->id];
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                return ['order/edit', 'id' => $this->order->id];
+        }
     }
 
     public function shouldSend($channel)
     {
         $allows = $this->allow();
-        $allowByChannel = ArrayHelper::getValue($allow, $channel->id, []);
+        $allowByChannel = ArrayHelper::getValue($allows, $channel->id, []);
         return in_array($this->key, $allowByChannel);
     }
 
@@ -62,13 +88,10 @@ class OrderNotification extends Notification
     {
         return [
             'desktop' => [
-                self::KEY_NEW_ORDER,
-                self::KEY_PENDING,
-                self::KEY_PENDING_INFORMATION,
-                self::KEY_REQUEST_CANCEL,
-                self::KEY_REJECT_CANCEL_REQUEST,
-                self::KEY_APPROVE_CANCEL_REQUEST,
-                self::KEY_COMPLETE,
+                self::NOTIFY_ORDERTEAM_NEW_PENDING,
+                self::NOTIFY_SUPPLIER_NEW_ORDER,
+                self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE,
+                self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE,
             ]
         ];
     }

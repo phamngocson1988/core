@@ -3,11 +3,15 @@ namespace frontend\components\notifications;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use webzop\notifications\Notification;
 
-class OrderNotification extends \common\components\notifications
+class OrderNotification extends Notification
 {
-    const KEY_NEW_ORDER = 'KEY_NEW_ORDER';
-
+    const NOTIFY_SALER_NEW_ORDER = 'NOTIFY_SALER_NEW_ORDER';
+    const NOTIFY_ORDERTEAM_NEW_ORDER = 'NOTIFY_ORDERTEAM_NEW_ORDER';
+    const NOTIFY_SALER_CANCEL_ORDER = 'NOTIFY_SALER_CANCEL_ORDER';
+    const NOTIFY_ORDERTEAM_CANCEL_ORDER = 'NOTIFY_ORDERTEAM_CANCEL_ORDER';
+    const NOTIFY_SUPPLIER_CANCEL_ORDER = 'NOTIFY_SUPPLIER_CANCEL_ORDER';
     /**
      * @var \frontend\models\Order the order object
      */
@@ -19,8 +23,28 @@ class OrderNotification extends \common\components\notifications
     public function getTitle()
     {
         switch($this->key){
-            case self::KEY_NEW_ORDER:
-                return Yii::t('app', 'New account {user} created', ['user' => '#'.$this->userId]);
+            case self::NOTIFY_SALER_NEW_ORDER:
+            case self::NOTIFY_ORDERTEAM_NEW_ORDER:
+                return sprintf("[Đơn hàng mới] - #%s", $this->order->id);
+            case self::NOTIFY_SALER_CANCEL_ORDER:
+            case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
+            case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
+                return sprintf("[Yêu cầu hủy] - #%s", $this->order->id);
+
+        }
+    }
+
+    public function getIcon()
+    {
+        $setting = Yii::$app->settings;
+        switch($this->key){
+            case self::NOTIFY_SALER_NEW_ORDER:
+            case self::NOTIFY_ORDERTEAM_NEW_ORDER:
+            case self::NOTIFY_SALER_CANCEL_ORDER:
+            case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
+            case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
+                return $setting->get('ApplicationSettingForm', 'logo', '');
+
         }
     }
 
@@ -28,8 +52,14 @@ class OrderNotification extends \common\components\notifications
     {
 
         switch($this->key){
-            case self::KEY_NEW_ORDER:
-                return Yii::t('app', 'New account {user} created', ['user' => '#'.$this->userId]);
+            case self::NOTIFY_SALER_NEW_ORDER:
+                return sprintf("Chờ duyệt giao dịch");
+            case self::NOTIFY_ORDERTEAM_NEW_ORDER:
+                return sprintf("Chờ phân phối");
+            case self::NOTIFY_SALER_CANCEL_ORDER:
+            case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
+            case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
+                return sprintf("Yêu cầu hủy đơn hàng");
         }
     }
 
@@ -37,21 +67,34 @@ class OrderNotification extends \common\components\notifications
      * @inheritdoc
      */
     public function getRoute(){
-        return ['/users/edit', 'id' => $this->user->id];
+        switch($this->key){
+            case self::NOTIFY_SALER_NEW_ORDER:
+            case self::NOTIFY_ORDERTEAM_NEW_ORDER:
+            case self::NOTIFY_SALER_CANCEL_ORDER:
+            case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
+                return '';
+            case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
+                return ['order/edit', 'id' => $this->order->id];
+        }
     }
 
     public function shouldSend($channel)
     {
         $allows = $this->allow();
-        $allowByChannel = ArrayHelper::getValue($allow, $channel->id, []);
-        return in_array($this->key, $allowByChannel);
+        $allowByChannel = ArrayHelper::getValue($allows, $channel->id, []);
+        $re = in_array($this->key, $allowByChannel);
+        return $re;
     }
 
     protected function allow()
     {
         return [
             'desktop' => [
-                self::KEY_NEW_ORDER,
+                self::NOTIFY_SALER_NEW_ORDER,
+                self::NOTIFY_ORDERTEAM_NEW_ORDER,
+                self::NOTIFY_SALER_CANCEL_ORDER,
+                self::NOTIFY_ORDERTEAM_CANCEL_ORDER,
+                self::NOTIFY_SUPPLIER_CANCEL_ORDER,
             ]
         ];
     }

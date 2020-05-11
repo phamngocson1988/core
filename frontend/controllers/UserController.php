@@ -24,6 +24,8 @@ use common\models\PaymentTransaction;
 use common\models\OrderComplains;
 use frontend\behaviors\OrderLogBehavior;
 
+// Notification
+use frontend\components\notifications\OrderNotification;
 /**
  * UserController
  */
@@ -199,20 +201,26 @@ class UserController extends Controller
         $request = Yii::$app->request;
         $order->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             $o = $event->sender;
-            // $o->attachBehavior('log', OrderLogBehavior::className());
             $o->log(sprintf("Sent cancel request"));
+            // Send notification to saler
+            $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+            $o->pushNotification(OrderNotification::NOTIFY_SALER_CANCEL_ORDER, $salerTeamIds);
+
+            // Send notification to orderteam
+            $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
+            $o->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_CANCEL_ORDER, $orderTeamIds);
+
+            // Send notification to supplier
+            $supplier = $o->workingSupplier;
+            if ($supplier) {
+                $o->pushNotification(OrderNotification::NOTIFY_SUPPLIER_CANCEL_ORDER, $supplier->supplier_id);
+            }
         });
         $order->setScenario(Order::SCENARIO_CANCELORDER);
         $order->request_cancel = 1;
         $order->request_cancel_time = date('Y-m-d H:i:s');
         $order->request_cancel_description = $request->post('content');
         if ($order->save()) {
-            // Send content as complain
-            // $model = new OrderComplains();
-            // $model->order_id = $order->id;
-            // $model->content = $request->post('content');
-            // $model->created_by = Yii::$app->user->id;
-            // $model->save();
             return $this->renderJson(true, []);
         } else {
             return $this->renderJson(false, [], $order->getErrorSummary(true));

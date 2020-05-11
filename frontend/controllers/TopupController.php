@@ -26,6 +26,9 @@ use frontend\components\payment\cart\PaymentPromotion;
 use frontend\components\payment\PaymentGateway;
 use frontend\components\payment\PaymentGatewayFactory;
 
+// Notification
+use frontend\components\notifications\DepositNotification;
+use frontend\behaviors\DepositNotificationBehavior;
 /**
  * TopupController
  */
@@ -224,6 +227,14 @@ class TopupController extends Controller
         $trn->save();
         $gateway->setReferenceId($trn->auth_key);
         $cart->clear();
+
+        // Notify saler in case this is offline payment
+        if ($gateway->type == 'offline') {
+            $trn->attachBehavior('notification', DepositNotificationBehavior::className());
+            $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+            $trn->pushNotification(DepositNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
+        }
+
         $gateway->setCart($paymentCart);
         $paygateData = $gateway->request();
         try {

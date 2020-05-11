@@ -40,6 +40,9 @@ use backend\forms\UpdateOrderToPartialForm;
 use backend\forms\StopOrderForm;
 use backend\forms\ApproveCancelOrder;
 
+// Notification
+use backend\components\notifications\OrderNotification;
+
 // use backend\forms\UpdateOrderStatusPending;
 
 class OrderController extends Controller
@@ -465,20 +468,8 @@ class OrderController extends Controller
                     'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
             ]);
             $order->log(sprintf("Moved to pending with payment_id: %s", $order->payment_id));
-
-            // $adminEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
-            // if ($adminEmail) {
-            //     Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            //     Yii::$app->mailer->compose('admin_send_pending_order', [
-            //         'order' => $order,
-            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            //     ])
-            //     ->setTo($order->customer_email)
-            //     ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
-            //     ->setSubject(sprintf("Order confirmation - %s", $order->id))
-            //     ->setTextBody("Your order is moved to pending status")
-            //     ->send();
-            // }
+            $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
+            $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_PENDING, $orderTeamIds);
         });
         if (!$model->auth_key) $model->generateAuthKey();
         $model->payment_type = 'offline';
@@ -609,14 +600,17 @@ class OrderController extends Controller
         $order = Order::findOne($id);
         $content = $request->post('content');
         if (trim($content)) {
-            // Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             $order->complain($content);
-            // $order->send(
-            //     'admin_complain_order', 
-            //     sprintf("[KingGems] - Your have a notification for order #%s", $order->id), [
-            //         'content' => $content, 
-            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true)
-            // ]);
+            if (Yii::$app->user->isRole('orderteam')) {
+                $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $order->customer_id);
+            }
+            if (Yii::$app->user->isRole('saler') && $order->supplier) {
+                $supplier = $order->workingSupplier;
+                if ($supplier) {
+                    $order->pushNotification(OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE, $supplier->supplier_id);
+                }
+
+            }
             return $this->renderJson(true);
         }
         return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);

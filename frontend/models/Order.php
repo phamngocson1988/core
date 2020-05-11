@@ -3,6 +3,7 @@ namespace frontend\models;
 
 use Yii;
 use frontend\behaviors\OrderComplainBehavior;
+use frontend\behaviors\OrderNotificationBehavior;
 /**
  * Order model
  */
@@ -14,6 +15,7 @@ class Order extends \common\models\Order
     {
         $behaviors = parent::behaviors();
         $behaviors['complain'] = OrderComplainBehavior::className();
+        $behaviors['notification'] = OrderNotificationBehavior::className();
         return $behaviors;
     }
 

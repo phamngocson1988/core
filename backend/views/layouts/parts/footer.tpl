@@ -1,3 +1,5 @@
+{use class='backend\components\notifications\PushNotifications'}
+{PushNotifications::widget()}
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
   <div class="page-footer-inner"> 2016 &copy; Metronic Theme By

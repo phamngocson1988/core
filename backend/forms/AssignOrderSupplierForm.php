@@ -7,6 +7,7 @@ use yii\base\Model;
 use backend\models\Order;
 use backend\models\Supplier;
 use backend\models\OrderSupplier;
+use backend\components\notifications\OrderNotification;
 
 class AssignOrderSupplierForm extends Model
 {
@@ -99,25 +100,9 @@ class AssignOrderSupplierForm extends Model
             ]);
             $orderSupplier->save();
             $order->log(sprintf("Chuyển đến nhà cung cấp %s (#%s)", $supplier->user->name, $this->supplier_id));
-
-            // $from = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
-            // $fromName = sprintf("%s Administrator", Yii::$app->name);
-            // $supplier = $orderSupplier->user;
-            // $to = $supplier->email;
-            // $title = sprintf("You have received new request for processing order #%s", $order->id);
-            // Yii::$app->mailer->compose('notify_supplier_new_request', [
-            //     'order' => $order, 
-            //     'title' => $title, 
-            //     'supplier' => $supplier
-            // ])
-            // ->setTo($to)
-            // ->setFrom([$from => $fromName])
-            // ->setSubject($title)
-            // ->setTextBody($title)
-            // ->send();
+            $order->pushNotification(OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER, $this->supplier_id);
 
             $transaction->commit();
-            // $order->notifyNewOrderToSupplier();
             return true;
         } catch(Exception $e) {
             $transaction->rollback();

@@ -1,3 +1,5 @@
+{use class='supplier\components\notifications\PushNotifications'}
+{PushNotifications::widget()}
 {if $app->session->hasFlash('error')}
 <div class="alert alert-danger" role="alert">
   <ul>

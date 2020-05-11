@@ -1,4 +1,6 @@
 <?php
+use frontend\components\notifications\PushNotifications;
+PushNotifications::widget();
 $setting = Yii::$app->settings;
 ?>
 <section class="footer">

@@ -21,7 +21,12 @@ function notifyMe() {
   else if (Notification.permission === "granted") {
     // If it's okay let's create a notification
     console.log('Should say hi because of agreeing');
-    var notification = new Notification('hi hi', options);
+    var notification = new Notification('This is the title', options);
+    notification.onclick = function(event) {
+      console.log('onclick');
+      event.preventDefault(); // prevent the browser from focusing the Notification's tab
+      window.open('https\://vnexpress.net');
+    }
   }
 
   // Otherwise, we need to ask the user for permission
@@ -30,7 +35,12 @@ function notifyMe() {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
         console.log('Should say hi');
-        var notification = new Notification("Hi there!", options);
+        var notification = new Notification("This is the title", options);
+        notification.onclick = function(event) {
+          console.log('onclick');
+          event.preventDefault(); // prevent the browser from focusing the Notification's tab
+          window.open('https\://vnexpress.net');
+        }
       }
     });
   }

@@ -25,6 +25,9 @@ use frontend\components\payment\PaymentGatewayFactory;
 use common\components\helpers\FormatConverter;
 use frontend\behaviors\OrderLogBehavior;
 
+// Notification
+use frontend\components\notifications\OrderNotification;
+
 /**
  * CartController
  */
@@ -287,7 +290,6 @@ class CartController extends Controller
             $order->payment_method = $identifier;
             $order->payment_type = $gateway->type;
             $order->rate_usd = $rate;
-            // $order->payment_id = $gateway->getReferenceId();
             $order->price = $cartItem->getPrice();
             $order->cogs_price = $cartItem->getCogs();
             $order->sub_total_price = $subTotalPrice;
@@ -333,6 +335,11 @@ class CartController extends Controller
             }
             if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
             $order->log(sprintf("Created. Status %s (%s - %s)", $order->status, $identifier, $gateway->type));
+            // Notify saler in case this is offline payment
+            if ($gateway->type == 'offline') {
+                $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+                $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
+            }
             $cart->clear();
             return $gateway->request();
         } catch (\Exception $e) {
@@ -357,11 +364,6 @@ class CartController extends Controller
                     'auth_key' => $refId,
                     'status' => Order::STATUS_VERIFYING
                 ]);
-                // $order = Order::find()->where([
-                //     'payment_method' => $identifier,
-                //     'auth_key' => $refId,
-                //     'status' => Order::STATUS_VERIFYING,
-                // ])->one();
                 if (!$order) throw new \Exception('Order is not exist');
                 $order->attachBehavior('log', OrderLogBehavior::className());
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
@@ -372,6 +374,11 @@ class CartController extends Controller
                 $order->payment_id = $gateway->getPaymentId();
                 $order->save();
                 $order->log(sprintf("Verified, Status is %s", $order->status));
+
+                // Notify to orderteam in case this is online order
+                $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
+                $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_ORDER, $orderTeamIds);
+
                 return $gateway->doSuccess();
             } else {
                 return $gateway->doError();

@@ -25,6 +25,9 @@ use supplier\forms\AddOrderQuantityForm;
 use supplier\forms\UpdateOrderToCompletedForm;
 use supplier\forms\UpdateOrderToPartialForm;
 
+// Notification
+use supplier\components\notifications\OrderNotification;
+
 class OrderController extends Controller
 {
     public function behaviors()
@@ -496,6 +499,7 @@ class OrderController extends Controller
         $content = $request->post('content');
         if (trim($content)) {
             $order->complain($content);
+            $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $order->customer_id);
             return $this->renderJson(true);
         }
         return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);

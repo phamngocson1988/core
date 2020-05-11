@@ -1,5 +1,6 @@
 {$user = Yii::$app->user->getIdentity()}
 {use class='backend\components\notifications\Notifications'}
+{use class='backend\components\notifications\PushNotifications'}
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
   <!-- BEGIN HEADER INNER -->
@@ -52,3 +53,4 @@
   <!-- END HEADER INNER -->
 </div>
 <!-- END HEADER -->
+{PushNotifications::widget()}
