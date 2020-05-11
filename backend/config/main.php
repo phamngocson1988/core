@@ -10,8 +10,8 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'layout' => 'main.tpl',
-    'defaultRoute' => 'order',
+    'layout' => 'main.php',
+    'defaultRoute' => 'site',
     'bootstrap' => [
         'log', 
     ],
@@ -28,8 +28,6 @@ return [
             ],
         ],
     ],
-	'language' => 'vi',
-	'sourceLanguage' => 'en-US',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',            
@@ -39,6 +37,7 @@ return [
             'identityClass' => 'backend\models\User', 
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'on afterLogin' => ['backend\events\LoginEvent', 'logLogin'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend

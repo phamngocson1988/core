@@ -20,7 +20,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'activate'],
+                        'actions' => ['login', 'error'],
                         'allow' => true,
                     ],
                     [
@@ -62,7 +62,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $this->layout = 'login.tpl';
+        $this->layout = 'login.php';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -71,7 +71,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-            return $this->render('login.tpl', [
+            return $this->render('login.php', [
                 'model' => $model,
             ]);
         }
@@ -91,7 +91,7 @@ class SiteController extends Controller
     
     public function actionActivate()
     {
-        $this->layout = 'login.tpl';
+        $this->layout = 'login.php';
         $request = Yii::$app->request;
         $id = $request->get('id');
         $key = $request->get('activation_key');
@@ -117,6 +117,6 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('activate.tpl', ['model' => $model]);
+        return $this->render('activate.php', ['model' => $model]);
     }
 }

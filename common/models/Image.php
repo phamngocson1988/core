@@ -55,24 +55,4 @@ class Image extends ActiveRecord
 		return Yii::$app->image->get($this, $size);
 	}
 
-    public function generateHtml($options = [], $size = null, $hiddenOptions = null) 
-    {
-    	$options['src'] = $this->getUrl($size);
-    	$imgAttr = [];
-    	foreach ($options as $key => $value) {
-    		$imgAttr[] = "$key='$value'";
-    	}
-    	$imgElement = sprintf("<img %s />", implode(" ", $imgAttr));
-
-    	$hiddenElement = "";
-    	if ($hiddenOptions !== null) {
-    		$hiddenAttr = [];
-	    	foreach ((array)$hiddenOptions as $key => $value) {
-	    		$hiddenAttr[] = "$key='$value'";
-	    	}
-    		$hiddenElement = sprintf("<input type='hidden' %s />", implode(" ", $hiddenAttr));
-    	}
-
-    	return $imgElement . $hiddenElement;
-    }
 }

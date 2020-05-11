@@ -1,5 +1,8 @@
-{$user = Yii::$app->user->getIdentity()}
-{use class='backend\components\notifications\Notifications'}
+<?php 
+use backend\components\notifications\Notifications;
+use yii\helpers\Url;
+?>
+<?php $user = Yii::$app->user->getIdentity();?>
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
   <!-- BEGIN HEADER INNER -->
@@ -22,25 +25,25 @@
     <div class="top-menu">
       <ul class="nav navbar-nav pull-right">
         
-        {Notifications::widget()}
+        <?=Notifications::widget();?>
         <li class="dropdown dropdown-user">
           <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-          <img alt="Avatar" global="avatar_{$user->id}" class="img-circle" src="{$user->getAvatarUrl('100x100')}"/>
-          <span class="username username-hide-on-mobile"> {$user->getName()} </span>
+          <img alt="Avatar" global="avatar_{$user->id}" class="img-circle" src="<?=$user->getAvatarUrl('100x100');?>"/>
+          <span class="username username-hide-on-mobile"> <?=$user->getName();?> </span>
           <i class="fa fa-angle-down"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-default">
             <li>
-              <a href="{url route='/profile/index'}">
-              <i class="icon-user"></i> {Yii::t('app', 'my_profile')} </a>
+              <a href="<?=Url::to(['profile/index']);?>">
+              <i class="icon-user"></i> <?=Yii::t('app', 'my_profile');?> </a>
             </li>
             <li>
-              <a href="{url route='/profile/password'}">
-              <i class="icon-key"></i> {Yii::t('app', 'change_password')} </a>
+              <a href="<?=Url::to(['profile/password']);?>">
+              <i class="icon-key"></i> <?=Yii::t('app', 'change_password');?> </a>
             </li>
             <li>
-              <a href="{url route='/site/logout'}">
-              <i class="icon-logout"></i> {Yii::t('app', 'logout')} </a>
+              <a href="<?=Url::to(['site/logout']);?>">
+              <i class="icon-logout"></i> <?=Yii::t('app', 'logout');?> </a>
             </li>
           </ul>
         </li>
