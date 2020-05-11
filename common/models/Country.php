@@ -16,7 +16,7 @@ class Country extends Model
     
     public static function fetchAll() 
     {
-        $countries = Yii::$app->params['countries'];
+        $countries = Yii::$app->params['country'];
         return array_map(function($arr) {
             return new Country($arr);
         }, $countries);

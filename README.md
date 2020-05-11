@@ -69,5 +69,3 @@ php yii migrate
 php yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
 
 php yii migrate/up --migrationPath=vendor/webzop/yii2-notifications/migrations
-
-php yii migrate --migrationPath=@vendor/yii2mod/yii2-cart/migrations

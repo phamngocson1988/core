@@ -14,22 +14,19 @@ class InitController extends Controller
 
         // User: admin
         $form = new \backend\forms\SignupForm([
-            'name' => 'Administrator',
             'username' => 'admin',
             'email' => 'phamngocson1988@gmail.com',
-            'password' => '123456'
+            'password' => '123456',
+            'firstname' => 'System',
+            'lastname' => 'Admin',
+            'country' => 'VN',
+            'gender' => 'M',
         ]);
         $user = $form->create();
 
-        foreach (Yii::$app->user->fixRoles as $roleName) {
-            $role = $auth->createRole($roleName);
-            $role->description = ucfirst($roleName);
-            $auth->add($role);
-
-            $auth->assign($role, $user->id);
-        }
-        die('Done');        
-
+        // Create roles / permisions
+        
+        // Assign system_admin to user
         
     }
 }

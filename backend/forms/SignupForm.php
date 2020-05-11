@@ -1,11 +1,9 @@
 <?php
-
 namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use yii\helpers\ArrayHelper;
-use backend\forms\AssignRoleForm;
+use backend\models\User;
 
 class SignupForm extends Model
 {
@@ -17,52 +15,61 @@ class SignupForm extends Model
     public $country;
     public $gender;
 
-	public function rules()
+	/**
+     * @inheritdoc
+     */
+    public function rules()
     {
-        $rules = parent::rules();
-        $rules[] = ['role', 'trim'];
-        return $rules;
+        return [
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'validate_username_unique')],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => Yii::t('app', 'validate_email_unique')],
+
+            ['password', 'required'],
+            ['password', 'string', 'min' => 6],
+
+            ['firstname', 'trim'],
+            ['firstname', 'string', 'max' => 255],
+
+            ['lastname', 'trim'],
+            ['lastname', 'string', 'max' => 255],
+
+            ['country', 'trim'],
+            ['country', 'string', 'max' => 64],
+
+            ['gender', 'trim'],
+            ['gender', 'string'],
+        ];
     }
 
-	public function getRoles()
+    /**
+     * Signs user up.
+     *
+     * @return User|null the saved model or null if saving fails
+     */
+    public function signup()
     {
-        $auth = Yii::$app->authManager;
-        $roles = $auth->getRoles();
-        $names = ArrayHelper::map($roles, 'name', 'description');
-        return $names;
-    }
-	
-	public function signup()
-	{
-		$connection = Yii::$app->db;
-		$transaction = $connection->beginTransaction();
-		try {
-			$user = parent::signup();
-			if ($this->role && ($user instanceof \common\models\User)) {
-				$form = new AssignRoleForm(['user_id' => $user->id, 'role' => $this->role, 'scenario' => AssignRoleForm::SCENARIO_ADD]);
-				$form->save();
-			}	
-			$transaction->commit();
-			$this->sendEmail();
-            Yii::$app->syslog->log('create_user', 'create new user', $user);
-			return $user;
-		} catch (\Exception $e) {
-			$transaction->rollBack();
-			$this->addError('username', $e->getMessage());
-			return false;
-		}
-	}
-
-	public function sendEmail()
-    {
-        // $settings = Yii::$app->settings;
-        // $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        // $email = $this->email;
-        // return Yii::$app->mailer->compose('invite_user', ['mail' => $this])
-        //     ->setTo($email)
-        //     ->setFrom([$adminEmail => Yii::$app->name])
-        //     ->setSubject("[Kinggems][Invitation email] Bạn nhận được lời mời từ " . Yii::$app->name)
-        //     ->setTextBody('Bạn nhận được lời mời làm thành viên quản trị từ kinggems.us')
-        //     ->send();
+        if (!$this->validate()) {
+            return null;
+        }
+        
+        $user = new User();
+        $user->username = $this->username;
+        $user->email = $this->email;
+        $user->setPassword($this->password);
+        $user->generateAuthKey();
+        $user->firstname = $this->firstname;        
+        $user->lastname = $this->lastname;        
+        $user->country = $this->country;        
+        $user->gender = $this->gender;        
+        
+        return $user->save() ? $user : null;
     }
 }
