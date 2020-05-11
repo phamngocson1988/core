@@ -40,7 +40,7 @@
         "zvook/php-skrill-quick-checkout": "*",
         "lavrentiev/yii2-toastr": "^2.0",
         "yii2mod/yii2-sweet-alert": "*",
-        "alexandernst/yii2-device-detect": "0.0.12",
+        "alexandernst/yii2-device-detect": "0.0.12"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -50,7 +50,7 @@
         "codeception/verify": "~0.3.1"
     },
     "config": {
-        "process-timeout": 1800
+        "process-timeout": 1800,
     },
     "repositories": [
         {

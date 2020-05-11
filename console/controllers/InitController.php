@@ -12,11 +12,6 @@ class InitController extends Controller
         $auth = Yii::$app->authManager;
         $auth->removeAll();
 
-        // Role: admin
-        $admin = $auth->createRole('admin');
-        $admin->description = 'Admin';
-        $auth->add($admin);
-
         // User: admin
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
@@ -24,6 +19,17 @@ class InitController extends Controller
             'email' => 'phamngocson1988@gmail.com',
             'password' => '123456'
         ]);
-        $form->signup();
+        $user = $form->create();
+
+        foreach (Yii::$app->user->fixRoles as $roleName) {
+            $role = $auth->createRole($roleName);
+            $role->description = ucfirst($roleName);
+            $auth->add($role);
+
+            $auth->assign($role, $user->id);
+        }
+        die('Done');        
+
+        
     }
 }

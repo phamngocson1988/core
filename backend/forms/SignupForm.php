@@ -3,13 +3,19 @@
 namespace backend\forms;
 
 use Yii;
-use common\forms\SignupForm as BaseSignupForm;
+use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\forms\AssignRoleForm;
 
-class SignupForm extends BaseSignupForm
+class SignupForm extends Model
 {
-	public $role;
+	public $username;
+    public $email;
+    public $password;
+	public $firstname;
+    public $lastname;
+    public $country;
+    public $gender;
 
 	public function rules()
     {
