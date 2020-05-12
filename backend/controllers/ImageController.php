@@ -48,14 +48,17 @@ class ImageController extends Controller
             $html = "";
             $template = $request->get('template', '_item');
             foreach ($models as $model) {
-                $html .= $this->renderPartial("$template.tpl",['model' => $model]);
+                $html .= $this->renderPartial("$template.php",['model' => $model]);
             }
             $data = [
                 'items' => $html,
                 'total' => $total,
                 'load_more' => $total > ($offset + $limit)
             ];
-            return $this->renderJson(true, $data);
+            return $this->asJson([
+                'status' => true,
+                'data' => $data,
+            ]);
         }
     }    
 
@@ -93,7 +96,10 @@ class ImageController extends Controller
             $errors = Yii::$app->image->getErrors($attribute);
         }
         
-        return $this->renderJson($result, $data, $errors);
+        return $this->asJson([
+            'status' => $result,
+            'data' => $data,
+        ]);
     }
 
     public function actionAjaxDelete($id)
@@ -103,7 +109,11 @@ class ImageController extends Controller
             return;
         }
         $model = new DeleteImageForm(['id' => $id]);
-        return $this->renderJson($model->delete(), [], $model->getErrors());
+        return $this->asJson([
+            'status' => $model->delete(),
+            'data' => [],
+            'errors' => $model->getErrors()
+        ]);
     }
 
     public function actionPopup()
@@ -111,7 +121,7 @@ class ImageController extends Controller
         $request = Yii::$app->request;
         $result = ['status' => false];
         $defaultThumbnail = $request->get('thumbnail', '500x500');
-        return $this->renderPartial('popup.tpl', ['default_thumbnail' => $defaultThumbnail]);
+        return $this->renderPartial('popup.php', ['default_thumbnail' => $defaultThumbnail]);
     }
 
     public function actionEditor()

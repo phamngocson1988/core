@@ -191,6 +191,13 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public static function getUserGender() {
+        return [
+            self::GENDER_FEMALE => Yii::t('app', 'female'),
+            self::GENDER_MALE => Yii::t('app', 'male'),
+        ];
+    }
+
     public function getStatusLabel()
     {
         $labels = self::getUserStatus();
@@ -239,10 +246,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getGenderLabel()
     {
-        $labels = [
-            self::GENDER_FEMALE => Yii::t('app', 'female'),
-            self::GENDER_MALE => Yii::t('app', 'male'),
-        ];
+        $labels = static::getUserGender();
         return ArrayHelper::getValue($labels, $this->gender, '');
     }
 }
