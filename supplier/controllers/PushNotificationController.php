@@ -2,6 +2,7 @@
 
 namespace supplier\controllers;
 
+use Yii;
 use yii\db\Query;
 use yii\helpers\Url;
 
@@ -16,7 +17,7 @@ class PushNotificationController extends Controller
             ->from('{{%device_notifications}}')
             ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
             ->orderBy(['id' => SORT_DESC])
-            ->limit(10)
+            ->limit(1)
             ->all();
         $notifs = $this->prepareNotifications($list);
         return $this->ajaxResponse(['list' => $notifs]);

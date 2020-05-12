@@ -1,0 +1,71 @@
+<?php
+namespace frontend\models;
+
+use Yii;
+use frontend\behaviors\OrderComplainBehavior;
+use frontend\behaviors\OrderNotificationBehavior;
+/**
+ * Order model
+ */
+class Order extends \common\models\Order
+{
+    const SCENARIO_CANCELORDER = 'cancel_order';
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['complain'] = OrderComplainBehavior::className();
+        $behaviors['notification'] = OrderNotificationBehavior::className();
+        return $behaviors;
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $new = [
+            self::SCENARIO_CANCELORDER => ['request_cancel', 'request_cancel_time', 'request_cancel_description'],
+        ];
+        return array_merge($scenarios, $new);
+    }
+
+    public function rules()
+    {
+        return [
+            [['request_cancel', 'request_cancel_time'], 'required', 'on' => self::SCENARIO_CANCELORDER],
+            ['request_cancel_description', 'trim']
+        ];
+    }
+
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_VERIFYING => 'Verifying',
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_PROCESSING => 'Processing',
+            self::STATUS_PARTIAL => 'Processing',
+            self::STATUS_COMPLETED => 'Completed',
+            self::STATUS_CONFIRMED => 'Confirmed',
+            self::STATUS_DELETED => 'Deleted',
+            self::STATUS_CANCELLED => 'Cancelled',
+        ];
+    }
+
+    public function getStatusLabel($format = '<span class="%s">%s</span>')
+    {
+        $list = [
+            self::STATUS_VERIFYING => 'text-gray-1',
+            self::STATUS_PENDING => 'text-primary',
+            self::STATUS_PROCESSING => 'text-secondary',
+            self::STATUS_COMPLETED => 'text-secondary-3',
+            self::STATUS_PARTIAL => 'text-secondary-3',
+            self::STATUS_CONFIRMED => 'text-secondary-3',
+            self::STATUS_CANCELLED => 'text-gray-1',
+            self::STATUS_DELETED => 'text-gray-1'
+        ];
+        $labels = self::getStatusList();
+        $color = $list[$this->status];
+        $label = $labels[$this->status];
+        if (!$format) return $label;
+        return sprintf($format, $color, $label);
+    }
+}

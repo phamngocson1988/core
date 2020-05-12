@@ -339,8 +339,8 @@ $this->registerJs($moveProcessingJs)
       </div>
       <?= Html::beginForm(['order/move-to-completed', 'id' => $model->id], 'post', ['class' => 'form-horizontal form-row-seperated', 'id' => 'update-quantity-form', 'style' => 'padding-bottom: 20px']) ?>
       <div class="modal-body"> 
-        <strong style="color: red">** ĐỒNG Ý HỦY:</strong><br/>
-        <strong style="color: blue">** LƯU Ý:</strong>
+        <strong style="color: red" role="cancel">** ĐỒNG Ý HỦY:</strong><br/>
+        <strong style="color: blue" role="completed">** LƯU Ý:</strong>
         <ol>
           <li>Nhập chính xác số lượng gói đã hoàn thành vào ô "Số lượng gói đã hoàn thành" bên dưới.</li>
           <li>Đảm bảo đã tải đầy đủ ảnh, tên nhân vật trong ảnh trùng với tên nhân vật được cung cấp trong phần Order detail để tránh khiếu kiện từ khách hàng.</li>
