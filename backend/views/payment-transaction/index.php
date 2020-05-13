@@ -67,10 +67,10 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ])->label('Khách hàng')?>
 
-            <?=$form->field($search, 'payment_type', [
+            <?=$form->field($search, 'payment_method', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'payment_type']
-            ])->dropDownList(['online' => 'Online', 'offline' => 'Offline'], ['prompt' => 'All Type'])->label('Loại giao dịch');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'payment_method']
+            ])->dropDownList($search->fetchPaymentMethods(), ['prompt' => 'Tất cả'])->label('Phương thức thanh toán');?>
 
             <?=$form->field($search, 'status', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],

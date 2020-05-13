@@ -25,8 +25,8 @@ class FetchTransactionForm extends PaymentTransaction
         if ($this->id) {
             $command->andWhere(['id' => $this->id]);
         }
-        if ($this->payment_type) {
-            $command->andWhere(['payment_type' => $this->payment_type]);
+        if ($this->payment_method) {
+            $command->andWhere(['payment_method' => $this->payment_method]);
         }
         if ($this->user_id) {
             $command->andWhere(['user_id' => $this->user_id]);
@@ -54,5 +54,22 @@ class FetchTransactionForm extends PaymentTransaction
             $this->createCommand();
         }
         return $this->_command;
+    }
+
+    public function fetchPaymentMethods()
+    {
+        return [
+            'alipay' => 'Alipay',
+            'skrill' => 'Skrill',
+            'alipay' => 'Alipay',
+            'wechat' => 'Wechat',
+            'postal-savings-bank-of-china' => 'Postal Savings Bank Of China',
+            'payoneer' => 'Payoneer',
+            'bitcoin' => 'Bitcoin',
+            'western_union' => 'Western Union',
+            'neteller' => 'Neteller',
+            'standard_chartered' => 'Standard Chartered',
+            'paypal' => 'Paypal',
+        ];   
     }
 }

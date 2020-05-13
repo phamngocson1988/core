@@ -40,7 +40,7 @@ class PaymentTransactionController extends Controller
             'created_at_to' => $request->get('created_at_to'),
             'id' => $request->get('id'),
             'user_id' => $request->get('user_id'),
-            'payment_type' => $request->get('payment_type'),
+            'payment_method' => $request->get('payment_method'),
             'status' => $request->get('status', [PaymentTransaction::STATUS_COMPLETED, PaymentTransaction::STATUS_PENDING]),
         ];
         $search = new FetchTransactionForm($data);
