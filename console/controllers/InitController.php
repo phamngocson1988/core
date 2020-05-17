@@ -45,17 +45,27 @@ class InitController extends Controller
         $moderator->description = 'Operator Moderator';
         $auth->add($moderator);
 
+        // add the rule
+        $rule = new \frontend\rbac\OperatorManagerRule;
+        $auth->add($rule);
+
         // Permission: manage_operator
         $manageOperatorPermission = $auth->createPermission('manage_operator');
         $manageOperatorPermission->description = 'Manage Operator Permission';
+        $manageOperatorPermission->ruleName = $rule->name;
         $auth->add($manageOperatorPermission);
         $auth->addChild($manager, $manageOperatorPermission);
         
         // Permission: manage_forum
         $manageForumPermission = $auth->createPermission('manage_forum');
         $manageForumPermission->description = 'Manage Operator Permission';
+        $manageForumPermission->ruleName = $rule->name;
         $auth->add($manageForumPermission);
         $auth->addChild($moderator, $manageForumPermission);
+
+        // Add child to admin
+        $auth->addChild($admin, $manager);
+        $auth->addChild($admin, $moderator);
 
         // assign
         $auth->assign($system, $user->id);

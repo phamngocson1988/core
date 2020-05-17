@@ -72,6 +72,10 @@ class FileController extends Controller
         } else {
             $errors = Yii::$app->file->getErrors($attribute);
         }
-        return $this->renderJson($result, $data, $errors);
+        return $this->asJson([
+            'status' => $result, 
+            'data' => $data,
+            'errors' => $errors
+        ]);
     }
 }
