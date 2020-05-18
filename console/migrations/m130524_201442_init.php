@@ -25,6 +25,7 @@ class m130524_201442_init extends Migration
             'password_reset_token' => $this->string(255)->unique(),
             'email' => $this->string(255)->notNull()->unique(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
+            'operator_id' => $this->integer(),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
             'last_login' => $this->dateTime(),

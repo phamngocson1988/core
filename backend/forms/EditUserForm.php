@@ -7,8 +7,9 @@ use backend\models\User;
 use common\models\Country;
 use yii\helpers\ArrayHelper;
 
-class SignupForm extends Model
+class EditUserForm extends Model
 {
+    public $id;
 	public $username;
     public $email;
     public $password;
@@ -17,24 +18,18 @@ class SignupForm extends Model
     public $country;
     public $gender;
 
+    protected $_user;
+
 	/**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'validate_username_unique')],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['id', 'required'],
+            ['id', 'validateUser'],
 
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => Yii::t('app', 'validate_email_unique')],
-
-            ['password', 'required'],
+            ['password', 'trim'],
             ['password', 'string', 'min' => 6],
 
             ['firstname', 'trim'],
@@ -64,22 +59,29 @@ class SignupForm extends Model
         ];
     }
 
-    /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
-     */
-    public function signup()
+    public function validateUser($attribute, $params = []) 
     {
-        if (!$this->validate()) {
-            return null;
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
         }
-        
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
+    }
+
+    public function getUser()
+    {
+        if (!$this->_user) {
+            $this->_user = User::findOne($this->id);
+        }
+        return $this->_user;
+    }
+
+    public function update()
+    {
+        $user = $this->getUser();
+        if ($this->password && !$user->validatePassword($this->password)) {
+            $user->setPassword($this->password);
+            $user->generateAuthKey();
+        }
         $user->firstname = $this->firstname;        
         $user->lastname = $this->lastname;        
         $user->country = $this->country;        
@@ -97,5 +99,16 @@ class SignupForm extends Model
     public function fetchGender()
     {
         return User::getUserGender();
+    }
+
+    public function loadData()
+    {
+        $user = $this->getUser();
+        $this->username = $user->username;
+        $this->email = $user->email;
+        $this->firstname = $user->firstname;        
+        $this->lastname = $user->lastname;        
+        $this->country = $user->country;        
+        $this->gender = $user->gender;        
     }
 }

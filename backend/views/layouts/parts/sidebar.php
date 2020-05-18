@@ -28,6 +28,58 @@ use yii\helpers\Url;
           <span class="arrow open"></span>
         </a>
       </li>
+      <!-- Ban quản trị -->
+      <?php if (Yii::$app->user->can('system')) : ?>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-lock"></i>
+        <span class="title"><?=Yii::t('app', 'manage_rbac');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['rbac/index']);?>" class="nav-link " code='rbac.index'>
+            <span class="title"><?=Yii::t('app', 'manage_staff');?></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=Url::to(['rbac/role']);?>" class="nav-link" code='rbac.role'>
+            <span class="title"><?=Yii::t('app', 'manage_role');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <?php endif;?>
+
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user-following"></i>
+        <span class="title"><?=Yii::t('app', 'manage_user');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['user/index']);?>" class="nav-link " code='user.index'>
+            <span class="title"><?=Yii::t('app', 'user_list');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-building"></i>
+        <span class="title"><?=Yii::t('app', 'manage_operator');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['operator/index']);?>" class="nav-link " code='operator.index'>
+            <span class="title"><?=Yii::t('app', 'operator_list');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>

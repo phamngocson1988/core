@@ -37,7 +37,7 @@ return [
             'identityClass' => 'backend\models\User', 
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
-            'on afterLogin' => ['backend\events\LoginEvent', 'logLogin'],
+            'on afterLogin' => ['backend\events\LoginHandler', 'logLogin'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend

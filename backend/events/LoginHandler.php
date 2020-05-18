@@ -4,7 +4,7 @@ namespace backend\events;
 use Yii;
 use yii\base\Model;
 
-class LoginEvent extends Model
+class LoginHandler extends Model
 {
 	/**
 	 * @param $event UserEvent
