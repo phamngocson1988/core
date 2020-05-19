@@ -18,6 +18,11 @@ class Game extends ActiveRecord
     const UNPIN = 0;
     const PIN = 1;
 
+    const HOT_DEAL = 1;
+    const TOP_GROSSING = 1;
+    const NEW_TRENDING = 1;
+    const BACKTOSTOCK = 1;
+
     const SOLDOUT = 1;
     const INSTOCK = 0;
     /**
@@ -204,5 +209,10 @@ class Game extends ActiveRecord
     public function isDeleted()
     {
         return $this->status == self::STATUS_DELETE;
+    }
+
+    public function isBackToStock()
+    {
+        return $this->back_to_stock === self::BACKTOSTOCK;
     }
 }

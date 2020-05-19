@@ -430,7 +430,11 @@
             <span class="title">Game status</span>
             </a>
           </li>
-
+          <li class="nav-item  ">
+            <a href="{url route='game-category/index'}" class="nav-link " code='game-category.index'>
+            <span class="title">Danh mục game</span>
+            </a>
+          </li>
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>

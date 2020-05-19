@@ -12,9 +12,7 @@ use frontend\components\notifications\PushNotificationsAsset;
 
 class PushNotifications extends BaseNotifications
 {
-    public $xhrTimeout = 10000;
-    public $pollInterval = 2000;
-    
+    public $pollInterval = 10000;
     public function registerAssets()
     {
         $this->clientOptions = array_merge([

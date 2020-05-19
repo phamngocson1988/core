@@ -15,6 +15,8 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%user}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
+            'firstname' => $this->string(255),
+            'lastname' => $this->string(255),
             'username' => $this->string()->notNull()->unique(),
             'avatar' => $this->integer(),
             'auth_key' => $this->string(32)->notNull(),
@@ -192,6 +194,15 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer(),
             'created_by' => $this->integer(),
         ], $tableOptions);
+
+        $this->createTable('{{%auth}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'source' => $this->string()->notNull(),
+            'source_id' => $this->string()->notNull(),
+        ]);
+
+        $this->addForeignKey('fk-auth-user_id-user-id', '{{%auth}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()
@@ -206,5 +217,6 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%user_commission}}');
         $this->dropTable('{{%user_commission_withdraw}}');
         $this->dropTable('{{%user_reseller}}');
+        $this->dropTable('{{%auth}}');
     }
 }

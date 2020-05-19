@@ -22,6 +22,8 @@ class CartItem extends Game implements CartItemInterface
     public $reception_email;
     /* Saler */
     public $saler_code;
+    public $unit_price;
+    public $amount;
 
     const SCENARIO_ADD_CART = 'add_cart';
     const SCENARIO_EDIT_CART = 'edit_cart';

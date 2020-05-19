@@ -74,10 +74,10 @@ use frontend\components\cart\CartItem;
                   [
                     'name'  => 'quantity',
                     'title' => 'Quantity',
-                    'type'  => TabularColumn::TYPE_DROPDOWN,
+                    'type'  => TabularColumn::TYPE_TEXT_INPUT,
                     'headerOptions' => ['width' => '20%'],
                     'columnOptions' => ['style' => 'padding-left:20px; padding-right: 20px;'],
-                    'items' => CartItem::$quantites,
+                    // 'items' => CartItem::$quantites,
                     'options' => ['class' => 'quantity', 'style' => 'text-align: center; text-align-last: center;'],
                     'value' => function($data) {
                         return $data->quantity;
@@ -144,7 +144,8 @@ $script = <<< JS
 $('body').on('change', ".quantity", function(){
   var parent = $(this).closest('tr');
   var _p = parent.find('.price').html();
-  var _q = $(this).val();
+  var _q = parseFloat($(this).val());
+  $(this).val(_q);
   $(this).closest('tr').find('.total').html(_p * _q);
   calculateTotal();
 });

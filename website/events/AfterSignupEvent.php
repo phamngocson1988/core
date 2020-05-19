@@ -1,5 +1,5 @@
 <?php
-namespace frontend\events;
+namespace website\events;
 
 use Yii;
 use yii\base\Event;

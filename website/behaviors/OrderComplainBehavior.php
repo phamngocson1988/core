@@ -1,8 +1,8 @@
 <?php
-namespace frontend\behaviors;
+namespace website\behaviors;
 
-use frontend\models\OrderComplains;
-use frontend\models\Order;
+use website\models\OrderComplains;
+use website\models\Order;
 
 class OrderComplainBehavior extends \common\behaviors\OrderComplainBehavior
 {

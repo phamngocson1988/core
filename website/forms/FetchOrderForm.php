@@ -1,20 +1,17 @@
 <?php
 
-namespace frontend\forms;
+namespace website\forms;
 
 use Yii;
 use yii\base\Model;
-use frontend\models\Order;
-use common\models\Game;
-use yii\helpers\ArrayHelper;
+use website\models\Order;
 
-class FetchHistoryOrderForm extends Order
+class FetchOrderForm extends Model
 {
+    public $customer_id;
     public $start_date;
     public $end_date;
-
-    /*Attribute for query*/
-    public $item_title;
+    public $status;
 
     private $_command;
 
@@ -22,8 +19,7 @@ class FetchHistoryOrderForm extends Order
     {
         return [
             ['customer_id', 'required'],
-            [['game_id', 'status'],'trim'],
-            [['start_date', 'end_date'], 'safe']
+            [['start_date', 'end_date', 'status'], 'safe']
         ];
     }
     
@@ -43,12 +39,9 @@ class FetchHistoryOrderForm extends Order
         if ($this->end_date) {
             $command->andWhere(['<=', 'created_at', $this->end_date . " 23:59:59"]);
         }
-        if ($this->game_id) {
-            $command->andWhere(['game_id' => $this->game_id]);
-        }
         if ($this->status) {
             if ($this->status != Order::STATUS_PROCESSING) {
-                $command->andWhere(['status' => $this->status]);
+                $command->andWhere(['in', 'status', (array)$this->status]);
             } else {
                 $command->andWhere(['in', 'status', [Order::STATUS_PROCESSING, Order::STATUS_PARTIAL]]);
             }
@@ -65,18 +58,9 @@ class FetchHistoryOrderForm extends Order
         return $this->_command;
     }
 
-    public function fetchGames()
-    {
-        $games = Game::find()->all();
-        $games = ArrayHelper::map($games, 'id', 'title');
-        array_unshift($games, 'Choose one game');
-        return $games;
-    }
-
     public function fetchStatusList()
     {
         return [
-            Order::STATUS_VERIFYING => 'Verifying',
             Order::STATUS_PENDING => 'Pending',
             Order::STATUS_PROCESSING => 'Processing',
             Order::STATUS_COMPLETED => 'Completed',

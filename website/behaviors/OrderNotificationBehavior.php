@@ -1,7 +1,7 @@
 <?php
-namespace frontend\behaviors;
+namespace website\behaviors;
 use yii\behaviors\AttributeBehavior;
-use frontend\components\notifications\OrderNotification;
+use website\components\notifications\OrderNotification;
 
 class OrderNotificationBehavior extends AttributeBehavior
 {

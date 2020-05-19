@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
         'css/slimselect.min.css',
         'css/aos.css',
         'css/main.css',
+        'css/theme.css',
     ];
     public $js = [
         'js/vendor/modernizr-2.8.3-respond-1.4.2.min.js',

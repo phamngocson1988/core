@@ -35,6 +35,11 @@ class m180517_025826_create_product_schema extends Migration
             'meta_description' => $this->string(160),
             'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
             'pin' => $this->integer()->defaultValue(0),
+            'hot_deal' => $this->integer()->defaultValue(0),
+            'top_grossing' => $this->integer()->defaultValue(0),
+            'new_trending' => $this->integer()->defaultValue(0),
+            'back_to_stock' => $this->integer()->defaultValue(0),
+            'group_id' => $this->integer(),
             'created_at' => $this->dateTime(),            
             'created_by' => $this->integer(),
             'updated_at' => $this->dateTime(),
@@ -63,12 +68,12 @@ class m180517_025826_create_product_schema extends Migration
             'image_id' => $this->integer()->notNull()
         ], $tableOptions);
 
-        $this->createTable('{{%game_price}}', [
-            'id' => $this->primaryKey(),
-            'game_id' => $this->integer()->notNull(),
-            'provider_id' => $this->integer(),
-            'price' => $this->integer()->notNull(),
-        ], $tableOptions);
+        // $this->createTable('{{%game_price}}', [
+        //     'id' => $this->primaryKey(),
+        //     'game_id' => $this->integer()->notNull(),
+        //     'provider_id' => $this->integer(),
+        //     'price' => $this->integer()->notNull(),
+        // ], $tableOptions);
 
         $this->createTable('{{%game_price_log}}', [
             'id' => $this->primaryKey(),
@@ -89,6 +94,37 @@ class m180517_025826_create_product_schema extends Migration
             'updated_by' => $this->integer()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
         ], $tableOptions);
+
+        // Group
+        $this->createTable('{{%game_group}}', [
+            'id' => $this->primaryKey(),
+            'title' => $this->string(100)->notNull(),
+            'short_title' => $this->string(100),
+            'slug' => $this->string(100)->notNull()->unique(),
+            'excerpt' => $this->string(200),
+            'image_id' => $this->integer(),
+            'unit_name' => $this->string(50),
+            'content' => $this->text()->notNull(),
+            'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
+            'pin' => $this->integer()->defaultValue(0),
+        ], $tableOptions);
+
+        if ($this->db->driverName === 'mysql') {
+            $alterGroup = "ALTER TABLE {{%game_group}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
+            $commandGroup = $this->db->createCommand($alterGroup);
+            $commandGroup->execute();
+        }
+        // Category
+        $this->createTable('{{%game_category}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(128)->notNull(),
+            'status' => $this->string(1)->defaultValue('Y')
+        ], $tableOptions);
+        $this->createTable('{{%game_category_item}}', [
+            'id' => $this->primaryKey(),
+            'game_group_id' => $this->integer()->notNull(),
+            'game_category_id' => $this->integer()->notNull(),
+        ], $tableOptions);
     }
 
     public function down()
@@ -96,5 +132,8 @@ class m180517_025826_create_product_schema extends Migration
         $this->dropTable('{{%game}}');
         $this->dropTable('{{%game_image}}');
         $this->dropTable('{{%game_price}}');
+        $this->dropTable('{{%game_group}}');
+        $this->dropTable('{{%game_category}}');
+        $this->dropTable('{{%game_category_item}}');
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace frontend\controllers;
+namespace website\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
@@ -8,9 +8,12 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
-use frontend\models\Game;
-use frontend\models\Promotion;
-use frontend\components\cart\CartItem;
+use website\models\Game;
+use website\models\Promotion;
+use website\components\cart\CartItem;
+
+// form
+use website\forms\FetchGameForm;
 
 /**
  * GameController
@@ -19,35 +22,17 @@ class GameController extends Controller
 {
     public function actionIndex()
     {
-        $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
-        $q = $request->get('q');
-        $sort = $request->get('sort', null);
-        $command = Game::find();
-        if ($q) {
-            $command->andWhere(['like', 'title', $q]);
-        }
-        $orderBy = ['soldout' => SORT_ASC];
-        if ($sort == 'desc') {
-            $orderBy['title'] = SORT_DESC;
-        } elseif ($sort == 'asc') {
-            $orderBy['title'] = SORT_ASC;
-        } else {
-            $orderBy['id'] = SORT_DESC;
-        }
-        $command->orderBy($orderBy);
+        $form = new FetchGameForm(['q' => $request->get('q')]);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->all();
-        $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
-            'promotions' => $promotions,
-            'q' => $q,
-            'sort' => $sort
+            'form' => $form
         ]);
     }
     public function actionView($id)
@@ -83,6 +68,45 @@ class GameController extends Controller
             'game' => $game,
             'promotions' => $promotions,
             'is_reseller' => $is_reseller
+        ]);
+    }
+
+    public function actionHotDeal()
+    {
+        $form = new FetchGameForm(['hot_deal' => Game::HOT_DEAL]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('index', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionTopGrossing()
+    {
+        $form = new FetchGameForm(['top_grossing' => Game::TOP_GROSSING]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('top-grossing', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionNewTrending()
+    {
+        $form = new FetchGameForm(['new_trending' => Game::NEW_TRENDING]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('new-trending', [
+            'models' => $models,
+            'pages' => $pages,
         ]);
     }
 }

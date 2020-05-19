@@ -1,8 +1,4 @@
 <?php
-
-/* @var $this \yii\web\View */
-/* @var $content string */
-
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Nav;
@@ -75,7 +71,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         data-aos-duration="500">
         <h2 class="logo mb-3">
           <a href="#">
-            <img src="./images/logo.png" />
+            <img src="/images/logo.png" />
           </a>
         </h2>
         <p class="pr-5 text-white-50">King Gems is an organization,we provide worldwide top up services for mobile
@@ -94,31 +90,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <ul class="m-0 p-0">
           <li class="nav-item mb-3">
             <a href="#" class="d-flex align-items-center">
-              <img class="icon-sm mr-2" src="./images/icon/facebook-icon.svg" />
+              <img class="icon-sm mr-2" src="/images/icon/facebook-icon.svg" />
               <span>Facebook</span>
             </a>
           </li>
           <li class="nav-item mb-3">
             <a href="#" class="d-flex align-items-center">
-              <img class="icon-sm mr-2" src="./images/icon/viber.svg" />
+              <img class="icon-sm mr-2" src="/images/icon/viber.svg" />
               <span>Viber</span>
             </a>
           </li>
           <li class="nav-item mb-3">
             <a href="#" class="d-flex align-items-center">
-              <img class="icon-sm mr-2" src="./images/icon/telegram-icon.svg" />
+              <img class="icon-sm mr-2" src="/images/icon/telegram-icon.svg" />
               <span>Telegram</span>
             </a>
           </li>
           <li class="nav-item mb-3">
             <a href="#" class="d-flex align-items-center">
-              <img class="icon-sm mr-2" src="./images/icon/wechat-icon.svg" />
+              <img class="icon-sm mr-2" src="/images/icon/wechat-icon.svg" />
               <span>Wechat</span>
             </a>
           </li>
           <li class="nav-item mb-3">
             <a href="#" class="d-flex align-items-center">
-              <img class="icon-sm mr-2" src="./images/icon/line.svg" />
+              <img class="icon-sm mr-2" src="/images/icon/line.svg" />
               <span>Line</span>
             </a>
           </li>
@@ -129,25 +125,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h4 class="mt-lg-0 mb-5">Payment methods</h4>
         <ul class="list-inline">
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="./images/icon/visa.svg" /></i></a>
+            <a href="#"><img class="icon-lg" src="/images/icon/visa.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="./images/icon/mastercard.svg" /></i></a>
+            <a href="#"><img class="icon-lg" src="/images/icon/mastercard.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="./images/icon/paypal.svg" /></i></a>
+            <a href="#"><img class="icon-lg" src="/images/icon/paypal.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="./images/icon/payoneer.svg" /></i></a>
+            <a href="#"><img class="icon-lg" src="/images/icon/payoneer.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img style="width:100px" src="./images/icon/alipay.png" /></i></a>
+            <a href="#"><img style="width:100px" src="/images/icon/alipay.png" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img style="width:100px" src="./images/icon/wechatpay.png" /></i></a>
+            <a href="#"><img style="width:100px" src="/images/icon/wechatpay.png" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img style="width:100px" src="./images/icon/skrill.svg" /></i></a>
+            <a href="#"><img style="width:100px" src="/images/icon/skrill.svg" /></i></a>
           </li>
         </ul>
       </div>
@@ -159,6 +155,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 </div>
+<?php require_once(Yii::$app->basePath . '/views/layouts/modal.php');?>
 <?php $this->endBody() ?>
 </body>
 </html>

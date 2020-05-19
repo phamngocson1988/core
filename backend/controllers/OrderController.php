@@ -752,12 +752,14 @@ class OrderController extends Controller
             'status' => SupplierGame::STATUS_ENABLED,
         ])
         ->select(['supplier_id', 'price'])
+        ->orderBy(['price' => SORT_ASC])
         ->asArray()
         ->all();
         $supplierIds = ArrayHelper::getColumn($supplierGames, 'supplier_id');
         $suppliers = Supplier::find()
         ->where(['status' => Supplier::STATUS_ENABLED])
         ->andWhere(['in', 'user_id', $supplierIds])
+        ->indexBy('user_id')
         ->with('user')
         ->all();
 
@@ -786,16 +788,23 @@ class OrderController extends Controller
 
 
         $supplierList = [];
-        foreach ($suppliers as $supplier) {
-            $supplierId = $supplier->user_id;
+        // foreach ($suppliers as $supplier) {
+        //     $supplierId = $supplier->user_id;
+        //     $supplierName = $supplier->user->name;
+        //     $price = ArrayHelper::getValue($supplierPrice, $supplierId, 0);
+        //     $count = ArrayHelper::getValue($processingOrder, $supplierId, 0);
+        //     $avgTime = ArrayHelper::getValue($completedOrder, $supplierId, 0);
+        //     $avgTimeFormat = FormatConverter::countDuration((int)$avgTime);
+        //     $supplierList[$supplierId] = sprintf("%s - Price %s - Completed %s - Average %s", $supplierName, number_format($price), $count, $avgTimeFormat);
+        // }
+        foreach ($supplierPrice as $supplierId => $price) {
+            $supplier = $suppliers[$supplierId];
             $supplierName = $supplier->user->name;
-            $price = ArrayHelper::getValue($supplierPrice, $supplierId, 0);
             $count = ArrayHelper::getValue($processingOrder, $supplierId, 0);
             $avgTime = ArrayHelper::getValue($completedOrder, $supplierId, 0);
             $avgTimeFormat = FormatConverter::countDuration((int)$avgTime);
             $supplierList[$supplierId] = sprintf("%s - Price %s - Completed %s - Average %s", $supplierName, number_format($price), $count, $avgTimeFormat);
         }
-
 
         return $this->renderPartial('assign-supplier', [
             'id' => $id,

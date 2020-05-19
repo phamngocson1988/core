@@ -1,0 +1,10 @@
+.help-block-error {
+	color: red;
+	font-size: 12px;
+}
+
+.navbar-main ul.nav li a:hover, .navbar-main ul.nav li.active a {
+	color: #ff6129;
+    border-bottom: solid 2px #ff6129;
+    text-decoration: none;
+}

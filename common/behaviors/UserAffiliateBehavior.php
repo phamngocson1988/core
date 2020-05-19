@@ -19,4 +19,22 @@ class UserAffiliateBehavior extends AttributeBehavior
         }
         return $command;
 	}
+
+	public function isAffiliate()
+	{
+		$owner = $this->owner;
+		return UserAffiliate::find()
+		->where(['user_id' => $owner->id])
+		->andWhere(['status' => UserAffiliate::STATUS_ENABLE])
+		->exists();
+	}
+
+	public function hasPendingAffiliateRequest()
+	{
+		$owner = $this->owner;
+		return UserAffiliate::find()
+		->where(['user_id' => $owner->id])
+		->andWhere(['status' => UserAffiliate::STATUS_DISABLE])
+		->exists();
+	}
 }

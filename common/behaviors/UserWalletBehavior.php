@@ -39,4 +39,12 @@ class UserWalletBehavior extends AttributeBehavior
         $wallet->payment_at = date('Y-m-d H:i:s');
         $wallet->save();
     }
+
+    public function walletBalance() 
+    {
+        $user = $this->owner;
+        return UserWallet::find()->where(['user_id' => $user->id])
+        ->andWhere(['status' => UserWallet::STATUS_COMPLETED])
+        ->sum('coin');
+    }
 }

@@ -58,7 +58,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove1">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link1']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove2">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link2']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove3">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link3']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>
@@ -148,7 +148,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove4">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link4']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>
@@ -179,7 +179,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove5">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link5']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove6">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link6']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>
@@ -241,7 +241,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove7">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link7']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>
@@ -272,7 +272,7 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove8">Remove</button></span>{error}</div></div>',
             'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'link8']
-          ])->textInput()->label('Image (1170x416px)')}
+          ])->textInput()->label('Image (1460x708px - for new design)')}
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ var PushNotifications = (function(opts) {
     var notifyMe = function(object) {
         var notificationOptions = {
             body: object.message,
-            icon: object.icon,//'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/1024px-Volkswagen_logo_2019.svg.png',
+            icon: 'http://hoanggianapgame.com/images/Logo-hoanggia-game.png', //object.icon
             dir: 'ltr'
         };
         var notification = new Notification(object.title, notificationOptions);
@@ -64,17 +64,7 @@ var PushNotifications = (function(opts) {
         });
     };
 
-    
-
-    var _updateTimeout;
-    var startPoll = function() {
-        _updateTimeout = setTimeout(function() {
-            showList();
-        }, opts.pollInterval);
-    };
-
-    // Fire the initial poll
+    setInterval(function(){ showList(); }, opts.pollInterval);
     showList();
-    startPoll();
 
 });

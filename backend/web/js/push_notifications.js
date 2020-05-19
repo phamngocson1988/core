@@ -64,17 +64,7 @@ var PushNotifications = (function(opts) {
         });
     };
 
-    
-
-    var _updateTimeout;
-    var startPoll = function() {
-        _updateTimeout = setTimeout(function() {
-            showList();
-        }, opts.pollInterval);
-    };
-
-    // Fire the initial poll
+    setInterval(function(){ showList(); }, opts.pollInterval);
     showList();
-    startPoll();
 
 });
