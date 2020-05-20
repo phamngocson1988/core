@@ -51,7 +51,7 @@ return [
         'promotion/<id:\d+>-<slug:[\w\-]+>' => 'promotion/view',
 
         // refer
-        'refer-friend' => 'refer/index',
+        'referral' => 'referral/index',
 
         // affiliate
         'affiliate' => 'affiliate/index',
