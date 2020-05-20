@@ -114,7 +114,13 @@ $models = $search->fetch();
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td><?=$model->created_at;?></td>
-                <td><?=$model->description;?></td>
+                <td>
+                <?php if ($model->source == 'order') : ?>
+                  <a href="<?=Url::to(['order/view', 'id' => $model->key]);?>" target="_blank"><?=$model->description;?></a>
+                <?php else :?>
+                  <?=$model->description;?>
+                <?php endif;?>
+                </td>
                 <td>
                   <?php if ($model->type == SupplierWallet::TYPE_INPUT) : ?>
                     <span class="label label-success">Nạp tiền</span>

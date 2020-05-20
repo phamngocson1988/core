@@ -28,6 +28,9 @@ class FetchTransactionForm extends PaymentTransaction
         if ($this->payment_method) {
             $command->andWhere(['payment_method' => $this->payment_method]);
         }
+        if ($this->payment_type) {
+            $command->andWhere(['payment_type' => $this->payment_type]);
+        }
         if ($this->user_id) {
             $command->andWhere(['user_id' => $this->user_id]);
         }
