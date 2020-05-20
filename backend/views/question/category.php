@@ -41,7 +41,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="#new" data-toggle="modal"><?=Yii::t('app', 'add_new')?></a>
+            <a class="btn green" href="<?=Url::to(['question/create-category']);?>" data-toggle="modal"><?=Yii::t('app', 'add_new')?></a>
           </div>
         </div>
       </div>
@@ -64,7 +64,7 @@ use yii\widgets\ActiveForm;
                 <td style="vertical-align: middle;">#<?=$model->id;?></td>
                 <td style="vertical-align: middle;"><?=$model->title;?></td>
                 <td style="vertical-align: middle;">
-                  <a href='#edit<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa" data-toggle="modal"><i class="fa fa-pencil"></i></a>
+                  <a href='<?=Url::to(['question/edit-category', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <a href='<?=Url::to(['question/delete-category', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-trash"></i></a>
                   <div class="modal fade" id="edit<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog">

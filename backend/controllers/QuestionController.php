@@ -117,24 +117,34 @@ class QuestionController extends Controller
 
     public function actionCreateCategory()
     {
+        $this->view->params['main_menu_active'] = 'question.category';
         $request = Yii::$app->request;
         $model = new QuestionCategory();
         if ($model->load($request->post()) && $model->save()) {
-            return $this->renderJson(true, []);
+            // return $this->renderJson(true, []);
+            Yii::$app->session->setFlash('success', 'Tạo danh mục thành công');
+            return $this->redirect('question/category');
         } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
+            Yii::$app->session->setFlash('error', $model->getErrors());
+            // return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
+        return $this->render('create-category.tpl', ['model' => $model]);
     }
 
     public function actionEditCategory($id)
     {
+        $this->view->params['main_menu_active'] = 'question.category';
         $request = Yii::$app->request;
         $model = QuestionCategory::findOne($id);
         if ($model->load($request->post()) && $model->save()) {
-            return $this->renderJson(true, []);
+            // return $this->renderJson(true, []);
+            Yii::$app->session->setFlash('success', 'Tạo danh mục thành công');
+            return $this->redirect(['question/category']);
         } else {
-            return $this->renderJson(false, [], $model->getErrorSummary(true));
+            Yii::$app->session->setFlash('error', $model->getErrors());
+            // return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
+        return $this->render('edit-category.tpl', ['model' => $model]);
     }
 
     public function actionDeleteCategory($id)

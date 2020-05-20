@@ -171,7 +171,7 @@ use yii\helpers\Url;
           ['label' => 'Promotion', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index2'],
           ['label' => 'Affiliate', 'url' => ['affiliate/index'], 'active' => $main_menu_active == 'affiliate.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Referral', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index4'],
-          ['label' => 'Help center', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index5'],
+          ['label' => 'Help center', 'url' => ['question/index'], 'active' => $main_menu_active == 'question.index'],
           // ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
         ],
       ]);

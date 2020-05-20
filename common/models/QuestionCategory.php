@@ -28,7 +28,8 @@ class QuestionCategory extends ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required']
+            [['title'], 'required'],
+            [['description', 'icon_url'], 'trim'],
         ];
     }
 
