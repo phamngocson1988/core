@@ -29,6 +29,7 @@
 .table td.left {
 	text-align: left !important;
 	vertical-align: middle !important;
+	padding-left: 5px !important;
 }
 
 .table th {

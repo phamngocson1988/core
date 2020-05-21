@@ -68,7 +68,7 @@ use yii\helpers\Url;
 
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-building"></i>
+        <i class="fa fa-building"></i>
         <span class="title"><?=Yii::t('app', 'manage_operator');?></span>
         <span class="arrow"></span>
         </a>
@@ -76,6 +76,25 @@ use yii\helpers\Url;
           <li class="nav-item">
             <a href="<?=Url::to(['operator/index']);?>" class="nav-link " code='operator.index'>
             <span class="title"><?=Yii::t('app', 'operator_list');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-newspaper-o"></i>
+        <span class="title"><?=Yii::t('app', 'manage_post');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['post/index']);?>" class="nav-link " code='post.index'>
+            <span class="title"><?=Yii::t('app', 'post_list');?></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=Url::to(['category/index']);?>" class="nav-link " code='category.index'>
+            <span class="title"><?=Yii::t('app', 'category_list');?></span>
             </a>
           </li>
         </ul>

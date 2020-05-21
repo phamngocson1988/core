@@ -36,7 +36,7 @@ use yii\helpers\Url;
           </div>
         </div>
       </div>
-      <div class="portlet-body">
+      <div class="table-responsive">
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['user/index']]);?>
             <?=$form->field($search, 'q', [
@@ -59,39 +59,40 @@ use yii\helpers\Url;
           <?php ActiveForm::end()?>
         </div>
         <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th> <?=Yii::t('app', 'id');?> </th>
-              <th> <?=Yii::t('app', 'username');?> </th>
-              <th> <?=Yii::t('app', 'firstname');?> </th>
-              <th> <?=Yii::t('app', 'lastname');?> </th>
-              <th> <?=Yii::t('app', 'email');?> </th>
-              <th> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if ($models) : ?>
-            <?php foreach ($models as $model) : ?>
-            <tr>
-              <td><?=$model->id;?></td>
-              <td><?=$model->username;?></td>
-              <td><?=$model->firstname;?></td>
-              <td><?=$model->lastname;?></td>
-              <td><?=$model->email;?></td>
-              <td><?=$model->getCountryName();?></td>
-              <td>
-                <a class="btn btn-xs default tooltips" href="<?=Url::to(['user/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'edit_user');?>"><i class="fa fa-pencil"></i></a>
-              </td>
-            </tr>
-            <?php endforeach;?>
-            <?php else : ?>
-            <tr>
-              <td colspan="6"><?=Yii::t('app', 'no_data_found');?></td>
-            </tr>
-            <?php endif;?>
-          </tbody>
-        </table>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th> <?=Yii::t('app', 'id');?> </th>
+                <th> <?=Yii::t('app', 'username');?> </th>
+                <th> <?=Yii::t('app', 'firstname');?> </th>
+                <th> <?=Yii::t('app', 'lastname');?> </th>
+                <th> <?=Yii::t('app', 'email');?> </th>
+                <th> <?=Yii::t('app', 'country');?> </th>
+                <th> <?=Yii::t('app', 'actions');?> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if ($models) : ?>
+              <?php foreach ($models as $model) : ?>
+              <tr>
+                <td class="center"><?=$model->id;?></td>
+                <td class="left"><?=$model->username;?></td>
+                <td class="left"><?=$model->firstname;?></td>
+                <td class="left"><?=$model->lastname;?></td>
+                <td class="left"><?=$model->email;?></td>
+                <td class="left"><?=$model->getCountryName();?></td>
+                <td>
+                  <a class="btn btn-xs default tooltips" href="<?=Url::to(['user/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'edit_user');?>"><i class="fa fa-pencil"></i></a>
+                </td>
+              </tr>
+              <?php endforeach;?>
+              <?php else : ?>
+              <tr>
+                <td colspan="7"><?=Yii::t('app', 'no_data_found');?></td>
+              </tr>
+              <?php endif;?>
+            </tbody>
+          </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages]);?>
       </div>

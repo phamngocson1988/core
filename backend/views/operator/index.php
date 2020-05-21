@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 ?>
 
@@ -59,37 +60,39 @@ use yii\helpers\Url;
           <?php ActiveForm::end()?>
         </div>
         <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th> <?=Yii::t('app', 'id');?> </th>
-              <th> <?=Yii::t('app', 'name');?> </th>
-              <th> <?=Yii::t('app', 'main_url');?> </th>
-              <th> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if ($models) : ?>
-            <?php foreach ($models as $model) : ?>
-            <tr>
-              <td><?=$model->id;?></td>
-              <td>
-                <img class="img-thumbnail" width="50px" height="50px" src="https://www.ira-sme.net/wp-content/themes/consultix/images/no-image-found-360x260.png">
-                <?=$model->name;?>
-              </td>
-              <td><?=$model->main_url;?></td>
-              <td>
-                <a class="btn btn-xs default tooltips" href="<?=Url::to(['operator/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'edit_operator');?>"><i class="fa fa-pencil"></i></a>
-              </td>
-            </tr>
-            <?php endforeach;?>
-            <?php else : ?>
-            <tr>
-              <td colspan="6"><?=Yii::t('app', 'no_data_found');?></td>
-            </tr>
-            <?php endif;?>
-          </tbody>
-        </table>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th> <?=Yii::t('app', 'id');?> </th>
+                <th> <?=Yii::t('app', 'name');?> </th>
+                <th> <?=Yii::t('app', 'main_url');?> </th>
+                <th> <?=Yii::t('app', 'manager');?> </th>
+                <th> <?=Yii::t('app', 'actions');?> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if ($models) : ?>
+              <?php foreach ($models as $model) : ?>
+              <tr>
+                <td class="center"><?=$model->id;?></td>
+                <td class="left">
+                  <img class="img-thumbnail" width="50px" height="50px" src="<?=$model->getImageUrl('50x50');?>">
+                  <?=$model->name;?>
+                </td>
+                <td class="left"><?=$model->main_url;?></td>
+                <td class="left"><?=ArrayHelper::getValue($managers, $model->id, '');?></td>
+                <td class="center">
+                  <a class="btn btn-xs default tooltips" href="<?=Url::to(['operator/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'edit_operator');?>"><i class="fa fa-pencil"></i></a>
+                </td>
+              </tr>
+              <?php endforeach;?>
+              <?php else : ?>
+              <tr>
+                <td colspan="5"><?=Yii::t('app', 'no_data_found');?></td>
+              </tr>
+              <?php endif;?>
+            </tbody>
+          </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages]);?>
       </div>

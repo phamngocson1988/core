@@ -27,7 +27,7 @@ use yii\helpers\Url;
           <span class="caption-subject bold uppercase"> <?=Yii::t('app', 'manage_roles');?></span>
         </div>
       </div>
-      <div class="portlet-body">
+      <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
@@ -44,8 +44,8 @@ use yii\helpers\Url;
             <?php else : ?>
             <?php foreach ($models as $model) :?>
             <tr>
-              <td><?=$model->description;?></td>
-              <td><?=count(Yii::$app->authManager->getUserIdsByRole($model->name));?></td>
+              <td class="left"><?=$model->description;?></td>
+              <td class="left"><?=count(Yii::$app->authManager->getUserIdsByRole($model->name));?></td>
               <td>
                 <a class="btn btn-xs grey-salsa tooltips" href="<?=Url::to(['rbac/index', 'role' => $model->name]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'list_user');?>"><i class="fa fa-list"></i></a>
                 <a class="btn btn-xs grey-salsa tooltips" href="<?=Url::to(['rbac/assign', 'role' => $model->name]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'add_new');?>"><i class="fa fa-plus"></i></a>
