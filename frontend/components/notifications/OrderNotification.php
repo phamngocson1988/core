@@ -12,6 +12,7 @@ class OrderNotification extends Notification
     const NOTIFY_SALER_CANCEL_ORDER = 'NOTIFY_SALER_CANCEL_ORDER';
     const NOTIFY_ORDERTEAM_CANCEL_ORDER = 'NOTIFY_ORDERTEAM_CANCEL_ORDER';
     const NOTIFY_SUPPLIER_CANCEL_ORDER = 'NOTIFY_SUPPLIER_CANCEL_ORDER';
+    const NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE = 'NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE';
     /**
      * @var \frontend\models\Order the order object
      */
@@ -30,20 +31,23 @@ class OrderNotification extends Notification
             case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
             case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
                 return sprintf("[Yêu cầu hủy] - #%s", $this->order->id);
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                return sprintf("[Tin nhắn mới] - #%s", $this->order->id);
 
         }
     }
 
     public function getIcon()
     {
-        $setting = Yii::$app->settings;
         switch($this->key){
             case self::NOTIFY_SALER_NEW_ORDER:
             case self::NOTIFY_ORDERTEAM_NEW_ORDER:
             case self::NOTIFY_SALER_CANCEL_ORDER:
             case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
+                return 'https://kinggems.us/images/logo_icon.png';
             case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
-                return $setting->get('ApplicationSettingForm', 'logo', '');
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                return 'http://hoanggianapgame.com/images/Logo-hoanggia-game.png';
 
         }
     }
@@ -60,6 +64,8 @@ class OrderNotification extends Notification
             case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
             case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
                 return sprintf("Yêu cầu hủy đơn hàng");
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                return sprintf("Chờ phản hồi");
         }
     }
 
@@ -74,7 +80,9 @@ class OrderNotification extends Notification
             case self::NOTIFY_ORDERTEAM_CANCEL_ORDER:
                 return '';
             case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
-                return ['order/edit', 'id' => $this->order->id];
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                $supplier = $this->order->workingSupplier;
+                return ['order/edit', 'id' => $supplier->id];
         }
     }
 
@@ -95,6 +103,7 @@ class OrderNotification extends Notification
                 self::NOTIFY_SALER_CANCEL_ORDER,
                 self::NOTIFY_ORDERTEAM_CANCEL_ORDER,
                 self::NOTIFY_SUPPLIER_CANCEL_ORDER,
+                self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE,
             ]
         ];
     }

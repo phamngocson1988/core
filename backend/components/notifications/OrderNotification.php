@@ -50,13 +50,12 @@ class OrderNotification extends Notification
 
     public function getIcon()
     {
-        $setting = Yii::$app->settings;
         switch($this->key){
             case self::NOTIFY_ORDERTEAM_NEW_PENDING:
             case self::NOTIFY_SUPPLIER_NEW_ORDER:
             case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
             case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
-                return $setting->get('ApplicationSettingForm', 'logo', '');
+                return 'https://kinggems.us/images/logo_icon.png';
 
         }
     }

@@ -16,6 +16,7 @@ class PushNotificationController extends Controller
         $list = (new Query())
             ->from('{{%device_notifications}}')
             ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
+            ->andWhere(['>=', 'created_at', strtotime('-24 hours')])
             ->orderBy(['id' => SORT_DESC])
             ->limit(1)
             ->all();
