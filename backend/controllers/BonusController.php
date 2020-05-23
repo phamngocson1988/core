@@ -2,21 +2,20 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
 
-//forms
-use backend\forms\FetchUserForm;
-use backend\forms\SignupForm;
-use backend\forms\EditUserForm;
+use backend\forms\FetchBonusForm;
+use backend\forms\CreateBonusForm;
+use backend\forms\EditBonusForm;
 
-/**
- * UserController
- */
-class UserController extends Controller
+
+class BonusController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
@@ -32,13 +31,14 @@ class UserController extends Controller
         ];
     }
 
+
     public function actionIndex()
     {
-        $this->view->params['main_menu_active'] = 'user.index';
+        $this->view->params['main_menu_active'] = 'bonus.index';
         $request = Yii::$app->request;
-        $form = new FetchUserForm([
+        $form = new FetchBonusForm([
             'q' => $request->get('q'),
-            'status' => $request->get('status'),
+            'operator_id' => $request->get('operator_id'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -52,18 +52,17 @@ class UserController extends Controller
 
     public function actionCreate()
     {
-        $this->view->params['main_menu_active'] = 'user.index';        
+        $this->view->params['main_menu_active'] = 'bonus.index';
         $request = Yii::$app->request;
-        $model = new SignupForm();
+        $model = new CreateBonusForm();
         if ($model->load($request->post())) {
-            if ($user = $model->signup()) {
+            if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                return $this->redirect(['user/index']);
+                return $this->redirect(['bonus/index']);
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrors());
             }
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -71,22 +70,23 @@ class UserController extends Controller
 
     public function actionEdit($id)
     {
-        $this->view->params['main_menu_active'] = 'user.index';        
+        $this->view->params['main_menu_active'] = 'bonus.index';
         $request = Yii::$app->request;
-        $model = new EditUserForm(['id' => $id]);
-        if ($model->load($request->post())) {
+        $model = new EditBonusForm(['id' => $id]);
+        if ($model->load(Yii::$app->request->post())) {
             if ($model->validate() && $model->update()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                return $this->redirect(['user/index']);
+                return $this->redirect(['bonus/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                Yii::$app->session->setFlash('error', $model->getErrors());
             }
         } else {
-            $model->loadData();
+            $model->loadData($id);
         }
 
         return $this->render('edit', [
             'model' => $model,
         ]);
+
     }
 }

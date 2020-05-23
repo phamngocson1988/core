@@ -99,6 +99,20 @@ use yii\helpers\Url;
           </li>
         </ul>
       </li>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-newspaper-o"></i>
+        <span class="title"><?=Yii::t('app', 'manage_bonus');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['bonus/index']);?>" class="nav-link " code='bonus.index'>
+            <span class="title"><?=Yii::t('app', 'bonus_list');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>
