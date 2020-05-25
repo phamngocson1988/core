@@ -58,6 +58,68 @@ class StopOrderForm extends Model
     {
         if (!$this->validate()) return false;
         $order = $this->getOrder();
+        $newQuantity = $this->quantity;
+        $oldQuantity = $order->quantity;
+        $refundQuantity = max(0, $oldQuantity - $newQuantity);
+        $refundAmount = $order->price * $refundQuantity;
+        $newSubTotalPrice = $order->price * $newQuantity;
+        $newTotalPrice = $newSubTotalPrice - $order->total_discount + $order->total_fee + $order->total_tax;
+        $newSubUnit = $order->sub_total_unit * $newQuantity / $order->quantity;
+        $newTotalUnit = $newSubUnit + $order->promotion_unit;
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+
+            $diff = $this->quantity - $order->doing_unit;
+            $order->status = Order::STATUS_COMPLETED;
+            $order->doing_unit = $newQuantity;
+            $order->quantity = $newQuantity;
+            $order->sub_total_unit = $newSubUnit;
+            $order->total_unit = $newTotalUnit;
+            $order->total_price = $newTotalPrice;
+            $order->sub_total_price = $newSubTotalPrice;
+            $order->save();
+
+            // Complete supplier
+            $workingSupplier = $order->workingSupplier;
+            if ($workingSupplier) {
+                $completeSupplierCommand = $order->getSuppliers();
+                $completedQuantity = $completeSupplierCommand->sum('doing');
+                $workingSupplier->status = OrderSupplier::STATUS_COMPLETED;
+                $workingSupplier->completed_at = date('Y-m-d H:i:s');
+                $workingSupplier->doing = max(0, $newQuantity - $completedQuantity);
+                $workingSupplier->total_price = $workingSupplier->price * $workingSupplier->doing;
+                $workingSupplier->save();
+            }
+
+            // Topup user wallet
+            $user = $order->customer;
+            $user->topup($refundAmount, $order->id, sprintf("[Order #%s] Completed partially: %s/%s >>> Refund %s of the charge", $order->id, $newQuantity, $oldQuantity, $refundAmount));
+            // Add to log
+            $order->log(sprintf("Stop order when it is in %s / %s package(s) and refund %s", $newQuantity, $oldQuantity, $refundAmount));
+            $order->send(
+                'admin_notify_stop_order', 
+                sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
+                    'old_unit' => $oldQuantity, 
+                    'new_unit' => $newQuantity, 
+                    'refund_coin' => $refundAmount,
+                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true)
+                ]);
+            // Send mail notification
+            $transaction->commit();
+            return true;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->addError('id', 'This order has some errors.');
+            return false;
+        }
+    }
+
+    public function stopbk()
+    {
+        if (!$this->validate()) return false;
+        $order = $this->getOrder();
         // Calculate percent of work
         $percent = ceil($this->quantity / $order->quantity * 100);
         $remainingPercent = 100 - $percent;

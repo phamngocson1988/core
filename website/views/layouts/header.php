@@ -166,7 +166,7 @@ use yii\helpers\Url;
       'linkTemplate' => '<a href="{url}" class="nav-link">{label}</a>',
       'items' => [
           ['label' => 'Home', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index'],
-          ['label' => 'Kcoin wallet', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index1'],
+          ['label' => 'Kcoin wallet', 'url' => ['wallet/index'], 'active' => $main_menu_active == 'wallet.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Games', 'url' => ['game/index'], 'active' => $main_menu_active == 'game.index'],
           ['label' => 'Promotion', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index2'],
           ['label' => 'Affiliate', 'url' => ['affiliate/index'], 'active' => $main_menu_active == 'affiliate.index', 'visible' => !Yii::$app->user->isGuest],
