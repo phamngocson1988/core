@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="12px" viewBox="0 0 17 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>Combined Shape</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Notifications-Settings" transform="translate(-469.000000, -550.000000)" fill="#1994FC">
+            <g id="Settings" transform="translate(30.000000, 85.000000)">
+                <g id="Manage-Notifications" transform="translate(28.000000, 110.000000)">
+                    <g id="Complaints" transform="translate(1.000000, 350.000000)">
+                        <g id="Imported-Layers-+-Imported-Layers" transform="translate(410.000000, 4.000000)">
+                            <path d="M0.0107953318,2.02695863 L8.35288568,6.84326674 L8.3660254,6.8660254 L8.37916512,6.85843918 L8.39230485,6.8660254 L8.40544457,6.84326674 L16.6133399,2.10443615 C16.6152378,2.13180865 16.6162026,2.15943476 16.6162026,2.18728307 L16.6162026,11.8127169 C16.6162026,12.4678384 16.0822687,13 15.4271472,13 L1.18905546,13 C0.533933978,13 0,12.4678384 0,11.8127169 L0,2.18728307 C0,2.13291684 0.0036770732,2.07939741 0.0107953318,2.02695863 Z M0.552387246,1.18494633 C0.736626583,1.06785991 0.955114259,1 1.18905546,1 L15.4271472,1 C15.689294,1 15.9320362,1.08520968 16.1289285,1.22941069 L8.37916512,5.70373864 L0.552387246,1.18494633 Z" id="Combined-Shape"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

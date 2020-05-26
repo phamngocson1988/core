@@ -43,7 +43,7 @@ return [
                     'basePath' => '@webroot',
                     'baseUrl' => '@web',
                     'js' => [
-                        'js/jquery-3.3.1.min.js',
+                        'js/jquery.min.js',
                     ]
                 ],
                 'yii\bootstrap\BootstrapAsset' => [
@@ -76,12 +76,6 @@ return [
                 'screen' => [
                     'class' => 'webzop\notifications\channels\ScreenChannel',
                 ],
-                // 'email' => [
-                //     'class' => 'webzop\notifications\channels\EmailChannel',
-                //     'message' => [
-                //         'from' => 'example@email.com'
-                //     ],
-                // ],
             ],
         ],
     ],
