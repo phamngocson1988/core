@@ -43,7 +43,7 @@ if (!Yii::$app->user->can('saler') && !Yii::$app->user->can('accounting')) retur
         <?=$order->getStatusLabel();?>
       </div>
     </div>
-    <?php if (Yii::$app->user->can('admin')) :?>
+    <?php if (Yii::$app->user->isRole(['admin', 'accounting', 'saler'])) :?>
     <?php if ($order->total_discount) :?>
     <div class="row static-info">
       <div class="col-md-5"> Sub total: </div>
