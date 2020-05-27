@@ -15,12 +15,15 @@ class m200526_172701_payment extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        // payment
-        $this->createTable('{{%payment}}', [
+        // paygate
+        $this->createTable('{{%paygate}}', [
             'id' => $this->primaryKey(),
-            'payment_type' => $this->string(15)->notNull(),
+            'paygate_type' => $this->string(15)->notNull(),
             'content' => $this->text(),
             'logo' => $this->integer(11),
+            'transfer_fee' => $this->float(),
+            'transfer_fee_type' => $this->string(15), // percent || fix
+            'currency' => $this->string(15),
             'config' => $this->text(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'created_by' => $this->integer(),  
@@ -32,10 +35,10 @@ class m200526_172701_payment extends Migration
     }
 
     /**
-     * Drop table `payment`
+     * Drop table `paygate`
      */
     public function down()
     {
-        $this->dropTable('{{%payment}}');
+        $this->dropTable('{{%paygate}}');
     }
 }

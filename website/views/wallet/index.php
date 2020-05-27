@@ -27,7 +27,7 @@ $user = Yii::$app->user->getIdentity();
             <div class="col-md-6 p-4 bg-green">
               <p class="mb-2">Add Kcoin to Wallet</p>
               <div class="input-group inp-deposit">
-                <input type="number" step="100" value="100" class="form-control">
+                <input type="number" step="100" id="quantity" value="100" class="form-control">
               </div>
             </div>
           </div>
@@ -36,35 +36,35 @@ $user = Yii::$app->user->getIdentity();
           <p class="lead mb-2">Payment method</p>
           <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
             <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="options" id="option2" autocomplete="off">
+              <input type="radio" name="identifier" value="skrill" autocomplete="off">
               <img class="icon" src="/images/icon/skrill.svg" />
             </label>
             <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="options" id="option2" autocomplete="off">
+              <input type="radio" name="identifier" value="alipay" autocomplete="off">
+              <img class="icon" src="/images/icon/alipay.svg" />
+            </label>
+            <label class="btn flex-fill btn-secondary">
+              <input type="radio" name="identifier" value="standard_chartered" autocomplete="off">
+              <img class="icon" src="/images/icon/standard_chartered.svg" />
+            </label>
+            <label class="btn flex-fill btn-secondary">
+              <input type="radio" name="identifier" value="option2" autocomplete="off">
               <img class="icon" src="/images/icon/skrill.svg" />
             </label>
             <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="options" id="option2" autocomplete="off">
+              <input type="radio" name="identifier" value="option2" autocomplete="off">
               <img class="icon" src="/images/icon/skrill.svg" />
             </label>
             <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="options" id="option2" autocomplete="off">
-              <img class="icon" src="/images/icon/skrill.svg" />
-            </label>
-            <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="options" id="option2" autocomplete="off">
-              <img class="icon" src="/images/icon/skrill.svg" />
-            </label>
-            <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="options" id="option2" autocomplete="off">
+              <input type="radio" name="identifier" value="option2" autocomplete="off">
               <img class="icon" src="/images/icon/skrill.svg" />
             </label>
           </div>
           <div class="input-group my-3">
-            <input type="text" class="form-control" placeholder="Enter promo code here"
+            <input type="text" class="form-control" id="voucher" placeholder="Enter promo code here"
               aria-label="Enter promo code here" aria-describedby="button-addon2">
             <div class="input-group-append">
-              <button class="btn btn-warning text-white" type="button" id="button-addon2">Accept</button>
+              <button class="btn btn-warning text-white" type="button" id="button-addon2" id="applyVocherBtn">Accept</button>
             </div>
           </div>
         </div>
@@ -324,30 +324,29 @@ $user = Yii::$app->user->getIdentity();
 <!-- end modal order detail -->
 <?php
 $script = <<< JS
-function WalletPayment = () {
+function WalletPayment() {
   var quantityElement = $('#quantity');
   var voucherElement = $('#voucher');
-  var callToServer = function () {
-    var form = new FormData();
-    form.append('quantity', quantityElement.val());
-    form.append('voucher', voucherElement.val());
-    $.ajax({
-        url: _url,
-        type: "POST",
-        dataType: 'json',
-        data: form,
-        success: function (result, textStatus, jqXHR) {
-            if (result.status == false) {
-                that.error(result.errors);
-                return false;
-            } else {
-                that.success(result.data);
-            }
-            
-        },
-    });
-  }
+  $.ajax({
+      url: '/wallet/cart.html',
+      type: "POST",
+      dataType: 'json',
+      data: {
+        quantity: quantityElement.val(),
+        voucher: voucherElement.val(),
+      },
+      success: function (result, textStatus, jqXHR) {
+          console.log('WalletPayment', result);
+      },
+  });
 };
+
+$('#quantity').on('change', function(e) {
+  WalletPayment();
+});
+$('#applyVocherBtn').on('click', function(e)) {
+  WalletPayment();
+}
 JS;
 $this->registerJs($script);
 ?>

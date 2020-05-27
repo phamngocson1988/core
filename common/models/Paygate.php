@@ -6,7 +6,7 @@ use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 
-class Payment extends ActiveRecord
+class Paygate extends ActiveRecord
 {
     const STATUS_INACTIVE = 1;
     const STATUS_ACTIVE = 10;
@@ -17,7 +17,7 @@ class Payment extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%payment}}';
+        return '{{%paygate}}';
     }
 
     public function behaviors()
@@ -37,4 +37,22 @@ class Payment extends ActiveRecord
         ];
     }
 
+    public function isActive()
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function getImage()
+    {
+        return $this->hasOne(Image::className(), ['id' => 'logo']);
+    }
+
+    public function getImageUrl($size = null, $default = '/vendor/assets/pages/media/profile/profile_user.jpg')
+    {
+        $image = $this->image;
+        if (!$image) {
+            return $default;
+        }
+        return $image->getUrl($size);
+    }
 }
