@@ -57,4 +57,26 @@ class PaygateController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionEdit($id)
+    {
+        $this->view->params['main_menu_active'] = 'paygate.index';
+        $request = Yii::$app->request;
+        $model = new \backend\forms\EditPaygateForm(['id' => $id]);
+        if ($model->load($request->post())) {
+            if ($model->validate() && $model->update()) {
+                Yii::$app->session->setFlash('success', 'Success!');
+                $ref = $request->get('ref', Url::to(['paygate/index']));
+                return $this->redirect($ref);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrors());
+            }
+        } else {
+            $model->loadData();
+        }
+
+        return $this->render('edit', [
+            'model' => $model,
+        ]);
+    }
 }
