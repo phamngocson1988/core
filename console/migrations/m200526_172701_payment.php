@@ -18,6 +18,8 @@ class m200526_172701_payment extends Migration
         // paygate
         $this->createTable('{{%paygate}}', [
             'id' => $this->primaryKey(),
+            'name' => $this->string(50)->notNull(),
+            'identifier' => $this->string(50)->notNull(),
             'paygate_type' => $this->string(15)->notNull(),
             'content' => $this->text(),
             'logo' => $this->integer(11),

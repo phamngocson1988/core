@@ -35,33 +35,15 @@ $user = Yii::$app->user->getIdentity();
         <div class="col-md-6">
           <p class="lead mb-2">Payment method</p>
           <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
+            <?php foreach ($paygates as $paygate) : ?>
             <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="identifier" value="skrill" autocomplete="off">
-              <img class="icon" src="/images/icon/skrill.svg" />
+              <input type="radio" name="identifier" value="<?=$paygate->identifier;?>" data-currency="<?=$paygate->currency;?>" data-exchange-rate="<?=$paygate->currency;?>" data-transfer_fee="<?=$paygate->transfer_fee;?>" data-transfer_fee_type="<?=$paygate->transfer_fee_type;?>" autocomplete="off">
+              <img class="icon" src="<?=$paygate->getImageUrl();?>" />
             </label>
-            <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="identifier" value="alipay" autocomplete="off">
-              <img class="icon" src="/images/icon/alipay.svg" />
-            </label>
-            <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="identifier" value="standard_chartered" autocomplete="off">
-              <img class="icon" src="/images/icon/standard_chartered.svg" />
-            </label>
-            <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="identifier" value="option2" autocomplete="off">
-              <img class="icon" src="/images/icon/skrill.svg" />
-            </label>
-            <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="identifier" value="option2" autocomplete="off">
-              <img class="icon" src="/images/icon/skrill.svg" />
-            </label>
-            <label class="btn flex-fill btn-secondary">
-              <input type="radio" name="identifier" value="option2" autocomplete="off">
-              <img class="icon" src="/images/icon/skrill.svg" />
-            </label>
+            <?php endforeach;?>
           </div>
           <div class="input-group my-3">
-            <input type="text" class="form-control" id="voucher" placeholder="Enter promo code here"
+            <input type="text" class="form-control" id="voucher" data-valid="0" placeholder="Enter promo code here"
               aria-label="Enter promo code here" aria-describedby="button-addon2">
             <div class="input-group-append">
               <button class="btn btn-warning text-white" type="button" id="button-addon2" id="applyVocherBtn">Accept</button>
@@ -72,35 +54,31 @@ $user = Yii::$app->user->getIdentity();
           <!-- CART SUMMARY -->
           <p class="lead mb-2">Billing infomation</p>
           <div class="card card-summary">
-            <div class="card-body">
-              <div class="d-flex">
-                <div class="flex-fill w-100">Transaction ID</div>
-                <div class="flex-fill w-100 text-right font-weight-bold">T123456789</div>
-              </div>
+            <div class="card-body" id="subtotal-kingcoin-row">
               <div class="d-flex">
                 <div class="flex-fill w-100">Kcoin</div>
-                <div class="flex-fill w-100 text-right font-weight-bold">100 KC</div>
+                <div class="flex-fill w-100 text-right font-weight-bold" id="subtotal-kingcoin">100 KC</div>
               </div>
-              <div class="d-flex">
+              <div class="d-flex" id="bonus-kingcoin-row">
                 <div class="flex-fill w-100">Bonus</div>
-                <div class="flex-fill w-100 text-right font-weight-bold">10 KC</div>
+                <div class="flex-fill w-100 text-right font-weight-bold" id="bonus-kingcoin">10 KC</div>
               </div>
-              <div class="d-flex">
+              <div class="d-flex" id="total-kingcoin-row">
                 <div class="flex-fill w-100">Total KC</div>
-                <div class="flex-fill w-100 text-right text-red">110 KC</div>
+                <div class="flex-fill w-100 text-right text-red" id="total-kingcoin">110 KC</div>
               </div>
               <hr />
-              <div class="d-flex">
+              <div class="d-flex" id="subtotal-payment-row">
                 <div class="flex-fill w-100">Subtotal</div>
-                <div class="flex-fill text-red font-weight-bold w-100 text-right">$100.0</div>
+                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="subtotal-payment">$100.0</div>
               </div>
-              <div class="d-flex">
+              <div class="d-flex" id="transfer-fee-row">
                 <div class="flex-fill w-100">Transfer fee</div>
-                <div class="flex-fill text-red font-weight-bold w-100 text-right">$1.0</div>
+                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="transfer-fee">$1.0</div>
               </div>
-              <div class="d-flex">
+              <div class="d-flex" id="total-payment-row">
                 <div class="flex-fill w-100">Total payment</div>
-                <div class="flex-fill text-red font-weight-bold w-100 text-right">$101.0</div>
+                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="total-payment">$101.0</div>
               </div>
               <a href="#" data-toggle="modal" data-target="#paymentGame" class="mt-3 btn btn-block btn-payment">Pay
                 now</a>
@@ -324,29 +302,66 @@ $user = Yii::$app->user->getIdentity();
 <!-- end modal order detail -->
 <?php
 $script = <<< JS
-function WalletPayment() {
+function Calculator() {
+  // Elements
   var quantityElement = $('#quantity');
   var voucherElement = $('#voucher');
+  var paygateElement = $( "input[name=identifier]:checked" );
+  // Calculate
+  var quantity = quantityElement.val();
+  var voucher = voucherElement.val();
+  var paygate = paygateElement.val();
+
   $.ajax({
-      url: '/wallet/cart.html',
+      url: '/wallet/calculate.html',
       type: "POST",
       dataType: 'json',
       data: {
-        quantity: quantityElement.val(),
-        voucher: voucherElement.val(),
+        quantity: quantity,
+        voucher: voucher,
+        paygate: paygate,
       },
       success: function (result, textStatus, jqXHR) {
-          console.log('WalletPayment', result);
+          console.log('Calculator', result);
+          if (result.status) {
+            ShowSummary(result)
+          } else {
+            toastr.error(result.errors.join('<br/>')); 
+          }
       },
   });
 };
 
-$('#quantity').on('change', function(e) {
-  WalletPayment();
-});
-$('#applyVocherBtn').on('click', function(e)) {
-  WalletPayment();
+function ShowSummary(data) {
+  // Elements
+  var quantityElement = $('#quantity');
+  var voucherElement = $('#voucher');
+  var paygateElement = $( "input[name=identifier]:checked" );
+  // Html
+  var subtotalKingcoinRow = $("#subtotal-kingcoin-row");
+  var subtotalKingcoin = $("#subtotal-kingcoin");
+  var bonusKingcoinRow = $("#bonus-kingcoin-row");
+  var bonusKingcoin = $("#bonus-kingcoin");
+  var totalKingcoinRow = $("#total-kingcoin-row");
+  var totalKingcoin = $("#total-kingcoin");
+  var subtotalPaymentRow = $("#subtotal-payment-row");
+  var subtotalPayment = $("#subtotal-payment");
+  var totalPaymentRow = $("#total-payment-row");
+  var totalPayment = $("#total-payment");
+  var transferFeeRow = $("#transfer-fee-row");
+  var transferFee = $("#transfer-fee");
 }
+
+$('#quantity').on('change', function(e) {
+  Calculator();
+});
+$('#applyVocherBtn').on('click', function(e) {
+  Calculator();
+});
+$( "input[name=identifier]:radio" ).on('change', function(e) {
+  console.log('radio click');
+  Calculator();
+})
 JS;
 $this->registerJs($script);
 ?>

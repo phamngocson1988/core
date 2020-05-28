@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\SluggableBehavior;
 
 class Paygate extends ActiveRecord
 {
@@ -33,6 +34,13 @@ class Paygate extends ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
+            ],
+            [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'name',
+                'slugAttribute' => 'identifier',
+                'immutable' => true,
+                'ensureUnique'=>true,
             ],
         ];
     }
