@@ -55,6 +55,11 @@
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="logo_upload">Upload</button><input type="file" id="file_logo_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'logo']
                 ])->textInput()}
+                {$form->field($model, 'fee', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                  'inputOptions' => ['class' => 'form-control']
+                ])->textInput()->label('Phần trăm phí thanh toán')}
                 {$form->field($model, 'logo_width', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',

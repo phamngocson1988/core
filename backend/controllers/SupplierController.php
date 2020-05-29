@@ -167,7 +167,9 @@ class SupplierController extends Controller
         $this->view->params['main_menu_active'] = 'supplier.withdraw-request';
         $request = Yii::$app->request;
         $form = new \backend\forms\FetchSupplierWithdrawRequestForm([
-            'status' => $request->get('status')
+            'status' => $request->get('status'),
+            'done_from' => $request->get('done_from'),
+            'done_to' => $request->get('done_to'),
         ]);
         $command = $form->getCommand();
 
@@ -176,20 +178,10 @@ class SupplierController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();
-        // $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
-        // $statCommand = SupplierWithdrawRequest::find()
-        // ->where(['IN', 'supplier_id', $supplierIds])
-        // ->andWhere(['status' => SupplierWithdrawRequest::STATUS_DONE])
-        // ->select(['supplier_id', 'SUM(amount) as amount'])
-        // ->groupBy(['supplier_id'])
-        // ->asArray()
-        // ->all();
-        // $doneAmount = ArrayHelper::map($statCommand, 'supplier_id', 'amount');
         return $this->render('withdraw-request', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
-            // 'doneAmount' => $doneAmount
         ]);
     }
 

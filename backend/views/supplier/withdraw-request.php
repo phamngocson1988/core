@@ -85,15 +85,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>
                   <td><?=number_format($model->amount);?></td>
                   <td>
-                    <!--
-                    <?php if ($model->isDone()) : ?>
-                    <?=number_format($model->available_balance - $model->amount);?>
-                    <?php elseif ($model->isCancel()) : ?>
-                    <?=number_format($model->available_balance);?>
-                    <?php else : ?>
-                    <?=number_format($supplier->walletTotal());?>
-                    <?php endif;?>
-                    -->
                     <?=number_format($model->available_balance);?>
                   </td>
                   <td>
@@ -134,6 +125,16 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 </tr>
                 <?php endforeach;?>
             </tbody>
+            <?php if ($models) :?>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td><?=number_format($search->getCommand()->sum('amount'));?></td>
+                <td colspan="7"></td>
+              </tr>
+            </tfoot>
+            <?php endif;?>
           </table>
         </div>
       </div>

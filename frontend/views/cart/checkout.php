@@ -191,9 +191,20 @@ $cart->applyPromotion();
                         <div class="grand-line last-line price" paygate='wechat' style="display: none">
                           <span>Total Price:</span><span>CNY<?=FormatConverter::convertCurrencyToCny($cart->getTotalPrice());?></span>
                         </div>
+
+                        <?php
+                        $skrillFee = number_format(Yii::$app->settings->get('SkrillSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
+                        ?>
                         <div class="grand-line last-line price" paygate='skrill' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>
+                        <div class="grand-line price" paygate='skrill' style="display: none">
+                          <span>Payment fee:</span><span>$<?=number_format($skrillFee, 1);?></span>
+                        </div>
+                        <div class="grand-line price" paygate='skrill' style="display: none">
+                          <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $skrillFee, 1);?></span>
+                        </div>
+
                         <div class="grand-line last-line price" paygate='payoneer' style="display: none">
                           <span>Total Price:</span><span>$<?=number_format($cart->getTotalPrice(), 1);?></span>
                         </div>

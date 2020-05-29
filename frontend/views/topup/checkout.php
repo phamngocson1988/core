@@ -181,13 +181,22 @@ $total = $cart->getTotalPrice();
                 <p><span class="t-red-bold">CNY<?=FormatConverter::convertCurrencyToCny($item->getTotalPrice());?></span></p>
               </div>
 
+              <?php
+              $skrillFee = number_format(Yii::$app->settings->get('SkrillSettingForm', 'fee') * $cart->getTotalPrice() / 100, 1);
+              ?>
               <div class="t-flex-between t-sub-total price" paygate="skrill" style="display: none">
                 <p>Subtotal:</p>
-                <p>$<?=number_format($item->getPrice() * $item->quantity);?></p>
+                <p>$<?=number_format($item->getPrice() * $item->quantity, 1);?></p>
               </div>
               <div class="t-flex-between t-payment-total price" paygate="skrill" style="display: none">
                 <p>Grand Total:</p>
-                <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice());?></span></p>
+                <p><span class="t-red-bold">$<?=number_format($item->getTotalPrice(), 1);?></span></p>
+              </div>
+              <div class="t-flex-between t-sub-total price" paygate='skrill' style="display: none">
+                <span>Payment fee:</span><span>$<?=number_format($skrillFee, 1);?></span>
+              </div>
+              <div class="t-flex-between t-sub-total price" paygate='skrill' style="display: none">
+                <span>Total Amount:</span><span>$<?=number_format($cart->getTotalPrice() + $skrillFee, 1);?></span>
               </div>
 
               <div class="t-flex-between t-sub-total price" paygate="payoneer" style="display: none">

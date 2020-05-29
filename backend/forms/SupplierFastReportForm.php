@@ -79,49 +79,6 @@ class SupplierFastReportForm extends Model
         }
         return $this->_page;
     }
-    // public function getReport1()
-    // {
-    //     $pages = $this->getPage();
-    //     $range = $this->getRange();
-    //     // wallet report
-    //     $walletCommand = $this->getWalletCommand();
-    //     $walletData = $walletCommand->offset($pages->offset)->limit($pages->limit)->all();
-    //     $income = array_filter($walletData, function($row) {
-    //         return $row['type'] == SupplierWallet::TYPE_INPUT;
-    //     });
-    //     $income = array_column($income, 'amount', 'report_date');
-    //     $outcome = array_filter($walletData, function($row) {
-    //         return $row['type'] == SupplierWallet::TYPE_OUTPUT;
-    //     });
-    //     $outcome = array_column($outcome, 'amount', 'report_date');
-
-    //     // order report
-    //     $orderCommand = $this->getOrderCommand();
-    //     $orders = $orderCommand->all();
-    //     $quantity = array_column($orders, 'quantity', 'report_date');
-    //     $revenue = array_column($orders, 'total_price', 'report_date');
-
-    //     // build report
-    //     $result = [];
-    //     $firstIncome = $this->getFirstIncome();
-    //     foreach ($range as $date) {
-    //         $incomeByDate = ArrayHelper::getValue($income, $date, 0);
-    //         $outcomeByDate = ArrayHelper::getValue($outcome, $date, 0);
-    //         $quantityByDate = ArrayHelper::getValue($quantity, $date, 0);
-    //         $revenueBByDate = ArrayHelper::getValue($revenue, $date, 0);
-    //         $lastIncome = $firstIncome + $incomeByDate + $outcomeByDate;
-    //         $result[$date] = [
-    //             'quantity' => $quantityByDate,
-    //             'revenue' => $revenueBByDate,
-    //             'first_income' => $firstIncome,
-    //             'income' => $incomeByDate,
-    //             'outcome' => $outcomeByDate,
-    //             'last_income' => $lastIncome
-    //         ];
-    //         $firstIncome = $lastIncome;
-    //     }
-    //     return $result;
-    // }
 
     public function getReport()
     {

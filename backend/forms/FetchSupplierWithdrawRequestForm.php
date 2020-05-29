@@ -8,6 +8,8 @@ use Yii;
 class FetchSupplierWithdrawRequestForm extends Model
 {
     public $status;
+    public $done_from;
+    public $done_to;
 
     private $_command;
 
@@ -18,6 +20,15 @@ class FetchSupplierWithdrawRequestForm extends Model
             $this->status = $this->getDefaultStatusList();
         }
         $command = SupplierWithdrawRequest::find()->where(["IN", 'status', $this->status]);
+
+        if ($this->done_from) {
+            $command->andWhere(['>=', 'done_at', sprintf("%s 00:00:00", $this->done_from)]);
+        }
+
+        if ($this->done_to) {
+            $command->andWhere(['<=', 'done_at', sprintf("%s 23:59:59", $this->done_to)]);
+        }
+        // die($command->createCommand()->getRawSql());
         return $command;
     }
 

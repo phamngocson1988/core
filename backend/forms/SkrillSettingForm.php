@@ -13,12 +13,14 @@ class SkrillSettingForm extends Model
     public $logo;
     public $logo_width;
     public $logo_height;
+    public $fee;
 
     public function rules()
     {
         return [
             [['pay_to_email', 'secret_word', 'content', 'logo'], 'trim'],
-            [['logo_width', 'logo_height'], 'number']
+            [['logo_width', 'logo_height'], 'number'],
+            [['fee'], 'number']
         ];
     }
 }

@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datepicker\DatePicker;
 use backend\models\SupplierWallet;
+use backend\models\SupplierWithdrawRequest;
 
 $models = $search->getReport();
 ?>
@@ -84,7 +85,6 @@ $models = $search->getReport();
           <?php ActiveForm::end()?>
         </div>
         
-        <?php Pjax::begin(); ?>
         <table class="table table-striped table-bordered table-hover table-checkable">
           <thead>
             <tr>
@@ -107,18 +107,30 @@ $models = $search->getReport();
               <?php foreach ($models as $date => $model) :?>
               <tr>
                 <td><?=$date;?></td>
-                <td><?=number_format($model['quantity']);?></td>
-                <td><?=number_format($model['revenue']);?></td>
+                <td><a href="<?=Url::to(['report-profit/order', 'confirmed_from' => sprintf("%s 00:00", $date), 'confirmed_to' => sprintf("%s 23:59", $date)]);?>" target="_blank"><?=number_format($model['quantity'], 1);?></a></td>
+                <td><a href="<?=Url::to(['report-profit/order', 'confirmed_from' => sprintf("%s 00:00", $date), 'confirmed_to' => sprintf("%s 23:59", $date)]);?>" target="_blank"><?=number_format($model['revenue']);?></a></td>
                 <td><?=number_format($model['first_income']);?></td>
-                <td><?=number_format($model['income']);?></td>
-                <td><?=number_format(abs($model['outcome']));?></td>
+                <td><a href="<?=Url::to(['report-profit/order', 'confirmed_from' => sprintf("%s 00:00", $date), 'confirmed_to' => sprintf("%s 23:59", $date)]);?>" target="_blank"><?=number_format($model['income']);?></a></td>
+                <td><a href="<?=Url::to(['supplier/withdraw-request', 'status' => SupplierWithdrawRequest::STATUS_DONE, 'done_from' => $date, 'done_to' => $date]);?>" target="_blank"><?=number_format(abs($model['outcome']));?></a></td>
                 <td><?=number_format($model['last_income']);?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
+          <?php if ($models) :?>
+          <tfoot>
+            <tr>
+              <td>Tổng:</td>
+              <td><?=number_format(array_sum(array_column($models, 'quantity')), 1);?></td>
+              <td><?=number_format(array_sum(array_column($models, 'revenue')));?></td>
+              <td>-</td>
+              <td><?=number_format(array_sum(array_column($models, 'income')));?></td>
+              <td><?=number_format(abs(array_sum(array_column($models, 'outcome'))));?></td>
+              <td>-</td>
+            </tr>
+          </tfoot>
+          <?php endif;?>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
