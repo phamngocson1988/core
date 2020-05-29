@@ -40,7 +40,11 @@ AppAsset::register($this);
                 <button class="fa fa-search" type="submit"></button>
               </form>
               <ul class="header-nav-list d-flex">
-                <li class="header-login"><a href="#">LOGIN</a></li>
+                <?php if (Yii::$app->user->isGuest) : ?>
+                <li class="header-login"><a href="#modalLogin" data-toggle="modal">LOGIN</a></li>
+                <?php else :?>
+                <li class="header-login"><a href="<?=Url::to(['profile/index']);?>"><?=strtoupper(Yii::$app->user->identity->getName());?></a></li>
+                <?php endif;?>
                 <li><a class="item-nav" href="./operators/">OPERATORS</a></li>
                 <li><a class="item-nav" href="#">GAME PROVIDERS</a></li>
                 <li class="has-sub"><a class="item-nav no-link" href="./bonus/">BONUSES</a>
@@ -59,6 +63,11 @@ AppAsset::register($this);
           </nav>
         </div>
         <div class="header-right d-flex align-items-center">
+          
+          <?php if (Yii::$app->user->isGuest) : ?>
+          <div class="header-login"><a href="#modalLogin" data-toggle="modal">LOGIN</a></div>
+          <?php else : ?>
+          <?php $user = Yii::$app->user->getIdentity();?>
           <div class="header-icon header-email"><a class="trans" href="#"><i class="fas fa-envelope"></i></a></div>
           <div class="header-icon header-bell header-dropdown"><a class="trans" href="#"><i class="fas fa-bell"></i></a><span class="js-action"></span>
             <div class="dropdown-mega">
@@ -102,7 +111,38 @@ AppAsset::register($this);
               </div>
             </div>
           </div>
-          <div class="header-login"><a href="#">LOGIN</a></div>
+          <div class="header-avatar header-dropdown"><a class="avatar" href="#"><img class="img-radius" src="/img/common/avatar_img_01.png" alt="image"></a><span class="js-action"></span>
+            <div class="dropdown-mega">
+              <div class="dropdown-mega-inner">
+                <p class="mega-title">Good afternoon <?=$user->getName();?><i class="fas fa-cog"></i></p>
+                <div class="mega-content">
+                  <div class="mega-row">
+                    <p class="mega-ttl">Active complaints</p>
+                    <ul class="list-text">
+                      <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
+                      <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
+                      <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
+                    </ul>
+                    <div class="mega-create"><a class="fas fa-plus-circle trans" href="#"></a></div>
+                  </div>
+                  <div class="mega-row">
+                    <p class="mega-ttl">Favorite operators</p>
+                    <ul class="list-favorites">
+                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
+                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
+                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
+                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
+                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
+                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
+                    </ul>
+                    <div class="mega-create"><a class="fas fa-plus-circle trans" href="#"></a></div>
+                  </div>
+                </div>
+                <div class="mega-link"><a href="<?=Url::to(['profile/index']);?>" class="text-uppercase">My profile</a><a class="trans" href="<?=Url::to(['site/logout']);?>">log out</a></div>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
           <div class="header-language"><a class="trans" href="#"><span>VI</span></a></div>
         </div>
         <div class="btn-menu" id="btn-menu"><span></span><span></span><span></span></div>
@@ -146,6 +186,7 @@ AppAsset::register($this);
       </div>
     </footer>
   </div>
+  <?php require_once(Yii::$app->basePath . '/views/layouts/modal.php');?>
   <?php $this->endBody();?>
 </body>
 </html>

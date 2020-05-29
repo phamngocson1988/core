@@ -220,7 +220,10 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getName()
     {
-        return sprintf("%s %s", $this->firstname, $this->lastname);
+        if ($this->firstname || $this->lastname) {
+            return sprintf("%s %s", $this->firstname, $this->lastname);
+        }
+        return $this->username;
     }
 
     public function isActive()

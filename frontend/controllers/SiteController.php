@@ -10,6 +10,8 @@ use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+use frontend\forms\LoginForm;
+
 class SiteController extends Controller
 {
 
@@ -29,4 +31,105 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionLogin()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $message]);
+        }
+    }
+
+    public function actionSignup()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
+        $model = new SignupForm();
+
+        // Register an event
+        if ($request->get('refer')) {
+            $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
+            $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $referTitle], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $referContent], 'og:description');
+            $model->refer = $request->get('refer');
+            $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'referCheckingEvent']);
+        }
+        if ($request->get('affiliate')) {
+            $affTitle = Html::encode("WELCOME TO KINGGEMS.US");
+            $affContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $affTitle], 'og:title');
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $affContent], 'og:description');
+            $model->affiliate = $request->get('affiliate');
+            $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
+        }
+        if ($model->load($request->post()) && $model->validate()) {
+            $user = $model->signup();
+            if ($user) {
+                Yii::$app->user->login($user);
+                return json_encode(['status' => true]);
+            } else {
+                return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => 'There is something wrong. Please contact our staff.']);
+            }
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $message]);
+        }
+    }
+
+    public function actionRequestPasswordReset()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                return json_encode(['status' => true]);
+            } else {
+                return json_encode(['status' => false, 'errors' => 'Sorry, we are unable to reset password for the provided email address.']);
+            }
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $message]);
+        }
+    }
+
+    public function actionResetPassword($token)
+    {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password saved.');
+
+            return $this->goHome();
+        }
+
+        return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+        return $this->goHome();
+    }
 }
