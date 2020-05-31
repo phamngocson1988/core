@@ -9,22 +9,30 @@ use frontend\forms\SignupForm;
 class SignupFormWidget extends Widget
 {
     public $formId = 'flash-signup-form';
+    public $signupUrl;
+    public $profileUrl;
+
     public function run()
     {
         $model = new SignupForm();
         $this->registerClientScript();
-        return $this->render('signup', ['model' => $model, 'id' => $this->formId]);
+        return $this->render('signup', [
+            'model' => $model, 
+            'id' => $this->formId,
+            'signupUrl' => $this->signupUrl,
+        ]);
     }
 
     protected function getScriptCode()
     {
         $id = $this->formId;
-        $profileUrl = Url::to(['profile/index', '#' => 'modalSecure']);
+        $signupUrl = $this->signupUrl;
+        $profileUrl = $this->profileUrl;
         return "
 $('html').on('submit', 'form#$id', function() {
     var form = $(this);
     $.ajax({
-        url: '/signup.html',
+        url: '$signupUrl',
         type: 'post',
         dataType : 'json',
         data: form.serialize(),
@@ -38,7 +46,7 @@ $('html').on('submit', 'form#$id', function() {
             }
         },
     });
-            return false;
+    return false;
 });
 ";
     }

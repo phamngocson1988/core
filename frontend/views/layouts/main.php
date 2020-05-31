@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\assets\AppAsset;
+use frontend\components\toastr\NotificationFlash;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -24,6 +25,7 @@ AppAsset::register($this);
   <?= Html::csrfMetaTags() ?>
   <title><?= Html::encode($this->title) ?></title>
   <link rel="shortcut icon" href="/favicon.ico" />
+  <?= NotificationFlash::widget() ?>
   <?php $this->head() ?>
 </head>
 <body>
@@ -39,26 +41,37 @@ AppAsset::register($this);
                 <input class="form-control" type="text" placeholder="Search">
                 <button class="fa fa-search" type="submit"></button>
               </form>
-              <ul class="header-nav-list d-flex">
-                <?php if (Yii::$app->user->isGuest) : ?>
-                <li class="header-login"><a href="#modalLogin" data-toggle="modal">LOGIN</a></li>
-                <?php else :?>
-                <li class="header-login"><a href="<?=Url::to(['profile/index']);?>"><?=strtoupper(Yii::$app->user->identity->getName());?></a></li>
-                <?php endif;?>
-                <li><a class="item-nav" href="./operators/">OPERATORS</a></li>
-                <li><a class="item-nav" href="#">GAME PROVIDERS</a></li>
-                <li class="has-sub"><a class="item-nav no-link" href="./bonus/">BONUSES</a>
-                  <div class="item-nav js-btn-dropdown">BONUSES</div>
-                  <ul class="js-dropdown">
-                    <li><a class="trans" href="#">Casino Bonuses</a></li>
-                    <li><a class="trans" href="#">Bonus Reviews</a></li>
-                    <li><a class="trans" href="#">Exclusive Bonuses</a></li>
-                  </ul>
-                </li>
-                <li><a class="item-nav" href="./complaints/">COMPLAINTS</a></li>
-                <li><a class="item-nav" href="./news/">NEWS</a></li>
-                <li><a class="item-nav" href="./forum/">FORUM</a></li>
-              </ul>
+              <?php $main_menu_active = isset($this->params['main_menu_active']) ? $this->params['main_menu_active'] : '';?>
+              <?php
+              $items = [];
+              if (Yii::$app->user->isGuest) {
+                $items[] = ['label' => 'LOGIN', 'url' => '#modalLogin', 'visible' => Yii::$app->user->isGuest, 'template' => '<a href="{url}" data-toggle="modal">{label}</a>', 'options' => ['class' => 'header-login']];
+              } else {
+                $items[] = ['label' => strtoupper(Yii::$app->user->identity->getName()), 'url' => ['profile/index'], 'options' => ['class' => 'header-login']];
+              }
+              $items[] = ['label' => 'OPERATORS', 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'];
+              $items[] = [
+                'label' => 'BONUSES', 
+                'url' => ['bonus/index'], 
+                'active' => $main_menu_active == 'bonus.index', 
+                'options' => ['class' => 'has-sub'],
+                'template' => '<a href="{url}" class="item-nav no-link">{label}</a><div class="item-nav js-btn-dropdown">{label}</div>', 
+                'items' => [
+                  ['label' => 'Casino Bonuses', 'url' => '#', 'template' => '<a href="{url}" class="trans">{label}</a>']
+                ],
+              ];
+              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'];
+              $items[] = ['label' => 'NEWS', 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'];
+              $items[] = ['label' => 'FORUM', 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
+              ?>
+              <?php echo yii\widgets\Menu::widget([
+                'options' => ['class' => 'header-nav-list d-flex'],
+                'itemOptions' => ['class' => ''],
+                'linkTemplate' => '<a href="{url}" class="item-nav">{label}</a>',
+                'submenuTemplate' => '<ul class="js-dropdown">{items}</ul>',
+                'items' => $items
+                ]);
+              ?>
             </div>
           </nav>
         </div>

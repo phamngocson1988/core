@@ -16,10 +16,11 @@ class AppAsset extends AssetBundle
         'css/style.css',
     ];
     public $js = [
-        'js/a076d05399.js',
+        ['js/a076d05399.js', 'position' => \yii\web\View::POS_HEAD],
         'js/popper.min.js',
         'js/jquery.matchHeight-min.js',
         'js/slick.min.js',
+        'js/scripts.js',
         'js/ajax_action.js',
         // 'js/function.js',
     ];

@@ -3136,14 +3136,14 @@ body {
   content: "";
   width: 24px;
   height: 24px;
-  background: transparent url(../img/common/icon_review_like.svg) 0 0 no-repeat;
+  background: transparent url(../img/common/icon_review_like.png) 0 0 no-repeat;
   background-size: 100% 100%;
   position: absolute;
   top: 2px;
   left: -40px;
 }
 .review-item .review-content .review-text .review-text-negative:before {
-  background-image: url(../img/common/icon_review_dislike.svg);
+  background-image: url(../img/common/icon_review_dislike.png);
 }
 .review-item .review-content .review-more a {
   color: #333;
@@ -3394,14 +3394,14 @@ body {
   content: "";
   width: 24px;
   height: 24px;
-  background: transparent url(../img/common/icon_review_like.svg) 0 0 no-repeat;
+  background: transparent url(../img/common/icon_review_like.png) 0 0 no-repeat;
   background-size: 100% 100%;
   position: absolute;
   top: 10px;
   left: 20px;
 }
 .operator-review-form .formrv-row.row-dislike:before {
-  background-image: url(../img/common/icon_review_dislike.svg);
+  background-image: url(../img/common/icon_review_dislike.png);
 }
 .operator-review-form .formrv-row textarea {
   background: #eee;
@@ -3804,18 +3804,18 @@ body {
 }
 
 .notifications-check-email input:checked + span {
-  background-image: url(../img/common/mailblue_icon.svg);
+  background-image: url(../img/common/mailblue_icon.png);
 }
 .notifications-check-email span {
-  background: url(../img/common/mailblack_icon.svg) no-repeat center center;
+  background: url(../img/common/mailblack_icon.png) no-repeat center center;
   background-size: 17px auto;
 }
 
 .notifications-check-onsite input:checked + span {
-  background-image: url(../img/common/bellblue_icon.svg);
+  background-image: url(../img/common/bellblue_icon.png);
 }
 .notifications-check-onsite span {
-  background: url(../img/common/bellblack_icon.svg) no-repeat center center;
+  background: url(../img/common/bellblack_icon.png) no-repeat center center;
   background-size: 13px auto;
 }
 
@@ -3848,11 +3848,11 @@ body {
     top: 2px;
   }
   .notifications-icon > li.notifications-icon-email:after {
-    background-image: url(../img/common/mailblack_icon.svg);
+    background-image: url(../img/common/mailblack_icon.png);
     background-size: 17px auto;
   }
   .notifications-icon > li.notifications-icon-onsite:after {
-    background-image: url(../img/common/bellblack_icon.svg);
+    background-image: url(../img/common/bellblack_icon.png);
     background-size: 13px auto;
     top: 3px;
   }

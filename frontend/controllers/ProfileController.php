@@ -9,6 +9,10 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+
+use frontend\models\Operator;
+use frontend\models\OperatorFavorite;
 
 class ProfileController extends Controller
 {
@@ -41,8 +45,22 @@ class ProfileController extends Controller
             $model->loadData();
         }
 
+        // operators 
+        $favorites = OperatorFavorite::find()
+        ->where(['user_id' => Yii::$app->user->id])
+        ->select(['operator_id'])
+        ->asArray()
+        ->all();
+        $operatorFavoriteIds = ArrayHelper::getColumn($favorites, 'operator_id');
+        $operators = Operator::find()
+        ->where(['NOT IN', 'id', $operatorFavoriteIds])
+        ->limit(5)
+        ->all();
+
+
         return $this->render('index', [
             'model' => $model,
+            'operators' => $operators,
         ]);
     }
 }

@@ -28,10 +28,21 @@ class m200518_152739_operator extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
+        $this->createTable('{{%operator_favorite}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'operator_id' => $this->integer()->notNull(),
+            'created_by' => $this->integer(),
+            'updated_by' => $this->integer(),
+            'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
+        ], $tableOptions);
+
     }
 
     public function down()
     {
         $this->dropTable('{{%operator}}');
+        $this->dropTable('{{%operator_favorite}}');
     }
 }

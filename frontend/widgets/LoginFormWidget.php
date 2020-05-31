@@ -42,7 +42,7 @@ $('html').on('submit', 'form#$formId', function() {
             }
         },
     });
-            return false;
+    return false;
 });
 ";
     }

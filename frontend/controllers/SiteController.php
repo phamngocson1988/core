@@ -26,7 +26,6 @@ class SiteController extends Controller
     
     public function actionIndex()
     {
-        $this->layout = 'main';
         return $this->render('index', [
         ]);
     }
@@ -54,25 +53,8 @@ class SiteController extends Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
-        $model = new SignupForm();
+        $model = new \frontend\forms\SignupForm();
 
-        // Register an event
-        if ($request->get('refer')) {
-            $referTitle = Html::encode("WELCOME TO KINGGEMS.US");
-            $referContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
-            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $referTitle], 'og:title');
-            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $referContent], 'og:description');
-            $model->refer = $request->get('refer');
-            $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'referCheckingEvent']);
-        }
-        if ($request->get('affiliate')) {
-            $affTitle = Html::encode("WELCOME TO KINGGEMS.US");
-            $affContent = Html::encode("You're invited to join our Kinggems.us- a top-up game service website. Let join us to check out hundreds of amazing mobile games and many surprising promotions. Enjoy your games and get a lot of bonus, WHY NOT!!! >>> Click here");
-            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $affTitle], 'og:title');
-            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $affContent], 'og:description');
-            $model->affiliate = $request->get('affiliate');
-            $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
-        }
         if ($model->load($request->post()) && $model->validate()) {
             $user = $model->signup();
             if ($user) {

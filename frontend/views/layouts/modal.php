@@ -6,7 +6,10 @@ use yii\helpers\Url;
 
 <?php if (Yii::$app->user->isGuest) : ?>
 <?=LoginFormWidget::widget(['loginUrl' => Url::to(['site/login'])]);?>
-<?=SignupFormWidget::widget();?>
+<?=SignupFormWidget::widget([
+	'signupUrl' => Url::to(['site/signup']),
+	'profileUrl' => Url::to(['profile/index']),
+]);?>
 <?php
 $script = <<< JS
 // var hash = window.location.hash.substr(1).trim();

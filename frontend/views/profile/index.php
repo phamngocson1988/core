@@ -46,32 +46,20 @@ $this->title = 'User Profile';
                 </div>
               </div>
             </div>
+            <?php if ($operators) : ?>
             <div class="mb-3 mb-md-5">
               <h1 class="sec-title text-center text-uppercase mb-1">SUGGESTION FOR YOU</h1>
               <p class="text-center">add these operators to your favorites</p>
               <ul class="list-add">
-                <li>
-                  <div class="heading-image custom-avatar"><img class="object-fit" src="/img/common/avatar_img_01.png" alt="image"></div>
-                  <p class="add-desc">Operators 1</p><a class="btn btn-info" href="#">ADD</a>
-                </li>
-                <li>
-                  <div class="heading-image custom-avatar"><img class="object-fit" src="/img/common/avatar_img_01.png" alt="image"></div>
-                  <p class="add-desc">Operators 1</p><a class="btn btn-info" href="#">ADD</a>
-                </li>
-                <li>
-                  <div class="heading-image custom-avatar"><img class="object-fit" src="/img/common/avatar_img_01.png" alt="image"></div>
-                  <p class="add-desc">Operators 1</p><a class="btn btn-info" href="#">ADD</a>
-                </li>
-                <li>
-                  <div class="heading-image custom-avatar"><img class="object-fit" src="/img/common/avatar_img_01.png" alt="image"></div>
-                  <p class="add-desc">Operators 1</p><a class="btn btn-info" href="#">ADD</a>
-                </li>
-                <li>
-                  <div class="heading-image custom-avatar"><img class="object-fit" src="/img/common/avatar_img_01.png" alt="image"></div>
-                  <p class="add-desc">Operators 1</p><a class="btn btn-info" href="#">ADD</a>
-                </li>
+                <?php foreach ($operators as $operator) : ?>
+                  <li>
+                    <div class="heading-image custom-avatar"><img class="object-fit" src="<?=$operator->getImageUrl('180x180');?>" alt="image"></div>
+                    <p class="add-desc"><?=$operator->name;?></p><a class="btn btn-info add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $operator->id]);?>"><?=Yii::t('app', 'add');?></a>
+                  </li>
+                <?php endforeach;?>
               </ul>
             </div>
+            <?php endif;?>
             <div class="text-center">
               <button class="btn btn-primary text-uppercase pl-4 pr-4" type="submit">COMPLETE YOUR PROFILE</button>
             </div>
@@ -81,3 +69,20 @@ $this->title = 'User Profile';
     </div>
   </section>
 </main>
+<?php
+$script = <<< JS
+$(".add-favorite-action").ajax_action({
+  confirm: false,
+  callback: function(eletement, data) {
+    toastr.success(data.message);
+    setTimeout(function(){
+      location.reload();
+    },1000);
+  },
+  error: function(errors) {
+      toastr.error(errors);
+  },
+});
+JS;
+$this->registerJs($script);
+?>
