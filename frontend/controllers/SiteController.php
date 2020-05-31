@@ -11,6 +11,9 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 use frontend\forms\LoginForm;
+use frontend\models\Operator;
+use frontend\models\Bonus;
+use frontend\models\Post;
 
 class SiteController extends Controller
 {
@@ -26,7 +29,15 @@ class SiteController extends Controller
     
     public function actionIndex()
     {
+        $topOperators = Operator::find()->limit(10)->orderBy(['id' => SORT_DESC])->all();
+        $newestOperators = Operator::find()->limit(10)->orderBy(['id' => SORT_DESC])->all();
+        $lastestBonuses = Bonus::find()->limit(5)->orderBy(['id' => SORT_DESC])->all();
+        $newestNews = Post::find()->limit(4)->orderBy(['id' => SORT_DESC])->all();
         return $this->render('index', [
+            'topOperators' => $topOperators,
+            'newestOperators' => $newestOperators,
+            'lastestBonuses' => $lastestBonuses,
+            'newestNews' => $newestNews,
         ]);
     }
 

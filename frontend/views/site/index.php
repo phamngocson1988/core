@@ -1,3 +1,6 @@
+<?php
+use yii\helpers\Url; 
+?>
 <main>
   <div class="section-keyvisual">
     <div class="container"><a class="trans delineation" href="#"><img class="object-fit" src="/img/top/delineation_bnr_01.jpg" alt="image"></a>
@@ -6,35 +9,41 @@
           <div class="row">
             <div class="col-12 col-md-6">
               <div class="row keyvisual-first">
-                <div class="col-12"><a class="item-block" href="#"><img class="object-fit" src="/img/top/keyvisual_img_01.jpg" alt="image">
-                    <p class="item-category">NEWS CATEGORY</p>
-                    <p class="item-title">SPAIN OVERTAKES CHINA IN COVID-19 DEATHS</p></a></div>
-                <div class="col-6"><a class="item-block" href="#"><img class="object-fit" src="/img/top/keyvisual_img_01.jpg" alt="image">
-                    <p class="item-category">NEWS CATEGORY</p>
-                    <p class="item-title">THIS IS NOT A JOKE</p></a></div>
-                <div class="col-6"><a class="item-block" href="#"><img class="object-fit" src="/img/top/keyvisual_img_01.jpg" alt="image">
-                    <p class="item-category">NEWS CATEGORY</p>
-                    <p class="item-title">THIS IS NOT A JOKE</p></a></div>
+                <?php $post = array_shift($newestNews);?>
+                <div class="col-12"><a class="item-block" href="<?=Url::to(['post/view', 'id' => $post->id]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image">
+                    <?php $category = $post->category;?>
+                    <?php if ($category) : ?>
+                    <p class="item-category"><?=$category->title;?></p>
+                    <?php endif ;?>
+                    <p class="item-title"><?=$post->title;?></p></a></div>
+                <?php $post = array_shift($newestNews);?>
+                <div class="col-6"><a class="item-block" href="<?=Url::to(['post/view', 'id' => $post->id]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image">
+                    <?php $category = $post->category;?>
+                    <?php if ($category) : ?>
+                    <p class="item-category"><?=$category->title;?></p>
+                    <?php endif ;?>
+                    <p class="item-title"><?=$post->title;?></p></a></div>
+                <?php $post = array_shift($newestNews);?>
+                <div class="col-6"><a class="item-block" href="<?=Url::to(['post/view', 'id' => $post->id]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image">
+                    <?php $category = $post->category;?>
+                    <?php if ($category) : ?>
+                    <p class="item-category"><?=$category->title;?></p>
+                    <?php endif ;?>
+                    <p class="item-title"><?=$post->title;?></p></a></div>
               </div>
             </div>
-            <div class="col-12 col-md-6"><a class="item-block large" href="#"><img class="object-fit" src="/img/top/keyvisual_img_01.jpg" alt="image"></a></div>
+            <?php $post = array_shift($newestNews);?>
+            <div class="col-12 col-md-6"><a class="item-block large" href="<?=Url::to(['post/view', 'id' => $post->id]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image"></a></div>
           </div>
         </div>
         <div class="col-lg-3 col-lrg-2">
           <div class="sidebar-category">
-            <p class="category-title">TOP OPERATORS</p>
+            <p class="category-title"><?=Yii::t('app', 'top_operator');?></p>
             <div class="category-inner">
               <ul class="category-list">
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
+                <?php foreach ($topOperators as $operator) : ?>
+                <li><a href="<?=Url::to(['operator/view', 'id' => $operator]);?>"><span class="category-icon"><img src="<?=$operator->getImageUrl('50x50');?>" alt="icon"></span><span class="category-name"><?=$operator->name;?></span></a></li>
+                <?php endforeach;?>
               </ul>
             </div>
           </div>
@@ -45,185 +54,53 @@
   <section class="section-newest">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title">NEWEST OPERATORS</h2><a class="btn btn-primary trans" href="#">SEE ALL NEWEST OPERATORS<i class="fas fa-chevron-right"></i></a>
+        <h2 class="sec-title"><?=Yii::t('app', 'newest_operator');?></h2><a class="btn btn-primary trans" href="<?=Url::to(['operator/index']);?>"><?=Yii::t('app', 'see_all_newest_operator');?><i class="fas fa-chevron-right"></i></a>
       </div>
       <div class="newest-slider js-newest-slider">
+        <?php foreach ($newestOperators as $operator) :?>
         <div class="newest-item">
           <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
+            <div class="card-image"><img class="object-fit" src="<?=$operator->getImageUrl('400x220');?>" alt="image"></div>
             <div class="card-body">
               <div class="star-rating-group">
                 <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
               </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
+              <h3 class="card-title"><?=$operator->name;?></h3>
               <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
             </div>
           </div>
         </div>
-        <div class="newest-item">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
-        <div class="newest-item">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
-        <div class="newest-item">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
-        <div class="newest-item">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
-        <div class="newest-item">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
+        <?php endforeach;?>
       </div>
     </div>
   </section>
   <section class="section-latest-bonuses">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title">LATEST BONUSES</h2><a class="btn btn-primary trans" href="#">SEE ALL LATEST BONUSES<i class="fas fa-chevron-right"></i></a>
+        <h2 class="sec-title"><?=Yii::t('app', 'lastest_bonus');?></h2><a class="btn btn-primary trans" href="<?=Url::to(['bonus/index']);?>"><?=Yii::t('app', 'see_all_lastest_bonus');?><i class="fas fa-chevron-right"></i></a>
       </div>
       <div class="row">
+        <?php foreach ($lastestBonuses as $bonus) : ?>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2">
           <div class="block-bonuses js-bonuses">
             <div class="bonuses-front">
               <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-              <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
+              <div class="bonuses-image"><img class="object-fit" src="<?=$bonus->getImageUrl('400x220');?>" alt="image"></div>
               <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
+                <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                 <p class="bonuses-desc">WELCOME BONUS</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
+              </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>"><?=Yii::t('app', 'get_bonus');?></a>
             </div>
             <div class="bonuses-back">
               <div class="bonuses-icon fas fa-close js-close"></div>
               <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
+                <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                 <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
+              </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>"><?=Yii::t('app', 'get_bonus');?></a>
             </div>
           </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2">
-          <div class="block-bonuses js-bonuses">
-            <div class="bonuses-front">
-              <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-              <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">WELCOME BONUS</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-            <div class="bonuses-back">
-              <div class="bonuses-icon fas fa-close js-close"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2">
-          <div class="block-bonuses js-bonuses">
-            <div class="bonuses-front">
-              <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-              <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">WELCOME BONUS</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-            <div class="bonuses-back">
-              <div class="bonuses-icon fas fa-close js-close"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2">
-          <div class="block-bonuses js-bonuses">
-            <div class="bonuses-front">
-              <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-              <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">WELCOME BONUS</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-            <div class="bonuses-back">
-              <div class="bonuses-icon fas fa-close js-close"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2">
-          <div class="block-bonuses js-bonuses">
-            <div class="bonuses-front">
-              <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-              <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">WELCOME BONUS</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-            <div class="bonuses-back">
-              <div class="bonuses-icon fas fa-close js-close"></div>
-              <div class="bonuses-body">
-                <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-              </div><a class="btn btn-primary" href="#">GET BONUS</a>
-            </div>
-          </div>
-        </div>
+        <?php endforeach;?>
       </div>
     </div>
   </section>
