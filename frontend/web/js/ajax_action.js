@@ -316,10 +316,8 @@ function AjaxUploadImage(opts) {
         file_element: '#file', // seletor of the file element
         review_width: '150',
         review_height: '150',
+        link: '/image/ajax-upload'
     }; 
-    this.links = {
-        upload: '/image/ajax-upload',
-    };
     // form to push data to server
     this.form = new FormData();
  
@@ -356,7 +354,7 @@ function AjaxUploadImage(opts) {
     this.upload = function() {
         var that = this;
         $.ajax({
-            url: this.links.upload,
+            url: this.options.link,
             type: 'POST',
             processData: false, // important
             contentType: false, // important

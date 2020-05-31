@@ -2,6 +2,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 $this->title = 'User Profile';
+$user = Yii::$app->user->getIdentity();
 ?>
 <main>
   <section class="section-profile-user mt-3 mt-md-5">
@@ -12,7 +13,11 @@ $this->title = 'User Profile';
             <div class="border-bottom pb-3 mb-4">
               <h1 class="sec-title text-center text-uppercase mb-1">COMPLETE YOUR PROFILE</h1>
               <p class="text-center text-uppercase">Set your profile picture</p>
-              <div class="heading-image mb-4"><img class="object-fit" src="/img/common/avatar_img_01.png" alt="image"><a class="edit-camera fas fa-camera trans" href="#"></a></div>
+              <div class="heading-image mb-4 user-avatar-background">
+                <img class="object-fit user-avatar" src="<?=$user->getAvatarUrl('180x180');?>" alt="image">
+                <a class="edit-camera fas fa-camera trans" href="javascript:;"></a>
+                <input type="file" id="upload-user-avatar-element" name="upload-user-avatar-element" style="display: none" multiple accept="image/*"/>
+              </div>
               <div class="row pl-md-5 pr-md-5">
                 <div class="col-sm-6">
                   <?= $form->field($model, 'firstname', [
@@ -83,6 +88,43 @@ $(".add-favorite-action").ajax_action({
       toastr.error(errors);
   },
 });
+
+var uploadImage = new AjaxUploadImage({
+  trigger_element: '.edit-camera',
+  file_element: '#upload-user-avatar-element', // seletor of the file element
+  review_width: '180',
+  review_height: '180',
+  link: '###LINK###'
+});
+uploadImage.callback = function(data) { 
+  console.log(data);
+  var objs = Object.values(data);
+  if (objs.length) {
+    var avatarObj = objs[0];
+    var id = avatarObj.id;
+    var thumb = avatarObj.thumb;
+    console.log(id);
+    console.log(thumb);
+    $('body').find('.user-avatar').attr('src', thumb);
+    $('body').find('.user-avatar-background').attr('style', 'background-image: url("'+thumb+'")')
+    // Update user avatar
+    $.ajax({
+      url: '###UPDATEAVATAR###',
+      type: 'POST',
+      dataType : 'json',
+      data: {id: id},
+      success: function (result, textStatus, jqXHR) {
+        console.log(result);
+      },
+    });
+  } else {
+    toastr.error('No file');
+  }
+};
 JS;
+$uploadLink = Url::to(['image/ajax-upload']);
+$updateAvatarLink = Url::to(['profile/update-avatar']);
+$script = str_replace('###LINK###', $uploadLink, $script);
+$script = str_replace('###UPDATEAVATAR###', $updateAvatarLink, $script);
 $this->registerJs($script);
 ?>

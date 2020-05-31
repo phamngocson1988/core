@@ -124,7 +124,7 @@ AppAsset::register($this);
               </div>
             </div>
           </div>
-          <div class="header-avatar header-dropdown"><a class="avatar" href="#"><img class="img-radius" src="/img/common/avatar_img_01.png" alt="image"></a><span class="js-action"></span>
+          <div class="header-avatar header-dropdown"><a class="avatar" href="javascript:;"><img class="img-radius user-avatar" src="<?=$user->getAvatarUrl('50x50');?>" alt="image"></a><span class="js-action"></span>
             <div class="dropdown-mega">
               <div class="dropdown-mega-inner">
                 <p class="mega-title">Good afternoon <?=$user->getName();?><i class="fas fa-cog"></i></p>

@@ -63,4 +63,16 @@ class ProfileController extends Controller
             'operators' => $operators,
         ]);
     }
+
+    public function actionUpdateAvatar() 
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $user = Yii::$app->user->getIdentity();
+        $user->avatar = $request->post('id');
+        $user->save();
+        return $this->asJson(['status' => true]);
+    }
 }
