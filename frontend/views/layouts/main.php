@@ -124,37 +124,7 @@ AppAsset::register($this);
               </div>
             </div>
           </div>
-          <div class="header-avatar header-dropdown"><a class="avatar" href="javascript:;"><img class="img-radius user-avatar" src="<?=$user->getAvatarUrl('50x50');?>" alt="image"></a><span class="js-action"></span>
-            <div class="dropdown-mega">
-              <div class="dropdown-mega-inner">
-                <p class="mega-title">Good afternoon <?=$user->getName();?><i class="fas fa-cog"></i></p>
-                <div class="mega-content">
-                  <div class="mega-row">
-                    <p class="mega-ttl">Active complaints</p>
-                    <ul class="list-text">
-                      <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
-                      <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
-                      <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
-                    </ul>
-                    <div class="mega-create"><a class="fas fa-plus-circle trans" href="#"></a></div>
-                  </div>
-                  <div class="mega-row">
-                    <p class="mega-ttl">Favorite operators</p>
-                    <ul class="list-favorites">
-                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
-                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
-                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
-                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
-                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
-                      <li><a href="#"><img src="/img/common/avatar_img_01.png" alt="image"></a></li>
-                    </ul>
-                    <div class="mega-create"><a class="fas fa-plus-circle trans" href="#"></a></div>
-                  </div>
-                </div>
-                <div class="mega-link"><a href="<?=Url::to(['profile/index']);?>" class="text-uppercase">My profile</a><a class="trans" href="<?=Url::to(['site/logout']);?>">log out</a></div>
-              </div>
-            </div>
-          </div>
+          <?=\frontend\widgets\ProfileMenuWidget::widget();?>
           <?php endif;?>
           <div class="header-language"><a class="trans" href="#"><span>VI</span></a></div>
         </div>
