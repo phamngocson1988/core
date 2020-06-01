@@ -43,7 +43,7 @@ class AddOperatorFavoriteForm extends Model
 
     public function add()
     {
-        $favorite = OperatorFavorite::find([
+        $favorite = OperatorFavorite::find()->where([
             'user_id' => $this->user_id,
             'operator_id' => $this->operator_id
         ])->exists();
