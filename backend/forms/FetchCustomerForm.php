@@ -175,7 +175,7 @@ class FetchCustomerForm extends User
         $command = self::find();
         $command->with('order');
         $command->select(["{$userTable}.*", "{$orderTable}.game_title", "{$orderTable}.created_at as last_order_date", "SUM({$orderTable}.total_price) as total_price_purchase", "SUM({$orderTable}.total_unit) as total_unit_purchase"]);
-        $command->leftJoin($orderTable, "{$orderTable}.customer_id = {$userTable}.id");
+        $command->leftJoin($orderTable, "{$orderTable}.customer_id = {$userTable}.id AND {$orderTable}.status = '" . Order::STATUS_COMPLETED . "'");
 
         if ($this->created_start) {
             $command->andWhere(['>=', "{$userTable}.created_at", $this->created_start . " 00:00:00"]);
