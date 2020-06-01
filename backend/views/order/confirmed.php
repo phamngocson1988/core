@@ -230,7 +230,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
         <?php if ($sumQuantity) : ?>
         <div class="row">
           <div class="col-md-2 col-sm-4">
-            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
+            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->groupBy(["order.id"])->count());?></span>
           </div>
           <div class="col-md-2 col-sm-4">
             <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
