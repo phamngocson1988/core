@@ -8,6 +8,8 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
 use common\behaviors\UserOperatorFavoriteBehavior;
+use common\behaviors\UserOperatorReviewBehavior;
+
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -39,6 +41,7 @@ class User extends ActiveRecord implements IdentityInterface
                 'value' => date('Y-m-d H:i:s')
             ],
             'operatorFavorite' => UserOperatorFavoriteBehavior::className(),
+            'operatorReview' => UserOperatorReviewBehavior::className(),
         ];
     }
 

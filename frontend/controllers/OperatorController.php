@@ -23,12 +23,27 @@ class OperatorController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['add-favorite'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
         ];
+    }
+
+    public function actionIndex()
+    {
+
+    }
+
+    public function actionView($id) 
+    {
+        $model = Operator::findOne($id);
+        if (!$model) throw new NotFoundHttpException(Yii::t('app', 'operator_not_found'));
+        return $this->render('view', [
+            'model' => $model
+        ]);
     }
 
     public function actionAddFavorite()

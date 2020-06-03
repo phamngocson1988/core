@@ -6,11 +6,11 @@ use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 
-class OperatorFavorite extends ActiveRecord
+class OperatorReview extends ActiveRecord
 {
     public static function tableName()
     {
-        return '{{%operator_favorite}}';
+        return '{{%operator_review}}';
     }
 
     public function behaviors()
