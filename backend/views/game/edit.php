@@ -108,6 +108,12 @@ $canShowPrice = $user->can('orderteam');
                 <li>
                   <a href="#tab_1_2" data-toggle="tab">Meta data</a>
                 </li>
+                <li>
+                  <a href="#tab_1_3" data-toggle="tab">Danh mục</a>
+                </li>
+                <li>
+                  <a href="#tab_1_4" data-toggle="tab">Đặc tính</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -124,6 +130,37 @@ $canShowPrice = $user->can('orderteam');
                   <?=$form->field($model, 'meta_title')->textInput();?>
                   <?=$form->field($model, 'meta_keyword')->textInput();?>
                   <?=$form->field($model, 'meta_description')->textInput();?>
+                </div>
+                <div class="tab-pane" id="tab_1_3">
+                  <?=$form->field($model, 'categories', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->checkboxList($model->getCategories('%s<span></span>'), [
+                    'class' => 'md-checkbox-list', 
+                    'encode' => false , 
+                    'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
+                  ])->label('Categories');?>
+                </div>
+                <div class="tab-pane" id="tab_1_4">
+                  <?=$form->field($model, 'hot_deal', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+
+                  <?=$form->field($model, 'new_trending', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+
+                  <?=$form->field($model, 'top_grossing', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+
+                  <?=$form->field($model, 'back_to_stock', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
                 </div>
               </div>
             </div>

@@ -117,13 +117,15 @@ class m180517_025826_create_product_schema extends Migration
         // Category
         $this->createTable('{{%game_category}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(128)->notNull(),
+            'name' => $this->string(255)->notNull(),
+            'slug' => $this->string(255)->notNull(),
             'status' => $this->string(1)->defaultValue('Y')
         ], $tableOptions);
+
         $this->createTable('{{%game_category_item}}', [
             'id' => $this->primaryKey(),
-            'game_group_id' => $this->integer()->notNull(),
-            'game_category_id' => $this->integer()->notNull(),
+            'game_id' => $this->integer()->notNull(),
+            'category_id' => $this->integer()->notNull(),
         ], $tableOptions);
     }
 

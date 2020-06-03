@@ -69,22 +69,22 @@ $this->title = 'Register Affiliate';
           <p class="lead w-100">@drfly109</p>
           <p class="mb-3">“At first I thought it was a scam. No way seller will sell something so valuable for so cheap. But it indeed was like that. Awesome!”</p>
           <div class="starts text-center">
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
           </div>
         </div>
         <div class="item">
           <p class="lead w-100">@theoampl</p>
           <p class="mb-3">“Cheapest fastest and 100% safe topup. Highly recommended”</p>
           <div class="starts text-center mt-auto">
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
           </div>
           
         </div>
@@ -92,11 +92,11 @@ $this->title = 'Register Affiliate';
           <p class="lead w-100">@ashstark</p>
           <p class="mb-3">“At first i was a bit skeptical. Not sure whether this is a scam. I give it go and BAM!!! Got the CP credits. Im so happy!!! Y’all can trust this seller. Fast & cheap. I definitely will buy again from this seller”</p>
           <div class="starts text-center mt-auto">
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
-            <img class="icon-sm d-inline-block" src="./images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
+            <img class="icon-sm d-inline-block" src="/images/icon/star-active.svg"/>
           </div>
         </div>
         
