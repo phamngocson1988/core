@@ -1,15 +1,24 @@
+<?php 
+use yii\helpers\Url;
+?>
 <main>
   <section class="section-module">
     <div class="container">
       <div class="sec-content">
         <div class="mod-column">
           <section class="operator-hero widget-box">
-            <div class="hero-main"><a class="hero-photo" href="<?=$model->main_url;?>"><img src="/img/common/sample_img_00.png" alt="<?=$model->title;?>"></a>
+            <div class="hero-main"><a class="hero-photo" href="<?=$model->main_url;?>"><img src="/img/common/sample_img_00.png" alt="<?=$model->name;?>"></a>
               <div class="hero-info">
-                <div class="hero-name"><?=$model->title;?></div>
-                <div class="hero-rate"><span class="rate-text">Very Good 8.24</span><span class="rate-star">
-                    <div class="star-rating"><span style="width:94.5%"></span></div></span></div>
-                <div class="hero-buttons"><a class="btn btn-outline-light" href="<?=$model->main_url;?>">Visit now</a><a class="btn btn-outline-light" href="#">Add to favorite <i class="fa fa-star-o"></i></a></div>
+                <div class="hero-name"><?=$model->name;?></div>
+                <?php $star = round($model->averageStar(), 1) * 100;?>
+                <div class="hero-rate"><span class="rate-text">Very Good <?=$star;?></span><span class="rate-star">
+                    <div class="star-rating"><span style="width:<?=$star;?>%"></span></div></span></div>
+                <div class="hero-buttons">
+                  <a class="btn btn-outline-light" href="<?=$model->main_url;?>">Visit now</a>
+                  <?php if (!$isFavorite) : ?>
+                  <a class="btn btn-outline-light add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $operator->id]);?>">Add to favorite <i class="fa fa-star-o"></i></a>
+                  <?php endif;?>
+                </div>
                 <div class="hero-feature">
                   <p><i class="fa fa-clock-o"></i> Average Complaint Response Time: 1 hour</p>
                 </div>
@@ -28,7 +37,7 @@
           </section>
           <section class="operator-overview widget-box">
             <h2 class="widget-head">
-              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=$model->title;?> Overview</span></div>
+              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=$model->name;?> Overview</span></div>
             </h2>
             <div class="widget-content">
               <h3 class="content-title">Best Place In The World</h3>
@@ -219,7 +228,9 @@
                   </div>
                 </div>
               </div>
-              <div class="rate-button"><a class="btn btn-lg btn-primary" href="#">Write a review</a></div>
+              <?php if ($user) : ?>
+              <div class="rate-button"><a class="btn btn-lg btn-primary" href="#write-review-section">Write a review</a></div>
+              <?php endif;?>
             </div>
           </section>
           <section class="operator-review-group widget-box">
@@ -325,9 +336,10 @@
             </div>
             <div class="review-button"><a class="btn trans" href="#">Show more player reviews</a></div>
           </section>
-          <section class="operator-review-form widget-box">
+          <?php if ($user) : ?>
+          <section class="operator-review-form widget-box" id="write-review-section">
             <div class="formrv-header">
-              <div class="user-photo"><img src="/img/common/avatar_img_02.png" alt="Username"></div>
+              <div class="user-photo"><img src="<?=$user->getAvatarUrl('50x50');?>" alt="Username"></div>
               <div class="rate-content">
                 <div class="rate-label">Rate Henderson &amp; Bench and write a review</div>
                 <div class="rate-star">
@@ -390,6 +402,7 @@
               </div>
             </div>
           </section>
+          <?php endif;?>
           <section class="operator-bonus">
             <h2 class="sec-title text-center">Henderson &amp; Bench Bonuses</h2>
             <div class="row">
@@ -576,3 +589,21 @@
     </div>
   </section>
 </main>
+<?php
+$script = <<< JS
+$(".add-favorite-action").ajax_action({
+  confirm: false,
+  callback: function(eletement, data) {
+    toastr.success(data.message);
+    setTimeout(function(){
+      location.reload();
+    },1000);
+  },
+  error: function(errors) {
+      toastr.error(errors);
+  },
+});
+
+JS;
+$this->registerJs($script);
+?>

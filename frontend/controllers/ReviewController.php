@@ -14,7 +14,7 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
 
-class OperatorController extends Controller
+class ReviewController extends Controller
 {
 	public function behaviors()
     {
@@ -23,14 +23,8 @@ class OperatorController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view'],
+                        'actions' => ['add'],
                         'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['add-favorite'],
-                        'allow' => true,
-                        'roles' => ['?'],
                     ],
                     
                 ],
@@ -38,31 +32,12 @@ class OperatorController extends Controller
         ];
     }
 
-    public function actionIndex()
-    {
-
-    }
-
-    public function actionView($id, $slug) 
-    {
-        $model = Operator::findOne($id);
-        if (!$model) throw new NotFoundHttpException(Yii::t('app', 'operator_not_found'));
-
-        $user = Yii::$app->user->getIdentity();
-        $isFavorite = $user && $user->isOperatorFavorite($model->id);
-        return $this->render('view', [
-            'model' => $model,
-            'isFavorite' => $isFavorite,
-            'user' => $user
-        ]);
-    }
-
-    public function actionAddFavorite()
+    public function actionAdd()
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        $model = new \frontend\forms\AddOperatorFavoriteForm([
+        $model = new \frontend\forms\AddOperatorReviewForm([
             'user_id' => Yii::$app->user->id,
             'operator_id' => $request->get('id')
         ]);

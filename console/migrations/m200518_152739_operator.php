@@ -59,5 +59,6 @@ class m200518_152739_operator extends Migration
     {
         $this->dropTable('{{%operator}}');
         $this->dropTable('{{%operator_favorite}}');
+        $this->dropTable('{{%operator_review}}');
     }
 }

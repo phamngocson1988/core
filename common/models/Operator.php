@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use common\behaviors\OperatorReviewBehavior;
 
 class Operator extends ActiveRecord
 {
@@ -39,6 +40,7 @@ class Operator extends ActiveRecord
                 'immutable' => true,
                 'ensureUnique'=>true,
             ],
+            'operatorReview' => OperatorReviewBehavior::className(),
         ];
     }
 

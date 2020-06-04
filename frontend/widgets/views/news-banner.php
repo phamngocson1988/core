@@ -39,7 +39,7 @@ use yii\helpers\Url;
       <div class="category-inner">
         <ul class="category-list">
           <?php foreach ($topOperators as $operator) : ?>
-          <li><a href="<?=Url::to(['operator/view', 'id' => $operator]);?>"><span class="category-icon"><img src="<?=$operator->getImageUrl('50x50');?>" alt="icon"></span><span class="category-name"><?=$operator->name;?></span></a></li>
+          <li><a href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><span class="category-icon"><img src="<?=$operator->getImageUrl('50x50');?>" alt="icon"></span><span class="category-name"><?=$operator->name;?></span></a></li>
           <?php endforeach;?>
         </ul>
       </div>
