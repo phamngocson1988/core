@@ -10,6 +10,7 @@ use backend\models\User;
 use backend\models\Game;
 use backend\models\Supplier;
 use backend\models\OrderSupplier;
+use common\components\helpers\FormatConverter;
 
 class FetchOrderForm extends Model
 {
@@ -203,5 +204,137 @@ class FetchOrderForm extends Model
             'standard_chartered' => 'Standard Chartered',
             'paypal' => 'Paypal',
         ];   
+    }
+
+    // Export function
+    public function export($fileName = null)
+    {
+        $command = $this->getCommand();
+        $fileName = ($fileName) ? $fileName : 'order-list' . date('His') . '.xlsx';
+        $titles = [
+            'A' => 'Mã đơn hàng',
+            'B' => 'Tên khách hàng',
+            'C' => 'Tên game',
+            'D' => 'Ngày xác nhận',
+            'E' => 'Cổng thanh toán',
+            'F' => 'Số lượng nạp',
+            'G' => 'Số gói',
+            'H' => 'Thời gian chờ nạp',
+            'I' => 'Tổng thời gian chờ',
+            'J' => 'Người bán hàng',
+            'K' => 'Nhân viên đơn hàng',
+            'L' => 'Trạng thái',
+            'M' => 'Nhà cung cấp',
+        ];
+        $totalRow = $command->count();
+        $startRow = 12;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);
+
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $heading = 'DANH SÁCH ĐƠN HÀNG ĐÃ XÁC NHẬN';
+        $customer = $this->getCustomer();
+        $saler = User::findOne($this->saler_id);
+        $orderteam = User::findOne($this->orderteam_id);
+        $game = Game::findOne($this->game_id);
+        $supplier = User::findOne($this->supplier_id);
+        $allPaymentMethods = $this->fetchPaymentMethods();
+        $paymentMethod = ArrayHelper::getValue($allPaymentMethods, $this->payment_method, '');
+        $header = [
+            "A2:{$endColumn}2" => sprintf('Mã đơn hàng: %s', $this->q),
+            "A3:{$endColumn}3" => sprintf('Khách hàng: %s', $customer ? $customer->name : ''),
+            "A4:{$endColumn}4" => sprintf('Nhân viên sale: %s', $saler ? $saler->name : ''),
+            "A5:{$endColumn}5" => sprintf('Nhân viên đơn hàng: %s', $orderteam ? $orderteam->name : ''),
+            "A6:{$endColumn}6" => sprintf('Tên game: %s', $game ? $game->title : ''),
+            "A7:{$endColumn}7" => sprintf('Nhà cung cấp: %s', ($supplier) ? $supplier->name : ''),
+            "A8:{$endColumn}8" => sprintf('Ngày xác nhận từ: %s', ($this->confirmed_from) ? $this->confirmed_from : ''),
+            "A9:{$endColumn}9" => sprintf('Ngày xác nhận đến: %s', ($this->confirmed_from) ? $this->confirmed_from : ''),
+            "A10:{$endColumn}10" => sprintf('Phương thức thanh toán: %s', $paymentMethod),
+        ];
+        $footer = [
+            "A$footerRow" => sprintf('Tổng: %s', $command->count()),
+            "G$footerRow" => sprintf('Tổng: %s', number_format($command->sum('order.quantity'), 1)),
+        ];
+        
+        $data = [];
+        $command->orderBy(['order.created_at' => SORT_DESC]);
+        foreach ($command->all() as $model) {
+            $suppliers = $model->suppliers;
+            $supplierList = [];
+            foreach ($suppliers as $supplier) {
+                $supplierList[] = sprintf('%s (%s)', $supplier->user->name, $supplier->doing);
+            }
+            $data[] = [
+                '#' . $model->id, 
+                $model->customer_name,
+                $model->game_title, 
+                $model->confirmed_at,
+                $model->payment_method,
+                $model->total_unit,
+                $model->quantity,
+                FormatConverter::countDuration($model->processing_waiting_time),
+                FormatConverter::countDuration($model->completed_waiting_time),
+                ($model->saler) ? $model->saler->name : '',
+                ($model->orderteam) ? $model->orderteam->name : '',
+                $model->getStatusLabel(false),
+                implode(", ", $supplierList)
+            ];
+        }
+
+        $file = \Yii::createObject([
+            'class' => 'codemix\excelexport\ExcelFile',
+            'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
+            'sheets' => [
+                'Report by transaction' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    'heading' => $heading,
+                    'header' => $header,
+                    'footer' => $footer,
+                    'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+                    'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+                ],
+            ],
+        ]);
+        $file->send($fileName);
     }
 }

@@ -304,6 +304,7 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.confirmed';
         $request = Yii::$app->request;
+        $mode = $request->get('mode');
         $data = [
             'q' => $request->get('q'),
             'customer_id' => $request->get('customer_id'),
@@ -317,6 +318,11 @@ class OrderController extends Controller
             'status' => Order::STATUS_CONFIRMED,
         ];
         $form = new FetchOrderForm($data);
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'danh-don-hang-da-xac-nhan.xls';
+            return $form->export($fileName);
+        }
+
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)

@@ -60,6 +60,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
           <span class="caption-subject bold uppercase"> Đơn hàng đã được khách xác nhận</span>
         </div>
         <div class="actions">
+          <?php if (Yii::$app->user->can('admin')) : ?>
+          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
@@ -227,22 +230,14 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php if ($models) :?>
         <?php $sumQuantity = $search->getCommand()->sum('order.quantity');?>
-        <?php $sumOrder = number_format($search->getCommand()->groupBy(["order.id"])->count());?>
-        <?php $avgProcessingTime = $search->getCommand()->sum('processing_waiting_time') / $sumOrder;?>
-        <?php $avgCompletedTime = $search->getCommand()->sum('completed_waiting_time') / $sumQuantity;?>
+        <?php $sumOrder = number_format($search->getCommand()->count());?>
         <?php if ($sumQuantity) : ?>
         <div class="row">
           <div class="col-md-2 col-sm-4">
             <span class="label label-danger">Tổng đơn hàng: <?=$sumOrder;?></span>
           </div>
           <div class="col-md-2 col-sm-4">
-            <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
-          </div>
-          <div class="col-md-2 col-sm-4">
-            <span class="label label-default">Thời gian chờ nạp trung bình: <?=round($avgProcessingTime, 1);?></span>
-          </div>
-          <div class="col-md-2 col-sm-4">
-            <span class="label label-warning">Tổng thời gian chờ trung bình: <?=round($avgCompletedTime, 1);?></span>
+            <span class="label label-success">Tổng số gói: <?=number_format($sumQuantity, 1);?></span>
           </div>
          
         </div>
