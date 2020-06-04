@@ -10,9 +10,6 @@ class OrderBehavior extends AttributeBehavior
     {
         $order = $this->owner;
         $order->orderteam_id = $id;
-        if (!$order->process_start_time) {
-        	$order->process_start_time = date('Y-m-d H:i:s');
-        }
         return $order->save();
     }
 }

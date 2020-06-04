@@ -55,7 +55,7 @@ class FetchOrderForm extends Model
     {
         $command = Order::find();
         $table = Order::tableName();
-        $command->select(["$table.*"]);
+        $command->select(["$table.*", "TIMESTAMPDIFF(SECOND , $table.created_at, $table.process_start_time) as processing_waiting_time", "TIMESTAMPDIFF(SECOND , $table.created_at, $table.process_end_time) as completed_waiting_time"]);
         $supplierTable = OrderSupplier::tableName();
         
         if ($this->q) {

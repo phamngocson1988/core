@@ -173,8 +173,8 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th <?=$showCustomer ? '' : 'class="hide"';?>> Cổng thanh toán </th>
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
-                <th class="hidden-xs"> Thời gian nhận đơn </th>
-                <th> Thời gian chờ </th>
+                <th class="hidden-xs"> Thời gian chờ nạp </th>
+                <th> Tổng thời gian chờ </th>
                 <th class="hidden-xs"> Người bán hàng </th>
                 <th class="hidden-xs"> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
@@ -195,8 +195,8 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->payment_method;?></td>
                   <td><?=$model->total_unit;?></td>
                   <td><?=$model->quantity;?></td>
-                  <td class="hidden-xs"><?=$model->process_start_time;?></td>
-                  <td><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
+                  <td class="hidden-xs"><?=FormatConverter::countDuration($model->processing_waiting_time);?></td>
+                  <td><?=FormatConverter::countDuration($model->completed_waiting_time);?></td>
                   <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
                   <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                   <td>
@@ -227,14 +227,24 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php if ($models) :?>
         <?php $sumQuantity = $search->getCommand()->sum('order.quantity');?>
+        <?php $sumOrder = number_format($search->getCommand()->groupBy(["order.id"])->count());?>
+        <?php $avgProcessingTime = $search->getCommand()->sum('processing_waiting_time') / $sumOrder;?>
+        <?php $avgCompletedTime = $search->getCommand()->sum('completed_waiting_time') / $sumQuantity;?>
         <?php if ($sumQuantity) : ?>
         <div class="row">
           <div class="col-md-2 col-sm-4">
-            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->groupBy(["order.id"])->count());?></span>
+            <span class="label label-danger">Tổng đơn hàng: <?=$sumOrder;?></span>
           </div>
           <div class="col-md-2 col-sm-4">
             <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
           </div>
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-default">Thời gian chờ nạp trung bình: <?=round($avgProcessingTime, 1);?></span>
+          </div>
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-warning">Tổng thời gian chờ trung bình: <?=round($avgCompletedTime, 1);?></span>
+          </div>
+         
         </div>
         <?php endif;?>
         <?php endif;?>

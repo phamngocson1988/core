@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use backend\models\User;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -75,11 +76,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
-                <?php
-                $supplier = $model->supplier;
-                if (!$supplier) continue;
-                $user = $supplier->user; 
-                ?>
+                <?php $user = User::findOne($model->supplier_id);?>
                 <tr>
                   <td><?=$model->getId();?></td>
                   <td><?=sprintf("%s (#%s)", $user->name, $user->id);?></td>

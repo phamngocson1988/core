@@ -58,7 +58,7 @@ if (!count($lastPrices)) {
     <div class="profile-sidebar">
       <?php $form = ActiveForm::begin(['action' => ['game/update-price', 'id' => $id], 'options' => ['class' => 'form-horizontal form-row-seperated form', 'id' => 'update-price-form']]);?>
       <div class="portlet light">
-        <img id="image_game-image_id" class="img-responsive" src="<?=$model->getImageUrl('500x500');?>">
+        <img id="image_game-image_id" class="img-responsive" src="<?=$model->getGame()->getImageUrl('500x500');?>">
         <?php if ($canUpdatePrice) : ?>
         <?=$form->field($model, 'price1', [
           'options' => ['class' => 'list-separated profile-stat'],

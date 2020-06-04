@@ -9,6 +9,8 @@ use backend\behaviors\OrderNotificationBehavior;
  */
 class Order extends \common\models\Order
 {
+    public $processing_waiting_time;
+    public $completed_waiting_time;
     const SCENARIO_CREATE = 'create';
     const SCENARIO_GO_PENDING = 'go_pending';
     const SCENARIO_GO_PROCESSING = 'go_processing';

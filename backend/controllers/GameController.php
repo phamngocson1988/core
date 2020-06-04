@@ -293,8 +293,10 @@ class GameController extends Controller
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         if (!Yii::$app->user->can('orderteam')) throw new NotFoundHttpException('Not found');
         $request = Yii::$app->request;
-        $model = Game::findOne($id);
-
+        // $model = Game::findOne($id);
+        $model = new \backend\forms\UpdateGamePriceForm(['id' => $id]);
+        $model->loadData();
+        
         $form = new FetchSupplierGameForm([
             'game_id' => $id,
             'supplier_id' => $request->get('supplier_id'),
@@ -342,77 +344,116 @@ class GameController extends Controller
         ]);
     }
 
+    // public function actionUpdatePrice($id)
+    // {
+    //     $this->view->params['main_menu_active'] = 'game.provider';
+    //     $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+    //     $request = Yii::$app->request;
+    //     $model = Game::findOne($id);
+    //     $model->setScenario(Game::SCENARIO_UPDATE_PRICE);
+    //     if ($request->isPost) {
+    //         // Write log
+    //         $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
+    //             $game = $event->sender; //game
+    //             $oldGame = clone $game;
+    //             $oldGame->attributes = $event->changedAttributes;
+    //             $setting = Yii::$app->settings;
+    //             $config = [
+    //                 'managing_cost_rate' => $setting->get('ApplicationSettingForm', 'managing_cost_rate', 0),
+    //                 'investing_cost_rate' => $setting->get('ApplicationSettingForm', 'investing_cost_rate', 0),
+    //                 'desired_profit' => $setting->get('ApplicationSettingForm', 'desired_profit', 0),
+    //                 'reseller_desired_profit' => $setting->get('ApplicationSettingForm', 'reseller_desired_profit', 0),
+    //             ];
+    //             $newPrice = $game->getPrice();
+    //             $oldPrice = $oldGame->getPrice();
+    //             $attrs = [
+    //                 'old_price' => $oldPrice,
+    //                 'new_price' => $newPrice,
+    //                 'old_price_1' => $oldGame->price1,
+    //                 'old_price_2' => $oldGame->price2,
+    //                 'old_price_3' => $oldGame->price3,
+    //                 'new_price_1' => $game->price1,
+    //                 'new_price_2' => $game->price2,
+    //                 'new_price_3' => $game->price3,
+    //                 'old_reseller_1' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_1),
+    //                 'new_reseller_1' => $game->getResellerPrice(User::RESELLER_LEVEL_1),
+    //                 'old_reseller_2' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_2),
+    //                 'new_reseller_2' => $game->getResellerPrice(User::RESELLER_LEVEL_2),
+    //                 'old_reseller_3' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_3),
+    //                 'new_reseller_3' => $game->getResellerPrice(User::RESELLER_LEVEL_3),
+    //             ];
+    //             Yii::error($attrs, 'actionUpdatePrice attrs');
+    //             $log = new GamePriceLog();
+    //             foreach ($attrs as $key => $value) {
+    //                 $log->$key = $value;
+    //             }
+    //             $log->game_id = $game->id;
+    //             $log->config = json_encode(array_merge($event->changedAttributes, $config));
+    //             $log->save();
+
+    //             // Send mail to saler
+    //             $salerIds = Yii::$app->authManager->getUserIdsByRole('saler');
+    //             $saleManagerIds = Yii::$app->authManager->getUserIdsByRole('sale_manager');
+    //             $salerTeamIds = array_merge($salerIds, $saleManagerIds);
+    //             $salerTeamIds = array_unique($salerTeamIds);
+    //             $salerTeams = User::findAll($salerTeamIds);
+    //             $salerEmails = ArrayHelper::getColumn($salerTeams, 'email');
+    //             $admin = Yii::$app->params['email_admin'];
+    //             $siteName = Yii::$app->name;
+    //             Yii::$app->mailer->compose('notify_updating_game_price', [
+    //                 'game' => $game,
+    //                 'changes' => $attrs
+    //             ])
+    //             ->setTo($salerEmails)
+    //             ->setFrom([$admin => $siteName])
+    //             ->setSubject(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
+    //             ->setTextBody(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
+    //             ->send();
+    //         });
+    //         if ($model->load($request->post()) && $model->save()) {
+    //             if ($request->isAjax) {
+    //                 return $this->asJson(['status' => true]);
+    //             } else {
+    //                 Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
+    //                 $ref = $request->get('ref', Url::to(['game/provider']));
+    //                 return $this->redirect($ref);    
+    //             }
+    //         } else {
+    //             $errors = $model->getErrorSummary(false);
+    //             $message = reset($errors);
+    //             Yii::$app->session->setFlash('error', $message);
+    //             if ($request->isAjax) {
+    //                 return $this->asJson(['status' => false, 'errors' => $message]);
+    //             }
+    //         }
+    //     }
+
+    //     // Load suppliers
+    //     $suppliers = SupplierGame::find()
+    //     ->where(['game_id' => $id])
+    //     ->orderBy(['price' => SORT_ASC])
+    //     ->with('user')->all();
+
+    //     return $this->render('update-price.tpl', [
+    //         'model' => $model,
+    //         'suppliers' => $suppliers,
+    //         'id' => $id,
+    //     ]);
+    // }
+
     public function actionUpdatePrice($id)
     {
         $this->view->params['main_menu_active'] = 'game.provider';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = Game::findOne($id);
-        $model->setScenario(Game::SCENARIO_UPDATE_PRICE);
+        $model = new \backend\forms\UpdateGamePriceForm(['id' => $id]);
         if ($request->isPost) {
-            // Write log
-            $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
-                $game = $event->sender; //game
-                $oldGame = clone $game;
-                $oldGame->attributes = $event->changedAttributes;
-                $setting = Yii::$app->settings;
-                $config = [
-                    'managing_cost_rate' => $setting->get('ApplicationSettingForm', 'managing_cost_rate', 0),
-                    'investing_cost_rate' => $setting->get('ApplicationSettingForm', 'investing_cost_rate', 0),
-                    'desired_profit' => $setting->get('ApplicationSettingForm', 'desired_profit', 0),
-                    'reseller_desired_profit' => $setting->get('ApplicationSettingForm', 'reseller_desired_profit', 0),
-                ];
-                $newPrice = $game->getPrice();
-                $oldPrice = $oldGame->getPrice();
-                $attrs = [
-                    'old_price' => $oldPrice,
-                    'new_price' => $newPrice,
-                    'old_price_1' => $oldGame->price1,
-                    'old_price_2' => $oldGame->price2,
-                    'old_price_3' => $oldGame->price3,
-                    'new_price_1' => $game->price1,
-                    'new_price_2' => $game->price2,
-                    'new_price_3' => $game->price3,
-                    'old_reseller_1' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_1),
-                    'new_reseller_1' => $game->getResellerPrice(User::RESELLER_LEVEL_1),
-                    'old_reseller_2' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_2),
-                    'new_reseller_2' => $game->getResellerPrice(User::RESELLER_LEVEL_2),
-                    'old_reseller_3' => $oldGame->getResellerPrice(User::RESELLER_LEVEL_3),
-                    'new_reseller_3' => $game->getResellerPrice(User::RESELLER_LEVEL_3),
-                ];
-                Yii::error($attrs, 'actionUpdatePrice attrs');
-                $log = new GamePriceLog();
-                foreach ($attrs as $key => $value) {
-                    $log->$key = $value;
-                }
-                $log->game_id = $game->id;
-                $log->config = json_encode(array_merge($event->changedAttributes, $config));
-                $log->save();
-
-                // Send mail to saler
-                $salerIds = Yii::$app->authManager->getUserIdsByRole('saler');
-                $saleManagerIds = Yii::$app->authManager->getUserIdsByRole('sale_manager');
-                $salerTeamIds = array_merge($salerIds, $saleManagerIds);
-                $salerTeamIds = array_unique($salerTeamIds);
-                $salerTeams = User::findAll($salerTeamIds);
-                $salerEmails = ArrayHelper::getColumn($salerTeams, 'email');
-                $admin = Yii::$app->params['email_admin'];
-                $siteName = Yii::$app->name;
-                Yii::$app->mailer->compose('notify_updating_game_price', [
-                    'game' => $game,
-                    'changes' => $attrs
-                ])
-                ->setTo($salerEmails)
-                ->setFrom([$admin => $siteName])
-                ->setSubject(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
-                ->setTextBody(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
-                ->send();
-            });
-            if ($model->load($request->post()) && $model->save()) {
+            if ($model->load($request->post()) && $model->validate() && $model->save()) {
                 if ($request->isAjax) {
                     return $this->asJson(['status' => true]);
                 } else {
-                    Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $model->title);
+                    $game = $model->getGame();
+                    Yii::$app->session->setFlash('success', 'Cập nhật giá thành công cho game ' . $game->title);
                     $ref = $request->get('ref', Url::to(['game/provider']));
                     return $this->redirect($ref);    
                 }
@@ -421,7 +462,7 @@ class GameController extends Controller
                 $message = reset($errors);
                 Yii::$app->session->setFlash('error', $message);
                 if ($request->isAjax) {
-                    return $this->asJson(['status' => false, 'errors' => $message]);
+                    return $this->asJson(['status' => false, 'errors' => $errors]);
                 }
             }
         }

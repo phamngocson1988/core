@@ -177,8 +177,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th <?=$showCustomer ? '' : 'class="hide"';?>> Cổng thanh toán </th>
                 <th> Số lượng nạp </th>
                 <th> Số gói </th>
-                <th> Thời gian nhận đơn </th>
-                <th> Thời gian chờ </th>
                 <th> Người bán hàng </th>
                 <th> Nhân viên đơn hàng </th>
                 <th> Trạng thái </th>
@@ -188,7 +186,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="14"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $supplier = $model->supplier;?>
@@ -201,8 +199,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->payment_method;?></td>
                   <td><?=$model->total_unit;?></td>
                   <td><?=$model->quantity;?></td>
-                  <td><?=$model->process_start_time;?></td>
-                  <td><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
                   <td><?=($model->saler) ? $model->saler->name : '';?></td>
                   <td><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                   <td>
