@@ -8,6 +8,7 @@ use common\models\Image;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\behaviors\GamePriceLogBehavior;
+use common\behaviors\GameCategoryBehavior;
 
 class Game extends ActiveRecord
 {
@@ -49,7 +50,8 @@ class Game extends ActiveRecord
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
             ],
-            ['class' => GamePriceLogBehavior::className()]
+            ['class' => GamePriceLogBehavior::className()],
+            ['class' => GameCategoryBehavior::className()],
         ];
     }
 

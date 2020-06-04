@@ -1,10 +1,11 @@
 <?php 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 use website\widgets\LinkPager;
 ?>
 <div class="container mt-5">
-  <form method="GET" autocomplete='off' action="<?=Url::to(['game/index']);?>">
+  <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['game/index'], 'options' => ['autocomplete' => 'off']]);?>
     <div class="input-group search-category">
       <div class="input-group-prepend dropdown">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All games</button>
@@ -14,17 +15,21 @@ use website\widgets\LinkPager;
           <a class="dropdown-item" href="#">category 3</a>
         </div>
       </div>
-      <input type="text" name="q" value="<?=$form->q;?>" class="form-control" placeholder="Enter keyword here.....">
+      <?=$form->field($search, 'q', [
+        'options' => ['tag' => false],
+        'template' => '{input}',
+        'inputOptions' => ['class' => 'form-control', 'name' => 'q', 'placeholder' => 'Enter keyword here.....']
+      ])->textInput()->label(false);?>
       <div class="input-group-append">
         <button class="btn" type="submit"><img class="icon-sm" src="/images/icon/search.svg" /></button>
       </div>
     </div>
-  </form>
+  <?php ActiveForm::end()?>
 </div>
 <div class="container category-page post-list mt-5">
   <div class="post-wrapper d-flex flex-wrap justify-content-left">
     <?php foreach ($models as $game) : ?>
-    <?php $viewUrl = Url::to(['game/view', 'id' => $game->id]);?>
+    <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
     <div class="post-item card">
       <div class="post-thumb">
         <a href="<?=$viewUrl;?>" class="hover-img"><img src="<?=$game->getImageUrl('300x300');?>" /></a>
@@ -40,12 +45,14 @@ use website\widgets\LinkPager;
         <h4 class="post-title">
           <a href="<?=$viewUrl;?>"><?=$game->title;?></a>
         </h4>
+        <?php if ($game->hasCategory()) : ?>
         <div class="tags">
           <img src="/images/icon/tag.svg" />
-          <span class="badge badge-primary">action</span>
-          <span class="badge badge-primary">role-playing</span>
-          <span class="badge badge-primary">moba</span>
+          <?php foreach ($game->categories as $category) : ?>
+          <span class="badge badge-primary"><?=$category->name;?></span>
+          <?php endforeach; ?>
         </div>
+        <?php endif;?>
         <div class="d-flex justify-content-between align-items-center py-2">
           <div class="flex-fill value">
             <span class="num"><?=number_format($game->pack);?></span>

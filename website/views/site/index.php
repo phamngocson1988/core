@@ -506,7 +506,7 @@ $sideGallery = array_slice($gallery, -2);
   <p class="mb-5">Shop our most popular products for this season.</p>
   <div class="post-wrapper post-slider" data-aos="fade-up" data-aos-duration="800">
     <?php foreach ($hotGames as $game) :?>
-    <?php $viewUrl = Url::to(['game/view', 'id' => $game->id]);?>
+    <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
     <div class="post-item card">
       <div class="post-thumb">
         <a href="<?=$viewUrl;?>" class="hover-img">
@@ -524,12 +524,14 @@ $sideGallery = array_slice($gallery, -2);
         <h4 class="post-title">
           <a href="<?=$viewUrl;?>"><?=Html::encode($game->title);?></a>
         </h4>
+        <?php if ($game->hasCategory()) : ?>
         <div class="tags">
           <img src="/images/icon/tag.svg" />
-          <span class="badge badge-primary">action</span>
-          <span class="badge badge-primary">role-playing</span>
-          <span class="badge badge-primary">moba</span>
+          <?php foreach ($game->categories as $category) : ?>
+          <span class="badge badge-primary"><?=$category->name;?></span>
+          <?php endforeach; ?>
         </div>
+        <?php endif;?>
         <div class="d-flex justify-content-between align-items-center py-2">
           <div class="flex-fill value">
             <span class="num"><?=number_format($game->pack);?></span>
@@ -586,7 +588,7 @@ $sideGallery = array_slice($gallery, -2);
       <p class="mb-5">Shop our most popular products for this season.</p>
       <div class="post-wrapper top-grossing" data-aos="fade-up" data-aos-duration="800">
         <?php foreach ($grossingGames as $game) : ?>
-        <?php $viewUrl = Url::to(['game/view', 'id' => $game->id]);?>
+        <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
         <div class="post-item card">
           <div class="d-flex">
             <div class="post-thumb">
@@ -603,13 +605,14 @@ $sideGallery = array_slice($gallery, -2);
               <h4 class="post-title">
                 <a href="<?=$viewUrl;?>"><?=$game->title;?></a>
               </h4>
+              <?php if ($game->hasCategory()) : ?>
               <div class="tags">
                 <img src="/images/icon/tag.svg" />
-                <span class="badge badge-primary">action</span>
-                <span class="badge badge-primary">role-playing</span>
-                <span class="badge badge-primary">moba</span>
+                <?php foreach ($game->categories as $category) : ?>
+                <span class="badge badge-primary"><?=$category->name;?></span>
+                <?php endforeach; ?>
               </div>
-
+              <?php endif;?>
               <div class="d-flex justify-content-between align-items-center py-2">
                 <div class="flex-fill value">
                   <span class="num"><?=number_format($game->pack);?></span>
@@ -653,7 +656,7 @@ $sideGallery = array_slice($gallery, -2);
       <p class="mb-5">Shop our most popular products for this season.</p>
       <div class="post-wrapper top-grossing" data-aos="fade-up" data-aos-duration="800">
         <?php foreach ($trendGames as $game) : ?>
-        <?php $viewUrl = Url::to(['game/view', 'id' => $game->id]);?>
+        <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
         <div class="post-item card">
           <div class="d-flex">
             <div class="post-thumb">
@@ -670,12 +673,14 @@ $sideGallery = array_slice($gallery, -2);
               <h4 class="post-title">
                 <a href="<?=$viewUrl;?>"><?=$game->title;?></a>
               </h4>
+              <?php if ($game->hasCategory()) : ?>
               <div class="tags">
                 <img src="/images/icon/tag.svg" />
-                <span class="badge badge-primary">action</span>
-                <span class="badge badge-primary">role-playing</span>
-                <span class="badge badge-primary">moba</span>
+                <?php foreach ($game->categories as $category) : ?>
+                <span class="badge badge-primary"><?=$category->name;?></span>
+                <?php endforeach; ?>
               </div>
+              <?php endif;?>
               <div class="d-flex justify-content-between align-items-center py-2">
                 <div class="flex-fill value">
                   <span class="num"><?=number_format($game->pack);?></span>

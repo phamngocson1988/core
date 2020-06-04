@@ -24,7 +24,10 @@ class GameController extends Controller
     {
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
-        $form = new FetchGameForm(['q' => $request->get('q')]);
+        $form = new FetchGameForm([
+            'q' => $request->get('q'),
+            'category_id' => $request->get('category_id'),
+        ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
@@ -32,7 +35,7 @@ class GameController extends Controller
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
-            'form' => $form
+            'search' => $form
         ]);
     }
     public function actionView($id)
