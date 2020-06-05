@@ -27,6 +27,9 @@ class AddOperatorReviewForm extends Model
             [['user_id', 'operator_id'], 'required'],
             ['user_id', 'validateUser'],
             ['operator_id', 'validateOperator'],
+            [['good_thing', 'bad_thing'], 'trim'],
+            ['star', 'number', 'max' => 10, 'min' => 1],
+            [['notify_register', 'experience'], 'safe'],
         ];
     }
 
@@ -35,6 +38,9 @@ class AddOperatorReviewForm extends Model
         $user = $this->getUser();
         if (!$user) {
             $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
+        }
+        if ($user->isOperatorFavorite($this->operator_id)) {
+            $this->addError($attribute, Yii::t('app', 'you_reviewed_operator'));
         }
     }
 
@@ -48,17 +54,15 @@ class AddOperatorReviewForm extends Model
 
     public function add()
     {
-        $favorite = OperatorFavorite::find()->where([
-            'user_id' => $this->user_id,
-            'operator_id' => $this->operator_id
-        ])->exists();
-        if (!$favorite) {
-            $favorite = new OperatorFavorite();
-            $favorite->user_id = $this->user_id;
-            $favorite->operator_id = $this->operator_id;
-            return $favorite->save();
-        }
-        return true;
+        $review = new OperatorReview();
+        $review->user_id = $this->user_id;
+        $review->operator_id = $this->operator_id;
+        $review->good_thing = $this->good_thing;
+        $review->bad_thing = $this->bad_thing;
+        $review->star = $this->star;
+        $review->notify_register = $this->notify_register;
+        $review->experience = $this->experience;
+        return $review->save();
     }
 
     public function getUser()

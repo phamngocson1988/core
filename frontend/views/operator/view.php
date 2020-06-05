@@ -1,5 +1,6 @@
 <?php 
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 ?>
 <main>
   <section class="section-module">
@@ -379,6 +380,7 @@ use yii\helpers\Url;
               </div>
             </div>
             <div class="formrv-main">
+              <?php $form = ActiveForm::begin(); ?>
               <div class="formrv-inputs">
                 <div class="formrv-row row-like">
                   <textarea class="form-control" rows="6" placeholder="What do you like?"></textarea>
@@ -400,6 +402,7 @@ use yii\helpers\Url;
               <div class="formrv-button">
                 <button class="btn btn-primary btn-lg" type="submit">Post my review</button>
               </div>
+              <?php ActiveForm::end();?>
             </div>
           </section>
           <?php endif;?>
