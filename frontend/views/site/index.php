@@ -20,8 +20,7 @@ use yii\helpers\Url;
             <div class="card-image"><img class="object-fit" src="<?=$operator->getImageUrl('400x220');?>" alt="image"></div>
             <div class="card-body">
               <div class="star-rating-group">
-                <?php $star = round($operator->averageStar(), 1) * 100;?>
-                <div class="star-rating"><span style="width:<?=$star;?>%"></span></div><span class="star-rating-text"><?=$star;?></span>
+                <div class="star-rating"><span style="width:<?=$operator->averageReviewPercent();?>%"></span></div><span class="star-rating-text"><?=number_format($operator->averageStar(), 1);?></span>
               </div>
               <h3 class="card-title"><?=$operator->name;?></h3>
               <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>">JOIN NOW</a>

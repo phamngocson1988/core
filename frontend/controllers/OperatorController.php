@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 
 use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
+use frontend\models\OperatorReview;
 
 class OperatorController extends Controller
 {
@@ -25,12 +26,11 @@ class OperatorController extends Controller
                     [
                         'actions' => ['index', 'view'],
                         'allow' => true,
-                        'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['add-favorite'],
+                        'actions' => ['add-favorite', 'add-review'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['@'],
                     ],
                     
                 ],
@@ -50,10 +50,13 @@ class OperatorController extends Controller
 
         $user = Yii::$app->user->getIdentity();
         $isFavorite = $user && $user->isOperatorFavorite($model->id);
+        $isReview = $user && $user->isReview($model->id);
         $reviewForm = new \frontend\forms\AddOperatorReviewForm();
+
         return $this->render('view', [
             'model' => $model,
             'isFavorite' => $isFavorite,
+            'isReview' => $isReview,
             'user' => $user,
             'reviewForm' => $reviewForm
         ]);
@@ -77,6 +80,13 @@ class OperatorController extends Controller
         }
     }
 
+    public function actionListReview()
+    {
+        $request = Yii::$app->request;
+        $models = OperatorReview::find()->where(['operator_id' => $request->get('id')])->all();
+        return $this->renderPartial('list-review', ['models' => $models]);
+
+    }
     public function actionAddReview()
     {
         $request = Yii::$app->request;
@@ -86,7 +96,7 @@ class OperatorController extends Controller
             'user_id' => Yii::$app->user->id,
             'operator_id' => $request->get('id')
         ]);
-        if ($model->validate() && $model->add()) {
+        if ($model->load($request->post()) && $model->validate() && $model->add()) {
             return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'add_operator_favorite_success')]]);
         } else {
             $message = $model->getErrorSummary(true);

@@ -24,12 +24,13 @@ class AddOperatorReviewForm extends Model
     public function rules()
     {
         return [
-            [['user_id', 'operator_id'], 'required'],
+            [['user_id', 'operator_id', 'star'], 'required'],
             ['user_id', 'validateUser'],
             ['operator_id', 'validateOperator'],
             [['good_thing', 'bad_thing'], 'trim'],
             ['star', 'number', 'max' => 10, 'min' => 1],
-            [['notify_register', 'experience'], 'safe'],
+            [['notify_register', 'experience'], 'boolean', 'trueValue' => true, 'falseValue' => false],
+            [['notify_register', 'experience'], 'default', 'value' => false],
         ];
     }
 
@@ -39,7 +40,7 @@ class AddOperatorReviewForm extends Model
         if (!$user) {
             $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
         }
-        if ($user->isOperatorFavorite($this->operator_id)) {
+        if ($user->isReview($this->operator_id)) {
             $this->addError($attribute, Yii::t('app', 'you_reviewed_operator'));
         }
     }

@@ -14,4 +14,22 @@ class OperatorReviewBehavior extends AttributeBehavior
             'operator_id' => $owner->id
         ])->average('star');
     }
+
+    public function averageReviewRating() 
+    {
+        $owner = $this->owner; // Operator
+        return $owner->averageStar() / 10;
+    }
+
+    public function averageReviewPercent() 
+    {
+        $owner = $this->owner; // Operator
+        return $owner->averageStar() * 10;
+    }
+
+    public function countReview()
+    {
+        $owner = $this->owner; // Operator
+    	return OperatorReview::find()->where(['operator_id' => $owner->id])->count();
+    }
 }
