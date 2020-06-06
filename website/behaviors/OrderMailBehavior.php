@@ -1,5 +1,5 @@
 <?php
-namespace frontend\behaviors;
+namespace webstie\behaviors;
 
 use Yii;
 

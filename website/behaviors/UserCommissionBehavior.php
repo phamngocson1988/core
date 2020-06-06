@@ -1,8 +1,8 @@
 <?php 
-namespace frontend\behaviors;
+namespace website\behaviors;
 
 use Yii;
-use frontend\models\UserCommission;
+use website\models\UserCommission;
 
 class UserCommissionBehavior extends \common\behaviors\UserCommissionBehavior
 {

@@ -1,7 +1,7 @@
 <?php
-namespace frontend\behaviors;
+namespace website\behaviors;
 use yii\behaviors\AttributeBehavior;
-use frontend\components\notifications\DepositNotification;
+use website\components\notifications\DepositNotification;
 
 class DepositNotificationBehavior extends AttributeBehavior
 {

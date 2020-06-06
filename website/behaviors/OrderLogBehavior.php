@@ -1,5 +1,5 @@
 <?php
-namespace frontend\behaviors;
+namespace website\behaviors;
 
 class OrderLogBehavior extends \common\behaviors\OrderLogBehavior
 {

@@ -27,7 +27,7 @@ $user = Yii::$app->user->getIdentity();
             <div class="col-md-6 p-4 bg-green">
               <p class="mb-2">Add Kcoin to Wallet</p>
               <div class="input-group inp-deposit">
-                <input type="number" step="100" id="quantity" value="100" class="form-control">
+                <input type="number" step="100" id="quantity" value="0" class="form-control">
               </div>
             </div>
           </div>
@@ -57,31 +57,31 @@ $user = Yii::$app->user->getIdentity();
             <div class="card-body" id="subtotal-kingcoin-row">
               <div class="d-flex">
                 <div class="flex-fill w-100">Kcoin</div>
-                <div class="flex-fill w-100 text-right font-weight-bold" id="subtotal-kingcoin">100 KC</div>
+                <div class="flex-fill w-100 text-right font-weight-bold" id="subtotal-kingcoin">0 KC</div>
               </div>
               <div class="d-flex" id="bonus-kingcoin-row">
                 <div class="flex-fill w-100">Bonus</div>
-                <div class="flex-fill w-100 text-right font-weight-bold" id="bonus-kingcoin">10 KC</div>
+                <div class="flex-fill w-100 text-right font-weight-bold" id="bonus-kingcoin">0 KC</div>
               </div>
               <div class="d-flex" id="total-kingcoin-row">
                 <div class="flex-fill w-100">Total KC</div>
-                <div class="flex-fill w-100 text-right text-red" id="total-kingcoin">110 KC</div>
+                <div class="flex-fill w-100 text-right text-red" id="total-kingcoin">0 KC</div>
               </div>
               <hr />
               <div class="d-flex" id="subtotal-payment-row">
                 <div class="flex-fill w-100">Subtotal</div>
-                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="subtotal-payment">$100.0</div>
+                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="subtotal-payment">$0.0</div>
               </div>
               <div class="d-flex" id="transfer-fee-row">
                 <div class="flex-fill w-100">Transfer fee</div>
-                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="transfer-fee">$1.0</div>
+                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="transfer-fee">$0.0</div>
               </div>
               <div class="d-flex" id="total-payment-row">
                 <div class="flex-fill w-100">Total payment</div>
-                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="total-payment">$101.0</div>
+                <div class="flex-fill text-red font-weight-bold w-100 text-right" id="total-payment">$0.0</div>
               </div>
-              <a href="#" data-toggle="modal" data-target="#paymentGame" class="mt-3 btn btn-block btn-payment">Pay
-                now</a>
+              <!-- <a href="#" data-toggle="modal" data-target="#paymentGame" class="mt-3 btn btn-block btn-payment">Pay now</a> -->
+              <button id="payNowButton" class="mt-3 btn btn-block btn-payment">Pay now</button>
             </div>
           </div>
           <!-- END SUMMARY -->
@@ -302,6 +302,7 @@ $user = Yii::$app->user->getIdentity();
 <!-- end modal order detail -->
 <?php
 $script = <<< JS
+$("input[name=identifier]:first").trigger('click');
 function Calculator() {
   // Elements
   var quantityElement = $('#quantity');
@@ -324,7 +325,37 @@ function Calculator() {
       success: function (result, textStatus, jqXHR) {
           console.log('Calculator', result);
           if (result.status) {
-            ShowSummary(result)
+            ShowSummary(result.data)
+          } else {
+            toastr.error(result.errors.join('<br/>')); 
+          }
+      },
+  });
+};
+
+function Purchase() {
+  // Elements
+  var quantityElement = $('#quantity');
+  var voucherElement = $('#voucher');
+  var paygateElement = $( "input[name=identifier]:checked" );
+  // Calculate
+  var quantity = quantityElement.val();
+  var voucher = voucherElement.val();
+  var paygate = paygateElement.val();
+
+  $.ajax({
+      url: '/wallet/purchase.html',
+      type: "POST",
+      dataType: 'json',
+      data: {
+        quantity: quantity,
+        voucher: voucher,
+        paygate: paygate,
+      },
+      success: function (result, textStatus, jqXHR) {
+          console.log('Purchase', result);
+          if (result.status) {
+            ShowTransaction(result.data)
           } else {
             toastr.error(result.errors.join('<br/>')); 
           }
@@ -338,18 +369,35 @@ function ShowSummary(data) {
   var voucherElement = $('#voucher');
   var paygateElement = $( "input[name=identifier]:checked" );
   // Html
-  var subtotalKingcoinRow = $("#subtotal-kingcoin-row");
-  var subtotalKingcoin = $("#subtotal-kingcoin");
+  var subTotalKingcoinRow = $("#subtotal-kingcoin-row");
+  var subTotalKingcoin = $("#subtotal-kingcoin");
   var bonusKingcoinRow = $("#bonus-kingcoin-row");
   var bonusKingcoin = $("#bonus-kingcoin");
   var totalKingcoinRow = $("#total-kingcoin-row");
   var totalKingcoin = $("#total-kingcoin");
-  var subtotalPaymentRow = $("#subtotal-payment-row");
-  var subtotalPayment = $("#subtotal-payment");
+
+  var subTotalPaymentRow = $("#subtotal-payment-row");
+  var subTotalPayment = $("#subtotal-payment");
   var totalPaymentRow = $("#total-payment-row");
   var totalPayment = $("#total-payment");
   var transferFeeRow = $("#transfer-fee-row");
   var transferFee = $("#transfer-fee");
+
+  // bonusKingcoin: 0
+  // subTotalKingcoin: "200"
+  // subTotalPayment: "200"
+  // totalKingcoin: "200"
+  // totalPayment: "200"
+  // transferFee: "3.0"
+  // voucherApply: false
+
+  bonusKingcoin.html(data.bonusKingcoin + ' KC');
+  totalKingcoin.html(data.totalKingcoin + ' KC');
+  subTotalKingcoin.html(data.subTotalKingcoin + ' KC');
+
+  subTotalPayment.html('$' + data.subTotalPayment);
+  transferFee.html('$' + data.transferFee);
+  totalPayment.html('$' + data.totalPayment);
 }
 
 $('#quantity').on('change', function(e) {
@@ -361,7 +409,10 @@ $('#applyVocherBtn').on('click', function(e) {
 $( "input[name=identifier]:radio" ).on('change', function(e) {
   console.log('radio click');
   Calculator();
-})
+});
+$( "#payNowButton").on('click', function() {
+  Purchase();
+});
 JS;
 $this->registerJs($script);
 ?>
