@@ -245,57 +245,7 @@ $user = Yii::$app->user->getIdentity();
   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header d-block">
-        <h2 class="modal-title text-center w-100 text-red text-uppercase">Payment Kcoin</h2>
-        <p class="text-center d-block">Transaction ID: T12345678</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6 border-right">
-            <p><span class="list-item">Kcoin:</span><b>100 KC</b></p>
-            <p><span class="list-item">Bonus:</span><b>10 KC</b></p>
-            <p><span class="list-item">Total KC:</span><b class="text-red">110 KC</b></p>
-            <hr />
-            <p><span class="list-item">Subtotal:</span><b class="text-red">100 USD</b></p>
-            <p><span class="list-item">Transfer fee:</span><b class="text-red">1 USD</b></p>
-            <p><span class="list-item">Total payment:</span><b class="text-red">101 USD</b></p>
-          </div>
-          <div class="col-md-6">
-            <img class="payment-logo" src="/images/icon/skrill.svg" />
-            <h3 class="text-red pt-3">Recipient Account</h3>
-            <p><span class="list-item">Account Email:</span><b>leohuynh.huynhgia@gmail.com</b></p>
-            <p><span class="list-item">Account ID:</span><b>19216811</b></p>
-            <p><span class="list-item">Account Holder:</span><b>huynhkhaihung</b></p>
-          </div>
-          <div class="col-md-12">
-            <p class="text-center font-weight-bold mt-5 mb-0">Kindly submit Transaction Number after you do payment
-              successfully</p>
-            <p class="font-italic text-center"><small>Payment will be auto-confirmed, please make sure Transaction
-                Number is correct</small></p>
-            <div class="form-group">
-              <input type="number" class="form-control input-number" id="" aria-describedby="emailHelp"
-                placeholder="Enter transaction number here...">
-            </div>
-            <div class="text-center btn-wrapper d-block" role="group">
-              <button type="button" class="btn text-uppercase">Submit</button>
-              <label class="btn text-uppercase btn-upload">
-                Upload picture <input type="file" hidden>
-              </label>
-            </div>
-            <p class="text-center">
-              <a class="link-dark" href="#">How to get Transaction Number?</a>
-            </p>
-          </div>
-        </div>
-
-      </div>
-      <!-- <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="button" class="btn btn-primary">Save changes</button>
-    </div> -->
+      
     </div>
   </div>
 </div>
@@ -400,6 +350,26 @@ function ShowSummary(data) {
   totalPayment.html('$' + data.totalPayment);
 }
 
+function ShowTransaction(id) {
+  $.ajax({
+      url: '/wallet/view.html',
+      type: "GET",
+      dataType: 'json',
+      data: {
+        id: id,
+      },
+      success: function (result, textStatus, jqXHR) {
+          console.log('ShowTransaction', result);
+          if (result.status) {
+            $('#paymentGame .modal-content').html(result.data);
+            $('#paymentGame').modal('show');
+          } else {
+            toastr.error(result.errors.join('<br/>')); 
+          }
+      },
+  });
+}
+
 $('#quantity').on('change', function(e) {
   Calculator();
 });
@@ -413,6 +383,39 @@ $( "input[name=identifier]:radio" ).on('change', function(e) {
 $( "#payNowButton").on('click', function() {
   Purchase();
 });
+
+$('#paymentGame').on('click', '#update-payment-button', function(e) {
+  e.preventDefault();
+  var baseForm = $(this).closest('form');
+  var url = baseForm.attr('action');
+  var form = new FormData();
+  baseForm.find('input').each(function( index ) {
+    var elementName = $(this).attr('name');
+    if ($(this).attr('type') == 'file') {
+      $.each(this.files, function( index, value ) {
+        form.append(elementName, value);
+      });
+    } else {
+      form.append(elementName, $(this).val());
+    }
+  });
+  $.ajax({
+      url: url,
+      type: "POST",
+      processData: false, // important
+      contentType: false, // important
+      dataType : 'json',
+      data: form,
+      success: function (result, textStatus, jqXHR) {
+        if (!result.status) {
+          toastr.error(result.errors);
+        } else {
+          toastr.success(result.message);
+        }
+      },
+  });
+});
+ShowTransaction(16870763);
 JS;
 $this->registerJs($script);
 ?>

@@ -570,3 +570,89 @@ $.fn.selectImage = function(manager, opts) {
         manager.open_popup();
     });
 }
+
+/* File */
+function AjaxUploadFile(opts) {
+    // default configuration properties
+    this.options = {
+        trigger_element: null,
+        file_element: '#file', // seletor of the file element
+        file_options: null
+    }; 
+    this.links = {
+        upload: '/file/ajax-upload.html',
+    };
+    // form to push data to server
+    this.form = new FormData();
+ 
+    //constructor
+    this.init = function (opts) {
+        this.options = $.extend(this.options, opts);
+        var that = this;
+        if (this.options.trigger_element !== null) {
+            $(that.options.trigger_element).click(function(){
+                $(that.options.file_element).trigger('click');
+            });
+        }
+        $(this.options.file_element).on('change', function(){
+            var element_name = $(this).attr('name');
+            $.each(this.files, function( index, value ) {
+                var file = value;
+                // var imagefile = file.type;
+                // var match= ["image/jpeg","image/png","image/jpg"];
+                // if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2]))) {
+                //     return false;
+                // } else {
+                    that.form.append(element_name, file);
+                // }
+            });
+            element_name = element_name.replace(/[ \[\] ]/g, "");
+            that.form.append('name', element_name);
+            if (that.options.file_options) {
+                let opts = that.options.file_options || {};
+                console.log('opts', opts);
+                Object.keys(opts).map(k => {
+                    that.form.append(k, opts[k]);
+                });
+            }
+            that.upload();
+        });
+    };
+
+
+    this.upload = function() {
+        var that = this;
+        $.ajax({
+            url: this.links.upload,
+            type: 'POST',
+            processData: false, // important
+            contentType: false, // important
+            dataType : 'json',
+            data: this.form,
+            success: function (result, textStatus, jqXHR) {
+                if (result.status == false) {
+                    alert(result.errors.join("\n"));
+                    return false;
+                } else {
+                    that.callback(result.data);
+                }
+                 
+            },
+            complete: function() {
+                that.reset();
+            }
+        });
+    }
+
+    //reset
+    this.reset = function() {
+        this.form = new FormData();
+        $(this.options.file_element).val('');
+    }
+
+    this.callback = function(result) {
+        console.log('callback');
+    }
+
+    this.init(opts);
+};
