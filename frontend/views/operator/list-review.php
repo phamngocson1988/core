@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="review-more"><a href="#">Show more</a></div>
-    <?php if ($more->reply) : ?>
+    <?php if ($model->reply) : ?>
     <div class="review-comments">
       <div class="review-comment">
         <div class="review-comment-header">
@@ -31,18 +31,7 @@
           <div class="comment-date">Replied on <?=date('F j, Y', strtotime($model->replied_at));?></div>
         </div>
         <div class="review-comment-content">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro voluptatem ratione fugiat quod voluptas quam ducimus maiores temporibus dolorem facere illum nostrum, a nobis reiciendis expedita saepe repellat quia sapiente.</p>
-        </div>
-        <div class="review-more"><a href="#">Show more</a></div>
-      </div>
-      <div class="review-comment">
-        <div class="review-comment-header">
-          <div class="user-photo"><img src="/img/common/sample_img_00.png" alt="Username"></div>
-          <div class="user-name">Henderson &amp; Bench</div>
-          <div class="comment-date">Replied on February 8, 2020</div>
-        </div>
-        <div class="review-comment-content">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro voluptatem ratione fugiat quod voluptas quam ducimus maiores temporibus dolorem facere illum nostrum, a nobis reiciendis expedita saepe repellat quia sapiente.</p>
+          <p><?=$model->reply;?></p>
         </div>
         <div class="review-more"><a href="#">Show more</a></div>
       </div>

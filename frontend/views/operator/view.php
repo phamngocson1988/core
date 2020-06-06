@@ -537,23 +537,11 @@ $(".rating-star").on("click", function() {
   });
 });
 // Review List
-function loadReview() {
-  $.ajax({
-      url: '###REVIEWLIST###',
-      dataType : 'html',
-      data: form.serialize(),
-      beforeSend: that.beforeSend(form),
-      success: function (result, textStatus, jqXHR) {
-          if (result.status == false) {
-              that.error(result.errors);
-              return false;
-          } else {
-              that.success(result.data, form);
-          }
-      },
-      complete: that.complete(form)
-  });
-}
+var reviewListLoading = new AjaxPaging({
+  container: '.review-list',
+  request_url: '###REVIEWLIST###',
+  auto_first_load: true
+});
 // Review Form
 var reviewForm = new AjaxFormSubmit({
   element : 'form#add-review-form'
@@ -568,5 +556,7 @@ reviewForm.success = function (data, form) {
   }, 1000);
 }
 JS;
+$listReviewLink = Url::to(['operator/list-review']);
+$script = str_replace('###REVIEWLIST###', $listReviewLink, $script);
 $this->registerJs($script);
 ?>

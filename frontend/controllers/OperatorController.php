@@ -84,7 +84,8 @@ class OperatorController extends Controller
     {
         $request = Yii::$app->request;
         $models = OperatorReview::find()->where(['operator_id' => $request->get('id')])->all();
-        return $this->renderPartial('list-review', ['models' => $models]);
+        $html = $this->renderPartial('list-review', ['models' => $models]);
+        return $this->asJson(['status' => true, 'data' => $html]);
 
     }
     public function actionAddReview()
