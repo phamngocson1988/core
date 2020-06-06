@@ -47,10 +47,13 @@ class m200518_152739_operator extends Migration
             'star' => $this->integer()->defaultValue(0),
             'notify_register' => $this->boolean()->notNull()->defaultValue(false),
             'experience' => $this->boolean()->notNull()->defaultValue(false),
+            'reply' => $this->text(),
             'created_by' => $this->integer(),
             'updated_by' => $this->integer(),
+            'replied_by' => $this->integer(),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
+            'replied_at' => $this->dateTime(),
         ], $tableOptions);
 
     }

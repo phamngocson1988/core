@@ -15,4 +15,12 @@ class UserOperatorReviewBehavior extends AttributeBehavior
             'operator_id' => $operatorId
         ])->exists();
     }
+
+    public function countReview()
+    {
+    	$owner = $this->owner; // User
+    	return OperatorReview::find()->where([
+    		'user_id' => $owner->id
+    	])->count();
+    }
 }
