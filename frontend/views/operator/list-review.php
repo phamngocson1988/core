@@ -21,7 +21,7 @@
         <p><?=$model->bad_thing;?></p>
       </div>
     </div>
-    <div class="review-more"><a href="#">Show more</a></div>
+    <!-- <div class="review-more"><a href="#">Show more</a></div> -->
     <?php if ($model->reply) : ?>
     <div class="review-comments">
       <div class="review-comment">
@@ -33,7 +33,7 @@
         <div class="review-comment-content">
           <p><?=$model->reply;?></p>
         </div>
-        <div class="review-more"><a href="#">Show more</a></div>
+        <!-- <div class="review-more"><a href="#">Show more</a></div> -->
       </div>
     </div>
     <?php endif;?>

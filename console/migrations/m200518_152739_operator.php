@@ -44,7 +44,7 @@ class m200518_152739_operator extends Migration
             'operator_id' => $this->integer()->notNull(),
             'good_thing' => $this->text(),
             'bad_thing' => $this->text(),
-            'star' => $this->integer()->defaultValue(0),
+            'star' => $this->integer()->defaultValue(1),
             'notify_register' => $this->boolean()->notNull()->defaultValue(false),
             'experience' => $this->boolean()->notNull()->defaultValue(false),
             'reply' => $this->text(),

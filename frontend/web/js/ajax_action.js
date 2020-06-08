@@ -307,6 +307,7 @@ function AjaxPaging(opts) {
     }
 
     this.init(opts);
+    return this;
 }
 
 function AjaxUploadImage(opts) {

@@ -16,7 +16,7 @@ use yii\bootstrap\ActiveForm;
                 <div class="hero-buttons">
                   <a class="btn btn-outline-light" href="<?=$model->main_url;?>">Visit now</a>
                   <?php if (!$isFavorite) : ?>
-                  <a class="btn btn-outline-light add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $operator->id]);?>">Add to favorite <i class="fa fa-star-o"></i></a>
+                  <a class="btn btn-outline-light add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $model->id]);?>">Add to favorite <i class="fa fa-star-o"></i></a>
                   <?php endif;?>
                 </div>
                 <div class="hero-feature">
@@ -217,55 +217,8 @@ use yii\bootstrap\ActiveForm;
               </div>
             </div>
             <div class="review-list">
-              <article class="review-item">
-                <div class="review-user">
-                  <div class="user-photo"><img src="/img/common/sample_img_00.png" alt="Username"></div>
-                  <div class="user-name"><a href="#">Username</a></div>
-                  <div class="user-meta"><span>52 reviews</span><span>Vietnam</span></div>
-                  <div class="user-message"><a href="#"><i class="fas fa-envelope"></i> Message</a></div>
-                </div>
-                <div class="review-content">
-                  <div class="review-date">Reviewed on <span>February 6, 2020</span></div>
-                  <div class="review-rate">
-                    <div class="star-rating"><span style="width:94.5%"></span></div>
-                  </div>
-                  <div class="review-text">
-                    <div class="review-text-positive">
-                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nam cumque maxime, officia aut expedita libero? Deleniti reiciendis accusamus, modi, dolor temporibus a quam accusantium soluta, voluptate eius ullam maiores.</p>
-                    </div>
-                    <div class="review-text-negative">
-                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, magnam aperiam sed optio, laboriosam corporis voluptatem laudantium, animi aliquid dolorem ipsa porro obcaecati voluptatum illo autem in voluptate distinctio nostrum.</p>
-                    </div>
-                  </div>
-                  <div class="review-more"><a href="#">Show more</a></div>
-                  <div class="review-comments">
-                    <div class="review-comment">
-                      <div class="review-comment-header">
-                        <div class="user-photo"><img src="/img/common/sample_img_00.png" alt="Username"></div>
-                        <div class="user-name">Henderson &amp; Bench</div>
-                        <div class="comment-date">Replied on February 8, 2020</div>
-                      </div>
-                      <div class="review-comment-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro voluptatem ratione fugiat quod voluptas quam ducimus maiores temporibus dolorem facere illum nostrum, a nobis reiciendis expedita saepe repellat quia sapiente.</p>
-                      </div>
-                      <div class="review-more"><a href="#">Show more</a></div>
-                    </div>
-                    <div class="review-comment">
-                      <div class="review-comment-header">
-                        <div class="user-photo"><img src="/img/common/sample_img_00.png" alt="Username"></div>
-                        <div class="user-name">Henderson &amp; Bench</div>
-                        <div class="comment-date">Replied on February 8, 2020</div>
-                      </div>
-                      <div class="review-comment-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro voluptatem ratione fugiat quod voluptas quam ducimus maiores temporibus dolorem facere illum nostrum, a nobis reiciendis expedita saepe repellat quia sapiente.</p>
-                      </div>
-                      <div class="review-more"><a href="#">Show more</a></div>
-                    </div>
-                  </div>
-                </div>
-              </article>
             </div>
-            <div class="review-button"><a class="btn trans" href="#">Show more player reviews</a></div>
+            <div class="review-button"><a class="btn trans" href="javascript:;" id="load-more-reivew">Show more player reviews</a></div>
           </section>
           <?php if ($user && !$isReview) : ?>
           <section class="operator-review-form widget-box" id="write-review-section">
@@ -326,89 +279,34 @@ use yii\bootstrap\ActiveForm;
           </section>
           <?php endif;?>
           <section class="operator-bonus">
-            <h2 class="sec-title text-center">Henderson &amp; Bench Bonuses</h2>
+            <h2 class="sec-title text-center"><?=$model->name;?> Bonuses</h2>
             <div class="row">
+              <?php foreach ($bonuses as $bonus) : ?>
               <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <div class="block-bonuses js-bonuses">
                   <div class="bonuses-front">
                     <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-                    <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
+                    <div class="bonuses-image"><img class="object-fit" src="<?=$bonus->getImageUrl('400x220');?>" alt="image"></div>
                     <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
+                      <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                       <p class="bonuses-desc">WELCOME BONUS</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
+                    </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
                   </div>
                   <div class="bonuses-back">
                     <div class="bonuses-icon fas fa-close js-close"></div>
                     <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                      <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
+                      <h3 class="bonuses-title"><?=$bonus->title;?></h3>
+                      <p class="bonuses-desc"><?=$bonus->content;?></p>
+                    </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-bonuses js-bonuses">
-                  <div class="bonuses-front">
-                    <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-                    <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                      <p class="bonuses-desc">WELCOME BONUS</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
-                  </div>
-                  <div class="bonuses-back">
-                    <div class="bonuses-icon fas fa-close js-close"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                      <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-bonuses js-bonuses">
-                  <div class="bonuses-front">
-                    <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-                    <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                      <p class="bonuses-desc">WELCOME BONUS</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
-                  </div>
-                  <div class="bonuses-back">
-                    <div class="bonuses-icon fas fa-close js-close"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                      <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-bonuses js-bonuses">
-                  <div class="bonuses-front">
-                    <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-                    <div class="bonuses-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                      <p class="bonuses-desc">WELCOME BONUS</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
-                  </div>
-                  <div class="bonuses-back">
-                    <div class="bonuses-icon fas fa-close js-close"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title">Henderson & Ben: 150% up tp $100</h3>
-                      <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
-                    </div><a class="btn btn-primary" href="#">GET BONUS</a>
-                  </div>
-                </div>
-              </div>
+              <?php endforeach;?>
             </div>
-            <div class="operator-sec-button"><a class="btn" href="#">See all <i class="fas fa-chevron-right"></i></a></div>
+            <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['bonus/index']);?>">See all <i class="fas fa-chevron-right"></i></a></div>
           </section>
           <section class="operator-complaint">
-            <h2 class="sec-title text-center">Henderson &amp; Bench Complaints</h2>
+            <h2 class="sec-title text-center"><?=$bonus->title;?> Complaints</h2>
             <ul class="complaint-stats">
               <li>Total 99 cases</li>
               <li>700/995 case resolved (90%)</li>
@@ -487,23 +385,7 @@ use yii\bootstrap\ActiveForm;
             <div class="category-button"><a class="trans" href="#">Show all news</a></div>
           </div>
           <div class="sidebar-col side-operator">
-            <div class="sidebar-category">
-              <p class="category-title">TOP OPERATORS</p>
-              <div class="category-inner">
-                <ul class="category-list">
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                  <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                </ul>
-              </div>
-            </div>
+            <?=\frontend\widgets\TopOperatorWidget::widget();?>
           </div>
           <div class="sidebar-delineation"><a class="trans" href="#"><img src="/img/operators/img_01.jpg" alt="image"></a></div>
         </aside>
@@ -555,8 +437,21 @@ reviewForm.success = function (data, form) {
     location.reload();
   }, 1000);
 }
+reviewListLoading.no_data = function() {
+  console.log('no_data');
+  // $('#load-more-reivew').style('display', 'none');
+};
+reviewListLoading.stop_search = function() {
+  console.log('stop_search');
+  // $('#load-more-reivew').remove();
+};
+$('#load-more-reivew').on('click', function() {
+
+  console.log('load more');
+  reviewListLoading.load();
+})
 JS;
-$listReviewLink = Url::to(['operator/list-review']);
+$listReviewLink = Url::to(['operator/list-review', 'id' => $model->id]);
 $script = str_replace('###REVIEWLIST###', $listReviewLink, $script);
 $this->registerJs($script);
 ?>
