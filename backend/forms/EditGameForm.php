@@ -23,9 +23,6 @@ class EditGameForm extends Model
     public $pack;
     public $pin;
     public $soldout;
-    public $price1;
-    public $price2;
-    public $price3;
     public $average_speed;
     public $number_supplier;
     public $remark;
@@ -52,7 +49,6 @@ class EditGameForm extends Model
             ['pin', 'default', 'value' => Game::UNPIN],
             ['soldout', 'default', 'value' => 0],
             [['original_price'], 'trim'],
-            [['price1', 'price2', 'price3'], 'safe'],
             [['meta_title', 'meta_keyword', 'meta_description'], 'trim'],
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe']
@@ -73,9 +69,6 @@ class EditGameForm extends Model
             'pack' => 'Số đơn vị game trong gói',
             'pin' => 'Ưu tiên hiển thị',
             'soldout' => 'Hết hàng',
-            'price1' => 'Giá nhà cung cấp 1',
-            'price2' => 'Giá nhà cung cấp 2',
-            'price3' => 'Giá nhà cung cấp 3',
             'average_speed' => 'Tốc độ xử lý (phút)',
             'number_supplier' => 'Số nhà cung cấp',
             'remark' => 'Remark',
@@ -101,9 +94,6 @@ class EditGameForm extends Model
             $game->pack = $this->pack;
             $game->pin = $this->pin;
             $game->soldout = $this->soldout;
-            $game->price1 = $this->price1;
-            $game->price2 = $this->price2;
-            $game->price3 = $this->price3;
             $game->average_speed = $this->average_speed;
             $game->number_supplier = $this->number_supplier;
             $game->remark = $this->remark;
@@ -162,9 +152,6 @@ class EditGameForm extends Model
         $this->pack = $game->pack;
         $this->pin = $game->pin;
         $this->soldout = $game->soldout;
-        $this->price1 = $game->price1;
-        $this->price2 = $game->price2;
-        $this->price3 = $game->price3;
         $this->average_speed = $game->average_speed;
         $this->number_supplier = $game->number_supplier;
         $this->remark = $game->remark;
