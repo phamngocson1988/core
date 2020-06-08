@@ -113,6 +113,21 @@ use yii\helpers\Url;
           </li>
         </ul>
       </li>
+
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user-following"></i>
+        <span class="title"><?=Yii::t('app', 'manage_complain');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['reason/index']);?>" class="nav-link " code='reason.index'>
+            <span class="title"><?=Yii::t('app', 'manage_reason');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>

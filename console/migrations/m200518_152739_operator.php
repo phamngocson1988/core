@@ -55,25 +55,6 @@ class m200518_152739_operator extends Migration
             'updated_at' => $this->dateTime(),
             'replied_at' => $this->dateTime(),
         ], $tableOptions);
-
-        // $this->createTable('{{%operator_complain}}', [
-        //     'id' => $this->primaryKey(),
-        //     'user_id' => $this->integer()->notNull(),
-        //     'operator_id' => $this->integer()->notNull(),
-        //     'good_thing' => $this->text(),
-        //     'bad_thing' => $this->text(),
-        //     'star' => $this->integer()->defaultValue(0),
-        //     'notify_register' => $this->boolean()->notNull()->defaultValue(false),
-        //     'experience' => $this->boolean()->notNull()->defaultValue(false),
-        //     'reply' => $this->text(),
-        //     'created_by' => $this->integer(),
-        //     'updated_by' => $this->integer(),
-        //     'replied_by' => $this->integer(),
-        //     'created_at' => $this->dateTime(),
-        //     'updated_at' => $this->dateTime(),
-        //     'replied_at' => $this->dateTime(),
-        // ], $tableOptions);
-
     }
 
     public function down()

@@ -1,6 +1,7 @@
 <?php 
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use common\components\helpers\TimeElapsed;
 ?>
 <main>
   <section class="section-module">
@@ -306,59 +307,31 @@ use yii\bootstrap\ActiveForm;
             <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['bonus/index']);?>">See all <i class="fas fa-chevron-right"></i></a></div>
           </section>
           <section class="operator-complaint">
-            <h2 class="sec-title text-center"><?=$bonus->title;?> Complaints</h2>
+            <h2 class="sec-title text-center"><?=$model->name;?> Complaints</h2>
             <ul class="complaint-stats">
               <li>Total 99 cases</li>
               <li>700/995 case resolved (90%)</li>
               <li>5 hours average response</li>
             </ul>
             <div class="row">
+              <?php foreach ($complains as $complain) : ?>
               <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <div class="block-complaint">
-                  <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
+                  <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
                   <div class="complaint-heading">
-                    <p class="complaint-ttl">OPEN CASE</p>
-                    <p>An Hour Ago</p>
+                    <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
+                    <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
                   </div>
-                  <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
+                  <div class="complaint-desc"><?=$complain->title;?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id]);?>">READ MORE</a>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-complaint">
-                  <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                  <div class="complaint-heading">
-                    <p class="complaint-ttl">RESOLVED</p>
-                    <p>An Hour Ago</p>
-                  </div>
-                  <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-complaint">
-                  <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                  <div class="complaint-heading">
-                    <p class="complaint-ttl">REJECTED</p>
-                    <p>An Hour Ago</p>
-                  </div>
-                  <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-complaint">
-                  <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                  <div class="complaint-heading">
-                    <p class="complaint-ttl">REJECTED</p>
-                    <p>An Hour Ago</p>
-                  </div>
-                  <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-                </div>
-              </div>
+              <?php endforeach;?>
             </div>
-            <div class="operator-sec-button"><a class="btn" href="#">See all <i class="fas fa-chevron-right"></i></a></div>
+            <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['complain/index', 'operator_id' => $model->id]);?>">See all <i class="fas fa-chevron-right"></i></a></div>
           </section>
           <section class="operator-trouble widget-box">
-            <div class="trouble-title">Have trouble with Henderson &amp; Bench?</div>
-            <div class="trouble-button"><a class="btn btn-lg trans" href="#">Submit complaint</a><a class="btn btn-lg trans" href="#">Learn more</a></div>
+            <div class="trouble-title">Have trouble with <?=$model->name;?></div>
+            <div class="trouble-button"><a class="btn btn-lg trans" href="<?=Url::to(['complain/create', 'operator_id' => $model->id]);?>">Submit complaint</a><a class="btn btn-lg trans" href="#">Learn more</a></div>
           </section>
         </div>
         <aside class="mod-sidebar">
