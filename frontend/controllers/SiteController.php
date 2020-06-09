@@ -13,6 +13,7 @@ use yii\helpers\Html;
 use frontend\forms\LoginForm;
 use frontend\models\Operator;
 use frontend\models\Bonus;
+use frontend\models\Complain;
 
 class SiteController extends Controller
 {
@@ -30,9 +31,11 @@ class SiteController extends Controller
     {
         $newestOperators = Operator::find()->limit(10)->orderBy(['id' => SORT_DESC])->all();
         $lastestBonuses = Bonus::find()->limit(5)->orderBy(['id' => SORT_DESC])->all();
+        $lastestComplains = Complain::find()->limit(8)->orderBy(['id' => SORT_DESC])->all();
         return $this->render('index', [
             'newestOperators' => $newestOperators,
             'lastestBonuses' => $lastestBonuses,
+            'lastestComplains' => $lastestComplains,
         ]);
     }
 

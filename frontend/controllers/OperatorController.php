@@ -14,8 +14,6 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
 use frontend\models\OperatorReview;
-use frontend\models\Bonus;
-use frontend\models\Complain;
 
 class OperatorController extends Controller
 {
@@ -54,16 +52,12 @@ class OperatorController extends Controller
         $isFavorite = $user && $user->isOperatorFavorite($model->id);
         $isReview = $user && $user->isReview($model->id);
         $reviewForm = new \frontend\forms\AddOperatorReviewForm();
-        $bonuses = Bonus::find()->where(['operator_id' => $model->id, 'status' => Bonus::STATUS_ACTIVE])->limit(4)->all();
-        $complains = Complain::find()->where(['operator_id' => $model->id])->limit(4)->all();
         return $this->render('view', [
             'model' => $model,
             'isFavorite' => $isFavorite,
             'isReview' => $isReview,
             'user' => $user,
             'reviewForm' => $reviewForm,
-            'bonuses' => $bonuses,
-            'complains' => $complains,
         ]);
     }
 

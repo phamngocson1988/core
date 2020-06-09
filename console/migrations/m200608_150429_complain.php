@@ -29,6 +29,7 @@ class m200608_150429_complain extends Migration
             'updated_by' => $this->integer(),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
+            'first_reply_at' => $this->dateTime(),
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
             $alterComplainStatus = "ALTER TABLE {{%complain}} MODIFY `status` ENUM('open', 'reject', 'resolve') NOT NULL DEFAULT 'open'";

@@ -279,83 +279,17 @@ use common\components\helpers\TimeElapsed;
             </div>
           </section>
           <?php endif;?>
-          <section class="operator-bonus">
-            <h2 class="sec-title text-center"><?=$model->name;?> Bonuses</h2>
-            <div class="row">
-              <?php foreach ($bonuses as $bonus) : ?>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-bonuses js-bonuses">
-                  <div class="bonuses-front">
-                    <div class="bonuses-icon fas fa-exclamation-circle js-exclamation"></div>
-                    <div class="bonuses-image"><img class="object-fit" src="<?=$bonus->getImageUrl('400x220');?>" alt="image"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title"><?=$bonus->title;?></h3>
-                      <p class="bonuses-desc">WELCOME BONUS</p>
-                    </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
-                  </div>
-                  <div class="bonuses-back">
-                    <div class="bonuses-icon fas fa-close js-close"></div>
-                    <div class="bonuses-body">
-                      <h3 class="bonuses-title"><?=$bonus->title;?></h3>
-                      <p class="bonuses-desc"><?=$bonus->content;?></p>
-                    </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
-                  </div>
-                </div>
-              </div>
-              <?php endforeach;?>
-            </div>
-            <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['bonus/index']);?>">See all <i class="fas fa-chevron-right"></i></a></div>
-          </section>
-          <section class="operator-complaint">
-            <h2 class="sec-title text-center"><?=$model->name;?> Complaints</h2>
-            <ul class="complaint-stats">
-              <li>Total 99 cases</li>
-              <li>700/995 case resolved (90%)</li>
-              <li>5 hours average response</li>
-            </ul>
-            <div class="row">
-              <?php foreach ($complains as $complain) : ?>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-complaint">
-                  <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
-                  <div class="complaint-heading">
-                    <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
-                    <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
-                  </div>
-                  <div class="complaint-desc"><?=$complain->title;?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id]);?>">READ MORE</a>
-                </div>
-              </div>
-              <?php endforeach;?>
-            </div>
-            <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['complain/index', 'operator_id' => $model->id]);?>">See all <i class="fas fa-chevron-right"></i></a></div>
-          </section>
-          <section class="operator-trouble widget-box">
-            <div class="trouble-title">Have trouble with <?=$model->name;?></div>
-            <div class="trouble-button"><a class="btn btn-lg trans" href="<?=Url::to(['complain/create', 'operator_id' => $model->id]);?>">Submit complaint</a><a class="btn btn-lg trans" href="#">Learn more</a></div>
-          </section>
+          <?=\frontend\widgets\OperatorBonusWidget::widget(['operator' => $model]);?>
+          <?=\frontend\widgets\OperatorComplainWidget::widget(['operator' => $model]);?>
+          
+          
         </div>
         <aside class="mod-sidebar">
           <div class="sidebar-col sidebar-category">
-            <p class="category-title text-center">Henderson &amp; Bench<br>bonuses</p>
-            <ul class="list-news-cate">
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-            </ul>
-            <div class="category-button"><a class="trans" href="#">Show all bonuses</a></div>
+            <?=\frontend\widgets\TopOperatorBonusWidget::widget(['operator' => $model]);?>
           </div>
           <div class="sidebar-col sidebar-category">
-            <p class="category-title text-center">Henderson &amp; Bench<br>news</p>
-            <ul class="list-news-cate">
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-              <li><a class="trans" href="#"><span class="icon"><img src="/img/common/category_icon_01.png" alt="image"></span><span class="name">100% up to $500<br>+200 bonus</span></a></li>
-            </ul>
-            <div class="category-button"><a class="trans" href="#">Show all news</a></div>
+            <?=\frontend\widgets\TopOperatorNewsWidget::widget(['operator' => $model]);?>
           </div>
           <div class="sidebar-col side-operator">
             <?=\frontend\widgets\TopOperatorWidget::widget();?>

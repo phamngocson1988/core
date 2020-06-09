@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url; 
+use common\components\helpers\TimeElapsed;
 ?>
 <main>
   <div class="section-keyvisual">
@@ -69,108 +70,22 @@ use yii\helpers\Url;
       <div class="row">
         <div class="col-md-12 col-lg-9 col-lrg-8">
           <div class="row">
+            <?php foreach ($lastestComplains as $complain) : ?>
             <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
               <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
+                <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
                 <div class="complaint-heading">
-                  <p class="complaint-ttl">OPEN CASE</p>
-                  <p>An Hour Ago</p>
+                  <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
+                  <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
                 </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
+                <div class="complaint-desc"><?=$complain->title;?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id]);?>">READ MORE</a>
               </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-              <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                <div class="complaint-heading">
-                  <p class="complaint-ttl">RESOLVED</p>
-                  <p>An Hour Ago</p>
-                </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-              <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                <div class="complaint-heading">
-                  <p class="complaint-ttl">REJECTED</p>
-                  <p>An Hour Ago</p>
-                </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-              <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                <div class="complaint-heading">
-                  <p class="complaint-ttl">REJECTED</p>
-                  <p>An Hour Ago</p>
-                </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-              <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                <div class="complaint-heading">
-                  <p class="complaint-ttl">OPEN CASE</p>
-                  <p>An Hour Ago</p>
-                </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-              <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                <div class="complaint-heading">
-                  <p class="complaint-ttl">RESOLVED</p>
-                  <p>An Hour Ago</p>
-                </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-              <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                <div class="complaint-heading">
-                  <p class="complaint-ttl">REJECTED</p>
-                  <p>An Hour Ago</p>
-                </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-              <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-                <div class="complaint-heading">
-                  <p class="complaint-ttl">REJECTED</p>
-                  <p>An Hour Ago</p>
-                </div>
-                <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-              </div>
-            </div>
+            <?php endforeach;?>
           </div>
         </div>
         <div class="col-md-12 col-lg-3 col-lrg-2">
-          <div class="sidebar-category category-has-btn">
-            <p class="category-title">CASE BY OPERATORS</p>
-            <div class="category-inner">
-              <ul class="category-list">
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA (1,120)</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA (965)</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA (222)</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA (103)</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA (44)</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA (52)</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-                <li><a href="#"><span class="category-icon"><img src="/img/common/category_icon_01.png" alt="icon"></span><span class="category-name">COCA COLA</span></a></li>
-              </ul>
-            </div><a class="btn btn-primary" href="#">SEE ALL</a>
-          </div>
+          <?=\frontend\widgets\ComplainByOperatorWidget::widget();?>
         </div>
       </div><a class="delineation large trans" href="#"><img class="object-fit" src="/img/top/delineation_bnr_02.jpg" alt="image"></a>
     </div>

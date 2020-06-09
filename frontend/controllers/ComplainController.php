@@ -37,13 +37,7 @@ class ComplainController extends Controller
 
     public function actionIndex()
     {
-        $operatorNews = Post::find()->where(['IS NOT', 'operator_id', null])->limit(5)->all();
-        $categoryModels = Category::find()->select(['id'])->limit(2)->all();
-        $categoryIds = ArrayHelper::getColumn($categoryModels, 'id');
-        return $this->render('index', [
-            'operatorNews' => $operatorNews,
-            'categoryIds' => $categoryIds
-        ]);
+        return $this->redirect(Url::to(['complain/create']));
     }
 
     public function actionCreate()

@@ -7,6 +7,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\behaviors\OperatorReviewBehavior;
+use common\behaviors\OperatorComplainBehavior;
 
 class Operator extends ActiveRecord
 {
@@ -41,6 +42,7 @@ class Operator extends ActiveRecord
                 'ensureUnique'=>true,
             ],
             'operatorReview' => OperatorReviewBehavior::className(),
+            'operatorComplain' => OperatorComplainBehavior::className(),
         ];
     }
 
