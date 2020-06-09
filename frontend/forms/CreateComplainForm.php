@@ -18,11 +18,14 @@ class CreateComplainForm extends Model
     public $description;
     public $account_name;
     public $account_email;
+    public $agree;
 
     public function rules()
     {
         return [
-            [['user_id', 'operator_id', 'reason_id', 'title', 'description', 'account_name', 'account_email'], 'required'],
+            [['user_id', 'operator_id', 'reason_id', 'title', 'description', 'account_name', 'account_email', 'agree'], 'required'],
+            ['agree', 'boolean'],
+            ['agree', 'validateAgree'],
         ];
     }
 
@@ -35,6 +38,13 @@ class CreateComplainForm extends Model
             'account_name' => Yii::t('app', 'account_name_used_at_this_operator'),
             'account_email' => Yii::t('app', 'email_registered_with_this_operator'),
         ];
+    }
+
+    public function validateAgree($attribute, $params = [])
+    {
+        if (!$this->agree) {
+            $this->addError($attribute, Yii::t('app', 'you_need_to_agree_our_term_and_policy'));
+        }
     }
     
     public function create()

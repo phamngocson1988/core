@@ -26,5 +26,5 @@ use yii\helpers\Url;
     </div>
     <?php endforeach;?>
   </div>
-  <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['bonus/index']);?>">See all <i class="fas fa-chevron-right"></i></a></div>
+  <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['bonus/operator', 'id' => $operator->id, 'slug' => $operator->slug]);?>">See all <i class="fas fa-chevron-right"></i></a></div>
 </section>

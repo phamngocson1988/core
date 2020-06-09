@@ -98,7 +98,7 @@ $this->title = sprintf("Complain - %s", $complain->title);
               <?php endif;?>
               <?php endforeach;?>
               
-              <?php if ($complain->isOpen()) : ?>
+              <?php if ($canReply) : ?>
               <article class="review-item complaint-item">
                 <div class="review-user">
                 </div>

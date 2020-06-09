@@ -11,6 +11,8 @@ app.init = function () {
   app.tabContrib();
   app.selectMessage();
   app.btnSort();
+  app.selectTags();
+  app.datePicker();
 };
 
 app.isMobile = function () {
@@ -262,6 +264,76 @@ app.btnSort = function () {
     $(this).toggleClass('is-down');
     return false;
   });
+};
+
+app.selectTags = function () {
+  var dataLanguage = [
+    {
+      id: 1,
+      name: 'Vietnamese'
+    },
+    {
+      id: 2,
+      name: 'Chinese'
+    },
+    {
+      id: 3,
+      name: 'English'
+    }
+  ];
+
+  var dataBackup = [
+    {
+      id: 1,
+      name: 'Link 1',
+      url: '#'
+    },
+    {
+      id: 2,
+      name: 'Link 2',
+      url: '#'
+    },
+    {
+      id: 3,
+      name: 'Link 3',
+      url: '#'
+    },
+    {
+      id: 4,
+      name: 'Link 4',
+      url: '#'
+    }
+  ];
+
+  $('#js-tag-language').magicsearch({
+    dataSource: dataLanguage,
+    id: 'id',
+    format: '%name%',
+    dropdownBtn: true,
+    focusShow: true,
+    multiple: true,
+    multiField: 'name',
+    multiStyle: {
+      width: 100
+    }
+  });
+
+  $('#js-tag-backup').magicsearch({
+    dataSource: dataBackup,
+    id: 'id',
+    format: '%name%',
+    dropdownBtn: true,
+    focusShow: true,
+    multiple: true,
+    multiField: 'name',
+    multiStyle: {
+      width: 100
+    }
+  });
+};
+
+app.datePicker = function () {
+  $('.js-datepicker').datepicker();
 };
 
 $(function () {

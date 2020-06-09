@@ -8,9 +8,11 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use frontend\models\Complain;
+use frontend\models\Operator;
 
 class ComplainController extends Controller
 {
@@ -21,7 +23,7 @@ class ComplainController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view'],
+                        'actions' => ['index', 'view', 'operator'],
                         'allow' => true,
                     ],
                     [
@@ -70,6 +72,12 @@ class ComplainController extends Controller
         $replies = $complain->replies;
         $replyForm = new \frontend\forms\ReplyComplainForm();
         $complains = Complain::find()->where(['operator_id' => $operator->id])->limit(4)->all();
+
+        $user = Yii::$app->user;
+        $canReply = false;
+        if (!$user->isGuest) {
+            $canReply = $complain->isOpen() && $user->id == $complain->user_id;
+        }
         return $this->render('view', [
             'complain' => $complain,
             'operator' => $operator,
@@ -78,6 +86,7 @@ class ComplainController extends Controller
             'replies' => $replies,
             'replyForm' => $replyForm,
             'complains' => $complains,
+            'canReply' => $canReply,
         ]);
     }
 
@@ -97,5 +106,20 @@ class ComplainController extends Controller
             $message = reset($message);
             return json_encode(['status' => false, 'errors' => $message]);
         }
+    }
+
+    public function actionOperator($id, $slug)
+    {
+        $operator = Operator::findOne($id);
+        $command = Complain::find()->where(['operator_id' => $id])->orderBy(['id' => SORT_DESC]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $complains = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+        return $this->render('operator', [
+            'complains' => $complains,
+            'pages' => $pages,
+            'operator' => $operator,
+        ]);
     }
 }

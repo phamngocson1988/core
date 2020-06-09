@@ -25,7 +25,7 @@ use common\components\helpers\TimeElapsed;
     </div>
     <?php endforeach;?>
   </div>
-  <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['complain/index', 'operator_id' => $operator->id]);?>">See all <i class="fas fa-chevron-right"></i></a></div>
+  <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['complain/operator', 'id' => $operator->id, 'slug' => $operator->slug]);?>">See all <i class="fas fa-chevron-right"></i></a></div>
 </section>
 
 <section class="operator-trouble widget-box">

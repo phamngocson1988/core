@@ -4596,6 +4596,42 @@ body {
     bottom: 0;
   }
 }
+/* SECTION OPERATOR UPDATE */
+.section-operator-update {
+  padding: 15px;
+}
+.section-operator-update .form-buttons .btn {
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.section-operator-update .fm-avatar {
+  margin-bottom: 20px;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 100%;
+  -webkit-border-radius: 100%;
+  border-radius: 100%;
+}
+.section-operator-update .fm-avatar img {
+  display: block;
+  width: 100%;
+}
+.section-operator-update .form-group .fm-label {
+  font-weight: bold;
+}
+.section-operator-update .fm-calendar {
+  background-image: url("../img/common/icon_calendar.png");
+  background-size: auto 20px;
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+}
+.section-operator-update .magicsearch-wrapper .form-control {
+  width: auto;
+  display: inline-block;
+  max-width: 300px;
+}
+
 .forum-container {
   max-width: 1300px;
   margin: 50px auto;

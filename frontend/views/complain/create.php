@@ -41,11 +41,11 @@ $this->title = 'Leave complain';
                     <label for="inputGroupFile01"><i class="fas fa-paperclip"></i><span>ATTACH FILES</span></label>
                   </div>
                 </div>
-                <div class="col-lg-8 text-right custom-agree">
-                  <label>
-                    <input class="mr-1" type="checkbox"><span>I agree to the Terms &amp; Conditions and Privacy Policy</span>
-                  </label>
-                </div>
+                <?= $form->field($model, 'agree', [
+                  'inputOptions' => ['class' => 'mr-1'],
+                  'options' => ['class' => 'col-lg-8 text-right custom-agree'],
+                ])->checkbox()->label('<span>I agree to the Terms &amp; Conditions and Privacy Policy</span>');?>
+
               </div>
             </div>
             <div class="mb-4">
