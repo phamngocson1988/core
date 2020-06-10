@@ -33,8 +33,15 @@ class WalletController extends Controller
         $this->view->params['main_menu_active'] = 'wallet.index';
         $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
 
+        // pending transaction
+        $pendings = PaymentTransaction::find()->where([
+            'status' => PaymentTransaction::STATUS_PENDING,
+            'user_id' => Yii::$app->user->id
+        ])->all();
+
     	return $this->render('index', [
-            'paygates' => $paygates
+            'paygates' => $paygates,
+            'pendings' => $pendings,
         ]);
     }
 

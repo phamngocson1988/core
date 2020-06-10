@@ -366,7 +366,7 @@ class CartController extends Controller
                 ]);
                 if (!$order) throw new \Exception('Order is not exist');
                 $order->attachBehavior('log', OrderLogBehavior::className());
-                $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
+                // $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
                 $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
                 $order->status = Order::STATUS_PENDING;
@@ -378,6 +378,7 @@ class CartController extends Controller
                 // Notify to orderteam in case this is online order
                 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
                 $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_ORDER, $orderTeamIds);
+                $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_PENDING_ORDER, $order->customer_id);
 
                 return $gateway->doSuccess();
             } else {

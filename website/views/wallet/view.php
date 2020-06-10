@@ -36,7 +36,7 @@ use yii\helpers\Url;
       <?php $form = ActiveForm::begin(['action' => Url::to(['wallet/update', 'id' => $payment->id]), 'id' => 'update-payment-form']);?>
       <?= $form->field($model, 'payment_id', [
         'template' => '{input}',
-        'inputOptions' => ['class' => 'form-control input-number', 'aria-describedby' => 'emailHelp', 'placeholder' => 'Enter transaction number here...']
+        'inputOptions' => ['class' => 'form-control input-number', 'aria-describedby' => 'emailHelp', 'placeholder' => 'Enter transaction number here...', 'disabled' => $model->payment_id]
       ])->textInput()->label(false) ?>
 
       <div class="text-center btn-wrapper d-block" role="group">
@@ -51,7 +51,7 @@ use yii\helpers\Url;
       </div>
       <?php ActiveForm::end(); ?>
       <p class="text-center">
-        <a class="link-dark" href="#">How to get Transaction Number?</a>
+        <a class="link-dark" href="google.com" target="_blank">How to get Transaction Number?</a>
       </p>
     </div>
   </div>

@@ -13,9 +13,9 @@ return [
         'notifications' => [
             'class' => 'webzop\notifications\Module',
             'channels' => [
-                // 'screen' => [
-                //     'class' => 'webzop\notifications\channels\ScreenChannel',
-                // ],
+                'email' => [
+                    'class' => 'webzop\notifications\channels\EmailChannel',
+                ],
                 'desktop' => [
                     'class' => 'common\components\notifications\channels\DesktopNotificationChannel'
                 ]

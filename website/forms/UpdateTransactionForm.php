@@ -30,16 +30,20 @@ class UpdateTransactionForm extends Model
         $transaction = $this->getTransaction();
         if (!$transaction) {
             $this->addError($attribute, 'Payment transaction is not exist');
-        }
-        if ($transaction->user_id != Yii::$app->user->id) {
+        } elseif ($transaction->user_id != Yii::$app->user->id) {
             $this->addError($attribute, 'Payment transaction is not exist');
+        } elseif ($transaction->isCompleted()) {
+            $this->addError($attribute, 'Payment transaction cannot be updated anymore.');
         }
+
     }
 
     public function update()
     {
         $transaction = $this->getTransaction();
-        $transaction->payment_id = $this->payment_id;
+        if (!$transaction->payment_id) {
+            $transaction->payment_id = $this->payment_id;
+        }
         $transaction->evidence = $this->evidence;
         return $transaction->save();
     }

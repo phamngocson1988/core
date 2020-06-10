@@ -4,6 +4,7 @@ namespace frontend\components\notifications;
 use Yii;
 use yii\helpers\ArrayHelper;
 use webzop\notifications\Notification;
+use frontend\models\User;
 
 class OrderNotification extends Notification
 {
@@ -13,6 +14,8 @@ class OrderNotification extends Notification
     const NOTIFY_ORDERTEAM_CANCEL_ORDER = 'NOTIFY_ORDERTEAM_CANCEL_ORDER';
     const NOTIFY_SUPPLIER_CANCEL_ORDER = 'NOTIFY_SUPPLIER_CANCEL_ORDER';
     const NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE = 'NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE';
+    // for mail
+    const NOTIFY_CUSTOMER_PENDING_ORDER = 'NOTIFY_CUSTOMER_PENDING_ORDER';
     /**
      * @var \frontend\models\Order the order object
      */
@@ -104,7 +107,48 @@ class OrderNotification extends Notification
                 self::NOTIFY_ORDERTEAM_CANCEL_ORDER,
                 self::NOTIFY_SUPPLIER_CANCEL_ORDER,
                 self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE,
-            ]
+            ],
+            'email' => [
+                self::NOTIFY_CUSTOMER_PENDING_ORDER,
+            ],
+
         ];
+    }
+
+    /**
+     * Override send to email channel
+     *
+     * @param $channel the email channel
+     * @return void
+     */
+    public function toEmail($channel)
+    {
+        $settings = Yii::$app->settings;
+        $supplierMail = $settings->get('ApplicationSettingForm', 'supplier_service_email');
+        $supportMail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+        $fromEmail = $supportMail;
+        $user = User::findOne($this->userId);
+
+        switch($this->key) {
+            case self::NOTIFY_CUSTOMER_PENDING_ORDER:
+                $subject = sprintf('Confirm payment for order #%s', $this->order->id);
+                $template = 'new_pending_order';
+                $fromEmail = $supportMail;
+                break;
+        }
+Yii::trace('after switch');
+        $message = $channel->mailer->compose($template, [
+            'user' => $user,
+            'order' => $this->order,
+            'notification' => $this,
+        ]);
+Yii::trace('after intitiating mail');
+
+        $message->setFrom($fromEmail);
+        $message->setTo($user->email);
+        $message->setSubject($subject);
+        $message->send($channel->mailer);
+Yii::trace('after sending');
+
     }
 }

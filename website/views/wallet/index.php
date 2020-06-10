@@ -98,34 +98,31 @@ $user = Yii::$app->user->getIdentity();
                   <th scope="col">Status</th>
                   <th scope="col">Transaction</th>
                   <th scope="col">Receipt</th>
-                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
+                <?php if (!$pendings) : ?>
+                <tr><td colspan="6" class="text-center">No data found</td></tr>
+                <?php endif;?>
+                <?php foreach ($pendings as $pending) : ?>
                 <tr>
                   <th scope="row">
-                    <a href="#" data-toggle="modal" data-target="#detailOrder">#12345678</a>
-                    <span class="date-time">2020-03-06 20:48</span>
+                    <a href="javascript:;" class="view-detail" data-id="<?=$pending->id;?>"><?=$pending->getId();?></a>
+                    <span class="date-time"><?=$pending->created_at;?></span>
                   </th>
-                  <td>Paypal</td>
-                  <td class="text-center"><span class="text-red">100 KC</span></td>
-                  <td class="text-center">Pending</td>
-                  <td><button type="button" class="btn btn-red text-uppercase">Submit</button></td>
-                  <td><button type="button" class="btn btn-upload">Upload</button></td>
-                  <td class="text-center"><img class="icon-sm btn-delete" src="/images/icon/trash-can.svg" /></td>
+                  <td><?=$pending->payment_method;?></td>
+                  <td class="text-center"><span class="text-red"><?=number_format($pending->total_coin);?> KC</span></td>
+                  <td class="text-center"><?=$pending->status;?></td>
+                  <td>
+                    <?php if (!$pending->payment_id) : ?>
+                    <button type="button" class="btn btn-red text-uppercase view-detail" data-id="<?=$pending->id;?>">Submit</button>
+                    <?php else :?>
+                    <?=$pending->payment_id;?>
+                    <?php endif;?>
+                  </td>
+                  <td><button type="button" class="btn btn-upload view-detail" data-id="<?=$pending->id;?>">Upload</button></td>
                 </tr>
-                <tr>
-                  <th scope="row">
-                    <a href="#" data-toggle="modal" data-target="#detailOrder">#12345678</a>
-                    <span class="date-time">2020-03-06 20:48</span>
-                  </th>
-                  <td>Striller</td>
-                  <td class="text-center"><span class="text-red">100 KC</span></td>
-                  <td class="text-center">Unpaid</td>
-                  <td>123456789</td>
-                  <td><button type="button" class="btn btn-upload">Upload</button></td>
-                  <td class="text-center"><img class="icon-sm btn-delete" src="/images/icon/trash-can.svg" /></td>
-                </tr>
+                <?php endforeach;?>
               </tbody>
             </table>
           </div>
@@ -364,7 +361,7 @@ function ShowTransaction(id) {
             $('#paymentGame .modal-content').html(result.data);
             $('#paymentGame').modal('show');
           } else {
-            toastr.error(result.errors.join('<br/>')); 
+            toastr.error(result.errors); 
           }
       },
   });
@@ -415,7 +412,13 @@ $('#paymentGame').on('click', '#update-payment-button', function(e) {
       },
   });
 });
-ShowTransaction(16870763);
+// ShowTransaction(16870763); 
+
+// open view detail
+$(".view-detail").on('click', function() {
+  var id = $(this).data('id');
+  ShowTransaction(id); 
+});
 JS;
 $this->registerJs($script);
 ?>
