@@ -15,6 +15,7 @@ class AppAsset extends AssetBundle
         'css/font-awesome.min.css',
         'css/jquery-ui.css',
         'css/jquery.magicsearch.css',
+        'css/bootstrap-tagsinput.css',
         'css/style.css',
     ];
     public $js = [

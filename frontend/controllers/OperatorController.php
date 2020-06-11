@@ -59,7 +59,7 @@ class OperatorController extends Controller
             'user' => $user,
             'reviewForm' => $reviewForm,
         ]);
-    }
+    }    
 
     public function actionAddFavorite()
     {

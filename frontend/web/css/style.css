@@ -4617,6 +4617,11 @@ body {
   display: block;
   width: 100%;
 }
+@media only screen and (max-width: 767px) {
+  .section-operator-update .fm-avatar {
+    margin: 0 auto 20px;
+  }
+}
 .section-operator-update .form-group .fm-label {
   font-weight: bold;
 }
@@ -4626,10 +4631,42 @@ body {
   background-position: 100% 50%;
   background-repeat: no-repeat;
 }
-.section-operator-update .magicsearch-wrapper .form-control {
-  width: auto;
+.section-operator-update .bootstrap-tagsinput {
+  display: block;
+  width: 100%;
+  min-height: 35px;
+  padding: 0.175rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: none;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.section-operator-update .bootstrap-tagsinput:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.section-operator-update .bootstrap-tagsinput .tag {
   display: inline-block;
-  max-width: 300px;
+  background: #5bc0de;
+  margin: 2px 2px 2px 0;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  border-radius: 3px;
+  font-size: 14px;
+}
+.section-operator-update .bootstrap-tagsinput .tag [data-role="remove"] {
+  margin-left: 4px;
+}
+.section-operator-update .bootstrap-tagsinput input {
+  font-size: 14px;
 }
 
 .forum-container {

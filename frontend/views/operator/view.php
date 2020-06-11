@@ -27,7 +27,7 @@ use common\components\helpers\TimeElapsed;
             </div>
             <div class="hero-footer">
               <ul class="hero-nav">
-                <li><a href="#"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
+                <li><a href="<?=Url::to(['manage/index', 'id' => $model->id, 'slug' => $model->slug]);?>"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
                 <li><a href="#"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Details</span></a></li>
                 <li><a href="#"><i class="fa fa-comments"></i><span class="nav-text">Player Reviews (552)</span></a></li>
                 <li><a href="#"><i class="fa fa-gift"></i><span class="nav-text">Bonuses (10)</span></a></li>
