@@ -94,6 +94,7 @@ class UpdateOrderToProcessingForm extends Model
             $order = $this->getOrder();
             if ($order->isPendingOrder()) {
                 $order->status = Order::STATUS_PROCESSING;
+                $order->state = new \yii\db\Expression('NULL');
                 $order->process_start_time = date('Y-m-d H:i:s');
                 $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                     $sender = $event->sender; // Order

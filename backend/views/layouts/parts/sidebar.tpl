@@ -365,6 +365,11 @@
             </a>
             <ul class="sub-menu">
               <li class="nav-item">
+                <a href="{url route='paygate/index'}" class="nav-link" code='paygate.index'>
+                  <i class="cc-paypal"></i> Cổng offline
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{url route='setting/paypal'}" class="nav-link" code='setting.paypal'>
                   <i class="cc-paypal"></i> Paypal
                 </a>

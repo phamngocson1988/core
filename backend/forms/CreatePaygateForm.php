@@ -37,6 +37,7 @@ class CreatePaygateForm extends Model
         $paygate->transfer_fee = $this->transfer_fee;
         $paygate->transfer_fee_type = $this->transfer_fee_type;
         $paygate->currency = $this->currency;
+        $paygate->status = Paygate::STATUS_ACTIVE;
         return $paygate->save();
     }
 

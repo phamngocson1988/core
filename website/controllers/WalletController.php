@@ -31,6 +31,7 @@ class WalletController extends Controller
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'wallet.index';
+        $request = Yii::$app->request;
         $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
 
         // pending transaction
@@ -39,9 +40,23 @@ class WalletController extends Controller
             'user_id' => Yii::$app->user->id
         ])->all();
 
+        // history transaction
+        $form = new \website\forms\FetchPaymentTransactionForm([
+            'user_id' => Yii::$app->user->id,
+            'status' => $request->get('status'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+        ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $transactions = $command->offset($pages->offset)->limit($pages->limit)->all();
+
     	return $this->render('index', [
             'paygates' => $paygates,
             'pendings' => $pendings,
+            'transactions' => $transactions,
+            'pages' => $pages,
+            'search' => $form,
         ]);
     }
 

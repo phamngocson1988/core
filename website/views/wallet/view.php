@@ -21,11 +21,6 @@ use yii\helpers\Url;
       <p><span class="list-item">Total payment:</span><b class="text-red"><?=number_format($payment->total_price, 1);?> USD</b></p>
     </div>
     <div class="col-md-6">
-      <img class="payment-logo" src="<?=$paygate->getImageUrl();?>" />
-      <h3 class="text-red pt-3">Recipient Account</h3>
-      <!-- <p><span class="list-item">Account Email:</span><b>leohuynh.huynhgia@gmail.com</b></p>
-      <p><span class="list-item">Account ID:</span><b>19216811</b></p>
-      <p><span class="list-item">Account Holder:</span><b>huynhkhaihung</b></p> -->
       <?=$paygate->content;?>
     </div>
     <div class="col-md-12">

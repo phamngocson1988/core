@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use website\widgets\LinkPager;
+use yii\widgets\Pjax;
 $user = Yii::$app->user->getIdentity();
 ?>
 <div class="container my-5 my-wallet">
@@ -139,31 +141,29 @@ $user = Yii::$app->user->getIdentity();
   <hr class="my-5" />
   <div class="d-flex bd-highlight justify-content-between align-items-center orders-history-wrapper mb-3">
     <p class="lead mb-0">Transaction history</p>
+    <?php $form = ActiveForm::begin(['method' => 'get']);?>
     <div class="d-flex ml-auto">
-      <div class="flex-fill d-flex align-items-center mr-3">
-        <label class="d-block w-100 mr-2 mb-0">Start date</label>
-        <input class="form-control" type="date" id="birthday" name="birthday" min="2017-04-01" max="2017-04-30">
-      </div>
-      <div class="flex-fill d-flex align-items-center mr-3">
-        <label class="d-block w-100 mr-2 mb-0">End date</label>
-        <input class="form-control" type="date" id="birthday" name="birthday" min="2017-04-01" max="2017-04-30">
-      </div>
-      <div class="flex-fill d-flex align-items-center mr-3">
-        <label class="d-block w-100 mr-2 mb-0">Status</label>
-        <select class="form-control" id="status">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-      </div>
+      <?= $form->field($search, 'start_date', [
+        'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
+        'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
+        'inputOptions' => ['class' => 'form-control', 'type' => 'date', 'name' => 'start_date', 'data-date-format'=>"DD MMMM YYYY"]
+      ])->textInput()->label('Start date') ?>
+      <?= $form->field($search, 'end_date', [
+        'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
+        'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
+        'inputOptions' => ['class' => 'form-control', 'type' => 'date', 'name' => 'end_date']
+      ])->textInput()->label('End date') ?>
+      <?= $form->field($search, 'status', [
+        'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
+        'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
+        'inputOptions' => ['class' => 'form-control', 'name' => 'status']
+      ])->dropdownList($search->fetchStatusList(), ['prompt' => 'Select status'])->label('Status') ?>
       <div class="flex-fill">
-        <a class="btn btn-primary" href="#" role="button">Filter</a>
+        <button class="btn btn-primary" type="submit">Filter</button>
       </div>
     </div>
+    <?php ActiveForm::end(); ?>
   </div>
-
   <div class="table-wrapper table-responsive bg-white">
     <table class="table table-hover">
       <thead>
@@ -178,61 +178,33 @@ $user = Yii::$app->user->getIdentity();
         </tr>
       </thead>
       <tbody>
+        <?php foreach ($transactions as $transaction): ?>
         <tr>
           <th scope="row">
-            <a href="#">#12345678</a>
-            <span class="date-time">2020-03-06 20:48</span>
+            <a href="#"><?=$transaction->getId();?></a>
+            <span class="date-time"><?=$transaction->created_at;?></span>
           </th>
-          <td>Paypal</td>
-          <td class="text-center"><span class="text-red">100 KC</span></td>
-          <td class="text-center">Paid</td>
+          <td><?=$transaction->payment_method;?></td>
+          <td class="text-center"><span class="text-red"><?=number_format($transaction->total_coin);?> KC</span></td>
+          <td class="text-center"><?=$transaction->status;?></td>
           <td><a href="#" class="text-red" >View invoice</span></td>
-          <td>
-            123456789
-          </td>
-          <td>
-            Transaction ID: 123456789
-          </td>
+          <td><?=$transaction->payment_id;?></td>
+          <td><?=$transaction->remark;?></td>
         </tr>
-        <tr>
-          <th scope="row">
-            <a href="#">#12345678</a>
-            <span class="date-time">2020-03-06 20:48</span>
-          </th>
-          <td>Paypal</td>
-          <td class="text-center"><span class="text-red">100 KC</span></td>
-          <td class="text-center">Paid</td>
-          <td><a href="#" class="text-red" >View invoice</span></td>
-          <td>
-            123456789
-          </td>
-          <td>
-            Transaction ID: 123456789
-          </td>
-        </tr>
+        <?php endforeach;?>
         <tr>
           <th scope="row" class="text-right">TOTAL</th>
-          <td colspan="6"><b class="text-red">200 KC</b></td>
+          <th scope="row" class="text-right"></th>
+          <td colspan="5"><b class="text-red"><?=number_format($search->getCommand()->sum('total_coin'), 1);?> KC</b></td>
         </tr>
       </tbody>
     </table>
   </div>
   <nav aria-label="Page navigation" class="mt-2 mb-5">
-    <ul class="pagination justify-content-end">
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1">
-          <img class="icon" src="/images/icon/back.svg"/>
-        </a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#">
-          <img class="icon" src="/images/icon/next.svg"/>
-        </a>
-      </li>
-    </ul>
+    <?=LinkPager::widget([
+      'pagination' => $pages,
+      'options' => ['class' => 'pagination justify-content-end']
+    ]);?>
   </nav>
 </div>
 <!-- END Transaction History Table -->

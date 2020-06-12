@@ -496,6 +496,7 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $model->setScenario(Order::SCENARIO_GO_PROCESSING);
         $model->status = Order::STATUS_PROCESSING;
+        $model->state = new \yii\db\Expression('NULL');;
         $model->process_start_time = date('Y-m-d H:i:s');
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;

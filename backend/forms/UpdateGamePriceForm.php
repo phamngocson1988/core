@@ -44,7 +44,10 @@ class UpdateGamePriceForm extends Model
             $model->on(Game::EVENT_AFTER_UPDATE, function($event) {
                 $game = $event->sender; //game
                 $oldGame = clone $game;
-                $oldGame->attributes = $event->changedAttributes;
+                $oldAttributes = $event->changedAttributes;
+                $oldGame->price1 = ArrayHelper::getValue($oldAttributes, 'price1');
+                $oldGame->price2 = ArrayHelper::getValue($oldAttributes, 'price2');
+                $oldGame->price3 = ArrayHelper::getValue($oldAttributes, 'price3');
                 $setting = Yii::$app->settings;
                 $config = [
                     'managing_cost_rate' => $setting->get('ApplicationSettingForm', 'managing_cost_rate', 0),

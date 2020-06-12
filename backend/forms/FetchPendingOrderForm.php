@@ -59,7 +59,7 @@ class FetchPendingOrderForm extends Model
             $command->andWhere(['<=', "$table.created_at", $this->end_date]);
         }
 
-        $command->andWhere(["$table.status" => Order::STATUS_PENDING]);
+        $command->andWhere(["IN", "$table.status", [Order::STATUS_PENDING, Order::STATUS_PROCESSING]]);
         $command->andWhere(["IS NOT", "$table.state", null]);
         if ($this->state) {
             $command->andWhere(["{$table}.state" => $this->state]);
