@@ -3,9 +3,9 @@ namespace website\forms;
 
 use Yii;
 use yii\base\Model;
-use website\models\UserAffiliate;
+use website\models\Affiliate;
 
-class RegisterUserAffiliateForm extends Model
+class RegisterAffiliateForm extends Model
 {
     public $user_id;    
     public $preferred_im;
@@ -24,7 +24,7 @@ class RegisterUserAffiliateForm extends Model
 
     public function validateUser($attribute, $params = []) 
     {
-        $request = UserAffiliate::find()->where(['user_id' => $this->user_id])->one();
+        $request = Affiliate::find()->where(['user_id' => $this->user_id])->one();
         if ($request) {
             if ($request->isEnable()) {
                 $this->addError($attribute, 'You have been an affiliate.');
@@ -36,24 +36,24 @@ class RegisterUserAffiliateForm extends Model
 
     public function register()
     {
-        $model = new UserAffiliate();
+        $model = new Affiliate();
         $model->user_id = $this->user_id;    
         $model->preferred_im = $this->preferred_im;
         $model->im_account = $this->im_account;
         $model->company = $this->company;
         $model->channel = $this->channel;
         $model->channel_type = $this->channel_type;
-        $model->status = UserAffiliate::STATUS_DISABLE;
+        $model->status = Affiliate::STATUS_DISABLE;
         return $model->save();
     }
 
     public function fetchPreferImList()
     {
-        return UserAffiliate::preferImList();
+        return Affiliate::preferImList();
     }
 
     public function fetchChannelTypeList()
     {
-        return UserAffiliate::channelTypeList();
+        return Affiliate::channelTypeList();
     }
 }

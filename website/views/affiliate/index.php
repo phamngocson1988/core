@@ -2,6 +2,8 @@
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use website\widgets\LinkPager;
+$user = Yii::$app->user->getIdentity();
 $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js', ['position' => \yii\web\View::POS_HEAD]);
 ?>
 <div class="container profile profile-affiliate my-5">
@@ -10,9 +12,9 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
       <div class="card card-info text-center">
         <img class="card-img-top" src="/images//icon/mask.svg" alt="Card image">
         <div class="card-body">
-          <h4 class="card-title">John Doe</h4>
-          <p class="card-text">@JohnDoe93</p>
-          <p class="font-weight-bold text-red">Balance: 500 KCOIN</p>
+          <h4 class="card-title"><?=$user->name;?></h4>
+          <p class="card-text">@<?=$user->username;?></p>
+          <p class="font-weight-bold text-red">Balance: <?=number_format($user->walletBalance());?> KCOIN</p>
           <a href="#" class="btn btn-green" data-toggle="modal" data-target="#choosePayment">
             WITHDRAW
           </a>
@@ -35,59 +37,24 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
                 </button>
                 <span class="align-self-center text-muted">(Maximum 4 accounts)</span>
               </div>
-
-              <div class="btn-group-toggle multi-choose d-flex beneficiary" data-toggle="buttons">
-                <label class="btn flex-fill w-25 mr-2 active">
-                  <input type="radio" name="options" id="option1" autocomplete="off" checked="">Name <br/>Payment method
-                  <div class="action">
-                    <div class="edit icon-edit" data-toggle="modal" data-target="#addBeneficiary">
-                      <img src="/images//icon/edit.svg"/>
-                    </div>
-                    <div class="del icon-del">
-                      <img src="/images//icon/trash-can.svg"/>
-                    </div>
-                  </div>
-                </label>
-                <label class="btn flex-fill w-25 mr-2">
-                  <input type="radio" name="options" id="option2" autocomplete="off"> Name <br/>Payment method
-                  <div class="action">
-                    <div class="edit icon-edit" data-toggle="modal" data-target="#addBeneficiary">
-                      <img src="/images//icon/edit.svg"/>
-                    </div>
-                    <div class="del icon-del">
-                      <img src="/images//icon/trash-can.svg"/>
-                    </div>
-                  </div>
-                </label>
-                <label class="btn flex-fill w-25 mr-2">
-                  <input type="radio" name="options" id="option3" autocomplete="off"> Name <br/>Payment method
-                  <div class="action">
-                    <div class="edit icon-edit" data-toggle="modal" data-target="#addBeneficiary">
-                      <img src="/images//icon/edit.svg"/>
-                    </div>
-                    <div class="del icon-del">
-                      <img src="/images//icon/trash-can.svg"/>
-                    </div>
-                  </div>
-                </label>
-                <label class="btn flex-fill w-25">
-                  <input type="radio" name="options" id="option4" autocomplete="off"> Name <br/>Payment method
-                  <div class="action">
-                    <div class="edit icon-edit" data-toggle="modal" data-target="#addBeneficiary">
-                      <img src="/images//icon/edit.svg"/>
-                    </div>
-                    <div class="del icon-del">
-                      <img src="/images//icon/trash-can.svg"/>
-                    </div>
-                  </div>
-                </label>
-              </div>
+              <?php $form = ActiveForm::begin(['action' => Url::to(['affiliate/send-withdraw-request']), 'options' => ['id' => 'withdraw-form']]);?>
+              <?= $form->field($withdrawForm, 'account_id', [
+                'options' => ['class' => 'btn-group-toggle multi-choose d-flex beneficiary', 'data-toggle' => 'buttons'],
+              ])->widget(\website\widgets\AffiliateAccountRadioListInput::className(), [
+                'items' => $withdrawForm->fetchAccounts(),
+                'options' => ['tag' => false]
+              ])->label(false);?>
               <div class="input-group mt-4" style="max-width:300px">
-                <input type="text" class="form-control" placeholder="Withdraw Amount" aria-label="Withdraw Amount" aria-describedby="button-addon2">
+                <?= $form->field($withdrawForm, 'amount', [
+                  'template' => '{input}',
+                  'options' => ['tag' => false],
+                  'inputOptions' => ['class' => 'form-control', 'placeholder' => 'Withdraw Amount', 'aria-label' => 'Withdraw Amount', 'aria-describedby' => 'button-addon2', 'type' => 'number']
+                ])->textInput()->label(false) ?>
                 <div class="input-group-append">
                   <button class="btn btn-warning text-white" type="button" id="button-addon2">Submit</button>
                 </div>
               </div>
+              <?php ActiveForm::end();?>
               <div class="note py-5">
                 <p class="lead">Withdraw Policy</p>
                 <p class="mb-0"><em>- Cut off time: 13:00 (GMT +7) Monday to Friday</em></p>
@@ -104,77 +71,28 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
                       <th scope="col">No.</th>
                       <th scope="col">ID</th>
                       <th class="text-center" scope="col">Amount ($)</th>
-                      <th class="text-center" scope="col">Opening</th>
-                      <th class="text-center" scope="col">Ending</th>
                       <th class="text-center" scope="col">Status</th>
                       <th class="text-center" scope="col">Details</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>100$</td>
-                      <th scope="row">
-                        <a href="#">#12345678</a>
-                        <span class="date-time">2020-03-06 20:48</span>
-                      </th>
-                      <td class="text-center">100$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">Pending</td>
-                      <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
-                    </tr>
-                    <tr>
-                      <td>100$</td>
-                      <th scope="row">
-                        <a href="#">#12345678</a>
-                        <span class="date-time">2020-03-06 20:48</span>
-                      </th>
-                      <td class="text-center">100$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">Pending</td>
-                      <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
-                    </tr>
-                    <tr>
-                      <td>100$</td>
-                      <th scope="row">
-                        <a href="#">#12345678</a>
-                        <span class="date-time">2020-03-06 20:48</span>
-                      </th>
-                      <td class="text-center">100$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">Pending</td>
-                      <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
-                    </tr>
-                    <tr>
-                      <td>100$</td>
-                      <th scope="row">
-                        <a href="#">#12345678</a>
-                        <span class="date-time">2020-03-06 20:48</span>
-                      </th>
-                      <td class="text-center">100$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">Pending</td>
-                      <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
-                    </tr>
-                    <tr>
-                      <td>100$</td>
-                      <th scope="row">
-                        <a href="#">#12345678</a>
-                        <span class="date-time">2020-03-06 20:48</span>
-                      </th>
-                      <td class="text-center">100$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">20$</td>
-                      <td class="text-center">Pending</td>
-                      <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
-                    </tr>
+                    <?php foreach ($withdraws as $no => $withdraw) : ?>
+                      <tr>
+                        <td class="text-center"><?=$no+1;?></td>
+                        <th scope="row">
+                          <a href="#">#<?=$withdraw->id;?></a>
+                          <span class="date-time"><?=$withdraw->created_at;?></span>
+                        </th>
+                        <td><?=number_format($withdraw->amount, 1);?>$</td>
+                        <td class="text-center"><?=$withdraw->getStatusLabel();?></td>
+                        <td class="text-center"><span href="#" class="text-green"><?=$withdraw->note;?></span></td>
+                      </tr>
+                    <?php endforeach;?>
+                    
                     <tr>
                       <th scope="row" class="text-left">GRAND TOTAL</th>
                       <td class="text-center"></td>
-                      <td class="text-center"><b class="text-red">$500</b></td>
+                      <td class="text-center"><b class="text-red">$<?=number_format($withdrawTotalAmount, 1);?></b></td>
                       <td class="text-center" colspan="4"></td>
                     </tr>
                   </tbody>
@@ -199,26 +117,13 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
             </div>
             <div class="modal-body p-5">
               <h3 class="text-center">Beneficiary account info</h3>
-              <form>
-                <div class="form-group">
-                  <label for="paymentMethod">Payment method</label>
-                  <input type="email" class="form-control" id="paymentMethod" aria-describedby="emailHelp" placeholder="">
-                  <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
-                <div class="form-group">
-                  <label for="accountId">Account ID/No.</label>
-                  <input type="number" class="form-control" id="accountId" placeholder="">
-                </div>
-                <div class="form-group">
-                  <label for="nameHolder">Name of Holder</label>
-                  <input type="text" class="form-control" id="nameHolder" placeholder="">
-                </div>
-                <div class="form-group">
-                  <label for="region">Region</label>
-                  <input type="text" class="form-control" id="region" placeholder="">
-                </div>
+              <?php $form = ActiveForm::begin(['action' => Url::to(['affiliate/add-account']), 'options' => ['id' => 'add-account-form']]);?>
+                <?= $form->field($addAccountForm, 'payment_method')->textInput()->label('Payment method') ?>
+                <?= $form->field($addAccountForm, 'account_number')->textInput()->label('Account ID/No') ?>
+                <?= $form->field($addAccountForm, 'account_name')->textInput()->label('Name of Holder') ?>
+                <?= $form->field($addAccountForm, 'region')->textInput()->label('Region') ?>
                 <button type="submit" class="btn mt-3 btn-warning text-white btn-block">SAVE</button>
-              </form>
+              <?php ActiveForm::end();?>
             </div>
           </div>
         </div>
@@ -226,69 +131,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
       <!-- END MODAL ADD BENEFICIARY -->
     </div>
     <div class="col-md-9">
-      <canvas id="myChart"></canvas>
-      <script>
-        var ctx = document.getElementById('myChart');
-        var myLineChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# data1',
-                data: [1, 2, 3, 4, 5, 7],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-              },
-              {
-                label: '# data2',
-                data: [5, 6, 7, 8, 9, 10],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-              }
-
-            ]
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true
-                }
-              }]
-            }
-          },
-        });
-      </script>
+      <?=\website\widgets\AffiliateChartWidget::widget();?>
     </div>
     <div class="col-md-12">
       <hr class="my-5" />
@@ -297,29 +140,28 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
       <!-- Transaction History Table -->
       <div class="d-flex bd-highlight justify-content-between align-items-center orders-history-wrapper mb-3">
         <p class="lead mb-0">Transaction history</p>
+        <?php $form = ActiveForm::begin(['method' => 'get']);?>
         <div class="d-flex ml-auto">
-          <div class="flex-fill d-flex align-items-center mr-3">
-            <label class="d-block w-100 mr-2 mb-0">Start date</label>
-            <input class="form-control" type="date" id="birthday" name="birthday" min="2017-04-01" max="2017-04-30">
-          </div>
-          <div class="flex-fill d-flex align-items-center mr-3">
-            <label class="d-block w-100 mr-2 mb-0">End date</label>
-            <input class="form-control" type="date" id="birthday" name="birthday" min="2017-04-01" max="2017-04-30">
-          </div>
-          <div class="flex-fill d-flex align-items-center mr-3">
-            <label class="d-block w-100 mr-2 mb-0">Status</label>
-            <select class="form-control" id="status">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
+          <?= $form->field($searchCommission, 'start_date', [
+            'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
+            'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
+            'inputOptions' => ['class' => 'form-control', 'type' => 'date', 'name' => 'start_date', 'data-date-format'=>"DD MMMM YYYY"]
+          ])->textInput()->label('Start date') ?>
+          <?= $form->field($searchCommission, 'end_date', [
+            'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
+            'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
+            'inputOptions' => ['class' => 'form-control', 'type' => 'date', 'name' => 'end_date']
+          ])->textInput()->label('End date') ?>
+          <?= $form->field($searchCommission, 'status', [
+            'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
+            'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'status']
+          ])->dropdownList($searchCommission->fetchStatusList(), ['prompt' => 'Select status'])->label('Status') ?>
           <div class="flex-fill">
-            <a class="btn btn-primary" href="#" role="button">Filter</a>
+            <button class="btn btn-primary" type="submit">Filter</button>
           </div>
         </div>
+        <?php ActiveForm::end(); ?>
       </div>
 
       <div class="table-wrapper table-responsive bg-white">
@@ -334,63 +176,79 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
             </tr>
           </thead>
           <tbody>
+            <?php if (!$commissions) : ?>
+            <tr>
+              <td class="text-center" colspan="5">No data</td>
+            </tr>
+            <?php endif; ?>
+            <?php foreach ($commissions as $commission) : ?>
+            <?php $order = $commission->order;?>
             <tr>
               <th scope="row">
-                <a href="#">#12345678</a>
-                <span class="date-time">2020-03-06 20:48</span>
+                <a href="javascript:;">#<?=$order->id;?></a>
+                <span class="date-time"><?=$order->created_at;?></span>
               </th>
-              <td class="text-center">100$</td>
-              <td class="text-center">20$</td>
-              <td class="text-center">Pending</td>
-              <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
+              <td class="text-center"><?=number_format($order->sub_total_price, 1);?>$</td>
+              <td class="text-center"><?=number_format($commission->commission, 1);?>$</td>
+              <td class="text-center"><?=$commission->getStatusLabel();?></td>
+              <td class="text-center"><span href="javascript:;" class="text-green"><?=$commission->description;?></span></td>
             </tr>
-            <tr>
-              <th scope="row">
-                <a href="#">#12345678</a>
-                <span class="date-time">2020-03-06 20:48</span>
-              </th>
-              <td class="text-center">100$</td>
-              <td class="text-center">20$</td>
-              <td class="text-center">Pending</td>
-              <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <a href="#">#12345678</a>
-                <span class="date-time">2020-03-06 20:48</span>
-              </th>
-              <td class="text-center">100$</td>
-              <td class="text-center">20$</td>
-              <td class="text-center">Pending</td>
-              <td class="text-center"><span href="#" class="text-green">Comment Details</span></td>
-            </tr>
-            <tr>
-              <th scope="row" class="text-left">GRAND TOTAL</th>
-              <td class="text-center"><b class="text-red">$500</b></td>
-              <td class="text-center"><b class="text-red">$100</b></td>
-              <td class="text-center" colspan="2"></td>
-            </tr>
+            <?php endforeach;?>
           </tbody>
         </table>
       </div>
       <nav aria-label="Page navigation" class="mt-2 mb-5">
-        <ul class="pagination justify-content-end">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">
-              <img class="icon" src="/images//icon/back.svg" />
-            </a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">
-              <img class="icon" src="/images//icon/next.svg" />
-            </a>
-          </li>
-        </ul>
+        <?=LinkPager::widget([
+          'pagination' => $pages,
+          'options' => ['class' => 'pagination justify-content-end']
+        ]);?>
       </nav>
     </div>
     <!-- END Transaction History Table -->
   </div>
 </div>
+<?php
+$script = <<< JS
+// Add account form
+var addAccountForm = new AjaxFormSubmit({element: 'form#add-account-form'});
+addAccountForm.success = function (data, form) {
+  setTimeout(() => {  
+      location.reload();
+  }, 2000);
+  toastr.success(data.message); 
+}
+addAccountForm.error = function(errors) {
+  toastr.error(errors);
+  return false;
+}
+
+// Withdraw form
+var withdrawForm = new AjaxFormSubmit({element: 'form#withdraw-form'});
+withdrawForm.success = function (data, form) {
+  setTimeout(() => {  
+      location.reload();
+  }, 2000);
+  toastr.success(data.message); 
+}
+withdrawForm.error = function(errors) {
+  toastr.error(errors);
+  return false;
+}
+
+// Delete account
+$(".delete-account-link").ajax_action({
+  method: 'POST',
+  confirm: true,
+  confirm_text: 'Do you want to delete this account?',
+  callback: function(element, data) {
+    $(element).closest('label').remove();
+    toastr.success(data.message); 
+  },
+  error: function(element, errors) {
+    toastr.error(errors);
+    return false;
+  }
+});
+JS;
+$this->registerJs($script);
+?>

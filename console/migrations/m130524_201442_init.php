@@ -68,45 +68,7 @@ class m130524_201442_init extends Migration
             'payment_at' => $this->dateTime(),
         ], $tableOptions);
 
-        $this->createTable('{{%user_affiliate}}', [
-            'user_id' => $this->integer()->notNull(),
-            'preferred_im' => $this->string(50)->notNull(),
-            'im_account' => $this->string(255)->notNull(),
-            'company' => $this->string()->notNull(),
-            'channel' => $this->string(),
-            'channel_type' => $this->string(50)->notNull(), // set 1: pending, 2: completed
-            'status' => $this->integer()->defaultValue(1),
-            'code' => $this->string(50),
-            'created_at' => $this->dateTime()->notNull(),
-            'updated_at' => $this->dateTime(),
-        ], $tableOptions);
-
-        $this->createTable('{{%user_commission}}', [
-            'id' => $this->primaryKey(),
-            'user_id' => $this->integer()->notNull(),
-            'commission' => $this->float()->notNull()->defaultValue(0),
-            'order_id' => $this->integer()->notNull(),
-            'member_id' => $this->integer()->notNull(),
-            'description' => $this->string(255),
-            'created_at' => $this->date(),
-            'valid_from_date' => $this->date(),
-            'valid_to_date' => $this->date(),
-            'status' => $this->integer()->notNull()->defaultValue(1), // set 1: valid, 2: withdrawed
-        ], $tableOptions);
-
-        $this->createTable('{{%user_commission_withdraw}}', [
-            'id' => $this->primaryKey(),
-            'user_id' => $this->integer()->notNull(),
-            'amount' => $this->float()->notNull()->defaultValue(0),
-            'created_at' => $this->dateTime()->notNull(),
-            'approved_at' => $this->dateTime(),
-            'approved_by' => $this->integer(),
-            'executed_at' => $this->dateTime(),
-            'executed_by' => $this->integer(),
-            'note' => $this->string(255),
-            'evidence' => $this->integer(),
-            'status' => $this->integer()->notNull()->defaultValue(1), // set 1: request, 2: approved, 3: executed
-        ], $tableOptions);
+        
 
         $this->createTable('{{%user_reseller}}', [
             'user_id' => $this->integer()->notNull(),
@@ -214,8 +176,6 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%post}}');
         $this->dropTable('{{%category}}');
         $this->dropTable('{{%image}}');
-        $this->dropTable('{{%user_commission}}');
-        $this->dropTable('{{%user_commission_withdraw}}');
         $this->dropTable('{{%user_reseller}}');
         $this->dropTable('{{%auth}}');
     }

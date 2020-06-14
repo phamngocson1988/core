@@ -129,7 +129,11 @@
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
           <span class="title">Affiliate</span>
+          {if $this->params['new_affiliate_request']}
+          <span class="badge badge-success">{$this->params['new_affiliate_request']}</span>
+          {else}
           <span class="arrow"></span>
+          {/if}
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">

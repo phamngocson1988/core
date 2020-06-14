@@ -78,17 +78,25 @@ class m180517_025826_create_product_schema extends Migration
         $this->createTable('{{%game_price_log}}', [
             'id' => $this->primaryKey(),
             'game_id' => $this->integer()->notNull(),
-            'old_price' => $this->float()->notNull(),
-            'new_price' => $this->float()->notNull(),
+            'old_price' => $this->float()->defaultValue(0),
+            'new_price' => $this->float()->defaultValue(0),
 
-            'old_reseller_1' => $this->float()->notNull(),
-            'new_reseller_1' => $this->float()->notNull(),
+            'old_price_1' => $this->float()->defaultValue(0),
+            'old_price_2' => $this->float()->defaultValue(0),
+            'old_price_3' => $this->float()->defaultValue(0),
 
-            'old_reseller_2' => $this->float()->notNull(),
-            'new_reseller_2' => $this->float()->notNull(),
+            'new_price_1' => $this->float()->defaultValue(0),
+            'new_price_2' => $this->float()->defaultValue(0),
+            'new_price_3' => $this->float()->defaultValue(0),
 
-            'old_reseller_3' => $this->float()->notNull(),
-            'new_reseller_3' => $this->float()->notNull(),
+            'old_reseller_1' => $this->float()->defaultValue(0),
+            'new_reseller_1' => $this->float()->defaultValue(0),
+
+            'old_reseller_2' => $this->float()->defaultValue(0),
+            'new_reseller_2' => $this->float()->defaultValue(0),
+
+            'old_reseller_3' => $this->float()->defaultValue(0),
+            'new_reseller_3' => $this->float()->defaultValue(0),
 
             'config' => $this->text(),
             'updated_by' => $this->integer()->notNull(),

@@ -6,9 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\User;
-use backend\models\UserAffiliate;
-use backend\models\UserCommission;
-use backend\models\UserCommissionWithdraw;
+use backend\models\Affiliate;
 use backend\models\Order;
 
 class FetchAffiliateForm extends Model
@@ -28,8 +26,8 @@ class FetchAffiliateForm extends Model
 
     protected function createCommand()
     {
-        $affiliateTable = UserAffiliate::tableName();
-        $command = UserAffiliate::find();
+        $affiliateTable = Affiliate::tableName();
+        $command = Affiliate::find();
         if ($this->user_id) {
             $command->andWhere(["{$affiliateTable}.user_id" => $this->user_id]);
         }

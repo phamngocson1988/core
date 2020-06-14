@@ -11,6 +11,7 @@ use common\models\UserWallet;
 // use common\behaviors\UserCommissionBehavior;
 use common\behaviors\UserWalletBehavior;
 use common\behaviors\UserResellerBehavior;
+use common\behaviors\AffiliateBehavior;
 
 /**
  * User model
@@ -76,6 +77,7 @@ class User extends ActiveRecord implements IdentityInterface
             [
                 'class' => UserResellerBehavior::className(),
             ],
+            'affiliate' => AffiliateBehavior::className(),
         ];
     }
 

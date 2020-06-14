@@ -18,6 +18,8 @@ use backend\forms\FetchCommissionWithdrawForm;
 use backend\behaviors\UserAffiliateBehavior;
 use backend\behaviors\UserCommissionBehavior;
 
+use backend\models\Affiliate;
+
 /**
  * AffiliateController
  */
@@ -89,7 +91,7 @@ class AffiliateController extends Controller
     public function actionRequest()
     {
         $this->view->params['main_menu_active'] = 'affiliate.request';
-        $command = UserAffiliate::find()->where(['status' => UserAffiliate::STATUS_DISABLE]);
+        $command = Affiliate::find()->where(['status' => Affiliate::STATUS_DISABLE]);
         $command->with('user');
         $command->orderBy(['created_at' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -104,10 +106,10 @@ class AffiliateController extends Controller
     {
         $request = Yii::$app->request;
         if( $request->isAjax) {
-            $userAffiliate = UserAffiliate::findOne($id);
+            $userAffiliate = Affiliate::findOne($id);
             if (!$userAffiliate) throw new NotFoundHttpException('Not found');
             $userAffiliate->generateAffiliateCode();
-            $userAffiliate->status = UserAffiliate::STATUS_ENABLE;
+            $userAffiliate->status = Affiliate::STATUS_ENABLE;
             return $this->asJson(['status' => $userAffiliate->save()]);
         }
     }
@@ -116,7 +118,7 @@ class AffiliateController extends Controller
     {
         $request = Yii::$app->request;
         if( $request->isAjax) {
-            $userAffiliate = UserAffiliate::findOne($id);
+            $userAffiliate = Affiliate::findOne($id);
             if (!$userAffiliate) throw new NotFoundHttpException('Not found');
             $userAffiliate->delete();
             // Send mail notification
