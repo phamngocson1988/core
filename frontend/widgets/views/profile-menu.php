@@ -22,7 +22,7 @@ use yii\helpers\Url;
           <p class="mega-ttl"><?=Yii::t('app', 'favorite_operaotor');?></p>
           <ul class="list-favorites">
             <?php foreach ($operators as $operator) : ?>
-            <li><a href="<?=Url::to(['operator/view', 'id' => $operator->id]);?>"><img src="<?=$operator->getImageUrl('50x50');?>" alt="image"></a></li>
+            <li><a href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><img src="<?=$operator->getImageUrl('50x50');?>" alt="image"></a></li>
             <?php endforeach;?>
           </ul>
           <div class="mega-create"><a class="fas fa-plus-circle trans" href="#"></a></div>

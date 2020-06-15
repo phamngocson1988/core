@@ -1,5 +1,6 @@
 <?php 
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\TimeElapsed;
 ?>
@@ -27,8 +28,8 @@ use common\components\helpers\TimeElapsed;
             </div>
             <div class="hero-footer">
               <ul class="hero-nav">
-                <li><a href="<?=Url::to(['manage/index', 'id' => $model->id, 'slug' => $model->slug]);?>"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
-                <li><a href="#"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Details</span></a></li>
+                <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
+                <li><a href="#detail"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Details</span></a></li>
                 <li><a href="#"><i class="fa fa-comments"></i><span class="nav-text">Player Reviews (552)</span></a></li>
                 <li><a href="#"><i class="fa fa-gift"></i><span class="nav-text">Bonuses (10)</span></a></li>
                 <li><a href="#"><i class="fa fa-thumbs-down"></i><span class="nav-text">Complaints (692)</span></a></li>
@@ -36,20 +37,19 @@ use common\components\helpers\TimeElapsed;
               </ul>
             </div>
           </section>
-          <section class="operator-overview widget-box">
+          <section class="operator-overview widget-box" id="overview">
             <h2 class="widget-head">
               <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=$model->name;?> Overview</span></div>
             </h2>
             <div class="widget-content">
               <h3 class="content-title">Best Place In The World</h3>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis vitae, repellat ad modi sapiente corrupti quisquam et adipisci fugiat beatae, delectus tempora vero doloribus itaque, expedita nam incidunt. Eaque expedita amet vero fugit numquam earum eos, consectetur necessitatibus eius nobis enim similique velit tempora.</p>
-              <p>Earum quae eveniet odio fuga eaque debitis, dignissimos quisquam ipsam harum eius nulla corporis. Distinctio, nesciunt. Iure quos ad nemo pariatur dignissimos quaerat! Cupiditate distinctio necessitatibus perspiciatis placeat iste nam, rerum nemo? Adipisci possimus facere id, incidunt doloremque aperiam odio porro dolore nulla a autem nihil optio provident expedita esse quas omnis. Nulla amet animi aut velit quisquam, laudantium perferendis ex blanditiis autem delectus praesentium ratione, nobis hic facere consectetur perspiciatis? Temporibus delectus minima.</p>
+              <?=$model->overview;?>
             </div>
             <div class="widget-foot overview-button"><a class="trans" href="#">Show more</a></div>
           </section>
-          <section class="operator-detail widget-box">
+          <section class="operator-detail widget-box" id="detail">
             <h2 class="widget-head">
-              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text">Henderson &amp; Bench Details</span></div>
+              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=$model->name;?></span></div>
             </h2>
             <div class="widget-content">
               <ul class="operator-detail-list">
@@ -58,7 +58,7 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-globe-americas"></i></div>
                     <div class="label-text">Main URL</div>
                   </div>
-                  <div class="content"><a href="#">www.henderson.com</a></div>
+                  <div class="content"><a href="<?=$model->main_url;?>" target="_blank"><?=$model->main_url;?></a></div>
                 </li>
                 <li>
                   <div class="label">
@@ -75,10 +75,12 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-undo-alt"></i></div>
                     <div class="label-text">Backup URLs</div>
                   </div>
-                  <div class="content"><a href="#">Link 1</a>,
-                    <a href="#">Link 2</a>,
-                    <a href="#">Link 3</a>,
-                    <a href="#">Link 4</a>
+                  <div class="content">
+                    <?php $urls = array_map(function($url) {
+                      return Html::a($url, $url, ['target' => '_blank']);
+                    }, explode(",", $model->backup_url));
+                    echo implode(",", $urls);
+                    ?>
                   </div>
                 </li>
                 <li>
@@ -124,7 +126,7 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-building"></i></div>
                     <div class="label-text">Owner</div>
                   </div>
-                  <div class="content"><a href="#">Golden Mountain, Inc.</a></div>
+                  <div class="content"><a href="javascript:;"><?=$model->owner;?></a></div>
                 </li>
                 <li>
                   <div class="label">
@@ -141,7 +143,7 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-calendar-alt"></i></div>
                     <div class="label-text">Established</div>
                   </div>
-                  <div class="content"><a href="#">2001</a></div>
+                  <div class="content"><a href="javascript:;"><?=$model->established;?></a></div>
                 </li>
                 <li>
                   <div class="label">
@@ -162,7 +164,7 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-meh"></i></div>
                     <div class="label-text">Withdrawal Limit</div>
                   </div>
-                  <div class="content">Up to $50,000 per transaction</div>
+                  <div class="content">Up to <?=sprintf("%s %s", $model->withdrawal_currency, number_format($model->withdrawal_limit));?> per transaction</div>
                 </li>
                 <li>
                   <div class="label">
@@ -170,9 +172,9 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-text">Contact</div>
                   </div>
                   <div class="content">
-                    Support Email: csd@henderson.com
+                    <?=$model->support_email;?>
                     <br>
-                    Support Telephone: +8412345678
+                    <?=$model->support_phone;?>
                   </div>
                 </li>
                 <li>
@@ -180,10 +182,10 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-gift"></i></div>
                     <div class="label-text">Rebates</div>
                   </div>
-                  <div class="content">Max 1.5%</div>
+                  <div class="content">Max <?=$model->rebate;?>%</div>
                 </li>
               </ul>
-              <div class="suggest-edit"><a class="btn btn-link" href="#">Suggest an edit</a></div>
+              <div class="suggest-edit"><a class="btn btn-link" href="<?=Url::to(['manage/index', 'id' => $model->id, 'slug' => $model->slug]);?>">Suggest an edit</a></div>
             </div>
           </section>
           <section class="operator-review-rate">
@@ -211,7 +213,7 @@ use common\components\helpers\TimeElapsed;
             </div>
             <?php endif;?>
           </section>
-          <section class="operator-review-group widget-box">
+          <section class="operator-review-group widget-box" id="review">
             <div class="review-header">
               <div class="header-buttons"><a class="btn-text sortable is-down js-btn-sort" href="#">Sort by date</a><a class="btn-text sortable is-down js-btn-sort" href="#">Sort by date</a>
                 <div class="btn-text" href="#">Average rating <?=$model->averageReviewRating();?> of <?=number_format($model->countReview());?> reviews</div>

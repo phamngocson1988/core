@@ -11,6 +11,7 @@ class UpdateOperatorForm extends Model
 {
     public $id;
     public $name;
+    public $overview;
     public $main_url;
     public $backup_url;
     public $withdrawal_limit;
@@ -27,7 +28,7 @@ class UpdateOperatorForm extends Model
     public function rules()
     {
         return [
-            ['name', 'trim'],
+            [['name', 'overview'], 'trim'],
             [['name', 'main_url', 'owner', 'support_email', 'support_phone'], 'string', 'max' => 255],
             ['backup_url', 'string', 'max' => 1024],
             ['withdrawal_currency', 'string', 'max' => 16],
@@ -39,6 +40,7 @@ class UpdateOperatorForm extends Model
     {
         $operator = $this->getOperator();
         $operator->main_url = $this->main_url;
+        $operator->overview = $this->overview;
         $operator->backup_url = $this->backup_url;
         $operator->withdrawal_limit = $this->withdrawal_limit;
         $operator->withdrawal_currency = $this->withdrawal_currency;
@@ -64,6 +66,7 @@ class UpdateOperatorForm extends Model
         $operator = $this->getOperator();
         $this->name = $operator->name;
         $this->main_url = $operator->main_url;
+        $this->overview = $operator->overview;
         $this->backup_url = $operator->backup_url;
 
         $this->withdrawal_limit = $operator->withdrawal_limit;

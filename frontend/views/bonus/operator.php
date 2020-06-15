@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Url;
-use common\components\helpers\TimeElapsed;
 use frontend\widgets\LinkPager;
 ?>
 <main>

@@ -34,7 +34,7 @@ AppAsset::register($this);
     <header class="header">
       <div class="container d-flex justify-content-between">
         <div class="header-left d-flex align-items-center">
-          <h1 class="header-logo"><a class="trans" href="./"><img src="/img/common/logo.png" alt="image"></a></h1>
+          <h1 class="header-logo"><a class="trans" href="/"><img src="/img/common/logo.png" alt="image"></a></h1>
           <nav class="header-nav" id="js-nav-bar">
             <div class="header-nav-inner">
               <form class="header-search" action="./">

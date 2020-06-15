@@ -19,6 +19,7 @@ class m200518_152739_operator extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string(255)->notNull(),
             'slug' => $this->string(255),
+            'overview' => $this->text(),
             'main_url' => $this->string(255),
             'backup_url' => $this->string(1024),
             'withdrawal_limit' => $this->integer(),

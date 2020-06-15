@@ -15,7 +15,7 @@ use yii\helpers\Url;
       </div>
       <div class="row">
         <?php foreach ($operatorNews as $post) : ?>
-        <div class="col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3"><a class="block-news trans" href="<?=Url::to(['news/view', 'id' => $post->id]);?>">
+        <div class="col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3"><a class="block-news trans" href="<?=Url::to(['news/view', 'id' => $post->id, 'slug' => $post->slug]);?>">
           <div class="news-image"><img class="object-fit" src="<?=$post->getImageUrl('400x220');?>" alt="image"></div>
           <div class="news-body">
             <p class="mb-0"><?=$post->title;?></p>

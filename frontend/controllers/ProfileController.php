@@ -30,7 +30,33 @@ class ProfileController extends Controller
             ],
         ];
     }
-	public function actionIndex()
+
+    public function actionIndex()
+    {
+        return $this->render('index');
+    }
+
+    public function actionFavorite()
+    {
+        return $this->render('favorite');
+    }
+
+    public function actionSetting()
+    {
+        $request = Yii::$app->request;
+        $editProfileForm = new \frontend\forms\EditProfileForm();
+        $editProfileForm->loadData();
+
+        $updateEmailForm = new \frontend\forms\UpdateEmailForm();
+        $changePasswordForm = new \frontend\forms\ChangePasswordForm();
+        return $this->render('setting', [
+            'editProfileForm' => $editProfileForm,
+            'updateEmailForm' => $updateEmailForm,
+            'changePasswordForm' => $changePasswordForm,
+        ]);
+    }
+
+	public function actionComplete()
     {
         $request = Yii::$app->request;
 
@@ -58,7 +84,7 @@ class ProfileController extends Controller
         ->all();
 
 
-        return $this->render('index', [
+        return $this->render('complete', [
             'model' => $model,
             'operators' => $operators,
         ]);
@@ -74,5 +100,53 @@ class ProfileController extends Controller
         $user->avatar = $request->post('id');
         $user->save();
         return $this->asJson(['status' => true]);
+    }
+
+    public function actionUpdateProfile()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\EditProfileForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
+            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'success')]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
+    }
+
+    public function actionUpdateEmail()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\UpdateEmailForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
+            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'success')]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
+    }
+
+    public function actionUpdatePassword()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\ChangePasswordForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->change()) {
+            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'success')]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
     }
 }

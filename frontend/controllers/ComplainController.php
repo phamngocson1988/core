@@ -68,7 +68,6 @@ class ComplainController extends Controller
         $complain = Complain::findOne($id);
         $operator = $complain->operator;
         $reason = $complain->reason;
-        $user = $complain->user;
         $replies = $complain->replies;
         $replyForm = new \frontend\forms\ReplyComplainForm();
         $complains = Complain::find()->where(['operator_id' => $operator->id])->limit(4)->all();
@@ -82,7 +81,7 @@ class ComplainController extends Controller
             'complain' => $complain,
             'operator' => $operator,
             'reason' => $reason,
-            'user' => $user,
+            'user' => $complain->user,
             'replies' => $replies,
             'replyForm' => $replyForm,
             'complains' => $complains,

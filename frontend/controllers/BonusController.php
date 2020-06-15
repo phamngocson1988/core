@@ -37,58 +37,23 @@ class BonusController extends Controller
         ];
     }
 
-    // public function actionIndex()
-    // {
-    //     return $this->redirect(Url::to(['complain/create']));
-    // }
+    public function actionIndex()
+    {
+        $form = new \frontend\forms\FetchBonusForm();
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $bonuses = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+        $total = $command->count();
+        return $this->render('index', [
+            'bonuses' => $bonuses,
+            'pages' => $pages,
+            'total' => $total,
+            'search' => $form
+        ]);
+    }
 
-    // public function actionCreate()
-    // {
-    //     $request = Yii::$app->request;
-    //     $model = new \frontend\forms\CreateComplainForm([
-    //         'user_id' => Yii::$app->user->id,
-    //         'operator_id' => $request->get('operator_id')
-    //     ]);
-    //     if ($model->load($request->post())) {
-    //         if ($model->validate() && $model->create()) {
-    //             Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-    //             return $this->redirect(['site/index']);
-    //         } else {
-    //             Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-    //         }
-    //     }
-    //     return $this->render('create', [
-    //         'model' => $model,
-    //     ]);
-    // }
-
-    // public function actionView($id)
-    // {
-    //     $request = Yii::$app->request;
-    //     $complain = Complain::findOne($id);
-    //     $operator = $complain->operator;
-    //     $reason = $complain->reason;
-    //     $user = $complain->user;
-    //     $replies = $complain->replies;
-    //     $replyForm = new \frontend\forms\ReplyComplainForm();
-    //     $complains = Complain::find()->where(['operator_id' => $operator->id])->limit(4)->all();
-
-    //     $user = Yii::$app->user;
-    //     $canReply = false;
-    //     if (!$user->isGuest) {
-    //         $canReply = $complain->isOpen() && $user->id == $complain->user_id;
-    //     }
-    //     return $this->render('view', [
-    //         'complain' => $complain,
-    //         'operator' => $operator,
-    //         'reason' => $reason,
-    //         'user' => $user,
-    //         'replies' => $replies,
-    //         'replyForm' => $replyForm,
-    //         'complains' => $complains,
-    //         'canReply' => $canReply,
-    //     ]);
-    // }
 
     public function actionOperator($id, $slug)
     {

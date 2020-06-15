@@ -184,10 +184,10 @@ $this->title = 'Update Operator';
                   <label class="fm-label">Contact</label>
                   <textarea class="form-control" rows="4"></textarea>
                 </div>
-                <div class="form-group">
-                  <label class="fm-label">Overview</label>
-                  <textarea class="form-control" rows="8"></textarea>
-                </div>
+                <?= $form->field($model, 'overview', [
+                  'labelOptions' => ['class' => 'fm-label'],
+                  'inputOptions' => ['class' => 'form-control', 'rows' => 8]
+                ])->textArea();?>
                 <div class="form-group form-buttons">
                   <button class="btn btn-primary" type="submit">Update</button>
                   <button class="btn btn-secondary" type="reset">Reset</button>

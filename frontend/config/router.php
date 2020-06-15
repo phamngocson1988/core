@@ -15,6 +15,7 @@ return [
         'register' => 'site/register',
         'activate' => 'site/activate',
         'operator/<id:\d+>-<slug:[\w\-]+>' => 'operator/view',
+        'news/<id:\d+>-<slug:[\w\-]+>' => 'news/view',
         '<controller>/<action>' => '<controller>/<action>',
     ],
 ];
