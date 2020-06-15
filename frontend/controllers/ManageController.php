@@ -36,8 +36,17 @@ class ManageController extends Controller
 
     public function actionIndex($id, $slug)
     {
+        $request = Yii::$app->request;
         $model = new \frontend\forms\UpdateOperatorForm(['id' => $id]);
-        $model->loadData();
+        if ($model->load($request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            }
+        } else {
+            $model->loadData();
+        }
         return $this->render('index', [
             'model' => $model
         ]);

@@ -19,11 +19,12 @@ $this->title = 'Update Operator';
         <div class="mod-column">
           <div class="widget-box timeline-post">
             <div class="section-operator-update">
-              <?php $form = ActiveForm::begin(['action' => Url::to(['complain/create'])]); ?>
+              <?php $form = ActiveForm::begin(); ?>
                 <div class="row">
                   <div class="col-12 col-lg-6">
                     <?= $form->field($model, 'name', [
-                      'labelOptions' => ['class' => 'fm-label']
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control', 'disabled' => true, 'readonly' => true, 'name' => '']
                     ])->textInput();?>
                   </div>
                   <div class="col-12 col-lg-6">
@@ -34,20 +35,52 @@ $this->title = 'Update Operator';
                 </div>
                 <div class="row">
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
+                    <?= $form->field($model, 'backup_url', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'template' => '{label}<div>{input}</div>',
+                      'inputOptions' => ['class' => 'form-control', 'data-role' => 'tagsinput']
+                    ])->textInput();?>
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <?= $form->field($model, 'rebate', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                    ])->textInput()->label('Rebate (%)');?>
+                  </div>
+                    <!-- <div class="form-group">
                       <label class="fm-label">Supported Languages</label>
                       <div>
                         <input class="form-control" type="text" id="js-tag-language" style="max-width: 300px">
                       </div>
-                    </div>
+                    </div> -->
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-lg-6">
+                    <?= $form->field($model, 'withdrawal_limit', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                    ])->textInput();?>
                   </div>
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Backup URLs</label>
-                      <div>
-                        <input class="form-control" type="text" id="js-tag-backup" style="max-width: 300px">
-                      </div>
-                    </div>
+                    <?= $form->field($model, 'withdrawal_currency', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                    ])->dropdownList(['USD' => 'USD', 'VND' => 'VND']);?>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-lg-6">
+                    <?= $form->field($model, 'rebate', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                    ])->textInput()->label('Rebate (%)');?>
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <?= $form->field($model, 'withdrawal_currency', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                    ])->dropdownList(['USD' => 'USD', 'VND' => 'VND']);?>
                   </div>
                 </div>
                 <div class="row">
