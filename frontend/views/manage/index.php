@@ -10,8 +10,12 @@ $this->title = 'Update Operator';
         <div class="heading-banner"><img class="object-fit" src="../img/profile/profile_bnr.jpg" alt="image"></div>
         <div class="heading-body">
           <div class="heading-avatar col-avatar">
-            <div class="heading-image"><img class="object-fit" src="../img/common/avatar_img_01.png" alt="image"><a class="edit-camera fas fa-camera trans" href="#"></a></div>
-            <h1 class="heading-name">Henderson &amp; Bench</h1>
+            <div class="heading-image operator-avatar-background">
+              <img class="object-fit operator-avatar" src="<?=$model->getImageUrl('150x150');?>" alt="image">
+              <a class="edit-camera fas fa-camera trans" href="javascript:;"></a>
+              <input type="file" id="upload-user-avatar-element" name="upload-user-avatar-element" style="display: none" multiple accept="image/*"/>
+            </div>
+            <h1 class="heading-name"><?=$model->name;?></h1>
           </div>
         </div>
       </div>
@@ -47,13 +51,6 @@ $this->title = 'Update Operator';
                       'inputOptions' => ['class' => 'form-control', 'type' => 'number']
                     ])->textInput()->label('Rebate (%)');?>
                   </div>
-                    <!-- <div class="form-group">
-                      <label class="fm-label">Supported Languages</label>
-                      <div>
-                        <input class="form-control" type="text" id="js-tag-language" style="max-width: 300px">
-                      </div>
-                    </div> -->
-                  </div>
                 </div>
                 <div class="row">
                   <div class="col-12 col-lg-6">
@@ -65,51 +62,36 @@ $this->title = 'Update Operator';
                   <div class="col-12 col-lg-6">
                     <?= $form->field($model, 'withdrawal_currency', [
                       'labelOptions' => ['class' => 'fm-label'],
-                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
+                      'inputOptions' => ['class' => 'form-control']
                     ])->dropdownList(['USD' => 'USD', 'VND' => 'VND']);?>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12 col-lg-6">
-                    <?= $form->field($model, 'rebate', [
+                    <?= $form->field($model, 'owner', [
                       'labelOptions' => ['class' => 'fm-label'],
-                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
-                    ])->textInput()->label('Rebate (%)');?>
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->textInput();?>
                   </div>
                   <div class="col-12 col-lg-6">
-                    <?= $form->field($model, 'withdrawal_currency', [
+                    <?= $form->field($model, 'established', [
                       'labelOptions' => ['class' => 'fm-label'],
-                      'inputOptions' => ['class' => 'form-control', 'type' => 'number']
-                    ])->dropdownList(['USD' => 'USD', 'VND' => 'VND']);?>
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->dropdownList($model->fetchEstablishedYear());?>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Supported Currencies</label>
-                      <div>
-                        <label class="form-check form-check-inline">
-                          <input class="form-check-input" type="checkbox" value="option1" checked><span class="form-check-label">VND</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                          <input class="form-check-input" type="checkbox" value="option2"><span class="form-check-label">THB</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                          <input class="form-check-input" type="checkbox" value="option3"><span class="form-check-label">MYR</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                          <input class="form-check-input" type="checkbox" value="option4"><span class="form-check-label">USD</span>
-                        </label>
-                      </div>
-                    </div>
+                    <?= $form->field($model, 'support_email', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->textInput();?>
                   </div>
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Products</label>
-                      <div>
-                        <input class="form-control" type="text" data-role="tagsinput">
-                      </div>
-                    </div>
+                    <?= $form->field($model, 'support_phone', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->textInput();?>
                   </div>
                 </div>
                 <div class="row">
@@ -275,6 +257,44 @@ $('form').on('keyup keypress', function(e) {
     return false;
   }
 });
+
+// upload image
+var uploadImage = new AjaxUploadImage({
+  trigger_element: '.edit-camera',
+  file_element: '#upload-user-avatar-element', // seletor of the file element
+  review_width: '180',
+  review_height: '180',
+  link: '###LINK###'
+});
+uploadImage.callback = function(data) { 
+  console.log(data);
+  var objs = Object.values(data);
+  if (objs.length) {
+    var avatarObj = objs[0];
+    var id = avatarObj.id;
+    var thumb = avatarObj.thumb;
+    console.log(id);
+    console.log(thumb);
+    $('body').find('.operator-avatar').attr('src', thumb);
+    $('body').find('.operator-avatar-background').attr('style', 'background-image: url("'+thumb+'")')
+    // Update user avatar
+    $.ajax({
+      url: '###UPDATEAVATAR###',
+      type: 'POST',
+      dataType : 'json',
+      data: {id: id},
+      success: function (result, textStatus, jqXHR) {
+        console.log(result);
+      },
+    });
+  } else {
+    toastr.error('No file');
+  }
+};
 JS;
+$uploadLink = Url::to(['image/ajax-upload']);
+$updateAvatarLink = Url::to(['manage/update-avatar', 'id' => $model->id]);
+$script = str_replace('###LINK###', $uploadLink, $script);
+$script = str_replace('###UPDATEAVATAR###', $updateAvatarLink, $script);
 $this->registerJs($script);
 ?>

@@ -28,8 +28,10 @@ class UpdateOperatorForm extends Model
     {
         return [
             ['name', 'trim'],
-            [['name', 'main_url'], 'string', 'max' => 255],
+            [['name', 'main_url', 'owner', 'support_email', 'support_phone'], 'string', 'max' => 255],
             ['backup_url', 'string', 'max' => 1024],
+            ['withdrawal_currency', 'string', 'max' => 16],
+            [['established', 'rebate', 'withdrawal_limit'], 'number'],
         ];
     }
 
@@ -74,4 +76,15 @@ class UpdateOperatorForm extends Model
         $this->support_phone = $operator->support_phone;
     }
 
+    public function getImageUrl($size = null, $default = 'https://www.ira-sme.net/wp-content/themes/consultix/images/no-image-found-360x260.png')
+    {
+        $operator = $this->getOperator();
+        return $operator->getImageUrl($size, $default);
+    }
+
+    public function fetchEstablishedYear()
+    {
+        $years = range(1990, date("Y"));
+        return array_combine($years, $years);
+    }
 }

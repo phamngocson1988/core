@@ -24,7 +24,7 @@ class ManageController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'update-avatar'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -50,5 +50,17 @@ class ManageController extends Controller
         return $this->render('index', [
             'model' => $model
         ]);
+    }
+
+    public function actionUpdateAvatar($id) 
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $operator = Operator::findOne($id);
+        $operator->logo = $request->post('id');
+        $operator->save();
+        return $this->asJson(['status' => true]);
     }
 }
