@@ -3,16 +3,24 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\TimeElapsed;
 $this->title = sprintf("Complain - %s", $complain->title);
+$user = Yii::$app->user->getIdentity();
 ?>
 <main>
   <section class="section-module">
     <div class="container">
       <section class="operator-hero complaint-hero widget-box">
-        <div class="hero-main"><a class="hero-photo" href="#"><img src="<?=$operator->getImageUrl('150x150');?>" alt="Henderson &amp; Bench"></a>
+        <div class="hero-main">
+          <a class="hero-photo" href="#"><img src="<?=$operator->getImageUrl('150x150');?>" alt="<?=$operator->name;?>"></a>
           <div class="hero-info">
             <div class="hero-name-sm"><?=$operator->name;?></div>
             <h1 class="hero-title"><?=$complain->title;?></h1>
-            <div class="hero-buttons"><a class="btn btn-outline-light" href="#">Follow <i class="fa fa-star-o"></i></a></div>
+            <div class="hero-buttons">
+            <?php if ($user) : ?>
+            <?php $isFollow = $user->isFollow($complain->id);?>
+              <a class="btn btn-outline-light <?= $isFollow ? '' : 'd-none' ;?>" id="unfollow-complain" href="<?=Url::to(['complain/unfollow', 'id' => $complain->id]);?>">Unfollow <i class="fa fa-star-o"></i></a>
+              <a class="btn btn-outline-light <?= $isFollow ? 'd-none' : '' ;?>" id="follow-complain" href="<?=Url::to(['complain/follow', 'id' => $complain->id]);?>">Follow <i class="fa fa-star"></i></a>
+            <?php endif;?>
+            </div>
             <div class="hero-feature">
               <p><i class="fa fa-clock-o"></i> <?=ucfirst($complain->status);?> Case (<?=TimeElapsed::timeElapsed($complain->created_at);?>)</p>
             </div>
@@ -179,6 +187,32 @@ reviewForm.success = function (data, form) {
     location.reload();
   }, 1000);
 }
+
+// follow
+$('#follow-complain').ajax_action({
+  method: 'POST',
+  callback: function(element, data) {
+    $('#follow-complain').addClass('d-none');
+    $('#unfollow-complain').removeClass('d-none');
+    toastr.success(data.message);
+  },
+  error: function(errors) {
+      toastr.error(errors);
+  },
+});
+
+// unfollow
+$('#unfollow-complain').ajax_action({
+  method: 'POST',
+  callback: function(element, data) {
+    $('#unfollow-complain').addClass('d-none');
+    $('#follow-complain').removeClass('d-none');
+    toastr.success(data.message);
+  },
+  error: function(errors) {
+      toastr.error(errors);
+  },
+});
 JS;
 $this->registerJs($script);
 ?>

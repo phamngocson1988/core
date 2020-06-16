@@ -1,5 +1,6 @@
 <?php 
 use yii\helpers\Url;
+use common\components\helpers\TimeElapsed;
 $user = Yii::$app->user->getIdentity();
 ?>
 <main>
@@ -35,128 +36,44 @@ $user = Yii::$app->user->getIdentity();
         </div>
       </div>
       <div class="heading-group">
-        <h2 class="sec-title">MY FAVORITE OPERATORS</h2><a class="btn btn-primary trans" href="#">+ ADD NEWS FAVORITE OPERATORS</a>
+        <h2 class="sec-title">MY FAVORITE OPERATORS</h2><a class="btn btn-primary trans" href="<?=Url::to(['operator/index']);?>">+ ADD NEWS FAVORITE OPERATORS</a>
       </div>
       <div class="row">
+        <?php foreach ($operators as $operator) : ?>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
           <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
+            <div class="card-image"><img class="object-fit" src="<?=$operator->getImageUrl('400x220');?>" alt="image"></div>
             <div class="card-body">
               <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
+                <div class="star-rating"><span style="width:<?=$operator->averageReviewPercent();?>%"></span></div><span class="star-rating-text"><?=number_format($operator->averageStar(), 1);?></span>
               </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
+              <h3 class="card-title"><?=$operator->name;?></h3>
+              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>">JOIN NOW</a>
             </div>
           </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="/img/top/img_01.jpg" alt="image"></div>
-            <div class="card-body">
-              <div class="star-rating-group">
-                <div class="star-rating"><span style="width:92.5%"></span></div><span class="star-rating-text">9.25</span>
-              </div>
-              <h3 class="card-title">Henderson &amp; Ben</h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="#">JOIN NOW</a>
-            </div>
-          </div>
-        </div>
+        <?php endforeach;?>
       </div>
     </div>
   </section>
   <section class="section-latest-complaints section-white">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title">FOLLOWED COMPLAINTS</h2><a class="btn btn-primary trans" href="#">+ FOLLOWED COMPLAINTS</a>
+        <h2 class="sec-title">FOLLOWED COMPLAINTS</h2><a class="btn btn-primary trans" href="<?=Url::to(['complain/index']);?>">+ FOLLOWED COMPLAINTS</a>
       </div>
       <div class="row">
+        <?php foreach ($complains as $complain) : ?>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
           <div class="block-complaint">
-            <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
+            <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
             <div class="complaint-heading">
-              <p class="complaint-ttl">OPEN CASE</p>
-              <p>An Hour Ago</p>
+              <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
+              <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
             </div>
-            <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
+            <div class="complaint-desc"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></div><a class="btn btn-primary" href="#">READ MORE</a>
           </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-complaint">
-            <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-            <div class="complaint-heading">
-              <p class="complaint-ttl">RESOLVED</p>
-              <p>An Hour Ago</p>
-            </div>
-            <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-complaint">
-            <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-            <div class="complaint-heading">
-              <p class="complaint-ttl">REJECTED</p>
-              <p>An Hour Ago</p>
-            </div>
-            <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-complaint">
-            <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-            <div class="complaint-heading">
-              <p class="complaint-ttl">REJECTED</p>
-              <p>An Hour Ago</p>
-            </div>
-            <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
-          <div class="block-complaint">
-            <div class="complaint-image"><img src="/img/top/img_02.jpg" alt="image"></div>
-            <div class="complaint-heading">
-              <p class="complaint-ttl">OPEN CASE</p>
-              <p>An Hour Ago</p>
-            </div>
-            <div class="complaint-desc">Henderson &amp; Ben - Slow approval of withdrawal</div><a class="btn btn-primary" href="#">READ MORE</a>
-          </div>
-        </div>
+        <?php endforeach;?>
       </div>
     </div>
   </section>

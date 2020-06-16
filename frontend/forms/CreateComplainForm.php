@@ -20,12 +20,15 @@ class CreateComplainForm extends Model
     public $account_email;
     public $agree;
 
+    protected $_operator;
+
     public function rules()
     {
         return [
             [['user_id', 'operator_id', 'reason_id', 'title', 'description', 'account_name', 'account_email', 'agree'], 'required'],
             ['agree', 'boolean'],
             ['agree', 'validateAgree'],
+            ['operator_id', 'validateOperator'],
         ];
     }
 
@@ -44,6 +47,14 @@ class CreateComplainForm extends Model
     {
         if (!$this->agree) {
             $this->addError($attribute, Yii::t('app', 'you_need_to_agree_our_term_and_policy'));
+        }
+    }
+
+    public function validateOperator($attribute, $params = [])
+    {
+        $operator = $this->getOperator();
+        if (!$operator) {
+            $this->addError($attribute, Yii::t('app', 'operator_is_not_exist'));
         }
     }
     
@@ -70,6 +81,14 @@ class CreateComplainForm extends Model
     {
         $operators = Operator::find()->select(['id', 'name'])->all();
         return ArrayHelper::map($operators, 'id', 'name');
+    }
+
+    public function getOperator()
+    {
+        if (!$this->_operator) {
+            $this->_operator = Operator::findOne($this->operator_id);
+        }
+        return $this->_operator;
     }
 
 }

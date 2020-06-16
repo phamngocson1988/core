@@ -50,6 +50,12 @@ class m200608_150429_complain extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
+        $this->createTable('{{%complain_follow}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'complain_id' => $this->integer()->notNull(),
+        ], $tableOptions);
+
         $this->createTable('{{%complain_reason}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
@@ -68,5 +74,6 @@ class m200608_150429_complain extends Migration
         $this->dropTable('{{%complain_reason}}');
         $this->dropTable('{{%complain_file}}');
         $this->dropTable('{{%complain_reply}}');
+        $this->dropTable('{{%complain_follow}}');
     }
 }

@@ -27,7 +27,7 @@ class ComplainController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['create', 'reply'],
+                        'actions' => ['create', 'reply', 'follow', 'unfollow'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -120,5 +120,43 @@ class ComplainController extends Controller
             'pages' => $pages,
             'operator' => $operator,
         ]);
+    }
+
+    public function actionFollow($id)
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\FollowComplainForm([
+            'user_id' => Yii::$app->user->id,
+            'complain_id' => $id
+        ]);
+        if ($model->validate() && $model->follow()) {
+            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'success')]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
+    }
+
+    public function actionUnfollow($id)
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\FollowComplainForm([
+            'user_id' => Yii::$app->user->id,
+            'complain_id' => $id
+        ]);
+        if ($model->validate() && $model->unfollow()) {
+            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'success')]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
     }
 }

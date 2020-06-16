@@ -9,7 +9,7 @@ use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
 use common\behaviors\UserOperatorFavoriteBehavior;
 use common\behaviors\UserOperatorReviewBehavior;
-
+use common\behaviors\UserComplainBehavior;
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -42,6 +42,7 @@ class User extends ActiveRecord implements IdentityInterface
             ],
             'operatorFavorite' => UserOperatorFavoriteBehavior::className(),
             'operatorReview' => UserOperatorReviewBehavior::className(),
+            'complain' => UserComplainBehavior::className(),
         ];
     }
 

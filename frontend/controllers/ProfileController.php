@@ -13,6 +13,9 @@ use yii\helpers\ArrayHelper;
 
 use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
+use frontend\models\Complain;
+use frontend\models\ComplainFollow;
+
 
 class ProfileController extends Controller
 {
@@ -38,7 +41,22 @@ class ProfileController extends Controller
 
     public function actionFavorite()
     {
-        return $this->render('favorite');
+        $favorites = OperatorFavorite::find()
+        ->where(['user_id' => Yii::$app->user->id])
+        ->select('operator_id')->asArray()->all();
+        $operatorIds = ArrayHelper::getColumn($favorites, 'operator_id');
+        $operators = Operator::findAll($operatorIds);
+
+        $follows = ComplainFollow::find()
+        ->where(['user_id' => Yii::$app->user->id])
+        ->select('complain_id')->asArray()->all();
+        $complainIds = ArrayHelper::getColumn($follows, 'complain_id');
+        $complains = Complain::findAll($complainIds);
+
+        return $this->render('favorite', [
+            'operators' => $operators,
+            'complains' => $complains,
+        ]);
     }
 
     public function actionSetting()
