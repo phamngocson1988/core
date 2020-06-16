@@ -89,31 +89,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h4 class="mt-lg-0 mb-5">Find Us</h4>
         <ul class="m-0 p-0">
           <li class="nav-item mb-3">
-            <a href="#" class="d-flex align-items-center">
+            <a href="https://www.facebook.com/Kinggems.us/" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/facebook-icon.svg" />
               <span>Facebook</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="#" class="d-flex align-items-center">
+            <a href="https://wa.me/84979997559" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/viber.svg" />
               <span>Viber</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="#" class="d-flex align-items-center">
+            <a href="https://t.me/KINGGEMS1303" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/telegram-icon.svg" />
               <span>Telegram</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="#" class="d-flex align-items-center">
+            <a href="https://u.wechat.com/IK-OOlb-deUWqmVLUAnz-GA" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/wechat-icon.svg" />
               <span>Wechat</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="#" class="d-flex align-items-center">
+            <a href="https://line.me/ti/p/6MOHXdDoCg" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/line.svg" />
               <span>Line</span>
             </a>

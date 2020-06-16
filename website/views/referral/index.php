@@ -33,11 +33,13 @@ $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
            target="_blank" title="Share on Twitter"><img class="icon-md" src="/images/icon/twitter.svg">
         </a>
       </li>
-      <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/instagram.svg"></a></li>
+      <!-- <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/instagram.svg"></a></li> -->
       <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/gmail.svg"></a></li>
-      <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/wechat-icon.svg"></a></li>
-      <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/whatsapp-icon.svg"></a></li>
-      <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/telegram-icon.svg"></a></li>
+      <!-- <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/wechat-icon.svg"></a></li> -->
+      <!-- <li class="list-inline-item"><a href="whatsapp://send?text=<?=$link;?>" data-action="share/whatsapp/share" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+           target="_blank" title="Share on Whatsapp"><img class="icon-md" src="/images/icon/whatsapp-icon.svg"></a></li> -->
+      <li class="list-inline-item"><a href="https://t.me/share/url?url=<?=$link;?>&text=Kinggems Title" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+           target="_blank" title="Share on Telegram"><img class="icon-md" src="/images/icon/telegram-icon.svg"></a></li>
 
     </ul>
   </div>

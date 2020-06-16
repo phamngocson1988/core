@@ -63,4 +63,38 @@ class OrderController extends Controller
         $order = Order::findOne($id);
         return $this->renderPartial('detail', ['order' => $order]);
     }
+
+    public function actionCancel($id)
+    {
+        // $order = Order::findOne(['auth_key' => $key]);
+        // if (!$order) throw new NotFoundHttpException('Order is invalid');
+        // // Save cancel request
+        // $request = Yii::$app->request;
+        // $order->on(Order::EVENT_AFTER_UPDATE, function ($event) {
+        //     $o = $event->sender;
+        //     $o->log(sprintf("Sent cancel request"));
+        //     // Send notification to saler
+        //     $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+        //     $o->pushNotification(OrderNotification::NOTIFY_SALER_CANCEL_ORDER, $salerTeamIds);
+
+        //     // Send notification to orderteam
+        //     $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
+        //     $o->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_CANCEL_ORDER, $orderTeamIds);
+
+        //     // Send notification to supplier
+        //     $supplier = $o->workingSupplier;
+        //     if ($supplier) {
+        //         $o->pushNotification(OrderNotification::NOTIFY_SUPPLIER_CANCEL_ORDER, $supplier->supplier_id);
+        //     }
+        // });
+        // $order->setScenario(Order::SCENARIO_CANCELORDER);
+        // $order->request_cancel = 1;
+        // $order->request_cancel_time = date('Y-m-d H:i:s');
+        // $order->request_cancel_description = $request->post('content');
+        // if ($order->save()) {
+        //     return $this->renderJson(true, []);
+        // } else {
+        //     return $this->renderJson(false, [], $order->getErrorSummary(true));
+        // }
+    }
 }

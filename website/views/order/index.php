@@ -29,6 +29,9 @@ use yii\widgets\ActiveForm;
         </tr>
       </thead>
       <tbody>
+        <?php if (!$verifyingOrders) : ?>
+        <tr><td class="text-center" colspan="9">No data found.</td></tr>
+        <?php endif;?>
       	<?php foreach ($verifyingOrders as $order) : ?>
         <tr>
           <th scope="row">
@@ -100,6 +103,9 @@ use yii\widgets\ActiveForm;
         </tr>
       </thead>
       <tbody>
+        <?php if (!$orders) : ?>
+        <tr><td class="text-center" colspan="8">No data found.</td></tr>
+        <?php endif;?>
       	<?php foreach ($orders as $order) : ?>
         <tr>
           <th scope="row">
