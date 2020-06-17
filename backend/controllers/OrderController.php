@@ -804,6 +804,7 @@ class OrderController extends Controller
         //     $supplierList[$supplierId] = sprintf("%s - Price %s - Completed %s - Average %s", $supplierName, number_format($price), $count, $avgTimeFormat);
         // }
         foreach ($supplierPrice as $supplierId => $price) {
+            if (!isset($suppliers[$supplierId])) continue;
             $supplier = $suppliers[$supplierId];
             $supplierName = $supplier->user->name;
             $count = ArrayHelper::getValue($processingOrder, $supplierId, 0);

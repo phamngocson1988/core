@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-use frontend\components\cart\CartItem;
 use common\components\helpers\FormatConverter;
 
 $this->registerMetaTag(['property' => 'og:image', 'content' => $game->getImageUrl('150x150')], 'og:image');
@@ -23,12 +22,15 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
       <div class="content p-4">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">danh muc games</a></li>
-            <li class="breadcrumb-item active" aria-current="page">tieu de game</li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <?php if ($game->hasCategory()) : ?>
+            <?php $category =  reset($game->categories);?>
+            <li class="breadcrumb-item"><a href="javascript:;"><?=$category->name;?></a></li>
+            <?php endif;?>
+            <li class="breadcrumb-item active" aria-current="page"><?=$game->title;?></li>
           </ol>
         </nav>
-        <h1 class="text-red mb-0">Playerunknown's Battlegrounds</h1>
+        <h1 class="text-red mb-0"><?=$game->title;?></h1>
         <p class="lead">Pack name here</p>
         <div class="btn-group-toggle multi-choose d-flex" data-toggle="buttons">
           <label class="btn flex-fill w-100 mr-2 btn-secondary active">
