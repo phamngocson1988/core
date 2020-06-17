@@ -13,6 +13,7 @@ use website\models\Promotion;
 
 // form
 use website\forms\FetchGameForm;
+use website\components\cart\CartItem;
 
 /**
  * GameController
@@ -41,10 +42,10 @@ class GameController extends Controller
     {
     	$request = Yii::$app->request;
         $game = Game::findOne($id);
-        $form = new \website\forms\AddCartForm(['game_id' => $id]);
+        $model = new CartItem(['game_id' => $id]);
     	return $this->render('view', [
             'game' => $game,
-            'model' => $form
+            'model' => $model
         ]);
     }
 

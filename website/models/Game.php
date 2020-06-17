@@ -2,9 +2,19 @@
 namespace website\models;
 
 use yii\db\ActiveQuery;
+use website\behaviors\GamePriceBehavior;
 
 class Game extends \common\models\Game
 {
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        return array_merge($behaviors, [
+            'price' => GamePriceBehavior::className(),
+        ]);
+    }
+
 	public static function find()
 	{
 		return new GameQuery(get_called_class());

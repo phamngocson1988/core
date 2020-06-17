@@ -7,165 +7,109 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\models\Game;
 
-class CartItem extends Game implements CartItemInterface
+class CartItem extends Model implements CartItemInterface
 {
-    public $quantity;
+    const SCENARIO_CALCULATE_CART = 'SCENARIO_CALCULATE_CART';
+    const SCENARIO_ADD_CART = 'SCENARIO_ADD_CART';
+    const SCENARIO_UPDATE_CART = 'SCENARIO_UPDATE_CART';
+
+    public $game_id;
+    public $quantity = 1;
     public $username;
     public $password;
     public $character_name;
     public $recover_code;
     public $server;
     public $note;
-    public $platform;
     public $login_method;
-    public $raw;
-    public $reception_email;
-    /* Saler */
-    public $saler_code;
-
-    const SCENARIO_ADD_CART = 'add_cart';
-    const SCENARIO_EDIT_CART = 'edit_cart';
-    const SCENARIO_INFO_CART = 'info_cart';
-    const SCENARIO_RECEPTION_CART = 'reception_cart';
-    const SCENARIO_IMPORT_CART = 'import_cart';
-    const SCENARIO_IMPORT_RAW = 'import_raw';
-
-    public static $quantites = [
-        '0.5' => 0.5, 
-        1 => 1, 
-        '1.5' => 1.5, 
-        2 => 2, 
-        '2.5' => 2.5, 
-        3 => 3, 
-        '3.5' => 3.5, 
-        4 => 4, 
-        '4.5' => 4.5, 
-        5 => 5, 
-        '5.5' => 5.5, 
-        6 => 6, 
-        '6.5' => 6.5, 
-        7 => 7, 
-        '7.5' => 7.5, 
-        8 => 8, 
-        '8.5' => 8.5, 
-        9 => 9, 
-        '9.5' => 9.5, 
-        10 => 10, 
-        '10.5' => 10.5, 
-        11 => 11, 
-        '11.5' => 11.5, 
-        12 => 12, 
-        '12.5' => 12.5, 
-        13 => 13, 
-        '13.5' => 13.5, 
-        14 => 14,
-        '14.5' => 14.5,
-        15 => 15,
-        '15.5' => 15.5,
-        16 => 16,
-        '16.5' => 16.5,
-        17 => 17,
-        '17.5' => 17.5,
-        18 => 18,
-        '18.5' => 18.5,
-        19 => 19,
-        '19.5' => 19.5,
-        20 => 20,
-        25 => 25,
-        30 => 30,
-        35 => 35,
-        40 => 40,
-        45 => 45,
-        50 => 50,
-    ];
-
-    public function init()
-    {
-        $this->quantity = ($this->quantity > 0) ? $this->quantity : 1;
-        $this->platform = ($this->platform) ? $this->platform : 'android';
-    }
+    public $voucher;
+    protected $_game;
 
     public function scenarios()
     {
         return [
-            self::SCENARIO_ADD_CART => ['id', 'quantity'],
-            self::SCENARIO_EDIT_CART => ['id', 'quantity'],
-            self::SCENARIO_INFO_CART => ['id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note', 'saler_code'],
-            self::SCENARIO_IMPORT_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
-            self::SCENARIO_RECEPTION_CART => ['id', 'reception_email'],
-            self::SCENARIO_IMPORT_RAW => ['id', 'raw', 'quantity'],
+            self::SCENARIO_CALCULATE_CART => ['game_id', 'quantity', 'voucher'],
+            self::SCENARIO_ADD_CART => ['game_id', 'quantity'],
+            self::SCENARIO_UPDATE_CART => ['game_id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'note', 'voucher'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['id'], 'required'],
-            [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT_CART, self::SCENARIO_ADD_CART, self::SCENARIO_IMPORT_CART, self::SCENARIO_IMPORT_RAW]],
+            [['game_id', 'quantity'], 'required'],
+            ['game_id', 'validateGame'],
             ['quantity', 'number'],
+            [['server', 'note', 'login_method', 'recover_code', 'voucher'], 'trim'],
+            [['username', 'password', 'character_name'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
 
-            [['username', 'password', 'character_name', 'platform'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
-            [['server', 'note', 'login_method', 'recover_code'], 'trim', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
-            ['recover_code', 'required', 'whenClient' => "function (attribute, value) {
-                return $('#login_method').val() != 'account';
-                return ['facebook', 'google'].includes($('#login_method').val());
-            }",
-            'when' =>  [$this, 'validateRecoverCode'],
-            'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART],
-            'message' => 'Recover code is required in case you choose facebook/google'
-            ],
-            ['recover_code', 'match', 'pattern' => '/^\d{8}(\s\d{8})*$/i', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART], 'message' => 'Recovery codes are invalid.'],
-
-            ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART],
-            ['saler_code', 'trim', 'on' => self::SCENARIO_INFO_CART],
-            ['raw', 'required', 'on' => self::SCENARIO_IMPORT_RAW],
         ];
     }
 
-    public function validateRecoverCode($model) 
+    public function validateGame($attribute, $params = [])
     {
-        return in_array($model->login_method, ['facebook', 'google']);
+        $game = $this->getGame();
+        if (!$game) {
+            $this->addError($attribute, 'This game is not found.');
+            return;
+        }
     }
 
-    public function getTotalPrice()
+    public function getGame()
     {
-        return $this->getPrice() * (float)$this->quantity;
+        if (!$this->_game) {
+            $this->_game = Game::findOne($this->game_id);
+        }
+        return $this->_game;
     }
 
-    public function getPrice()
+    public function fetchLoginMethod()
     {
-        if (Yii::$app->user->isGuest) return parent::getPrice();
-        $user = Yii::$app->user->getIdentity();
-        if (!$user->isReseller()) return parent::getPrice();
-        return $this->getResellerPrice($user->reseller_level);
+        return [
+            'facebook' => 'Facebook',
+            'google' => 'Google',
+            'other' => 'Other methods',
+        ];
     }
 
-    public function getTotalOriginalPrice()
+    public function fetchPlatform()
     {
-        return $this->getOriginalPrice() * (float)$this->quantity;
+        return [
+            'android' => 'Android',
+            'ios' => 'IOS'
+        ];
     }
 
-    public function getTotalUnit()
+    /**
+     * Returns the price for the cart item
+     */
+    public function getPrice() 
     {
-        $pack = $this->pack;
+        $game = $this->getGame();
         $quantity = $this->quantity;
-        return $pack * $quantity;
+        return $game->getPrice() * $quantity;
     }
 
-    // ============== implement interface ===========//
-    // public function getPrice()
-    // {
-    //     // return (int)$this->price;
-    //     return $this->getPrice();
-    // }
-
-    public function getLabel()
+    /**
+     * Returns the label for the cart item (displayed in cart etc)
+     *
+     * @return int|string
+     */
+    public function getLabel() 
     {
-        return $this->title;
+        $game = $this->getGame();
+        return $game->title;
     }
 
-    public function getUniqueId()
+    /**
+     * Returns unique id to associate cart item with product
+     *
+     * @return int|string
+     */
+    public function getUniqueId() 
     {
-        return 'item' . $this->id;
+        $game = $this->getGame();
+        return $game->id;
     }
+
 }

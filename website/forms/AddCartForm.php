@@ -9,7 +9,8 @@ use website\models\Game;
 class AddCartForm extends Model
 {
     public $game_id;
-    public $quantity;
+    public $quantity = 1;
+    public $voucher;
     protected $_game;
 
     public function rules()
@@ -17,7 +18,8 @@ class AddCartForm extends Model
         return [
             [['game_id', 'quantity'], 'required'],
             ['game_id', 'validateGame'],
-            ['quantity', 'number']
+            ['quantity', 'number'],
+            ['voucher', 'trim']
         ];
     }
 
@@ -40,6 +42,20 @@ class AddCartForm extends Model
 
     public function add()
     {
+        $cart = Yii::$app->cart;
+        $cart->clear();
+        $item = new \website\components\cart\CartItem([
+            'game' => $this->getGame(),
+            'quantity' => $this->quantity
+        ]);
+        $cart->add($item);
+    }
+
+    public function calculate()
+    {
+        $game = $this->getGame();
+        $quantity = $this->quantity;
+        return $game->getPrice() * $quantity;
     }
 }
 

@@ -13,9 +13,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
   <div class="d-flex justify-content-between align-items-centert bg-white">
     <div class="w-50 flex-fill">
       <div class="single-img-slider">
-        <img class="single-img" src="/images/single-img.jpg" />
-        <img class="single-img" src="/images/single-img.jpg" />
-        <img class="single-img" src="/images/single-img.jpg" />
+        <img class="single-img" src="<?=$game->getImageUrl('555x691');?>" />
       </div>
     </div>
     <div class="w-50 flex-fill">
@@ -44,7 +42,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
           </label>
         </div>
         <div class="price py-3">
-          <span class="price-value text-red mr-2">$34</span>
+          <span class="price-value text-red mr-2" id="price">$<?=number_format($model->getPrice());?></span>
           <span class="badge badge-danger">save 70%</span>
           <span class="btn-group-toggle bell" data-toggle="buttons">
             <label class="btn">
@@ -106,23 +104,25 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
           </div>
         </div>
 
+        <?php $form = ActiveForm::begin(['action' => Url::to(['cart/add', 'id' => $model->game_id]), 'options' => ['id' => 'add-cart-form', 'data-calculatecart-url' => Url::to(['cart/calculate', 'id' => $model->game_id])]]);?>
         <div class="multi-button d-flex justify-content-between align-items-center">
           <div class="w-100 flex-fill p-2">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-100 flex-fill">Quanity</div>
-              <div class="w-100 flex-fill">
-                <input type="number" class="form-control" id="" aria-describedby="">
-              </div>
-            </div>
+            <?= $form->field($model, 'quantity', [
+              'options' => ['class' => 'd-flex justify-content-between align-items-center'],
+              'labelOptions' => ['class' => 'w-100 flex-fill'],
+              'template' => '{label}<div class="w-100 flex-fill">{input}</div>',
+              'inputOptions' => ['class' => 'form-control', 'type' => 'number', 'id' => 'quantity']
+            ])->textInput()->label('Quanity') ?>
           </div>
           <div class="w-100 flex-fill p-2">
-            <button type="button" class="btn btn-buy">Buy now</button>
+            <button type="submit" class="btn btn-buy">Buy now</button>
           </div>
           <div class="w-100 flex-fill p-2">
             <button type="button" class="btn btn-quickbuy"><img class="icon-sm" src="/images/icon/timer.svg" /> Quick
               Buy</button>
           </div>
         </div>
+        <?php ActiveForm::end(); ?>
         <hr />
         <div class="multi-rating d-flex justify-content-between align-items-center">
           <div class="p-2 flex-fill bd-highlight">
@@ -799,3 +799,31 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
     </div><!-- END POST ITEM -->
   </div> <!-- END POST SLIDER -->
 </div><!-- END container -->
+
+<?php
+$script = <<< JS
+// Review Form
+function calculateCart() {
+  var form = $('form#add-cart-form');
+  var calculateUrl = form.data('calculatecart-url');
+  $.ajax({
+      url: calculateUrl,
+      type: 'POST',
+      dataType : 'json',
+      data: form.serialize(),
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            toastr.error(errors);
+        } else {
+            $('#price').html('$' + result.data.amount);
+        }
+      },
+  });
+}
+$('#quantity').on('change', function() {  
+  calculateCart();
+});
+
+JS;
+$this->registerJs($script);
+?>

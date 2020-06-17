@@ -90,13 +90,6 @@ return [
                 // 'deleteIfEmpty' => true
             ]
         ],
-        'kingcoin' => [
-            'class' => 'website\components\kingcoin\Cart',
-            'storageClass' => [
-                'class' => 'yii2mod\cart\storage\DatabaseStorage',
-                'deleteIfEmpty' => true
-            ]
-        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@website/mail',
