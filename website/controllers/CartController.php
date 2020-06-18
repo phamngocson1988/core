@@ -10,6 +10,8 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
 use website\components\cart\CartItem;
+use website\models\Paygate;
+use website\models\Order;
 
 class CartController extends Controller
 {
@@ -22,7 +24,7 @@ class CartController extends Controller
         $model = new CartItem(['game_id' => $id]);
         $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $amount = $model->getPrice();
+            $amount = $model->getTotalPrice();
             return $this->asJson(['status' => true, 'data' => ['amount' => number_format($amount, 1)]]);
         } else {
             $message = $model->getErrorSummary(true);
@@ -60,11 +62,35 @@ class CartController extends Controller
             $cart = Yii::$app->cart;
             $cart->clear();
             $cart->add($model);
-            return $this->redirect(['cart/confirm']);
+            return $this->redirect(['cart/checkout']);
         }
         return $this->render('index', [
             'model' => $model,
             'game' => $game,
+        ]);
+    }
+
+    public function actionCheckout()
+    {
+        $cart = Yii::$app->cart;
+        $model = $cart->getItem();
+        $game = $model->getGame();
+        $user = Yii::$app->user->getIdentity();
+        $balance = $user->getWalletAmount();
+        $canPlaceOrder = $balance >= $cart->getTotalPrice();
+        $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+
+        // if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        //     $model-
+        //     return $this->redirect(['cart/checkout']);
+        // }
+
+        return $this->render('checkout', [
+            'model' => $model,
+            'game' => $game,
+            'can_place_order' => $canPlaceOrder,
+            'balance' => $balance,
+            'paygates' => $paygates,
         ]);
     }
 }

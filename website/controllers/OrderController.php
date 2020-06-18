@@ -97,4 +97,25 @@ class OrderController extends Controller
         //     return $this->renderJson(false, [], $order->getErrorSummary(true));
         // }
     }
+
+    public function actionView() 
+    {
+        $request = Yii::$app->request;
+        $id = $request->get('id');
+        $order = Order::findOne($id);
+        if (!$order) {
+            return $this->asJson(['status' => false, 'errors' => 'Order is not found']);
+        }
+        if ($order->customer_id != Yii::$app->user->id) {
+            return $this->asJson(['status' => false, 'errors' => 'Order is not found']);
+        }
+        $paygate = Paygate::find()->where(['identifier' => $order->payment_method])->one();
+        $model = new \website\forms\UpdateOrderForm(['id' => $id]);
+        $model->loadData();
+        return $this->asJson(['status' => true, 'data' => $this->renderPartial('view', [
+            'payment' => $payment,
+            'paygate' => $paygate,
+            'model' => $model,
+        ])]);
+    }
 }

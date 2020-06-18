@@ -93,7 +93,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <tr>
                 <th> Mã đơn hàng </th>
                 <th> Tên game </th>
-                <th> Số gói </th>
                 <th> Chờ nhận đơn </th>
                 <th> Chờ login </th>
                 <th> Chờ phản hồi </th>
@@ -103,14 +102,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <?php $order = $model->order;?>
                 <tr>
                   <td class="center" style="max-width: none">#<?=$model->order_id;?></td>
                   <td class="center"><?=$model->getGameTitle();?></td>
-                  <td class="center"><?=$model->quantity;?></td>
                   <td class="center"><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
                   <td class="center"><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->approved_at), 'h:i');?></td>
                   <td class="center">

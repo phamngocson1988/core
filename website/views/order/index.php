@@ -154,6 +154,17 @@ use yii\widgets\ActiveForm;
   </div>
 </div>
 <!-- end modal order detail -->
+
+<!-- Modal order view-->
+<div class="modal fade modal-kg" id="paymentGame" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      
+    </div>
+  </div>
+</div>
+<!-- end modal order view -->
+
 <?php
 $script = <<< JS
 $('#detailOrder').on('show.bs.modal', function (e) {

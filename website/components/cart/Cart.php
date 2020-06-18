@@ -17,4 +17,16 @@ class Cart extends \yii2mod\cart\Cart
         $items = $this->getItems($itemType);
         return reset($items);
     }
+
+    public function getSubTotalPrice()
+    {
+        $item = $this->getItem();
+        return $item->getTotalPrice();
+    }
+
+    public function getTotalPrice()
+    {
+        $item = $this->getItem();
+        return $item->getTotalPrice();
+    }
 }

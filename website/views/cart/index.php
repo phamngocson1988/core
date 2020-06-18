@@ -77,14 +77,14 @@ use yii\bootstrap\ActiveForm;
         <img class="thumb flex-fill mr-3" src="<?=$game->getImageUrl('100x100');?>" />
         <ul class="flex-fill list-unstyled mr-auto mb-0 w-100">
           <li><?=$game->title;?></li>
-          <li><span class="text-bold text-green">600 GEMS</span></li>
+          <li><span class="text-bold text-green" data-target='total-unit'><?=sprintf("%s %s", number_format($model->getTotalUnit()), strtoupper($model->getUnitName()));?></span></li>
           <li>Version Global</li>
         </ul>
         <div class="flex-fill w-100">
           <div class="d-flex justify-content-between align-items-center">
             <div class="flex-fill w-100 p-2">
               <p class="m-0 text-red font-weight-bold"><strike>$100.0</strike></p>
-              <p class="m-0 text-red font-weight-bold" data-target='price'>$<?=number_format($model->getPrice(), 1);?></p>
+              <p class="m-0 text-red font-weight-bold" data-target='price'>$<?=number_format($model->getTotalPrice(), 1);?></p>
             </div>
             <div class="flex-fill w-100">
               <?= $form->field($model, 'quantity', [

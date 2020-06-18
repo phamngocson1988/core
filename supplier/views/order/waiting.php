@@ -106,38 +106,38 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
         <?php ActiveForm::end()?>
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
-          <thead>
-            <tr>
-              <th> Mã đơn hàng </th>
-              <th> Tên game </th>
-              <th> Số gói </th>
-              <th> Ngày đơn hàng gửi đến </th>
-              <th> Trạng thái </th>
-              <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+            <thead>
               <tr>
-                <td>#<?=$model->order_id;?></a></td>
-                <td><?=$model->getGameTitle();?></td>
-                <td><?=$model->quantity;?></td>
-                <td><?=$model->requested_at;?></td>
-                <td>
-                  <span class="label label-warning">Đang yêu cầu</span>
-                </td>
-                <td>
-                  <a href='<?=Url::to(['order/accept', 'id' => $model->id]);?>' class="btn btn-xs blue ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-check"></i></a>
-                  <a href='<?=Url::to(['order/reject', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Từ chối đơn hàng"><i class="fa fa-times"></i></a>
-                </td>
+                <th> Mã đơn hàng </th>
+                <th> Tên game </th>
+                <th> Ngày đơn hàng gửi đến </th>
+                <th> Trạng thái </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $model) :?>
+                <tr>
+                  <td>#<?=$model->order_id;?></a></td>
+                  <td><?=$model->getGameTitle();?></td>
+                  <td><?=$model->requested_at;?></td>
+                  <td>
+                    <span class="label label-warning">Đang yêu cầu</span>
+                  </td>
+                  <td>
+                    <a href='<?=Url::to(['order/accept', 'id' => $model->id]);?>' class="btn btn-xs blue ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-check"></i></a>
+                    <a href='<?=Url::to(['order/reject', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Từ chối đơn hàng"><i class="fa fa-times"></i></a>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

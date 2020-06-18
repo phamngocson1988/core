@@ -80,14 +80,39 @@ class CartItem extends Model implements CartItemInterface
         ];
     }
 
+    public function getUnit() 
+    {
+        $game = $this->getGame();
+        return $game->pack;
+    }
+
+    public function getTotalUnit()
+    {
+        $unit = $this->getUnit();
+        $quantity = $this->quantity;
+        return $unit * $quantity;
+    }
+
+    public function getUnitName()
+    {
+        $game = $this->getGame();
+        return $game->unit_name;
+    }
+
+    public function getTotalPrice()
+    {
+        $game = $this->getGame();
+        $quantity = $this->quantity;
+        return $game->getPrice() * $quantity;
+    }
+
     /**
      * Returns the price for the cart item
      */
     public function getPrice() 
     {
         $game = $this->getGame();
-        $quantity = $this->quantity;
-        return $game->getPrice() * $quantity;
+        return $game->getPrice();
     }
 
     /**
