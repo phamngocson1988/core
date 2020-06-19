@@ -20,7 +20,7 @@ class UserWalletBehavior extends AttributeBehavior
         $wallet->user_id = $user->id;
         $wallet->status = UserWallet::STATUS_COMPLETED;
         $wallet->payment_at = date('Y-m-d H:i:s');
-        $wallet->save();
+        return $wallet->save();
     }
 
     public function topup($amount, $refId = null, $description = '', $status = UserWallet::STATUS_COMPLETED)
@@ -37,7 +37,7 @@ class UserWalletBehavior extends AttributeBehavior
         $wallet->user_id = $user->id;
         $wallet->status = $status;
         $wallet->payment_at = date('Y-m-d H:i:s');
-        $wallet->save();
+        return $wallet->save();
     }
 
     public function walletBalance() 

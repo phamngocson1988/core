@@ -68,14 +68,16 @@ class WalletPaymentForm extends Model
         $voucherApply = false;
         $bonusKingcoin = 0;
 
-        $fee = $paygate->transfer_fee;
-        if ($fee) {
-            $type = $paygate->transfer_fee_type;
-            $transferFee = $type == 'fix' ? $fee : number_format($fee * $subTotalPayment / 100, 1);
-            $totalPayment += $transferFee;
-        } else {
-            $transferFee = 0;
-        }
+        // $fee = $paygate->transfer_fee;
+        // if ($fee) {
+        //     $type = $paygate->transfer_fee_type;
+        //     $transferFee = $type == 'fix' ? $fee : number_format($fee * $subTotalPayment / 100, 1);
+        //     $totalPayment += $transferFee;
+        // } else {
+        //     $transferFee = 0;
+        // }
+        $transferFee = $paygate->getFee($subTotalPayment);
+        $totalPayment += $transferFee;
         return [
             'subTotalKingcoin' => number_format($subTotalKingcoin, 1),
             'bonusKingcoin' => number_format($bonusKingcoin, 1),

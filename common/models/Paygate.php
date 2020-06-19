@@ -63,4 +63,15 @@ class Paygate extends ActiveRecord
         }
         return $image->getUrl($size);
     }
+
+    public function getFee($amount) 
+    {
+        $fee = $this->transfer_fee;
+        if ($fee) {
+            $type = $this->transfer_fee_type;
+            return $type == 'fix' ? $fee : number_format($fee * $amount / 100, 1);
+        } else {
+            return 0;
+        }
+    }
 }
