@@ -216,6 +216,17 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    public function actionTerm($slug)
+    {
+        $this->view->params['body_class'] = 'global-bg';
+        $request = Yii::$app->request;
+        $content = Yii::$app->settings->get('TermsConditionForm', $slug);
+        if ($request->isAjax) {
+            return $this->renderParital('term', ['content' => $content]);
+        }
+        return $this->render('term', ['content' => $content]);
+    }
+
     public function onAuthSuccess($client)
     {
         (new AuthHandler($client))->handle();

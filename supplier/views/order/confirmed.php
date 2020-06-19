@@ -124,14 +124,14 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <td>#<?=$model->order_id;?></td>
-                  <td><?=$model->getGameTitle();?></td>
-                  <td><?=$model->doing;?></td>
-                  <td><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
-                  <td><?=FormatConverter::countDuration(strtotime($model->processing_at) - strtotime($model->approved_at), 'h:i');?></td>
-                  <td><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->processing_at), 'h:i');?></td>
-                  <td><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->created_at), 'h:i');?></td>
-                  <td>
+                  <td class="center" style="max-width: none">#<?=$model->order_id;?></td>
+                  <td class="center"><?=$model->getGameTitle();?></td>
+                  <td class="center"><?=$model->doing;?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->processing_at) - strtotime($model->approved_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->processing_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->created_at), 'h:i');?></td>
+                  <td class="center">
                     <span class="label label-default">Confirmed</span>
                   </td>
                 </tr>

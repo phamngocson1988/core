@@ -7,13 +7,12 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\models\Game;
 
-class CartItem extends Model implements CartItemInterface
+class CartItem extends Game implements CartItemInterface
 {
     const SCENARIO_CALCULATE_CART = 'SCENARIO_CALCULATE_CART';
     const SCENARIO_ADD_CART = 'SCENARIO_ADD_CART';
     const SCENARIO_UPDATE_CART = 'SCENARIO_UPDATE_CART';
 
-    public $game_id;
     public $quantity = 1;
     public $username;
     public $password;
@@ -28,39 +27,20 @@ class CartItem extends Model implements CartItemInterface
     public function scenarios()
     {
         return [
-            self::SCENARIO_CALCULATE_CART => ['game_id', 'quantity', 'voucher'],
-            self::SCENARIO_ADD_CART => ['game_id', 'quantity'],
-            self::SCENARIO_UPDATE_CART => ['game_id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'note', 'voucher'],
+            self::SCENARIO_CALCULATE_CART => ['id', 'quantity', 'voucher'],
+            self::SCENARIO_ADD_CART => ['id', 'quantity'],
+            self::SCENARIO_UPDATE_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'note', 'voucher'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['game_id', 'quantity'], 'required'],
-            ['game_id', 'validateGame'],
             ['quantity', 'number'],
-            [['server', 'note', 'login_method', 'recover_code', 'voucher'], 'trim'],
-            [['username', 'password', 'character_name'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
+            [['server', 'note', 'recover_code', 'voucher'], 'trim'],
+            [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
 
         ];
-    }
-
-    public function validateGame($attribute, $params = [])
-    {
-        $game = $this->getGame();
-        if (!$game) {
-            $this->addError($attribute, 'This game is not found.');
-            return;
-        }
-    }
-
-    public function getGame()
-    {
-        if (!$this->_game) {
-            $this->_game = Game::findOne($this->game_id);
-        }
-        return $this->_game;
     }
 
     public function fetchLoginMethod()
@@ -82,8 +62,7 @@ class CartItem extends Model implements CartItemInterface
 
     public function getUnit() 
     {
-        $game = $this->getGame();
-        return $game->pack;
+        return $this->pack;
     }
 
     public function getTotalUnit()
@@ -95,15 +74,18 @@ class CartItem extends Model implements CartItemInterface
 
     public function getUnitName()
     {
-        $game = $this->getGame();
-        return $game->unit_name;
+        return $this->unit_name;
+    }
+
+    public function getTotalOriginalPrice()
+    {
+        return $this->getOriginalPrice() * $this->quantity;
     }
 
     public function getTotalPrice()
     {
-        $game = $this->getGame();
         $quantity = $this->quantity;
-        return $game->getPrice() * $quantity;
+        return $this->getPrice() * $quantity;
     }
 
     /**
@@ -111,8 +93,7 @@ class CartItem extends Model implements CartItemInterface
      */
     public function getPrice() 
     {
-        $game = $this->getGame();
-        return $game->getPrice();
+        return parent::getPrice();
     }
 
     /**
@@ -122,8 +103,7 @@ class CartItem extends Model implements CartItemInterface
      */
     public function getLabel() 
     {
-        $game = $this->getGame();
-        return $game->title;
+        return $this->title;
     }
 
     /**
@@ -133,8 +113,7 @@ class CartItem extends Model implements CartItemInterface
      */
     public function getUniqueId() 
     {
-        $game = $this->getGame();
-        return $game->id;
+        return $this->id;
     }
 
 }

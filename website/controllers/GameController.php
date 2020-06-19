@@ -41,10 +41,8 @@ class GameController extends Controller
     public function actionView($id)
     {
     	$request = Yii::$app->request;
-        $game = Game::findOne($id);
-        $model = new CartItem(['game_id' => $id]);
+        $model = CartItem::findOne($id);
     	return $this->render('view', [
-            'game' => $game,
             'model' => $model
         ]);
     }

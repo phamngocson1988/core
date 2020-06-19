@@ -10,6 +10,7 @@ use website\models\Order;
 use website\models\UserWallet;
 use common\components\helpers\FormatConverter;
 use website\components\payment\PaymentGatewayFactory;
+use website\components\notifications\OrderNotification;
 // Notification
 
 class OrderPaymentForm extends Model
@@ -83,10 +84,10 @@ class OrderPaymentForm extends Model
 
         $cart = $this->cart;
         $cartItem = $cart->getItem();
-        $game = $cartItem->getGame();
         $subTotalPrice = $cart->getSubTotalPrice();
-        $totalPrice = $cart->getTotalPrice();
-        $cogsPrice = $game->getCogs();
+        $fee = $paygate->getFee($subTotalPrice);
+        $totalPrice = $cart->getTotalPrice() + $fee;
+        $cogsPrice = $cartItem->getCogs();
         $totalUnit = $cartItem->getTotalUnit();
 
         // Create order
@@ -123,10 +124,10 @@ class OrderPaymentForm extends Model
             $order->generateAuthKey();
 
             // Item detail
-            $order->game_id = $game->id;
-            $order->game_title = $game->title;
+            $order->game_id = $cartItem->id;
+            $order->game_title = $cartItem->getLabel();
             $order->quantity = $cartItem->quantity;
-            $order->unit_name = $game->unit_name;
+            $order->unit_name = $cartItem->getUnitName();
             $order->sub_total_unit = $totalUnit;
             $order->promotion_unit = 0;
             $order->total_unit = $totalUnit;

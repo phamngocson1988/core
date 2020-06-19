@@ -123,15 +123,15 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <tr>
-                  <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
-                  <td><?=$model->getGameTitle();?></td>
-                  <td><?=$model->quantity;?></td>
-                  <td><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->processing_at), 'h:i');?></td>
-                  <td><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->created_at), 'h:i');?></td>
-                  <td>
+                  <td class="center" style="max-width: none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
+                  <td class="center"><?=$model->getGameTitle();?></td>
+                  <td class="center"><?=$model->quantity;?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->processing_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->created_at), 'h:i');?></td>
+                  <td class="center">
                     <span class="label label-default">Processing</span>
                   </td>
-                  <td>
+                  <td class="center">
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   </td>
                 </tr>

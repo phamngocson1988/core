@@ -28,7 +28,7 @@ use yii\bootstrap\ActiveForm;
   </div>
 </div>
 <div class="container my-5 single-order">
-  <?php $form = ActiveForm::begin(['options' => ['id' => 'update-cart-form', 'data-calculatecart-url' => Url::to(['cart/calculate', 'id' => $model->game_id])]]);?>
+  <?php $form = ActiveForm::begin(['options' => ['id' => 'update-cart-form', 'data-calculatecart-url' => Url::to(['cart/calculate', 'id' => $model->id])]]);?>
   <div class="row">
     <div class="col-md-5 info">
       <p class="lead mb-2">Infomation Character</p>
@@ -56,17 +56,17 @@ use yii\bootstrap\ActiveForm;
       <p><small>(*) The recovery code should contain 8 degits, and kindly provide at cleast 3 codes. <br />
         Ex: 12345678 12345678 12345678</small></p>
         <p>
-          <a class="text-red mr-4" href="#">How to get Google Code?</a><a class="text-red" href="#">How to get Facebook Code?</a>
+          <a class="text-red mr-4" href="https://youtu.be/F3xMAXFRHNE" target="_blank">How to get Google Code?</a><a class="text-red" href="https://youtu.be/sG1GAcsslzs" target="_blank">How to get Facebook Code?</a>
         </p>
         <?= $form->field($model, 'note')->textInput(['placeholder' => 'Special note (optional)'])->label(false) ?>
 
         <div class="custom-control custom-checkbox mb-3">
-          <input type="checkbox" class="custom-control-input" id="customCheck1">
-          <label class="custom-control-label" for="customCheck1">I confirm that by making this purchase, I understand and aggree with <a class="text-red" href="#">the lossing sharing term</a></label>
+          <input type="checkbox" class="custom-control-input" id="policy1">
+          <label class="custom-control-label" for="policy1">I confirm that by making this purchase, I understand and aggree with <a class="text-red" href="<?=Url::to(['site/term', 'slug' => 'risk']);?>">the lossing sharing term</a></label>
         </div>
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="customCheck2">
-          <label class="custom-control-label" for="customCheck2">By making this purchase, I’m confirming that I totally under-stand <a class="text-red" href="#">no refund policy</a></label>
+          <input type="checkbox" class="custom-control-input" id="policy2">
+          <label class="custom-control-label" for="policy2">By making this purchase, I’m confirming that I totally under-stand <a class="text-red" href="<?=Url::to(['site/term', 'slug' => 'no_refund']);?>">no refund policy</a></label>
         </div>
     </div>
     <div class="col-md-7">
@@ -74,16 +74,16 @@ use yii\bootstrap\ActiveForm;
       <hr/>
       <!-- ORDER ITEM -->
       <div class="order-item mb-3 d-flex justify-content-between align-items-center">
-        <img class="thumb flex-fill mr-3" src="<?=$game->getImageUrl('100x100');?>" />
+        <img class="thumb flex-fill mr-3" src="<?=$model->getImageUrl('100x100');?>" />
         <ul class="flex-fill list-unstyled mr-auto mb-0 w-100">
-          <li><?=$game->title;?></li>
+          <li><?=$model->title;?></li>
           <li><span class="text-bold text-green" data-target='total-unit'><?=sprintf("%s %s", number_format($model->getTotalUnit()), strtoupper($model->getUnitName()));?></span></li>
           <li>Version Global</li>
         </ul>
         <div class="flex-fill w-100">
           <div class="d-flex justify-content-between align-items-center">
             <div class="flex-fill w-100 p-2">
-              <p class="m-0 text-red font-weight-bold"><strike>$100.0</strike></p>
+              <p class="m-0 text-red font-weight-bold"><strike data-target="origin">$<?=number_format($model->getTotalOriginalPrice());?></strike></p>
               <p class="m-0 text-red font-weight-bold" data-target='price'>$<?=number_format($model->getTotalPrice(), 1);?></p>
             </div>
             <div class="flex-fill w-100">
@@ -108,14 +108,14 @@ use yii\bootstrap\ActiveForm;
       <div class="card card-summary">
         <h5 class="card-header text-uppercase">Card summary</h5>
         <div class="card-body">
-          <p class="card-text text-red font-weight-bold">Game: <?=$game->title;?></p>
-          <p class="text-green card-text font-weight-bold"><?=sprintf("%s %s", number_format($model->getUnit()), strtoupper($model->getUnitName()));?> x <?=$model->quantity;?></p>
+          <p class="card-text text-red font-weight-bold">Game: <?=$model->title;?></p>
+          <p class="text-green card-text font-weight-bold" id="unit-game"><?=sprintf("%s %s", number_format($model->getUnit()), strtoupper($model->getUnitName()));?> x <span data-target="quantity"><?=$model->quantity;?></span></p>
           <p class="card-text">Version Global</p>
           <h5 class="card-title">Price Details</h5>
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?></div>
+            <div class="flex-fill w-100 text-right" data-target="price">$<?=number_format($model->getTotalPrice(), 1);?></div>
           </div>
           <div class="d-flex">
             <div class="flex-fill w-100 text-danger">Discount</div>
@@ -124,7 +124,7 @@ use yii\bootstrap\ActiveForm;
           <hr />
           <div class="d-flex mb-3">
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?></div>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right" data-target="price">$<?=number_format($model->getTotalPrice(), 1);?></div>
           </div>
           <button type="submit" class="btn btn-block btn-payment text-uppercase">Payment method</button>
         </div>
@@ -151,6 +151,9 @@ function calculateCart() {
             toastr.error(errors);
         } else {
             $('[data-target="price"]').html('$' + result.data.amount);
+            $('[data-target="origin"]').html('$' + result.data.origin);
+            $('[data-target="total-unit"]').html(result.data.unit);
+            $('[data-target="quantity"]').html($('#quantity').val());
         }
       },
   });
@@ -158,6 +161,13 @@ function calculateCart() {
 $('#quantity').on('change', function() {  
   calculateCart();
 });
+
+$('form#update-cart-form').on('submit', function() {
+  if (!$('#policy1').is(':checked') || !$('#policy2').is(':checked')) {
+    toastr.error('You need to agree with our policies');
+    return false;
+  }
+})
 
 JS;
 $this->registerJs($script);

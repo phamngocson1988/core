@@ -105,9 +105,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </div>
         </div>
         <?php ActiveForm::end()?>
-        <?php Pjax::begin(); ?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+          <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
               <tr>
                 <th> Mã đơn hàng </th>
@@ -123,13 +122,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <tr>
-                  <td>#<?=$model->order_id;?></a></td>
-                  <td><?=$model->getGameTitle();?></td>
-                  <td><?=$model->requested_at;?></td>
-                  <td>
+                  <td class="center" style="max-width: none">#<?=$model->order_id;?></a></td>
+                  <td class="center"><?=$model->getGameTitle();?></td>
+                  <td class="center"><?=$model->requested_at;?></td>
+                  <td class="center">
                     <span class="label label-warning">Đang yêu cầu</span>
                   </td>
-                  <td>
+                  <td class="center">
                     <a href='<?=Url::to(['order/accept', 'id' => $model->id]);?>' class="btn btn-xs blue ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-check"></i></a>
                     <a href='<?=Url::to(['order/reject', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Từ chối đơn hàng"><i class="fa fa-times"></i></a>
                   </td>
@@ -139,7 +138,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

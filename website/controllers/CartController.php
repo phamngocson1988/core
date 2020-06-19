@@ -21,11 +21,18 @@ class CartController extends Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        $model = new CartItem(['game_id' => $id]);
+        $model = CartItem::findOne($id);
         $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $amount = $model->getTotalPrice();
-            return $this->asJson(['status' => true, 'data' => ['amount' => number_format($amount, 1)]]);
+            $unit = $model->getTotalUnit();
+            $unitName = $model->getUnitName();
+            $origin = $model->getTotalOriginalPrice();
+            return $this->asJson(['status' => true, 'data' => [
+                'amount' => number_format($amount, 1),
+                'origin' => number_format($origin, 1),
+                'unit' => sprintf("%s %s", number_format($unit), strtoupper($unitName)),
+            ]]);
         } else {
             $message = $model->getErrorSummary(true);
             $message = reset($message);
@@ -37,7 +44,7 @@ class CartController extends Controller
     {
         $request = Yii::$app->request;
 
-        $model = new CartItem(['game_id' => $id]);
+        $model = CartItem::findOne($id);
         $model->setScenario(CartItem::SCENARIO_ADD_CART);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $cart = Yii::$app->cart;
@@ -56,7 +63,6 @@ class CartController extends Controller
     {
         $cart = Yii::$app->cart;
         $model = $cart->getItem();
-        $game = $model->getGame();
         $model->setScenario(CartItem::SCENARIO_UPDATE_CART);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $cart = Yii::$app->cart;
@@ -66,7 +72,6 @@ class CartController extends Controller
         }
         return $this->render('index', [
             'model' => $model,
-            'game' => $game,
         ]);
     }
 
@@ -79,10 +84,9 @@ class CartController extends Controller
         if ($checkoutForm->load($request->post()) && $checkoutForm->validate() && $id = $checkoutForm->purchase()) {
             return $this->redirect(['order/index', '#' => $id]);
         } else {
-            Yii::$app->session->setFlash('error', $checkoutForm->getErrors());
+            Yii::$app->session->setFlash('error', $checkoutForm->getErrorSummary(true));
         }
         $model = $cart->getItem();
-        $game = $model->getGame();
         $user = Yii::$app->user->getIdentity();
         $balance = $user->getWalletAmount();
         $canPlaceOrder = $balance >= $cart->getTotalPrice();
@@ -90,7 +94,6 @@ class CartController extends Controller
 
         return $this->render('checkout', [
             'model' => $model,
-            'game' => $game,
             'can_place_order' => $canPlaceOrder,
             'balance' => $balance,
             'paygates' => $paygates,

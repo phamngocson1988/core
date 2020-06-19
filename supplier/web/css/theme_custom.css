@@ -32,6 +32,7 @@
 .table td.center {
 	text-align: center !important;
 	vertical-align: middle !important;
+	min-width: 100px !important;
 }
 
 .table td.left {

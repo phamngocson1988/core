@@ -41,7 +41,7 @@ $user = Yii::$app->user->getIdentity();
       <div class="card card-summary">
         <h5 class="card-header text-uppercase">Card summary</h5>
         <div class="card-body">
-          <p class="card-text text-red font-weight-bold">Game: <?=$game->title;?></p>
+          <p class="card-text text-red font-weight-bold">Game: <?=$model->title;?></p>
           <p class="text-green card-text font-weight-bold"><?=sprintf("%s %s", number_format($model->getTotalUnit()), strtoupper($model->getUnitName()));?></p>
           <p class="card-text">Version Global</p>
           <h5 class="card-title">Price Details</h5>

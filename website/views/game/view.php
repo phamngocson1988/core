@@ -5,15 +5,15 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\FormatConverter;
 
-$this->registerMetaTag(['property' => 'og:image', 'content' => $game->getImageUrl('150x150')], 'og:image');
-$this->registerMetaTag(['property' => 'og:title', 'content' => $game->getMetaTitle()], 'og:title');
-$this->registerMetaTag(['property' => 'og:description', 'content' => $game->getMetaDescription()], 'og:description');
+$this->registerMetaTag(['property' => 'og:image', 'content' => $model->getImageUrl('150x150')], 'og:image');
+$this->registerMetaTag(['property' => 'og:title', 'content' => $model->getMetaTitle()], 'og:title');
+$this->registerMetaTag(['property' => 'og:description', 'content' => $model->getMetaDescription()], 'og:description');
 ?>
 <div class="container my-5 single">
   <div class="d-flex justify-content-between align-items-centert bg-white">
     <div class="w-50 flex-fill">
       <div class="single-img-slider">
-        <img class="single-img" src="<?=$game->getImageUrl('555x691');?>" />
+        <img class="single-img" src="<?=$model->getImageUrl('555x691');?>" />
       </div>
     </div>
     <div class="w-50 flex-fill">
@@ -21,14 +21,14 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <?php if ($game->hasCategory()) : ?>
-            <?php $category =  reset($game->categories);?>
+            <?php if ($model->hasCategory()) : ?>
+            <?php $category =  reset($model->categories);?>
             <li class="breadcrumb-item"><a href="javascript:;"><?=$category->name;?></a></li>
             <?php endif;?>
-            <li class="breadcrumb-item active" aria-current="page"><?=$game->title;?></li>
+            <li class="breadcrumb-item active" aria-current="page"><?=$model->title;?></li>
           </ol>
         </nav>
-        <h1 class="text-red mb-0"><?=$game->title;?></h1>
+        <h1 class="text-red mb-0"><?=$model->title;?></h1>
         <p class="lead">Pack name here</p>
         <div class="btn-group-toggle multi-choose d-flex" data-toggle="buttons">
           <label class="btn flex-fill w-100 mr-2 btn-secondary active">
@@ -43,7 +43,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
         </div>
         <div class="price py-3">
           <span class="price-value text-red mr-2" id="price">$<?=number_format($model->getPrice());?></span>
-          <span class="badge badge-danger">save 70%</span>
+          <span class="badge badge-danger">save <?=number_format($model->getSavedPrice());?>%</span>
           <span class="btn-group-toggle bell" data-toggle="buttons">
             <label class="btn">
               <input type="checkbox">
@@ -52,7 +52,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
         </div>
         <div class="d-flex align-content-end">
           <div class="w-100 flex-fill">
-            <span class="gems-value">10,000 Gems</span>
+            <span class="gems-value" id="game-unit"><?=sprintf("%s %s", number_format($model->getUnit()), strtoupper($model->getUnitName()));?></span>
           </div>
           <div class="w-100 flex-fill">
             <div class="d-flex bd-highlight">
@@ -104,14 +104,14 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
           </div>
         </div>
 
-        <?php $form = ActiveForm::begin(['action' => Url::to(['cart/add', 'id' => $model->game_id]), 'options' => ['id' => 'add-cart-form', 'data-calculatecart-url' => Url::to(['cart/calculate', 'id' => $model->game_id])]]);?>
+        <?php $form = ActiveForm::begin(['action' => Url::to(['cart/add', 'id' => $model->id]), 'options' => ['id' => 'add-cart-form', 'data-calculatecart-url' => Url::to(['cart/calculate', 'id' => $model->id])]]);?>
         <div class="multi-button d-flex justify-content-between align-items-center">
           <div class="w-100 flex-fill p-2">
             <?= $form->field($model, 'quantity', [
               'options' => ['class' => 'd-flex justify-content-between align-items-center'],
               'labelOptions' => ['class' => 'w-100 flex-fill'],
               'template' => '{label}<div class="w-100 flex-fill">{input}</div>',
-              'inputOptions' => ['class' => 'form-control', 'type' => 'number', 'id' => 'quantity']
+              'inputOptions' => ['class' => 'form-control', 'type' => 'number', 'id' => 'quantity', 'min' => 1]
             ])->textInput()->label('Quanity') ?>
           </div>
           <div class="w-100 flex-fill p-2">
@@ -202,18 +202,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $game->getM
   <div class="card bg-light mt-3">
     <div class="card-body">
       <h4 class="card-title">Description</h4>
-      <p class="card-text">
-        Welcome to the Introduction for PlayerUnknown's Battlegrounds! A lot of you out there may be wondering, just what is PUBG and why has it become such a popular title in both the casual and competitive scene? Well, before we get into all the nitty gritty let’s begin with the origin of the actual name. PlayerUnknown’s Battlegrounds or ‘PUBG’ as it’s quite commonly known, was developed by Bluehole Studio Inc., a Korean based developer that was founded in March of 2007. PlayerUnknown's Battlegrounds came from Brendan Greene, who is the game’s creative director and worked on other popular Battle Royale based titles such as Arma and H1Z1. The Battle Royale mode was a mod for Arma 2 where Greene (known as PlayerUnknown) would spend most of his time playing, since his dream was to create the ultimate Battle Royale experience.
-      </p>
-      <p class="card-text">
-        Some of PUBG’s inspiration came from the Japanese movie of the same name (Battle Royale), which pits players against one another in an all out fight to determine the last person standing. Unfortunately due to copyright risks and other legalities the team wanted to avoid, they eventually stuck with PlayerUnknown’s Battlegrounds which we now all know and love. PUBG is still in early access on Steam and is going through constant refinement to ensure players who purchase the game are rewarded in the long run, with extra maps, features and more. So now that you have an idea of what PUBG means, let’s dive a little deeper so that everything is a little more clear.
-      </p>
-      <p class="card-text">
-        PlayerUnknown’s Battlegrounds is a game in which 100 players are thrown into an open world island where their ultimate goal is to be the last person standing. You have access to a number of weapons and vehicles to choose from, which you’ll be using to traverse your way around to different houses in order to loot them. Since the island is a large open environment, trying to discover where your opponents are located is what creates the immersiveness and tactical appeal of PUBG. 
-      </p>
-      <p class="card-text">
-        You can choose between a male or female default character and as you continue to play through the game, you earn Battle Points which can be used to purchase new clothing to make your character stand out via crates (items can also be purchased on Steam via real money). All of you start off on a far away island from the main island you'll be going to, and once you're ejected from the plane it's pretty much up to you to survive. As a reminder, this is simply just a brief overview of the game and so, more articles will be released which will detail a lot of the more intricate ways of coming out on top.
-      </p>
+      <?=$model->content;?>
     </div>
   </div>
 </div><!-- END MAIN SINGLE -->
@@ -816,6 +805,7 @@ function calculateCart() {
             toastr.error(errors);
         } else {
             $('#price').html('$' + result.data.amount);
+            $('#game-unit').html(result.data.unit);
         }
       },
   });
