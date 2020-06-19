@@ -3,9 +3,13 @@ namespace website\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use website\models\Paygate;
 use website\models\Order;
+use website\models\UserWallet;
 use common\components\helpers\FormatConverter;
+use website\components\payment\PaymentGatewayFactory;
 // Notification
 
 class OrderPaymentForm extends Model
@@ -18,6 +22,7 @@ class OrderPaymentForm extends Model
     public function rules()
     {
         return [
+            [['cart', 'paygate'], 'required'],
             ['cart', 'validateCart'],
             ['paygate', 'validatePaygate'],
         ];
@@ -31,11 +36,27 @@ class OrderPaymentForm extends Model
         return $this->_paygate;
     }
 
+    public function getUser()
+    {
+        return Yii::$app->user->getIdentity();
+    }
+
     public function validatePaygate($attribute, $params = [])
     {
         $paygate = $this->getPaygate();
         if (!$paygate) {
             $this->addError($attribute, sprintf('Payment Gateway %s is not available', $this->paygate));
+            return;
+        }
+        if ($paygate->getIdentifier() == 'kinggems') {
+            $user = $this->getUser();
+            $cart = $this->cart;
+            $balance = $user->getWalletAmount();
+            $totalPrice = $cart->getTotalPrice();
+            if ($balance < $totalPrice) {
+                $this->addError($attribute, 'You have not enough balance to place this order');
+                return;
+            }
         }
     }
 
@@ -52,24 +73,19 @@ class OrderPaymentForm extends Model
         }
     }
 
-    protected isKinggems()
-    {
-        return $this->paygate == 'kinggems';
-    }
-
     public function purchase()
     {
         $settings = Yii::$app->settings;
         $request = Yii::$app->request;
         $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
-        $user = Yii::$app->user->getIdentity();
+        $user = $this->getUser();
+        $paygate = $this->getPaygate();
 
         $cart = $this->cart;
         $cartItem = $cart->getItem();
         $game = $cartItem->getGame();
         $subTotalPrice = $cart->getSubTotalPrice();
         $totalPrice = $cart->getTotalPrice();
-        $fee = $this->isKinggems() ? '0' : $this->getPaygate()->getFee($subTotalPrice);
         $cogsPrice = $game->getCogs();
         $totalUnit = $cartItem->getTotalUnit();
 
@@ -78,24 +94,30 @@ class OrderPaymentForm extends Model
         $transaction = $connection->beginTransaction();
         try {
 
-            // Order detail
             $order = new Order();
-            $order->payment_method = $this->paygate;
-            $order->payment_type = $this->isKinggems() ? 'online' : 'offline';
+            // paygate
+            $order->payment_method = $paygate->getIdentifier();
+            $order->payment_type = $paygate->getPaymentType();
+            $order->currency = $paygate->getCurrency();
+
+            // prices
             $order->rate_usd = $rate;
             $order->price = $cartItem->getPrice();
             $order->cogs_price = $cogsPrice;
+            $order->total_cogs_price = $cogsPrice * (float)$cartItem->quantity;
             $order->sub_total_price = $subTotalPrice;
             $order->total_price = $totalPrice;
-            $order->total_fee = $fee;
+            $order->total_fee = $paygate->getFee($subTotalPrice);
             $order->total_price_by_currency = FormatConverter::convertCurrencyToCny($totalPrice);
-            $order->currency = 'USD';
-            $order->total_cogs_price = $cogsPrice * (float)$cartItem->quantity;
+
+            // customer
             $order->customer_id = $user->id;
             $order->customer_name = $user->name;
             $order->customer_email = $user->email;
             $order->customer_phone = $user->phone;
             $order->user_ip = $request->userIP;
+
+            // order information
             $order->status = Order::STATUS_VERIFYING;
             $order->payment_at = date('Y-m-d H:i:s');
             $order->generateAuthKey();
@@ -103,15 +125,15 @@ class OrderPaymentForm extends Model
             // Item detail
             $order->game_id = $game->id;
             $order->game_title = $game->title;
-            $order->quantity = $this->quantity;
+            $order->quantity = $cartItem->quantity;
             $order->unit_name = $game->unit_name;
             $order->sub_total_unit = $totalUnit;
             $order->promotion_unit = 0;
             $order->total_unit = $totalUnit;
-            $order->promotion_id = $cart->hasPromotion() ? $cart->getPromotionItem()->id : null;
+            // $order->promotion_id = $cart->hasPromotion() ? $cart->getPromotionItem()->id : null;
             $order->username = $cartItem->username;
             $order->password = $cartItem->password;
-            $order->platform = $cartItem->platform;
+            // $order->platform = $cartItem->platform;
             $order->login_method = $cartItem->login_method;
             $order->character_name = $cartItem->character_name;
             $order->recover_code = $cartItem->recover_code;
@@ -119,14 +141,26 @@ class OrderPaymentForm extends Model
             $order->note = $cartItem->note;
 
             $order->save();
-            $order->log(sprintf("Created. Status %s (%s - %s)", $order->status, $identifier, $gateway->type));
+            $order->log(sprintf("Created. Status %s (%s - %s)", $order->status, $paygate->getIdentifier(), $paygate->getPaymentType()));
 
             // Withdraw from wallet and move status to pending
-            if ($this->isKinggems()) {
-                $user->withdraw($totalPrice, $order->id, sprintf("Pay for order #%s", $order->id));
+            if ($paygate->getPaymentType() == 'online') {
+                // $user->withdraw($totalPrice, $order->id, sprintf("Pay for order #%s", $order->id));
+                $wallet = new UserWallet();
+                $wallet->coin = (-1) * $totalPrice;
+                $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+                $wallet->type = UserWallet::TYPE_OUTPUT;
+                $wallet->description = sprintf("Pay for order #%s", $order->id);
+                $wallet->ref_name = UserWallet::REF_ORDER;
+                $wallet->ref_key = $order->id;
+                $wallet->created_by = $user->id;
+                $wallet->user_id = $user->id;
+                $wallet->status = UserWallet::STATUS_COMPLETED;
+                $wallet->payment_at = date('Y-m-d H:i:s');
+                $wallet->save();
+
                 $order->status = Order::STATUS_PENDING;
-                $order->payment_at = date('Y-m-d H:i:s');
-                $order->payment_id = $gateway->getPaymentId();
+                $order->payment_id = $wallet->id;
                 $order->save();
                 $order->log(sprintf("Verified, Status is %s", $order->status));
 
@@ -134,8 +168,6 @@ class OrderPaymentForm extends Model
                 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
                 $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_ORDER, $orderTeamIds);
                 $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_PENDING_ORDER, $order->customer_id);
-
-                $order->save();
             } else {
                 $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
                 $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
@@ -148,5 +180,24 @@ class OrderPaymentForm extends Model
             return false;
         }
 
+    }
+
+    public function fetchPaygates()
+    {
+        $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+        $list = ArrayHelper::map($paygates, 'identifier', function($obj) {
+            return Html::img($obj->getImageUrl(), ['class' => 'icon']);
+        });
+
+        $user = $this->getUser();
+        $cart = $this->cart;
+        $balance = $user->getWalletAmount();
+        $totalPrice = $cart->getTotalPrice();
+        if ($balance >= $totalPrice) {
+            $list = array_merge([
+                'kinggems' => sprintf('<div>Blance</div><div class="lead text-red font-weight-bold">%s Kcoin</div>', number_format($balance, 1))
+            ], $list);
+        }
+        return $list;
     }
 }

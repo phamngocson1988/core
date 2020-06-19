@@ -12,9 +12,11 @@ class UserWallet extends ActiveRecord
 	const TYPE_INPUT = "I";
     const TYPE_OUTPUT = "O";
 
-    CONST STATUS_WAITING = "waiting";
-    CONST STATUS_PENDING = "pending";
+    const STATUS_WAITING = "waiting";
+    const STATUS_PENDING = "pending";
     const STATUS_COMPLETED = "completed";
+
+    const REF_ORDER = 'order';
 
     public function behaviors()
     {

@@ -72,7 +72,15 @@ class CartController extends Controller
 
     public function actionCheckout()
     {
+        $request = Yii::$app->request;
         $cart = Yii::$app->cart;
+        
+        $checkoutForm = new \website\forms\OrderPaymentForm(['cart' => $cart]);
+        if ($checkoutForm->load($request->post()) && $checkoutForm->validate() && $id = $checkoutForm->purchase()) {
+            return $this->redirect(['order/index', '#' => $id]);
+        } else {
+            Yii::$app->session->setFlash('error', $checkoutForm->getErrors());
+        }
         $model = $cart->getItem();
         $game = $model->getGame();
         $user = Yii::$app->user->getIdentity();
@@ -80,17 +88,13 @@ class CartController extends Controller
         $canPlaceOrder = $balance >= $cart->getTotalPrice();
         $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
 
-        // if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        //     $model-
-        //     return $this->redirect(['cart/checkout']);
-        // }
-
         return $this->render('checkout', [
             'model' => $model,
             'game' => $game,
             'can_place_order' => $canPlaceOrder,
             'balance' => $balance,
             'paygates' => $paygates,
+            'checkoutForm' => $checkoutForm,
         ]);
     }
 }

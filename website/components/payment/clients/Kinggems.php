@@ -21,7 +21,7 @@ class Kinggems extends Model
 		return 'USD';
 	}
 
-	public function getFee()
+	public function getFee($total = 0)
 	{
 		return 0;
 	}

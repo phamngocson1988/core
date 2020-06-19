@@ -109,13 +109,13 @@ use yii\bootstrap\ActiveForm;
         <h5 class="card-header text-uppercase">Card summary</h5>
         <div class="card-body">
           <p class="card-text text-red font-weight-bold">Game: <?=$game->title;?></p>
-          <p class="text-green card-text font-weight-bold">600 GEMS x <?=$model->quantity;?></p>
+          <p class="text-green card-text font-weight-bold"><?=sprintf("%s %s", number_format($model->getUnit()), strtoupper($model->getUnitName()));?> x <?=$model->quantity;?></p>
           <p class="card-text">Version Global</p>
           <h5 class="card-title">Price Details</h5>
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right">$<?=number_format($model->getPrice(), 1);?></div>
+            <div class="flex-fill w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?></div>
           </div>
           <div class="d-flex">
             <div class="flex-fill w-100 text-danger">Discount</div>
@@ -124,7 +124,7 @@ use yii\bootstrap\ActiveForm;
           <hr />
           <div class="d-flex mb-3">
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getPrice(), 1);?></div>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?></div>
           </div>
           <button type="submit" class="btn btn-block btn-payment text-uppercase">Payment method</button>
         </div>

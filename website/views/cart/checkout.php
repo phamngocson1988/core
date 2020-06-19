@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 $user = Yii::$app->user->getIdentity();
 ?>
 <div class="container my-5">
@@ -23,25 +24,17 @@ $user = Yii::$app->user->getIdentity();
   </div>
 </div>
 <div class="container my-5 single-order">
+  <?php $form = ActiveForm::begin();?>
   <div class="row">
     <div class="col-md-5 info">
       <p class="lead mb-2">Payment method</p>
       <hr/>
-      <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
-        <?php if ($can_place_order) : ?>
-        <label class="btn flex-fill btn-secondary active">
-          <input type="radio" name="identifier" value="kinggems">
-          <div>Blance</div>
-          <div class="lead text-red font-weight-bold"><?=number_format($balance, 1);?> Kcoin</div>
-        </label>
-        <?php endif;?>
-        <?php foreach ($paygates as $paygate) : ?>
-        <label class="btn flex-fill btn-secondary">
-          <input type="radio" name="identifier" value="<?=$paygate->identifier;?>" data-currency="<?=$paygate->currency;?>" data-exchange-rate="<?=$paygate->currency;?>" data-transfer_fee="<?=$paygate->transfer_fee;?>" data-transfer_fee_type="<?=$paygate->transfer_fee_type;?>" autocomplete="off">
-          <img class="icon" src="<?=$paygate->getImageUrl();?>" />
-        </label>
-        <?php endforeach;?>
-      </div>
+      <?= $form->field($checkoutForm, 'paygate', [
+          'options' => ['class' => 'btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap', 'data-toggle' => 'buttons'],
+        ])->widget(\website\widgets\PaygateRadioListInput::className(), [
+          'items' => $checkoutForm->fetchPaygates(),
+          'options' => ['tag' => false]
+        ])->label(false);?>
     </div>
     <div class="col-md-7">
       <!-- CART SUMMARY -->
@@ -55,7 +48,7 @@ $user = Yii::$app->user->getIdentity();
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right">$<?=number_format($model->getPrice(), 1);?></div>
+            <div class="flex-fill w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?></div>
           </div>
           <div class="d-flex">
             <div class="flex-fill w-100 text-danger">Discount</div>
@@ -64,7 +57,7 @@ $user = Yii::$app->user->getIdentity();
           <hr />
           <div class="d-flex mb-3">
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getPrice(), 1);?>.0</div>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?>.0</div>
           </div>
           <button type="submit" class="btn btn-block btn-payment text-uppercase">Payment</button>
         </div>
@@ -72,4 +65,5 @@ $user = Yii::$app->user->getIdentity();
       <!-- END SUMMARY -->
     </div>
   </div>
+  <?php ActiveForm::end();?>
 </div>

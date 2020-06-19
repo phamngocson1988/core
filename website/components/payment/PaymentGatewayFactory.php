@@ -3,6 +3,8 @@ namespace website\components\payment;
 
 use Yii;
 use yii\base\Model;
+use website\components\payment\clients\OfflinePayment;
+use website\components\payment\clients\Kinggems;
 
 class PaymentGatewayFactory extends Model
 {
@@ -10,11 +12,11 @@ class PaymentGatewayFactory extends Model
     {
         switch ($identifier) {
             case 'kinggems':
-                return new \website\components\payment\clients\Kinggems();
+                return new Kinggems();
                 break;
             
             default:
-                $paygate = \website\components\payment\clients\OfflinePayment::find()
+                $paygate = OfflinePayment::find()
                 ->where(['identifier' => $identifier])
                 ->andWhere(['status' => OfflinePayment::STATUS_ACTIVE])
                 ->one();
