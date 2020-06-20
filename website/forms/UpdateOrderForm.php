@@ -32,7 +32,7 @@ class UpdateOrderForm extends Model
             $this->addError($attribute, 'Order is not exist');
         } elseif ($order->customer_id != Yii::$app->user->id) {
             $this->addError($attribute, 'Order is not exist');
-        } elseif (!$order->isVerifying()) {
+        } elseif (!$order->isVerifyingOrder()) {
             $this->addError($attribute, 'Order cannot be updated anymore.');
         }
 

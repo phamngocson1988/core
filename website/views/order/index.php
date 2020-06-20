@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
       	<?php foreach ($verifyingOrders as $order) : ?>
         <tr>
           <th scope="row">
-            <a href='<?=Url::to(['order/detail', 'id' => $order->id]);?>' data-target="#detailOrder" data-toggle="modal" >#<?=$order->id;?></a>
+            <a href='<?=Url::to(['order/view', 'id' => $order->id]);?>' id="<?=$order->id;?>" data-target="#paymentGame" data-toggle="modal" >#<?=$order->id;?></a>
             <span class="date-time"><?=FormatConverter::convertToDate(strtotime($order->created_at), 'd-m-Y H:i');?></span>
           </th>
           <td class="text-center"><?=$order->game_title;?></td>
@@ -47,11 +47,23 @@ use yii\widgets\ActiveForm;
           	<?php if ($order->payment_id) : ?>
           	<?=$order->payment_id;?>
           	<?php else : ?>
-          	<button type="button" class="btn btn-primary">Submit</button>
+            <a href='<?=Url::to(['order/view', 'id' => $order->id]);?>' data-target="#paymentGame" data-toggle="modal" class="btn btn-primary">Submit</a>
           	<?php endif;?>
           </td>
-          <td class="text-center"><button type="button" class="btn btn-upload">Upload</button></td>
-          <td class="text-center"><img class="icon-sm btn-delete" src="/images/icon/criss-cross.svg" /></td>
+          <td class="text-center">
+            <?php if ($order->evidence) : ?>
+            <a href='<?=$order->evidence;?>' target="_blank">View</a>
+            <?php else : ?>
+            <a href='<?=Url::to(['order/view', 'id' => $order->id]);?>' data-target="#paymentGame" data-toggle="modal" class="btn btn-upload">Upload</a>
+            <?php endif;?>
+          </td>
+          <td class="text-center">
+            <?php if ($order->request_cancel) : ?>
+              Waiting cancellation
+            <?php else :?>
+            <a href="<?=Url::to(['order/cancel', 'id' => $order->id]);?>" class='cancel-order-button'><img class="icon-sm btn-delete" src="/images/icon/criss-cross.svg" /></a>
+            <?php endif;?>
+          </td>
         </tr>
       	<?php endforeach;?>
       </tbody>
@@ -109,7 +121,7 @@ use yii\widgets\ActiveForm;
       	<?php foreach ($orders as $order) : ?>
         <tr>
           <th scope="row">
-            <a href="#">#<?=$order->id;?></a>
+            <a href='<?=Url::to(['order/detail', 'id' => $order->id]);?>' data-target="#detailOrder" data-toggle="modal" >#<?=$order->id;?></a>
             <span class="date-time"><?=FormatConverter::convertToDate(strtotime($order->created_at), 'd-m-Y H:i');?></span>
           </th>
           <td class="text-center"><?=$order->game_title;?></td>
@@ -124,8 +136,18 @@ use yii\widgets\ActiveForm;
                 aria-valuemin="0" aria-valuemax="100"><?=$percent;?>%</div>
             </div>
           </td>
-          <td class="text-center"><a class="text-red" href="<?=Url::to(['order/view', 'id' => $order->id]);?>">View+</a></td>
-          <td class="text-center"><img class="icon-sm btn-delete" src="/images/icon/trash-can.svg"></td>
+          <td class="text-center">
+            <a href='<?=Url::to(['order/view', 'id' => $order->id]);?>' id="<?=$order->id;?>" class="text-red" data-target="#paymentGame" data-toggle="modal" >View+</a>
+          </td>
+          <td class="text-center">
+            <?php if ($order->isPendingOrder() || $order->isProcessingOrder() || $order->isPartialOrder()) : ?>
+            <?php if ($order->request_cancel) : ?>
+              Waiting cancellation
+            <?php else :?>
+            <a href="<?=Url::to(['order/cancel', 'id' => $order->id]);?>" class='cancel-order-button'><img class="icon-sm btn-delete" src="/images/icon/trash-can.svg"></a>
+            <?php endif;?>
+            <?php endif;?>
+          </td>
         </tr>
       	<?php endforeach;?>
         <tr>
@@ -165,11 +187,182 @@ use yii\widgets\ActiveForm;
 </div>
 <!-- end modal order view -->
 
+<!-- Modal -->
+<div class="modal fade" id="img-modal" tabindex="-1" role="dialog" aria-labelledby="img-modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<!-- end modal image slider -->
+
+<!-- Modal survey-->
+<div class="modal fade" id="modalSurvey" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      
+    </div>
+  </div>
+</div>
+<!-- End modal survey-->
+
 <?php
 $script = <<< JS
 $('#detailOrder').on('show.bs.modal', function (e) {
     $(this).find('.modal-content').load(e.relatedTarget.href);
+    setTimeout(() => {  
+      if ($(this).find('#stars li.hover').length) {
+        $(this).find('#stars li>a').replaceWith('<span class="icon-star"></span>');
+      } else {
+        $(this).find('#stars li').on('mouseover', function () {
+          var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+          // Now highlight all the stars that's not after the current hovered star
+          $(this).parent().children('li.star').each(function (e) {
+            if (e < onStar) {
+              $(this).addClass('hover');
+            } else {
+              $(this).removeClass('hover');
+            }
+          });
+
+        }).on('mouseout', function () {
+          $(this).parent().children('li.star').each(function (e) {
+            $(this).removeClass('hover');
+          });
+        });
+      }
+    }, 2000);
+    
 });
+$('#paymentGame').on('show.bs.modal', function (e) {
+    $(this).find('.modal-content').load(e.relatedTarget.href);
+});
+
+$('#img-modal').on('show.bs.modal', function (e) {
+  var linkOrderId = $(e.relatedTarget).data('order');
+  var contentOrderId = $(this).find('.modal-slider').data('order');
+  if (linkOrderId == contentOrderId) return;
+  $(this).find('.modal-content').load(e.relatedTarget.href);
+  setTimeout(() => {  
+    $('#img-modal').find('.modal-slider').slick({
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      infinite: true,
+    });
+  }, 2000);
+});
+
+$('#modalSurvey').on('show.bs.modal', function (e) {
+    $(this).find('.modal-content').load(e.relatedTarget.href);
+});
+
+// Update order
+$('#paymentGame').on('click', '#update-payment-button', function(e) {
+  e.preventDefault();
+  var baseForm = $(this).closest('form');
+  var url = baseForm.attr('action');
+  var form = new FormData();
+  baseForm.find('input').each(function( index ) {
+    var elementName = $(this).attr('name');
+    if ($(this).attr('type') == 'file') {
+      $.each(this.files, function( index, value ) {
+        form.append(elementName, value);
+      });
+    } else {
+      form.append(elementName, $(this).val());
+    }
+  });
+  $.ajax({
+      url: url,
+      type: "POST",
+      processData: false, // important
+      contentType: false, // important
+      dataType : 'json',
+      data: form,
+      success: function (result, textStatus, jqXHR) {
+        if (!result.status) {
+          toastr.error(result.errors);
+        } else {
+          setTimeout(() => {  
+              location.reload();
+          }, 2000);
+          toastr.success(result.message); 
+        }
+      },
+  });
+});
+
+// Rating order
+$('#modalSurvey').on('click', '#rating-order-button', function(e) {
+  e.preventDefault();
+  var form = $(this).closest('form');
+  $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      dataType : 'json',
+      data: form.serialize(),
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            toastr.error(result.errors);
+            return false;
+        } else {
+            toastr.success('Success');
+            $('#modalSurvey').modal('hide');
+            $('#detailOrder').find('#stars li').off('mouseover').off('mouseout').removeClass('hover');
+            $('#detailOrder').find('#stars li').filter(function() {
+              return  $(this).data("value") <= result.rating;
+            }).addClass('hover');
+            $('#detailOrder').find('#stars li>a').replaceWith('<span class="icon-star"></span>');
+        }
+      },
+  });
+  return false;
+});
+
+
+// Show order
+var hash = window.location.hash.substr(1).trim();
+if (hash) {
+  $('#'+hash).click();
+}
+
+// Cancel order 
+$('.cancel-order-button').ajax_action({
+  method: 'POST',
+  confirm: true,
+  confirm_text: 'Do you want to send a cancellation request for this order?',
+  callback: function(element, data) {
+    $(element).replaceWith('Waiting cancellation');
+  },
+  error: function(errors) {
+    toastr.error(errors);
+  },
+});
+
+// Confirm delivery
+$('#detailOrder').on('click', '#confirm-order-button', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  if (!window.confirm('Do you want to confirm delivery for this order?')) {
+      return false;
+  }
+  var element = this;
+  $.ajax({
+    url: $(this).attr('href'),
+    type: 'POST',
+    dataType : 'json',
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+        toastr.error(result.errors);
+        return false;
+      } else {
+        toastr.success('Confirm successfully');
+        $(element).replaceWith('<button type="button" class="btn text-uppercase">comfirm delivery</button>');
+      }
+    }
+  });
+})
 JS;
 $this->registerJs($script);
 ?>

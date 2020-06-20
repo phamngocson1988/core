@@ -1,3 +1,7 @@
+<?php 
+use yii\helpers\Url;
+use website\models\OrderFile;
+?>
 <div class="modal-header d-block">
   <h2 class="modal-title text-center w-100 text-red text-uppercase">Order details</h2>
   <p class="text-center d-block">Order ID: #<?=$order->id;?></p>
@@ -10,12 +14,14 @@
     <div class="col-md-6 border-right">
       <div><span class="list-item">Game:</span><b><?=$order->game_title;?></b></div>
       <div><span class="list-item">Version:</span><b>Global</b></div>
-      <div><span class="list-item">Pack:</span><b class="text-red">100 GEMS</b></div>
+      <div><span class="list-item">Pack:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_unit), $order->unit_name);?></b></div>
       <div><span class="list-item">Quantity:</span><b><?=number_format($order->quantity, 1);?></b></div>
       <div><span class="list-item">Total Unit:</span><b class="text-red"><?=sprintf("%s %s", $order->total_unit, $order->unit_name);?></b></div>
       <hr />
       <div><span class="list-item">Payment method:</span><b class="text-red"><?=$order->payment_method;?></b></div>
-      <div><span class="list-item">Total Unit:</span><b class="text-red"><?=number_format($order->total_price, 1);?> USD</b></div>
+      <div><span class="list-item">Sub Price:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->sub_total_price, 1), $order->currency);?></b></div>
+      <div><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_fee, 1), $order->currency);?></b></div>
+      <div><span class="list-item">Total Price:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_price, 1), $order->currency);?></b></div>
     </div>
     <div class="col-md-6">
       <div><span class="list-item">Login method:</span><b><?=$order->login_method;?></b></div>
@@ -25,23 +31,26 @@
       <div><span class="list-item">Server:</span><b><?=$order->server;?></b></div>
       <div><span class="list-item">Recovery code:</span><b><?=$order->recover_code;?></b></div>
     </div>
+    <?php if ($order->isCompletedOrder() || $order->isConfirmedOrder()) : ?>
     <div class="col-md-12 mt-4">
       <h3 class="text-center text-uppercase">delivery status</h3>
-      <p class="text-center">1/8000 Completed</p>
+      <p class="text-center"><?=$order->getPercent();?>% Completed</p>
       <div class="row bf-at">
+        <?php $files = $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER);?>
+        <?php foreach ($files as $file) : ?>
         <div class="col-md-6 mb-4">
-          <a href="#" data-toggle="modal" data-target="#img-modal">
-            <img class="btn-modal-img" src="/images/post-item01.jpg" />
+          <a href="<?=Url::to(['order/files', 'id' => $order->id]);?>" data-order="<?=$order->id;?>" data-toggle="modal" data-target="#img-modal">
+            <img class="btn-modal-img" src="<?=$file->getUrl();?>" />
           </a>
         </div>
-        <div class="col-md-6 mb-4">
-          <a href="#" data-toggle="modal" data-target="#img-modal">
-            <img class="btn-modal-img" src="/images/post-item01.jpg" />
-          </a>
-        </div>
+        <?php endforeach ;?>
       </div>
       <p class="text-center">
-        <button type="button" class="btn btn-comfirm text-uppercase">comfirm delivery</button>
+        <?php if ($order->isCompletedOrder()) : ?>
+        <a role="button" id="confirm-order-button" href="<?=Url::to(['order/confirm', 'id' => $order->id]);?>" class="btn btn-comfirm text-uppercase">comfirm delivery</a>
+        <?php elseif ($order->isConfirmedOrder()) : ?>
+        <button type="button" class="btn text-uppercase">comfirm delivery</button>
+        <?php endif;?>
       </p>
       <p class="text-center mb-0">
         <b>Rate this order!</b>
@@ -49,25 +58,35 @@
       <!-- Rating Stars Box -->
       <div class='rating-stars text-center'>
         <ul id='stars'>
-          <li data-toggle="modal" data-target="#modalSurvey" class='star' title='Poor' data-value='1'>
-            <span class="icon-star"></span>
+          <li class='star <?=((int)$order->rating >= 1) ? "hover" : "";?>' title='Poor' data-value='1'>
+            <a href="<?=Url::to(['order/survey', 'id' => $order->id, 'star' => 1]);?>" data-toggle="modal" data-target="#modalSurvey" >
+              <span class="icon-star"></span>
+            </a>
           </li>
-          <li data-toggle="modal" data-target="#modalSurvey" class='star' title='Fair' data-value='2'>
-            <span class="icon-star"></span>
+          <li class='star <?=((int)$order->rating >= 2) ? "hover" : "";?>' title='Fair' data-value='2'>
+            <a href="<?=Url::to(['order/survey', 'id' => $order->id, 'rating' => 2]);?>" data-toggle="modal" data-target="#modalSurvey" >
+              <span class="icon-star"></span>
+            </a>
           </li>
-          <li data-toggle="modal" data-target="#modalSurvey" class='star' title='Good' data-value='3'>
-            <span class="icon-star"></span>
+          <li class='star <?=((int)$order->rating >= 3) ? "hover" : "";?>' title='Good' data-value='3'>
+            <a href="<?=Url::to(['order/survey', 'id' => $order->id, 'rating' => 3]);?>" data-toggle="modal" data-target="#modalSurvey" >
+              <span class="icon-star"></span>
+            </a>
           </li>
-          <li data-toggle="modal" data-target="#modalSurvey" class='star' title='Excellent' data-value='4'>
-            <span class="icon-star"></span>
+          <li class='star <?=((int)$order->rating >= 4) ? "hover" : "";?>' title='Excellent' data-value='4'>
+            <a href="<?=Url::to(['order/survey', 'id' => $order->id, 'rating' => 4]);?>" data-toggle="modal" data-target="#modalSurvey" >
+              <span class="icon-star"></span>
+            </a>
           </li>
-          <li data-toggle="modal" data-target="#modalSurvey" class='star' title='WOW!!!' data-value='5'>
-            <span class="icon-star"></span>
+          <li class='star <?=((int)$order->rating >= 5) ? "hover" : "";?>' title='WOW!!!' data-value='5'>
+            <a href="<?=Url::to(['order/survey', 'id' => $order->id, 'rating' => 5]);?>" data-toggle="modal" data-target="#modalSurvey" >
+              <span class="icon-star"></span>
+            </a>
           </li>
         </ul>
       </div>
-
     </div>
+    <?php endif;?>
   </div>
   <h4 class="text-uppercase text-right chat-admin-title">Chat ADMIN</h4>
   <div class="row rounded-lg overflow-hidden shadow">
