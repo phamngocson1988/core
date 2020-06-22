@@ -10,16 +10,18 @@ use yii\helpers\Url;
       <div class="mega-content">
         <div class="mega-row">
           <p class="mega-ttl"><?=Yii::t('app', 'active_complaint');?></p>
+          <?php if ($complains) : ?>
           <ul class="list-text">
-            <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
-            <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
-            <li><a href="#">Henderson &amp; Bench - My deposit is not approved</a></li>
+            <?php foreach ($complains as $complain) :?>
+            <li><a href="<?=Url::to(['complain/view', 'id' => $complain->id]);?>"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></a></li>
+            <?php endforeach;?>
           </ul>
-          <div class="mega-create"><a class="fas fa-plus-circle trans" href="#"></a></div>
+          <?php endif;?>
+          <div class="mega-create"><a class="fas fa-plus-circle trans" href="<?=Url::to(['complain/index']);?>"></a></div>
         </div>
         <?php if ($operators) : ?>
         <div class="mega-row">
-          <p class="mega-ttl"><?=Yii::t('app', 'favorite_operaotor');?></p>
+          <p class="mega-ttl"><?=Yii::t('app', 'favorite_operator');?></p>
           <ul class="list-favorites">
             <?php foreach ($operators as $operator) : ?>
             <li><a href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><img src="<?=$operator->getImageUrl('50x50');?>" alt="image"></a></li>

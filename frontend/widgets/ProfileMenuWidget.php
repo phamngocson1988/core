@@ -5,12 +5,12 @@ use Yii;
 use yii\base\Widget;
 use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
+use frontend\models\Complain;
 
 class ProfileMenuWidget extends Widget
 {
     public function run()
     {
-        // $this->registerClientScript();
         // Favorite
         $operatorTable = Operator::tableName();
         $favoriteTable = OperatorFavorite::tableName();
@@ -19,9 +19,17 @@ class ProfileMenuWidget extends Widget
         ->innerJoin($favoriteTable, "{$favoriteTable}.operator_id = {$operatorTable}.id AND {$favoriteTable}.user_id = $userId")
         ->limit(6)
         ->all();
+
+        // Complain
+        $complains = Complain::find()
+        ->where([
+            'user_id' => $userId,
+            'status' => Complain::STATUS_OPEN,
+        ])->limit(3)->all();
         return $this->render('profile-menu', [
             'user' => Yii::$app->user->getIdentity(), 
-            'operators' => $operators
+            'operators' => $operators,
+            'complains' => $complains
         ]);
     }
 
