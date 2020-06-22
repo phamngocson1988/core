@@ -1,6 +1,8 @@
 <?php
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use frontend\models\UserSetting;
 $this->title = 'User Profile';
 $user = Yii::$app->user->getIdentity();
 ?>
@@ -123,12 +125,12 @@ $user = Yii::$app->user->getIdentity();
                       <div class="col-first">Operators responded</div>
                       <div class="col-second">
                         <label class="notifications-check-email">
-                          <input type="checkbox" checked><span></span>
+                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::MAIL_OPERATOR_RESPONSE_REIVEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_OPERATOR_RESPONSE_REIVEW, 0) ? 'checked' : '';?> ><span></span>
                         </label>
                       </div>
                       <div class="col-third">
                         <label class="notifications-check-onsite">
-                          <input type="checkbox" checked><span></span>
+                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::NOTIFICATION_OPERATOR_RESPONSE_REIVEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_OPERATOR_RESPONSE_REIVEW, 0) ? 'checked' : '';?> ><span></span>
                         </label>
                       </div>
                     </div>
@@ -136,12 +138,12 @@ $user = Yii::$app->user->getIdentity();
                       <div class="col-first">New player review</div>
                       <div class="col-second">
                         <label class="notifications-check-email">
-                          <input type="checkbox" checked><span></span>
+                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::MAIL_NEW_PLAYER_REVIEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_NEW_PLAYER_REVIEW, 0) ? 'checked' : '';?>><span></span>
                         </label>
                       </div>
                       <div class="col-third">
                         <label class="notifications-check-onsite">
-                          <input type="checkbox"><span></span>
+                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::NOTIFICATION_NEW_PLAYER_REVIEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_NEW_PLAYER_REVIEW, 0) ? 'checked' : '';?>><span></span>
                         </label>
                       </div>
                     </div>
@@ -158,12 +160,12 @@ $user = Yii::$app->user->getIdentity();
                       <div class="col-first">Operators responded</div>
                       <div class="col-second">
                         <label class="notifications-check-email">
-                          <input type="checkbox" checked><span></span>
+                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::MAIL_OPERATOR_RESPONSE_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_OPERATOR_RESPONSE_COMPLAIN, 0) ? 'checked' : '';?>><span></span>
                         </label>
                       </div>
                       <div class="col-third">
                         <label class="notifications-check-onsite">
-                          <input type="checkbox" checked><span></span>
+                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::NOTIFICATION_OPERATOR_RESPONSE_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_OPERATOR_RESPONSE_COMPLAIN, 0) ? 'checked' : '';?>><span></span>
                         </label>
                       </div>
                     </div>
@@ -171,12 +173,12 @@ $user = Yii::$app->user->getIdentity();
                       <div class="col-first">New player review</div>
                       <div class="col-second">
                         <label class="notifications-check-email">
-                          <input type="checkbox" checked><span></span>
+                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::MAIL_NEW_PLAYER_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_NEW_PLAYER_COMPLAIN, 0) ? 'checked' : '';?>><span></span>
                         </label>
                       </div>
                       <div class="col-third">
                         <label class="notifications-check-onsite">
-                          <input type="checkbox"><span>  </span>
+                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::NOTIFICATION_NEW_PLAYER_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_NEW_PLAYER_COMPLAIN, 0) ? 'checked' : '';?>><span>  </span>
                         </label>
                       </div>
                     </div>
@@ -229,6 +231,32 @@ editPasswordForm.success = function (data, form) {
 editPasswordForm.error = function (errors) {	
 	toastr.error(errors);
 }
+
+// Update setting
+$('.notification-setting').change(function(){
+  var val = $(this).is(":checked") ? 1 : 0;
+  var key = $(this).attr("name");
+  $.ajax({
+    url: '###NOTIFICATIONLINK###',
+    type: "POST",
+    dataType: 'json',
+    data: {
+      key: key,
+      value: val
+    },
+    success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            that.error(result.errors);
+            return false;
+        } else {
+            that.success(result.data);
+        }
+        
+    },
+  });
+});
 JS;
+$notificationLink = Url::to(['profile/notification']);
+$script = str_replace('###NOTIFICATIONLINK###', $notificationLink, $script);
 $this->registerJs($script);
 ?>

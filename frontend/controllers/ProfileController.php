@@ -67,10 +67,14 @@ class ProfileController extends Controller
 
         $updateEmailForm = new \frontend\forms\UpdateEmailForm();
         $changePasswordForm = new \frontend\forms\ChangePasswordForm();
+
+        $user = Yii::$app->user->getIdentity();
+        $settings = $user->getSettings();
         return $this->render('setting', [
             'editProfileForm' => $editProfileForm,
             'updateEmailForm' => $updateEmailForm,
             'changePasswordForm' => $changePasswordForm,
+            'settings' => $settings,
         ]);
     }
 
@@ -166,5 +170,18 @@ class ProfileController extends Controller
             $message = reset($message);
             return json_encode(['status' => false, 'errors' => $message]);
         }
+    }
+
+    public function actionNotification()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $key = $request->post('key');
+        $value = $request->post('value');
+        $user = Yii::$app->user->getIdentity();
+        $user->setSetting($key, $value);
+        return $this->asJson(['status' => true, 'key' => $key, 'value' => $value]);
     }
 }

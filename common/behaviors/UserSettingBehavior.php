@@ -2,6 +2,7 @@
 namespace common\behaviors;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\AttributeBehavior;
 use common\models\UserSetting;
 
@@ -32,5 +33,14 @@ class UserSettingBehavior extends AttributeBehavior
         }
         $setting->value = $value;
         return $setting->save();
+    }
+
+    public function getSettings()
+    {
+        $owner = $this->owner;
+        $setting = UserSetting::find()->where([
+            'user_id' => $owner->id,
+        ])->select(['key', 'value'])->asArray()->all();
+        return ArrayHelper::map($setting, 'key', 'value');
     }
 }
