@@ -131,24 +131,20 @@ class OrderNotification extends Notification
 
         switch($this->key) {
             case self::NOTIFY_CUSTOMER_PENDING_ORDER:
-                $subject = sprintf('Confirm payment for order #%s', $this->order->id);
+                $subject = sprintf('King Gems - #%s - Order Confirmed', $this->order->id);
                 $template = 'new_pending_order';
                 $fromEmail = $supportMail;
                 break;
         }
-Yii::trace('after switch');
         $message = $channel->mailer->compose($template, [
             'user' => $user,
             'order' => $this->order,
             'notification' => $this,
         ]);
-Yii::trace('after intitiating mail');
 
         $message->setFrom($fromEmail);
         $message->setTo($user->email);
         $message->setSubject($subject);
         $message->send($channel->mailer);
-Yii::trace('after sending');
-
     }
 }

@@ -474,12 +474,11 @@ class SiteController extends Controller
         die;
     }
 
-    public function actionEmail()
+    public function actionEmail($email)
     {
-        $email = 'phamngocson1988@gmail.com';
         $settings = Yii::$app->settings;
         $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        Yii::$app->mailer->compose('test_mail')
+        Yii::$app->test_mailer->compose('test_mail')
             ->setTo($email)
             ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
             ->setSubject(sprintf("TESTING EMAIL"))
