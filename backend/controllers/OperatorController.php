@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 use backend\forms\FetchOperatorForm;
 use backend\forms\CreateOperatorForm;
 use backend\forms\EditOperatorForm;
+use backend\forms\CreateOperatorMetaForm;
 // models
 use backend\models\User;
 
@@ -94,6 +95,28 @@ class OperatorController extends Controller
         }
 
         return $this->render('edit', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionMeta()
+    {
+        $this->view->params['main_menu_active'] = 'operator.meta';        
+        $request = Yii::$app->request;
+        $model = new CreateOperatorMetaForm();
+        if ($request->isPost) {
+            if ($model->load($request->post())) {
+                if ($model->create()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                } else {
+                    Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                }
+            }
+        } else {
+            $model->loadData();
+        }
+
+        return $this->render('meta', [
             'model' => $model,
         ]);
     }

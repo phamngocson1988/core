@@ -78,6 +78,11 @@ use yii\helpers\Url;
             <span class="title"><?=Yii::t('app', 'operator_list');?></span>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="<?=Url::to(['operator/meta']);?>" class="nav-link " code='operator.meta'>
+            <span class="title"><?=Yii::t('app', 'operator_meta');?></span>
+            </a>
+          </li>
         </ul>
       </li>
       <li class="nav-item  ">

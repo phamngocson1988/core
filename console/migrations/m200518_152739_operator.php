@@ -24,12 +24,19 @@ class m200518_152739_operator extends Migration
             'backup_url' => $this->string(1024),
             'withdrawal_limit' => $this->integer(),
             'withdrawal_currency' => $this->string(15),
+            'withdrawal_time' => $this->string(255),
+            'withdrawal_method' => $this->string(255),
+            'product' => $this->string(255),
+            'deposit_method' => $this->string(255),
             'rebate' => $this->integer(),
             'owner' => $this->string(255),
             'established' => $this->integer(),
             'livechat_support' => $this->boolean()->defaultValue(false),
             'support_email' => $this->string(255),
             'support_phone' => $this->string(255),
+            'support_language' => $this->string(255),
+            'support_currency' => $this->string(255),
+            'license' => $this->string(255),
             'logo' => $this->integer(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'created_by' => $this->integer(),
@@ -65,6 +72,12 @@ class m200518_152739_operator extends Migration
             'updated_at' => $this->dateTime(),
             'replied_at' => $this->dateTime(),
         ], $tableOptions);
+
+        $this->createTable('{{%operator_meta}}', [
+            'id' => $this->primaryKey(),
+            'key' => $this->string(255)->notNull(),
+            'value' => $this->string(255)->notNull(),
+        ], $tableOptions);
     }
 
     public function down()
@@ -72,5 +85,6 @@ class m200518_152739_operator extends Migration
         $this->dropTable('{{%operator}}');
         $this->dropTable('{{%operator_favorite}}');
         $this->dropTable('{{%operator_review}}');
+        $this->dropTable('{{%operator_meta}}');
     }
 }

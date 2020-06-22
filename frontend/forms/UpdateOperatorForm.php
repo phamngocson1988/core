@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use frontend\models\Operator;
+use frontend\models\OperatorMeta;
 use common\models\Country;
 
 class UpdateOperatorForm extends Model
@@ -16,6 +17,8 @@ class UpdateOperatorForm extends Model
     public $backup_url;
     public $withdrawal_limit;
     public $withdrawal_currency;
+    public $withdrawal_time;
+    public $withdrawal_method;
     public $rebate;
     public $owner;
     public $established;
@@ -23,6 +26,11 @@ class UpdateOperatorForm extends Model
     public $support_email;
     public $support_phone;
     public $logo;
+    public $support_language;
+    public $support_currency;
+    public $license;
+    public $product;
+    public $deposit_method;
     protected $_operator;
     
     public function rules()
@@ -33,6 +41,7 @@ class UpdateOperatorForm extends Model
             ['backup_url', 'string', 'max' => 1024],
             ['withdrawal_currency', 'string', 'max' => 16],
             [['established', 'rebate', 'withdrawal_limit'], 'number'],
+            [['support_language', 'support_currency', 'license', 'withdrawal_time', 'withdrawal_method', 'product', 'deposit_method'], 'safe'],
         ];
     }
 
@@ -50,6 +59,16 @@ class UpdateOperatorForm extends Model
         $operator->livechat_support = $this->livechat_support;
         $operator->support_email = $this->support_email;
         $operator->support_phone = $this->support_phone;
+
+        // new
+        $operator->support_language = implode(",", (array)$this->support_language);
+        $operator->support_currency = implode(",", (array)$this->support_currency);
+        $operator->withdrawal_method = implode(",", (array)$this->withdrawal_method);
+        $operator->product = implode(",", (array)$this->product);
+        $operator->deposit_method = implode(",", (array)$this->deposit_method);
+        $operator->withdrawal_time = $this->withdrawal_time;
+        $operator->license = $this->license;
+
         return $operator->save();
     }
 
@@ -77,6 +96,16 @@ class UpdateOperatorForm extends Model
         $this->livechat_support = $operator->livechat_support;
         $this->support_email = $operator->support_email;
         $this->support_phone = $operator->support_phone;
+
+
+        // new
+        $this->support_currency = explode(",", $operator->support_currency);
+        $this->support_language = explode(",", $operator->support_language);
+        $this->withdrawal_time = $operator->withdrawal_time;
+        $this->withdrawal_method = explode(",", $operator->withdrawal_method);
+        $this->product = explode(",", $operator->product);
+        $this->deposit_method = explode(",", $operator->deposit_method);
+        $this->license = $operator->license;
     }
 
     public function getImageUrl($size = null, $default = 'https://www.ira-sme.net/wp-content/themes/consultix/images/no-image-found-360x260.png')
@@ -89,5 +118,63 @@ class UpdateOperatorForm extends Model
     {
         $years = range(1990, date("Y"));
         return array_combine($years, $years);
+    }
+
+    public function fetchLanguage()
+    {
+        return ArrayHelper::getValue(Yii::$app->params, 'language', []);
+    }
+
+    public function fetchCurrency()
+    {
+        return ArrayHelper::getValue(Yii::$app->params, 'currency', []);
+    }
+
+    public function fetchLiveChat()
+    {
+        return [
+            'Yes' => 'Yes',
+            'No' => 'No',
+        ];
+    }
+
+    public function fetchWithdrawTime()
+    {
+        return [
+            "E-wallets: 0m – 24h" => "E-wallets: 0m – 24h",
+            "Card Payments: 0m – 24h" => "Card Payments: 0m – 24h",
+            "Bank Transfers: 3-5d" => "Bank Transfers: 3-5d",
+            "Cheques: 3-5d" => "Cheques: 3-5d",
+        ];
+    }
+
+    public function fetchWithdrawMethod()
+    {
+        $withdrawal = OperatorMeta::find()->where(['key' => OperatorMeta::KEY_WITHDRAWVAL_METHOD])->one();
+        $values = $withdrawal ? explode(",", $withdrawal->value) : [];
+        if (count($values)) {
+            return array_combine($values, $values);
+        }
+        return [];
+    }
+
+    public function fetchProduct()
+    {
+        $product = OperatorMeta::find()->where(['key' => OperatorMeta::KEY_PRODUCT])->one();
+        $values = $product ? explode(",", $product->value) : [];
+        if (count($values)) {
+            return array_combine($values, $values);
+        }
+        return [];
+    }
+
+    public function fetchDepositMethod()
+    {
+        $deposit = OperatorMeta::find()->where(['key' => OperatorMeta::KEY_DEPOSIT_METHOD])->one();
+        $values = $deposit ? explode(",", $deposit->value) : [];
+        if (count($values)) {
+            return array_combine($values, $values);
+        }
+        return [];
     }
 }

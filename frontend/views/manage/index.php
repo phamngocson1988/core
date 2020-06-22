@@ -1,6 +1,7 @@
 <?php
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use yii\helpers\Html;
 $this->title = 'Update Operator';
 ?>
 <main>
@@ -63,7 +64,26 @@ $this->title = 'Update Operator';
                     <?= $form->field($model, 'withdrawal_currency', [
                       'labelOptions' => ['class' => 'fm-label'],
                       'inputOptions' => ['class' => 'form-control']
-                    ])->dropdownList(['USD' => 'USD', 'VND' => 'VND']);?>
+                    ])->dropdownList($model->fetchCurrency());?>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-lg-6">
+                    <?= $form->field($model, 'withdrawal_time', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->dropdownList($model->fetchWithdrawTime());?>
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <?= $form->field($model, 'withdrawal_method', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->checkboxList($model->fetchWithdrawMethod(), [
+                      'item' => function($index, $label, $name, $checked, $value) {
+                        $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                        return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                      }
+                    ]);?>
                   </div>
                 </div>
                 <div class="row">
@@ -96,94 +116,67 @@ $this->title = 'Update Operator';
                 </div>
                 <div class="row">
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">License</label>
-                      <input class="form-control fm-calendar js-datepicker" type="text">
-                    </div>
+                    <?= $form->field($model, 'livechat_support', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->dropdownList($model->fetchLiveChat());?>
                   </div>
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Deposit Methods</label>
-                      <input class="form-control fm-calendar js-datepicker" type="text">
-                    </div>
+                    <?= $form->field($model, 'license', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->textInput();?>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Owner</label>
-                      <input class="form-control" type="text">
-                    </div>
+                    <?= $form->field($model, 'support_currency', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->checkboxList($model->fetchCurrency(), [
+                      'item' => function($index, $label, $name, $checked, $value) {
+                        $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                        return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                      }
+                    ]);?>
                   </div>
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Withdrawal Methods</label>
-                      <input class="form-control" type="text">
-                    </div>
+                    <?= $form->field($model, 'support_language', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->checkboxList($model->fetchLanguage(), [
+                      'item' => function($index, $label, $name, $checked, $value) {
+                        $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                        return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                      }
+                    ]);?>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Established</label>
-                      <input class="form-control" type="text">
-                    </div>
+                    <?= $form->field($model, 'product', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->checkboxList($model->fetchProduct(), [
+                      'item' => function($index, $label, $name, $checked, $value) {
+                        $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                        return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                      }
+                    ]);?>
                   </div>
                   <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Withdrawal Time</label>
-                      <select class="form-control">
-                        <option selected>Local Banks: 0-24 hours</option>
-                        <option>International Banks: 0-24 hours</option>
-                      </select>
-                    </div>
+                    <?= $form->field($model, 'deposit_method', [
+                      'labelOptions' => ['class' => 'fm-label'],
+                      'inputOptions' => ['class' => 'form-control']
+                    ])->checkboxList($model->fetchDepositMethod(), [
+                      'item' => function($index, $label, $name, $checked, $value) {
+                        $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                        return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                      }
+                    ]);?>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Live Chat</label>
-                      <div>
-                        <label class="form-check form-check-inline">
-                          <input class="form-check-input" id="fm-livechat1" type="radio" name="fm-livechat" value="yes" selected><span class="form-check-label" for="fm-livechat1">Yes</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                          <input class="form-check-input" id="fm-livechat2" type="radio" name="fm-livechat" value="no"><span class="form-check-label" for="fm-livechat2">No</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                          <input class="form-check-input" id="fm-livechat3" type="radio" name="fm-livechat" value="other" disabled><span class="form-check-label" for="fm-livechat3">Other (disabled)</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Withdrawal Limit</label>
-                      <select class="form-control">
-                        <option selected>Up to $50,000 per transaction</option>
-                        <option>Up to $30,000 per transaction</option>
-                        <option>Up to $10,000 per transaction</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                      <label class="fm-label">Rebates</label>
-                      <select class="form-control">
-                        <option selected>Max 1.5%</option>
-                        <option>Max 1.0%</option>
-                        <option>Max 0.5%</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-6"></div>
-                </div>
-                <div class="form-group">
-                  <label class="fm-label">Contact</label>
-                  <textarea class="form-control" rows="4"></textarea>
-                </div>
+                
                 <?= $form->field($model, 'overview', [
                   'labelOptions' => ['class' => 'fm-label'],
                   'inputOptions' => ['class' => 'form-control', 'rows' => 8]
