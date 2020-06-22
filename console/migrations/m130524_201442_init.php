@@ -53,11 +53,19 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer(),
             'created_by' => $this->integer(),
         ], $tableOptions);
+
+        $this->createTable('{{%user_setting}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'key' => $this->string(255)->notNull(),
+            'value' => $this->text(),
+        ], $tableOptions);
     }
 
     public function down()
     {
         $this->dropTable('{{%user}}');
+        $this->dropTable('{{%user_setting}}');
         $this->dropTable('{{%image}}');
         $this->dropTable('{{%file}}');
     }

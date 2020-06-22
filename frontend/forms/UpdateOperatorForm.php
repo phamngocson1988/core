@@ -93,7 +93,7 @@ class UpdateOperatorForm extends Model
         $this->rebate = $operator->rebate;
         $this->owner = $operator->owner;
         $this->established = $operator->established;
-        $this->livechat_support = $operator->livechat_support;
+        $this->livechat_support = (boolean)$operator->livechat_support;
         $this->support_email = $operator->support_email;
         $this->support_phone = $operator->support_phone;
 
@@ -133,8 +133,8 @@ class UpdateOperatorForm extends Model
     public function fetchLiveChat()
     {
         return [
-            'Yes' => 'Yes',
-            'No' => 'No',
+            '1' => 'Yes',
+            '0' => 'No',
         ];
     }
 

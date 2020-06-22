@@ -65,9 +65,12 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fa fa-language"></i></div>
                     <div class="label-text">Supported Languages</div>
                   </div>
-                  <div class="content"><a href="#">Vietnamese</a>,
-                    <a href="#">Chinese</a>,
-                    <a href="#">English</a>
+                  <div class="content">
+                    <?php $languages = array_map(function($language) {
+                      return Html::a($language, "javascript:;");
+                    }, explode(",", $model->support_language));
+                    echo implode(",", $languages);
+                    ?>
                   </div>
                 </li>
                 <li>
@@ -88,10 +91,12 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-dollar-sign"></i></div>
                     <div class="label-text">Supported Currencies</div>
                   </div>
-                  <div class="content"><a href="#">VND</a>,
-                    <a href="#">THB</a>,
-                    <a href="#">MYR</a>,
-                    <a href="#">USD</a>
+                  <div class="content">
+                    <?php $currencies = array_map(function($currency) {
+                      return Html::a($currency, "javascript:;");
+                    }, explode(",", $model->support_currency));
+                    echo implode(",", $currencies);
+                    ?>
                   </div>
                 </li>
                 <li>
@@ -99,9 +104,12 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-gamepad"></i></div>
                     <div class="label-text">Products</div>
                   </div>
-                  <div class="content"><a href="#">Product 1</a>,
-                    <a href="#">Product 2</a>,
-                    <a href="#">Product 3</a>
+                  <div class="content">
+                    <?php $products = array_map(function($product) {
+                      return Html::a($product, "javascript:;");
+                    }, explode(",", $model->product));
+                    echo implode(",", $products);
+                    ?>
                   </div>
                 </li>
                 <li>
@@ -109,16 +117,19 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fab fa-codepen"></i></div>
                     <div class="label-text">License</div>
                   </div>
-                  <div class="content"><a href="#">Philippines</a></div>
+                  <div class="content"><a href="javascript:;"><?=$model->license;?></a></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-credit-card"></i></div>
                     <div class="label-text">Deposit Methods</div>
                   </div>
-                  <div class="content"><a href="#">Product 1</a>,
-                    <a href="#">Product 2</a>,
-                    <a href="#">Product 3</a>
+                  <div class="content">
+                    <?php $depositMethods = array_map(function($deposit) {
+                      return Html::a($deposit, "javascript:;");
+                    }, explode(",", $model->deposit_method));
+                    echo implode(",", $depositMethods);
+                    ?>
                   </div>
                 </li>
                 <li>
@@ -133,9 +144,12 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-dollar-sign"></i></div>
                     <div class="label-text">Withdrawal Methods</div>
                   </div>
-                  <div class="content"><a href="#">Product 1</a>,
-                    <a href="#">Product 2</a>,
-                    <a href="#">Product 3</a>
+                  <div class="content">
+                    <?php $withdrawMethods = array_map(function($method) {
+                      return Html::a($method, "javascript:;");
+                    }, explode(",", $model->withdrawal_method));
+                    echo implode(",", $withdrawMethods);
+                    ?>
                   </div>
                 </li>
                 <li>
@@ -150,14 +164,14 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-clock"></i></div>
                     <div class="label-text">Withdrawal Time</div>
                   </div>
-                  <div class="content">Local Banks: 0-24 hours</div>
+                  <div class="content"><?=$model->withdrawal_time;?></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-comments"></i></div>
                     <div class="label-text">Live Chat</div>
                   </div>
-                  <div class="content">Yes</div>
+                  <div class="content"><?=$model->livechat_support ? 'Yes' : 'No';?></div>
                 </li>
                 <li>
                   <div class="label">

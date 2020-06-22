@@ -149,7 +149,7 @@ $user = Yii::$app->user->getIdentity();
                 </li>
                 <li>
                   <div class="notifications-thead">
-                    <div class="col-first">MY REVIEWS</div>
+                    <div class="col-first">MY COMPLAINS</div>
                     <div class="col-second">RECEIVE EMAILS</div>
                     <div class="col-third">RECEIVE ON-SITE NOTIFICATIONS</div>
                   </div>

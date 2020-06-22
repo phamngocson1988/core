@@ -191,25 +191,9 @@ $this->title = 'Update Operator';
         </div>
         <div class="mod-sidebar">
           <div class="sidebar-col sidebar-category">
-            <div class="category-row">
-              <p class="category-title"><a class="trans" href="#"><i class="fas fa-pencil-alt"></i>Reviews (52)</a></p>
-              <div class="category-inner">
-                <ul class="category-list">
-                  <li><a class="trans" href="#">Unresponded reviews (31)</a></li>
-                  <li><a class="trans" href="#">Responded reviews (21)</a></li>
-                </ul>
-              </div>
-            </div>
-            <div class="category-row">
-              <p class="category-title"><a class="trans" href="#"><i class="fas fa-comment"></i>Complaints (1,796)</a></p>
-              <div class="category-inner">
-                <ul class="category-list">
-                  <li><a class="trans" href="#">Open cases (18)</a></li>
-                  <li><a class="trans" href="#">Resolved (99)</a></li>
-                  <li><a class="trans" href="#">Rejected (0)</a></li>
-                </ul>
-              </div>
-            </div>
+            <?=\frontend\widgets\ReviewStatByOperatorWidget::widget(['operator_id' => $model->id]);?>
+            <?=\frontend\widgets\ComplainStatByOperatorWidget::widget(['operator_id' => $model->id]);?>
+            
             <div class="category-row">
               <p class="category-title"><a class="trans" href="#"><i class="fas fa-users"></i>Manage users</a></p>
               <div class="category-inner">
