@@ -23,6 +23,9 @@ class CreateWithdrawRequestForm extends Model
     {
         return [
             [['supplier_id', 'bank_code', 'account_name', 'account_number', 'amount'], 'required'],
+            ['amount', 'filter', 'filter' => function ($value) {
+                return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+            }],
             ['amount', 'validateAmount']
         ];
     }
