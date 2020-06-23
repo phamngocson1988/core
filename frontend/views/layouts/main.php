@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\assets\AppAsset;
 use frontend\components\toastr\NotificationFlash;
+use webzop\notifications\widgets\Notifications;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -124,6 +125,7 @@ AppAsset::register($this);
               </div>
             </div>
           </div>
+          <?=Notifications::widget();?>
           <?=\frontend\widgets\ProfileMenuWidget::widget();?>
           <?php endif;?>
           <div class="header-language"><a class="trans" href="#"><span>VI</span></a></div>

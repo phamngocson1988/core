@@ -10,6 +10,17 @@ return [
     'bootstrap' => [
         'queue', // The component registers its own console commands
     ],
+    'modules' => [
+        'notifications' => [
+            'class' => 'webzop\notifications\Module',
+            'channels' => [
+                'email' => [
+                    'class' => 'webzop\notifications\channels\EmailChannel',
+                ],
+                
+            ],
+        ],
+    ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [
