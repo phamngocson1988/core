@@ -41,8 +41,8 @@ $this->title = 'User Profile';
         <div class="col-md-6">
           <p class="lead">Account</p>
           <hr />
-          <?= $form->field($model, 'username')->textInput(['placeholder' => 'Username', 'readonly' => true, 'disabled' => true])->label(false);?>
-          <?= $form->field($model, 'email')->textInput(['placeholder' => 'Email', 'readonly' => true, 'disabled' => true])->label(false);?>
+          <?= $form->field($model, 'username')->textInput(['placeholder' => 'Username', 'readonly' => true])->label(false);?>
+          <?= $form->field($model, 'email')->textInput(['placeholder' => 'Email', 'readonly' => true])->label(false);?>
           <?= $form->field($model, 'phone')->textInput(['placeholder' => 'Phone number', 'class' => 'form-control phoneinp', 'readonly' => true, 'disabled' => true])->label(false);?>
           <div class="form-group">
             <div class="input-group mb-3">
@@ -68,64 +68,40 @@ $this->title = 'User Profile';
           <hr />
         </div>
         <div class="col-md-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="">
-                <img class="icon-sm" src="/images/icon/facebook-icon.svg">
-              </span>
-            </div>
-            <input type="text" class="form-control" placeholder="Link URL" aria-label="" aria-describedby="">
-          </div>
+          <?= $form->field($model, 'social_facebook', [
+            'options' => ['class' => 'input-group mb-3'],
+            'template' => '<div class="input-group-prepend"><span class="input-group-text"><img class="icon-sm" src="/images/icon/facebook-icon.svg"></span></div>{input}'
+          ])->textInput(['placeholder' => 'Link URL'])->label(false);?>
         </div>
         <div class="col-md-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="">
-                <img class="icon-sm" src="/images/icon/telegram-icon.svg">
-              </span>
-            </div>
-            <input type="text" class="form-control" placeholder="Phone Number" aria-label="" aria-describedby="">
-          </div>
+          <?= $form->field($model, 'social_telegram', [
+            'options' => ['class' => 'input-group mb-3'],
+            'template' => '<div class="input-group-prepend"><span class="input-group-text"><img class="icon-sm" src="/images/icon/telegram-icon.svg"></span></div>{input}'
+          ])->textInput(['placeholder' => 'Link URL'])->label(false);?>
         </div>
         <div class="col-md-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="">
-                <img class="icon-sm" src="/images/icon/twitter-icon.svg">
-              </span>
-            </div>
-            <input type="text" class="form-control" placeholder="Link URL" aria-label="" aria-describedby="">
-          </div>
+          <?= $form->field($model, 'social_twitter', [
+            'options' => ['class' => 'input-group mb-3'],
+            'template' => '<div class="input-group-prepend"><span class="input-group-text"><img class="icon-sm" src="/images/icon/twitter-icon.svg"></span></div>{input}'
+          ])->textInput(['placeholder' => 'Link URL'])->label(false);?>
         </div>
         <div class="col-md-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="">
-                <img class="icon-sm" src="/images/icon/wechat-icon.svg">
-              </span>
-            </div>
-            <input type="text" class="form-control" placeholder="Phone Number" aria-label="" aria-describedby="">
-          </div>
+          <?= $form->field($model, 'social_wechat', [
+            'options' => ['class' => 'input-group mb-3'],
+            'template' => '<div class="input-group-prepend"><span class="input-group-text"><img class="icon-sm" src="/images/icon/wechat-icon.svg"></span></div>{input}'
+          ])->textInput(['placeholder' => 'Phone Number'])->label(false);?>
         </div>
         <div class="col-md-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="">
-                <img class="icon-sm" src="/images/icon/whatsapp-icon.svg">
-              </span>
-            </div>
-            <input type="text" class="form-control" placeholder="Phone Number" aria-label="" aria-describedby="">
-          </div>
+          <?= $form->field($model, 'social_whatsapp', [
+            'options' => ['class' => 'input-group mb-3'],
+            'template' => '<div class="input-group-prepend"><span class="input-group-text"><img class="icon-sm" src="/images/icon/whatsapp-icon.svg"></span></div>{input}'
+          ])->textInput(['placeholder' => 'Phone Number'])->label(false);?>
         </div>
         <div class="col-md-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="">
-                Other
-              </span>
-            </div>
-            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="">
-          </div>
+          <?= $form->field($model, 'social_other', [
+            'options' => ['class' => 'input-group mb-3'],
+            'template' => '<div class="input-group-prepend"><span class="input-group-text">Other</span></div>{input}'
+          ])->textInput()->label(false);?>
         </div>
       </div>
       <div class="text-right mt-5">

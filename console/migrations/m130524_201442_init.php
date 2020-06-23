@@ -41,6 +41,12 @@ class m130524_201442_init extends Migration
             'is_supplier' => $this->smallInteger()->defaultValue(1),
             'marketing_id' => $this->integer(),
             'trust' => $this->string(1),
+            'social_facebook' => $this->string(255),
+            'social_twitter' => $this->string(255),
+            'social_whatsapp' => $this->string(255),
+            'social_telegram' => $this->string(255),
+            'social_wechat' => $this->string(255),
+            'social_other' => $this->string(255),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);

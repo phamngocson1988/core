@@ -14,9 +14,18 @@ class EditProfileForm extends Model
     public $birthday;
     public $phone;
 
+    public $social_facebook;
+    public $social_twitter;
+    public $social_whatsapp;
+    public $social_telegram;
+    public $social_wechat;
+    public $social_other;
+
     public function rules()
     {
         return [
+            [['username', 'email'], 'required'],
+
             ['firstname', 'trim'],
             ['firstname', 'string', 'max' => 255],
 
@@ -25,6 +34,8 @@ class EditProfileForm extends Model
 
             ['birthday', 'trim'],
             ['phone', 'trim'],
+
+            [['social_facebook', 'social_twitter', 'social_whatsapp', 'social_telegram', 'social_wechat', 'social_other'], 'trim']
         ];
     }
 
@@ -40,6 +51,12 @@ class EditProfileForm extends Model
         $user->lastname = $this->lastname;
         $user->birthday = $this->birthday;
         $user->phone = $this->phone;
+        $user->social_facebook = $this->social_facebook;
+        $user->social_twitter = $this->social_twitter;
+        $user->social_whatsapp = $this->social_whatsapp;
+        $user->social_telegram = $this->social_telegram;
+        $user->social_wechat = $this->social_wechat;
+        $user->social_other = $this->social_other;
         return $user->save();
     }
 
@@ -57,5 +74,11 @@ class EditProfileForm extends Model
         $this->email = $user->email;
         $this->birthday = $user->birthday;
         $this->phone = $user->phone;
+        $this->social_facebook = $user->social_facebook;
+        $this->social_twitter = $user->social_twitter;
+        $this->social_whatsapp = $user->social_whatsapp;
+        $this->social_telegram = $user->social_telegram;
+        $this->social_wechat = $user->social_wechat;
+        $this->social_other = $user->social_other;
     }
 }

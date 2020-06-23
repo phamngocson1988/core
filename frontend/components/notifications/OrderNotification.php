@@ -110,6 +110,8 @@ class OrderNotification extends Notification
             ],
             'email' => [
                 self::NOTIFY_CUSTOMER_PENDING_ORDER,
+                self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE,
+                self::NOTIFY_SUPPLIER_CANCEL_ORDER,
             ],
 
         ];
@@ -125,26 +127,51 @@ class OrderNotification extends Notification
     {
         $settings = Yii::$app->settings;
         $supplierMail = $settings->get('ApplicationSettingForm', 'supplier_service_email');
-        $supportMail = $settings->get('ApplicationSettingForm', 'customer_service_email');
-        $fromEmail = $supportMail;
+        $kinggemsMail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+        $supplierMailer = Yii::$app->supplier_mailer;
+        $kinggemsMailer = Yii::$app->mailer;
         $user = User::findOne($this->userId);
+
+        $fromEmail = $kinggemsMail;
+        $mailer = $kinggemsMailer;
+        $toEmail = $user->email;
+        $subject = '';
+        $template = '';
+        $data = [];
 
         switch($this->key) {
             case self::NOTIFY_CUSTOMER_PENDING_ORDER:
                 $subject = sprintf('King Gems - #%s - Order Confirmed', $this->order->id);
-                $template = 'new_pending_order';
-                $fromEmail = $supportMail;
+                $template = 'order_confirmed';
+                $fromEmail = $kinggemsMail;
+                $mailer = $kinggemsMailer;
                 break;
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                $subject = sprintf('Hoàng Gia - #%s - Tin nhắn mới', $this->order->id);
+                $template = 'notify_supplier_new_message';
+                $fromEmail = $supplierMail;
+                $mailer = $supplierMailer;
+                $data['detailUrl'] = 'https://hoanggianapgame.com/order/pending';
+                break;
+            case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
+                $subject = sprintf('Hoàng Gia - #%s - Yêu cầu hủy', $this->order->id);
+                $template = 'notify_supplier_cancel_order';
+                $fromEmail = $supplierMail;
+                $mailer = $supplierMailer;
+                $data['detailUrl'] = 'https://hoanggianapgame.com/order/pending';
+                break;
+
         }
-        $message = $channel->mailer->compose($template, [
+
+        $message = $mailer->compose($template, array_merge([
             'user' => $user,
             'order' => $this->order,
             'notification' => $this,
-        ]);
+        ], $data));
 
         $message->setFrom($fromEmail);
-        $message->setTo($user->email);
+        $message->setTo($toEmail);
         $message->setSubject($subject);
-        $message->send($channel->mailer);
+        $message->send($mailer);
     }
 }

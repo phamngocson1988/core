@@ -4,13 +4,15 @@ namespace backend\components\notifications;
 use Yii;
 use webzop\notifications\Notification;
 use yii\helpers\ArrayHelper;
+use backend\models\User;
 
 class OrderNotification extends Notification
 {
     const NOTIFY_ORDERTEAM_NEW_PENDING = 'NOTIFY_ORDERTEAM_NEW_PENDING';
-    const NOTIFY_SUPPLIER_NEW_ORDER = 'NOTIFY_SUPPLIER_NEW_ORDER';
+    const NOTIFY_SUPPLIER_NEW_ORDER = 'NOTIFY_SUPPLIER_NEW_ORDER'; // notification and mail
     const NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE = 'NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE';
     const NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE = 'NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE';
+    const NOTIFY_CUSTOMER_COMPLETE_ORDER = 'NOTIFY_CUSTOMER_COMPLETE_ORDER';
 
     /**
      * @var \backend\models\Order the order object
@@ -91,7 +93,78 @@ class OrderNotification extends Notification
                 self::NOTIFY_SUPPLIER_NEW_ORDER,
                 self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE,
                 self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE,
-            ]
+            ],
+            'email' => [
+                self::NOTIFY_SUPPLIER_NEW_ORDER,
+                self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE,
+                self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE,
+                self::NOTIFY_CUSTOMER_COMPLETE_ORDER,
+            ],
         ];
+    }
+
+    /**
+     * Override send to email channel
+     *
+     * @param $channel the email channel
+     * @return void
+     */
+    public function toEmail($channel)
+    {
+        $settings = Yii::$app->settings;
+        $supplierMail = $settings->get('ApplicationSettingForm', 'supplier_service_email');
+        $kinggemsMail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+        $supplierMailer = Yii::$app->supplier_mailer;
+        $kinggemsMailer = Yii::$app->mailer;
+        $user = User::findOne($this->userId);
+
+        $fromEmail = $kinggemsMail;
+        $mailer = $kinggemsMailer;
+        $toEmail = $user->email;
+        $subject = '';
+        $template = '';
+        $data = [];
+
+        switch($this->key) {
+            case self::NOTIFY_SUPPLIER_NEW_ORDER:
+                $subject = sprintf('Hoàng Gia - #%s - Đơn hàng mới', $this->order->id);
+                $template = 'notify_supplier_new_order';
+                $fromEmail = $supplierMail;
+                $mailer = $supplierMailer;
+                $data['orderWaitingUrl'] = 'https://hoanggianapgame.com/order/waiting';
+                break;
+            case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
+                $subject = sprintf('Hoàng Gia - #%s - Tin nhắn mới', $this->order->id);
+                $template = 'notify_supplier_new_message';
+                $fromEmail = $supplierMail;
+                $mailer = $supplierMailer;
+                $data['detailUrl'] = 'https://hoanggianapgame.com/order/pending';
+                break;
+            case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
+                $subject = sprintf('King Gems - #%s - Information Request', $this->order->id);
+                $template = 'infomation_request';
+                $fromEmail = $kinggemsMail;
+                $mailer = $kinggemsMailer;
+                $data['detailUrl'] = 'http://kinggems.com/user/detail.html?id=' . $this->order->id;
+                break;
+            case self::NOTIFY_CUSTOMER_COMPLETE_ORDER:
+                $subject = sprintf('King Gems - #%s - Completed', $this->order->id);
+                $template = 'completed';
+                $fromEmail = $kinggemsMail;
+                $mailer = $kinggemsMailer;
+                $data['detailUrl'] = 'http://kinggems.com/user/detail.html?id=' . $this->order->id;
+                break;
+
+        }
+        
+        $message = $mailer->compose($template, array_merge([
+            'order' => $this->order,
+            'notification' => $this,
+        ], $data));
+
+        $message->setFrom($fromEmail);
+        $message->setTo($toEmail);
+        $message->setSubject($subject);
+        $message->send($mailer);
     }
 }
