@@ -81,6 +81,8 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => require('router.php'),
+        'urlManagerBackend' => require('../../backend/config/router.php'),
+        'urlManagerSupplier' => require('../../supplier/config/router.php'),
         'cart' => [
             'class' => 'frontend\components\cart\Cart',
             // you can change default storage class as following:

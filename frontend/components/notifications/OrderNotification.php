@@ -132,6 +132,9 @@ class OrderNotification extends Notification
         $kinggemsMailer = Yii::$app->mailer;
         $user = User::findOne($this->userId);
 
+        Yii::$app->urlManagerBackend->setHostInfo(Yii::$app->params['backend_url']);
+        Yii::$app->urlManagerSupplier->setHostInfo(Yii::$app->params['supplier_url']);
+
         $fromEmail = $kinggemsMail;
         $mailer = $kinggemsMailer;
         $toEmail = $user->email;
@@ -151,14 +154,18 @@ class OrderNotification extends Notification
                 $template = 'notify_supplier_new_message';
                 $fromEmail = $supplierMail;
                 $mailer = $supplierMailer;
-                $data['detailUrl'] = 'https://hoanggianapgame.com/order/pending';
+                $supplierOrder = $this->order->workingSupplier;
+                if (!$supplierOrder) return;
+                $data['detailUrl'] = Yii::$app->urlManagerSupplier->createAbsoluteUrl(['order/edit', 'id' => $supplierOrder->id], true);
                 break;
             case self::NOTIFY_SUPPLIER_CANCEL_ORDER:
                 $subject = sprintf('Hoàng Gia - #%s - Yêu cầu hủy', $this->order->id);
                 $template = 'notify_supplier_cancel_order';
                 $fromEmail = $supplierMail;
                 $mailer = $supplierMailer;
-                $data['detailUrl'] = 'https://hoanggianapgame.com/order/pending';
+                $supplierOrder = $this->order->workingSupplier;
+                if (!$supplierOrder) return;
+                $data['detailUrl'] = Yii::$app->urlManagerSupplier->createAbsoluteUrl(['order/edit', 'id' => $supplierOrder->id], true);
                 break;
 
         }

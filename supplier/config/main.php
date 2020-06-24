@@ -85,9 +85,14 @@ return [
 
         'urlManager' => require('router.php'),
         'urlManagerFrontend' => require('../../frontend/config/router.php'),
+        'urlManagerBackend' => require('../../backend/config/router.php'),
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@supplier/mail',
+            'viewPath' => '@supplier/mail/kinggems',
+        ],
+        'supplier_mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@supplier/mail/supplier',
         ],
     ],
     'params' => $params,

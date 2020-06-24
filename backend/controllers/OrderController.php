@@ -466,15 +466,16 @@ class OrderController extends Controller
         $model->setScenario(Order::SCENARIO_GO_PENDING);
         $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             $order = $event->sender;
-            Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            $order->send(
-                'admin_send_pending_order', 
-                sprintf("Order confirmation - %s", $order->id), [
-                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            ]);
+            // Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+            // $order->send(
+            //     'admin_send_pending_order', 
+            //     sprintf("Order confirmation - %s", $order->id), [
+            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            // ]);
             $order->log(sprintf("Moved to pending with payment_id: %s", $order->payment_id));
             $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
             $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_PENDING, $orderTeamIds);
+            $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_PENDING_ORDER, $order->customer_id);
         });
         if (!$model->auth_key) $model->generateAuthKey();
         $model->payment_type = 'offline';
@@ -672,21 +673,35 @@ class OrderController extends Controller
     public function actionDisapprove($id)
     {
         $request = Yii::$app->request;
-            $model = Order::findOne($id);
-            $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
-                // Save a complain
-                $order = $event->sender;
-                $complain = new OrderComplains();
-                $complain->order_id = $order->id;
-                $complain->content = sprintf("Your request is cancelled by admin");
-                $complain->save();
-            });
-            $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
-                $order = $event->sender;
-                $order->log(sprintf("Disapproved to be cancelled when status is %s", $order->status));
-            });
-            $model->request_cancel = 0;
-            return $this->renderJson($model->save());
+        if ($request->isAjax) {
+            $form = new DenyCancelOrder(['id' => $id]);
+            $viewUrl = Url::to(['order/view', 'id' => $id]);
+            if ($form->validate() && $form->deny()) {
+                return $this->asJson(['status' => true, 'view_url' => $viewUrl]);
+            } else {
+                $errors = $form->getErrorSummary(false);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'errors' => $error]);
+            }
+        }
+        return $this->asJson(['status' => false, 'errors' => 'Not found']);
+
+        // $request = Yii::$app->request;
+        //     $model = Order::findOne($id);
+        //     $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
+        //         // Save a complain
+        //         $order = $event->sender;
+        //         $complain = new OrderComplains();
+        //         $complain->order_id = $order->id;
+        //         $complain->content = sprintf("Your request is cancelled by admin");
+        //         $complain->save();
+        //     });
+        //     $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
+        //         $order = $event->sender;
+        //         $order->log(sprintf("Disapproved to be cancelled when status is %s", $order->status));
+        //     });
+        //     $model->request_cancel = 0;
+        //     return $this->renderJson($model->save());
     }
 
     public function actionAddEvidenceImage($id)

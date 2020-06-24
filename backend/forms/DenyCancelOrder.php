@@ -8,7 +8,7 @@ use backend\events\OrderEventHandler;
 use backend\forms\RetakeOrderSupplierForm;
 use backend\components\notifications\OrderNotification;
 
-class ApproveCancelOrder extends Model
+class DenyCancelOrder extends Model
 {
     public $id;
     private $_order;
@@ -28,7 +28,7 @@ class ApproveCancelOrder extends Model
             $this->addError($attribute, 'Đơn hàng không tồn tại');
         }
         if (!$order->hasCancelRequest()) {
-            $this->addError($attribute, sprintf('Đơn hàng không thể bị hủy vì không có yêu cầu hủy hoặc đang ở trạng thái %s', $order->status));
+            $this->addError($attribute, sprintf('Đơn hàng không có yêu cầu hủy'));
         }
         $orderSupplier = $order->workingSupplier;
         if ($orderSupplier) {
@@ -37,7 +37,7 @@ class ApproveCancelOrder extends Model
         }
     }
 
-    public function approve()
+    public function deny()
     {
         if (!$this->validate()) return false;
         $order = $this->getOrder();
@@ -47,25 +47,11 @@ class ApproveCancelOrder extends Model
             // $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
             $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $model = $event->sender;
-                $model->log(sprintf("Approved to be cancelled when status is %s", $model->status));
-                $model->pushNotification(OrderNotification::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER, $model->customer_id);
+                $order->log(sprintf("Disapproved to be cancelled when status is %s", $order->status));
+                $model->pushNotification(OrderNotification::NOTIFY_CUSTOMER_CANCELLATION_DENIED_ORDER, $model->customer_id);
             });
-            if ($order->isPendingOrder() || $order->isProcessingOrder() || $order->isPartialOrder()) {
-                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
-                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
-            }
-            $order->status = Order::STATUS_CANCELLED;
+            $model->request_cancel = 0;
             $result = $order->save();
-
-            $orderSupplier = $order->requestingSupplier;
-            if ($orderSupplier) {
-                $retakeForm = new RetakeOrderSupplierForm([
-                    'order_id' => $this->id,
-                    'requester' => Yii::$app->user->id,
-                ]);
-                $retakeForm->retake();
-            }
-
             $transaction->commit();
             return $result;
         } catch(Exception $e) {

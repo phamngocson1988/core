@@ -10,6 +10,7 @@ use supplier\models\OrderSupplier;
 use supplier\behaviors\OrderSupplierBehavior;
 use supplier\behaviors\OrderLogBehavior;
 use supplier\behaviors\OrderMailBehavior;
+use supplier\components\notifications\OrderNotification;
 
 class UpdateOrderToCompletedForm extends Model
 {
@@ -123,11 +124,12 @@ class UpdateOrderToCompletedForm extends Model
                     $sender = $event->sender; // Order
                     Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                     $sender->log("Moved to completed");
-                    $sender->send(
-                        'admin_send_complete_order', 
-                        sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
-                            'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
-                    ]);
+                    $sender->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $sender->customer_id);
+                    // $sender->send(
+                    //     'admin_send_complete_order', 
+                    //     sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
+                    //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
+                    // ]);
                 });
             } else {
                 $order->status = Order::STATUS_PARTIAL;

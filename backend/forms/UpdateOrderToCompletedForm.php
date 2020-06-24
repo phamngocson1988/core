@@ -7,6 +7,7 @@ use yii\base\Model;
 use backend\models\Order;
 use backend\models\Supplier;
 use backend\models\OrderSupplier;
+use backend\components\notifications\OrderNotification;
 
 class UpdateOrderToCompletedForm extends Model
 {
@@ -53,13 +54,14 @@ class UpdateOrderToCompletedForm extends Model
             $order->process_duration_time = strtotime($order->completed_at) - strtotime($order->process_start_time);
             $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $order = $event->sender;
-                Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+                // Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                 $order->log("Moved to completed");
-                $order->send(
-                    'admin_send_complete_order', 
-                    sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
-                        'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-                ]);
+                $sender->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $sender->customer_id);
+                // $order->send(
+                //     'admin_send_complete_order', 
+                //     sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
+                //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+                // ]);
             });
             $order->save();
 
