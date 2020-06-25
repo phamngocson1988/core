@@ -76,6 +76,9 @@ return [
                 'screen' => [
                     'class' => 'webzop\notifications\channels\ScreenChannel',
                 ],
+                'email' => [
+                    'class' => 'webzop\notifications\channels\EmailChannel',
+                ],
             ],
         ],
     ],

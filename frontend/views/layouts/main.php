@@ -64,7 +64,7 @@ AppAsset::register($this);
               $items[] = ['label' => 'NEWS', 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'];
               $items[] = ['label' => 'FORUM', 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
               ?>
-              <?php echo yii\widgets\Menu::widget([
+              <?=yii\widgets\Menu::widget([
                 'options' => ['class' => 'header-nav-list d-flex'],
                 'itemOptions' => ['class' => ''],
                 'linkTemplate' => '<a href="{url}" class="item-nav">{label}</a>',
@@ -82,48 +82,8 @@ AppAsset::register($this);
           <?php else : ?>
           <?php $user = Yii::$app->user->getIdentity();?>
           <div class="header-icon header-email"><a class="trans" href="#"><i class="fas fa-envelope"></i></a></div>
-          <div class="header-icon header-bell header-dropdown"><a class="trans" href="#"><i class="fas fa-bell"></i></a><span class="js-action"></span>
-            <div class="dropdown-mega">
-              <div class="dropdown-mega-inner">
-                <p class="mega-title">Notifications (12)</p>
-                <div class="mega-content">
-                  <ul class="bell-list">
-                    <li><a class="bell-item trans" href="#">
-                        <div class="bell-image"><img src="/img/common/avatar_img_01.png" alt="image"></div>
-                        <div class="bell-info">
-                          <div class="bell-group"><span class="bell-name">Username</span><span class="bell-txt">replied to your topic</span></div>
-                          <p class="bell-date">a day ago</p>
-                        </div></a></li>
-                    <li><a class="bell-item trans" href="#">
-                        <div class="bell-image"><img src="/img/common/avatar_img_01.png" alt="image"></div>
-                        <div class="bell-info">
-                          <div class="bell-group"><span class="bell-name">Username</span><span class="bell-txt">replied to your topic</span></div>
-                          <p class="bell-date">a day ago</p>
-                        </div></a></li>
-                    <li><a class="bell-item trans" href="#">
-                        <div class="bell-image"><img src="/img/common/avatar_img_01.png" alt="image"></div>
-                        <div class="bell-info">
-                          <div class="bell-group"><span class="bell-name">Username</span><span class="bell-txt">replied to your topic</span></div>
-                          <p class="bell-date">a day ago</p>
-                        </div></a></li>
-                    <li><a class="bell-item trans" href="#">
-                        <div class="bell-image"><img src="/img/common/avatar_img_01.png" alt="image"></div>
-                        <div class="bell-info">
-                          <div class="bell-group"><span class="bell-name">Username</span><span class="bell-txt">replied to your topic</span></div>
-                          <p class="bell-date">a day ago</p>
-                        </div></a></li>
-                    <li><a class="bell-item trans" href="#">
-                        <div class="bell-image"><img src="/img/common/avatar_img_01.png" alt="image"></div>
-                        <div class="bell-info">
-                          <div class="bell-group"><span class="bell-name">Username</span><span class="bell-txt">replied to your topic</span></div>
-                          <p class="bell-date">a day ago</p>
-                        </div></a></li>
-                  </ul>
-                </div>
-                <div class="mega-btn"><span>Mark as read</span><a class="trans mg-left" href="#">VIEW ALL</a><a class="fas fa-cog" href="#"></a></div>
-              </div>
-            </div>
-          </div>
+          <?=\frontend\components\notifications\Notifications::widget();?>
+
           <?=\frontend\widgets\ProfileMenuWidget::widget();?>
           <?php endif;?>
           <div class="header-language"><a class="trans" href="#"><span>VI</span></a></div>
