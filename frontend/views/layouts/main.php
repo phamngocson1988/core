@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\assets\AppAsset;
 use frontend\components\toastr\NotificationFlash;
+use webzop\notifications\widgets\Notifications;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -83,7 +84,6 @@ AppAsset::register($this);
           <?php $user = Yii::$app->user->getIdentity();?>
           <div class="header-icon header-email"><a class="trans" href="#"><i class="fas fa-envelope"></i></a></div>
           <?=\frontend\components\notifications\Notifications::widget();?>
-
           <?=\frontend\widgets\ProfileMenuWidget::widget();?>
           <?php endif;?>
           <div class="header-language"><a class="trans" href="#"><span>VI</span></a></div>
