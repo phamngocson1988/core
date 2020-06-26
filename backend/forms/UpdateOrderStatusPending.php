@@ -52,12 +52,12 @@ class UpdateOrderStatusPending extends Model
         try {
             $order->on(Order::EVENT_AFTER_UPDATE, function ($event) {
                 $order = $event->sender; // Order
-                Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-                $order->send(
-                    'admin_send_pending_order', 
-                    sprintf("Order confirmation - %s", $order->id), [
-                        'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-                ]);
+                // Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
+                // $order->send(
+                //     'admin_send_pending_order', 
+                //     sprintf("Order confirmation - %s", $order->id), [
+                //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+                // ]);
                 $order->log(sprintf("Moved to pending with payment_id: %s", $order->payment_id));
             });
 

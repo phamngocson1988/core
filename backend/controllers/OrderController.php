@@ -503,11 +503,11 @@ class OrderController extends Controller
             $order = $event->sender;
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             $order->log("Moved to processing");
-            $order->send(
-                'admin_send_processing_order', 
-                sprintf("[KingGems] - Processing Order - Order #%s", $order->id), [
-                    'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            ]);
+            // $order->send(
+            //     'admin_send_processing_order', 
+            //     sprintf("[KingGems] - Processing Order - Order #%s", $order->id), [
+            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
+            // ]);
         });
 
         return $this->renderJson($model->save());
