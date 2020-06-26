@@ -21,7 +21,7 @@ class Controller extends BaseController
 	        $newPendingOrderTotal = $newPendingOrderCommand->count();
 			$this->view->params['new_pending_order'] = $newPendingOrderTotal ? $newPendingOrderTotal : '';
 
-			$newPendingInforOrderCommand = Order::find()->where(['status' => Order::STATUS_PENDING])
+			$newPendingInforOrderCommand = Order::find()->where(["IN", "status", [Order::STATUS_PENDING, Order::STATUS_PROCESSING]])
 			->andWhere(["IS NOT", 'state', null]);
 	        $newPendingInfoOrderTotal = $newPendingInforOrderCommand->count();
 			$this->view->params['new_pending_info_order'] = $newPendingInfoOrderTotal ? $newPendingInfoOrderTotal : '';
