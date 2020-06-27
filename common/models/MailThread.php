@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use common\behaviors\MailboxBehavior;
 
 class MailThread extends ActiveRecord
 {
@@ -14,7 +15,7 @@ class MailThread extends ActiveRecord
             [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => false,
+                'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
             ],
             [
@@ -22,6 +23,7 @@ class MailThread extends ActiveRecord
                 'createdByAttribute' => 'from',
                 'updatedByAttribute' => false,
             ],
+            'mailbox' => MailboxBehavior::className(),
         ];
     }
 

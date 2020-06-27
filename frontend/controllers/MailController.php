@@ -12,6 +12,9 @@ use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
+use frontend\models\MailThread;
+use frontend\models\Mail;
+
 class MailController extends Controller
 {
     public function behaviors()
@@ -32,24 +35,30 @@ class MailController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $form = new \frontend\forms\FetchMailBoxForm([
+            'user_id' => Yii::$app->user->id
+        ]);
+        $command = $form->getCommand();
+        $threads = $command->limit(50)->all();
+        return $this->render('index', [
+            'threads' => $threads
+        ]);
     }
 
     public function actionCompose()
     {
         $request = Yii::$app->request;
         $model = new \frontend\forms\ComposeMailForm([
-            'from' => Yii::$app->user->id,
         ]);
         if ($model->load($request->post())) {
-            if ($model->validate() && $model->create()) {
+            if ($model->validate() && $model->compose()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                return $this->redirect(['site/index']);
+                return $this->redirect(['mail/index']);
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
         }
-        return $this->render('create', [
+        return $this->render('compose', [
             'model' => $model,
         ]);
     }
@@ -57,27 +66,11 @@ class MailController extends Controller
     public function actionView($id)
     {
         $request = Yii::$app->request;
-        $complain = Complain::findOne($id);
-        $operator = $complain->operator;
-        $reason = $complain->reason;
-        $replies = $complain->replies;
-        $replyForm = new \frontend\forms\ReplyComplainForm();
-        $complains = Complain::find()->where(['operator_id' => $operator->id])->limit(4)->all();
-
-        $user = Yii::$app->user;
-        $canReply = false;
-        if (!$user->isGuest) {
-            $canReply = $complain->isOpen() && $user->id == $complain->user_id;
-        }
-        return $this->render('view', [
-            'complain' => $complain,
-            'operator' => $operator,
-            'reason' => $reason,
-            'user' => $complain->user,
-            'replies' => $replies,
-            'replyForm' => $replyForm,
-            'complains' => $complains,
-            'canReply' => $canReply,
+        $thread = MailThread::findOne($id);
+        $mails = Mail::find()->where(['mail_thread_id' => $id])->orderBy(['created_at' => SORT_ASC])->all();
+        return $this->renderPartial('view', [
+            'thread' => $thread,
+            'mails' => $mails,
         ]);
     }
 

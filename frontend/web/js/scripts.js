@@ -217,28 +217,28 @@ app.selectMessage = function () {
     $(this)
       .closest('li')
       .addClass('is-current');
-    if (!app.isMobile()) {
-      $('#js-message-main')
-        .find('.sec-empty')
-        .hide();
-      $('#js-message-main')
-        .find('.review-list')
-        .show();
-    } else {
-      $('#js-message-main')
-        .find('.sec-empty')
-        .hide();
-      $('#js-message-main')
-        .find('.review-list')
-        .slideDown(function () {
-          $('.section-user-message').animate(
-            {
-              left: '-100%'
-            },
-            400
-          );
-        });
-    }
+    // if (!app.isMobile()) {
+    //   $('#js-message-main')
+    //     .find('.sec-empty')
+    //     .hide();
+    //   $('#js-message-main')
+    //     .find('.review-list')
+    //     .show();
+    // } else {
+    //   $('#js-message-main')
+    //     .find('.sec-empty')
+    //     .hide();
+    //   $('#js-message-main')
+    //     .find('.review-list')
+    //     .slideDown(function () {
+    //       $('.section-user-message').animate(
+    //         {
+    //           left: '-100%'
+    //         },
+    //         400
+    //       );
+    //     });
+    // }
     return false;
   });
 

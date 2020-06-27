@@ -21,6 +21,7 @@ class m200625_173042_mailbox extends Migration
             'from' => $this->integer()->notNull(),
             'to' => $this->integer()->notNull(),
             'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
         $this->createTable('{{%mail}}', [

@@ -82,7 +82,7 @@ AppAsset::register($this);
           <div class="header-login"><a href="#modalLogin" data-toggle="modal">LOGIN</a></div>
           <?php else : ?>
           <?php $user = Yii::$app->user->getIdentity();?>
-          <div class="header-icon header-email"><a class="trans" href="#"><i class="fas fa-envelope"></i></a></div>
+          <div class="header-icon header-email"><a class="trans" href="<?=Url::to(['mail/index']);?>"><i class="fas fa-envelope"></i></a></div>
           <?=\frontend\components\notifications\Notifications::widget();?>
           <?=\frontend\widgets\ProfileMenuWidget::widget();?>
           <?php endif;?>

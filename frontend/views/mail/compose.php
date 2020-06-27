@@ -9,19 +9,26 @@ $this->title = 'Leave complain';
       <h1 class="sec-title">Compose new email!</h1>
       <div class="sec-content">
         <div class="mod-column form-complaints">
-          <?php $form = ActiveForm::begin(['action' => Url::to(['complain/create'])]); ?>
+          <?php $form = ActiveForm::begin(); ?>
           <div class="widget-box mb-5 p-3 p-md-4">
             <div class="mb-5">
-              <h2 class="sec-ttl mb-3">Fill in the complaint submission form</h2>
-              <div class="row">
-                <?= $form->field($model, 'title', [
+              <div class="row mb-3">
+                <?= $form->field($model, 'subject', [
+                  'options' => ['class' => 'col-sm-12 mb-sm-0 mb-3'],
                   'labelOptions' => ['class' => 'text-uppercase mb-2']
                 ])->textInput();?>
               </div>
-              <?= $form->field($model, 'description', [
+              <div class="row mb-3">
+                <?= $form->field($model, 'toEmail', [
+                  'options' => ['class' => 'col-sm-12 mb-sm-0 mb-3'],
+                  'labelOptions' => ['class' => 'text-uppercase mb-2']
+                ])->textInput();?>
+              </div>
+              <?= $form->field($model, 'content', [
                 'inputOptions' => ['class' => 'form-control mb-1', 'cols' => '30', 'rows' => '10'],
                 'options' => ['tag' => false],
-                'template' => '{input}{hint}'
+                'template' => '{label}{input}{hint}',
+                'labelOptions' => ['class' => 'text-uppercase mb-2']
               ])->textArea();?>
             </div>
             <div class="text-center">

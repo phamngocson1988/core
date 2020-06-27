@@ -29,4 +29,9 @@ class Mail extends ActiveRecord
     {
         return '{{%mail}}';
     }
+
+    public function getSender()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
 }

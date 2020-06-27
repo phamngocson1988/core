@@ -35,6 +35,14 @@ class ReplyMailForm extends Model
         }
     }
 
+    public function getThread()
+    {
+        if (!$this->_thread) {
+            $this->_thread = MailThread::findOne($this->thread_id);
+        }
+        return $this->_thread;
+    }
+
     public function attributeLabels()
     {
         return [
@@ -44,10 +52,23 @@ class ReplyMailForm extends Model
 
     public function reply()
     {
-        $mail = new Mail();
-        $mail->mail_thread_id = $this->thread_id;
-        $mail->content = $this->content;
-        return $mail->save();
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $mail = new Mail();
+            $mail->mail_thread_id = $this->thread_id;
+            $mail->content = $this->content;
+            $mail->save();
+
+            $thread = $this->getThread();
+            $thread->touch('updated_at');
+            $transaction->commit();
+            return true;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->addError('content', $e->getMessage());
+            return false;
+        }
     }
 
 }

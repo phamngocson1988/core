@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use frontend\models\Mail;
 use frontend\models\MailThread;
+use frontend\models\User;
 
 class ComposeMailForm extends Model
 {
@@ -18,8 +19,8 @@ class ComposeMailForm extends Model
     public function rules()
     {
         return [
-            [['subject', 'content', 'to'], 'required'],
-            ['to', 'validateTo']
+            [['subject', 'content', 'toEmail'], 'required'],
+            ['toEmail', 'validateTo']
         ];
     }
 
@@ -64,7 +65,7 @@ class ComposeMailForm extends Model
             $mail->save();
 
             $transaction->commit();
-            return $result;
+            return true;
         } catch(Exception $e) {
             $transaction->rollback();
             $this->addError('id', $e->getMessage());
