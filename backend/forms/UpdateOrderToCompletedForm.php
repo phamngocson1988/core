@@ -56,7 +56,7 @@ class UpdateOrderToCompletedForm extends Model
                 $order = $event->sender;
                 // Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                 $order->log("Moved to completed");
-                $sender->pushNotification(OrderNotification::NOTIFY_CUSTOMER_COMPLETE_ORDER, $sender->customer_id);
+                $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_COMPLETE_ORDER, $order->customer_id);
                 // $order->send(
                 //     'admin_send_complete_order', 
                 //     sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [

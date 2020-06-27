@@ -46,7 +46,9 @@ class UpdateOrderToCompletedForm extends Model
     public function getOrder()
     {
         $supplier = $this->getOrderSupplier(); // OrderSupplier
-        if (!$this->_order) $this->_order = $supplier->order;
+        if (!$this->_order) {
+            $this->_order = Order::findOne($supplier->order_id);
+        }
         return $this->_order;
     }
 
