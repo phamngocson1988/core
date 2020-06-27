@@ -47,10 +47,10 @@ class DenyCancelOrder extends Model
             // $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'sendMailDeleteOrder']);
             $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $model = $event->sender;
-                $order->log(sprintf("Disapproved to be cancelled when status is %s", $order->status));
+                $model->log(sprintf("Disapproved to be cancelled when status is %s", $model->status));
                 $model->pushNotification(OrderNotification::NOTIFY_CUSTOMER_CANCELLATION_DENIED_ORDER, $model->customer_id);
             });
-            $model->request_cancel = 0;
+            $order->request_cancel = 0;
             $result = $order->save();
             $transaction->commit();
             return $result;

@@ -657,7 +657,7 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         if ($request->isAjax) {
-            $form = new ApproveCancelOrder(['id' => $id]);
+            $form = new \backend\forms\ApproveCancelOrder(['id' => $id]);
             $viewUrl = Url::to(['order/view', 'id' => $id]);
             if ($form->validate() && $form->approve()) {
                 return $this->asJson(['status' => true, 'view_url' => $viewUrl]);
@@ -674,7 +674,7 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         if ($request->isAjax) {
-            $form = new DenyCancelOrder(['id' => $id]);
+            $form = new \backend\forms\DenyCancelOrder(['id' => $id]);
             $viewUrl = Url::to(['order/view', 'id' => $id]);
             if ($form->validate() && $form->deny()) {
                 return $this->asJson(['status' => true, 'view_url' => $viewUrl]);
