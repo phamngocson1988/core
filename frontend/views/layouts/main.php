@@ -57,9 +57,9 @@ AppAsset::register($this);
                 'active' => $main_menu_active == 'bonus.index', 
                 'options' => ['class' => 'has-sub'],
                 'template' => '<a href="{url}" class="item-nav no-link">{label}</a><div class="item-nav js-btn-dropdown">{label}</div>', 
-                'items' => [
-                  ['label' => 'Casino Bonuses', 'url' => '#', 'template' => '<a href="{url}" class="trans">{label}</a>']
-                ],
+                // 'items' => [
+                //   ['label' => 'Casino Bonuses', 'url' => '#', 'template' => '<a href="{url}" class="trans">{label}</a>']
+                // ],
               ];
               $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'];
               $items[] = ['label' => 'NEWS', 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'];

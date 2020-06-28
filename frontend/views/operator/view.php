@@ -10,7 +10,7 @@ use common\components\helpers\TimeElapsed;
       <div class="sec-content">
         <div class="mod-column">
           <section class="operator-hero widget-box">
-            <div class="hero-main"><a class="hero-photo" href="<?=$model->main_url;?>"><img src="/img/common/sample_img_00.png" alt="<?=$model->name;?>"></a>
+            <div class="hero-main"><a class="hero-photo" href="<?=$model->main_url;?>"><img src="<?=$model->getImageUrl('150x150');?>" alt="<?=$model->name;?>"></a>
               <div class="hero-info">
                 <div class="hero-name"><?=$model->name;?></div>
                 <div class="hero-rate"><span class="rate-text">Very Good <?=number_format($model->averageStar(), 1);?></span><span class="rate-star">
@@ -21,19 +21,22 @@ use common\components\helpers\TimeElapsed;
                   <a class="btn btn-outline-light add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $model->id]);?>">Add to favorite <i class="fa fa-star-o"></i></a>
                   <?php endif;?>
                 </div>
+                <?php $avgResponseTime = $model->averageRespondTime();?>
+                <?php if ($avgResponseTime) : ?>
                 <div class="hero-feature">
-                  <p><i class="fa fa-clock-o"></i> Average Complaint Response Time: 1 hour</p>
+                  <p><i class="fa fa-clock-o"></i> Average Complaint Response Time: <?=round($avgResponseTime);?> hours</p>
                 </div>
+                <?php endif;?>
               </div>
             </div>
             <div class="hero-footer">
               <ul class="hero-nav">
                 <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
                 <li><a href="#detail"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Details</span></a></li>
-                <li><a href="#"><i class="fa fa-comments"></i><span class="nav-text">Player Reviews (552)</span></a></li>
-                <li><a href="#"><i class="fa fa-gift"></i><span class="nav-text">Bonuses (10)</span></a></li>
-                <li><a href="#"><i class="fa fa-thumbs-down"></i><span class="nav-text">Complaints (692)</span></a></li>
-                <li><a href="#"><i class="fa fa-newspaper"></i><span class="nav-text">News (22)</span></a></li>
+                <li><a href="#review"><i class="fa fa-comments"></i><span class="nav-text">Player Reviews (552)</span></a></li>
+                <li><a href="#bonus"><i class="fa fa-gift"></i><span class="nav-text">Bonuses (10)</span></a></li>
+                <li><a href="#complain"><i class="fa fa-thumbs-down"></i><span class="nav-text">Complaints (692)</span></a></li>
+                <!-- <li><a href="#"><i class="fa fa-newspaper"></i><span class="nav-text">News (22)</span></a></li> -->
               </ul>
             </div>
           </section>
@@ -229,8 +232,10 @@ use common\components\helpers\TimeElapsed;
           </section>
           <section class="operator-review-group widget-box" id="review">
             <div class="review-header">
-              <div class="header-buttons"><a class="btn-text sortable is-down js-btn-sort" href="#">Sort by date</a><a class="btn-text sortable is-down js-btn-sort" href="#">Sort by date</a>
-                <div class="btn-text" href="#">Average rating <?=$model->averageReviewRating();?> of <?=number_format($model->countReview());?> reviews</div>
+              <div class="header-buttons">
+                <a class="btn-text sortable is-down js-btn-sort" href="javascript:;" id='sort-review-by-date'>Sort by date</a>
+                <a class="btn-text sortable is-down js-btn-sort" href="javascript:;" id='sort-review-by-rate'>Sort by rating</a>
+                <div class="btn-text" href="javascript:;">Average rating <?=$model->averageReviewRating();?> of <?=number_format($model->countReview());?> reviews</div>
               </div>
             </div>
             <div class="review-list">
@@ -341,12 +346,7 @@ $(".rating-star").on("click", function() {
     }
   });
 });
-// Review List
-var reviewListLoading = new AjaxPaging({
-  container: '.review-list',
-  request_url: '###REVIEWLIST###',
-  auto_first_load: true
-});
+
 // Review Form
 var reviewForm = new AjaxFormSubmit({
   element : 'form#add-review-form'
@@ -360,19 +360,32 @@ reviewForm.success = function (data, form) {
     location.reload();
   }, 1000);
 }
-reviewListLoading.no_data = function() {
-  console.log('no_data');
-  // $('#load-more-reivew').style('display', 'none');
-};
-reviewListLoading.stop_search = function() {
-  console.log('stop_search');
-  // $('#load-more-reivew').remove();
-};
-$('#load-more-reivew').on('click', function() {
 
-  console.log('load more');
+// Review List
+var reviewListLoading = new AjaxPaging({
+  container: '.review-list',
+  request_url: '###REVIEWLIST###',
+  auto_first_load: true
+});
+$('#load-more-reivew').on('click', function() {
   reviewListLoading.load();
-})
+});
+$('#sort-review-by-date').on('click', function() {
+  reviewListLoading.reset({
+    condition: {
+      sort: 'date',
+      type: $(this).hasClass('is-down') ? 'desc' : 'asc',
+    }
+  });
+});
+$('#sort-review-by-rate').on('click', function() {
+  reviewListLoading.reset({
+    condition: {
+      sort: 'rate',
+      type: $(this).hasClass('is-down') ? 'desc' : 'asc',
+    }
+  });
+});
 JS;
 $listReviewLink = Url::to(['operator/list-review', 'id' => $model->id]);
 $script = str_replace('###REVIEWLIST###', $listReviewLink, $script);

@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use common\components\helpers\TimeElapsed;
 ?>
-<section class="operator-complaint">
+<section class="operator-complaint" id="complain">
   <h2 class="sec-title text-center"><?=$operator->name;?> Complaints</h2>
   <ul class="complaint-stats">
     <li>Total <?=number_format($total);?> cases</li>
