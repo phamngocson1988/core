@@ -94,6 +94,9 @@ class OrderNotification extends Notification
         $allows = $this->allow();
         $allowByChannel = ArrayHelper::getValue($allows, $channel->id, []);
         $re = in_array($this->key, $allowByChannel);
+        $order = $this->order;
+        $order->log(sprintf("shouldSend %s %s %s", $order->id, $this->key, $re));
+
         return $re;
     }
 
@@ -141,9 +144,11 @@ class OrderNotification extends Notification
         $subject = '';
         $template = '';
         $data = [];
+        $order = $this->order;
 
         switch($this->key) {
             case self::NOTIFY_CUSTOMER_PENDING_ORDER:
+                $order->log('case ' . self::NOTIFY_CUSTOMER_PENDING_ORDER);
                 $subject = sprintf('King Gems - #%s - Order Confirmed', $this->order->id);
                 $template = 'order_confirmed';
                 $fromEmail = $kinggemsMail;
@@ -180,5 +185,7 @@ class OrderNotification extends Notification
         $message->setTo($toEmail);
         $message->setSubject($subject);
         $message->send($mailer);
+        $order->log('sent notification ' . self::NOTIFY_CUSTOMER_PENDING_ORDER);
+
     }
 }

@@ -478,7 +478,7 @@ class SiteController extends Controller
     {
         $settings = Yii::$app->settings;
         $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        Yii::$app->test_mailer->compose('test_mail')
+        Yii::$app->supplier_mailer->compose('test_mail')
             ->setTo($email)
             ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
             ->setSubject(sprintf("TESTING EMAIL"))
