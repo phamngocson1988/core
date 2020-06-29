@@ -330,7 +330,7 @@ class CartController extends Controller
             if ($reseller) {
                 $order->saler_id = $reseller->manager_id;
             } elseif ($cartItem->saler_code && !$order->saler_id) {
-                $invitor = User::findOne(['saler_code' => $cartItem->saler_code]);
+                $invitor = User::findOne(['saler_code' => trim($cartItem->saler_code)]);
                 $order->saler_id = ($invitor) ? $invitor->id : null;
             }
             if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);

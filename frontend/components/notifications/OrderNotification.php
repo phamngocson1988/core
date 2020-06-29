@@ -95,8 +95,6 @@ class OrderNotification extends Notification
         $allowByChannel = ArrayHelper::getValue($allows, $channel->id, []);
         $re = in_array($this->key, $allowByChannel);
         $order = $this->order;
-        $order->log(sprintf("shouldSend %s %s %s", $order->id, $this->key, $re));
-
         return $re;
     }
 
@@ -128,6 +126,9 @@ class OrderNotification extends Notification
      */
     public function toEmail($channel)
     {
+        $order = $this->order;
+        $order->log(sprintf("toEmail %s %s %s", $order->id, $this->key, $channel->id));
+
         $settings = Yii::$app->settings;
         $supplierMail = $settings->get('ApplicationSettingForm', 'supplier_service_email');
         $kinggemsMail = $settings->get('ApplicationSettingForm', 'customer_service_email');
@@ -144,11 +145,9 @@ class OrderNotification extends Notification
         $subject = '';
         $template = '';
         $data = [];
-        $order = $this->order;
 
         switch($this->key) {
             case self::NOTIFY_CUSTOMER_PENDING_ORDER:
-                $order->log('case ' . self::NOTIFY_CUSTOMER_PENDING_ORDER);
                 $subject = sprintf('King Gems - #%s - Order Confirmed', $this->order->id);
                 $template = 'order_confirmed';
                 $fromEmail = $kinggemsMail;
