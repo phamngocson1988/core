@@ -50,12 +50,6 @@ use yii\helpers\Url;
                 </div>
               </div>
             </div>
-            
-            <?php else:?>
-            <div class="p-2 flex-fill login-item">
-              <a class="link-light" href="#modalLogin" data-toggle="modal">Login / Signup</a>
-            </div>
-            <?php endif;?>
             <div class="p-2 flex-fill order-item border-gradian-1">
               <a class="link-light" href="<?=Url::to(['order/index']);?>">
                 <img class="icon-sm" src="/images/icon/bill.svg" />My order</a>
@@ -144,6 +138,12 @@ use yii\helpers\Url;
                 </ul>
               </div>
             </div>
+            <?php else:?>
+            <div class="p-2 flex-fill login-item">
+              <a class="link-light" href="#modalLogin" data-toggle="modal">Login / Signup</a>
+            </div>
+            <?php endif;?>
+            
           </div>
         </div>
         <div class="nav-mb">
@@ -172,7 +172,6 @@ use yii\helpers\Url;
           ['label' => 'Affiliate', 'url' => ['affiliate/index'], 'active' => $main_menu_active == 'affiliate.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Referral', 'url' => ['referral/index'], 'active' => $main_menu_active == 'referral.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Help center', 'url' => ['question/index'], 'active' => $main_menu_active == 'question.index'],
-          // ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
         ],
       ]);
     ?>

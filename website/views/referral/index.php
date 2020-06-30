@@ -33,11 +33,7 @@ $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
            target="_blank" title="Share on Twitter"><img class="icon-md" src="/images/icon/twitter.svg">
         </a>
       </li>
-      <!-- <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/instagram.svg"></a></li> -->
-      <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/gmail.svg"></a></li>
-      <!-- <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/wechat-icon.svg"></a></li> -->
-      <!-- <li class="list-inline-item"><a href="whatsapp://send?text=<?=$link;?>" data-action="share/whatsapp/share" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-           target="_blank" title="Share on Whatsapp"><img class="icon-md" src="/images/icon/whatsapp-icon.svg"></a></li> -->
+      <li class="list-inline-item"><a href="#modalReferral" data-toggle="modal"><img class="icon-md" src="/images/icon/gmail.svg"></a></li>
       <li class="list-inline-item"><a href="https://t.me/share/url?url=<?=$link;?>&text=Kinggems Title" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
            target="_blank" title="Share on Telegram"><img class="icon-md" src="/images/icon/telegram-icon.svg"></a></li>
 
@@ -136,11 +132,68 @@ $gift_value = Yii::$app->settings->get('ReferProgramForm', 'gift_value', 5);
     </div>
   </div>
 </div>
+
+<!-- Modal Referal -->
+<div id="modalReferral" class="modal fade">
+  <div class="modal-dialog modal-login ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="avatar">
+          <img src="/images/avatar.png" alt="Avatar">
+        </div>
+        <h3 class="modal-title text-uppercase">Send invitation to friends</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">Invite a friend to join Kinggems - Get $<?=$gift_value;?> bonus</p>
+        <?php $form = ActiveForm::begin(['action' => Url::to(['referral/invite']), 'id' => 'referralForm']); ?>
+          <?= $form->field($model, 'email[]')->textInput(['autofocus' => true, 'placeholder' => 'Email'])->label(false) ?>
+          <?= $form->field($model, 'email[]')->textInput(['placeholder' => 'Email'])->label(false) ?>
+          <?= $form->field($model, 'email[]')->textInput(['placeholder' => 'Email'])->label(false) ?>
+          <?= $form->field($model, 'email[]')->textInput(['placeholder' => 'Email'])->label(false) ?>
+          <?= $form->field($model, 'email[]')->textInput(['placeholder' => 'Email'])->label(false) ?>
+          <div class="form-group mt-5 d-flex">
+            <div class="flex-fill w-100 mr-2">
+              <button type="button" class="btn-block btn btn-skip login-btn text-uppercase" style="background-color: #d3d1d2; color: #7a787a" 
+                data-dismiss="modal">skip</button>
+            </div>
+            <div class="flex-fill w-100">
+              <button type="submit" class="btn-block btn btn-save login-btn text-uppercase">save</button>
+            </div>
+          </div>
+        <?php ActiveForm::end(); ?>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Modal Referal -->
 <?php
 $script = <<< JS
 $('#click-to-copy-btn').click(function(){
     copyToClipboard($('#referral-link').val());
     toastr.success('Copied!'); 
+});
+
+$('html').on('submit', 'form#referralForm', function() {
+    var form = $(this);
+    $.ajax({
+        url: form.attr('action'),
+        type: 'post',
+        dataType : 'json',
+        data: form.serialize(),
+        success: function (result, textStatus, jqXHR) {
+            console.log(result);
+            if (result.status == false) {
+                toastr.error(result.errors);
+                return false;
+            } else {
+              form.trigger("reset");
+              toastr.success('Success');
+              $('#modalReferral').modal('hide');
+            }
+        },
+    });
+    return false;
 });
 JS;
 $this->registerJs($script);

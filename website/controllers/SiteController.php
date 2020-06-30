@@ -229,7 +229,7 @@ class SiteController extends Controller
 
     public function onAuthSuccess($client)
     {
-        (new AuthHandler($client))->handle();
+        (new \website\components\auth\AuthHandler($client))->handle();
     }
 
 }

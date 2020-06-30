@@ -52,7 +52,7 @@ class ApproveCancelOrder extends Model
             });
             if ($order->isPendingOrder() || $order->isProcessingOrder() || $order->isPartialOrder()) {
                 $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'removeCommission']);
-                // $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
+                $order->on(Order::EVENT_AFTER_UPDATE, [OrderEventHandler::className(), 'refundOrder']);
             }
             $order->status = Order::STATUS_CANCELLED;
             $result = $order->save();

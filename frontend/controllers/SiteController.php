@@ -81,6 +81,10 @@ class SiteController extends Controller
                 'class' => '\frontend\components\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
         ];
     }
 
@@ -553,6 +557,16 @@ class SiteController extends Controller
             }
         }
         return $this->render('register', ['model' => $model, 'scenario' => RegisterForm::SCENARIO_VALIDATE]);
+    }
+
+    public function actionTest()
+    {
+        return $this->render('test');
+    }
+
+    public function onAuthSuccess($client)
+    {
+        (new \frontend\components\auth\AuthHandler($client))->handle();
     }
 
 }
