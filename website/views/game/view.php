@@ -22,7 +22,8 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <?php if ($model->hasCategory()) : ?>
-            <?php $category =  reset($model->categories);?>
+            <?php $categories = $model->categories;?>
+            <?php $category =  reset($categories);?>
             <li class="breadcrumb-item"><a href="javascript:;"><?=$category->name;?></a></li>
             <?php endif;?>
             <li class="breadcrumb-item active" aria-current="page"><?=$model->title;?></li>

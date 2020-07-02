@@ -104,17 +104,18 @@ class m180517_025826_create_product_schema extends Migration
         ], $tableOptions);
 
         // Group
+        $this->createTable('{{%game_setting}}', [
+            'id' => $this->primaryKey(),
+            'key' => $this->string(255)->notNull(),
+            'value' => $this->string(255)->notNull(),
+        ], $tableOptions);
+
         $this->createTable('{{%game_group}}', [
             'id' => $this->primaryKey(),
-            'title' => $this->string(100)->notNull(),
-            'short_title' => $this->string(100),
-            'slug' => $this->string(100)->notNull()->unique(),
-            'excerpt' => $this->string(200),
-            'image_id' => $this->integer(),
-            'unit_name' => $this->string(50),
-            'content' => $this->text()->notNull(),
-            'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
-            'pin' => $this->integer()->defaultValue(0),
+            'title' => $this->string(255)->notNull(),
+            'method' => $this->string(255)->notNull(),
+            'version' => $this->string(255)->notNull(),
+            'pack' => $this->string(255)->notNull(),
         ], $tableOptions);
 
         if ($this->db->driverName === 'mysql') {

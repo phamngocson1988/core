@@ -444,6 +444,11 @@
             <span class="title">Danh mục game</span>
             </a>
           </li>
+          <li class="nav-item  "> 
+            <a href="{url route='/game/setting'}" class="nav-link " code='game.setting'>
+            <span class="title">Thuộc tính</span>
+            </a>
+          </li>
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>

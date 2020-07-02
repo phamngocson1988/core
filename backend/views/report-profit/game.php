@@ -112,7 +112,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <th> Số lượng gói </th>
                   <th> Doanh thu (nghìn VNĐ) </th>
                   <th> Chi phí (nghìn VNĐ) </th>
-                  <th> Lợi nhuận (nghìn VNĐ) </th>
+                  <th> Chênh lệch giá Mua/Bán (nghìn VNĐ) </th>
                 </tr>
               </thead>
               <tbody>
@@ -124,9 +124,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <td><?=$model['game_id'];?></td>
                     <td><?=$model['game']['title'];?></td>
                     <td><?=number_format($model['sum_doing'], 1);?></td>
-                    <td><?=number_format($model['sum_revenue'] / 1000, 1);?></td>
-                    <td><?=number_format($model['sum_fee'] / 1000, 1);?></td>
                     <td><?=number_format($model['sum_profit'] / 1000, 1);?></td>
+                    <td><?=number_format($model['sum_fee'] / 1000, 1);?></td>
+                    <td><?=number_format($model['sum_revenue'] / 1000, 1);?></td>
                   </tr>
                   <?php endforeach;?>
               </tbody>
