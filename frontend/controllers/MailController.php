@@ -68,9 +68,15 @@ class MailController extends Controller
         $request = Yii::$app->request;
         $thread = MailThread::findOne($id);
         $mails = Mail::find()->where(['mail_thread_id' => $id])->orderBy(['created_at' => SORT_ASC])->all();
+
+        $model = new \frontend\forms\ReplyMailForm([
+            'thread_id' => $id
+        ]);
+
         return $this->renderPartial('view', [
             'thread' => $thread,
             'mails' => $mails,
+            'model' => $model,
         ]);
     }
 
@@ -79,65 +85,17 @@ class MailController extends Controller
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        $model = new \frontend\forms\ReplyComplainForm([
-            'user_id' => Yii::$app->user->id,
-            'complain_id' => $request->get('id')
+        $model = new \frontend\forms\ReplyMailForm([
+            'thread_id' => $id
         ]);
-        if ($model->load($request->post()) && $model->validate() && $model->add()) {
-            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'add_reply_success')]]);
-        } else {
-            $message = $model->getErrorSummary(true);
-            $message = reset($message);
-            return json_encode(['status' => false, 'errors' => $message]);
-        }
-    }
-
-    public function actionOperator($id, $slug)
-    {
-        $operator = Operator::findOne($id);
-        $command = Complain::find()->where(['operator_id' => $id])->orderBy(['id' => SORT_DESC]);
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $complains = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->all();
-        return $this->render('operator', [
-            'complains' => $complains,
-            'pages' => $pages,
-            'operator' => $operator,
-        ]);
-    }
-
-    public function actionFollow($id)
-    {
-        $request = Yii::$app->request;
-        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-
-        $model = new \frontend\forms\FollowComplainForm([
-            'user_id' => Yii::$app->user->id,
-            'complain_id' => $id
-        ]);
-        if ($model->validate() && $model->follow()) {
-            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'success')]]);
-        } else {
-            $message = $model->getErrorSummary(true);
-            $message = reset($message);
-            return json_encode(['status' => false, 'errors' => $message]);
-        }
-    }
-
-    public function actionUnfollow($id)
-    {
-        $request = Yii::$app->request;
-        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-
-        $model = new \frontend\forms\FollowComplainForm([
-            'user_id' => Yii::$app->user->id,
-            'complain_id' => $id
-        ]);
-        if ($model->validate() && $model->unfollow()) {
-            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'success')]]);
+        if ($model->load($request->post()) && $model->validate() && $model->reply()) {
+            return json_encode([
+                'status' => true, 
+                'data' => [
+                    'message' => Yii::t('app', 'add_reply_success'),
+                    'id' => $id
+                ]
+            ]);
         } else {
             $message = $model->getErrorSummary(true);
             $message = reset($message);

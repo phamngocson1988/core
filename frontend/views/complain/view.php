@@ -56,13 +56,13 @@ $user = Yii::$app->user->getIdentity();
                   </div>
                   <div class="content"><a href="#"><?=$reason->title;?></a></div>
                 </li>
-                <li>
+                <!-- <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-dollar-sign"></i></div>
                     <div class="label-text">Amount</div>
                   </div>
                   <div class="content">VND 1,500,000</div>
-                </li>
+                </li> -->
               </ul>
             </div>
           </section>

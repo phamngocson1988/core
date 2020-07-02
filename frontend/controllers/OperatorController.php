@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use yii\data\Pagination;
 
 use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
@@ -40,7 +41,18 @@ class OperatorController extends Controller
 
     public function actionIndex()
     {
-
+        $form = new \frontend\forms\FetchOperatorForm();
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $operators = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+        $total = $command->count();
+        return $this->render('index', [
+            'operators' => $operators,
+            'pages' => $pages,
+            'total' => $total,
+        ]);
     }
 
     public function actionView($id, $slug) 
@@ -85,6 +97,15 @@ class OperatorController extends Controller
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 10);
         $command = OperatorReview::find()->where(['operator_id' => $request->get('id')])->offset($offset)->limit($limit);
+        if ($request->get('sort') == 'date') {
+            $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
+            $command->orderBy(['created_at' => $type]);
+        }
+        if ($request->get('sort') == 'rate') {
+            $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
+            $command->orderBy(['star' => $type]);
+        }
+
         $models = $command->all();
         $total = $command->count();
         $html = $this->renderPartial('list-review', ['models' => $models]);

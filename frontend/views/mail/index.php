@@ -4,12 +4,12 @@ use common\components\helpers\TimeElapsed;
 ?>
 <main>
   <div class="section-user-message-wrapper">
-    <section class="section-user-storage">
+    <!-- <section class="section-user-storage">
       <div class="block-storage">
         <div class="progress-meter"><span style="width:40%"></span></div>
         <div class="progress-text">Used 0% message storage</div>
       </div>
-    </section>
+    </section> -->
     <section class="section-user-message container">
       <aside class="sec-sidebar">
         <div class="block-header">
@@ -19,18 +19,10 @@ use common\components\helpers\TimeElapsed;
         <div class="block-main widget-box">
           <div class="box-title widget-head">
             <div class="head-text">Messages</div>
-            <div class="head-button">
-              <div class="dropdown">
-                <div class="btn btn-sm dropdown-toggle" id="dropdown-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <input type="checkbox">
-                </div>
-                <div class="dropdown-menu" aria-labelledby="dropdown-select"><a class="dropdown-item" href="#">All</a><a class="dropdown-item" href="#">None</a></div>
-              </div>
-            </div>
           </div>
           <ul class="list-message" id="js-list-message">
             <?php foreach ($threads as $thread) : ?>
-            <li>
+            <li id="thread<?=$thread->id;?>">
               <div class="col-avatar"><a class="user-photo" href="javascript:;"><img src="<?=$thread->sender->getAvatarUrl('50x50');?>" alt="Username"></a></div>
               <div class="col-content">
                 <div class="message-title"><a class="mailthread-item" href="<?=Url::to(['mail/view', 'id' => $thread->id]);?>"><?=$thread->subject;?></a></div>
@@ -55,6 +47,9 @@ use common\components\helpers\TimeElapsed;
 </main>
 <?php 
 $script = <<< JS
+$('#js-list-message>li').on('click', function(){
+  $(this).find('.mailthread-item').trigger('click');
+});
 $(".mailthread-item").on('click', function(e) {
   $.ajax({
     url: $(this).attr('href'),
@@ -64,7 +59,30 @@ $(".mailthread-item").on('click', function(e) {
         $('#js-message-main').html(result.responseText);
     }
   });
-})
+});
+
+// Review Form
+$('#js-message-main').on('submit', 'form#reply-form', function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var form = $(this);
+    $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        dataType : 'json',
+        data: form.serialize(),
+        success: function (result, textStatus, jqXHR) {
+            if (result.status == false) {
+              toastr.error(result.errors);
+              return false;
+            } else {
+              toastr.success(result.data.message);
+              $('#thread' + result.data.id).trigger('click');
+            }
+        },
+    });
+    return false;
+});
 JS;
 $this->registerJs($script);
 ?>

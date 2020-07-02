@@ -1,6 +1,7 @@
 <?php foreach ($models as $model) : ?>
 <?php $user = $model->user;?>
 <?php $operator = $model->operator;?>
+<?php $percent = $model->star * 10;?>
 <article class="review-item">
   <div class="review-user">
     <div class="user-photo"><img src="<?=$user->getAvatarUrl('100x100');?>" alt="<?=$user->getName();?>"></div>
@@ -11,7 +12,7 @@
   <div class="review-content">
     <div class="review-date">Reviewed on <span><?=date("F j, Y", strtotime($model->created_at));?></span></div>
     <div class="review-rate">
-      <div class="star-rating"><span style="width:94.5%"></span></div>
+      <div class="star-rating"><span style="width:<?=$percent;?>%"></span></div>
     </div>
     <div class="review-text">
       <div class="review-text-positive">

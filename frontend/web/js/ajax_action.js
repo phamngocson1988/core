@@ -194,6 +194,21 @@ function AjaxPaging(opts) {
         }
     };
 
+    this.reset = function(opts) {
+        $(this.options.container).html('');
+        this.options = $.extend(this.options, {
+            query_time: null,
+            total: null,
+            offset: 0,
+            limit: 10,
+            condition: null
+        });
+        this.options = $.extend(this.options, opts);
+        if (this.options.auto_first_load === true) {
+            this.load();
+        }
+    }
+
     //callback
     this.callback = function(result) {
         console.log('callback: over-write me');

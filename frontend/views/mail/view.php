@@ -1,5 +1,7 @@
 <?php
 use common\components\helpers\TimeElapsed;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 ?>
 
 <div class="sec-message-view review-list widget-box" style="display: block !important">
@@ -32,16 +34,13 @@ use common\components\helpers\TimeElapsed;
         <?php endforeach;?>
       </div>
       <div class="review-reply">
-        <div class="form-group">
-          <textarea class="form-control" rows="5" placeholder="Reply..."></textarea>
-        </div>
-        <div class="form-group form-check">
-          <input class="form-check-input" id="option-close" type="checkbox">
-          <label class="form-check-label" for="option-close">Mark to close this case</label>
-        </div>
+        <?php $form = ActiveForm::begin(['action' => Url::to(['mail/reply', 'id' => $thread->id]), 'id' => 'reply-form']); ?>
+        <?= $form->field($model, 'content', [
+        ])->textArea(['rows' => '5', 'placeholder' => 'Reply...'])->label(false);?>
         <div class="form-group">
           <button class="btn btn-primary" type="submit">Post my reply</button>
         </div>
+        <?php ActiveForm::end();?>
       </div>
     </div>
   </article>

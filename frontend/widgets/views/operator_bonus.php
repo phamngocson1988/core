@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Url;
 ?>
-<section class="operator-bonus">
+<section class="operator-bonus" id="bonus">
   <h2 class="sec-title text-center"><?=$operator->name;?> Bonuses</h2>
   <div class="row">
     <?php foreach ($bonuses as $bonus) : ?>
