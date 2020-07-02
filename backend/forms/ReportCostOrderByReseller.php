@@ -14,6 +14,8 @@ use yii\data\Pagination;
 class ReportCostOrderByReseller extends Model
 {
     public $reseller_id;
+    public $confirm_from;
+    public $confirm_to;
 
     private $_command;
     protected $_page;
@@ -30,6 +32,12 @@ class ReportCostOrderByReseller extends Model
         $command->where(["$orderTable.status" => Order::STATUS_CONFIRMED]);
         if ($this->reseller_id) {
             $command->andWhere(["$orderTable.customer_id" => $this->reseller_id]);
+        }
+        if ($this->confirm_from) {
+            $command->andWhere([">=", "$orderTable.confirmed_at", $this->confirm_from]);
+        }
+        if ($this->confirm_to) {
+            $command->andWhere(["<=", "$orderTable.confirmed_at", $this->confirm_to]);
         }
         $command->groupBy(["$orderTable.customer_id"]);
         $command->select([

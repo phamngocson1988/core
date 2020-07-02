@@ -48,6 +48,33 @@ $pages = $search->getPage();
               'inputOptions' => ['class' => 'form-control', 'name' => 'reseller_id']
             ])->dropDownList($search->fetchResellers(), ['prompt' => 'Tìm theo reseller'])->label('Tên reseller');?>
 
+            <?=$form->field($search, 'confirm_from', [    
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'confirm_from', 'id' => 'confirm_from']
+            ])->widget(DateTimePicker::className(), [
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:00',
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
+            ])->label('Ngày xác nhận từ');?>
+
+            <?=$form->field($search, 'confirm_to', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'confirm_to', 'id' => 'confirm_to']
+            ])->widget(DateTimePicker::className(), [
+                'clientOptions' => [
+                  'autoclose' => true,
+                  'format' => 'yyyy-mm-dd hh:59',
+                  'todayBtn' => true,
+                  'minuteStep' => 1,
+                  'endDate' => date('Y-m-d H:i'),
+                  'minView' => '1'
+                ],
+            ])->label('Ngày xác nhận đến');?>
+
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>

@@ -546,6 +546,8 @@ class ReportController extends Controller
         $request = Yii::$app->request;
         $data = [
             'reseller_id' => $request->get('reseller_id'),
+            'confirm_from' => $request->get('confirm_from'),
+            'confirm_to' => $request->get('confirm_to'),
         ];
         $form = new \backend\forms\ReportCostOrderByReseller($data);
 
