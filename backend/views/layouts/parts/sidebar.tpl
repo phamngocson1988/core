@@ -445,7 +445,12 @@
             </a>
           </li>
           <li class="nav-item  "> 
-            <a href="{url route='/game/setting'}" class="nav-link " code='game.setting'>
+            <a href="{url route='/game-group/index'}" class="nav-link " code='game.group'>
+            <span class="title">Nhóm game</span>
+            </a>
+          </li>
+          <li class="nav-item  "> 
+            <a href="{url route='/game-group/setting'}" class="nav-link " code='game.setting'>
             <span class="title">Thuộc tính</span>
             </a>
           </li>

@@ -5,6 +5,23 @@ return [
     'date_format' => 'd-m-Y',
     'email_admin' => 'phamngocson1988@gmail.com',
     'countries' => require __DIR__ . '/countries.php',
+    'currency' => [
+        'USD' => [
+            'name' => 'USD',
+            'symbol' => '$',
+            'format' => '$%s',
+        ],
+        'CNY' => [
+            'name' => 'CNY',
+            'symbol' => '¥',
+            'format' => '%s¥',
+        ],
+        'VND' => [
+            'name' => 'VND',
+            'symbol' => '₫',
+            'format' => '%s₫',
+        ]
+    ],
     // 'country_code' => [
     //     '+355' => 'Albania',
     //     '+213' => 'Algeria',

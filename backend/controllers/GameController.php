@@ -523,46 +523,4 @@ class GameController extends Controller
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
-
-    public function actionSetting()
-    {
-        $this->view->params['main_menu_active'] = 'game.setting';        
-        $request = Yii::$app->request;
-        $model = new \backend\forms\CreateGameSettingForm();
-        if ($request->isPost) {
-            if ($model->load($request->post())) {
-                if ($model->create()) {
-                    Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                } else {
-                    Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-                }
-            }
-        } else {
-            $model->loadData();
-        }
-
-        return $this->render('setting', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionGroup()
-    {
-        $this->view->params['main_menu_active'] = 'game.group';        
-        $request = Yii::$app->request;
-        $model = new \backend\forms\CreateGameGroupForm();
-        if ($request->isPost) {
-            if ($model->load($request->post())) {
-                if ($model->create()) {
-                    Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                } else {
-                    Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-                }
-            }
-        }
-
-        return $this->render('group', [
-            'model' => $model,
-        ]);
-    }
 }

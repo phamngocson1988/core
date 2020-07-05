@@ -16,8 +16,8 @@ use yii\helpers\Url;
       <p><span class="list-item">Version:</span><b>Global</b></p>
       <p><span class="list-item">Total Unit:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_unit), $order->unit_name);?></b></p>
       <hr />
-      <p><span class="list-item">Payment:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->sub_total_price, 1), $order->currency);?></b></p>
-      <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_fee, 1), $order->currency);?></b></p>
+      <p><span class="list-item">Payment:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->sub_total_price, 1), 'USD');?></b></p>
+      <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_fee, 1), 'USD');?></b></p>
     </div>
     <div class="col-md-6">
       <?=$paygate->content;?>

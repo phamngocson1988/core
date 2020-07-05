@@ -13,7 +13,8 @@ use yii\data\Pagination;
 class ReportCostOrderBySupplier extends Model
 {
     public $supplier_id;
-
+    public $confirmed_from;
+    public $confirmed_to;
     private $_command;
     protected $_page;
 
@@ -32,6 +33,12 @@ class ReportCostOrderBySupplier extends Model
         $command->where(["$orderSupplierTable.status" => OrderSupplier::STATUS_CONFIRMED]);
         if ($this->supplier_id) {
             $command->andWhere(["$orderSupplierTable.supplier_id" => $this->supplier_id]);
+        }
+        if ($this->confirmed_from) {
+            $command->andWhere([">=", "$orderSupplierTable.updated_at", $this->confirmed_from]);
+        }
+        if ($this->confirmed_to) {
+            $command->andWhere(["<=", "$orderSupplierTable.updated_at", $this->confirmed_to]);
         }
         $command->groupBy(["$orderSupplierTable.supplier_id"]);
         $command->orderBy(["total_price" => SORT_DESC]);

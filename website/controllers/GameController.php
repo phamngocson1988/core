@@ -8,8 +8,13 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use website\models\Game;
+use website\models\GameGroup;
+use website\models\GameSetting;
 use website\models\Promotion;
+use website\models\GameCategoryItem;
 
 // form
 use website\forms\FetchGameForm;
@@ -42,8 +47,65 @@ class GameController extends Controller
     {
     	$request = Yii::$app->request;
         $model = CartItem::findOne($id);
+
+        $group = GameGroup::findOne($model->group_id);
+        $games = CartItem::find()->where(['group_id' => $model->group_id])->all();
+        $methods = ArrayHelper::getColumn($games, 'method');
+        $methods = array_filter($methods);
+        $methods = array_unique($methods);
+        $mapping = [];
+        foreach ($games as $game) {
+            $gameInfo = [
+                'viewUrl' => Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug], true),
+                'cartUrl' => Url::to(['cart/add', 'id' => $game->id], true),
+                'calculateUrl' => Url::to(['cart/calculate', 'id' => $game->id], true),
+                'title' => $game->title,
+                'content' => $game->content,
+                'image' => $game->getImageUrl(),
+                'save' => sprintf('save %s', number_format($game->getSavedPrice())) . '%',
+            ];
+            $mapping[$game->method][$game->version][$game->package] = $gameInfo;
+        }
+
+        $settingMethod = GameSetting::find()->where(['key' => 'method'])->one();
+        $settingMethodValues = explode(",", $settingMethod->value);
+        $settingMethodParams = [];
+        foreach ($settingMethodValues as $settingMethodValue) {
+            $methodParts = explode("|", $settingMethodValue);
+            $methodTitle = array_shift($methodParts);
+            if (!in_array($methodTitle, $methods)) continue;
+            $methodPrice = array_shift($methodParts);
+            $methodSpeed = array_shift($methodParts);
+            $methodSafe = array_shift($methodParts);
+            $settingMethodParams[$methodTitle] = [
+                'price' => $methodPrice,
+                'speed' => $methodSpeed,
+                'safe' => $methodSafe,
+            ];
+        }
+
+        // other games
+        $relatedGames = [];
+        $category = null;
+        if ($model->hasCategory()) {
+            $categories = $model->categories;
+            $categoryIds = ArrayHelper::getColumn($categories, 'id');
+            $category =  reset($categories);
+            $categoryGames = GameCategoryItem::find()
+            ->where(['in', 'category_id', $categoryIds])
+            ->andWhere(['<>', 'game_id', $id])
+            ->limit(5)->all();
+            $gameIds = ArrayHelper::getColumn($categoryGames, 'game_id');
+            $relatedGames = Game::findAll($gameIds);
+        }
+
     	return $this->render('view', [
-            'model' => $model
+            'model' => $model,
+            'methods' => $methods,
+            'settingMethodParams' => $settingMethodParams,
+            'mapping' => json_encode($mapping),
+            'relatedGames' => $relatedGames,
+            'category' => $category,
         ]);
     }
 

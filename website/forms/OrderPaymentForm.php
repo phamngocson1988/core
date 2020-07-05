@@ -11,6 +11,7 @@ use website\models\UserWallet;
 use common\components\helpers\FormatConverter;
 use website\components\payment\PaymentGatewayFactory;
 use website\components\notifications\OrderNotification;
+use common\models\Currency;
 // Notification
 
 class OrderPaymentForm extends Model
@@ -90,6 +91,10 @@ class OrderPaymentForm extends Model
         $cogsPrice = $cartItem->getCogs();
         $totalUnit = $cartItem->getTotalUnit();
 
+        $usdCurrency = Currency::findOne('USD');
+        $otherCurrency = Currency::findOne($paygate->getCurrency());
+        $otherCurrencyTotal = Currency::convertUSDToCurrency($totalPrice, $paygate->getCurrency());
+
         // Create order
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
@@ -109,7 +114,7 @@ class OrderPaymentForm extends Model
             $order->sub_total_price = $subTotalPrice;
             $order->total_price = $totalPrice;
             $order->total_fee = $paygate->getFee($subTotalPrice);
-            $order->total_price_by_currency = FormatConverter::convertCurrencyToCny($totalPrice);
+            $order->total_price_by_currency = $otherCurrencyTotal;
 
             // customer
             $order->customer_id = $user->id;
@@ -185,13 +190,17 @@ class OrderPaymentForm extends Model
 
     public function fetchPaygates()
     {
-        $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+        $cart = $this->cart;
+        $item = $cart->getItem();
+        $paygates = Paygate::find()->where([
+            'status' => Paygate::STATUS_ACTIVE,
+            'currency' => $item->currency
+        ])->all();
         $list = ArrayHelper::map($paygates, 'identifier', function($obj) {
             return Html::img($obj->getImageUrl(), ['class' => 'icon']);
         });
 
         $user = $this->getUser();
-        $cart = $this->cart;
         $balance = $user->getWalletAmount();
         $totalPrice = $cart->getTotalPrice();
         if ($balance >= $totalPrice) {

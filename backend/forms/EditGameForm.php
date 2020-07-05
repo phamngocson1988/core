@@ -7,6 +7,7 @@ use yii\base\Model;
 use backend\models\Game;
 use backend\models\GameCategory;
 use backend\models\GameCategoryItem;
+use backend\models\GameGroup;
 use yii\helpers\ArrayHelper;
 
 class EditGameForm extends Model
@@ -35,9 +36,14 @@ class EditGameForm extends Model
     public $new_trending;
     public $top_grossing;
     public $back_to_stock;
+    public $group_id;
+    public $method;
+    public $version;
+    public $package;
     public $categories;
 
     protected $_game;
+    protected $_groups;
 
     public function rules()
     {
@@ -51,7 +57,8 @@ class EditGameForm extends Model
             [['original_price'], 'trim'],
             [['meta_title', 'meta_keyword', 'meta_description'], 'trim'],
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
-            [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe']
+            [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
+            [['group_id', 'method', 'package', 'version'], 'safe'],
         ];
     }
 
@@ -106,6 +113,10 @@ class EditGameForm extends Model
             $game->top_grossing = $this->top_grossing;
             $game->new_trending = $this->new_trending;
             $game->back_to_stock = $this->back_to_stock;
+            $game->group_id = $this->group_id;
+            $game->method = $this->method;
+            $game->version = $this->version;
+            $game->package = $this->package;
             $game->save();
             $newId = $game->id;
 
@@ -164,6 +175,10 @@ class EditGameForm extends Model
         $this->top_grossing = $game->top_grossing;
         $this->new_trending = $game->new_trending;
         $this->back_to_stock = $game->back_to_stock;
+        $this->group_id = $game->group_id;
+        $this->method = $game->method;
+        $this->version = $game->version;
+        $this->package = $game->package;
 
         $categories = GameCategoryItem::find()->where(['game_id' => $this->id])->all();
         $this->categories = ArrayHelper::getColumn($categories, 'category_id');
@@ -178,6 +193,51 @@ class EditGameForm extends Model
             return sprintf($format, $name);
         }, $categories);
         return $categories;
+    }
+
+    public function getGroups()
+    {
+        $groups = GameGroup::find()->all();
+        return ArrayHelper::map($groups, 'id', 'title');
+    }
+
+    public function getMethods()
+    {
+        if (!$this->group_id) return [];
+        $group = GameGroup::findOne($this->group_id);
+        $methods = explode(',', $group->method);
+        return array_combine($methods, $methods);
+    }
+
+    public function getVersions()
+    {
+        if (!$this->group_id) return [];
+        $group = GameGroup::findOne($this->group_id);
+        $versions = explode(',', $group->version);
+        return array_combine($versions, $versions);
+    }
+
+    public function getPackages()
+    {
+        if (!$this->group_id) return [];
+        $group = GameGroup::findOne($this->group_id);
+        $packages = explode(',', $group->package);
+        return array_combine($packages, $packages);
+    }
+
+
+    public function getGroupData()
+    {
+        $groups = GameGroup::find()->all();
+
+        return ArrayHelper::map($groups, 'id', function($obj) {
+            return [
+                'data-method' => $obj->method,
+                'data-version' => $obj->version,
+                'data-package' => $obj->package,
+            ];
+        });
+
     }
 
 }

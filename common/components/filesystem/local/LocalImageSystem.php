@@ -51,7 +51,10 @@ class LocalImageSystem extends Model implements ImageSystemInterface
 
         if ($this->auto_generate_thumb === true) { // check if the resource is not exist. system will generate it
             $file_headers = @get_headers($fileUrl);
-            if (!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') { // not exist
+            if (!$file_headers 
+                || $file_headers[0] == 'HTTP/1.1 404 Not Found'
+                || $file_headers[0] == 'HTTP/1.1 400 Bad Request'
+            ) { // not exist
                 $fileUrl = $this->saveThumbnail($fileModel, $thumbnail);
             }    
         }

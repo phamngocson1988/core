@@ -7,12 +7,15 @@ use yii\base\Model;
 use backend\models\GameGroup;
 use backend\models\GameSetting;
 
-class CreateGameGroupForm extends Model
+class EditGameGroupForm extends Model
 {
+    public $id;
     public $title;
     public $method;
     public $version;
     public $package;
+
+    protected $_group;
 
     /**
      * @inheritdoc
@@ -20,13 +23,13 @@ class CreateGameGroupForm extends Model
     public function rules()
     {
         return [
-            [['title', 'method', 'version', 'package'], 'required'],
+            [['id', 'title', 'method', 'version', 'package'], 'required'],
         ];
     }
 
     public function create()
     {
-        $group = new GameGroup();
+        $group = $this->getGroup();
         $group->title = $this->title;
         $group->method = implode(",", $this->method);
         $group->version = implode(",", $this->version);
@@ -61,5 +64,22 @@ class CreateGameGroupForm extends Model
             return trim($value);
         }, explode(",", $model->value));
         return array_combine($values, $values);
+    }
+
+    public function getGroup()
+    {
+        if (!$this->_group) {
+            $this->_group = GameGroup::findOne($this->id);
+        }
+        return $this->_group;
+    }
+
+    public function loadData()
+    {
+        $group = $this->getGroup();
+        $this->title = $group->title;
+        $this->method = explode(",", $group->method);
+        $this->version = explode(",", $group->version);
+        $this->package = explode(",", $group->package);
     }
 }

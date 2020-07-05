@@ -22,13 +22,14 @@ class CartItem extends Game implements CartItemInterface
     public $note;
     public $login_method;
     public $voucher;
+    public $currency;
     protected $_game;
 
     public function scenarios()
     {
         return [
-            self::SCENARIO_CALCULATE_CART => ['id', 'quantity', 'voucher'],
-            self::SCENARIO_ADD_CART => ['id', 'quantity'],
+            self::SCENARIO_CALCULATE_CART => ['id', 'quantity', 'voucher', 'currency'],
+            self::SCENARIO_ADD_CART => ['id', 'quantity', 'currency'],
             self::SCENARIO_UPDATE_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'note', 'voucher'],
         ];
     }
@@ -37,7 +38,7 @@ class CartItem extends Game implements CartItemInterface
     {
         return [
             ['quantity', 'number'],
-            [['server', 'note', 'recover_code', 'voucher'], 'trim'],
+            [['server', 'note', 'recover_code', 'voucher', 'currency'], 'trim'],
             [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
 
         ];
@@ -57,6 +58,14 @@ class CartItem extends Game implements CartItemInterface
         return [
             'android' => 'Android',
             'ios' => 'IOS'
+        ];
+    }
+
+    public function fetchCurrency()
+    {
+        return [
+            'USD' => 'USD',
+            'CNY' => 'CNY',
         ];
     }
 

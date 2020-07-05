@@ -9,7 +9,7 @@ class CreateGameSettingForm extends Model
 {
 	public $method;
     public $version;
-    public $pack;
+    public $package;
 
 	/**
      * @inheritdoc
@@ -17,7 +17,7 @@ class CreateGameSettingForm extends Model
     public function rules()
     {
         return [
-            [['method', 'version', 'pack'], 'trim'],
+            [['method', 'version', 'package'], 'trim'],
         ];
     }
 
@@ -32,9 +32,9 @@ class CreateGameSettingForm extends Model
         $version->value = $this->version;
         $version->save();
 
-        $pack = $this->getPack();
-        $pack->value = $this->pack;
-        $pack->save();
+        $package = $this->getPack();
+        $package->value = $this->package;
+        $package->save();
         
         return true;
     }
@@ -42,10 +42,10 @@ class CreateGameSettingForm extends Model
     public function loadData()
     {
         $method = $this->getMethod();
-        $pack = $this->getPack();
+        $package = $this->getPack();
         $version = $this->getVersion();
         $this->method = $method->value;
-        $this->pack = $pack->value;
+        $this->package = $package->value;
         $this->version = $version->value;
 
     }
@@ -61,9 +61,9 @@ class CreateGameSettingForm extends Model
 
     public function getPack()
     {
-        $model = GameSetting::find()->where(['key' => 'pack'])->one();
+        $model = GameSetting::find()->where(['key' => 'package'])->one();
         if (!$model) {
-            $model = new GameSetting(['key' => 'pack']);
+            $model = new GameSetting(['key' => 'package']);
         }
         return $model;
     }

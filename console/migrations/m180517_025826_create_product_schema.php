@@ -40,6 +40,9 @@ class m180517_025826_create_product_schema extends Migration
             'new_trending' => $this->integer()->defaultValue(0),
             'back_to_stock' => $this->integer()->defaultValue(0),
             'group_id' => $this->integer(),
+            'method' => $this->string(255),
+            'version' => $this->string(255),
+            'package' => $this->string(255),
             'created_at' => $this->dateTime(),            
             'created_by' => $this->integer(),
             'updated_at' => $this->dateTime(),
@@ -115,7 +118,7 @@ class m180517_025826_create_product_schema extends Migration
             'title' => $this->string(255)->notNull(),
             'method' => $this->string(255)->notNull(),
             'version' => $this->string(255)->notNull(),
-            'pack' => $this->string(255)->notNull(),
+            'package' => $this->string(255)->notNull(),
         ], $tableOptions);
 
         if ($this->db->driverName === 'mysql') {
@@ -144,6 +147,7 @@ class m180517_025826_create_product_schema extends Migration
         $this->dropTable('{{%game_image}}');
         $this->dropTable('{{%game_price}}');
         $this->dropTable('{{%game_group}}');
+        $this->dropTable('{{%game_setting}}');
         $this->dropTable('{{%game_category}}');
         $this->dropTable('{{%game_category_item}}');
     }

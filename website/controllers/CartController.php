@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 use website\components\cart\CartItem;
 use website\models\Paygate;
 use website\models\Order;
+use common\models\Currency;
 
 class CartController extends Controller
 {
@@ -91,6 +92,14 @@ class CartController extends Controller
         $balance = $user->getWalletAmount();
         $canPlaceOrder = $balance >= $cart->getTotalPrice();
         $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+        $isOtherCurrency = $model->currency != 'USD';
+        $otherCurrency = '';
+        if ($isOtherCurrency) {
+            $usdCurrency = Currency::findOne('USD');
+            $otherCurrencyTotal = Currency::convertUSDToCurrency($model->getTotalPrice(), $model->currency);
+            $currencyModel = Currency::findOne($model->currency);
+            $otherCurrency = $currencyModel->addSymbolFormat(number_format($otherCurrencyTotal, 1));
+        }
 
         return $this->render('checkout', [
             'model' => $model,
@@ -98,6 +107,8 @@ class CartController extends Controller
             'balance' => $balance,
             'paygates' => $paygates,
             'checkoutForm' => $checkoutForm,
+            'isOtherCurrency' => $isOtherCurrency,
+            'otherCurrency' => $otherCurrency,
         ]);
     }
 }

@@ -9,6 +9,10 @@ $this->registerCssFile('vendor/assets/global/plugins/bootstrap-tagsinput/bootstr
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/global/plugins/typeahead/handlebars.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/global/plugins/typeahead/typeahead.bundle.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -51,23 +55,38 @@ $this->registerJsFile('vendor/assets/global/plugins/typeahead/typeahead.bundle.m
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
+                  <?=$form->field($model, 'title', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control input-large'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()->label('Tên group');?>      
+
                   <?=$form->field($model, 'method', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control input-large', 'data-role' => "tagsinput"],
+                    'inputOptions' => ['class' => 'form-control input-large'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Phương thức nạp');?>      
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchMethod(),
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                  ])->label('Phương thức nạp')?>
 
                   <?=$form->field($model, 'version', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control input-large', 'data-role' => "tagsinput"],
+                    'inputOptions' => ['class' => 'form-control input-large'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Phiên bản');?>      
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchVersion(),
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                  ])->label('Phiên bản')?>
 
-                  <?=$form->field($model, 'pack', [
+                  <?=$form->field($model, 'package', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control input-large', 'data-role' => "tagsinput"],
+                    'inputOptions' => ['class' => 'form-control input-large'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Loại gói');?>        
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchPack(),
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                  ])->label('Loại gói')?>
 
                 </div>
               </div>

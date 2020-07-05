@@ -57,7 +57,11 @@ $user = Yii::$app->user->getIdentity();
           <hr />
           <div class="d-flex mb-3">
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?>.0</div>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?>
+              <?php if ($isOtherCurrency) : ?>
+              <br/><span>(<?=$otherCurrency;?>)</span>
+              <?php endif;?>
+            </div>
           </div>
           <button type="submit" class="btn btn-block btn-payment text-uppercase">Payment</button>
         </div>

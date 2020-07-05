@@ -114,6 +114,9 @@ $canShowPrice = $user->can('orderteam');
                 <li>
                   <a href="#tab_1_4" data-toggle="tab">Đặc tính</a>
                 </li>
+                <li>
+                  <a href="#tab_1_5" data-toggle="tab">Nhóm game</a>
+                </li>
               </ul>
             </div>
             <div class="portlet-body">
@@ -162,6 +165,35 @@ $canShowPrice = $user->can('orderteam');
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                   ])->widget(CheckboxInput::className())->label('');?>
                 </div>
+                <div class="tab-pane" id="tab_1_5">
+                  <?=$form->field($model, 'group_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'group_id']
+                  ])->dropdownList($model->getGroups(), [
+                    'prompt' => 'Chọn nhóm game',
+                    'options'=> $model->getGroupData()
+                  ])->label('Nhóm game');?>
+
+                  <?=$form->field($model, 'method', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'method']
+                  ])->dropdownList($model->getMethods(), ['prompt' => 'Chọn phương thức'])->label('Phương thức nạp');?>
+
+                  <?=$form->field($model, 'version', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'version']
+                  ])->dropdownList($model->getVersions(), ['prompt' => 'Chọn version'])->label('Version');?>
+
+                  <?=$form->field($model, 'package', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
+                    'inputOptions' => ['class' => 'form-control', 'id' => 'package']
+                  ])->dropdownList($model->getPackages(), ['prompt' => 'Chọn loại gói'])->label('Loại gói');?>
+
+                </div>
               </div>
             </div>
           </div>
@@ -172,3 +204,26 @@ $canShowPrice = $user->can('orderteam');
   </div>
 </div>
 <?php ActiveForm::end()?>
+
+<?php
+$script = <<< JS
+$("#group_id").on('change', function(){
+  var method = $(this).find('option:selected').data('method');
+  var package = $(this).find('option:selected').data('package');
+  var version = $(this).find('option:selected').data('version');
+
+  $('#method').html(buildOptionItems(method));
+  $('#package').html(buildOptionItems(package));
+  $('#version').html(buildOptionItems(version));
+});
+function buildOptionItems(str) {
+  var values = str.split(',');
+  var html = '';
+  $.each(str.split(','), function( index, value ) {
+    html += '<option value="'+ value +'">'+ value +'</option>';
+  });
+  return html;
+}
+JS;
+$this->registerJs($script);
+?>
