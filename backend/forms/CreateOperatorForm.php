@@ -27,7 +27,7 @@ class CreateOperatorForm extends Model
             ['main_url', 'trim'],
             ['main_url', 'string', 'max' => 255],
 
-            ['user_id', 'safe'],
+            ['user_id', 'required'],
             ['user_id', 'validateManager'],
         ];
     }

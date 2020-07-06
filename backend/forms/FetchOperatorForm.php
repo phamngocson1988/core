@@ -31,8 +31,8 @@ class FetchOperatorForm extends Model
            ]);
         }
 
-        if ($this->status) {
-            $command->where(["{$operatorTable}.status" => $this->status]);
+        if ($this->status !== '') {
+            $command->andWhere(["{$operatorTable}.status" => $this->status]);
         }
         $this->_command = $command;
     }

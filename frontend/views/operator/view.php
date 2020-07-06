@@ -202,7 +202,9 @@ use common\components\helpers\TimeElapsed;
                   <div class="content">Max <?=$model->rebate;?>%</div>
                 </li>
               </ul>
+              <?php if (Yii::$app->user->can('manage_operator', ['operator' => $model])): ?>
               <div class="suggest-edit"><a class="btn btn-link" href="<?=Url::to(['manage/index', 'id' => $model->id, 'slug' => $model->slug]);?>">Suggest an edit</a></div>
+              <?php endif;?>
             </div>
           </section>
           <section class="operator-review-rate">
