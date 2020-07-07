@@ -14,6 +14,7 @@ class ReplyComplainForm extends Model
     public $complain_id;
     public $mark_close;
     public $description;
+    public $operator_id;
 
     protected $_complain;
 
@@ -21,7 +22,8 @@ class ReplyComplainForm extends Model
     {
         return [
             [['user_id', 'complain_id', 'mark_close', 'description'], 'required'],
-            ['complain_id', 'validateComplain']
+            ['complain_id', 'validateComplain'],
+            ['operator_id', 'safe']
         ];
     }
 

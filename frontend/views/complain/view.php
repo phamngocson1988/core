@@ -3,7 +3,6 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\TimeElapsed;
 $this->title = sprintf("Complain - %s", $complain->title);
-$user = Yii::$app->user->getIdentity();
 ?>
 <main>
   <section class="section-module">
@@ -92,11 +91,12 @@ $user = Yii::$app->user->getIdentity();
                 </div>
               </article>
               <?php else : ?>
+              <?php $userReply = $reply->user;?>
               <article class="review-item complaint-item">
                 <div class="review-user">
-                  <div class="user-photo"><img src="<?=$user->getAvatarUrl('100x100');?>" alt="<?=$user->name;?>"></div>
-                  <div class="user-name"><a href="#"><?=$user->name;?></a></div>
-                  <div class="user-meta"><span><?=$user->getCountryName();?></span></div>
+                  <div class="user-photo"><img src="<?=$userReply->getAvatarUrl('100x100');?>" alt="<?=$userReply->name;?>"></div>
+                  <div class="user-name"><a href="#"><?=$userReply->name;?></a></div>
+                  <div class="user-meta"><span><?=$userReply->getCountryName();?></span></div>
                 </div>
                 <div class="review-content">
                   <div class="review-date">Posted on <?=date("F j, Y", strtotime($reply->created_at));?></div>

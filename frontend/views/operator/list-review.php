@@ -27,8 +27,8 @@
     <div class="review-comments">
       <div class="review-comment">
         <div class="review-comment-header">
-          <div class="user-photo"><img src="/img/common/sample_img_00.png" alt="Username"></div>
-          <div class="user-name"><?=$operator->getImageUrl('50x50');?></div>
+          <div class="user-photo"><img src="<?=$operator->getImageUrl('50x50');?>" alt="Username"></div>
+          <div class="user-name"><?=$operator->name;?></div>
           <div class="comment-date">Replied on <?=date('F j, Y', strtotime($model->replied_at));?></div>
         </div>
         <div class="review-comment-content">

@@ -29,4 +29,9 @@ class ComplainReply extends ActiveRecord
     {
         return '{{%complain_reply}}';
     }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
 }
