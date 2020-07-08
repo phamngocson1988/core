@@ -25,7 +25,7 @@ class ManageController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'edit', 'update-avatar', 'reply-review', 'reply-complain'],
+                        'actions' => ['index', 'edit', 'update-avatar', 'reply-review', 'reply-complain', 'review', 'list-review'],
                         'allow' => true,
                         'roles' => ['admin', 'manager', 'moderator'],
                     ],
@@ -90,6 +90,43 @@ class ManageController extends Controller
         $operator->logo = $request->post('id');
         $operator->save();
         return $this->asJson(['status' => true]);
+    }
+
+    public function actionReview($id, $slug)
+    {
+        $model = Operator::findOne($id);
+        if (!$model) throw new NotFoundHttpException(Yii::t('app', 'operator_not_found'));
+
+        $user = Yii::$app->user->getIdentity();
+        return $this->render('review', [
+            'model' => $model,
+            'user' => $user,
+        ]);
+    }
+
+    public function actionListReview()
+    {
+        $request = Yii::$app->request;
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 10);
+        $command = OperatorReview::find()->where(['operator_id' => $request->get('id')])->offset($offset)->limit($limit);
+        if ($request->get('sort') == 'date') {
+            $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
+            $command->orderBy(['created_at' => $type]);
+        }
+        if ($request->get('sort') == 'rate') {
+            $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
+            $command->orderBy(['star' => $type]);
+        }
+
+        $models = $command->all();
+        $total = $command->count();
+        $html = $this->renderPartial('list-review', ['models' => $models]);
+        return $this->asJson(['status' => true, 'data' => [
+            'items' => $html,
+            'total' => $total
+        ]]);
+
     }
 
     public function actionReplyReview()

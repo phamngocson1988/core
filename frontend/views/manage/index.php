@@ -33,13 +33,20 @@ use common\components\helpers\TimeElapsed;
                 <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <ul class="list-tabs tabs-none">
-                    <li><a class="trans" href="<?=Url::to(['manage/review', 'id' => $model->id, 'slug' => $model->slug]);?>">Reviews (52)</a></li>
-                    <li><a class="trans" href="<?=Url::to(['manage/complain', 'id' => $model->id, 'slug' => $model->slug]);?>">Complaints (49)</a></li>
+                    <li><a class="trans" href="<?=Url::to(['manage/review', 'id' => $model->id, 'slug' => $model->slug]);?>">Reviews (<?=number_format($model->countReview());?>)</a></li>
+                    <li><a class="trans" href="<?=Url::to(['manage/complain', 'id' => $model->id, 'slug' => $model->slug]);?>">Complaints (<?=number_format($model->totalComplain());?>)</a></li>
                     <li><a class="trans" href="<?=Url::to(['manage/information', 'id' => $model->id, 'slug' => $model->slug]);?>">Page information</a></li>
                   </ul>
                 </div>
               </div>
             </div>
+            <?php if (!$review && !$complain) : ?>
+            <div class="widget-main">
+              <div class="review-list">
+                <center style="padding: 10px 0">No thing found</center>
+              </div>
+            </div>
+            <?php endif;?>
             <div class="widget-main">
               <div class="review-list">
                 <?php if ($review) :?>
