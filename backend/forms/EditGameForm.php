@@ -9,6 +9,7 @@ use backend\models\GameCategory;
 use backend\models\GameCategoryItem;
 use backend\models\GameGroup;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 class EditGameForm extends Model
 {
@@ -59,7 +60,34 @@ class EditGameForm extends Model
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
             [['group_id', 'method', 'package', 'version'], 'safe'],
+            ['group_id', 'validateGroup']
         ];
+    }
+
+    public function validateGroup($attribute, $params) 
+    {   
+        if (!$this->group_id) return;
+        if (!$this->method || !$this->version || !$this->package) {
+            $this->addError($attribute, 'Những thông số đi kèm không được bỏ trống');
+            return;
+        }
+        $game = $this->getGame();
+        if (
+            $game->group_id != $this->group_id
+            || $game->method != $this->method
+            || $game->version != $this->version
+            || $game->package != $this->package
+        ) {
+            if (Game::find()->where([
+                'group_id' => $this->group_id,
+                'method' => $this->method,
+                'version' => $this->version,
+                'package' => $this->package,
+            ])->exists()) {
+                $this->addError($attribute, 'Những thông số này đã được dùng cho 1 game khác.');
+            }
+        }
+
     }
 
     public function attributeLabels()
@@ -206,7 +234,10 @@ class EditGameForm extends Model
         if (!$this->group_id) return [];
         $group = GameGroup::findOne($this->group_id);
         $methods = explode(',', $group->method);
-        return array_combine($methods, $methods);
+        $keys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $methods);
+        return array_combine($keys, $methods);
     }
 
     public function getVersions()
@@ -214,7 +245,10 @@ class EditGameForm extends Model
         if (!$this->group_id) return [];
         $group = GameGroup::findOne($this->group_id);
         $versions = explode(',', $group->version);
-        return array_combine($versions, $versions);
+        $keys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $versions);
+        return array_combine($keys, $versions);
     }
 
     public function getPackages()
@@ -222,7 +256,10 @@ class EditGameForm extends Model
         if (!$this->group_id) return [];
         $group = GameGroup::findOne($this->group_id);
         $packages = explode(',', $group->package);
-        return array_combine($packages, $packages);
+        $keys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $packages);
+        return array_combine($keys, $packages);
     }
 
 

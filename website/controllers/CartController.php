@@ -16,6 +16,23 @@ use common\models\Currency;
 
 class CartController extends Controller
 {
+    // public function behaviors()
+    // {
+    //     return [
+    //         'access' => [
+    //             'class' => AccessControl::className(),
+    //             'rules' => [
+    //                 [
+    //                     'actions' => ['index', 'checkout'],
+    //                     'allow' => true,
+    //                     'roles' => ['@'],
+    //                 ],
+
+    //             ],
+    //         ],
+    //     ];
+    // }
+
     public function actionCalculate($id) 
     {
         $request = Yii::$app->request;

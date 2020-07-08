@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 use website\models\Game;
 use website\models\GameGroup;
 use website\models\GameSetting;
@@ -53,6 +54,25 @@ class GameController extends Controller
         $methods = ArrayHelper::getColumn($games, 'method');
         $methods = array_filter($methods);
         $methods = array_unique($methods);
+
+        // Game settings
+        $settingMethod = GameSetting::find()->where(['key' => 'method'])->one();
+        $settingMethodValues = explode(",", $settingMethod->value);
+
+        $settingVersion = GameSetting::find()->where(['key' => 'version'])->one();
+        $settingVersionValues = explode(",", $settingVersion->value);
+        $settingVersionKeys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $settingVersionValues);
+        $settingVersionMapping = array_combine($settingVersionKeys, $settingVersionValues);
+
+        $settingPackage = GameSetting::find()->where(['key' => 'package'])->one();
+        $settingPackageValues = explode(",", $settingPackage->value);
+        $settingPackageKeys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $settingPackageValues);
+        $settingPackageMapping = array_combine($settingPackageKeys, $settingPackageValues);
+
         $mapping = [];
         foreach ($games as $game) {
             $gameInfo = [
@@ -64,26 +84,34 @@ class GameController extends Controller
                 'image' => $game->getImageUrl(),
                 'save' => sprintf('save %s', number_format($game->getSavedPrice())) . '%',
             ];
+            // $packageInfo = [
+            //     'name' => $settingPackageMapping[$game->package],
+            //     'game' => $gameInfo,
+            // ];
+            // $versionInfo = [
+            //     'name' => $settingVersionMapping[$game->version],
+            //     'packages' => [$game->package => $packageInfo]
+            // ];
             $mapping[$game->method][$game->version][$game->package] = $gameInfo;
         }
 
-        $settingMethod = GameSetting::find()->where(['key' => 'method'])->one();
-        $settingMethodValues = explode(",", $settingMethod->value);
+        
         $settingMethodParams = [];
         foreach ($settingMethodValues as $settingMethodValue) {
             $methodParts = explode("|", $settingMethodValue);
             $methodTitle = array_shift($methodParts);
-            if (!in_array($methodTitle, $methods)) continue;
+            $slugTitle = Inflector::slug($methodTitle);
+            if (!in_array($slugTitle, $methods)) continue;
             $methodPrice = array_shift($methodParts);
             $methodSpeed = array_shift($methodParts);
             $methodSafe = array_shift($methodParts);
-            $settingMethodParams[$methodTitle] = [
+            $settingMethodParams[$slugTitle] = [
+                'name' => $methodTitle,
                 'price' => $methodPrice,
                 'speed' => $methodSpeed,
                 'safe' => $methodSafe,
             ];
         }
-
         // other games
         $relatedGames = [];
         $category = null;
@@ -104,6 +132,8 @@ class GameController extends Controller
             'methods' => $methods,
             'settingMethodParams' => $settingMethodParams,
             'mapping' => json_encode($mapping),
+            'settingVersionMapping' => json_encode($settingVersionMapping),
+            'settingPackageMapping' => json_encode($settingPackageMapping),
             'relatedGames' => $relatedGames,
             'category' => $category,
         ]);

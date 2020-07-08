@@ -37,9 +37,10 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           $settingMethodPrice = ArrayHelper::getValue($settingMethodParam, 'price', 0);
           $settingMethodSpeed = ArrayHelper::getValue($settingMethodParam, 'speed', 0);
           $settingMethodSafe = ArrayHelper::getValue($settingMethodParam, 'safe', 0);
+          $settingMethodTitle = ArrayHelper::getValue($settingMethodParam, 'name', '');
           ?>
           <label class="btn flex-fill w-100 mr-2 btn-secondary <?=($method == $model->method) ? 'active' : '';?>">
-            <input type="radio" name="method" id="<?=$method;?>" autocomplete="off" <?=($method == $model->method) ? 'checked' : '';?> data-price="<?=$settingMethodPrice;?>" data-speed="<?=$settingMethodSpeed;?>" data-safe="<?=$settingMethodSafe;?>"><?=$method;?>
+            <input type="radio" name="method" id="<?=$method;?>" autocomplete="off" <?=($method == $model->method) ? 'checked' : '';?> data-price="<?=$settingMethodPrice;?>" data-speed="<?=$settingMethodSpeed;?>" data-safe="<?=$settingMethodSafe;?>"><?=$settingMethodTitle;?>
           </label>
           <?php endforeach;?>
         </div>
@@ -294,8 +295,10 @@ $('#quantity').on('change', function() {
 // React view on attributes
 var currentMethod = '$model->method';
 var currentVersion = '$model->version';
-var currentPackage = '$model->package';
+var currentPackage = "$model->package";
 var mapping = $mapping;
+var settingVersionMapping = $settingVersionMapping;
+var settingPackageMapping = $settingPackageMapping;
 
 $(":radio[name=method]").on('change', function() {
   currentMethod = $(this).attr('id');
@@ -308,6 +311,9 @@ $(":radio[name=method]").on('change', function() {
 });
 $("#version").on('change', function() {
   currentVersion = $(this).val();
+  var method = mapping[currentMethod];
+  var version = method[currentVersion];
+  currentPackage = Object.keys(version)[0];
   changeView();
 });
 $("#package").on('change', function() {
@@ -318,13 +324,21 @@ changeStar();
 
 function changeView() {
   var method = mapping[currentMethod];
-  var versions = Object.keys(method);
+  console.log('method', method);
+  var versions = Object.keys(method).reduce((p, c) => {
+    p[c] = settingVersionMapping[c];
+    return p;
+  }, {});
   var version = method[currentVersion];
-  var packages = Object.keys(version);
+  console.log('version', version);
+  var packages = Object.keys(version).reduce((p, c) => {
+    p[c] = settingPackageMapping[c];
+    return p;
+  }, {});
   var game = version[currentPackage];
+  console.log('game', game);
   $('#version').html(buildOptions(versions, currentVersion));
   $('#package').html(buildOptions(packages, currentPackage));
-
   var viewUrl = game['viewUrl'];
   var cartUrl = game['cartUrl'];
   var calculateUrl = game['calculateUrl'];
@@ -343,7 +357,9 @@ function changeView() {
   $('#quantity').val(1).trigger('change');
 };
 function changeStar() {
+  console.log('changeStar', currentMethod);
   var method = $('#' + currentMethod);
+  console.log('changeStar', method);
   var price = method.data('price');
   var speed = method.data('speed');
   var safe = method.data('safe');
@@ -362,12 +378,14 @@ function changeStar() {
     return index + 1 <= safe;
   }).addClass('selected');
 }
-function buildOptions(arr, sel) {
+function buildOptions(obj, sel) {
+  console.log('buildOptions', obj);
   html = '';
-  arr.forEach((item, index) => {
-    var selected = sel == item ? 'selected' : '';
-    html += '<option value="'+item+'" '+selected+'>'+item+'</option>';
-  });
+  for (var index in obj) {
+    var item = obj[index];
+    var selected = sel == index ? 'selected' : '';
+    html += '<option value="'+index+'" '+selected+'>'+item+'</option>';
+  };
   return html;
 }
 changeView();
