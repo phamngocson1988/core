@@ -20,8 +20,8 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         ['js/a076d05399.js', 'position' => \yii\web\View::POS_HEAD],
+        ['js/popper.min.js', 'position' => \yii\web\View::POS_HEAD],
         'js/jquery-ui.js',
-        'js/popper.min.js',
         'js/jquery.matchHeight-min.js',
         'js/jquery.magicsearch.min.js',
         'js/slick.min.js',

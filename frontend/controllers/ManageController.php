@@ -114,9 +114,10 @@ class ManageController extends Controller
             $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
             $command->orderBy(['created_at' => $type]);
         }
-        if ($request->get('sort') == 'rate') {
-            $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
-            $command->orderBy(['star' => $type]);
+        $status = $request->get('status');
+        if ($status) {
+            $not = $status == 'responded' ? 'NOT' : '';
+            $command->andWhere(["IS $not", "reply", null]);
         }
 
         $models = $command->all();

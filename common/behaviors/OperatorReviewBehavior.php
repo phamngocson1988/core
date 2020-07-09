@@ -32,4 +32,20 @@ class OperatorReviewBehavior extends AttributeBehavior
         $owner = $this->owner; // Operator
     	return OperatorReview::find()->where(['operator_id' => $owner->id])->count();
     }
+
+    public function countResponsedReview()
+    {
+        $owner = $this->owner; // Operator
+        return OperatorReview::find()->where(['operator_id' => $owner->id])
+        ->andWhere(['IS NOT', 'reply', null])
+        ->count();
+    }
+
+    public function countUnResponsedReview()
+    {
+        $owner = $this->owner; // Operator
+        return OperatorReview::find()->where(['operator_id' => $owner->id])
+        ->andWhere(['IS', 'reply', null])
+        ->count();
+    }
 }
