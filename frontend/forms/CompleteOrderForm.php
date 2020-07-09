@@ -54,6 +54,7 @@ class CompleteOrderForm extends Model
                 $supplier = Supplier::findOne($orderSupplier->supplier_id);
                 if (!$supplier) continue;
                 $orderSupplier->status = OrderSupplier::STATUS_CONFIRMED;
+                $orderSupplier->confirmed_at = $order->confirmed_at;
                 $orderSupplier->save();
                 
                 $amount = $orderSupplier->total_price;

@@ -71,6 +71,7 @@ class m191210_171926_supplier extends Migration
             'approved_at' => $this->dateTime(),         
             'processing_at' => $this->dateTime(),  
             'completed_at' => $this->dateTime(),  
+            'confirmed_at' => $this->dateTime(),  
             'rejected_at' => $this->dateTime(),           
             'stopped_at' => $this->dateTime(),           
             'retaken_at' => $this->dateTime(),           

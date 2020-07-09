@@ -35,10 +35,10 @@ class ReportCostOrderBySupplier extends Model
             $command->andWhere(["$orderSupplierTable.supplier_id" => $this->supplier_id]);
         }
         if ($this->confirmed_from) {
-            $command->andWhere([">=", "$orderSupplierTable.updated_at", $this->confirmed_from]);
+            $command->andWhere([">=", "$orderSupplierTable.confirmed_at", $this->confirmed_from]);
         }
         if ($this->confirmed_to) {
-            $command->andWhere(["<=", "$orderSupplierTable.updated_at", $this->confirmed_to]);
+            $command->andWhere(["<=", "$orderSupplierTable.confirmed_at", $this->confirmed_to]);
         }
         $command->groupBy(["$orderSupplierTable.supplier_id"]);
         $command->orderBy(["total_price" => SORT_DESC]);
