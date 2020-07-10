@@ -8,6 +8,7 @@ use backend\models\Game;
 use backend\models\GameCategory;
 use backend\models\GameCategoryItem;
 use backend\models\GameGroup;
+use backend\models\GameSetting;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 
@@ -269,9 +270,9 @@ class EditGameForm extends Model
 
         return ArrayHelper::map($groups, 'id', function($obj) {
             return [
-                'data-method' => $obj->method,
-                'data-version' => $obj->version,
-                'data-package' => $obj->package,
+                'data-method' => GameSetting::buildMapping($obj->method),
+                'data-version' => GameSetting::buildMapping($obj->version),
+                'data-package' => GameSetting::buildMapping($obj->package),
             ];
         });
 

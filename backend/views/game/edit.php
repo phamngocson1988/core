@@ -211,17 +211,19 @@ $("#group_id").on('change', function(){
   var method = $(this).find('option:selected').data('method');
   var package = $(this).find('option:selected').data('package');
   var version = $(this).find('option:selected').data('version');
-
-  $('#method').html(buildOptionItems(method));
-  $('#package').html(buildOptionItems(package));
-  $('#version').html(buildOptionItems(version));
+  $('#method').html(buildOptions(method));
+  $('#package').html(buildOptions(package));
+  $('#version').html(buildOptions(version));
 });
-function buildOptionItems(str) {
-  var values = str.split(',');
-  var html = '';
-  $.each(str.split(','), function( index, value ) {
-    html += '<option value="'+ value +'">'+ value +'</option>';
-  });
+
+function buildOptions(obj, sel) {
+  console.log('buildOptions', obj);
+  html = '';
+  for (var index in obj) {
+    var item = obj[index];
+    var selected = sel == index ? 'selected' : '';
+    html += '<option value="'+index+'" '+selected+'>'+item+'</option>';
+  };
   return html;
 }
 JS;

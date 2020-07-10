@@ -84,14 +84,6 @@ class GameController extends Controller
                 'image' => $game->getImageUrl(),
                 'save' => sprintf('save %s', number_format($game->getSavedPrice())) . '%',
             ];
-            // $packageInfo = [
-            //     'name' => $settingPackageMapping[$game->package],
-            //     'game' => $gameInfo,
-            // ];
-            // $versionInfo = [
-            //     'name' => $settingVersionMapping[$game->version],
-            //     'packages' => [$game->package => $packageInfo]
-            // ];
             $mapping[$game->method][$game->version][$game->package] = $gameInfo;
         }
 

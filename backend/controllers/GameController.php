@@ -85,25 +85,6 @@ class GameController extends Controller
         ]);
     }
 
-    // public function actionCreate()
-    // {
-    //     $this->view->params['main_menu_active'] = 'game.index';
-    //     $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
-    //     $request = Yii::$app->request;
-    //     $model = new Game();
-    //     $model->setScenario(Game::SCENARIO_CREATE);
-    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
-    //         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-    //         $ref = Url::to(['game/index']);
-    //         return $this->redirect($ref);    
-    //     } else {
-    //         Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-    //     }
-    //     return $this->render('create.tpl', [
-    //         'model' => $model,
-    //         'back' => $request->get('ref', Url::to(['game/index']))
-    //     ]);
-    // }
     public function actionCreate()
     {
         $this->view->params['main_menu_active'] = 'game.index';
@@ -125,28 +106,6 @@ class GameController extends Controller
         ]);
     }
 
-    // public function actionEdit($id)
-    // {
-    //     $this->view->params['main_menu_active'] = 'game.index';
-    //     $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
-    //     $request = Yii::$app->request;
-    //     $model =Game::findOne($id);
-    //     $model->setScenario(Game::SCENARIO_EDIT);
-    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
-    //         Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-    //         $ref = Url::to(['game/index']);
-    //         return $this->redirect($ref);    
-    //     } else {
-    //         Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
-    //     }
-    //     $numSupplier = SupplierGame::find()->where(['game_id' => $id])->count();
-    //     return $this->render('edit.php', [
-    //         'id' => $id,
-    //         'model' => $model,
-    //         'back' => $request->get('ref', Url::to(['game/index'])),
-    //         'numSupplier' => $numSupplier
-    //     ]);
-    // }
     public function actionEdit($id)
     {
         $this->view->params['main_menu_active'] = 'game.index';
@@ -164,11 +123,12 @@ class GameController extends Controller
         }
         $model->loadData();
         $numSupplier = SupplierGame::find()->where(['game_id' => $id])->count();
+
         return $this->render('edit.php', [
             'id' => $id,
             'model' => $model,
             'back' => $request->get('ref', Url::to(['game/index'])),
-            'numSupplier' => $numSupplier
+            'numSupplier' => $numSupplier,
         ]);
     }
 

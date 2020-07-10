@@ -5,7 +5,9 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Game;
+use backend\models\GameGroup;
 use backend\models\GameCategory;
+use backend\models\GameSetting;
 use backend\models\GameCategoryItem;
 use yii\helpers\ArrayHelper;
 
@@ -37,6 +39,10 @@ class CreateGameForm extends Model
     public $new_trending;
     public $top_grossing;
     public $back_to_stock;
+    public $group_id;
+    public $method;
+    public $version;
+    public $package;
     public $categories;
 
     public function rules()
@@ -52,8 +58,27 @@ class CreateGameForm extends Model
             [['price1', 'price2', 'price3'], 'safe'],
             [['meta_title', 'meta_keyword', 'meta_description'], 'trim'],
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
-            [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe']
+            [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
+            [['group_id', 'method', 'package', 'version'], 'safe'],
+            ['group_id', 'validateGroup']
         ];
+    }
+
+    public function validateGroup($attribute, $params) 
+    {   
+        if (!$this->group_id) return;
+        if (!$this->method || !$this->version || !$this->package) {
+            $this->addError($attribute, 'Những thông số đi kèm không được bỏ trống');
+            return;
+        }
+        if (Game::find()->where([
+            'group_id' => $this->group_id,
+            'method' => $this->method,
+            'version' => $this->version,
+            'package' => $this->package,
+        ])->exists()) {
+            $this->addError($attribute, 'Những thông số này đã được dùng cho 1 game khác.');
+        }
     }
 
     public function attributeLabels()
@@ -139,6 +164,10 @@ class CreateGameForm extends Model
         $post->new_trending = $this->new_trending;
         $post->top_grossing = $this->top_grossing;
         $post->back_to_stock = $this->back_to_stock;
+        $post->group_id = $this->group_id;
+        $post->method = $this->method;
+        $post->version = $this->version;
+        $post->package = $this->package;
         return $post;
     }
 
@@ -151,6 +180,60 @@ class CreateGameForm extends Model
             return sprintf($format, $name);
         }, $categories);
         return $categories;
+    }
+
+    public function getGroups()
+    {
+        $groups = GameGroup::find()->all();
+        return ArrayHelper::map($groups, 'id', 'title');
+    }
+
+    public function getMethods()
+    {
+        if (!$this->group_id) return [];
+        $group = GameGroup::findOne($this->group_id);
+        $methods = explode(',', $group->method);
+        $keys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $methods);
+        return array_combine($keys, $methods);
+    }
+
+    public function getVersions()
+    {
+        if (!$this->group_id) return [];
+        $group = GameGroup::findOne($this->group_id);
+        $versions = explode(',', $group->version);
+        $keys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $versions);
+        return array_combine($keys, $versions);
+    }
+
+    public function getPackages()
+    {
+        if (!$this->group_id) return [];
+        $group = GameGroup::findOne($this->group_id);
+        $packages = explode(',', $group->package);
+        $keys = array_map(function($val) {
+            return Inflector::slug($val);
+        }, $packages);
+        return array_combine($keys, $packages);
+    }
+
+
+    public function getGroupData()
+    {
+        $groups = GameGroup::find()->all();
+
+        return ArrayHelper::map($groups, 'id', function($obj) {
+            return [
+                'data-method' => GameSetting::buildMapping($obj->method),
+                'data-version' => GameSetting::buildMapping($obj->version),
+                'data-package' => GameSetting::buildMapping($obj->package),
+            ];
+        });
+
     }
 
 }
