@@ -18,6 +18,9 @@ use frontend\models\Complain;
 
 class ManageController extends Controller
 {
+    protected $operator_id;
+    protected $_operator;
+
     public function behaviors()
     {
         return [
@@ -25,7 +28,7 @@ class ManageController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'edit', 'update-avatar', 'reply-review', 'reply-complain', 'review', 'list-review'],
+                        'actions' => ['index', 'edit', 'update-avatar', 'reply-review', 'reply-complain', 'review', 'list-review', 'complain', 'list-complain'],
                         'allow' => true,
                         'roles' => ['admin', 'manager', 'moderator'],
                     ],
@@ -35,9 +38,27 @@ class ManageController extends Controller
         ];
     }
 
-    public function actionIndex($id, $slug)
+    public function beforeAction($action)
     {
-        $model = Operator::findOne($id);
+        if (!parent::beforeAction($action)) return false;
+        $request = Yii::$app->request;
+        $this->operator_id = $request->get('operator_id');
+        $operator = $this->getOperator();
+        return $operator;
+    }
+
+    protected function getOperator()
+    {
+        if (!$this->_operator) {
+            $this->_operator = Operator::findOne($this->operator_id);
+        }
+        return $this->_operator;
+    }
+
+    public function actionIndex()
+    {
+        $operator = $this->getOperator();
+        $id = $this->operator_id;
         // review
         $review = OperatorReview::find()
         ->where(['operator_id' => $id])
@@ -54,7 +75,7 @@ class ManageController extends Controller
         ->one();
         $complainForm = new \frontend\forms\ReplyComplainForm();
         return $this->render('index', [
-            'model' => $model,
+            'operator' => $operator,
             'review' => $review,
             'reviewForm' => $reviewForm,
             'complain' => $complain,
@@ -62,10 +83,11 @@ class ManageController extends Controller
         ]);
     }
 
-    public function actionEdit($id, $slug)
+    public function actionEdit()
     {
         $request = Yii::$app->request;
-        $model = new \frontend\forms\UpdateOperatorForm(['id' => $id]);
+        $operator = $this->getOperator();
+        $model = new \frontend\forms\UpdateOperatorForm(['id' => $this->operator_id]);
         if ($model->load($request->post())) {
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
@@ -76,30 +98,29 @@ class ManageController extends Controller
             $model->loadData();
         }
         return $this->render('edit', [
-            'model' => $model
+            'model' => $model,
+            'operator' => $operator,
         ]);
     }
 
-    public function actionUpdateAvatar($id) 
+    public function actionUpdateAvatar() 
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        $operator = Operator::findOne($id);
-        $operator->logo = $request->post('id');
+        $operator = $this->getOperator();
+        $operator->logo = $request->post('image_id');
         $operator->save();
         return $this->asJson(['status' => true]);
     }
 
-    public function actionReview($id, $slug)
+    public function actionReview()
     {
-        $model = Operator::findOne($id);
-        if (!$model) throw new NotFoundHttpException(Yii::t('app', 'operator_not_found'));
-
+        $operator = $this->getOperator();
         $user = Yii::$app->user->getIdentity();
         return $this->render('review', [
-            'model' => $model,
+            'operator' => $operator,
             'user' => $user,
         ]);
     }
@@ -109,7 +130,9 @@ class ManageController extends Controller
         $request = Yii::$app->request;
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 10);
-        $command = OperatorReview::find()->where(['operator_id' => $request->get('id')])->offset($offset)->limit($limit);
+        $operator = $this->getOperator();
+
+        $command = OperatorReview::find()->where(['operator_id' => $operator->id])->offset($offset)->limit($limit);
         if ($request->get('sort') == 'date') {
             $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
             $command->orderBy(['created_at' => $type]);
@@ -137,7 +160,7 @@ class ManageController extends Controller
 
         $model = new \frontend\forms\ReplyOperatorReviewForm([
             'user_id' => Yii::$app->user->id,
-            'id' => $request->get('id')
+            'id' => $request->get('review_id')
         ]);
         if ($model->load($request->post()) && $model->validate() && $model->reply()) {
             return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'reply_review_success')]]);
@@ -148,14 +171,53 @@ class ManageController extends Controller
         }
     }
 
-    public function actionReplyComplain($id)
+    public function actionComplain() 
+    {
+        $operator = $this->getOperator();
+        return $this->render('complain', ['operator' => $operator]);
+    }
+
+    public function actionListComplain()
+    {
+        $operator = $this->getOperator();
+        $request = Yii::$app->request;
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 10);
+        $command = Complain::find()->where(['operator_id' => $operator->id])->offset($offset)->limit($limit);
+
+        if ($request->get('sort') == 'date') {
+            $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
+            $command->orderBy(['created_at' => $type]);
+        }
+        $status = $request->get('status');
+        if ($status) {
+            $command->andWhere(["status" => $status]);
+        }
+
+        $complains = $command->all();
+        $total = $command->count();
+
+        $complainForm = new \frontend\forms\ReplyComplainForm();
+
+        $html = $this->renderPartial('list-complain', [
+            'operator' => $operator, 
+            'complains' => $complains, 
+            'complainForm' => $complainForm
+        ]);
+        return $this->asJson(['status' => true, 'data' => [
+            'items' => $html,
+            'total' => $total
+        ]]);
+    }
+
+    public function actionReplyComplain()
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
 
         $model = new \frontend\forms\ReplyComplainForm([
             'user_id' => Yii::$app->user->id,
-            'complain_id' => $request->get('id')
+            'complain_id' => $request->get('complain_id')
         ]);
         if ($model->load($request->post()) && $model->validate() && $model->add()) {
             return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'add_reply_success')]]);

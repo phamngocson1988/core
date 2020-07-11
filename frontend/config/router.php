@@ -16,6 +16,9 @@ return [
         'activate' => 'site/activate',
         'operator/<id:\d+>-<slug:[\w\-]+>' => 'operator/view',
         'news/<id:\d+>-<slug:[\w\-]+>' => 'news/view',
+
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/dashboard' => 'manage/index',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/<action>' => 'manage/<action>',
         '<controller>/<action>' => '<controller>/<action>',
     ],
 ];

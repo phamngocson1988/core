@@ -27,15 +27,15 @@ $this->title = sprintf("Complain - %s", $complain->title);
         </div>
         <div class="hero-footer">
           <ul class="hero-nav">
-            <li><a href="#"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
-            <li><a href="#"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Discussion</span></a></li>
-            <li><a href="#"><i class="fa fa-comments"></i><span class="nav-text">Other Complaints (0)</span></a></li>
+            <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
+            <li><a href="#discussion"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Discussion</span></a></li>
+            <li><a href="#complain"><i class="fa fa-comments"></i><span class="nav-text">Other Complaints (<?=$operator->totalComplain();?>)</span></a></li>
           </ul>
         </div>
       </section>
       <div class="sec-content">
         <div class="mod-column">
-          <section class="operator-detail widget-box">
+          <section class="operator-detail widget-box" id="overview">
             <h2 class="widget-head">
               <div class="head-text"><i class="fa fa-info-circle"></i><span class="text">Complaint Info</span></div>
             </h2>
@@ -65,7 +65,7 @@ $this->title = sprintf("Complain - %s", $complain->title);
               </ul>
             </div>
           </section>
-          <section class="operator-review-group widget-box">
+          <section class="operator-review-group widget-box" id="discussion">
             <div class="review-list">
               <article class="review-item complaint-item">
                 <div class="review-user">
@@ -134,33 +134,7 @@ $this->title = sprintf("Complain - %s", $complain->title);
             </div>
           </section>
           <div class="section-complaint-back"><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>">Back to <?=$operator->name;?></a></div>
-          <section class="operator-complaint">
-            <h2 class="sec-title text-center"><?=$operator->name;?> Complaints</h2>
-            <ul class="complaint-stats">
-              <li>Total 99 cases</li>
-              <li>700/995 case resolved (90%)</li>
-              <li>5 hours average response</li>
-            </ul>
-            <div class="row">
-              <?php foreach ($complains as $complain) : ?>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <div class="block-complaint">
-                  <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
-                  <div class="complaint-heading">
-                    <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
-                    <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
-                  </div>
-                  <div class="complaint-desc"><?=$complain->title;?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id]);?>">READ MORE</a>
-                </div>
-              </div>
-              <?php endforeach;?>
-            </div>
-            <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['complain/index', 'operator_id' => $operator->id]);?>">See all <i class="fas fa-chevron-right"></i></a></div>
-          </section>
-          <section class="operator-trouble widget-box">
-            <div class="trouble-title">Have trouble with <?=$operator->name;?>?</div>
-            <div class="trouble-button"><a class="btn btn-lg trans" href="<?=Url::to(['complain/create', 'operator_id' => $operator->id]);?>">Submit complaint</a><a class="btn btn-lg trans" href="#">Learn more</a></div>
-          </section>
+          <?=\frontend\widgets\OperatorComplainWidget::widget(['operator' => $operator]);?>
         </div>
         <aside class="mod-sidebar">
           <div class="sidebar-col side-operator">

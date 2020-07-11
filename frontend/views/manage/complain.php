@@ -1,12 +1,12 @@
 <?php
 use yii\helpers\Url;
+use frontend\models\Complain;
 ?>
 <main>
   <section class="section-profile-user">
     <div class="container">
       <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator]);?>
-      
-      <h2 class="sec-heading-title">Player reviews</h2>
+      <h2 class="sec-heading-title">Player Complaints</h2>
       <div class="widget-box timeline-post">
         <div class="timeline-heading">
           <div class="heading-text mb-0">
@@ -14,8 +14,9 @@ use yii\helpers\Url;
               <button class="dropdown-toggle" id="dropdownMenuSort" type="button" data-toggle="dropdown" aria-expanded="false">Sort</button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuSort">
                 <ul class="list-sort">
-                  <li><a class="trans" href="javascript:;" id='sort-latest'>Latest</a></li>
+                  <li><a class="trans" href="javascript:;" id='sort-lastest'>Latest</a></li>
                   <li><a class="trans" href="javascript:;" id='sort-oldest'>Oldest</a></li>
+                  <!-- <li><a class="trans" href="javascript:;" id='order-lastest'>Assigned To</a></li> -->
                 </ul>
               </div>
             </div>
@@ -24,16 +25,16 @@ use yii\helpers\Url;
             <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <ul class="list-tabs tabs-none">
-                <li><a class="trans" href="javascript:;" id='search-all'>All (<?=number_format($operator->countReview());?>)</a></li>
-                <li><a class="trans" href="javascript:;" id='search-responded'>Responded (<?=number_format($operator->countResponsedReview());?>)</a></li>
-                <li><a class="trans" href="javascript:;" id='search-unresponded'>Unresponded (<?=number_format($operator->countUnResponsedReview());?>)</a></li>
+                <li><a class="trans" href="javascript:;" id='search-all'>All (<?=number_format($operator->totalComplain());?>)</a></li>
+                <li><a class="trans" href="javascript:;" id='search-open'>Open cases (<?=number_format($operator->totalComplainOpen());?>)</a></li>
+                <li><a class="trans" href="javascript:;" id='search-resolve'>Resolved (<?=number_format($operator->totalComplainResolve());?>)</a></li>
+                <li><a class="trans" href="javascript:;" id='search-reject'>Rejected (<?=number_format($operator->totalComplainReject());?>)</a></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="widget-main">
           <div class="review-list">
-            
           </div>
         </div>
       </div>
@@ -43,19 +44,26 @@ use yii\helpers\Url;
 
 <?php
 $script = <<< JS
-// Review Form
-var reviewForm = new AjaxFormSubmit({
-  element : 'form#add-review-form'
-});
-reviewForm.error = function (errors) {
-  toastr.error(errors);
-}
-reviewForm.success = function (data, form) {
-  toastr.success(data.message);
-  setTimeout(() => {  
-    location.reload();
-  }, 1000);
-}
+$('.review-list').on('click', '.reply-complain-button', function() {
+  var form = $(this).closest('form.reply-complain-form');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+          toastr.error(result.errors);
+        } else {
+          toastr.success(result.data.message);
+          setTimeout(() => {  
+            location.reload();
+          }, 1000);
+        }
+    },
+  });
+  return false;
+})
 
 // Review List
 var reviewListLoading = new AjaxPaging({
@@ -66,7 +74,7 @@ var reviewListLoading = new AjaxPaging({
 $('#load-more-reivew').on('click', function() {
   reviewListLoading.load();
 });
-$('#sort-latest').on('click', function() {
+$('#sort-lastest').on('click', function() {
   reviewListLoading.reset({
     condition: {
       sort: 'date',
@@ -87,22 +95,32 @@ $('#search-all').on('click', function() {
     request_url: '###REVIEWLIST###',
   });
 });
-$('#search-responded').on('click', function() {
+$('#search-open').on('click', function() {
   reviewListLoading.reset({
     condition: {
-      status: 'responded'
+      status: '###STATUS_OPEN###'
     }
   });
 });
-$('#search-unresponded').on('click', function() {
+$('#search-resolve').on('click', function() {
   reviewListLoading.reset({
     condition: {
-      status: 'unresponded'
+      status: '###STATUS_RESOLVE###'
+    }
+  });
+});
+$('#search-reject').on('click', function() {
+  reviewListLoading.reset({
+    condition: {
+      status: '###STATUS_REJECT###'
     }
   });
 });
 JS;
-$listReviewLink = Url::to(['manage/list-review', 'operator_id' => $operator->id]);
+$listReviewLink = Url::to(['manage/list-complain', 'operator_id' => $operator->id]);
 $script = str_replace('###REVIEWLIST###', $listReviewLink, $script);
+$script = str_replace('###STATUS_OPEN###', Complain::STATUS_OPEN, $script);
+$script = str_replace('###STATUS_RESOLVE###', Complain::STATUS_RESOLVE, $script);
+$script = str_replace('###STATUS_REJECT###', Complain::STATUS_REJECT, $script);
 $this->registerJs($script);
 ?>

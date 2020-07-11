@@ -20,6 +20,36 @@ class OperatorComplainBehavior extends AttributeBehavior
         return $command->count();
     }
 
+    public function totalComplainOpen() 
+    {
+        $owner = $this->owner; // Operator
+        $command = Complain::find()->where([
+            'operator_id' => $owner->id,
+            'status' => Complain::STATUS_OPEN
+        ]);
+        return $command->count();
+    }
+
+    public function totalComplainResolve() 
+    {
+        $owner = $this->owner; // Operator
+        $command = Complain::find()->where([
+            'operator_id' => $owner->id,
+            'status' => Complain::STATUS_RESOLVE
+        ]);
+        return $command->count();
+    }
+
+    public function totalComplainReject() 
+    {
+        $owner = $this->owner; // Operator
+        $command = Complain::find()->where([
+            'operator_id' => $owner->id,
+            'status' => Complain::STATUS_REJECT
+        ]);
+        return $command->count();
+    }
+
     public function averageRespondTime() 
     {
         $owner = $this->owner; // Operator

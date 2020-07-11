@@ -6,8 +6,7 @@ use common\components\helpers\TimeElapsed;
 <main>
   <section class="section-profile-user">
     <div class="container">
-      <?php echo $this->render('@frontend/views/manage/header.php', ['model' => $model]);?>
-      
+      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator]);?>
       <div class="sec-content">
         <div class="mod-column">
           <div class="widget-box timeline-post">
@@ -17,9 +16,9 @@ use common\components\helpers\TimeElapsed;
                 <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <ul class="list-tabs tabs-none">
-                    <li><a class="trans" href="<?=Url::to(['manage/review', 'id' => $model->id, 'slug' => $model->slug]);?>">Reviews (<?=number_format($model->countReview());?>)</a></li>
-                    <li><a class="trans" href="<?=Url::to(['manage/complain', 'id' => $model->id, 'slug' => $model->slug]);?>">Complaints (<?=number_format($model->totalComplain());?>)</a></li>
-                    <li><a class="trans" href="<?=Url::to(['manage/information', 'id' => $model->id, 'slug' => $model->slug]);?>">Page information</a></li>
+                    <li><a class="trans" href="<?=Url::to(['manage/review', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Reviews (<?=number_format($operator->countReview());?>)</a></li>
+                    <li><a class="trans" href="<?=Url::to(['manage/complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Complaints (<?=number_format($operator->totalComplain());?>)</a></li>
+                    <li><a class="trans" href="<?=Url::to(['manage/information', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Page information</a></li>
                   </ul>
                 </div>
               </div>
@@ -57,7 +56,7 @@ use common\components\helpers\TimeElapsed;
                       </div>
                     </div>
                     <div class="review-reply">
-                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-review', 'id' => $review->id]), 'id' => 'reply-review-form']); ?>
+                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-review', 'review_id' => $review->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-review-form']); ?>
                       <?= $form->field($reviewForm, 'reply', [
                         'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']
                       ])->textArea()->label(false);?>
@@ -126,7 +125,7 @@ use common\components\helpers\TimeElapsed;
                       <?php endforeach;?>
                     </div>
                     <div class="review-reply">
-                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-complain', 'id' => $complain->id]), 'id' => 'reply-complain-form']); ?>
+                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-complain', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-complain-form']); ?>
                       <?= $form->field($complainForm, 'description', [
                         'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']
                       ])->textArea()->label(false);?>
@@ -140,7 +139,7 @@ use common\components\helpers\TimeElapsed;
                       <?= $form->field($complainForm, 'operator_id', [
                         'options' => ['tag' => false],
                         'template' => '{input}',
-                        'inputOptions' => ['value' => $model->id]
+                        'inputOptions' => ['value' => $operator->id]
                       ])->hiddenInput()->label(false);?>
 
                       <div class="form-group">
@@ -157,8 +156,8 @@ use common\components\helpers\TimeElapsed;
         </div>
         <div class="mod-sidebar">
           <div class="sidebar-col sidebar-category">
-            <?=\frontend\widgets\ReviewStatByOperatorWidget::widget(['operator_id' => $model->id]);?>
-            <?=\frontend\widgets\ComplainStatByOperatorWidget::widget(['operator_id' => $model->id]);?>
+            <?=\frontend\widgets\ReviewStatByOperatorWidget::widget(['operator_id' => $operator->id]);?>
+            <?=\frontend\widgets\ComplainStatByOperatorWidget::widget(['operator_id' => $operator->id]);?>
             
             <div class="category-row">
               <p class="category-title"><a class="trans" href="#"><i class="fas fa-users"></i>Manage users</a></p>
@@ -222,7 +221,7 @@ reviewForm.success = function (data, form) {
 }
 JS;
 $uploadLink = Url::to(['image/ajax-upload']);
-$updateAvatarLink = Url::to(['manage/update-avatar', 'id' => $model->id]);
+$updateAvatarLink = Url::to(['manage/update-avatar', 'id' => $operator->id]);
 $script = str_replace('###LINK###', $uploadLink, $script);
 $script = str_replace('###UPDATEAVATAR###', $updateAvatarLink, $script);
 $this->registerJs($script);

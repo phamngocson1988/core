@@ -7,7 +7,7 @@ $this->title = 'Update Operator';
 <main>
   <section class="section-profile-user">
     <div class="container">
-      <?php echo $this->render('@frontend/views/manage/header.php', ['model' => $model->getOperator()]);?>
+      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator]);?>
       <div class="sec-content">
         <div class="mod-column">
           <div class="widget-box timeline-post">
