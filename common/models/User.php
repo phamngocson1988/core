@@ -11,6 +11,7 @@ use common\behaviors\UserOperatorFavoriteBehavior;
 use common\behaviors\UserOperatorReviewBehavior;
 use common\behaviors\UserComplainBehavior;
 use common\behaviors\UserSettingBehavior;
+use common\behaviors\UserForumBehavior;
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -45,6 +46,7 @@ class User extends ActiveRecord implements IdentityInterface
             'operatorReview' => UserOperatorReviewBehavior::className(),
             'complain' => UserComplainBehavior::className(),
             'setting' => UserSettingBehavior::className(),
+            'forum' => UserForumBehavior::className(),
         ];
     }
 

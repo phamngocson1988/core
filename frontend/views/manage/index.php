@@ -207,13 +207,13 @@ reviewForm.success = function (data, form) {
 }
 
 // Complain Form
-var reviewForm = new AjaxFormSubmit({
+var compLainForm = new AjaxFormSubmit({
   element : 'form#reply-complain-form'
 });
-reviewForm.error = function (errors) {
+compLainForm.error = function (errors) {
   toastr.error(errors);
 }
-reviewForm.success = function (data, form) {
+compLainForm.success = function (data, form) {
   toastr.success(data.message);
   setTimeout(() => {  
     location.reload();

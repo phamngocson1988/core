@@ -133,6 +133,26 @@ use yii\helpers\Url;
           </li>
         </ul>
       </li>
+
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-user-following"></i>
+        <span class="title"><?=Yii::t('app', 'manage_forum');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['forum/index']);?>" class="nav-link " code='forum.index'>
+            <span class="title"><?=Yii::t('app', 'manage_forum');?></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=Url::to(['forum-section/index']);?>" class="nav-link " code='forum-section.index'>
+            <span class="title"><?=Yii::t('app', 'manage_forum_section');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>
