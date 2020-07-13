@@ -24,7 +24,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'email'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -118,5 +118,18 @@ class SiteController extends Controller
         }
 
         return $this->render('activate.tpl', ['model' => $model]);
+    }
+
+    public function actionEmail($email)
+    {
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
+        Yii::$app->supplier_mailer->compose('test_mail')
+            ->setTo($email)
+            ->setFrom([$adminEmail => Yii::$app->name . ' Administrator'])
+            ->setSubject(sprintf("TESTING EMAIL"))
+            ->setTextBody("Thanks for your deposit")
+            ->send();
+        var_dump($email);die;
     }
 }

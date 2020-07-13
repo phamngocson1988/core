@@ -85,7 +85,6 @@ class OrderNotification extends Notification
         $settings = Yii::$app->settings;
         $supplierMail = $settings->get('ApplicationSettingForm', 'supplier_service_email');
         $kinggemsMail = $settings->get('ApplicationSettingForm', 'customer_service_email');
-        $supplierMailer = Yii::$app->supplier_mailer;
         $kinggemsMailer = Yii::$app->mailer;
         $user = User::findOne($this->userId);
         Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
@@ -115,9 +114,11 @@ class OrderNotification extends Notification
 
         }
         
+        $this->order->log(sprintf("supplier notification mail %s %s to %s", $this->key, $template, $toEmail));
         $message = $mailer->compose($template, array_merge([
             'order' => $this->order,
             'notification' => $this,
+            'user' => $user
         ], $data));
 
         $message->setFrom($fromEmail);

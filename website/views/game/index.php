@@ -7,14 +7,10 @@ use website\widgets\LinkPager;
 <div class="container mt-5">
   <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['game/index'], 'options' => ['autocomplete' => 'off']]);?>
     <div class="input-group search-category">
-      <div class="input-group-prepend dropdown">
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All games</button>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">category 1</a>
-          <a class="dropdown-item" href="#">category 2</a>
-          <a class="dropdown-item" href="#">category 3</a>
-        </div>
-      </div>
+      <?=$form->field($search, 'category_id', [
+        'options' => ['class' => 'input-group-prepend dropdown'],
+        'inputOptions' => ['class' => 'form-control btn btn-outline-secondary select-category', 'name' => 'category_id']
+      ])->dropdownList($search->fetchCategory(), ['prompt' => 'All games'])->label(false);?>
       <?=$form->field($search, 'q', [
         'options' => ['tag' => false],
         'template' => '{input}',

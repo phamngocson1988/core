@@ -127,7 +127,6 @@ class OrderNotification extends Notification
     public function toEmail($channel)
     {
         $order = $this->order;
-        $order->log(sprintf("toEmail %s %s %s", $order->id, $this->key, $channel->id));
 
         $settings = Yii::$app->settings;
         $supplierMail = $settings->get('ApplicationSettingForm', 'supplier_service_email');
@@ -174,6 +173,7 @@ class OrderNotification extends Notification
 
         }
 
+        $this->order->log(sprintf("frontend notification mail %s to %s", $this->key, $toEmail));
         $message = $mailer->compose($template, array_merge([
             'user' => $user,
             'order' => $this->order,
@@ -184,7 +184,5 @@ class OrderNotification extends Notification
         $message->setTo($toEmail);
         $message->setSubject($subject);
         $message->send($mailer);
-        $order->log('sent notification ' . self::NOTIFY_CUSTOMER_PENDING_ORDER);
-
     }
 }

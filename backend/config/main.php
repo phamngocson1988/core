@@ -91,14 +91,6 @@ return [
                 ],
             ],
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@backend/mail/kinggems',
-        ],
-        'supplier_mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@backend/mail/supplier',
-        ],
         'syslog' => [
             'class' => 'backend\components\logs\SystemLog',
         ],

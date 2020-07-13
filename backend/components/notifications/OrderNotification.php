@@ -139,7 +139,6 @@ class OrderNotification extends Notification
                 $template = 'notify_supplier_new_order';
                 $fromEmail = $supplierMail;
                 $mailer = $supplierMailer;
-                $this->order->log(sprintf("notification %s to %s", $this->key, $toEmail));
                 $data['orderWaitingUrl'] = Yii::$app->urlManagerSupplier->createAbsoluteUrl(['order/waiting'], true);
                 break;
             case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
@@ -185,12 +184,14 @@ class OrderNotification extends Notification
                 $mailer = $kinggemsMailer;
                 $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $this->order->id], true);
                 break;
-
         }
         
+        $this->order->log(sprintf("admin notification mail %s %s to %s", $this->key, $template, $toEmail));
+
         $message = $mailer->compose($template, array_merge([
             'order' => $this->order,
             'notification' => $this,
+            'user' => $user
         ], $data));
 
         $message->setFrom($fromEmail);
