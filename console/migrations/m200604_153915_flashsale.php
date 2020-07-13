@@ -36,6 +36,7 @@ class m200604_153915_flashsale extends Migration
             'game_id' => $this->integer()->notNull(),
             'price' => $this->float()->notNull(),
             'limit' => $this->integer(),
+            'remain' => $this->integer(),
         ], $tableOptions);
 
     }
