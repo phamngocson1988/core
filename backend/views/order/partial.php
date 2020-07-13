@@ -224,8 +224,8 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                     <?php
                     $suppliers = $model->suppliers;
                     if ($suppliers) {
-                      foreach ($suppliers as $supplier) {
-                        echo sprintf('%s (%s)<br/>', $supplier->user->name, $supplier->doing);
+                      foreach ($suppliers as $completedSupplier) {
+                        echo sprintf('%s (%s)<br/>', $completedSupplier->user->name, $completedSupplier->doing);
                       }
                     }
                     ?>
