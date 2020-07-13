@@ -222,9 +222,12 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   </td>
                   <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?php
-                    if ($supplier) {
-                      echo $supplier->user->name;
-                    } 
+                    $suppliers = $model->suppliers;
+                    if ($suppliers) {
+                      foreach ($suppliers as $supplier) {
+                        echo sprintf('%s (%s)<br/>', $supplier->user->name, $supplier->doing);
+                      }
+                    }
                     ?>
                   </td>
                   <td>
