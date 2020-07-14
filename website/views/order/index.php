@@ -3,6 +3,7 @@ use common\components\helpers\FormatConverter;
 use website\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+$this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <div class="container order-page">
   <h1 class="text-uppercase mt-5">my order</h1>
@@ -225,7 +226,6 @@ $('#detailOrder').on('show.bs.modal', function (e) {
               $(this).removeClass('hover');
             }
           });
-
         }).on('mouseout', function () {
           $(this).parent().children('li.star').each(function (e) {
             $(this).removeClass('hover');
@@ -362,7 +362,31 @@ $('#detailOrder').on('click', '#confirm-order-button', function(e) {
       }
     }
   });
-})
+});
+var complain = new Complains({
+  id: '#detailOrder',
+  container: '.complain-list',
+  url: '###COMPALINS_URL###'
+});
+$('#detailOrder').on('click', '#send-complain-button', function() {
+  var form = $(this).closest('form')[0]; 
+  $.ajax({
+    url: $(form).attr('action'),
+    type: $(form).attr('method'),
+    dataType : 'json',
+    data: $(form).serialize(),
+    success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+            toastr.error(result.errors);
+        } else {
+            form.reset();
+            complain.showList();
+        }
+    },
+  });
+});
 JS;
+$complainListUrl = Url::to(['order-complain/list', 'id' => $order->id]);
+$complainRealtimeJs = str_replace('###COMPALINS_URL###', $complainListUrl, $script);
 $this->registerJs($script);
 ?>

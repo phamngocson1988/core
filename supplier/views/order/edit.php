@@ -59,8 +59,6 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
       </div>
       <div class="portlet-body">
         <?php echo $this->render('@supplier/views/order/_step.php', ['order' => $model]);?>
-
-        <?php if (($model->isApprove() && $countComplain) || $model->isProcessing() || $model->isCompleted() ||  $model->isConfirmed()) :?>
         <div class="table-responsive">
           <table class="table table-hover table-bordered table-striped">
             <thead>
@@ -75,15 +73,14 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
             <tbody>
               <tr>
                 <td><?=$model->getGameTitle();?></td>
-                <td><?=$model->quantity;?></td>
-                <td><?=$model->doing;?></td>
-                <td><?=number_format($model->price, 1);?></td>
-                <td><?=number_format($model->total_price, 1);?></td>
+                <td class="center"><?=$model->quantity;?></td>
+                <td class="center"><?=$model->doing;?></td>
+                <td class="center"><?=number_format($model->price, 1);?></td>
+                <td class="center"><?=number_format($model->total_price, 1);?></td>
               </tr>
             </tbody>
           </table>
         </div>
-        <?php endif;?>
         <div class="row">
           <div class="col-md-3">
             <div class="flex-container" style="text-align: center; background-color: #67809F;">

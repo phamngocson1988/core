@@ -1,10 +1,10 @@
 <?php
-namespace frontend\controllers;
+namespace website\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
-use frontend\models\OrderComplains;
+use website\models\OrderComplains;
 
 class OrderComplainController extends Controller
 {

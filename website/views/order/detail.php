@@ -1,5 +1,6 @@
 <?php 
 use yii\helpers\Url;
+use yii\helpers\Html;
 use website\models\OrderFile;
 ?>
 <div class="modal-header d-block">
@@ -92,95 +93,32 @@ use website\models\OrderFile;
   <div class="row rounded-lg overflow-hidden shadow">
     <!-- Chat Box-->
     <div class="col-12 px-0">
-      <div class="px-4 py-5 chat-box bg-white">
-        <!-- Sender Message-->
-        <div class="media w-50 mb-3"><img src="/images/icon/young.svg" alt="user" width="50"
-            class="rounded-circle">
-          <div class="media-body ml-3">
-            <div class="bg-light rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-muted">Anh và tôi thật ra gặp nhau và quen nhau cũng đã được mấy
-                năm, mà chẳng có chi hơn lời hỏi thăm</p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div>
-
-        <!-- Reciever Message-->
-        <div class="media w-50 ml-auto mb-3">
-          <div class="media-body">
-            <div class="bg-primary rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-white">rằng giờ này đã ăn sáng chưa? ở bên đấy nắng hay mưa?</p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div>
-
-        <!-- Sender Message-->
-        <div class="media w-50 mb-3"><img src="/images/icon/young.svg" alt="user" width="50"
-            class="rounded-circle">
-          <div class="media-body ml-3">
-            <div class="bg-light rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-muted">Anh và tôi thật ra Mm, Mmm mải mê nhìn lén nhau, Và không
-                một ai nói nên câu</p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div>
-
-        <!-- Reciever Message-->
-        <div class="media w-50 ml-auto mb-3">
-          <div class="media-body">
-            <div class="bg-primary rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-white">Rằng người ơi tôi đang nhớ anh, Và anh có nhớ tôi không?</p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div>
-
-        <!-- Sender Message-->
-        <div class="media w-50 mb-3"><img src="/images/icon/young.svg" alt="user" width="50"
-            class="rounded-circle">
-          <div class="media-body ml-3">
-            <div class="bg-light rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-muted">Tôi... từ lâu đã thích anh rồi, Chỉ mong hai ta thành đôi
-              </p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div>
-
-        <!-- Reciever Message-->
-        <div class="media w-50 ml-auto mb-3">
-          <div class="media-body">
-            <div class="bg-primary rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-white">Anh nhà ở đâu thế?</p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div>
+      <div class="px-4 py-5 chat-box bg-white complain-list">
 
       </div>
 
       <!-- Typing area -->
-      <form action="#" class="bg-light">
+      <?= Html::beginForm(Url::to(['order/send-complain', 'id' => $order->id]), 'POST', ['id' => 'send-complain-form', 'class' => 'bg-light']); ?>
         <div class="input-group">
-          <div contentEditable="true" placeholder="Type a message" aria-describedby="button-addon2"
+        <!--   <div contentEditable="true" placeholder="Type a message" aria-describedby="button-addon2"
             class="form-control rounded-0 border-0 py-4 bg-light">
             Anh nhà ở đâu thế <img class="icon-md" src="/images/post-item01.jpg"> bla bla
-          </div>
-          <div class="input-group-append">
+          </div> -->
+          <textarea contentEditable="true" placeholder="Type a message" aria-describedby="button-addon2"
+            class="form-control rounded-0 border-0 py-4 bg-light" name="content" rows="3"></textarea>
+          <!-- <div class="input-group-append">
             <input class="d-none" type="file" id="FileUpload"/>
             <button onclick='$("#FileUpload").click()' id="button-addon2" type="file" class="btn btn-link">
               <img class="icon-sm" src="/images/icon/attach.svg" />
             </button>
-          </div>
+          </div> -->
           <div class="input-group-append">
-            <button id="button-addon2" type="submit" class="btn btn-link">
+            <button id="send-complain-button" type="button" class="btn btn-link">
               <img class="icon-sm" src="/images/icon/send.svg" />
             </button>
           </div>
         </div>
-      </form>
+      <?= Html::endForm(); ?>
 
     </div>
   </div>

@@ -108,7 +108,6 @@ class FlashsaleController extends Controller
         $model = new \backend\forms\EditGameToFlashSaleForm(['id' => $id]);
         if ($request->isPost) {
             $model->load($request->post());
-            $model->flashsale_id = $id;
             if ($model->validate() && $model->edit()) {
                 return $this->asJson(['status' => true]);
             }

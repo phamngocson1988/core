@@ -13,31 +13,19 @@ class EditGameToFlashSaleForm extends Model
 {
     public $id;
     public $game_id;
-    public $flashsale_id;
     public $price;
     public $limit;
     public $remain;
 
-    protected $_flashsale;
-    protected $_game;
     protected $_flashsalegame;
     private $_command;
 
     public function rules()
     {
         return [
-            [['flashsale_id', 'game_id'], 'required'],
             [['price', 'limit', 'remain'], 'safe']
     
         ];
-    }
-
-    public function getGame()
-    {
-        if (!$this->_game) {
-            $this->_game = Game::findOne($this->game_id);
-        }
-        return $this->_game;
     }
 
     public function getFlashSaleGame()
@@ -50,9 +38,8 @@ class EditGameToFlashSaleForm extends Model
 
     public function edit()
     {
-        $game = $this->getGame();
         $flashGame = $this->getFlashSaleGame();
-        $flashGame->price = $this->price ? $this->price : $game->price;
+        $flashGame->price = $this->price;
         $flashGame->limit = $this->limit;
         $flashGame->remain = $this->remain;
         return $flashGame->save();
@@ -68,7 +55,6 @@ class EditGameToFlashSaleForm extends Model
     {
         $flashGame = $this->getFlashSaleGame();
         $this->game_id = $flashGame->game_id;
-        $this->flashsale_id = $flashGame->flashsale_id;
         $this->price = $flashGame->price;
         $this->limit = $flashGame->limit;
         $this->remain = $flashGame->remain;

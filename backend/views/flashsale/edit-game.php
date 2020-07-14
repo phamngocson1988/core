@@ -35,7 +35,7 @@ use yii\helpers\Url;
   </div>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Thêm game</button>
+  <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Chỉnh sửa</button>
   <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
 </div>
 <?php ActiveForm::end()?>

@@ -159,4 +159,23 @@ class OrderController extends Controller
             return $this->asJson(['status' => false, 'errors' => $order->getErrorSummary(true)]);
         }
     }
+
+    public function actionSendComplain($id)
+    {
+        $request = Yii::$app->request;
+        $order = Order::findOne($id);
+        if (!$order) {
+            return $this->asJson(['status' => false, 'errors' => 'Order is not found.']);
+        }
+        $content = $request->post('content');
+        if (!$content) {
+            return $this->asJson(['status' => false, 'errors' => 'Content is required.']);
+        }
+        $order->complain($content);
+        // $supplier = $order->workingSupplier;
+        // if ($supplier) {
+        //     $order->pushNotification(OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE, $supplier->supplier_id);
+        // }
+        return $this->asJson(['status' => true]);
+    }
 }

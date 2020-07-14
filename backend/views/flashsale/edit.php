@@ -123,7 +123,9 @@ use backend\components\datetimepicker\DateTimePicker;
                         <td><?=$saleGame->price;?></td>
                         <td><?=$saleGame->limit;?></td>
                         <td><?=$saleGame->remain;?></td>
-                        <td></td>
+                        <td>
+                          <a href='<?=Url::to(['flashsale/edit-game', 'id' => $saleGame->id]);?>' data-target="#edit-game-modal" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm game" data-toggle="modal" ><i class="fa fa-pencil"></i></a>
+                        </td>
                       </tr>
                       <?php endforeach;?>
                   </tbody>
@@ -138,6 +140,15 @@ use backend\components\datetimepicker\DateTimePicker;
 </div>
 
 <div class="modal fade" id="add-game-modal" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="edit-game-modal" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     </div>
