@@ -228,6 +228,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                         echo sprintf('%s (%s)<br/>', $completedSupplier->user->name, $completedSupplier->doing);
                       }
                     }
+                    if ($supplier) {
+                      echo sprintf('%s (%s)<br/>', $supplier->user->name, $supplier->status);
+                    }
                     ?>
                   </td>
                   <td>

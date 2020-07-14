@@ -101,4 +101,26 @@ class FlashsaleController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionEditGame($id) 
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\EditGameToFlashSaleForm(['id' => $id]);
+        if ($request->isPost) {
+            $model->load($request->post());
+            $model->flashsale_id = $id;
+            if ($model->validate() && $model->edit()) {
+                return $this->asJson(['status' => true]);
+            }
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'error' => $error]);
+        } else {
+            $model->loadData();
+        }
+        return $this->renderPartial('edit-game', [
+            'id' => $id,
+            'model' => $model,
+        ]);
+    }
 }

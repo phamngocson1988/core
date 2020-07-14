@@ -167,6 +167,26 @@ $(document).on('submit', 'body #add-game-form', function(e) {
   });
   return false;
 });
+
+$(document).on('submit', 'body #edit-game-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+       alert(result.error);
+      else 
+        location.reload();
+    },
+  });
+  return false;
+});
 JS;
 $this->registerJs($script);
 ?>
