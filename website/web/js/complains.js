@@ -8,6 +8,7 @@ function Complains(opts) {
         pollInterval: 10000,
         xhrTimeout: 2000,
     }; 
+    this.interval = null;
 
     //constructor
     this.init = function (opts) {
@@ -24,7 +25,7 @@ function Complains(opts) {
         this.options = $.extend(this.options, opts);
         this.showList();
         var that = this;
-        setInterval(function(){ 
+        this.interval = setInterval(function(){ 
             that.showList(); 
         }, this.options.pollInterval);
     };
@@ -72,7 +73,6 @@ function Complains(opts) {
                     var item = that.renderRow(object);
                     list.append(item);
                 });
-                that.scrollDown();
             }
         });
     }

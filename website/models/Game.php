@@ -28,6 +28,22 @@ class Game extends \common\models\Game
         }
         return $default;
     }
+
+    // public function getPrice()
+    // {
+    //     $owner = $this->owner; // game
+    //     $flashsale = $this->getFlashSalePrice();
+    //     if ($flashsale) return $flashsale->price;
+    //     return parent::getPrice();
+    // }   
+
+    // public function getResellerPrice($level = User::RESELLER_LEVEL_1)
+    // {
+    //     $owner = $this->owner; // game
+    //     $flashsale = $this->getFlashSalePrice();
+    //     if ($flashsale) return $flashsale->price;
+    //     return parent::getResellerPrice();
+    // }
 }
 
 class GameQuery extends ActiveQuery

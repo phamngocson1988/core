@@ -209,6 +209,25 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
 
 <?php
 $script = <<< JS
+var complain = new Complains({id: '#detailOrder'});
+var triggerSendComplainButton = function () {
+  var form = $(this).closest('form')[0]; 
+  $.ajax({
+    url: $(form).attr('action'),
+    type: $(form).attr('method'),
+    dataType : 'json',
+    data: $(form).serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          toastr.error(result.errors);
+      } else {
+          form.reset();
+          complain.showList();
+          complain.scrollDown();
+      }
+    },
+  });
+}
 $('#detailOrder').on('show.bs.modal', function (e) {
     $(this).find('.modal-content').load(e.relatedTarget.href);
     setTimeout(() => {  
@@ -232,8 +251,19 @@ $('#detailOrder').on('show.bs.modal', function (e) {
           });
         });
       }
+
+      // complain
+      complain.init({
+        id: '#detailOrder',
+        container: '.complain-list',
+        url: $(this).find('.complain-list').attr('data-url')
+      });
+      $('#detailOrder').on('click', '#send-complain-button', triggerSendComplainButton);
     }, 2000);
-    
+}).on('hide.bs.modal', function(e) {
+  console.log('hide.bs.modal');
+  clearInterval(complain.interval);
+  $('#detailOrder').off('click', '#send-complain-button', triggerSendComplainButton);
 });
 $('#paymentGame').on('show.bs.modal', function (e) {
     $(this).find('.modal-content').load(e.relatedTarget.href);
@@ -361,28 +391,6 @@ $('#detailOrder').on('click', '#confirm-order-button', function(e) {
         $(element).replaceWith('<button type="button" class="btn text-uppercase">comfirm delivery</button>');
       }
     }
-  });
-});
-var complain = new Complains({
-  id: '#detailOrder',
-  container: '.complain-list',
-  url: '###COMPALINS_URL###'
-});
-$('#detailOrder').on('click', '#send-complain-button', function() {
-  var form = $(this).closest('form')[0]; 
-  $.ajax({
-    url: $(form).attr('action'),
-    type: $(form).attr('method'),
-    dataType : 'json',
-    data: $(form).serialize(),
-    success: function (result, textStatus, jqXHR) {
-        if (result.status == false) {
-            toastr.error(result.errors);
-        } else {
-            form.reset();
-            complain.showList();
-        }
-    },
   });
 });
 JS;

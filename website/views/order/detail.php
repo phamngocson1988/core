@@ -93,7 +93,7 @@ use website\models\OrderFile;
   <div class="row rounded-lg overflow-hidden shadow">
     <!-- Chat Box-->
     <div class="col-12 px-0">
-      <div class="px-4 py-5 chat-box bg-white complain-list">
+      <div class="px-4 py-5 chat-box bg-white complain-list" data-url="<?=Url::to(['order-complain/list', 'id' => $order->id]);?>">
 
       </div>
 
