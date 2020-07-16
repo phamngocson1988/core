@@ -172,4 +172,22 @@ class GameController extends Controller
             'search' => $form
         ]);
     }
+
+    public function actionQuick($id, $slug)
+    {
+        $request = Yii::$app->request;
+        $model = CartItem::findOne($id);
+        $versions = GameSetting::fetchVersion();
+        $packages = GameSetting::fetchPackage();
+        $version = ArrayHelper::getValue($versions, $model->version, '');
+        $package = ArrayHelper::getValue($packages, $model->package, '');
+        $user = Yii::$app->user->getIdentity();
+        $balance = $user->getWalletAmount();
+        return $this->render('quick', [
+            'model' => $model,
+            'version' => $version,
+            'package' => $package,
+            'balance' => $balance,
+        ]);
+    }
 }

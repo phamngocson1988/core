@@ -27,7 +27,7 @@ class CartController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'checkout'],
+                        'actions' => ['index', 'checkout', 'bulk'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -131,5 +131,32 @@ class CartController extends Controller
             'isOtherCurrency' => $isOtherCurrency,
             'otherCurrency' => $otherCurrency,
         ]);
+    }
+
+    public function actionBulk($id)
+    {
+        $request = Yii::$app->request;
+        $cart = Yii::$app->cart;
+        
+        $model = CartItem::findOne($id);
+        $model->setScenario(CartItem::SCENARIO_BULK_CART);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $cart->clear();
+            $cart->add($model);
+            $checkoutForm = new \website\forms\OrderPaymentForm(['cart' => $cart, 'paygate' => 'kinggems']);
+            if ($checkoutForm->validate() && $checkoutForm->purchase()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                $message = $model->getErrorSummary(true);
+                $message = reset($message);
+                return $this->asJson(['status' => false, 'errors' => $message]);
+            }
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return $this->asJson(['status' => false, 'errors' => $message]);
+        }
+
+        
     }
 }

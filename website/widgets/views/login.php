@@ -26,7 +26,7 @@ use yii\helpers\Url;
           <?php \yii\authclient\widgets\AuthChoice::end(); ?>
         </ul>
         <div class="text-horizontal"><span>or</span></div>
-        <?php $form = ActiveForm::begin(['action' => Url::to(['site/login']), 'id' => $id]); ?>
+        <?php $form = ActiveForm::begin(['id' => $id]); ?>
           <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => 'Username', 'required' => 'required'])->label(false) ?>
           <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'required' => 'required'])->label(false) ?>
           <div class="d-flex bd-highlight">

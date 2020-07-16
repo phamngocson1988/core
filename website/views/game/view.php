@@ -105,14 +105,18 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           </div>
           <div class="w-100 flex-fill p-2">
             <?php if (Yii::$app->user->isGuest) : ?>
-            <a href="#modalLogin" class="btn btn-buy">Buy now</a>
+            <a href="#modalLogin" class="btn btn-buy" data-toggle="modal">Buy now</a>
             <?php else :?>
             <button type="submit" class="btn btn-buy">Buy now</button>
             <?php endif;?>
           </div>
           <div class="w-100 flex-fill p-2">
-            <button type="button" class="btn btn-quickbuy"><img class="icon-sm" src="/images/icon/timer.svg" /> Quick
-              Buy</button>
+            <?php if (Yii::$app->user->isGuest) : ?>
+            <a href="#modalLogin" class="btn btn-quickbuy" data-toggle="modal"><img class="icon-sm" src="/images/icon/timer.svg" />Buy now</a>
+            <?php else :?>
+            <a href="<?=Url::to(['game/quick', 'id' => $model->id, 'slug' => $model->slug]);?>" class="btn btn-quickbuy"><img class="icon-sm" src="/images/icon/timer.svg" /> Quick
+              Buy</a>
+            <?php endif;?>
           </div>
         </div>
         <?php ActiveForm::end(); ?>
@@ -293,9 +297,6 @@ $('#quantity').on('change', function() {
   calculateCart();
 });
 
-
-// $(":radio[name=method]:checked").trigger('change');
-
 // React view on attributes
 var currentMethod = '$model->method';
 var currentVersion = '$model->version';
@@ -324,7 +325,7 @@ $("#package").on('change', function() {
   currentPackage = $(this).val();
   changeView();
 });
-changeStar();
+// changeStar();
 
 function changeView() {
   var method = mapping[currentMethod];

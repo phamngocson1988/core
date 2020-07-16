@@ -12,6 +12,7 @@ class CartItem extends Game implements CartItemInterface
     const SCENARIO_CALCULATE_CART = 'SCENARIO_CALCULATE_CART';
     const SCENARIO_ADD_CART = 'SCENARIO_ADD_CART';
     const SCENARIO_UPDATE_CART = 'SCENARIO_UPDATE_CART';
+    const SCENARIO_BULK_CART = 'SCENARIO_BULK_CART';
 
     public $quantity = 1;
     public $username;
@@ -23,6 +24,7 @@ class CartItem extends Game implements CartItemInterface
     public $login_method;
     public $voucher;
     public $currency;
+    public $raw;
     protected $_game;
 
     public function scenarios()
@@ -31,6 +33,7 @@ class CartItem extends Game implements CartItemInterface
             self::SCENARIO_CALCULATE_CART => ['id', 'quantity', 'voucher', 'currency'],
             self::SCENARIO_ADD_CART => ['id', 'quantity', 'currency'],
             self::SCENARIO_UPDATE_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'note', 'voucher'],
+            self::SCENARIO_BULK_CART => ['id', 'quantity', 'raw'],
         ];
     }
 
@@ -40,6 +43,7 @@ class CartItem extends Game implements CartItemInterface
             ['quantity', 'number'],
             [['server', 'note', 'recover_code', 'voucher', 'currency'], 'trim'],
             [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
+            [['quantity', 'raw'], 'required', 'on' => self::SCENARIO_BULK_CART],
 
         ];
     }

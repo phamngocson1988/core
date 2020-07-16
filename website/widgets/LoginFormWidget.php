@@ -3,26 +3,35 @@ namespace website\widgets;
 
 use Yii;
 use yii\base\Widget;
+use yii\helpers\Url;
 use website\forms\LoginForm;
 
 class LoginFormWidget extends Widget
 {
     public $formId = 'flash-login-form';
+    protected $url;
+
     public function run()
     {
+        $this->url = Url::to(['site/login'], true);
         $model = new LoginForm();
         $this->registerClientScript();
-        return $this->render('login', ['model' => $model, 'id' => $this->formId]);
+        return $this->render('login', [
+            'model' => $model, 
+            'id' => $this->formId,
+            'url' => $this->url,
+        ]);
     }
 
     protected function getScriptCode()
     {
         $id = $this->formId;
+        $url = $this->url;
         return "
 $('html').on('submit', 'form#flash-login-form', function() {
     var form = $(this);
     $.ajax({
-        url: '/login.html',
+        url: '$url',
         type: 'post',
         dataType : 'json',
         data: form.serialize(),
