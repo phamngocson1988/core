@@ -79,13 +79,13 @@ class WalletPaymentForm extends Model
         $transferFee = $paygate->getFee($subTotalPayment);
         $totalPayment += $transferFee;
         return [
-            'subTotalKingcoin' => number_format($subTotalKingcoin, 1),
-            'bonusKingcoin' => number_format($bonusKingcoin, 1),
-            'totalKingcoin' => number_format($totalKingcoin, 1),
-            'subTotalPayment' => number_format($subTotalPayment, 1),
-            'voucherApply' => number_format($voucherApply, 1),
-            'transferFee' => number_format($transferFee, 1),
-            'totalPayment' => number_format($totalPayment, 1),
+            'subTotalKingcoin' => round($subTotalKingcoin, 1, PHP_ROUND_HALF_UP),
+            'bonusKingcoin' => round($bonusKingcoin, 1, PHP_ROUND_HALF_DOWN),
+            'totalKingcoin' => round($totalKingcoin, 1, PHP_ROUND_HALF_UP),
+            'subTotalPayment' => round($subTotalPayment, 1, PHP_ROUND_HALF_UP),
+            'voucherApply' => round($voucherApply, 1, PHP_ROUND_HALF_DOWN),
+            'transferFee' => round($transferFee, 1, PHP_ROUND_HALF_UP),
+            'totalPayment' => round($totalPayment, 1, PHP_ROUND_HALF_UP),
         ];
     }
 

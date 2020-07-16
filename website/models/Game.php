@@ -1,20 +1,11 @@
 <?php
 namespace website\models;
 
+use Yii;
 use yii\db\ActiveQuery;
-use website\behaviors\GamePriceBehavior;
 
 class Game extends \common\models\Game
 {
-
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        return array_merge($behaviors, [
-            'price' => GamePriceBehavior::className(),
-        ]);
-    }
-
 	public static function find()
 	{
 		return new GameQuery(get_called_class());
@@ -29,21 +20,32 @@ class Game extends \common\models\Game
         return $default;
     }
 
-    // public function getPrice()
-    // {
-    //     $owner = $this->owner; // game
-    //     $flashsale = $this->getFlashSalePrice();
-    //     if ($flashsale) return $flashsale->price;
-    //     return parent::getPrice();
-    // }   
+    public function getPrice()
+    {
+        $flashsale = $this->getFlashSalePrice();
+        if ($flashsale) return $flashsale->price;
+        return parent::getPrice();
+    }   
 
-    // public function getResellerPrice($level = User::RESELLER_LEVEL_1)
-    // {
-    //     $owner = $this->owner; // game
-    //     $flashsale = $this->getFlashSalePrice();
-    //     if ($flashsale) return $flashsale->price;
-    //     return parent::getResellerPrice();
-    // }
+    public function getResellerPrice($level = User::RESELLER_LEVEL_1)
+    {
+        $flashsale = $this->getFlashSalePrice();
+        if ($flashsale) return $flashsale->price;
+        return parent::getPrice();
+    }
+
+    public function getFlashSalePrice() 
+    {
+        $now = date('Y-m-d H:i:s');
+        $flashSaleTable = FlashSale::tableName();
+        $flashSaleGameTable = FlashSaleGame::tableName();
+        return FlashSaleGame::find()
+        ->innerJoin($flashSaleTable, "{$flashSaleTable}.id = {$flashSaleGameTable}.flashsale_id")
+        ->where(['<=', "{$flashSaleTable}.start_from", $now])
+        ->andWhere(['>=', "{$flashSaleTable}.start_to", $now])
+        ->andWhere(["{$flashSaleGameTable}.game_id" => $this->id])
+        ->one();
+    }
 }
 
 class GameQuery extends ActiveQuery

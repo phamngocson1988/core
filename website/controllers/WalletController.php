@@ -95,7 +95,17 @@ class WalletController extends Controller
         ]);
 
         if ($form->validate()) {
-            return $this->asJson(['status' => true, 'data' => $form->calculate()]);
+            $calculate = $form->calculate();
+            $data = [
+                'subTotalKingcoin' => number_format($calculate['subTotalKingcoin'], 1),
+                'bonusKingcoin' => number_format($calculate['bonusKingcoin'], 1),
+                'totalKingcoin' => number_format($calculate['totalKingcoin'], 1),
+                'subTotalPayment' => number_format($calculate['subTotalPayment'], 1),
+                'voucherApply' => number_format($calculate['voucherApply'], 1),
+                'transferFee' => number_format($calculate['transferFee'], 1),
+                'totalPayment' => number_format($calculate['totalPayment'], 1),
+            ];
+            return $this->asJson(['status' => true, 'data' => $data]);
         } else {
             return $this->asJson(['status' => false, 'errors' => $form->getErrorSummary(true)]);
         }

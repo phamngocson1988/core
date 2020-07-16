@@ -31,7 +31,7 @@ class Currency extends Model
         return sprintf($this->format, $number);
     }
 
-    public public function convertUSDToCurrency($number, $currency)
+    public static function convertUSDToCurrency($number, $currency)
     {
         if ($currency == 'USD') return $number;
         $key = sprintf('exchange_rate_%s', strtolower($currency));

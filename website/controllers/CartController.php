@@ -16,22 +16,26 @@ use common\models\Currency;
 
 class CartController extends Controller
 {
-    // public function behaviors()
-    // {
-    //     return [
-    //         'access' => [
-    //             'class' => AccessControl::className(),
-    //             'rules' => [
-    //                 [
-    //                     'actions' => ['index', 'checkout'],
-    //                     'allow' => true,
-    //                     'roles' => ['@'],
-    //                 ],
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['calculate', 'add'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['index', 'checkout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
 
-    //             ],
-    //         ],
-    //     ];
-    // }
+                ],
+            ],
+        ];
+    }
 
     public function actionCalculate($id) 
     {

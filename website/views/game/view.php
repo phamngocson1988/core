@@ -104,7 +104,11 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             ])->textInput()->label('Quantity') ?>
           </div>
           <div class="w-100 flex-fill p-2">
+            <?php if (Yii::$app->user->isGuest) : ?>
+            <a href="#modalLogin" class="btn btn-buy">Buy now</a>
+            <?php else :?>
             <button type="submit" class="btn btn-buy">Buy now</button>
+            <?php endif;?>
           </div>
           <div class="w-100 flex-fill p-2">
             <button type="button" class="btn btn-quickbuy"><img class="icon-sm" src="/images/icon/timer.svg" /> Quick

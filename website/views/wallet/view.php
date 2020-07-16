@@ -31,7 +31,7 @@ use yii\helpers\Url;
       <?php $form = ActiveForm::begin(['action' => Url::to(['wallet/update', 'id' => $payment->id]), 'id' => 'update-payment-form']);?>
       <?= $form->field($model, 'payment_id', [
         'template' => '{input}',
-        'inputOptions' => ['class' => 'form-control input-number', 'aria-describedby' => 'emailHelp', 'placeholder' => 'Enter transaction number here...', 'disabled' => $model->payment_id]
+        'inputOptions' => ['class' => 'form-control input-number', 'aria-describedby' => 'emailHelp', 'placeholder' => 'Enter transaction number here...', 'disabled' => (boolean)$model->payment_id]
       ])->textInput()->label(false) ?>
 
       <div class="text-center btn-wrapper d-block" role="group">

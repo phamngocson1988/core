@@ -144,8 +144,6 @@ class Game extends ActiveRecord
 
     public function getPrice()
     {
-        $flashsale = $this->getFlashSalePrice();
-        if ($flashsale) return $flashsale->price;
         $cogs = $this->getCogs();
         $desired_profit = Yii::$app->settings->get('ApplicationSettingForm', 'desired_profit', 0);
         $managing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'managing_cost_rate', 0);
@@ -160,25 +158,8 @@ class Game extends ActiveRecord
         return ceil($price);
     }   
 
-    public function getFlashSalePrice() 
-    {
-        $owner = $this->owner; //Game
-        $now = date('Y-m-d H:i:s');
-        $flashSaleTable = FlashSale::tableName();
-        $flashSaleGameTable = FlashSaleGame::tableName();
-        return FlashSaleGame::find()
-        ->innerJoin($flashSaleTable, "{$flashSaleTable}.id = {$flashSaleGameTable}.flashsale_id")
-        ->where(['<=', "{$flashSaleTable}.start_from", $now])
-        ->andWhere(['>=', "{$flashSaleTable}.start_to", $now])
-        ->andWhere(["{$flashSaleGameTable}.game_id" => $owner->id])
-        ->one();
-    }
-
     public function getResellerPrice($level = User::RESELLER_LEVEL_1)
     {
-        $flashsale = $this->getFlashSalePrice();
-        if ($flashsale) return $flashsale->price;
-        
         $cogs = $this->getCogs();
         $desired_profit = Yii::$app->settings->get('ApplicationSettingForm', 'reseller_desired_profit', 0);
         $managing_cost_rate = Yii::$app->settings->get('ApplicationSettingForm', 'managing_cost_rate', 0);

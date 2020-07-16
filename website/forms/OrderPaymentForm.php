@@ -178,6 +178,13 @@ class OrderPaymentForm extends Model
                 $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
                 $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
             }
+
+            // Check flashsale
+            $flashsale = $cartItem->getFlashSalePrice();
+            if ($flashsale && $flashsale->limit) {
+                $flashsale->remain = min($flashsale->limit, $flashsale->remain) - 1;
+                $flashsale->save();
+            }
             $transaction->commit();
             return $order->id;
         } catch(Exception $e) {

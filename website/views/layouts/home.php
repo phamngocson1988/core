@@ -44,13 +44,13 @@ AppAsset::register($this);
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <?= Html::csrfMetaTags() ?>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146694384-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-37CX919500"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'UA-146694384-1');
+      gtag('config', 'G-37CX919500');
     </script>
     <?php $this->head() ?>
 </head>

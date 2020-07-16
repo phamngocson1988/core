@@ -141,6 +141,7 @@ class GameController extends Controller
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
+            'search' => $form
         ]);
     }
 
@@ -154,6 +155,7 @@ class GameController extends Controller
         return $this->render('top-grossing', [
             'models' => $models,
             'pages' => $pages,
+            'search' => $form
         ]);
     }
 
@@ -167,6 +169,7 @@ class GameController extends Controller
         return $this->render('new-trending', [
             'models' => $models,
             'pages' => $pages,
+            'search' => $form
         ]);
     }
 }

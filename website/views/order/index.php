@@ -394,7 +394,5 @@ $('#detailOrder').on('click', '#confirm-order-button', function(e) {
   });
 });
 JS;
-$complainListUrl = Url::to(['order-complain/list', 'id' => $order->id]);
-$complainRealtimeJs = str_replace('###COMPALINS_URL###', $complainListUrl, $script);
 $this->registerJs($script);
 ?>
