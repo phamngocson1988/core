@@ -49,29 +49,36 @@ class GameController extends Controller
     	$request = Yii::$app->request;
         $model = CartItem::findOne($id);
 
-        $group = GameGroup::findOne($model->group_id);
-        $games = CartItem::find()->where(['group_id' => $model->group_id])->all();
-        $methods = ArrayHelper::getColumn($games, 'method');
-        $methods = array_filter($methods);
-        $methods = array_unique($methods);
+        if (!$model->group_id) {
+            $games = [];
+            $methods = [];
+        } else {
+            $group = GameGroup::findOne($model->group_id);
+            $games = CartItem::find()->where(['group_id' => $model->group_id])->all();
+            $methods = ArrayHelper::getColumn($games, 'method');
+            $methods = array_filter($methods);
+            $methods = array_unique($methods);
+        }
 
         // Game settings
         $settingMethod = GameSetting::find()->where(['key' => 'method'])->one();
         $settingMethodValues = explode(",", $settingMethod->value);
 
-        $settingVersion = GameSetting::find()->where(['key' => 'version'])->one();
-        $settingVersionValues = explode(",", $settingVersion->value);
-        $settingVersionKeys = array_map(function($val) {
-            return Inflector::slug($val);
-        }, $settingVersionValues);
-        $settingVersionMapping = array_combine($settingVersionKeys, $settingVersionValues);
+        // $settingVersion = GameSetting::find()->where(['key' => 'version'])->one();
+        // $settingVersionValues = explode(",", $settingVersion->value);
+        // $settingVersionKeys = array_map(function($val) {
+        //     return Inflector::slug($val);
+        // }, $settingVersionValues);
+        // $settingVersionMapping = array_combine($settingVersionKeys, $settingVersionValues);
+        $settingVersionMapping = GameSetting::fetchVersion();
 
-        $settingPackage = GameSetting::find()->where(['key' => 'package'])->one();
-        $settingPackageValues = explode(",", $settingPackage->value);
-        $settingPackageKeys = array_map(function($val) {
-            return Inflector::slug($val);
-        }, $settingPackageValues);
-        $settingPackageMapping = array_combine($settingPackageKeys, $settingPackageValues);
+        // $settingPackage = GameSetting::find()->where(['key' => 'package'])->one();
+        // $settingPackageValues = explode(",", $settingPackage->value);
+        // $settingPackageKeys = array_map(function($val) {
+        //     return Inflector::slug($val);
+        // }, $settingPackageValues);
+        // $settingPackageMapping = array_combine($settingPackageKeys, $settingPackageValues);
+        $settingPackageMapping = GameSetting::fetchPackage();
 
         $mapping = [];
         foreach ($games as $game) {
