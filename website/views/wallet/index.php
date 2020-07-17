@@ -181,13 +181,13 @@ $user = Yii::$app->user->getIdentity();
         <?php foreach ($transactions as $transaction): ?>
         <tr>
           <th scope="row">
-            <a href="javascript:;" class="view-detail" data-id="<?=$pending->id;?>"><?=$transaction->getId();?></a>
+            <a href="javascript:;" class="view-detail" data-id="<?=$transaction->id;?>"><?=$transaction->getId();?></a>
             <span class="date-time"><?=$transaction->created_at;?></span>
           </th>
           <td><?=$transaction->payment_method;?></td>
           <td class="text-center"><span class="text-red"><?=number_format($transaction->total_coin);?> KC</span></td>
           <td class="text-center"><?=$transaction->status;?></td>
-          <td><a href="javascript:;" class="view-detail" data-id="<?=$pending->id;?>" class="text-red" >View invoice</span></td>
+          <td><a href="javascript:;" class="view-detail" data-id="<?=$transaction->id;?>" class="text-red" >View invoice</span></td>
           <td><?=$transaction->payment_id;?></td>
           <td><?=$transaction->remark;?></td>
         </tr>
