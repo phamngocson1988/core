@@ -69,13 +69,13 @@ use common\widgets\TinyMce;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput();?>
+                  ])->dropdownList($model->fetchFeeType());?>
 
                   <?=$form->field($model, 'currency', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput();?>
+                  ])->dropdownList($model->fetchCurrency());?>
 
                   <?=$form->field($model, 'logo', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use backend\models\Paygate;
 use yii\helpers\ArrayHelper;
+use common\models\Currency;
 
 class EditPaygateForm extends Model
 {
@@ -68,5 +69,19 @@ class EditPaygateForm extends Model
         $this->transfer_fee = $paygate->transfer_fee;
         $this->transfer_fee_type = $paygate->transfer_fee_type;
         $this->currency = $paygate->currency;
+    }
+
+    public function FetchFeeType()
+    {
+        return [
+            'fix' => 'Giảm cố định',
+            'percent' => 'Giảm theo phần trăm'
+        ];
+    }
+
+    public function fetchCurrency()
+    {
+        $models = Currency::fetchAll();
+        return ArrayHelper::map($models, 'name', 'name');
     }
 }

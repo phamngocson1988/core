@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use backend\models\Paygate;
 use yii\helpers\ArrayHelper;
+use common\models\Currency;
 
 class CreatePaygateForm extends Model
 {
@@ -39,6 +40,20 @@ class CreatePaygateForm extends Model
         $paygate->currency = $this->currency;
         $paygate->status = Paygate::STATUS_ACTIVE;
         return $paygate->save();
+    }
+
+    public function FetchFeeType()
+    {
+        return [
+            'fix' => 'Giảm cố định',
+            'percent' => 'Giảm theo phần trăm'
+        ];
+    }
+
+    public function fetchCurrency()
+    {
+        $models = Currency::fetchAll();
+        return ArrayHelper::map($models, 'name', 'name');
     }
 
 }

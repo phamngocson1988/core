@@ -328,8 +328,9 @@ $("#package").on('change', function() {
 // changeStar();
 
 function changeView() {
+  if (!mapping.length) return;
   var method = mapping[currentMethod];
-  console.log('method', method);
+  console.log('method', method, mapping);
   var versions = Object.keys(method).reduce((p, c) => {
     p[c] = settingVersionMapping[c];
     return p;
@@ -362,6 +363,7 @@ function changeView() {
   $('#quantity').val(1).trigger('change');
 };
 function changeStar() {
+  // if (!mapping.length) return;
   console.log('changeStar', currentMethod);
   var method = $('#' + currentMethod);
   console.log('changeStar', method);
