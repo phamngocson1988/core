@@ -7,6 +7,9 @@ use \website\components\verification\twilio\Sms;
 
 class VerifyPhoneForm extends Model
 {
+    const SCENARIO_SEND = 'SCENARIO_SEND';
+    const SCENARIO_VERIFY = 'SCENARIO_VERIFY';
+
     public $phone;
     public $code;
 
@@ -14,7 +17,16 @@ class VerifyPhoneForm extends Model
     {
         return [
             [['phone', 'code'], 'trim'],
-            [['phone', 'code'], 'required'],
+            ['phone', 'required'],
+            ['code', 'required', 'on' => self::SCENARIO_VERIFY]
+        ];
+    }
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_SEND => ['phone'],
+            self::SCENARIO_VERIFY => ['phone', 'code'],
         ];
     }
 
@@ -22,10 +34,16 @@ class VerifyPhoneForm extends Model
     {
         return new Sms();
     }
-    public function send($phone)
+
+    public function send()
     {
         $service = $this->getService();
-        return $service->send($phone, 'Kinggems.us: Your verification code is {pin}');
+        $phone = $this->phone;
+        if (!$service->send($phone, 'Kinggems.us: Your verification code is {pin}')) {
+            $this->addError('phone', 'Cannot send validation code to this phone number.');
+            return false;
+        }
+        return true;
     }
 
     public function verify()

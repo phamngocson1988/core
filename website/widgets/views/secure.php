@@ -19,14 +19,14 @@ use yii\bootstrap\ActiveForm;
         <?php $form = ActiveForm::begin(['action' => $url, 'id' => $id]); ?>
           <?= $form->field($model, 'firstname')->textInput(['autofocus' => true, 'placeholder' => 'Your first name', 'required' => 'required'])->label(false) ?>
           <?= $form->field($model, 'lastname')->textInput(['placeholder' => 'Your last name', 'required' => 'required'])->label(false) ?>
-          <p>To protect the security of your account, please add your mobile number and request for the security
+          <!-- <p>To protect the security of your account, please add your mobile number and request for the security
             token. We will send you a text message with th 6-digit security token that you’ll need to enter below
-          </p>
-          <?php /* $form->field($model, 'phone', ['template' => '{input}', 'options' => ['class' => 'input-group mb-3']])->textInput([
-            'placeholder' => 'Phone number', 
-            'required' => 'required',
-            'class' => 'form-control phoneinp',
-          ])->label(false); */ ?>
+          </p> -->
+          <?php /*$form->field($model, 'phone', [
+            'template' => '{input}', 
+            'options' => ['class' => 'input-group mb-3'],
+            'inputOptions' => ['required' => 'required', 'class' => 'form-control phoneinp']
+          ])->textInput()->label(false); */?>
           <!-- <div class="input-group mb-3">
             <div class="input-group-prepend mr-2">
               <button class="btn btn-request-token border-radius-3 text-left" type="button">Security token

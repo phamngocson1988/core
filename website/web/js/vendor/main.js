@@ -178,7 +178,7 @@ $(document).ready(function () {
   }
 
   if ($('.phoneinp').length) {
-    $(".phoneinp").intlTelInput();
+    $(".phoneinp").intlTelInput({initialCountry: 'vn', nationalMode: false, autoHideDialCode: false});
   }
 
   $('.modal').on('shown.bs.modal', function (e) {

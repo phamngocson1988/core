@@ -27,11 +27,15 @@ class Sms extends Model
         $params['{pin}'] = $this->createCode();
         $newContent = str_replace(array_keys($params), array_values($params), $content);
         $service = Yii::$app->sms;
-
-        return $service->compose()
-        ->setTo($phone)
-        ->setMessage($newContent)
-        ->send();
+        try {
+            return $service->compose()
+            ->setTo($phone)
+            ->setMessage($newContent)
+            ->send();    
+        } catch (\Twilio\Exceptions\TwilioException  $e) { 
+            throw $e;
+        }
+        
     }
 
     public function verify($pin)

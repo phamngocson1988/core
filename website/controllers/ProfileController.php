@@ -92,12 +92,15 @@ class ProfileController extends Controller
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $phone = $request->post('phone');
 
-        if (!$phone) {
-            return $this->asJson(['status' => false, 'errors' => 'Phone number is required.']);
+        $model = new \website\forms\VerifyPhoneForm(['phone' => $phone]);
+        $model->setScenario(\website\forms\VerifyPhoneForm::SCENARIO_SEND);
+        if ($model->validate() && $model->send()) {
+            return json_encode(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
         }
-        $model = new \website\forms\VerifyPhoneForm();
-        $result = $model->send($phone);
-        return $this->asJson(['status' => $result, 'errors' => 'An error is occurred.']);
     }
 
     public function actionVerifySmsCode()
@@ -106,6 +109,7 @@ class ProfileController extends Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $model = new \website\forms\VerifyPhoneForm();
+        $model->setScenario(\website\forms\VerifyPhoneForm::SCENARIO_VERIFY);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->verify()) {
                 return json_encode(['status' => true]);

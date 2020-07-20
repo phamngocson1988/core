@@ -19,6 +19,7 @@ class CartItem extends Game implements CartItemInterface
     public $password;
     public $character_name;
     public $recover_code;
+    public $recover_file_id;
     public $server;
     public $note;
     public $login_method;
@@ -32,7 +33,7 @@ class CartItem extends Game implements CartItemInterface
         return [
             self::SCENARIO_CALCULATE_CART => ['id', 'quantity', 'voucher', 'currency'],
             self::SCENARIO_ADD_CART => ['id', 'quantity', 'currency'],
-            self::SCENARIO_UPDATE_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'note', 'voucher'],
+            self::SCENARIO_UPDATE_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'recover_file_id', 'note', 'voucher'],
             self::SCENARIO_BULK_CART => ['id', 'quantity', 'raw'],
         ];
     }
@@ -41,7 +42,7 @@ class CartItem extends Game implements CartItemInterface
     {
         return [
             ['quantity', 'number'],
-            [['server', 'note', 'recover_code', 'voucher', 'currency'], 'trim'],
+            [['server', 'note', 'recover_code', 'recover_file_id', 'voucher', 'currency'], 'trim'],
             [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
             [['quantity', 'raw'], 'required', 'on' => self::SCENARIO_BULK_CART],
 

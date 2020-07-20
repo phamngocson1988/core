@@ -39,6 +39,16 @@ var MessageNotifications = (function(opts) {
         return $(html);
     };
 
+    var emptyRow = function() {
+        var html =  '<li class="notification-box" data-id="0">' +
+                    '<div class="border-bottom p-2">' +
+                    '<a href="javascript:;" class="d-block">No message</a>' +
+                    '<small class="text-muted"></small>' + 
+                    '</div>' +
+                    '</li>';
+        return $(html); 
+    }
+
     var showList = function() {
         var list = elem.find('ul.dropdown-menu');
         $.ajax({
@@ -51,7 +61,12 @@ var MessageNotifications = (function(opts) {
                 var seen = 0;
 
                 if($.isEmptyObject(data.list)){
-                    list.find('.empty-row span').show();
+                    if(list.find('>li[data-id="0"]').length){
+                        return;
+                    } else {
+                        var emptyItem = emptyRow();
+                        emptyItem.insertBefore(list.find('li:last'));
+                    }
                 }
 
                 $.each(data.list, function (index, object) {

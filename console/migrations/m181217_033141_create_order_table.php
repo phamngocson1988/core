@@ -72,6 +72,7 @@ class m181217_033141_create_order_table extends Migration
             'login_method' => $this->string(20),
             'character_name' => $this->string(255),
             'recover_code' => $this->string(255),
+            'recover_file_id' => $this->string(255),
             'server' => $this->string(255),
             'note' => $this->string(255),
             'raw' => $this->text(),

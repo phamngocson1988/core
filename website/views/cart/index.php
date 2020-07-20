@@ -48,8 +48,13 @@ use yii\bootstrap\ActiveForm;
           'options' => ['tag' => false],
           'template' => '{input}'
         ])->textInput(['placeholder' => 'Recovery Code'])->label(false) ?>
+        <?= $form->field($model, 'recover_file_id', [
+          'options' => ['tag' => false],
+          'template' => '{input}',
+          'inputOptions' => ['id' => 'recover_file_id']
+        ])->hiddenInput()->label(false) ?>
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="inputGroupFile02">
+          <input type="file" class="custom-file-input" id="inputGroupFile02" name="recover_file">
           <label class="custom-file-label upload-filename" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Upload</label>
         </div>
       </div>
@@ -167,8 +172,18 @@ $('form#update-cart-form').on('submit', function() {
     toastr.error('You need to agree with our policies');
     return false;
   }
-})
+});
 
+// upload image
+var uploadRecover = new AjaxUploadFile({
+  file_element: '#inputGroupFile02',
+  file_options: {resize: '500xauto'}
+});
+uploadRecover.callback = function(result) {
+  result.forEach(function(element) {
+    $('#recover_file_id').val(element.id);
+  });
+}
 JS;
 $this->registerJs($script);
 ?>

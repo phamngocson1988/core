@@ -143,6 +143,7 @@ class OrderPaymentForm extends Model
             $order->login_method = $cartItem->login_method;
             $order->character_name = $cartItem->character_name;
             $order->recover_code = $cartItem->recover_code;
+            $order->recover_file_id = $cartItem->recover_file_id;
             $order->server = $cartItem->server;
             $order->note = $cartItem->note;
 
