@@ -27,19 +27,6 @@ var MessageNotifications = (function(opts) {
      * @returns {jQuery|HTMLElement|*}
      */
     var renderRow = function (object) {
-        // var html = '<li class="dropdown-item notification-item' + (object.read != '0' ? ' read' : '') + '"' +
-        //     ' data-id="' + object.id + '"' +
-        //     ' data-class="' + object.class + '"' +
-        //     ' data-key="' + object.key + '">' +
-        //     '<a href="javascript:;">' +
-        //     '<span class="time">' + object.timeago + '</span>' +
-        //     '<span class="details">' +
-        //     '<span class="label label-sm label-icon label-warning">' +
-        //     '<i class="fa fa-bell-o"></i>' +
-        //     '</span>' + object.message + '</span>' +
-        //     '<span class="mark-read" data-toggle="tooltip" title="' + (object.read != '0' ? options.readLabel : options.markAsReadLabel) + '"></span>' +
-        //     '</a>' +
-        //     '</li>';
         var html =  '<li class="notification-box' + (object.read != '0' ? ' read' : '') + '"' +
                     ' data-id="' + object.id + '"' +
                     ' data-class="' + object.class + '"' +
@@ -53,7 +40,7 @@ var MessageNotifications = (function(opts) {
     };
 
     var showList = function() {
-        var list = elem.find('.notifications-list');
+        var list = elem.find('ul.dropdown-menu');
         $.ajax({
             url: options.url,
             type: "GET",
@@ -100,7 +87,7 @@ var MessageNotifications = (function(opts) {
                         seen += 1;
                     }
 
-                    list.append(item);
+                    item.insertBefore(list.find('li:last'));
                 });
 
                 setCount(seen, true);
@@ -140,20 +127,14 @@ var MessageNotifications = (function(opts) {
         mark.closest('.dropdown-item').addClass('read');
     };
 
-    var setCount = function(count, decrement) {
-        var badge = elem.find('.notifications-count');
-        var header = elem.find('.header-notifications-count');
-        if(decrement) {
-            count = parseInt(badge.data('count')) - count;
-        }
-
+    var setCount = function(count) {
+        var badge = elem.find('.count');
         if(count > 0){
-            badge.data('count', count).text(count).show();
+            badge.text('Notification (' + count + ' )');
         }
         else {
-            badge.data('count', 0).text(0).hide();
+            badge.text('Notification');
         }
-        header.text(count);
     };
 
     var updateCount = function() {

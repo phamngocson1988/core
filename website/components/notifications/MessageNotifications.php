@@ -32,7 +32,7 @@ class MessageNotifications extends BaseNotifications
         ]);
 
         // first li
-        $countNotification = Html::tag('span', 'Notifications (3)');
+        $countNotification = Html::tag('span', 'Notifications', ['class' => 'count']);
         $firstLiContent = Html::tag('div', $countNotification, ['class' => 'col-lg-12 col-sm-12 col-12']);
         $firstLiWrapper = Html::tag('div', $firstLiContent, ['class' => 'row']);
         $firstLi = Html::tag('li', $firstLiWrapper, ['class' => 'head text-light']);
@@ -50,10 +50,10 @@ class MessageNotifications extends BaseNotifications
     {
         $this->clientOptions = array_merge([
             'id' => $this->options['id'],
-            'url' => Url::to(['notification/list']),
-            'countUrl' => Url::to(['notification/count']),
-            'readUrl' => Url::to(['notification/read']),
-            'readAllUrl' => Url::to(['notification/read-all']),
+            'url' => Url::to(['message-notification/list']),
+            'countUrl' => Url::to(['message-notification/count']),
+            'readUrl' => Url::to(['message-notification/read']),
+            'readAllUrl' => Url::to(['message-notification/read-all']),
             'xhrTimeout' => Html::encode($this->xhrTimeout),
             'pollInterval' => Html::encode($this->pollInterval),
         ], $this->clientOptions);
@@ -61,7 +61,7 @@ class MessageNotifications extends BaseNotifications
         $js = 'MessageNotifications(' . Json::encode($this->clientOptions) . ');';
         $view = $this->getView();
 
-        NotificationsAsset::register($view);
+        MessageNotificationsAsset::register($view);
 
         $view->registerJs($js);
     }
