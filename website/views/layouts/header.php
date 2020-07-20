@@ -55,7 +55,7 @@ use yii\helpers\Url;
                 <img class="icon-sm" src="/images/icon/bill.svg" />My order</a>
             </div>
             <div class="p-2 flex-fill noti-item">
-              <div class="nav-item dropdown d-inline-block p-2">
+              <!-- <div class="nav-item dropdown d-inline-block p-2">
                 <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <img class="icon-sm" src="/images/icon/bell.svg" />
                 </a>
@@ -95,9 +95,10 @@ use yii\helpers\Url;
                     <a href="" class="text-light">View All</a>
                   </li>
                 </ul>
-              </div>
-
-              <div class="nav-item dropdown d-inline-block p-2">
+              </div> -->
+              <?=\website\components\notifications\Notifications::widget();?>
+              <?=\website\components\notifications\MessageNotifications::widget();?>
+              <!-- <div class="nav-item dropdown d-inline-block p-2">
                 <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <img class="icon-sm" src="/images/icon/message.svg" />
                 </a>
@@ -136,7 +137,7 @@ use yii\helpers\Url;
                     <a href="" class="text-light">View all in Messenger</a>
                   </li>
                 </ul>
-              </div>
+              </div> -->
             </div>
             <?php else:?>
             <div class="p-2 flex-fill login-item">

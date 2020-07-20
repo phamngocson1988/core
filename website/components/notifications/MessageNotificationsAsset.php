@@ -9,7 +9,7 @@ use yii\web\AssetBundle;
  *
  * @package webzop\notifications
  */
-class NotificationsAsset extends \webzop\notifications\NotificationsAsset
+class MessageNotificationsAsset extends \webzop\notifications\NotificationsAsset
 {
     /**
      * @inheritdoc
@@ -21,7 +21,7 @@ class NotificationsAsset extends \webzop\notifications\NotificationsAsset
      * @inheritdoc
      */
     public $js = [
-        'js/notifications.js',
+        'js/message-notifications.js',
     ];
 
     /**

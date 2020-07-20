@@ -8,26 +8,20 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
-use website\components\notifications\NotificationsAsset;
+use website\components\notifications\MessageNotificationsAsset;
 
-class Notifications extends BaseNotifications
+class MessageNotifications extends BaseNotifications
 {
     public $options = [
         'class' => 'nav-item dropdown d-inline-block p-2',
-        'id' => 'header-notification',
-    ];
-
-    public $countOptions = [
-        'tag' => 'p',
-        'class' => 'mega-title',
-        'id' => 'header-notification-count'
+        'id' => 'message-notification',
     ];
 
     protected function renderNavbarItem()
     {
         // Start notifications
         $html  = Html::beginTag('div', $this->options);
-        $bell = Html::img('/images/icon/bell.svg', ['class' => 'icon-sm']);
+        $bell = Html::img('/images/icon/message.svg', ['class' => 'icon-sm']);
         $html .= Html::a($bell, 'javascript:;', [
             'class' => 'text-light',
             'id' => 'navbarDropdown',
@@ -39,8 +33,7 @@ class Notifications extends BaseNotifications
 
         // first li
         $countNotification = Html::tag('span', 'Notifications (3)');
-        $markReadAll = Html::a('Mark all as read', 'javascript:;', ['class' => 'float-right text-light']);
-        $firstLiContent = Html::tag('div', $countNotification . $markReadAll, ['class' => 'col-lg-12 col-sm-12 col-12']);
+        $firstLiContent = Html::tag('div', $countNotification, ['class' => 'col-lg-12 col-sm-12 col-12']);
         $firstLiWrapper = Html::tag('div', $firstLiContent, ['class' => 'row']);
         $firstLi = Html::tag('li', $firstLiWrapper, ['class' => 'head text-light']);
 
@@ -65,7 +58,7 @@ class Notifications extends BaseNotifications
             'pollInterval' => Html::encode($this->pollInterval),
         ], $this->clientOptions);
 
-        $js = 'Notifications(' . Json::encode($this->clientOptions) . ');';
+        $js = 'MessageNotifications(' . Json::encode($this->clientOptions) . ');';
         $view = $this->getView();
 
         NotificationsAsset::register($view);
