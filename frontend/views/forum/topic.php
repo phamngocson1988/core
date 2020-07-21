@@ -4,6 +4,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
 $creator = $topic->creator;
+$user = Yii::$app->user->getIdentity();
 ?>
 
 <main>
@@ -33,7 +34,25 @@ $creator = $topic->creator;
               <div class="thread-content">
                 <?=$post->content;?>
               </div>
-              <div class="thread-reaction"><a class="like-btn" href="<?=Url::to(['forum/like', 'id' => $post->id]);?>" data-like="<?=Url::to(['forum/like', 'id' => $post->id]);?>" data-dislike="<?=Url::to(['forum/dislike', 'id' => $post->id]);?>"></a><a href="#">Username 1</a>, <a href="#">Username 2</a> and <a href="#">26 others</a> liked this</div>
+              <div class="thread-reaction">
+                <?php if ($user) :?>
+                <?php 
+                $isLike = $user->isLike($post->id);
+                $likeLink = Url::to(['forum/like', 'id' => $post->id]);
+                $dislikeLink = Url::to(['forum/dislike', 'id' => $post->id]);
+                $userLikes = $post->userLike;
+                $firstUserLike = array_slice($userLikes, 0, 2);
+                $remainingUserLike = count($userLikes) - 2;
+                ?>
+                <a class="like-btn <?=$isLike ? 'liked' : '';?>" href="<?=$isLike ? $dislikeLink : $likeLink;?>" data-like="<?=$likeLink;?>" data-dislike="<?=$dislikeLink;?>" data-username="<?=$user->username;?>"></a>
+                <?php endif;?>
+                <?php foreach ($firstUserLike as $firstUser) : ;?>
+                  <a href="javascript:;" data-post-id="<?=$post->id;?>" data-user-id="<?=$firstUser->id;?>"><?=$firstUser->username;?></a>
+                <?php endforeach;?>
+                <?php if ($remainingUserLike > 0) :?>
+                and <a href="javascript:;"><?=number_format($remainingUserLike);?> others</a> liked this
+                <?php endif;?>
+              </div>
             </div>
           </li>
           <?php endforeach;?>
@@ -85,9 +104,6 @@ topic.success = function (data, form) {
     location.reload();
   }, 1000);
 };
-$('a.like-btn').click(function(){
-	$(this).toggleClass('liked');
-});
 
 $('a.like-btn').ajax_action({
   method: 'POST',
@@ -97,7 +113,11 @@ $('a.like-btn').ajax_action({
     } else {
       $(element).attr('href', $(element).data('like'));
     }
-    $(element).toggleClass('liked');
+    location.reload();
+    // $(element).toggleClass('liked');
+  },
+  error: function(errors) {
+      console.log(errors);
   },
 });
 JS;

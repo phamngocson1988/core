@@ -22,7 +22,7 @@ class LikeForumForm extends Model
     public function like()
     {
         $exists = ForumLike::find()->where([
-          'user_id' => $this->user_id,
+          'created_by' => $this->user_id,
           'post_id' => $this->post_id,
         ])->exists();
         if ($exists) return true;
@@ -36,7 +36,7 @@ class LikeForumForm extends Model
     public function dislike()
     {
         $like = ForumLike::find()->where([
-            'user_id' => $this->user_id,
+            'created_by' => $this->user_id,
             'post_id' => $this->post_id,
         ])->one();
         return $like ? $like->delete() : true;

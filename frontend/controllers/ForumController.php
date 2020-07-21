@@ -26,7 +26,7 @@ class ForumController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['create'],
+                        'actions' => ['create', 'like', 'dislike'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -84,7 +84,10 @@ class ForumController extends Controller
     public function actionTopic($id, $slug)
     {
         $topic = ForumTopic::findOne($id);
-        $command = ForumPost::find()->where(['topic_id' => $id])->with('sender');
+        $command = ForumPost::find()
+        ->where(['topic_id' => $id])
+        ->with('sender')
+        ->with('userLike');
         $pages = new Pagination(['totalCount' => $command->count()]);
         $posts = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -133,7 +136,7 @@ class ForumController extends Controller
             'post_id' => $id,
             'user_id' => Yii::$app->user->id
         ]);
-        if ($model->load($request->post()) && $model->validate() && $model->like()) {
+        if ($model->validate() && $model->like()) {
             return json_encode([
                 'status' => true, 
                 'data' => [
@@ -143,7 +146,7 @@ class ForumController extends Controller
             ]);
         } else {
             $message = $model->getErrorSummary(true);
-            $message = reset($message);
+            // $message = reset($message);
             return json_encode(['status' => false, 'errors' => $message]);
         }
     }
@@ -157,7 +160,7 @@ class ForumController extends Controller
             'post_id' => $id,
             'user_id' => Yii::$app->user->id
         ]);
-        if ($model->load($request->post()) && $model->validate() && $model->dislike()) {
+        if ($model->validate() && $model->dislike()) {
             return json_encode([
                 'status' => true, 
                 'data' => [

@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use common\behaviors\ForumLikeBehavior;
 
 class ForumPost extends ActiveRecord
 {
@@ -22,6 +23,7 @@ class ForumPost extends ActiveRecord
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
             ],
+            'like' => ForumLikeBehavior::className(),
         ];
     }
 
