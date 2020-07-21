@@ -38,7 +38,7 @@ class Notifications extends BaseNotifications
         ]);
 
         // first li
-        $countNotification = Html::tag('span', 'Notifications (3)');
+        $countNotification = Html::tag('span', 'Notifications');
         $markReadAll = Html::a('Mark all as read', 'javascript:;', ['class' => 'float-right text-light']);
         $firstLiContent = Html::tag('div', $countNotification . $markReadAll, ['class' => 'col-lg-12 col-sm-12 col-12']);
         $firstLiWrapper = Html::tag('div', $firstLiContent, ['class' => 'row']);
@@ -57,10 +57,10 @@ class Notifications extends BaseNotifications
     {
         $this->clientOptions = array_merge([
             'id' => $this->options['id'],
-            'url' => Url::to(['notification/list']),
-            'countUrl' => Url::to(['notification/count']),
-            'readUrl' => Url::to(['notification/read']),
-            'readAllUrl' => Url::to(['notification/read-all']),
+            'url' => Url::to(['push-notification/list']),
+            'countUrl' => Url::to(['push-notification/count']),
+            'readUrl' => Url::to(['push-notification/read']),
+            'readAllUrl' => Url::to(['push-notification/read-all']),
             'xhrTimeout' => Html::encode($this->xhrTimeout),
             'pollInterval' => Html::encode($this->pollInterval),
         ], $this->clientOptions);

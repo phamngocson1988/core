@@ -3,78 +3,182 @@
  */
 
 var Notifications = (function(opts) {
-    console.log('This is my PushNotifications lib', Notification.permission);
-    if (!("Notification" in window)) {
-        alert("This browser does not support desktop notification");
-        return;
-    } else if (Notification.permission == 'denied') {
-        return;
-    } else if (Notification.permission != 'granted') {
-        Notification.requestPermission();
-        return;
+    console.log('This is my Notifications lib');
+    if(!opts.id){
+        throw new Error('Notifications: the param id is required.');
+    }
+
+    var elem = $('#'+opts.id);
+    if(!elem.length){
+        throw Error('Notifications: the element was not found.');
     }
 
     var options = $.extend({
         pollInterval: 60000,
         xhrTimeout: 2000,
+        readLabel: 'read',
+        markAsReadLabel: 'mark as read'
     }, opts);
-    console.log('This is my PushNotifications options', options);
 
-    var notifyMe = function(object) {
-        var notificationOptions = {
-            body: object.message,
-            icon: object.icon,//'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/1024px-Volkswagen_logo_2019.svg.png',
-            dir: 'ltr'
-        };
-        var notification = new Notification(object.title, notificationOptions);
-        if (object.url) {
-            notification.onclick = function(event) {
-              console.log('onclick');
-              event.preventDefault(); // prevent the browser from focusing the Notification's tab
-              window.open(object.url);
-            }
-        }
-    }
+    /**
+     * Renders a notification row
+     *
+     * @param object The notification instance
+     * @returns {jQuery|HTMLElement|*}
+     */
+    var renderRow = function (object) {
+        var html =  '<li class="notification-box' + (object.read != '0' ? ' read' : '') + '"' +
+                    ' data-id="' + object.id + '"' +
+                    ' data-class="' + object.class + '"' +
+                    ' data-key="' + object.key + '">' +
+                    '<div class="border-bottom p-2">' +
+                    '<a href="javascript:;" class="d-block">' + object.message + '</a>' +
+                    '<small class="text-muted">' + object.timeago + '</small>' + 
+                    '</div>' +
+                    '</li>';
+        return $(html);
+    };
 
-    var deleteMe = function(object) {
-        $.ajax({
-            url: options.deleteUrl + '?id=' + object.id,
-            type: "GET",
-            dataType: "json",
-            timeout: opts.xhrTimeout,
-        });
+    var emptyRow = function() {
+        var html =  '<li class="notification-box" data-id="0">' +
+                    '<div class="border-bottom p-2">' +
+                    '<a href="javascript:;" class="d-block">No message</a>' +
+                    '<small class="text-muted"></small>' + 
+                    '</div>' +
+                    '</li>';
+        return $(html); 
     }
 
     var showList = function() {
-        console.log('This is my PushNotifications showList');
+        var list = elem.find('ul.dropdown-menu');
         $.ajax({
             url: options.url,
             type: "GET",
             dataType: "json",
             timeout: opts.xhrTimeout,
+            //loader: list.parent(),
             success: function(data) {
+                var seen = 0;
+
                 if($.isEmptyObject(data.list)){
-                    return;
+                    if(list.find('>li[data-id="0"]').length){
+                        return;
+                    } else {
+                        var emptyItem = emptyRow();
+                        emptyItem.insertBefore(list.find('li:last'));
+                    }
                 }
+
                 $.each(data.list, function (index, object) {
-                    notifyMe(object);
-                    deleteMe(object);
-                })
+                    if(list.find('>li[data-id="' + object.id + '"]').length){
+                        return;
+                    }
+
+                    var item = renderRow(object);
+
+                    item.on('click', function(e) {
+                        e.stopPropagation();
+                        // if(item.hasClass('read')){
+                        //     return;
+                        // }
+                        $.ajax({
+                            url: options.readUrl,
+                            type: "GET",
+                            data: {id: item.data('id')},
+                            dataType: "json",
+                            timeout: opts.xhrTimeout,
+                            success: function (data) {
+                                item.removeClass('read');
+                                item.addClass('read');
+                                if(object.url){
+                                    document.location = object.url;
+                                }
+                            }
+                        });
+
+                    });
+
+                    if(object.seen == '0'){
+                        seen += 1;
+                    }
+
+                    item.insertBefore(list.find('li:last'));
+                });
+
+                setCount(seen, true);
+
+                startPoll(true);
             }
         });
     };
 
-    
+    elem.find('> a[data-toggle="dropdown"]').on('click', function(e){
+        if(!$(this).parent().hasClass('show')){
+            showList();
+        }
+    });
+
+    elem.find('.read-all').on('click', function(e){
+        e.stopPropagation();
+        var link = $(this);
+        $.ajax({
+            url: options.readAllUrl,
+            type: "GET",
+            dataType: "json",
+            timeout: opts.xhrTimeout,
+            success: function (data) {
+                // markRead(elem.find('.dropdown-item:not(.read)').find('.mark-read'));
+                elem.find('.dropdown-item').removeClass('read');
+                elem.find('.dropdown-item').addClass('read');
+                link.off('click').on('click', function(){ return false; });
+            }
+        });
+    });
+
+    var markRead = function(mark){
+        mark.off('click').on('click', function(){ return false; });
+        mark.attr('title', options.readLabel);
+        mark.tooltip('dispose').tooltip();
+        mark.closest('.dropdown-item').addClass('read');
+    };
+
+    var setCount = function(count) {
+        var badge = elem.find('.count');
+        if(count > 0){
+            badge.text('Notification (' + count + ' )');
+        }
+        else {
+            badge.text('Notification');
+        }
+    };
+
+    var updateCount = function() {
+        console.log('notification updateCount');
+        $.ajax({
+            url: options.countUrl,
+            type: "GET",
+            dataType: "json",
+            timeout: opts.xhrTimeout,
+            success: function(data) {
+                setCount(data.count);
+            },
+            complete: function() {
+                startPoll();
+            }
+        });
+    };
 
     var _updateTimeout;
-    var startPoll = function() {
+    var startPoll = function(restart) {
+        if (restart && _updateTimeout){
+            clearTimeout(_updateTimeout);
+        }
         _updateTimeout = setTimeout(function() {
-            showList();
+            updateCount();
         }, opts.pollInterval);
     };
 
     // Fire the initial poll
-    showList();
     startPoll();
 
 });

@@ -29,7 +29,7 @@ class GameSetting extends ActiveRecord
 
     public static function fetchVersion()
     {
-    	$setting = self::find()->where(['key' => 'method'])->one();
+    	$setting = self::find()->where(['key' => 'version'])->one();
         return self::buildMapping($setting->value);
     }
 

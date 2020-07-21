@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\controllers;
+namespace website\controllers;
 
 use Yii;
 use yii\db\Query;
@@ -8,7 +8,6 @@ use yii\helpers\Url;
 
 class PushNotificationController extends Controller
 {
-    public $layout = "main.tpl";
 
     public function actionList()
     {

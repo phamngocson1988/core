@@ -1,9 +1,9 @@
 <?php
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-$calculateUrl = Url::to(['cart/calculate', 'id' => $model->id]);
+$calculateUrl = Url::to(['cart/calculate-bulk', 'id' => $model->id]);
 $addCartUrl = Url::to(['cart/bulk', 'id' => $model->id]);
-
+$orderLink = Url::to(['order/index']);
 ?>
 <div class="container my-5 single-order">
   <div class="row">
@@ -36,7 +36,7 @@ $addCartUrl = Url::to(['cart/bulk', 'id' => $model->id]);
                 <?= $form->field($model, 'quantity', [
                   'options' => ['tag' => false],
                   'template' => '{input}',
-                  'inputOptions' => ['class' => 'quantity-value flex-fill text-center']
+                  'inputOptions' => ['class' => 'quantity-value flex-fill text-center', 'name' => 'quantity']
                 ])->textInput()->label(false) ?>
                 <span class="flex-fill plus">
                   <img class="icon-sm" src="/images/icon/plus.svg"/>
@@ -48,14 +48,10 @@ $addCartUrl = Url::to(['cart/bulk', 'id' => $model->id]);
             </div>
           </div>
         </div>
-        <!-- <div class="flex-fill w-100">
-          <label for="exampleFormControlTextarea1">Infomation Character</label>
-          <textarea class="form-control raw" id="exampleFormControlTextarea1" rows="3" placeholder="Enter infomation here..."></textarea>
-        </div> -->
         <?= $form->field($model, 'raw', [
           'options' => ['class' => 'flex-fill w-100'],
           'template' => '{label}{input}',
-          'inputOptions' => ['class' => 'form-control raw', 'rows' => '3', 'placeholder' => 'Enter infomation here ...']
+          'inputOptions' => ['class' => 'form-control raw', 'rows' => '3', 'placeholder' => 'Enter infomation here ...', 'name' => 'raw']
         ])->textArea() ?>
       </div><!-- END ORDER ITEM -->
       <?php ActiveForm::end(); ?>
@@ -110,7 +106,7 @@ function calculateCart(form) {
       data: form.serialize(),
       success: function (result, textStatus, jqXHR) {
         if (result.status == false) {
-            toastr.error(errors);
+            toastr.error(result.errors);
         } else {
             form.find('.game-price').html(result.data.amount);
             form.find('.game-original-price').html(result.data.origin);
@@ -199,20 +195,51 @@ $('#bulk-cart').on('click', '.plus', function () {
 });
 
 $('#add-row').on('click', function() {
+  var newId = Date.now();
   var row = $('#bulk-cart').find('form.row-item-form:last').clone();
   $(row).find('.raw').val('');
+  $(row).attr('id', newId);
   $(row).appendTo('#bulk-cart');
   $(row).find('.quantity-value').val(1).change();
   renderSummary();
 });
 renderSummary();
 
+function getFormData(form){
+    var unindexed_array = form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    return indexed_array;
+}
 $('#checkout-button').on('click', function() {
-  // var forms = $('#bulk-cart').find('form.row-item-form');
-  // $.each(forms, function( index, form ) {
-  //   purchase(form);
-  // });
-  purchase();
+  var forms = $('#bulk-cart').find('form.row-item-form');
+  var payload = {};
+  $.each(forms, function( index, form ) {
+    // purchase(form);
+    payload[$(form).attr('id')] = getFormData($(form));
+  });
+  console.log(payload);
+  $.ajax({
+      url: '$addCartUrl',
+      type: 'POST',
+      dataType : 'json',
+      data: payload,
+      success: function (result, textStatus, jqXHR) {
+        if (result.status == false) {
+          toastr.error(result.errors);
+        } else {
+          setTimeout(() => {  
+            window.location.href = "$orderLink";
+          }, 2000);
+          toastr.success(result.success); 
+        }
+      },
+  });
+  return false;
 });
 
 

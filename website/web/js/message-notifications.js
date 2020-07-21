@@ -3,7 +3,7 @@
  */
 
 var MessageNotifications = (function(opts) {
-    console.log('This is my Notifications lib');
+    console.log('This is my MessageNotifications lib');
     if(!opts.id){
         throw new Error('Notifications: the param id is required.');
     }
@@ -153,6 +153,7 @@ var MessageNotifications = (function(opts) {
     };
 
     var updateCount = function() {
+        console.log('message notification updateCount');
         $.ajax({
             url: options.countUrl,
             type: "GET",

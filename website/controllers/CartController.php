@@ -27,7 +27,7 @@ class CartController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'checkout', 'bulk'],
+                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -133,30 +133,54 @@ class CartController extends Controller
         ]);
     }
 
-    public function actionBulk($id)
+    public function actionCalculateBulk($id) 
     {
         $request = Yii::$app->request;
-        $cart = Yii::$app->cart;
-        
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+
         $model = CartItem::findOne($id);
-        $model->setScenario(CartItem::SCENARIO_BULK_CART);
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $cart->clear();
-            $cart->add($model);
-            $checkoutForm = new \website\forms\OrderPaymentForm(['cart' => $cart, 'paygate' => 'kinggems']);
-            if ($checkoutForm->validate() && $checkoutForm->purchase()) {
-                return $this->asJson(['status' => true]);
-            } else {
-                $message = $model->getErrorSummary(true);
-                $message = reset($message);
-                return $this->asJson(['status' => false, 'errors' => $message]);
-            }
+        $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
+        $model->quantity = $request->post('quantity', 0);
+        if ($model->validate()) {
+            $amount = $model->getTotalPrice();
+            $unit = $model->getTotalUnit();
+            $unitName = $model->getUnitName();
+            $origin = $model->getTotalOriginalPrice();
+            return $this->asJson(['status' => true, 'data' => [
+                'amount' => number_format($amount, 1),
+                'origin' => number_format($origin, 1),
+                'unit' => sprintf("%s %s", number_format($unit), strtoupper($unitName)),
+            ]]);
         } else {
             $message = $model->getErrorSummary(true);
             $message = reset($message);
             return $this->asJson(['status' => false, 'errors' => $message]);
         }
+    }
 
-        
+    public function actionBulk($id)
+    {
+        $request = Yii::$app->request;
+        $items = $request->post();
+        $model = new \website\forms\OrderPaymentBulkForm([
+            'id' => $id,
+            'items' => $items,
+        ]);
+        if ($model->validate() && $model->purchase()) {
+            $errors = $model->getErrorList();
+            $success = $model->getSuccessList();
+            if (!count($success)) {
+                return $this->asJson(['status' => false, 'errors' => 'Something went wroing']);
+            } elseif (!count($errors)) {
+                return $this->asJson(['status' => true, 'success' => 'Your orders are placed successfully']);
+            } else {
+                return $this->asJson(['status' => true, 'success' => 'Some of orders are placed successfully']);
+            }
+        } else {
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $errors]);
+        }
     }
 }

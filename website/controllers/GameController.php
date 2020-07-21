@@ -63,21 +63,7 @@ class GameController extends Controller
         // Game settings
         $settingMethod = GameSetting::find()->where(['key' => 'method'])->one();
         $settingMethodValues = explode(",", $settingMethod->value);
-
-        // $settingVersion = GameSetting::find()->where(['key' => 'version'])->one();
-        // $settingVersionValues = explode(",", $settingVersion->value);
-        // $settingVersionKeys = array_map(function($val) {
-        //     return Inflector::slug($val);
-        // }, $settingVersionValues);
-        // $settingVersionMapping = array_combine($settingVersionKeys, $settingVersionValues);
         $settingVersionMapping = GameSetting::fetchVersion();
-
-        // $settingPackage = GameSetting::find()->where(['key' => 'package'])->one();
-        // $settingPackageValues = explode(",", $settingPackage->value);
-        // $settingPackageKeys = array_map(function($val) {
-        //     return Inflector::slug($val);
-        // }, $settingPackageValues);
-        // $settingPackageMapping = array_combine($settingPackageKeys, $settingPackageValues);
         $settingPackageMapping = GameSetting::fetchPackage();
 
         $mapping = [];
@@ -126,6 +112,13 @@ class GameController extends Controller
             $relatedGames = Game::findAll($gameIds);
         }
 
+        // reseller
+        $is_reseller = false;
+        if (!Yii::$app->user->isGuest) {
+            $user = Yii::$app->user->identity;
+            $is_reseller = $user->isReseller();
+        }
+
     	return $this->render('view', [
             'model' => $model,
             'methods' => $methods,
@@ -135,6 +128,8 @@ class GameController extends Controller
             'settingPackageMapping' => json_encode($settingPackageMapping),
             'relatedGames' => $relatedGames,
             'category' => $category,
+            'is_reseller' => $is_reseller,
+            'has_group' => (int)$model->group_id
         ]);
     }
 

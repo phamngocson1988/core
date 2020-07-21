@@ -146,6 +146,8 @@ class OrderPaymentForm extends Model
             $order->recover_file_id = $cartItem->recover_file_id;
             $order->server = $cartItem->server;
             $order->note = $cartItem->note;
+            $order->raw = $cartItem->raw;
+            $order->bulk = $cartItem->bulk;
 
             $order->save();
             $order->log(sprintf("Created. Status %s (%s - %s)", $order->status, $paygate->getIdentifier(), $paygate->getPaymentType()));

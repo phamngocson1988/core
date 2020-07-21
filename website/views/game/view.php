@@ -110,6 +110,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             <button type="submit" class="btn btn-buy">Buy now</button>
             <?php endif;?>
           </div>
+          <?php if ($is_reseller) : ?>
           <div class="w-100 flex-fill p-2">
             <?php if (Yii::$app->user->isGuest) : ?>
             <a href="#modalLogin" class="btn btn-quickbuy" data-toggle="modal"><img class="icon-sm" src="/images/icon/timer.svg" />Buy now</a>
@@ -118,6 +119,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
               Buy</a>
             <?php endif;?>
           </div>
+          <?php endif;?>
         </div>
         <?php ActiveForm::end(); ?>
         <hr />
@@ -302,6 +304,7 @@ var currentMethod = '$model->method';
 var currentVersion = '$model->version';
 var currentPackage = "$model->package";
 var mapping = $mapping;
+var has_group = $has_group;
 var settingVersionMapping = $settingVersionMapping;
 var settingPackageMapping = $settingPackageMapping;
 
@@ -328,7 +331,7 @@ $("#package").on('change', function() {
 // changeStar();
 
 function changeView() {
-  if (!mapping.length) return;
+  if (!has_group) return;
   var method = mapping[currentMethod];
   console.log('method', method, mapping);
   var versions = Object.keys(method).reduce((p, c) => {
@@ -363,7 +366,7 @@ function changeView() {
   $('#quantity').val(1).trigger('change');
 };
 function changeStar() {
-  // if (!mapping.length) return;
+  if (!has_group) return;
   console.log('changeStar', currentMethod);
   var method = $('#' + currentMethod);
   console.log('changeStar', method);

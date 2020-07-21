@@ -7,6 +7,9 @@ class OrderNotificationBehavior extends AttributeBehavior
 {
 	public function pushNotification($key, $userIds)
     {
+    	if (is_numeric($userIds)) {
+    		$userIds = (array)$userIds;
+    	}
     	if (!count($userIds)) return;
 	    $owner = $this->owner; // order
     	foreach ($userIds as $userId) {

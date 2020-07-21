@@ -81,11 +81,11 @@ class SiteController extends Controller
 
         // Hot deal
         $hotCommand = new FetchGameForm(['hot_deal' => Game::HOT_DEAL]);
-        $hotGames = $hotCommand->getCommand()->limit(5)->all();
+        $hotGames = $hotCommand->getCommand()->orderBy(['updated_at' => SORT_DESC])->limit(5)->all();
         $trendCommand = new FetchGameForm(['new_trending' => Game::NEW_TRENDING]);
-        $trendGames = $trendCommand->getCommand()->limit(2)->all();
+        $trendGames = $trendCommand->getCommand()->orderBy(['updated_at' => SORT_DESC])->limit(2)->all();
         $grossingCommand = new FetchGameForm(['top_grossing' => Game::TOP_GROSSING]);
-        $grossingGames = $grossingCommand->getCommand()->limit(2)->all();
+        $grossingGames = $grossingCommand->getCommand()->orderBy(['updated_at' => SORT_DESC])->limit(2)->all();
 
         return $this->render('index', [
             'hotGames' => $hotGames,

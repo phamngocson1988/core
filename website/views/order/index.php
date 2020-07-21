@@ -208,6 +208,7 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
 <!-- End modal survey-->
 
 <?php
+$viewUrl = Url::current();
 $script = <<< JS
 var complain = new Complains({id: '#detailOrder'});
 var triggerSendComplainButton = function () {
@@ -266,7 +267,9 @@ $('#detailOrder').on('show.bs.modal', function (e) {
   $('#detailOrder').off('click', '#send-complain-button', triggerSendComplainButton);
 });
 $('#paymentGame').on('show.bs.modal', function (e) {
-    $(this).find('.modal-content').load(e.relatedTarget.href);
+  $(this).find('.modal-content').load(e.relatedTarget.href);
+}).on('hide.bs.modal', function(e) {
+  history.pushState({}, '', '$viewUrl');
 });
 
 $('#img-modal').on('show.bs.modal', function (e) {
