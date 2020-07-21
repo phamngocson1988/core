@@ -1,0 +1,26 @@
+.short-text {
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  max-width: 210px;
+}
+
+/*forum like button*/
+a.like-btn{
+  width: 20px;
+  height: 20px;
+  background-image: url("https://image.flaticon.com/icons/svg/633/633759.svg");
+  background-size: 20px;
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 5px;
+  margin-bottom: -4px;
+  -webkit-transition: all 0.2s;
+ -o-transition: all 0.2s;
+ transition: all 0.2s;
+ }
+ a.like-btn.liked{
+   background-image: url("https://image.flaticon.com/icons/svg/686/686370.svg");
+ }

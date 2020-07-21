@@ -20,7 +20,7 @@ use yii\helpers\Url;
           $user = $topic->creator;
         ?>
         <div class="post-item"><a class="post-author-photo" href="javascript:;"><img src="<?=$user->getAvatarUrl('34x34');?>" alt="<?=$user->getName();?>"></a>
-          <div class="post-title"><a href="<?=Url::to(['forum/topic', 'id' => $topic->id, 'slug' => $topic->slug]);?>"><?=$topic->subject;?></a></div>
+          <div class="post-title"><a href="<?=Url::to(['forum/topic', 'id' => $topic->id, 'slug' => $topic->slug]);?>" class="short-text"><?=$topic->subject;?></a></div>
           <div class="post-author">By <a href="javascript:;"><?=$user->getName();?></a></div>
           <div class="post-date"><?=date("F j, Y", strtotime($topic->created_at));?></div>
         </div>

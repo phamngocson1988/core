@@ -123,4 +123,52 @@ class ForumController extends Controller
             return json_encode(['status' => false, 'errors' => $message]);
         }
     }
+
+    public function actionLike($id)
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\LikeForumForm([
+            'post_id' => $id,
+            'user_id' => Yii::$app->user->id
+        ]);
+        if ($model->load($request->post()) && $model->validate() && $model->like()) {
+            return json_encode([
+                'status' => true, 
+                'data' => [
+                    'message' => Yii::t('app', 'like_post_success'),
+                    'id' => $id
+                ]
+            ]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
+    }
+
+    public function actionDislike($id)
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\LikeForumForm([
+            'post_id' => $id,
+            'user_id' => Yii::$app->user->id
+        ]);
+        if ($model->load($request->post()) && $model->validate() && $model->dislike()) {
+            return json_encode([
+                'status' => true, 
+                'data' => [
+                    'message' => Yii::t('app', 'dislike_post_success'),
+                    'id' => $id
+                ]
+            ]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
+    }
 }

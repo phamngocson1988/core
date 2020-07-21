@@ -33,7 +33,7 @@ $creator = $topic->creator;
               <div class="thread-content">
                 <?=$post->content;?>
               </div>
-              <div class="thread-reaction"><a href="#">Username 1</a>, <a href="#">Username 2</a> and <a href="#">26 others</a> liked this</div>
+              <div class="thread-reaction"><a class="like-btn" href="<?=Url::to(['forum/like', 'id' => $post->id]);?>" data-like="<?=Url::to(['forum/like', 'id' => $post->id]);?>" data-dislike="<?=Url::to(['forum/dislike', 'id' => $post->id]);?>"></a><a href="#">Username 1</a>, <a href="#">Username 2</a> and <a href="#">26 others</a> liked this</div>
             </div>
           </li>
           <?php endforeach;?>
@@ -84,7 +84,22 @@ topic.success = function (data, form) {
   setTimeout(() => {  
     location.reload();
   }, 1000);
-}
+};
+$('a.like-btn').click(function(){
+	$(this).toggleClass('liked');
+});
+
+$('a.like-btn').ajax_action({
+  method: 'POST',
+  callback: function(element, data) {
+    if ($(element).hasClass('liked')) {
+      $(element).attr('href', $(element).data('dislike'));
+    } else {
+      $(element).attr('href', $(element).data('like'));
+    }
+    $(element).toggleClass('liked');
+  },
+});
 JS;
 $this->registerJs($script);
 ?>

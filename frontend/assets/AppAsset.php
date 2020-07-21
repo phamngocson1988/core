@@ -17,6 +17,7 @@ class AppAsset extends AssetBundle
         'css/jquery.magicsearch.css',
         'css/bootstrap-tagsinput.css',
         'css/style.css',
+        'css/theme.css',
     ];
     public $js = [
         ['js/a076d05399.js', 'position' => \yii\web\View::POS_HEAD],
