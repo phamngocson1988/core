@@ -6,6 +6,7 @@ use yii2mod\cart\models\CartItemInterface;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\models\Game;
+use website\models\Promotion;
 
 class CartItem extends Game implements CartItemInterface
 {
@@ -27,7 +28,9 @@ class CartItem extends Game implements CartItemInterface
     public $currency;
     public $raw;
     public $bulk;
+
     protected $_game;
+    protected $_promotion;
 
     public function scenarios()
     {
@@ -44,6 +47,7 @@ class CartItem extends Game implements CartItemInterface
         return [
             ['quantity', 'number'],
             [['server', 'note', 'recover_code', 'recover_file_id', 'voucher', 'currency', 'bulk'], 'trim'],
+            ['voucher', 'validateVoucher'],
             [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
             [['quantity', 'raw'], 'required', 'on' => self::SCENARIO_BULK_CART],
 
@@ -80,11 +84,22 @@ class CartItem extends Game implements CartItemInterface
         return $this->pack;
     }
 
-    public function getTotalUnit()
+    public function getSubtotalUnit()
     {
         $unit = $this->getUnit();
         $quantity = $this->quantity;
-        return $unit * $quantity;
+        return $unit * $quantity;   
+    }
+
+    public function getTotalUnit()
+    {
+        $subTotal = $this->getSubtotalUnit();
+        $promotion = $this->getPromotion();
+        if ($promotion) {
+            $promotionUnit = $promotion->apply($this->getSubtotalUnit());
+            $subTotal += $promotionUnit;
+        }
+        return $subTotal;
     }
 
     public function getUnitName()
@@ -97,10 +112,16 @@ class CartItem extends Game implements CartItemInterface
         return $this->getOriginalPrice() * $this->quantity;
     }
 
-    public function getTotalPrice()
+    public function getSubTotalPrice()
     {
         $quantity = $this->quantity;
-        return $this->getPrice() * $quantity;
+        return $this->getPrice() * $quantity;        
+    }
+
+    public function getTotalPrice()
+    {
+        $sub = $this->getSubTotalPrice();
+        return $sub;
     }
 
     /**
@@ -131,4 +152,32 @@ class CartItem extends Game implements CartItemInterface
         return $this->id;
     }
 
+    // Promotion
+    public function getPromotion()
+    {
+        if (!$this->_promotion) {
+            $this->_promotion = Promotion::findOne(['code' => $this->voucher]);
+        }
+        return $this->_promotion;
+    }
+
+    public function validateVoucher($attribute, $params)
+    {
+        if (!$this->voucher) return;
+        $promotion = $this->getPromotion();
+        if (!$promotion) {
+            $this->addError($attribute, 'This voucher code is not valid');
+            return;
+        }
+        if ($promotion->promotion_scenario != Promotion::SCENARIO_BUY_GEMS) {
+            $this->addError($attribute, 'This voucher code is not valid');
+            $this->_promotion = null;
+            return;
+        }
+        if (!$promotion->canApplyForGame($this->id) && !$promotion->canApplyForUser(Yii::$app->user->id)) {
+            $this->addError($attribute, 'This voucher code is not valid for this user');
+            $this->_promotion = null;
+            return;
+        }
+    }
 }

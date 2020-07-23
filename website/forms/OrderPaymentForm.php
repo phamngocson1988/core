@@ -89,7 +89,9 @@ class OrderPaymentForm extends Model
         $fee = $paygate->getFee($subTotalPrice);
         $totalPrice = $cart->getTotalPrice() + $fee;
         $cogsPrice = $cartItem->getCogs();
-        $totalUnit = $cartItem->getTotalUnit();
+        $subtotalUnit = (int)$cartItem->getSubTotalUnit();
+        $totalUnit = (int)$cartItem->getTotalUnit();
+        $promotion = $cartItem->getPromotion();
 
         $usdCurrency = Currency::findOne('USD');
         $otherCurrency = Currency::findOne($paygate->getCurrency());
@@ -133,10 +135,10 @@ class OrderPaymentForm extends Model
             $order->game_title = $cartItem->getLabel();
             $order->quantity = $cartItem->quantity;
             $order->unit_name = $cartItem->getUnitName();
-            $order->sub_total_unit = $totalUnit;
-            $order->promotion_unit = 0;
+            $order->sub_total_unit = $subtotalUnit;
+            $order->promotion_unit = $totalUnit - $subtotalUnit;
             $order->total_unit = $totalUnit;
-            // $order->promotion_id = $cart->hasPromotion() ? $cart->getPromotionItem()->id : null;
+            $order->promotion_id = $promotion ? $promotion->id : null;
             $order->username = $cartItem->username;
             $order->password = $cartItem->password;
             // $order->platform = $cartItem->platform;

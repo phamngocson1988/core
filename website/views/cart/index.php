@@ -107,7 +107,7 @@ use yii\bootstrap\ActiveForm;
       <?= $form->field($model, 'voucher', [
         'options' => ['class' => 'input-group my-3'],
         'template' => '{input}<div class="input-group-append"><button class="btn btn-warning text-white" type="button" id="apply-voucher-button">Accept</button></div>',
-        'inputOptions' => ['class' => 'form-control', 'placeholder' => 'Enter promo code here']
+        'inputOptions' => ['class' => 'form-control', 'id' => 'voucher', 'placeholder' => 'Enter promo code here']
       ])->textInput(); ?>
       <!-- CART SUMMARY -->
       <div class="card card-summary">
@@ -153,7 +153,7 @@ function calculateCart() {
       data: form.serialize(),
       success: function (result, textStatus, jqXHR) {
         if (result.status == false) {
-            toastr.error(errors);
+            toastr.error(result.errors);
         } else {
             $('[data-target="price"]').html('$' + result.data.amount);
             $('[data-target="origin"]').html('$' + result.data.origin);
@@ -183,7 +183,28 @@ uploadRecover.callback = function(result) {
   result.forEach(function(element) {
     $('#recover_file_id').val(element.id);
   });
-}
+};
+
+$('form#update-cart-form').on('click', '.minus', function () {
+  var _input = $(this).parent().find('input');
+  var count = parseInt(_input.val()) - 1;
+  count = count < 1 ? 1 : count;
+  _input.val(count);
+  _input.change();
+  return false;
+});
+
+$('form#update-cart-form').on('click', '.plus', function () {
+  var _input = $(this).parent().find('input');
+  _input.val(parseInt(_input.val()) + 1);
+  _input.change();
+  return false;
+});
+$('form#update-cart-form').on('click', '#apply-voucher-button', function() {
+  console.log('voucher', $('#voucher').val());
+  if (!$('#voucher').val()) return;
+  calculateCart();
+});
 JS;
 $this->registerJs($script);
 ?>

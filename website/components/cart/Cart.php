@@ -3,6 +3,7 @@
 namespace website\components\cart;
 
 use Yii;
+use website\models\Promotion;
 
 /**
  * Class Cart provides basic cart functionality (adding, removing, clearing, listing items). You can extend this class and
@@ -12,9 +13,9 @@ use Yii;
  */
 class Cart extends \yii2mod\cart\Cart
 {
-	public function getItem($itemType = null)
+	public function getItem()
     {
-        $items = $this->getItems($itemType);
+        $items = $this->getItems(static::ITEM_PRODUCT);
         return reset($items);
     }
 
