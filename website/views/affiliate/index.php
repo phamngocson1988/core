@@ -51,7 +51,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
                   'inputOptions' => ['class' => 'form-control', 'placeholder' => 'Withdraw Amount', 'aria-label' => 'Withdraw Amount', 'aria-describedby' => 'button-addon2', 'type' => 'number']
                 ])->textInput()->label(false) ?>
                 <div class="input-group-append">
-                  <button class="btn btn-warning text-white" type="button" id="button-addon2">Submit</button>
+                  <button class="btn btn-warning text-white" type="submit" id="button-addon2">Submit</button>
                 </div>
               </div>
               <?php ActiveForm::end();?>

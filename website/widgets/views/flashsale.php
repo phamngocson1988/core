@@ -15,6 +15,9 @@ use yii\helpers\Html;
   <div class="post-wrapper post-slider" data-aos="fade-up" data-aos-duration="800">
     <?php foreach ($flashsaleGames as $flashsaleGame) :?>
     <?php $game = $flashsaleGame->game;?>
+    <?php if (!$game) :;?>
+    <?php continue;?>
+    <?php endif;?>
     <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
     <?php $percent = round($flashsaleGame->remain * 100 / $flashsaleGame->limit);?>
     <div class="post-item card">

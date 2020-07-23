@@ -28,7 +28,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           </ol>
         </nav>
         <h1 class="text-red mb-0" id="title"><?=$model->title;?></h1>
-        <p class="lead">Pack name here</p>
+        <p class="lead" id="package-name"></p>
         <?php if ($methods) : ?>
         <div class="btn-group-toggle multi-choose d-flex" data-toggle="buttons">
           <?php foreach ($methods as $method) : ?>
@@ -326,9 +326,10 @@ $("#version").on('change', function() {
 });
 $("#package").on('change', function() {
   currentPackage = $(this).val();
+  $('#package-name').html(settingPackageMapping[currentPackage]);
   changeView();
 });
-// changeStar();
+changeStar();
 
 function changeView() {
   if (!has_group) return;

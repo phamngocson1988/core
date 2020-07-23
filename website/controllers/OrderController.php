@@ -45,7 +45,9 @@ class OrderController extends Controller
 
     	$form = new FetchOrderForm([
     		'customer_id' => $userId,
-    		'status' => $request->get('status')
+            'status' => $request->get('status'),
+            'start_date' => $request->get('start_date'),
+    		'end_date' => $request->get('end_date'),
     	]);
     	if (!$form->status) {
     		$form->status = $form->fetchStatusList();

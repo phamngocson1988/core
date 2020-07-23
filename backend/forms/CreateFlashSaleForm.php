@@ -36,6 +36,7 @@ class CreateFlashSaleForm extends Model
         $flashsale->title = $this->title;
         $flashsale->start_from = $this->start_from;
         $flashsale->start_to = $this->start_to;
-        return $flashsale->save();
+        $flashsale->save();
+        return $flashsale->id;
     }
 }

@@ -48,7 +48,7 @@ $user = Yii::$app->user->getIdentity();
             <input type="text" class="form-control" id="voucher" data-valid="0" placeholder="Enter promo code here"
               aria-label="Enter promo code here" aria-describedby="button-addon2">
             <div class="input-group-append">
-              <button class="btn btn-warning text-white" type="button" id="button-addon2" id="applyVocherBtn">Accept</button>
+              <button class="btn btn-warning text-white" type="button" id="applyVocherBtn">Accept</button>
             </div>
           </div>
         </div>

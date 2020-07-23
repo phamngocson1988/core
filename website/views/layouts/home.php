@@ -70,7 +70,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="col-lg-5 col-xs-12 about-company" data-aos="fade-up" data-aos-anchor-placement="center-bottom"
         data-aos-duration="500">
         <h2 class="logo mb-3">
-          <a href="#">
+          <a href="/">
             <img src="/images/logo.png" />
           </a>
         </h2>
@@ -89,31 +89,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h4 class="mt-lg-0 mb-5">Find Us</h4>
         <ul class="m-0 p-0">
           <li class="nav-item mb-3">
-            <a href="https://www.facebook.com/Kinggems.us/" class="d-flex align-items-center">
+            <a target="_blank" href="https://www.facebook.com/Kinggems.us/" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/facebook-icon.svg" />
               <span>Facebook</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="https://wa.me/84979997559" class="d-flex align-items-center">
+            <a target="_blank" href="https://wa.me/84979997559" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/viber.svg" />
               <span>Viber</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="https://t.me/KINGGEMS1303" class="d-flex align-items-center">
+            <a target="_blank" href="https://t.me/KINGGEMS1303" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/telegram-icon.svg" />
               <span>Telegram</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="https://u.wechat.com/IK-OOlb-deUWqmVLUAnz-GA" class="d-flex align-items-center">
+            <a target="_blank" href="https://u.wechat.com/IK-OOlb-deUWqmVLUAnz-GA" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/wechat-icon.svg" />
               <span>Wechat</span>
             </a>
           </li>
           <li class="nav-item mb-3">
-            <a href="https://line.me/ti/p/6MOHXdDoCg" class="d-flex align-items-center">
+            <a target="_blank" href="https://line.me/ti/p/6MOHXdDoCg" class="d-flex align-items-center">
               <img class="icon-sm mr-2" src="/images/icon/line.svg" />
               <span>Line</span>
             </a>
@@ -125,25 +125,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h4 class="mt-lg-0 mb-5">Payment methods</h4>
         <ul class="list-inline">
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="/images/icon/visa.svg" /></i></a>
+            <a href="javascript:;"><img class="icon-lg" src="/images/icon/visa.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="/images/icon/mastercard.svg" /></i></a>
+            <a href="javascript:;"><img class="icon-lg" src="/images/icon/mastercard.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="/images/icon/paypal.svg" /></i></a>
+            <a href="javascript:;"><img class="icon-lg" src="/images/icon/paypal.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img class="icon-lg" src="/images/icon/payoneer.svg" /></i></a>
+            <a href="javascript:;"><img class="icon-lg" src="/images/icon/payoneer.svg" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img style="width:100px" src="/images/icon/alipay.png" /></i></a>
+            <a href="javascript:;"><img style="width:100px" src="/images/icon/alipay.png" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img style="width:100px" src="/images/icon/wechatpay.png" /></i></a>
+            <a href="javascript:;"><img style="width:100px" src="/images/icon/wechatpay.png" /></i></a>
           </li>
           <li class="list-inline-item">
-            <a href="#"><img style="width:100px" src="/images/icon/skrill.svg" /></i></a>
+            <a href="javascript:;"><img style="width:100px" src="/images/icon/skrill.svg" /></i></a>
           </li>
         </ul>
       </div>

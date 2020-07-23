@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use website\models\Paygate;
 use website\models\PaymentTransaction;
+use website\models\Promotion;
 use common\components\helpers\FormatConverter;
 // Notification
 use website\components\notifications\DepositNotification;
@@ -17,6 +18,7 @@ class WalletPaymentForm extends Model
     public $paygate;
 
     protected $_paygate;
+    protected $_promotion;
 
     public function rules()
     {
@@ -40,6 +42,14 @@ class WalletPaymentForm extends Model
         return $this->_paygate;
     }
 
+    public function getPromotion()
+    {
+        if (!$this->_promotion) {
+            $this->_promotion = Promotion::findOne(['code' => $this->voucher]);
+        }
+        return $this->_promotion;
+    }
+
     public function validatePaygate($attribute, $params = [])
     {
         $paygate = $this->getPaygate();
@@ -48,9 +58,24 @@ class WalletPaymentForm extends Model
         }
     }
 
-    public function validateVoucher($attribute, $params = [])
+    public function validateVoucher($attribute, $params)
     {
         if (!$this->voucher) return;
+        $promotion = $this->getPromotion();
+        if (!$promotion) {
+            $this->addError($attribute, 'This voucher code is not valid');
+            return;
+        }
+        if ($promotion->promotion_scenario != Promotion::SCENARIO_BUY_COIN) {
+            $this->addError($attribute, 'This voucher code is not valid');
+            $this->_promotion = null;
+            return;
+        }
+        if (!$promotion->canApplyForUser(Yii::$app->user->id)) {
+            $this->addError($attribute, 'This voucher code is not valid for this user');
+            $this->_promotion = null;
+            return;
+        }
     }
 
     public function calculate()
@@ -61,21 +86,18 @@ class WalletPaymentForm extends Model
             $subTotalPayment = FormatConverter::convertCurrencyToCny($this->quantity);
         }
         $totalPayment = $subTotalPayment;
+        $promotion = $this->getPromotion();
+        $bonusKingcoin = 0;
+        if ($promotion) {
+            $bonusKingcoin = $promotion->apply($subTotalPayment);
+            $totalPayment += $bonusKingcoin;
+        }
         
         $subTotalKingcoin = $this->quantity;
         $totalKingcoin = $subTotalKingcoin;
         
-        $voucherApply = false;
-        $bonusKingcoin = 0;
+        $voucherApply = $promotion ? true : false;
 
-        // $fee = $paygate->transfer_fee;
-        // if ($fee) {
-        //     $type = $paygate->transfer_fee_type;
-        //     $transferFee = $type == 'fix' ? $fee : number_format($fee * $subTotalPayment / 100, 1);
-        //     $totalPayment += $transferFee;
-        // } else {
-        //     $transferFee = 0;
-        // }
         $transferFee = $paygate->getFee($subTotalPayment);
         $totalPayment += $transferFee;
         return [
