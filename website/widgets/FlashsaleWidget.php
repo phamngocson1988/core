@@ -6,6 +6,7 @@ use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use website\models\FlashSale;
 use website\models\FlashSaleGame;
+use website\models\Game;
 
 class FlashsaleWidget extends Widget
 {
@@ -17,10 +18,22 @@ class FlashsaleWidget extends Widget
         ->andWhere(['>=', 'start_to', $now])
         ->one();
         if (!$flashsale) return '';
+        // $flashsaleGames = FlashSaleGame::find()
+        // ->where(['flashsale_id' => $flashsale->id])
+        // ->andWhere(['>', 'remain', 0])
+        // ->limit(5)->all();
+
+        $gameTable = Game::tableName();
+        $flashGameTable = FlashSaleGame::tableName();
         $flashsaleGames = FlashSaleGame::find()
-        ->where(['flashsale_id' => $flashsale->id])
-        ->andWhere(['>', 'remain', 0])
-        ->limit(5)->all();
+        ->innerJoin($gameTable, "{$gameTable}.id = {$flashGameTable}.game_id")
+        ->where(["{$flashGameTable}.flashsale_id" => $flashsale->id])
+        ->andWhere(["{$gameTable}.status" => Game::STATUS_VISIBLE])
+        ->andWhere(['>', "{$flashGameTable}.remain", 0])
+        ->select(["{$flashGameTable}.*"])
+        ->limit(5)
+        ->all();
+
         return $this->render('flashsale', [
             'flashsale' => $flashsale,
             'flashsaleGames' => $flashsaleGames,

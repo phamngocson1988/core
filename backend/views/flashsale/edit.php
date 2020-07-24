@@ -106,6 +106,7 @@ use backend\components\datetimepicker\DateTimePicker;
                       <th> Tên game </th>
                       <th> Số tiền </th>
                       <th> Số lượng </th>
+                      <th> Trạng thái </th>
                       <th> Còn lại </th>
                       <th>  </th>
                     </tr>
@@ -113,7 +114,7 @@ use backend\components\datetimepicker\DateTimePicker;
                   <tbody>
                       <?php $games = $model->getFlashSale()->games;?>
                       <?php if (!count($games)) : ?>
-                      <tr><td colspan="6"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                      <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
                       <?php endif; ?>
                       <?php foreach ($games as $saleGame) :?>
                       <?php $game = $saleGame->game;?>
@@ -122,6 +123,7 @@ use backend\components\datetimepicker\DateTimePicker;
                         <td><?=$game->title;?></td>
                         <td><?=$saleGame->price;?></td>
                         <td><?=$saleGame->limit;?></td>
+                        <td><?=$game->isVisible() ? 'Đang hiển thị' : 'Đã ẩn';?></td>
                         <td><?=$saleGame->remain;?></td>
                         <td>
                           <a href='<?=Url::to(['flashsale/edit-game', 'id' => $saleGame->id]);?>' data-target="#edit-game-modal" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm game" data-toggle="modal" ><i class="fa fa-pencil"></i></a>
