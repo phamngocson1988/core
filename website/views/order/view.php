@@ -20,7 +20,7 @@ use yii\helpers\Url;
       <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_fee, 1), 'USD');?></b></p>
     </div>
     <div class="col-md-6">
-      <?=$paygate->content;?>
+      <?=$order->payment_data;?>
     </div>
     <div class="col-md-12">
       <p class="text-center font-weight-bold mt-5 mb-0">Kindly submit Transaction Number after you do payment successfully</p>

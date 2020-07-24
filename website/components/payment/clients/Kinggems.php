@@ -2,9 +2,9 @@
 namespace website\components\payment\clients;
 
 use Yii;
-use yii\base\Model;
+// use yii\base\Model;
 
-class Kinggems extends Model
+class Kinggems extends \website\models\Paygate
 {
 	public function getIdentifier()
 	{

@@ -106,6 +106,7 @@ class OrderPaymentForm extends Model
             // paygate
             $order->payment_method = $paygate->getIdentifier();
             $order->payment_type = $paygate->getPaymentType();
+            $order->payment_data = $paygate->content;
             $order->currency = $paygate->getCurrency();
 
             // prices

@@ -122,7 +122,7 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
       	<?php foreach ($orders as $order) : ?>
         <tr>
           <th scope="row">
-            <a href='<?=Url::to(['order/detail', 'id' => $order->id]);?>' data-target="#detailOrder" data-toggle="modal" >#<?=$order->id;?></a>
+            <a href='<?=Url::to(['order/detail', 'id' => $order->id]);?>' data-target="#detailOrder" data-toggle="modal" id="<?=$order->id;?>">#<?=$order->id;?></a>
             <span class="date-time"><?=FormatConverter::convertToDate(strtotime($order->created_at), 'd-m-Y H:i');?></span>
           </th>
           <td class="text-center"><?=$order->game_title;?></td>

@@ -13,7 +13,6 @@ use website\models\OrderFile;
 use website\models\Paygate;
 // forms
 use website\forms\FetchOrderForm;
-use website\components\payment\PaymentGatewayFactory;
 
 
 class OrderController extends Controller
@@ -118,12 +117,10 @@ class OrderController extends Controller
         if ($order->customer_id != Yii::$app->user->id) {
             return $this->asJson(['status' => false, 'errors' => 'Order is not found']);
         }
-        $paygate = PaymentGatewayFactory::getClient($order->payment_method);
         $model = new \website\forms\UpdateOrderForm(['id' => $id]);
         $model->loadData();
         return $this->renderPartial('view', [
             'order' => $order,
-            'paygate' => $paygate,
             'model' => $model,
         ]);
     }
