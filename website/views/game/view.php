@@ -48,11 +48,13 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         <div class="price py-3">
           <span class="price-value text-red mr-2" id="price">$<?=number_format($model->getPrice());?></span>
           <span class="badge badge-danger" id="save"><?=sprintf("save %s", number_format($model->getSavedPrice()));?>%</span>
-          <span class="btn-group-toggle bell" data-toggle="buttons">
-            <label class="btn">
+          <?php if (!Yii::$app->user->isGuest) : ?>
+          <span class="btn-group-toggle bell" data-toggle="buttons" id="subscribe" data-subscribe="<?=Url::to(['user/subscribe']);?>" data-unsubscribe="<?=Url::to(['user/unsubscribe']);?>">
+            <label class="btn <?=$isSubscribe ? 'active' : '';?>">
               <input type="checkbox">
             </label>
           </span>
+          <?php endif;?>
         </div>
         <div class="d-flex align-content-end">
           <div class="w-100 flex-fill">
@@ -65,7 +67,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             </div>
             <div class="d-flex bd-highlight">
               <div class="w-100 flex-fill">Status:</div>
-              <div class="w-100 flex-fill"><b>Available</b></div>
+              <div class="w-100 flex-fill"><b><?=$model->isVisible() ? 'Available' : 'Inactive';?></b></div>
             </div>
           </div>
         </div>
@@ -103,6 +105,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
               'inputOptions' => ['class' => 'form-control', 'type' => 'number', 'id' => 'quantity', 'min' => 1]
             ])->textInput()->label('Quantity') ?>
           </div>
+          <?php if ($model->isSoldout()) :?>
           <div class="w-100 flex-fill p-2">
             <?php if (Yii::$app->user->isGuest) : ?>
             <a href="#modalLogin" class="btn btn-buy" data-toggle="modal">Buy now</a>
@@ -119,6 +122,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
               Buy</a>
             <?php endif;?>
           </div>
+          <?php endif;?>
           <?php endif;?>
         </div>
         <?php ActiveForm::end(); ?>
@@ -400,6 +404,23 @@ function buildOptions(obj, sel) {
   return html;
 }
 changeView();
+
+// subscribe
+$('#subscribe').on('click', function() {
+  var _url = $(this).find('.active').length ? $(this).data('unsubscribe') : $(this).data('subscribe');
+  $.ajax({
+    url: _url,
+    type: 'POST',
+    dataType : 'json',
+    data: {game_id: $model->id},
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+          toastr.error('Something went wrong');
+          return false;
+      }
+    },
+  });
+});
 JS;
 $this->registerJs($script);
 ?>

@@ -20,6 +20,7 @@ use website\models\GameCategoryItem;
 // form
 use website\forms\FetchGameForm;
 use website\components\cart\CartItem;
+use website\models\GameSubscriber;
 
 /**
  * GameController
@@ -119,6 +120,12 @@ class GameController extends Controller
             $is_reseller = $user->isReseller();
         }
 
+        // Subscribe
+        $isSubscribe = Yii::$app->user->isGuest ? false : GameSubscriber::find([
+            'user_id' => Yii::$app->user->id,
+            'game_id' => $id
+        ])->exists();
+
     	return $this->render('view', [
             'model' => $model,
             'methods' => $methods,
@@ -129,7 +136,8 @@ class GameController extends Controller
             'relatedGames' => $relatedGames,
             'category' => $category,
             'is_reseller' => $is_reseller,
-            'has_group' => (int)$model->group_id
+            'has_group' => (int)$model->group_id,
+            'isSubscribe' => $isSubscribe
         ]);
     }
 

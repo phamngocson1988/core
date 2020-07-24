@@ -139,6 +139,13 @@ class m180517_025826_create_product_schema extends Migration
             'game_id' => $this->integer()->notNull(),
             'category_id' => $this->integer()->notNull(),
         ], $tableOptions);
+
+        // Subscriber
+        $this->createTable('{{%game_subscriber}}', [
+            'id' => $this->primaryKey(),
+            'game_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
+        ], $tableOptions);
     }
 
     public function down()
@@ -150,5 +157,6 @@ class m180517_025826_create_product_schema extends Migration
         $this->dropTable('{{%game_setting}}');
         $this->dropTable('{{%game_category}}');
         $this->dropTable('{{%game_category_item}}');
+        $this->dropTable('{{%game_subscriber}}');
     }
 }
