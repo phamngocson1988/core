@@ -37,7 +37,7 @@ use website\models\OrderFile;
       <h3 class="text-center text-uppercase">delivery status</h3>
       <p class="text-center"><?=$order->getPercent();?>% Completed</p>
       <div class="row bf-at">
-        <?php $files = $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER);?>
+        <?php $files = $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE);?>
         <?php foreach ($files as $file) : ?>
         <div class="col-md-6 mb-4">
           <a href="<?=Url::to(['order/files', 'id' => $order->id]);?>" data-order="<?=$order->id;?>" data-toggle="modal" data-target="#img-modal">

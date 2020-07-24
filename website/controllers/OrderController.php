@@ -72,7 +72,7 @@ class OrderController extends Controller
     public function actionFiles($id)
     {
         $order = Order::findOne($id);
-        $files = $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER);
+        $files = $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE);
         return $this->renderPartial('files', ['files' => $files, 'order' => $order]);
     }
 

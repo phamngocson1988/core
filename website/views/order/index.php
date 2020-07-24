@@ -283,7 +283,7 @@ $('#img-modal').on('show.bs.modal', function (e) {
       slidesToScroll: 1,
       infinite: true,
     });
-  }, 2000);
+  }, 5000);
 });
 
 $('#modalSurvey').on('show.bs.modal', function (e) {

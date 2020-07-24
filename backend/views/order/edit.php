@@ -311,7 +311,7 @@ $this->registerJs($cancelOrderJs)
               <div class="row" style="margin-bottom: 20px">
                 <div class=col-md-12>
                   <?php if (Yii::$app->user->can('orderteam')) : ?>
-                  <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh trước khi hoàn thành</a>
+                  <a class="btn red btn-outline sbold" id="uploadElement">Tải hình ảnh</a>
                   <input type="file" id="uploadEvidence" name="uploadEvidence[]" style="display: none" multiple accept="image/*"/>
                   <?php else : ?>
                   <a class="btn red btn-outline sbold" href="javascript:;">Hình ảnh trước khi hoàn thành</a>
@@ -322,7 +322,7 @@ $this->registerJs($cancelOrderJs)
                 <?php echo $this->render('@backend/views/order/_evidence.php', ['images' => $order->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE), 'can_edit' => true]);?>
               </div>
               <hr/>
-              <div class="row" style="margin-bottom: 20px">
+              <div class="row" style="margin-bottom: 20px; display: none">
                 <div class=col-md-12>
                   <?php if (Yii::$app->user->can('orderteam')) : ?>
                   <a class="btn red btn-outline sbold" id="uploadElementAfter">Tải hình ảnh sau khi hoàn thành</a>
