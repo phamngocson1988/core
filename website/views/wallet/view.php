@@ -21,7 +21,7 @@ use yii\helpers\Url;
       <p><span class="list-item">Total payment:</span><b class="text-red"><?=number_format($payment->total_price, 1);?> USD</b></p>
     </div>
     <div class="col-md-6">
-      <?=$paygate->content;?>
+      <?=$payment->payment_data;?>
     </div>
     <div class="col-md-12">
       <p class="text-center font-weight-bold mt-5 mb-0">Kindly submit Transaction Number after you do payment

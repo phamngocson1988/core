@@ -118,6 +118,7 @@ class WalletPaymentForm extends Model
         $request = Yii::$app->request;
         $settings = Yii::$app->settings;
         $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
+        $paygate = $this->getPaygate();
 
         // Save transaction
         $trn = new PaymentTransaction();
@@ -125,6 +126,7 @@ class WalletPaymentForm extends Model
         $trn->user_ip = $request->userIP;
         $trn->payment_method = $this->paygate;
         $trn->payment_type = 'offline';
+        $trn->payment_data = $paygate->content;
         $trn->rate_usd = $rate;
         // Price
         $trn->price = $data['subTotalPayment'];
