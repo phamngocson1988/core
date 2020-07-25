@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use frontend\models\User;
+use frontend\models\UserBadge;
 use common\models\Country;
 
 class EditProfileForm extends Model
@@ -40,6 +41,10 @@ class EditProfileForm extends Model
         $user->lastname = $this->lastname;
         $user->country = $this->country;
         $user->gender = $this->gender;
+        if (!$user->hasBadge(UserBadge::BADGE_PROFILE)) {
+            $user->addBadge(UserBadge::BADGE_PROFILE, $user->id, 'Complete Profile');
+            $user->plusPoint(100, 'Complete Profile');
+        }
         return $user->save();
     }
 

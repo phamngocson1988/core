@@ -8,7 +8,7 @@ use yii\helpers\Url;
 <?=LoginFormWidget::widget(['loginUrl' => Url::to(['site/login'])]);?>
 <?=SignupFormWidget::widget([
 	'signupUrl' => Url::to(['site/signup']),
-	'profileUrl' => Url::to(['profile/index']),
+	'profileUrl' => Url::to(['profile/complete']),
 ]);?>
 <?php
 $script = <<< JS

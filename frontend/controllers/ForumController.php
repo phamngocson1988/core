@@ -66,8 +66,7 @@ class ForumController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new \frontend\forms\CreateTopicForumForm([
-        ]);
+        $model = new \frontend\forms\CreateTopicForumForm();
         if ($model->load($request->post())) {
             if ($model->validate() && $topic = $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

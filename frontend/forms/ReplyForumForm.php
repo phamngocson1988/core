@@ -50,6 +50,10 @@ class ReplyForumForm extends Model
 
             $topic = $this->getTopic();
             $topic->touch('updated_at');
+
+            $user = $this->getUser();
+            $user->plusPoint(20, sprintf("Reply forum topic %s", $topic->subject));
+
             $transaction->commit();
             return true;
         } catch(Exception $e) {
@@ -57,6 +61,11 @@ class ReplyForumForm extends Model
             $this->addError('content', $e->getMessage());
             return false;
         }
+    }
+
+    public function getUser()
+    {
+        return Yii::$app->user->getIdentity();
     }
 
 }

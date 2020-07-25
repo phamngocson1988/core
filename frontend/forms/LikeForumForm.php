@@ -12,11 +12,31 @@ class LikeForumForm extends Model
     public $post_id;
     public $user_id;
 
+    protected $_post;
+
     public function rules()
     {
         return [
             [['post_id', 'user_id'], 'required'],
+            ['post_id', 'validatePost'],
+            ['user_id', 'validateUser'],
         ];
+    }
+
+    public function validatePost($attribute, $params = [])
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            $this->addError($attribute, 'The post is not exist');
+        }
+    }
+
+    public function validateUser($attribute, $params = [])
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addError($attribute, 'You have to login to like/dislike a post');
+        }
     }
 
     public function like()
@@ -30,7 +50,13 @@ class LikeForumForm extends Model
         $like = new ForumLike([
             'post_id' => $this->post_id,
         ]);
-        return $like->save();
+        $post = $this->getPost();
+        $result = $like->save();
+        if ($post->created_by != $this->user_id) {
+            $creator = $post->sender;
+            $creator->plusPoint(1, 'Your post have just been liked by another');
+        }
+        return $result;
     }
 
     public function dislike()
@@ -40,6 +66,19 @@ class LikeForumForm extends Model
             'post_id' => $this->post_id,
         ])->one();
         return $like ? $like->delete() : true;
+    }
+
+    public function getPost()
+    {
+        if (!$this->_post) {
+            $this->_post = ForumPost::findOne($this->post_id);
+        }
+        return $this->_post;
+    }
+
+    public function getUser()
+    {
+        return Yii::$app->user->getIdentity();
     }
 
 }

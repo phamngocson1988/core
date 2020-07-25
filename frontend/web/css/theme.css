@@ -11,7 +11,7 @@
 a.like-btn{
   width: 20px;
   height: 20px;
-  background-image: url("https://image.flaticon.com/icons/svg/633/633759.svg");
+  background-image: url("/img/forum/633759.svg");
   background-size: 20px;
   display: inline-block;
   cursor: pointer;
@@ -22,5 +22,9 @@ a.like-btn{
  transition: all 0.2s;
  }
  a.like-btn.liked{
-   background-image: url("https://image.flaticon.com/icons/svg/686/686370.svg");
+   background-image: url("/img/forum/686370.svg");
  }
+
+.timeline-post .timeline-ttl {
+  max-width: 100%;
+}

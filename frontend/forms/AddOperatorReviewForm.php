@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use frontend\models\User;
 use frontend\models\Operator;
 use frontend\models\OperatorReview;
+use frontend\models\UserBadge;
 
 class AddOperatorReviewForm extends Model
 {
@@ -55,6 +56,8 @@ class AddOperatorReviewForm extends Model
 
     public function add()
     {
+        $user = $this->getUser();
+        $operator = $this->getOperator();
         $review = new OperatorReview();
         $review->user_id = $this->user_id;
         $review->operator_id = $this->operator_id;
@@ -63,6 +66,8 @@ class AddOperatorReviewForm extends Model
         $review->star = $this->star;
         $review->notify_register = $this->notify_register;
         $review->experience = $this->experience;
+        $user->addBadge(UserBadge::BADGE_REVIEW, $user->id, sprintf("%s - %s stars", $operator->name, $review->star));
+        $user->plusPoint(100, sprintf("New review for %s", $operator->name));
         return $review->save();
     }
 

@@ -7,6 +7,7 @@ use yii\base\Model;
 use frontend\models\Complain;
 use frontend\models\Operator;
 use frontend\models\ComplainReason;
+use frontend\models\UserBadge;
 use yii\helpers\ArrayHelper;
 
 class CreateComplainForm extends Model
@@ -68,7 +69,12 @@ class CreateComplainForm extends Model
         $complain->operator_id = $this->operator_id;
         $complain->account_name = $this->account_name;
         $complain->account_email = $this->account_email;
-        return $complain->save();
+        $result = $complain->save();
+        if ($result) {
+            $user = $this->getUser();
+            $operator = $this->getOperator();
+            $user->addBadge(UserBadge::BADGE_COMPLAIN, $complain->id, sprintf("%s - %s", $operator->name, $complain->title));
+        }
     }
 
     public function fetchReason()
@@ -89,6 +95,11 @@ class CreateComplainForm extends Model
             $this->_operator = Operator::findOne($this->operator_id);
         }
         return $this->_operator;
+    }
+
+    public function getUser()
+    {
+        return Yii::$app->user->getIdentity();
     }
 
 }

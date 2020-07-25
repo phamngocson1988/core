@@ -77,6 +77,20 @@ class m130524_201442_init extends Migration
             'description' => $this->string(255),
             'created_at' => $this->integer(),
         ], $tableOptions);
+         
+        $this->createTable('{{%user_badge}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'badge' => $this->string(50)->notNull(), //profile,complaint,review
+            'key' => $this->integer(), // which action
+            'description' => $this->string(255), // detail
+            'created_at' => $this->integer(),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterBadge = "ALTER TABLE {{%user_badge}} MODIFY `badge` ENUM('profile', 'complain', 'review') NOT NULL";
+            $command = $this->db->createCommand($alterBadge);
+            $command->execute();
+        }
     }
 
     public function down()
@@ -84,6 +98,7 @@ class m130524_201442_init extends Migration
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%user_setting}}');
         $this->dropTable('{{%user_log}}');
+        $this->dropTable('{{%user_badge}}');
         $this->dropTable('{{%user_point}}');
         $this->dropTable('{{%image}}');
         $this->dropTable('{{%file}}');

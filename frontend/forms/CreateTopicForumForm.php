@@ -47,6 +47,9 @@ class CreateTopicForumForm extends Model
             $post->content = $this->content;
             $post->save();
 
+            $user = $this->getUser();
+            $user->plusPoint(20, sprintf("Create new forum topic %s", $this->subject));
+            
             $transaction->commit();
             return $topic;
         } catch(Exception $e) {
@@ -60,5 +63,10 @@ class CreateTopicForumForm extends Model
     {
         $models = ForumCategory::find()->all();
         return ArrayHelper::map($models, 'id', 'title');
+    }
+
+    public function getUser()
+    {
+        return Yii::$app->user->getIdentity();
     }
 }

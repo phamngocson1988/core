@@ -1,6 +1,12 @@
 <?php 
 use yii\helpers\Url;
+use frontend\models\UserPoint;
+use frontend\models\UserBadge;
 $user = Yii::$app->user->getIdentity();
+$level = $user->getLevel();
+$point = $user->totalPoint();
+$nextLevelPoint = UserPoint::getPointByLevel($level + 1);
+$badgeUrl = Url::to(['profile/badge']);
 ?>
 <main>
   <section class="section-profile-user">
@@ -19,11 +25,11 @@ $user = Yii::$app->user->getIdentity();
           <div class="heading-left d-flex col-md-3 col-lg-4 order-md-1 p-0">
             <div class="level d-flex">
               <div class="text-uppercase">Level</div>
-              <div class="level-number">1</div>
+              <div class="level-number"><?=$level;?></div>
             </div>
             <div class="point d-flex">
               <div class="text-uppercase">POINTS</div>
-              <div class="point-number">200</div>
+              <div class="point-number"><?=number_format($point);?></div>
             </div>
           </div>
           <div class="heading-right col-md-3 col-lg-4 order-md-3 p-0">
@@ -43,104 +49,49 @@ $user = Yii::$app->user->getIdentity();
                 <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <ul class="list-tabs nav nav-pills" role="tablist">
-                    <li role="presentation"><a class="active" href="#all" aria-controls="all" role="tab" data-toggle="tab">All</a></li>
-                    <li role="presentation"><a href="#achievements" aria-controls="achievements" role="tab" data-toggle="tab">Achievements</a></li>
-                    <li role="presentation"><a href="#complaints" aria-controls="complaints" role="tab" data-toggle="tab">Complaints</a></li>
-                    <li role="presentation"><a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews</a></li>
+                    <li role="presentation"><a class="tab-item active" href="javascript:;" id="badge-all">All</a></li>
+                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-profile">Complete Profile</a></li>
+                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-complain">Complaints</a></li>
+                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-review">Reviews</a></li>
                   </ul>
                 </div>
               </div>
             </div>
             <div class="tab-content">
               <div class="tab-pane active" id="all" role="tabpanel">
-                <div class="timeline-post-inner">
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-trophy"></i></div>
-                      <div class="timeline-ttl">Unlocked an ABCXYZ badge</div>
-                      <div class="timeline-points"><i class="far fa-gem"></i><span>200 points</span></div>
-                      <div class="timeline-time"><i class="far fa-clock"></i><span>2 hour ago</span></div>
-                      <div class="timeline-badges"><span class="badge-container"><img src="/img/common/member.png" alt="image"></span></div>
-                    </div>
-                  </div>
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-thumbs-down"></i></div>
-                      <div class="timeline-ttl">You wrote a complaint: henderson &amp; bench - my case was not approved open case</div>
-                    </div>
-                  </div>
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-comments"></i></div>
-                      <div class="timeline-ttl">You wrote a review: henderson &amp; bench - my case was not approved</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="achievements" role="tabpanel">
-                <div class="timeline-post-inner">
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-trophy"></i></div>
-                      <div class="timeline-ttl">Unlocked an ABCXYZ badge</div>
-                      <div class="timeline-points"><i class="far fa-gem"></i><span>200 points</span></div>
-                      <div class="timeline-time"><i class="far fa-clock"></i><span>2 hour ago</span></div>
-                      <div class="timeline-badges"><span class="badge-container"><img src="/img/common/member.png" alt="image"></span></div>
-                    </div>
-                  </div>
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-thumbs-down"></i></div>
-                      <div class="timeline-ttl">You wrote a complaint: henderson &amp; bench - my case was not approved open case</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="complaints" role="tabpanel">
-                <div class="timeline-post-inner">
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-trophy"></i></div>
-                      <div class="timeline-ttl">Unlocked an ABCXYZ badge</div>
-                      <div class="timeline-points"><i class="far fa-gem"></i><span>200 points</span></div>
-                      <div class="timeline-time"><i class="far fa-clock"></i><span>2 hour ago</span></div>
-                      <div class="timeline-badges"><span class="badge-container"><img src="/img/common/member.png" alt="image"></span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="reviews" role="tabpanel">
-                <div class="timeline-post-inner">
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-thumbs-down"></i></div>
-                      <div class="timeline-ttl">You wrote a complaint: henderson &amp; bench - my case was not approved open case</div>
-                    </div>
-                  </div>
-                  <div class="timeline-post-row">
-                    <div class="timeline-group">
-                      <div class="timeline-icon"><i class="fas fa-comments"></i></div>
-                      <div class="timeline-ttl">You wrote a review: henderson &amp; bench - my case was not approved</div>
-                    </div>
-                  </div>
+                <div class="timeline-post-inner badge-list">
+                  
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="mod-sidebar">
-          <div class="sidebar-col widget-box"><a class="btn-profile trans" href="#"><i class="fas fa-envelope"></i><i class="fas fa-chevron-right"></i><span>MY MESSAGES (0)</span></a></div>
+          <div class="sidebar-col widget-box"><a class="btn-profile trans" href="<?=Url::to(['mail/index']);?>"><i class="fas fa-envelope"></i><i class="fas fa-chevron-right"></i><span>MY MESSAGES (0)</span></a></div>
           <div class="sidebar-col widget-box">
             <div class="widget-title">LEVEL PROGRESS</div>
             <div class="widget-body">
               <div class="timeline-progress">
-                <p class="timeline-txt">Level 1</p>
-                <p class="timeline-levelval"><i class="far fa-gem"></i><span>200/500</span></p>
-                <div class="progress-meter"><span style="width:40%"></span></div>
+                <p class="timeline-txt">Level <?=$level;?></p>
+                <?php if ($nextLevelPoint !== false) : ?>
+                <p class="timeline-levelval"><i class="far fa-gem"></i><span><?=number_format($point);?>/<?=number_format($nextLevelPoint);?></span></p>
+                <div class="progress-meter"><span style="width:<?=$point*100/$nextLevelPoint;?>%"></span></div>
+                <?php else : ?>
+                <p class="timeline-levelval"><i class="far fa-gem"></i><span><?=number_format($point);?></span></p>
+                <div class="progress-meter"><span style="width:100%"></span></div>
+                <?php endif;?>
               </div>
               <p class="mb-2">Achievements</p>
               <ul class="achievement-badge">
+                <?php if ($user->hasBadge(UserBadge::BADGE_PROFILE)) : ?>
                 <li><img src="/img/common/member.png" alt="image"></li>
+                <?php endif;?>
+                <?php if ($user->hasBadge(UserBadge::BADGE_COMPLAIN)) : ?>
+                <li><img src="/img/common/icon_review_dislike.png" alt="image"></li>
+                <?php endif;?>
+                <?php if ($user->hasBadge(UserBadge::BADGE_REVIEW)) : ?>
+                <li><img src="/img/forum/forum_icon_01.png" alt="image"></li>
+                <?php endif;?>
               </ul>
             </div>
           </div>
@@ -148,25 +99,25 @@ $user = Yii::$app->user->getIdentity();
             <div class="widget-title">RANKINGS</div>
             <div class="widget-body">
               <ul class="rankings-list">
-                <li><a class="trans" href="#"><span class="icon"><img src="/img/common/planet.png" alt="image"></span><span class="text">#196 in overall</span><i class="fas fa-chevron-right"></i></a></li>
+                <li><a class="trans" href="javascript:;"><span class="icon"><img src="/img/common/planet.png" alt="image"></span><span class="text">#<?=number_format($user->getRanking());?> in overall</span><i class="fas fa-chevron-right"></i></a></li>
               </ul>
             </div>
           </div>
           <div class="sidebar-col widget-box">
-            <div class="widget-title">USERNAME'S STATS</div>
+            <div class="widget-title"><?=sprintf("%s'S STATS", $user->username);?></div>
             <div class="widget-body">
               <ul class="stats-list">
                 <li>Member since
-                  <p class="text">March 29,2019</p>
+                  <p class="text"><?=date("F j, Y", strtotime($user->created_at));?></p>
                 </li>
                 <li>Level
-                  <p class="text">1</p>
+                  <p class="text"><?=$level;?></p>
                 </li>
-                <li>Badges
+                <!-- <li>Badges
                   <p class="text">1</p>
-                </li>
+                </li> -->
                 <li>Forum posts
-                  <p class="text">0</p>
+                  <p class="text"><?=number_format($user->countForumPost());?></p>
                 </li>
               </ul>
             </div>
@@ -210,6 +161,46 @@ uploadImage.callback = function(data) {
     toastr.error('No file');
   }
 };
+
+// Badget List
+var badgeListLoading = new AjaxPaging({
+  container: '.badge-list',
+  request_url: '$badgeUrl',
+  auto_first_load: true
+});
+$('#load-more-reivew').on('click', function() {
+  badgeListLoading.load();
+});
+$('#badge-all').on('click', function() {
+  badgeListLoading.reset({
+    condition: {}
+  });
+});
+$('#badge-complain').on('click', function() {
+  badgeListLoading.reset({
+    condition: {
+      badge: 'complain',
+    }
+  });
+});
+$('#badge-review').on('click', function() {
+  badgeListLoading.reset({
+    condition: {
+      badge: 'review',
+    }
+  });
+});
+$('#badge-profile').on('click', function() {
+  badgeListLoading.reset({
+    condition: {
+      badge: 'profile',
+    }
+  });
+});
+$('.tab-item').on('click', function(){
+  $('.tab-item').removeClass('active');
+  $(this).addClass('active');
+})
 JS;
 $uploadLink = Url::to(['image/ajax-upload']);
 $updateAvatarLink = Url::to(['profile/update-avatar']);

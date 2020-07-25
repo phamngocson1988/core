@@ -15,6 +15,7 @@ use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
 use frontend\models\Complain;
 use frontend\models\ComplainFollow;
+use frontend\models\UserBadge;
 
 
 class ProfileController extends Controller
@@ -36,7 +37,32 @@ class ProfileController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        
+        return $this->render('index', [
+            'badges' => $badges
+        ]);
+    }
+
+    public function actionBadge()
+    {
+        $request = Yii::$app->request;
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 10);
+        $command = UserBadge::find()
+        ->where(['user_id' => Yii::$app->user->id])
+        ->orderBy(['id' => SORT_DESC]);
+        $badge = $request->get('badge');
+        if ($badge) {
+            $command->andWhere(['badge' => $badge]);
+        }
+
+        $models = $command->all();
+        $total = $command->count();
+        $html = $this->renderPartial('badge', ['models' => $models]);
+        return $this->asJson(['status' => true, 'data' => [
+            'items' => $html,
+            'total' => $total
+        ]]);
     }
 
     public function actionFavorite()

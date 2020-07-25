@@ -12,6 +12,9 @@ use common\behaviors\UserOperatorReviewBehavior;
 use common\behaviors\UserComplainBehavior;
 use common\behaviors\UserSettingBehavior;
 use common\behaviors\UserForumBehavior;
+use common\behaviors\UserLogBehavior;
+use common\behaviors\UserPointBehavior;
+use common\behaviors\UserBadgeBehavior;
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -47,6 +50,9 @@ class User extends ActiveRecord implements IdentityInterface
             'complain' => UserComplainBehavior::className(),
             'setting' => UserSettingBehavior::className(),
             'forum' => UserForumBehavior::className(),
+            'log' => UserLogBehavior::className(),
+            'point' => UserPointBehavior::className(),
+            'badge' => UserBadgeBehavior::className(),
         ];
     }
 

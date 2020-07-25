@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\SluggableBehavior;
 use common\behaviors\ForumTopicBehavior;
 
 class ForumTopic extends ActiveRecord
@@ -22,6 +23,13 @@ class ForumTopic extends ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
+            ],
+            [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'slugAttribute' => 'slug',
+                'immutable' => true,
+                'ensureUnique'=>true,
             ],
             'reply' => ForumTopicBehavior::className(),
         ];
