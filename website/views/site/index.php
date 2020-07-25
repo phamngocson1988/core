@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 $setting = Yii::$app->settings;
+$affBanner = $setting->get('ApplicationSettingForm', 'affiliate_banner');
+$referBanner = $setting->get('ApplicationSettingForm', 'refer_banner');
 $gallery = [
     [
         'title' => $setting->get('GallerySettingForm', 'title1'),
@@ -111,15 +113,17 @@ $sideGallery = array_slice($gallery, -2);
     </div>
   </div>
 </div>
+<?php if ($affBanner) : ?>
 <div class="container mt-5">
   <div class="card-deck main-card">
     <div class="card" data-aos="zoom-in-down">
       <div class="media">
-        <img src="/images/ads.png" />
+        <img src="<?=$affBanner;?>" />
       </div>
     </div>
   </div>
 </div>
+<?php endif;?>
 <?=\website\widgets\FlashsaleWidget::widget();?>
 <!-- END container -->
 <div class="container mt-5">
@@ -192,15 +196,17 @@ $sideGallery = array_slice($gallery, -2);
   <!-- END POST SLIDER -->
 </div>
 <!-- END container -->
+<?php if ($referBanner) : ?>
 <div class="container mt-5">
   <div class="card-deck main-card">
     <div class="card">
       <div class="media">
-        <img src="/images/ads2.png" />
+        <img src="<?=$referBanner;?>" />
       </div>
     </div>
   </div>
 </div>
+<?php endif;?>
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-6">

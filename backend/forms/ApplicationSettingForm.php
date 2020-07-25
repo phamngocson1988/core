@@ -23,6 +23,9 @@ class ApplicationSettingForm extends Model
     public $desired_profit; 
     public $reseller_desired_profit; 
     public $logo;
+    public $affiliate_banner;
+    public $refer_banner;
+    public $kcoin_banner;
 
     public function init()
     {
@@ -40,6 +43,7 @@ class ApplicationSettingForm extends Model
             ['exchange_rate_cny', 'number'],
             [['logo', 'customer_service_email', 'supplier_service_email'], 'safe'],
             [['managing_cost_rate', 'investing_cost_rate', 'desired_profit', 'reseller_desired_profit'], 'number'],
+            [['affiliate_banner', 'refer_banner', 'kcoin_banner'], 'safe']
         ];
     }
 
@@ -62,6 +66,9 @@ class ApplicationSettingForm extends Model
             'desired_profit' => 'Lợi nhuận mong muốn',
             'reseller_desired_profit' => 'Lợi nhuận mong muốn từ nhà bán lẻ',
             'logo' => 'Logo',
+            'affiliate_banner' => 'Banner for affiliate',
+            'refer_banner' => 'Banner for Referral Friend',
+            'kcoin_banner' => 'Banner for KCoin',
             'accountant_email' => 'Email kế toán',
         ];
     }

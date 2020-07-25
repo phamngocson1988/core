@@ -6,6 +6,8 @@ use yii\bootstrap\ActiveForm;
 use website\widgets\LinkPager;
 use yii\widgets\Pjax;
 $user = Yii::$app->user->getIdentity();
+$setting = Yii::$app->settings;
+$kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/sidebar-ads.jpg');
 ?>
 <div class="container my-5 my-wallet">
   <div class="row">
@@ -132,9 +134,11 @@ $user = Yii::$app->user->getIdentity();
         </div>
       </div>
     </div>
+    <?php if ($kCoinBanner) : ?>
     <div class="col-md-4">
-      <img src="/images/sidebar-ads.jpg" />
+      <img src="<?=$kCoinBanner;?>" />
     </div>
+    <?php endif;?>
   </div>
 
   <!-- Transaction History Table -->
