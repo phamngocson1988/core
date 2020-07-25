@@ -48,7 +48,7 @@ class CreateTopicForumForm extends Model
             $post->save();
 
             $transaction->commit();
-            return $topic->id;
+            return $topic;
         } catch(Exception $e) {
             $transaction->rollback();
             $this->addError('id', $e->getMessage());

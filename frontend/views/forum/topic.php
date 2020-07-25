@@ -32,7 +32,7 @@ $user = Yii::$app->user->getIdentity();
             <div class="thread-main">
               <div class="thread-date">Posted <time datetime="<?=$post->created_at;?>"><?=date('F j, Y', strtotime($post->created_at));?></time></div>
               <div class="thread-content">
-                <?=$post->content;?>
+                <?=nl2br($post->content);?>
               </div>
               <div class="thread-reaction">
                 <?php if ($user) :?>

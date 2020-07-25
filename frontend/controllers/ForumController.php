@@ -69,9 +69,9 @@ class ForumController extends Controller
         $model = new \frontend\forms\CreateTopicForumForm([
         ]);
         if ($model->load($request->post())) {
-            if ($model->validate() && $newId = $model->create()) {
+            if ($model->validate() && $topic = $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                return $this->redirect(['forum/topic', 'id' => $newId]);
+                return $this->redirect(['forum/topic', 'id' => $topic->id, 'slug' => $topic->slug]);
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }

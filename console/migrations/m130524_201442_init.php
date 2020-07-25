@@ -60,12 +60,31 @@ class m130524_201442_init extends Migration
             'key' => $this->string(255)->notNull(),
             'value' => $this->text(),
         ], $tableOptions);
+
+        $this->createTable('{{%user_log}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'object' => $this->string(255), // which object
+            'action' => $this->string(255), // which action
+            'description' => $this->string(255), // detail
+            'created_at' => $this->integer(),
+        ], $tableOptions);
+
+        $this->createTable('{{%user_point}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'point' => $this->integer()->notNull()->defaultValue(0),
+            'description' => $this->string(255),
+            'created_at' => $this->integer(),
+        ], $tableOptions);
     }
 
     public function down()
     {
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%user_setting}}');
+        $this->dropTable('{{%user_log}}');
+        $this->dropTable('{{%user_point}}');
         $this->dropTable('{{%image}}');
         $this->dropTable('{{%file}}');
     }
