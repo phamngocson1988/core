@@ -20,6 +20,7 @@ use website\forms\AskEmailRequestForm;
 
 // models
 use website\models\Game;
+use website\models\HotNew;
 
 // events
 use website\events\SignupEventHandler;
@@ -87,10 +88,14 @@ class SiteController extends Controller
         $grossingCommand = new FetchGameForm(['top_grossing' => Game::TOP_GROSSING]);
         $grossingGames = $grossingCommand->getCommand()->orderBy(['updated_at' => SORT_DESC])->limit(2)->all();
 
+        // hotnew
+        $hotnews = HotNew::find()->limit(5)->orderBy(['id' => SORT_DESC])->all();
+
         return $this->render('index', [
             'hotGames' => $hotGames,
             'trendGames' => $trendGames,
             'grossingGames' => $grossingGames,
+            'hotnews' => $hotnews,
         ]);
     }
 

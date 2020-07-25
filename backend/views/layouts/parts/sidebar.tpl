@@ -329,6 +329,11 @@
           </li>
           {/if}
           <li class="nav-item  ">
+            <a href="{url route='/hotnew/index'}" class="nav-link " code='hotnew.index'>
+            <span class="title">What's hot news</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="{url route='/setting/top_notice'}" class="nav-link " code='setting.top_notice'>
             <span class="title">Thông báo ở đầu trang</span>
             </a>

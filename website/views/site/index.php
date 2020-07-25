@@ -350,6 +350,7 @@ $sideGallery = array_slice($gallery, -2);
   </div>
 </div>
 <!-- END container -->
+<?php if (count($hotnews)) :?>
 <div class="popular-products py-5 mt-5">
   <div class="container">
     <div class="row d-flex justify-content-between align-items-center">
@@ -360,56 +361,22 @@ $sideGallery = array_slice($gallery, -2);
       </div>
       <div class="col-md-9">
         <div class="card-group popular-products-slider" data-aos="fade-left" data-aos-duration="1000">
+          <?php foreach ($hotnews as $hotnew) : ?>
           <div class="card">
-            <a class="hover-img" href="#">
-            <img class="card-img-top" src="/images/post-item02.jpg" alt="">
+            <a class="hover-img" href="<?=$hotnew->link;?>" target="_blank">
+            <img class="card-img-top" src="<?=$hotnew->getImageUrl('500x500');?>" alt="">
             </a>
             <div class="card-body d-flex justify-content-between align-items-center">
-              <p class="mb-0 mr-2 card-text line-clamp-2">Some quick example text to build on the card title and make
-                up the bulk of the card's content.
+              <p class="mb-0 mr-2 card-text line-clamp-2"><?=$hotnew->title;?>
               </p>
-              <a href="#" class="btn">Learn more</a>
+              <a href="<?=$hotnew->link;?>" target="_blank" class="btn">Learn more</a>
             </div>
           </div>
-          <!-- End product item -->
-          <div class="card">
-            <a class="hover-img" href="#">
-            <img class="card-img-top" src="/images/post-item03.jpg" alt="">
-            </a>
-            <div class="card-body d-flex justify-content-between align-items-center">
-              <p class="mb-0 mr-2 card-text line-clamp-2">Some quick example text to build on the card title and make
-                up the bulk of the card's content.
-              </p>
-              <a href="#" class="btn">Learn more</a>
-            </div>
-          </div>
-          <!-- End product item -->
-          <div class="card">
-            <a class="hover-img" href="#">
-            <img class="card-img-top" src="/images/post-item02.jpg" alt="">
-            </a>
-            <div class="card-body d-flex justify-content-between align-items-center">
-              <p class="mb-0 mr-2 card-text line-clamp-2">Some quick example text to build on the card title and make
-                up the bulk of the card's content.
-              </p>
-              <a href="#" class="btn">Learn more</a>
-            </div>
-          </div>
-          <!-- End product item -->
-          <div class="card">
-            <a class="hover-img" href="#">
-            <img class="card-img-top" src="/images/post-item03.jpg" alt="">
-            </a>
-            <div class="card-body d-flex justify-content-between align-items-center">
-              <p class="mb-0 mr-2 card-text line-clamp-2">Some quick example text to build on the card title and make
-                up the bulk of the card's content.
-              </p>
-              <a href="#" class="btn">Learn more</a>
-            </div>
-          </div>
+          <?php endforeach;?>
           <!-- End product item -->
         </div>
       </div>
     </div>
   </div>
 </div>
+<?php endif;?>
