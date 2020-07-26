@@ -19,6 +19,8 @@ return [
 
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/dashboard' => 'manage/index',
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/<action>' => 'manage/<action>',
+
+        'member/<username>/dashboard' => 'member/index',
         '<controller>/<action>' => '<controller>/<action>',
     ],
 ];

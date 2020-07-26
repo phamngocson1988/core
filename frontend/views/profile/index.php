@@ -113,9 +113,9 @@ $badgeUrl = Url::to(['profile/badge']);
                 <li>Level
                   <p class="text"><?=$level;?></p>
                 </li>
-                <!-- <li>Badges
-                  <p class="text">1</p>
-                </li> -->
+                <li>Badges
+                  <p class="text"><?=number_format($user->countBadge());?></p>
+                </li>
                 <li>Forum posts
                   <p class="text"><?=number_format($user->countForumPost());?></p>
                 </li>

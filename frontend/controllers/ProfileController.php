@@ -37,9 +37,7 @@ class ProfileController extends Controller
 
     public function actionIndex()
     {
-        
         return $this->render('index', [
-            'badges' => $badges
         ]);
     }
 

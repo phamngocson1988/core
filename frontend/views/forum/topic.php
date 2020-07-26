@@ -13,7 +13,7 @@ $user = Yii::$app->user->getIdentity();
       <section class="section-thread-heading">
         <div class="heading-content"><a class="author-photo" href="javascript:;"><img src="<?=$creator->getAvatarUrl('150x150');?>" alt="<?=$creator->getName();?>"></a>
           <h1 class="thread-title"><a href="javascript:;"><?=$topic->subject;?></a></h1>
-          <div class="thread-info">By <a href="javascript:;"><?=$creator->getName();?></a>, <?=TimeElapsed::timeElapsed($topic->created_at);?></div>
+          <div class="thread-info">By <a href="<?=Url::to(['member/index', 'username' => $creator->username]);?>"><?=$creator->getName();?></a>, <?=TimeElapsed::timeElapsed($topic->created_at);?></div>
         </div>
         <div class="heading-button"><a class="btn btn-link" href="<?=Url::to(['forum/create']);?>">Start new topic</a><a class="btn btn-primary" href="#reply">Reply to this topic</a></div>
       </section>
@@ -23,10 +23,10 @@ $user = Yii::$app->user->getIdentity();
           <?php $sender = $post->sender;?>
           <li class="thread-row widget-box">
             <aside class="thread-panel">
-              <div class="author-name"><a href="javascript:;"><?=$sender->getName();?></a></div>
-              <div class="author-level">User Level 1</div><a class="author-photo" href="javascript:;"><img src="<?=$sender->getAvatarUrl('150x150');?>" alt="<?=$sender->getName();?>"></a>
+              <div class="author-name"><a href="<?=Url::to(['member/index', 'username' => $sender->username]);?>"><?=$sender->getName();?></a></div>
+              <div class="author-level">User Level <?=$sender->getLevel();?></div><a class="author-photo" href="javascript:;"><img src="<?=$sender->getAvatarUrl('150x150');?>" alt="<?=$sender->getName();?>"></a>
               <div class="author-type">Member</div>
-              <div class="author-point">115 Points</div>
+              <div class="author-point"><?=number_format($sender->totalPoint());?> Points</div>
               <div class="author-stat"><?=number_format($sender->countForumPost());?> posts</div>
             </aside>
             <div class="thread-main">
@@ -47,7 +47,7 @@ $user = Yii::$app->user->getIdentity();
                 <a class="like-btn <?=$isLike ? 'liked' : '';?>" href="<?=$isLike ? $dislikeLink : $likeLink;?>" data-like="<?=$likeLink;?>" data-dislike="<?=$dislikeLink;?>" data-username="<?=$user->username;?>"></a>
                 <?php endif;?>
                 <?php foreach ($firstUserLike as $firstUser) : ;?>
-                  <a href="javascript:;" data-post-id="<?=$post->id;?>" data-user-id="<?=$firstUser->id;?>"><?=$firstUser->username;?></a>
+                  <a href="<?=Url::to(['member/index', 'username' => $firstUser->username]);?>" data-post-id="<?=$post->id;?>" data-user-id="<?=$firstUser->id;?>"><?=$firstUser->username;?></a>
                 <?php endforeach;?>
                 <?php if ($remainingUserLike > 0) :?>
                 and <a href="javascript:;"><?=number_format($remainingUserLike);?> others</a> liked this

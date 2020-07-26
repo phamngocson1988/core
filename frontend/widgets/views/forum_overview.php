@@ -19,9 +19,9 @@ use yii\helpers\Url;
         if ($topic) : 
           $user = $topic->creator;
         ?>
-        <div class="post-item"><a class="post-author-photo" href="javascript:;"><img src="<?=$user->getAvatarUrl('34x34');?>" alt="<?=$user->getName();?>"></a>
+        <div class="post-item"><a class="post-author-photo" href="<?=Url::to(['member/index', 'username' => $user->username]);?>"><img src="<?=$user->getAvatarUrl('34x34');?>" alt="<?=$user->getName();?>"></a>
           <div class="post-title"><a href="<?=Url::to(['forum/topic', 'id' => $topic->id, 'slug' => $topic->slug]);?>" class="short-text"><?=$topic->subject;?></a></div>
-          <div class="post-author">By <a href="javascript:;"><?=$user->getName();?></a></div>
+          <div class="post-author">By <a href="<?=Url::to(['member/index', 'username' => $user->username]);?>"><?=$user->getName();?></a></div>
           <div class="post-date"><?=date("F j, Y", strtotime($topic->created_at));?></div>
         </div>
         <?php endif;?>

@@ -27,4 +27,14 @@ class UserBadgeBehavior extends AttributeBehavior
             'user_id' => $owner->id,
         ])->exists();
     }
+
+    public function countBadge($badge = null) 
+    {
+        $owner = $this->owner; // User
+        $command = UserBadge::find()->where(['user_id' => $owner->id]);
+        if ($badge) {
+            $command->andWhere(['badge' => $badge]);
+        }
+        return $command->count();
+    }
 }

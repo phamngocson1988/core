@@ -36,4 +36,9 @@ class ForumPost extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
+
+    public function getTopic()
+    {
+        return $this->hasOne(ForumTopic::className(), ['id' => 'topic_id']);
+    }
 }
