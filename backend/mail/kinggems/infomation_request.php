@@ -1,7 +1,8 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?=$user->name;?>,</P>
-    We would like to inform that Order <span style="color:#E95D2B">#<?=$order->id;?> :</span> To complete your order, kindly support us by clicking the button below and replying the information requested.
+    <p>Please be informed that you have received a request for additional information regarding order with details below:</p>
+    + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
   </td>
 </tr>
 <tr>

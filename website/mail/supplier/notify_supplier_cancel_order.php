@@ -1,7 +1,10 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     Dear <?=$user->name;?>,<br/>
-    Hoanggianapgame.com trân trọng thông báo: Đơn hàng #<?=$order->id;?> vừa nhận được <strong>"Yêu cầu hủy"</strong> từ khách hàng, vui lòng xem thêm chi tiết trên website.
+    <span style="color:#178186">Hoanggianapgame.com</span> xin thông báo<br/>
+    <p>Bạn nhận được yêu cầu huỷ đơn hàng từ khách hàng. </p>
+    + Mã đơn hàng: <span style="color:#178186"><?=$order->id;?></span><br/>
+    + Game: <?=$order->game_title;?><br/>
   </td>
 </tr>
 <tr>

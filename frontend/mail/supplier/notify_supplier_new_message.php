@@ -1,7 +1,11 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     Dear <?=$user->name;?>,<br/>
-    Hoanggianapgame.com trân trọng thông báo: Đơn hàng #<?=$order->id;?> vừa nhận được tin nhắn mới từ khách hàng, quý khách vui lòng kiểm tra mục <strong>"Phản hồi từ khách hàng"</strong> trong phần chi tiết đơn hàng.
+    <span style="color:#178186">Hoanggianapgame.com</span> xin thông báo:<br/>
+    <p>Bạn vừa nhận được phản hồi trợ giúp từ khách hàng, liên quan đến yêu cầu thông tin trước đó của đơn hàng</p>
+    + Mã đơn hàng: <span style="color:#178186"><?=$order->id;?></span><br/>
+    <p>Vui lòng kiểm tra tin nhắn và tiến hành đăng nhập tài khoản.</p>
+    <p>Đừng quên xác nhận đăng nhập thành công. Xin cảm ơn!</p>
   </td>
 </tr>
 <tr>

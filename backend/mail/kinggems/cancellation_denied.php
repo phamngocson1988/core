@@ -1,7 +1,12 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?=$order->customer_name;?>,</P>
-    We would like to inform that Order <span style="color:#E95D2B">#<?=$order->id;?> :</span> This order is being processed. Kindly wait until it’s completed.
+    We would like to inform that your order is being processed now.<br/>
+    + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
+    + Game: <?=$order->game_title;?><br/>
+    <p>Please wait until your order is informed as "Completed".</p>
+    <p>Thanks for your patience!</p>
+    <p>For checking status of order you may visit to tab: "My order" any time.</p>
   </td>
 </tr>
 <tr>
