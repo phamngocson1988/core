@@ -86,9 +86,10 @@ class AffiliateController extends Controller
             return $this->redirect(['affiliate/index']);
         }
         $model = new RegisterAffiliateForm(['user_id' => Yii::$app->user->id]);
+        $isRegisterSuccess = false;
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->register()) {
-                Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
+                $isRegisterSuccess = true;
             } else {
                 $message = $model->getErrorSummary(true);
                 $message = reset($message);
@@ -99,6 +100,7 @@ class AffiliateController extends Controller
         return $this->render('register',[
             'model' => $model,
             'sentRequest' => $user->hasPendingAffiliateRequest(),
+            'isRegisterSuccess' => (int)$isRegisterSuccess
         ]);
     }
 

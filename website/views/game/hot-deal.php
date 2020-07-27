@@ -16,19 +16,25 @@ use website\widgets\LinkPager;
         <?php endif;?>
         <span class="tag promotion">promotion</span>
         <?php if ($game->isBackToStock()) : ?>
-        <span class="tag bts">back to stock</span>
+        <span class="tag bts">event in-game</span>
         <?php endif;?>
       </div>
       <div class="post-content">
         <h4 class="post-title">
           <a href="<?=$viewUrl;?>"><?=$game->title;?></a>
         </h4>
+        <?php if ($game->hasCategory()) : ?>
         <div class="tags">
           <img src="/images/icon/tag.svg" />
-          <span class="badge badge-primary">action</span>
-          <span class="badge badge-primary">role-playing</span>
-          <span class="badge badge-primary">moba</span>
+          <?php $categories = array_slice($game->categories, 0, 3);?>
+          <?php foreach ($categories as $category) : ?>
+          <span class="badge badge-primary"><?=$category->name;?></span>
+          <?php endforeach; ?>
+          <?php if (count($game->categories) > 3) :?>
+          <span class="badge badge-primary">...</span>
+          <?php endif;?>
         </div>
+        <?php endif;?>
         <div class="d-flex justify-content-between align-items-center py-2">
           <div class="flex-fill value">
             <span class="num"><?=number_format($game->pack);?></span>

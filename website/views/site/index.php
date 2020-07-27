@@ -148,7 +148,7 @@ $sideGallery = array_slice($gallery, -2);
         <?php endif;?>
         <span class="tag promotion">promotion</span>
         <?php if ($game->isBackToStock()) : ?>
-        <span class="tag bts">back to stock</span>
+        <span class="tag bts">event in-game</span>
         <?php endif;?>
       </div>
       <div class="post-content">
@@ -158,9 +158,13 @@ $sideGallery = array_slice($gallery, -2);
         <?php if ($game->hasCategory()) : ?>
         <div class="tags">
           <img src="/images/icon/tag.svg" />
-          <?php foreach ($game->categories as $category) : ?>
+          <?php $categories = array_slice($game->categories, 0, 3);?>
+          <?php foreach ($categories as $category) : ?>
           <span class="badge badge-primary"><?=$category->name;?></span>
           <?php endforeach; ?>
+          <?php if (count($game->categories) > 3) :?>
+          <span class="badge badge-primary">...</span>
+          <?php endif;?>
         </div>
         <?php endif;?>
         <div class="d-flex justify-content-between align-items-center py-2">
@@ -231,7 +235,7 @@ $sideGallery = array_slice($gallery, -2);
               <?php endif;?>
               <span class="tag promotion">promotion</span>
               <?php if ($game->isBackToStock()) : ?>
-              <span class="tag bts">back to stock</span>
+              <span class="tag bts">event in-game</span>
               <?php endif;?>
             </div>
             <div class="post-content">
@@ -241,9 +245,13 @@ $sideGallery = array_slice($gallery, -2);
               <?php if ($game->hasCategory()) : ?>
               <div class="tags">
                 <img src="/images/icon/tag.svg" />
-                <?php foreach ($game->categories as $category) : ?>
+                <?php $categories = array_slice($game->categories, 0, 3);?>
+                <?php foreach ($categories as $category) : ?>
                 <span class="badge badge-primary"><?=$category->name;?></span>
                 <?php endforeach; ?>
+                <?php if (count($game->categories) > 3) :?>
+                <span class="badge badge-primary">...</span>
+                <?php endif;?>
               </div>
               <?php endif;?>
               <div class="d-flex justify-content-between align-items-center py-2">
@@ -299,7 +307,7 @@ $sideGallery = array_slice($gallery, -2);
               <?php endif;?>
               <span class="tag promotion">promotion</span>
               <?php if ($game->isBackToStock()) : ?>
-              <span class="tag bts">back to stock</span>
+              <span class="tag bts">event in-game</span>
               <?php endif;?>
             </div>
             <div class="post-content">
@@ -309,9 +317,13 @@ $sideGallery = array_slice($gallery, -2);
               <?php if ($game->hasCategory()) : ?>
               <div class="tags">
                 <img src="/images/icon/tag.svg" />
-                <?php foreach ($game->categories as $category) : ?>
+                <?php $categories = array_slice($game->categories, 0, 3);?>
+                <?php foreach ($categories as $category) : ?>
                 <span class="badge badge-primary"><?=$category->name;?></span>
                 <?php endforeach; ?>
+                <?php if (count($game->categories) > 3) :?>
+                <span class="badge badge-primary">...</span>
+                <?php endif;?>
               </div>
               <?php endif;?>
               <div class="d-flex justify-content-between align-items-center py-2">

@@ -124,7 +124,12 @@ $kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/
                     <?=$pending->payment_id;?>
                     <?php endif;?>
                   </td>
-                  <td><button type="button" class="btn btn-upload view-detail" data-id="<?=$pending->id;?>">Upload</button></td>
+                  <td>
+                    <button type="button" class="btn btn-upload view-detail" data-id="<?=$pending->id;?>">Upload</button>
+                    <?php if ($pending->evidence) : ?>
+                      <a href="<?=$pending->evidence;?>" target="_blank">View</a>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
@@ -191,7 +196,7 @@ $kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/
           <td><?=$transaction->payment_method;?></td>
           <td class="text-center"><span class="text-red"><?=number_format($transaction->total_coin);?> KC</span></td>
           <td class="text-center"><?=$transaction->status;?></td>
-          <td><a href="javascript:;" class="view-detail" data-id="<?=$transaction->id;?>" class="text-red" >View invoice</span></td>
+          <td><a href="javascript:;" class="view-detail" data-id="<?=$transaction->id;?>" class="text-red" >View invoice</a></td>
           <td><?=$transaction->payment_id;?></td>
           <td><?=$transaction->remark;?></td>
         </tr>

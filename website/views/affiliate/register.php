@@ -134,3 +134,29 @@ $this->title = 'Register Affiliate';
     </div>
   </div>
   <?php endif; ?>
+</div>
+<!-- Modal modelSuccess -->
+<div id="modelSuccess" class="modal fade">
+  <div class="modal-dialog modal-login ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title text-uppercase">Success</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        Thank you for interested in our services & your willing to join KingGems Network. We will contact you directly for further informations. Best Regards!
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Modal modelSuccess -->
+
+<?php
+$script = <<< JS
+var showPopup = $isRegisterSuccess;
+if (showPopup) {
+  $('#modelSuccess').modal('show');
+}
+JS;
+$this->registerJs($script);
+?>

@@ -67,7 +67,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             </div>
             <div class="d-flex bd-highlight">
               <div class="w-100 flex-fill">Status:</div>
-              <div class="w-100 flex-fill"><b><?=$model->isVisible() ? 'Available' : 'Inactive';?></b></div>
+              <div class="w-100 flex-fill"><b><?=$model->isSoldout() ? 'Out Stock' : 'In Stock';?></b></div>
             </div>
           </div>
         </div>
@@ -86,13 +86,6 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             </div>
           </div>
           <div class="col-md-4">
-            <!-- <div class="form-group">
-              <label for="exampleFormControlSelect3">Currency</label>
-              <select class="form-control" id="exampleFormControlSelect3">
-                <option>USD</option>
-                <option>CNY</option>
-              </select>
-            </div> -->
             <?= $form->field($model, 'currency')->dropdownList($model->fetchCurrency())->label('Quantity') ?>
           </div>
         </div>
@@ -105,7 +98,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
               'inputOptions' => ['class' => 'form-control', 'type' => 'number', 'id' => 'quantity', 'min' => 1]
             ])->textInput()->label('Quantity') ?>
           </div>
-          <?php if ($model->isSoldout()) :?>
+          <?php if (!$model->isSoldout()) :?>
           <div class="w-100 flex-fill p-2">
             <?php if (Yii::$app->user->isGuest) : ?>
             <a href="#modalLogin" class="btn btn-buy" data-toggle="modal">Buy now</a>
@@ -230,7 +223,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         <?php endif;?>
         <span class="tag promotion">promotion</span>
         <?php if ($game->isBackToStock()) : ?>
-        <span class="tag bts">back to stock</span>
+        <span class="tag bts">event in-game</span>
         <?php endif;?>
       </div>
       <div class="post-content">
@@ -240,9 +233,13 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         <?php if ($game->hasCategory()) : ?>
         <div class="tags">
           <img src="/images/icon/tag.svg" />
-          <?php foreach ($game->categories as $category) : ?>
+          <?php $categories = array_slice($game->categories, 0, 3);?>
+          <?php foreach ($categories as $category) : ?>
           <span class="badge badge-primary"><?=$category->name;?></span>
           <?php endforeach; ?>
+          <?php if (count($game->categories) > 3) :?>
+          <span class="badge badge-primary">...</span>
+          <?php endif;?>
         </div>
         <?php endif;?>
         <div class="d-flex justify-content-between align-items-center py-2">
