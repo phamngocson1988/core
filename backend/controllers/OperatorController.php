@@ -39,7 +39,7 @@ class OperatorController extends Controller
         $request = Yii::$app->request;
         $form = new FetchOperatorForm([
             'q' => $request->get('q'),
-            'status' => $request->get('status'),
+            'status' => $request->get('status', ''),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
