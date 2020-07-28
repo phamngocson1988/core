@@ -54,6 +54,8 @@ use yii\helpers\Url;
                 <td><?=ArrayHelper::getValue($gameCount, $model->id, 0);?></td>
                 <td>
                     <a href='<?=Url::to(["game-category/edit", "id" => $model->id]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
+
+                    <a href='<?=Url::to(["game-category/delete", "id" => $model->id]);?>' class="btn btn-xs grey-salsa delete"><i class="fa fa-close"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -64,3 +66,21 @@ use yii\helpers\Url;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$script = <<< JS
+// delete
+$('.delete').ajax_action({
+  method: 'DELETE',
+  confirm: true,
+  confirm_text: 'Bạn có muốn xóa danh mục game này không?',
+  callback: function(el, data) {
+    location.reload();
+    setTimeout(() => {  
+        location.reload();
+    }, 2000);
+    toastr.success(data.message); 
+  },
+});
+JS;
+$this->registerJs($script);
+?>

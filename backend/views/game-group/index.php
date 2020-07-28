@@ -73,6 +73,10 @@ use yii\web\JsExpression;
                 <td><?=$model->method;?></td>
                 <td><?=$model->version;?></td>
                 <td><?=$model->package;?></td>
+                <td class="left">
+                  <a href='<?=Url::to(['game-group/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <a href='<?=Url::to(['game-group/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>
+                </td>
               </tr>
               <?php endforeach;?>
           </tbody>
@@ -84,3 +88,21 @@ use yii\web\JsExpression;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$script = <<< JS
+// delete
+$('.delete').ajax_action({
+  method: 'DELETE',
+  confirm: true,
+  confirm_text: 'Bạn có muốn xóa nhóm game này không?',
+  callback: function(el, data) {
+    location.reload();
+    setTimeout(() => {  
+        location.reload();
+    }, 2000);
+    toastr.success(data.message); 
+  },
+});
+JS;
+$this->registerJs($script);
+?>

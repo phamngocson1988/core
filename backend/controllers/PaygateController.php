@@ -79,4 +79,14 @@ class PaygateController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionDelete($id)
+    {
+        $paygate = Paygate::findOne($id);
+        if ($paygate) {
+            $paygate->delete();
+        }
+        $name = $paygate ? $paygate->name : '';
+        return $this->asJson(['status' => true, 'data' => ['message' => sprintf("Bạn đã xoá cổng thanh toán %s thành công", $name)]]);
+    }
 }

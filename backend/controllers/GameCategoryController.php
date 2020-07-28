@@ -83,5 +83,25 @@ class GameCategoryController extends Controller
 
     }
 
-
+    public function actionDelete($id)
+    {
+        $category = GameCategory::findOne($id);
+        if ($category) {
+            $connection = Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $category->delete();
+                $games = GameCategoryItem::find()->where(['category_id' => $id])->all();
+                foreach ($games as $game) {
+                    $game->delete();
+                }
+                $transaction->commit();
+            } catch(Exception $e) {
+                $transaction->rollback();
+                return false;
+            }
+        }
+        $name = $category ? $category->name : '';
+        return $this->asJson(['status' => true, 'data' => ['message' => sprintf("Bạn đã xoá danh mục game %s thành công", $name)]]);
+    }
 }

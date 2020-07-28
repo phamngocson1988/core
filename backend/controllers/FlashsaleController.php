@@ -6,6 +6,8 @@ use backend\controllers\Controller;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use yii\helpers\Url;
+use backend\models\FlashSale;
+use backend\models\FlashSaleGame;
 
 class FlashsaleController extends Controller
 {
@@ -121,5 +123,27 @@ class FlashsaleController extends Controller
             'id' => $id,
             'model' => $model,
         ]);
+    }
+
+    public function actionDelete($id)
+    {
+        $flashsale = FlashSale::findOne($id);
+        if ($flashsale) {
+            $connection = Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $flashsale->delete();
+                $games = FlashSaleGame::find()->where(['flashsale_id' => $id])->all();
+                foreach ($games as $game) {
+                    $game->delete();
+                }
+                $transaction->commit();
+            } catch(Exception $e) {
+                $transaction->rollback();
+                return false;
+            }
+        }
+        $name = $flashsale ? $flashsale->title : '';
+        return $this->asJson(['status' => true, 'data' => ['message' => sprintf("Bạn đã xoá flash sale %s thành công", $name)]]);
     }
 }

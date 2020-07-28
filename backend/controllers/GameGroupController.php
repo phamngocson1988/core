@@ -5,6 +5,8 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use backend\models\GameGroup;
+use backend\models\Game;
 
 class GameGroupController extends Controller
 {
@@ -106,5 +108,31 @@ class GameGroupController extends Controller
         return $this->render('edit', [
             'model' => $model,
         ]);
+    }
+
+    public function actionDelete($id)
+    {
+        $group = GameGroup::findOne($id);
+        if ($group) {
+            $connection = Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $group->delete();
+                $games = Game::find()->where(['group_id' => $id])->all();
+                foreach ($games as $game) {
+                    $game->group_id = null;
+                    $game->method = null;
+                    $game->version = null;
+                    $game->package = null;
+                    $game->save();
+                }
+                $transaction->commit();
+            } catch(Exception $e) {
+                $transaction->rollback();
+                return false;
+            }
+        }
+        $name = $group ? $group->title : '';
+        return $this->asJson(['status' => true, 'data' => ['message' => sprintf("Bạn đã xoá nhóm game %s thành công", $name)]]);
     }
 }

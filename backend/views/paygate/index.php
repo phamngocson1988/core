@@ -63,6 +63,7 @@ use yii\widgets\ActiveForm;
                 <td class="left"><?=$model->isActive() ? 'Active' : 'Disabled';?></td>
                 <td class="left">
                   <a href='<?=Url::to(['paygate/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <a href='<?=Url::to(['paygate/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -79,9 +80,13 @@ $script = <<< JS
 $('.delete').ajax_action({
   method: 'DELETE',
   confirm: true,
-  confirm_text: 'Bạn có muốn xóa tin này không?',
-  callback: function(data) {
+  confirm_text: 'Bạn có muốn xóa cổng thanh toán này không?',
+  callback: function(el, data) {
     location.reload();
+    setTimeout(() => {  
+        location.reload();
+    }, 2000);
+    toastr.success(data.message); 
   },
 });
 JS;
