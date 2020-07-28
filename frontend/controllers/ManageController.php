@@ -28,7 +28,7 @@ class ManageController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'edit', 'update-avatar', 'reply-review', 'reply-complain', 'review', 'list-review', 'complain', 'list-complain'],
+                        'actions' => ['index', 'edit', 'update-avatar', 'reply-review', 'reply-complain', 'review', 'list-review', 'complain', 'my-complain', 'list-complain', 'list-my-complain', 'detail-complain'],
                         'allow' => true,
                         'roles' => ['admin', 'manager', 'moderator'],
                     ],
@@ -171,6 +171,48 @@ class ManageController extends Controller
         }
     }
 
+    public function actionMyComplain() 
+    {
+        $operator = $this->getOperator();
+        return $this->render('my-complain', ['operator' => $operator]);
+    }
+
+    public function actionListMyComplain()
+    {
+        $operator = $this->getOperator();
+        $request = Yii::$app->request;
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 10);
+        $command = Complain::find()->where([
+            'operator_id' => $operator->id,
+            'managed_by' => Yii::$app->user->id,
+        ])->offset($offset)->limit($limit);
+
+        if ($request->get('sort') == 'date') {
+            $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;
+            $command->orderBy(['created_at' => $type]);
+        }
+        $status = $request->get('status');
+        if ($status) {
+            $command->andWhere(["status" => $status]);
+        }
+
+        $complains = $command->all();
+        $total = $command->count();
+
+        $complainForm = new \frontend\forms\ReplyComplainForm();
+
+        $html = $this->renderPartial('list-complain', [
+            'operator' => $operator, 
+            'complains' => $complains, 
+            'complainForm' => $complainForm
+        ]);
+        return $this->asJson(['status' => true, 'data' => [
+            'items' => $html,
+            'total' => $total
+        ]]);
+    }
+
     public function actionComplain() 
     {
         $operator = $this->getOperator();
@@ -208,6 +250,25 @@ class ManageController extends Controller
             'items' => $html,
             'total' => $total
         ]]);
+    }
+
+    public function actionDetailComplain($id)
+    {
+        $request = Yii::$app->request;
+        $operator = $this->getOperator();
+        $complain = Complain::findOne($id);
+        $reason = $complain->reason;
+        $replies = $complain->replies;
+        $complainForm = new \frontend\forms\ReplyComplainForm();
+        return $this->render('detail-complain', [
+            'complain' => $complain,
+            'operator' => $operator,
+            'reason' => $reason,
+            'replies' => $replies,
+            'user' => $complain->user,
+            'complainForm' => $complainForm,
+            'canReply' => $complain->managed_by == Yii::$app->user->id
+        ]);
     }
 
     public function actionReplyComplain()

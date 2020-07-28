@@ -33,9 +33,9 @@ use common\components\helpers\TimeElapsed;
               <ul class="hero-nav">
                 <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
                 <li><a href="#detail"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Details</span></a></li>
-                <li><a href="#review"><i class="fa fa-comments"></i><span class="nav-text">Player Reviews (552)</span></a></li>
-                <li><a href="#bonus"><i class="fa fa-gift"></i><span class="nav-text">Bonuses (10)</span></a></li>
-                <li><a href="#complain"><i class="fa fa-thumbs-down"></i><span class="nav-text">Complaints (692)</span></a></li>
+                <li><a href="#review"><i class="fa fa-comments"></i><span class="nav-text">Player Reviews (<?=number_format($model->countReview());?>)</span></a></li>
+                <li><a href="#bonus"><i class="fa fa-gift"></i><span class="nav-text">Bonuses (<?=number_format($model->countBonus());?>)</span></a></li>
+                <li><a href="#complain"><i class="fa fa-thumbs-down"></i><span class="nav-text">Complaints (<?=number_format($model->totalComplain());?>)</span></a></li>
                 <!-- <li><a href="#"><i class="fa fa-newspaper"></i><span class="nav-text">News (22)</span></a></li> -->
               </ul>
             </div>

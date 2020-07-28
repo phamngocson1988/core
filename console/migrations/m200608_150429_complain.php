@@ -19,6 +19,7 @@ class m200608_150429_complain extends Migration
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
             'operator_id' => $this->integer()->notNull(),
+            'managed_by' => $this->integer(),
             'reason_id' => $this->integer()->notNull(),
             'title' => $this->string(255)->notNull(),
             'description' => $this->text()->notNull(),

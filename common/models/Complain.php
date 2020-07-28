@@ -68,4 +68,9 @@ class Complain extends ActiveRecord
     {
         return $this->hasMany(ComplainReply::className(), ['complain_id' => 'id']);
     }
+
+    public function hasManager()
+    {
+        return (boolean)$this->managed_by;
+    }
 }

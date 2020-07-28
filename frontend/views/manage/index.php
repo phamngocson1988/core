@@ -18,7 +18,7 @@ use common\components\helpers\TimeElapsed;
                   <ul class="list-tabs tabs-none">
                     <li><a class="trans" href="<?=Url::to(['manage/review', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Reviews (<?=number_format($operator->countReview());?>)</a></li>
                     <li><a class="trans" href="<?=Url::to(['manage/complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Complaints (<?=number_format($operator->totalComplain());?>)</a></li>
-                    <li><a class="trans" href="<?=Url::to(['manage/information', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Page information</a></li>
+                    <!-- <li><a class="trans" href="<?=Url::to(['manage/information', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Page information</a></li> -->
                   </ul>
                 </div>
               </div>

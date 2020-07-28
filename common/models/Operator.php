@@ -8,6 +8,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\behaviors\OperatorReviewBehavior;
 use common\behaviors\OperatorComplainBehavior;
+use common\behaviors\OperatorBonusBehavior;
 
 class Operator extends ActiveRecord
 {
@@ -43,6 +44,7 @@ class Operator extends ActiveRecord
             ],
             'operatorReview' => OperatorReviewBehavior::className(),
             'operatorComplain' => OperatorComplainBehavior::className(),
+            'operatorBonus' => OperatorBonusBehavior::className(),
         ];
     }
 
