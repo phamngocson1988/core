@@ -9,6 +9,7 @@ use yii\behaviors\TimestampBehavior;
 use common\behaviors\OperatorReviewBehavior;
 use common\behaviors\OperatorComplainBehavior;
 use common\behaviors\OperatorBonusBehavior;
+use common\behaviors\OperatorRoleBehavior;
 
 class Operator extends ActiveRecord
 {
@@ -45,6 +46,7 @@ class Operator extends ActiveRecord
             'operatorReview' => OperatorReviewBehavior::className(),
             'operatorComplain' => OperatorComplainBehavior::className(),
             'operatorBonus' => OperatorBonusBehavior::className(),
+            'operatorRole' => OperatorRoleBehavior::className(),
         ];
     }
 

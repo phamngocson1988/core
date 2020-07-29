@@ -52,8 +52,7 @@ body {
 /* COMMON HEADER
  * ----------------------------------------------- */
 .header {
-  /* background: #272b2f; */
-  background: #cc0000;
+  background: #272b2f;
   position: relative;
   z-index: 1000;
 }
@@ -3576,6 +3575,117 @@ body {
   font-size: 14px;
 }
 
+@media only screen and (min-width: 921px) {
+  .list-operator-col {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .list-operator-col .operator-col {
+    padding-left: 55px;
+    width: 71.3%;
+  }
+  .list-operator-col .operator-col:nth-child(2n+1) {
+    padding-left: 0;
+    width: 28.7%;
+  }
+  .list-operator-col .operator-col:nth-child(2n) .col-left {
+    min-width: 320px;
+  }
+}
+.list-operator-text {
+  margin: 0;
+  padding: 0;
+}
+.list-operator-text li {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.list-operator-text .col-left {
+  margin-right: 30px;
+  display: flex;
+  align-items: center;
+}
+.list-operator-text .label-icon {
+  margin-right: 10px;
+}
+.list-operator-text .label-icon i {
+  font-size: 1.5em;
+}
+.list-operator-text .text {
+  padding: 0 10px;
+}
+.list-operator-text .label-text {
+  font-weight: bold;
+}
+
+.review-form-comment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-right: 20px;
+}
+.review-form-comment label {
+  margin-bottom: 0;
+}
+.review-form-comment label input {
+  margin-right: 10px;
+}
+.review-form-comment .form-comment-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.review-form-comment .form-group {
+  width: 150px;
+  margin: 0 0 0 10px;
+}
+.review-form-comment .form-group select {
+  width: 100%;
+}
+
+.list-checkbox-review .form-check-label {
+  margin-right: 50px;
+}
+.list-checkbox-review .form-check-label:last-child {
+  margin-right: 0;
+}
+
+@media only screen and (max-width: 920px) {
+  .list-operator-col .operator-col:nth-child(2n) .col-left {
+    min-width: 320px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .list-operator-col .operator-col:nth-child(2n) {
+    display: block;
+  }
+  .list-operator-col .operator-col:nth-child(2n) .list-operator-text li {
+    display: block;
+  }
+  .list-operator-col .operator-col:nth-child(2n) .col-left {
+    min-width: 0;
+    display: block;
+  }
+
+  .review-form-comment {
+    display: block;
+  }
+  .review-form-comment .form-comment-left {
+    margin-bottom: 15px;
+  }
+  .review-form-comment .form-comment-right {
+    flex-wrap: nowrap;
+  }
+  .review-form-comment .form-comment-right .text {
+    flex: 0 0 80px;
+    width: 80px;
+  }
+  .review-form-comment .form-comment-right .form-group {
+    width: 100%;
+  }
+}
 .section-white {
   background: #fff;
 }

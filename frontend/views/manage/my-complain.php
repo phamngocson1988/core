@@ -29,6 +29,9 @@ use frontend\models\Complain;
                 <li><a class="trans" href="javascript:;" id='search-open'>Open cases (<?=number_format($operator->totalComplainOpen());?>)</a></li>
                 <li><a class="trans" href="javascript:;" id='search-resolve'>Resolved (<?=number_format($operator->totalComplainResolve());?>)</a></li>
                 <li><a class="trans" href="javascript:;" id='search-reject'>Rejected (<?=number_format($operator->totalComplainReject());?>)</a></li>
+                <?php if (Yii::$app->user->can('admin')) : ?>
+                <li><a class="trans" href="<?=Url::to(['manage/complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">All complaints</a></li>
+                <?php endif;?>
               </ul>
             </div>
           </div>

@@ -28,3 +28,14 @@ a.like-btn{
 .timeline-post .timeline-ttl {
   max-width: 100%;
 }
+
+.header {
+  background: #cc0000;
+}
+
+.disabled-link {
+  cursor: default;
+  pointer-events: none;        
+  text-decoration: none;
+  color: #212529;
+}

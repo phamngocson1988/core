@@ -32,7 +32,17 @@ class ManageController extends Controller
                         'allow' => true,
                         'roles' => ['admin', 'manager', 'moderator'],
                     ],
-                    
+                    [
+                        'actions' => ['assign-complain'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'assign-complain' => ['post'],
                 ],
             ],
         ];
@@ -202,7 +212,7 @@ class ManageController extends Controller
 
         $complainForm = new \frontend\forms\ReplyComplainForm();
 
-        $html = $this->renderPartial('list-complain', [
+        $html = $this->renderPartial('list-my-complain', [
             'operator' => $operator, 
             'complains' => $complains, 
             'complainForm' => $complainForm
@@ -282,6 +292,24 @@ class ManageController extends Controller
         ]);
         if ($model->load($request->post()) && $model->validate() && $model->add()) {
             return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'add_reply_success')]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
+    }
+
+    public function actionAssignComplain()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+
+        $model = new \frontend\forms\AssignComplainForm([
+            'user_id' => $request->post('user_id'),
+            'complain_id' => $request->post('complain_id')
+        ]);
+        if ($model->validate() && $model->assign()) {
+            return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'assign_complain_success')]]);
         } else {
             $message = $model->getErrorSummary(true);
             $message = reset($message);

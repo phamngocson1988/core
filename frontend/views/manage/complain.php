@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Url;
 use frontend\models\Complain;
+$currentUserId = Yii::$app->user->id;
+$assignComplainUrl = Url::to(['manage/assign-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
 ?>
 <main>
   <section class="section-profile-user">
@@ -29,19 +31,20 @@ use frontend\models\Complain;
                 <li><a class="trans" href="javascript:;" id='search-open'>Open cases (<?=number_format($operator->totalComplainOpen());?>)</a></li>
                 <li><a class="trans" href="javascript:;" id='search-resolve'>Resolved (<?=number_format($operator->totalComplainResolve());?>)</a></li>
                 <li><a class="trans" href="javascript:;" id='search-reject'>Rejected (<?=number_format($operator->totalComplainReject());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage/my-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Assigned To Me</a></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="widget-main">
           <div class="review-list">
+            
           </div>
         </div>
       </div>
     </div>
   </section>
 </main>
-
 <?php
 $script = <<< JS
 $('.review-list').on('click', '.reply-complain-button', function() {
@@ -63,7 +66,7 @@ $('.review-list').on('click', '.reply-complain-button', function() {
     },
   });
   return false;
-})
+});
 
 // Review List
 var reviewListLoading = new AjaxPaging({
@@ -116,6 +119,35 @@ $('#search-reject').on('click', function() {
     }
   });
 });
+
+// Assign complain to member
+$('.review-list').on('click', '.assign-to-me', function(e) {
+  e.preventDefault();
+  var complain_id = $(this).closest('article').data('id');
+  assignComplain($currentUserId, complain_id);
+  return false;
+});
+$('.review-list').on('change', '.assign-to-admin', function(e) {
+  e.preventDefault();
+  var complain_id = $(this).closest('article').data('id');
+  assignComplain($(this).val(), complain_id);
+  return false;
+});
+function assignComplain(user_id, complain_id) {
+  $.ajax({
+    url: '$assignComplainUrl',
+    type: 'POST',
+    dataType : 'json',
+    data: {user_id, complain_id},
+    success: function (result, textStatus, jqXHR) {
+      if (result.status == false) {
+        toastr.error(result.errors);
+      } else {
+        location.reload();
+      }
+    },
+  });
+}
 JS;
 $listReviewLink = Url::to(['manage/list-complain', 'operator_id' => $operator->id]);
 $script = str_replace('###REVIEWLIST###', $listReviewLink, $script);
