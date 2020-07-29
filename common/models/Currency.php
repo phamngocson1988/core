@@ -35,6 +35,6 @@ class Currency extends Model
     {
         if ($currency == 'USD') return $number;
         $key = sprintf('exchange_rate_%s', strtolower($currency));
-        return Yii::$app->settings->get('ApplicationSettingForm', $key);
+        return Yii::$app->settings->get('ApplicationSettingForm', $key) * $number;
     }
 }

@@ -82,9 +82,6 @@ class WalletPaymentForm extends Model
     {
         $paygate = $this->getPaygate();
         $subTotalPayment = $this->quantity;
-        if ($paygate->currency == 'CNY') {
-            $subTotalPayment = FormatConverter::convertCurrencyToCny($this->quantity);
-        }
         $totalPayment = $subTotalPayment;
         $promotion = $this->getPromotion();
         $bonusKingcoin = 0;

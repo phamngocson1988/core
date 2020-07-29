@@ -10,6 +10,7 @@ use yii\data\Pagination;
 // models
 use website\models\Paygate;
 use website\models\PaymentTransaction;
+use common\models\Currency;
 
 class WalletController extends Controller
 {
@@ -96,6 +97,14 @@ class WalletController extends Controller
 
         if ($form->validate()) {
             $calculate = $form->calculate();
+            $totalPayment = $calculate['totalPayment'];
+            $paygate = $form->getPaygate();
+            if ($paygate->currency != 'USD') {
+                $otherCurrencyTotal = Currency::convertUSDToCurrency($totalPayment, $paygate->currency);
+                $currencyModel = Currency::findOne($paygate->currency);
+                $otherCurrency = $currencyModel->addSymbolFormat(number_format($otherCurrencyTotal, 1));
+                $totalPayment = sprintf("%s (%s)", number_format($totalPayment), $otherCurrency);
+            }
             $data = [
                 'subTotalKingcoin' => number_format($calculate['subTotalKingcoin'], 1),
                 'bonusKingcoin' => number_format($calculate['bonusKingcoin'], 1),
@@ -103,8 +112,9 @@ class WalletController extends Controller
                 'subTotalPayment' => number_format($calculate['subTotalPayment'], 1),
                 'voucherApply' => number_format($calculate['voucherApply'], 1),
                 'transferFee' => number_format($calculate['transferFee'], 1),
-                'totalPayment' => number_format($calculate['totalPayment'], 1),
+                'totalPayment' => $totalPayment,
             ];
+            
             return $this->asJson(['status' => true, 'data' => $data]);
         } else {
             return $this->asJson(['status' => false, 'errors' => $form->getErrorSummary(true)]);
