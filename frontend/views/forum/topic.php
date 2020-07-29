@@ -40,12 +40,14 @@ $user = Yii::$app->user->getIdentity();
                 $isLike = $user->isLike($post->id);
                 $likeLink = Url::to(['forum/like', 'id' => $post->id]);
                 $dislikeLink = Url::to(['forum/dislike', 'id' => $post->id]);
-                $userLikes = $post->userLike;
-                $firstUserLike = array_slice($userLikes, 0, 2);
-                $remainingUserLike = count($userLikes) - 2;
                 ?>
                 <a class="like-btn <?=$isLike ? 'liked' : '';?>" href="<?=$isLike ? $dislikeLink : $likeLink;?>" data-like="<?=$likeLink;?>" data-dislike="<?=$dislikeLink;?>" data-username="<?=$user->username;?>"></a>
                 <?php endif;?>
+                <?php
+                $userLikes = $post->userLike;
+                $firstUserLike = (array)array_slice($userLikes, 0, 2);
+                $remainingUserLike = count($userLikes) - 2; 
+                ?>
                 <?php foreach ($firstUserLike as $firstUser) : ;?>
                   <a href="<?=Url::to(['member/index', 'username' => $firstUser->username]);?>" data-post-id="<?=$post->id;?>" data-user-id="<?=$firstUser->id;?>"><?=$firstUser->username;?></a>
                 <?php endforeach;?>
@@ -61,7 +63,7 @@ $user = Yii::$app->user->getIdentity();
           <h3 class="reply-title">Join the conversation</h3>
           <?php if (Yii::$app->user->isGuest) : ?>
           <div class="reply-desc">
-            <p>You can post now and register later. If you have an account, <a href="#modalLogin">sign in now</a> to post with your account.</p>
+            <p>You can post now and register later. If you have an account, <a href="#modalLogin" data-toggle="modal">sign in now</a> to post with your account.</p>
           </div>
           <?php else : ?>
           <?php $user = Yii::$app->user->getIdentity();?>
