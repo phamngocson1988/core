@@ -13,6 +13,10 @@ class Bonus extends ActiveRecord
     const STATUS_INACTIVE = 1;
     const STATUS_ACTIVE = 10;
 
+    const TYPE_WELCOME = 'welcome';
+    const TYPE_RELOAD = 'reload';
+    const TYPE_NODEPOSIT = 'no_deposit';
+
     public static function tableName()
     {
         return '{{%bonus}}';
@@ -48,6 +52,15 @@ class Bonus extends ActiveRecord
             self::STATUS_ACTIVE => Yii::t('app', 'active'),
             self::STATUS_INACTIVE => Yii::t('app', 'inactive'),
             self::STATUS_DELETED => Yii::t('app', 'disable'),
+        ];
+    }
+
+    public static function getTypeList()
+    {
+        return [
+            self::TYPE_WELCOME => 'Welcome Bonus',
+            self::TYPE_RELOAD => 'Reload Bonus',
+            self::TYPE_NODEPOSIT => 'No Deposit Bonus',
         ];
     }
 

@@ -62,11 +62,51 @@ use common\widgets\TinyMce;
                     'options' => ['rows' => 20]
                   ]);?>
 
+                  <?=$form->field($model, 'currency', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'slug form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchCurrency(), ['prompt' => Yii::t('app', 'choose_currency')]);?>
+
+                  <?=$form->field($model, 'bonus_type', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'slug form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchType(), ['prompt' => Yii::t('app', 'choose_type')]);?>
+
                   <?=$form->field($model, 'operator_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropdownList($model->fetchOperator(), ['prompt' => Yii::t('app', 'choose_operator')]);?>
+
+                  <?=$form->field($model, 'minimum_deposit', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'minimum_deposit', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(TinyMce::className(), [
+                    'options' => ['rows' => 20]
+                  ]);?>
+
+                  <?=$form->field($model, 'minimum_deposit_value', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'slug form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput();?>
+
+                  <?=$form->field($model, 'wagering_requirement', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'wagering_requirement', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(TinyMce::className(), [
+                    'options' => ['rows' => 20]
+                  ]);?>
+
+                  <?=$form->field($model, 'cashable', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'slug form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchCash(), ['prompt' => Yii::t('app', 'choose_status')]);?>
 
                   <?=$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

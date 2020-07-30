@@ -20,7 +20,13 @@ class m200523_105213_bonus extends Migration
             'title' => $this->string(255)->notNull(),
             'slug' => $this->string(255),
             'content' => $this->text(),
+            'currency' => $this->string(15),
             'operator_id' => $this->integer(),
+            'bonus_type' => $this->integer(),
+            'minimum_deposit' => $this->text(),
+            'minimum_deposit_value' => $this->float(),
+            'wagering_requirement' => $this->text(),
+            'cashable' => $this->boolean(),
             'image_id' => $this->integer(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'created_by' => $this->integer(),
@@ -28,6 +34,11 @@ class m200523_105213_bonus extends Migration
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $bonusTypeAlter = "ALTER TABLE {{%bonus}} MODIFY `bonus_type` ENUM('welcome', 'reload', 'no_deposit')";
+            $command = $this->db->createCommand($bonusTypeAlter);
+            $command->execute();
+        }
     }
 
     public function down()
