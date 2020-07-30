@@ -43,12 +43,12 @@ class UserController extends Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $model = new UpdateSecureProfileForm();
-        if ($model->load(Yii::$app->request->post()) && $model->update()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->update()) {
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id]);
         } else {
             $message = $model->getErrorSummary(true);
             $message = reset($message);
-            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $message, 'model' => 'asdfasdf']);
+            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $message, 'model' => $model->favourite]);
         }
     }
 

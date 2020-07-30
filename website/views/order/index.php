@@ -54,9 +54,8 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
           <td class="text-center">
             <?php if ($order->evidence) : ?>
             <a href='<?=$order->evidence;?>' target="_blank">View</a>
-            <?php else : ?>
-            <a href='<?=Url::to(['order/view', 'id' => $order->id]);?>' data-target="#paymentGame" data-toggle="modal" class="btn btn-upload">Upload</a>
             <?php endif;?>
+            <a href='<?=Url::to(['order/view', 'id' => $order->id]);?>' data-target="#paymentGame" data-toggle="modal" class="btn btn-upload">Upload</a>
           </td>
           <td class="text-center">
             <?php if ($order->request_cancel) : ?>

@@ -7,14 +7,22 @@ use yii\helpers\ArrayHelper;
 use common\models\Country;
 use website\models\Game;
 use website\models\UserFavorite;
+use website\forms\VerifyPhoneForm;
 
 class UpdateSecureProfileForm extends Model
 {
     public $firstname;
     public $lastname;
     public $phone;
+    public $code;
     public $country_code;
     public $favourite = [];
+    public $social_facebook;
+    public $social_twitter;
+    public $social_whatsapp;
+    public $social_telegram;
+    public $social_wechat;
+    public $social_other;
     protected $_user;
 
     public function rules()
@@ -22,8 +30,23 @@ class UpdateSecureProfileForm extends Model
         return [
             ['firstname', 'required'],
             ['lastname', 'required'],
-            [['favourite', 'phone', 'country_code'], 'safe']
+            [['favourite', 'phone', 'code', 'country_code'], 'trim'],
+            [['social_facebook', 'social_twitter', 'social_whatsapp', 'social_telegram', 'social_wechat', 'social_other'], 'trim'],
+            ['phone', 'validatePhone']
         ];
+    }
+
+    public function validatePhone($attribute, $params = [])
+    {
+        if (!$this->phone) return;
+        if (!$this->code) return;
+        $model = new VerifyPhoneForm();
+        $model->phone = $this->phone;
+        $model->code = $this->code;
+        $model->setScenario(VerifyPhoneForm::SCENARIO_VERIFY);
+        if (!$model->verify()) {
+            $this->addError($attribute, 'Security code is invalid');
+        }
     }
 
     public function update()
@@ -40,18 +63,25 @@ class UpdateSecureProfileForm extends Model
             }
             $user->firstname = $this->firstname;
             $user->lastname = $this->lastname;
-            $user->phone = $this->phone;
-            $user->country_code = $this->country_code;
+            // $user->phone = $this->phone;
+            // $user->country_code = $this->country_code;
+            $user->social_facebook = $this->social_facebook;
+            $user->social_twitter = $this->social_twitter;
+            $user->social_telegram = $this->social_telegram;
+            $user->social_whatsapp = $this->social_whatsapp;
+            $user->social_wechat = $this->social_wechat;
+            $user->social_other = $this->social_other;
             $user->save();
 
             // Game Favorite
             UserFavorite::deleteAll(['user_id' => $user->id]);
             foreach ((array)$this->favourite as $gameId) {
+                if (!$gameId) continue;
                 $favourite = new UserFavorite();
                 $favourite->user_id = $user->id;
                 $favourite->game_id = $gameId;
                 $favourite->save();
-            }
+            } 
             $transaction->commit();
             return true;
         } catch(Exception $e) {
@@ -77,6 +107,12 @@ class UpdateSecureProfileForm extends Model
         $this->lastname = $user->lastname;
         $this->phone = $user->phone;
         $this->country_code = $user->country_code;
+        $this->social_facebook = $user->social_facebook;
+        $this->social_twitter = $user->social_twitter;
+        $this->social_telegram = $user->social_telegram;
+        $this->social_whatsapp = $user->social_whatsapp;
+        $this->social_wechat = $user->social_wechat;
+        $this->social_other = $user->social_other;
         $this->favourite = ArrayHelper::getColumn($favourite, 'game_id');
     }
 

@@ -10,19 +10,61 @@ class SecureFormWidget extends Widget
 {
     public $formId = 'flash-secure-form';
     public $url = 'fullfill-profile.html';
+    public $phoneId = 'secure-phone-element';
+    public $buttonId = 'secure-phone-button';
 
     public function run()
     {
         $model = new UpdateSecureProfileForm();
         $model->loadForm();
         $this->registerClientScript();
-        return $this->render('secure', ['model' => $model, 'id' => $this->formId, 'url' => $this->url]);
+        return $this->render('secure', [
+            'model' => $model, 
+            'id' => $this->formId, 
+            'url' => $this->url,
+            'phoneId' => $this->phoneId,
+            'buttonId' => $this->buttonId,
+        ]);
+    }
+
+    protected function getRequestCodeUrl()
+    {
+        return Url::to(['profile/request-sms-code']);
+    }
+
+    protected function getVerifyCodeUrl()
+    {
+        return Url::to(['profile/verify-sms-code']);
     }
 
     protected function getScriptCode()
     {
         $id = $this->formId;
+        $phoneId = $this->phoneId;
+        $buttonId = $this->buttonId;
+        $requestSmsCodeUrl = $this->getRequestCodeUrl();
+        $verifySmsCodeUrl = $this->getVerifyCodeUrl();
         return "
+$('html').on('click', '#$buttonId', function() {
+    var phone = $('#$phoneId').val();
+    phone = phone.trim();
+    if (!phone) return;
+    $.ajax({
+        url: '$requestSmsCodeUrl',
+        type: 'post',
+        dataType : 'json',
+        data: {phone: phone},
+        success: function (result, textStatus, jqXHR) {
+            console.log(result);
+            if (result.status == false) {
+                toastr.error(result.errors);
+            } else {
+                toastr.success('A sms code has just sent to ' + phone);
+            }
+        },
+    });
+    return fasle;
+});
 $('html').on('submit', 'form#$id', function() {
     var form = $(this);
     $.ajax({
@@ -44,6 +86,12 @@ $('html').on('submit', 'form#$id', function() {
         },
     });
     return false;
+});
+$('form#$id .contact-apps>li>a').on('click', function(e) {
+    var platform = $(this).data('platform');
+    console.log(platform);
+    $('form#$id .platform').addClass('d-none');
+    $('#' + platform).removeClass('d-none');
 });
 ";
     }
