@@ -55,7 +55,7 @@ if ($canSaler) $numColumn += 1;
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET']);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['order/pending-information'])]);?>
         <div class="row margin-bottom-10">
             <?=$form->field($search, 'id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],

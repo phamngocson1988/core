@@ -66,7 +66,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET']);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['order/confirmed'])]);?>
         <div class="row margin-bottom-10">
             <?php $customer = $search->getCustomer();?>
             <?=$form->field($search, 'q', [
