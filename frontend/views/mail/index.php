@@ -1,6 +1,7 @@
 <?php 
 use yii\helpers\Url;
 use common\components\helpers\TimeElapsed;
+$loadThreadUrl = Url::to(['mail/list-thread'])
 ?>
 <main>
   <div class="section-user-message-wrapper">
@@ -19,28 +20,16 @@ use common\components\helpers\TimeElapsed;
         <div class="block-main widget-box">
           <div class="box-title widget-head">
             <div class="head-text">Messages</div>
-            <!-- <div class="head-button">
+            <div class="head-button">
               <div class="dropdown">
                 <div class="btn btn-sm dropdown-toggle" id="dropdown-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <input type="checkbox">
+                  <!-- <input type="checkbox"> -->
                 </div>
-                <div class="dropdown-menu" aria-labelledby="dropdown-select"><a class="dropdown-item" href="#">All</a><a class="dropdown-item" href="#">None</a></div>
+                <div class="dropdown-menu" aria-labelledby="dropdown-select"><a class="dropdown-item" href="javascript:;" id="sort-desc">SORT DESC</a><a class="dropdown-item" href="javascript:;" id="sort-asc">SORT ASC</a></div>
               </div>
-            </div> -->
+            </div>
           </div>
           <ul class="list-message" id="js-list-message">
-            <?php foreach ($threads as $thread) : ?>
-            <li id="thread<?=$thread->id;?>">
-              <div class="col-avatar"><a class="user-photo" href="javascript:;"><img src="<?=$thread->sender->getAvatarUrl('50x50');?>" alt="Username"></a></div>
-              <div class="col-content">
-                <div class="message-title"><a class="mailthread-item" href="<?=Url::to(['mail/view', 'id' => $thread->id]);?>"><?=$thread->subject;?></a></div>
-                <div class="message-info">
-                  <div class="sender"><a href="#"><?=$thread->sender->username;?></a></div>
-                  <div class="date"><?=TimeElapsed::timeElapsed($thread->updated_at);?></div>
-                </div>
-              </div>
-            </li>
-            <?php endforeach;?>
           </ul>
         </div>
       </aside>
@@ -55,10 +44,11 @@ use common\components\helpers\TimeElapsed;
 </main>
 <?php 
 $script = <<< JS
-$('#js-list-message>li').on('click', function(){
-  $(this).find('.mailthread-item').trigger('click');
-});
-$(".mailthread-item").on('click', function(e) {
+// $('#js-list-message').on('click', 'li', function(){
+//   $(this).find('.mailthread-item').trigger('click');
+// });
+$("#js-list-message").on('click', '.mailthread-item', function(e) {
+  e.preventDefault();
   $.ajax({
     url: $(this).attr('href'),
     type: 'get',
@@ -85,11 +75,36 @@ $('#js-message-main').on('submit', 'form#reply-form', function(e) {
               return false;
             } else {
               toastr.success(result.data.message);
-              $('#thread' + result.data.id).trigger('click');
+              $('#js-list-message #thread' + result.data.id + ' .mailthread-item').trigger('click');
             }
         },
     });
     return false;
+});
+
+// threads
+var threadListLoading = new AjaxPaging({
+  container: '#js-list-message',
+  request_url: '$loadThreadUrl',
+  limit: 50,
+  auto_first_load: true
+});
+// $('#load-more-reivew').on('click', function() {
+//   threadListLoading.load();
+// });
+$('#sort-desc').on('click', function() {
+  threadListLoading.reset({
+    condition: {
+      sort: 'desc',
+    }
+  });
+});
+$('#sort-asc').on('click', function() {
+  threadListLoading.reset({
+    condition: {
+      sort: 'asc',
+    }
+  });
 });
 JS;
 $this->registerJs($script);

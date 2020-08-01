@@ -35,11 +35,11 @@ class MailController extends Controller
 
     public function actionIndex()
     {
-        $form = new \frontend\forms\FetchMailBoxForm([
-            'user_id' => Yii::$app->user->id
-        ]);
-        $command = $form->getCommand();
-        $threads = $command->limit(50)->all();
+        // $form = new \frontend\forms\FetchMailBoxForm([
+        //     'user_id' => Yii::$app->user->id
+        // ]);
+        // $command = $form->getCommand();
+        // $threads = $command->limit(50)->all();
         $user = Yii::$app->user->getIdentity();
         $numberofMail = $user->countEmail();
         $limitMail = $user->getLimitEmail();
@@ -48,7 +48,7 @@ class MailController extends Controller
         }
         $percent = min(round($numberofMail * 100 / $limitMail), 100); 
         return $this->render('index', [
-            'threads' => $threads,
+            // 'threads' => $threads,
             'numberofMail' => $numberofMail,
             'percent' => $percent,
         ]);
@@ -70,6 +70,32 @@ class MailController extends Controller
         return $this->render('compose', [
             'model' => $model,
         ]);
+    }
+
+    public function actionListThread()
+    {
+        $request = Yii::$app->request;
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 50);
+
+        $form = new \frontend\forms\FetchMailBoxForm([
+            'user_id' => Yii::$app->user->id
+        ]);
+        $command = $form->getCommand();
+        $sort = $request->get('sort', 'desc');
+        if ($sort == 'asc') {
+            $command->orderBy(['updated_at' => SORT_ASC]);
+        } else {
+            $command->orderBy(['updated_at' => SORT_DESC]);
+        }
+        $models = $command->all();
+        $total = $command->count();
+        $html = $this->renderPartial('list-thread', ['models' => $models]);
+        return $this->asJson(['status' => true, 'data' => [
+            'items' => $html,
+            'total' => $total
+        ]]);
+
     }
 
     public function actionView($id)

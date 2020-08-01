@@ -30,7 +30,6 @@ class FetchMailBoxForm extends Model
                ]);
                 break;
         }
-        $command->orderBy(['updated_at' => SORT_DESC]);
         $this->_command = $command;
     }
 
