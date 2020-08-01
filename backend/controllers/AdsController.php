@@ -77,7 +77,7 @@ class AdsController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate() && $model->update()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
-                return $this->redirect(['post/index']);
+                return $this->redirect(['ads/index']);
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }

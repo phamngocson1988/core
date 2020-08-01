@@ -5,7 +5,7 @@ use common\components\helpers\TimeElapsed;
 <main>
   <div class="section-keyvisual">
     <div class="container">
-      <a class="trans delineation" href="#"><img class="object-fit" src="/img/top/delineation_bnr_01.jpg" alt="image"></a>
+      <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_TOPHOME]);?>
       <?=\frontend\widgets\NewsBannerWidget::widget();?>
     </div>
   </div>
@@ -87,7 +87,8 @@ use common\components\helpers\TimeElapsed;
         <div class="col-md-12 col-lg-3 col-lrg-2">
           <?=\frontend\widgets\ComplainByOperatorWidget::widget();?>
         </div>
-      </div><a class="delineation large trans" href="#"><img class="object-fit" src="/img/top/delineation_bnr_02.jpg" alt="image"></a>
+      </div>
+      <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_BANNERHOME]);?>
     </div>
   </section>
 </main>

@@ -49,9 +49,9 @@ class Ads extends ActiveRecord
     public static function getPositionList()
     {
         return [
-            self::POSITION_TOPHOME => 'Top home',
-            self::POSITION_BANNERHOME => 'Home banner',
-            self::POSITION_SIDEBAR => 'Sidebar',
+            self::POSITION_TOPHOME => 'Top home (1260x60)',
+            self::POSITION_BANNERHOME => 'Bottom home (1260x100)',
+            self::POSITION_SIDEBAR => 'Sidebar (220x700)',
         ];
     }
 
@@ -73,5 +73,16 @@ class Ads extends ActiveRecord
     {
         $list = self::getPositionList();
         return ArrayHelper::getValue($list, $this->status);
+    }
+
+    public function isValid()
+    {
+        if ($this->status != self::STATUS_ACTIVE) return false;
+        $now = strtotime('now');
+        $start = strtotime($this->start_date);
+        $end = strtotime($this->end_date);
+        if ($now < $start) return false;
+        if ($now > $end) return false;
+        return true;
     }
 }

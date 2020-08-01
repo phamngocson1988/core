@@ -4,14 +4,14 @@ use yii\helpers\Url;
 <main>
   <div class="section-keyvisual">
     <div class="container">
-      <a class="trans delineation" href="#"><img class="object-fit" src="/img/top/delineation_bnr_01.jpg" alt="image"></a>
+      <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_TOPHOME]);?>
       <?=\frontend\widgets\NewsBannerWidget::widget();?>
     </div>
   </div>
   <section class="section-news section-white">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title">OPERATOR NEWS</h2><a class="btn btn-primary trans" href="#">SEE ALL<i class="fas fa-chevron-right"></i></a>
+        <h2 class="sec-title">OPERATOR NEWS</h2><a class="btn btn-primary trans" href="javascrip:;">Operator</a>
       </div>
       <div class="row">
         <?php foreach ($operatorNews as $post) : ?>

@@ -1,0 +1,1 @@
+<a class="trans delineation" href="<?=$model->link;?>" target="_blank"><img class="object-fit" src="<?=$model->getImageUrl('1260x60');?>" alt="image"></a>

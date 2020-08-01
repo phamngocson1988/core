@@ -15,6 +15,10 @@ return [
         'register' => 'site/register',
         'activate' => 'site/activate',
         'operator/<id:\d+>-<slug:[\w\-]+>' => 'operator/view',
+
+        'news' => 'news/index',
+        'news/category/<id:\d+>-<slug:[\w\-]+>' => 'news/category',
+        'news/operator/<id:\d+>-<slug:[\w\-]+>' => 'news/operator',
         'news/<id:\d+>-<slug:[\w\-]+>' => 'news/view',
 
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/dashboard' => 'manage/index',

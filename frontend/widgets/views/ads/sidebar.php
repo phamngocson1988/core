@@ -1,0 +1,1 @@
+<div class="sidebar-delineation"><a class="trans" href="<?=$model->link;?>"><img src="<?=$model->getImageUrl('220x700');?>" target="_blank" alt="image"></a></div>

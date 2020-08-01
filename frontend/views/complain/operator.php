@@ -41,7 +41,7 @@ use frontend\widgets\LinkPager;
           <div class="sidebar-category sidebar-col">
             <?=\frontend\widgets\ComplainByReasonWidget::widget();?>
           </div>
-          <div class="sidebar-delineation"><a class="trans" href="#"><img src="../img/operators/img_01.jpg" alt="image"></a></div>
+          <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_SIDEBAR]);?>
         </aside>
       </div>
     </div>

@@ -52,7 +52,7 @@ class EditAdsForm extends Model
     
     public function update()
     {
-        $ads = new Ads();
+        $ads = $this->getAds();
         $ads->title = $this->title;
         $ads->link = $this->link;
         $ads->media_id = $this->media_id;
