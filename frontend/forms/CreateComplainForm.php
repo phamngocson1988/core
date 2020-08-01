@@ -75,6 +75,7 @@ class CreateComplainForm extends Model
             $operator = $this->getOperator();
             $user->addBadge(UserBadge::BADGE_COMPLAIN, $complain->id, sprintf("%s - %s", $operator->name, $complain->title));
         }
+        return $complain;
     }
 
     public function fetchReason()

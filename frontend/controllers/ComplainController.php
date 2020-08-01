@@ -12,6 +12,7 @@ use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use frontend\models\Complain;
+use frontend\models\ComplainFile;
 use frontend\models\Operator;
 
 class ComplainController extends Controller
@@ -50,7 +51,15 @@ class ComplainController extends Controller
             'operator_id' => $request->get('operator_id')
         ]);
         if ($model->load($request->post())) {
-            if ($model->validate() && $model->create()) {
+            if ($model->validate() && $complain = $model->create()) {
+                $files = Yii::$app->file->upload('attachFile', "complain/$complain->id", true);
+                if ($files) {
+                    $inputFile = reset($files);
+                    $attach = new ComplainFile();
+                    $attach->complain_id = $complain->id;
+                    $attach->file_id = $inputFile['secure_url'];
+                    $attach->save();
+                }
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['site/index']);
             } else {

@@ -55,6 +55,19 @@ $this->title = sprintf("Complain - %s", $complain->title);
                   </div>
                   <div class="content"><a href="#"><?=$reason->title;?></a></div>
                 </li>
+                <?php if ($complain->files) : ?>
+                <li>
+                  <div class="label">
+                    <div class="label-icon"><i class="fa fa-paperclip"></i></div>
+                    <div class="label-text">Attached file</div>
+                  </div>
+                  <div class="content">
+                    <?php foreach ($complain->files as $file) : ?>
+                    <a href="<?=$file->file_id;?>" target="_blank">Attach File</a>
+                    <?php endforeach;?>
+                  </div>
+                </li>
+                <?php endif;?>
                 <!-- <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-dollar-sign"></i></div>

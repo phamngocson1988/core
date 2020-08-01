@@ -9,7 +9,7 @@ $this->title = 'Leave complain';
       <h1 class="sec-title">Having trouble with an operator? We’re here to help!</h1>
       <div class="sec-content">
         <div class="mod-column form-complaints">
-          <?php $form = ActiveForm::begin(['action' => Url::to(['complain/create'])]); ?>
+          <?php $form = ActiveForm::begin(['action' => Url::to(['complain/create']), 'options' => ["enctype" => "multipart/form-data"]]); ?>
           <div class="widget-box mb-5 p-3 p-md-4">
             <p class="text-uppercase mb-2">SELECT AN OPTION THAT BEST DESCRIBES THE ISSUE</p>
             <?= $form->field($model, 'reason_id', [
@@ -37,7 +37,7 @@ $this->title = 'Leave complain';
               <div class="row">
                 <div class="col-lg-4">
                   <div class="file-upload">
-                    <input id="inputGroupFile01" type="file">
+                    <input id="inputGroupFile01" name="attachFile" type="file">
                     <label for="inputGroupFile01"><i class="fas fa-paperclip"></i><span>ATTACH FILES</span></label>
                   </div>
                 </div>
