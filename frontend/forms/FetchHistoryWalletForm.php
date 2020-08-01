@@ -15,9 +15,10 @@ class FetchHistoryWalletForm extends UserWallet
     {
         return [
             ['user_id', 'required'],
-            ['start_date', 'default', 'value' => date('Y-m-01')],
-            ['end_date', 'default', 'value' => date('Y-m-d')],
-            [['type', 'status'], 'trim']
+            // ['start_date', 'default', 'value' => date('Y-m-01')],
+            // ['end_date', 'default', 'value' => date('Y-m-d')],
+            [['type', 'status'], 'trim'],
+            [['start_date', 'end_date'], 'safe'],
         ];
     }
 

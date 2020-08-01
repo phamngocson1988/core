@@ -283,8 +283,8 @@ class UserController extends Controller
         $promotion = $request->get('pro');
         $filter = [
             'user_id' => Yii::$app->user->id,
-            'start_date' => $request->get('start_date', $firstOfMonth),
-            'end_date' => $request->get('end_date', $today),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'type' => $request->get('type'),
             'status' => $request->get('status'),
         ];
