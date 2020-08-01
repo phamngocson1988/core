@@ -62,12 +62,8 @@ class m130524_201442_init extends Migration
         ], $tableOptions);
 
         $this->createTable('{{%user_log}}', [
-            'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
-            'object' => $this->string(255), // which object
-            'action' => $this->string(255), // which action
-            'description' => $this->string(255), // detail
-            'created_at' => $this->integer(),
+            'last_activity' => $this->dateTime(),
         ], $tableOptions);
 
         $this->createTable('{{%user_point}}', [

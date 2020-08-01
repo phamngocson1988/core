@@ -15,6 +15,7 @@ use common\behaviors\UserForumBehavior;
 use common\behaviors\UserLogBehavior;
 use common\behaviors\UserPointBehavior;
 use common\behaviors\UserBadgeBehavior;
+use common\behaviors\UserMailBehavior;
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -53,6 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
             'log' => UserLogBehavior::className(),
             'point' => UserPointBehavior::className(),
             'badge' => UserBadgeBehavior::className(),
+            'mail' => UserMailBehavior::className(),
         ];
     }
 

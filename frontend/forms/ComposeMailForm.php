@@ -36,7 +36,8 @@ class ComposeMailForm extends Model
     {
         $user = $this->getReceiver();
         if (!$user) {
-            $this->addError($attribute, 'Receiver is not exist.');
+            $this->addError($attribute, 'Receiver is not exist in system.');
+            return;
         }
     }
 

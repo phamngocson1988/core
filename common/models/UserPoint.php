@@ -25,32 +25,6 @@ class UserPoint extends ActiveRecord
         ];
     }
 
-    // public static function definedLevel()
-    // {
-    //     return [
-    //         0 => 'I’m Still Exploring',
-    //         1 => 'Novice Gambler',
-    //         2 => 'Experienced Gambler',
-    //         3 => 'Solid Gambler',
-    //         4 => 'Ultimate Gambler',
-    //         5 => 'Bet Guru',
-    //         6 => 'God of Gamblers',
-    //     ];
-    // }
-
-    // public static function definedStar()
-    // {
-    //     return [
-    //         0 => 0,
-    //         500 => 1,
-    //         2500 => 2,
-    //         5000 => 3,
-    //         10000 => 4,
-    //         15000 => 5,
-    //         25000 => 6,
-    //     ];
-    // }
-
     public static function definedLevelPoint()
     {
         return [

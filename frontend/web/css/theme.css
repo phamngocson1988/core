@@ -39,3 +39,7 @@ a.like-btn{
   text-decoration: none;
   color: #212529;
 }
+
+.help-block-error {
+  color: red;
+}

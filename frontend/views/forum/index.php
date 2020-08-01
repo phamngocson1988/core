@@ -14,9 +14,13 @@ use common\components\helpers\TimeElapsed;
         <?php foreach ($sections as $section) : ?>
         <?=\frontend\widgets\ForumOverviewWidget::widget(['section' => $section]);?>
         <?php endforeach;?>
+        <?=\frontend\widgets\WhoOnlineWidget::widget();?>
       </section>
     </div>
+    <aside class="forum-sidebar">
     <?=\frontend\widgets\ForumSidebarWidget::widget();?>
+    <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_SIDEBAR]);?>
+    </aside>
   </div>
 </main>
 <?php 

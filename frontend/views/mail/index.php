@@ -4,12 +4,12 @@ use common\components\helpers\TimeElapsed;
 ?>
 <main>
   <div class="section-user-message-wrapper">
-    <!-- <section class="section-user-storage">
+    <section class="section-user-storage">
       <div class="block-storage">
-        <div class="progress-meter"><span style="width:40%"></span></div>
-        <div class="progress-text">Used 0% message storage</div>
+        <div class="progress-meter"><span style="width:<?=$percent;?>%"></span></div>
+        <div class="progress-text">Used <?=$percent;?>% message storage</div>
       </div>
-    </section> -->
+    </section>
     <section class="section-user-message container">
       <aside class="sec-sidebar">
         <div class="block-header">

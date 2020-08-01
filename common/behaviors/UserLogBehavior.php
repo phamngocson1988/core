@@ -8,14 +8,20 @@ use common\models\UserLog;
 
 class UserLogBehavior extends AttributeBehavior
 {
-    public function log($object, $action = '', $description = '') 
+    public function getLastActivity()
     {
         $owner = $this->owner; // User
-        $log = new UserLog();
-        $log->user_id = $owner->id;
-        $log->object = $object;
-        $log->action = $action;
-        $log->description = $description;
-        return $log->save();
+        return $owner->hasOne(UserLog::className(), ['user_id' => 'id']);
+    }
+    public function logLastActivity() 
+    {
+        $owner = $this->owner; // User
+        $log = $owner->lastActivity;
+        if (!$log ) {
+            $log = new UserLog(['user_id' => $owner->id]);
+            $log->save();
+        } else {
+            $log->touch('last_activity');
+        }
     }
 }

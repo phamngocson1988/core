@@ -12,15 +12,25 @@ class UserLog extends ActiveRecord
         return '{{%user_log}}';
     }
 
+    public static function primaryKey()
+    {
+        return ['user_id'];
+    }
+
     public function behaviors()
     {
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => false,
+                'createdAtAttribute' => 'last_activity',
+                'updatedAtAttribute' => 'last_activity',
                 'value' => date('Y-m-d H:i:s')
             ],
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

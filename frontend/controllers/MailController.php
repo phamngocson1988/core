@@ -40,8 +40,17 @@ class MailController extends Controller
         ]);
         $command = $form->getCommand();
         $threads = $command->limit(50)->all();
+        $user = Yii::$app->user->getIdentity();
+        $numberofMail = $user->countEmail();
+        $limitMail = $user->getLimitEmail();
+        if ($limitMail < $numberofMail) {
+            Yii::$app->session->setFlash('warning', 'You have reached limit quota.');
+        }
+        $percent = min(round($numberofMail * 100 / $limitMail), 100); 
         return $this->render('index', [
-            'threads' => $threads
+            'threads' => $threads,
+            'numberofMail' => $numberofMail,
+            'percent' => $percent,
         ]);
     }
 
