@@ -58,6 +58,17 @@ class AddOperatorReviewForm extends Model
     {
         $user = $this->getUser();
         $operator = $this->getOperator();
+
+        $subscribedItems = OperatorReview::find()->where([
+            'operator_id' => $this->operator_id,
+            'notify_register' => 1
+        ])->with('user')->all();
+        $emailSubscribers = [];
+        foreach ($subscribedItems as $item) {
+            $user = $item->user;
+            $emailSubscribers[] = $user->email;
+        }
+
         $review = new OperatorReview();
         $review->user_id = $this->user_id;
         $review->operator_id = $this->operator_id;
@@ -68,6 +79,13 @@ class AddOperatorReviewForm extends Model
         $review->experience = $this->experience;
         $user->addBadge(UserBadge::BADGE_REVIEW, $user->id, sprintf("%s - %s stars", $operator->name, $review->star));
         $user->plusPoint(100, sprintf("New review for %s", $operator->name));
+        if (count($emailSubscribers)) {
+            Yii::$app->mailer->compose('notify_new_review_operator', ['operator' => $operator])
+            ->setTo($emailSubscribers)
+            ->setFrom(['bw2020@support.com' => 'BW2020 Customer Service'])
+            ->setSubject(sprintf("New Operator Review - %s", $operator->name))
+            ->send();
+        }
         return $review->save();
     }
 

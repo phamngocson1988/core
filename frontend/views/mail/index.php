@@ -19,6 +19,14 @@ use common\components\helpers\TimeElapsed;
         <div class="block-main widget-box">
           <div class="box-title widget-head">
             <div class="head-text">Messages</div>
+            <!-- <div class="head-button">
+              <div class="dropdown">
+                <div class="btn btn-sm dropdown-toggle" id="dropdown-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <input type="checkbox">
+                </div>
+                <div class="dropdown-menu" aria-labelledby="dropdown-select"><a class="dropdown-item" href="#">All</a><a class="dropdown-item" href="#">None</a></div>
+              </div>
+            </div> -->
           </div>
           <ul class="list-message" id="js-list-message">
             <?php foreach ($threads as $thread) : ?>
