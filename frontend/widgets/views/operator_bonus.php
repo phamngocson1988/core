@@ -12,14 +12,19 @@ use yii\helpers\Url;
           <div class="bonuses-image"><img class="object-fit" src="<?=$bonus->getImageUrl('400x220');?>" alt="image"></div>
           <div class="bonuses-body">
             <h3 class="bonuses-title"><?=$bonus->title;?></h3>
-            <p class="bonuses-desc">WELCOME BONUS</p>
+            <p class="bonuses-desc"><?=$bonus->getType();?></p>
           </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
         </div>
         <div class="bonuses-back">
           <div class="bonuses-icon fas fa-close js-close"></div>
           <div class="bonuses-body">
             <h3 class="bonuses-title"><?=$bonus->title;?></h3>
-            <p class="bonuses-desc"><?=$bonus->content;?></p>
+            <p class="bonuses-desc">
+              Type: <?=$bonus->getType();?><br>
+              Bonus Value: $150<br>
+              Minimum Deposit: <?=$bonus->minimum_deposit;?><br>
+              Wagering Requirement: <?=$bonus->wagering_requirement;?>
+            </p>
           </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
         </div>
       </div>

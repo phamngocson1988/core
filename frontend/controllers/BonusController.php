@@ -39,7 +39,10 @@ class BonusController extends Controller
 
     public function actionIndex()
     {
-        $form = new \frontend\forms\FetchBonusForm();
+        $request = Yii::$app->request;
+        $form = new \frontend\forms\FetchBonusForm([
+            'bonus_type' => $request->get('bonus_type')
+        ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $bonuses = $command->offset($pages->offset)

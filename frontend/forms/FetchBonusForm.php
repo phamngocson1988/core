@@ -11,7 +11,7 @@ use frontend\models\Operator;
 class FetchBonusForm extends Model
 {
     public $operator_id;
-    public $status;
+    public $bonus_type;
 
     private $_command;
     
@@ -19,7 +19,7 @@ class FetchBonusForm extends Model
     {
         return [
             'operator' => Yii::t('app', 'operator'),
-            'status' => Yii::t('app', 'status'),
+            'bonus_type' => Yii::t('app', 'bonus_type'),
         ];
     }
     protected function createCommand()
@@ -29,8 +29,8 @@ class FetchBonusForm extends Model
         if ($this->operator_id) {
             $command->andWhere(['operator_id' => $this->operator_id]);
         }
-        if ($this->status) {
-            $command->andWhere(['status' => $this->status]);
+        if ($this->bonus_type) {
+            $command->andWhere(['bonus_type' => $this->bonus_type]);
         }
         $this->_command = $command;
     }
@@ -52,5 +52,10 @@ class FetchBonusForm extends Model
     public function fetchStatus()
     {
         return Bonus::getStatusList();
+    }
+
+    public function fetchType()
+    {
+        return Bonus::getTypeList();
     }
 }

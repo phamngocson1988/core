@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -81,5 +82,11 @@ class Bonus extends ActiveRecord
             return $image->getUrl($size);
         }
         return $default;
+    }
+
+    public function getType()
+    {
+        $list = self::getTypeList();
+        return ArrayHelper::getValue($list, $this->bonus_type);
     }
 }

@@ -72,7 +72,7 @@ class Ads extends ActiveRecord
     public function getPosition()
     {
         $list = self::getPositionList();
-        return ArrayHelper::getValue($list, $this->status);
+        return ArrayHelper::getValue($list, $this->position);
     }
 
     public function isValid()

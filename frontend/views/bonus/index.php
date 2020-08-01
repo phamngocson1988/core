@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use frontend\widgets\LinkPager;
+use yii\bootstrap\ActiveForm;
 ?>
 <main>
   <section class="section-module">
@@ -10,14 +11,17 @@ use frontend\widgets\LinkPager;
       </div>
       <div class="sec-content">
         <div class="mod-column">
+          <?php $form = ActiveForm::begin(['method' => 'get', 'action' => Url::to(['bonus/index'])]); ?>
           <div class="widget-box bonus-total">
-            <select class="form-control">
-              <option value="All">ALL</option>
-              <option value="FIRST DEPOSIT BONUS">FIRST DEPOSIT BONUS</option>
-              <option value="SECOND DEPOSIT BONUS">SECOND DEPOSIT BONUS</option>
-            </select>
+            <?= $form->field($search, 'bonus_type', [
+              'options' => ['tag' => false],
+              'template' => '{input}',
+              'inputOptions' => ['name' => 'bonus_type', 'class' => 'form-control']
+            ])->dropdownList($search->fetchType(), ['prompt' => 'Select bonus type'])->label(false);?>
             <div class="total-text text-right">TOTAL <?=number_format($total);?> ACTIVE BONUSES</div>
           </div>
+          
+          <?php ActiveForm::end();?>
           <div class="row">
             <?php foreach ($bonuses as $bonus) :?>
             <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
@@ -27,14 +31,19 @@ use frontend\widgets\LinkPager;
                   <div class="bonuses-image"><img class="object-fit" src="<?=$bonus->getImageUrl('400x220');?>" alt="image"></div>
                   <div class="bonuses-body">
                     <h3 class="bonuses-title"><?=$bonus->title;?></h3>
-                    <p class="bonuses-desc">WELCOME BONUS</p>
+                    <p class="bonuses-desc"><?=$bonus->getType();?></p>
                   </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
                 </div>
                 <div class="bonuses-back">
                   <div class="bonuses-icon fas fa-close js-close"></div>
                   <div class="bonuses-body">
                     <h3 class="bonuses-title"><?=$bonus->title;?></h3>
-                    <p class="bonuses-desc">Type: Welcome Bonus<br>Bonus Value: $150<br>Minimum Deposit: $15<br>Wagering Requirement: 15x</p>
+                    <p class="bonuses-desc">
+                      Type: <?=$bonus->getType();?><br>
+                      Bonus Value: $150<br>
+                      Minimum Deposit: <?=$bonus->minimum_deposit;?><br>
+                      Wagering Requirement: <?=$bonus->wagering_requirement;?>
+                    </p>
                   </div><a class="btn btn-primary" href="<?=Url::to(['bonus/view', 'id' => $bonus->id]);?>">GET BONUS</a>
                 </div>
               </div>
@@ -113,3 +122,8 @@ use frontend\widgets\LinkPager;
     </div>
   </section>
 </main>
+<?php 
+$script = <<< JS
+JS;
+$this->registerJs($script);
+?>
