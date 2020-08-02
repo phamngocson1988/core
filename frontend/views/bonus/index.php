@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 ?>
 <main>
   <section class="section-module">
-    <div class="container"><a class="trans delineation" href="#"><img class="object-fit" src="../img/top/delineation_bnr_01.jpg" alt="image"></a>
+    <div class="container">
       <div class="heading-group">
         <h1 class="sec-title">LATEST BONUSES</h1>
       </div>

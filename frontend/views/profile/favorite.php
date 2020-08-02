@@ -2,6 +2,8 @@
 use yii\helpers\Url;
 use common\components\helpers\TimeElapsed;
 $user = Yii::$app->user->getIdentity();
+$level = $user->getLevel();
+$point = $user->totalPoint();
 ?>
 <main>
   <section class="section-profile-user">
@@ -20,16 +22,16 @@ $user = Yii::$app->user->getIdentity();
           <div class="heading-left d-flex col-md-3 col-lg-4 order-md-1 p-0">
             <div class="level d-flex">
               <div class="text-uppercase">Level</div>
-              <div class="level-number">1</div>
+              <div class="level-number"><?=$level;?></div>
             </div>
             <div class="point d-flex">
               <div class="text-uppercase">POINTS</div>
-              <div class="point-number">200</div>
+              <div class="point-number"><?=number_format($point);?></div>
             </div>
           </div>
           <div class="heading-right col-md-3 col-lg-4 order-md-3 p-0">
             <ul class="profile-link">
-              <li class="favorites"><a class="trans" href="<?=Url::to(['profile/favorite']);?>"><span>FAVORITES</span><i class="fas fa-star"></i></a></li>
+              <li class="favorites"><a class="trans" href="<?=Url::to(['profile/index']);?>"><span>MY PROFILE</span> <i class="far fa-user-circle"></i></a></li>
               <li class="edit-profile"><a class="trans" href="<?=Url::to(['profile/setting']);?>"><span>EDIT PROFILE</span><i class="fas fa-user"></i></a></li>
             </ul>
           </div>

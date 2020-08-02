@@ -28,10 +28,11 @@ class AddOperatorReviewForm extends Model
             [['user_id', 'operator_id', 'star'], 'required'],
             ['user_id', 'validateUser'],
             ['operator_id', 'validateOperator'],
-            [['good_thing', 'bad_thing'], 'trim'],
+            [['good_thing', 'bad_thing'], 'required'],
             ['star', 'number', 'max' => 10, 'min' => 1],
             [['notify_register', 'experience'], 'boolean', 'trueValue' => true, 'falseValue' => false],
             [['notify_register', 'experience'], 'default', 'value' => false],
+            ['experience', 'validateExperience']
         ];
     }
 
@@ -43,6 +44,13 @@ class AddOperatorReviewForm extends Model
         }
         if ($user->isReview($this->operator_id)) {
             $this->addError($attribute, Yii::t('app', 'you_reviewed_operator'));
+        }
+    }
+
+    public function validateExperience($attribute, $params = []) 
+    {
+        if (!$this->experience) {
+            $this->addError($attribute, 'You have to confirm that this review is base on your own experience');
         }
     }
 

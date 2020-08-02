@@ -214,7 +214,7 @@ use common\components\helpers\TimeElapsed;
               <div class="rate-main">
                 <div class="user-photo"><img src="/img/common/avatar_img_02.png" alt="Username"></div>
                 <div class="rate-content">
-                  <div class="rate-label">Rate Henderson &amp; Bench and write a review</div>
+                  <div class="rate-label">Rate <?=$model->name;?> and write a review</div>
                   <div class="rate-star">
                     <div class="star-group">
                       <?php for ($i = 0; $i < 10; $i++) : ?>
@@ -249,7 +249,7 @@ use common\components\helpers\TimeElapsed;
             <div class="formrv-header">
               <div class="user-photo"><img src="<?=$user->getAvatarUrl('50x50');?>" alt="Username"></div>
               <div class="rate-content">
-                <div class="rate-label">Rate Henderson &amp; Bench and write a review</div>
+                <div class="rate-label">Rate <?=$model->name;?> and write a review</div>
                 <div class="rate-star">
                   <div class="star-group">
                     <?php for ($i = 0; $i < 10; $i++) : ?>
@@ -281,19 +281,26 @@ use common\components\helpers\TimeElapsed;
                 ])->textArea()->label(false);?>
               </div>
               <div class="formrv-options">
-                <?= $form->field($reviewForm, 'notify_register', [
-                  'options' => ['class' => 'formrv-check'],
-                  'template' => '{input}',
-                  'inputOptions' => ['class' => 'form-check-input', 'id' => 'review-option-1'],
-                  'labelOptions' => ['class' => 'form-check-label']
-                ])->checkbox()->label('Notify me about new player reviews on this page.');?>
-
-                <?= $form->field($reviewForm, 'experience', [
-                  'options' => ['class' => 'formrv-check'],
-                  'template' => '{input}',
-                  'inputOptions' => ['class' => 'form-check-input', 'id' => 'review-option-2'],
-                  'labelOptions' => ['class' => 'form-check-label']
-                ])->checkbox()->label('I declare that my review is based on my own experience and represents my genuine opinion of this operator.');?>
+                <div class="formrv-check">
+                  <label class="form-check-label">
+                    <?= $form->field($reviewForm, 'notify_register', [
+                      'options' => ['tag' => false],
+                      'template' => '{input}',
+                      'inputOptions' => ['class' => 'form-check-input', 'id' => 'review-option-1'],
+                    ])->checkbox(['class' => 'form-check-input'], false);?>
+                    <span>Notify me about new player reviews on this page.</span>
+                  </label>
+                </div>
+                <div class="formrv-check">
+                  <label class="form-check-label">
+                    <?= $form->field($reviewForm, 'experience', [
+                      'options' => ['tag' => false],
+                      'template' => '{input}',
+                      'inputOptions' => ['class' => 'form-check-input', 'id' => 'review-option-2'],
+                    ])->checkbox(['class' => 'form-check-input'], false);?>
+                    <span>I declare that my review is based on my own experience and represents my genuine opinion of this operator.</span>
+                  </label>
+                </div>
               </div>
               <div class="formrv-button">
                 <button class="btn btn-primary btn-lg" type="submit">Post my review</button>

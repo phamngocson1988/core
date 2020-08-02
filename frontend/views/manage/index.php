@@ -85,7 +85,7 @@ $complainLink = Yii::$app->user->can('admin')
                   <div class="review-content">
                     <div class="review-date">Complained on <span><?=date("F j, Y", strtotime($complain->created_at));?></span></div>
                     <div class="review-complaint-heading">
-                      <h3 class="complaint-title"><?=$complain->title;?></h3>
+                      <h3 class="complaint-title"><a href="<?=Url::to(['manage/detail-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'id' => $complain->id]);?>" class="disabled-link"><?=$complain->title;?></a></h3>
                       <div class="complaint-status"><i class="fa fa-exclamation-circle"></i> <?=ucfirst($complain->status);?> Case (<?=TimeElapsed::timeElapsed($complain->created_at);?>)</div>
                     </div>
                     <div class="review-complaint-info">
@@ -98,13 +98,6 @@ $complainLink = Yii::$app->user->can('admin')
                           </div>
                           <div class="content"><a href="javascript:;"><?=$reason->title;?></a></div>
                         </li>
-                        <!-- <li>
-                          <div class="label">
-                            <div class="label-icon"><i class="fas fa-dollar-sign"></i></div>
-                            <div class="label-text">Amount</div>
-                          </div>
-                          <div class="content">VND 1,500,000</div>
-                        </li> -->
                       </ul>
                     </div>
                     <div class="review-text">
@@ -127,17 +120,20 @@ $complainLink = Yii::$app->user->can('admin')
                       </div>
                       <?php endforeach;?>
                     </div>
-                    <div class="review-reply">
+                    <!-- <div class="review-reply">
                       <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-complain', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-complain-form']); ?>
                       <?= $form->field($complainForm, 'description', [
                         'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']
                       ])->textArea()->label(false);?>
-                      <?= $form->field($complainForm, 'mark_close', [
-                        'options' => ['class' => 'form-group form-check'],
-                        'template' => '{input}{label}',
-                        'inputOptions' => ['class' => 'form-check-input'],
-                        'labelOptions' => ['class' => 'form-check-label']
-                      ])->checkbox()->label('Mark to close this case');?>
+                      <div class="form-group form-check">
+                        <label class="form-check-label">
+                          <?= $form->field($complainForm, 'mark_close', [
+                            'options' => ['tag' => false],
+                            'template' => '{input}',
+                          ])->checkbox(['class' => 'form-check-input'], false);?>
+                          <span>Mark to close this case</span>
+                        </label>
+                      </div>
 
                       <?= $form->field($complainForm, 'operator_id', [
                         'options' => ['tag' => false],
@@ -149,7 +145,7 @@ $complainLink = Yii::$app->user->can('admin')
                         <button class="btn btn-primary" type="submit">Post my reply</button>
                       </div>
                       <?php ActiveForm::end();?>
-                    </div>
+                    </div> -->
                   </div>
                 </article>
                 <?php endif;?>

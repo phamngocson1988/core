@@ -20,7 +20,7 @@ $currentUserId = Yii::$app->user->id;
   <div class="review-content">
     <div class="review-date">Complained on <span><?=date("F j, Y", strtotime($complain->created_at));?></span></div>
     <div class="review-complaint-heading">
-      <h3 class="complaint-title"><a href="<?=Url::to(['manage/detail-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'id' => $complain->id]);?>"><?=$complain->title;?></a></h3>
+      <h3 class="complaint-title"><a href="<?=Url::to(['manage/detail-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'id' => $complain->id]);?>" class="disabled-link"><?=$complain->title;?></a></h3>
       <div class="complaint-status"><i class="fa fa-exclamation-circle"></i> <?=ucfirst($complain->status);?> Case (<?=TimeElapsed::timeElapsed($complain->created_at);?>)</div>
     </div>
     <div class="review-complaint-info">

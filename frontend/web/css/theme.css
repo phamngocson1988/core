@@ -33,9 +33,9 @@ a.like-btn{
   background: #cc0000;
 }
 
-.disabled-link {
-  cursor: default;
-  pointer-events: none;        
+.disabled-link, .disabled-link:hover{
+  /*cursor: default;*/
+  /*pointer-events: none;        */
   text-decoration: none;
   color: #212529;
 }

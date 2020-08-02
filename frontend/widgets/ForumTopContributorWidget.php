@@ -12,9 +12,13 @@ class ForumTopContributorWidget extends Widget
     public function run()
     {
     	$report = [];
+        $year = date('Y-01-01 00:00:00');
+        $week = date('Y-m-d 00:00:00', strtotime('monday this week'));
+        $month = date('Y-m-01 00:00:00');
     	// this week
     	$weekRecords = UserPoint::find()
-    	->select(['user_id', 'week(created_at) as report_week', 'sum(point) sumpoint'])
+    	->select(['user_id', 'week(created_at) as report_week', 'year(created_at) as report_year', 'sum(point) sumpoint'])
+        ->where(['>=', 'created_at', $week])
     	->groupBy(['user_id', 'report_week'])
     	->orderBy(['sumpoint' => SORT_DESC])
     	->asArray()
@@ -30,7 +34,8 @@ class ForumTopContributorWidget extends Widget
 
     	// this month
     	$monthRecords = UserPoint::find()
-    	->select(['user_id', 'month(created_at) as report_month', 'sum(point) sumpoint'])
+    	->select(['user_id', 'month(created_at) as report_month', 'year(created_at) as report_year', 'sum(point) sumpoint'])
+        ->where(['>=', 'created_at', $month])
     	->groupBy(['user_id', 'report_month'])
     	->orderBy(['sumpoint' => SORT_DESC])
     	->asArray()
@@ -41,12 +46,13 @@ class ForumTopContributorWidget extends Widget
     	$monthUsers = User::find()->where(['in', 'id', $monthUserIds])->indexBy('id')->all();
     	foreach ($monthPoints as $userId => $point) {
     		$report['month'][$userId]['point'] = $point;
-    		$report['month'][$userId]['user'] = ArrayHelper::getValue($weekUsers, $userId);
+    		$report['month'][$userId]['user'] = ArrayHelper::getValue($monthUsers, $userId);
     	}
 
     	// this year
     	$yearRecords = UserPoint::find()
     	->select(['user_id', 'year(created_at) as report_year', 'sum(point) sumpoint'])
+        ->where(['>=', 'created_at', $year])
     	->groupBy(['user_id', 'report_year'])
     	->orderBy(['sumpoint' => SORT_DESC])
     	->asArray()
@@ -57,7 +63,7 @@ class ForumTopContributorWidget extends Widget
     	$yearUsers = User::find()->where(['in', 'id', $yearUserIds])->indexBy('id')->all();
     	foreach ($yearPoints as $userId => $point) {
     		$report['year'][$userId]['point'] = $point;
-    		$report['year'][$userId]['user'] = ArrayHelper::getValue($weekUsers, $userId);
+    		$report['year'][$userId]['user'] = ArrayHelper::getValue($yearUsers, $userId);
     	}
 
     	// this all
@@ -73,10 +79,8 @@ class ForumTopContributorWidget extends Widget
     	$allUsers = User::find()->where(['in', 'id', $allUserIds])->indexBy('id')->all();
     	foreach ($allPoints as $userId => $point) {
     		$report['all'][$userId]['point'] = $point;
-    		$report['all'][$userId]['user'] = ArrayHelper::getValue($weekUsers, $userId);
+    		$report['all'][$userId]['user'] = ArrayHelper::getValue($allUsers, $userId);
     	}
-
-
         return $this->render('forum_topcontributor', [
 
         	'report' => $report

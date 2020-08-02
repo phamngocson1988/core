@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\TimeElapsed;
 $this->title = sprintf("Complain - %s", $complain->title);
+$currentUser = Yii::$app->user->getIdentity();
 ?>
 <main>
   <section class="section-module">
@@ -14,8 +15,8 @@ $this->title = sprintf("Complain - %s", $complain->title);
             <div class="hero-name-sm"><?=$operator->name;?></div>
             <h1 class="hero-title"><?=$complain->title;?></h1>
             <div class="hero-buttons">
-            <?php if ($user) : ?>
-            <?php $isFollow = $user->isFollow($complain->id);?>
+            <?php if ($currentUser) : ?>
+            <?php $isFollow = $currentUser->isFollow($complain->id);?>
               <a class="btn btn-outline-light <?= $isFollow ? '' : 'd-none' ;?>" id="unfollow-complain" href="<?=Url::to(['complain/unfollow', 'id' => $complain->id]);?>">Unfollow <i class="fa fa-star-o"></i></a>
               <a class="btn btn-outline-light <?= $isFollow ? 'd-none' : '' ;?>" id="follow-complain" href="<?=Url::to(['complain/follow', 'id' => $complain->id]);?>">Follow <i class="fa fa-star"></i></a>
             <?php endif;?>
@@ -130,12 +131,16 @@ $this->title = sprintf("Complain - %s", $complain->title);
                       'template' => '{input}',
                       'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']
                     ])->textArea()->label(false);?>
-                    <?= $form->field($replyForm, 'mark_close', [
-                      'options' => ['class' => 'form-group form-check'],
-                      'template' => '{input}{label}',
-                      'inputOptions' => ['class' => 'form-check-input'],
-                      'labelOptions' => ['class' => 'form-check-label']
-                    ])->checkbox()->label('Mark to close this case');?>
+                    <div class="form-group form-check">
+                      <label class="form-check-label">
+                        <?= $form->field($replyForm, 'mark_close', [
+                          'options' => ['tag' => false],
+                          'template' => '{input}',
+                          'inputOptions' => ['class' => 'form-check-input'],
+                        ])->checkbox(['class' => 'form-check-input'], false);?>
+                        <span>Mark to close this case</span>
+                      </label>
+                    </div>
                     <div class="form-group">
                       <button class="btn btn-primary" type="submit">Post my reply</button>
                     </div>

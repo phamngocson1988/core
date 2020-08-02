@@ -94,12 +94,15 @@ use yii\bootstrap\ActiveForm;
                 <?= $form->field($complainForm, 'description', [
                   'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']
                 ])->textArea()->label(false);?>
-                <?= $form->field($complainForm, 'mark_close', [
-                  'options' => ['class' => 'form-group form-check'],
-                  'template' => '{input}{label}',
-                  'inputOptions' => ['class' => 'form-check-input'],
-                  'labelOptions' => ['class' => 'form-check-label']
-                ])->checkbox()->label('Mark to close this case');?>
+                <div class="form-group form-check">
+                  <label class="form-check-label">
+                    <?= $form->field($complainForm, 'mark_close', [
+                      'options' => ['tag' => false],
+                      'template' => '{input}',
+                    ])->checkbox(['class' => 'form-check-input'], false);?>
+                    <span>Mark to close this case</span>
+                  </label>
+                </div>
 
                 <?= $form->field($complainForm, 'operator_id', [
                   'options' => ['tag' => false],

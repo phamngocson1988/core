@@ -61,7 +61,7 @@ AppAsset::register($this);
                 //   ['label' => 'Casino Bonuses', 'url' => '#', 'template' => '<a href="{url}" class="trans">{label}</a>']
                 // ],
               ];
-              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'];
+              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/create'], 'active' => $main_menu_active == 'complain.index', 'visible' => !Yii::$app->user->isGuest,];
               $items[] = ['label' => 'NEWS', 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'];
               $items[] = ['label' => 'FORUM', 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
               ?>
