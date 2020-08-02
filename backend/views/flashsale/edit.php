@@ -127,6 +127,7 @@ use backend\components\datetimepicker\DateTimePicker;
                         <td><?=$saleGame->remain;?></td>
                         <td>
                           <a href='<?=Url::to(['flashsale/edit-game', 'id' => $saleGame->id]);?>' data-target="#edit-game-modal" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm game" data-toggle="modal" ><i class="fa fa-pencil"></i></a>
+                          <a href='<?=Url::to(['flashsale/delete-game', 'id' => $saleGame->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-container="body" data-original-title="Xoá game"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                       <?php endforeach;?>
@@ -199,6 +200,14 @@ $(document).on('submit', 'body #edit-game-form', function(e) {
     },
   });
   return false;
+});
+
+$(".delete").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có chắc muốn xoá game này khỏi flash sale?',
+  callback: function(eletement, data) {
+    location.reload();
+  }
 });
 JS;
 $this->registerJs($script);

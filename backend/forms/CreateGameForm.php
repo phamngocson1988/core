@@ -32,6 +32,8 @@ class CreateGameForm extends Model
     public $remark;
     public $price_remark;
     public $google_ads;
+    public $promotion_info;
+    public $event_info;
     public $meta_title;
     public $meta_keyword;
     public $meta_description;
@@ -56,7 +58,7 @@ class CreateGameForm extends Model
             ['soldout', 'default', 'value' => 0],
             [['original_price'], 'trim'],
             [['price1', 'price2', 'price3'], 'safe'],
-            [['meta_title', 'meta_keyword', 'meta_description'], 'trim'],
+            [['meta_title', 'meta_keyword', 'meta_description', 'promotion_info', 'event_info'], 'trim'],
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
             [['group_id', 'method', 'package', 'version'], 'safe'],
@@ -152,6 +154,8 @@ class CreateGameForm extends Model
         $post->price1 = $this->price1;
         $post->price2 = $this->price2;
         $post->price3 = $this->price3;
+        $post->promotion_info = $this->promotion_info;
+        $post->event_info = $this->event_info;
         $post->average_speed = $this->average_speed;
         $post->number_supplier = $this->number_supplier;
         $post->remark = $this->remark;

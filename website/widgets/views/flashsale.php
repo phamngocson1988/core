@@ -28,7 +28,9 @@ use yii\helpers\Html;
         <?php if ($game->getSavedPrice()) : ?>
         <span class="tag save">save <?=number_format($game->getSavedPrice());?>%</span>
         <?php endif;?>
-        <span class="tag promotion">promotion</span>
+        <?php if ($game->promotion_info) : ?>
+        <span class="tag promotion"><?=$game->promotion_info;?></span>
+        <?php endif;?>
         <?php if ($game->isBackToStock()) : ?>
         <span class="tag bts">back to stock</span>
         <?php endif;?>

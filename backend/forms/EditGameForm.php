@@ -31,6 +31,8 @@ class EditGameForm extends Model
     public $remark;
     public $price_remark;
     public $google_ads;
+    public $promotion_info;
+    public $event_info;
     public $meta_title;
     public $meta_keyword;
     public $meta_description;
@@ -57,7 +59,7 @@ class EditGameForm extends Model
             ['pin', 'default', 'value' => Game::UNPIN],
             ['soldout', 'default', 'value' => 0],
             [['original_price'], 'trim'],
-            [['meta_title', 'meta_keyword', 'meta_description'], 'trim'],
+            [['meta_title', 'meta_keyword', 'meta_description', 'promotion_info', 'event_info'], 'trim'],
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
             [['group_id', 'method', 'package', 'version'], 'safe'],
@@ -135,6 +137,8 @@ class EditGameForm extends Model
             $game->remark = $this->remark;
             $game->price_remark = $this->price_remark;
             $game->google_ads = $this->google_ads;
+            $game->promotion_info = $this->promotion_info;
+            $game->event_info = $this->event_info;
             $game->meta_title = $this->meta_title;
             $game->meta_keyword = $this->meta_keyword;
             $game->meta_description = $this->meta_description;
@@ -197,6 +201,8 @@ class EditGameForm extends Model
         $this->remark = $game->remark;
         $this->price_remark = $game->price_remark;
         $this->google_ads = $game->google_ads;
+        $this->promotion_info = $game->promotion_info;
+        $this->event_info = $game->event_info;
         $this->meta_title = $game->meta_title;
         $this->meta_keyword = $game->meta_keyword;
         $this->meta_description = $game->meta_description;

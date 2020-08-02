@@ -221,9 +221,11 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         <?php if ($game->getSavedPrice()) : ?>
         <span class="tag save">save <?=number_format($game->getSavedPrice());?>%</span>
         <?php endif;?>
-        <span class="tag promotion">promotion</span>
-        <?php if ($game->isBackToStock()) : ?>
-        <span class="tag bts">event in-game</span>
+        <?php if ($game->promotion_info) : ?>
+        <span class="tag promotion"><?=$game->promotion_info;?></span>
+        <?php endif;?>
+        <?php if ($game->event_info) : ?>
+        <span class="tag bts"><?=$game->event_info;?></span>
         <?php endif;?>
       </div>
       <div class="post-content">

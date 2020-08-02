@@ -65,6 +65,14 @@
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(CheckboxInput::className())->label(false)}
 
+        {$form->field($model, 'promotion_info', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->textInput()->label('Thông tin khuyến mãi')}
+
+        {$form->field($model, 'event_info', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->textInput()->label('Thông tin sự kiện')}
+
         {if $app->user->can('orderteam')}
         {$form->field($model, 'average_speed', [
           'options' => ['class' => 'list-separated profile-stat']

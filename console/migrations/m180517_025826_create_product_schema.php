@@ -30,6 +30,8 @@ class m180517_025826_create_product_schema extends Migration
             'reseller_price' => $this->integer(),
             'original_price' => $this->integer(),
             'pack' => $this->integer()->notNull()->defaultValue(1),
+            'promotion_info' => $this->string(255),
+            'event_info' => $this->string(255),
             'meta_title' => $this->string(160),
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),

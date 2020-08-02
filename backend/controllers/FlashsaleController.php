@@ -125,6 +125,13 @@ class FlashsaleController extends Controller
         ]);
     }
 
+    public function actionDeleteGame($id) 
+    {
+        $game = FlashSaleGame::findOne($id);
+        if ($game) $game->delete();
+        return $this->asJson(['status' => true]);
+    }
+
     public function actionDelete($id)
     {
         $flashsale = FlashSale::findOne($id);
