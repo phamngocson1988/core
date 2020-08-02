@@ -54,6 +54,10 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
+          {$form->field($model, 'href1', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
           {$form->field($model, 'link1', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove1">Remove</button></span>{error}</div></div>',
@@ -81,6 +85,10 @@
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
           {$form->field($model, 'content2', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
+          {$form->field($model, 'href2', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
@@ -114,6 +122,10 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
+          {$form->field($model, 'href3', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
           {$form->field($model, 'link3', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove3">Remove</button></span>{error}</div></div>',
@@ -141,6 +153,10 @@
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
           {$form->field($model, 'content4', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
+          {$form->field($model, 'href4', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
@@ -175,6 +191,10 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
+          {$form->field($model, 'href5', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
           {$form->field($model, 'link5', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove5">Remove</button></span>{error}</div></div>',
@@ -203,6 +223,10 @@
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
           {$form->field($model, 'content6', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
+          {$form->field($model, 'href6', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
@@ -237,6 +261,10 @@
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
+          {$form->field($model, 'href7', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
           {$form->field($model, 'link7', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="remove7">Remove</button></span>{error}</div></div>',
@@ -265,6 +293,10 @@
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}
           {$form->field($model, 'content8', [
+            'labelOptions' => ['class' => 'col-md-4 control-label'],
+            'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
+          ])->textInput()}
+          {$form->field($model, 'href8', [
             'labelOptions' => ['class' => 'col-md-4 control-label'],
             'template' => '{label}<div class="col-md-8">{input}{hint}{error}</div>'
           ])->textInput()}

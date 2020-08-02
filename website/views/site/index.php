@@ -9,41 +9,49 @@ $gallery = [
         'title' => $setting->get('GallerySettingForm', 'title1'),
         'content' => $setting->get('GallerySettingForm', 'content1'),
         'link' => $setting->get('GallerySettingForm', 'link1'),
+        'href' => $setting->get('GallerySettingForm', 'href1'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title2'),
         'content' => $setting->get('GallerySettingForm', 'content2'),
         'link' => $setting->get('GallerySettingForm', 'link2'),
+        'href' => $setting->get('GallerySettingForm', 'href2'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title3'),
         'content' => $setting->get('GallerySettingForm', 'content3'),
         'link' => $setting->get('GallerySettingForm', 'link3'),
+        'href' => $setting->get('GallerySettingForm', 'href3'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title4'),
         'content' => $setting->get('GallerySettingForm', 'content4'),
         'link' => $setting->get('GallerySettingForm', 'link4'),
+        'href' => $setting->get('GallerySettingForm', 'href4'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title5'),
         'content' => $setting->get('GallerySettingForm', 'content5'),
         'link' => $setting->get('GallerySettingForm', 'link5'),
+        'href' => $setting->get('GallerySettingForm', 'href5'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title6'),
         'content' => $setting->get('GallerySettingForm', 'content6'),
         'link' => $setting->get('GallerySettingForm', 'link6'),
+        'href' => $setting->get('GallerySettingForm', 'href6'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title7'),
         'content' => $setting->get('GallerySettingForm', 'content7'),
         'link' => $setting->get('GallerySettingForm', 'link7'),
+        'href' => $setting->get('GallerySettingForm', 'href7'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title8'),
         'content' => $setting->get('GallerySettingForm', 'content8'),
         'link' => $setting->get('GallerySettingForm', 'link8'),
+        'href' => $setting->get('GallerySettingForm', 'href8'),
     ]
 ];
 $gallery = array_filter($gallery, function($data) {
@@ -58,7 +66,7 @@ $sideGallery = array_slice($gallery, -2);
       <div class="col-sm-8 flex-fill">
         <div class="main-slider" data-aos="zoom-in" data-aos-duration="500">
           <?php foreach ($gallery as $data) : ?>
-            <a class="hover-img" href="#">
+            <a class="hover-img" href="<?=$data['href'];?>">
             <img src="<?=$data['link'];?>" />
             </a>
           <?php endforeach;?>
@@ -68,7 +76,7 @@ $sideGallery = array_slice($gallery, -2);
         <div class="main-banner">
           <?php foreach ($sideGallery as $data) : ?>
           <div class="item-banner" data-aos="fade-left" data-aos-duration="800">
-            <a class="hover-img" href="#">
+            <a class="hover-img" href="<?=$data['href'];?>">
             <img src="<?=$data['link'];?>" />
             </a>
           </div>

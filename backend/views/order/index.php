@@ -315,7 +315,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php if ($models) :?>
-        <?php $sumQuantity = $search->getCommand()->sum('quantity');?>
+        <?php $sumQuantity = $search->getCommand()->sum('order.quantity');?>
         <?php if ($sumQuantity) : ?>
         <div class="row">
           <div class="col-md-2 col-sm-4">
@@ -325,7 +325,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
           </div>
           <div class="col-md-2 col-sm-4">
-            <span class="label label-default" data-time="<?=$search->getCommand()->sum('process_duration_time');?>" data-quantity="<?=$search->getCommand()->sum('quantity');?>">Thời gian trung bình: <?=FormatConverter::countDuration(round($search->getCommand()->sum('process_duration_time') / $sumQuantity));?></span>
+            <span class="label label-default" data-time="<?=$search->getCommand()->sum('process_duration_time');?>" data-quantity="<?=$sumQuantity;?>">Thời gian trung bình: <?=FormatConverter::countDuration(round($search->getCommand()->sum('process_duration_time') / $sumQuantity));?></span>
           </div>
         </div>
         <?php endif;?>
