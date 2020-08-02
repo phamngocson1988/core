@@ -460,6 +460,16 @@
             </a>
           </li>
           <li class="nav-item  "> 
+            <a href="{url route='/game-method/index'}" class="nav-link " code='gamemethod.index'>
+            <span class="title">Phương thức nạp</span>
+            </a>
+          </li>
+          <li class="nav-item  "> 
+            <a href="{url route='/game-version/index'}" class="nav-link " code='gameversion.index'>
+            <span class="title">Phiên bản nạp</span>
+            </a>
+          </li>
+          <li class="nav-item  "> 
             <a href="{url route='/flashsale/index'}" class="nav-link " code='flashsale.index'>
             <span class="title">Flash sale</span>
             </a>

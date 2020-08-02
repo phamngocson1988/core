@@ -73,13 +73,6 @@ class m180517_025826_create_product_schema extends Migration
             'image_id' => $this->integer()->notNull()
         ], $tableOptions);
 
-        // $this->createTable('{{%game_price}}', [
-        //     'id' => $this->primaryKey(),
-        //     'game_id' => $this->integer()->notNull(),
-        //     'provider_id' => $this->integer(),
-        //     'price' => $this->integer()->notNull(),
-        // ], $tableOptions);
-
         $this->createTable('{{%game_price_log}}', [
             'id' => $this->primaryKey(),
             'game_id' => $this->integer()->notNull(),
@@ -113,6 +106,28 @@ class m180517_025826_create_product_schema extends Migration
             'id' => $this->primaryKey(),
             'key' => $this->string(255)->notNull(),
             'value' => $this->string(255)->notNull(),
+        ], $tableOptions);
+
+        $this->createTable('{{%game_method}}', [
+            'id' => $this->primaryKey(),
+            'title' => $this->string(255)->notNull(),
+            'slug' => $this->string(255)->notNull(),
+            'description' => $this->string(255)->notNull(),
+            'safe' => $this->integer()->notNull(),
+            'speed' => $this->integer()->notNull(),
+            'price' => $this->integer()->notNull(),
+        ], $tableOptions);
+
+        $this->createTable('{{%game_version}}', [
+            'id' => $this->primaryKey(),
+            'title' => $this->string(255)->notNull(),
+            'slug' => $this->string(255)->notNull(),
+        ], $tableOptions);
+
+        $this->createTable('{{%game_package}}', [
+            'id' => $this->primaryKey(),
+            'title' => $this->string(255)->notNull(),
+            'slug' => $this->string(255)->notNull(),
         ], $tableOptions);
 
         $this->createTable('{{%game_group}}', [
