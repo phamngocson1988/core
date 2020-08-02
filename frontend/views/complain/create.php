@@ -36,9 +36,10 @@ $this->title = 'Leave complain';
               ])->textArea();?>
               <div class="row">
                 <div class="col-lg-4">
-                  <div class="file-upload">
+                  <div class="file-upload js-fileupload">
                     <input id="inputGroupFile01" name="attachFile" type="file">
                     <label for="inputGroupFile01"><i class="fas fa-paperclip"></i><span>ATTACH FILES</span></label>
+                    <div class="filename"><span class="name"></span><span class="remove"><i class="fas fa-times"></i></span></div>
                   </div>
                 </div>
                 <?= $form->field($model, 'agree', [

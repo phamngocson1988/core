@@ -1551,6 +1551,7 @@ body {
 }
 .file-upload {
   position: relative;
+  z-index: 100;
   display: inline-block;
 }
 .file-upload .fas {
@@ -1561,7 +1562,43 @@ body {
   position: absolute;
   width: 100%;
 }
+.file-upload .filename {
+  display: none;
+  position: absolute;
+  top: -1px;
+  left: 100%;
+  margin-left: 10px;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.file-upload .filename .name {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-upload .filename .remove {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  margin-left: 5px;
+  margin-top: 2px;
+  cursor: pointer;
+}
 
+@media only screen and (max-width: 767px) {
+  .file-upload .filename {
+    position: static;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+  .file-upload .filename .name {
+    max-width: 240px;
+  }
+}
 .btn-profile {
   display: flex;
   width: 100%;
@@ -2020,6 +2057,27 @@ body {
 }
 .breadcrumb .breadcrumb-item + .breadcrumb-item:before {
   content: ">";
+}
+
+.block-delineation {
+  background: orange;
+  margin-bottom: 20px;
+}
+.block-delineation ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.block-delineation ul li {
+  display: block;
+}
+.block-delineation ul li a,
+.block-delineation ul li img {
+  display: block;
+  width: 100%;
+}
+.block-delineation ul:not(.slick-initialized) li:not(:first-child) {
+  display: none;
 }
 
 /* PAGES

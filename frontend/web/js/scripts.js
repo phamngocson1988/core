@@ -13,6 +13,7 @@ app.init = function () {
   app.btnSort();
   app.selectTags();
   app.datePicker();
+  app.fileUpload();
 };
 
 app.isMobile = function () {
@@ -135,6 +136,21 @@ app.slick = function () {
       ]
     });
   }
+
+  $('.js-delineation ul').each(function () {
+    if ($(this).find('li').length > 1) {
+      $(this).slick({
+        dots: false,
+        arrows: false,
+        infinite: true,
+        fade: true,
+        autoplay: true,
+        speed: 500,
+        autoplaySpeed: 3000,
+        draggable: false
+      });
+    }
+  });
 };
 
 app.exclamation = function () {
@@ -217,28 +233,28 @@ app.selectMessage = function () {
     $(this)
       .closest('li')
       .addClass('is-current');
-    // if (!app.isMobile()) {
-    //   $('#js-message-main')
-    //     .find('.sec-empty')
-    //     .hide();
-    //   $('#js-message-main')
-    //     .find('.review-list')
-    //     .show();
-    // } else {
-    //   $('#js-message-main')
-    //     .find('.sec-empty')
-    //     .hide();
-    //   $('#js-message-main')
-    //     .find('.review-list')
-    //     .slideDown(function () {
-    //       $('.section-user-message').animate(
-    //         {
-    //           left: '-100%'
-    //         },
-    //         400
-    //       );
-    //     });
-    // }
+    if (!app.isMobile()) {
+      $('#js-message-main')
+        .find('.sec-empty')
+        .hide();
+      $('#js-message-main')
+        .find('.review-list')
+        .show();
+    } else {
+      $('#js-message-main')
+        .find('.sec-empty')
+        .hide();
+      $('#js-message-main')
+        .find('.review-list')
+        .slideDown(function () {
+          $('.section-user-message').animate(
+            {
+              left: '-100%'
+            },
+            400
+          );
+        });
+    }
     return false;
   });
 
@@ -334,6 +350,37 @@ app.selectTags = function () {
 
 app.datePicker = function () {
   $('.js-datepicker').datepicker();
+};
+
+app.fileUpload = function () {
+  $('.js-fileupload input[type="file"]').on('change', function (e) {
+    var fileName = e.target.files[0].name;
+    $(this)
+      .closest('.js-fileupload')
+      .find('.name')
+      .text(fileName);
+    var that = $(this);
+    setTimeout(function () {
+      that
+        .closest('.js-fileupload')
+        .find('.filename')
+        .fadeIn();
+    }, 100);
+  });
+  $('.js-fileupload .remove').click(function () {
+    $(this)
+      .closest('.js-fileupload')
+      .find('input[type="file"]')
+      .val('');
+    $(this)
+      .closest('.js-fileupload')
+      .find('.filename')
+      .fadeOut(function () {
+        $(this)
+          .find('.name')
+          .text('');
+      });
+  });
 };
 
 $(function () {
