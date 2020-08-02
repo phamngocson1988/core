@@ -54,14 +54,6 @@ use common\widgets\TinyMce;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput();?>
 
-                  <?=$form->field($model, 'content', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'content', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->widget(TinyMce::className(), [
-                    'options' => ['rows' => 20]
-                  ]);?>
-
                   <?=$form->field($model, 'currency', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
@@ -82,11 +74,9 @@ use common\widgets\TinyMce;
 
                   <?=$form->field($model, 'minimum_deposit', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'minimum_deposit', 'class' => 'form-control'],
+                    'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->widget(TinyMce::className(), [
-                    'options' => ['rows' => 20]
-                  ]);?>
+                  ])->textInput();?>
 
                   <?=$form->field($model, 'minimum_deposit_value', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -96,11 +86,9 @@ use common\widgets\TinyMce;
 
                   <?=$form->field($model, 'wagering_requirement', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'wagering_requirement', 'class' => 'form-control'],
+                    'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->widget(TinyMce::className(), [
-                    'options' => ['rows' => 20]
-                  ]);?>
+                  ])->textInput();?>
 
                   <?=$form->field($model, 'cashable', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

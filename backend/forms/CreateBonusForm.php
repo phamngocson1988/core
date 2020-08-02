@@ -25,7 +25,7 @@ class CreateBonusForm extends Model
     public function rules()
     {
         return [
-            [['title', 'content', 'status'], 'required'],
+            [['title', 'status'], 'required'],
             [['image_id', 'operator_id', 'currency', 'bonus_type', 'minimum_deposit', 'minimum_deposit_value', 'wagering_requirement', 'cashable'], 'safe'],
         ];
     }

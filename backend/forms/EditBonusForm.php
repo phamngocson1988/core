@@ -28,7 +28,7 @@ class EditBonusForm extends Model
     public function rules()
     {
         return [
-            [['id', 'title', 'content', 'status'], 'required'],
+            [['id', 'title', 'status'], 'required'],
             ['id', 'validateBonus'],
             [['image_id', 'operator_id', 'currency', 'bonus_type', 'minimum_deposit', 'minimum_deposit_value', 'wagering_requirement', 'cashable'], 'safe'],
         ];
