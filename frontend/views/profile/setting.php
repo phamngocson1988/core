@@ -3,6 +3,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use frontend\models\UserSetting;
+use frontend\components\notifications\ReviewNotification;
 $this->title = 'User Profile';
 $user = Yii::$app->user->getIdentity();
 ?>
@@ -122,15 +123,15 @@ $user = Yii::$app->user->getIdentity();
                   </div>
                   <div class="notifications-wrap">
                     <div class="notifications-flex">
-                      <div class="col-first">Operators responded</div>
+                      <div class="col-first">Operator’s response</div>
                       <div class="col-second">
                         <label class="notifications-check-email">
-                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::MAIL_OPERATOR_RESPONSE_REIVEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_OPERATOR_RESPONSE_REIVEW, 0) ? 'checked' : '';?> ><span></span>
+                          <input type="checkbox" class="notification-setting" name="<?=ReviewNotification::MAIL_OPERATOR_RESPONSE;?>" <?=(int)ArrayHelper::getValue($settings, ReviewNotification::MAIL_OPERATOR_RESPONSE, 0) ? 'checked' : '';?> ><span></span>
                         </label>
                       </div>
                       <div class="col-third">
                         <label class="notifications-check-onsite">
-                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::NOTIFICATION_OPERATOR_RESPONSE_REIVEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_OPERATOR_RESPONSE_REIVEW, 0) ? 'checked' : '';?> ><span></span>
+                          <input type="checkbox" class="notification-setting" name="<?=ReviewNotification::MAIL_OPERATOR_RESPONSE;?>" <?=(int)ArrayHelper::getValue($settings, ReviewNotification::MAIL_OPERATOR_RESPONSE, 0) ? 'checked' : '';?> ><span></span>
                         </label>
                       </div>
                     </div>
@@ -138,12 +139,7 @@ $user = Yii::$app->user->getIdentity();
                       <div class="col-first">New player review</div>
                       <div class="col-second">
                         <label class="notifications-check-email">
-                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::MAIL_NEW_PLAYER_REVIEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_NEW_PLAYER_REVIEW, 0) ? 'checked' : '';?>><span></span>
-                        </label>
-                      </div>
-                      <div class="col-third">
-                        <label class="notifications-check-onsite">
-                          <input type="checkbox" class="notification-setting" name="<?=UserSetting::NOTIFICATION_NEW_PLAYER_REVIEW;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_NEW_PLAYER_REVIEW, 0) ? 'checked' : '';?>><span></span>
+                          <input type="checkbox" class="notification-setting" name="<?=ReviewNotification::BELL_OPERATOR_RESPONSE;?>" <?=(int)ArrayHelper::getValue($settings, ReviewNotification::BELL_OPERATOR_RESPONSE, 0) ? 'checked' : '';?>><span></span>
                         </label>
                       </div>
                     </div>
@@ -157,7 +153,7 @@ $user = Yii::$app->user->getIdentity();
                   </div>
                   <div class="notifications-wrap">
                     <div class="notifications-flex">
-                      <div class="col-first">Operators responded</div>
+                      <div class="col-first">Complaint not published</div>
                       <div class="col-second">
                         <label class="notifications-check-email">
                           <input type="checkbox" class="notification-setting"  name="<?=UserSetting::MAIL_OPERATOR_RESPONSE_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_OPERATOR_RESPONSE_COMPLAIN, 0) ? 'checked' : '';?>><span></span>
