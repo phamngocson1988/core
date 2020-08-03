@@ -196,45 +196,68 @@ class CreateGameForm extends Model
     {
         if (!$this->group_id) return [];
         $group = GameGroup::findOne($this->group_id);
-        $methods = explode(',', $group->method);
-        $keys = array_map(function($val) {
-            return Inflector::slug($val);
-        }, $methods);
-        return array_combine($keys, $methods);
+        $methods = $group->getMethods();
+        return ArrayHelper::map($methods, 'id', 'title');
     }
 
     public function getVersions()
     {
         if (!$this->group_id) return [];
         $group = GameGroup::findOne($this->group_id);
-        $versions = explode(',', $group->version);
-        $keys = array_map(function($val) {
-            return Inflector::slug($val);
-        }, $versions);
-        return array_combine($keys, $versions);
+        $versions = $group->getVersions();
+        return ArrayHelper::map($versions, 'id', 'title');
     }
 
     public function getPackages()
     {
         if (!$this->group_id) return [];
         $group = GameGroup::findOne($this->group_id);
-        $packages = explode(',', $group->package);
-        $keys = array_map(function($val) {
-            return Inflector::slug($val);
-        }, $packages);
-        return array_combine($keys, $packages);
+        $packages = $group->getPackages();
+        return ArrayHelper::map($packages, 'id', 'title');
     }
+
+    // public function getMethods()
+    // {
+    //     if (!$this->group_id) return [];
+    //     $group = GameGroup::findOne($this->group_id);
+    //     $methods = explode(',', $group->method);
+    //     $keys = array_map(function($val) {
+    //         return Inflector::slug($val);
+    //     }, $methods);
+    //     return array_combine($keys, $methods);
+    // }
+
+    // public function getVersions()
+    // {
+    //     if (!$this->group_id) return [];
+    //     $group = GameGroup::findOne($this->group_id);
+    //     $versions = explode(',', $group->version);
+    //     $keys = array_map(function($val) {
+    //         return Inflector::slug($val);
+    //     }, $versions);
+    //     return array_combine($keys, $versions);
+    // }
+
+    // public function getPackages()
+    // {
+    //     if (!$this->group_id) return [];
+    //     $group = GameGroup::findOne($this->group_id);
+    //     $packages = explode(',', $group->package);
+    //     $keys = array_map(function($val) {
+    //         return Inflector::slug($val);
+    //     }, $packages);
+    //     return array_combine($keys, $packages);
+    // }
 
 
     public function getGroupData()
     {
         $groups = GameGroup::find()->all();
-
         return ArrayHelper::map($groups, 'id', function($obj) {
             return [
-                'data-method' => GameSetting::buildMapping($obj->method),
-                'data-version' => GameSetting::buildMapping($obj->version),
-                'data-package' => GameSetting::buildMapping($obj->package),
+                'data-method' => ArrayHelper::map($obj->getMethods(), 'id', 'title'),
+                'data-version' => ArrayHelper::map($obj->getVersions(), 'id', 'title'),
+                'data-package' => ArrayHelper::map($obj->getPackages(), 'id', 'title'),
             ];
         });
 

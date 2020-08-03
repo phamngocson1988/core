@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 ?>
@@ -60,19 +61,38 @@ use yii\web\JsExpression;
               <th> Phương thức </th>
               <th> Phiên bản </th>
               <th> Loại gói </th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="5"><?=Yii::t('app', 'no_data_found')?></td></tr>
+              <tr><td colspan="6"><?=Yii::t('app', 'no_data_found')?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $key => $model) :?>
               <tr>
                 <td><a href="<?=Url::to(['game-group/edit', 'id' => $model->id])?>"><?=$model->id;?></a></td>
                 <td><?=$model->title;?></td>
-                <td><?=$model->method;?></td>
-                <td><?=$model->version;?></td>
-                <td><?=$model->package;?></td>
+                <td>
+                  <?php 
+                  $methods = $model->getMethods();
+                  $methodTitles = ArrayHelper::getColumn($methods, 'title');
+                  echo implode(",", $methodTitles);
+                  ?>
+                </td>
+                <td>
+                  <?php 
+                  $versions = $model->getVersions();
+                  $versionTitles = ArrayHelper::getColumn($versions, 'title');
+                  echo implode(",", $versionTitles);
+                  ?>
+                </td>
+                <td>
+                  <?php 
+                  $packages = $model->getPackages();
+                  $packageTitles = ArrayHelper::getColumn($packages, 'title');
+                  echo implode(",", $packageTitles);
+                  ?>
+                </td>
                 <td class="left">
                   <a href='<?=Url::to(['game-group/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   <a href='<?=Url::to(['game-group/delete', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>

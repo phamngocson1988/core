@@ -86,6 +86,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   ])->widget(kartik\select2\Select2::classname(), [
                     'data' => $model->fetchPack(),
                     'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                    'pluginOptions' => ['tags' => true]
                   ])->label('Loại gói')?>
 
                 </div>

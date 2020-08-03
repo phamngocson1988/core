@@ -33,14 +33,13 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         <div class="btn-group-toggle multi-choose d-flex" data-toggle="buttons">
           <?php foreach ($methods as $method) : ?>
           <?php 
-          $settingMethodParam = ArrayHelper::getValue($settingMethodParams, $method, []);
-          $settingMethodPrice = ArrayHelper::getValue($settingMethodParam, 'price', 0);
-          $settingMethodSpeed = ArrayHelper::getValue($settingMethodParam, 'speed', 0);
-          $settingMethodSafe = ArrayHelper::getValue($settingMethodParam, 'safe', 0);
-          $settingMethodTitle = ArrayHelper::getValue($settingMethodParam, 'name', '');
+          $settingMethodPrice = $method->price;
+          $settingMethodSpeed = $method->speed;
+          $settingMethodSafe = $method->safe;
+          $settingMethodTitle = $method->title;
           ?>
-          <label class="btn flex-fill w-100 mr-2 btn-secondary <?=($method == $model->method) ? 'active' : '';?>">
-            <input type="radio" name="method" id="<?=$method;?>" autocomplete="off" <?=($method == $model->method) ? 'checked' : '';?> data-price="<?=$settingMethodPrice;?>" data-speed="<?=$settingMethodSpeed;?>" data-safe="<?=$settingMethodSafe;?>"><?=$settingMethodTitle;?>
+          <label class="btn flex-fill w-100 mr-2 btn-secondary <?=($method->id == $model->method) ? 'active' : '';?>">
+            <input type="radio" name="method" id="<?=$method->id;?>" autocomplete="off" <?=($method->id == $model->method) ? 'checked' : '';?> data-price="<?=$settingMethodPrice;?>" data-speed="<?=$settingMethodSpeed;?>" data-safe="<?=$settingMethodSafe;?>"><?=$settingMethodTitle;?>
           </label>
           <?php endforeach;?>
         </div>
