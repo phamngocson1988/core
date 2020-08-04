@@ -78,7 +78,7 @@ use common\components\helpers\TimeElapsed;
             <?php foreach ($lastestComplains as $complain) : ?>
             <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
               <div class="block-complaint">
-                <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
+                <div class="complaint-image"><img src="<?=$complain->getIcon();?>" alt="image"></div>
                 <div class="complaint-heading">
                   <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
                   <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
@@ -93,7 +93,6 @@ use common\components\helpers\TimeElapsed;
           <?=\frontend\widgets\ComplainByOperatorWidget::widget();?>
         </div>
       </div>
-      <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_BANNERHOME]);?>
     </div>
   </section>
 </main>

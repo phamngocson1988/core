@@ -30,7 +30,9 @@ use yii\helpers\Url;
         </div>
       </div>
       <?php $post = array_shift($newestNews);?>
-      <div class="col-12 col-md-6"><a class="item-block large" href="<?=Url::to(['news/view', 'id' => $post->id, 'slug' => $post->slug]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image"></a></div>
+      <div class="col-12 col-md-6">
+        <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_BANNERHOME]);?>
+      </div>
     </div>
   </div>
   <div class="col-lg-3 col-lrg-2">

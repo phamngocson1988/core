@@ -50,7 +50,7 @@ class Ads extends ActiveRecord
     {
         return [
             self::POSITION_TOPHOME => 'Top home (1260x60)',
-            self::POSITION_BANNERHOME => 'Bottom home (1260x100)',
+            self::POSITION_BANNERHOME => 'Banner home (1260x100)',
             self::POSITION_SIDEBAR => 'Sidebar (220x700)',
         ];
     }

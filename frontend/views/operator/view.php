@@ -44,11 +44,17 @@ use common\components\helpers\TimeElapsed;
             <h2 class="widget-head">
               <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=$model->name;?> Overview</span></div>
             </h2>
-            <div class="widget-content">
-              <h3 class="content-title">Best Place In The World</h3>
-              <?=$model->overview;?>
+            <div class="js-show-more">
+              <div class="widget-content">
+                <?=nl2br($model->overview);?>
+                <!-- <div class="show-more-content js-show-more-content">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere adipisci recusandae ipsam doloremque? Perferendis fugiat distinctio ipsam. Nisi minus amet explicabo ad sunt dolorum iure aliquid totam nihil? Nam, quod!</p>
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere adipisci recusandae ipsam doloremque? Perferendis fugiat distinctio ipsam. Nisi minus amet explicabo ad sunt dolorum iure aliquid totam nihil? Nam, quod!</p>
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere adipisci recusandae ipsam doloremque? Perferendis fugiat distinctio ipsam. Nisi minus amet explicabo ad sunt dolorum iure aliquid totam nihil? Nam, quod!</p>
+                </div> -->
+              </div>
+              <!-- <div class="widget-foot overview-button"><a class="trans js-btn-more" href="#"><span class="is-more">Show more</span><span class="is-less">Show less</span></a></div> -->
             </div>
-            <div class="widget-foot overview-button"><a class="trans" href="#">Show more</a></div>
           </section>
           <section class="operator-detail widget-box" id="detail">
             <h2 class="widget-head">

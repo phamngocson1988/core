@@ -11,7 +11,7 @@ use yii\bootstrap\ActiveForm;
       </div>
       <div class="sec-content">
         <div class="mod-column">
-          <?php $form = ActiveForm::begin(['method' => 'get', 'action' => Url::to(['bonus/index'])]); ?>
+          <?php $form = ActiveForm::begin(['method' => 'get', 'id' => 'bonusTypeSearchForm', 'action' => Url::to(['bonus/index'])]); ?>
           <div class="widget-box bonus-total">
             <?= $form->field($search, 'bonus_type', [
               'options' => ['tag' => false],
@@ -64,54 +64,35 @@ use yii\bootstrap\ActiveForm;
           <div class="sidebar-col">
             <div class="sidebar-category">
               <p class="category-title">FILTER BONUS</p>
+              <?php $form = ActiveForm::begin(['method' => 'get', 'id' => 'commonSearchForm', 'action' => Url::to(['bonus/index'])]); ?>
+              <?= $form->field($search, 'bonus_type', [
+                'options' => ['tag' => false],
+                'template' => '{input}',
+                'inputOptions' => ['name' => 'bonus_type', 'class' => 'form-control']
+              ])->hiddenInput()->label(false);?>
               <div class="category-inner">
                 <ul class="category-list list-dropdown">
-                  <li><a class="js-btn-dropdown" href="javascript:void(0)">BONUS VALUE</a>
-                    <ul class="js-dropdown">
-                      <li><a href="#">VALUE 1</a></li>
-                      <li><a href="#">VALUE 2</a></li>
-                      <li><a href="#">VALUE 3</a></li>
-                      <li><a href="#">VALUE 4</a></li>
-                    </ul>
-                  </li>
                   <li><a class="js-btn-dropdown" href="javascript:void(0)">W/R</a>
-                    <ul class="js-dropdown">
-                      <li><a href="#">W/R 1</a></li>
-                      <li><a href="#">W/R 2</a></li>
-                    </ul>
+                    <div class="js-dropdown">
+                      <?= $form->field($search, 'wagering_requirement', [
+                        'options' => ['class' => 'category-text'],
+                        'template' => '{input}',
+                        'inputOptions' => ['name' => 'wagering_requirement', 'class' => 'form-control']
+                      ])->textInput()->label(false);?>
+                    </div>
                   </li>
                   <li><a class="js-btn-dropdown" href="javascript:void(0)">MIN DEPOSIT</a>
-                    <ul class="js-dropdown">
-                      <li><a href="#">MIN DEPOSIT 1</a></li>
-                      <li><a href="#">MIN DEPOSIT 2</a></li>
-                    </ul>
-                  </li>
-                  <li><a class="js-btn-dropdown" href="javascript:void(0)">MAX BONUS</a>
-                    <ul class="js-dropdown">
-                      <li><a href="#">MAX BONUS 1</a></li>
-                      <li><a href="#">MAX BONUS 2</a></li>
-                    </ul>
-                  </li>
-                  <li><a class="js-btn-dropdown" href="javascript:void(0)">MAX WITHDRAW</a>
-                    <ul class="js-dropdown">
-                      <li><a href="#">MAX WITHDRAW 1</a></li>
-                      <li><a href="#">MAX WITHDRAW 2</a></li>
-                    </ul>
-                  </li>
-                  <li><a class="js-btn-dropdown" href="javascript:void(0)">PRODUCT</a>
-                    <ul class="js-dropdown">
-                      <li><a href="#">PRODUCT 1</a></li>
-                      <li><a href="#">PRODUCT 2</a></li>
-                    </ul>
-                  </li>
-                  <li><a class="js-btn-dropdown" href="javascript:void(0)">EXCLUSIVE</a>
-                    <ul class="js-dropdown">
-                      <li><a href="#">EXCLUSIVE 1</a></li>
-                      <li><a href="#">EXCLUSIVE 2</a></li>
-                    </ul>
+                    <div class="js-dropdown">
+                      <?= $form->field($search, 'minimum_deposit_value', [
+                        'options' => ['class' => 'category-text'],
+                        'template' => '{input}',
+                        'inputOptions' => ['name' => 'minimum_deposit_value', 'class' => 'form-control']
+                      ])->textInput()->label(false);?>
+                    </div>
                   </li>
                 </ul>
               </div>
+              <?php ActiveForm::end();?>
             </div>
           </div>
           <div class="sidebar-col">
@@ -124,6 +105,12 @@ use yii\bootstrap\ActiveForm;
 </main>
 <?php 
 $script = <<< JS
+$("[name=bonus_type]").on('change', function(){
+  $(this).closest('form').submit();
+});
+$("#commonSearchForm input").on('blur', function() {
+  $(this).closest('form').submit();
+})
 JS;
 $this->registerJs($script);
 ?>

@@ -41,7 +41,9 @@ class BonusController extends Controller
     {
         $request = Yii::$app->request;
         $form = new \frontend\forms\FetchBonusForm([
-            'bonus_type' => $request->get('bonus_type')
+            'bonus_type' => $request->get('bonus_type'),
+            'wagering_requirement' => $request->get('wagering_requirement'),
+            'minimum_deposit_value' => $request->get('minimum_deposit_value'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

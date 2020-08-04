@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle
         'js/slick.min.js',
         'js/scripts.js',
         'js/bootstrap-tagsinput.min.js',
+        'js/bootstrap-slider.min.js',
         'js/ajax_action.js',
         // 'js/function.js',
     ];

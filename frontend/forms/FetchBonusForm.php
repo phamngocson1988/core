@@ -12,6 +12,8 @@ class FetchBonusForm extends Model
 {
     public $operator_id;
     public $bonus_type;
+    public $wagering_requirement;
+    public $minimum_deposit_value;
 
     private $_command;
     
@@ -31,6 +33,12 @@ class FetchBonusForm extends Model
         }
         if ($this->bonus_type) {
             $command->andWhere(['bonus_type' => $this->bonus_type]);
+        }
+        if ($this->wagering_requirement) {
+            $command->andWhere(['like', 'wagering_requirement', $this->wagering_requirement]);
+        }
+        if ($this->minimum_deposit_value) {
+            $command->andWhere(['minimum_deposit_value' => $this->minimum_deposit_value]);
         }
         $this->_command = $command;
     }

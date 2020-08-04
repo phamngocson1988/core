@@ -15,7 +15,7 @@ use common\components\helpers\TimeElapsed;
     <?php foreach ($complains as $complain) : ?>
     <div class="col-12 col-sm-6 col-md-6 col-lg-3">
       <div class="block-complaint">
-        <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
+        <div class="complaint-image"><img src="<?=$complain->getIcon();?>" alt="image"></div>
         <div class="complaint-heading">
           <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
           <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>

@@ -67,7 +67,7 @@ $point = $user->totalPoint();
         <?php foreach ($complains as $complain) : ?>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-lrg-2 mb-3">
           <div class="block-complaint">
-            <div class="complaint-image"><img src="/img/complain/<?=$complain->status;?>.jpg" alt="image"></div>
+            <div class="complaint-image"><img src="<?=$complain->getIcon();?>" alt="image"></div>
             <div class="complaint-heading">
               <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
               <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>

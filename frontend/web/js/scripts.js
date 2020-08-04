@@ -14,6 +14,8 @@ app.init = function () {
   app.selectTags();
   app.datePicker();
   app.fileUpload();
+  app.showMore();
+  app.range();
 };
 
 app.isMobile = function () {
@@ -166,6 +168,31 @@ app.exclamation = function () {
       $(this)
         .parents('.js-bonuses')
         .removeClass('block-bonuses-show');
+    });
+  }
+};
+
+app.showMore = function () {
+  if ($('.js-btn-more').length) {
+    $('.js-btn-more').click(function () {
+      $(this)
+        .parents('.js-show-more')
+        .find('.js-show-more-content')
+        .slideToggle();
+      $(this).toggleClass('is-active');
+      return false;
+    });
+  }
+};
+
+app.range = function () {
+  if ($('#range').length) {
+    new Slider('#range', {
+      min: 0,
+      max: 100,
+      value: [50, 80],
+      range: true,
+      tooltip: 'always'
     });
   }
 };
