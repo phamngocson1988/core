@@ -27,8 +27,6 @@ class GameGroup extends ActiveRecord
 
     public function getPackages() 
     {
-    	$ids = explode(",", $this->package);
-    	if (!count($ids)) return [];
-    	return GamePackage::find()->where(['in', 'id', $ids])->all();
+    	return $this->hasMany(GamePackage::className(), ['group_id' => 'id']);
     }
 }

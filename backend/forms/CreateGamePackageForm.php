@@ -7,12 +7,13 @@ use backend\models\GamePackage;
 
 class CreateGamePackageForm extends Model
 {
+    public $group_id;
     public $title;
 
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title', 'group_id'], 'required'],
         ];
     }
 
@@ -20,6 +21,7 @@ class CreateGamePackageForm extends Model
     {
         $method = new GamePackage();
         $method->title = $this->title;
+        $method->group_id = $this->group_id;
         return $method->save() ? $method : null;
     }
 }

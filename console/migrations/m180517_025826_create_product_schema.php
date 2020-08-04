@@ -128,6 +128,7 @@ class m180517_025826_create_product_schema extends Migration
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
             'slug' => $this->string(255)->notNull(),
+            'group_id' => $this->integer(),
         ], $tableOptions);
 
         $this->createTable('{{%game_group}}', [

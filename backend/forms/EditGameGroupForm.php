@@ -40,22 +40,23 @@ class EditGameGroupForm extends Model
         $packageIds = $this->package;
         if (count($packageIds)) {
             $packages = GamePackage::find()
-            ->where(['in', 'id', $packageIds])
+            ->where(['group_id' => $group->id])
+            ->andWhere(['in', 'id', $packageIds])
             ->select(['id'])
             ->asArray()
             ->all();
             $currentIds = array_column($packages, 'id');
             $diff = array_diff($packageIds, $currentIds);
             foreach ($diff as $diffValue) {
-                $packForm = new CreateGamePackageForm(['title' => $diffValue]);
+                $packForm = new CreateGamePackageForm([
+                    'group_id' => $group->id,
+                    'title' => $diffValue,
+                ]);
                 $newPack = $packForm->save();
                 $currentIds[] = $newPack->id;
             }
-            $group->package = implode(",", $currentIds);
-        } else {
-            $group->package = '';
         }
-        return $group->save();
+        return $group;
     }
 
     public function fetchMethod()
@@ -70,7 +71,8 @@ class EditGameGroupForm extends Model
 
     public function fetchPack()
     {
-        return ArrayHelper::map(GamePackage::find()->all(), 'id', 'title');
+        $group = $this->getGroup();
+        return ArrayHelper::map($group->packages, 'id', 'title');
     }
 
     // public function fetchMethod()
@@ -113,9 +115,11 @@ class EditGameGroupForm extends Model
     public function loadData()
     {
         $group = $this->getGroup();
+        $packages = $group->packages;
+
         $this->title = $group->title;
         $this->method = explode(",", $group->method);
         $this->version = explode(",", $group->version);
-        $this->package = explode(",", $group->package);
+        $this->package = ArrayHelper::getColumn($packages, 'id');
     }
 }

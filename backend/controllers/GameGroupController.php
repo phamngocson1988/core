@@ -75,8 +75,9 @@ class GameGroupController extends Controller
         $model = new \backend\forms\CreateGameGroupForm();
         if ($request->isPost) {
             if ($model->load($request->post())) {
-                if ($model->create()) {
+                if ($group = $model->create()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                    return $this->redirect(['game-group/edit', 'id' => $group->id]);
                 } else {
                     Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
                 }
@@ -97,6 +98,7 @@ class GameGroupController extends Controller
             if ($model->load($request->post())) {
                 if ($model->create()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                    return $this->redirect(['game-group/index']);
                 } else {
                     Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
                 }

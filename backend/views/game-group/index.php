@@ -88,7 +88,7 @@ use yii\web\JsExpression;
                 </td>
                 <td>
                   <?php 
-                  $packages = $model->getPackages();
+                  $packages = $model->packages;
                   $packageTitles = ArrayHelper::getColumn($packages, 'title');
                   echo implode(",", $packageTitles);
                   ?>

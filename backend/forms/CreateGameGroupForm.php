@@ -34,25 +34,22 @@ class CreateGameGroupForm extends Model
         $group->title = $this->title;
         $group->method = implode(",", $this->method);
         $group->version = implode(",", $this->version);
-        $packageIds = $this->package;
-        if (count($packageIds)) {
-            $packages = GamePackage::find()
-            ->where(['in', 'id', $packageIds])
-            ->select(['id'])
-            ->asArray()
-            ->all();
-            $currentIds = array_column($packages, 'id');
-            $diff = array_diff($packageIds, $currentIds);
-            foreach ($diff as $diffValue) {
-                $packForm = new CreateGamePackageForm(['title' => $diffValue]);
-                $newPack = $packForm->save();
-                $currentIds[] = $newPack->id;
+        $group->save();
+        // Create packages
+        $packages = $this->package;
+        if (count($packages)) {
+            foreach ($packages as $packageValue) {
+                $packForm = new CreateGamePackageForm([
+                    'group_id' => $group->id,
+                    'title' => $packageValue,
+                ]);
+                $packForm->save();
             }
-            $group->package = implode(",", $currentIds);
+
         } else {
             $group->package = '';
         }
-        return $group->save();
+        return $group;
     }
 
     public function fetchMethod()
@@ -67,7 +64,7 @@ class CreateGameGroupForm extends Model
 
     public function fetchPack()
     {
-        return ArrayHelper::map(GamePackage::find()->all(), 'id', 'title');
+        return [];
     }
     // public function fetchMethod()
     // {

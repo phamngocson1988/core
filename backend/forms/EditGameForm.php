@@ -256,7 +256,7 @@ class EditGameForm extends Model
     {
         if (!$this->group_id) return [];
         $group = GameGroup::findOne($this->group_id);
-        $packages = $group->getPackages();
+        $packages = $group->packages;
         return ArrayHelper::map($packages, 'id', 'title');
     }
 
@@ -301,7 +301,7 @@ class EditGameForm extends Model
             return [
                 'data-method' => ArrayHelper::map($obj->getMethods(), 'id', 'title'),
                 'data-version' => ArrayHelper::map($obj->getVersions(), 'id', 'title'),
-                'data-package' => ArrayHelper::map($obj->getPackages(), 'id', 'title'),
+                'data-package' => ArrayHelper::map($obj->packages, 'id', 'title'),
             ];
         });
 
