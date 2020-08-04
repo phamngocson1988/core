@@ -10,4 +10,9 @@ class Auth extends ActiveRecord
     {
         return '{{%auth}}';
     }
+
+    public function getUser() 
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
 }
