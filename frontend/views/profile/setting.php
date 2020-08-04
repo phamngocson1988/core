@@ -122,62 +122,26 @@ $user = Yii::$app->user->getIdentity();
                     <div class="col-third">RECEIVE ON-SITE NOTIFICATIONS</div>
                   </div>
                   <div class="notifications-wrap">
+                    <?php foreach (ReviewNotification::settingList() as $notifSetting) : ?>
+                    <?php $key = $notifSetting['key'];?>
                     <div class="notifications-flex">
-                      <div class="col-first">Operator’s response</div>
+                      <div class="col-first"><?=$notifSetting['title'];?></div>
+                      <?php if (in_array('email', $notifSetting['platform'])) : ?>
                       <div class="col-second">
                         <label class="notifications-check-email">
-                          <input type="checkbox" class="notification-setting" name="<?=ReviewNotification::MAIL_OPERATOR_RESPONSE;?>" <?=(int)ArrayHelper::getValue($settings, ReviewNotification::MAIL_OPERATOR_RESPONSE, 0) ? 'checked' : '';?> ><span></span>
+                          <input type="checkbox" class="notification-setting" data-platform="email" name="<?=$key;?>" <?=(int)ArrayHelper::getValue($settings, sprintf("email.%s", $key), 0) ? 'checked' : '';?> ><span></span>
                         </label>
                       </div>
+                      <?php endif;?>
+                      <?php if (in_array('onsite', $notifSetting['platform'])) : ?>
                       <div class="col-third">
                         <label class="notifications-check-onsite">
-                          <input type="checkbox" class="notification-setting" name="<?=ReviewNotification::MAIL_OPERATOR_RESPONSE;?>" <?=(int)ArrayHelper::getValue($settings, ReviewNotification::MAIL_OPERATOR_RESPONSE, 0) ? 'checked' : '';?> ><span></span>
+                          <input type="checkbox" class="notification-setting" data-platform="onsite" name="<?=$key;?>" <?=(int)ArrayHelper::getValue($settings, sprintf("onsite.%s", $key), 0) ? 'checked' : '';?> ><span></span>
                         </label>
                       </div>
+                      <?php endif;?>
                     </div>
-                    <div class="notifications-flex">
-                      <div class="col-first">New player review</div>
-                      <div class="col-second">
-                        <label class="notifications-check-email">
-                          <input type="checkbox" class="notification-setting" name="<?=ReviewNotification::BELL_OPERATOR_RESPONSE;?>" <?=(int)ArrayHelper::getValue($settings, ReviewNotification::BELL_OPERATOR_RESPONSE, 0) ? 'checked' : '';?>><span></span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="notifications-thead">
-                    <div class="col-first">MY COMPLAINS</div>
-                    <div class="col-second">RECEIVE EMAILS</div>
-                    <div class="col-third">RECEIVE ON-SITE NOTIFICATIONS</div>
-                  </div>
-                  <div class="notifications-wrap">
-                    <div class="notifications-flex">
-                      <div class="col-first">Complaint not published</div>
-                      <div class="col-second">
-                        <label class="notifications-check-email">
-                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::MAIL_OPERATOR_RESPONSE_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_OPERATOR_RESPONSE_COMPLAIN, 0) ? 'checked' : '';?>><span></span>
-                        </label>
-                      </div>
-                      <div class="col-third">
-                        <label class="notifications-check-onsite">
-                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::NOTIFICATION_OPERATOR_RESPONSE_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_OPERATOR_RESPONSE_COMPLAIN, 0) ? 'checked' : '';?>><span></span>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="notifications-flex">
-                      <div class="col-first">New player review</div>
-                      <div class="col-second">
-                        <label class="notifications-check-email">
-                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::MAIL_NEW_PLAYER_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::MAIL_NEW_PLAYER_COMPLAIN, 0) ? 'checked' : '';?>><span></span>
-                        </label>
-                      </div>
-                      <div class="col-third">
-                        <label class="notifications-check-onsite">
-                          <input type="checkbox" class="notification-setting"  name="<?=UserSetting::NOTIFICATION_NEW_PLAYER_COMPLAIN;?>" <?=(int)ArrayHelper::getValue($settings, UserSetting::NOTIFICATION_NEW_PLAYER_COMPLAIN, 0) ? 'checked' : '';?>><span>  </span>
-                        </label>
-                      </div>
-                    </div>
+                    <?php endforeach;?>
                   </div>
                 </li>
               </ul>
@@ -232,13 +196,15 @@ editPasswordForm.error = function (errors) {
 $('.notification-setting').change(function(){
   var val = $(this).is(":checked") ? 1 : 0;
   var key = $(this).attr("name");
+  var platform = $(this).data("platform");
   $.ajax({
     url: '###NOTIFICATIONLINK###',
     type: "POST",
     dataType: 'json',
     data: {
       key: key,
-      value: val
+      value: val,
+      platform: platform
     },
     success: function (result, textStatus, jqXHR) {
         if (result.status == false) {

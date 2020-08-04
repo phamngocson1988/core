@@ -16,7 +16,8 @@ use common\behaviors\UserLogBehavior;
 use common\behaviors\UserPointBehavior;
 use common\behaviors\UserBadgeBehavior;
 use common\behaviors\UserMailBehavior;
-
+use common\behaviors\UserNotificationSettingBehavior;
+;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
@@ -55,6 +56,7 @@ class User extends ActiveRecord implements IdentityInterface
             'point' => UserPointBehavior::className(),
             'badge' => UserBadgeBehavior::className(),
             'mail' => UserMailBehavior::className(),
+            'notification' => UserNotificationSettingBehavior::className(),
         ];
     }
 

@@ -10,12 +10,27 @@ class ReviewNotification extends Notification
 {
     public $review;
 
-    const BELL_OPERATOR_RESPONSE = 'BELL_OPERATOR_RESPONSE';
-    const MAIL_OPERATOR_RESPONSE = 'MAIL_OPERATOR_RESPONSE';
-    const MAIL_NEW_PLAYER_REVIEW = 'MAIL_NEW_PLAYER_REVIEW';
+    const OPERATOR_RESPONSE = 'OPERATOR_RESPONSE';
+    const NEW_PLAYER_REVIEW = 'NEW_PLAYER_REVIEW';
     protected $_user;
 
-    protected function getUser()
+    public static function settingList()
+    {
+        return [
+            [
+                'title' => 'Operator’s response',
+                'key' => self::OPERATOR_RESPONSE,
+                'platform' => ['email', 'onsite']
+            ],
+            [
+                'title' => 'New player review',
+                'key' => self::NEW_PLAYER_REVIEW,
+                'platform' => ['email']
+            ]
+        ];
+    }
+
+    public function getUser()
     {
         if (!$this->_user) {
             $this->_user = User::findOne($this->userId);
@@ -28,7 +43,7 @@ class ReviewNotification extends Notification
     public function getTitle()
     {
         switch($this->key){
-            case self::BELL_OPERATOR_RESPONSE:
+            case self::OPERATOR_RESPONSE:
                 return sprintf("Operator Response");
         }
     }
@@ -37,7 +52,7 @@ class ReviewNotification extends Notification
     {
         $operator = $this->review->operator;
         switch($this->key){
-            case self::BELL_OPERATOR_RESPONSE:
+            case self::OPERATOR_RESPONSE:
                 return sprintf("You have received a review response from %s", $Operator->name);
         }
     }
@@ -46,7 +61,7 @@ class ReviewNotification extends Notification
     {
         $operator = $this->review->operator;
         switch($this->key){
-            case self::BELL_OPERATOR_RESPONSE:
+            case self::OPERATOR_RESPONSE:
                 return $operator->getImageUrl('100x100');
 
         }
@@ -59,7 +74,7 @@ class ReviewNotification extends Notification
     {
         $operator = $this->review->operator;
         switch($this->key){
-            case self::BELL_OPERATOR_RESPONSE:
+            case self::OPERATOR_RESPONSE:
                 return ['operator/view', 'id' => $operator->id, 'slug' => $operator->slug];
         }
     }
@@ -77,11 +92,10 @@ class ReviewNotification extends Notification
         $settings = $user->getSettings();
         return [
             'screen' => [
-                self::BELL_OPERATOR_RESPONSE,
+                self::OPERATOR_RESPONSE,
             ],
             'email' => [
-                self::MAIL_OPERATOR_RESPONSE,
-                self::MAIL_NEW_PLAYER_REVIEW,
+                self::NEW_PLAYER_REVIEW,
             ],
         ];
     }
@@ -104,9 +118,8 @@ class ReviewNotification extends Notification
         $data = [];
 
         switch($this->key) {
-            case self::MAIL_OPERATOR_RESPONSE: {
+            case self::OPERATOR_RESPONSE: {
                 $subject = sprintf('BW2020 - %s have just response your review', $operator->name);
-                $template = self::MAIL_OPERATOR_RESPONSE;
                 $fromEmail = $customerServiceMail;
                 $mailer = $customerServiceMailer;
                 $data['operatorUrl'] = Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug], true);
@@ -114,9 +127,9 @@ class ReviewNotification extends Notification
                 break;
             }
 
-            case self::MAIL_NEW_PLAYER_REVIEW: {
+            case self::NEW_PLAYER_REVIEW: {
                 $subject = sprintf('BW2020 - %s have just received new review', $operator->name);
-                $template = self::MAIL_NEW_PLAYER_REVIEW;
+                $template = self::NEW_PLAYER_REVIEW;
                 $fromEmail = $customerServiceMail;
                 $mailer = $customerServiceMailer;
                 $data['operatorUrl'] = Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug], true);

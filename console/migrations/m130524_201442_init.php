@@ -61,6 +61,14 @@ class m130524_201442_init extends Migration
             'value' => $this->text(),
         ], $tableOptions);
 
+        $this->createTable('{{%user_notification_setting}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'platform' => $this->string(255)->notNull(),
+            'key' => $this->string(255)->notNull(),
+            'value' => $this->text(),
+        ], $tableOptions);
+
         $this->createTable('{{%user_log}}', [
             'user_id' => $this->integer()->notNull(),
             'last_activity' => $this->dateTime(),
@@ -93,6 +101,7 @@ class m130524_201442_init extends Migration
     {
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%user_setting}}');
+        $this->dropTable('{{%user_notification_setting}}');
         $this->dropTable('{{%user_log}}');
         $this->dropTable('{{%user_badge}}');
         $this->dropTable('{{%user_point}}');
