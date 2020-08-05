@@ -7,6 +7,7 @@ use yii\base\Model;
 use frontend\models\ComplainReply;
 use frontend\models\Complain;
 use yii\helpers\ArrayHelper;
+use frontend\components\notifications\ComplainNotification;
 
 class ReplyComplainForm extends Model
 {
@@ -54,17 +55,40 @@ class ReplyComplainForm extends Model
     
     public function add()
     {
-        $reply = new ComplainReply();
-        $reply->description = $this->description;
-        $reply->user_id = $this->user_id;
-        $reply->complain_id = $this->complain_id;
-        $reply->mark_close = $this->mark_close;
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $reply = new ComplainReply();
+            $reply->description = $this->description;
+            $reply->user_id = $this->user_id;
+            $reply->complain_id = $this->complain_id;
+            $reply->mark_close = $this->mark_close;
+            if ($reply->save()) {
+                $complain = $this->getComplain();
+                if ($this->mark_close) {
+                    $complain->status = Complain::STATUS_RESOLVE;
+                    $complain->save();
 
-        if ($this->mark_close) {
-            $complain = $this->getComplain();
-            $complain->status = Complain::STATUS_RESOLVE;
-            $complain->save();
+                    ComplainNotification::create(ComplainNotification::COMPLAIN_RESOLVED, [
+                        'complain' => $complain,
+                        'userId' => $reply->user_id
+                    ])->send();
+                } elseif ($this->operator_id) { 
+                    ComplainNotification::create(ComplainNotification::OPERATOR_RESPONSE, [
+                        'complain' => $complain,
+                        'userId' => $complain->user_id
+                    ])->send();
+                }
+                $transaction->commit();
+                return true;
+            }
+            $transaction->rollback();
+            return false;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->addError('id', $e->getMessage());
+            return false;
         }
-        return $reply->save();
+        
     }
 }

@@ -4,6 +4,7 @@ namespace frontend\forms;
 use Yii;
 use yii\base\Model;
 use frontend\models\OperatorReview;
+use frontend\components\notifications\ReviewNotification;
 
 class ReplyOperatorReviewForm extends Model
 {
@@ -38,11 +39,30 @@ class ReplyOperatorReviewForm extends Model
 
     public function reply()
     {
-        $review = $this->getReview();
-        $review->reply = $this->reply;
-        $review->replied_by = $this->user_id;
-        $review->replied_at = date('Y-m-d H:i:s');
-        return $review->save();
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $review = $this->getReview();
+            $review->reply = $this->reply;
+            $review->replied_by = $this->user_id;
+            $review->replied_at = date('Y-m-d H:i:s');
+            if ($review->save()) {
+                ReviewNotification::create(ReviewNotification::OPERATOR_RESPONSE, [
+                    'review' => $review,
+                    'userId' => $review->created_by
+                ])->send();
+                $transaction->commit();
+                return true;
+            }
+            $transaction->rollback();
+            return false;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->addError('id', $e->getMessage());
+            return false;
+        }
+
+        
     }
 
     public function getReview()

@@ -8,7 +8,9 @@ use frontend\models\Complain;
 use frontend\models\Operator;
 use frontend\models\ComplainReason;
 use frontend\models\UserBadge;
+use frontend\models\User;
 use yii\helpers\ArrayHelper;
+use frontend\components\notifications\ComplainNotification;
 
 class CreateComplainForm extends Model
 {
@@ -61,21 +63,41 @@ class CreateComplainForm extends Model
     
     public function create()
     {
-        $complain = new Complain();
-        $complain->title = $this->title;
-        $complain->description = $this->description;
-        $complain->user_id = $this->user_id;
-        $complain->reason_id = $this->reason_id;
-        $complain->operator_id = $this->operator_id;
-        $complain->account_name = $this->account_name;
-        $complain->account_email = $this->account_email;
-        $result = $complain->save();
-        if ($result) {
-            $user = $this->getUser();
-            $operator = $this->getOperator();
-            $user->addBadge(UserBadge::BADGE_COMPLAIN, $complain->id, sprintf("%s - %s", $operator->name, $complain->title));
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $complain = new Complain();
+            $complain->title = $this->title;
+            $complain->description = $this->description;
+            $complain->user_id = $this->user_id;
+            $complain->reason_id = $this->reason_id;
+            $complain->operator_id = $this->operator_id;
+            $complain->account_name = $this->account_name;
+            $complain->account_email = $this->account_email;
+            if ($complain->save()) {
+                $user = $this->getUser();
+                $operator = $this->getOperator();
+                $user->addBadge(UserBadge::BADGE_COMPLAIN, $complain->id, sprintf("%s - %s", $operator->name, $complain->title));
+
+                $operatorStaffs = User::find()->where(['operator_id' => $this->operator_id])->all();
+                foreach ($operatorStaffs as $operatorStaff) {
+                    ComplainNotification::create(ComplainNotification::NEW_COMPLAIN_PUBLISHED, [
+                        'complain' => $complain,
+                        'userId' => $operatorStaff->id
+                    ])->send();
+                }
+
+                $transaction->commit();
+                return $complain;
+            }
+            $transaction->rollback();
+            return false;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->addError('id', $e->getMessage());
+            return false;
         }
-        return $complain;
+        
     }
 
     public function fetchReason()

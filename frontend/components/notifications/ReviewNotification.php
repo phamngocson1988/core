@@ -20,7 +20,7 @@ class ReviewNotification extends Notification
             [
                 'title' => 'Operator’s response',
                 'key' => self::OPERATOR_RESPONSE,
-                'platform' => ['email', 'onsite']
+                'platform' => ['email', 'screen']
             ],
             [
                 'title' => 'New player review',
@@ -53,7 +53,7 @@ class ReviewNotification extends Notification
         $operator = $this->review->operator;
         switch($this->key){
             case self::OPERATOR_RESPONSE:
-                return sprintf("You have received a review response from %s", $Operator->name);
+                return sprintf("You have received a review response from %s", $operator->name);
         }
     }
 
@@ -95,7 +95,8 @@ class ReviewNotification extends Notification
                 self::OPERATOR_RESPONSE,
             ],
             'email' => [
-                self::NEW_PLAYER_REVIEW,
+                self::OPERATOR_RESPONSE,
+                self::NEW_PLAYER_REVIEW
             ],
         ];
     }
@@ -108,43 +109,43 @@ class ReviewNotification extends Notification
      */
     public function toEmail($channel)
     {
-        $customerServiceMail = 'phamngocson1988@gmail.com';
-        $customerServiceMailer = Yii::$app->mailer;
-        $operator = $this->review->operator;
-        $user = $this->getUser();
-        $toEmail = $user->email;
-        $subject = '';
-        $template = '';
-        $data = [];
+        // $customerServiceMail = 'phamngocson1988@gmail.com';
+        // $customerServiceMailer = Yii::$app->mailer;
+        // $operator = $this->review->operator;
+        // $user = $this->getUser();
+        // $toEmail = $user->email;
+        // $subject = '';
+        // $template = '';
+        // $data = [];
 
-        switch($this->key) {
-            case self::OPERATOR_RESPONSE: {
-                $subject = sprintf('BW2020 - %s have just response your review', $operator->name);
-                $fromEmail = $customerServiceMail;
-                $mailer = $customerServiceMailer;
-                $data['operatorUrl'] = Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug], true);
-                $data['review'] = $this->review;
-                break;
-            }
+        // switch($this->key) {
+        //     case self::OPERATOR_RESPONSE: {
+        //         $subject = sprintf('BW2020 - %s have just response your review', $operator->name);
+        //         $fromEmail = $customerServiceMail;
+        //         $mailer = $customerServiceMailer;
+        //         $data['operatorUrl'] = Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug], true);
+        //         $data['review'] = $this->review;
+        //         break;
+        //     }
 
-            case self::NEW_PLAYER_REVIEW: {
-                $subject = sprintf('BW2020 - %s have just received new review', $operator->name);
-                $template = self::NEW_PLAYER_REVIEW;
-                $fromEmail = $customerServiceMail;
-                $mailer = $customerServiceMailer;
-                $data['operatorUrl'] = Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug], true);
-                $data['review'] = $this->review;
-                break;
-            }
-        }
+        //     case self::NEW_PLAYER_REVIEW: {
+        //         $subject = sprintf('BW2020 - %s have just received new review', $operator->name);
+        //         $template = self::NEW_PLAYER_REVIEW;
+        //         $fromEmail = $customerServiceMail;
+        //         $mailer = $customerServiceMailer;
+        //         $data['operatorUrl'] = Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug], true);
+        //         $data['review'] = $this->review;
+        //         break;
+        //     }
+        // }
         
-        $message = $mailer->compose($template, array_merge([
-            'notification' => $this,
-        ], $data));
+        // $message = $mailer->compose($template, array_merge([
+        //     'notification' => $this,
+        // ], $data));
 
-        $message->setFrom($fromEmail);
-        $message->setTo($toEmail);
-        $message->setSubject($subject);
-        $message->send($mailer);
+        // $message->setFrom($fromEmail);
+        // $message->setTo($toEmail);
+        // $message->setSubject($subject);
+        // $message->send($mailer);
     }
 }

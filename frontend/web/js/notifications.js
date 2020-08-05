@@ -34,7 +34,7 @@ var Notifications = (function(opts) {
             '<a class="bell-item trans" href="javascript:;">' + 
             '<div class="bell-image"><img src="/img/common/avatar_img_01.png" alt="image"></div>' +
             '<div class="bell-info">' +
-            '<div class="bell-group"><span class="bell-name">Username</span><span class="bell-txt">' + object.message + '</span></div>' +
+            '<div class="bell-group"><span class="bell-txt">' + object.message + '</span></div>' +
             '<p class="bell-date">' + object.timeago + '</p>' +
             '</div></a></li>';
 
@@ -42,7 +42,7 @@ var Notifications = (function(opts) {
     };
 
     var showList = function() {
-        var list = elem.find('.notifications-list');
+        var list = elem.find('.bell-list');
         $.ajax({
             url: options.url,
             type: "GET",

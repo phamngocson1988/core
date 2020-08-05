@@ -5,6 +5,7 @@ use Yii;
 use yii\db\Query;
 use yii\helpers\Url;
 use webzop\notifications\controllers\DefaultController;
+use common\components\helpers\TimeElapsed;
 
 class NotificationController extends DefaultController
 {
@@ -38,6 +39,7 @@ class NotificationController extends DefaultController
         foreach($list as $notif){
             $route = @unserialize($notif['route']);
             $notif['url'] = !empty($route) ? Url::to($route) : '';
+            $notif['timeago'] = TimeElapsed::timeElapsed($notif['created_at']);
             $notifs[] = $notif;
         }
 

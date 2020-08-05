@@ -65,10 +65,6 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => require('router.php'),
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@frontend/mail',
-        ],
     ],
     'modules' => [
         'notifications' => [

@@ -12,7 +12,7 @@ $this->title = 'Notifications';
         <section class="section-forum-heading">
           <h1 class="heading-title">Notifications</h1>
           <div class="heading-button">
-            <a class="btn btn-primary" href="<?= Url::toRoute(['notification/read-all']) ?>">Mark all as read</a>
+            <a class="btn btn-primary read-all" href="<?= Url::toRoute(['notification/read-all']) ?>">Mark all as read</a>
           </div>
         </section>
         <div class="section-notification widget-box">
@@ -26,7 +26,7 @@ $this->title = 'Notifications';
                 </div>
                 <div class="col-content">
                   <p class="notifition-message"><?= Html::encode($notif['message']); ?></p>
-                  <div class="notifition-time"><i class="fas fa-comment"></i><?= $notif['timeago']; ?></div>
+                  <div class="notifition-time"><?= $notif['timeago']; ?></div>
                 </div>
                 <div class="col-button"><span>Read more</span></div>
               </a>
@@ -55,3 +55,17 @@ $this->title = 'Notifications';
     </div>
   </section>
 </main>
+<?php
+$script = <<< JS
+$('a.read-all').ajax_action({
+  method: 'GET',
+  callback: function(element, data) {
+    location.reload();
+  },
+  error: function(errors) {
+    location.reload();
+  },
+});
+JS;
+$this->registerJs($script);
+?>

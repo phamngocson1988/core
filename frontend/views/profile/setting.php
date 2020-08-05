@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use frontend\models\UserSetting;
 use frontend\components\notifications\ReviewNotification;
+use frontend\components\notifications\ComplainNotification;
 $this->title = 'User Profile';
 $user = Yii::$app->user->getIdentity();
 ?>
@@ -133,7 +134,36 @@ $user = Yii::$app->user->getIdentity();
                         </label>
                       </div>
                       <?php endif;?>
-                      <?php if (in_array('onsite', $notifSetting['platform'])) : ?>
+                      <?php if (in_array('screen', $notifSetting['platform'])) : ?>
+                      <div class="col-third">
+                        <label class="notifications-check-onsite">
+                          <input type="checkbox" class="notification-setting" data-platform="onsite" name="<?=$key;?>" <?=(int)ArrayHelper::getValue($settings, sprintf("onsite.%s", $key), 0) ? 'checked' : '';?> ><span></span>
+                        </label>
+                      </div>
+                      <?php endif;?>
+                    </div>
+                    <?php endforeach;?>
+                  </div>
+                </li>
+                <li>
+                  <div class="notifications-thead">
+                    <div class="col-first">MY COMPLAINTS</div>
+                    <div class="col-second">RECEIVE EMAILS</div>
+                    <div class="col-third">RECEIVE ON-SITE NOTIFICATIONS</div>
+                  </div>
+                  <div class="notifications-wrap">
+                    <?php foreach (ComplainNotification::settingList() as $notifSetting) : ?>
+                    <?php $key = $notifSetting['key'];?>
+                    <div class="notifications-flex">
+                      <div class="col-first"><?=$notifSetting['title'];?></div>
+                      <?php if (in_array('email', $notifSetting['platform'])) : ?>
+                      <div class="col-second">
+                        <label class="notifications-check-email">
+                          <input type="checkbox" class="notification-setting" data-platform="email" name="<?=$key;?>" <?=(int)ArrayHelper::getValue($settings, sprintf("email.%s", $key), 0) ? 'checked' : '';?> ><span></span>
+                        </label>
+                      </div>
+                      <?php endif;?>
+                      <?php if (in_array('screen', $notifSetting['platform'])) : ?>
                       <div class="col-third">
                         <label class="notifications-check-onsite">
                           <input type="checkbox" class="notification-setting" data-platform="onsite" name="<?=$key;?>" <?=(int)ArrayHelper::getValue($settings, sprintf("onsite.%s", $key), 0) ? 'checked' : '';?> ><span></span>

@@ -102,17 +102,6 @@ return [
                 ],
             ],
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@backend/mail',
-        ],
-        'supplier_mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@backend/supplier_mail',
-        ],
-        'syslog' => [
-            'class' => 'backend\components\logs\SystemLog',
-        ],
     ],
     'params' => $params,
 ];
