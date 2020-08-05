@@ -24,7 +24,9 @@ use common\components\helpers\TimeElapsed;
                 <div class="star-rating"><span style="width:<?=$operator->averageReviewPercent();?>%"></span></div><span class="star-rating-text"><?=number_format($operator->averageStar(), 1);?></span>
               </div>
               <h3 class="card-title"><?=$operator->name;?></h3>
-              <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>">JOIN NOW</a>
+              <p class="card-desc">
+                <?=$operator->product;?>
+              </p><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>">JOIN NOW</a>
             </div>
           </div>
         </div>

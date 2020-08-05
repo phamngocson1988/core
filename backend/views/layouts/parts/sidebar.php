@@ -106,7 +106,7 @@ use yii\helpers\Url;
       </li>
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="fa fa-newspaper-o"></i>
+        <i class="fa fa-dollar"></i>
         <span class="title"><?=Yii::t('app', 'manage_bonus');?></span>
         <span class="arrow"></span>
         </a>
@@ -121,7 +121,7 @@ use yii\helpers\Url;
 
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user-following"></i>
+        <i class="fa fa-comment"></i>
         <span class="title"><?=Yii::t('app', 'manage_complain');?></span>
         <span class="arrow"></span>
         </a>
@@ -136,7 +136,7 @@ use yii\helpers\Url;
 
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user-following"></i>
+        <i class="fa fa-life-ring"></i>
         <span class="title"><?=Yii::t('app', 'manage_forum');?></span>
         <span class="arrow"></span>
         </a>
@@ -156,7 +156,7 @@ use yii\helpers\Url;
 
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="icon-user-following"></i>
+        <i class="fa fa-buysellads"></i>
         <span class="title"><?=Yii::t('app', 'manage_ads');?></span>
         <span class="arrow"></span>
         </a>
