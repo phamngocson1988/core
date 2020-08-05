@@ -2130,6 +2130,9 @@ body {
 .keyvisual-slider .slick-initialized li {
   visibility: visible;
 }
+.keyvisual-slider .is-slider-show li {
+  visibility: visible;
+}
 
 .item-block {
   color: #fff !important;

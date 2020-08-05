@@ -153,6 +153,23 @@ app.slick = function () {
       });
     }
   });
+
+  $('.js-top-keyvisual ul').each(function () {
+    if ($(this).find('li').length > 1) {
+      $(this).slick({
+        dots: false,
+        arrows: false,
+        infinite: true,
+        fade: true,
+        autoplay: true,
+        speed: 1000,
+        autoplaySpeed: 5000,
+        draggable: false
+      });
+    } else {
+      $(this).addClass('is-slider-show');
+    }
+  });
 };
 
 app.exclamation = function () {
