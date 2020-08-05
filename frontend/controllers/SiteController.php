@@ -48,7 +48,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id]);
+            $result = [
+                'status' => true, 
+                'user_id' => Yii::$app->user->id,
+            ];
+            if (Yii::$app->user->can('admin')) {
+                $user = Yii::$app->user->getIdentity();
+                $operator = Operator::findOne($user->operator_id);
+                $result['next'] = Url::to(['manage/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
+            }
+            return json_encode($result);
         } else {
             $message = $model->getErrorSummary(true);
             $message = reset($message);

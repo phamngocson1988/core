@@ -19,7 +19,7 @@ return [
             'identityClass' => 'frontend\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
-            'loginUrl' => ['site/login', '#' => 'page-title'],
+            'loginUrl' => ['site/index', '#' => 'modalLogin'],
             'on afterLogin' => ['frontend\events\LoginHandler', 'logLogin'],
         ],
         

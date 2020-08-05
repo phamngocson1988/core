@@ -64,7 +64,7 @@ use common\components\helpers\TimeElapsed;
             <div class="widget-inner">
               <ul class="followers-list">
                 <?php foreach ($favorites as $favorite) : ?>
-                <li><a class="trans" href="<?=Url::to(['operator/index', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><img class="img-radius" src="<?=$favorite->getImageUrl('50x50');?>" alt="<?=$favorite->title;?>"></a></li>
+                <li><a class="trans" href="<?=Url::to(['operator/index', 'id' => $favorite->id, 'slug' => $favorite->slug]);?>"><img class="img-radius" src="<?=$favorite->getImageUrl('50x50');?>" alt="<?=$favorite->name;?>"></a></li>
                 <?php endforeach;?>
               </ul>
             </div>

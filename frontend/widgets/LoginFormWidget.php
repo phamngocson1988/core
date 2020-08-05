@@ -38,7 +38,11 @@ $('html').on('submit', 'form#$formId', function() {
                 toastr.error(result.errors);
                 return false;
             } else {
-                location.reload();
+                if (result.next) {
+                    window.location.href = result.next;
+                } else {
+                    location.reload();
+                }
             }
         },
     });
