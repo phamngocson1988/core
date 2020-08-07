@@ -84,17 +84,15 @@ class WalletPaymentForm extends Model
         $subTotalPayment = $this->quantity;
         $totalPayment = $subTotalPayment;
         $promotion = $this->getPromotion();
-        $bonusKingcoin = 0;
-        if ($promotion) {
-            $bonusKingcoin = $promotion->apply($subTotalPayment);
-            $totalPayment += $bonusKingcoin;
-        }
-        
         $subTotalKingcoin = $this->quantity;
         $totalKingcoin = $subTotalKingcoin;
-        
-        $voucherApply = $promotion ? true : false;
 
+        $bonusKingcoin = 0;
+        if ($promotion) {
+            $bonusKingcoin = $promotion->apply($subTotalKingcoin);
+            $totalKingcoin += $bonusKingcoin;
+        }
+        $voucherApply = $promotion ? true : false;
         $transferFee = $paygate->getFee($subTotalPayment);
         $totalPayment += $transferFee;
         return [
