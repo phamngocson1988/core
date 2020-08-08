@@ -51,8 +51,9 @@ class SpecifiedUsersRule extends PromotionRuleAbstract implements PromotionRuleI
 
     public function isValid($userId)
     {
-        if (!$userId); return false;
+        if (!$userId) return false;
         if (!in_array($userId, $this->users)) return false;
+        return true;
     }
 
     protected function loadAllUsers()
