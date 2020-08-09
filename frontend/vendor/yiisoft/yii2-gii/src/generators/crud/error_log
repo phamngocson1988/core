@@ -1,0 +1,84 @@
+[19-Nov-2018 13:37:52 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[19-Nov-2018 14:34:34 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[19-Nov-2018 14:34:34 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[23-Dec-2018 18:50:11 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[23-Dec-2018 18:50:25 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[23-Dec-2018 18:50:25 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[24-Dec-2018 05:01:34 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[24-Dec-2018 05:01:58 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[24-Dec-2018 05:01:58 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[24-Dec-2018 12:57:24 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[24-Dec-2018 12:57:50 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[24-Dec-2018 12:57:50 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[08-Jan-2019 13:57:28 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[08-Jan-2019 13:57:35 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[08-Jan-2019 13:57:35 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[09-Jan-2019 04:19:41 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[09-Jan-2019 04:20:08 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[09-Jan-2019 04:20:08 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[09-Jan-2019 13:50:38 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[09-Jan-2019 13:51:11 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[09-Jan-2019 13:51:11 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[26-Jan-2019 20:04:20 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[26-Jan-2019 20:04:33 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[26-Jan-2019 20:04:33 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[27-Jan-2019 11:49:47 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[27-Jan-2019 11:50:16 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[27-Jan-2019 11:50:16 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[27-Jan-2019 22:33:30 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[27-Jan-2019 22:33:52 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[27-Jan-2019 22:33:52 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[01-Feb-2019 04:00:23 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[01-Feb-2019 04:00:57 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[01-Feb-2019 04:00:57 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[17-Feb-2019 14:20:20 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[17-Feb-2019 14:20:28 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[17-Feb-2019 14:20:28 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[18-Feb-2019 08:50:05 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[18-Feb-2019 08:50:19 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[18-Feb-2019 08:50:19 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[19-Feb-2019 02:11:07 UTC] PHP Fatal error:  Class 'yii\gii\Generator' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/Generator.php on line 33
+[19-Feb-2019 02:11:34 UTC] PHP Notice:  Undefined variable: form in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6
+[19-Feb-2019 02:11:34 UTC] PHP Fatal error:  Uncaught Error: Call to a member function field() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/crud/form.php on line 6

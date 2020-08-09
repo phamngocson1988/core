@@ -1,0 +1,6 @@
+[16-Feb-2019 13:16:40 UTC] PHP Fatal error:  Interface 'GuzzleHttp\ClientInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Client.php on line 25
+[16-Feb-2019 13:17:10 UTC] PHP Fatal error:  Interface 'GuzzleHttp\Promise\PromisorInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Pool.php on line 19
+[17-Feb-2019 09:12:31 UTC] PHP Fatal error:  Interface 'GuzzleHttp\ClientInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Client.php on line 25
+[17-Feb-2019 09:13:56 UTC] PHP Fatal error:  Interface 'GuzzleHttp\Promise\PromisorInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Pool.php on line 19
+[18-Feb-2019 03:13:08 UTC] PHP Fatal error:  Interface 'GuzzleHttp\ClientInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Client.php on line 25
+[18-Feb-2019 03:14:53 UTC] PHP Fatal error:  Interface 'GuzzleHttp\Promise\PromisorInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Pool.php on line 19

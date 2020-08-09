@@ -1,0 +1,56 @@
+[23-Dec-2018 02:03:04 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[23-Dec-2018 18:46:59 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[24-Dec-2018 05:00:28 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[08-Jan-2019 01:31:45 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[08-Jan-2019 13:55:29 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[09-Jan-2019 04:41:25 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[20-Jan-2019 18:33:55 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[26-Jan-2019 03:42:02 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[26-Jan-2019 20:00:23 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[27-Jan-2019 11:48:19 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[31-Jan-2019 10:33:33 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[17-Feb-2019 00:37:34 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[17-Feb-2019 14:17:08 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6
+[18-Feb-2019 08:49:18 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\debug\DebugAsset' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/views/layouts/main.php on line 6

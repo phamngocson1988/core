@@ -1,0 +1,12 @@
+[23-Dec-2018 12:02:18 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[24-Dec-2018 03:30:47 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[24-Dec-2018 12:00:56 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[08-Jan-2019 09:50:50 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[08-Jan-2019 22:57:27 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[09-Jan-2019 09:01:48 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[10-Jan-2019 01:59:49 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[26-Jan-2019 13:46:14 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[31-Jan-2019 18:15:54 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[17-Feb-2019 09:35:30 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[18-Feb-2019 03:54:24 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14
+[18-Feb-2019 22:04:50 UTC] PHP Fatal error:  Interface 'Prophecy\Exception\Exception' not found in /home/kinggems/public_html/vendor/phpspec/prophecy/src/Prophecy/Exception/InvalidArgumentException.php on line 14

@@ -1,0 +1,165 @@
+[24-Dec-2018 05:03:21 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[24-Dec-2018 05:03:21 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[24-Dec-2018 05:03:21 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[24-Dec-2018 05:03:21 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Undefined variable: modelClassName in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 17
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Undefined variable: className in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[24-Dec-2018 05:03:23 UTC] PHP Notice:  Trying to get property 'queryBaseClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[24-Dec-2018 12:58:51 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[24-Dec-2018 12:58:51 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[24-Dec-2018 12:58:51 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[24-Dec-2018 12:58:51 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[25-Dec-2018 01:21:49 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[25-Dec-2018 01:21:49 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[25-Dec-2018 01:21:49 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[25-Dec-2018 01:21:49 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[26-Dec-2018 11:38:04 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[26-Dec-2018 11:38:04 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[26-Dec-2018 11:38:04 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[26-Dec-2018 11:38:04 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Undefined variable: modelClassName in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 17
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Undefined variable: className in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[08-Jan-2019 17:04:50 UTC] PHP Notice:  Trying to get property 'queryBaseClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[09-Jan-2019 04:21:52 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Jan-2019 04:21:52 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Jan-2019 04:21:52 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[09-Jan-2019 04:21:52 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Undefined variable: modelClassName in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 17
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Undefined variable: className in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[09-Jan-2019 04:21:55 UTC] PHP Notice:  Trying to get property 'queryBaseClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[09-Jan-2019 13:57:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Jan-2019 13:57:23 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Jan-2019 13:57:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[09-Jan-2019 13:57:23 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[09-Jan-2019 20:12:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Jan-2019 20:12:20 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Jan-2019 20:12:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[09-Jan-2019 20:12:20 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[27-Jan-2019 11:52:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[27-Jan-2019 11:52:23 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[27-Jan-2019 11:52:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[27-Jan-2019 11:52:23 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Undefined variable: modelClassName in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 17
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Undefined variable: className in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[27-Jan-2019 11:52:26 UTC] PHP Notice:  Trying to get property 'queryBaseClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[27-Jan-2019 22:34:49 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[27-Jan-2019 22:34:49 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[27-Jan-2019 22:34:49 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[27-Jan-2019 22:34:49 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[28-Jan-2019 03:33:15 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[28-Jan-2019 03:33:15 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[28-Jan-2019 03:33:15 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[28-Jan-2019 03:33:15 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[01-Feb-2019 10:41:07 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[01-Feb-2019 10:41:07 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[01-Feb-2019 10:41:07 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[01-Feb-2019 10:41:07 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Undefined variable: modelClassName in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 17
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Undefined variable: className in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[01-Feb-2019 10:41:10 UTC] PHP Notice:  Trying to get property 'queryBaseClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[09-Feb-2019 17:06:36 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Feb-2019 17:06:36 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[09-Feb-2019 17:06:36 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[09-Feb-2019 17:06:36 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[18-Feb-2019 08:51:18 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[18-Feb-2019 08:51:18 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[18-Feb-2019 08:51:18 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[18-Feb-2019 08:51:18 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Undefined variable: modelClassName in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 17
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 18
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Trying to get property 'queryNs' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 25
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Undefined variable: className in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[18-Feb-2019 08:51:20 UTC] PHP Notice:  Trying to get property 'queryBaseClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/query.php on line 32
+[19-Feb-2019 02:12:35 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[19-Feb-2019 02:12:35 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[19-Feb-2019 02:12:35 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[19-Feb-2019 02:12:35 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[19-Feb-2019 10:45:32 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[19-Feb-2019 10:45:32 UTC] PHP Notice:  Trying to get property 'ns' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 20
+[19-Feb-2019 10:45:32 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25
+[19-Feb-2019 10:45:32 UTC] PHP Fatal error:  Uncaught Error: Call to a member function generateTableName() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php:25
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/model/default/model.php on line 25

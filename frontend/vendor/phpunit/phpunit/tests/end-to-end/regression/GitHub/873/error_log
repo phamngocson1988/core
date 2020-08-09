@@ -1,0 +1,12 @@
+[19-Feb-2019 01:28:58 UTC] PHP Fatal error:  Uncaught Exception: PHPUnit suppresses exceptions thrown outside of test case function in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/873/Issue873Test.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/873/Issue873Test.php on line 14
+[19-Feb-2019 10:20:52 UTC] PHP Fatal error:  Uncaught Exception: PHPUnit suppresses exceptions thrown outside of test case function in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/873/Issue873Test.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/873/Issue873Test.php on line 14
+[19-Feb-2019 22:35:47 UTC] PHP Fatal error:  Uncaught Exception: PHPUnit suppresses exceptions thrown outside of test case function in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/873/Issue873Test.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/873/Issue873Test.php on line 14

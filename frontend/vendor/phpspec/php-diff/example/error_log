@@ -1,0 +1,120 @@
+[12-Nov-2018 11:08:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[22-Dec-2018 12:31:43 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[23-Dec-2018 01:51:22 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[23-Dec-2018 12:01:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[07-Jan-2019 02:53:14 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[07-Jan-2019 15:55:01 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[08-Jan-2019 09:48:49 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[25-Jan-2019 10:00:38 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[25-Jan-2019 22:20:42 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[26-Jan-2019 13:46:01 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[30-Jan-2019 19:10:40 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[07-Feb-2019 11:30:56 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[15-Feb-2019 20:45:14 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[16-Feb-2019 13:26:52 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158
+[17-Feb-2019 09:33:52 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mb_strlen() in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php:158
+Stack trace:
+#0 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php(83): Diff_Renderer_Html_Array->getChangeExtent('\t\t<title>Hello ...', '\t\t<title>Goodby...')
+#1 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/SideBySide.php(55): Diff_Renderer_Html_Array->render()
+#2 /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff.php(102): Diff_Renderer_Html_SideBySide->render()
+#3 /home/kinggems/public_html/vendor/phpspec/php-diff/example/example.php(37): Diff->render(Object(Diff_Renderer_Html_SideBySide))
+#4 {main}
+  thrown in /home/kinggems/public_html/vendor/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php on line 158

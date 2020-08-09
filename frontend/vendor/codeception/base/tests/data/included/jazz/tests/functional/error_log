@@ -1,0 +1,117 @@
+[24-Dec-2018 18:27:08 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[24-Dec-2018 18:27:54 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[24-Dec-2018 18:28:27 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[25-Dec-2018 01:33:02 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[25-Dec-2018 01:33:05 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[25-Dec-2018 01:33:07 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[25-Dec-2018 07:56:24 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[25-Dec-2018 07:56:26 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[25-Dec-2018 07:56:29 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[09-Jan-2019 14:23:25 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[09-Jan-2019 14:23:26 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[09-Jan-2019 14:23:28 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[09-Jan-2019 23:56:29 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[09-Jan-2019 23:56:32 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[09-Jan-2019 23:56:37 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[10-Jan-2019 05:14:50 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[10-Jan-2019 05:15:07 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[10-Jan-2019 05:15:24 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[27-Jan-2019 22:58:04 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[27-Jan-2019 22:58:06 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[27-Jan-2019 22:58:09 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[28-Jan-2019 03:39:22 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[28-Jan-2019 03:39:24 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[28-Jan-2019 03:39:25 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[28-Jan-2019 08:27:35 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[28-Jan-2019 08:27:37 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[28-Jan-2019 08:27:40 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[01-Feb-2019 16:55:43 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[01-Feb-2019 16:55:46 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[01-Feb-2019 16:55:47 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[19-Feb-2019 05:58:16 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[19-Feb-2019 05:58:18 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[19-Feb-2019 05:58:20 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[19-Feb-2019 22:26:09 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[19-Feb-2019 22:26:14 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[19-Feb-2019 22:26:22 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3
+[20-Feb-2019 02:15:30 UTC] PHP Fatal error:  Uncaught Error: Class 'Jazz\TestGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/DemoCept.php on line 3
+[20-Feb-2019 02:15:42 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/TestGuy.php on line 25
+[20-Feb-2019 02:15:49 UTC] PHP Fatal error:  Uncaught Error: Class 'Codeception\Configuration' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/included/jazz/tests/functional/_bootstrap.php on line 3

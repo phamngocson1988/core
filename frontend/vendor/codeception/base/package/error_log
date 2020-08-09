@@ -1,0 +1,75 @@
+[23-Sep-2018 22:39:31 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[22-Dec-2018 11:52:44 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[23-Dec-2018 01:10:21 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[23-Dec-2018 11:23:29 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[07-Jan-2019 02:31:54 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[07-Jan-2019 15:10:40 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[08-Jan-2019 05:11:34 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[25-Jan-2019 03:12:54 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[25-Jan-2019 16:56:30 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[26-Jan-2019 04:27:08 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[30-Jan-2019 17:55:43 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[07-Feb-2019 11:29:47 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[15-Feb-2019 20:36:21 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[16-Feb-2019 08:48:00 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3
+[17-Feb-2019 05:13:05 UTC] PHP Fatal error:  Uncaught PharException: internal corruption of phar "/home/kinggems/public_html/vendor/codeception/base/package/stub.php" (truncated manifest at stub end) in /home/kinggems/public_html/vendor/codeception/base/package/stub.php:3
+Stack trace:
+#0 /home/kinggems/public_html/vendor/codeception/base/package/stub.php(3): Phar::mapPhar()
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/package/stub.php on line 3

@@ -1,0 +1,6 @@
+[18-Feb-2019 08:44:23 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/models/ExampleModel.php on line 15
+[18-Feb-2019 08:44:24 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/models/Item.php on line 18
+[19-Feb-2019 02:04:27 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/models/ExampleModel.php on line 15
+[19-Feb-2019 02:04:29 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/models/Item.php on line 18
+[19-Feb-2019 10:42:28 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/models/ExampleModel.php on line 15
+[19-Feb-2019 10:42:31 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/models/Item.php on line 18

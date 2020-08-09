@@ -1,0 +1,9 @@
+[18-Feb-2019 08:53:51 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/Command.php on line 18
+[18-Feb-2019 08:53:52 UTC] PHP Fatal error:  Class 'yii\queue\cli\Action' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/InfoAction.php on line 18
+[18-Feb-2019 08:53:53 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/Queue.php on line 21
+[19-Feb-2019 02:15:09 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/Command.php on line 18
+[19-Feb-2019 02:15:12 UTC] PHP Fatal error:  Class 'yii\queue\cli\Action' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/InfoAction.php on line 18
+[19-Feb-2019 02:15:14 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/Queue.php on line 21
+[19-Feb-2019 18:41:07 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/Command.php on line 18
+[19-Feb-2019 18:41:19 UTC] PHP Fatal error:  Class 'yii\queue\cli\Action' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/InfoAction.php on line 18
+[19-Feb-2019 18:41:44 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/beanstalk/Queue.php on line 21

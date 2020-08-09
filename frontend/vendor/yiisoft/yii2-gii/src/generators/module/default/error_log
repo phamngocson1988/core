@@ -1,0 +1,208 @@
+[20-Nov-2018 09:16:00 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[20-Nov-2018 09:16:00 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[20-Nov-2018 09:16:00 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[20-Nov-2018 09:16:00 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[20-Nov-2018 09:16:00 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[20-Nov-2018 09:16:00 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[21-Nov-2018 18:18:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[21-Nov-2018 18:18:20 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[22-Nov-2018 01:01:35 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[22-Nov-2018 01:01:35 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[24-Dec-2018 05:03:59 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[24-Dec-2018 05:03:59 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[24-Dec-2018 05:04:04 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[24-Dec-2018 05:04:04 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[24-Dec-2018 05:04:04 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[24-Dec-2018 05:04:04 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[24-Dec-2018 05:04:04 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[24-Dec-2018 05:04:04 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[24-Dec-2018 05:04:06 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[24-Dec-2018 05:04:06 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[24-Dec-2018 12:59:11 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[24-Dec-2018 12:59:11 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[24-Dec-2018 12:59:17 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[24-Dec-2018 12:59:17 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[24-Dec-2018 12:59:17 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[24-Dec-2018 12:59:17 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[24-Dec-2018 12:59:17 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[24-Dec-2018 12:59:17 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[25-Dec-2018 01:21:52 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[25-Dec-2018 01:21:52 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[25-Dec-2018 01:21:58 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[25-Dec-2018 01:21:58 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[25-Dec-2018 01:21:58 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[25-Dec-2018 01:21:58 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[25-Dec-2018 01:21:58 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[25-Dec-2018 01:21:58 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[09-Jan-2019 04:22:27 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[09-Jan-2019 04:22:27 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[09-Jan-2019 04:22:32 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[09-Jan-2019 04:22:32 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[09-Jan-2019 04:22:32 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[09-Jan-2019 04:22:32 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[09-Jan-2019 04:22:32 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[09-Jan-2019 04:22:32 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[09-Jan-2019 04:22:35 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[09-Jan-2019 04:22:35 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[09-Jan-2019 13:57:56 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[09-Jan-2019 13:57:56 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[09-Jan-2019 13:58:02 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[09-Jan-2019 13:58:02 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[09-Jan-2019 13:58:02 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[09-Jan-2019 13:58:02 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[09-Jan-2019 13:58:02 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[09-Jan-2019 13:58:02 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[09-Jan-2019 20:12:26 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[09-Jan-2019 20:12:26 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[09-Jan-2019 20:12:30 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[09-Jan-2019 20:12:30 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[09-Jan-2019 20:12:30 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[09-Jan-2019 20:12:30 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[09-Jan-2019 20:12:30 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[09-Jan-2019 20:12:30 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[27-Jan-2019 11:53:05 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[27-Jan-2019 11:53:05 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[27-Jan-2019 11:53:11 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[27-Jan-2019 11:53:11 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[27-Jan-2019 11:53:11 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[27-Jan-2019 11:53:11 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[27-Jan-2019 11:53:11 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[27-Jan-2019 11:53:11 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[27-Jan-2019 11:53:13 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[27-Jan-2019 11:53:13 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[27-Jan-2019 22:35:13 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[27-Jan-2019 22:35:13 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[27-Jan-2019 22:35:17 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[27-Jan-2019 22:35:17 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[27-Jan-2019 22:35:17 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[27-Jan-2019 22:35:17 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[27-Jan-2019 22:35:17 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[27-Jan-2019 22:35:17 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[28-Jan-2019 03:33:17 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[28-Jan-2019 03:33:17 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[28-Jan-2019 03:33:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[28-Jan-2019 03:33:20 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[28-Jan-2019 03:33:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[28-Jan-2019 03:33:20 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[28-Jan-2019 03:33:20 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[28-Jan-2019 03:33:20 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[01-Feb-2019 10:41:19 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[01-Feb-2019 10:41:19 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[01-Feb-2019 10:41:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[01-Feb-2019 10:41:23 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[01-Feb-2019 10:41:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[01-Feb-2019 10:41:23 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[01-Feb-2019 10:41:23 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[01-Feb-2019 10:41:23 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[01-Feb-2019 10:41:25 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[01-Feb-2019 10:41:25 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[18-Feb-2019 08:51:36 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[18-Feb-2019 08:51:36 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[18-Feb-2019 08:51:39 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[18-Feb-2019 08:51:39 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[18-Feb-2019 08:51:39 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[18-Feb-2019 08:51:39 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[18-Feb-2019 08:51:39 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[18-Feb-2019 08:51:39 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[18-Feb-2019 08:51:40 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[18-Feb-2019 08:51:40 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/view.php on line 5
+[19-Feb-2019 02:12:54 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[19-Feb-2019 02:12:54 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[19-Feb-2019 02:12:59 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[19-Feb-2019 02:12:59 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[19-Feb-2019 02:12:59 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[19-Feb-2019 02:12:59 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[19-Feb-2019 02:12:59 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[19-Feb-2019 02:12:59 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[19-Feb-2019 10:45:35 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[19-Feb-2019 10:45:35 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/controller.php on line 12
+[19-Feb-2019 10:45:40 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[19-Feb-2019 10:45:40 UTC] PHP Notice:  Trying to get property 'moduleClass' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 9
+[19-Feb-2019 10:45:40 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[19-Feb-2019 10:45:40 UTC] PHP Notice:  Trying to get property 'moduleID' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 20
+[19-Feb-2019 10:45:40 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27
+[19-Feb-2019 10:45:40 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getControllerNamespace() on null in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/yiisoft/yii2-gii/src/generators/module/default/module.php on line 27

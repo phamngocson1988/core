@@ -1,0 +1,105 @@
+[06-Dec-2018 10:20:58 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[06-Dec-2018 12:57:27 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[06-Dec-2018 13:12:43 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[08-Dec-2018 16:21:37 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[23-Dec-2018 01:17:33 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[23-Dec-2018 01:17:37 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[23-Dec-2018 01:17:43 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[23-Dec-2018 01:17:45 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[23-Dec-2018 11:30:17 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[23-Dec-2018 11:30:18 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[23-Dec-2018 11:30:19 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[23-Dec-2018 11:30:21 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[23-Dec-2018 19:46:56 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[23-Dec-2018 19:46:58 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[23-Dec-2018 19:46:59 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[23-Dec-2018 19:47:02 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[07-Jan-2019 15:17:48 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[07-Jan-2019 15:17:52 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[07-Jan-2019 15:17:56 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[07-Jan-2019 15:17:59 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[08-Jan-2019 05:27:52 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[08-Jan-2019 05:27:56 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[08-Jan-2019 05:27:59 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[08-Jan-2019 05:28:01 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[08-Jan-2019 14:20:33 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[08-Jan-2019 14:20:35 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[08-Jan-2019 14:20:38 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[08-Jan-2019 14:20:39 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[25-Jan-2019 17:02:35 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[25-Jan-2019 17:02:40 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[25-Jan-2019 17:02:45 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[25-Jan-2019 17:02:48 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[26-Jan-2019 08:30:11 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[26-Jan-2019 08:30:14 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[26-Jan-2019 08:30:17 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[26-Jan-2019 08:30:19 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[27-Jan-2019 00:18:43 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[27-Jan-2019 00:18:46 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[27-Jan-2019 00:18:50 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[27-Jan-2019 00:18:53 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[31-Jan-2019 03:04:35 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[31-Jan-2019 03:04:42 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[31-Jan-2019 03:04:48 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[31-Jan-2019 03:04:50 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[08-Feb-2019 00:56:16 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[08-Feb-2019 01:19:13 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[08-Feb-2019 01:30:42 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[08-Feb-2019 02:39:34 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[16-Feb-2019 08:54:24 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[16-Feb-2019 08:54:31 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[16-Feb-2019 08:54:37 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[16-Feb-2019 08:54:42 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[17-Feb-2019 05:26:00 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[17-Feb-2019 05:26:03 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[17-Feb-2019 05:26:04 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[17-Feb-2019 05:26:10 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2
+[17-Feb-2019 18:27:33 UTC] PHP Parse error:  syntax error, unexpected 'do' (T_DO) in /home/kinggems/public_html/vendor/codeception/base/tests/data/Invalid.php on line 2
+[17-Feb-2019 18:27:35 UTC] PHP Fatal error:  Uncaught Error: Class 'CodeGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleCept.php on line 2
+[17-Feb-2019 18:27:37 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleNamespacedTest.php on line 6
+[17-Feb-2019 18:27:39 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/SimpleTest.php on line 2

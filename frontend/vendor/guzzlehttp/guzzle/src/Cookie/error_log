@@ -1,0 +1,9 @@
+[17-Feb-2019 09:12:47 UTC] PHP Fatal error:  Interface 'GuzzleHttp\Cookie\CookieJarInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/CookieJar.php on line 10
+[17-Feb-2019 09:12:52 UTC] PHP Fatal error:  Class 'GuzzleHttp\Cookie\CookieJar' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/FileCookieJar.php on line 7
+[17-Feb-2019 09:12:54 UTC] PHP Fatal error:  Class 'GuzzleHttp\Cookie\CookieJar' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/SessionCookieJar.php on line 7
+[18-Feb-2019 03:13:25 UTC] PHP Fatal error:  Interface 'GuzzleHttp\Cookie\CookieJarInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/CookieJar.php on line 10
+[18-Feb-2019 03:13:30 UTC] PHP Fatal error:  Class 'GuzzleHttp\Cookie\CookieJar' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/FileCookieJar.php on line 7
+[18-Feb-2019 03:13:33 UTC] PHP Fatal error:  Class 'GuzzleHttp\Cookie\CookieJar' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/SessionCookieJar.php on line 7
+[18-Feb-2019 21:27:31 UTC] PHP Fatal error:  Interface 'GuzzleHttp\Cookie\CookieJarInterface' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/CookieJar.php on line 10
+[18-Feb-2019 21:27:33 UTC] PHP Fatal error:  Class 'GuzzleHttp\Cookie\CookieJar' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/FileCookieJar.php on line 7
+[18-Feb-2019 21:27:34 UTC] PHP Fatal error:  Class 'GuzzleHttp\Cookie\CookieJar' not found in /home/kinggems/public_html/vendor/guzzlehttp/guzzle/src/Cookie/SessionCookieJar.php on line 7

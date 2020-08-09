@@ -1,0 +1,14 @@
+[20-Nov-2018 02:57:59 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[23-Dec-2018 11:35:20 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[23-Dec-2018 20:06:25 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[24-Dec-2018 10:40:25 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[08-Jan-2019 05:47:17 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[08-Jan-2019 14:38:11 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[09-Jan-2019 04:59:56 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[26-Jan-2019 08:36:10 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[27-Jan-2019 00:49:23 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[27-Jan-2019 16:46:50 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[31-Jan-2019 14:11:29 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[17-Feb-2019 05:39:03 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[17-Feb-2019 21:51:42 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4
+[18-Feb-2019 12:38:34 UTC] PHP Fatal error:  Class 'WebGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/web/_steps/RootWatcherSteps.php on line 4

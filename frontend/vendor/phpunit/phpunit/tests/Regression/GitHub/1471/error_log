@@ -1,0 +1,14 @@
+[22-Nov-2018 16:28:19 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[16-Dec-2018 18:29:31 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[24-Dec-2018 12:18:28 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[25-Dec-2018 01:10:48 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[08-Jan-2019 23:18:56 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[09-Jan-2019 09:46:30 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[09-Jan-2019 19:29:32 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[27-Jan-2019 10:50:24 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[27-Jan-2019 21:51:15 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[28-Jan-2019 03:22:58 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[31-Jan-2019 21:50:49 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[18-Feb-2019 08:08:11 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[18-Feb-2019 22:28:48 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12
+[19-Feb-2019 10:04:44 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/Regression/GitHub/1471/Issue1471Test.php on line 12

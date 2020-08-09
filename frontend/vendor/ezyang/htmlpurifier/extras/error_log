@@ -1,0 +1,82 @@
+[20-Nov-2018 19:30:15 UTC] PHP Deprecated:  __autoload() is deprecated, use spl_autoload_register() instead in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload-legacy.php on line 10
+[20-Nov-2018 19:32:24 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[22-Dec-2018 12:09:28 UTC] PHP Deprecated:  __autoload() is deprecated, use spl_autoload_register() instead in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload-legacy.php on line 10
+[22-Dec-2018 12:09:31 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[23-Dec-2018 01:30:36 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[23-Dec-2018 11:39:56 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[07-Jan-2019 02:39:06 UTC] PHP Deprecated:  __autoload() is deprecated, use spl_autoload_register() instead in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload-legacy.php on line 10
+[07-Jan-2019 02:39:08 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[07-Jan-2019 15:32:39 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[08-Jan-2019 06:07:25 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[25-Jan-2019 03:23:21 UTC] PHP Deprecated:  __autoload() is deprecated, use spl_autoload_register() instead in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload-legacy.php on line 10
+[25-Jan-2019 03:23:27 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[25-Jan-2019 17:16:49 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[26-Jan-2019 08:38:52 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[30-Jan-2019 18:00:23 UTC] PHP Deprecated:  __autoload() is deprecated, use spl_autoload_register() instead in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload-legacy.php on line 10
+[30-Jan-2019 18:00:24 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[07-Feb-2019 11:30:05 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[07-Feb-2019 11:30:05 UTC] PHP Deprecated:  __autoload() is deprecated, use spl_autoload_register() instead in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload-legacy.php on line 10
+[15-Feb-2019 20:40:10 UTC] PHP Deprecated:  __autoload() is deprecated, use spl_autoload_register() instead in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload-legacy.php on line 10
+[15-Feb-2019 20:40:16 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[16-Feb-2019 13:12:01 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14
+[17-Feb-2019 09:08:46 UTC] PHP Fatal error:  Uncaught LogicException: Passed array does not specify an existing static method (class 'HTMLPurifierExtras' not found) in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php:14
+Stack trace:
+#0 /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php(14): spl_autoload_register(Array)
+#1 {main}
+  thrown in /home/kinggems/public_html/vendor/ezyang/htmlpurifier/extras/HTMLPurifierExtras.autoload.php on line 14

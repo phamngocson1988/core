@@ -1,0 +1,56 @@
+[22-Dec-2018 14:37:36 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[23-Dec-2018 10:20:51 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[23-Dec-2018 18:36:40 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[07-Jan-2019 09:13:04 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[08-Jan-2019 01:17:04 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[08-Jan-2019 13:46:15 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[25-Jan-2019 10:37:11 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[26-Jan-2019 03:27:24 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[26-Jan-2019 19:43:25 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[31-Jan-2019 04:46:56 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[07-Feb-2019 11:34:38 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[16-Feb-2019 02:58:59 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[17-Feb-2019 00:26:40 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6
+[17-Feb-2019 13:57:49 UTC] PHP Fatal error:  Uncaught Error: Class 'Yii' not found in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/webzop/yii2-notifications/views/default/index.php on line 6

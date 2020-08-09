@@ -1,0 +1,15 @@
+[17-Feb-2019 01:01:28 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/FloatHeaderBehavior.php on line 22
+[17-Feb-2019 01:01:30 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/GroupColumnsBehavior.php on line 19
+[17-Feb-2019 01:01:32 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/LoadingBehavior.php on line 17
+[17-Feb-2019 01:01:33 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/ResizableColumnsBehavior.php on line 18
+[17-Feb-2019 01:01:35 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/ToolbarBehavior.php on line 17
+[17-Feb-2019 17:41:13 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/FloatHeaderBehavior.php on line 22
+[17-Feb-2019 17:41:15 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/GroupColumnsBehavior.php on line 19
+[17-Feb-2019 17:41:17 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/LoadingBehavior.php on line 17
+[17-Feb-2019 17:41:19 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/ResizableColumnsBehavior.php on line 18
+[17-Feb-2019 17:41:23 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/ToolbarBehavior.php on line 17
+[18-Feb-2019 09:00:20 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/FloatHeaderBehavior.php on line 22
+[18-Feb-2019 09:00:22 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/GroupColumnsBehavior.php on line 19
+[18-Feb-2019 09:00:23 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/LoadingBehavior.php on line 17
+[18-Feb-2019 09:00:24 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/ResizableColumnsBehavior.php on line 18
+[18-Feb-2019 09:00:26 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/2amigos/yii2-grid-view-library/src/behaviors/ToolbarBehavior.php on line 17

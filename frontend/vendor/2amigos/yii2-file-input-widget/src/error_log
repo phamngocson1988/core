@@ -1,0 +1,12 @@
+[16-Feb-2019 08:05:40 UTC] PHP Fatal error:  Class 'yii\widgets\InputWidget' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/BootstrapFileInput.php on line 24
+[16-Feb-2019 08:05:44 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/BootstrapFileInputAsset.php on line 21
+[16-Feb-2019 08:05:47 UTC] PHP Fatal error:  Class 'yii\widgets\InputWidget' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/FileInput.php on line 24
+[16-Feb-2019 08:05:50 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/FileInputAsset.php on line 21
+[17-Feb-2019 00:55:28 UTC] PHP Fatal error:  Class 'yii\widgets\InputWidget' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/BootstrapFileInput.php on line 24
+[17-Feb-2019 00:55:30 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/BootstrapFileInputAsset.php on line 21
+[17-Feb-2019 00:55:31 UTC] PHP Fatal error:  Class 'yii\widgets\InputWidget' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/FileInput.php on line 24
+[17-Feb-2019 00:55:33 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/FileInputAsset.php on line 21
+[17-Feb-2019 17:36:52 UTC] PHP Fatal error:  Class 'yii\widgets\InputWidget' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/BootstrapFileInput.php on line 24
+[17-Feb-2019 17:37:05 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/BootstrapFileInputAsset.php on line 21
+[17-Feb-2019 17:37:16 UTC] PHP Fatal error:  Class 'yii\widgets\InputWidget' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/FileInput.php on line 24
+[17-Feb-2019 17:37:27 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/kinggems/public_html/vendor/2amigos/yii2-file-input-widget/src/FileInputAsset.php on line 21

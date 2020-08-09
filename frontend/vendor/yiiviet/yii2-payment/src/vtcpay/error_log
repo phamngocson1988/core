@@ -1,0 +1,15 @@
+[18-Feb-2019 08:57:10 UTC] PHP Fatal error:  Class 'yiiviet\payment\BasePaymentClient' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/PaymentClient.php on line 24
+[18-Feb-2019 08:57:12 UTC] PHP Fatal error:  Class 'yiiviet\payment\BasePaymentGateway' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/PaymentGateway.php on line 31
+[18-Feb-2019 08:57:13 UTC] PHP Fatal error:  Class 'vxm\gatewayclients\RequestData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/RequestData.php on line 23
+[18-Feb-2019 08:57:14 UTC] PHP Fatal error:  Class 'vxm\gatewayclients\ResponseData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/ResponseData.php on line 25
+[18-Feb-2019 08:57:15 UTC] PHP Fatal error:  Class 'yiiviet\payment\VerifiedData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/VerifiedData.php on line 32
+[19-Feb-2019 05:43:44 UTC] PHP Fatal error:  Class 'yiiviet\payment\BasePaymentClient' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/PaymentClient.php on line 24
+[19-Feb-2019 05:43:46 UTC] PHP Fatal error:  Class 'yiiviet\payment\BasePaymentGateway' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/PaymentGateway.php on line 31
+[19-Feb-2019 05:43:49 UTC] PHP Fatal error:  Class 'vxm\gatewayclients\RequestData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/RequestData.php on line 23
+[19-Feb-2019 05:43:51 UTC] PHP Fatal error:  Class 'vxm\gatewayclients\ResponseData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/ResponseData.php on line 25
+[19-Feb-2019 05:43:54 UTC] PHP Fatal error:  Class 'yiiviet\payment\VerifiedData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/VerifiedData.php on line 32
+[19-Feb-2019 19:00:31 UTC] PHP Fatal error:  Class 'yiiviet\payment\BasePaymentClient' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/PaymentClient.php on line 24
+[19-Feb-2019 19:00:43 UTC] PHP Fatal error:  Class 'yiiviet\payment\BasePaymentGateway' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/PaymentGateway.php on line 31
+[19-Feb-2019 19:00:57 UTC] PHP Fatal error:  Class 'vxm\gatewayclients\RequestData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/RequestData.php on line 23
+[19-Feb-2019 19:01:08 UTC] PHP Fatal error:  Class 'vxm\gatewayclients\ResponseData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/ResponseData.php on line 25
+[19-Feb-2019 19:01:20 UTC] PHP Fatal error:  Class 'yiiviet\payment\VerifiedData' not found in /home/kinggems/public_html/vendor/yiiviet/yii2-payment/src/vtcpay/VerifiedData.php on line 32

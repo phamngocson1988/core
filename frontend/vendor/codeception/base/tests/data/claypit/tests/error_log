@@ -1,0 +1,14 @@
+[23-Dec-2018 19:48:12 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[24-Dec-2018 05:30:53 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[24-Dec-2018 13:10:55 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[03-Jan-2019 03:24:27 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[08-Jan-2019 14:21:39 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[09-Jan-2019 04:33:38 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[09-Jan-2019 14:08:32 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[27-Jan-2019 00:20:43 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[27-Jan-2019 16:10:05 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[27-Jan-2019 22:45:22 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[31-Jan-2019 18:11:01 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[17-Feb-2019 18:28:55 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[18-Feb-2019 09:14:36 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5
+[19-Feb-2019 05:52:06 UTC] PHP Fatal error:  Class 'Codeception\GroupObject' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/_data/MyGroupHighlighter.php on line 5

@@ -81,6 +81,8 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => require('router.php'),
+        'urlManagerBackend' => require('../../backend/config/router.php'),
+        'urlManagerSupplier' => require('../../supplier/config/router.php'),
         'cart' => [
             'class' => 'website\components\cart\Cart',
             // you can change default storage class as following:
@@ -89,13 +91,6 @@ return [
                 // you can also override some properties 
                 // 'deleteIfEmpty' => true
             ]
-        ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@website/mail',
-        ],
-        'sms' => [
-            'viewPath' => '@website/sms',
         ],
     ],
     'modules' => [

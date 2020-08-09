@@ -1,0 +1,9 @@
+[18-Feb-2019 08:54:11 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/Command.php on line 18
+[18-Feb-2019 08:54:12 UTC] PHP Fatal error:  Class 'yii\queue\cli\Action' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/InfoAction.php on line 18
+[18-Feb-2019 08:54:13 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/Queue.php on line 22
+[19-Feb-2019 02:16:10 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/Command.php on line 18
+[19-Feb-2019 02:16:12 UTC] PHP Fatal error:  Class 'yii\queue\cli\Action' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/InfoAction.php on line 18
+[19-Feb-2019 02:16:14 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/Queue.php on line 22
+[19-Feb-2019 18:45:33 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/Command.php on line 18
+[19-Feb-2019 18:45:44 UTC] PHP Fatal error:  Class 'yii\queue\cli\Action' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/InfoAction.php on line 18
+[19-Feb-2019 18:46:08 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/file/Queue.php on line 22

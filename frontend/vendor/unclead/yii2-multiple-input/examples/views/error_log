@@ -1,0 +1,36 @@
+[18-Feb-2019 08:44:31 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/embedded-input.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/embedded-input.php on line 27
+[18-Feb-2019 08:44:33 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/multiple-input.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/multiple-input.php on line 16
+[18-Feb-2019 08:44:34 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/tabular-input.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/tabular-input.php on line 14
+[19-Feb-2019 02:04:41 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/embedded-input.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/embedded-input.php on line 27
+[19-Feb-2019 02:04:46 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/multiple-input.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/multiple-input.php on line 16
+[19-Feb-2019 02:04:47 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/tabular-input.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/tabular-input.php on line 14
+[19-Feb-2019 10:42:35 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/embedded-input.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/embedded-input.php on line 27
+[19-Feb-2019 10:42:41 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/multiple-input.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/multiple-input.php on line 16
+[19-Feb-2019 10:42:44 UTC] PHP Fatal error:  Uncaught Error: Class 'yii\bootstrap\ActiveForm' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/tabular-input.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/examples/views/tabular-input.php on line 14

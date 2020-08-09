@@ -1,0 +1,12 @@
+[17-Feb-2019 14:28:54 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/IgbinarySerializer.php on line 20
+[17-Feb-2019 14:29:02 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/JsonSerializer.php on line 20
+[17-Feb-2019 14:29:06 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/PhpSerializer.php on line 17
+[17-Feb-2019 14:29:10 UTC] PHP Fatal error:  Interface 'yii\queue\serializers\SerializerInterface' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/Serializer.php on line 17
+[18-Feb-2019 08:55:16 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/IgbinarySerializer.php on line 20
+[18-Feb-2019 08:55:17 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/JsonSerializer.php on line 20
+[18-Feb-2019 08:55:18 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/PhpSerializer.php on line 17
+[18-Feb-2019 08:55:20 UTC] PHP Fatal error:  Interface 'yii\queue\serializers\SerializerInterface' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/Serializer.php on line 17
+[19-Feb-2019 05:39:25 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/IgbinarySerializer.php on line 20
+[19-Feb-2019 05:39:27 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/JsonSerializer.php on line 20
+[19-Feb-2019 05:39:29 UTC] PHP Fatal error:  Class 'yii\base\BaseObject' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/PhpSerializer.php on line 17
+[19-Feb-2019 05:39:33 UTC] PHP Fatal error:  Interface 'yii\queue\serializers\SerializerInterface' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/serializers/Serializer.php on line 17

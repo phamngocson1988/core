@@ -85,7 +85,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             </div>
           </div>
           <div class="col-md-4">
-            <?= $form->field($model, 'currency')->dropdownList($model->fetchCurrency())->label('Quantity') ?>
+            <?= $form->field($model, 'currency')->dropdownList($model->fetchCurrency())->label('Currency') ?>
           </div>
         </div>
         <div class="multi-button d-flex justify-content-between align-items-center">

@@ -1,0 +1,9 @@
+[17-Feb-2019 00:18:55 UTC] PHP Fatal error:  Interface 'Symfony\Component\Process\Pipes\PipesInterface' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/AbstractPipes.php on line 21
+[17-Feb-2019 00:18:59 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Pipes\AbstractPipes' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/UnixPipes.php on line 23
+[17-Feb-2019 00:19:01 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Pipes\AbstractPipes' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/WindowsPipes.php on line 27
+[17-Feb-2019 13:44:05 UTC] PHP Fatal error:  Interface 'Symfony\Component\Process\Pipes\PipesInterface' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/AbstractPipes.php on line 21
+[17-Feb-2019 13:44:09 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Pipes\AbstractPipes' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/UnixPipes.php on line 23
+[17-Feb-2019 13:44:14 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Pipes\AbstractPipes' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/WindowsPipes.php on line 27
+[18-Feb-2019 08:42:09 UTC] PHP Fatal error:  Interface 'Symfony\Component\Process\Pipes\PipesInterface' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/AbstractPipes.php on line 21
+[18-Feb-2019 08:42:10 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Pipes\AbstractPipes' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/UnixPipes.php on line 23
+[18-Feb-2019 08:42:12 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Pipes\AbstractPipes' not found in /home/kinggems/public_html/vendor/symfony/process/Pipes/WindowsPipes.php on line 27

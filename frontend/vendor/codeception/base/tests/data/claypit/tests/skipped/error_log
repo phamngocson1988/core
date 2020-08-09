@@ -1,0 +1,169 @@
+[24-Dec-2018 05:37:36 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[24-Dec-2018 05:37:38 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[24-Dec-2018 05:37:40 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[24-Dec-2018 05:37:43 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[24-Dec-2018 18:06:46 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[24-Dec-2018 18:06:48 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[24-Dec-2018 18:06:50 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[24-Dec-2018 18:06:52 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[25-Dec-2018 01:28:25 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[25-Dec-2018 01:28:27 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[25-Dec-2018 01:28:29 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[25-Dec-2018 01:28:32 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[04-Jan-2019 11:43:05 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[04-Jan-2019 14:16:24 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[04-Jan-2019 14:52:27 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[04-Jan-2019 15:28:31 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[09-Jan-2019 04:40:29 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[09-Jan-2019 04:40:31 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[09-Jan-2019 04:40:34 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[09-Jan-2019 04:40:37 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[09-Jan-2019 14:15:57 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[09-Jan-2019 14:15:58 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[09-Jan-2019 14:16:00 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[09-Jan-2019 14:16:03 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[27-Jan-2019 16:21:50 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[27-Jan-2019 16:21:54 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[27-Jan-2019 16:21:59 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[27-Jan-2019 16:22:03 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[27-Jan-2019 22:52:00 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[27-Jan-2019 22:52:03 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[27-Jan-2019 22:52:05 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[27-Jan-2019 22:52:07 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[28-Jan-2019 03:36:47 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[28-Jan-2019 03:36:49 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[28-Jan-2019 03:36:50 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[28-Jan-2019 03:36:51 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[01-Feb-2019 12:05:32 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[01-Feb-2019 12:05:34 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[01-Feb-2019 12:05:37 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[01-Feb-2019 12:05:43 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[18-Feb-2019 12:14:45 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[18-Feb-2019 12:14:50 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[18-Feb-2019 12:14:59 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[18-Feb-2019 12:15:07 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[19-Feb-2019 05:50:00 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[19-Feb-2019 05:50:03 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[19-Feb-2019 05:50:05 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[19-Feb-2019 05:50:10 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
+[19-Feb-2019 18:42:38 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/IncompleteMeCept.php on line 4
+[19-Feb-2019 18:42:41 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/NoEnvironmentCept.php on line 3
+[19-Feb-2019 18:42:42 UTC] PHP Fatal error:  Class 'Codeception\Test\Unit' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipByGroupTest.php on line 3
+[19-Feb-2019 18:42:45 UTC] PHP Fatal error:  Uncaught Error: Class 'SkipGuy' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/kinggems/public_html/vendor/codeception/base/tests/data/claypit/tests/skipped/SkipMeCept.php on line 3
