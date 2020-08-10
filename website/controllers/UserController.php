@@ -60,7 +60,7 @@ class UserController extends Controller
 
         $gameId = $request->post('game_id');
         $userId = Yii::$app->user->id;
-        $exists = GameSubscriber::find(['user_id' => $userId, 'game_id' => $gameId])->exists();
+        $exists = GameSubscriber::find()->where(['user_id' => $userId, 'game_id' => $gameId])->exists();
         if (!$exists) {
             $subscriber = new GameSubscriber();
             $subscriber->user_id = $userId;

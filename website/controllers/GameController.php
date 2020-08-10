@@ -117,7 +117,7 @@ class GameController extends Controller
         }
 
         // Subscribe
-        $isSubscribe = Yii::$app->user->isGuest ? false : GameSubscriber::find([
+        $isSubscribe = Yii::$app->user->isGuest ? false : GameSubscriber::find()->where([
             'user_id' => Yii::$app->user->id,
             'game_id' => $id
         ])->exists();
