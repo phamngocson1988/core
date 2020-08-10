@@ -139,6 +139,7 @@ class m181217_033141_create_order_table extends Migration
             'id' => $this->primaryKey(),
             'order_id' => $this->integer(11)->notNull(),
             'content' => $this->string(500)->notNull(),
+            'content_type' => $this->string(16)->defaultValue('text'),
             'is_read' => $this->integer(1)->defaultValue(0),
             'is_customer' => $this->string(1)->defaultValue('N'),
             'object_name' => $this->string(10),

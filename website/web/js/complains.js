@@ -33,21 +33,31 @@ function Complains(opts) {
     this.renderRow = function (object) {
         var html = '';
         if (!object.is_customer) {
+            var content = '';
+            if (object.content_type == 'image') {
+                content = '<img src="' + object.content + '"/>';
+            } else {
+                content ='<div class="bg-light rounded py-2 px-3 mb-2">' + 
+                    '<p class="text-small mb-0 text-muted">'+object.content+'</p>' +
+                '</div>';
+            }
             html = '<div class="media w-50 mb-3 t-report-row" data-id="'+object.id+'">' +
           '<img src="/images/icon/young.svg" alt="user" width="50" class="rounded-circle">' +
-          '<div class="media-body ml-3">' +
-            '<div class="bg-light rounded py-2 px-3 mb-2">' + 
-              '<p class="text-small mb-0 text-muted">'+object.content+'</p>' +
-            '</div>' + 
-            '<p class="small text-muted">'+object.created_at+'</p>' + 
+          '<div class="media-body ml-3">' + content + 
+            '<p class="small text-muted">'+ object.created_at +'</p>' + 
           '</div>' + 
         '</div>';
         } else {
+            var content = '';
+            if (object.content_type == 'image') {
+                content = '<img src="' + object.content + '"/>';
+            } else {
+                content ='<div class="bg-primary rounded py-2 px-3 mb-2">' +
+                    '<p class="text-small mb-0 text-white">'+object.content+'</p>' +
+                '</div>';
+            }
             html = '<div class="media w-50 ml-auto mb-3 t-report-row" data-id="'+object.id+'">' +
-          '<div class="media-body">' +
-            '<div class="bg-primary rounded py-2 px-3 mb-2">' +
-              '<p class="text-small mb-0 text-white">'+object.content+'</p>' +
-            '</div>' +
+          '<div class="media-body">' + content +
             '<p class="small text-muted timeline-body-time">'+object.created_at+'</p>' +
           '</div>' +
         '</div>';
