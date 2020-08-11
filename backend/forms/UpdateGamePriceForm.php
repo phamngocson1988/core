@@ -6,7 +6,9 @@ use yii\base\Model;
 use backend\models\Game;
 use backend\models\GamePriceLog;
 use backend\models\User;
+use backend\models\GameSubscriber;
 use yii\helpers\ArrayHelper;
+use backend\components\notifications\GameNotification;
 
 class UpdateGamePriceForm extends Model
 {
@@ -48,6 +50,7 @@ class UpdateGamePriceForm extends Model
                 $oldGame->price1 = ArrayHelper::getValue($oldAttributes, 'price1', 0);
                 $oldGame->price2 = ArrayHelper::getValue($oldAttributes, 'price2', 0);
                 $oldGame->price3 = ArrayHelper::getValue($oldAttributes, 'price3', 0);
+                if ($oldGame->price1 == $game->price1 && $oldGame->price2 == $game->price2 && $oldGame->price3 == $game->price3) return; // have no changes
                 $setting = Yii::$app->settings;
                 $config = [
                     'managing_cost_rate' => $setting->get('ApplicationSettingForm', 'managing_cost_rate', 0),
@@ -100,6 +103,12 @@ class UpdateGamePriceForm extends Model
                 ->setSubject(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
                 ->setTextBody(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
                 ->send();
+
+                // Notify to users who subscried the game
+                $subscribers = GameSubscriber::find()->where(['game_id' => $game->id])->select(['user_id'])->all();
+                $subscriberIds = ArrayHelper::getColumn($subscribers, 'user_id');
+                if (!count($subscriberIds)) return; // there is no user subscribe this game
+                $game->pushNotification(GameNotification::NOTIFY_NEW_PRICE, $subscriberIds);
             });
             $model->price1 = $this->price1;
             $model->price2 = $this->price2;

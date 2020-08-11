@@ -37,6 +37,7 @@ class EditGameGroupForm extends Model
         $group->title = $this->title;
         $group->method = implode(",", $this->method);
         $group->version = implode(",", $this->version);
+        $group->save();
         $packageIds = $this->package;
         if (count($packageIds)) {
             $packages = GamePackage::find()

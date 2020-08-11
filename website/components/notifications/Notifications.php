@@ -57,10 +57,10 @@ class Notifications extends BaseNotifications
     {
         $this->clientOptions = array_merge([
             'id' => $this->options['id'],
-            'url' => Url::to(['push-notification/list']),
-            'countUrl' => Url::to(['push-notification/count']),
-            'readUrl' => Url::to(['push-notification/read']),
-            'readAllUrl' => Url::to(['push-notification/read-all']),
+            'url' => Url::to(['notification/list']),
+            'countUrl' => Url::to(['notification/count']),
+            'readUrl' => Url::to(['notification/read']),
+            'readAllUrl' => Url::to(['notification/read-all']),
             'xhrTimeout' => Html::encode($this->xhrTimeout),
             'pollInterval' => Html::encode($this->pollInterval),
         ], $this->clientOptions);

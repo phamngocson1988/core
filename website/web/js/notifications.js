@@ -88,6 +88,7 @@ var Notifications = (function(opts) {
                             dataType: "json",
                             timeout: opts.xhrTimeout,
                             success: function (data) {
+                                console.log('success', object);
                                 item.removeClass('read');
                                 item.addClass('read');
                                 if(object.url){

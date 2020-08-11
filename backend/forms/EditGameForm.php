@@ -9,8 +9,10 @@ use backend\models\GameCategory;
 use backend\models\GameCategoryItem;
 use backend\models\GameGroup;
 use backend\models\GameSetting;
+use backend\models\GameSubscriber;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
+use backend\components\notifications\GameNotification;
 
 class EditGameForm extends Model
 {
@@ -121,6 +123,21 @@ class EditGameForm extends Model
         $transaction = Yii::$app->db->beginTransaction();
         $game = $this->getGame();
         try {
+            $game->on(Game::EVENT_AFTER_UPDATE, function($event) {
+                $game = $event->sender; //game
+                $oldGame = clone $game;
+                $oldAttributes = $event->changedAttributes;
+                $oldGame->soldout = ArrayHelper::getValue($oldAttributes, 'soldout', false);
+                if ($oldGame->soldout == $game->soldout) return; // have no changes
+
+                // Notify to users who subscried the game
+                $subscribers = GameSubscriber::find()->where(['game_id' => $game->id])->select(['user_id'])->all();
+                $subscriberIds = ArrayHelper::getColumn($subscribers, 'user_id');
+                if (!count($subscriberIds)) return; // there is no user subscribe this game
+                $key = $game->soldout ? GameNotification::NOTIFY_OUT_STOCK : GameNotification::NOTIFY_IN_STOCK ;
+                $game->pushNotification($key, $subscriberIds);
+            });
+
             $game->title = $this->title;
             $game->excerpt = $this->excerpt;
             $game->content = $this->content;
@@ -162,6 +179,8 @@ class EditGameForm extends Model
                 $postCategory->category_id = $categoryId;
                 $postCategory->save();
             }
+
+            
 
             $transaction->commit();
             return $newId;
