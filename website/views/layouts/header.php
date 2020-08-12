@@ -43,7 +43,7 @@ use yii\helpers\Url;
               
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a class="dropdown-item" href="<?=Url::to(['profile/index']);?>">Account info</a>
-                  <a class="dropdown-item" href="<?=Url::to(['wallet/index']);?>">My Wallet</a>
+                  <a class="dropdown-item" href="<?=Url::to(['order/index']);?>">My order</a>
                   <!-- <a class="dropdown-item" href="#">Notification</a>
                   <a class="dropdown-item" href="#">Message</a> -->
                   <a class="dropdown-item" href="<?=Url::to(['site/logout']);?>">Log-out</a>

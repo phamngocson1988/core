@@ -36,6 +36,12 @@ class OrderNotification extends Notification
                 return sprintf("[Information request] - #%s", $this->order->id);
             case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
                 return sprintf("[Tin nhắn mới] - #%s", $this->order->id);
+            case self::NOTIFY_CUSTOMER_COMPLETE_ORDER:
+                return sprintf("[Order completed] - #%s", $this->order->id);
+            case self::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER:
+                return sprintf("[Order cancelled] - #%s", $this->order->id);
+            case self::NOTIFY_CUSTOMER_PENDING_ORDER:
+                return sprintf("[Order approved] - #%s", $this->order->id);
         }
     }
 
@@ -50,6 +56,12 @@ class OrderNotification extends Notification
                 return sprintf("Waiting for response");
             case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
                 return sprintf("Chờ phản hồi");
+            case self::NOTIFY_CUSTOMER_COMPLETE_ORDER:
+                return sprintf("Order completed");
+            case self::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER:
+                return sprintf("Order cancelled");
+            case self::NOTIFY_CUSTOMER_PENDING_ORDER:
+                return sprintf("Order approved");
         }
     }
 
@@ -78,6 +90,12 @@ class OrderNotification extends Notification
                 return ['user/detail', 'id' => $this->order->id];
             case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
                 return ['order/edit', 'id' => $this->order->id];
+            case self::NOTIFY_CUSTOMER_COMPLETE_ORDER:
+                return ['order/index'];
+            case self::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER:
+                return ['order/index'];
+            case self::NOTIFY_CUSTOMER_PENDING_ORDER:
+                return ['order/index'];
         }
     }
 
@@ -106,6 +124,11 @@ class OrderNotification extends Notification
                 self::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER,
                 self::NOTIFY_CUSTOMER_CANCELLATION_DENIED_ORDER,
             ],
+            'screen' => [
+                self::NOTIFY_CUSTOMER_COMPLETE_ORDER,
+                self::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER,
+                self::NOTIFY_CUSTOMER_PENDING_ORDER,
+            ]
         ];
     }
 
