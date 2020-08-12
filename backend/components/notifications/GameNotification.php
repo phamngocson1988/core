@@ -24,15 +24,16 @@ class GameNotification extends Notification
      */
     public function getTitle()
     {
+        $game = $this->game;
         switch($this->key) {
             case self::NOTIFY_NEW_PRICE:
-                return "New price";
+                return sprintf("Game %s price has been updated", $game->title);
             case self::NOTIFY_IN_STOCK:
-                return "In stock";
+                return sprintf("Game %s is in-stock now", $game->title);
             case self::NOTIFY_OUT_STOCK:
-                return "Out stock";
+                return sprintf("Game %s is out-stock now", $game->title);
             case self::NOTIFY_NEW_PROMOTION_FOR_GAME:
-                return "New promotion";
+                return sprintf("Game %s has new promotion", $game->title);
         }
     }
 

@@ -58,7 +58,7 @@ use website\widgets\LinkPager;
             <?php endif;?>
           </div>
           <div class="flex-fill">
-            <a href="<?=$viewUrl;?>" class="main-btn">
+            <a href="<?=$viewUrl;?>" class="main-btn <?=$game->isSoldout() ? 'disable' : '';?>">
               <span>BUY NOW</span>
             </a>
           </div>

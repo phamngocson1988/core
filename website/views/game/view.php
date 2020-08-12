@@ -30,7 +30,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         <h1 class="text-red mb-0" id="title"><?=$model->title;?></h1>
         <p class="lead" id="package-name"></p>
         <?php if ($methods) : ?>
-        <div class="btn-group-toggle multi-choose d-flex" data-toggle="buttons">
+        <div class="btn-group-toggle multi-choose row" data-toggle="buttons">
           <?php foreach ($methods as $method) : ?>
           <?php 
           $settingMethodPrice = $method->price;
@@ -38,9 +38,11 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           $settingMethodSafe = $method->safe;
           $settingMethodTitle = $method->title;
           ?>
-          <label class="btn flex-fill w-100 mr-2 btn-secondary <?=($method->id == $model->method) ? 'active' : '';?>">
-            <input type="radio" name="method" id="<?=$method->id;?>" autocomplete="off" <?=($method->id == $model->method) ? 'checked' : '';?> data-price="<?=$settingMethodPrice;?>" data-speed="<?=$settingMethodSpeed;?>" data-safe="<?=$settingMethodSafe;?>"><?=$settingMethodTitle;?>
-          </label>
+          <div class="col-lg-4 col-md-6 col-xs-12 mb-3">
+            <label class="btn btn-secondary w-100 <?=($method->id == $model->method) ? 'active' : '';?>" data-toggle="tooltip" data-placement="top" title="<?=$settingMethodTitle;?>">
+              <input type="radio" name="method" id="<?=$method->id;?>" autocomplete="off" <?=($method->id == $model->method) ? 'checked' : '';?> data-price="<?=$settingMethodPrice;?>" data-speed="<?=$settingMethodSpeed;?>" data-safe="<?=$settingMethodSafe;?>"><?=$settingMethodTitle;?>
+            </label>
+          </div>
           <?php endforeach;?>
         </div>
         <?php endif;?>
@@ -49,7 +51,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           <span class="badge badge-danger" id="save"><?=sprintf("save %s", number_format($model->getSavedPrice()));?>%</span>
           <?php if (!Yii::$app->user->isGuest) : ?>
           <span class="btn-group-toggle bell" data-toggle="buttons" id="subscribe" data-subscribe="<?=Url::to(['user/subscribe']);?>" data-unsubscribe="<?=Url::to(['user/unsubscribe']);?>">
-            <label class="btn <?=$isSubscribe ? 'active' : '';?>">
+            <label class="btn <?=$isSubscribe ? 'active' : '';?>" data-toggle="tooltip" data-placement="top" title="Notify me when price is changed or new promotions">
               <input type="checkbox">
             </label>
           </span>
@@ -61,7 +63,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           </div>
           <div class="w-100 flex-fill">
             <div class="d-flex bd-highlight">
-              <div class="w-100 flex-fill">ETA:</div>
+              <div class="w-100 flex-fill" style="cursor: help;" data-toggle="tooltip" data-placement="left" title="Estimate Time Arrival">ETA:</div>
               <div class="w-100 flex-fill"><b>2 - 4h</b></div>
             </div>
             <div class="d-flex bd-highlight">
@@ -197,7 +199,10 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
   <div class="card bg-light mt-3">
     <div class="card-body" id="content">
       <h4 class="card-title">Description</h4>
-      <?=$model->content;?>
+      <div class="card-text description">
+        <?=$model->content;?>
+      </div>
+      <button type="button" class="btn btn-info btn-seemore">See more</button>
     </div>
   </div>
 </div><!-- END MAIN SINGLE -->
@@ -264,7 +269,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             <?php endif;?>
           </div>
           <div class="flex-fill">
-            <a href="<?=$viewUrl;?>" class="main-btn">
+            <a href="<?=$viewUrl;?>" class="main-btn <?=$game->isSoldout() ? 'disable' : '';?>">
             <span>BUY NOW</span>
             </a>
           </div>

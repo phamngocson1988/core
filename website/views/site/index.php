@@ -198,7 +198,7 @@ $sideGallery = array_slice($gallery, -2);
             <?php endif;?>
           </div>
           <div class="flex-fill">
-            <a href="<?=$viewUrl;?>" class="main-btn">
+            <a href="<?=$viewUrl;?>" class="main-btn <?=$game->isSoldout() ? 'disable' : '';?>">
             <span>BUY NOW</span>
             </a>
           </div>
@@ -287,7 +287,7 @@ $sideGallery = array_slice($gallery, -2);
                   <?php endif;?>
                 </div>
                 <div class="flex-fill">
-                  <a href="<?=$viewUrl;?>" class="main-btn"><span>BUY NOW</span></a>
+                  <a href="<?=$viewUrl;?>" class="main-btn <?=$game->isSoldout() ? 'disable' : '';?>"><span>BUY NOW</span></a>
                 </div>
               </div>
             </div>
@@ -361,7 +361,7 @@ $sideGallery = array_slice($gallery, -2);
                   <?php endif;?>
                 </div>
                 <div class="flex-fill">
-                  <a href="<?=$viewUrl;?>" class="main-btn">
+                  <a href="<?=$viewUrl;?>" class="main-btn <?=$game->isSoldout() ? 'disable' : '';?>">
                   <span>BUY NOW</span>
                   </a>
                 </div>

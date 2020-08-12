@@ -36,7 +36,7 @@ use yii\helpers\Url;
             <div class="p-2 flex-fill login-item">
               <div class="dropdown">
                 <a class="dropdown-toggle link-light" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <?=$user->name;?>
+                  <?=$user->name;?> <!-- <img class="icon-sm icon-verified" src="https://image.flaticon.com/icons/svg/2438/2438080.svg"/> -->
                   <br />
                   <span class="text-green"><?=number_format($user->walletBalance());?> Kcoin</span>
                 </a>

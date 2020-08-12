@@ -149,21 +149,21 @@ $(document).ready(function () {
   });
 
   // 
-  // $('.minus').click(function () {
-  //   var $input = $(this).parent().find('input');
-  //   var count = parseInt($input.val()) - 1;
-  //   count = count < 1 ? 1 : count;
-  //   $input.val(count);
-  //   $input.change();
-  //   return false;
-  // });
+  $('.minus').click(function () {
+    var $input = $(this).parent().find('input');
+    var count = parseInt($input.val()) - 1;
+    count = count < 1 ? 1 : count;
+    $input.val(count);
+    $input.change();
+    return false;
+  });
 
-  // $('.plus').click(function () {
-  //   var $input = $(this).parent().find('input');
-  //   $input.val(parseInt($input.val()) + 1);
-  //   $input.change();
-  //   return false;
-  // });
+  $('.plus').click(function () {
+    var $input = $(this).parent().find('input');
+    $input.val(parseInt($input.val()) + 1);
+    $input.change();
+    return false;
+  });
 
   $('input[type="file"]').change(function (e) {
     var fileName = e.target.files[0].name;
@@ -178,7 +178,11 @@ $(document).ready(function () {
   }
 
   if ($('.phoneinp').length) {
-    $(".phoneinp").intlTelInput({initialCountry: 'vn', nationalMode: false, autoHideDialCode: false});
+    $(".phoneinp").intlTelInput();
+  }
+
+  if ($("[data-toggle='tooltip'").length) {
+    $('[data-toggle="tooltip"]').tooltip()
   }
 
   $('.modal').on('shown.bs.modal', function (e) {
@@ -186,6 +190,7 @@ $(document).ready(function () {
         $('.modal-slider').slick('setPosition'); 
     }
   })
+
 
   $(document).on('show.bs.modal', '.modal', function () {
 
@@ -204,14 +209,45 @@ $(document).ready(function () {
 
   $('.contact-apps>li').click(function(event){
     event.preventDefault();
-    $('.inputDisabled').prop("disabled", false);
+    $('.inp-url').show();
   })
+
+  $(".btn-seemore").click(function(){
+    $(this).hide()
+    $('.description').addClass('show-all');    
+  });
+
+  $('.btn-request-token').click(function(){
+    $(this).prop('disabled', true);
+    (function(){
+      var counter = 60*2;
+      $('.btn-request-token').html("<span id='count'>120</span>");
+      setInterval(function() {
+        counter--;
+        if (counter >= 0) {
+          span = document.getElementById("count");
+          span.innerHTML = counter;
+        }
+        // Display 'counter' wherever you want to display it.
+        if (counter === 0) {
+        //    alert('this is where it happens');
+            clearInterval(counter);
+            $('.btn-request-token').html("Security token<br /><small>Request Token</small></button>");
+            $('.btn-request-token').prop('disabled', false);
+        }
+    
+      }, 1000);
+    
+    })();
+  });
 
   AOS.init({
     easing: 'ease', // default easing for AOS animations
     mirror: false, // whether elements should animate out while scrolling past them
 
   });
+
+
 
 });
 
