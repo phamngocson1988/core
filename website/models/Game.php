@@ -31,7 +31,7 @@ class Game extends \common\models\Game
     {
         $flashsale = $this->getFlashSalePrice();
         if ($flashsale) return $flashsale->price;
-        return parent::getPrice();
+        return parent::getResellerPrice($level);
     }
 
     public function getFlashSalePrice() 

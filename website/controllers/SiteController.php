@@ -41,7 +41,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error'],
+                        'actions' => ['index', 'auth', 'error', 'test'],
                         'allow' => true,
                     ],
                     [
@@ -235,6 +235,11 @@ class SiteController extends Controller
     public function onAuthSuccess($client)
     {
         (new \website\components\auth\AuthHandler($client))->handle();
+    }
+
+    public function actionTest()
+    {
+        die('test');
     }
 
 }
