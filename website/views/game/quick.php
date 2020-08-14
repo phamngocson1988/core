@@ -146,13 +146,13 @@ function renderSummary() {
   $.each(items, function( index, item ) {
     var q = $(item).val();
     if (isNaN(q)) q = 0;
-    quantity += parseInt(q);
+    quantity += parseFloat(q);
   });
 
   $.each(prices, function( index, pItem ) {
     var q = $(pItem).html();
     if (isNaN(q)) q = 0;
-    price += parseInt(q);
+    price += parseFloat(q);
   });
 
   $('.summary-quantity').html(quantity);

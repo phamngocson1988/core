@@ -124,17 +124,32 @@ use yii\helpers\Url;
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'affiliate_banner'],
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="affiliate_banner_upload">Upload</button><input type="file" id="file_affiliate_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
                 ])->textInput();?>
+                <?=$form->field($model, 'affiliate_banner_link', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput();?>
 
                 <?=$form->field($model, 'refer_banner', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'refer_banner'],
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="refer_banner_upload">Upload</button><input type="file" id="file_refer_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
                 ])->textInput();?>
+                <?=$form->field($model, 'refer_banner_link', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput();?>
 
                 <?=$form->field($model, 'kcoin_banner', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'kcoin_banner'],
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="kcoin_banner_upload">Upload</button><input type="file" id="file_kcoin_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
+                ])->textInput();?>
+                <?=$form->field($model, 'kcoin_banner_link', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput();?>
               </div>
             </div>

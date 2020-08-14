@@ -3,7 +3,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 $setting = Yii::$app->settings;
 $affBanner = $setting->get('ApplicationSettingForm', 'affiliate_banner');
+$affBannerLink = $setting->get('ApplicationSettingForm', 'affiliate_banner_link', 'javascript:;');
 $referBanner = $setting->get('ApplicationSettingForm', 'refer_banner');
+$referBannerLink = $setting->get('ApplicationSettingForm', 'refer_banner_link', 'javascript:;');
 $gallery = [
     [
         'title' => $setting->get('GallerySettingForm', 'title1'),
@@ -126,7 +128,7 @@ $sideGallery = array_slice($gallery, -2);
   <div class="card-deck main-card">
     <div class="card" data-aos="zoom-in-down">
       <div class="media">
-        <img src="<?=$affBanner;?>" />
+        <a href="<?=$affBannerLink;?>"><img src="<?=$affBanner;?>" /></a>
       </div>
     </div>
   </div>
@@ -215,7 +217,7 @@ $sideGallery = array_slice($gallery, -2);
   <div class="card-deck main-card">
     <div class="card">
       <div class="media">
-        <img src="<?=$referBanner;?>" />
+        <a href="<?=$referBannerLink;?>"><img src="<?=$referBanner;?>" /></a>
       </div>
     </div>
   </div>

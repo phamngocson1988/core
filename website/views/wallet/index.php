@@ -8,6 +8,7 @@ use yii\widgets\Pjax;
 $user = Yii::$app->user->getIdentity();
 $setting = Yii::$app->settings;
 $kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/sidebar-ads.jpg');
+$kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 'javascript:;');
 ?>
 <div class="container my-5 my-wallet">
   <div class="row">
@@ -141,7 +142,7 @@ $kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/
     </div>
     <?php if ($kCoinBanner) : ?>
     <div class="col-md-4">
-      <img src="<?=$kCoinBanner;?>" />
+      <a href="<?=$kCoinBannerLink;?>"><img src="<?=$kCoinBanner;?>" /></a>
     </div>
     <?php endif;?>
   </div>
@@ -196,7 +197,11 @@ $kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/
           <td><?=$transaction->payment_method;?></td>
           <td class="text-center"><span class="text-red"><?=number_format($transaction->total_coin);?> KC</span></td>
           <td class="text-center"><?=$transaction->status;?></td>
-          <td><a href="javascript:;" class="view-detail" data-id="<?=$transaction->id;?>" class="text-red" >View invoice</a></td>
+          <td>
+            <?php if ($transaction->evidence) : ?>
+            <a href="<?=$transaction->evidence;?>" class="view-detail" target="_blank" class="text-red" >View invoice</a>
+            <?php endif;?>
+          </td>
           <td><?=$transaction->payment_id;?></td>
           <td><?=$transaction->remark;?></td>
         </tr>

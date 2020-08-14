@@ -42,7 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col col-12 col-lg-1 col-md-1 col-sm-12"></div>
         <div class="col col-12 col-lg-4 col-md-4 col-sm-12">
-          <?php echo $this->render('@frontend/views/site/_reg_deposit.php');?>
         </div>
       </div>
     </div>

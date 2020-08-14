@@ -142,13 +142,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td>T<?=$model->id;?></td>
                 <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
                 <td><?=$model->created_at;?></td>
-                <td><?=number_format($model->coin);?></td>
+                <td><?=number_format($model->coin, 1);?></td>
                 <td>
                 <?php if ($model->promotion_coin) : ?>
-                <?=sprintf("%s (%s)", number_format($model->promotion_coin), $model->promotion_code);?>
+                <?=sprintf("%s (%s)", number_format($model->promotion_coin, 1), $model->promotion_code);?>
                 <?php endif;?>
                 </td>
-                <td>$<?=number_format($model->total_price);?></td>
+                <td>$<?=number_format($model->total_price, 1);?></td>
                 <td><?=sprintf("%s (%s)", $model->payment_method, $model->user_ip);?></td>
                 <td><?=$model->payment_id;?></td>
                 <td><?=$model->payment_type;?></td>

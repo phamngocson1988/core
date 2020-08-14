@@ -6,46 +6,33 @@ use yii\helpers\Url;
 $this->title = 'Change password';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-<section class="page-title" id="page-title">
-  <div class="container">
-    <div class="row">
-      <div class="col col-sm-12">
-        <div class="page-title-content text-center pad-bot">
-          <img src="/images/text-register.png" alt="">
-          <p>Change password</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="register-page">
-  <div class="container">
-    <div class="small-container">
-      <div class="row">
-        <div class="col col-12 col-lg-7 col-md-7 col-sm-12">
-          <div class="register-block">
-            <?php $form = ActiveForm::begin(['id' => 'form-login', 'options' => ['autocomplete' => 'off']]); ?>
-              <p>Type new password.</p>
-              <?= $form->field($model, 'password', [
-                'template' => '{input}{label}{error}',
-                'options' => ['class' => 'form-group t-input'],
-                'labelOptions' => ['class' => 'placeholder'],
-                'inputOptions' => ['placeholder' => ' ']
-              ])->passwordInput(['autofocus' => true])->label('Password <span class="required">*</span>') ?>
-              <div class="register-action">
-                <button type="submit" class="cus-btn yellow has-shadow">Submit</button>
-                <div class="reg-login-now"><a href="<?=Url::to(['site/login', '#' => 'page-title']);?>">Login now</a></div>
+<div class="container profile my-5">
+  <div class="row">
+    <div class="col-md-12">
+      <?php $form = ActiveForm::begin(['options' => ['autocomplete' => 'off']]); ?>
+      <div class="row mt-5">
+        <div class="col-md-6">
+          <p class="lead">Type new password.</p>
+          <hr />
+          <?= $form->field($model, 'password', [
+            'template' => '<div class="input-group mb-3">{input}<div class="input-group-prepend">
+                <button class="btn btn-green" type="submit">Change password</button>
+              </div>',
+          ])->passwordInput([
+            'autofocus' => true,
+            'class' => 'form-control inp-changepw'
+          ])->label(false) ?>
+          <!-- <div class="form-group">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control inp-changepw" disabled placeholder="*********" aria-label="Example text with button addon" aria-describedby="">
+              <div class="input-group-prepend">
+                <button class="btn btn-green" type="button" id="btn-changepw" data-toggle="modal" data-target="#changepw">Change password</button>
               </div>
-            <?php ActiveForm::end(); ?>
-          </div>
-        </div>
-        <div class="col col-12 col-lg-1 col-md-1 col-sm-12"></div>
-        <div class="col col-12 col-lg-4 col-md-4 col-sm-12">
-          <?php echo $this->render('@frontend/views/site/_reg_deposit.php');?>
+            </div>
+          </div> -->
         </div>
       </div>
+      <?php ActiveForm::end();?>
     </div>
   </div>
-</section>
+</div>

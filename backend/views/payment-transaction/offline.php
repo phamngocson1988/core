@@ -156,11 +156,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                         <?php $form = ActiveForm::begin(['options' => ['class' => 'confirm-form'], 'action' => ['payment-transaction/pay-offline', 'id' => $model->id]]);?>
                         <div class="modal-body">
                           <p>Xác nhận thanh toán cho giao dịch mã số <?=$model->getId();?></p>
-                          <p>Số tiền phải nạp: $ <?=number_format($model->total_price, 1);?></p>
+                          <p>Số tiền phải nạp: $ <?=number_format($model->price, 1);?></p>
                           <?php if ($model->total_fee) : ?>
                           <p>Phí dịch vụ: $ <?=number_format($model->total_fee, 1);?></p>
                           <?php endif;?>
-                          <p>Tổng cộng: $ <?=number_format($model->total_price + $model->total_fee, 1);?></p>
+                          <p>Tổng cộng: $ <?=number_format($model->total_price, 1);?></p>
                           <?=$form->field($model, 'payment_id', [
                             'labelOptions' => ['class' => 'col-form-label'],
                           ])->textInput()?>

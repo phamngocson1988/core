@@ -96,7 +96,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
               'options' => ['class' => 'd-flex justify-content-between align-items-center'],
               'labelOptions' => ['class' => 'w-100 flex-fill'],
               'template' => '{label}<div class="w-100 flex-fill">{input}</div>',
-              'inputOptions' => ['class' => 'form-control', 'type' => 'number', 'id' => 'quantity', 'min' => 1]
+              'inputOptions' => ['class' => 'form-control', 'id' => 'quantity']
             ])->textInput()->label('Quantity') ?>
           </div>
           <?php if (!$model->isSoldout()) :?>
@@ -303,8 +303,28 @@ function calculateCart() {
   });
 }
 $('#quantity').on('change', function() {  
+  standarizeQuantity();
   calculateCart();
 });
+
+function standarizeQuantity() {
+  if (!validateQuantity()) {
+    $('#quantity').val(1);
+  }
+}
+
+function validateQuantity() {
+    var num = $("#quantity").val();
+    num = parseFloat(num);
+    $('#quantity').val(num);
+    if (num <= 0) {
+        return false;
+    }
+    if (isNaN(num)) {
+        return false;
+    }
+    return true;
+}
 
 // React view on attributes
 var currentMethod = '$model->method';

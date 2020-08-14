@@ -103,7 +103,7 @@ class WalletController extends Controller
                 $otherCurrencyTotal = Currency::convertUSDToCurrency($totalPayment, $paygate->currency);
                 $currencyModel = Currency::findOne($paygate->currency);
                 $otherCurrency = $currencyModel->addSymbolFormat(number_format($otherCurrencyTotal, 1));
-                $totalPayment = sprintf("%s (%s)", number_format($totalPayment), utf8_encode($otherCurrency));
+                $totalPayment = sprintf("%s (%s)", number_format($totalPayment, 1), utf8_encode($otherCurrency));
             }
             $data = [
                 'subTotalKingcoin' => number_format($calculate['subTotalKingcoin'], 1),

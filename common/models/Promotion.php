@@ -105,6 +105,14 @@ class Promotion extends ActiveRecord
                 'class' => '\common\models\promotions\FirstTopupRule',
                 'title' => 'Khuyến mãi cho đơn hàng đầu tiên'
             ],
+            'customer_only' => [
+                'class' => '\common\models\promotions\CustomerOnlyRule',
+                'title' => 'Khuyến mãi cho khách hàng thường'
+            ],
+            'reseller_only' => [
+                'class' => '\common\models\promotions\ResellerOnlyRule',
+                'title' => 'Khuyến mãi cho đại lý'
+            ],
         ];
     }
 

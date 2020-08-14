@@ -65,10 +65,6 @@ use yii\bootstrap\ActiveForm;
         </p>
         <?= $form->field($model, 'note')->textInput(['placeholder' => 'Special note (optional)'])->label(false) ?>
 
-        <div class="custom-control custom-checkbox mb-3">
-          <input type="checkbox" class="custom-control-input" id="policy1">
-          <label class="custom-control-label" for="policy1">I confirm that by making this purchase, I understand and aggree with <a class="text-red" href="<?=Url::to(['site/term', 'slug' => 'risk']);?>">the lossing sharing term</a></label>
-        </div>
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="policy2">
           <label class="custom-control-label" for="policy2">By making this purchase, I’m confirming that I totally under-stand <a class="text-red" href="<?=Url::to(['site/term', 'slug' => 'no_refund']);?>">no refund policy</a></label>
@@ -168,7 +164,7 @@ $('#quantity').on('change', function() {
 });
 
 $('form#update-cart-form').on('submit', function() {
-  if (!$('#policy1').is(':checked') || !$('#policy2').is(':checked')) {
+  if (!$('#policy2').is(':checked')) {
     toastr.error('You need to agree with our policies');
     return false;
   }
