@@ -73,6 +73,16 @@ class ReportByBalanceForm extends Model
             $users[$model->user_id]['balance_start'] = $balanceAtStartNumber;
             $users[$model->user_id]['balance_end'] = $balanceAtEndNumber;
         }
+        // Add missing user
+        $userIds = array_keys($users);
+        if ($this->user_id && !in_array($this->user_id, $userIds)) {
+            $user = $this->getUser();
+            $users[$this->user_id]['name'] = $user->name;
+            $users[$this->user_id]['topup'] = 0;
+            $users[$this->user_id]['withdraw'] = 0;
+            $users[$this->user_id]['balance_start'] = 0;
+            $users[$this->user_id]['balance_end'] = 0;
+        }
         return $users;
     }
 

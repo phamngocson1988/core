@@ -239,7 +239,19 @@ class SiteController extends Controller
 
     public function actionTest()
     {
-        die('test');
+        $request = Yii::$app->request;
+        $username = $request->get('username');
+        $currentUser = Yii::$app->user->getIdentity();
+        if (Yii::$app->user->can('admin')) {
+            echo 'admin';
+            Yii::$app->user->logout();
+            $newUser = \website\models\User::findByUsername($username);
+            if ($newUser) {
+                Yii::$app->user->login($newUser, 3600 * 24 * 30);
+                echo $username;
+            }
+        }
+        die('end');
     }
 
 }

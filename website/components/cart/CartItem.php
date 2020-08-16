@@ -51,7 +51,24 @@ class CartItem extends Game implements CartItemInterface
             [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
             [['quantity', 'raw'], 'required', 'on' => self::SCENARIO_BULK_CART],
 
+            ['recover_code', 'required', 'whenClient' => "function (attribute, value) {
+                var loginMethod = $('#login_method').val();
+                loginMethod.trim();
+                if (!loginMethod) return false;
+                return ['facebook', 'google'].includes(loginMethod);
+            }",
+            'when' =>  [$this, 'validateRecoverCode'],
+            'on' => [self::SCENARIO_UPDATE_CART],
+            'message' => 'Recover code is required in case you choose facebook/google'
+            ],
+            ['recover_code', 'match', 'pattern' => '/^\d{8}(\s\d{8})*$/i', 'on' => [self::SCENARIO_UPDATE_CART], 'message' => 'Recovery codes are invalid.'],
+
         ];
+    }
+
+    public function validateRecoverCode($model) 
+    {
+        return in_array($model->login_method, ['facebook', 'google']);
     }
 
     public function fetchLoginMethod()
@@ -59,7 +76,8 @@ class CartItem extends Game implements CartItemInterface
         return [
             'facebook' => 'Facebook',
             'google' => 'Google',
-            'other' => 'Other methods',
+            'account' => 'Game Account',
+            'other' => 'Other Method'
         ];
     }
 

@@ -158,9 +158,13 @@ class OrderPaymentForm extends Model
             // Withdraw from wallet and move status to pending
             if ($paygate->getPaymentType() == 'online') {
                 // $user->withdraw($totalPrice, $order->id, sprintf("Pay for order #%s", $order->id));
+                $userWalletTotal = UserWallet::find()->where([
+                    'user_id' => $user->id,
+                    'status' => UserWallet::STATUS_COMPLETED
+                ])->sum('coin');
                 $wallet = new UserWallet();
                 $wallet->coin = (-1) * $totalPrice;
-                $wallet->balance = $user->getWalletAmount() + $wallet->coin;
+                $wallet->balance = $userWalletTotal + $wallet->coin;
                 $wallet->type = UserWallet::TYPE_OUTPUT;
                 $wallet->description = sprintf("Pay for order #%s", $order->id);
                 $wallet->ref_name = UserWallet::REF_ORDER;

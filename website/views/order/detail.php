@@ -25,12 +25,16 @@ use website\models\OrderFile;
       <div><span class="list-item">Total Price:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_price, 1), $order->currency);?></b></div>
     </div>
     <div class="col-md-6">
+      <?php if ($order->raw) : ?>
+      <?=$order->raw;?>
+      <?php else : ?>
       <div><span class="list-item">Login method:</span><b><?=$order->login_method;?></b></div>
       <div><span class="list-item">Character name:</span><b><?=$order->character_name;?></b></div>
       <div><span class="list-item">Account login:</span><b><?=$order->username;?></b></div>
       <div><span class="list-item">Account password:</span><b><?=$order->password;?></b></div>
       <div><span class="list-item">Server:</span><b><?=$order->server;?></b></div>
       <div><span class="list-item">Recovery code:</span><b><?=$order->recover_code;?></b></div>
+      <?php endif;?>
     </div>
     <?php if ($order->isCompletedOrder() || $order->isConfirmedOrder()) : ?>
     <div class="col-md-12 mt-4">

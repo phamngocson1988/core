@@ -37,8 +37,8 @@ class WalletController extends Controller
 		$this->view->params['main_menu_active'] = 'wallet.index';
         $request = Yii::$app->request;
         $data = [
-        //     'created_at_from' => $request->get('created_at_from'),
-        //     'created_at_to' => $request->get('created_at_to'),
+            'created_at_from' => $request->get('created_at_from'),
+            'created_at_to' => $request->get('created_at_to'),
         //     'id' => $request->get('id'),
             'id' => $request->get('id'),
             'user_id' => $request->get('user_id'),

@@ -19,7 +19,7 @@ use yii\helpers\Html;
     <?php continue;?>
     <?php endif;?>
     <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
-    <?php $percent = round($flashsaleGame->remain * 100 / $flashsaleGame->limit);?>
+    <?php $percent = 100 - round($flashsaleGame->remain * 100 / $flashsaleGame->limit);?>
     <div class="post-item card">
       <div class="post-thumb">
         <a href="<?=$viewUrl;?>" class="hover-img">

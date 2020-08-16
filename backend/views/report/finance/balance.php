@@ -128,18 +128,17 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </tr>
           </thead>
           <tbody>
-              <?php if (!$models) :?>
+              <?php if (!$report) :?>
               <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <?php $userId = $model->user_id;?>
+              <?php foreach ($report as $userId => $r) :?>
               <tr>
-                <td>#<?=($pages->offset + $no + 1)?></td>
-                <td style="vertical-align: middle;"><?=$report[$userId]['name'];?></td>
-                <td style="vertical-align: middle;"><?=number_format($report[$userId]['topup']);?></td>
-                <td style="vertical-align: middle;"><?=number_format($report[$userId]['withdraw']);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_start']);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($report[$userId]['balance_end']);?></td>
+                <td>#<?=$userId?></td>
+                <td style="vertical-align: middle;"><?=$r['name'];?></td>
+                <td style="vertical-align: middle;"><?=number_format($r['topup']);?></td>
+                <td style="vertical-align: middle;"><?=number_format($r['withdraw']);?></td>
+                <td style="vertical-align: middle;">$<?=number_format($r['balance_start']);?></td>
+                <td style="vertical-align: middle;">$<?=number_format($r['balance_end']);?></td>
                 <td style="vertical-align: middle;">
                   <a class="btn btn-xs green tooltips" href="<?=Url::to(['report/finance-balance-detail', 'user_id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
                   <?php if (Yii::$app->user->can('admin')) : ?>

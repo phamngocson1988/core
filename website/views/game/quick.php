@@ -215,7 +215,13 @@ function getFormData(form){
 
     return indexed_array;
 }
-$('#checkout-button').on('click', function() {
+$('#checkout-button').on('click', function(e) {
+  if ($(this).hasClass('inprogress')) return;
+  $(this).addClass('inprogress');
+  var that = this;
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+  e.preventDefault();
   var forms = $('#bulk-cart').find('form.row-item-form');
   var payload = {};
   $.each(forms, function( index, form ) {
@@ -231,6 +237,8 @@ $('#checkout-button').on('click', function() {
       success: function (result, textStatus, jqXHR) {
         if (result.status == false) {
           toastr.error(result.errors);
+          $(that).removeClass('inprogress');
+
         } else {
           setTimeout(() => {  
             window.location.href = "$orderLink";

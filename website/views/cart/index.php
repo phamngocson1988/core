@@ -37,27 +37,26 @@ use yii\bootstrap\ActiveForm;
         <img class="icon-md flex-fill mr-3" src="./images/icon/risk.svg"/>
         <div class="flex-fill">WARNING: Please input infomations very carefully or the order may take much longer time to be completed!!</div>
       </div>
-      <?= $form->field($model, 'login_method')->dropdownList($model->fetchLoginMethod(), ['prompt' => 'Login method'])->label(false) ?>
+      <?= $form->field($model, 'login_method', [
+        'inputOptions' => ['id' => 'login_method', 'class' => 'form-control'],
+      ])->dropdownList($model->fetchLoginMethod(), ['prompt' => 'Login method'])->label(false) ?>
       <?= $form->field($model, 'character_name')->textInput(['placeholder' => 'Character name'])->label(false) ?>
       <?= $form->field($model, 'username')->textInput(['placeholder' => 'Account Login'])->label(false) ?>
       <?= $form->field($model, 'password')->textInput(['placeholder' => 'Account Password'])->label(false) ?>
       <?= $form->field($model, 'server')->textInput(['placeholder' => 'Server'])->label(false) ?>
-      <div class="input-group mb-3">
-        <!-- <input type="text" class="form-control" placeholder="Recovery Code" aria-label="" aria-describedby="basic-addon1"> -->
-        <?= $form->field($model, 'recover_code', [
-          'options' => ['tag' => false],
-          'template' => '{input}'
-        ])->textInput(['placeholder' => 'Recovery Code'])->label(false) ?>
-        <?= $form->field($model, 'recover_file_id', [
+      <?= $form->field($model, 'recover_code', [
+        'options' => ['class' => 'form-group'],
+        'inputOptions' => ['id' => 'recover_code', 'class' => 'form-control'],
+        'template' => '<div class="input-group mb-3">{input}<div class="custom-file">
+          <input type="file" class="custom-file-input" id="inputGroupFile02" name="recover_file">
+          <label class="custom-file-label upload-filename" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Upload</label>
+        </div></div>{error}'
+      ])->textInput(['placeholder' => 'Recovery Code'])->label(false) ?>
+      <?= $form->field($model, 'recover_file_id', [
           'options' => ['tag' => false],
           'template' => '{input}',
           'inputOptions' => ['id' => 'recover_file_id']
         ])->hiddenInput()->label(false) ?>
-        <div class="custom-file">
-          <input type="file" class="custom-file-input" id="inputGroupFile02" name="recover_file">
-          <label class="custom-file-label upload-filename" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Upload</label>
-        </div>
-      </div>
       <p><small>(*) The recovery code should contain 8 degits, and kindly provide at cleast 3 codes. <br />
         Ex: 12345678 12345678 12345678</small></p>
         <p>
