@@ -26,7 +26,7 @@ use website\models\OrderFile;
     </div>
     <div class="col-md-6">
       <?php if ($order->raw) : ?>
-      <?=$order->raw;?>
+      <?=nl2br($order->raw);?>
       <?php else : ?>
       <div><span class="list-item">Login method:</span><b><?=$order->login_method;?></b></div>
       <div><span class="list-item">Character name:</span><b><?=$order->character_name;?></b></div>

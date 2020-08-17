@@ -137,7 +137,9 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
             </div>
           </td>
           <td class="text-center">
-            <a href='<?=Url::to(['order/view', 'id' => $order->id]);?>' id="<?=$order->id;?>" class="text-red" data-target="#paymentGame" data-toggle="modal" >View+</a>
+            <?php if ($order->evidence) : ?>
+            <a href='<?=$order->evidence;?>' class="text-red" target="_blank">View+</a>
+            <?php endif;?>
           </td>
           <td class="text-center">
             <?php if ($order->isPendingOrder() || $order->isProcessingOrder() || $order->isPartialOrder()) : ?>
