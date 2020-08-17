@@ -3,8 +3,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 $setting = Yii::$app->settings;
 $affBanner = $setting->get('ApplicationSettingForm', 'affiliate_banner');
+$affBannerMobile = $setting->get('ApplicationSettingForm', 'affiliate_banner_mobile');
 $affBannerLink = $setting->get('ApplicationSettingForm', 'affiliate_banner_link', 'javascript:;');
 $referBanner = $setting->get('ApplicationSettingForm', 'refer_banner');
+$referBannerMobile = $setting->get('ApplicationSettingForm', 'refer_banner_mobile');
 $referBannerLink = $setting->get('ApplicationSettingForm', 'refer_banner_link', 'javascript:;');
 $gallery = [
     [

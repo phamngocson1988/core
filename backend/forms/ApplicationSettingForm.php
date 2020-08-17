@@ -24,10 +24,13 @@ class ApplicationSettingForm extends Model
     public $reseller_desired_profit; 
     public $logo;
     public $affiliate_banner;
+    public $affiliate_banner_mobile;
     public $affiliate_banner_link;
     public $refer_banner;
+    public $refer_banner_mobile;
     public $refer_banner_link;
     public $kcoin_banner;
+    public $kcoin_banner_mobile;
     public $kcoin_banner_link;
 
     public function init()
@@ -46,7 +49,7 @@ class ApplicationSettingForm extends Model
             ['exchange_rate_cny', 'number'],
             [['logo', 'customer_service_email', 'supplier_service_email'], 'safe'],
             [['managing_cost_rate', 'investing_cost_rate', 'desired_profit', 'reseller_desired_profit'], 'number'],
-            [['affiliate_banner', 'affiliate_banner_link', 'refer_banner', 'refer_banner_link', 'kcoin_banner', 'kcoin_banner_link'], 'safe']
+            [['affiliate_banner', 'affiliate_banner_mobile', 'affiliate_banner_link', 'refer_banner', 'refer_banner_mobile', 'refer_banner_link', 'kcoin_banner', 'kcoin_banner_mobile', 'kcoin_banner_link'], 'safe']
         ];
     }
 
@@ -70,10 +73,13 @@ class ApplicationSettingForm extends Model
             'reseller_desired_profit' => 'Lợi nhuận mong muốn từ nhà bán lẻ',
             'logo' => 'Logo',
             'affiliate_banner' => 'Banner for affiliate',
+            'affiliate_banner_mobile' => 'Banner for affiliate (mobile)',
             'affiliate_banner_link' => 'Link for affiliate banner',
             'refer_banner' => 'Banner for Referral Friend',
+            'refer_banner_mobile' => 'Banner for Referral Friend (mobile)',
             'refer_banner_link' => 'Link for Referral Friend banner',
             'kcoin_banner' => 'Banner for KCoin',
+            'kcoin_banner_mobile' => 'Banner for KCoin (mobile)',
             'kcoin_banner_link' => 'Link for KCoin banner',
             'accountant_email' => 'Email kế toán',
         ];

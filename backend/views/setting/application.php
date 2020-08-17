@@ -124,6 +124,11 @@ use yii\helpers\Url;
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'affiliate_banner'],
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="affiliate_banner_upload">Upload</button><input type="file" id="file_affiliate_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
                 ])->textInput();?>
+                <?=$form->field($model, 'affiliate_banner_mobile', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'affiliate_banner_mobile'],
+                  'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="affiliate_banner_mobile_upload">Upload</button><input type="file" id="file_affiliate_banner_mobile_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
+                ])->textInput();?>
                 <?=$form->field($model, 'affiliate_banner_link', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
@@ -135,6 +140,11 @@ use yii\helpers\Url;
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'refer_banner'],
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="refer_banner_upload">Upload</button><input type="file" id="file_refer_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
                 ])->textInput();?>
+                <?=$form->field($model, 'refer_banner_mobile', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'refer_banner_mobile'],
+                  'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="refer_banner_mobile_upload">Upload</button><input type="file" id="file_refer_banner_mobile_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
+                ])->textInput();?>
                 <?=$form->field($model, 'refer_banner_link', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
@@ -145,6 +155,11 @@ use yii\helpers\Url;
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'kcoin_banner'],
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="kcoin_banner_upload">Upload</button><input type="file" id="file_kcoin_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
+                ])->textInput();?>
+                <?=$form->field($model, 'kcoin_banner_mobile', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'kcoin_banner_mobile'],
+                  'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="kcoin_banner_mobile_upload">Upload</button><input type="file" id="file_kcoin_banner_mobile_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
                 ])->textInput();?>
                 <?=$form->field($model, 'kcoin_banner_link', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -185,6 +200,17 @@ affUpload.callback = function(result) {
   $('#affiliate_banner').val(file.src);
 }
 
+var affMobileUpload = new AjaxUploadFile({
+  trigger_element: '#affiliate_banner_mobile_upload', 
+  file_element: '#file_affiliate_banner_mobile_upload',
+  link_upload: '$uploadLink'
+});
+affMobileUpload.callback = function(result) {
+  var file = result[0];
+  console.log(file);
+  $('#affiliate_banner_mobile').val(file.src);
+}
+
 var referUpload = new AjaxUploadFile({
   trigger_element: '#refer_banner_upload', 
   file_element: '#file_refer_banner_upload',
@@ -196,6 +222,17 @@ referUpload.callback = function(result) {
   $('#refer_banner').val(file.src);
 }
 
+var referMobileUpload = new AjaxUploadFile({
+  trigger_element: '#refer_banner_mobile_upload', 
+  file_element: '#file_refer_banner_mobile_upload',
+  link_upload: '$uploadLink'
+});
+referMobileUpload.callback = function(result) {
+  var file = result[0];
+  console.log(file);
+  $('#refer_banner_mobile').val(file.src);
+}
+
 var kcoinBannerUpload = new AjaxUploadFile({
   trigger_element: '#kcoin_banner_upload', 
   file_element: '#file_kcoin_banner_upload',
@@ -205,6 +242,17 @@ kcoinBannerUpload.callback = function(result) {
   var file = result[0];
   console.log(file);
   $('#kcoin_banner').val(file.src);
+}
+
+var kcoinBannerMobileUpload = new AjaxUploadFile({
+  trigger_element: '#kcoin_banner_mobile_upload', 
+  file_element: '#file_kcoin_banner_mobile_upload',
+  link_upload: '$uploadLink'
+});
+kcoinBannerMobileUpload.callback = function(result) {
+  var file = result[0];
+  console.log(file);
+  $('#kcoin_banner_mobile').val(file.src);
 }
 JS;
 $this->registerJs($script);
