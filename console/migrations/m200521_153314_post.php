@@ -30,6 +30,12 @@ class m200521_153314_post extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
 
+        $this->createTable('{{%post_category}}', [
+            'id' => $this->primaryKey(),
+            'post_id' => $this->integer(11)->notNull(),
+            'category_id' => $this->integer(11)->notNull(),
+        ], $tableOptions);
+
         $this->createTable('{{%category}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
@@ -42,6 +48,7 @@ class m200521_153314_post extends Migration
     public function down()
     {
         $this->dropTable('{{%post}}');
+        $this->dropTable('{{%post_category}}');
         $this->dropTable('{{%category}}');
     }
 }

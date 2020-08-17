@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use backend\models\Post;
 use backend\models\Category;
+use backend\models\PostCategory;
 use backend\models\Operator;
 use yii\helpers\ArrayHelper;
 
@@ -15,6 +16,7 @@ class CreatePostForm extends Model
     public $content;
     public $image_id;
     public $category_id;
+    public $category_ids;
     public $operator_id;
     public $status;
 
@@ -22,7 +24,7 @@ class CreatePostForm extends Model
     {
         return [
             [['title', 'content', 'status'], 'required'],
-            [['image_id', 'category_id', 'operator_id'], 'safe'],
+            [['image_id', 'category_id', 'category_ids', 'operator_id'], 'safe'],
         ];
     }
 
@@ -31,7 +33,8 @@ class CreatePostForm extends Model
         return [
             'title' => Yii::t('app', 'title'),
             'content' => Yii::t('app', 'content'),
-            'category_id' => Yii::t('app', 'category'),
+            'category_id' => Yii::t('app', 'main_category'),
+            'category_ids' => Yii::t('app', 'category'),
             'operator' => Yii::t('app', 'operator'),
             'status' => Yii::t('app', 'status'),
         ];
@@ -46,7 +49,17 @@ class CreatePostForm extends Model
         $post->category_id = $this->category_id;
         $post->operator_id = $this->operator_id;
         $post->status = $this->status;
-        return $post->save();
+        $result = $post->save();
+
+        if ($result && $this->category_ids) {
+            foreach ((array)$this->category_ids as $categoryId) {
+                $postCat = new PostCategory();
+                $postCat->category_id = $categoryId;
+                $postCat->post_id = $post->id;
+                $postCat->save();
+            }
+        }
+        return $result;
     }
 
     public function fetchCategory()

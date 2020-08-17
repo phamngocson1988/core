@@ -12,7 +12,7 @@ use frontend\widgets\LinkPager;
         <div class="mod-column">
           <div class="row">
             <?php foreach ($operators as $operator) :?>
-            <div class="newest-item col">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
               <div class="block-card">
                 <div class="card-image"><img class="object-fit" src="<?=$operator->getImageUrl('400x220');?>" alt="image"></div>
                 <div class="card-body">

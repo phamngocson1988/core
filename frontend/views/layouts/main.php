@@ -45,24 +45,25 @@ AppAsset::register($this);
               <?php $main_menu_active = isset($this->params['main_menu_active']) ? $this->params['main_menu_active'] : '';?>
               <?php
               $items = [];
+              $categories = \frontend\models\Category::find()->all();
               if (Yii::$app->user->isGuest) {
                 $items[] = ['label' => 'LOGIN', 'url' => '#modalLogin', 'visible' => Yii::$app->user->isGuest, 'template' => '<a href="{url}" data-toggle="modal">{label}</a>', 'options' => ['class' => 'header-login']];
               } else {
                 $items[] = ['label' => strtoupper(Yii::$app->user->identity->getName()), 'url' => ['profile/index'], 'options' => ['class' => 'header-login']];
               }
               $items[] = ['label' => 'OPERATORS', 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'];
+              $items[] = ['label' => 'BONUSES', 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'];
+              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/create'], 'active' => $main_menu_active == 'complain.index', 'visible' => !Yii::$app->user->isGuest,];
               $items[] = [
-                'label' => 'BONUSES', 
-                'url' => ['bonus/index'], 
-                'active' => $main_menu_active == 'bonus.index', 
+                'label' => 'NEWS', 
+                'url' => ['news/index'], 
+                'active' => $main_menu_active == 'news.index', 
                 'options' => ['class' => 'has-sub'],
                 'template' => '<a href="{url}" class="item-nav no-link">{label}</a><div class="item-nav js-btn-dropdown">{label}</div>', 
-                // 'items' => [
-                //   ['label' => 'Casino Bonuses', 'url' => '#', 'template' => '<a href="{url}" class="trans">{label}</a>']
-                // ],
+                'items' => array_map(function($category) {
+                  return ['label' => $category->title, 'url' => Url::to(['news/category', 'id' => $category->id, 'slug' => $category->slug]), 'template' => '<a href="{url}" class="trans">{label}</a>'];
+                }, $categories)
               ];
-              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/create'], 'active' => $main_menu_active == 'complain.index', 'visible' => !Yii::$app->user->isGuest,];
-              $items[] = ['label' => 'NEWS', 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'];
               $items[] = ['label' => 'FORUM', 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
               ?>
               <?=yii\widgets\Menu::widget([
