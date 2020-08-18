@@ -220,7 +220,8 @@ $sideGallery = array_slice($gallery, -2);
   <div class="card-deck main-card">
     <div class="card">
       <div class="media">
-        <a href="<?=$referBannerLink;?>"><img src="<?=$referBanner;?>" /></a>
+        <a href="<?=$referBannerLink;?>"><img class="desktop-ads" src="<?=$referBanner;?>"/></a>
+        <a href="<?=$referBannerLink;?>"><img class="mobile-ads" src="<?=$referBannerMobile;?>"/></a>
       </div>
     </div>
   </div>

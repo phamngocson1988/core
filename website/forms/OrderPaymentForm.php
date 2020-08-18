@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use website\models\Paygate;
 use website\models\Order;
+use website\models\User;
 use website\models\UserWallet;
 use common\components\helpers\FormatConverter;
 use website\components\payment\PaymentGatewayFactory;
@@ -152,6 +153,15 @@ class OrderPaymentForm extends Model
             $order->raw = $cartItem->raw;
             $order->bulk = $cartItem->bulk;
 
+            // Check saler
+            $reseller = $user->reseller; 
+            if ($reseller) {
+                $order->saler_id = $reseller->manager_id;
+            } elseif ($cartItem->saler_code && !$order->saler_id) {
+                $invitor = User::findOne(['saler_code' => trim($cartItem->saler_code)]);
+                $order->saler_id = ($invitor) ? $invitor->id : null;
+            }
+
             $order->save();
             $order->log(sprintf("Created. Status %s (%s - %s)", $order->status, $paygate->getIdentifier(), $paygate->getPaymentType()));
 
@@ -194,15 +204,6 @@ class OrderPaymentForm extends Model
             if ($flashsale && $flashsale->limit) {
                 $flashsale->remain = min($flashsale->limit, $flashsale->remain) - 1;
                 $flashsale->save();
-            }
-
-            // Check saler
-            $reseller = $user->reseller; 
-            if ($reseller) {
-                $order->saler_id = $reseller->manager_id;
-            } elseif ($cartItem->saler_code && !$order->saler_id) {
-                $invitor = User::findOne(['saler_code' => trim($cartItem->saler_code)]);
-                $order->saler_id = ($invitor) ? $invitor->id : null;
             }
 
             $transaction->commit();

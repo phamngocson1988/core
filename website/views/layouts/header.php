@@ -36,7 +36,7 @@ use yii\helpers\Url;
             <div class="p-2 flex-fill login-item">
               <div class="dropdown">
                 <a class="dropdown-toggle link-light" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <?=$user->name;?> <!-- <img class="icon-sm icon-verified" src="https://image.flaticon.com/icons/svg/2438/2438080.svg"/> -->
+                  <?=$user->name;?>
                   <br />
                   <span class="text-green"><?=number_format($user->walletBalance());?> Kcoin</span>
                 </a>
@@ -76,90 +76,21 @@ use yii\helpers\Url;
   </div>
   <div class="navbar-header navbar-noti w-100">
     <div class="d-flex justify-content-between">
-      <div class="w-100 text-center py-2 dropdown noti-item">
-        <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img class="icon-sm" src="./images/icon/bell.svg" />
-        </a>
-        <ul class="dropdown-menu">
-          <li class="head text-light">
-            <div class="row">
-              <div class="col-lg-12 col-sm-12 col-12">
-                <span>Notifications (3)</span>
-                <a href="" class="float-right text-light">Mark all as read</a>
-              </div>
-          </li>
-          <li class="notification-box">
-            <div class="border-bottom p-2">
-              <a href="#" class="d-block">
-                Lorem ipsum dolor sit amet, consectetur
-              </a>
-              <small class="text-muted">27.11.2015, 15:00</small>
-            </div> 
-          </li>
-          <li class="notification-box">
-            <div class="border-bottom p-2">
-              <a href="#" class="d-block">
-                Lorem ipsum dolor sit amet, consectetur
-              </a>
-              <small class="text-muted">27.11.2015, 15:00</small>
-            </div> 
-          </li>
-          <li class="notification-box">
-            <div class="border-bottom p-2">
-              <a href="#" class="d-block">
-                Lorem ipsum dolor sit amet, consectetur
-              </a>
-              <small class="text-muted">27.11.2015, 15:00</small>
-            </div> 
-          </li>
-          <li class="text-center view-all">
-            <a href="" class="text-light">View All</a>
-          </li>
-        </ul>
-      </div>
-      <div class="w-100 text-center py-2 dropdown noti-item border-gradian-1">
-        <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img class="icon-sm" src="./images/icon/message.svg" />
-        </a>
-        <ul class="dropdown-menu">
-          <li class="head text-light">
-            <div class="row">
-              <div class="col-lg-12 col-sm-12 col-12">
-                <span>Message (3)</span>
-              </div>
-          </li>
-          <li class="notification-box">
-            <div class="border-bottom p-2">
-              <a href="#" class="d-block">
-                Lorem ipsum dolor sit amet, consectetur
-              </a>
-              <small class="text-muted">27.11.2015, 15:00</small>
-            </div> 
-          </li>
-          <li class="notification-box">
-            <div class="border-bottom p-2">
-              <a href="#" class="d-block">
-                Lorem ipsum dolor sit amet, consectetur
-              </a>
-              <small class="text-muted">27.11.2015, 15:00</small>
-            </div> 
-          </li>
-          <li class="notification-box">
-            <div class="border-bottom p-2">
-              <a href="#" class="d-block">
-                Lorem ipsum dolor sit amet, consectetur
-              </a>
-              <small class="text-muted">27.11.2015, 15:00</small>
-            </div> 
-          </li>
-          <li class="text-center view-all">
-            <a href="" class="text-light">View all in Messenger</a>
-          </li>
-        </ul>
-      </div>
+      <?=\website\components\notifications\Notifications::widget([
+        'options' => [
+          'class' => 'w-100 text-center py-2 dropdown noti-item',
+          'id' => 'mobile-header-notification',
+        ]
+      ]);?>
+      <?=\website\components\notifications\MessageNotifications::widget([
+        'options' => [
+          'class' => 'w-100 text-center py-2 dropdown noti-item border-gradian-1',
+          'id' => 'mobile-message-notification',
+        ]
+      ]);?>
       <div class="w-100 text-center py-2">
-        <a class="link-light" href="#">
-          <img class="icon-sm" src="./images/icon/bill.svg" />
+        <a class="link-light" href="<?=Url::to(['order/index']);?>">
+          <img class="icon-sm" src="/images/icon/bill.svg" />
           My order
         </a>
       </div>

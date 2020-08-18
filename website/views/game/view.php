@@ -92,33 +92,17 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         </div>
         <div class="multi-button d-flex justify-content-between align-items-center">
           <div class="w-100 flex-fill p-2">
-
-            <!-- <div class="d-flex justify-content-between align-items-center">
-              <div class="w-100 flex-fill">Quanity</div>
-              <div class="w-100 flex-fill single-order">
-                <div class="add-quantity d-flex justify-content-between align-items-center">
-                  <span class="flex-fill minus">
-                    <img class="icon-sm" src="./images/icon/minus.svg"/>
-                  </span>
-                  <input class="quantity-value" class="flex-fill text-center" type="text" value="1"/>
-                  <span class="flex-fill plus">
-                    <img class="icon-sm" src="./images/icon/plus.svg"/>
-                  </span>
-                </div>
-              </div>
-            </div> -->
-            
             <?= $form->field($model, 'quantity', [
               'options' => ['class' => 'd-flex justify-content-between align-items-center'],
-              'labelOptions' => ['class' => 'w-100 flex-fill'],
-              'template' => '{label}<div class="add-quantity d-flex justify-content-between align-items-center">
+              'labelOptions' => ['class' => 'w-100 flex-fill', 'tag' => 'div'],
+              'template' => '{label}<div class="w-100 flex-fill single-order"><div class="add-quantity d-flex justify-content-between align-items-center">
                   <span class="flex-fill minus">
-                    <img class="icon-sm" src="./images/icon/minus.svg"/>
+                    <img class="icon-sm" src="/images/icon/minus.svg"/>
                   </span>{input}<span class="flex-fill plus">
-                  <img class="icon-sm" src="./images/icon/plus.svg"/>
+                  <img class="icon-sm" src="/images/icon/plus.svg"/>
                 </span>
-              </div>',
-              'inputOptions' => ['class' => 'form-control', 'id' => 'quantity']
+              </div></div>',
+              'inputOptions' => ['class' => 'quantity-value', 'id' => 'quantity']
             ])->textInput()->label('Quantity') ?>
           </div>
           <?php if (!$model->isSoldout()) :?>

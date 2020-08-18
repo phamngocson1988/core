@@ -108,12 +108,6 @@ use yii\bootstrap\ActiveForm;
           ])->textInput(); ?>
         </div>
         <div class="col-lg-6">
-          <div class="input-group my-3">
-            <input type="text" class="form-control" placeholder="Enter Supporter's code" aria-label="Enter Supporter's code" aria-describedby="button-addon2">
-            <div class="input-group-append">
-              <button class="btn btn-warning text-white" type="button" id="button-addon2">Submit</button>
-            </div>
-          </div>
           <?= $form->field($model, 'saler_code', [
             'options' => ['class' => 'input-group my-3'],
             'template' => '{input}<div class="input-group-append"><button class="btn btn-warning text-white" type="button">Submit</button></div>',
