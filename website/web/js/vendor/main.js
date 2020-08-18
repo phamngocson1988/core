@@ -41,7 +41,7 @@ $(document).ready(function () {
         {
           breakpoint: 425,
           settings: {
-            slidesToShow: 1,
+            slidesToShow: 1.5,
             slidesToScroll: 1
           }
         }
@@ -213,8 +213,10 @@ $(document).ready(function () {
   })
 
   $(".btn-seemore").click(function(){
-    $(this).hide()
-    $('.description').addClass('show-all');    
+    $('.description').toggleClass('show-all');   
+    $(this).html(function(i, text){
+        return text === "<img class='icon-sm' src='https://image.flaticon.com/icons/svg/892/892687.svg'/>" ? "<img class='icon-sm' src='https://image.flaticon.com/icons/svg/892/892629.svg'/>" : "<img class='icon-sm' src='https://image.flaticon.com/icons/svg/892/892687.svg'/>";
+    }) 
   });
 
   $('.btn-request-token').click(function(){

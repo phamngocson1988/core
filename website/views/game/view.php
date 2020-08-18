@@ -92,10 +92,32 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         </div>
         <div class="multi-button d-flex justify-content-between align-items-center">
           <div class="w-100 flex-fill p-2">
+
+            <!-- <div class="d-flex justify-content-between align-items-center">
+              <div class="w-100 flex-fill">Quanity</div>
+              <div class="w-100 flex-fill single-order">
+                <div class="add-quantity d-flex justify-content-between align-items-center">
+                  <span class="flex-fill minus">
+                    <img class="icon-sm" src="./images/icon/minus.svg"/>
+                  </span>
+                  <input class="quantity-value" class="flex-fill text-center" type="text" value="1"/>
+                  <span class="flex-fill plus">
+                    <img class="icon-sm" src="./images/icon/plus.svg"/>
+                  </span>
+                </div>
+              </div>
+            </div> -->
+            
             <?= $form->field($model, 'quantity', [
               'options' => ['class' => 'd-flex justify-content-between align-items-center'],
               'labelOptions' => ['class' => 'w-100 flex-fill'],
-              'template' => '{label}<div class="w-100 flex-fill">{input}</div>',
+              'template' => '{label}<div class="add-quantity d-flex justify-content-between align-items-center">
+                  <span class="flex-fill minus">
+                    <img class="icon-sm" src="./images/icon/minus.svg"/>
+                  </span>{input}<span class="flex-fill plus">
+                  <img class="icon-sm" src="./images/icon/plus.svg"/>
+                </span>
+              </div>',
               'inputOptions' => ['class' => 'form-control', 'id' => 'quantity']
             ])->textInput()->label('Quantity') ?>
           </div>
@@ -197,14 +219,18 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
   </div>
   <!-- DES -->
   <div class="card bg-light mt-3">
-    <div class="card-body" id="content">
-      <h4 class="card-title">Description</h4>
-      <div class="card-text description">
-        <?=$model->content;?>
+      <div class="card-body">
+        <h4 class="card-title">Description</h4>
+        <div class="card-text description">
+          <?=$model->content;?>
+        </div>
       </div>
-      <button type="button" class="btn btn-info btn-seemore">See more</button>
+      <div class="card-footer text-center">
+        <a class="btn-seemore">
+          <img class="icon-sm" src="https://image.flaticon.com/icons/svg/892/892629.svg"/>
+        </a>
+      </div>
     </div>
-  </div>
 </div><!-- END MAIN SINGLE -->
 <?php if ($relatedGames) : ?>
 <div class="container my-5">

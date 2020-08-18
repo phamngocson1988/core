@@ -44,8 +44,6 @@ use yii\helpers\Url;
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a class="dropdown-item" href="<?=Url::to(['profile/index']);?>">Account info</a>
                   <a class="dropdown-item" href="<?=Url::to(['order/index']);?>">My order</a>
-                  <!-- <a class="dropdown-item" href="#">Notification</a>
-                  <a class="dropdown-item" href="#">Message</a> -->
                   <a class="dropdown-item" href="<?=Url::to(['site/logout']);?>">Log-out</a>
                 </div>
               </div>
@@ -55,89 +53,8 @@ use yii\helpers\Url;
                 <img class="icon-sm" src="/images/icon/bill.svg" />My order</a>
             </div>
             <div class="p-2 flex-fill noti-item">
-              <!-- <div class="nav-item dropdown d-inline-block p-2">
-                <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img class="icon-sm" src="/images/icon/bell.svg" />
-                </a>
-                <ul class="dropdown-menu">
-                  <li class="head text-light">
-                    <div class="row">
-                      <div class="col-lg-12 col-sm-12 col-12">
-                        <span>Notifications (3)</span>
-                        <a href="" class="float-right text-light">Mark all as read</a>
-                      </div>
-                  </li>
-                  <li class="notification-box">
-                    <div class="border-bottom p-2">
-                      <a href="#" class="d-block">
-                        Lorem ipsum dolor sit amet, consectetur
-                      </a>
-                      <small class="text-muted">27.11.2015, 15:00</small>
-                    </div> 
-                  </li>
-                  <li class="notification-box">
-                    <div class="border-bottom p-2">
-                      <a href="#" class="d-block">
-                        Lorem ipsum dolor sit amet, consectetur
-                      </a>
-                      <small class="text-muted">27.11.2015, 15:00</small>
-                    </div> 
-                  </li>
-                  <li class="notification-box">
-                    <div class="border-bottom p-2">
-                      <a href="#" class="d-block">
-                        Lorem ipsum dolor sit amet, consectetur
-                      </a>
-                      <small class="text-muted">27.11.2015, 15:00</small>
-                    </div> 
-                  </li>
-                  <li class="text-center view-all">
-                    <a href="" class="text-light">View All</a>
-                  </li>
-                </ul>
-              </div> -->
               <?=\website\components\notifications\Notifications::widget();?>
               <?=\website\components\notifications\MessageNotifications::widget();?>
-              <!-- <div class="nav-item dropdown d-inline-block p-2">
-                <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img class="icon-sm" src="/images/icon/message.svg" />
-                </a>
-                <ul class="dropdown-menu">
-                  <li class="head text-light">
-                    <div class="row">
-                      <div class="col-lg-12 col-sm-12 col-12">
-                        <span>Message (3)</span>
-                      </div>
-                  </li>
-                  <li class="notification-box">
-                    <div class="border-bottom p-2">
-                      <a href="#" class="d-block">
-                        Lorem ipsum dolor sit amet, consectetur
-                      </a>
-                      <small class="text-muted">27.11.2015, 15:00</small>
-                    </div> 
-                  </li>
-                  <li class="notification-box">
-                    <div class="border-bottom p-2">
-                      <a href="#" class="d-block">
-                        Lorem ipsum dolor sit amet, consectetur
-                      </a>
-                      <small class="text-muted">27.11.2015, 15:00</small>
-                    </div> 
-                  </li>
-                  <li class="notification-box">
-                    <div class="border-bottom p-2">
-                      <a href="#" class="d-block">
-                        Lorem ipsum dolor sit amet, consectetur
-                      </a>
-                      <small class="text-muted">27.11.2015, 15:00</small>
-                    </div> 
-                  </li>
-                  <li class="text-center view-all">
-                    <a href="" class="text-light">View all in Messenger</a>
-                  </li>
-                </ul>
-              </div> -->
             </div>
             <?php else:?>
             <div class="p-2 flex-fill login-item">
@@ -147,13 +64,104 @@ use yii\helpers\Url;
             
           </div>
         </div>
-        <div class="nav-mb">
+        <div class="nav-mb p-2">
           <div id="nav-icon">
             <span></span>
             <span></span>
             <span></span>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar-header navbar-noti w-100">
+    <div class="d-flex justify-content-between">
+      <div class="w-100 text-center py-2 dropdown noti-item">
+        <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="icon-sm" src="./images/icon/bell.svg" />
+        </a>
+        <ul class="dropdown-menu">
+          <li class="head text-light">
+            <div class="row">
+              <div class="col-lg-12 col-sm-12 col-12">
+                <span>Notifications (3)</span>
+                <a href="" class="float-right text-light">Mark all as read</a>
+              </div>
+          </li>
+          <li class="notification-box">
+            <div class="border-bottom p-2">
+              <a href="#" class="d-block">
+                Lorem ipsum dolor sit amet, consectetur
+              </a>
+              <small class="text-muted">27.11.2015, 15:00</small>
+            </div> 
+          </li>
+          <li class="notification-box">
+            <div class="border-bottom p-2">
+              <a href="#" class="d-block">
+                Lorem ipsum dolor sit amet, consectetur
+              </a>
+              <small class="text-muted">27.11.2015, 15:00</small>
+            </div> 
+          </li>
+          <li class="notification-box">
+            <div class="border-bottom p-2">
+              <a href="#" class="d-block">
+                Lorem ipsum dolor sit amet, consectetur
+              </a>
+              <small class="text-muted">27.11.2015, 15:00</small>
+            </div> 
+          </li>
+          <li class="text-center view-all">
+            <a href="" class="text-light">View All</a>
+          </li>
+        </ul>
+      </div>
+      <div class="w-100 text-center py-2 dropdown noti-item border-gradian-1">
+        <a class="text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="icon-sm" src="./images/icon/message.svg" />
+        </a>
+        <ul class="dropdown-menu">
+          <li class="head text-light">
+            <div class="row">
+              <div class="col-lg-12 col-sm-12 col-12">
+                <span>Message (3)</span>
+              </div>
+          </li>
+          <li class="notification-box">
+            <div class="border-bottom p-2">
+              <a href="#" class="d-block">
+                Lorem ipsum dolor sit amet, consectetur
+              </a>
+              <small class="text-muted">27.11.2015, 15:00</small>
+            </div> 
+          </li>
+          <li class="notification-box">
+            <div class="border-bottom p-2">
+              <a href="#" class="d-block">
+                Lorem ipsum dolor sit amet, consectetur
+              </a>
+              <small class="text-muted">27.11.2015, 15:00</small>
+            </div> 
+          </li>
+          <li class="notification-box">
+            <div class="border-bottom p-2">
+              <a href="#" class="d-block">
+                Lorem ipsum dolor sit amet, consectetur
+              </a>
+              <small class="text-muted">27.11.2015, 15:00</small>
+            </div> 
+          </li>
+          <li class="text-center view-all">
+            <a href="" class="text-light">View all in Messenger</a>
+          </li>
+        </ul>
+      </div>
+      <div class="w-100 text-center py-2">
+        <a class="link-light" href="#">
+          <img class="icon-sm" src="./images/icon/bill.svg" />
+          My order
+        </a>
       </div>
     </div>
   </div>
@@ -166,6 +174,7 @@ use yii\helpers\Url;
       'itemOptions' => ['class' => 'nav-item'],
       'linkTemplate' => '<a href="{url}" class="nav-link">{label}</a>',
       'items' => [
+          // Add one more record
           ['label' => 'Home', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index'],
           ['label' => 'Kcoin wallet', 'url' => ['wallet/index'], 'active' => $main_menu_active == 'wallet.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Games', 'url' => ['game/index'], 'active' => $main_menu_active == 'game.index'],

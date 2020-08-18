@@ -195,6 +195,16 @@ class OrderPaymentForm extends Model
                 $flashsale->remain = min($flashsale->limit, $flashsale->remain) - 1;
                 $flashsale->save();
             }
+
+            // Check saler
+            $reseller = $user->reseller; 
+            if ($reseller) {
+                $order->saler_id = $reseller->manager_id;
+            } elseif ($cartItem->saler_code && !$order->saler_id) {
+                $invitor = User::findOne(['saler_code' => trim($cartItem->saler_code)]);
+                $order->saler_id = ($invitor) ? $invitor->id : null;
+            }
+
             $transaction->commit();
             return $order->id;
         } catch(Exception $e) {

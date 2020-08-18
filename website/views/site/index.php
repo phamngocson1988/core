@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 $setting = Yii::$app->settings;
 $affBanner = $setting->get('ApplicationSettingForm', 'affiliate_banner');
-$affBannerMobile = $setting->get('ApplicationSettingForm', 'affiliate_banner_mobile');
+$affBannerMobile = $setting->get('ApplicationSettingForm', 'affiliate_banner_mobile', $affBanner);
 $affBannerLink = $setting->get('ApplicationSettingForm', 'affiliate_banner_link', 'javascript:;');
 $referBanner = $setting->get('ApplicationSettingForm', 'refer_banner');
 $referBannerMobile = $setting->get('ApplicationSettingForm', 'refer_banner_mobile');
@@ -130,7 +130,8 @@ $sideGallery = array_slice($gallery, -2);
   <div class="card-deck main-card">
     <div class="card" data-aos="zoom-in-down">
       <div class="media">
-        <a href="<?=$affBannerLink;?>"><img src="<?=$affBanner;?>" /></a>
+        <a href="<?=$affBannerLink;?>"><img class="desktop-ads" src="<?=$affBanner;?>"/></a>
+        <a href="<?=$affBannerLink;?>"><img class="mobile-ads" src="<?=$affBannerMobile;?>"/></a>
       </div>
     </div>
   </div>

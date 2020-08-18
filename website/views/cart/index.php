@@ -99,11 +99,29 @@ use yii\bootstrap\ActiveForm;
           </div>
         </div>
       </div><!-- END ORDER ITEM -->
-      <?= $form->field($model, 'voucher', [
-        'options' => ['class' => 'input-group my-3'],
-        'template' => '{input}<div class="input-group-append"><button class="btn btn-warning text-white" type="button" id="apply-voucher-button">Accept</button></div>',
-        'inputOptions' => ['class' => 'form-control', 'id' => 'voucher', 'placeholder' => 'Enter promo code here']
-      ])->textInput(); ?>
+      <div class="row">
+        <div class="col-lg-6">
+          <?= $form->field($model, 'voucher', [
+            'options' => ['class' => 'input-group my-3'],
+            'template' => '{input}<div class="input-group-append"><button class="btn btn-warning text-white" type="button" id="apply-voucher-button">Accept</button></div>',
+            'inputOptions' => ['class' => 'form-control', 'id' => 'voucher', 'placeholder' => 'Enter promo code here']
+          ])->textInput(); ?>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group my-3">
+            <input type="text" class="form-control" placeholder="Enter Supporter's code" aria-label="Enter Supporter's code" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-warning text-white" type="button" id="button-addon2">Submit</button>
+            </div>
+          </div>
+          <?= $form->field($model, 'saler_code', [
+            'options' => ['class' => 'input-group my-3'],
+            'template' => '{input}<div class="input-group-append"><button class="btn btn-warning text-white" type="button">Submit</button></div>',
+            'inputOptions' => ['class' => 'form-control', 'placeholder' => 'Enter Supporter\'s code']
+          ])->textInput(); ?>
+        </div>
+      </div>
+      
       <!-- CART SUMMARY -->
       <div class="card card-summary">
         <h5 class="card-header text-uppercase">Card summary</h5>
