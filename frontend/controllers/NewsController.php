@@ -30,7 +30,10 @@ class NewsController extends Controller
 
     public function actionCategory($id, $slug)
     {
-        $command = Post::find()->where(['category_id' => $id])->orderBy(['id' => SORT_DESC]);
+        $form = new \frontend\forms\FetchPostForm(['category_id' => $id]);
+        $command = $form->getCommand();
+        $command->orderBy(['id' => SORT_DESC]);
+        // $command = Post::find()->where(['category_id' => $id])->orderBy(['id' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
         $posts = $command->offset($pages->offset)
                             ->limit($pages->limit)

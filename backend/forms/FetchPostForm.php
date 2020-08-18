@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\Post;
 use backend\models\Category;
+use backend\models\PostCategory;
 use backend\models\Operator;
 
 class FetchPostForm extends Model
@@ -31,21 +32,25 @@ class FetchPostForm extends Model
     {
         $command = Post::find();
 
+        $postTable = Post::tableName();
+        $categoryTable = PostCategory::tableName();
+        $command->innerJoin($categoryTable, "{$postTable}.id = {$categoryTable}.post_id");
+        $command->select(["{$postTable}.*"]);
+        if ($this->category_id) {
+            $command->where(["{$categoryTable}.category_id" => $this->category_id]);
+        }
         if ($this->q) {
             $command->andWhere(['or',
-                ['like', 'title', $this->q],
-                ['like', 'content', $this->q],
+                ['like', "{$postTable}.title", $this->q],
+                ['like', "{$postTable}.content", $this->q],
 
             ]);
         }
-        if ($this->category_id) {
-            $command->andWhere(['category_id' => $this->category_id]);
-        }
         if ($this->operator_id) {
-            $command->andWhere(['operator_id' => $this->operator_id]);
+            $command->andWhere(["{$postTable}.operator_id" => $this->operator_id]);
         }
         if ($this->status) {
-            $command->andWhere(['status' => $this->status]);
+            $command->andWhere(["{$postTable}.status" => $this->status]);
         }
         $this->_command = $command;
     }

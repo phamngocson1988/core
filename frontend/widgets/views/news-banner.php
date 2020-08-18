@@ -9,23 +9,17 @@ use yii\helpers\Url;
           <?php $post = array_shift($newestNews);?>
           <div class="col-12"><a class="item-block" href="<?=Url::to(['news/view', 'id' => $post->id, 'slug' => $post->slug]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image">
               <?php $category = $post->category;?>
-              <?php if ($category) : ?>
-              <p class="item-category"><?=$category->title;?></p>
-              <?php endif ;?>
+              <p class="item-category"><?=$category ? $category->title : '';?></p>
               <p class="item-title"><?=$post->title;?></p></a></div>
           <?php $post = array_shift($newestNews);?>
           <div class="col-6"><a class="item-block" href="<?=Url::to(['news/view', 'id' => $post->id, 'slug' => $post->slug]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image">
               <?php $category = $post->category;?>
-              <?php if ($category) : ?>
-              <p class="item-category"><?=$category->title;?></p>
-              <?php endif ;?>
+              <p class="item-category"><?=$category ? $category->title : '';?></p>
               <p class="item-title"><?=$post->title;?></p></a></div>
           <?php $post = array_shift($newestNews);?>
           <div class="col-6"><a class="item-block" href="<?=Url::to(['news/view', 'id' => $post->id, 'slug' => $post->slug]);?>"><img class="object-fit" src="<?=$post->getImageUrl('600x400');?>" alt="image">
               <?php $category = $post->category;?>
-              <?php if ($category) : ?>
-              <p class="item-category"><?=$category->title;?></p>
-              <?php endif ;?>
+              <p class="item-category"><?=$category ? $category->title : '';?></p>
               <p class="item-title"><?=$post->title;?></p></a></div>
         </div>
       </div>

@@ -15,7 +15,6 @@ class CreatePostForm extends Model
     public $title;
     public $content;
     public $image_id;
-    public $category_id;
     public $category_ids;
     public $operator_id;
     public $status;
@@ -24,7 +23,7 @@ class CreatePostForm extends Model
     {
         return [
             [['title', 'content', 'status'], 'required'],
-            [['image_id', 'category_id', 'category_ids', 'operator_id'], 'safe'],
+            [['image_id', 'category_ids', 'operator_id'], 'safe'],
         ];
     }
 
@@ -33,7 +32,6 @@ class CreatePostForm extends Model
         return [
             'title' => Yii::t('app', 'title'),
             'content' => Yii::t('app', 'content'),
-            'category_id' => Yii::t('app', 'main_category'),
             'category_ids' => Yii::t('app', 'category'),
             'operator' => Yii::t('app', 'operator'),
             'status' => Yii::t('app', 'status'),
@@ -46,7 +44,6 @@ class CreatePostForm extends Model
         $post->title = $this->title;
         $post->content = $this->content;
         $post->image_id = $this->image_id;
-        $post->category_id = $this->category_id;
         $post->operator_id = $this->operator_id;
         $post->status = $this->status;
         $result = $post->save();

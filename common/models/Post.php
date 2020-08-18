@@ -53,7 +53,14 @@ class Post extends ActiveRecord
 
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+        $categories = (array)$this->categories;
+        return reset($categories);
+    }
+
+    public function getCategories()
+    {
+        return $this->hasMany(Category::className(), ['id' => 'category_id'])
+            ->viaTable('post_category', ['post_id' => 'id']);
     }
 
     public function getOperator()

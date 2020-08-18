@@ -16,7 +16,6 @@ class EditPostForm extends Model
     public $title;
     public $content;
     public $image_id;
-    public $category_id;
     public $category_ids;
     public $operator_id;
     public $status;
@@ -28,7 +27,7 @@ class EditPostForm extends Model
         return [
             [['id', 'title', 'content', 'status'], 'required'],
             ['id', 'validatePost'],
-            [['image_id', 'category_id', 'category_ids', 'operator_id'], 'safe'],
+            [['image_id', 'category_ids', 'operator_id'], 'safe'],
         ];
     }
 
@@ -37,7 +36,6 @@ class EditPostForm extends Model
         return [
             'title' => Yii::t('app', 'title'),
             'content' => Yii::t('app', 'content'),
-            'category_id' => Yii::t('app', 'main_category'),
             'category_ids' => Yii::t('app', 'category'),
             'operator' => Yii::t('app', 'operator'),
             'status' => Yii::t('app', 'status'),
@@ -57,7 +55,6 @@ class EditPostForm extends Model
         $post->title = $this->title;
         $post->content = $this->content;
         $post->image_id = $this->image_id;
-        $post->category_id = $this->category_id;
         $post->operator_id = $this->operator_id;
         $post->status = $this->status;
         $result = $post->save();
@@ -100,9 +97,12 @@ class EditPostForm extends Model
         $this->title = $post->title;
         $this->content = $post->content;
         $this->image_id = $post->image_id;
-        $this->category_id = $post->category_id;
         $this->operator_id = $post->operator_id;
         $this->status = $post->status;
+
+        // Categories
+        $categories = (array)$post->categories;
+        $this->category_ids = ArrayHelper::getColumn($categories, 'id');
     }
 
     public function getPost()

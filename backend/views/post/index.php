@@ -1,6 +1,7 @@
 <?php 
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 ?>
 <!-- BEGIN PAGE BAR -->
@@ -85,7 +86,12 @@ use yii\widgets\ActiveForm;
                   <td class="center"><?=$model->id;?></td>
                   <td class="left"><img class="img-thumbnail" width="50px" height="50px" src="<?=$model->getImageUrl('50x50');?>">
                     <?=$model->title;?></td>
-                  <td class="left"><?=$model->category_id ? $model->category->title : '';?></td>
+                  <td class="left">
+                    <?php 
+                    $categories = ArrayHelper::getColumn((array)$model->categories, 'title');
+                    echo implode(", ", $categories);
+                    ?>
+                  </td>
                   <td class="left"><?=$model->operator_id ? $model->operator->name : '';?></td>
                   <td class="left"><?=$model->created_at;?></td>
                   <td class="left">
