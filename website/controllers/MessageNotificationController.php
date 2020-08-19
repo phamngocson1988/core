@@ -66,6 +66,7 @@ class MessageNotificationController extends Controller
             $notif['read'] = $notif['is_read'];
             $notif['key'] = $notif['id'];
             $notif['class'] = $notif['object_name'];
+            $notif['order_id'] = $notif['order_id'];
             $notif['message'] = $notif['content'];
             $notif['timeago'] = \common\components\helpers\TimeElapsed::timeElapsed($notif['created_at']);
             $notifs[] = $notif;
