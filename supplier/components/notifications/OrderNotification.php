@@ -50,7 +50,7 @@ class OrderNotification extends Notification
     public function getRoute(){
         switch($this->key){
             case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
-                return ['user/detail', 'id' => $this->order->id];
+                return ['order/index', '#' => $this->order->id];
         }
     }
 
@@ -102,14 +102,15 @@ class OrderNotification extends Notification
                 $template = 'infomation_request';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
-                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $this->order->id], true);
+                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['order/index', '#' => $this->order->id], true);
+                $data['message'] = ArrayHelper::getValue($this->data, 'message', '');
                 break;
             case self::NOTIFY_CUSTOMER_COMPLETE_ORDER:
                 $subject = sprintf('King Gems - #%s - Completed', $this->order->id);
                 $template = 'completed';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
-                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $this->order->id], true);
+                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['order/index', '#' => $this->order->id], true);
                 break;
 
         }

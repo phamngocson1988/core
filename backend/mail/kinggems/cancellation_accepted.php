@@ -4,7 +4,7 @@
     <p>We would like to inform that:</p>
     <p>Your order has been cancelled.</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
-    + Game: <?=$order->game_title;?><br/>
+    + Reason: Buyer's favor<br/>
     <p>Please be noted that the service charge has been refunded to your wallet accordingly.</p>
     <p>We highly appreciate if your have any feedbacks to improve our service quality.</p>
     <p>Thank you!</p>

@@ -609,7 +609,7 @@ class OrderController extends Controller
         if (trim($content)) {
             $order->complain($content);
             if (Yii::$app->user->isRole('orderteam')) {
-                $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $order->customer_id);
+                $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $order->customer_id, ['message' => $content]);
             }
             if (Yii::$app->user->isRole('saler') && $order->supplier) {
                 $supplier = $order->workingSupplier;

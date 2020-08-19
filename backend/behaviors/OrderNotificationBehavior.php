@@ -9,7 +9,7 @@ class OrderNotificationBehavior extends AttributeBehavior
 	 * @param string $key - Key of notification
 	 * @param array|int $userIds array of user id will be received notification
 	 */
-	public function pushNotification($key, $userIds)
+	public function pushNotification($key, $userIds, $data = [])
     {
     	if (is_numeric($userIds)) {
     		$userIds = (array)$userIds;
@@ -19,7 +19,8 @@ class OrderNotificationBehavior extends AttributeBehavior
     	foreach ($userIds as $userId) {
 	        OrderNotification::create($key, [
 	            'order' => $owner,
-	            'userId' => $userId
+	            'userId' => $userId,
+	            'data' => $data
 	        ])->send();
     	}
     }

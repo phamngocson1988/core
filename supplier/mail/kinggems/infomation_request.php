@@ -3,6 +3,7 @@
     <P>Dear <?=$user->name;?>,</P>
     <p>Please be informed that you have received a request for additional information regarding order with details below:</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
+    + Request: <?=$message;?><br/>
   </td>
 </tr>
 <tr>

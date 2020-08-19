@@ -76,7 +76,7 @@ return [
         ],
 
         'urlManager' => require('router.php'),
-        'urlManagerFrontend' => require('../../frontend/config/router.php'),
+        'urlManagerFrontend' => require('../../website/config/router.php'),
         'urlManagerSupplier' => require('../../supplier/config/router.php'),
         'i18n' => [
             'translations' => [

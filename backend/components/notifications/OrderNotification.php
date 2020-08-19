@@ -87,15 +87,15 @@ class OrderNotification extends Notification
             case self::NOTIFY_SUPPLIER_NEW_ORDER:
                 return ['order/waiting'];
             case self::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE:
-                return ['user/detail', 'id' => $this->order->id];
+                return ['order/index', '#' => $this->order->id];
             case self::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE:
                 return ['order/edit', 'id' => $this->order->id];
             case self::NOTIFY_CUSTOMER_COMPLETE_ORDER:
-                return ['order/index'];
+                return ['order/index', '#' => $this->order->id];
             case self::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER:
-                return ['order/index'];
+                return ['order/index', '#' => $this->order->id];
             case self::NOTIFY_CUSTOMER_PENDING_ORDER:
-                return ['order/index'];
+                return ['order/index', '#' => $this->order->id];
         }
     }
 
@@ -184,28 +184,29 @@ class OrderNotification extends Notification
                 $template = 'infomation_request';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
-                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $this->order->id], true);
+                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['order/index', '#' => $this->order->id], true);
+                $data['message'] = ArrayHelper::getValue($this->data, 'message', '');
                 break;
             case self::NOTIFY_CUSTOMER_COMPLETE_ORDER:
                 $subject = sprintf('King Gems - #%s - Completed', $this->order->id);
                 $template = 'completed';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
-                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $this->order->id], true);
+                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['order/index', '#' => $this->order->id], true);
                 break;
             case self::NOTIFY_CUSTOMER_CANCELLATION_ACCEPTED_ORDER:
                 $subject = sprintf('King Gems - #%s - Cancellation Accepted', $this->order->id);
                 $template = 'cancellation_accepted';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
-                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $this->order->id], true);
+                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['order/index', '#' => $this->order->id], true);
                 break;
             case self::NOTIFY_CUSTOMER_CANCELLATION_DENIED_ORDER:
                 $subject = sprintf('King Gems - #%s - Cancellation Denied', $this->order->id);
                 $template = 'cancellation_denied';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
-                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $this->order->id], true);
+                $data['detailUrl'] = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['order/index', '#' => $this->order->id], true);
                 break;
         }
         

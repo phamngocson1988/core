@@ -190,20 +190,10 @@ class FetchOrderForm extends Model
 
     public function fetchPaymentMethods()
     {
-        return [
-            'kinggems' => 'King Coin',
-            'alipay' => 'Alipay',
-            'skrill' => 'Skrill',
-            'alipay' => 'Alipay',
-            'wechat' => 'Wechat',
-            'postal-savings-bank-of-china' => 'Postal Savings Bank Of China',
-            'payoneer' => 'Payoneer',
-            'bitcoin' => 'Bitcoin',
-            'western_union' => 'Western Union',
-            'neteller' => 'Neteller',
-            'standard_chartered' => 'Standard Chartered',
-            'paypal' => 'Paypal',
-        ];   
+        $paygates = \backend\models\Paygate::find()->all();
+        $list = ArrayHelper::map($paygates, 'identifier', 'name');
+        $list['kinggems'] = 'King Coin';
+        return $list;
     }
 
     // Export function

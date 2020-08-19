@@ -266,6 +266,7 @@ $('#detailOrder').on('show.bs.modal', function (e) {
   console.log('hide.bs.modal');
   clearInterval(complain.interval);
   $('#detailOrder').off('click', '#send-complain-button', triggerSendComplainButton);
+  history.pushState({}, '', '$viewUrl');
 });
 $('#paymentGame').on('show.bs.modal', function (e) {
   $(this).find('.modal-content').load(e.relatedTarget.href);

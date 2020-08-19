@@ -499,7 +499,7 @@ class OrderController extends Controller
         $content = $request->post('content');
         if (trim($content)) {
             $order->complain($content);
-            $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $order->customer_id);
+            $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_NEW_ORDER_MESSAGE, $order->customer_id, ['message' => $content]);
             return $this->renderJson(true);
         }
         return $this->renderJson(false, null, ['error' => 'Nội dung bị rỗng']);

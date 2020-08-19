@@ -171,10 +171,10 @@ class OrderController extends Controller
             return $this->asJson(['status' => false, 'errors' => 'Content is required.']);
         }
         $order->complain($content);
-        // $supplier = $order->workingSupplier;
-        // if ($supplier) {
-        //     $order->pushNotification(OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE, $supplier->supplier_id);
-        // }
+        $supplier = $order->workingSupplier;
+        if ($supplier) {
+            $order->pushNotification(\website\components\notifications\OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE, $supplier->supplier_id);
+        }
         return $this->asJson(['status' => true]);
     }
 }
