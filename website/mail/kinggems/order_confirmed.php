@@ -6,9 +6,13 @@
     <p>The order is processd with following details:</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
     + Quantity / loaded amount: <?=number_format($order->quantity, 1);?><br/>
+    <?php if ($order->raw): ?>
+    + <?=nl2br($order->raw);?><br/>
+    <?php else : ?>
     + <?=$order->username;?><br/>
     + <?=$order->password;?><br/>
     + <?=$order->character_name;?><br/>
+    <?php endif;?>
     <hr>
     <p>We’re happy to help you with any further questions or concerns. Please contact our customer services via :</p>
   </td>

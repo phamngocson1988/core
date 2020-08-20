@@ -63,10 +63,9 @@ use yii\bootstrap\ActiveForm;
           <a class="text-red mr-4" href="https://youtu.be/F3xMAXFRHNE" target="_blank">How to get Google Code?</a><a class="text-red" href="https://youtu.be/sG1GAcsslzs" target="_blank">How to get Facebook Code?</a>
         </p>
         <?= $form->field($model, 'note')->textInput(['placeholder' => 'Special note (optional)'])->label(false) ?>
-
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="policy2">
-          <label class="custom-control-label" for="policy2">By making this purchase, I’m confirming that I totally under-stand <a class="text-red" href="<?=Url::to(['site/term', 'slug' => 'no_refund']);?>">no refund policy</a></label>
+          <label class="custom-control-label" for="policy2">By making this purchase, I’m confirming that I totally under-stand <a class="text-red" href="javascript:;" data-toggle="modal" data-target="#noRefundModal">no refund policy</a></label>
         </div>
     </div>
     <div class="col-md-7">
@@ -147,6 +146,27 @@ use yii\bootstrap\ActiveForm;
   <?php ActiveForm::end(); ?>
 </div>
 
+<?php 
+$noRefundContent = Yii::$app->settings->get('TermsConditionForm', 'no_refund');
+?>
+<div class="modal fade" id="noRefundModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">No Refund Policy</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?=$noRefundContent;?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <?php
 $script = <<< JS
 // Review Form

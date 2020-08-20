@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
         'css/slimselect.min.css',
         'css/aos.css',
         'css/main.css',
+        'css/jquery.fancybox.min.css',
         'css/theme.css',
     ];
     public $js = [
@@ -28,6 +29,7 @@ class AppAsset extends AssetBundle
         'js/vendor/slimselect.min.js',
         'js/vendor/aos.js',
         'js/vendor/main.js',
+        'js/jquery.fancybox.min.js',
         'js/ajax_action.js',
         'js/function.js',
     ];

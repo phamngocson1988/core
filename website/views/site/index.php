@@ -412,3 +412,20 @@ $sideGallery = array_slice($gallery, -2);
   </div>
 </div>
 <?php endif;?>
+<?php
+$script = <<< JS
+$.fancybox.open({
+  src  : '/images/promotion.jpg',
+  type : 'image',
+  afterShow: function (instance, current) {
+    console.log(instance, current); 
+    $(instance.current.image).wrap($("<a />", {
+        // set anchor attributes
+        href: '#', //or your target link
+        target: "_blank" // optional
+    }));
+  }
+});
+JS;
+$this->registerJs($script);
+?>
