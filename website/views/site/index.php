@@ -419,9 +419,9 @@ $.fancybox.open({
   type : 'image',
   afterShow: function (instance, current) {
     console.log(instance, current); 
-    $(instance.current.image).wrap($("<a />", {
+    $('.fancybox-image').wrap($("<a />", {
         // set anchor attributes
-        href: '#', //or your target link
+        href: 'https://layout.kinggems.us/promotion/', //or your target link
         target: "_blank" // optional
     }));
   }
