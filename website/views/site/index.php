@@ -415,7 +415,7 @@ $sideGallery = array_slice($gallery, -2);
 <?php
 $script = <<< JS
 $.fancybox.open({
-  src  : '/images/promotion.jpg',
+  src  : '/images/promotion.png',
   type : 'image',
   afterShow: function (instance, current) {
     console.log(instance, current); 
