@@ -5,6 +5,7 @@ namespace website\controllers;
 use Yii;
 use yii\db\Query;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 use website\models\OrderComplains;
 use website\models\Order;
@@ -54,7 +55,7 @@ class MessageNotificationController extends Controller
         ->andWhere(["{$complainTable}.is_customer" => OrderComplains::IS_NOT_CUSTOMER])
         ->andWhere(["{$complainTable}.is_read" => 0])
         ->count();
-        return $this->asJson(['data' => $count]);
+        $this->ajaxResponse(['count' => $count]);
     }
 
     private function prepareNotifications($list){
@@ -91,4 +92,35 @@ class MessageNotificationController extends Controller
         }
         return $this->asJson($data);
     }
+
+    public function actionReadAll()
+    {
+        $userId = Yii::$app->getUser()->getId();
+        $orderTable = Order::tableName();
+        $complainTable = OrderComplains::tableName();
+        $records = OrderComplains::find()
+        ->innerJoin($orderTable, "{$orderTable}.id = {$complainTable}.order_id")
+        ->where(["{$orderTable}.customer_id" => $userId])
+        ->andWhere(["{$complainTable}.is_customer" => OrderComplains::IS_NOT_CUSTOMER])
+        ->andWhere(["{$complainTable}.is_read" => 0])
+        ->select(["{$complainTable}.id"])->all();
+        $ids = ArrayHelper::getColumn($records, 'id');
+        OrderComplains::updateAll(['is_read' => 1], ['in', 'id', $ids]);
+        if(Yii::$app->getRequest()->getIsAjax()){
+            return $this->ajaxResponse(1);
+        }
+        die('404');
+
+        
+    }
+
+    // public function actionCount()
+    // {
+    //     $userId = Yii::$app->getUser()->getId();
+    //     $count = OrderComplains::find()
+    //     ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
+    //     ->andWhere(['seen' => false])
+    //     ->count();
+    //     $this->ajaxResponse(['count' => $count]);
+    // }
 }

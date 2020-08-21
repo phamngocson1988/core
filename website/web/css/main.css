@@ -141,6 +141,21 @@ img {
    right: 0;
    left: auto;
 }
+.noti-item a.text-light{
+   position: relative;
+}
+.noti-item .noti-num{
+   position: absolute;
+    font-size: 10px;
+    right: -10px;
+    background: red;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 100%;
+    top: -7px;
+}
 .navbar-header .noti-item .dropdown-menu .notification-box a{
    color: #392a2f;
    font-weight: bold;

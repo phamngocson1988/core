@@ -63,4 +63,25 @@ class NotificationController extends DefaultController
         }
         return $this->asJson($data);
     }
+
+    public function actionReadAll()
+    {
+        Yii::$app->getDb()->createCommand()->update('{{%notifications}}', ['read' => true, 'seen' => true])->execute();
+        if(Yii::$app->getRequest()->getIsAjax()){
+            return $this->ajaxResponse(1);
+        }
+        die('404');
+    }
+
+    public function actionCount()
+    {
+        $userId = Yii::$app->getUser()->getId();
+        $count = (new Query())
+            ->from('{{%notifications}}')
+            ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
+            ->andWhere(['seen' => false])
+            ->count();
+
+        $this->ajaxResponse(['count' => $count]);
+    }
 }

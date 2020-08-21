@@ -22,7 +22,8 @@ class MessageNotifications extends BaseNotifications
         // Start notifications
         $html  = Html::beginTag('div', $this->options);
         $bell = Html::img('/images/icon/message.svg', ['class' => 'icon-sm']);
-        $html .= Html::a($bell, 'javascript:;', [
+        $countNew = Html::tag('span', '', ['class' => 'noti-num d-none']);
+        $html .= Html::a($bell . $countNew, 'javascript:;', [
             'class' => 'text-light',
             'id' => 'navbarDropdown',
             'role' => 'button',
@@ -33,7 +34,8 @@ class MessageNotifications extends BaseNotifications
 
         // first li
         $countNotification = Html::tag('span', 'Notifications', ['class' => 'count']);
-        $firstLiContent = Html::tag('div', $countNotification, ['class' => 'col-lg-12 col-sm-12 col-12']);
+        $markReadAll = Html::a('Mark all as read', 'javascript:;', ['class' => 'float-right text-light read-all']);
+        $firstLiContent = Html::tag('div', $countNotification . $markReadAll, ['class' => 'col-lg-12 col-sm-12 col-12']);
         $firstLiWrapper = Html::tag('div', $firstLiContent, ['class' => 'row']);
         $firstLi = Html::tag('li', $firstLiWrapper, ['class' => 'head text-light']);
 
@@ -56,6 +58,7 @@ class MessageNotifications extends BaseNotifications
             'readAllUrl' => Url::to(['message-notification/read-all']),
             'xhrTimeout' => Html::encode($this->xhrTimeout),
             'pollInterval' => Html::encode($this->pollInterval),
+            'countElement' => '.noti-num'
         ], $this->clientOptions);
 
         $js = 'MessageNotifications(' . Json::encode($this->clientOptions) . ');';

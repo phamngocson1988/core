@@ -14,7 +14,7 @@ var MessageNotifications = (function(opts) {
     }
 
     var options = $.extend({
-        pollInterval: 60000,
+        pollInterval: 10000,
         xhrTimeout: 2000,
         readLabel: 'read',
         markAsReadLabel: 'mark as read'
@@ -77,38 +77,38 @@ var MessageNotifications = (function(opts) {
 
                     var item = renderRow(object);
 
-                    item.on('click', function(e) {
-                        e.stopPropagation();
-                        // if(item.hasClass('read')){
-                        //     return;
-                        // }
-                        $.ajax({
-                            url: options.readUrl,
-                            type: "GET",
-                            data: {id: item.data('id')},
-                            dataType: "json",
-                            timeout: opts.xhrTimeout,
-                            success: function (data) {
-                                item.removeClass('read');
-                                item.addClass('read');
-                                if(object.url){
-                                    document.location = object.url;
-                                }
-                            }
-                        });
+                    // item.on('click', function(e) {
+                    //     e.stopPropagation();
+                    //     // if(item.hasClass('read')){
+                    //     //     return;
+                    //     // }
+                    //     $.ajax({
+                    //         url: options.readUrl,
+                    //         type: "GET",
+                    //         data: {id: item.data('id')},
+                    //         dataType: "json",
+                    //         timeout: opts.xhrTimeout,
+                    //         success: function (data) {
+                    //             item.removeClass('read');
+                    //             item.addClass('read');
+                    //             if(object.url){
+                    //                 document.location = object.url;
+                    //             }
+                    //         }
+                    //     });
 
-                    });
+                    // });
 
-                    if(object.seen == '0'){
-                        seen += 1;
-                    }
+                    // if(object.seen == '0'){
+                    //     seen += 1;
+                    // }
 
                     item.insertBefore(list.find('li:last'));
                 });
 
-                setCount(seen, true);
+                // setCount(seen, true);
 
-                startPoll(true);
+                // startPoll(true);
             }
         });
     };
@@ -132,6 +132,8 @@ var MessageNotifications = (function(opts) {
                 elem.find('.dropdown-item').removeClass('read');
                 elem.find('.dropdown-item').addClass('read');
                 link.off('click').on('click', function(){ return false; });
+                var badge = elem.find(options.countElement);
+                badge.text('').addClass('d-none');
             }
         });
     });
@@ -144,12 +146,13 @@ var MessageNotifications = (function(opts) {
     };
 
     var setCount = function(count) {
-        var badge = elem.find('.count');
+        console.log('setCount', count);
+        var badge = elem.find(options.countElement);
         if(count > 0){
-            badge.text('Notification (' + count + ' )');
+            badge.text(count).removeClass('d-none');
         }
         else {
-            badge.text('Notification');
+            badge.text('').addClass('d-none');
         }
     };
 
@@ -181,5 +184,6 @@ var MessageNotifications = (function(opts) {
 
     // Fire the initial poll
     startPoll();
+    updateCount();
 
 });
