@@ -96,7 +96,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </thead>
             <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="10" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="11" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>

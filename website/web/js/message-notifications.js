@@ -102,7 +102,12 @@ var MessageNotifications = (function(opts) {
                     // if(object.seen == '0'){
                     //     seen += 1;
                     // }
-
+                    item.on('click', function(e){
+                        e.stopPropagation();
+                        if (object.url) {
+                            document.location = object.url;
+                        }
+                    });
                     item.insertBefore(list.find('li:last'));
                 });
 

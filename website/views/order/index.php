@@ -2,8 +2,13 @@
 use common\components\helpers\FormatConverter;
 use website\widgets\LinkPager;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$orderIds = ArrayHelper::getColumn($orders, 'id');
+$orderIds = implode(',', $orderIds);
+$checkNewMessageUrl = Url::to(['order/check-new-message', 'ids' => $orderIds])
 ?>
 <div class="container order-page">
   <h1 class="text-uppercase mt-5">my order</h1>
@@ -121,8 +126,13 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
       	<?php foreach ($orders as $order) : ?>
         <tr>
           <th scope="row">
-            <a href='<?=Url::to(['order/detail', 'id' => $order->id]);?>' data-target="#detailOrder" data-toggle="modal" id="<?=$order->id;?>">#<?=$order->id;?></a>
-            <span class="date-time"><?=FormatConverter::convertToDate(strtotime($order->created_at), 'd-m-Y H:i');?></span>
+            <div class="media">
+              <div class="media-body">
+                <a href="<?=Url::to(['order/detail', 'id' => $order->id]);?>" data-toggle="modal" data-target="#detailOrder" id="<?=$order->id;?>">#<?=$order->id;?></a>
+                <span class="date-time"><?=FormatConverter::convertToDate(strtotime($order->created_at), 'd-m-Y H:i');?></span>
+              </div>
+              <img class="align-self-center ml-1 icon-sm <?=$order->hasNewMessage() ? '' : 'd-none';?>" src="https://image.flaticon.com/icons/svg/497/497738.svg" alt="There are new messages" id="newMessageAlert<?=$order->id;?>">
+            </div>        
           </th>
           <td class="text-center"><?=$order->game_title;?></td>
           <td class="text-center"><span class="text-red">$<?=number_format($order->total_price, 1);?></span></td>
@@ -226,6 +236,7 @@ var triggerSendComplainButton = function () {
           form.reset();
           complain.showList();
           complain.scrollDown();
+          checkNewMessage();
       }
     },
   });
@@ -359,8 +370,47 @@ $('#modalSurvey').on('click', '#rating-order-button', function(e) {
 // Show order
 var hash = window.location.hash.substr(1).trim();
 if (hash) {
-  $('#'+hash).click();
+  console.log('hash', hash);
+  var id = '#'+hash;
+  if (!$(id).length) {
+    var detail = '/order/detail.html?id=' + hash;
+    var newLink = $('<a href="'+detail+'" data-toggle="modal" data-target="#detailOrder" style="display:none" id="'+hash+'"></a>');
+    $('body').append(newLink);
+  }
+  $(id).click();
 }
+
+// Check new message
+var checkNewMessage = function() {
+  $.ajax({
+      url: '$checkNewMessageUrl',
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+          if (data.status) {
+            var mapping = data.mapping;
+            Object.keys(mapping).map(k => {
+              var img = $('#newMessageAlert' + k);
+              if (mapping[k]) { // has new message
+                img.removeClass('d-none');
+              } else { // no new message
+                img.addClass('d-none');
+              }
+            });
+          }
+          startCheck();
+      }
+  });
+};
+var startCheck = function(restart) {
+  if (restart && _checkNewMessage){
+      clearTimeout(_checkNewMessage);
+  }
+  _checkNewMessage = setTimeout(function() {
+      checkNewMessage();
+  }, 60000);
+}
+startCheck();
 
 // Cancel order 
 $('.cancel-order-button').ajax_action({

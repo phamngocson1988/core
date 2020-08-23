@@ -62,7 +62,7 @@ class MessageNotificationController extends Controller
         $notifs = [];
         $seen = [];
         foreach($list as $notif){
-            $route = ['order/index', '#detailOrder' => $notif['order_id']];
+            $route = ['order/index', '#' => $notif['order_id']];
             $notif['url'] = !empty($route) ? Url::to($route) : '';
             $notif['read'] = $notif['is_read'];
             $notif['key'] = $notif['id'];

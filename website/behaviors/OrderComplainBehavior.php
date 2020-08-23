@@ -18,4 +18,13 @@ class OrderComplainBehavior extends \common\behaviors\OrderComplainBehavior
         $owner->state = Order::STATE_PENDING_CONFIRMATION;
         $owner->save();
     }
+
+    public function hasNewMessage()
+    {
+        $owner = $this->owner; //order
+        $complain = OrderComplains::find()
+        ->where(['order_id' => $owner->id])->orderBy(['id' => SORT_DESC])->one();
+        if (!$complain) return false;
+        return !$complain->isCustomer();
+    }
 }

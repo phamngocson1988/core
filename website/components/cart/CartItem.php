@@ -194,6 +194,12 @@ class CartItem extends Game implements CartItemInterface
             $this->addError($attribute, 'This voucher code is not valid');
             return;
         }
+        $user = Yii::$app->user->getIdentity();
+        if (!$user->phone) {
+            $this->addError($attribute, 'You have not verified your phone number. Please do it before applying any our promotion campain.');
+            $this->_promotion = null;
+            return;
+        }
         if ($promotion->promotion_scenario != Promotion::SCENARIO_BUY_GEMS) {
             $this->addError($attribute, 'This voucher code is not valid');
             $this->_promotion = null;

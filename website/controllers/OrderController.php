@@ -66,6 +66,9 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $order = Order::findOne($id);
+        if ($order->customer_id != Yii::$app->user->id) {
+            return '<div class="modal-header d-block"><h2 class="modal-title text-center w-100 text-red text-uppercase">Not found</h2></div>';
+        }
         return $this->renderPartial('detail', ['order' => $order]);
     }
 
@@ -176,5 +179,22 @@ class OrderController extends Controller
             $order->pushNotification(\website\components\notifications\OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE, $supplier->supplier_id);
         }
         return $this->asJson(['status' => true]);
+    }
+
+    public function actionCheckNewMessage($ids) 
+    {
+        $request = Yii::$app->request;
+        $ids = $request->get('ids');
+        $ids = trim($ids);
+        if (!$ids) {
+            return $this->asJson(['status' => false]);
+        }
+        $ids = explode(",", $ids);
+        $orders = Order::findAll($ids);
+        $mapping = [];
+        foreach ($orders as $order) {
+            $mapping[$order->id] = $order->hasNewMessage();
+        }
+        return $this->asJson(['status' => true, 'mapping' => $mapping]);
     }
 }
