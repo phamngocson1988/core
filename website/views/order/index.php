@@ -222,63 +222,81 @@ $checkNewMessageUrl = Url::to(['order/check-new-message', 'ids' => $orderIds])
 $viewUrl = Url::current();
 $script = <<< JS
 var complain = new Complains({id: '#detailOrder'});
-var triggerSendComplainButton = function () {
-  var form = $(this).closest('form')[0]; 
+var triggerSendComplainButton = function (e) {
+  e.preventDefault();
+  var baseForm = $(this).closest('form');
+  var url = baseForm.attr('action');
+  var form = new FormData();
+  baseForm.find('input, textarea').each(function( index ) {
+    var elementName = $(this).attr('name');
+    if ($(this).attr('type') == 'file') {
+      $.each(this.files, function( index, value ) {
+        form.append(elementName, value);
+      });
+    } else {
+      form.append(elementName, $(this).val());
+    }
+  });
   $.ajax({
-    url: $(form).attr('action'),
-    type: $(form).attr('method'),
-    dataType : 'json',
-    data: $(form).serialize(),
-    success: function (result, textStatus, jqXHR) {
-      if (result.status == false) {
+      url: url,
+      type: "POST",
+      processData: false, // important
+      contentType: false, // important
+      dataType : 'json',
+      data: form,
+      success: function (result, textStatus, jqXHR) {
+        if (!result.status) {
           toastr.error(result.errors);
-      } else {
-          form.reset();
+        } else {
+          baseForm[0].reset();
           complain.showList();
           complain.scrollDown();
           checkNewMessage();
-      }
-    },
+        }
+      },
   });
 }
 $('#detailOrder').on('show.bs.modal', function (e) {
-    $(this).find('.modal-content').load(e.relatedTarget.href);
-    setTimeout(() => {  
-      if ($(this).find('#stars li.hover').length) {
-        $(this).find('#stars li>a').replaceWith('<span class="icon-star"></span>');
-      } else {
-        $(this).find('#stars li').on('mouseover', function () {
-          var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+  $(this).find('.modal-content').load(e.relatedTarget.href);
+  setTimeout(() => {  
+    if ($(this).find('#stars li.hover').length) {
+      $(this).find('#stars li>a').replaceWith('<span class="icon-star"></span>');
+    } else {
+      $(this).find('#stars li').on('mouseover', function () {
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
 
-          // Now highlight all the stars that's not after the current hovered star
-          $(this).parent().children('li.star').each(function (e) {
-            if (e < onStar) {
-              $(this).addClass('hover');
-            } else {
-              $(this).removeClass('hover');
-            }
-          });
-        }).on('mouseout', function () {
-          $(this).parent().children('li.star').each(function (e) {
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('li.star').each(function (e) {
+          if (e < onStar) {
+            $(this).addClass('hover');
+          } else {
             $(this).removeClass('hover');
-          });
+          }
         });
-      }
-
-      // complain
-      complain.init({
-        id: '#detailOrder',
-        container: '.complain-list',
-        url: $(this).find('.complain-list').attr('data-url')
+      }).on('mouseout', function () {
+        $(this).parent().children('li.star').each(function (e) {
+          $(this).removeClass('hover');
+        });
       });
-      $('#detailOrder').on('click', '#send-complain-button', triggerSendComplainButton);
-    }, 2000);
+    }
+
+    // complain
+    complain.init({
+      id: '#detailOrder',
+      container: '.complain-list',
+      url: $(this).find('.complain-list').attr('data-url')
+    });
+    $('#detailOrder').on('click', '#send-complain-button', triggerSendComplainButton);
+    $('#detailOrder').on('change', '#FileUpload', triggerSendComplainButton);
+  }, 2000);
 }).on('hide.bs.modal', function(e) {
   console.log('hide.bs.modal');
   clearInterval(complain.interval);
   $('#detailOrder').off('click', '#send-complain-button', triggerSendComplainButton);
+  $('#detailOrder').off('change', '#FileUpload', triggerSendComplainButton);
   history.pushState({}, '', '$viewUrl');
 });
+
 $('#paymentGame').on('show.bs.modal', function (e) {
   $(this).find('.modal-content').load(e.relatedTarget.href);
 }).on('hide.bs.modal', function(e) {

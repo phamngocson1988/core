@@ -104,18 +104,14 @@ use website\models\OrderFile;
       <!-- Typing area -->
       <?= Html::beginForm(Url::to(['order/send-complain', 'id' => $order->id]), 'POST', ['id' => 'send-complain-form', 'class' => 'bg-light']); ?>
         <div class="input-group">
-        <!--   <div contentEditable="true" placeholder="Type a message" aria-describedby="button-addon2"
-            class="form-control rounded-0 border-0 py-4 bg-light">
-            Anh nhà ở đâu thế <img class="icon-md" src="/images/post-item01.jpg"> bla bla
-          </div> -->
           <textarea contentEditable="true" placeholder="Type a message" aria-describedby="button-addon2"
             class="form-control rounded-0 border-0 py-4 bg-light" name="content" rows="3"></textarea>
-          <!-- <div class="input-group-append">
-            <input class="d-none" type="file" id="FileUpload"/>
-            <button onclick='$("#FileUpload").click()' id="button-addon2" type="file" class="btn btn-link">
+          <div class="input-group-append">
+            <input class="d-none" type="file" name="file_message" id="FileUpload" accept="image/*"/>
+            <button class="btn btn-link" onclick="$('#FileUpload').click(); return false">
               <img class="icon-sm" src="/images/icon/attach.svg" />
             </button>
-          </div> -->
+          </div>
           <div class="input-group-append">
             <button id="send-complain-button" type="button" class="btn btn-link">
               <img class="icon-sm" src="/images/icon/send.svg" />

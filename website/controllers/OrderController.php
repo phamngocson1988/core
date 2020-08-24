@@ -169,15 +169,26 @@ class OrderController extends Controller
         if (!$order) {
             return $this->asJson(['status' => false, 'errors' => 'Order is not found.']);
         }
+
+        $files = Yii::$app->file->upload('file_message', "order_message/$id", true);
         $content = $request->post('content');
+        $type = 'text';
+        if ($files) {
+            $inputFile = reset($files);
+            $content = $inputFile;
+            $type = 'image';
+        }
         if (!$content) {
             return $this->asJson(['status' => false, 'errors' => 'Content is required.']);
         }
-        $order->complain($content);
+        $order->complain($content, $type);
         $supplier = $order->workingSupplier;
         if ($supplier) {
             $order->pushNotification(\website\components\notifications\OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE, $supplier->supplier_id);
         }
+
+
+        
         return $this->asJson(['status' => true]);
     }
 

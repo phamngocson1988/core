@@ -40,6 +40,7 @@ class OrderComplainController extends Controller
             $object['avatar'] = $sender->getAvatarUrl(null, null);
             $object['senderName'] = $senderName;
             $object['content'] = nl2br($model->content);
+            $object['content_type'] = $model->content_type;
             $object['created_at'] = \common\components\helpers\TimeElapsed::timeElapsed($model->created_at);
             $object['is_customer'] = $model->isCustomer();
             return $object;
