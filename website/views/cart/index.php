@@ -64,6 +64,10 @@ use yii\bootstrap\ActiveForm;
         </p>
         <?= $form->field($model, 'note')->textInput(['placeholder' => 'Special note (optional)'])->label(false) ?>
         <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="policy1">
+          <label class="custom-control-label" for="policy1">I’ve read & agreed with <a class="text-red" href="javascript:;" data-toggle="modal" data-target="#disclaimer_policies">Disclaimer policies</a> of service</label>
+        </div>
+        <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="policy2">
           <label class="custom-control-label" for="policy2">By making this purchase, I’m confirming that I totally under-stand <a class="text-red" href="javascript:;" data-toggle="modal" data-target="#noRefundModal">no refund policy</a></label>
         </div>
@@ -148,6 +152,7 @@ use yii\bootstrap\ActiveForm;
 
 <?php 
 $noRefundContent = Yii::$app->settings->get('TermsConditionForm', 'no_refund');
+$disclaimerPolicies = Yii::$app->settings->get('TermsConditionForm', 'disclaimer_policies');
 ?>
 <div class="modal fade" id="noRefundModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -160,6 +165,24 @@ $noRefundContent = Yii::$app->settings->get('TermsConditionForm', 'no_refund');
       </div>
       <div class="modal-body">
         <?=$noRefundContent;?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="disclaimer_policies" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Disclaimer policies</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?=$disclaimerPolicies;?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -195,7 +218,7 @@ $('#quantity').on('change', function() {
 });
 
 $('form#update-cart-form').on('submit', function() {
-  if (!$('#policy2').is(':checked')) {
+  if (!$('#policy1').is(':checked') || !$('#policy2').is(':checked')) {
     toastr.error('You need to agree with our policies');
     return false;
   }

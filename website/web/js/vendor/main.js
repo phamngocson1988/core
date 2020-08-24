@@ -1,6 +1,10 @@
 $(document).ready(function () {
   if ($('.main-slider').length) {
-    $('.main-slider').slick();
+    console.log('main-slider');
+    $('.main-slider').slick({
+      autoplay: true,
+      autoplaySpeed: 3000,
+    });
   }
   if ($('.single-img-slider').length) {
     $('.single-img-slider').slick();

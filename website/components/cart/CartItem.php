@@ -196,7 +196,7 @@ class CartItem extends Game implements CartItemInterface
         }
         $user = Yii::$app->user->getIdentity();
         if (!$user->phone) {
-            $this->addError($attribute, 'You have not verified your phone number. Please do it before applying any our promotion campain.');
+            $this->addError($attribute, 'Your account is not eligible for this promotion.');
             $this->_promotion = null;
             return;
         }
