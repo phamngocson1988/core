@@ -49,8 +49,6 @@ use yii\helpers\Url;
           </li>
         </ul>
       </li>
-      <?php endif;?>
-
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user-following"></i>
@@ -136,6 +134,23 @@ use yii\helpers\Url;
 
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-buysellads"></i>
+        <span class="title"><?=Yii::t('app', 'manage_ads');?></span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item">
+            <a href="<?=Url::to(['ads/index']);?>" class="nav-link " code='ads.index'>
+            <span class="title"><?=Yii::t('app', 'manage_ads');?></span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <?php endif;?>
+
+      <?php if (Yii::$app->user->can('system_moderator')) : ?>
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
         <i class="fa fa-life-ring"></i>
         <span class="title"><?=Yii::t('app', 'manage_forum');?></span>
         <span class="arrow"></span>
@@ -153,21 +168,9 @@ use yii\helpers\Url;
           </li>
         </ul>
       </li>
+      <?php endif;?>
 
-      <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-        <i class="fa fa-buysellads"></i>
-        <span class="title"><?=Yii::t('app', 'manage_ads');?></span>
-        <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-          <li class="nav-item">
-            <a href="<?=Url::to(['ads/index']);?>" class="nav-link " code='ads.index'>
-            <span class="title"><?=Yii::t('app', 'manage_ads');?></span>
-            </a>
-          </li>
-        </ul>
-      </li>
+      
     </ul>
   </div>
 </div>

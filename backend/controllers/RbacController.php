@@ -80,4 +80,22 @@ class RbacController extends Controller
             'model' => $model,
         ]);        
     }
+
+    public function actionCreate()
+    {
+        $this->view->params['main_menu_active'] = 'rbac.role';
+        $model = new \backend\forms\CreateRoleForm();
+        if (Yii::$app->request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                $ref = Yii::$app->request->get('ref', Url::to(['rbac/role']));
+                return $this->redirect($ref);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            }    
+        }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+        
+    }
 }

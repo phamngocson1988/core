@@ -15,7 +15,7 @@ class LoginForm extends Model
     public $rememberMe = true;
 
     private $_user;
-    private $_roles = ['system'];
+    private $_roles = ['system', 'system_moderator'];
 
     /**
      * @inheritdoc

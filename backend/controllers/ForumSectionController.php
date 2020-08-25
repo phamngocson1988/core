@@ -20,7 +20,7 @@ class ForumSectionController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['system_moderator'],
                     ],
                 ],
             ],
