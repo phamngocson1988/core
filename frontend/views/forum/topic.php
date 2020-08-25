@@ -15,7 +15,9 @@ $user = Yii::$app->user->getIdentity();
           <h1 class="thread-title"><a href="javascript:;"><?=$topic->subject;?></a></h1>
           <div class="thread-info">By <a href="<?=Url::to(['member/index', 'username' => $creator->username]);?>"><?=$creator->getName();?></a>, <?=TimeElapsed::timeElapsed($topic->created_at);?></div>
         </div>
+        <?php if (!Yii::$app->user->isGuest) : ?>
         <div class="heading-button"><a class="btn btn-link" href="<?=Url::to(['forum/create']);?>">Start new topic</a><a class="btn btn-primary" href="#reply">Reply to this topic</a></div>
+        <?php endif;?>
       </section>
       <section class="section-thread">
         <ol class="thread-list">

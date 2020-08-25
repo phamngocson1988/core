@@ -8,7 +8,9 @@ use frontend\widgets\LinkPager;
     <div class="forum-main">
       <section class="section-forum-heading">
         <h1 class="heading-title"><?=$category->title;?></h1>
+        <?php if (!Yii::$app->user->isGuest) : ?>
         <div class="heading-button"><a class="btn btn-primary" href="<?=Url::to(['forum/create']);?>">Start new topic</a></div>
+        <?php endif;?>
       </section>
       <section class="section-topics">
         <section class="topics-group widget-box">

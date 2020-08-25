@@ -26,12 +26,14 @@ class ForumController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['create', 'like', 'dislike'],
+                        'actions' => ['create', 'like', 'dislike', 'reply'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
+                        'actions' => ['index', 'category', 'topic'],
                         'allow' => true,
+                        'roles' => ['?', '@'],
                     ]
                 ],
             ],
