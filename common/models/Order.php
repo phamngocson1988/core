@@ -114,6 +114,11 @@ class Order extends ActiveRecord
         return $this->hasOne(Game::className(), ['id' => 'game_id']);
     }
 
+    public function getRecoverFile()
+    {
+        return $this->hasOne(File::className(), ['id' => 'recover_file_id']);
+    }
+
     public function getItems() 
     {
         return $this->hasMany(OrderItems::className(), ['order_id' => 'id']);

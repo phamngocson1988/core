@@ -57,6 +57,7 @@ use website\models\OrderFile;
         <button type="button" class="btn text-uppercase">comfirm delivery</button>
         <?php endif;?>
       </p>
+      <p class="text-center"><i>After 24 hrs since the order was completed, KingGems will not take any responsibility</i></p>
       <p class="text-center mb-0">
         <b>Rate this order!</b>
       </p>

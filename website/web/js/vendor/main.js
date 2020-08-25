@@ -223,7 +223,7 @@ $(document).ready(function () {
     }) 
   });
 
-  $('.btn-request-token').click(function(){
+  $('.btn-request-token1').click(function(){
     $(this).prop('disabled', true);
     (function(){
       var counter = 60*2;

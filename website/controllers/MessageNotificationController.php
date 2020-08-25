@@ -68,7 +68,7 @@ class MessageNotificationController extends Controller
             $notif['key'] = $notif['id'];
             $notif['class'] = $notif['object_name'];
             $notif['order_id'] = $notif['order_id'];
-            $notif['message'] = $notif['content'];
+            $notif['message'] = $notif['content_type'] == 'image' ? 'An image was sent to you' : $notif['content'];
             $notif['timeago'] = \common\components\helpers\TimeElapsed::timeElapsed($notif['created_at']);
             $notifs[] = $notif;
         }

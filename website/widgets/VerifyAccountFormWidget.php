@@ -45,9 +45,30 @@ class VerifyAccountFormWidget extends Widget
         $profileUrl = Url::to(['profile/index']);
         return "
 $('html').on('click', '#$buttonId', function() {
+    console.log('verify phone click');
     var phone = $('#$phoneId').val();
     phone = phone.trim();
     if (!phone) return;
+
+    $(this).prop('disabled', true);
+    (function(){
+      var counter = 60*2;
+      $('#$buttonId').html(\"<span id='count'>120</span>\");
+      setInterval(function() {
+        counter--;
+        if (counter >= 0) {
+          span = document.getElementById(\"count\");
+          span.innerHTML = counter;
+        }
+        // Display 'counter' wherever you want to display it.
+        if (counter === 0) {
+            clearInterval(counter);
+            $('#$buttonId').html(\"Security token<br /><small>Request Token</small></button>\");
+            $('#$buttonId').prop('disabled', false);
+        }
+      }, 1000);
+    })();
+
     $.ajax({
         url: '$requestSmsCodeUrl',
         type: 'post',
@@ -62,7 +83,7 @@ $('html').on('click', '#$buttonId', function() {
             }
         },
     });
-    return fasle;
+    return false;
 });
 $('html').on('submit', 'form#$id', function() {
     var form = $(this);
