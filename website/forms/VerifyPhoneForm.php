@@ -43,6 +43,11 @@ class VerifyPhoneForm extends Model
             $this->addError('phone', 'Cannot send validation code to this phone number.');
             return false;
         }
+        $user = $this->getUser();
+        if ($user) {
+            $user->security_pin = Yii::$app->session->get('pin');
+            $user->save();
+        }
         return true;
     }
 

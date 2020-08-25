@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Country;
 use website\models\Game;
 use website\models\UserFavorite;
-use website\forms\VerifyPhoneForm;
+// use website\forms\VerifyPhoneForm;
 
 class UpdateSecureProfileForm extends Model
 {
@@ -40,11 +40,12 @@ class UpdateSecureProfileForm extends Model
     {
         if (!$this->phone) return;
         if (!$this->code) return;
-        $model = new VerifyPhoneForm();
-        $model->phone = $this->phone;
-        $model->code = $this->code;
-        $model->setScenario(VerifyPhoneForm::SCENARIO_VERIFY);
-        if (!$model->verify()) {
+        // $model = new VerifyPhoneForm();
+        // $model->phone = $this->phone;
+        // $model->code = $this->code;
+        // $model->setScenario(VerifyPhoneForm::SCENARIO_VERIFY);
+        $user = $this->getUser();
+        if ($user->security_pin != $this->code) {
             $this->addError($attribute, 'Security code is invalid');
         }
     }
