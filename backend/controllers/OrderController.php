@@ -328,13 +328,23 @@ class OrderController extends Controller
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
-                            ->all();                    
+                            ->all();       
 
+        // Check admin/supplier message (required by Thinh (27/8) via chat)
+        $orderIds = ArrayHelper::getColumn($models, 'id');
+        $complains = OrderComplains::find()
+        ->where(['in', 'order_id', $orderIds])             
+        ->andWhere(['in', 'object_name', ['supplier', 'admin']])
+        ->groupBy(['order_id'])
+        ->select(['order_id'])
+        ->all();
+        $existStaffComplainIds = ArrayHelper::getColumn($complains, 'order_id');
         return $this->render('confirmed', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
+            'existStaffComplainIds' => $existStaffComplainIds
         ]);
     }
 
