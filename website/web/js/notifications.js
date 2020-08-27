@@ -32,7 +32,7 @@ var Notifications = (function(opts) {
                     ' data-class="' + object.class + '"' +
                     ' data-key="' + object.key + '">' +
                     '<div class="border-bottom p-2">' +
-                    '<a href="javascript:;" class="d-block">' + object.message + '</a>' +
+                    '<a href="javascript:;" class="d-block overflow-text">' + object.message + '</a>' +
                     '<small class="text-muted">' + object.timeago + '</small>' + 
                     '</div>' +
                     '</li>';

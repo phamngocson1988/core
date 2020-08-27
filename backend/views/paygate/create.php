@@ -84,6 +84,12 @@ use common\widgets\TinyMce;
                     'template' => '<div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">{image}{input}</div>{choose_button}{cancel_button}',
                     'imageOptions' => ['width' => 150, 'height' => 150]
                   ])->label('Hình ảnh');?>
+
+                  <?=$form->field($model, 'status', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchStatus());?>
                   
                 </div>
               </div>

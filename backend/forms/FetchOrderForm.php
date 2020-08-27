@@ -10,6 +10,7 @@ use backend\models\User;
 use backend\models\Game;
 use backend\models\Supplier;
 use backend\models\OrderSupplier;
+use backend\models\OrderComplains;
 use common\components\helpers\FormatConverter;
 
 class FetchOrderForm extends Model
@@ -215,6 +216,7 @@ class FetchOrderForm extends Model
             'K' => 'Nhân viên đơn hàng',
             'L' => 'Trạng thái',
             'M' => 'Nhà cung cấp',
+            'N' => 'Sai thông tin',
         ];
         $totalRow = $command->count();
         $startRow = 12;
@@ -254,7 +256,16 @@ class FetchOrderForm extends Model
         
         $data = [];
         $command->orderBy(['order.created_at' => SORT_DESC]);
-        foreach ($command->all() as $model) {
+        $models = $command->all();
+        $orderIds = ArrayHelper::getColumn($models, 'id');
+        $complains = OrderComplains::find()
+        ->where(['in', 'order_id', $orderIds])             
+        ->andWhere(['in', 'object_name', ['supplier', 'admin']])
+        ->groupBy(['order_id'])
+        ->select(['order_id'])
+        ->all();
+        $existStaffComplainIds = ArrayHelper::getColumn($complains, 'order_id');
+        foreach ($models as $model) {
             $suppliers = $model->suppliers;
             $supplierList = [];
             foreach ($suppliers as $supplier) {
@@ -273,7 +284,8 @@ class FetchOrderForm extends Model
                 ($model->saler) ? $model->saler->name : '',
                 ($model->orderteam) ? $model->orderteam->name : '',
                 $model->getStatusLabel(false),
-                implode(", ", $supplierList)
+                implode(", ", $supplierList),
+                in_array($model->id, $existStaffComplainIds) ? 'X' : ''
             ];
         }
 
