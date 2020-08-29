@@ -46,6 +46,7 @@ class m190313_163324_create_wallet extends Migration
             'rate_usd' => $this->float(),
             'description' => $this->string(100), 
             'created_by' => $this->integer(11),
+            'updated_by' => $this->integer(11),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime(),
             'payment_at' => $this->dateTime(),

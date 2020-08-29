@@ -121,7 +121,7 @@ class GameNotification extends Notification
             'notification' => $this,
             'user' => $user,
             'description' => $description,
-            'game_url' => Yii::$app->urlManagerSupplier->createAbsoluteUrl(['game/view', 'id' => $game->id, 'slug' => $game->slug], true)
+            'game_url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['game/view', 'id' => $game->id, 'slug' => $game->slug], true)
             ], $data));
 
         $message->setFrom($fromEmail);

@@ -26,6 +26,7 @@ class m130524_201442_init extends Migration
             'country_code' => $this->string(10),
             'subscription' => $this->integer()->defaultValue(0),
             'phone' => $this->string(50),
+            'security_pin' => $this->string(10),
             'is_verify_phone' => $this->smallInteger()->defaultValue(0),
             'address' => $this->string(200),
             'birthday' => $this->date(),
