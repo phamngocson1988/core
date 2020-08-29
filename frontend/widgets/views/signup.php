@@ -26,6 +26,10 @@ use yii\helpers\Url;
           <p>Already a member?<a href="#" data-toggle="modal" data-target="#modalLogin" style="cursor: pointer;"
             data-dismiss="modal"> <?=Yii::t('app', 'login');?></a></p>
         </div>
+        <div class="text-center">
+          <p><?=Yii::t('app', 'forgot_password?');?><a href="#modalResetPassword" data-toggle="modal" style="cursor: pointer;"
+            data-dismiss="modal"> <?=Yii::t('app', 'reset_password');?></a></p>
+        </div>
       </div>
     </div>
   </div>

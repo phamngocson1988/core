@@ -115,10 +115,10 @@ class SiteController extends Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
-        $model = new PasswordResetRequestForm();
+        $model = new \frontend\forms\PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                return json_encode(['status' => true]);
+                return json_encode(['status' => true, 'message' => Yii::t('app', 'an_email_was_sent_to_reset_password')]);
             } else {
                 return json_encode(['status' => false, 'errors' => 'Sorry, we are unable to reset password for the provided email address.']);
             }
@@ -132,7 +132,7 @@ class SiteController extends Controller
     public function actionResetPassword($token)
     {
         try {
-            $model = new ResetPasswordForm($token);
+            $model = new \frontend\forms\ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }

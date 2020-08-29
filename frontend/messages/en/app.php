@@ -52,4 +52,7 @@ return [
     'activate_account_success' => 'You have activated your account successfully!',
     'activate_account_fail' => 'There is something wrong. Please contact with our customer service!',
     'no_message_with_email' => 'There is no user with this email address.',
+    'forgot_password?' => 'Forgot password?',
+    'reset_password' => 'Reset password',
+    'an_email_was_sent_to_reset_password' => 'An email was sent to your email.',
 ];
