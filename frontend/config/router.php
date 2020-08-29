@@ -14,6 +14,8 @@ return [
         'signup' => 'site/signup',
         'register' => 'site/register',
         'activate' => 'site/activate',
+        'reset-password' => 'site/reset-password',
+
         'operator' => 'operator/index',
         'operator/<id:\d+>-<slug:[\w\-]+>' => 'operator/view',
 

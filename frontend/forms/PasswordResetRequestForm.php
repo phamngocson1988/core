@@ -4,7 +4,7 @@ namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\User;
+use frontend\models\User;
 
 class PasswordResetRequestForm extends Model
 {
@@ -19,7 +19,7 @@ class PasswordResetRequestForm extends Model
             ['email', 'exist', 
                 'targetClass' => User::className(), 
                 'filter' => ['status' => User::STATUS_ACTIVE],
-                'message' => 'There is no user with this email address.'
+                'message' => Yii::t('app', 'no_message_with_email'),
             ],
         ];
     }
@@ -45,16 +45,15 @@ class PasswordResetRequestForm extends Model
         }
 
         $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+        $adminEmail = Yii::$app->params['admin_email'];
         return Yii::$app
             ->mailer
-            ->compose(
-                ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
+            ->compose('passwordResetToken-html',
                 ['user' => $user]
             )
             ->setFrom([$adminEmail => Yii::$app->name])
             ->setTo($this->email)
-            ->setSubject('Reset password Kinggems')
+            ->setSubject(sprintf('[%s] Reset password', Yii::$app->name))
             ->send();
     }
 }

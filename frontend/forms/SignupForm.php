@@ -45,7 +45,20 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->status = User::STATUS_ACTIVE;
-        return $user->save() ? $user : null;
+        $user->status = User::STATUS_INACTIVE;
+        if (!$user->save()) return null;
+
+        $admin = Yii::$app->params['admin_email'];
+        $siteName = Yii::$app->name;
+        $email = Yii::$app->mailer->compose('signup_mail', [
+            'user' => $user,
+        ])
+        ->setTo($user->email)
+        ->setFrom([$admin => $siteName])
+        ->setSubject(sprintf('[%s] Verify your email', Yii::$app->name))
+        ->setTextBody(sprintf("[%s] Verify your email", Yii::$app->name))
+        ->send();
+
+        return $user;
     }
 }

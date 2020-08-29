@@ -46,10 +46,10 @@ class LoginForm extends Model
             $user = $this->getUser();
             if ($user) {
                 if ($user->status == User::STATUS_INACTIVE) {
-                    $this->addError('username', Yii::t('frontend', 'customer_is_not_active'));
+                    $this->addError('username', Yii::t('app', 'customer_is_not_active'));
                     return false;    
                 } elseif ($user->status == User::STATUS_DELETED) {
-                    $this->addError('username', Yii::t('frontend', 'customer_is_deleted'));
+                    $this->addError('username', Yii::t('app', 'customer_is_deleted'));
                     return false;    
                 }
             }
@@ -95,7 +95,7 @@ class LoginForm extends Model
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::find()->where(['username' => $this->username])->one();
         }
 
         return $this->_user;

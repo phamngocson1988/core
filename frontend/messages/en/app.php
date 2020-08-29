@@ -49,4 +49,7 @@ return [
     'top_operator' => 'Top operator',
     'see_all_lastest_bonus' => 'See all lastest bonus',
     'see_all_newest_operator' => 'See all newest operator',
+    'activate_account_success' => 'You have activated your account successfully!',
+    'activate_account_fail' => 'There is something wrong. Please contact with our customer service!',
+    'no_message_with_email' => 'There is no user with this email address.',
 ];

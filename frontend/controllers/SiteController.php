@@ -88,6 +88,27 @@ class SiteController extends Controller
         }
     }
 
+    public function actionActivate()
+    {
+        $request = Yii::$app->request;
+        $id = $request->get('id');
+        $key = $request->get('key');
+        $confirmForm = new \frontend\forms\ActiveUserForm([
+            'id'=>$id,
+            'auth_key'=>$key,
+        ]);
+
+        if ($confirmForm->validate() && $user = $confirmForm->confirm()) {
+            Yii::$app->getSession()->setFlash('success', Yii::t('app', 'activate_account_success'));
+            Yii::$app->getUser()->login($user);
+        } else{
+            Yii::$app->getSession()->setFlash('warning',Yii::t('app', 'activate_account_fail'));
+        }
+        
+        return $this->goHome();
+    }
+
+
     public function actionRequestPasswordReset()
     {
         $request = Yii::$app->request;
