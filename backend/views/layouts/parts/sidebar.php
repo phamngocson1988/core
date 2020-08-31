@@ -166,6 +166,11 @@ use yii\helpers\Url;
             <span class="title"><?=Yii::t('app', 'manage_forum_section');?></span>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="<?=Url::to(['topic/index']);?>" class="nav-link " code='forum-topic.index'>
+            <span class="title"><?=Yii::t('app', 'manage_forum_topic');?></span>
+            </a>
+          </li>
         </ul>
       </li>
       <?php endif;?>
