@@ -11,7 +11,11 @@ use yii\widgets\ActiveForm;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span><?=Yii::t('app', 'manage_topic');?></span>
+      <a href="<?=Url::to(['topic/index']);?>"><?=Yii::t('app', 'manage_topic');?></a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span><?=Yii::t('app', 'manage_forum_post');?></span>
     </li>
   </ul>
 </div>
@@ -26,11 +30,11 @@ use yii\widgets\ActiveForm;
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> <?=Yii::t('app', 'manage_topic');?></span>
+          <span class="caption-subject bold uppercase"> <?=$topic->subject;?></span>
         </div>
       </div>
       <div class="row margin-bottom-10">
-      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['topic/index']]);?>
+      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['topic/list', 'id' => $topic->id]]);?>
           <?=$form->field($search, 'q', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             'inputOptions' => ['class' => 'form-control', 'name' => 'q']
@@ -56,21 +60,27 @@ use yii\widgets\ActiveForm;
             <tr>
               <th> <?=Yii::t('app', 'id');?> </th>
               <th> <?=Yii::t('app', 'content');?> </th>
+              <th> <?=Yii::t('app', 'created_by');?> </th>
               <th> <?=Yii::t('app', 'created_at');?> </th>
+              <th> <?=Yii::t('app', 'approved');?> </th>
+              <th> <?=Yii::t('app', 'status');?> </th>
               <th> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif; ?>
               <?php foreach ($models as $model) : ?>
               <tr>
                 <td class="center"><?=$model->id;?></td>
-                <td class="left"><?=$model->content;?></td>
+                <td class="left"><?=\yii\helpers\StringHelper::truncateWords($model->content, 100);?></td>
+                <td class="left"><?=$model->sender->getName();?></td>
                 <td class="left"><?=$model->created_at;?></td>
+                <td class="left"><?=$model->is_approved ? 'YES' : 'NO';?></td>
+                <td class="left"><?=$model->getStatusLabel();?></td>
                 <td class="left">
-                  
+                  <a href='<?=Url::to(['topic/edit-post', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>

@@ -85,10 +85,13 @@ class ForumController extends Controller
     public function actionTopic($id, $slug)
     {
         $topic = ForumTopic::findOne($id);
-        $command = ForumPost::find()
-        ->where(['topic_id' => $id])
-        ->with('sender')
-        ->with('userLike');
+        // $command = ForumPost::find()
+        // ->where(['topic_id' => $id])
+        // ->with('sender')
+        // ->with('userLike');
+        $form = new \frontend\forms\FetchForumPostForm(['topic_id' => $id]);
+        $command = $form->getCommand();
+        $command->with('sender')->with('userLike');
         $pages = new Pagination(['totalCount' => $command->count()]);
         $posts = $command->offset($pages->offset)
                             ->limit($pages->limit)

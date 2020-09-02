@@ -35,6 +35,8 @@ class m200711_164917_forum extends Migration
             'created_at' => $this->dateTime(),
             'updated_by' => $this->integer(),
             'updated_at' => $this->dateTime(),
+            'is_approved' => $this->boolean()->defaultValue(true),
+            'status' => $this->integer()->defaultValue(10),,
         ], $tableOptions);
 
         $this->createTable('{{%forum_category}}', [

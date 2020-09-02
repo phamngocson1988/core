@@ -4,7 +4,7 @@ use yii\helpers\Url;
 ?>
 <!-- Modal SignUp -->
 <div id="modalSignup" class="modal fade">
-  <div class="modal-dialog modal-login ">
+  <div class="modal-dialog modal-login modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title text-uppercase"><?=Yii::t('app', 'signup');?></h3>

@@ -1,12 +1,10 @@
 <?php
 
-namespace backend\forms;
+namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use yii\helpers\ArrayHelper;
-use backend\models\ForumPost;
-use backend\models\User;
+use frontend\models\ForumPost;
 
 class FetchForumPostForm extends Model
 {
@@ -14,7 +12,6 @@ class FetchForumPostForm extends Model
     public $topic_id;
     public $created_by;
 
-    protected $_topic;
     private $_command;
     
     public function attributeLabels()
@@ -28,6 +25,10 @@ class FetchForumPostForm extends Model
     protected function createCommand()
     {
         $command = ForumPost::find();
+        $command->where([
+            'is_approved' => ForumPost::APPROVED_YES,
+            'status' => ForumPost::STATUS_ACTIVE,
+        ]);
         if ($this->topic_id) {
             $command->andWhere(["topic_id" => $this->topic_id]);
         } 
@@ -46,26 +47,5 @@ class FetchForumPostForm extends Model
             $this->createCommand();
         }
         return $this->_command;
-    }
-
-    public function getTopic() 
-    {
-        if (!$this->_topic) {
-            $this->_topic = ForumTopic::findOne($this->topic_id);
-        }
-        return $this->_topic;
-    }
-
-    public function fetchUser()
-    {
-        $rows = ForumPost::find()->where(['topic_id' => $this->topic_id])->all();
-        $userIds = ArrayHelper::getColumn($rows, 'created_by');
-        if ($userIds) {
-            $users = User::findAll($userIds);
-            return ArrayHelper::map($users, 'id', function($user) {
-                return $user->getName();
-            });
-        }
-        return [];
     }
 }
