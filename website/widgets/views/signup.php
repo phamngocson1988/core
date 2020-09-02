@@ -16,10 +16,15 @@ use yii\helpers\Url;
       <div class="modal-body">
         <p class="text-center">with your social network</p>
         <ul class="list-inline text-center">
-          <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/facebook.svg" /></a></li>
-          <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/google-plus.svg" /></a>
-          </li>
-          <li class="list-inline-item"><a href="#"><img class="icon-md" src="/images/icon/twitter.svg" /></a></li>
+          <?php $authAuthChoice = \yii\authclient\widgets\AuthChoice::begin([
+            'baseAuthUrl' => ['site/auth'],
+            'popupMode' => false,
+          ]); ?>
+          <?php foreach ($authAuthChoice->getClients() as $key => $client): ?>
+            <?php if ($key == 'google') continue;?>
+            <li class="list-inline-item <?=$key;?>"><?= $authAuthChoice->clientLink($client) ?></li>
+          <?php endforeach; ?>
+          <?php \yii\authclient\widgets\AuthChoice::end(); ?>
         </ul>
         <div class="text-horizontal"><span>or</span></div>
         <?php $form = ActiveForm::begin(['action' => Url::to(['site/login']), 'id' => $id]); ?>

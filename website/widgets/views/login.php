@@ -20,7 +20,8 @@ use yii\helpers\Url;
             'baseAuthUrl' => ['site/auth'],
             'popupMode' => false,
           ]); ?>
-          <?php foreach ($authAuthChoice->getClients() as $client): ?>
+          <?php foreach ($authAuthChoice->getClients() as $key => $client): ?>
+            <?php if ($key == 'google') continue;?>
             <li class="list-inline-item"><?= $authAuthChoice->clientLink($client) ?></li>
           <?php endforeach; ?>
           <?php \yii\authclient\widgets\AuthChoice::end(); ?>

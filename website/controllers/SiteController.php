@@ -41,7 +41,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error', 'test'],
+                        'actions' => ['index', 'auth', 'error', 'test', 'social'],
                         'allow' => true,
                     ],
                     [
@@ -252,6 +252,11 @@ class SiteController extends Controller
             }
         }
         die('end');
+    }
+
+    public function actionSocial()
+    {
+        return $this->render('social');
     }
 
 }

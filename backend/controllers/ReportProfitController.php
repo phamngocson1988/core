@@ -36,8 +36,8 @@ class ReportProfitController extends Controller
         $request = Yii::$app->request;
         $data = [
             'id' => $request->get('id'),
-            'confirmed_from' => $request->get('confirmed_from'),
-            'confirmed_to' => $request->get('confirmed_to'),
+            'confirmed_from' => $request->get('confirmed_from', date('Y-m-d H:00', strtotime('-10 days'))),
+            'confirmed_to' => $request->get('confirmed_to', date('Y-m-d H:00')),
             'payment_method' => $request->get('payment_method'),
         ];
         $form = new \backend\forms\ReportOrderProfitForm($data);

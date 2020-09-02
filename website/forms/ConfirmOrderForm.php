@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use website\models\Order;
 use website\models\OrderSupplier;
+use website\models\Supplier;
 
 class ConfirmOrderForm extends Model
 {
