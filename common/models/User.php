@@ -229,7 +229,7 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(Image::className(), ['id' => 'avatar']);
     }
 
-    public function getAvatarUrl($size = null, $default = '/vendor/assets/pages/media/profile/profile_user.jpg')
+    public function getAvatarUrl($size = null, $default = '/img/common/avatar_img_01.png')
     {
         $image = $this->avatarImage;
         if (!$image) {
