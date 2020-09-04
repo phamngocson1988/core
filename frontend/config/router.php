@@ -27,7 +27,8 @@ return [
         'news/<id:\d+>-<slug:[\w\-]+>' => 'news/view',
 
         'forum' => 'forum/index',
-        'forum/<id:\d+>-<slug:[\w\-]+>' => 'forum/topic',
+        'forum/topic/<id:\d+>-<slug:[\w\-]+>' => 'forum/topic',
+        'forum/<id:\d+>-<slug:[\w\-]+>' => 'forum/category',
 
 
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/dashboard' => 'manage/index',

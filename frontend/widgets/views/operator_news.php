@@ -3,7 +3,7 @@ use yii\helpers\Url;
 ?>
 
 <div class="related-posts">
-	<h2 class="sec-title text-center">MORE OPERATOR NEWS</h2>
+	<h4 class="sec-title text-center">MORE OPERATOR NEWS</h4>
 	<div class="row">
 		<?php foreach ($posts as $post) : ?>
 	  <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4"><a class="block-news trans" href="<?=Url::to(['news/view', 'id' => $post->id, 'slug' => $post->slug]);?>">
