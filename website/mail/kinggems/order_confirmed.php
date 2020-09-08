@@ -5,9 +5,13 @@
     <hr>
     <p>The order is processd with following details:</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
+    + Game: <?=$order->game_title;?><br/>
     + Quantity / loaded amount: <?=number_format($order->quantity, 1);?><br/>
     <?php if ($order->raw): ?>
-    + <?=nl2br($order->raw);?><br/>
+    <?php $rawPart = explode(PHP_EOL, $order->raw);?>
+    <?php foreach ($rawPart as $raw) :?>
+    + <?=$raw;?><br/>
+    <?php endforeach;?>
     <?php else : ?>
     + <?=$order->username;?><br/>
     + <?=$order->password;?><br/>

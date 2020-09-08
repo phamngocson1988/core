@@ -20,8 +20,8 @@ use yii\helpers\Url;
         <table align="center" style="width:100%" border="0" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
-              <td align="center" style="padding-top:30px;padding-left:0px;padding-right:0px">
-                <table align="center" style="max-width:475px;width:100%" border="0" cellspacing="0" cellpadding="0">
+              <td align="center" style="padding-top:0px;padding-left:0px;padding-right:0px">
+                <table align="center" style="max-width:500px;width:100%" border="0" cellspacing="0" cellpadding="0">
                   <tbody>
                     <tr>
                       <td style="padding-top:10px">
@@ -36,7 +36,7 @@ use yii\helpers\Url;
                               </td>
                             </tr>
                             <tr bgcolor="#FFFFFF">
-                              <td style="padding-top:30px;padding-right:30px;padding-left:30px;padding-bottom:35px;border-left:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd">
+                              <td style="padding-top:0px;padding-right:30px;padding-left:30px;padding-bottom:35px;border-left:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd">
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                   <tbody>
                                     <?=$content;?>

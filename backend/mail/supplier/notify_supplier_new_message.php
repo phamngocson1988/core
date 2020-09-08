@@ -4,6 +4,7 @@
     <span style="color:#178186">Hoanggianapgame.com</span> xin thông báo:<br/>
     <p>Bạn vừa nhận được phản hồi trợ giúp từ khách hàng, liên quan đến yêu cầu thông tin trước đó của đơn hàng</p>
     + Mã đơn hàng: <span style="color:#178186"><?=$order->id;?></span><br/>
+    + Game: <?=$order->game_title;?><br/>
     <p>Vui lòng kiểm tra tin nhắn và tiến hành đăng nhập tài khoản.</p>
     <p>Đừng quên xác nhận đăng nhập thành công. Xin cảm ơn!</p>
   </td>

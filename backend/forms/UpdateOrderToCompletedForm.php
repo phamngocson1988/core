@@ -39,6 +39,10 @@ class UpdateOrderToCompletedForm extends Model
             Order::STATUS_PARTIAL
         ])) return $this->addError($attribute, sprintf('Không thể hoàn tất đơn hàng khi ở trạng thái %s', $order->status));
         if ($order->doing_unit < $order->quantity) return $this->addError($attribute, 'Đơn hàng chưa được nhập đủ số lượng game');
+        // $supplier = $order->supplier;
+        // if (!$supplier) {
+        //     return $this->addError($attribute, 'Bạn không thể complete đơn hàng vì đơn này không có nhà cung cấp quản lý.');
+        // } elseif ($supplier) {}
     }
     
     public function move()
