@@ -66,8 +66,10 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
                 <th> Tên game </th>
                 <th> Số gói yêu cầu </th>
                 <th> Số gói đã nạp </th>
+                <?php if (Yii::$app->user->isAdvanceMode()) :?>
                 <th> Đơn giá </th>
                 <th> Thành tiền </th>
+                <?php endif;?>
               </tr>
             </thead>
             <tbody>
@@ -75,8 +77,10 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
                 <td><?=$model->getGameTitle();?></td>
                 <td class="center"><?=$model->quantity;?></td>
                 <td class="center"><?=$model->doing;?></td>
+                <?php if (Yii::$app->user->isAdvanceMode()) :?>
                 <td class="center"><?=number_format($model->price, 1);?></td>
                 <td class="center"><?=number_format($model->total_price, 1);?></td>
+                <?php endif;?>
               </tr>
             </tbody>
           </table>

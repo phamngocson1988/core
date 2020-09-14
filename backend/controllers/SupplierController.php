@@ -83,6 +83,29 @@ class SupplierController extends Controller
         ]);
     }
 
+    public function actionEdit($id)
+    {
+        $this->view->params['main_menu_active'] = 'supplier.index';
+        $request = Yii::$app->request;
+        $auth = Yii::$app->authManager;
+        $model = new \backend\forms\EditSupplierForm(['id' => $id]);
+        if ($model->load($request->post())) {
+            if ($user = $model->edit()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
+                return $this->redirect(['supplier/index']);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+            }
+        } else {
+            $model->loadData();
+        }
+
+        return $this->render('edit.tpl', [
+            'model' => $model,
+            'back' => $request->get('ref', Url::to(['user/index']))
+        ]);
+    }
+
     public function actionCreate($id)
     {
         $request = Yii::$app->request;

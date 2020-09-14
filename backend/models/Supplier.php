@@ -14,7 +14,7 @@ class Supplier extends \common\models\Supplier
     {
         return [
             self::SCENARIO_CREATE => ['user_id', 'password'],
-            self::SCENARIO_EDIT => ['user_id'],
+            self::SCENARIO_EDIT => ['password'],
         ];
     }
 

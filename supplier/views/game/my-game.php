@@ -6,6 +6,9 @@ use yii\widgets\ActiveForm;
 
 $supplier = Yii::$app->user->getIdentity();
 $supplier->attachBehavior('supplier', new UserSupplierBehavior);
+$isAdvanceMode = Yii::$app->user->isAdvanceMode();
+$column = 6;
+if ($isAdvanceMode) $column++;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -45,7 +48,9 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
                 <th> <?=Yii::t('app', 'ID');?> </th>
                 <th> <?=Yii::t('app', 'image');?> </th>
                 <th> <?=Yii::t('app', 'title');?> </th>
+                <?php if ($isAdvanceMode) :?>
                 <th> <?=Yii::t('app', 'price');?> </th>
+                <?php endif;?>
                 <th> Trạng thái ở Kinggems </th>
                 <th> Trạng thái của nhà cung cấp </th>
                 <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
@@ -53,7 +58,7 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
             </thead>
             <tbody>
                 <?php if (!$models) : ?>
-                <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="<?=$column;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $supplierGame) : ?>
                 <?php $model = $supplierGame->game;?>
@@ -61,7 +66,9 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
                   <td><?=$model->id;?></td>
                   <td><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
                   <td><?=$model->title;?></td>
+                  <?php if ($isAdvanceMode) :?>
                   <td><?=number_format($supplierGame->price, 1);?></td>
+                  <?php endif;?>
                   <td>
                     <?php if ($model->isVisible()) : ?>
                     <span class="label label-success"><?=Yii::t('app', 'visible');?></span>
@@ -87,6 +94,8 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
                     <a href="<?=Url::to(['game/enable', 'id' => $model->id]);?>" class="btn btn-sm red link-action tooltips" data-container="body" data-original-title="Kích hoạt"><i class="fa fa-arrow-up"></i> Kích hoạt </a>
                     <?php endif;?>
                     <?php endif;?>
+
+                    <?php if (Yii::$app->user->isAdvanceMode()) : ?>
                     <a href="#price-modal-<?=$model->id;?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Cập nhật giá" data-toggle="modal"><i class="fa fa-arrow-up"></i> Cập nhật giá </a>
                     <div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                       <div class="modal-dialog">
@@ -107,6 +116,7 @@ $supplier->attachBehavior('supplier', new UserSupplierBehavior);
                         </div>
                       </div>
                     </div>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <?php endforeach;?>
