@@ -32,4 +32,11 @@ class UserSupplierBehavior extends AttributeBehavior
         $command->where(['game_id' => $game_id]);
         return true && $command->count();
     }
+
+    public function hasSupplierPassword()
+    {
+        $supplier = $this->supplier;
+        if (!$supplier) return false;
+        return $supplier->password;
+    }
 }

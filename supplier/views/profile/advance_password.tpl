@@ -52,11 +52,11 @@
                 <li>
                   <a href="{$links.profile}">{Yii::t('app', 'personal_info')}</a>
                 </li>
-                <li class="active">
-                  <a href="#tab_1_2">{Yii::t('app', 'change_password')}</a>
-                </li>
                 <li>
-                  <a href="{$links.advance_password}">Password nâng cao</a>
+                  <a href="{$links.password}">{Yii::t('app', 'change_password')}</a>
+                </li>
+                <li class="active">
+                  <a href="#tab_1_3">Password nâng cao</a>
                 </li>
               </ul>
             </div>
@@ -64,7 +64,7 @@
               <div class="tab-content">
                 <div class="tab-pane" id="tab_1_1"></div>
                 <!-- PERSONAL INFO TAB -->
-                <div class="tab-pane active" id="tab_1_2">
+                <div class="tab-pane active" id="tab_1_3">
                   {ActiveForm assign='form'}
                     {$form->field($model, 'old_password')->passwordInput()}
                     {$form->field($model, 'new_password')->passwordInput()}

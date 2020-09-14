@@ -63,7 +63,7 @@ $user = Yii::$app->user->getIdentity();
               <?php endif;?>
             </div>
           </div>
-          <button type="submit" class="btn btn-block btn-payment text-uppercase">Payment</button>
+          <button type="submit" id="checkout-button" class="btn btn-block btn-payment text-uppercase">Payment</button>
         </div>
       </div>
       <!-- END SUMMARY -->
@@ -71,3 +71,12 @@ $user = Yii::$app->user->getIdentity();
   </div>
   <?php ActiveForm::end();?>
 </div>
+<?php
+$script = <<< JS
+$('#checkout-button').on('click', function(e) {
+  if ($(this).hasClass('inprogress')) return false;
+  $(this).addClass('inprogress');
+});
+JS;
+$this->registerJs($script);
+?>

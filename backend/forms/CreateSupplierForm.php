@@ -15,6 +15,7 @@ class CreateSupplierForm extends BaseSignupForm
     public $username;
     public $email;
     public $password;
+    public $advance_password;
     public $phone;
     public $address;
     public $birthday;
@@ -41,7 +42,9 @@ class CreateSupplierForm extends BaseSignupForm
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
-            [['username', 'password'], function ($attribute, $params) {
+            ['advance_password', 'trim'],
+
+            [['username', 'password', 'advance_password'], function ($attribute, $params) {
                 if (preg_match('/\s+/',$this->$attribute)) {
                      $this->addError($attribute, Yii::t('app', 'no_white_space_allowed')); //No white spaces allowed!
                 }
@@ -59,6 +62,7 @@ class CreateSupplierForm extends BaseSignupForm
             'username' => 'Tên đăng nhập',
             'email' => 'Hộp thư',
             'password' => 'Mật khẩu',
+            'advance_password' => 'Mật khẩu nâng cao',
             'phone' => 'Điện thoại',
             'address' => 'Địa chỉ',
             'birthday' => 'Ngày sinh',
@@ -91,6 +95,7 @@ class CreateSupplierForm extends BaseSignupForm
             $supplier = new Supplier();
             $supplier->setScenario(Supplier::SCENARIO_CREATE);
             $supplier->user_id = $user->id;
+            $supplier->password = $this->advance_password;
             $supplier->save();
 
    			$transaction->commit();

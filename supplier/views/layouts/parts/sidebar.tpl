@@ -1,3 +1,4 @@
+{use class='supplier\widgets\UnclockAccountWidget'}
 <!-- BEGIN SIDEBAR -->
 <div class="page-sidebar-wrapper">
   <div class="page-sidebar navbar-collapse collapse">
@@ -99,6 +100,7 @@
       </li>
 
       <!-- Ngân hàng -->
+      {if ($app->user->isAdvanceMode())}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-wallet"></i>
@@ -123,6 +125,23 @@
           </li>
         </ul>
       </li>
+      {else}
+      <li class="nav-item  ">
+        <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="icon-wallet"></i>
+        <span class="title">Tài khoản</span>
+        <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+          <li class="nav-item  "> 
+            <a href="#unclockModal" data-toggle="modal" class="nav-link ">
+            <span class="title">Mở khoá tài khoản</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {/if}
     </ul>
   </div>
 </div>
+{UnclockAccountWidget::widget()}

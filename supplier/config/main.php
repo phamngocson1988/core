@@ -31,6 +31,7 @@ return [
             'csrfParam' => '_csrf-supplier',            
         ],
         'user' => [
+            'class' => 'supplier\components\User',
             'identityClass' => 'supplier\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-supplier', 'httpOnly' => true],

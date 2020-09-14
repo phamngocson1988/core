@@ -91,7 +91,7 @@ class TestController extends Controller
         $from = $settings->get('ApplicationSettingForm', 'supplier_service_email', null);
         $fromName = sprintf("%s Administrator", Yii::$app->name);
         try {
-            return $mailer->compose('support_order', [])
+            return $mailer->compose('test_mail', [])
             ->setTo('phamngocson1988@gmail.com')
             ->setFrom([$from => $fromName])
             ->setSubject($title)

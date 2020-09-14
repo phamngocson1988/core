@@ -20,6 +20,7 @@ class m191210_171926_supplier extends Migration
 
         $this->createTable('{{%supplier}}', [
             'user_id' => $this->integer()->notNull(),
+            'password' => $this->string(50),
             'status' => $this->string(10),
             'created_by' => $this->integer(),  
             'updated_by' => $this->integer(),  

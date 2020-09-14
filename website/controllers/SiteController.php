@@ -41,7 +41,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error', 'test', 'social'],
+                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail'],
                         'allow' => true,
                     ],
                     [
@@ -257,6 +257,33 @@ class SiteController extends Controller
     public function actionSocial()
     {
         return $this->render('social');
+    }
+
+    public function actionTestMail()
+    {
+        $o = \website\models\Order::findOne(16883597);
+        $supplier = $o->workingSupplier;
+        $o->pushNotification(\website\components\notifications\OrderNotification::NOTIFY_SUPPLIER_CANCEL_ORDER, $supplier->supplier_id);
+        // $user = \website\models\User::findOne($supplier->supplier_id);
+        // $toEmail = $user->email;
+        $o->log(sprintf("log something"));
+
+        //
+        // $user = \website\models\User::findOne($supplier->supplier_id);
+        // $supplierMailer = Yii::$app->supplier_mailer;
+        // $message = $supplierMailer->compose('test_mail', [
+        //     'user' => $user,
+        //     'order' => $o,
+        // ]);
+
+        // $message->setFrom('napgamehoanggia@gmail.com');
+        // $message->setTo('phamngocson1988@gmail.com');
+        // $message->setSubject('Test');
+        // $message->send();
+
+        // print_r($supplier->supplier_id);
+        // print_r($o);
+        die('send');
     }
 
 }

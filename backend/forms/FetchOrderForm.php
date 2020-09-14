@@ -215,8 +215,9 @@ class FetchOrderForm extends Model
             'J' => 'Người bán hàng',
             'K' => 'Nhân viên đơn hàng',
             'L' => 'Trạng thái',
-            'M' => 'Nhà cung cấp',
-            'N' => 'Sai thông tin',
+            'M' => 'Ngày tạo',
+            'N' => 'Nhà cung cấp',
+            'O' => 'Sai thông tin',
         ];
         $totalRow = $command->count();
         $startRow = 12;
@@ -284,6 +285,7 @@ class FetchOrderForm extends Model
                 ($model->saler) ? $model->saler->name : '',
                 ($model->orderteam) ? $model->orderteam->name : '',
                 $model->getStatusLabel(false),
+                $model->created_at,
                 implode(", ", $supplierList),
                 in_array($model->id, $existStaffComplainIds) ? 'X' : ''
             ];

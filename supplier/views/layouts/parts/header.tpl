@@ -30,6 +30,7 @@
           <i class="fa fa-angle-down"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-default">
+            {if ($app->user->isAdvanceMode())}
             <li>
               <a href="{url route='/profile/index'}">
               <i class="icon-user"></i> {Yii::t('app', 'my_profile')} </a>
@@ -38,6 +39,7 @@
               <a href="{url route='/profile/password'}">
               <i class="icon-key"></i> {Yii::t('app', 'change_password')} </a>
             </li>
+            {/if}
             <li>
               <a href="{url route='/site/logout'}">
               <i class="icon-logout"></i> {Yii::t('app', 'logout')} </a>

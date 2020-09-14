@@ -53,7 +53,6 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $auth = Yii::$app->authManager;
             $user = $this->getUser();
-            $user->attachBehavior('supplier', new UserSupplierBehavior);
             if (!$user->isSupplier()) {
                 $this->addError($attribute, Yii::t('app', 'you_are_not_allowed_to_login'));
                 return false;
@@ -90,6 +89,9 @@ class LoginForm extends Model
     {
         if ($this->_user === null) {
             $this->_user = User::findByUsername($this->username);
+            if ($this->_user) {
+                $this->_user->attachBehavior('supplier', new UserSupplierBehavior);
+            }
         }
 
         return $this->_user;

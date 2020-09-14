@@ -30,7 +30,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'unclock-account'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -169,5 +169,20 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionUnclockAccount()
+    {
+        $request = Yii::$app->request;
+        $confirmForm = new \supplier\forms\UnclockAccountForm();
+
+        if ($confirmForm->load($request->post()) && $confirmForm->verify()) {
+            return json_encode(['status' => true, 'message' => 'Bạn đã mở khoá thành công']);
+        } else{
+            $message = $confirmForm->getErrorSummary(true);
+            $message = reset($message);
+            return json_encode(['status' => false, 'errors' => $message, 'aaa' => $_POST]);
+        }
+        
     }
 }

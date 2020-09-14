@@ -13,7 +13,7 @@ class Supplier extends \common\models\Supplier
     public function scenarios()
     {
         return [
-            self::SCENARIO_CREATE => ['user_id'],
+            self::SCENARIO_CREATE => ['user_id', 'password'],
             self::SCENARIO_EDIT => ['user_id'],
         ];
     }
@@ -22,6 +22,7 @@ class Supplier extends \common\models\Supplier
     {
         return [
             ['id', 'required'],
+            ['password', 'trim'],
         ];
     }
 }

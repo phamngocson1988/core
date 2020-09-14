@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use supplier\forms\EditProfileForm;
 use supplier\forms\ChangePasswordForm;
 use supplier\forms\ChangeAvatarForm;
-
+use supplier\forms\ChangeAdvancePasswordForm;
 
 class ProfileController extends Controller
 {
@@ -23,6 +23,10 @@ class ProfileController extends Controller
                     [
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->isAdvanceMode();
+                        },
+
                     ],
                 ],
             ],
@@ -58,6 +62,7 @@ class ProfileController extends Controller
             'profile' => Url::to(['profile/index']),
             'change_avatar' => Url::to(['profile/change-avatar']),
             'password' => Url::to(['profile/password']),
+            'advance_password' => Url::to(['profile/advance-password']),
             'saler' => Url::to(['profile/saler']),
             'upload_image' => Url::to(['image/ajax-upload']),
         ];
@@ -87,11 +92,43 @@ class ProfileController extends Controller
             'profile' => Url::to(['profile/index']),
             'change_avatar' => Url::to(['profile/change-avatar']),
             'password' => Url::to(['profile/password']),
+            'advance_password' => Url::to(['profile/advance-password']),
             'saler' => Url::to(['profile/saler']),
             'upload_image' => Url::to(['image/ajax-upload']),
         ];
 
         return $this->render('password.tpl', [
+            'model' => $model,
+            'user' => Yii::$app->user->getIdentity(),
+            'links' => $links
+        ]);
+    }
+
+    public function actionAdvancePassword()
+    {
+        $request = Yii::$app->request;
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
+        $this->view->registerCssFile('vendor/assets/pages/css/profile.min.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+        $this->view->registerCssFile('vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+
+        $post = $request->post();
+        $model = new ChangeAdvancePasswordForm();
+        
+        if ($model->load($post) && $model->change()) {
+            // Reset form change password
+            $model = new ChangeAdvancePasswordForm();
+        }
+
+        $links = [
+            'profile' => Url::to(['profile/index']),
+            'change_avatar' => Url::to(['profile/change-avatar']),
+            'password' => Url::to(['profile/password']),
+            'advance_password' => Url::to(['profile/advance-password']),
+            'saler' => Url::to(['profile/saler']),
+            'upload_image' => Url::to(['image/ajax-upload']),
+        ];
+
+        return $this->render('advance_password.tpl', [
             'model' => $model,
             'user' => Yii::$app->user->getIdentity(),
             'links' => $links
