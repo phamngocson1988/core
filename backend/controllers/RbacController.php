@@ -367,4 +367,11 @@ class RbacController extends Controller
         print_r($fulllist);die;
         return $fulllist;
     }
+
+    public function actionRemove($role) 
+    {
+        $object = Yii::$app->authManager->getRole($role);
+        Yii::$app->authManager->remove($object);
+        die($role);
+    }
 }

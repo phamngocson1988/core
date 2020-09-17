@@ -14,4 +14,12 @@ class User extends \yii\web\User
 		$intersect = array_intersect($roleNames, $name);
 		return count($intersect);
 	}
+
+	public function cans($roles)
+	{
+		foreach ($roles as $role) {
+			if ($this->can($role)) return true;
+		}
+		return false;
+	}
 }

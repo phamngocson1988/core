@@ -51,7 +51,7 @@
       {/if}
 
       <!-- Khách hàng -->
-      {if $app->user->can('saler')}
+      {if $app->user->cans(['saler', 'customer_support'])}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-user-following"></i>
@@ -74,7 +74,7 @@
       {/if}
 
       <!-- Reseller -->
-      {if $app->user->can('saler')}
+      {if $app->user->cans(['saler', 'customer_support'])}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -82,7 +82,7 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->can('sale_manager')}
+          {if $app->user->cans(['sale_manager', 'customer_support'])}
           <li class="nav-item  ">
             <a href="{url route='/reseller/index'}" class="nav-link " code='reseller.index'>
             <span class="title">Danh sách reseller</span>
@@ -94,7 +94,7 @@
       {/if}
 
       <!-- Supplier -->
-      {if ($app->user->can('accounting') || $app->user->can('orderteam'))}
+      {if ($app->user->cans(['accounting', 'orderteam']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -124,7 +124,7 @@
       {/if}
 
       <!-- Affiliate -->
-      {if $app->user->can('sale_manager')}
+      {if $app->user->cans(['sale_manager', 'customer_support_vip'])}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -165,7 +165,7 @@
       {/if}
 
       <!-- Bài viết -->
-      {if ($app->user->can('saler') || $app->user->can('marketing_officer'))}
+      {if ($app->user->cans(['saler', 'marketing_officer']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
@@ -188,7 +188,7 @@
       {/if}
 
       <!-- Trung tâm hổ trợ -->
-      {if ($app->user->can('saler') || $app->user->can('marketing_officer'))}
+      {if ($app->user->cans(['saler', 'marketing_officer']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-question"></i>
@@ -275,7 +275,7 @@
       {/if}
 
       <!-- Giao dịch nạp tiền -->
-      {if ($app->user->can('accounting') || $app->user->can('saler'))}
+      {if ($app->user->cans(['accounting', 'saler', 'customer_support']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-wallet"></i>
@@ -313,7 +313,7 @@
       {/if}
 
       <!-- Cấu hình -->
-      {if ($app->user->can('saler') || $app->user->can('marketing_officer'))}
+      {if ($app->user->cans(['saler', 'marketing_officer']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
@@ -431,7 +431,7 @@
       {/if}
 
       <!-- Game -->
-      {if ($app->user->can('saler') || $app->user->can('orderteam') || $app->user->can('marketing_officer'))}
+      {if ($app->user->cans(['saler', 'orderteam', 'marketing_officer', 'customer_support']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-note"></i>
@@ -498,7 +498,7 @@
       {/if}
 
       <!-- Đơn hàng -->
-      {if $app->user->can('saler') || $app->user->can('orderteam') || $app->user->can('accounting')}
+      {if $app->user->cans(['saler', 'orderteam', 'accounting', 'customer_support'])}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-basket"></i>
@@ -583,8 +583,6 @@
       {/if}
 
       <!-- Thống kê -->
-      {$roles = $app->authManager->getRolesByUser($app->user->id)}
-      {$roles = array_keys($roles)}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-line-chart"></i>
@@ -592,33 +590,32 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->can('accounting')}
+          {if $app->user->cans(['accounting', 'customer_support'])}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê dòng tiền</span>
               <span class="arrow"></span>
             </a>
             <ul class="sub-menu">
+              {if $app->user->can('accounting')}
               <li class="nav-item  ">
                 <a href="{url route='/report/finance-transaction'}" class="nav-link nav-toggle" code='report.finance.transaction'>
                   <span class="title">Giao dịch nạp tiền</span>
                 </a>
               </li>
+              {/if}
               <li class="nav-item  ">
                 <a href="{url route='/report/finance-balance'}" class="nav-link nav-toggle" code='report.finance.balance'>
                   <span class="title">Số dư tài khoản khách hàng</span>
                 </a>
               </li>
-              {* <li class="nav-item  ">
-                <a href="" class="nav-link nav-toggle" code="supplier.balance">
-                  <span class="title">Giao dịch rút tiền</span>
-                </a>
-              </li> *}
+              {if $app->user->can('accounting')}
               <li class="nav-item  ">
                 <a href="{url route='/supplier/balance'}" class="nav-link nav-toggle" code="supplier.balance">
                   <span class="title">Số dư tài khoản nhà cung cấp</span>
                 </a>
               </li> 
+              {/if}
             </ul>
           </li>
           {/if}
