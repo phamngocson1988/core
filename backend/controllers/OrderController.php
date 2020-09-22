@@ -136,7 +136,7 @@ class OrderController extends Controller
         $this->view->params['main_menu_active'] = 'order.pending';
         $request = Yii::$app->request;
         $data = [
-            'q' => $request->get('q'),
+            'id' => $request->get('id'),
             'customer_id' => $request->get('customer_id'),
             'saler_id' => $request->get('saler_id'),
             'supplier_id' => $request->get('supplier_id'),
@@ -145,9 +145,8 @@ class OrderController extends Controller
             'game_id' => $request->get('game_id'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
-            'status' => Order::STATUS_PENDING,
         ];
-        $form = new FetchOrderForm($data);
+        $form = new \backend\forms\FetchPendingShopForm($data);
         $command = $form->getCommand();
         $command->with('game');
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -178,7 +177,7 @@ class OrderController extends Controller
             'end_date' => $request->get('end_date'),
             'state' => $request->get('state')
         ];
-        $form = new \backend\forms\FetchPendingOrderForm($data);
+        $form = new \backend\forms\FetchPendingInformationShopForm($data);
         $command = $form->getCommand();
         $command->with('game');
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -186,20 +185,32 @@ class OrderController extends Controller
                             ->limit($pages->limit)
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();                    
-        $complains = [];
+        $lastComplains = [];
         foreach ($models as $model) {
-            if ($model->state) {
-                $complains[] = OrderComplains::find()->select(["order_id", "MAX(created_at) as created_at"])
-                ->where(["order_id" => $model->id])->asArray()->one();
+            $complain = OrderComplains::find()
+            ->select(["order_id", "created_at", "content", "content_type"])
+            ->where(["order_id" => $model->id])
+            ->orderBy(['id' => SORT_DESC])
+            ->asArray()->one();
+            if ($complain) {
+                $lastComplains[$model->id] = $complain;
             }
         }
-        $complains = $complains ? ArrayHelper::map($complains, 'order_id', 'created_at') : $complains;
+
+        $orderIds = ArrayHelper::getColumn($models, 'id');
+        $firstComplains = OrderComplains::find()
+        ->select(["order_id", "created_at"])
+        ->where(["in", "order_id", $orderIds])
+        ->groupBy("order_id")
+        ->indexBy("order_id")
+        ->asArray()->all();
 
         return $this->render('pending-information', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
-            'complains' => $complains,
+            'lastComplains' => $lastComplains,
+            'firstComplains' => $firstComplains,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -476,12 +487,6 @@ class OrderController extends Controller
         $model->setScenario(Order::SCENARIO_GO_PENDING);
         $model->on(Order::EVENT_AFTER_UPDATE, function ($event) {
             $order = $event->sender;
-            // Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
-            // $order->send(
-            //     'admin_send_pending_order', 
-            //     sprintf("Order confirmation - %s", $order->id), [
-            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            // ]);
             $order->log(sprintf("Moved to pending with payment_id: %s", $order->payment_id));
             $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
             $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_PENDING, $orderTeamIds);
@@ -490,6 +495,7 @@ class OrderController extends Controller
         if (!$model->auth_key) $model->generateAuthKey();
         $model->payment_type = 'offline';
         $model->status = Order::STATUS_PENDING;
+        $model->pending_at = date('Y-m-d H:i:s');
         if ($model->load($request->post()) && $model->save()) {
             return $this->renderJson(true, ['next' => Url::to(['order/index'])]);
         } else {
@@ -509,15 +515,11 @@ class OrderController extends Controller
         $model->status = Order::STATUS_PROCESSING;
         $model->state = new \yii\db\Expression('NULL');;
         $model->process_start_time = date('Y-m-d H:i:s');
+        $model->processing_at = date('Y-m-d H:i:s');
         $model->on(Order::EVENT_AFTER_UPDATE, function($event) {
             $order = $event->sender;
             Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
             $order->log("Moved to processing");
-            // $order->send(
-            //     'admin_send_processing_order', 
-            //     sprintf("[KingGems] - Processing Order - Order #%s", $order->id), [
-            //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-            // ]);
         });
 
         return $this->renderJson($model->save());

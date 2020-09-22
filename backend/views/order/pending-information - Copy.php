@@ -7,7 +7,6 @@ use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
 use backend\models\User;
 use yii\helpers\ArrayHelper;
-use yii\helpers\StringHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
 use backend\models\Order;
@@ -149,53 +148,46 @@ if ($canSaler) $numColumn += 1;
         </div>
         <?php ActiveForm::end()?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable hidden" id="order-table">
+          <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
               <tr>
-                <th col-tag="id"> Mã đơn hàng </th>
-                <th col-tag="customer"> Khách hàng </th>
-                <th col-tag="game"> Shop Game </th>
-                <th col-tag="total_unit"> Số lượng nạp </th>
-                <th col-tag="quantity"> Số gói </th>
-                <th col-tag="waiting_time"> Tổng TG chờ </th>
-                <th col-tag="processing_time"> TG xử lý yêu cầu </th>
-                <th col-tag="response_time"> TG chờ phản hồi </th>
-                <th col-tag="status"> Trạng thái </th>
-                <th col-tag="message"> Nội dung tin nhắn </th>
-                <th col-tag="saler"> NV hỗ trợ </th>
-                <th col-tag="orderteam"> NV phân phối </th>
-                <th col-tag="supplier"> Nhà cung cấp </th>
-                <th col-tag="action" class="dt-center"> Tác vụ </th>
+                <th> Mã đơn hàng </th>
+                <th> Khách hàng </th>
+                <th> Tên game </th>
+                <th> Số lượng </th>
+                <th> Thời gian tạo </th>
+                <th> Chờ phản hồi </th>
+                <th> Trạng thái </th>
+                <th <?=($canSaler) ? '' : "class='hide'";?>> NV hỗ trợ </th>
+                <th <?=($canOrderTeam) ? '' : "class='hide'";?>> NV phân phối </th>
+                <th <?=($canOrderTeam) ? '' : "class='hide'";?>> Nhà cung cấp </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="13" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="<?=$numColumn;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $supplier = $model->supplier;?>
                 <?php $label = $model->getStatusLabel(null); ?>
                 <tr>
-                  <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                  <td col-tag="customer"><?=$model->getCustomerName();?></td>
-                  <td col-tag="game"><?=$model->game_title;?></td>
-                  <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
-                  <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
-                  <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
-                  <td col-tag="processing_time" class="center">
+                  <td class="center"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td class="center"><?=$model->customer_name;?></td>
+                  <td class="center"><?=$model->game_title;?></td>
+                  <td class="center"><?=$model->quantity;?></td>
+                  <td class="center"><?=date('d/m/y H:i', strtotime($model->created_at));?></td>
+                  <td class="center">
                     <?php 
-                    $firstComplain = ArrayHelper::getValue($firstComplains, $model->id); 
-                    echo number_format((strtotime('now') - strtotime($firstComplain['created_at'])) / 60);
+                    $lastComplain = ArrayHelper::getValue($complains, $model->id); 
+                    if (!$lastComplain) {
+                      echo '--';
+                    } else {
+                      echo FormatConverter::countDuration(strtotime('now') - strtotime($lastComplain), 'h:i');
+                    }
                     ?>
                   </td>
-                  <td col-tag="response_time" class="center">
-                    <?php 
-                    $lastComplain = ArrayHelper::getValue($lastComplains, $model->id); 
-                    echo number_format((strtotime('now') - strtotime($lastComplain['created_at'])) / 60);
-                    ?>
-                      
-                  </td>
-                  <td col-tag="status">
+                  <td class="center">
                     <?php if ($model->hasCancelRequest()) :?>
                     <span class="label label-danger">Có yêu cầu hủy</span>
                     <?php endif;?>
@@ -207,16 +199,11 @@ if ($canSaler) $numColumn += 1;
                     <span class="label label-default">Pending</span>
                     <?php endif;?>
                   </td>
-                  <td col-tag="message">
-                    <?php 
-                    $lastComplain = ArrayHelper::getValue($lastComplains, $model->id); 
-                    echo $lastComplain ? StringHelper::truncate($lastComplain['content'], 25, '...', null, true) : '--';
-                    ?>
-                  </td>
-                  <td col-tag="saler"><?=($model->saler) ? $model->saler->name : '--';?></td>
-                  <td col-tag="orderteam"><?=($model->orderteam) ? $model->orderteam->name : '--';?></td>
-                  <td col-tag="supplier"><?=($supplier) ? sprintf("%s", $supplier->user->name) : '--';?></td>
-                  <td col-tag="action">
+                  <td class="center <?=($canSaler) ? '' : 'hide';?>"><?=($model->saler) ? $model->saler->name : '--';?></td>
+                  <td class="center <?=($canOrderTeam) ? '' : 'hide';?>"><?=($model->orderteam) ? $model->orderteam->name : '--';?></td>
+                  <td class="center <?=($canOrderTeam) ? '' : 'hide';?>"><?=($supplier) ? sprintf("%s", $supplier->user->name) : '--';?></td>
+                  <td class="center">
+                    
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id, '#' => 'complain']);?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Chat" ><i class="fa fa-comments-o"></i></a>
 
                     <!-- Order team -->
@@ -290,25 +277,8 @@ if ($canSaler) $numColumn += 1;
                     <?php endif;?> <!-- end if canBeTaken -->
                   </td>
                 </tr>
-                </tr>
                 <?php endforeach;?>
             </tbody>
-            <tfooter>
-              <td col-tag="id"><?=number_format($search->count());?></td>
-              <td col-tag="customer"></td>
-              <td col-tag="game"></td>
-              <td col-tag="total_unit" class="center"></td>
-              <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 1);?></td>
-              <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
-              <td col-tag="processing_time"></td>
-              <td col-tag="response_time"></td>
-              <td col-tag="status"></td>
-              <td col-tag="message"></td>
-              <td col-tag="saler"></td>
-              <td col-tag="orderteam"></td>
-              <td col-tag="supplier"></td>
-              <td col-tag="action" class="dt-center"></td>
-            </tfooter>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
@@ -327,14 +297,7 @@ if ($canSaler) $numColumn += 1;
   <!-- /.modal-dialog -->
 </div>
 <?php
-$hiddenColumns = [];
-if (Yii::$app->user->isRole('orderteam')) array_push($hiddenColumns, 'customer', 'saler');
-if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'orderteam', 'supplier');
-$hiddenColumnString = implode(',', $hiddenColumns);
 $script = <<< JS
-var hiddenColumns = '$hiddenColumnString';
-initTable('#order-table', '#no-data', hiddenColumns);
-
 $(".ajax-link").ajax_action({
   confirm: true,
   confirm_text: 'Bạn có muốn thực hiện tác vụ này?',

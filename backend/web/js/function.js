@@ -73,4 +73,13 @@ function initDatePicker() {
 
 $('.nav-tabs > li > a').on('click', function() {
     window.location.hash = $(this).attr('href');
-})
+});
+
+function initTable(tableSelector, noDataSelector, hiddenColumns) {
+    hiddenColumns.split(",").filter(x => x).map(c => {
+      $(tableSelector+' th[col-tag='+c+'],'+tableSelector+' td[col-tag='+c+']').remove();
+      var numCol = $(tableSelector+' thead th').length;
+      $(tableSelector+' thead th').find(noDataSelector).attr('colspan', numCol);
+    });
+    $(tableSelector).removeClass('hidden');
+}

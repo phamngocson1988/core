@@ -187,6 +187,8 @@ class OrderPaymentForm extends Model
 
                 $order->status = Order::STATUS_PENDING;
                 $order->payment_id = $wallet->id;
+                $order->pending_at = date('Y-m-d H:i:s');
+
                 $order->save();
                 $order->log(sprintf("Verified, Status is %s", $order->status));
 

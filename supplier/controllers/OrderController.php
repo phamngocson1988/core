@@ -375,22 +375,6 @@ class OrderController extends Controller
         ]);
     }
 
-    // public function actionMoveToProcessing1($id)
-    // {
-    //     $form = new UpdateOrderToProcessingForm([
-    //         'id' => $id,
-    //         'supplier_id' => Yii::$app->user->id
-
-    //     ]);
-    //     if ($form->move()) {
-    //         return $this->asJson(['status' => true]);
-    //     }
-    //     $errors = $form->getErrorSummary(false);
-    //     $error = reset($errors);
-    //     return $this->asJson(['status' => false, 'errors' => $error]);
-
-    // }
-
     public function actionMoveToProcessing($id) 
     {
         $request = Yii::$app->request;

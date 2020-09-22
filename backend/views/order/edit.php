@@ -413,7 +413,7 @@ $this->registerJs($imageJs);
                         <?php if (!Yii::$app->user->isRole(['admin', 'saler'])) : ?>
                         <a href="#complain_template" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi phản hồi theo mẫu</a>
                         <?php endif;?>
-                        <?php if (Yii::$app->user->can('saler')) : ?>
+                        <?php if (Yii::$app->user->cans(['saler', 'orderteam'])) : ?>
                         <a href="#complain_custom" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Gửi nội dung tùy chọn</a>
                         <?php endif;?>
 

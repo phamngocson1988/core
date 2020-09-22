@@ -17,13 +17,12 @@ class Controller extends BaseController
 	{
 		if (parent::beforeAction($action)) {
 			// Show number of new pending orders
-			$newPendingOrderCommand = Order::find()->where(['status' => Order::STATUS_PENDING]);
-	        $newPendingOrderTotal = $newPendingOrderCommand->count();
+	        $pendingForm = new \backend\forms\FetchPendingShopForm();
+	        $newPendingOrderTotal = $pendingForm->count();
 			$this->view->params['new_pending_order'] = $newPendingOrderTotal ? $newPendingOrderTotal : '';
 
-			$newPendingInforOrderCommand = Order::find()->where(["IN", "status", [Order::STATUS_PENDING, Order::STATUS_PROCESSING]])
-			->andWhere(["IS NOT", 'state', null]);
-	        $newPendingInfoOrderTotal = $newPendingInforOrderCommand->count();
+	        $pendingInformationForm = new \backend\forms\FetchPendingInformationShopForm();
+	        $newPendingInfoOrderTotal = $pendingInformationForm->count();
 			$this->view->params['new_pending_info_order'] = $newPendingInfoOrderTotal ? $newPendingInfoOrderTotal : '';
 			
 			// Show number of new verifying orders

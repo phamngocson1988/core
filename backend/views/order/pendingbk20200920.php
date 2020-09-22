@@ -35,11 +35,6 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 $user = Yii::$app->user;
 $showSupplier = $user->can('orderteam') || $user->can('accounting');
 $showCustomer = $user->can('saler') || $user->can('accounting');
-
-$hiddenColumns = [];
-if (Yii::$app->user->isRole('orderteam')) array_push($hiddenColumns, 'customer', 'saler');
-if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'orderteam', 'supplier');
-
 ?>
 <!-- jQuery Modal -->
 <!-- BEGIN PAGE BAR -->
@@ -74,9 +69,9 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['order/pending'])]);?>
         <div class="row margin-bottom-10">
             <?php $customer = $search->getCustomer();?>
-            <?=$form->field($search, 'id', [
+            <?=$form->field($search, 'q', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
 
             <?=$form->field($search, 'customer_id', [
@@ -101,6 +96,12 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'saler_id']
             ])->dropDownList($salerTeams, ['prompt' => 'Chọn nhân viên sale'])->label('Nhân viên sale');?>
 
+            <?php $orderTeams['-1'] = 'Chưa có người quản lý';?>
+            <?=$form->field($search, 'orderteam_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'orderteam_id']
+            ])->dropDownList($orderTeams, ['prompt' => 'Chọn nhân viên đơn hàng'])->label('Nhân viên đơn hàng');?>
+
             <?php $game = $search->getGame();?>   
             <?=$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -119,6 +120,13 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
               ]
             ])->label('Tên game')?>
           
+            <?php if ($showSupplier): ?>
+            <?=$form->field($search, 'supplier_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'supplier_id'],
+            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
+            <?php endif;?>
+
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
@@ -159,43 +167,42 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
         </div>
         <?php ActiveForm::end()?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable hidden" id="order-table">
+          <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
               <tr>
-                <th col-tag="id"> Mã đơn hàng </th>
-                <th col-tag="customer"> Tên khách hàng </th>
-                <th col-tag="game"> Shop Game </th>
-                <th col-tag="total_unit"> Số lượng nạp </th>
-                <th col-tag="quantity"> Số gói </th>
-                <th col-tag="waiting_time"> Tổng TG chờ </th>
-                <th col-tag="distributed_time"> TG phân phối </th>
-                <th col-tag="approved_time"> TG nhận đơn </th>
-                <th col-tag="saler"> Người bán hàng </th>
-                <th col-tag="orderteam"> Nhân viên đơn hàng </th>
-                <th col-tag="status"> Trạng thái </th>
-                <th col-tag="supplier"> Nhà cung cấp </th>
-                <th col-tag="action" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+                <th> Mã đơn hàng </th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Tên khách hàng </th>
+                <th> Tên game </th>
+                <th> Ngày tạo </th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Cổng thanh toán </th>
+                <th> Số lượng nạp </th>
+                <th> Số gói </th>
+                <th> Người bán hàng </th>
+                <th> Nhân viên đơn hàng </th>
+                <th> Trạng thái </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="13" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $supplier = $model->supplier;?>
                 <?php $label = $model->getStatusLabel(null); ?>
                 <tr>
-                  <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                  <td col-tag="customer"><?=$model->getCustomerName();?></td>
-                  <td col-tag="game"><?=$model->game_title;?></td>
-                  <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
-                  <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
-                  <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
-                  <td col-tag="distributed_time" class="center"><?=number_format($model->distributed_time);?></td>
-                  <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
-                  <td col-tag="saler"><?=($model->saler) ? $model->saler->name : '';?></td>
-                  <td col-tag="orderteam"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                  <td col-tag="status">
+                  <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->getCustomerName();?></td>
+                  <td><?=$model->game_title;?></td>
+                  <td><?=$model->created_at;?></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->payment_method;?></td>
+                  <td><?=$model->total_unit;?></td>
+                  <td><?=$model->quantity;?></td>
+                  <td><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td>
+                    
                     <?php if ($model->hasCancelRequest()) :?>
                     <span class="label label-danger">Có yêu cầu hủy</span>
                     <?php endif;?>
@@ -213,10 +220,10 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
                       <?=$model->getStatusLabel();?>
                     <?php endif;?>
                   </td>
-                  <td col-tag="supplier" <?=$showSupplier ? '' : 'class="hide"';?>>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
                     <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
                   </td>
-                  <td col-tag="action">
+                  <td>
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                     <?php if (Yii::$app->user->can('orderteam')) :?>
                     <a href='<?=Url::to(['order/taken', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận quản lý đơn hàng"><i class="fa fa-cogs"></i></a>
@@ -267,24 +274,22 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <tfooter>
-              <td col-tag="id"><?=number_format($search->count());?></td>
-              <td col-tag="customer"></td>
-              <td col-tag="game"></td>
-              <td col-tag="total_unit" class="center"></td>
-              <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 1);?></td>
-              <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
-              <td col-tag="distributed_time" class="center"><?=number_format($search->getAverageDistributedTime());?></td>
-              <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime());?></td>
-              <td col-tag="saler"></td>
-              <td col-tag="orderteam"></td>
-              <td col-tag="status"></td>
-              <td col-tag="supplier"></td>
-              <td col-tag="action"></td>
-            </tfooter>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
+        <?php if ($models) :?>
+        <?php $sumQuantity = $search->getCommand()->sum('quantity');?>
+        <?php if ($sumQuantity) : ?>
+        <div class="row">
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
+          </div>
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
+          </div>
+        </div>
+        <?php endif;?>
+        <?php endif;?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
@@ -300,11 +305,7 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
   <!-- /.modal-dialog -->
 </div>
 <?php
-$hiddenColumnString = implode(',', $hiddenColumns);
 $script = <<< JS
-var hiddenColumns = '$hiddenColumnString';
-initTable('#order-table', '#no-data', hiddenColumns);
-
 $(".ajax-link").ajax_action({
   confirm: true,
   confirm_text: 'Bạn có muốn thực hiện tác vụ này?',

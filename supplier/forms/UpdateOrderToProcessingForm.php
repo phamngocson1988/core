@@ -96,16 +96,11 @@ class UpdateOrderToProcessingForm extends Model
                 $order->status = Order::STATUS_PROCESSING;
                 $order->state = new \yii\db\Expression('NULL');
                 $order->process_start_time = date('Y-m-d H:i:s');
+                $order->processing_at = $order->processing_at ? $order->processing_at : date('Y-m-d H:i:s');
                 $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                     $sender = $event->sender; // Order
                     Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                     $sender->log("Moved to processing");
-                    // $sender->send(
-                    //     'admin_send_processing_order', 
-                    //     sprintf("[KingGems] - Processing Order - Order #%s", $sender->id), [
-                    //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
-                    // ]);
-
                 });
 
                 $order->save();

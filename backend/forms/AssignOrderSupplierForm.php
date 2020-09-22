@@ -85,6 +85,7 @@ class AssignOrderSupplierForm extends Model
             $order = $this->getOrder();
             $supplier = $this->getSupplier();
             $order->supplier_id = $this->supplier_id;
+            $order->distributed_at = $order->distributed_at ? $order->distributed_at : date('Y-m-d H:i:s');
             $order->save();
             $orderSupplier = new OrderSupplier([
                 'order_id' => $this->order_id,

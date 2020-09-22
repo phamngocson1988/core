@@ -9,6 +9,14 @@ use backend\behaviors\OrderNotificationBehavior;
  */
 class Order extends \common\models\Order
 {
+    public $distributed_time;
+    
+    public $approved_time;
+    public $waiting_time;
+
+
+
+
     public $processing_waiting_time;
     public $completed_waiting_time;
     const SCENARIO_CREATE = 'create';
