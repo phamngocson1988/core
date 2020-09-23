@@ -47,7 +47,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
         </div>
         <?php endif;?>
         <div class="price py-3">
-          <span class="price-value text-red mr-2" id="price">$<?=number_format($model->getPrice());?></span>
+          <span class="price-value text-red mr-2" id="price">$<?=number_format($model->getPrice(), 1);?></span>
           <span class="badge badge-danger" id="save"><?=sprintf("save %s", number_format($model->getSavedPrice()));?>%</span>
           <?php if (!Yii::$app->user->isGuest) : ?>
           <span class="btn-group-toggle bell" data-toggle="buttons" id="subscribe" data-subscribe="<?=Url::to(['user/subscribe']);?>" data-unsubscribe="<?=Url::to(['user/unsubscribe']);?>">
@@ -265,7 +265,8 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             <span class="text"><?=Html::encode($game->unit_name);?></span>
           </div>
           <div class="flex-fill price">
-            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($game->getPrice());?></span>
+            <?php $price = $game->getPrice();?>
+            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($price, (int)($price != round($price)));?></span>
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-center">

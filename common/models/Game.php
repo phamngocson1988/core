@@ -155,7 +155,7 @@ class Game extends ActiveRecord
          */
         // $price = ($cogs + $desired_profit) * (100 + $managing_cost_rate + $investing_cost_rate) / 100;
         $price = $cogs + $desired_profit;
-        return ceil($price);
+        return round($price, 1);
     }   
 
     public function getResellerPrice($level = User::RESELLER_LEVEL_1)
@@ -171,7 +171,7 @@ class Game extends ActiveRecord
          */
         // $price = ($cogs + $desired_profit) * (100 + $managing_cost_rate + $investing_cost_rate) / 100;
         $price = $cogs + $desired_profit;
-        $price = ceil($price);
+        $price = round($price, 1);
         if ($level == User::RESELLER_LEVEL_1) return $price + 4;
         if ($level == User::RESELLER_LEVEL_3) return $price - 1.5;
         return $price;
