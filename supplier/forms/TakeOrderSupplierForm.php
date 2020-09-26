@@ -90,6 +90,7 @@ class TakeOrderSupplierForm extends Model
             $order = $this->getOrder();
             $supplier = $this->getSupplier();
             $order->approved_at = $order->approved_at ? $order->approved_at : date('Y-m-d H:i:s');
+            $order->save();
             $order->log(sprintf("Nhà cung cấp %s chấp nhận đơn hàng", $supplier->user->name, $this->supplier_id));
 
             $transaction->commit();

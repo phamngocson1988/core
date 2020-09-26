@@ -863,4 +863,17 @@ class OrderController extends Controller
             return $this->asJson(['status' => false, 'errors' => $error]);
         }
     }
+
+    public function actionReport()
+    {
+        $this->view->params['main_menu_active'] = 'order.report';
+        $request = Yii::$app->request;
+        $model = new \backend\forms\ReportShopForm();
+        if ($model->load($request->post())) {
+            $fileName = date('YmdHis') . 'thong-ke-don-hang.xls';
+            $model->export($fileName);
+        }
+
+        return $this->render('report', ['search' => $model]);
+    }
 }

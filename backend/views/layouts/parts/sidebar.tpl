@@ -82,7 +82,7 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->cans(['sale_manager', 'customer_support'])}
+          {if $app->user->cans(['saler', 'customer_support'])}
           <li class="nav-item  ">
             <a href="{url route='/reseller/index'}" class="nav-link " code='reseller.index'>
             <span class="title">Danh sách reseller</span>
@@ -590,6 +590,11 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
+          <li class="nav-item  ">
+            <a href="{url route='/order/report'}" class="nav-link nav-toggle" code='order.report'>
+              <span class="title">Thống kê đơn hàng</span>
+            </a>
+          </li>
           {if $app->user->cans(['accounting', 'customer_support'])}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">

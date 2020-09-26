@@ -1,0 +1,285 @@
+<?php
+
+namespace backend\forms;
+
+use Yii;
+use yii\helpers\ArrayHelper;
+use backend\models\ReportOrder;
+use backend\models\Order;
+use backend\models\User;
+use backend\models\UserReseller;
+use backend\models\Game;
+use backend\models\OrderComplains;
+use backend\models\OrderSupplier;
+use common\models\Country;
+
+class ReportShopForm extends FetchShopForm
+{
+    public function rules()
+    {
+        return [
+            [['saler_id','supplier_id','orderteam_id','game_id','start_date','end_date','status'], 'safe']
+        ];
+    }
+
+    protected function createCommand()
+    {
+        $command = ReportOrder::find();
+        $table = Order::tableName();
+        $supplierTable = OrderSupplier::tableName();
+        $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
+        $command->where(["IN", "$supplierTable.status", [
+            OrderSupplier::STATUS_REQUEST,
+            OrderSupplier::STATUS_APPROVE,
+        ]]);
+
+        $now = date('Y-m-d H:i:s');
+        $command->select([
+            "$table.id", 
+            "$table.customer_id", 
+            "$table.customer_name", 
+            "$table.game_id",
+            "$table.game_title", 
+            "$table.payment_method", 
+            "$table.status", 
+            "$table.saler_id", 
+            "$table.orderteam_id", 
+            "$table.created_at",
+            "$supplierTable.supplier_id",
+            "$supplierTable.quantity", 
+            "$supplierTable.requested_at", 
+            "$supplierTable.approved_at", 
+            "$supplierTable.processing_at", 
+            "$supplierTable.completed_at", 
+            "$supplierTable.confirmed_at", 
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as approved_time",
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at) as pending_time",
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at) as processing_time", 
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.completed_at, $supplierTable.confirmed_at) as confirmed_time", 
+            "TIMESTAMPDIFF(MINUTE , $table.created_at, IFNULL($table.completed_at, '$now')) as total_completed_time", 
+            "TIMESTAMPDIFF(MINUTE , IFNULL($supplierTable.approved_at, '$now'), IFNULL($supplierTable.completed_at, '$now')) as completed_time", 
+            "TIMESTAMPDIFF(MINUTE , IFNULL($table.pending_at, '$now'), IFNULL($supplierTable.requested_at, '$now')) as distributed_time", 
+        ]);
+        
+        $condition = [
+            "$table.saler_id" => $this->saler_id,
+            "$table.orderteam_id" => $this->orderteam_id,
+            "$table.game_id" => $this->game_id,
+            "$table.status" => $this->status,
+            "$supplierTable.supplier_id" => $this->supplier_id
+        ];
+        $condition = array_filter($condition);
+        $command->andWhere($condition);
+
+        if ($this->start_date) {
+            $command->andWhere(['>=', "$table.created_at", $this->start_date]);
+        }
+        if ($this->end_date) {
+            $command->andWhere(['<=', "$table.created_at", $this->end_date]);
+        }
+        // die($command->createCommand()->getRawSql());
+        $this->_command = $command;
+    }
+
+    // Export function
+    public function export($fileName = null)
+    {
+        $command = $this->getCommand();
+        $fileName = ($fileName) ? $fileName : 'order-list' . date('His') . '.xlsx';
+        $titles = [
+            'A' => 'Mã đơn hàng',
+            'B' => 'Tên khách hàng',
+            'C' => 'Cấp bậc KH',
+            'D' => 'Quốc gia',
+            'E' => 'Shop game',
+            'F' => 'Phương thức nạp',
+            'G' => 'Số gói',
+            'H' => 'Cổng thanh toán',
+            'I' => 'Thời điểm tạo',
+            'J' => 'Thời điểm NCC nhận đơn',
+            'K' => 'Thời điểm hoàn thành',
+            'L' => 'Thời điểm xác nhận',
+            'M' => 'Tổng TG Hoàn Thành',
+            'N' => 'Tổng TG NCC hoàn thành',
+            'O' => 'TG duyệt',
+            'P' => 'TG phân phối',
+            'Q' => 'TG nhận đơn', 
+            'R' => 'TG login',    
+            'S' => 'TG nạp',  
+            'T' => 'TG xác nhận', 
+            'U' => 'Trạng thái',  
+            'V' => 'Sai thông tin',   
+            'W' => 'Nội dung sai thông tin',  
+            'X' => 'NV Hổ Trợ',   
+            'Y' => 'NV Phân Phối',    
+            'Z' => 'Nhà Cung Cấp'
+
+        ];
+        $totalRow = $command->count();
+        $startRow = 12;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);
+
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $heading = 'THỐNG KÊ ĐƠN HÀNG';
+        $customer = $this->getCustomer();
+        $saler = User::findOne($this->saler_id);
+        $orderteam = User::findOne($this->orderteam_id);
+        $game = Game::findOne($this->game_id);
+        $supplier = User::findOne($this->supplier_id);
+        $allPaymentMethods = $this->fetchPaymentMethods();
+        $paymentMethod = ArrayHelper::getValue($allPaymentMethods, $this->payment_method, '');
+        $header = [
+            // "A2:{$endColumn}2" => sprintf('Mã đơn hàng: %s', $this->q),
+            // "A3:{$endColumn}3" => sprintf('Khách hàng: %s', $customer ? $customer->name : ''),
+            // "A4:{$endColumn}4" => sprintf('Nhân viên sale: %s', $saler ? $saler->name : ''),
+            // "A5:{$endColumn}5" => sprintf('Nhân viên đơn hàng: %s', $orderteam ? $orderteam->name : ''),
+            // "A6:{$endColumn}6" => sprintf('Tên game: %s', $game ? $game->title : ''),
+            // "A7:{$endColumn}7" => sprintf('Nhà cung cấp: %s', ($supplier) ? $supplier->name : ''),
+            // "A8:{$endColumn}8" => sprintf('Ngày xác nhận từ: %s', ($this->confirmed_from) ? $this->confirmed_from : ''),
+            // "A9:{$endColumn}9" => sprintf('Ngày xác nhận đến: %s', ($this->confirmed_from) ? $this->confirmed_from : ''),
+            // "A10:{$endColumn}10" => sprintf('Phương thức thanh toán: %s', $paymentMethod),
+        ];
+        $footer = [
+            // "A$footerRow" => sprintf('Tổng: %s', $command->count()),
+            // "G$footerRow" => sprintf('Tổng: %s', number_format($command->sum('order.quantity'), 1)),
+        ];
+        
+        $data = [];
+        $command->orderBy(['order.created_at' => SORT_DESC]);
+        $models = $command->asArray()->all();
+        $orderIds = ArrayHelper::getColumn($models, 'id');
+        // Get Complain
+        $complains = OrderComplains::find()
+        ->where(['in', 'order_id', $orderIds])             
+        ->andWhere(['in', 'object_name', ['supplier', 'admin']])
+        ->groupBy(['order_id'])
+        ->select(['order_id', 'content'])
+        ->all();
+        $existStaffComplainIds = ArrayHelper::getColumn($complains, 'order_id');
+        $contentComplainIds = ArrayHelper::getColumn($complains, 'content');
+        // Get Reseller
+        $userIds = ArrayHelper::getColumn($models, 'customer_id');
+        $users = User::find()
+        ->where(['in', 'id', $userIds])
+        ->indexBy('id')->all();
+
+        // Get resellers 
+        $resellers = UserReseller::find()
+        ->where(['in', 'user_id', $userIds])
+        ->indexBy('user_id')->all();
+
+        // Get salers 
+        $salerIds = ArrayHelper::getColumn($models, 'saler_id');
+        $salers = User::find()
+        ->where(['in', 'id', $salerIds])
+        ->indexBy('id')->all();
+
+        // order team
+        $orderteamIds = ArrayHelper::getColumn($models, 'orderteam_id');
+        $orderteams = User::find()
+        ->where(['in', 'id', $orderteamIds])
+        ->indexBy('id')->all();
+
+        // Supplier
+        $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
+        $suppliers = User::find()->where(['in', 'id', $supplierIds])
+        ->indexBy('id')->all();
+
+        foreach ($models as $model) {
+            $user = $users[$model['customer_id']];
+            $reseller = ArrayHelper::getValue($resellers, $user->id);
+            $resellerLevel = $reseller ? $reseller->getLevelLabel() : '';
+
+            $country = Country::findOne($user->country_code);
+            $countryName = $country ? $country->country_name : '';
+            
+            $supplier = ArrayHelper::getValue($suppliers, $model['supplier_id']);
+            $saler = ArrayHelper::getValue($salers, $model['saler_id']);
+            $orderteam = ArrayHelper::getValue($orderteams, $model['orderteam_id']);
+            $data[] = [
+                '#' . $model['id'], 
+                $model['customer_name'],
+                $resellerLevel,
+                $countryName,
+                $model['game_title'], 
+                $model['payment_method'],
+                $model['quantity'],
+                $model['payment_method'],
+                $model['created_at'],
+                $model['approved_at'],
+                $model['completed_at'],
+                $model['confirmed_at'],
+                $model['total_completed_time'],
+                $model['completed_time'],
+                $model['approved_time'],
+                $model['distributed_time'],
+                $model['approved_time'],
+                $model['pending_time'],
+                $model['processing_time'],
+                $model['confirmed_time'],
+                $model['status'],
+                in_array($model['id'], $existStaffComplainIds) ? 'X' : '',
+                strip_tags(ArrayHelper::getValue($contentComplainIds, $model['id'], '')),
+                $saler ? $saler->getName() : '',
+                $orderteam ? $orderteam->getName() : '',
+                $supplier ? $supplier->getName() : '',
+            ];
+        }
+        $file = \Yii::createObject([
+            'class' => 'codemix\excelexport\ExcelFile',
+            'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
+            'sheets' => [
+                'Report by transaction' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    'heading' => $heading,
+                    'header' => $header,
+                    'footer' => $footer,
+                    'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+                    'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+                ],
+            ],
+        ]);
+        $file->send($fileName);
+    }
+}

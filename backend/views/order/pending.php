@@ -213,7 +213,7 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
                       <?=$model->getStatusLabel();?>
                     <?php endif;?>
                   </td>
-                  <td col-tag="supplier" <?=$showSupplier ? '' : 'class="hide"';?>>
+                  <td col-tag="supplier">
                     <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
                   </td>
                   <td col-tag="action">

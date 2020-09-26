@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\helpers\ArrayHelper;
 
 class UserReseller extends ActiveRecord
 {
@@ -48,5 +49,20 @@ class UserReseller extends ActiveRecord
     public function getManager()
     {
     	return $this->hasOne(User::className(), ['id' => 'manager_id']);
+    }
+
+    public static function getLevelList() 
+    {
+        return [
+            self::RESELLER_LEVEL_1 => 'Silver',
+            self::RESELLER_LEVEL_2 => 'Gold',
+            self::RESELLER_LEVEL_3 => 'Diamond',
+        ];
+    }
+
+    public function getLevelLabel() 
+    {
+        $list = self::getLevelList();
+        return ArrayHelper::getValue($list, $this->level, '');
     }
 }

@@ -202,23 +202,26 @@ class FetchOrderForm extends Model
     {
         $command = $this->getCommand();
         $fileName = ($fileName) ? $fileName : 'order-list' . date('His') . '.xlsx';
-        $titles = [
-            'A' => 'Mã đơn hàng',
-            'B' => 'Tên khách hàng',
-            'C' => 'Tên game',
-            'D' => 'Ngày xác nhận',
-            'E' => 'Cổng thanh toán',
-            'F' => 'Số lượng nạp',
-            'G' => 'Số gói',
-            'H' => 'Thời gian chờ nạp',
-            'I' => 'Tổng thời gian chờ',
-            'J' => 'Người bán hàng',
-            'K' => 'Nhân viên đơn hàng',
-            'L' => 'Trạng thái',
-            'M' => 'Ngày tạo',
-            'N' => 'Nhà cung cấp',
-            'O' => 'Sai thông tin',
+        $columnKeys = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
+        $columnTitles = [
+            'Mã đơn hàng',
+            'Tên khách hàng',
+            'Tên game',
+            'Ngày xác nhận',
+            'Cổng thanh toán',
+            'Số lượng nạp',
+            'Số gói',
+            'Thời điểm NCC nhận đơn',
+            'Thời gian chờ nạp',
+            'Tổng thời gian chờ',
+            'Người bán hàng',
+            'Nhân viên đơn hàng',
+            'Trạng thái',
+            'Ngày tạo',
+            'Nhà cung cấp',
+            'Sai thông tin',
         ];
+        $titles = array_combine($columnKeys, $columnTitles);
         $totalRow = $command->count();
         $startRow = 12;
         $endRow = $startRow + $totalRow;
@@ -280,6 +283,7 @@ class FetchOrderForm extends Model
                 $model->payment_method,
                 $model->total_unit,
                 $model->quantity,
+                $model->approved_at,
                 FormatConverter::countDuration($model->processing_waiting_time),
                 FormatConverter::countDuration($model->completed_waiting_time),
                 ($model->saler) ? $model->saler->name : '',

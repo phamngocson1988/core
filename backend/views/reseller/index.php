@@ -84,33 +84,33 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         </div>
         <?php ActiveForm::end()?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable">
+          <table class="table table-striped table-bordered table-hover table-checkable hidden" id="order-table">
             <thead>
               <tr>
-                <th> STT </th>
-                <th> Tên </th>
-                <th> Tên đăng nhập </th>
-                <th> Email </th>
-                <th> Phone </th>
-                <th> Level </th>
-                <th> Quản lý </th>
-                <th class="dt-center"> Tác vụ </th>
+                <th col-tag="id"> STT </th>
+                <th col-tag="name"> Tên </th>
+                <th col-tag="username"> Tên đăng nhập </th>
+                <th col-tag="email"> Email </th>
+                <th col-tag="phone"> Phone </th>
+                <th col-tag="level"> Level </th>
+                <th col-tag="manager"> Quản lý </th>
+                <th col-tag="action" class="dt-center"> Tác vụ </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="8" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $key => $model) :?>
                 <tr>
-                  <td><?=$key + $pages->offset + 1;?></td>
-                  <td style="vertical-align: middle;"><?=$model->user->name;?></td>
-                  <td style="vertical-align: middle;"><?=$model->user->username;?></td>
-                  <td style="vertical-align: middle;"><?=$model->user->email;?></td>
-                  <td style="vertical-align: middle;"><?=$model->user->phone;?></td>
-                  <td style="vertical-align: middle;"><?=$model->user->getResellerLabel();?></td>
-                  <td style="vertical-align: middle;"><?=($model->manager) ? $model->manager->name : '';?></td>
-                  <td style="vertical-align: middle;">
+                  <td col-tag="id"><?=$key + $pages->offset + 1;?></td>
+                  <td col-tag="name"><?=$model->user->name;?></td>
+                  <td col-tag="username"><?=$model->user->username;?></td>
+                  <td col-tag="email"><?=$model->user->email;?></td>
+                  <td col-tag="phone"><?=$model->user->phone;?></td>
+                  <td col-tag="level"><?=$model->user->getResellerLabel();?></td>
+                  <td col-tag="manager"><?=($model->manager) ? $model->manager->name : '';?></td>
+                  <td col-tag="action">
                     <?php if (Yii::$app->user->can('admin')) : ?>
                     <a class="btn btn-sm blue tooltips" target="_blank" href="<?=Url::to(['user/edit', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                     <?php endif;?>
@@ -166,7 +166,13 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
   </div>
 </div>
 <?php
+$hiddenColumns = [];
+if (Yii::$app->user->isRole('saler')) array_push($hiddenColumns, 'manager', 'action');
+$hiddenColumnString = implode(',', $hiddenColumns);
+
 $script = <<< JS
+var hiddenColumns = '$hiddenColumnString';
+initTable('#order-table', '#no-data', hiddenColumns);
 
 // delete
 $('.action-link').ajax_action({
