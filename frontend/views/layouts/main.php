@@ -53,7 +53,7 @@ AppAsset::register($this);
               }
               $items[] = ['label' => 'OPERATORS', 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'];
               $items[] = ['label' => 'BONUSES', 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'];
-              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/create'], 'active' => $main_menu_active == 'complain.index', 'visible' => !Yii::$app->user->isGuest,];
+              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'];
               $items[] = [
                 'label' => 'NEWS', 
                 'url' => ['news/index'], 
@@ -133,5 +133,16 @@ AppAsset::register($this);
   <?php require_once(Yii::$app->basePath . '/views/layouts/modal.php');?>
   <?php $this->endBody();?>
 </body>
+<?php
+$script = <<< JS
+var hash = window.location.hash.substr(1).trim();
+console.log(hash);
+if (hash == 'modalLogin') {
+  $('#modalLogin').modal();
+}
+JS;
+$this->registerJs($script);
+?>
+
 </html>
 <?php $this->endPage();?>

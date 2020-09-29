@@ -40,7 +40,15 @@ class ComplainController extends Controller
 
     public function actionIndex()
     {
-        return $this->redirect(Url::to(['complain/create']));
+        $command = Complain::find()->orderBy(['id' => SORT_DESC]);
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $complains = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+        return $this->render('index', [
+            'complains' => $complains,
+            'pages' => $pages,
+        ]);
     }
 
     public function actionCreate()

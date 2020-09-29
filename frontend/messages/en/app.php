@@ -55,4 +55,5 @@ return [
     'forgot_password?' => 'Forgot password?',
     'reset_password' => 'Reset password',
     'an_email_was_sent_to_reset_password' => 'An email was sent to your email.',
+    'leave_complain' => 'Leave complain',
 ];
