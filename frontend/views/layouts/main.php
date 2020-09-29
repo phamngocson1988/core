@@ -97,22 +97,27 @@ AppAsset::register($this);
     <footer class="footer">
       <div class="container d-flex flex-wrap">
         <div class="footer-col col-md-2 col-6">
-          <ul class="footer-menu">
-            <li><a href="#">OPERATORS</a></li>
-            <li><a href="#">GAME</a></li>
-            <li><a href="#">BONUSES</a></li>
-            <li><a href="#">COMPLAINT</a></li>
-            <li><a href="#">NEWS</a></li>
-            <li><a href="#">FORUM</a></li>
-          </ul>
+          <?=yii\widgets\Menu::widget([
+            'options' => ['class' => 'footer-menu'],
+            'items' => [
+              ['label' => 'OPERATORS', 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'],
+              ['label' => 'BONUSES', 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'],
+              ['label' => 'COMPLAINTS', 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'],
+              ['label' => 'NEWS', 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'],
+              ['label' => 'FORUM', 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'],
+            ]
+          ]);?>
         </div>
         <div class="footer-col col-md-2 col-6">
-          <ul class="footer-menu">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Advertise</a></li>
-            <li><a href="#">Corporate</a></li>
-            <li><a href="#">Contact Us</a></li>
-          </ul>
+          <?=yii\widgets\Menu::widget([
+            'options' => ['class' => 'footer-menu'],
+            'items' => [
+              ['label' => 'About Us', 'url' => ['site/about']],
+              ['label' => 'Advertise', 'url' => ['site/advertise']],
+              ['label' => 'Corporate', 'url' => ['site/corporate']],
+              ['label' => 'Contact Us', 'url' => ['site/contact']],
+            ]
+          ]);?>
         </div>
         <div class="footer-col col-12 col-md-7">
           <p class="footer-title">SIGN UP FOR LATEST PROMOTION OFFERS FORM OUR PARTNERS</p>
@@ -133,16 +138,5 @@ AppAsset::register($this);
   <?php require_once(Yii::$app->basePath . '/views/layouts/modal.php');?>
   <?php $this->endBody();?>
 </body>
-<?php
-$script = <<< JS
-var hash = window.location.hash.substr(1).trim();
-console.log(hash);
-if (hash == 'modalLogin') {
-  $('#modalLogin').modal();
-}
-JS;
-$this->registerJs($script);
-?>
-
 </html>
 <?php $this->endPage();?>

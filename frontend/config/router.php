@@ -15,6 +15,10 @@ return [
         'register' => 'site/register',
         'activate' => 'site/activate',
         'reset-password' => 'site/reset-password',
+        'about' => 'site/about',
+        'contact' => 'site/contact',
+        'advertise' => 'site/advertise',
+        'corporate' => 'site/corporate',
 
         'operator' => 'operator/index',
         'operator/<id:\d+>-<slug:[\w\-]+>' => 'operator/view',

@@ -153,4 +153,22 @@ class SiteController extends Controller
         Yii::$app->user->logout();
         return $this->goHome();
     }
+
+    public function actionAbout()
+    {
+        return $this->render('about');
+    }
+    public function actionAdvertise()
+    {
+        return $this->render('advertise');
+    }
+    public function actionCorporate()
+    {
+        return $this->render('corporate');
+    }
+    public function actionContact()
+    {
+        return $this->render('contact');
+    }
+
 }

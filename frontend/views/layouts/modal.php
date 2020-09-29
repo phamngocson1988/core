@@ -14,11 +14,11 @@ use yii\helpers\Url;
 ]);?>
 <?php
 $script = <<< JS
-// var hash = window.location.hash.substr(1).trim();
-// console.log(hash);
-// if (hash == 'modalSecure') {
-//   $('#modalSecure').modal();
-// }
+var hash = window.location.hash.substr(1).trim();
+console.log(hash);
+if (hash == 'modalLogin') {
+  $('#modalLogin').modal();
+}
 JS;
 $this->registerJs($script);
 ?>
