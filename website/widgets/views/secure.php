@@ -19,9 +19,9 @@ use yii\bootstrap\ActiveForm;
         <?php $form = ActiveForm::begin(['action' => $url, 'id' => $id]); ?>
           <?= $form->field($model, 'firstname')->textInput(['autofocus' => true, 'placeholder' => 'Your first name', 'required' => 'required'])->label(false) ?>
           <?= $form->field($model, 'lastname')->textInput(['placeholder' => 'Your last name', 'required' => 'required'])->label(false) ?>
-          <p>To protect the security of your account, please add your mobile number and request for the security
-            token. We will send you a text message with th 6-digit security token that you’ll need to enter below
-          </p>
+          <!-- <p>To protect the security of your account, please add your mobile number and request for the security
+            token. We will send you a text message with 6-digit security token that you’ll need to enter below
+          </p> 
           <?=$form->field($model, 'phone', [
             'template' => '{input}', 
             'options' => ['class' => 'input-group mb-3'],
@@ -39,7 +39,7 @@ use yii\bootstrap\ActiveForm;
               'inputOptions' => ['class' => 'form-control border-radius-3']
             ])->textInput()->label(false);?>
           </div>
-
+          -->
           <p style="color: #f7931f;">Your favourite games</p>
           <?= $form->field($model, 'favourite', ['template' => '{input}', 'options' => ['tag' => false]])->dropdownList($model->fetchGame(), ['multiple' => true, 'id' => 'multiple'])->label(false) ?>
           <p class="mt-3" style="color: #009345;">Contact apps</p>
