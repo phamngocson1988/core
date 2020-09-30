@@ -13,6 +13,7 @@ class EditProfileForm extends Model
     public $email;
     public $birthday;
     public $phone;
+    public $is_verify_email;
 
     public $social_facebook;
     public $social_twitter;
@@ -34,6 +35,8 @@ class EditProfileForm extends Model
 
             ['birthday', 'trim'],
             ['phone', 'trim'],
+
+            ['is_verify_email', 'safe'],
 
             [['social_facebook', 'social_twitter', 'social_whatsapp', 'social_telegram', 'social_wechat', 'social_other'], 'trim']
         ];
@@ -74,6 +77,7 @@ class EditProfileForm extends Model
         $this->email = $user->email;
         $this->birthday = $user->birthday;
         $this->phone = $user->phone;
+        $this->is_verify_email = $user->is_verify_email;
         $this->social_facebook = $user->social_facebook;
         $this->social_twitter = $user->social_twitter;
         $this->social_whatsapp = $user->social_whatsapp;

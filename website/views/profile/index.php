@@ -12,10 +12,10 @@ $this->title = 'User Profile';
         <div class="card-body">
           <h4 class="card-title"><?=sprintf("%s %s", $model->firstname, $model->lastname);?></h4>
           <p class="card-text">@<?=$model->username;?></p>
-          <?php if (!$model->phone) :?>
+          <?php if (!$model->is_verify_email) :?>
           <div class="text-red font-weight-bold mb-2"><img class="icon-btn" src="/images/icon/warning.svg"/>UNVERIFIED</div>
-          <a href="#" class="btn btn-orange" data-toggle="modal" data-target="#verify">
-            Click here to VERIFY 
+          <a href="#" class="btn btn-orange" data-toggle="modal" data-target="#verify-email">
+            Click here to VERIFY EMAIL
           </a>
           <?php else :?>
           <div class="text-red font-weight-bold mb-2"><img class="icon-btn mr-1" src="/images/icon/verrified.svg"/>VERIFIED</div>
@@ -112,5 +112,6 @@ $this->title = 'User Profile';
   </div>
 </div>
 
-<?=\website\widgets\VerifyAccountFormWidget::widget();?>
+<?php // website\widgets\VerifyAccountFormWidget::widget();?>
+<?=\website\widgets\VerifyEmailFormWidget::widget();?>
 <?=\website\widgets\ChangePasswordFormWidget::widget();?>

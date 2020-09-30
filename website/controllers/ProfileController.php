@@ -120,4 +120,39 @@ class ProfileController extends Controller
         return json_encode(['status' => false, 'errors' => $message]);
     }
 
+    public function actionRequestEmailCode()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        $user = Yii::$app->user->getIdentity();
+        $email = $user->email;
+        $model = new \website\forms\VerifyEmailForm(['email' => $email]);
+        $model->setScenario(\website\forms\VerifyEmailForm::SCENARIO_SEND);
+        if ($model->validate() && $model->send()) {
+            return json_encode(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        }
+    }
+
+    public function actionVerifyEmailCode()
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        $model = new \website\forms\VerifyEmailForm();
+        $model->setScenario(\website\forms\VerifyEmailForm::SCENARIO_VERIFY);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->verify()) {
+                return json_encode(['status' => true]);
+            }
+        }
+        $message = $model->getErrorSummary(true);
+        $message = reset($message);
+        return json_encode(['status' => false, 'errors' => $message]);
+    }
+
 }
