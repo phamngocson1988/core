@@ -70,7 +70,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
               'initValueText' => ($game) ? $game->title : '',
-              'options' => ['class' => 'form-control', 'name' => 'game_id'],
+              'options' => ['class' => 'form-control'],
               'pluginOptions' => [
                 'placeholder' => 'Chọn game',
                 'allowClear' => true,
@@ -85,9 +85,15 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 
             <?=$form->field($search, 'supplier_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control'],
-            ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
-          
+            ])->widget(kartik\select2\Select2::classname(), [
+              'data' => $search->fetchSuppliers(),
+              'options' => ['class' => 'form-control'],
+              'pluginOptions' => [
+                'placeholder' => 'Nhà cung cấp',
+                'allowClear' => true,
+              ]
+            ])->label('Nhà cung cấp')?>
+
             <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'bs-select form-control']
@@ -105,12 +111,18 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 Order::STATUS_PENDING => 'Pending',
                 Order::STATUS_PROCESSING => 'Processing',
                 Order::STATUS_COMPLETED => 'Completed',
-                Order::STATUS_CONFIRMED => 'Confirmed'
+                Order::STATUS_CONFIRMED => 'Confirmed',
+                Order::STATUS_CANCELLED => 'Cancelled',
             ])->label('Trạng thái');?>
+
+            <?=$form->field($search, 'date_time_type', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control'],
+            ])->dropDownList($search->fetchDateTimeType())->label('Lọc theo mốc thời gian');?>
 
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'id' => 'start_date']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -119,11 +131,11 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày tạo từ');?>
+            ])->label('Thời điểm đầu');?>
 
             <?=$form->field($search, 'end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'id' => 'end_date']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -133,7 +145,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày tạo đến');?>
+            ])->label('Thời điểm cuối');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">

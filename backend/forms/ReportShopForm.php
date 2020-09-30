@@ -4,7 +4,6 @@ namespace backend\forms;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use backend\models\ReportOrder;
 use backend\models\Order;
 use backend\models\User;
 use backend\models\UserReseller;
@@ -15,22 +14,31 @@ use common\models\Country;
 
 class ReportShopForm extends FetchShopForm
 {
+    public $date_time_type;
+
     public function rules()
     {
         return [
-            [['saler_id','supplier_id','orderteam_id','game_id','start_date','end_date','status'], 'safe']
+            [['saler_id','supplier_id','orderteam_id','game_id','start_date','end_date','status', 'date_time_type'], 'safe']
         ];
     }
 
     protected function createCommand()
     {
-        $command = ReportOrder::find();
+        $command = Order::find();
         $table = Order::tableName();
         $supplierTable = OrderSupplier::tableName();
-        $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
+
+        if ($this->supplier_id) {
+            $command->innerJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id AND $supplierTable.supplier_id = " . $this->supplier_id);
+        } else {
+            $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
+        }
         $command->where(["IN", "$supplierTable.status", [
-            OrderSupplier::STATUS_REQUEST,
             OrderSupplier::STATUS_APPROVE,
+            OrderSupplier::STATUS_PROCESSING,
+            OrderSupplier::STATUS_COMPLETED,
+            OrderSupplier::STATUS_CONFIRMED,
         ]]);
 
         $now = date('Y-m-d H:i:s');
@@ -45,6 +53,8 @@ class ReportShopForm extends FetchShopForm
             "$table.saler_id", 
             "$table.orderteam_id", 
             "$table.created_at",
+            "$table.completed_at as order_completed_at",
+            "$table.confirmed_at as order_confirmed_at",
             "$supplierTable.supplier_id",
             "$supplierTable.quantity", 
             "$supplierTable.requested_at", 
@@ -52,12 +62,12 @@ class ReportShopForm extends FetchShopForm
             "$supplierTable.processing_at", 
             "$supplierTable.completed_at", 
             "$supplierTable.confirmed_at", 
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as approved_time",
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at) as pending_time",
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at) as processing_time", 
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.completed_at, $supplierTable.confirmed_at) as confirmed_time", 
-            "TIMESTAMPDIFF(MINUTE , $table.created_at, IFNULL($table.completed_at, '$now')) as total_completed_time", 
-            "TIMESTAMPDIFF(MINUTE , IFNULL($supplierTable.approved_at, '$now'), IFNULL($supplierTable.completed_at, '$now')) as completed_time", 
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as supplier_approved_time",
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at) as supplier_pending_time",
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at) as supplier_processing_time", 
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.completed_at, $supplierTable.confirmed_at) as supplier_confirmed_time", 
+            "TIMESTAMPDIFF(MINUTE , $table.created_at, IFNULL($table.completed_at, '$now')) as order_completed_time", 
+            "TIMESTAMPDIFF(MINUTE , IFNULL($supplierTable.approved_at, '$now'), IFNULL($supplierTable.completed_at, '$now')) as supplier_completed_time", 
             "TIMESTAMPDIFF(MINUTE , IFNULL($table.pending_at, '$now'), IFNULL($supplierTable.requested_at, '$now')) as distributed_time", 
         ]);
         
@@ -66,16 +76,17 @@ class ReportShopForm extends FetchShopForm
             "$table.orderteam_id" => $this->orderteam_id,
             "$table.game_id" => $this->game_id,
             "$table.status" => $this->status,
-            "$supplierTable.supplier_id" => $this->supplier_id
         ];
         $condition = array_filter($condition);
         $command->andWhere($condition);
-
-        if ($this->start_date) {
-            $command->andWhere(['>=', "$table.created_at", $this->start_date]);
-        }
-        if ($this->end_date) {
-            $command->andWhere(['<=', "$table.created_at", $this->end_date]);
+        if ($this->date_time_type) {
+            $type = $this->date_time_type;
+            if ($this->start_date) {
+                $command->andWhere(['>=', "$table.$type", $this->start_date]);
+            }
+            if ($this->end_date) {
+                $command->andWhere(['<=', "$table.$type", $this->end_date]);
+            }
         }
         // die($command->createCommand()->getRawSql());
         $this->_command = $command;
@@ -116,7 +127,7 @@ class ReportShopForm extends FetchShopForm
 
         ];
         $totalRow = $command->count();
-        $startRow = 12;
+        $startRow = 3;
         $endRow = $startRow + $totalRow;
         $footerRow = $endRow + 1;
         $columns = array_keys($titles);
@@ -153,17 +164,21 @@ class ReportShopForm extends FetchShopForm
         
         $data = [];
         $command->orderBy(['order.created_at' => SORT_DESC]);
-        $models = $command->asArray()->all();
+        $models = $command->asArray()
+        ->indexBy(function ($row) use(&$index){
+           return ++$index;
+        })
+        ->all();
         $orderIds = ArrayHelper::getColumn($models, 'id');
         // Get Complain
         $complains = OrderComplains::find()
         ->where(['in', 'order_id', $orderIds])             
-        ->andWhere(['in', 'object_name', ['supplier', 'admin']])
+        ->andWhere(['is_customer' => OrderComplains::IS_NOT_CUSTOMER])
         ->groupBy(['order_id'])
         ->select(['order_id', 'content'])
         ->all();
         $existStaffComplainIds = ArrayHelper::getColumn($complains, 'order_id');
-        $contentComplainIds = ArrayHelper::getColumn($complains, 'content');
+        $contentComplainIds = ArrayHelper::map($complains, 'order_id', 'content');
         // Get Reseller
         $userIds = ArrayHelper::getColumn($models, 'customer_id');
         $users = User::find()
@@ -214,16 +229,16 @@ class ReportShopForm extends FetchShopForm
                 $model['payment_method'],
                 $model['created_at'],
                 $model['approved_at'],
-                $model['completed_at'],
-                $model['confirmed_at'],
-                $model['total_completed_time'],
-                $model['completed_time'],
-                $model['approved_time'],
+                $model['order_completed_at'],
+                $model['order_confirmed_at'],
+                $model['order_completed_time'],
+                $model['supplier_completed_time'],
+                $model['supplier_approved_time'],
                 $model['distributed_time'],
-                $model['approved_time'],
-                $model['pending_time'],
-                $model['processing_time'],
-                $model['confirmed_time'],
+                $model['supplier_approved_time'],
+                $model['supplier_pending_time'],
+                $model['supplier_processing_time'],
+                $model['supplier_confirmed_time'],
                 $model['status'],
                 in_array($model['id'], $existStaffComplainIds) ? 'X' : '',
                 strip_tags(ArrayHelper::getValue($contentComplainIds, $model['id'], '')),
@@ -281,5 +296,14 @@ class ReportShopForm extends FetchShopForm
             ],
         ]);
         $file->send($fileName);
+    }
+
+    public function fetchDateTimeType()
+    {
+        return [
+            'created_at' => 'Thời điểm tạo đơn',
+            'completed_at' => 'Thời điểm hoàn thành',
+            'confirmed_at' => 'Thời điểm confirmed'
+        ];
     }
 }
