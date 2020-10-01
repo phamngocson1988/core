@@ -56,7 +56,7 @@ class ReportShopForm extends FetchShopForm
             "$table.completed_at as order_completed_at",
             "$table.confirmed_at as order_confirmed_at",
             "$supplierTable.supplier_id",
-            "$supplierTable.quantity", 
+            "$supplierTable.doing", 
             "$supplierTable.requested_at", 
             "$supplierTable.approved_at", 
             "$supplierTable.processing_at", 
@@ -159,7 +159,7 @@ class ReportShopForm extends FetchShopForm
         ];
         $footer = [
             // "A$footerRow" => sprintf('Tổng: %s', $command->count()),
-            // "G$footerRow" => sprintf('Tổng: %s', number_format($command->sum('order.quantity'), 1)),
+            // "G$footerRow" => sprintf('Tổng: %s', number_format($command->sum('order.doing'), 1)),
         ];
         
         $data = [];
@@ -225,7 +225,7 @@ class ReportShopForm extends FetchShopForm
                 $countryName,
                 $model['game_title'], 
                 $model['payment_method'],
-                $model['quantity'],
+                $model['doing'],
                 $model['payment_method'],
                 $model['created_at'],
                 $model['approved_at'],
