@@ -64,7 +64,8 @@ class EditPostForm extends Model
             foreach ($cats as $cat) {
                 $cat->delete();
             }
-            foreach ((array)$this->category_ids as $categoryId) {
+            $categoryIds = array_filter((array)$this->category_ids);
+            foreach ($categoryIds as $categoryId) {
                 $postCat = new PostCategory();
                 $postCat->category_id = $categoryId;
                 $postCat->post_id = $post->id;

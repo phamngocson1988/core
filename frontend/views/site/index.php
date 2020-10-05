@@ -16,17 +16,18 @@ use common\components\helpers\TimeElapsed;
       </div>
       <div class="newest-slider js-newest-slider">
         <?php foreach ($newestOperators as $operator) :?>
+        <?php $operatorView = Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>
         <div class="newest-item">
           <div class="block-card">
-            <div class="card-image"><img class="object-fit" src="<?=$operator->getImageUrl('400x220');?>" alt="image"></div>
+            <a href="<?=$operatorView;?>"><div class="card-image"><img class="object-fit" src="<?=$operator->getImageUrl('400x220');?>" alt="image"></div></a>
             <div class="card-body">
               <div class="star-rating-group">
                 <div class="star-rating"><span style="width:<?=$operator->averageReviewPercent();?>%"></span></div><span class="star-rating-text"><?=number_format($operator->averageStar(), 1);?></span>
               </div>
-              <h3 class="card-title"><?=$operator->name;?></h3>
+              <h3 class="card-title"><a href="<?=$operatorView;?>" class="disabled-link"><?=$operator->name;?></a></h3>
               <p class="card-desc">
                 <?=$operator->product;?>
-              </p><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>">JOIN NOW</a>
+              </p><a class="btn btn-primary" href="<?=$operatorView;?>">JOIN NOW</a>
             </div>
           </div>
         </div>
@@ -95,6 +96,7 @@ use common\components\helpers\TimeElapsed;
           <?=\frontend\widgets\ComplainByOperatorWidget::widget();?>
         </div>
       </div>
+      <?=\frontend\widgets\AdsWidget::widget(['position' => \frontend\models\Ads::POSITION_BOTTOMHOME]);?>
     </div>
   </section>
 </main>

@@ -33,10 +33,11 @@ class FetchPostForm extends Model
         $command = Post::find();
 
         $postTable = Post::tableName();
-        $categoryTable = PostCategory::tableName();
-        $command->innerJoin($categoryTable, "{$postTable}.id = {$categoryTable}.post_id");
+        
         $command->select(["{$postTable}.*"]);
         if ($this->category_id) {
+            $categoryTable = PostCategory::tableName();
+            $command->leftJoin($categoryTable, "{$postTable}.id = {$categoryTable}.post_id");
             $command->where(["{$categoryTable}.category_id" => $this->category_id]);
         }
         if ($this->q) {

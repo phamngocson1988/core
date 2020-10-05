@@ -13,6 +13,7 @@ class Ads extends ActiveRecord
     const STATUS_ACTIVE = 10;
 
     const POSITION_TOPHOME = 'tophome';
+    const POSITION_BOTTOMHOME = 'bottomhome';
     const POSITION_BANNERHOME = 'bannerhome';
     const POSITION_SIDEBAR = 'sidebar';
 
@@ -50,7 +51,8 @@ class Ads extends ActiveRecord
     {
         return [
             self::POSITION_TOPHOME => 'Top home (1260x60)',
-            self::POSITION_BANNERHOME => 'Banner home (1260x100)',
+            self::POSITION_BOTTOMHOME => 'Bottom home (1260x100)',
+            self::POSITION_BANNERHOME => 'Banner home (600x400)',
             self::POSITION_SIDEBAR => 'Sidebar (220x700)',
         ];
     }

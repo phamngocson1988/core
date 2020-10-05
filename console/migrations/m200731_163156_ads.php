@@ -34,6 +34,12 @@ class m200731_163156_ads extends Migration
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
+
+        if ($this->db->driverName === 'mysql') {
+            $alterAdsPosition = "ALTER TABLE {{%ads}} MODIFY `position` ENUM('tophome', 'bottomhome', 'bannerhome', 'sidebar') NOT NULL DEFAULT 'tophome'";
+            $commandAlter = $this->db->createCommand($alterAdsPosition);
+            $commandAlter->execute();
+        }
     }
 
     public function down()
