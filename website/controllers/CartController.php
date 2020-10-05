@@ -4,6 +4,7 @@ namespace website\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -27,7 +28,7 @@ class CartController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk'],
+                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk', 'thankyou'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -104,7 +105,8 @@ class CartController extends Controller
         
         $checkoutForm = new \website\forms\OrderPaymentForm(['cart' => $cart]);
         if ($checkoutForm->load($request->post()) && $checkoutForm->validate() && $id = $checkoutForm->purchase()) {
-            return $this->redirect(['order/index', '#' => $id]);
+            // return $this->redirect(['order/index', '#' => $id]);
+            return $this->redirect(['cart/thankyou', 'id' => $id]);
         } else {
             Yii::$app->session->setFlash('error', $checkoutForm->getErrorSummary(true));
         }
@@ -182,5 +184,21 @@ class CartController extends Controller
             $error = reset($errors);
             return $this->asJson(['status' => false, 'errors' => $errors]);
         }
+    }
+
+    public function actionThankyou($id)
+    {
+        $order = Order::findOne($id);
+        if (!$order) {
+            throw new NotFoundHttpException('order does not exist.');
+        }
+        if ($order->customer_id != Yii::$app->user->id) {
+            throw new NotFoundHttpException('order does not exist.');
+        }
+        $viewUrl = Url::to(['order/index', '#' => $id]);
+        return $this->render('thankyou', [
+            'order' => $order,
+            'viewUrl' => $viewUrl
+        ]);
     }
 }
