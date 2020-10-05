@@ -37,7 +37,7 @@ $showSupplier = $user->can('orderteam') || $user->can('accounting');
 $showCustomer = $user->can('saler') || $user->can('accounting');
 
 $hiddenColumns = [];
-if (Yii::$app->user->isRole('orderteam')) array_push($hiddenColumns, 'customer', 'saler');
+if (Yii::$app->user->isRole(['orderteam', 'orderteam_manager'])) array_push($hiddenColumns, 'customer', 'saler');
 if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'orderteam', 'supplier');
 
 ?>

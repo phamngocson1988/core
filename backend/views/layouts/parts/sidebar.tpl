@@ -590,11 +590,13 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
+          {if $app->user->cans(['admin', 'accounting'])}
           <li class="nav-item  ">
             <a href="{url route='/order/report'}" class="nav-link nav-toggle" code='order.report'>
               <span class="title">Thống kê đơn hàng</span>
             </a>
           </li>
+          {/if}
           {if $app->user->cans(['accounting', 'customer_support'])}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">

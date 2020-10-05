@@ -328,7 +328,7 @@ if ($canSaler) $numColumn += 1;
 </div>
 <?php
 $hiddenColumns = [];
-if (Yii::$app->user->isRole('orderteam')) array_push($hiddenColumns, 'customer', 'saler');
+if (Yii::$app->user->isRole(['orderteam', 'orderteam_manager'])) array_push($hiddenColumns, 'customer', 'saler');
 if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'orderteam', 'supplier');
 $hiddenColumnString = implode(',', $hiddenColumns);
 $script = <<< JS
