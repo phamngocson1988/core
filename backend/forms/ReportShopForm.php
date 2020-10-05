@@ -241,7 +241,7 @@ class ReportShopForm extends FetchShopForm
                 $model['supplier_confirmed_time'],
                 $model['status'],
                 in_array($model['id'], $existStaffComplainIds) ? 'X' : '',
-                strip_tags(ArrayHelper::getValue($contentComplainIds, $model['id'], '')),
+                html_entity_decode(strip_tags(ArrayHelper::getValue($contentComplainIds, $model['id'], ''))),
                 $saler ? $saler->getName() : '',
                 $orderteam ? $orderteam->getName() : '',
                 $supplier ? $supplier->getName() : '',
