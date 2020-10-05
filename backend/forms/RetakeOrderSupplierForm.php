@@ -59,11 +59,11 @@ class RetakeOrderSupplierForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
-            $order = $this->getOrder();
-            if ($order->isProcessingOrder()) {
-                $order->status = Order::STATUS_PENDING;
-                $order->save();
-            }
+            // $order = $this->getOrder();
+            // if ($order->isProcessingOrder()) {
+            //     $order->status = Order::STATUS_PENDING;
+            //     $order->save();
+            // }
 
             $supplier = $this->getSupplier();
             $supplier->status = OrderSupplier::STATUS_RETAKE;

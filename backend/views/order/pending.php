@@ -267,7 +267,7 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <tfooter>
+            <tfoot>
               <td col-tag="id"><?=number_format($search->count());?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
@@ -281,7 +281,7 @@ if (Yii::$app->user->isRole('customer_support')) array_push($hiddenColumns, 'ord
               <td col-tag="status"></td>
               <td col-tag="supplier"></td>
               <td col-tag="action"></td>
-            </tfooter>
+            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

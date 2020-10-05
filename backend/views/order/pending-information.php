@@ -293,7 +293,7 @@ if ($canSaler) $numColumn += 1;
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <tfooter>
+            <tfoot>
               <td col-tag="id"><?=number_format($search->count());?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
@@ -308,7 +308,7 @@ if ($canSaler) $numColumn += 1;
               <td col-tag="orderteam"></td>
               <td col-tag="supplier"></td>
               <td col-tag="action" class="dt-center"></td>
-            </tfooter>
+            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

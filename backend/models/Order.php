@@ -13,6 +13,8 @@ class Order extends \common\models\Order
     
     public $approved_time;
     public $waiting_time;
+    public $login_time;
+    public $processing_time;
 
 
 

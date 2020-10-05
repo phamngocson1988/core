@@ -30,16 +30,15 @@ class Controller extends BaseController
 	        $verifyingTotal = $verifyingCommand->count();
             $this->view->params['new_verifying_order'] = $verifyingTotal ? $verifyingTotal : '';
 
+            $processingForm = new \backend\forms\FetchProcessingShopForm();
+	        $processingOrderTotal = $processingForm->count();
+			$this->view->params['processing_order'] = $processingOrderTotal ? $processingOrderTotal : '';
+
             // Show number of new cancelling orders
 			$cancellingCommand = Order::find()->where(['IN', 'status', [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING]]);
         	$cancellingCommand->andWhere(['request_cancel' => 1]);
 	        $cancellingTotal = $cancellingCommand->count();
             $this->view->params['cancelling_order'] = $cancellingTotal ? $cancellingTotal : '';
-
-            // Show number of new processing orders
-			$processingCommand = Order::find()->where(['status' => Order::STATUS_PROCESSING]);
-	        $processingTotal = $processingCommand->count();
-            $this->view->params['processing_order'] = $processingTotal ? $processingTotal : '';
 
             // Show number of new processing orders
 			$partialCommand = Order::find()->where(['status' => Order::STATUS_PARTIAL]);
