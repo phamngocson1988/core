@@ -73,6 +73,7 @@ class StopOrderForm extends Model
 
             $diff = $this->quantity - $order->doing_unit;
             $order->status = Order::STATUS_COMPLETED;
+            $order->completed_at = date('Y-m-d H:i:s');
             $order->doing_unit = $newQuantity;
             $order->quantity = $newQuantity;
             $order->sub_total_unit = $newSubUnit;
