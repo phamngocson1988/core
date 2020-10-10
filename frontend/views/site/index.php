@@ -86,7 +86,7 @@ use common\components\helpers\TimeElapsed;
                   <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
                   <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
                 </div>
-                <div class="complaint-desc"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id]);?>">READ MORE</a>
+                <div class="complaint-desc"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id, 'slug' => $complain->slug]);?>">READ MORE</a>
               </div>
             </div>
             <?php endforeach;?>

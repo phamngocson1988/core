@@ -66,7 +66,7 @@ use common\widgets\TinyMce;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control', 'multiple' => true],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropdownList($model->fetchCategory(), ['prompt' => Yii::t('app', 'choose_categories')]);?>
+                  ])->dropdownList($model->fetchCategory());?>
 
                   <?=$form->field($model, 'operator_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

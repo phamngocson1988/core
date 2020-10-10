@@ -13,7 +13,7 @@ use yii\helpers\Url;
           <?php if ($complains) : ?>
           <ul class="list-text">
             <?php foreach ($complains as $complain) :?>
-            <li><a href="<?=Url::to(['complain/view', 'id' => $complain->id]);?>"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></a></li>
+            <li><a href="<?=Url::to(['complain/view', 'id' => $complain->id, 'slug' => $complain->slug]);?>"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></a></li>
             <?php endforeach;?>
           </ul>
           <?php endif;?>

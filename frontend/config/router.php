@@ -34,6 +34,9 @@ return [
         'forum/topic/<id:\d+>-<slug:[\w\-]+>' => 'forum/topic',
         'forum/<id:\d+>-<slug:[\w\-]+>' => 'forum/category',
 
+        'complain' => 'complain/index',
+        'complain/operator/<id:\d+>-<slug:[\w\-]+>' => 'complain/operator',
+        'complain/<id:\d+>-<slug>' => 'complain/view',
 
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/dashboard' => 'manage/index',
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/<action>' => 'manage/<action>',

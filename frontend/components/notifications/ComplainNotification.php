@@ -144,7 +144,7 @@ class ComplainNotification extends Notification
             case self::NEW_RESPONSE_COMPLAIN:
             case self::NEW_COMPLAIN_PUBLISHED:
             case self::OPERATOR_RESPONSE:
-                return Url::to(['complain/view', 'id' => $complain->id]);
+                return Url::to(['complain/view', 'id' => $complain->id, 'slug' => $complain->slug]);
         }
     }
 
