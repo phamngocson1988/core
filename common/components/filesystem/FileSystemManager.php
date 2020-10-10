@@ -3,6 +3,7 @@ namespace common\components\filesystem;
 
 use yii\base\DynamicModel;
 use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 use Yii;
 
 class FileSystemManager extends DynamicModel
@@ -125,4 +126,27 @@ class FileSystemManager extends DynamicModel
         $fileModel->save();
         return $fileModel;
     } 
+
+    public function delete($fileModel)
+    {
+        $path = $this->getPath($fileModel);
+        $this->unlink($path);
+    }
+
+    protected function unlink($path) 
+    {
+        if (!is_dir($path)) {
+            echo sprintf("Delete File: %s\n", $path);
+            FileHelper::unlink($path);
+            $this->unlink(dirname($path));
+        } else {
+            $files = FileHelper::findFiles($path, ['recursive' => false]);
+            $directories = FileHelper::findDirectories($path, ['recursive' => false]);
+            if (!count($files) && !count($directories)) {
+                echo sprintf("Delete folder: %s\n", $path);
+                rmdir($path);
+                $this->unlink(dirname($path));
+            }
+        }
+    }
 }

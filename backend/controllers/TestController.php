@@ -141,6 +141,32 @@ class TestController extends Controller
     	
     }
 
+    public function actionDeleteImage()
+    {
+        $request = Yii::$app->request;
+        $created_at = $request->get('created_at');
+        if (!$created_at) die('missing created at');
+        $orders = Order::find()->where(['<', 'created_at', $created_at])
+        ->andWhere(['status' => [Order::STATUS_CONFIRMED, Order::STATUS_DELETED, Order::STATUS_CANCELLED]])
+        ->all();
+        $count = 0;
+        foreach ($orders as $order) {
+            $orderFiles = OrderFile::find()->where(['order_id' => $order->id])->all();
+            $count += count($orderFiles);
+            foreach ($orderFiles as $orderFile) {
+                try {
+                    echo sprintf("ORDER ID %s\n", $orderFile->order_id);
+                    $orderFile->delete();
+                } catch (\Exception $e) {
+                    echo sprintf("Error %s\n", $orderFile->order_id);
+                }
+                
+            }
+            
+        }
+        die('end -- ' . $count);
+    }
+
     public function actionFolderPermission()
     {
     	$filePath = Yii::getAlias('@common/uploads/images');

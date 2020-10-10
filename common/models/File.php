@@ -65,8 +65,7 @@ class File extends ActiveRecord
 
 	public function afterDelete()
     {
-        $path = $this->getPath();
-        @unlink($path);
+        Yii::$app->file->delete($this);
         parent::afterDelete();
     }
 }

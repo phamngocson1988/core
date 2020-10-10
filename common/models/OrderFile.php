@@ -41,7 +41,9 @@ class OrderFile extends ActiveRecord
     public function afterDelete()
     {
         $file = $this->file;
-        $file->delete();
+        if ($file) {
+            $file->delete();
+        }
         parent::afterDelete();
     }
 }

@@ -48,12 +48,22 @@ class LocalFileSystem extends Model implements FileSystemInterface
 
     public function getPath($fileModel)
     {
+        $filePath = implode(DIRECTORY_SEPARATOR, explode('/', Yii::getAlias($this->file_path)));
         if (!is_object($fileModel)) {
-            return sprintf("%s/%s",  Yii::getAlias($this->file_path), $fileModel);
+            // return sprintf("%s/%s",  Yii::getAlias($this->file_path), $fileModel);
+            return implode(DIRECTORY_SEPARATOR, [
+                $filePath, 
+                $fileModel
+            ]);
         } else {
-            $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
-            $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
-            return $filePath;
+            // $fileDir = sprintf("%s/%s", Yii::getAlias($this->file_path), $this->getRelativePath($fileModel->id));
+            // $filePath = sprintf("%s/%s.%s", $fileDir, $fileModel->getName(), $fileModel->getExtension());
+            // return $filePath;
+            return implode(DIRECTORY_SEPARATOR, [
+                $filePath, 
+                $this->getRelativePath($fileModel->id),
+                sprintf("%s.%s", $fileModel->getName(), $fileModel->getExtension())
+            ]);
         }
     }
 

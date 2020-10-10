@@ -36,7 +36,7 @@ use yii\helpers\Url;
                               </td>
                             </tr>
                             <tr bgcolor="#FFFFFF">
-                              <td style="padding-top:0px;padding-right:30px;padding-left:30px;padding-bottom:35px;border-left:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd">
+                              <td style="padding-top:10px;padding-right:30px;padding-left:30px;padding-bottom:35px;border-left:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd">
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                   <tbody>
                                     <?=$content;?>
