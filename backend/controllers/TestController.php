@@ -147,7 +147,7 @@ class TestController extends Controller
         $created_at = $request->get('created_at');
         if (!$created_at) die('missing created at');
         $orders = Order::find()->where(['<', 'created_at', $created_at])
-        ->andWhere(['status' => [Order::STATUS_CONFIRMED, Order::STATUS_DELETED, Order::STATUS_CANCELLED]])
+        ->andWhere(['status' => [Order::STATUS_CONFIRMED, Order::STATUS_COMPLETED, Order::STATUS_DELETED, Order::STATUS_CANCELLED]])
         ->all();
         $count = 0;
         foreach ($orders as $order) {

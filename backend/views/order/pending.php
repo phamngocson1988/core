@@ -267,7 +267,7 @@ if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) arra
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <tfoot>
+            <tfoot style="background-color: #999;">
               <td col-tag="id"><?=number_format($search->count());?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>

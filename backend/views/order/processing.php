@@ -210,7 +210,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="supplier">
                     <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
                   </td>
-                  <td>
+                  <td col-tag="action">
                     <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
 
                     <!-- Assign to supplier -->

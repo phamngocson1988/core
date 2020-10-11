@@ -293,7 +293,7 @@ if ($canSaler) $numColumn += 1;
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <tfoot>
+            <tfoot style="background-color: #999;">
               <td col-tag="id"><?=number_format($search->count());?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>

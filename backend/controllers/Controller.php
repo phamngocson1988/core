@@ -16,34 +16,36 @@ class Controller extends BaseController
 	public function beforeAction($action)
 	{
 		if (parent::beforeAction($action)) {
-			// Show number of new pending orders
-	        $pendingForm = new \backend\forms\FetchPendingShopForm();
-	        $newPendingOrderTotal = $pendingForm->count();
-			$this->view->params['new_pending_order'] = $newPendingOrderTotal ? $newPendingOrderTotal : '';
-
-	        $pendingInformationForm = new \backend\forms\FetchPendingInformationShopForm();
-	        $newPendingInfoOrderTotal = $pendingInformationForm->count();
-			$this->view->params['new_pending_info_order'] = $newPendingInfoOrderTotal ? $newPendingInfoOrderTotal : '';
-			
 			// Show number of new verifying orders
 			$verifyingCommand = Order::find()->where(['status' => Order::STATUS_VERIFYING]);
 	        $verifyingTotal = $verifyingCommand->count();
             $this->view->params['new_verifying_order'] = $verifyingTotal ? $verifyingTotal : '';
 
+			// Show number of new pending orders
+	        $pendingForm = new \backend\forms\FetchPendingShopForm();
+	        $newPendingOrderTotal = $pendingForm->count();
+			$this->view->params['new_pending_order'] = $newPendingOrderTotal ? $newPendingOrderTotal : '';
+
+			// Show number of new pending information orders
+	        $pendingInformationForm = new \backend\forms\FetchPendingInformationShopForm();
+	        $newPendingInfoOrderTotal = $pendingInformationForm->count();
+			$this->view->params['new_pending_info_order'] = $newPendingInfoOrderTotal ? $newPendingInfoOrderTotal : '';
+
+			// Show number of new processing orders
             $processingForm = new \backend\forms\FetchProcessingShopForm();
 	        $processingOrderTotal = $processingForm->count();
 			$this->view->params['processing_order'] = $processingOrderTotal ? $processingOrderTotal : '';
+
+			// Show number of new partial orders
+            $partialForm = new \backend\forms\FetchPartialShopForm();
+	        $partialOrderTotal = $partialForm->count();
+			$this->view->params['partial_order'] = $partialOrderTotal ? $partialOrderTotal : '';
 
             // Show number of new cancelling orders
 			$cancellingCommand = Order::find()->where(['IN', 'status', [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING]]);
         	$cancellingCommand->andWhere(['request_cancel' => 1]);
 	        $cancellingTotal = $cancellingCommand->count();
             $this->view->params['cancelling_order'] = $cancellingTotal ? $cancellingTotal : '';
-
-            // Show number of new processing orders
-			$partialCommand = Order::find()->where(['status' => Order::STATUS_PARTIAL]);
-	        $partialTotal = $partialCommand->count();
-            $this->view->params['partial_order'] = $partialTotal ? $partialTotal : '';
 
             // Show number of new affiliate request
 	        $command = Affiliate::find()->where(['status' => Affiliate::STATUS_DISABLE]);
