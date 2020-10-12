@@ -26,11 +26,11 @@ class FetchPendingInformationShopForm extends FetchShopForm
             OrderSupplier::STATUS_PROCESSING
         ];
         $orderStatus = [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_PARTIAL];
-
+        $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
         $now = date('Y-m-d H:i:s');
         $command->select([
             "$table.*", 
-            "TIMESTAMPDIFF(MINUTE , $table.pending_at, '$now') as waiting_time",
+            "TIMESTAMPDIFF(MINUTE , $table.created_at, '$now') as waiting_time",
         ]);
         
         $condition = [
@@ -40,20 +40,15 @@ class FetchPendingInformationShopForm extends FetchShopForm
             "$table.orderteam_id" => $this->orderteam_id,
             "$table.payment_method" => $this->payment_method,
             "$table.game_id" => $this->game_id,
+            "$table.state" => $this->state,
+            "$supplierTable.supplier_id" => $this->supplier_id,
+            "$table.status" => $orderStatus,
+            "$supplierTable.status" => $orderSupplierStatus,
         ];
         $condition = array_filter($condition);
         $command->where($condition);
-        $command->andWhere(["IN", "$table.status", $orderStatus]);
         $command->andWhere(["IS NOT", "$table.state", null]);
-        if ($this->state) {
-            $command->andWhere(["{$table}.state" => $this->state]);
-        }
-
-        if ($this->supplier_id) {
-            $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
-            $command->andWhere(["IN", "$supplierTable.status", $orderSupplierStatus]);
-            $command->andWhere(["{$supplierTable}.supplier_id" => $this->supplier_id]);
-        }
+        
         if ($this->start_date) {
             $command->andWhere(['>=', "$table.created_at", $this->start_date]);
         }
@@ -79,20 +74,6 @@ class FetchPendingInformationShopForm extends FetchShopForm
     {
         $table = Order::tableName();
         $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, '$now')");
-    }
-
-    public function getAverageDistributedTime()
-    {
-        $table = Order::tableName();
-        $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, IFNULL($table.distributed_at, '$now'))");
-    }
-
-    public function getAverageApprovedTime()
-    {
-        $table = Order::tableName();
-        $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , IFNULL($table.distributed_at, '$now'), IFNULL($table.approved_at, '$now'))");
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, '$now')");
     }
 }

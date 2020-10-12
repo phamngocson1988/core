@@ -398,10 +398,14 @@ class OrderController extends Controller
                             ->orderBy(['created_at' => SORT_DESC])
                             ->all();                    
 
+        // supplier name
+        $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
+        $suppliers = User::find()->where(['id' => $supplierIds])->indexBy('id')->all();
         return $this->render('completed', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
+            'suppliers' => $suppliers,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }

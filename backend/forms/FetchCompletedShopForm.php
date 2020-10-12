@@ -23,15 +23,25 @@ class FetchCompletedShopForm extends FetchShopForm
 
         $now = date('Y-m-d H:i:s');
         $command->select([
-            "$table.*", 
+            "$table.id", 
+            "$table.customer_id", 
+            "$table.customer_name", 
+            "$table.game_id", 
+            "$table.game_title", 
+            "$supplierTable.quantity as quantity", 
+            "$table.created_at", 
+            "$table.completed_at", 
+            "$table.state", 
+            "$table.status", 
+            "$table.saler_id", 
+            "$table.orderteam_id", 
+            "$supplierTable.supplier_id as supplier_id", 
             "TIMESTAMPDIFF(MINUTE , $table.created_at, $table.completed_at) as completed_time",
             "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at) as supplier_completed_time",
-            
-
-            "TIMESTAMPDIFF(MINUTE , $table.created_at, IFNULL($supplierTable.processing_at, '$now')) as waiting_time",
+            "TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at) as pending_time",
             "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as approved_time", 
-            "(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at) / $supplierTable.quantity) as login_time", 
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, '$now') as processing_time",
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at) as processing_time", 
+            
         ]);
         
         $condition = [
@@ -67,8 +77,8 @@ class FetchCompletedShopForm extends FetchShopForm
 
     public function getSumQuantity()
     {
-        $table = Order::tableName();
-        return $this->getCommand()->sum("$table.quantity");
+        $supplierTable = OrderSupplier::tableName();
+        return $this->getCommand()->sum("$supplierTable.quantity");
     }
 
     public function getAverageCompletedTime()
@@ -83,24 +93,22 @@ class FetchCompletedShopForm extends FetchShopForm
         return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)");
     }
 
-    public function getAverageWaitingTime()
+    public function getAveragePendingTime()
     {
         $table = Order::tableName();
-        $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, '$now')");
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at)");
     }
 
-    public function getAverageLoginTime()
+    public function getAverageApprovedTime()
     {
-        $table = Order::tableName();
-        $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , IFNULL($table.approved_at, $table.pending_at), $table.processing_at)");
+        $supplierTable = OrderSupplier::tableName();
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at)");
     }
 
     public function getAverageProcessingTime()
     {
-        $table = Order::tableName();
-        $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.processing_at, '$now')");
+        $supplierTable = OrderSupplier::tableName();
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at)");
     }
+
 }

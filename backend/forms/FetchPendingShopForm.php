@@ -18,13 +18,14 @@ class FetchPendingShopForm extends FetchShopForm
         $command = Order::find();
         $table = Order::tableName();
         $supplierTable = OrderSupplier::tableName();
+        $command->leftJoin($supplierTable, sprintf("%s.id = %s.order_id AND %s.status IN ('%s', '%s')", $table, $supplierTable, $supplierTable, OrderSupplier::STATUS_REQUEST, OrderSupplier::STATUS_APPROVE));
 
         $now = date('Y-m-d H:i:s');
         $command->select([
             "$table.*", 
-            "TIMESTAMPDIFF(MINUTE , $table.pending_at, '$now') as waiting_time",
-            "TIMESTAMPDIFF(MINUTE , $table.pending_at, IFNULL($table.distributed_at, '$now')) as distributed_time", 
-            "TIMESTAMPDIFF(MINUTE , IFNULL($table.distributed_at, '$now'), IFNULL($table.approved_at, '$now')) as approved_time",
+            "TIMESTAMPDIFF(MINUTE , $table.created_at, '$now') as waiting_time",
+            "TIMESTAMPDIFF(MINUTE , $table.pending_at, IFNULL($supplierTable.requested_at, '$now')) as distributed_time", 
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as approved_time",
         ]);
         
         $condition = [
@@ -35,19 +36,12 @@ class FetchPendingShopForm extends FetchShopForm
             "$table.payment_method" => $this->payment_method,
             "$table.game_id" => $this->game_id,
             "$table.status" => $this->status,
+            "{$supplierTable}.supplier_id" => $this->supplier_id,
         ];
         $condition = array_filter($condition);
         $command->where($condition);
         $command->andWhere(["IS", "$table.state", null]);
 
-        if ($this->supplier_id) {
-            $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
-            $command->andWhere(["IN", "$supplierTable.status", [
-                OrderSupplier::STATUS_REQUEST,
-                OrderSupplier::STATUS_APPROVE,
-            ]]);
-            $command->andWhere(["{$supplierTable}.supplier_id" => $this->supplier_id]);
-        }
         if ($this->start_date) {
             $command->andWhere(['>=', "$table.created_at", $this->start_date]);
         }
@@ -73,20 +67,20 @@ class FetchPendingShopForm extends FetchShopForm
     {
         $table = Order::tableName();
         $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, '$now')");
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, '$now')");
     }
 
     public function getAverageDistributedTime()
     {
         $table = Order::tableName();
+        $supplierTable = OrderSupplier::tableName();
         $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, IFNULL($table.distributed_at, '$now'))");
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, IFNULL($supplierTable.requested_at, '$now'))");
     }
 
     public function getAverageApprovedTime()
     {
-        $table = Order::tableName();
-        $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , IFNULL($table.distributed_at, '$now'), IFNULL($table.approved_at, '$now'))");
+        $supplierTable = OrderSupplier::tableName();
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at)");
     }
 }

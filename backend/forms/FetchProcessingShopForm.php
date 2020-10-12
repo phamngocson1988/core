@@ -18,12 +18,13 @@ class FetchProcessingShopForm extends FetchShopForm
         $command = Order::find();
         $table = Order::tableName();
         $supplierTable = OrderSupplier::tableName();
+        $command->leftJoin($supplierTable, sprintf("%s.id = %s.order_id AND %s.status IN ('%s', '%s', '%s')", $table, $supplierTable, $supplierTable, OrderSupplier::STATUS_REQUEST, OrderSupplier::STATUS_APPROVE, OrderSupplier::STATUS_PROCESSING));
 
         $now = date('Y-m-d H:i:s');
         $command->select([
             "$table.*", 
             "TIMESTAMPDIFF(MINUTE , $table.created_at, '$now') as waiting_time",
-            "TIMESTAMPDIFF(MINUTE , IFNULL($table.approved_at, $table.pending_at), $table.processing_at) as login_time", 
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at) as login_time", 
             "TIMESTAMPDIFF(MINUTE , $table.processing_at, '$now') as processing_time",
         ]);
         
@@ -35,20 +36,12 @@ class FetchProcessingShopForm extends FetchShopForm
             "$table.payment_method" => $this->payment_method,
             "$table.game_id" => $this->game_id,
             "$table.status" => $this->status,
+            "$supplierTable.supplier_id" => $this->supplier_id
         ];
         $condition = array_filter($condition);
         $command->where($condition);
         $command->andWhere(["IS", "$table.state", null]);
 
-        if ($this->supplier_id) {
-            $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
-            $command->andWhere(["IN", "$supplierTable.status", [
-                OrderSupplier::STATUS_REQUEST,
-                OrderSupplier::STATUS_APPROVE,
-                OrderSupplier::STATUS_PROCESSING,
-            ]]);
-            $command->andWhere(["{$supplierTable}.supplier_id" => $this->supplier_id]);
-        }
         if ($this->start_date) {
             $command->andWhere(['>=', "$table.created_at", $this->start_date]);
         }
@@ -79,9 +72,9 @@ class FetchProcessingShopForm extends FetchShopForm
 
     public function getAverageLoginTime()
     {
-        $table = Order::tableName();
+        $supplierTable = OrderSupplier::tableName();
         $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , IFNULL($table.approved_at, $table.pending_at), $table.processing_at)");
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at)");
     }
 
     public function getAverageProcessingTime()

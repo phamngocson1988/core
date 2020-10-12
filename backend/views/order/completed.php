@@ -169,7 +169,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th col-tag="id"> Mã đơn hàng </th>
                 <th col-tag="customer"> Tên khách hàng </th>
                 <th col-tag="game"> Shop Game </th>
-                <th col-tag="total_unit"> Số lượng nạp </th>
                 <th col-tag="quantity"> Số gói </th>
                 <th col-tag="created_at"> Thời điểm tạo </th>
                 <th col-tag="completed_at"> Thời điểm hoàn thành </th>
@@ -177,12 +176,10 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
 
                 <th col-tag="completed_time"> Tổng TG hoàn thành </th>
                 <th col-tag="supplier_completed_time"> Tổng TG NCC hoàn thành </th>
-                <th col-tag="waiting_time"> Tổng TG chờ </th>
-                <th col-tag="login_time"> TG login </th>
-                <th col-tag="processing_time"> TG nạp </th>
+                <th col-tag="pending_time">TG duyệt</th>
+                <th col-tag="approved_time">TG nhận đơn</th>
+                <th col-tag="processing_time">TG nạp</th>
                 
-
-
                 <th col-tag="saler"> Người bán hàng </th>
                 <th col-tag="orderteam"> Nhân viên đơn hàng </th>
                 <th col-tag="status"> Trạng thái </th>
@@ -195,65 +192,50 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <tr><td colspan="13" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
-              <?php $supplier = $model->supplier;?>
-              <?php $label = $model->getStatusLabel(null); ?>
               <tr>
                 <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td col-tag="customer"><?=$model->getCustomerName();?></td>
                 <td col-tag="game"><?=$model->game_title;?></td>
-                <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
                 <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
                 <td col-tag="created_at"> <?=$model->created_at;?> </td>
                 <td col-tag="completed_at"> <?=$model->completed_at;?> </td>
                 <td col-tag="completed_time" class="center"><?=number_format($model->completed_time);?></td>
                 <td col-tag="supplier_completed_time" class="center"><?=number_format($model->supplier_completed_time);?></td>
-                <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
-                <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
+                <td col-tag="pending_time" class="center"><?=number_format($model->pending_time);?></td>
+                <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
                 <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>
+
                 <td col-tag="saler"><?=($model->saler) ? $model->saler->name : '';?></td>
                 <td col-tag="orderteam"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
                 <td col-tag="status">
-                  <?php if ($model->hasCancelRequest()) :?>
-                  <span class="label label-danger">Có yêu cầu hủy</span>
-                  <?php endif;?>
-                  <?php if ($model->tooLongProcess()) :?>
-                  <span class="label label-warning">Xử lý chậm</span>
-                  <?php endif;?>
-
-                  <?php if ($supplier) :?>
-                    <?php if ($supplier->isRequest()) : ?>
-                  <span class="label label-warning"><?=$label;?></span>
-                    <?php else : ?>
-                  <span class="label label-success"><?=$label;?></span>
-                  <?php endif;?>
-                  <?php else :?>
-                    <?=$model->getStatusLabel();?>
-                  <?php endif;?>
+                  <?=$model->getStatusLabel();?>
                 </td>
                 <td col-tag="supplier">
-                  <?=($supplier) ? sprintf("%s", $supplier->user->name) : '';?>
+                  <?php
+                  $supplier = ArrayHelper::getValue($suppliers, $model->supplier_id);
+                  echo ($supplier) ? sprintf("%s", $supplier->getName()) : '';
+                  ?>
                 </td>
-                  <td>
-                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                    <?php if (Yii::$app->user->can('saler') || Yii::$app->user->can('accounting')) :?>
-                    <a href='<?=Url::to(['order/move-to-confirmed', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa move-to-confirm tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đơn hàng"><i class="fa fa-check-circle"></i></a>
-                    <?php endif;?>
-                  </td>
-                </tr>
-                <?php endforeach;?>
+                <td col-tag="action">
+                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  <?php if (Yii::$app->user->can('saler') || Yii::$app->user->can('accounting')) :?>
+                  <a href='<?=Url::to(['order/move-to-confirmed', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa move-to-confirm tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đơn hàng"><i class="fa fa-check-circle"></i></a>
+                  <?php endif;?>
+                </td>
+              </tr>
+              <?php endforeach;?>
             </tbody>
             <tfoot style="background-color: #999;">
               <td col-tag="id" class="center"><?=number_format($search->count());?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
-              <td col-tag="total_unit" class="center"></td>
               <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 1);?></td>
               <td col-tag="created_at"></td>
-                <td col-tag="completed_at"></td>
+              <td col-tag="completed_at"></td>
               <td col-tag="completed_time" class="center"><?=number_format($search->getAverageCompletedTime());?></td>
               <td col-tag="supplier_completed_time" class="center"><?=number_format($search->getAverageSupplierCompletedTime());?></td>
-              <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
-              <td col-tag="login_time" class="center"><?=number_format($search->getAverageLoginTime());?></td>
+              <td col-tag="pending_time" class="center"><?=number_format($search->getAveragePendingTime());?></td>
+              <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime());?></td>
               <td col-tag="approved_time" class="center"><?=number_format($search->getAverageProcessingTime());?></td>
               <td col-tag="saler"></td>
               <td col-tag="orderteam"></td>

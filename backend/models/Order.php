@@ -11,6 +11,7 @@ class Order extends \common\models\Order
 {
     public $distributed_time;
     
+    public $pending_time;
     public $approved_time;
     public $waiting_time;
     public $login_time;
