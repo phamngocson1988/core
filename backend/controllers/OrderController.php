@@ -343,7 +343,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionCompleted()
+    public function actionCompleted1()
     {
         $this->view->params['main_menu_active'] = 'order.completed';
         $request = Yii::$app->request;
@@ -360,6 +360,37 @@ class OrderController extends Controller
             'status' => Order::STATUS_COMPLETED,
         ];
         $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();                    
+
+        return $this->render('completed', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionCompleted()
+    {
+        $this->view->params['main_menu_active'] = 'order.completed';
+        $request = Yii::$app->request;
+        $data = [
+            'id' => $request->get('id'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'supplier_id' => $request->get('supplier_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'payment_method' => $request->get('payment_method'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+        ];
+        $form = new \backend\forms\FetchCompletedShopForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)

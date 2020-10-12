@@ -15,6 +15,8 @@ class Order extends \common\models\Order
     public $waiting_time;
     public $login_time;
     public $processing_time;
+    public $completed_time;
+    public $supplier_completed_time;
 
 
 
