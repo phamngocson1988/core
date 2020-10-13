@@ -69,9 +69,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['order/confirmed'])]);?>
         <div class="row margin-bottom-10">
             <?php $customer = $search->getCustomer();?>
-            <?=$form->field($search, 'id', [
+            <?=$form->field($search, 'q', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'q']
             ])->textInput()->label('Mã đơn hàng');?>
 
             <?=$form->field($search, 'customer_id', [
@@ -126,9 +126,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             ])->dropDownList($search->fetchSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp');?>
             <?php endif;?>
 
-            <?= $form->field($search, 'start_date', [
+            <?= $form->field($search, 'confirmed_from', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'confirmed_from', 'id' => 'confirmed_from']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -139,9 +139,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               ],
             ])->label('Ngày xác nhận từ');?>
 
-            <?=$form->field($search, 'end_date', [
+            <?=$form->field($search, 'confirmed_to', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'confirmed_to', 'id' => 'confirmed_to']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -169,103 +169,84 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th col-tag="id"> Mã đơn hàng </th>
-                <th col-tag="customer"> Tên khách hàng </th>
-                <th col-tag="game"> Shop Game </th>
-                <th col-tag="quantity"> Số gói </th>
-                <th col-tag="created_at"> Thời điểm tạo </th>
-                <th col-tag="completed_at"> Thời điểm hoàn thành </th>
-                <th col-tag="confirmed_at"> Thời điểm xác nhận </th>
-
-
-                <th col-tag="completed_time"> Tổng TG hoàn thành </th>
-                <th col-tag="supplier_completed_time"> Tổng TG NCC hoàn thành </th>
-                <th col-tag="pending_time">TG duyệt</th>
-                <th col-tag="approved_time">TG nhận đơn</th>
-                <th col-tag="processing_time">TG nạp</th>
-                <th col-tag="confirmed_time">TG xác nhận</th>
-                
-                <th col-tag="saler"> Người bán hàng </th>
-                <th col-tag="orderteam"> Nhân viên đơn hàng </th>
-                <th col-tag="status"> Trạng thái </th>
-                <th col-tag="supplier"> Nhà cung cấp </th>
-                <th col-tag="action" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+                <th> Mã đơn hàng </th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Tên khách hàng </th>
+                <th> Tên game </th>
+                <th> Ngày xác nhận </th>
+                <th <?=$showCustomer ? '' : 'class="hide"';?>> Cổng thanh toán </th>
+                <th> Số lượng nạp </th>
+                <th> Số gói </th>
+                <th class="hidden-xs"> Thời gian chờ nạp </th>
+                <th> Tổng thời gian chờ </th>
+                <th class="hidden-xs"> Người bán hàng </th>
+                <th class="hidden-xs"> Nhân viên đơn hàng </th>
+                <th> Trạng thái </th>
+                <th> Sai thông tin </th>
+                <th <?=$showSupplier ? '' : 'class="hide"';?>> Nhà cung cấp </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-              <tr><td colspan="13" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
-              <tr>
-                <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
-                <td col-tag="customer"><?=$model->getCustomerName();?></td>
-                <td col-tag="game"><?=$model->game_title;?></td>
-                <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
-                <td col-tag="created_at"> <?=$model->created_at;?> </td>
-                <td col-tag="completed_at"> <?=$model->completed_at;?> </td>
-                <td col-tag="confirmed_at"> <?=$model->confirmed_at;?> </td>
-                <td col-tag="completed_time" class="center"><?=number_format($model->completed_time);?></td>
-                <td col-tag="supplier_completed_time" class="center"><?=number_format($model->supplier_completed_time);?></td>
-                <td col-tag="pending_time" class="center"><?=number_format($model->pending_time);?></td>
-                <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
-                <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>
-                <td col-tag="confirmed_time" class="center"><?=number_format($model->confirmed_time);?></td>
-
-                <td col-tag="saler"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td col-tag="orderteam"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
-                <td col-tag="status">
-                  <?=$model->getStatusLabel();?>
-                </td>
-                <td col-tag="supplier">
-                  <?php
-                  $supplier = ArrayHelper::getValue($suppliers, $model->supplier_id);
-                  echo ($supplier) ? sprintf("%s", $supplier->getName()) : '';
-                  ?>
-                </td>
-                <td col-tag="action">
-                  <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
-                </td>
-              </tr>
-              <?php endforeach;?>
+                <tr><td colspan="15"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <tr>
+                  <td><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->getCustomerName();?></td>
+                  <td><?=$model->game_title;?></td>
+                  <td><?=$model->confirmed_at;?></td>
+                  <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->payment_method;?></td>
+                  <td><?=$model->total_unit;?></td>
+                  <td><?=$model->quantity;?></td>
+                  <td class="hidden-xs"><?=FormatConverter::countDuration($model->processing_waiting_time);?></td>
+                  <td><?=FormatConverter::countDuration($model->completed_waiting_time);?></td>
+                  <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
+                  <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td>
+                    <?=$model->getStatusLabel();?>
+                    <?php if ($model->hasCancelRequest()) :?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                    <?php endif;?>
+                    <?php if ($model->tooLongProcess()) :?>
+                    <span class="label label-warning">Xử lý chậm</span>
+                    <?php endif;?>
+                  </td>
+                  <td><?=in_array($model->id, $existStaffComplainIds) ? 'X' : '';?></td>
+                  <td <?=$showSupplier ? '' : 'class="hide"';?>>
+                    <?php
+                    $suppliers = $model->suppliers;
+                    foreach ($suppliers as $supplier) {
+                      echo sprintf('%s (%s)<br/>', $supplier->user->name, $supplier->doing);
+                    }
+                    ?>
+                  </td>
+                  <td>
+                    <a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
+                  </td>
+                </tr>
+                <?php endforeach;?>
             </tbody>
-            <?php $average = $search->getAverage();?>
-            <tfoot style="background-color: #999;">
-              <td col-tag="id" class="center"><?=number_format(ArrayHelper::getValue($average, 'count', 0));?></td>
-              <td col-tag="customer"></td>
-              <td col-tag="game"></td>
-              <td col-tag="quantity" class="center"><?=number_format(ArrayHelper::getValue($average, 'quantity', 0));?></td>
-              <td col-tag="created_at"></td>
-              <td col-tag="completed_at"></td>
-              <td col-tag="confirmed_at"></td>
-              <td col-tag="completed_time" class="center"><?=number_format(ArrayHelper::getValue($average, 'completed_time', 0));?></td>
-              <td col-tag="supplier_completed_time" class="center"><?=number_format(ArrayHelper::getValue($average, 'supplier_completed_time', 0));?></td>
-              <td col-tag="pending_time" class="center"><?=number_format(ArrayHelper::getValue($average, 'pending_time', 0));?></td>
-              <td col-tag="approved_time" class="center"><?=number_format(ArrayHelper::getValue($average, 'approved_time', 0));?></td>
-              <td col-tag="processing_time" class="center"><?=number_format(ArrayHelper::getValue($average, 'processing_time', 0));?></td>
-              <td col-tag="confirmed_time" class="center"><?=number_format(ArrayHelper::getValue($average, 'confirmed_time', 0));?></td>
-              <td col-tag="saler"></td>
-              <td col-tag="orderteam"></td>
-              <td col-tag="status"></td>
-              <td col-tag="supplier"></td>
-              <td col-tag="action"></td>
-            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
+        <?php if ($models) :?>
+        <?php $sumQuantity = $search->getCommand()->sum('order.quantity');?>
+        <?php $sumOrder = number_format($search->getCommand()->count());?>
+        <?php if ($sumQuantity) : ?>
+        <div class="row">
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-danger">Tổng đơn hàng: <?=$sumOrder;?></span>
+          </div>
+          <div class="col-md-2 col-sm-4">
+            <span class="label label-success">Tổng số gói: <?=number_format($sumQuantity, 1);?></span>
+          </div>
+         
+        </div>
+        <?php endif;?>
+        <?php endif;?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<?php 
-$hiddenColumns = [];
-if (Yii::$app->user->isRole(['orderteam', 'orderteam_manager'])) array_push($hiddenColumns, 'customer', 'saler');
-if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) array_push($hiddenColumns, 'orderteam', 'supplier');
-$hiddenColumnString = implode(',', $hiddenColumns);
-$script = <<< JS
-var hiddenColumns = '$hiddenColumnString';
-initTable('#order-table', '#no-data', hiddenColumns);
-JS;
-$this->registerJs($script);
-?>

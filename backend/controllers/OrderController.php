@@ -411,7 +411,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionConfirmed()
+    public function actionConfirmed1()
     {
         $this->view->params['main_menu_active'] = 'order.confirmed';
         $request = Yii::$app->request;
@@ -455,6 +455,59 @@ class OrderController extends Controller
             'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
+            'existStaffComplainIds' => $existStaffComplainIds
+        ]);
+    }
+
+    public function actionConfirmed()
+    {
+        $this->view->params['main_menu_active'] = 'order.confirmed';
+        $request = Yii::$app->request;
+        $mode = $request->get('mode');
+        $data = [
+            'id' => $request->get('id'),
+            'customer_id' => $request->get('customer_id'),
+            'saler_id' => $request->get('saler_id'),
+            'supplier_id' => $request->get('supplier_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'payment_method' => $request->get('payment_method'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+        ];
+        $form = new \backend\forms\FetchConfirmedShopForm($data);
+        // if ($mode === 'export') {
+        //     $fileName = date('YmdHis') . 'danh-don-hang-da-xac-nhan.xls';
+        //     return $form->export($fileName);
+        // }
+
+        $table = Order::tableName();
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(["$table.id" => SORT_DESC])
+                            ->all();       
+
+        // supplier name
+        $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
+        $suppliers = User::find()->where(['id' => $supplierIds])->indexBy('id')->all();
+
+        // Check admin/supplier message (required by Thinh (27/8) via chat)
+        $orderIds = ArrayHelper::getColumn($models, 'id');
+        $complains = OrderComplains::find()
+        ->where(['in', 'order_id', $orderIds])             
+        ->andWhere(['in', 'object_name', ['supplier', 'admin']])
+        ->groupBy(['order_id'])
+        ->select(['order_id'])
+        ->all();
+        $existStaffComplainIds = ArrayHelper::getColumn($complains, 'order_id');
+        return $this->render('confirmed', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+            'suppliers' => $suppliers,
             'existStaffComplainIds' => $existStaffComplainIds
         ]);
     }
