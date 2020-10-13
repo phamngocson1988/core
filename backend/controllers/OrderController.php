@@ -330,9 +330,10 @@ class OrderController extends Controller
         $command = $form->getCommand();
         $command->with('game');
         $pages = new Pagination(['totalCount' => $command->count()]);
+        $table = Order::tableName();
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
+                            ->orderBy(["$table.id" => SORT_DESC])
                             ->all();                 
 
         return $this->render('partial', [

@@ -170,7 +170,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th col-tag="id"> Mã đơn hàng </th>
                 <th col-tag="customer"> Tên khách hàng </th>
                 <th col-tag="game"> Shop Game </th>
-                <th col-tag="total_unit"> Số lượng nạp </th>
                 <th col-tag="quantity"> Số gói cần nạp </th>
                 <th col-tag="doing"> Số gói đã nạp </th>
                 <th col-tag="waiting_time"> Tổng TG chờ </th>
@@ -197,7 +196,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
-                  <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
                   <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
                   <td col-tag="doing" class="center"><?=number_format($model->doing_unit, 1);?></td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
@@ -249,7 +247,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="id" class="center"><?=number_format($search->count());?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
-              <td col-tag="total_unit" class="center"></td>
               <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 1);?></td>
               <td col-tag="doing" class="center"></td>
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>

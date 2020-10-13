@@ -28,7 +28,7 @@ class FetchCompletedShopForm extends FetchShopForm
             "$table.customer_name", 
             "$table.game_id", 
             "$table.game_title", 
-            "$supplierTable.quantity as quantity", 
+            "$supplierTable.doing as quantity", 
             "$table.created_at", 
             "$table.completed_at", 
             "$table.state", 

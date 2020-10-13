@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use backend\models\Game;
 use yii\widgets\ActiveForm;
 use common\components\helpers\FormatConverter;
@@ -130,7 +131,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
                   ---
                   <?php else :?>
-                  <?=number_format($model->number_supplier);?>
+                  <?=number_format(ArrayHelper::getValue($suppliers, $model->id, 0));?>
                   <?php endif;?>
                 </td>
                 <td class="center">

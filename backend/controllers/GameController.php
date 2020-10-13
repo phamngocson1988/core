@@ -59,6 +59,7 @@ class GameController extends Controller
                             ->limit($pages->limit)
                             ->all();
 
+        // orders
         $gameIds = array_column($models, 'id');
         $orders = Order::find()
         ->where(['in', 'game_id', $gameIds])
@@ -67,6 +68,15 @@ class GameController extends Controller
         ->groupBy(['game_id'])
         ->asArray()->all();
         $orders = array_column($orders, 'total', 'game_id');
+
+        // suppliers
+        $suppliers = SupplierGame::find()
+        ->where(['game_id' => $gameIds])
+        ->andWhere(['status' => SupplierGame::STATUS_ENABLED])
+        ->select(['game_id', 'COUNT(*) as total'])
+        ->groupBy(['game_id'])
+        ->asArray()->all();
+        $suppliers = array_column($suppliers, 'total', 'game_id');
 
         // statictis
         $visibleCount = Game::find()->where(['status' => Game::STATUS_VISIBLE])->count();
@@ -78,6 +88,7 @@ class GameController extends Controller
             'pages' => $pages,
             'search' => $form,
             'orders' => $orders,
+            'suppliers'=> $suppliers,
             'ref' => Url::to($request->getUrl(), true),
             'visibleCount' => $visibleCount,
             'invisibleCount' => $invisibleCount,
