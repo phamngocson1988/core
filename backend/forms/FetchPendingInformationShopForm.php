@@ -20,13 +20,9 @@ class FetchPendingInformationShopForm extends FetchShopForm
         $command = Order::find();
         $table = Order::tableName();
         $supplierTable = OrderSupplier::tableName();
-        $orderSupplierStatus = [
-            OrderSupplier::STATUS_REQUEST, 
-            OrderSupplier::STATUS_APPROVE, 
-            OrderSupplier::STATUS_PROCESSING
-        ];
         $orderStatus = [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_PARTIAL];
-        $command->leftJoin($supplierTable, "{$table}.id = {$supplierTable}.order_id");
+        $command->leftJoin($supplierTable, sprintf("%s.id = %s.order_id AND %s.status IN ('%s', '%s', '%s')", $table, $supplierTable, $supplierTable, OrderSupplier::STATUS_REQUEST, OrderSupplier::STATUS_APPROVE, OrderSupplier::STATUS_PROCESSING));
+
         $now = date('Y-m-d H:i:s');
         $command->select([
             "$table.*", 
@@ -43,7 +39,6 @@ class FetchPendingInformationShopForm extends FetchShopForm
             "$table.state" => $this->state,
             "$supplierTable.supplier_id" => $this->supplier_id,
             "$table.status" => $orderStatus,
-            "$supplierTable.status" => $orderSupplierStatus,
         ];
         $condition = array_filter($condition);
         $command->where($condition);
