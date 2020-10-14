@@ -66,6 +66,9 @@ class FetchCompletedShopForm extends FetchShopForm
         if ($this->end_date) {
             $command->andWhere(['<=', "$table.created_at", $this->end_date]);
         }
+        $command->indexBy(function ($row) use(&$index){
+           return ++$index;
+        });
         // die($command->createCommand()->getRawSql());
         $this->_command = $command;
     }
