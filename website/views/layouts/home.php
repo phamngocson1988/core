@@ -26,15 +26,15 @@ AppAsset::register($this);
     })(window,document,'script','dataLayer','GTM-PDQS4ZB');</script>
     <!-- End Google Tag Manager -->
     <script>
-    var hm = hm || [];
-    hm.push('setClient', 'HM-001068');
-    (function() {
-        var dom = document.createElement('script'); dom.type = 'text/javascript';
-        dom.async = true;
-        dom.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dashboard.heatmap.vn/js/tracker.production.js?id=1141db4bf944362a9fb7';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(dom, s);
-    })();
+    // var hm = hm || [];
+    // hm.push('setClient', 'HM-001068');
+    // (function() {
+    //     var dom = document.createElement('script'); dom.type = 'text/javascript';
+    //     dom.async = true;
+    //     dom.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dashboard.heatmap.vn/js/tracker.production.js?id=1141db4bf944362a9fb7';
+    //     var s = document.getElementsByTagName('script')[0];
+    //     s.parentNode.insertBefore(dom, s);
+    // })();
     </script>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

@@ -67,7 +67,7 @@ class WalletPaymentForm extends Model
             return;
         }
         $user = Yii::$app->user->getIdentity();
-        if (!$user->phone) {
+        if (!$user->is_verify_phone && !$user->is_verify_email) {
             $this->addError($attribute, 'Your account is not eligible for this promotion.');
             $this->_promotion = null;
             return;
