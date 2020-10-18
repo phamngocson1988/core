@@ -45,7 +45,12 @@ class FetchOrderForm extends Model
             } else {
                 $command->andWhere(['in', 'status', [Order::STATUS_PROCESSING, Order::STATUS_PARTIAL]]);
             }
+        } else {
+            $listStatus = array_keys($this->fetchStatusList());
+            $listStatus[] = Order::STATUS_PARTIAL;
+            $command->andWhere(['in', 'status', $listStatus]);
         }
+        // echo $command->createCommand()->getRawSql();
         $command->orderBy(['created_at' => SORT_DESC]);
         $this->_command = $command;
     }

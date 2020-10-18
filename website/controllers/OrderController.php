@@ -48,9 +48,6 @@ class OrderController extends Controller
             'start_date' => $request->get('start_date'),
     		'end_date' => $request->get('end_date'),
     	]);
-    	if (!$form->status) {
-    		$form->status = $form->fetchStatusList();
-    	}
     	$command = $form->getCommand();
     	$pages = new Pagination(['totalCount' => $command->count()]);
         $orders = $command->offset($pages->offset)->limit($pages->limit)->all();

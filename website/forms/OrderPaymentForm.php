@@ -135,6 +135,7 @@ class OrderPaymentForm extends Model
             // Item detail
             $order->game_id = $cartItem->id;
             $order->game_title = $cartItem->getLabel();
+            $order->original_quantity = $cartItem->quantity;
             $order->quantity = $cartItem->quantity;
             $order->unit_name = $cartItem->getUnitName();
             $order->sub_total_unit = $subtotalUnit;

@@ -28,6 +28,7 @@ class m181217_033141_create_order_table extends Migration
             'rate_usd' => $this->float()->defaultValue(22000),
             'price' => $this->float()->defaultValue(0),
             'cogs_price' => $this->float(1)->defaultValue(0),
+            'original_quantity' => $this->float(1),
             'quantity' => $this->float(1)->notNull()->defaultValue(1),
             'sub_total_price' => $this->float()->defaultValue(0),
             'total_discount' => $this->float()->defaultValue(0),

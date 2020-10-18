@@ -1,5 +1,6 @@
 <?php
 use common\components\helpers\FormatConverter;
+use common\components\helpers\StringHelper;
 use website\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
@@ -45,8 +46,8 @@ $checkNewMessageUrl = Url::to(['order/check-new-message', 'ids' => $orderIds])
             <span class="date-time"><?=FormatConverter::convertToDate(strtotime($order->created_at), 'd-m-Y H:i');?></span>
           </th>
           <td class="text-center"><?=$order->game_title;?></td>
-          <td class="text-center"><span class="text-red">$<?=number_format($order->total_price, 1);?></span></td>
-          <td class="text-center"><?=number_format($order->quantity, 1);?></td>
+          <td class="text-center"><span class="text-red">$<?=StringHelper::numberFormat($order->total_price, 2);?></span></td>
+          <td class="text-center"><?=StringHelper::numberFormat($order->quantity, 2);?></td>
           <td class="text-center"><span class="text-red"><?=number_format($order->total_unit);?> <?=$order->unit_name;?></span></td>
           <td class="text-center text-capitalize"><?=$order->getStatusLabel();?></td>
           <td class="text-center">
@@ -135,8 +136,8 @@ $checkNewMessageUrl = Url::to(['order/check-new-message', 'ids' => $orderIds])
             </div>        
           </th>
           <td class="text-center"><?=$order->game_title;?></td>
-          <td class="text-center"><span class="text-red">$<?=number_format($order->total_price, 1);?></span></td>
-          <td class="text-center"><?=number_format($order->quantity, 1);?></td>
+          <td class="text-center"><span class="text-red">$<?=StringHelper::numberFormat($order->total_price, 2);?></span></td>
+          <td class="text-center"><?=StringHelper::numberFormat($order->quantity, 2);?> / <?=StringHelper::numberFormat($order->original_quantity, 2);?></td>
           <td class="text-center"><span class="text-red"><?=sprintf("%s %s", number_format($order->total_unit), $order->unit_name);?></span></td>
           <td class="text-center">
             <?=$order->getStatusLabel();?>

@@ -53,4 +53,10 @@ class StringHelper extends BaseStringHelper
 
         return $text;
     }
+
+    public static function numberFormat($num, $maxDecimal = 0) 
+    {
+        $decimals = ( (int) $num != $num ) ? (strlen($num) - strpos($num, '.')) - 1 : 0;
+        return number_format($num, min($maxDecimal, $decimals));
+    }
 }
