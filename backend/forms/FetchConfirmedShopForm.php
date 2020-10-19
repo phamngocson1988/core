@@ -59,7 +59,7 @@ class FetchConfirmedShopForm extends FetchShopForm
         ];
         $condition = array_filter($condition);
         $command->where($condition);
-        $command->andWhere(["IS", "$table.state", null]);
+        // $command->andWhere(["IS", "$table.state", null]);
 
         if ($this->start_date) {
             $command->andWhere(['>=', "$table.confirmed_at", $this->start_date]);

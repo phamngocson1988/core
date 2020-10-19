@@ -7,41 +7,31 @@ use yii\helpers\ArrayHelper;
 use backend\models\Order;
 use backend\models\OrderSupplier;
 
-class FetchCompletedShopForm extends FetchShopForm
+class FetchCancelShopForm extends FetchShopForm
 {
-    public function init() 
-    {
-        $this->status = Order::STATUS_COMPLETED;
-    }
     protected function createCommand()
     {
         $command = Order::find();
         $table = Order::tableName();
-        $supplierTable = OrderSupplier::tableName();
-
-        $command->leftJoin($supplierTable, sprintf("%s.id = %s.order_id AND %s.status IN ('%s')", $table, $supplierTable, $supplierTable, OrderSupplier::STATUS_COMPLETED));
 
         $now = date('Y-m-d H:i:s');
         $command->select([
             "$table.id", 
             "$table.customer_id", 
-            "$table.customer_name", 
+            "$table.customer_name",
+            "$table.quantity",
+            "$table.doing_unit", 
             "$table.game_id", 
             "$table.game_title", 
-            "$supplierTable.doing as quantity", 
             "$table.created_at", 
             "$table.completed_at", 
             "$table.state", 
             "$table.status", 
             "$table.saler_id", 
             "$table.orderteam_id", 
-            "$supplierTable.supplier_id as supplier_id", 
-            "TIMESTAMPDIFF(MINUTE , $table.created_at, $table.completed_at) as completed_time",
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at) as supplier_completed_time",
-            "TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at) as pending_time",
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as approved_time", 
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at) as processing_time", 
-            
+            "$table.request_cancel_description",
+            "$table.request_cancel_time",
+            "$table.request_cancel",
         ]);
         
         $condition = [
@@ -51,15 +41,19 @@ class FetchCompletedShopForm extends FetchShopForm
             "$table.orderteam_id" => $this->orderteam_id,
             "$table.payment_method" => $this->payment_method,
             "$table.game_id" => $this->game_id,
-            "$table.status" => $this->status,
         ];
         $condition = array_filter($condition);
         $command->where($condition);
-        // $command->andWhere(["IS", "$table.state", null]);
+        $command->andWhere(['NOT IN', "$table.status", [
+            Order::STATUS_COMPLETED,
+            Order::STATUS_CONFIRMED,
+            Order::STATUS_DELETED,
+        ]]);
+        $command->andWhere(['OR',
+            ["$table.status" => Order::STATUS_CANCELLED],
+            ["$table.request_cancel" => 1]
+        ]);
 
-        if ($this->supplier_id) {
-            $command->andWhere(["{$supplierTable}.supplier_id" => $this->supplier_id]);
-        }
         if ($this->start_date) {
             $command->andWhere(['>=', "$table.created_at", $this->start_date]);
         }
@@ -80,8 +74,8 @@ class FetchCompletedShopForm extends FetchShopForm
 
     public function getSumQuantity()
     {
-        $supplierTable = OrderSupplier::tableName();
-        return $this->getCommand()->sum("$supplierTable.quantity");
+        $table = Order::tableName();
+        return $this->getCommand()->sum("$table.quantity");
     }
 
     public function getAverageCompletedTime()
@@ -112,6 +106,20 @@ class FetchCompletedShopForm extends FetchShopForm
     {
         $supplierTable = OrderSupplier::tableName();
         return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at)");
+    }
+
+    public function getAverageWaitingTime()
+    {
+        $table = Order::tableName();
+        $now = date('Y-m-d H:i:s');
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, IFNULL($table.processing_at, '$now'))");
+    }
+
+    public function getAverageDistributedTime()
+    {
+        $table = Order::tableName();
+        $now = date('Y-m-d H:i:s');
+        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, IFNULL($table.distributed_at, '$now'))");
     }
 
 }
