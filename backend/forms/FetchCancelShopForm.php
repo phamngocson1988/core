@@ -72,6 +72,19 @@ class FetchCancelShopForm extends FetchShopForm
         return $this->getCommand()->count();
     }
 
+    public function countCancelling() 
+    {
+        $table = Order::tableName();
+        $command = Order::find()->where(["$table.request_cancel" => 1]);
+        $command->andWhere(['NOT IN', "$table.status", [
+            Order::STATUS_COMPLETED,
+            Order::STATUS_CONFIRMED,
+            Order::STATUS_DELETED,
+            Order::STATUS_CANCELLED
+        ]]);
+        return $command->count();
+    }
+
     public function getSumQuantity()
     {
         $table = Order::tableName();

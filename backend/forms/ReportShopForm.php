@@ -127,7 +127,7 @@ class ReportShopForm extends FetchShopForm
 
         ];
         $totalRow = $command->count();
-        $startRow = 3;
+        $startRow = 4;
         $endRow = $startRow + $totalRow;
         $footerRow = $endRow + 1;
         $columns = array_keys($titles);
@@ -138,7 +138,7 @@ class ReportShopForm extends FetchShopForm
         $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
         $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
 
-        $heading = 'THỐNG KÊ ĐƠN HÀNG';
+        // $heading = 'THỐNG KÊ ĐƠN HÀNG';
         $customer = $this->getCustomer();
         $saler = User::findOne($this->saler_id);
         $orderteam = User::findOne($this->orderteam_id);
@@ -147,7 +147,8 @@ class ReportShopForm extends FetchShopForm
         $allPaymentMethods = $this->fetchPaymentMethods();
         $paymentMethod = ArrayHelper::getValue($allPaymentMethods, $this->payment_method, '');
         $header = [
-            // "A2:{$endColumn}2" => sprintf('Mã đơn hàng: %s', $this->q),
+            "A1:{$endColumn}1" => sprintf('THỐNG KÊ ĐƠN HÀNG'),
+            "A2:{$endColumn}2" => sprintf('Thời gian thống kê: %s đến %s', $this->start_date, $this->end_date),
             // "A3:{$endColumn}3" => sprintf('Khách hàng: %s', $customer ? $customer->name : ''),
             // "A4:{$endColumn}4" => sprintf('Nhân viên sale: %s', $saler ? $saler->name : ''),
             // "A5:{$endColumn}5" => sprintf('Nhân viên đơn hàng: %s', $orderteam ? $orderteam->name : ''),
@@ -173,7 +174,7 @@ class ReportShopForm extends FetchShopForm
         // Get Complain
         $complains = OrderComplains::find()
         ->where(['in', 'order_id', $orderIds])             
-        ->andWhere(['is_customer' => OrderComplains::IS_NOT_CUSTOMER])
+        ->andWhere(['in', 'object_name', [OrderComplains::OBJECT_NAME_ADMIN, OrderComplains::OBJECT_NAME_SUPPLIER]])
         ->groupBy(['order_id'])
         ->select(['order_id', 'content'])
         ->all();
@@ -253,7 +254,7 @@ class ReportShopForm extends FetchShopForm
             'sheets' => [
                 'Report by transaction' => [
                     'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
-                    'heading' => $heading,
+                    // 'heading' => $heading,
                     'header' => $header,
                     'footer' => $footer,
                     'data' => $data,

@@ -556,6 +556,7 @@
           <li class="nav-item  ">
             <a href="{url route='/order/cancel'}" class="nav-link " code='order.cancel'>
             <span class="title">Đơn hàng cancel</span>
+            <span class="badge badge-success">{$this->params['cancelling_order']}</span>
             </a>
           </li>
           {if $app->user->can('sale_manager')}

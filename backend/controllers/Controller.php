@@ -42,9 +42,8 @@ class Controller extends BaseController
 			$this->view->params['partial_order'] = $partialOrderTotal ? $partialOrderTotal : '';
 
             // Show number of new cancelling orders
-			$cancellingCommand = Order::find()->where(['IN', 'status', [Order::STATUS_VERIFYING, Order::STATUS_PENDING, Order::STATUS_PROCESSING]]);
-        	$cancellingCommand->andWhere(['request_cancel' => 1]);
-	        $cancellingTotal = $cancellingCommand->count();
+			$cancellingCommand = new \backend\forms\FetchCancelShopForm();
+	        $cancellingTotal = $cancellingCommand->countCancelling();
             $this->view->params['cancelling_order'] = $cancellingTotal ? $cancellingTotal : '';
 
             // Show number of new affiliate request
