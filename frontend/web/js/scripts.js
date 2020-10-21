@@ -16,6 +16,7 @@ app.init = function () {
   app.fileUpload();
   app.showMore();
   app.range();
+  app.language();
 };
 
 app.isMobile = function () {
@@ -424,6 +425,22 @@ app.fileUpload = function () {
           .find('.name')
           .text('');
       });
+  });
+};
+
+app.language = function () {
+  $('.js-button-language').click(function () {
+    $('.js-dropdown-language').fadeToggle();
+  });
+  $(document).click(function (event) {
+    if (
+      !$(event.target).closest('.js-button-language, .js-dropdown-language')
+        .length
+    ) {
+      $('body')
+        .find('.js-dropdown-language')
+        .removeAttr('style');
+    }
   });
 };
 

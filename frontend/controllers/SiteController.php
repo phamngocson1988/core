@@ -154,6 +154,13 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    public function actionLanguage($language)
+    {
+        $language = in_array($language, array_keys(Yii::$app->params['languages'])) ? $language : 'en-US';
+        Yii::$app->session->set('language', $language);
+        return $this->asJson(['result' => true, 'language' => Yii::$app->session->get('language')]);
+    }
+
     public function actionAbout()
     {
         return $this->render('about');

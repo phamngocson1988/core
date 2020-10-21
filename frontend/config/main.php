@@ -73,7 +73,6 @@ return [
                     'sourceLanguage' => 'en-US',
                     'fileMap' => [
                         'app' => 'app.php',
-                        'app/error' => 'error.php',
                     ],
                 ],
             ],
@@ -93,4 +92,7 @@ return [
         ],
     ],
     'params' => $params,
+    'on beforeRequest' => function ($event) {
+        Yii::$app->language = Yii::$app->session->get('language', 'en-US');
+    },
 ];

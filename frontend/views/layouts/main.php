@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use frontend\assets\AppAsset;
 use frontend\components\toastr\NotificationFlash;
 use webzop\notifications\widgets\Notifications;
@@ -87,7 +88,19 @@ AppAsset::register($this);
           <?=\frontend\components\notifications\Notifications::widget();?>
           <?=\frontend\widgets\ProfileMenuWidget::widget();?>
           <?php endif;?>
-          <div class="header-language"><a class="trans" href="#"><span>VI</span></a></div>
+          <div class="header-language">
+            <div class="button-language js-button-language"><span><?php
+            $currentLanguageData = ArrayHelper::getValue(Yii::$app->params['languages'], Yii::$app->language);
+            echo $currentLanguageData ? $currentLanguageData['short'] : 'EN';
+            ?></span></div>
+            <div class="dropdown-language js-dropdown-language">
+              <ul class="list-language">
+                <?php foreach (Yii::$app->params['languages'] as $language => $languageData) : ?>
+                <li><a href="<?=Url::to(['site/language', 'language' => $language]);?>"><span class="flag"><img src="/img/common/<?=$language;?>.png" alt="image"></span><span class="text"><?=$languageData['title'];?></span></a></li>
+                <?php endforeach;?>
+              </ul>
+            </div>
+          </div>
         </div>
         <div class="btn-menu" id="btn-menu"><span></span><span></span><span></span></div>
       </div>
@@ -138,5 +151,23 @@ AppAsset::register($this);
   <?php require_once(Yii::$app->basePath . '/views/layouts/modal.php');?>
   <?php $this->endBody();?>
 </body>
+<?php
+$script = <<< JS
+$(".list-language > li").on('click', function() {
+  var link = $(this).find('a').attr('href');
+  console.log(link);
+  $.ajax({
+    url: link,
+    type: "GET",
+    success: function(result){
+      console.log(result);
+      location.reload();
+    },
+  });
+  return false;
+});
+JS;
+$this->registerJs($script);
+?>
 </html>
 <?php $this->endPage();?>
