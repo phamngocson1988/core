@@ -17,8 +17,8 @@ use yii\bootstrap\ActiveForm;
               'options' => ['tag' => false],
               'template' => '{input}',
               'inputOptions' => ['name' => 'bonus_type', 'class' => 'form-control']
-            ])->dropdownList($search->fetchType(), ['prompt' => 'Select bonus type'])->label(false);?>
-            <div class="total-text text-right">TOTAL <?=number_format($total);?> ACTIVE BONUSES<?=Yii::t('app', 'total_{n,plural,=0{no_active_bonus} =1{one_active_bonus} other{# active_bonus}}', ['n' => $total]);?></div>
+            ])->dropdownList($search->fetchType(), ['prompt' => Yii::t('app', 'select_bonus_type')])->label(false);?>
+            <div class="total-text text-right"><?=Yii::t('app', 'total_{n,plural,=0{no_active_bonus} =1{one_active_bonus} other{# active_bonus}}', ['n' => $total]);?></div>
           </div>
           
           <?php ActiveForm::end();?>

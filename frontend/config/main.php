@@ -70,7 +70,7 @@ return [
                 'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@frontend/messages',
-                    'sourceLanguage' => 'en-US',
+                    'sourceLanguage' => 'en-US1', // need to difference with language
                     'fileMap' => [
                         'app' => 'app.php',
                     ],

@@ -1,6 +1,8 @@
 <?php
 namespace frontend\widgets;
 
+use Yii;
+
 class LinkPager extends \yii\widgets\LinkPager
 {
 	public $options = ['class' => 'pagination justify-content-center'];
@@ -8,6 +10,12 @@ class LinkPager extends \yii\widgets\LinkPager
     public $prevPageCssClass = 'page-item';
     public $nextPageCssClass = 'page-item';
     public $linkOptions = ['class' => 'page-link'];
-    public $prevPageLabel= '<a class="page-link" href="javascript:;">Previous</a>';
-    public $nextPageLabel= '<a class="page-link" href="javascript:;">Next</a>';
+    public $prevPageLabel= 'Privious';
+    public $nextPageLabel= 'Next';
+    public function init() 
+    {
+    	parent::init();
+    	$this->prevPageLabel = '<a class="page-link" href="javascript:;">' . Yii::t('app', 'page_privious') . '</a>';
+    	$this->nextPageLabel = '<a class="page-link" href="javascript:;">' . Yii::t('app', 'page_next') . '</a>';
+    }
 }
