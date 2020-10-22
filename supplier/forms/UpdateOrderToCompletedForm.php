@@ -105,11 +105,13 @@ class UpdateOrderToCompletedForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         $supplier = $this->getOrderSupplier();
+        $game = $supplier->game;
         try {
             $percent = (int)(($this->doing / $supplier->quantity) * 100);
             $supplier->status = OrderSupplier::STATUS_COMPLETED;
             $supplier->completed_at = date('Y-m-d H:i:s');
             $supplier->doing = $this->doing;
+            $supplier->unit = $this->doing * $game->pack;
             $supplier->percent = max($supplier->percent, $percent);
             $supplier->total_price = $supplier->price * $this->doing;
             $supplier->save();
@@ -127,11 +129,6 @@ class UpdateOrderToCompletedForm extends Model
                     Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                     $sender->log("Moved to completed");
                     $sender->pushNotification(OrderNotification::NOTIFY_CUSTOMER_COMPLETE_ORDER, $sender->customer_id);
-                    // $sender->send(
-                    //     'admin_send_complete_order', 
-                    //     sprintf("[KingGems] - Completed Order - Order #%s", $sender->id), [
-                    //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $sender->id], true),
-                    // ]);
                 });
             } else {
                 $order->status = Order::STATUS_PARTIAL;

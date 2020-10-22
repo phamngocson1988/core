@@ -113,6 +113,36 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionProcessing1()
+    {
+        $this->view->params['main_menu_active'] = 'order.processing';
+        $request = Yii::$app->request;
+        $data = [
+            'order_id' => $request->get('order_id'),
+            'game_id' => $request->get('game_id'),
+            'request_start_date' => $request->get('request_start_date'),
+            'request_end_date' => $request->get('request_end_date'),
+            'status' => $request->get('status', [
+                OrderSupplier::STATUS_PROCESSING,
+            ]),
+            'supplier_id' => Yii::$app->user->id,
+        ];
+        $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('processing', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
     public function actionProcessing()
     {
         $this->view->params['main_menu_active'] = 'order.processing';
@@ -150,15 +180,12 @@ class OrderController extends Controller
         $data = [
             'order_id' => $request->get('order_id'),
             'game_id' => $request->get('game_id'),
-            'request_start_date' => $request->get('request_start_date'),
-            'request_end_date' => $request->get('request_end_date'),
-            'status' => $request->get('status', [
-                OrderSupplier::STATUS_COMPLETED,
-            ]),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm($data);
-        $command = $form->getCommand();
+        $form = new \supplier\forms\FetchCompletedShopForm($data);
+        $command = clone $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -269,7 +296,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionWaiting()
+    public function actionWaiting1()
     {
         $this->view->params['main_menu_active'] = 'order.waiting';
         $request = Yii::$app->request;
@@ -284,6 +311,32 @@ class OrderController extends Controller
             'supplier_id' => Yii::$app->user->id,
         ];
         $form = new FetchOrderForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('waiting', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+    public function actionWaiting()
+    {
+        $this->view->params['main_menu_active'] = 'order.waiting';
+        $request = Yii::$app->request;
+        $data = [
+            'order_id' => $request->get('order_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'supplier_id' => Yii::$app->user->id,
+        ];
+        $form = new \supplier\forms\FetchWaitingShopForm($data);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)

@@ -71,9 +71,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ])->label('Tên game')?>
           
-            <?= $form->field($search, 'start_date', [
+            <?= $form->field($search, 'request_start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'request_start_date', 'id' => 'request_start_date']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -84,9 +84,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ],
             ])->label('Ngày yêu cầu từ');?>
 
-            <?=$form->field($search, 'end_date', [
+            <?=$form->field($search, 'request_end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'request_end_date', 'id' => 'request_end_date']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -106,48 +106,35 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
         <?php ActiveForm::end()?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable" id="order-table">
+          <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
               <tr>
-                <th col-tag="order_id"> Mã đơn hàng </th>
-                <th col-tag="game_title"> Shop game </th>
-                <th col-tag="unit"> Số lượng nạp </th>
-                <th col-tag="quantity"> Số gói </th>
-                <th col-tag="approved_time"> TG nhận đơn </th>
-                <th col-tag="status"> Trạng thái </th>
-                <th col-tag="action" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+                <th> Mã đơn hàng </th>
+                <th> Tên game </th>
+                <th> Ngày đơn hàng gửi đến </th>
+                <th> Trạng thái </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <tr>
-                  <td col-tag="order_id" class="center" style="max-width: none">#<?=$model->order_id;?></a></td>
-                  <td col-tag="game_title" class="center"><?=$model->getGameTitle();?></td>
-                  <td col-tag="unit" class="center"><?=number_format($model->unit);?></td>
-                  <td col-tag="quantity" class="center"><?=number_format($model->quantity, 2);?></td>
-                  <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
-                  <td col-tag="" class="center">
+                  <td class="center" style="max-width: none">#<?=$model->order_id;?></a></td>
+                  <td class="center"><?=$model->getGameTitle();?></td>
+                  <td class="center"><?=$model->requested_at;?></td>
+                  <td class="center">
                     <span class="label label-warning">Đang yêu cầu</span>
                   </td>
-                  <td col-tag="" class="center">
+                  <td class="center">
                     <a href='<?=Url::to(['order/accept', 'id' => $model->id]);?>' class="btn btn-xs blue ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-check"></i></a>
                     <a href='<?=Url::to(['order/reject', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Từ chối đơn hàng"><i class="fa fa-times"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <tfoot style="background-color: #999;">
-              <td col-tag="order_id"><?=number_format($search->count());?></td>
-              <td col-tag="game_title"></td>
-              <td col-tag="unit"></td>
-              <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 2);?></td>
-              <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime(), 1);?></td>
-              <td col-tag="status"></td>
-              <td col-tag="action"></td>
-            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

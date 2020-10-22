@@ -5,6 +5,17 @@ use yii\helpers\ArrayHelper;
 
 class OrderSupplier extends \common\models\OrderSupplier
 {
+	// public $distributed_time;
+    
+    // public $pending_time;
+    public $approved_time;
+    // public $waiting_time;
+    public $login_time;
+    public $processing_time;
+    public $completed_time;
+    public $confirmed_time;
+    // public $supplier_completed_time;
+
 	public static function getStatusList()
     {
         return [

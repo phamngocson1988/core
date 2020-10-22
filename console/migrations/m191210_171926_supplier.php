@@ -60,6 +60,7 @@ class m191210_171926_supplier extends Migration
             'game_id' => $this->integer()->notNull(),
             'price' => $this->float(),
             'quantity' => $this->float()->defaultValue(0),
+            'unit' => $this->float()->defaultValue(0),
             'doing' => $this->float()->defaultValue(0),
             'percent' => $this->integer()->defaultValue(0),
             'total_price' => $this->float()->defaultValue(0),
