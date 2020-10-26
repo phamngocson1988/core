@@ -7,7 +7,7 @@ class OrderSupplier extends \common\models\OrderSupplier
 {
 	// public $distributed_time;
     
-    // public $pending_time;
+    public $pending_time;
     public $approved_time;
     // public $waiting_time;
     public $login_time;

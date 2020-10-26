@@ -17,36 +17,20 @@ class Controller extends BaseController
 		$userId = Yii::$app->user->id;
 		if (parent::beforeAction($action)) {
 			// Count order by status
-			$status = [
-				OrderSupplier::STATUS_REQUEST, 
-				OrderSupplier::STATUS_APPROVE, 
-				OrderSupplier::STATUS_PROCESSING, 
-				// OrderSupplier::STATUS_COMPLETED, 
-			];
-			$groupStatus = OrderSupplier::find()->where(['supplier_id' => $userId])
-			->andWhere(['in', 'status', $status])
-			->groupBy(['status'])
-			->select(['status', 'COUNT(*) as count'])
-			->asArray()
-			->all();
-
-			$statusCount = ArrayHelper::map($groupStatus, 'status', 'count');
-			$requesting = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_REQUEST, 0);
-			$pending = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_APPROVE, 0);
-			$processing = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_PROCESSING, 0);
-			// $completed = ArrayHelper::getValue($statusCount, OrderSupplier::STATUS_COMPLETED, 0);
-
-			$this->view->params['new_request_order'] = $requesting ? $requesting : '';
-			$this->view->params['new_pending_order'] = $pending ? $pending : '';
-			$this->view->params['new_processing_order'] = $processing ? $processing : '';
-			// $this->view->params['new_completed_order'] = $completed ? $completed : '';
-			// $this->view->params['new_confirmed_order'] = '';//$confirmed ? $confirmed : '';
-
-			// $this->view->params['new_request_order'] = '';
-			// $this->view->params['new_pending_order'] = '';
-			// $this->view->params['new_processing_order'] = '';
 			$this->view->params['new_completed_order'] = '';
 			$this->view->params['new_confirmed_order'] = '';
+
+			$waitingForm = new \supplier\forms\FetchWaitingShopForm(['supplier_id' => Yii::$app->user->id]);
+	        $newWaitingOrderTotal = $waitingForm->count();
+			$this->view->params['new_request_order'] = $newWaitingOrderTotal ? $newWaitingOrderTotal : '';
+
+			$pendingForm = new \supplier\forms\FetchPendingShopForm(['supplier_id' => Yii::$app->user->id]);
+	        $newPendingOrderTotal = $pendingForm->count();
+			$this->view->params['new_pending_order'] = $newPendingOrderTotal ? $newPendingOrderTotal : '';
+
+			$processingForm = new \supplier\forms\FetchProcessingShopForm(['supplier_id' => Yii::$app->user->id]);
+	        $processingOrderTotal = $processingForm->count();
+			$this->view->params['new_processing_order'] = $processingOrderTotal ? $processingOrderTotal : '';
 			return true;
         }
 

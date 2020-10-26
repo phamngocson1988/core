@@ -91,47 +91,31 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
               <tr>
-                <th col-tag="order_id"> Mã đơn hàng </th>
-                <th col-tag="game_title"> Shop game </th>
-                <th col-tag="unit"> Số lượng nạp </th>
-                <th col-tag="quantity"> Số gói </th>
-                <th col-tag="pending_time"> Tổng TG chờ </th>
-                <th col-tag="approved_time"> TG nhận đơn </th>
-                <th col-tag="login_time"> TG login </th>
-                <th col-tag="processing_time"> TG xử lý yêu cầu </th>
-                <th col-tag="replying_time"> TG chờ phản hồi </th>
-                <th col-tag="status"> Trạng thái </th>
-                <th col-tag="actions" class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
+                <th> Mã đơn hàng </th>
+                <th> Tên game </th>
+                <th> Số gói </th>
+                <th> Chờ nhận đơn </th>
+                <th> Chờ login </th>
+                <th> Chờ phản hồi </th>
+                <th> Trạng thái </th>
+                <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <?php $order = $model->order;?>
                 <tr>
-                  <td col-tag="order_id" class="center" style="max-width: none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
-                  <td col-tag="game_title" class="center"><?=$model->getGameTitle();?></td>
-                  <td col-tag="unit" class="center"><?=$model->unit;?></td>
-                  <td col-tag="quantity" class="center"><?=$model->doing;?></td>
-                  <td col-tag="pending_time" class="center"><?=number_format($model->pending_time);?></td>
-                  <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
-                  <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
-                  <td col-tag="processing_time" class="center">
+                  <td class="center" style="max-width: none">#<?=$model->order_id;?></td>
+                  <td class="center"><?=$model->getGameTitle();?></td>
+                  <td class="center"><?=number_format($model->quantity, 1);?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime('now') - strtotime($model->approved_at), 'h:i');?></td>
+                  <td class="center">
                     <?php 
-                    $firstComplain = ArrayHelper::getValue($firstComplains, $model->order_id); 
-                    if (!$firstComplain) {
-                      echo '--';
-                    } else {
-                      $duration = strtotime('now') - strtotime($firstComplain);
-                      echo FormatConverter::countDuration($duration, 'h:i');
-                    }
-                    ?>
-                  </td>
-                  <td col-tag="replying_time" class="center">
-                    <?php 
-                    $lastComplain = ArrayHelper::getValue($lastComplains, $model->order_id); 
+                    $lastComplain = ArrayHelper::getValue($complains, $model->order_id); 
                     if (!$lastComplain) {
                       echo '--';
                     } else {
@@ -140,8 +124,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     }
                     ?>
                   </td>
-                  
-                  <td col-tag="status" class="center">
+                  <td class="center">
                     <?php if ($order->hasCancelRequest()) :?>
                     <span class="label label-danger">Có yêu cầu hủy</span>
                     <?php endif;?>
@@ -153,27 +136,12 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <span class="label label-default">Pending</span>
                     <?php endif;?>
                   </td>
-                  <td col-tag="actions" class="center">
+                  <td class="center">
                     <a href="<?=Url::to(['order/edit', 'id' => $model->id]);?>" class="btn btn-sm red tooltips" data-container="body" data-original-title="Bắt đầu xử lý"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý </a>
                   </td>
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <?php $summary = $search->getSummary();?>
-            <tfoot style="background-color: #999;">
-              <td col-tag="order_id"><?=number_format($summary['count']);?></td>
-              <td col-tag="game_title"></td>
-              <td col-tag="unit"></td>
-              <td col-tag="quantity" class="center"><?=number_format($summary['quantity'], 2);?></td>
-              
-              <td col-tag="pending_time" class="center"><?=number_format($summary['pending_time']);?></td>
-              <td col-tag="approved_time" class="center"><?=number_format($summary['approved_time']);?></td>
-              <td col-tag="login_time" class="center"><?=number_format($summary['login_time']);?></td>
-              <td col-tag="processing_time" class="center"></td>
-              <td col-tag="replying_time" class="center"></td>
-              <td col-tag="status"></td>
-              <td col-tag="actions"></td>
-            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

@@ -70,9 +70,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ])->label('Tên game')?>
           
-            <?= $form->field($search, 'start_date', [
+            <?= $form->field($search, 'request_start_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'request_start_date', 'id' => 'request_start_date']
             ])->widget(DateTimePicker::className(), [
               'clientOptions' => [
                 'autoclose' => true,
@@ -81,11 +81,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 'endDate' => date('Y-m-d H:i'),
                 'minView' => '1'
               ],
-            ])->label('Ngày xác nhận từ');?>
+            ])->label('Ngày nhận đơn từ');?>
 
-            <?=$form->field($search, 'end_date', [
+            <?=$form->field($search, 'request_end_date', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+              'inputOptions' => ['class' => 'form-control', 'name' => 'request_end_date', 'id' => 'request_end_date']
             ])->widget(DateTimePicker::className(), [
                 'clientOptions' => [
                   'autoclose' => true,
@@ -95,7 +95,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   'endDate' => date('Y-m-d H:i'),
                   'minView' => '1'
                 ],
-            ])->label('Ngày xác nhận đến');?>
+            ])->label('Ngày nhận đơn đến');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -105,58 +105,38 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
         </div>
         <?php ActiveForm::end()?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable" id="order-table">
+          <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
               <tr>
-                <th col-tag="order_id"> Mã đơn hàng </th>
-                <th col-tag="game_title"> Shop game </th>
-                <th col-tag="unit"> Số lượng nạp </th>
-                <th col-tag="quantity"> Số gói </th>
-                <th col-tag="approved_at"> Thời điểm nhận đơn </th>
-                <th col-tag="completed_time"> Tổng TG hoàn thành </th>
-                <th col-tag="approved_time"> TG nhận đơn </th>
-                <th col-tag="login_time"> TG login </th>
-                <th col-tag="processing_time"> TG nạp </th>
-                <th col-tag="confirmed_time"> TG xác nhận </th>
-                <th col-tag="status"> Trạng thái </th>
+                <th> Mã đơn hàng </th>
+                <th> Tên game </th>
+                <th> Số gói </th>
+                <th> Chờ nhận đơn </th>
+                <th> Chờ Login </th>
+                <th> Thời gian xử lý </th>
+                <th> Tổng thời gian </th>
+                <th> Trạng thái </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="11"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
-                <?php foreach ($models as $model) :?>
+                <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <td col-tag="order_id" class="center" style="max-width: none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
-                  <td col-tag="game_title" class="center"><?=$model->getGameTitle();?></td>
-                  <td col-tag="unit" class="center"><?=$model->unit;?></td>
-                  <td col-tag="quantity" class="center"><?=$model->doing;?></td>
-                  <td col-tag="approved_at" class="center"><?=$model->approved_at;?></td>
-                  <td col-tag="completed_time" class="center"><?=number_format($model->completed_time);?></td>
-                  <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
-                  <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
-                  <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>
-                  <td col-tag="confirmed_time" class="center"><?=number_format($model->confirmed_time);?></td>
-                  <td col-tag="status" class="center">
-                    <span class="label label-default">Completed</span>
+                  <td class="center" style="max-width: none">#<?=$model->order_id;?></td>
+                  <td class="center"><?=$model->getGameTitle();?></td>
+                  <td class="center"><?=$model->doing;?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->approved_at) - strtotime($model->created_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->processing_at) - strtotime($model->approved_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->processing_at), 'h:i');?></td>
+                  <td class="center"><?=FormatConverter::countDuration(strtotime($model->completed_at) - strtotime($model->created_at), 'h:i');?></td>
+                  <td class="center">
+                    <span class="label label-default">Confirmed</span>
                   </td>
                 </tr>
                 <?php endforeach;?>
             </tbody>
-            <?php $summary = $search->getSummary();?>
-            <tfoot style="background-color: #999;">
-              <td col-tag="order_id"><?=number_format($summary['count']);?></td>
-              <td col-tag="game_title"></td>
-              <td col-tag="unit" class="center"></td>
-              <td col-tag="quantity" class="center"><?=number_format($summary['quantity']);?></td>
-              <td col-tag="approved_at"></td>
-              <td col-tag="completed_time" class="center"><?=number_format($summary['completed_time']);?></td>
-              <td col-tag="approved_time" class="center"><?=number_format($summary['approved_time']);?></td>
-              <td col-tag="login_time" class="center"><?=number_format($summary['login_time']);?></td>
-              <td col-tag="processing_time" class="center"><?=number_format($summary['processing_time']);?></td>
-              <td col-tag="confirmed_time"><?=number_format($summary['confirmed_time']);?></td>
-              <td col-tag="status"></td>
-            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

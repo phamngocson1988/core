@@ -7,12 +7,8 @@ use yii\helpers\ArrayHelper;
 use supplier\models\Order;
 use supplier\models\OrderSupplier;
 
-class FetchProcessingShopForm extends FetchShopForm
+class FetchPendingShopForm extends FetchShopForm
 {
-    public function init() 
-    {
-        $this->status = OrderSupplier::STATUS_PROCESSING;
-    }
     protected function createCommand()
     {
         $command = OrderSupplier::find();
@@ -25,14 +21,13 @@ class FetchProcessingShopForm extends FetchShopForm
             "$supplierTable.*", 
             "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, '$now') as pending_time",
             "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as approved_time",
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at) as login_time",
-            "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, '$now') as processing_time",
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, '$now') as login_time",
         ]);
         
         $condition = [
             "$supplierTable.order_id" => $this->order_id,
             "$table.game_id" => $this->game_id,
-            "$supplierTable.status" => $this->status,
+            "$supplierTable.status" => OrderSupplier::STATUS_APPROVE,
             "$supplierTable.supplier_id" => $this->supplier_id,
         ];
         $condition = array_filter($condition);
@@ -43,6 +38,14 @@ class FetchProcessingShopForm extends FetchShopForm
         }
         if ($this->end_date) {
             $command->andWhere(['<=', "$supplierTable.requested_at", $this->end_date]);
+        }
+
+        if ($this->status) {
+            if ($this->status != OrderSupplier::STATUS_APPROVE) {
+                $command->andWhere(["{$table}.state" => $this->status]);
+            } else {
+                $command->andWhere(["{$table}.state" => null]);
+            }
         }
         // die($command->createCommand()->getRawSql());
         $command->with('order');
@@ -64,14 +67,15 @@ class FetchProcessingShopForm extends FetchShopForm
     {
         $supplierTable = OrderSupplier::tableName();
         $now = date('Y-m-d H:i:s');
-        return $this->getCommand()->select([
+        $command = clone $this->getCommand();
+        return $command->select([
+            "$supplierTable.id",
             "$supplierTable.order_id",
             "COUNT(*) as count",
             "SUM($supplierTable.quantity) as quantity",
             "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, '$now')) as pending_time",
             "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at)) as approved_time",
-            "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at)) as login_time",
-            "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, '$now')) as processing_time"
+            "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, '$now')) as login_time",
         ])->asArray()->one();
     }
 }

@@ -77,7 +77,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionPending()
+    public function actionPending1()
     {
         $this->view->params['main_menu_active'] = 'order.pending';
         $request = Yii::$app->request;
@@ -109,6 +109,54 @@ class OrderController extends Controller
             'pages' => $pages,
             'search' => $form,
             'complains' => $complains,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionPending()
+    {
+        $this->view->params['main_menu_active'] = 'order.pending';
+        $request = Yii::$app->request;
+        $data = [
+            'order_id' => $request->get('order_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => $request->get('status'),
+            'supplier_id' => Yii::$app->user->id,
+        ];
+        $form = new \supplier\forms\FetchPendingShopForm($data);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
+
+        $firstComplains = $lastComplains = [];
+        foreach ($models as $model) {
+            $firstComplains[$model->order_id] = OrderComplains::find()
+                ->where([
+                    "order_id" => $model->order_id,
+                    "object_name" => [OrderComplains::OBJECT_NAME_ADMIN, OrderComplains::OBJECT_NAME_SUPPLIER]
+                ])
+                // ->andWhere(['BETWEEN', 'created_at', $model->created_at, $model->updated_at])
+                ->min('created_at');
+            $lastComplains[$model->order_id] = OrderComplains::find()
+                ->where([
+                    "order_id" => $model->order_id,
+                    "object_name" => OrderComplains::OBJECT_NAME_CUSTOMER
+                ])
+                // ->andWhere(['BETWEEN', 'created_at', $model->created_at, $model->updated_at])
+                ->max('created_at');
+        }
+
+        return $this->render('pending', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'firstComplains' => $firstComplains,
+            'lastComplains' => $lastComplains,
             'ref' => Url::to($request->getUrl(), true),
         ]);
     }
@@ -150,15 +198,12 @@ class OrderController extends Controller
         $data = [
             'order_id' => $request->get('order_id'),
             'game_id' => $request->get('game_id'),
-            'request_start_date' => $request->get('request_start_date'),
-            'request_end_date' => $request->get('request_end_date'),
-            'status' => $request->get('status', [
-                OrderSupplier::STATUS_PROCESSING,
-            ]),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
             'supplier_id' => Yii::$app->user->id,
         ];
-        $form = new FetchOrderForm($data);
-        $command = $form->getCommand();
+        $form = new \supplier\forms\FetchProcessingShopForm($data);
+        $command = clone $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -200,7 +245,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionConfirmed()
+    public function actionConfirmed1()
     {
         $this->view->params['main_menu_active'] = 'order.confirmed';
         $request = Yii::$app->request;
@@ -216,6 +261,33 @@ class OrderController extends Controller
         ];
         $form = new FetchOrderForm($data);
         $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['created_at' => SORT_DESC])
+                            ->all();
+
+        return $this->render('confirmed', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+            'ref' => Url::to($request->getUrl(), true),
+        ]);
+    }
+
+    public function actionConfirmed()
+    {
+        $this->view->params['main_menu_active'] = 'order.confirmed';
+        $request = Yii::$app->request;
+        $data = [
+            'order_id' => $request->get('order_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'supplier_id' => Yii::$app->user->id,
+        ];
+        $form = new \supplier\forms\FetchConfirmedShopForm($data);
+        $command = clone $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
