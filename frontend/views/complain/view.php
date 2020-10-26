@@ -17,8 +17,8 @@ $currentUser = Yii::$app->user->getIdentity();
             <div class="hero-buttons">
             <?php if ($currentUser) : ?>
             <?php $isFollow = $currentUser->isFollow($complain->id);?>
-              <a class="btn btn-outline-light <?= $isFollow ? '' : 'd-none' ;?>" id="unfollow-complain" href="<?=Url::to(['complain/unfollow', 'id' => $complain->id]);?>">Unfollow <i class="fa fa-star-o"></i></a>
-              <a class="btn btn-outline-light <?= $isFollow ? 'd-none' : '' ;?>" id="follow-complain" href="<?=Url::to(['complain/follow', 'id' => $complain->id]);?>">Follow <i class="fa fa-star"></i></a>
+              <a class="btn btn-outline-light <?= $isFollow ? '' : 'd-none' ;?>" id="unfollow-complain" href="<?=Url::to(['complain/unfollow', 'id' => $complain->id]);?>"><?=Yii::t('app', 'Unfollow');?> <i class="fa fa-star-o"></i></a>
+              <a class="btn btn-outline-light <?= $isFollow ? 'd-none' : '' ;?>" id="follow-complain" href="<?=Url::to(['complain/follow', 'id' => $complain->id]);?>"><?=Yii::t('app', 'Follow');?> <i class="fa fa-star"></i></a>
             <?php endif;?>
             </div>
             <div class="hero-feature">
@@ -28,9 +28,9 @@ $currentUser = Yii::$app->user->getIdentity();
         </div>
         <div class="hero-footer">
           <ul class="hero-nav">
-            <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
-            <li><a href="#discussion"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Discussion</span></a></li>
-            <li><a href="#complain"><i class="fa fa-comments"></i><span class="nav-text">Other Complaints (<?=$operator->totalComplain();?>)</span></a></li>
+            <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text"><?=Yii::t('app', 'Overview');?></span></a></li>
+            <li><a href="#discussion"><i class="fa fa-exclamation-circle"></i><span class="nav-text"><?=Yii::t('app', 'Discussion');?></span></a></li>
+            <li><a href="#complain"><i class="fa fa-comments"></i><span class="nav-text"><?=Yii::t('app', 'Other Complaints');?> (<?=$operator->totalComplain();?>)</span></a></li>
           </ul>
         </div>
       </section>
@@ -38,21 +38,21 @@ $currentUser = Yii::$app->user->getIdentity();
         <div class="mod-column">
           <section class="operator-detail widget-box" id="overview">
             <h2 class="widget-head">
-              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text">Complaint Info</span></div>
+              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=Yii::t('app', 'Complaint Info');?></span></div>
             </h2>
             <div class="widget-content">
               <ul class="operator-detail-list">
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-globe-americas"></i></div>
-                    <div class="label-text">Disputed Operator</div>
+                    <div class="label-text"><?=Yii::t('app', 'Disputed Operator');?></div>
                   </div>
                   <div class="content"><a href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><?=$operator->name;?></a></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fa fa-language"></i></div>
-                    <div class="label-text">Reason</div>
+                    <div class="label-text"><?=Yii::t('app', 'Reason');?></div>
                   </div>
                   <div class="content"><a href="#"><?=$reason->title;?></a></div>
                 </li>
@@ -60,11 +60,11 @@ $currentUser = Yii::$app->user->getIdentity();
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fa fa-paperclip"></i></div>
-                    <div class="label-text">Attached file</div>
+                    <div class="label-text"><?=Yii::t('app', 'Attached file');?></div>
                   </div>
                   <div class="content">
                     <?php foreach ($complain->files as $file) : ?>
-                    <a href="<?=$file->file_id;?>" target="_blank">Attach File</a>
+                    <a href="<?=$file->file_id;?>" target="_blank"><?=Yii::t('app', 'Attached file');?></a>
                     <?php endforeach;?>
                   </div>
                 </li>
@@ -88,7 +88,7 @@ $currentUser = Yii::$app->user->getIdentity();
                   <div class="user-meta"><span><?=$user->getCountryName();?></span></div>
                 </div>
                 <div class="review-content">
-                  <div class="review-date">Posted on <?=date("F j, Y", strtotime($complain->created_at));?></div>
+                  <div class="review-date"><?=Yii::t('app', 'Posted on {date}', ['date' => date("F j, Y", strtotime($complain->created_at))]);?></div>
                   <div class="review-text"><?=$complain->description;?></div>
                 </div>
               </article>
@@ -100,7 +100,7 @@ $currentUser = Yii::$app->user->getIdentity();
                   <div class="user-name"><a href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><?=$operator->name;?></a></div>
                 </div>
                 <div class="review-content">
-                  <div class="review-date">Posted on <?=date("F j, Y", strtotime($reply->created_at));?></div>
+                  <div class="review-date"><?=Yii::t('app', 'Posted on {date}', ['date' => date("F j, Y", strtotime($reply->created_at))]);?></div>
                   <div class="review-text"><?=$reply->description;?></div>
                 </div>
               </article>
@@ -113,7 +113,7 @@ $currentUser = Yii::$app->user->getIdentity();
                   <div class="user-meta"><span><?=$userReply->getCountryName();?></span></div>
                 </div>
                 <div class="review-content">
-                  <div class="review-date">Posted on <?=date("F j, Y", strtotime($reply->created_at));?></div>
+                  <div class="review-date"><?=Yii::t('app', 'Posted on {date}', ['date' => date("F j, Y", strtotime($reply->created_at))]);?></div>
                   <div class="review-text"><?=$reply->description;?></div>
                 </div>
               </article>
@@ -138,11 +138,11 @@ $currentUser = Yii::$app->user->getIdentity();
                           'template' => '{input}',
                           'inputOptions' => ['class' => 'form-check-input'],
                         ])->checkbox(['class' => 'form-check-input'], false);?>
-                        <span>Mark to close this case</span>
+                        <span><?=Yii::t('app', 'Mark to close this case');?></span>
                       </label>
                     </div>
                     <div class="form-group">
-                      <button class="btn btn-primary" type="submit">Post my reply</button>
+                      <button class="btn btn-primary" type="submit"><?=Yii::t('app', 'Post my reply');?></button>
                     </div>
                   </div>
                   <?php ActiveForm::end();?>
@@ -151,7 +151,7 @@ $currentUser = Yii::$app->user->getIdentity();
               <?php endif;?>
             </div>
           </section>
-          <div class="section-complaint-back"><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>">Back to <?=$operator->name;?></a></div>
+          <div class="section-complaint-back"><a class="btn btn-primary" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><?=Yii::t('app', 'Back to {operator}', ['operator' => $operator->name]);?></a></div>
           <?=\frontend\widgets\OperatorComplainWidget::widget(['operator' => $operator]);?>
         </div>
         <aside class="mod-sidebar">
