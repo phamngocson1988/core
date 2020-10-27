@@ -9,7 +9,7 @@ use frontend\widgets\LinkPager;
       <section class="section-forum-heading">
         <h1 class="heading-title"><?=$category->title;?></h1>
         <?php if (!Yii::$app->user->isGuest) : ?>
-        <div class="heading-button"><a class="btn btn-primary" href="<?=Url::to(['forum/create']);?>">Start new topic</a></div>
+        <div class="heading-button"><a class="btn btn-primary" href="<?=Url::to(['forum/create']);?>"><?=Yii::t('app', 'Start new topic');?></a></div>
         <?php endif;?>
       </section>
       <section class="section-topics">
@@ -31,9 +31,11 @@ use frontend\widgets\LinkPager;
               <li class="topic-row">
                 <div class="topic-content">
                   <h3 class="topic-title"><a href="<?=Url::to(['forum/topic', 'id' => $topic->id, 'slug' => $topic->slug]);?>"><?=$topic->subject;?></a></h3>
-                  <p class="topic-info">By <a href="javascript:;"><?=$user->getName();?></a>, <?=date('F j, Y', strtotime($topic->created_at));?></p>
+                  <p class="topic-info"><?=Yii::t('app', 'By {user}', ['user' => sprintf('<a href="javascript:;">%s</a>', $user->getName())]);?>, <?=date('F j, Y', strtotime($topic->created_at));?></p>
                 </div>
-                <div class="topic-stat"><span class="stat-reply"><?=number_format($topic->countPost());?> replies</span><span class="stat-view">0 views</span></div>
+                <div class="topic-stat">
+                  <span class="stat-reply"><?=Yii::t('app', '{count} replies', ['count' => number_format($topic->countPost())]);?></span>
+                  <span class="stat-view"><?=Yii::t('app', '{count} views', ['count' => 0]);?></span></div>
                 <div class="topic-author"><a class="author-photo" href="javascript:;"><img src="<?=$user->getAvatarUrl('34x34');?>" alt="<?=$user->getName();?>"></a>
                   <div class="author-username"><a href="javascript:;"><?=$user->getName();?></a></div>
                   <div class="post-date"><a href="#"><?=TimeElapsed::timeElapsed($topic->created_at);?></a></div>

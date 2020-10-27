@@ -38,4 +38,23 @@ return [
     'Mark to close this case' => 'Đánh dấu để đóng trường hợp này',
     'Post my reply' => 'Đăng phần trả lời',
     'Back to {operator}' => 'Trở về nhà cái {operator}',
+
+    // forum
+    'Start new topic' => 'Bắt đầu chủ đề mới',
+    'By {user}' => 'Đăng bởi {user}',
+    '{count} replies' => '{count} phản hồi',
+    '{count} views' => '{count} lượt xem',
+    'Create new topic' => 'Tạo chủ đề mới',
+    'Fill in the topic form' => 'Nhập thông tin chủ đề',
+    'New topic' => 'Chủ đề mới',
+    'Forums' => 'Diễn đàn',
+    'Reply to this topic' => 'Phản hồi chủ đề này',
+    'Member' => 'Thành viên',
+    'User Level' => 'Cấp bậc',
+    '{count} Points' => '{count} điểm',
+    '{count} posts' => '{count} bài viết',
+    'Posted {time}' => 'Đăng vào lúc {time}',
+    'and <a href="javascript:;">{count} others</a> liked this' => 'và <a href="javascript:;">{count} người khác</a> thích điều này',
+    'Join the conversation' => 'Tham gia cuộc thảo luận',
+    'You can post now and register later. If you have an account, <a href="#modalLogin" data-toggle="modal">sign in now</a> to post with your account.' => 'Bạn có thể đăng bài viết ngay bây giờ và đăng ký sau. Nếu bạn có tài khoản, <a href="#modalLogin" data-toggle="modal">đăng nhập ngay</a> để đăng bài viết với tài khoản của bạn.',
 ];

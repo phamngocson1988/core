@@ -1,18 +1,18 @@
 <?php
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
-$this->title = 'New topic';
+$this->title = Yii::t('app', 'New topic');
 ?>
 <main>
   <section class="section-module">
     <div class="container">
-      <h1 class="sec-title">Create new topic</h1>
+      <h1 class="sec-title"><?=Yii::t('app', 'Create new topic');?></h1>
       <div class="sec-content">
         <div class="mod-column form-complaints">
           <?php $form = ActiveForm::begin(); ?>
           <div class="widget-box mb-5 p-3 p-md-4">
             <div class="mb-5">
-              <h2 class="sec-ttl mb-3">Fill in the topic form</h2>
+              <h2 class="sec-ttl mb-3"><?=Yii::t('app', 'Fill in the topic form');?></h2>
               <div class="row mb-3">
                 <?= $form->field($model, 'subject', [
                   'options' => ['class' => 'col-sm-6 mb-sm-0 mb-3'],
@@ -30,7 +30,7 @@ $this->title = 'New topic';
               ])->textArea();?>
             </div>
             <div class="text-center">
-              <button class="btn btn-primary pl-3 pr-3" type="submit">CREATE NEW TOPIC</button>
+              <button class="btn btn-primary pl-3 pr-3" type="submit"><?=Yii::t('app', 'Create new topic');?></button>
             </div>
           </div>
           <?php ActiveForm::end();?>

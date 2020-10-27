@@ -7,9 +7,9 @@ use common\components\helpers\TimeElapsed;
     <div class="forum-main">
       <?=\frontend\widgets\ForumTopContributorWidget::widget();?>
       <section class="section-forum-heading">
-        <h1 class="heading-title">Forums</h1>
+        <h1 class="heading-title"><?=Yii::t('app', 'Forums');?></h1>
         <?php if (!Yii::$app->user->isGuest) : ?>
-        <div class="heading-button"><a class="btn btn-primary" href="<?=Url::to(['forum/create']);?>">Start new topic</a></div>
+        <div class="heading-button"><a class="btn btn-primary" href="<?=Url::to(['forum/create']);?>"><?=Yii::t('app', 'Start new topic');?></a></div>
         <?php endif;?>
       </section>
       <section class="section-forums">
