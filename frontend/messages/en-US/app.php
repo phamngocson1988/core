@@ -58,6 +58,54 @@ return [
     'Join the conversation' => 'Join the conversation',
     'You can post now and register later. If you have an account, <a href="#modalLogin" data-toggle="modal">sign in now</a> to post with your account.' => 'You can post now and register later. If you have an account, <a href="#modalLogin" data-toggle="modal">sign in now</a> to post with your account.',
 
+    // layouts
+    'Search' => 'Search',
+    'Operators' => 'Operators',
+    'Bonuses' => 'Bonuses',
+    'Complaints' => 'Complaints',
+    'Login' => 'Login',
+    'News' => 'News',
+    'Forum' => 'Forum',
+    'About Us' => 'About Us',
+    'Advertise' => 'Advertise',
+    'Corporate' => 'Corporate',
+    'Contact Us' => 'Contact Us',
+    'Sign up for lastest promotion offers from our partners' => 'Sign up for lastest promotion offers from our partners',
+    'Sign up' => 'Sign up',
+    'By subscribing you are certifying that you have reviewed and accepted our updated Privacy and Cookie Policy' => 'By subscribing you are certifying that you have reviewed and accepted our updated Privacy and Cookie Policy',
+
+    // mail
+    'Compose new email!' => 'Compose new email!',
+    'Send' => 'Send',
+    'Used {percent}% message storage' => 'Used {percent}% message storage',
+    'Inbox' => 'Inbox',
+    'Messages' => 'Messages',
+    'Compose new' => 'Compose new',
+    'Sort desc' => 'Sort desc',
+    'Sort asc' => 'Sort asc',
+    'No message selected' => 'No message selected',
+    'Back' => 'Back',
+    'Replied on {date}' => 'Replied on {date}',
+    'Post my reply' => 'Post my reply',
+
+    // member
+    'Joined' => 'Joined',
+    'Last visited' => 'Last visited',
+    'Activities' => 'Activities',
+    '{count} replied' => '{count} replied',
+    'badge' => 'badge',
+    'community reputation' => 'community reputation',
+    'Points' => 'Points',
+    'Profile information' => 'Profile information',
+    'Gender' => 'Gender',
+    'Location' => 'Location',
+    'Home' => 'Home',
+    '{count} favorites' => '{count} favorites',
+    "<a href='javascript:;'>{user}</a> replied to <a href='{author_link}'>{author}</a>'s topic in <a href='{topic_link}'>{topic}</a>" => "<a href='javascript:;'>{user}</a> replied to <a href='{author_link}'>{author}</a>'s topic in <a href='{topic_link}'>{topic}</a>",
+
+
+
+
     'select_country' => 'Select country',
     'select_gender' => 'Select gender',
     'add' => 'Add',

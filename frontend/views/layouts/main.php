@@ -40,7 +40,7 @@ AppAsset::register($this);
           <nav class="header-nav" id="js-nav-bar">
             <div class="header-nav-inner">
               <form class="header-search" action="./">
-                <input class="form-control" type="text" placeholder="Search">
+                <input class="form-control" type="text" placeholder="<?=Yii::t('app', 'Search');?>">
                 <button class="fa fa-search" type="submit"></button>
               </form>
               <?php $main_menu_active = isset($this->params['main_menu_active']) ? $this->params['main_menu_active'] : '';?>
@@ -48,15 +48,15 @@ AppAsset::register($this);
               $items = [];
               $categories = \frontend\models\Category::find()->all();
               if (Yii::$app->user->isGuest) {
-                $items[] = ['label' => 'LOGIN', 'url' => '#modalLogin', 'visible' => Yii::$app->user->isGuest, 'template' => '<a href="{url}" data-toggle="modal">{label}</a>', 'options' => ['class' => 'header-login']];
+                $items[] = ['label' => Yii::t('app', 'Login'), 'url' => '#modalLogin', 'visible' => Yii::$app->user->isGuest, 'template' => '<a href="{url}" data-toggle="modal">{label}</a>', 'options' => ['class' => 'header-login']];
               } else {
                 $items[] = ['label' => strtoupper(Yii::$app->user->identity->getName()), 'url' => ['profile/index'], 'options' => ['class' => 'header-login']];
               }
-              $items[] = ['label' => 'OPERATORS', 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'];
-              $items[] = ['label' => 'BONUSES', 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'];
-              $items[] = ['label' => 'COMPLAINTS', 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'];
+              $items[] = ['label' => Yii::t('app', 'Operators'), 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'];
+              $items[] = ['label' => Yii::t('app', 'Bonuses'), 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'];
+              $items[] = ['label' => Yii::t('app', 'Complaints'), 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'];
               $items[] = [
-                'label' => 'NEWS', 
+                'label' => Yii::t('app', 'News'), 
                 'url' => ['news/index'], 
                 'active' => $main_menu_active == 'news.index', 
                 'options' => ['class' => 'has-sub'],
@@ -65,7 +65,7 @@ AppAsset::register($this);
                   return ['label' => $category->title, 'url' => Url::to(['news/category', 'id' => $category->id, 'slug' => $category->slug]), 'template' => '<a href="{url}" class="trans">{label}</a>'];
                 }, $categories)
               ];
-              $items[] = ['label' => 'FORUM', 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
+              $items[] = ['label' =>  Yii::t('app', 'Forum'), 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
               ?>
               <?=yii\widgets\Menu::widget([
                 'options' => ['class' => 'header-nav-list d-flex'],
@@ -81,7 +81,7 @@ AppAsset::register($this);
         <div class="header-right d-flex align-items-center">
           
           <?php if (Yii::$app->user->isGuest) : ?>
-          <div class="header-login"><a href="#modalLogin" data-toggle="modal">LOGIN</a></div>
+          <div class="header-login"><a href="#modalLogin" data-toggle="modal"><?=Yii::t('app', 'Login');?></a></div>
           <?php else : ?>
           <?php $user = Yii::$app->user->getIdentity();?>
           <div class="header-icon header-email"><a class="trans" href="<?=Url::to(['mail/index']);?>"><i class="fas fa-envelope"></i></a></div>
@@ -113,11 +113,11 @@ AppAsset::register($this);
           <?=yii\widgets\Menu::widget([
             'options' => ['class' => 'footer-menu'],
             'items' => [
-              ['label' => 'OPERATORS', 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'],
-              ['label' => 'BONUSES', 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'],
-              ['label' => 'COMPLAINTS', 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'],
-              ['label' => 'NEWS', 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'],
-              ['label' => 'FORUM', 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'],
+              ['label' => Yii::t('app', 'Operators'), 'url' => ['operator/index'], 'active' => $main_menu_active == 'operator.index'],
+              ['label' => Yii::t('app', 'Bonuses'), 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'],
+              ['label' => Yii::t('app', 'Complaints'), 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'],
+              ['label' => Yii::t('app', 'News'), 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'],
+              ['label' => Yii::t('app', 'Forum'), 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'],
             ]
           ]);?>
         </div>
@@ -125,20 +125,20 @@ AppAsset::register($this);
           <?=yii\widgets\Menu::widget([
             'options' => ['class' => 'footer-menu'],
             'items' => [
-              ['label' => 'About Us', 'url' => ['site/about']],
-              ['label' => 'Advertise', 'url' => ['site/advertise']],
-              ['label' => 'Corporate', 'url' => ['site/corporate']],
-              ['label' => 'Contact Us', 'url' => ['site/contact']],
+              ['label' => Yii::t('app', 'About Us'), 'url' => ['site/about']],
+              ['label' => Yii::t('app', 'Advertise'), 'url' => ['site/advertise']],
+              ['label' => Yii::t('app', 'Corporate'), 'url' => ['site/corporate']],
+              ['label' => Yii::t('app', 'Contact Us'), 'url' => ['site/contact']],
             ]
           ]);?>
         </div>
         <div class="footer-col col-12 col-md-7">
-          <p class="footer-title">SIGN UP FOR LATEST PROMOTION OFFERS FORM OUR PARTNERS</p>
+          <p class="footer-title"><?=Yii::t('app', 'Sign up for lastest promotion offers from our partners');?></p>
           <form class="footer-form d-flex" action="./">
             <input class="form-control form-control-sm" type="text" placeholder="Email address">
-            <button class="btn btn-warning" type="submit">SIGN UP</button>
+            <button class="btn btn-warning" type="submit"><?=Yii::t('app', 'Sign up');?></button>
           </form>
-          <div class="footer-text col-12 col-md-10">By subscribing you are certifying that you have reviewed and accepted our updated Privacy and Cookie Policy</div>
+          <div class="footer-text col-12 col-md-10"><?=Yii::t('app', 'By subscribing you are certifying that you have reviewed and accepted our updated Privacy and Cookie Policy');?></div>
           <ul class="footer-sns d-flex align-items-center">
             <li><a class="fab fa-facebook trans" href="#"></a></li>
             <li><a class="fab fa-youtube trans" href="#"></a></li>

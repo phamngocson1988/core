@@ -6,7 +6,7 @@ $this->title = 'Leave complain';
 <main>
   <section class="section-module">
     <div class="container">
-      <h1 class="sec-title">Compose new email!</h1>
+      <h1 class="sec-title"><?=Yii::t('app', 'Compose new email!');?></h1>
       <div class="sec-content">
         <div class="mod-column form-complaints">
           <?php $form = ActiveForm::begin(); ?>
@@ -32,7 +32,7 @@ $this->title = 'Leave complain';
               ])->textArea();?>
             </div>
             <div class="text-center">
-              <button class="btn btn-primary pl-3 pr-3" type="submit">SEND</button>
+              <button class="btn btn-primary pl-3 pr-3" type="submit"><?=Yii::t('app', 'Send');?></button>
             </div>
           </div>
           <?php ActiveForm::end();?>

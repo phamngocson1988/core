@@ -8,24 +8,24 @@ $loadThreadUrl = Url::to(['mail/list-thread'])
     <section class="section-user-storage">
       <div class="block-storage">
         <div class="progress-meter"><span style="width:<?=$percent;?>%"></span></div>
-        <div class="progress-text">Used <?=$percent;?>% message storage</div>
+        <div class="progress-text"><?=Yii::t('app', 'Used {percent}% message storage', ['percent' => $percent]);?></div>
       </div>
     </section>
     <section class="section-user-message container">
       <aside class="sec-sidebar">
         <div class="block-header">
-          <div class="header-title">Inbox</div>
-          <div class="header-button"><a class="btn btn-primary btn-sm" href="<?=Url::to(['mail/compose']);?>">Compose new</a></div>
+          <div class="header-title"><?=Yii::t('app', 'Inbox');?></div>
+          <div class="header-button"><a class="btn btn-primary btn-sm" href="<?=Url::to(['mail/compose']);?>"><?=Yii::t('app', 'Compose new');?></a></div>
         </div>
         <div class="block-main widget-box">
           <div class="box-title widget-head">
-            <div class="head-text">Messages</div>
+            <div class="head-text"><?=Yii::t('app', 'Messages');?></div>
             <div class="head-button">
               <div class="dropdown">
                 <div class="btn btn-sm dropdown-toggle" id="dropdown-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <!-- <input type="checkbox"> -->
                 </div>
-                <div class="dropdown-menu" aria-labelledby="dropdown-select"><a class="dropdown-item" href="javascript:;" id="sort-desc">SORT DESC</a><a class="dropdown-item" href="javascript:;" id="sort-asc">SORT ASC</a></div>
+                <div class="dropdown-menu" aria-labelledby="dropdown-select"><a class="dropdown-item" href="javascript:;" id="sort-desc"><?=Yii::t('app', 'Sort desc');?></a><a class="dropdown-item" href="javascript:;" id="sort-asc"><?=Yii::t('app', 'Sort asc');?></a></div>
               </div>
             </div>
           </div>
@@ -35,9 +35,9 @@ $loadThreadUrl = Url::to(['mail/list-thread'])
       </aside>
       <div class="sec-main" id="js-message-main">
         <div class="sec-empty"><i class="fa fa-envelope"></i>
-          <p>No message selected</p>
+          <p><?=Yii::t('app', 'No message selected');?></p>
         </div>
-        <div class="sec-button d-block d-md-none"><a class="btn btn-sm btn-primary js-back" href="#">Back</a></div>
+        <div class="sec-button d-block d-md-none"><a class="btn btn-sm btn-primary js-back" href="#"><?=Yii::t('app', 'Back');?></a></div>
       </div>
     </section>
   </div>
