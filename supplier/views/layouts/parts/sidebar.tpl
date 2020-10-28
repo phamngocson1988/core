@@ -69,7 +69,7 @@
           <li class="nav-item  ">
             <a href="{url route='order/waiting'}" class="nav-link " code='order.waiting'>
             <span class="title">Đơn hàng mới</span>
-            <span class="badge badge-success">{$this->params['new_request_order']}</span>
+            <span class="badge badge-success" id="new_request_order">{$this->params['new_request_order']}</span>
             </a>
           </li>
           <li class="nav-item  ">
@@ -145,3 +145,27 @@
   </div>
 </div>
 {UnclockAccountWidget::widget()}
+
+{registerJs}
+{literal}
+_realTimeNewRequestChecker = setInterval(function() {
+  $.ajax({
+      url: '/order/count-waiting',
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        console.log('_realTimeNewRequestChecker', data);
+        if (data.status == true) {
+          console.log('_realTimeNewRequestChecker current', $('#new_request_order').html());
+          let count = data.count;
+          if (count != $('#new_request_order').html()) {
+            location.reload();
+          } else {
+            console.log('there is no new request');
+          }
+        }
+      }
+  });
+}, 10000);
+{/literal}
+{/registerJs}

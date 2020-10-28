@@ -368,35 +368,6 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionWaiting1()
-    {
-        $this->view->params['main_menu_active'] = 'order.waiting';
-        $request = Yii::$app->request;
-        $data = [
-            'order_id' => $request->get('order_id'),
-            'game_id' => $request->get('game_id'),
-            'request_start_date' => $request->get('request_start_date'),
-            'request_end_date' => $request->get('request_end_date'),
-            'status' => $request->get('status', [
-                OrderSupplier::STATUS_REQUEST,
-            ]),
-            'supplier_id' => Yii::$app->user->id,
-        ];
-        $form = new FetchOrderForm($data);
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
-
-        return $this->render('waiting', [
-            'models' => $models,
-            'pages' => $pages,
-            'search' => $form,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
     public function actionWaiting()
     {
         $this->view->params['main_menu_active'] = 'order.waiting';
@@ -422,6 +393,13 @@ class OrderController extends Controller
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
         ]);
+    }
+
+    public function actionCountWaiting()
+    {
+        $waitingForm = new \supplier\forms\FetchWaitingShopForm(['supplier_id' => Yii::$app->user->id]);
+        $newWaitingOrderTotal = $waitingForm->count();
+        return $this->asJson(['status' => true, 'count' => $newWaitingOrderTotal]);
     }
 
     public function actionAccept($id)
