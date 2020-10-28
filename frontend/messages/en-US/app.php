@@ -153,9 +153,9 @@ return [
     'Notify me about new player reviews on this page.' => 'Notify me about new player reviews on this page.',
     'I declare that my review is based on my own experience and represents my genuine opinion of this operator.' => 'I declare that my review is based on my own experience and represents my genuine opinion of this operator.',
     'Post my review' => 'Post my review',
+    'Visit now' => 'Visit now',
 
 
-    
 
     'select_country' => 'Select country',
     'select_gender' => 'Select gender',

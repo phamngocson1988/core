@@ -16,7 +16,7 @@ use common\components\helpers\TimeElapsed;
                 <div class="hero-rate"><span class="rate-text"><?=Yii::t('app', 'Very good');?> <?=number_format($model->averageStar(), 1);?></span><span class="rate-star">
                     <div class="star-rating"><span style="width:<?=$model->averageReviewPercent();?>%"></span></div></span></div>
                 <div class="hero-buttons">
-                  <a class="btn btn-outline-light" href="<?=$model->main_url;?>">Visit now</a>
+                  <a class="btn btn-outline-light" href="<?=$model->main_url;?>"><?=Yii::t('app', 'Visit now');?></a>
                   <?php if (!$isFavorite) : ?>
                   <a class="btn btn-outline-light add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $model->id]);?>"><?=Yii::t('app', 'Add to favorite');?> <i class="fa fa-star-o"></i></a>
                   <?php endif;?>
@@ -174,7 +174,7 @@ use common\components\helpers\TimeElapsed;
                     <div class="label-icon"><i class="fas fa-comments"></i></div>
                     <div class="label-text"><?=Yii::t('app', 'Live Chat');?></div>
                   </div>
-                  <div class="content"><?=$model->livechat_support ? Yii::t('app', 'Yes') : <?=Yii::t('app', 'No');?></div>
+                  <div class="content"><?=$model->livechat_support ? Yii::t('app', 'Yes') : Yii::t('app', 'No');?></div>
                 </li>
                 <li>
                   <div class="label">

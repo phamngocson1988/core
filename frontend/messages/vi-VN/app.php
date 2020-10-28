@@ -153,4 +153,5 @@ return [
     'Notify me about new player reviews on this page.' => 'Thông báo cho tôi về những lượt đánh giá mới trên trang này.',
     'I declare that my review is based on my own experience and represents my genuine opinion of this operator.' => 'Tôi xác nhận rằng tôi đã đánh giá dựa trên kinh nghiệm cá nhân và suy nghĩ chân thật về nhà cái này.',
     'Post my review' => 'Đăng đánh giá của tôi',
+    'Visit now' => 'Ghé thăm',
 ];
