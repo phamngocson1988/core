@@ -13,47 +13,41 @@ use common\components\helpers\TimeElapsed;
             <div class="hero-main"><a class="hero-photo" href="<?=$model->main_url;?>"><img src="<?=$model->getImageUrl('150x150');?>" alt="<?=$model->name;?>"></a>
               <div class="hero-info">
                 <div class="hero-name"><?=$model->name;?></div>
-                <div class="hero-rate"><span class="rate-text">Very Good <?=number_format($model->averageStar(), 1);?></span><span class="rate-star">
+                <div class="hero-rate"><span class="rate-text"><?=Yii::t('app', 'Very good');?> <?=number_format($model->averageStar(), 1);?></span><span class="rate-star">
                     <div class="star-rating"><span style="width:<?=$model->averageReviewPercent();?>%"></span></div></span></div>
                 <div class="hero-buttons">
                   <a class="btn btn-outline-light" href="<?=$model->main_url;?>">Visit now</a>
                   <?php if (!$isFavorite) : ?>
-                  <a class="btn btn-outline-light add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $model->id]);?>">Add to favorite <i class="fa fa-star-o"></i></a>
+                  <a class="btn btn-outline-light add-favorite-action" href="<?=Url::to(['operator/add-favorite', 'id' => $model->id]);?>"><?=Yii::t('app', 'Add to favorite');?> <i class="fa fa-star-o"></i></a>
                   <?php endif;?>
                 </div>
                 <?php $avgResponseTime = $model->averageRespondTime();?>
                 <?php if ($avgResponseTime) : ?>
                 <div class="hero-feature">
-                  <p><i class="fa fa-clock-o"></i> Average Complaint Response Time: <?=round($avgResponseTime);?> hours</p>
+                  <p><i class="fa fa-clock-o"></i> <?=Yii::t('app', 'Average Complaint Response Time');?>: <?=Yii::t('app', '{count} hours', ['count' => round($avgResponseTime)]);?></p>
                 </div>
                 <?php endif;?>
               </div>
             </div>
             <div class="hero-footer">
               <ul class="hero-nav">
-                <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text">Overview</span></a></li>
-                <li><a href="#detail"><i class="fa fa-exclamation-circle"></i><span class="nav-text">Details</span></a></li>
-                <li><a href="#review"><i class="fa fa-comments"></i><span class="nav-text">Player Reviews (<?=number_format($model->countReview());?>)</span></a></li>
-                <li><a href="#bonus"><i class="fa fa-gift"></i><span class="nav-text">Bonuses (<?=number_format($model->countBonus());?>)</span></a></li>
-                <li><a href="#complain"><i class="fa fa-thumbs-down"></i><span class="nav-text">Complaints (<?=number_format($model->totalComplain());?>)</span></a></li>
+                <li><a href="#overview"><i class="fa fa-info-circle"></i><span class="nav-text"><?=Yii::t('app', 'Overview');?></span></a></li>
+                <li><a href="#detail"><i class="fa fa-exclamation-circle"></i><span class="nav-text"><?=Yii::t('app', 'Details');?></span></a></li>
+                <li><a href="#review"><i class="fa fa-comments"></i><span class="nav-text"><?=Yii::t('app', 'Player Reviews');?> (<?=number_format($model->countReview());?>)</span></a></li>
+                <li><a href="#bonus"><i class="fa fa-gift"></i><span class="nav-text"><?=Yii::t('app', 'Bonuses');?> (<?=number_format($model->countBonus());?>)</span></a></li>
+                <li><a href="#complain"><i class="fa fa-thumbs-down"></i><span class="nav-text"><?=Yii::t('app', 'Complaints');?> (<?=number_format($model->totalComplain());?>)</span></a></li>
                 <!-- <li><a href="#"><i class="fa fa-newspaper"></i><span class="nav-text">News (22)</span></a></li> -->
               </ul>
             </div>
           </section>
           <section class="operator-overview widget-box" id="overview">
             <h2 class="widget-head">
-              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=$model->name;?> Overview</span></div>
+              <div class="head-text"><i class="fa fa-info-circle"></i><span class="text"><?=$model->name;?> <?=Yii::t('app', 'Overview');?></span></div>
             </h2>
             <div class="js-show-more">
               <div class="widget-content">
                 <?=nl2br($model->overview);?>
-                <!-- <div class="show-more-content js-show-more-content">
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere adipisci recusandae ipsam doloremque? Perferendis fugiat distinctio ipsam. Nisi minus amet explicabo ad sunt dolorum iure aliquid totam nihil? Nam, quod!</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere adipisci recusandae ipsam doloremque? Perferendis fugiat distinctio ipsam. Nisi minus amet explicabo ad sunt dolorum iure aliquid totam nihil? Nam, quod!</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere adipisci recusandae ipsam doloremque? Perferendis fugiat distinctio ipsam. Nisi minus amet explicabo ad sunt dolorum iure aliquid totam nihil? Nam, quod!</p>
-                </div> -->
               </div>
-              <!-- <div class="widget-foot overview-button"><a class="trans js-btn-more" href="#"><span class="is-more">Show more</span><span class="is-less">Show less</span></a></div> -->
             </div>
           </section>
           <section class="operator-detail widget-box" id="detail">
@@ -65,14 +59,14 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-globe-americas"></i></div>
-                    <div class="label-text">Main URL</div>
+                    <div class="label-text"><?=Yii::t('app', 'Main URL');?></div>
                   </div>
                   <div class="content"><a href="<?=$model->main_url;?>" target="_blank"><?=$model->main_url;?></a></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fa fa-language"></i></div>
-                    <div class="label-text">Supported Languages</div>
+                    <div class="label-text"><?=Yii::t('app', 'Supported Languages');?></div>
                   </div>
                   <div class="content">
                     <?php $languages = array_map(function($language) {
@@ -85,7 +79,7 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-undo-alt"></i></div>
-                    <div class="label-text">Backup URLs</div>
+                    <div class="label-text"><?=Yii::t('app', 'Backup URLs');?></div>
                   </div>
                   <div class="content">
                     <?php $urls = array_map(function($url) {
@@ -98,7 +92,7 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-dollar-sign"></i></div>
-                    <div class="label-text">Supported Currencies</div>
+                    <div class="label-text"><?=Yii::t('app', 'Supported Currencies');?></div>
                   </div>
                   <div class="content">
                     <?php $currencies = array_map(function($currency) {
@@ -111,7 +105,7 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-gamepad"></i></div>
-                    <div class="label-text">Products</div>
+                    <div class="label-text"><?=Yii::t('app', 'Products');?></div>
                   </div>
                   <div class="content">
                     <?php $products = array_map(function($product) {
@@ -124,14 +118,14 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fab fa-codepen"></i></div>
-                    <div class="label-text">License</div>
+                    <div class="label-text"><?=Yii::t('app', 'License');?></div>
                   </div>
                   <div class="content"><a href="javascript:;"><?=$model->license;?></a></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-credit-card"></i></div>
-                    <div class="label-text">Deposit Methods</div>
+                    <div class="label-text"><?=Yii::t('app', 'Deposit Methods');?></div>
                   </div>
                   <div class="content">
                     <?php $depositMethods = array_map(function($deposit) {
@@ -144,14 +138,14 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-building"></i></div>
-                    <div class="label-text">Owner</div>
+                    <div class="label-text"><?=Yii::t('app', 'Owner');?></div>
                   </div>
                   <div class="content"><a href="javascript:;"><?=$model->owner;?></a></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-dollar-sign"></i></div>
-                    <div class="label-text">Withdrawal Methods</div>
+                    <div class="label-text"><?=Yii::t('app', 'Withdrawal Methods');?></div>
                   </div>
                   <div class="content">
                     <?php $withdrawMethods = array_map(function($method) {
@@ -164,23 +158,23 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-calendar-alt"></i></div>
-                    <div class="label-text">Established</div>
+                    <div class="label-text"><?=Yii::t('app', 'Established');?></div>
                   </div>
                   <div class="content"><a href="javascript:;"><?=$model->established;?></a></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-clock"></i></div>
-                    <div class="label-text">Withdrawal Time</div>
+                    <div class="label-text"><?=Yii::t('app', 'Withdrawal Time');?></div>
                   </div>
                   <div class="content"><?=$model->withdrawal_time;?></div>
                 </li>
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-comments"></i></div>
-                    <div class="label-text">Live Chat</div>
+                    <div class="label-text"><?=Yii::t('app', 'Live Chat');?></div>
                   </div>
-                  <div class="content"><?=$model->livechat_support ? 'Yes' : 'No';?></div>
+                  <div class="content"><?=$model->livechat_support ? Yii::t('app', 'Yes') : <?=Yii::t('app', 'No');?></div>
                 </li>
                 <li>
                   <div class="label">
@@ -192,7 +186,7 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="label-text">Contact</div>
+                    <div class="label-text"><?=Yii::t('app', 'Contact');?></div>
                   </div>
                   <div class="content">
                     <?=$model->support_email;?>
@@ -203,13 +197,13 @@ use common\components\helpers\TimeElapsed;
                 <li>
                   <div class="label">
                     <div class="label-icon"><i class="fas fa-gift"></i></div>
-                    <div class="label-text">Rebates</div>
+                    <div class="label-text"><?=Yii::t('app', 'Rebates');?></div>
                   </div>
-                  <div class="content">Max <?=$model->rebate;?>%</div>
+                  <div class="content"><?=Yii::t('app', 'Max');?> <?=$model->rebate;?>%</div>
                 </li>
               </ul>
               <?php if (Yii::$app->user->can('manage_operator', ['operator' => $model])): ?>
-              <div class="suggest-edit"><a class="btn btn-link" href="<?=Url::to(['manage/index', 'operator_id' => $model->id, 'slug' => $model->slug]);?>">Suggest an edit</a></div>
+              <div class="suggest-edit"><a class="btn btn-link" href="<?=Url::to(['manage/index', 'operator_id' => $model->id, 'slug' => $model->slug]);?>"><?=Yii::t('app', 'Suggest an edit');?></a></div>
               <?php endif;?>
             </div>
           </section>
@@ -220,7 +214,7 @@ use common\components\helpers\TimeElapsed;
               <div class="rate-main">
                 <div class="user-photo"><img src="/img/common/avatar_img_02.png" alt="Username"></div>
                 <div class="rate-content">
-                  <div class="rate-label">Rate <?=$model->name;?> and write a review</div>
+                  <div class="rate-label"><?=Yii::t('app', 'Rate {operator} and write a review', ['operator' => $model->name]);?></div>
                   <div class="rate-star">
                     <div class="star-group">
                       <?php for ($i = 0; $i < 10; $i++) : ?>
@@ -233,7 +227,7 @@ use common\components\helpers\TimeElapsed;
                 </div>
               </div>
               <?php if ($user) : ?>
-              <div class="rate-button"><a class="btn btn-lg btn-primary" href="#write-review-section">Write a review</a></div>
+              <div class="rate-button"><a class="btn btn-lg btn-primary" href="#write-review-section"><?=Yii::t('app', 'Write a review');?></a></div>
               <?php endif;?>
             </div>
             <?php endif;?>
@@ -241,21 +235,21 @@ use common\components\helpers\TimeElapsed;
           <section class="operator-review-group widget-box" id="review">
             <div class="review-header">
               <div class="header-buttons">
-                <a class="btn-text sortable is-down js-btn-sort" href="javascript:;" id='sort-review-by-date'>Sort by date</a>
-                <a class="btn-text sortable is-down js-btn-sort" href="javascript:;" id='sort-review-by-rate'>Sort by rating</a>
-                <div class="btn-text" href="javascript:;">Average rating <?=$model->averageReviewRating();?> of <?=number_format($model->countReview());?> reviews</div>
+                <a class="btn-text sortable is-down js-btn-sort" href="javascript:;" id='sort-review-by-date'><?=Yii::t('app', 'Sort by date');?></a>
+                <a class="btn-text sortable is-down js-btn-sort" href="javascript:;" id='sort-review-by-rate'><?=Yii::t('app', 'Sort by rating');?></a>
+                <div class="btn-text" href="javascript:;"><?=Yii::t('app', 'Average rating {average} of {total} reviews', ['average' => $model->averageReviewRating(), 'total' => number_format($model->countReview())]);?></div>
               </div>
             </div>
             <div class="review-list">
             </div>
-            <div class="review-button"><a class="btn trans" href="javascript:;" id="load-more-reivew">Show more player reviews</a></div>
+            <div class="review-button"><a class="btn trans" href="javascript:;" id="load-more-reivew"><?=Yii::t('app', 'Show more player reviews');?></a></div>
           </section>
           <?php if ($user && !$isReview) : ?>
           <section class="operator-review-form widget-box" id="write-review-section">
             <div class="formrv-header">
               <div class="user-photo"><img src="<?=$user->getAvatarUrl('50x50');?>" alt="Username"></div>
               <div class="rate-content">
-                <div class="rate-label">Rate <?=$model->name;?> and write a review</div>
+                <div class="rate-label"><?=Yii::t('app', 'Rate {operator} and write a review', ['operator' => $model->name]);?></div>
                 <div class="rate-star">
                   <div class="star-group">
                     <?php for ($i = 0; $i < 10; $i++) : ?>
@@ -278,12 +272,12 @@ use common\components\helpers\TimeElapsed;
                 <?= $form->field($reviewForm, 'good_thing', [
                   'options' => ['class' => 'formrv-row row-like'],
                   'template' => '{input}',
-                  'inputOptions' => ['placeholder' => 'What do you like?', 'rows' => 6, 'class' => 'form-control']
+                  'inputOptions' => ['placeholder' => Yii::t('app', 'What do you like?'), 'rows' => 6, 'class' => 'form-control']
                 ])->textArea()->label(false);?>
                 <?= $form->field($reviewForm, 'bad_thing', [
                   'options' => ['class' => 'formrv-row row-dislike'],
                   'template' => '{input}',
-                  'inputOptions' => ['placeholder' => 'What do you dislike?', 'rows' => 6, 'class' => 'form-control']
+                  'inputOptions' => ['placeholder' => Yii::t('app', 'What do you dislike?'), 'rows' => 6, 'class' => 'form-control']
                 ])->textArea()->label(false);?>
               </div>
               <div class="formrv-options">
@@ -294,7 +288,7 @@ use common\components\helpers\TimeElapsed;
                       'template' => '{input}',
                       'inputOptions' => ['class' => 'form-check-input', 'id' => 'review-option-1'],
                     ])->checkbox(['class' => 'form-check-input'], false);?>
-                    <span>Notify me about new player reviews on this page.</span>
+                    <span><?=Yii::t('app', 'Notify me about new player reviews on this page.');?></span>
                   </label>
                 </div>
                 <div class="formrv-check">
@@ -304,12 +298,12 @@ use common\components\helpers\TimeElapsed;
                       'template' => '{input}',
                       'inputOptions' => ['class' => 'form-check-input', 'id' => 'review-option-2'],
                     ])->checkbox(['class' => 'form-check-input'], false);?>
-                    <span>I declare that my review is based on my own experience and represents my genuine opinion of this operator.</span>
+                    <span><?=Yii::t('app', 'I declare that my review is based on my own experience and represents my genuine opinion of this operator.');?></span>
                   </label>
                 </div>
               </div>
               <div class="formrv-button">
-                <button class="btn btn-primary btn-lg" type="submit">Post my review</button>
+                <button class="btn btn-primary btn-lg" type="submit"><?=Yii::t('app', 'Post my review');?></button>
               </div>
               <?php ActiveForm::end();?>
             </div>

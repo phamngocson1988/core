@@ -11,7 +11,7 @@ use yii\helpers\Url;
   <section class="section-news section-white">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title">OPERATOR NEWS</h2><a class="btn btn-primary trans" href="javascrip:;">Operator</a>
+        <h2 class="sec-title"><?=Yii::t('app', 'Operator news');?></h2><a class="btn btn-primary trans" href="javascrip:;"><?=Yii::t('app', 'Operator');?></a>
       </div>
       <div class="row">
         <?php foreach ($operatorNews as $post) : ?>

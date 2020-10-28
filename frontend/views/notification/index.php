@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\widgets\LinkPager;
-$this->title = 'Notifications';
+$this->title = Yii::t('app', 'Notifications');
 ?>
 
 <main>
@@ -10,9 +10,9 @@ $this->title = 'Notifications';
     <div class="container sec-content">
       <div class="mod-column">
         <section class="section-forum-heading">
-          <h1 class="heading-title">Notifications</h1>
+          <h1 class="heading-title"><?=Yii::t('app', 'Notifications');?></h1>
           <div class="heading-button">
-            <a class="btn btn-primary read-all" href="<?= Url::toRoute(['notification/read-all']) ?>">Mark all as read</a>
+            <a class="btn btn-primary read-all" href="<?= Url::toRoute(['notification/read-all']) ?>"><?=Yii::t('app', 'Mark all as read');?></a>
           </div>
         </section>
         <div class="section-notification widget-box">
@@ -28,12 +28,12 @@ $this->title = 'Notifications';
                   <p class="notifition-message"><?= Html::encode($notif['message']); ?></p>
                   <div class="notifition-time"><?= $notif['timeago']; ?></div>
                 </div>
-                <div class="col-button"><span>Read more</span></div>
+                <div class="col-button"><span><?=Yii::t('app', 'Read more');?></span></div>
               </a>
             </li>
             <?php endforeach; ?>
             <?php else: ?>
-                <li class="empty-row">There are no notifications to show</li>
+                <li class="empty-row"><?=Yii::t('app', 'There are no notifications to show');?></li>
             <?php endif; ?>
           </ul>
           <div class="pagination-wrap">

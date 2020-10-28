@@ -6,7 +6,7 @@ use frontend\widgets\LinkPager;
   <section class="section-module">
     <div class="container">
       <div class="heading-group">
-        <h1 class="sec-title">NEWEST OPERATOR</h1>
+        <h1 class="sec-title"><?=Yii::t('app', 'Newest operator');?></h1>
       </div>
       <div class="sec-content">
         <div class="mod-column">
@@ -21,7 +21,7 @@ use frontend\widgets\LinkPager;
                     <div class="star-rating"><span style="width:<?=$operator->averageReviewPercent();?>%"></span></div><span class="star-rating-text"><?=number_format($operator->averageStar(), 1);?></span>
                   </div>
                   <h3 class="card-title"><a href="<?=$operatorView;?>" class="disabled-link"><?=$operator->name;?></a></h3>
-                  <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="<?=$operatorView;?>">JOIN NOW</a>
+                  <p class="card-desc">Product A, Product B,Product C, Product S</p><a class="btn btn-primary" href="<?=$operatorView;?>"><?=Yii::t('app', 'Join now');?></a>
                 </div>
               </div>
             </div>
