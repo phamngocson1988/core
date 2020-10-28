@@ -404,17 +404,33 @@ class OrderController extends Controller
 
     public function actionAccept($id)
     {
-        $form = new TakeOrderSupplierForm([
+        $request = Yii::$app->request;
+        $action = $request->post('action', 'approve');
+
+        $condition = [
             'id' => $id,
             'supplier_id' => Yii::$app->user->id
-
-        ]);
-        if ($form->validate()) {
-            return $this->asJson(['status' => $form->approve()]);
+        ];
+        $approveForm = new TakeOrderSupplierForm($condition);
+        $processForm = new UpdateOrderToProcessingForm($condition);
+        $errors = [];
+        $processResult = $approveForm->approve();
+        if (!$processResult) {
+            $errors = $approveForm->getErrorSummary(false);
+        } elseif ($action == 'process') {
+            $processResult = $processForm->move();
+            if (!$processResult) {
+                $errors = $processForm->getErrorSummary(false);
+            } 
         }
-        $errors = $form->getErrorSummary(false);
-        $error = reset($errors);
-        return $this->asJson(['status' => false, 'errors' => $error]);
+
+        return $this->asJson([
+            'status' => $processResult, 
+            'errors' => reset($errors), 
+            'data' => [
+                'action' => $action,
+                'link' => Url::to(['order/edit', 'id' => $id], true),
+            ]]);
     }
 
     public function actionReject($id)
