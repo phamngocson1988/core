@@ -147,15 +147,17 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                           <input type="hidden" class="btn btn-default" name="action" >
                           <div class="modal-body"> 
                             <div class="row">
-                              <div class="col-md-12" style="text-align: left">
+                              <div class="col-md-12 text-left">
                                 + Chọn "nhận đơn" nếu bạn chưa xử lý đơn hàng.<br/>
                                 + Chỉ chọn "<span style="color:red; font-weight: bold;">Bắt đầu xử lý</span>" khi bạn đã sẵn sàng xử lý đơn hàng.
                               </div>
                             </div>
                           </div>
                           <div class="modal-footer" style="background-color: #dcfcff">
-                            <button type="submit" class="btn btn-default" name="approve">Nhận đơn</button>
-                            <button type="submit" class="btn dark btn-outline" name="process">Bắt đầu xử lý</button>
+                            <div class="col-md-12 text-center">
+                              <button type="submit" class="btn btn-default" name="approve">Nhận đơn</button>
+                              <button type="submit" class="btn dark btn-outline" name="process">Bắt đầu xử lý</button>
+                            </div>
                           </div>
                           <?= Html::endForm(); ?>
                         </div>
@@ -201,10 +203,10 @@ $(".accept-form").on('submit', function() {
         console.log(result);
         if (result.status) {
           if (result.data.action == "process") {
-            window.location.href = result.data.link;
-          } else {
-            location.reload();
+            // window.location.href = result.data.link;
+            window.open(result.data.link);
           }
+          location.reload();
         } else {
           alert(result.errors)
         }
