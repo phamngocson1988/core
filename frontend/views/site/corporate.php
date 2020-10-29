@@ -5,7 +5,7 @@
         <div class="mod-column">
           <div class="widget-box mb-5">
             <div class="news-article p-3 p-md-5">
-              Corporate
+              <?=Yii::t('app', 'Corporate');?>
             </div>
           </div>
         </div>

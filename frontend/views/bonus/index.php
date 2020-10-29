@@ -7,7 +7,7 @@ use yii\bootstrap\ActiveForm;
   <section class="section-module">
     <div class="container">
       <div class="heading-group">
-        <h1 class="sec-title"><?=Yii::t('app', 'lastest_bonus');?></h1>
+        <h1 class="sec-title"><?=Yii::t('app', 'Latest Bonuses');?></h1>
       </div>
       <div class="sec-content">
         <div class="mod-column">
@@ -17,7 +17,7 @@ use yii\bootstrap\ActiveForm;
               'options' => ['tag' => false],
               'template' => '{input}',
               'inputOptions' => ['name' => 'bonus_type', 'class' => 'form-control']
-            ])->dropdownList($search->fetchType(), ['prompt' => Yii::t('app', 'select_bonus_type')])->label(false);?>
+            ])->dropdownList($search->fetchType(), ['prompt' => Yii::t('app', 'Select bonus type')])->label(false);?>
             <div class="total-text text-right"><?=Yii::t('app', 'total_{n,plural,=0{no_active_bonus} =1{one_active_bonus} other{# active_bonus}}', ['n' => $total]);?></div>
           </div>
           
@@ -32,19 +32,19 @@ use yii\bootstrap\ActiveForm;
                   <div class="bonuses-body">
                     <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                     <p class="bonuses-desc"><?=$bonus->getType();?></p>
-                  </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'get_bonus');?></a>
+                  </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
                 </div>
                 <div class="bonuses-back">
                   <div class="bonuses-icon fas fa-close js-close"></div>
                   <div class="bonuses-body">
                     <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                     <p class="bonuses-desc">
-                      <?=Yii::t('app', 'bonus_type');?>: <?=$bonus->getType();?><br>
-                      <?=Yii::t('app', 'bonus_value');?>: $150<br>
-                      <?=Yii::t('app', 'minimum_deposit');?>: <?=$bonus->minimum_deposit;?><br>
-                      <?=Yii::t('app', 'wagering_requirement');?>: <?=$bonus->wagering_requirement;?>
+                      <?=Yii::t('app', 'Bonus Type');?>: <?=$bonus->getType();?><br>
+                      <?=Yii::t('app', 'Bonus Value');?>: $150<br>
+                      <?=Yii::t('app', 'Minimum deposit');?>: <?=$bonus->minimum_deposit;?><br>
+                      <?=Yii::t('app', 'Wagering requirement');?>: <?=$bonus->wagering_requirement;?>
                     </p>
-                  </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'get_bonus');?></a>
+                  </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
                 </div>
               </div>
             </div>
@@ -63,7 +63,7 @@ use yii\bootstrap\ActiveForm;
         <aside class="mod-sidebar">
           <div class="sidebar-col">
             <div class="sidebar-category">
-              <p class="category-title"><?=Yii::t('app', 'filter_bonus');?></p>
+              <p class="category-title"><?=Yii::t('app', 'Filter bonus');?></p>
               <?php $form = ActiveForm::begin(['method' => 'get', 'id' => 'commonSearchForm', 'action' => Url::to(['bonus/index'])]); ?>
               <?= $form->field($search, 'bonus_type', [
                 'options' => ['tag' => false],

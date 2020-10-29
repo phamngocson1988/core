@@ -27,7 +27,7 @@ use common\components\helpers\TimeElapsed;
               <h3 class="card-title"><a href="<?=$operatorView;?>" class="disabled-link"><?=$operator->name;?></a></h3>
               <p class="card-desc">
                 <?=$operator->product;?>
-              </p><a class="btn btn-primary" href="<?=$operatorView;?>">JOIN NOW</a>
+              </p><a class="btn btn-primary" href="<?=$operatorView;?>"><?=Yii::t('app', 'Join now');?></a>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@ use common\components\helpers\TimeElapsed;
   <section class="section-latest-bonuses">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title"><?=Yii::t('app', 'lastest_bonus');?></h2><a class="btn btn-primary trans" href="<?=Url::to(['bonus/index']);?>"><?=Yii::t('app', 'see_all_lastest_bonus');?><i class="fas fa-chevron-right"></i></a>
+        <h2 class="sec-title"><?=Yii::t('app', 'Latest Bonuses');?></h2><a class="btn btn-primary trans" href="<?=Url::to(['bonus/index']);?>"><?=Yii::t('app', 'See all lastest bonus');?><i class="fas fa-chevron-right"></i></a>
       </div>
       <div class="row">
         <?php foreach ($lastestBonuses as $bonus) : ?>
@@ -50,19 +50,19 @@ use common\components\helpers\TimeElapsed;
               <div class="bonuses-body">
                 <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                 <p class="bonuses-desc"><?=$bonus->getType();?></p>
-              </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'get_bonus');?></a>
+              </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
             </div>
             <div class="bonuses-back">
               <div class="bonuses-icon fas fa-close js-close"></div>
               <div class="bonuses-body">
                 <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                 <p class="bonuses-desc">
-                  Type: <?=$bonus->getType();?><br>
-                  Bonus Value: $150<br>
-                  Minimum Deposit: <?=$bonus->minimum_deposit;?><br>
-                  Wagering Requirement: <?=$bonus->wagering_requirement;?>
+                  <?=Yii::t('app', 'Bonus Type');?>: <?=$bonus->getType();?><br>
+                  <?=Yii::t('app', 'Bonus Value');?>: $150<br>
+                  <?=Yii::t('app', 'Minimum Deposit');?>: <?=$bonus->minimum_deposit;?><br>
+                  <?=Yii::t('app', 'Wagering Requirement');?>: <?=$bonus->wagering_requirement;?>
                 </p>
-              </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'get_bonus');?></a>
+              </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@ use common\components\helpers\TimeElapsed;
   <section class="section-latest-complaints">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title">LATEST COMPLAINTS</h2><a class="btn btn-primary trans" href="#">SEE ALL LATEST COMPLAINTS<i class="fas fa-chevron-right"></i></a>
+        <h2 class="sec-title"><?=Yii::t('app', 'Lastest complaints');?></h2><a class="btn btn-primary trans" href="#"><?=Yii::t('app', 'See all lastest complaints');?><i class="fas fa-chevron-right"></i></a>
       </div>
       <div class="row">
         <div class="col-md-12 col-lg-9 col-lrg-8">
@@ -86,7 +86,7 @@ use common\components\helpers\TimeElapsed;
                   <p class="complaint-ttl"><?=strtoupper($complain->status);?> CASE</p>
                   <p><?=TimeElapsed::timeElapsed($complain->created_at);?></p>
                 </div>
-                <div class="complaint-desc"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id, 'slug' => $complain->slug]);?>">READ MORE</a>
+                <div class="complaint-desc"><?=sprintf("%s - %s", $complain->operator->name, $complain->reason->title);?></div><a class="btn btn-primary" href="<?=Url::to(['complain/view', 'id' => $complain->id, 'slug' => $complain->slug]);?>"><?=Yii::t('app', 'Read more');?></a>
               </div>
             </div>
             <?php endforeach;?>

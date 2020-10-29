@@ -6,7 +6,7 @@ $this->title = 'Reset password';
 <main>
   <section class="section-module">
     <div class="container">
-      <h1 class="sec-title">Type new password</h1>
+      <h1 class="sec-title"><?=Yii::t('app', 'Type new password');?></h1>
       <div class="sec-content">
         <div class="mod-column form-complaints">
           <?php $form = ActiveForm::begin(); ?>
@@ -20,7 +20,7 @@ $this->title = 'Reset password';
               </div>
             </div>
             <div class="text-center">
-              <button class="btn btn-primary pl-3 pr-3" type="submit">Change password</button>
+              <button class="btn btn-primary pl-3 pr-3" type="submit"><?=Yii::t('app', 'Change password');?></button>
             </div>
           </div>
           <?php ActiveForm::end();?>

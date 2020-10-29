@@ -1,15 +1,16 @@
 <?php
 return [
-    'lastest_bonus' => 'Tiền Thưởng Mới Nhất',
+    // bonus
+    'Latest Bonuses' => 'Tiền Thưởng Mới Nhất',
     'total_{n,plural,=0{no_active_bonus} =1{one_active_bonus} other{# active_bonus}}' => 'Tổng cộng: {n} tiền thưởng',
-    'get_bonus' => 'Nhận Tiền Thưởng',
-    'bonus_type' => 'Loại Tiền thưởng',
-    'bonus_value' => 'Giá trị tiền thưởng',
-    'minimum_deposit' => 'Số tiền tối thiểu',
-    'wagering_requirement' => 'Yêu cầu tiền lương',
-    'filter_bonus' => 'Tìm kiếm tiền thưởng',
-    'back_to_operator' => 'Trở về nhà cái',
-    'select_bonus_type' => 'Chọn loại tiền thưởng',
+    'Get Bonus' => 'Nhận Tiền Thưởng',
+    'Bonus Type' => 'Loại Tiền thưởng',
+    'Bonus Value' => 'Giá trị tiền thưởng',
+    'Minimum deposit' => 'Số tiền tối thiểu',
+    'Wagering requirement' => 'Yêu cầu tiền lương',
+    'Filter bonus' => 'Tìm kiếm tiền thưởng',
+    'Back to operator' => 'Trở về nhà cái',
+    'Select bonus type' => 'Chọn loại tiền thưởng',
     'page_next' => 'trang sau',
     'page_privious' => 'Trang trước',
 
@@ -204,4 +205,10 @@ return [
     'My reviews' => 'Những đánh giá của tôi',
     'My complaints' => 'Những khiếu nại của tôi',
     'Back to my profile' => 'Trở lại trang hồ sơ cá nhân',
+
+    // site
+    'Type new password' => 'Nhập mật khẩu mới',
+    'See all lastest bonus' => 'Xem tất cả những tiền thưởng mới nhất',
+    'Lastest complaints' => 'Những khiếu nại mới nhất',
+    'See all lastest complaints' => 'Xem những khiếu nại mới nhất',
 ];

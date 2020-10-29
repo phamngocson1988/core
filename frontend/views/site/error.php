@@ -11,7 +11,7 @@ $code = $exception instanceof HttpException ? $exception->statusCode : $exceptio
       <h1 class="notfound-title"><?= $code ?></h1>
       <h2 class="notfound-ttl"><?= Html::encode($this->title) ?></h2>
       <div class="notfound-caption"><?= nl2br(Html::encode($message)) ?></div>
-      <a class="btn btn-primary trans" href="/">HOME</a>
+      <a class="btn btn-primary trans" href="/"><?=Yii::t('app', 'Home');?></a>
     </div>
   </section>
 </main>

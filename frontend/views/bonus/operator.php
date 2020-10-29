@@ -6,7 +6,7 @@ use frontend\widgets\LinkPager;
         <section class="section-module">
           <div class="container">
             <div class="heading-group">
-              <h1 class="sec-title"><?=$operator->name;?></h1><a class="btn btn-primary trans" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><?=Yii::t('app', 'back_to_operator');?><i class="fas fa-chevron-right"></i></a>
+              <h1 class="sec-title"><?=$operator->name;?></h1><a class="btn btn-primary trans" href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><?=Yii::t('app', 'Back to operator');?><i class="fas fa-chevron-right"></i></a>
             </div>
             <div class="sec-content">
               <div class="mod-column">
@@ -20,19 +20,19 @@ use frontend\widgets\LinkPager;
                         <div class="bonuses-body">
                           <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                           <p class="bonuses-desc"><?=$bonus->getType();?></p>
-                        </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'get_bonus');?></a>
+                        </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
                       </div>
                       <div class="bonuses-back">
                         <div class="bonuses-icon fas fa-close js-close"></div>
                         <div class="bonuses-body">
                           <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                           <p class="bonuses-desc">
-                            <?=Yii::t('app', 'bonus_type');?>: <?=$bonus->getType();?><br>
-                            <?=Yii::t('app', 'bonus_value');?>: $150<br>
-                            <?=Yii::t('app', 'minimum_deposit');?>: <?=$bonus->minimum_deposit;?><br>
-                            <?=Yii::t('app', 'wagering_requirement');?>: <?=$bonus->wagering_requirement;?>
+                            <?=Yii::t('app', 'Bonus Type');?>: <?=$bonus->getType();?><br>
+                            <?=Yii::t('app', 'Bonus Value');?>: $150<br>
+                            <?=Yii::t('app', 'Minimum deposit');?>: <?=$bonus->minimum_deposit;?><br>
+                            <?=Yii::t('app', 'Wagering requirement');?>: <?=$bonus->wagering_requirement;?>
                           </p>
-                        </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'get_bonus');?></a>
+                        </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
                       </div>
                     </div>
                   </div>

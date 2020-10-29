@@ -1,15 +1,16 @@
 <?php
 return [
-    'lastest_bonus' => 'Latest Bonuses',
+    // bonus
+    'Latest Bonuses' => 'Latest Bonuses',
     'total_{n,plural,=0{no_active_bonus} =1{one_active_bonus} other{# active_bonus}}' => 'TOTAL {n} ACTIVE BONUSES',
-    'get_bonus' => 'Get Bonus',
-    'bonus_type' => 'Bonus Type',
-    'bonus_value' => 'Bonus Value',
-    'minimum_deposit' => 'Minimum deposit',
-    'wagering_requirement' => 'Wagering requirement',
-    'filter_bonus' => 'Filter bonus',
-    'back_to_operator' => 'Back to operator',
-    'select_bonus_type' => 'Select bonus type',
+    'Get Bonus' => 'Get Bonus',
+    'Bonus Type' => 'Bonus Type',
+    'Bonus Value' => 'Bonus Value',
+    'Minimum deposit' => 'Minimum deposit',
+    'Wagering requirement' => 'Wagering requirement',
+    'Filter bonus' => 'Filter bonus',
+    'Back to operator' => 'Back to operator',
+    'Select bonus type' => 'Select bonus type',
     'page_next' => 'Next',
     'page_privious' => 'Privious',
 
@@ -204,6 +205,12 @@ return [
     'My complaints' => 'My complaints',
     'Back to my profile' => 'Back to my profile',
 
+    // site
+    'Type new password' => 'Type new password',
+    'See all lastest bonus' => 'See all lastest bonus',
+    'Lastest complaints' => 'Lastest complaints',
+    'See all lastest complaints' => 'See all lastest complaints',
+
 
     'newest_operator' => 'Newest operator',
     'user_is_not_exist' => 'User is not exist',
@@ -246,7 +253,6 @@ return [
     'logout' => 'Logout',
     'email' => 'Email',
     'top_operator' => 'Top operator',
-    'see_all_lastest_bonus' => 'See all lastest bonus',
     'see_all_newest_operator' => 'See all newest operator',
     'activate_account_success' => 'You have activated your account successfully!',
     'activate_account_fail' => 'There is something wrong. Please contact with our customer service!',
