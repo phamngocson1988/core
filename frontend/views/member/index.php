@@ -7,7 +7,7 @@ use common\components\helpers\TimeElapsed;
 <main>
   <div class="forum-container container section-forum-profile">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a class="fa fa-home trans" href="/">Home</a></li>
+      <li class="breadcrumb-item"><a class="fa fa-home trans" href="/"><?=Yii::t('app', 'Home');?></a></li>
       <li class="breadcrumb-item active"><?=$user->username;?></li>
     </ol>
     <div class="widget-box">

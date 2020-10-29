@@ -24,18 +24,18 @@ $badgeUrl = Url::to(['profile/badge']);
           </div>
           <div class="heading-left d-flex col-md-3 col-lg-4 order-md-1 p-0">
             <div class="level d-flex">
-              <div class="text-uppercase">Level</div>
+              <div class="text-uppercase"><?=Yii::t('app', 'Level');?></div>
               <div class="level-number"><?=$level;?></div>
             </div>
             <div class="point d-flex">
-              <div class="text-uppercase">POINTS</div>
+              <div class="text-uppercase"><?=Yii::t('app', 'Points');?></div>
               <div class="point-number"><?=number_format($point);?></div>
             </div>
           </div>
           <div class="heading-right col-md-3 col-lg-4 order-md-3 p-0">
             <ul class="profile-link">
-              <li class="favorites"><a class="trans" href="<?=Url::to(['profile/favorite']);?>"><span>FAVORITES</span><i class="fas fa-star"></i></a></li>
-              <li class="edit-profile"><a class="trans" href="<?=Url::to(['profile/setting']);?>"><span>EDIT PROFILE</span><i class="fas fa-user"></i></a></li>
+              <li class="favorites"><a class="trans" href="<?=Url::to(['profile/favorite']);?>"><span><?=Yii::t('app', 'Favorites');?></span><i class="fas fa-star"></i></a></li>
+              <li class="edit-profile"><a class="trans" href="<?=Url::to(['profile/setting']);?>"><span><?=Yii::t('app', 'Edit profile');?></span><i class="fas fa-user"></i></a></li>
             </ul>
           </div>
         </div>
@@ -44,15 +44,15 @@ $badgeUrl = Url::to(['profile/badge']);
         <div class="mod-column">
           <div class="widget-box timeline-post">
             <div class="timeline-heading">
-              <p class="heading-text mb-0">ACTIVITIES</p>
+              <p class="heading-text mb-0"><?=Yii::t('app', 'Activities');?></p>
               <div class="dropdown dropdown-fillter">
-                <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
+                <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i><?=Yii::t('app', 'Filter');?></button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <ul class="list-tabs nav nav-pills" role="tablist">
-                    <li role="presentation"><a class="tab-item active" href="javascript:;" id="badge-all">All</a></li>
-                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-profile">Complete Profile</a></li>
-                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-complain">Complaints</a></li>
-                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-review">Reviews</a></li>
+                    <li role="presentation"><a class="tab-item active" href="javascript:;" id="badge-all"><?=Yii::t('app', 'All');?></a></li>
+                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-profile"><?=Yii::t('app', 'Complete Profile');?></a></li>
+                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-complain"><?=Yii::t('app', 'Complaints');?></a></li>
+                    <li role="presentation"><a class="tab-item" href="javascript:;" id="badge-review"><?=Yii::t('app', 'Reviews');?></a></li>
                   </ul>
                 </div>
               </div>
@@ -69,10 +69,10 @@ $badgeUrl = Url::to(['profile/badge']);
         <div class="mod-sidebar">
           <div class="sidebar-col widget-box"><a class="btn-profile trans" href="<?=Url::to(['mail/index']);?>"><i class="fas fa-envelope"></i><i class="fas fa-chevron-right"></i><span>MY MESSAGES (0)</span></a></div>
           <div class="sidebar-col widget-box">
-            <div class="widget-title">LEVEL PROGRESS</div>
+            <div class="widget-title"><?=Yii::t('app', 'Level progress');?></div>
             <div class="widget-body">
               <div class="timeline-progress">
-                <p class="timeline-txt">Level <?=$level;?></p>
+                <p class="timeline-txt"><?=Yii::t('app', 'Level');?> <?=$level;?></p>
                 <?php if ($nextLevelPoint !== false) : ?>
                 <p class="timeline-levelval"><i class="far fa-gem"></i><span><?=number_format($point);?>/<?=number_format($nextLevelPoint);?></span></p>
                 <div class="progress-meter"><span style="width:<?=$point*100/$nextLevelPoint;?>%"></span></div>
@@ -81,7 +81,7 @@ $badgeUrl = Url::to(['profile/badge']);
                 <div class="progress-meter"><span style="width:100%"></span></div>
                 <?php endif;?>
               </div>
-              <p class="mb-2">Achievements</p>
+              <p class="mb-2"><?=Yii::t('app', 'Achievements');?></p>
               <ul class="achievement-badge">
                 <?php if ($user->hasBadge(UserBadge::BADGE_PROFILE)) : ?>
                 <li><img src="/img/common/member.png" alt="image"></li>
@@ -96,10 +96,10 @@ $badgeUrl = Url::to(['profile/badge']);
             </div>
           </div>
           <div class="sidebar-col widget-box">
-            <div class="widget-title">RANKINGS</div>
+            <div class="widget-title"><?=Yii::t('app', 'Rankings');?></div>
             <div class="widget-body">
               <ul class="rankings-list">
-                <li><a class="trans" href="javascript:;"><span class="icon"><img src="/img/common/planet.png" alt="image"></span><span class="text">#<?=number_format($user->getRanking());?> in overall</span><i class="fas fa-chevron-right"></i></a></li>
+                <li><a class="trans" href="javascript:;"><span class="icon"><img src="/img/common/planet.png" alt="image"></span><span class="text">#<?=number_format($user->getRanking());?> <?=Yii::t('app', 'in overall');?></span><i class="fas fa-chevron-right"></i></a></li>
               </ul>
             </div>
           </div>
@@ -107,16 +107,16 @@ $badgeUrl = Url::to(['profile/badge']);
             <div class="widget-title"><?=sprintf("%s'S STATS", $user->username);?></div>
             <div class="widget-body">
               <ul class="stats-list">
-                <li>Member since
+                <li><?=Yii::t('app', 'Member since');?>
                   <p class="text"><?=date("F j, Y", strtotime($user->created_at));?></p>
                 </li>
-                <li>Level
+                <li><?=Yii::t('app', 'Level');?>
                   <p class="text"><?=$level;?></p>
                 </li>
-                <li>Badges
+                <li><?=Yii::t('app', 'Badges');?>
                   <p class="text"><?=number_format($user->countBadge());?></p>
                 </li>
-                <li>Forum posts
+                <li><?=Yii::t('app', 'Forum posts');?>
                   <p class="text"><?=number_format($user->countForumPost());?></p>
                 </li>
               </ul>

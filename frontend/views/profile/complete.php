@@ -11,8 +11,8 @@ $user = Yii::$app->user->getIdentity();
         <div class="max-container">
           <?php $form = ActiveForm::begin(); ?>
             <div class="border-bottom pb-3 mb-4">
-              <h1 class="sec-title text-center text-uppercase mb-1">COMPLETE YOUR PROFILE</h1>
-              <p class="text-center text-uppercase">Set your profile picture</p>
+              <h1 class="sec-title text-center text-uppercase mb-1"><?=Yii::t('app', 'Complete your profile');?></h1>
+              <p class="text-center text-uppercase"><?=Yii::t('app', 'Set your profile picture');?></p>
               <div class="heading-image mb-4 user-avatar-background">
                 <img class="object-fit user-avatar" src="<?=$user->getAvatarUrl('180x180');?>" alt="image">
                 <a class="edit-camera fas fa-camera trans" href="javascript:;"></a>
@@ -24,7 +24,7 @@ $user = Yii::$app->user->getIdentity();
                     'options' => ['class' => 'mb-3'],
                     'labelOptions' => ['class' => 'mb-2 text-uppercase'],
                     'inputOptions' => ['class' => 'form-control btn-block']
-                  ])->textInput(['placeholder' => 'First name']);?>
+                  ])->textInput(['placeholder' => Yii::t('app', 'First name')]);?>
                 </div>
 
 
@@ -33,28 +33,28 @@ $user = Yii::$app->user->getIdentity();
                     'options' => ['class' => 'mb-3'],
                     'labelOptions' => ['class' => 'mb-2 text-uppercase'],
                     'inputOptions' => ['class' => 'form-control btn-block']
-                  ])->textInput(['placeholder' => 'Last name']);?>
+                  ])->textInput(['placeholder' => Yii::t('app', 'Last name')]);?>
                 </div>
                 <div class="col-sm-6">
                   <?= $form->field($model, 'country', [
                     'options' => ['class' => 'mb-3'],
                     'labelOptions' => ['class' => 'mb-2 text-uppercase'],
                     'inputOptions' => ['class' => 'form-control btn-block']
-                  ])->dropdownList($model->fetchCountry(), ['prompt' => Yii::t('app', 'select_country')]);?>
+                  ])->dropdownList($model->fetchCountry(), ['prompt' => Yii::t('app', 'Select country')]);?>
                 </div>
                 <div class="col-sm-6">
                   <?= $form->field($model, 'gender', [
                     'options' => ['class' => 'mb-3'],
                     'labelOptions' => ['class' => 'mb-2 text-uppercase'],
                     'inputOptions' => ['class' => 'form-control btn-block']
-                  ])->dropdownList($model->fetchGender(), ['prompt' => Yii::t('app', 'select_gender')]);?>
+                  ])->dropdownList($model->fetchGender(), ['prompt' => Yii::t('app', 'Select gender')]);?>
                 </div>
               </div>
             </div>
             <?php if ($operators) : ?>
             <div class="mb-3 mb-md-5">
-              <h1 class="sec-title text-center text-uppercase mb-1">SUGGESTION FOR YOU</h1>
-              <p class="text-center">add these operators to your favorites</p>
+              <h1 class="sec-title text-center text-uppercase mb-1"><?=Yii::t('app', 'Suggestion for you');?></h1>
+              <p class="text-center"><?=Yii::t('app', 'add these operators to your favorites');?></p>
               <ul class="list-add">
                 <?php foreach ($operators as $operator) : ?>
                   <li>
@@ -66,7 +66,7 @@ $user = Yii::$app->user->getIdentity();
             </div>
             <?php endif;?>
             <div class="text-center">
-              <button class="btn btn-primary text-uppercase pl-4 pr-4" type="submit">COMPLETE YOUR PROFILE</button>
+              <button class="btn btn-primary text-uppercase pl-4 pr-4" type="submit"><?=Yii::t('app', 'Complete your profile');?></button>
             </div>
           <?php ActiveForm::end();?>
         </div>

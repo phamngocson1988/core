@@ -7,7 +7,7 @@ use common\components\helpers\TimeElapsed;
   <section class="section-module">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title"><?=Yii::t('app', 'COMPLAINTS');?></h2>
+        <h2 class="sec-title"><?=Yii::t('app', 'Complaints');?></h2>
         <?php if (!Yii::$app->user->isGuest) : ?>
         <a class="btn btn-primary trans" href="<?=Url::to(['complain/create']);?>"><?=Yii::t('app', 'leave_complain');?><i class="fas fa-chevron-right"></i></a>
         <?php endif;?>
