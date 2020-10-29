@@ -156,9 +156,10 @@ _realTimeNewRequestChecker = setInterval(function() {
       success: function (data) {
         console.log('_realTimeNewRequestChecker', data);
         if (data.status == true) {
-          console.log('_realTimeNewRequestChecker current', $('#new_request_order').html());
+          let current = $('#new_request_order').html() || 0;
+          console.log('_realTimeNewRequestChecker current', current);
           let count = data.count;
-          if (count != $('#new_request_order').html()) {
+          if (count != current) {
             location.reload();
           } else {
             console.log('there is no new request');
