@@ -1,6 +1,0 @@
-[17-Feb-2019 14:26:46 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/closure/Behavior.php on line 29
-[17-Feb-2019 14:26:50 UTC] PHP Fatal error:  Interface 'yii\queue\JobInterface' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/closure/Job.php on line 18
-[18-Feb-2019 08:53:06 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/closure/Behavior.php on line 29
-[18-Feb-2019 08:53:08 UTC] PHP Fatal error:  Interface 'yii\queue\JobInterface' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/closure/Job.php on line 18
-[19-Feb-2019 02:13:55 UTC] PHP Fatal error:  Class 'yii\base\Behavior' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/closure/Behavior.php on line 29
-[19-Feb-2019 02:13:58 UTC] PHP Fatal error:  Interface 'yii\queue\JobInterface' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/closure/Job.php on line 18

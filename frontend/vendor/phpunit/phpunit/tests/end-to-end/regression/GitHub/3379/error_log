@@ -1,6 +1,0 @@
-[19-Feb-2019 01:33:38 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/3379/Issue3379Test.php on line 14
-[19-Feb-2019 01:33:40 UTC] PHP Fatal error:  Trait 'PHPUnit\Framework\TestListenerDefaultImplementation' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/3379/Issue3379TestListener.php on line 18
-[19-Feb-2019 10:18:24 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/3379/Issue3379Test.php on line 14
-[19-Feb-2019 10:18:26 UTC] PHP Fatal error:  Trait 'PHPUnit\Framework\TestListenerDefaultImplementation' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/3379/Issue3379TestListener.php on line 18
-[19-Feb-2019 22:34:20 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/3379/Issue3379Test.php on line 14
-[19-Feb-2019 22:34:27 UTC] PHP Fatal error:  Trait 'PHPUnit\Framework\TestListenerDefaultImplementation' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/3379/Issue3379TestListener.php on line 18

@@ -1,3 +1,0 @@
-[19-Feb-2019 01:26:33 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/2382/Issue2382Test.php on line 12
-[19-Feb-2019 10:14:19 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/2382/Issue2382Test.php on line 12
-[19-Feb-2019 22:31:54 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/regression/GitHub/2382/Issue2382Test.php on line 12

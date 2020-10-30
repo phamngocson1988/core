@@ -1,3 +1,0 @@
-[18-Feb-2019 12:43:56 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/snapshots/tests/_support/DataTester.php on line 19
-[19-Feb-2019 06:05:12 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/snapshots/tests/_support/DataTester.php on line 19
-[19-Feb-2019 18:55:59 UTC] PHP Fatal error:  Class 'Codeception\Actor' not found in /home/kinggems/public_html/vendor/codeception/base/tests/data/snapshots/tests/_support/DataTester.php on line 19

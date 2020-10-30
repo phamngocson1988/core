@@ -1,6 +1,0 @@
-[17-Feb-2019 00:11:38 UTC] PHP Fatal error:  Interface 'Psr\Cache\CacheItemInterface' not found in /home/kinggems/public_html/vendor/symfony/contracts/Cache/ItemInterface.php on line 23
-[17-Feb-2019 00:11:40 UTC] PHP Fatal error:  Interface 'Symfony\Contracts\Cache\CacheInterface' not found in /home/kinggems/public_html/vendor/symfony/contracts/Cache/TagAwareCacheInterface.php on line 21
-[17-Feb-2019 13:32:25 UTC] PHP Fatal error:  Interface 'Psr\Cache\CacheItemInterface' not found in /home/kinggems/public_html/vendor/symfony/contracts/Cache/ItemInterface.php on line 23
-[17-Feb-2019 13:32:29 UTC] PHP Fatal error:  Interface 'Symfony\Contracts\Cache\CacheInterface' not found in /home/kinggems/public_html/vendor/symfony/contracts/Cache/TagAwareCacheInterface.php on line 21
-[18-Feb-2019 08:39:59 UTC] PHP Fatal error:  Interface 'Psr\Cache\CacheItemInterface' not found in /home/kinggems/public_html/vendor/symfony/contracts/Cache/ItemInterface.php on line 23
-[18-Feb-2019 08:40:00 UTC] PHP Fatal error:  Interface 'Symfony\Contracts\Cache\CacheInterface' not found in /home/kinggems/public_html/vendor/symfony/contracts/Cache/TagAwareCacheInterface.php on line 21

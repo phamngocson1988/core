@@ -1,6 +1,0 @@
-[18-Feb-2019 08:54:20 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/gearman/Command.php on line 17
-[18-Feb-2019 08:54:21 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/gearman/Queue.php on line 18
-[19-Feb-2019 02:16:27 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/gearman/Command.php on line 17
-[19-Feb-2019 02:16:29 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/gearman/Queue.php on line 18
-[19-Feb-2019 18:46:37 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/gearman/Command.php on line 17
-[19-Feb-2019 18:46:58 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/gearman/Queue.php on line 18

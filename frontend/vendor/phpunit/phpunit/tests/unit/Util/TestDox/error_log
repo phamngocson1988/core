@@ -1,6 +1,0 @@
-[18-Feb-2019 08:17:51 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Util/TestDox/CliTestDoxPrinterTest.php on line 17
-[18-Feb-2019 08:17:57 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Util/TestDox/NamePrettifierTest.php on line 14
-[19-Feb-2019 01:36:59 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Util/TestDox/CliTestDoxPrinterTest.php on line 17
-[19-Feb-2019 01:37:02 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Util/TestDox/NamePrettifierTest.php on line 14
-[19-Feb-2019 10:25:06 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Util/TestDox/CliTestDoxPrinterTest.php on line 17
-[19-Feb-2019 10:25:08 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Util/TestDox/NamePrettifierTest.php on line 14

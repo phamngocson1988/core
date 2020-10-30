@@ -1,9 +1,0 @@
-[17-Feb-2019 10:02:59 UTC] PHP Fatal error:  Interface 'PHPUnit\Runner\BeforeFirstTestHook' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/Extension.php on line 24
-[17-Feb-2019 10:03:01 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/HookTest.php on line 16
-[17-Feb-2019 10:03:03 UTC] PHP Fatal error:  Class 'PHPUnit\Util\Printer' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/NullPrinter.php on line 16
-[18-Feb-2019 08:10:58 UTC] PHP Fatal error:  Interface 'PHPUnit\Runner\BeforeFirstTestHook' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/Extension.php on line 24
-[18-Feb-2019 08:11:01 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/HookTest.php on line 16
-[18-Feb-2019 08:11:04 UTC] PHP Fatal error:  Class 'PHPUnit\Util\Printer' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/NullPrinter.php on line 16
-[19-Feb-2019 01:29:02 UTC] PHP Fatal error:  Interface 'PHPUnit\Runner\BeforeFirstTestHook' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/Extension.php on line 24
-[19-Feb-2019 01:29:04 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/HookTest.php on line 16
-[19-Feb-2019 01:29:06 UTC] PHP Fatal error:  Class 'PHPUnit\Util\Printer' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/end-to-end/_files/NullPrinter.php on line 16

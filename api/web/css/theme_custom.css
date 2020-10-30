@@ -1,0 +1,46 @@
+.view-first .mask {
+	background-color: rgba(0,0,0,0);
+}
+
+.view .tools {
+    margin: 0;
+}
+
+#image-popup-form li a .fa {
+  visibility:hidden;
+}
+#image-popup-form li a.selected .fa{
+    visibility:visible;
+}
+#image-popup-form .thumbnail.selected {
+	border: solid 1px #000;
+}
+
+.box-shadow {
+	box-shadow: 0 4px 8px 0 rgb(88, 86, 86), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.inline {
+	display: inline-block;	
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+}
+
+.table td.center {
+	text-align: center !important;
+	vertical-align: middle !important;
+	min-width: 100px !important;
+}
+
+.table td.left {
+	text-align: left !important;
+	vertical-align: middle !important;
+}
+
+.table th {
+	text-align: center;
+	vertical-align: middle !important;
+}

@@ -1,3 +1,0 @@
-[19-Feb-2019 02:07:02 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/tests/unit/data/TestModel.php on line 11
-[19-Feb-2019 10:44:12 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/tests/unit/data/TestModel.php on line 11
-[19-Feb-2019 22:21:31 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/unclead/yii2-multiple-input/tests/unit/data/TestModel.php on line 11

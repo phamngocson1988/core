@@ -1,9 +1,0 @@
-[17-Feb-2019 10:04:33 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/PhptTestCaseTest.php on line 15
-[17-Feb-2019 10:04:34 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/ResultCacheExtensionTest.php on line 20
-[17-Feb-2019 10:04:38 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/TestSuiteSorterTest.php on line 18
-[18-Feb-2019 08:16:51 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/PhptTestCaseTest.php on line 15
-[18-Feb-2019 08:16:53 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/ResultCacheExtensionTest.php on line 20
-[18-Feb-2019 08:16:55 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/TestSuiteSorterTest.php on line 18
-[19-Feb-2019 01:35:55 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/PhptTestCaseTest.php on line 15
-[19-Feb-2019 01:35:58 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/ResultCacheExtensionTest.php on line 20
-[19-Feb-2019 01:36:00 UTC] PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found in /home/kinggems/public_html/vendor/phpunit/phpunit/tests/unit/Runner/TestSuiteSorterTest.php on line 18

@@ -1,3 +1,0 @@
-[16-Feb-2019 02:51:21 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Process' not found in /home/kinggems/public_html/vendor/symfony/process/PhpProcess.php on line 25
-[16-Feb-2019 23:57:54 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Process' not found in /home/kinggems/public_html/vendor/symfony/process/PhpProcess.php on line 25
-[17-Feb-2019 13:43:47 UTC] PHP Fatal error:  Class 'Symfony\Component\Process\Process' not found in /home/kinggems/public_html/vendor/symfony/process/PhpProcess.php on line 25

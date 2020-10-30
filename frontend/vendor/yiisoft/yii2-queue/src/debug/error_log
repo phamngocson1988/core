@@ -1,3 +1,0 @@
-[17-Feb-2019 14:27:17 UTC] PHP Fatal error:  Class 'yii\debug\Panel' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/debug/Panel.php on line 23
-[18-Feb-2019 08:53:14 UTC] PHP Fatal error:  Class 'yii\debug\Panel' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/debug/Panel.php on line 23
-[19-Feb-2019 02:14:05 UTC] PHP Fatal error:  Class 'yii\debug\Panel' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/debug/Panel.php on line 23

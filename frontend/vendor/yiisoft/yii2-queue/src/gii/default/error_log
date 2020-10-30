@@ -1,9 +1,0 @@
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Undefined variable: interfaces in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 11
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Undefined variable: ns in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 20
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Undefined variable: jobClass in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 23
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Undefined variable: jobClass in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 25
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Undefined variable: baseClass in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 25
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Undefined variable: properties in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 28
-[18-Feb-2019 08:55:05 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 28
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Undefined variable: generator in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 38
-[18-Feb-2019 08:55:05 UTC] PHP Notice:  Trying to get property 'retryable' of non-object in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/gii/default/job.php on line 38

@@ -1,6 +1,0 @@
-[29-Nov-2018 18:05:00 UTC] PHP Warning:  Class 'PHPUnit_Runner_Version' not found in /home/kinggems/public_html/vendor/codeception/stub/src/shim.php on line 7
-[23-Dec-2018 01:23:59 UTC] PHP Warning:  Class 'PHPUnit_Runner_Version' not found in /home/kinggems/public_html/vendor/codeception/stub/src/shim.php on line 7
-[07-Jan-2019 15:24:23 UTC] PHP Warning:  Class 'PHPUnit_Runner_Version' not found in /home/kinggems/public_html/vendor/codeception/stub/src/shim.php on line 7
-[25-Jan-2019 17:09:29 UTC] PHP Warning:  Class 'PHPUnit_Runner_Version' not found in /home/kinggems/public_html/vendor/codeception/stub/src/shim.php on line 7
-[31-Jan-2019 03:10:01 UTC] PHP Warning:  Class 'PHPUnit_Runner_Version' not found in /home/kinggems/public_html/vendor/codeception/stub/src/shim.php on line 7
-[16-Feb-2019 08:35:59 UTC] PHP Warning:  Class 'PHPUnit_Runner_Version' not found in /home/kinggems/public_html/vendor/codeception/stub/src/shim.php on line 7

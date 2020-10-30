@@ -1,6 +1,0 @@
-[17-Feb-2019 00:36:26 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/src/models/Router.php on line 19
-[17-Feb-2019 00:36:28 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/src/models/UserSwitch.php on line 24
-[17-Feb-2019 14:14:05 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/src/models/Router.php on line 19
-[17-Feb-2019 14:14:08 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/src/models/UserSwitch.php on line 24
-[18-Feb-2019 08:48:15 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/src/models/Router.php on line 19
-[18-Feb-2019 08:48:16 UTC] PHP Fatal error:  Class 'yii\base\Model' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-debug/src/models/UserSwitch.php on line 24

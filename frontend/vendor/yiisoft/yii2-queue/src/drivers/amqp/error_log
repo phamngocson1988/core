@@ -1,6 +1,0 @@
-[18-Feb-2019 08:53:35 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/amqp/Command.php on line 19
-[18-Feb-2019 08:53:36 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/amqp/Queue.php on line 25
-[19-Feb-2019 02:14:33 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/amqp/Command.php on line 19
-[19-Feb-2019 02:14:36 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/amqp/Queue.php on line 25
-[19-Feb-2019 10:45:54 UTC] PHP Fatal error:  Class 'yii\queue\cli\Command' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/amqp/Command.php on line 19
-[19-Feb-2019 18:39:48 UTC] PHP Fatal error:  Class 'yii\queue\cli\Queue' not found in /home/kinggems/public_html/vendor/yiisoft/yii2-queue/src/drivers/amqp/Queue.php on line 25
