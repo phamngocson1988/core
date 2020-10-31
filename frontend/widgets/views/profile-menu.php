@@ -6,10 +6,10 @@ use yii\helpers\Url;
   <span class="js-action"></span>
   <div class="dropdown-mega">
     <div class="dropdown-mega-inner">
-      <p class="mega-title">Good afternoon <?=$user->getName();?><i class="fas fa-cog"></i></p>
+      <p class="mega-title"><?=Yii::t('app', 'Good afternoon {user}', ['user' => $user->getName()]);?> <i class="fas fa-cog"></i></p>
       <div class="mega-content">
         <div class="mega-row">
-          <p class="mega-ttl"><?=Yii::t('app', 'active_complaint');?></p>
+          <p class="mega-ttl"><?=Yii::t('app', 'Active complaint');?></p>
           <?php if ($complains) : ?>
           <ul class="list-text">
             <?php foreach ($complains as $complain) :?>
@@ -21,7 +21,7 @@ use yii\helpers\Url;
         </div>
         <?php if ($operators) : ?>
         <div class="mega-row">
-          <p class="mega-ttl"><?=Yii::t('app', 'favorite_operator');?></p>
+          <p class="mega-ttl"><?=Yii::t('app', 'Favorite operator');?></p>
           <ul class="list-favorites">
             <?php foreach ($operators as $operator) : ?>
             <li><a href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><img src="<?=$operator->getImageUrl('50x50');?>" alt="image"></a></li>
@@ -31,7 +31,7 @@ use yii\helpers\Url;
         </div>
         <?php endif;?>
       </div>
-      <div class="mega-link"><a href="<?=Url::to(['profile/index']);?>" class="text-uppercase"><?=Yii::t('app', 'my_profile');?></a><a class="trans" href="<?=Url::to(['site/logout']);?>"><?=Yii::t('app', 'logout');?></a></div>
+      <div class="mega-link"><a href="<?=Url::to(['profile/index']);?>" class="text-uppercase"><?=Yii::t('app', 'My profile');?></a><a class="trans" href="<?=Url::to(['site/logout']);?>"><?=Yii::t('app', 'Logout');?></a></div>
     </div>
   </div>
 </div>

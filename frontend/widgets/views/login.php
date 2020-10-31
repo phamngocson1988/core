@@ -7,7 +7,7 @@ use yii\helpers\Url;
   <div class="modal-dialog modal-login modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title text-uppercase">Login</h3>
+        <h3 class="modal-title text-uppercase"><?=Yii::t('app', 'Login');?></h3>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>
       <div class="modal-body">
@@ -22,17 +22,17 @@ use yii\helpers\Url;
 				    ])->checkbox(['class' => 'form-check-input', 'style' => "margin-top:6px"], false);?>
           </div>
           <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase"><?=Yii::t('app', 'login');?></button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase"><?=Yii::t('app', 'Login');?></button>
           </div>
         <?php ActiveForm::end(); ?>
 
         <div class="text-center">
-          <p><?=Yii::t('app', 'not_member_yet');?><a href="#modalSignup" data-toggle="modal" style="cursor: pointer;"
-            data-dismiss="modal"> <?=Yii::t('app', 'signup');?></a></p>
+          <p><?=Yii::t('app', 'Not member yet');?><a href="#modalSignup" data-toggle="modal" style="cursor: pointer;"
+            data-dismiss="modal"> <?=Yii::t('app', 'Signup');?></a></p>
         </div>
         <div class="text-center">
-          <p><?=Yii::t('app', 'forgot_password?');?><a href="#modalResetPassword" data-toggle="modal" style="cursor: pointer;"
-            data-dismiss="modal"> <?=Yii::t('app', 'reset_password');?></a></p>
+          <p><?=Yii::t('app', 'Forgot password?');?><a href="#modalResetPassword" data-toggle="modal" style="cursor: pointer;"
+            data-dismiss="modal"> <?=Yii::t('app', 'Reset password');?></a></p>
         </div>
       </div>
     </div>

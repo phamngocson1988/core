@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 ?>
 <section class="operator-bonus" id="bonus">
-  <h2 class="sec-title text-center"><?=$operator->name;?> Bonuses</h2>
+  <h2 class="sec-title text-center"><?=Yii::t('app', '{operator} bonuses', ['operator' => $operator->name]);?></h2>
   <div class="row">
     <?php foreach ($bonuses as $bonus) : ?>
     <div class="col-12 col-sm-6 col-md-6 col-lg-3">
@@ -13,23 +13,23 @@ use yii\helpers\Url;
           <div class="bonuses-body">
             <h3 class="bonuses-title"><?=$bonus->title;?></h3>
             <p class="bonuses-desc"><?=$bonus->getType();?></p>
-          </div><a class="btn btn-primary" href="javascript:;">GET BONUS</a>
+          </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
         </div>
         <div class="bonuses-back">
           <div class="bonuses-icon fas fa-close js-close"></div>
           <div class="bonuses-body">
             <h3 class="bonuses-title"><?=$bonus->title;?></h3>
             <p class="bonuses-desc">
-              Type: <?=$bonus->getType();?><br>
-              Bonus Value: $150<br>
-              Minimum Deposit: <?=$bonus->minimum_deposit;?><br>
-              Wagering Requirement: <?=$bonus->wagering_requirement;?>
+              <?=Yii::t('app', 'Bonus Type');?>: <?=$bonus->getType();?><br>
+              <?=Yii::t('app', 'Bonus Value');?>: $150<br>
+              <?=Yii::t('app', 'Minimum Deposit');?>: <?=$bonus->minimum_deposit;?><br>
+              <?=Yii::t('app', 'Wagering Requirement');?>: <?=$bonus->wagering_requirement;?>
             </p>
-          </div><a class="btn btn-primary" href="javascript:;">GET BONUS</a>
+          </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
         </div>
       </div>
     </div>
     <?php endforeach;?>
   </div>
-  <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['bonus/operator', 'id' => $operator->id, 'slug' => $operator->slug]);?>">See all <i class="fas fa-chevron-right"></i></a></div>
+  <div class="operator-sec-button"><a class="btn" href="<?=Url::to(['bonus/operator', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><?=Yii::t('app', 'See all');?> <i class="fas fa-chevron-right"></i></a></div>
 </section>

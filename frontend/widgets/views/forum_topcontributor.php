@@ -2,14 +2,18 @@
 use yii\helpers\Url;
 ?>
 <section class="section-contributors widget-box">
-  <h3 class="widget-head">Top Contributors</h3>
-  <div class="contrib-tab-header"><a class="is-active" href="#week">This Week</a><a href="#month">This Month</a><a href="#year">This Year</a><a href="#all">All Time</a></div>
+  <h3 class="widget-head"><?=Yii::t('app', 'Top Contributors');?></h3>
+  <div class="contrib-tab-header">
+    <a class="is-active" href="#week"><?=Yii::t('app', 'This Week');?></a>
+    <a href="#month"><?=Yii::t('app', 'This Month');?></a>
+    <a href="#year"><?=Yii::t('app', 'This Year');?></a>
+    <a href="#all"><?=Yii::t('app', 'All Time');?></a></div>
   <div class="contrib-tab-header-sp">
     <select class="form-control form-control-sm">
-      <option value="#week">This Week</option>
-      <option value="#month">This Month</option>
-      <option value="#year">This Year</option>
-      <option value="#all">All Time</option>
+      <option value="#week"><?=Yii::t('app', 'This Week');?></option>
+      <option value="#month"><?=Yii::t('app', 'This Month');?></option>
+      <option value="#year"><?=Yii::t('app', 'This Year');?></option>
+      <option value="#all"><?=Yii::t('app', 'All Time');?></option>
     </select>
   </div>
   <div class="widget-inner">
@@ -22,7 +26,7 @@ use yii\helpers\Url;
         $user = $record['user'];
         ?>
         <div class="contrib-item"><a class="contrib-photo" href="<?=Url::to(['member/index', 'username' => $user->username]);?>"><img src="<?=$user->getAvatarUrl('50x50');?>" alt="<?=$user->getName();?>"></a><a class="contrib-name" href="<?=Url::to(['member/index', 'username' => $user->username]);?>"><?=$user->getName();?></a>
-          <div class="contrib-point"><?=number_format($point);?> Points</div>
+          <div class="contrib-point"><?=number_format($point);?> <?=Yii::t('app', 'Points');?></div>
         </div>
         <?php endforeach;?>
       </div>

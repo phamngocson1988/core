@@ -12,7 +12,7 @@ use yii\helpers\Url;
         <h3 class="forum-title"><a href="<?=Url::to(['forum/category', 'id' => $category->id, 'slug' => $category->slug]);?>"><?=$category->title;?></a></h3>
         <p class="forum-desc"><?=$category->intro;?></p>
       </div>
-      <div class="forum-stat"><span><?=number_format($category->countTopic());?></span>posts</div>
+      <div class="forum-stat"><span><?=number_format($category->countTopic());?></span><?=Yii::t('app', 'posts');?></div>
       <div class="forum-post">
         <?php
         $topic = $category->getNewestTopic(); 
@@ -21,7 +21,7 @@ use yii\helpers\Url;
         ?>
         <div class="post-item"><a class="post-author-photo" href="<?=Url::to(['member/index', 'username' => $user->username]);?>"><img src="<?=$user->getAvatarUrl('34x34');?>" alt="<?=$user->getName();?>"></a>
           <div class="post-title"><a href="<?=Url::to(['forum/topic', 'id' => $topic->id, 'slug' => $topic->slug]);?>" class="short-text"><?=$topic->subject;?></a></div>
-          <div class="post-author">By <a href="<?=Url::to(['member/index', 'username' => $user->username]);?>"><?=$user->getName();?></a></div>
+          <div class="post-author"><?=Yii::t('app', 'By {user}', ['user' => sprintf('<a href="%s">%s</a>', Url::to(['member/index', 'username' => $user->username]), $user->getName())]);?></div>
           <div class="post-date"><?=date("F j, Y", strtotime($topic->created_at));?></div>
         </div>
         <?php endif;?>

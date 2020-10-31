@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 ?>
 <section class="forum-online widget-box">
-  <h3 class="widget-head"><span class="online-title">Who's Online</span><span class="online-stat"><?=number_format($total);?> MEMBER</span></h3>
+  <h3 class="widget-head"><span class="online-title"><?=Yii::t('app', "Who's Online");?></span><span class="online-stat"><?=number_format($total);?> <?=Yii::t('app', "Member");?></span></h3>
   <ul class="online-list widget-inner">
   	<?php foreach ($logs as $log) :?>
   	<?php $user = $log->user;?>

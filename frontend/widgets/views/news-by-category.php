@@ -4,7 +4,7 @@ use yii\helpers\Url;
 <section class="section-news $class">
   <div class="container">
     <div class="heading-group">
-      <h2 class="sec-title"><?=$category->title;?></h2><a class="btn btn-primary trans" href="<?=Url::to(['news/category', 'id' => $category->id, 'slug' => $category->slug]);?>">SEE ALL<i class="fas fa-chevron-right"></i></a>
+      <h2 class="sec-title"><?=$category->title;?></h2><a class="btn btn-primary trans" href="<?=Url::to(['news/category', 'id' => $category->id, 'slug' => $category->slug]);?>"><?=Yii::t('app', 'See  all');?><i class="fas fa-chevron-right"></i></a>
     </div>
     <div class="row">
       <?php foreach ($posts as $post) :?>
