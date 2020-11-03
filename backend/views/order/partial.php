@@ -9,6 +9,7 @@ use backend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
+use common\components\helpers\StringHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -196,8 +197,8 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
-                  <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
-                  <td col-tag="doing" class="center"><?=number_format($model->doing_unit, 1);?></td>
+                  <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
+                  <td col-tag="doing" class="center"><?=StringHelper::numberFormat($model->doing_unit, 2);?></td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
                   <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
@@ -247,7 +248,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="id" class="center"><?=number_format($search->count());?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
-              <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 1);?></td>
+              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($search->getSumQuantity(), 2);?></td>
               <td col-tag="doing" class="center"></td>
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
               <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime());?></td>

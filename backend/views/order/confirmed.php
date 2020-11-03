@@ -9,6 +9,7 @@ use backend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
+use common\components\helpers\StringHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -201,7 +202,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                 <td col-tag="customer"><?=$model->getCustomerName();?></td>
                 <td col-tag="game"><?=$model->game_title;?></td>
-                <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
+                <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
                 <td col-tag="created_at"> <?=$model->created_at;?> </td>
                 <td col-tag="completed_at"> <?=$model->completed_at;?> </td>
                 <td col-tag="confirmed_at"> <?=$model->confirmed_at;?> </td>
@@ -234,7 +235,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="id" class="center"><?=number_format(ArrayHelper::getValue($average, 'count', 0));?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
-              <td col-tag="quantity" class="center"><?=number_format(ArrayHelper::getValue($average, 'quantity', 0));?></td>
+              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat(ArrayHelper::getValue($average, 'quantity', 0), 2);?></td>
               <td col-tag="created_at"></td>
               <td col-tag="completed_at"></td>
               <td col-tag="confirmed_at"></td>

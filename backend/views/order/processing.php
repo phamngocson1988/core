@@ -9,6 +9,7 @@ use backend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
+use common\components\helpers\StringHelper;
 use backend\behaviors\GameSupplierBehavior;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -183,7 +184,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
-                  <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
+                  <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
                   <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>
@@ -233,7 +234,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
               <td col-tag="total_unit" class="center"></td>
-              <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 1);?></td>
+              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($search->getSumQuantity(), 2);?></td>
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
               <td col-tag="login_time" class="center"><?=number_format($search->getAverageLoginTime());?></td>
               <td col-tag="approved_time" class="center"><?=number_format($search->getAverageProcessingTime());?></td>

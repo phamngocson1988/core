@@ -9,6 +9,7 @@ use backend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use common\components\helpers\FormatConverter;
+use common\components\helpers\StringHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -188,7 +189,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="doing_unit" class="center"><?=number_format($model->doing_unit);?></td>
-                  <td col-tag="quantity" class="center"><?=number_format($model->quantity, 1);?></td>
+                  <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="pending_time" class="center"><?=number_format($model->pending_time);?></td>
                   <td col-tag="distributed_time" class="center"><?=number_format($model->distributed_time);?></td>
@@ -214,7 +215,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
               <td col-tag="doing_unit" class="center"></td>
-              <td col-tag="quantity" class="center"><?=number_format($search->getSumQuantity(), 1);?></td>
+              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($search->getSumQuantity(), 2);?></td>
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
               <td col-tag="pending_time" class="center"></td>
               <td col-tag="distributed_time" class="center"></td>
@@ -228,19 +229,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php if ($models) :?>
-        <?php $sumQuantity = $search->getCommand()->sum('quantity');?>
-        <?php if ($sumQuantity) : ?>
-        <div class="row">
-          <div class="col-md-2 col-sm-4">
-            <span class="label label-danger">Tổng đơn hàng: <?=number_format($search->getCommand()->count());?></span>
-          </div>
-          <div class="col-md-2 col-sm-4">
-            <span class="label label-success">Tổng số gói: <?=round($sumQuantity, 1);?></span>
-          </div>
-        </div>
-        <?php endif;?>
-        <?php endif;?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

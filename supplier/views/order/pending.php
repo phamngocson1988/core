@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use supplier\components\datetimepicker\DateTimePicker;
 use supplier\models\User;
 use common\components\helpers\FormatConverter;
+use common\components\helpers\StringHelper;
 use supplier\models\Order;
 use supplier\models\OrderSupplier;
 
@@ -114,7 +115,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td col-tag="order_id" class="center" style="max-width: none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
                   <td col-tag="game_title" class="center"><?=$model->getGameTitle();?></td>
                   <td col-tag="unit" class="center"><?=$model->unit;?></td>
-                  <td col-tag="quantity" class="center"><?=$model->quantity;?></td>
+                  <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
                   <td col-tag="pending_time" class="center"><?=number_format($model->pending_time);?></td>
                   <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
                   <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
@@ -164,7 +165,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td col-tag="order_id"><?=number_format($summary['count']);?></td>
               <td col-tag="game_title"></td>
               <td col-tag="unit"></td>
-              <td col-tag="quantity" class="center"><?=number_format($summary['quantity'], 2);?></td>
+              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($summary['quantity'], 2);?></td>
               
               <td col-tag="pending_time" class="center"><?=number_format($summary['pending_time']);?></td>
               <td col-tag="approved_time" class="center"><?=number_format($summary['approved_time']);?></td>

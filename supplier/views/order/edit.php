@@ -167,6 +167,12 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
                 <td> Recover Code </td>
                 <td><?=$order->recover_code;?></td>
               </tr>
+              <?php if ($order->recover_file_id) : ?>
+              <tr>
+                <td>Recover Code Image: </td>
+                <td><a href="<?=$order->recoverFile->getUrl();?>" target="_blank">View</a></td>
+              </tr>
+              <?php endif;?>
               <tr>
                 <td> Server </td>
                 <td><?=$order->server;?></td>
