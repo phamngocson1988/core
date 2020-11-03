@@ -127,7 +127,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td col-tag="order_id" class="center" style="max-width: none">#<?=$model->order_id;?></a></td>
                   <td col-tag="game_title" class="center"><?=$model->getGameTitle();?></td>
                   <td col-tag="unit" class="center"><?=number_format($model->unit);?></td>
-                  <td col-tag="quantity" class="center"><?=number_format($model->quantity, 2);?></td>
+                  <td col-tag="quantity" class="center"><?=$model->quantity;?></td>
                   <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
                   <td col-tag="" class="center">
                     <span class="label label-warning">Đang yêu cầu</span>
