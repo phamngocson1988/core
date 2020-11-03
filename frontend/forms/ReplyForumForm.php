@@ -26,7 +26,7 @@ class ReplyForumForm extends Model
     {
         $topic = $this->getTopic();
         if (!$topic) {
-            $this->addError($attribute, 'This topic is not exist');
+            $this->addError($attribute, Yii::t('app', 'This topic is not exist'));
         }
     }
 

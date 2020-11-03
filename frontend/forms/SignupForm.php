@@ -20,12 +20,12 @@ class SignupForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => User::className(), 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'This email address has already been taken')],
 
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'string', 'max' => 255],
-            ['username', 'unique', 'targetClass' => User::className(), 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'This username has already been taken')],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],

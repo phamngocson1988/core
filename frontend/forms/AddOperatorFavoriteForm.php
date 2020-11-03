@@ -29,7 +29,7 @@ class AddOperatorFavoriteForm extends Model
     {
         $user = $this->getUser();
         if (!$user) {
-            $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'User is not exist'));
         }
     }
 
@@ -37,7 +37,7 @@ class AddOperatorFavoriteForm extends Model
     {
         $operator = $this->getOperator();
         if (!$operator) {
-            $this->addError($attribute, Yii::t('app', 'operator_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'Operator is not exist'));
         }
     }
 

@@ -32,9 +32,9 @@ class ReplyComplainForm extends Model
     {
         $complain = $this->getComplain();
         if (!$complain) {
-            $this->addError($attribute, Yii::t('app', 'complain_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'Complain is not exist'));
         } elseif (!$complain->isOpen()) {
-            $this->addError($attribute, Yii::t('app', 'complain_is_not_available_to_reply'));
+            $this->addError($attribute, Yii::t('app', 'Complaint is not available to reply'));
         }
     }
 
@@ -49,7 +49,7 @@ class ReplyComplainForm extends Model
     public function attributeLabels()
     {
         return [
-            'mark_close' => Yii::t('app', 'complain_mark_close'),
+            'mark_close' => Yii::t('app', 'Complaint mark close'),
         ];
     }
     

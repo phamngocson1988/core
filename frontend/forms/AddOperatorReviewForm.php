@@ -40,10 +40,10 @@ class AddOperatorReviewForm extends Model
     {
         $user = $this->getUser();
         if (!$user) {
-            $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'User is not exist'));
         }
         if ($user->isReview($this->operator_id)) {
-            $this->addError($attribute, Yii::t('app', 'you_reviewed_operator'));
+            $this->addError($attribute, Yii::t('app', 'You reviewed this operator'));
         }
     }
 
@@ -58,7 +58,7 @@ class AddOperatorReviewForm extends Model
     {
         $operator = $this->getOperator();
         if (!$operator) {
-            $this->addError($attribute, Yii::t('app', 'operator_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'Operator is not exist'));
         }
     }
 

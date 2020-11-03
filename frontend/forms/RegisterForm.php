@@ -64,16 +64,16 @@ class RegisterForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => User::className(), 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'This email address has already been taken')],
 
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'string', 'max' => 255],
-            ['username', 'unique', 'targetClass' => User::className(), 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'This username has already been taken')],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-            ['repassword', 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match"],        
+            ['repassword', 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('app', "Passwords don't match")],        
 
             [['firstname', 'lastname'], 'trim'],
             [['firstname', 'lastname'], 'required'],
@@ -85,11 +85,11 @@ class RegisterForm extends Model
             [['country_code', 'phone'], 'trim', 'on' => self::SCENARIO_VALIDATE],
             ['phone', 'unique', 
             'targetClass' => User::className(), 
-            'message' => 'This phone has already been taken.', 
+            'message' => Yii::t('app', 'This phone has already been taken'), 
             'on' => self::SCENARIO_VALIDATE],
 
             ['captcha', 'required', 'on' => self::SCENARIO_VALIDATE],
-            ['captcha', 'captcha', 'message' => 'Captcha is not match', 'on' => self::SCENARIO_VALIDATE],
+            ['captcha', 'captcha', 'message' => Yii::t('app', 'Captcha is not match'), 'on' => self::SCENARIO_VALIDATE],
         ];
     }
 

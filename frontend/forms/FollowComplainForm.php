@@ -28,7 +28,7 @@ class FollowComplainForm extends Model
     {
         $user = $this->getUser();
         if (!$user) {
-            $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'User is not exist'));
         }
     }
 
@@ -36,7 +36,7 @@ class FollowComplainForm extends Model
     {
         $complain = $this->getComplain();
         if (!$complain) {
-            $this->addError($attribute, Yii::t('app', 'complain_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'Complain is not exist'));
         }
     }
 

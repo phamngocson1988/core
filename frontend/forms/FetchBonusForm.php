@@ -20,8 +20,8 @@ class FetchBonusForm extends Model
     public function attributeLabels()
     {
         return [
-            'operator' => Yii::t('app', 'operator'),
-            'bonus_type' => Yii::t('app', 'bonus_type'),
+            'operator' => Yii::t('app', 'Operator'),
+            'bonus_type' => Yii::t('app', 'Bonus Type'),
         ];
     }
     protected function createCommand()

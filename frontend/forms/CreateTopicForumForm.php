@@ -26,9 +26,9 @@ class CreateTopicForumForm extends Model
     public function attributeLabels()
     {
         return [
-            'subject' => Yii::t('app', 'subject'),
-            'content' => Yii::t('app', 'content'),
-            'category_id' => Yii::t('app', 'forum'),
+            'subject' => Yii::t('app', 'Subject'),
+            'content' => Yii::t('app', 'Content'),
+            'category_id' => Yii::t('app', 'Forum'),
         ];
     }
 

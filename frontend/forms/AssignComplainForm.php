@@ -28,7 +28,7 @@ class AssignComplainForm extends Model
     {
         $complain = $this->getComplain();
         if (!$complain) {
-            $this->addError($attribute, Yii::t('app', 'complain_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'Complain is not exist'));
         }
     }
 
@@ -46,9 +46,9 @@ class AssignComplainForm extends Model
         $user = $this->getUser();
         $complain = $this->getComplain();
         if (!$user) {
-            $this->addError($attribute, Yii::t('app', 'user_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'User is not exist'));
         } elseif ($user->operator_id != $complain->operator_id) {
-            $this->addError($attribute, Yii::t('app', 'cannot_assign_user_to_complain'));
+            $this->addError($attribute, Yii::t('app', 'Cannot assign this user to the complaint'));
         }
     }
 

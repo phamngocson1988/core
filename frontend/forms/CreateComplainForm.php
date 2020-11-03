@@ -38,18 +38,18 @@ class CreateComplainForm extends Model
     public function attributeLabels()
     {
         return [
-            'operator_id' => Yii::t('app', 'select_operator'),
-            'reason_id' => Yii::t('app', 'select_an_option_that_best_describe_the_issue'),
-            'title' => Yii::t('app', 'complain_title'),
-            'account_name' => Yii::t('app', 'account_name_used_at_this_operator'),
-            'account_email' => Yii::t('app', 'email_registered_with_this_operator'),
+            'operator_id' => Yii::t('app', 'Select operator'),
+            'reason_id' => Yii::t('app', 'Select an option that best describe the issue'),
+            'title' => Yii::t('app', 'Complain title'),
+            'account_name' => Yii::t('app', 'Account name used at this operator'),
+            'account_email' => Yii::t('app', 'Email registered with this operator'),
         ];
     }
 
     public function validateAgree($attribute, $params = [])
     {
         if (!$this->agree) {
-            $this->addError($attribute, Yii::t('app', 'you_need_to_agree_our_term_and_policy'));
+            $this->addError($attribute, Yii::t('app', 'You need to agree our term and policy'));
         }
     }
 
@@ -57,7 +57,7 @@ class CreateComplainForm extends Model
     {
         $operator = $this->getOperator();
         if (!$operator) {
-            $this->addError($attribute, Yii::t('app', 'operator_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'Operator is not exist'));
         }
     }
     

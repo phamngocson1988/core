@@ -42,7 +42,7 @@ class ChangePasswordForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->old_password)) {
-                $this->addError($attribute, Yii::t('app', 'incorrect_password'));
+                $this->addError($attribute, Yii::t('app', 'Incorrect password'));
             }
         }
     }

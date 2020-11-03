@@ -27,8 +27,8 @@ class ComposeMailForm extends Model
     public function attributeLabels()
     {
         return [
-            'subject' => Yii::t('app', 'subject'),
-            'content' => Yii::t('app', 'content'),
+            'subject' => Yii::t('app', 'Subject'),
+            'content' => Yii::t('app', 'Content'),
         ];
     }
 
@@ -36,7 +36,7 @@ class ComposeMailForm extends Model
     {
         $user = $this->getReceiver();
         if (!$user) {
-            $this->addError($attribute, 'Receiver is not exist in system.');
+            $this->addError($attribute, 'Receiver is not exist in system');
             return;
         }
     }

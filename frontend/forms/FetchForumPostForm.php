@@ -17,9 +17,9 @@ class FetchForumPostForm extends Model
     public function attributeLabels()
     {
         return [
-            'q' => Yii::t('app', 'keyword'),
-            'topic_id' => Yii::t('app', 'topic'),
-            'created_by' => Yii::t('app', 'creator'),
+            'q' => Yii::t('app', 'Keyword'),
+            'topic_id' => Yii::t('app', 'Topic'),
+            'created_by' => Yii::t('app', 'Creator'),
         ];
     }
     protected function createCommand()

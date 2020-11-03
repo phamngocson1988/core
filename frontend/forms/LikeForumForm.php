@@ -27,7 +27,7 @@ class LikeForumForm extends Model
     {
         $post = $this->getPost();
         if (!$post) {
-            $this->addError($attribute, 'The post is not exist');
+            $this->addError($attribute, Yii::t('app', 'The post is not exist'));
         }
     }
 
@@ -35,7 +35,7 @@ class LikeForumForm extends Model
     {
         $user = $this->getUser();
         if (!$user) {
-            $this->addError($attribute, 'You have to login to like/dislike a post');
+            $this->addError($attribute, Yii::t('app', 'You have to login to like/dislike a post'));
         }
     }
 

@@ -21,7 +21,7 @@ class UpdateEmailForm extends Model
             ['confirm_email', 'trim'],
             ['confirm_email', 'string', 'max' => 255],
 
-            ['confirm_email', 'compare', 'compareAttribute' => 'new_email', 'message'=>"Email does not match" ],
+            ['confirm_email', 'compare', 'compareAttribute' => 'new_email', 'message' => Yii::t('app', "Email does not match") ],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
@@ -34,7 +34,7 @@ class UpdateEmailForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect password.');
+                $this->addError($attribute, Yii::t('app', 'Incorrect password'));
             }
         }
     }

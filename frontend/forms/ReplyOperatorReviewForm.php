@@ -28,11 +28,11 @@ class ReplyOperatorReviewForm extends Model
     {
         $review = $this->getReview();
         if (!$review) {
-            $this->addError($attribute, Yii::t('app', 'review_is_not_exist'));
+            $this->addError($attribute, Yii::t('app', 'Review is not exist'));
             return;
         }
         if ($review->reply) {
-            $this->addError($attribute, Yii::t('app', 'cannot_reply_on_this_review'));
+            $this->addError($attribute, Yii::t('app', 'Cannot reply on this review'));
             return;
         }
     }

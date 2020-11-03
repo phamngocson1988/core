@@ -26,11 +26,11 @@ class ReplyMailForm extends Model
     {
         $thread = $this->getThread();
         if (!$thread) {
-            $this->addError($attribute, 'This mail is not exist');
+            $this->addError($attribute, Yii::t('app', 'This mail is not exist'));
             return;
         } else {
             if (!in_array(Yii::$app->user->id, [$thread->from, $thread->to])) {
-                $this->addError($attribute, 'This mail is invalid');
+                $this->addError($attribute, Yii::t('app', 'This mail is invalid'));
             }
         }
     }
