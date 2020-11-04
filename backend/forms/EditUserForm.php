@@ -36,6 +36,7 @@ class EditUserForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
+            ['email', 'uniqueEmail'],
 
             ['password', 'trim'],
             ['password', 'string', 'min' => 6],
@@ -45,6 +46,17 @@ class EditUserForm extends Model
             ['country_code', 'required'],
             // ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
         ];
+    }
+
+    public function uniqueEmail($attribute, $params = []) 
+    {
+        $user = $this->getUser();
+        if ($user->email != $this->email) {
+            $findingUser = User::find()->where(['email' => $this->email])->one();
+            if ($findingUser) {
+                $this->addError($attribute, sprintf('Hộp thư điện tử bị trùng %s (#%s)', $findingUser->username, $findingUser->id));
+            }
+        }
     }
 
 	public function getRoles()

@@ -57,7 +57,7 @@
                   ])->textInput()}
                   {$form->field($model, 'email', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control', 'readonly' => true],
+                    'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()}
                   {$form->field($model, 'phone', [

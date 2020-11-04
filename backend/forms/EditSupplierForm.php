@@ -38,6 +38,10 @@ class EditSupplierForm extends BaseSignupForm
             ['username', 'trim'],
 
             ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'uniqueEmail'],
 
             ['password', 'trim'],
             ['password', 'string', 'min' => 6],
@@ -67,6 +71,17 @@ class EditSupplierForm extends BaseSignupForm
         }
     }
 
+    public function uniqueEmail($attribute, $params = []) 
+    {
+        $user = $this->getUser();
+        if ($user->email != $this->email) {
+            $findingUser = User::find()->where(['email' => $this->email])->one();
+            if ($findingUser) {
+                $this->addError($attribute, sprintf('Hộp thư điện tử bị trùng %s (#%s)', $findingUser->username, $findingUser->id));
+            }
+        }
+    }
+
     public function attributeLabels()
     {
         return [
@@ -93,7 +108,8 @@ class EditSupplierForm extends BaseSignupForm
 	        
 	        $user = $this->getUser();
             // $user->setScenario(User::SCENARIO_EDIT);
-	        $user->name = $this->name;        
+            $user->name = $this->name;        
+	        $user->email = $this->email;        
             $user->phone = $this->phone;
             $user->address = $this->address;
             $user->birthday = $this->birthday;
