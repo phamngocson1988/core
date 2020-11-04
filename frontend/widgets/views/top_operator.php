@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 ?>
 <div class="sidebar-category">
-  <p class="category-title"><?=Yii::t('app', 'top_operator');?></p>
+  <p class="category-title"><?=Yii::t('app', 'Top operator');?></p>
   <div class="category-inner">
     <ul class="category-list">
       <?php foreach ($topOperators as $operator) : ?>

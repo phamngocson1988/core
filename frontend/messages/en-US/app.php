@@ -210,6 +210,8 @@ return [
     'See all lastest bonus' => 'See all lastest bonus',
     'Lastest complaints' => 'Lastest complaints',
     'See all lastest complaints' => 'See all lastest complaints',
+    'Newest operator' => 'Newest operator',
+    'See all newest operator' => 'See all newest operator',
 
     // widgets
     'Case by operators' => 'Case by operators',
@@ -296,4 +298,5 @@ return [
     'Password reset token cannot be blank' => 'Password reset token cannot be blank',
     'Wrong password reset token' => 'Wrong password reset token',
     'Email does not match' => 'Email does not match',
+    'Top operator' => 'Top operator',
 ];

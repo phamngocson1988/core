@@ -12,7 +12,7 @@ use common\components\helpers\TimeElapsed;
   <section class="section-newest">
     <div class="container">
       <div class="heading-group">
-        <h2 class="sec-title"><?=Yii::t('app', 'newest_operator');?></h2><a class="btn btn-primary trans" href="<?=Url::to(['operator/index']);?>"><?=Yii::t('app', 'see_all_newest_operator');?><i class="fas fa-chevron-right"></i></a>
+        <h2 class="sec-title"><?=Yii::t('app', 'Newest operator');?></h2><a class="btn btn-primary trans" href="<?=Url::to(['operator/index']);?>"><?=Yii::t('app', 'See all newest operator');?><i class="fas fa-chevron-right"></i></a>
       </div>
       <div class="newest-slider js-newest-slider">
         <?php foreach ($newestOperators as $operator) :?>
