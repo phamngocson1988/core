@@ -125,7 +125,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <th col-tag="withdraw"> Số tiền mua hàng</th>
                 <th col-tag="balance_start"> Số dư ban đầu</th>
                 <th col-tag="balance_end"> Số dư hiện tại </th>
-                <th col-tag="actions" vụ </th>
+                <th col-tag="actions"> Tác vụ </th>
               </tr>
             </thead>
             <tbody>
