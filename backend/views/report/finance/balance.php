@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
+use common\components\helpers\StringHelper;
 use common\models\Order;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -114,46 +115,56 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <?php ActiveForm::end()?>
         </div>
         
-        <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 25%;"> Khách hàng </th>
-              <th style="width: 15%;"> Số tiền nạp </th>
-              <th style="width: 15%;"> Số tiền mua hàng</th>
-              <th style="width: 15%;"> Số dư ban đầu</th>
-              <th style="width: 15%;"> Số dư hiện tại </th>
-              <th style="width: 10%;"> Tác vụ </th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$report) :?>
-              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($report as $userId => $r) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable hidden" id="order-table">
+            <thead>
               <tr>
-                <td>#<?=$userId?></td>
-                <td style="vertical-align: middle;"><?=$r['name'];?></td>
-                <td style="vertical-align: middle;"><?=number_format($r['topup']);?></td>
-                <td style="vertical-align: middle;"><?=number_format($r['withdraw']);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($r['balance_start']);?></td>
-                <td style="vertical-align: middle;">$<?=number_format($r['balance_end']);?></td>
-                <td style="vertical-align: middle;">
-                  <a class="btn btn-xs green tooltips" href="<?=Url::to(['report/finance-balance-detail', 'user_id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
-                  <?php if (Yii::$app->user->can('admin')) : ?>
-                  <a class="btn btn-xs purple tooltips" href="<?=Url::to(['wallet/topup', 'id' => $userId]);?>" data-container="body" data-original-title="Topup wallet" target="_blank" data-pjax="0"><i class="fa fa-plus"></i></a>
-                  <a class="btn btn-xs grey tooltips" href="<?=Url::to(['wallet/withdraw', 'id' => $userId]);?>" data-container="body" data-original-title="Withdraw wallet" target="_blank" data-pjax="0"><i class="fa fa-minus"></i></a>
-                  <?php endif;?>
-                </td>
+                <th col-tag="id"> <?=Yii::t('app', 'no');?> </th>
+                <th col-tag="customer"> Khách hàng </th>
+                <th col-tag="topup"> Số tiền nạp </th>
+                <th col-tag="withdraw"> Số tiền mua hàng</th>
+                <th col-tag="balance_start"> Số dư ban đầu</th>
+                <th col-tag="balance_end"> Số dư hiện tại </th>
+                <th col-tag="actions" vụ </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$report) :?>
+                <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($report as $userId => $r) :?>
+                <tr>
+                  <td col-tag="id">#<?=$userId?></td>
+                  <td col-tag="customer" class="center"><?=$r['name'];?></td>
+                  <td col-tag="topup" class="center"><?=StringHelper::numberFormat($r['topup'], 2);?></td>
+                  <td col-tag="withdraw" class="center"><?=StringHelper::numberFormat($r['withdraw'], 2);?></td>
+                  <td col-tag="balance_start" class="center">$<?=StringHelper::numberFormat($r['balance_start'], 2);?></td>
+                  <td col-tag="balance_end" class="center">$<?=StringHelper::numberFormat($r['balance_end'], 2);?></td>
+                  <td col-tag="actions" class="center">
+                    <a class="btn btn-xs green tooltips" href="<?=Url::to(['report/finance-balance-detail', 'user_id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
+                    <?php if (Yii::$app->user->can('admin')) : ?>
+                    <a class="btn btn-xs purple tooltips" href="<?=Url::to(['wallet/topup', 'id' => $userId]);?>" data-container="body" data-original-title="Topup wallet" target="_blank" data-pjax="0"><i class="fa fa-plus"></i></a>
+                    <a class="btn btn-xs grey tooltips" href="<?=Url::to(['wallet/withdraw', 'id' => $userId]);?>" data-container="body" data-original-title="Withdraw wallet" target="_blank" data-pjax="0"><i class="fa fa-minus"></i></a>
+                    <?php endif;?>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$hiddenColumns = [];
+if (Yii::$app->user->isRole('saler')) array_push($hiddenColumns, 'topup', 'withdraw', 'balance_start');
+$hiddenColumnString = implode(',', $hiddenColumns);
+$script = <<< JS
+var hiddenColumns = '$hiddenColumnString';
+initTable('#order-table', '#no-data', hiddenColumns);
+JS;
+$this->registerJs($script);
+?>

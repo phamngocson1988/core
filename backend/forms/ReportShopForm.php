@@ -10,6 +10,7 @@ use backend\models\UserReseller;
 use backend\models\Game;
 use backend\models\OrderComplains;
 use backend\models\OrderSupplier;
+use backend\models\Promotion;
 use common\models\Country;
 
 class ReportShopForm extends FetchShopForm
@@ -49,6 +50,11 @@ class ReportShopForm extends FetchShopForm
             "$table.game_id",
             "$table.game_title", 
             "$table.payment_method", 
+            "$table.price", 
+            "$table.sub_total_price", 
+            "$table.total_price", 
+            "$table.promotion_id", 
+            "$table.rate_usd", 
             "$table.status", 
             "$table.saler_id", 
             "$table.orderteam_id", 
@@ -56,6 +62,8 @@ class ReportShopForm extends FetchShopForm
             "$table.completed_at as order_completed_at",
             "$table.confirmed_at as order_confirmed_at",
             "$supplierTable.supplier_id",
+            "$supplierTable.price as supplier_price", 
+            "$supplierTable.quantity as supplier_quantity", 
             "$supplierTable.doing", 
             "$supplierTable.requested_at", 
             "$supplierTable.approved_at", 
@@ -123,8 +131,19 @@ class ReportShopForm extends FetchShopForm
             'W' => 'Nội dung sai thông tin',  
             'X' => 'NV Hổ Trợ',   
             'Y' => 'NV Phân Phối',    
-            'Z' => 'Nhà Cung Cấp'
-
+            'Z' => 'Nhà Cung Cấp',
+            'AA' => 'Giá bán ( Kcoin )',
+            'AB' => 'Giá đơn hàng ( Kcoin )',
+            'AC' => 'Phí phát sinh ( Kcoin )',
+            'AD' => 'Khuyến mãi ( Kcoin )',
+            'AE' => 'KH thanh Toán ( Kcoin )',
+            'AF' => 'Thực nhận ( Kcoin )',
+            'AG' => 'Mã khuyến mãi',
+            'AH' => 'Tỷ giá ( VND/Kcoin )',
+            'AI' => 'Doanh thu ( VND )',
+            'AJ' => 'Giá mua ( VND ) ',
+            'AK' => 'Thanh toán NCC ( VND )',
+            'AL' => 'Lợi nhuận ( VND )',
         ];
         $totalRow = $command->count();
         $startRow = 4;
@@ -219,6 +238,9 @@ class ReportShopForm extends FetchShopForm
             $supplier = ArrayHelper::getValue($suppliers, $model['supplier_id']);
             $saler = ArrayHelper::getValue($salers, $model['saler_id']);
             $orderteam = ArrayHelper::getValue($orderteams, $model['orderteam_id']);
+
+            // Promotion
+            $promotion = $model['promotion_id'] ? Promotion::findOne($model['promotion_id']) : null;
             $data[] = [
                 '#' . $model['id'], 
                 $model['customer_name'],
@@ -246,6 +268,22 @@ class ReportShopForm extends FetchShopForm
                 $saler ? $saler->getName() : '',
                 $orderteam ? $orderteam->getName() : '',
                 $supplier ? $supplier->getName() : '',
+
+
+
+
+                $model['price'],
+                $model['price'] * $model['supplier_quantity'],
+                0, //$model['total_price'] - $model['sub_total_price'],
+                0,
+                $model['price'] * $model['supplier_quantity'],
+                '',
+                $promotion ? $promotion->code : '',
+                $model['rate_usd'],
+                $model['price'] * $model['supplier_quantity'] * $model['rate_usd'],
+                $model['supplier_price'],
+                $model['supplier_price'] * $model['supplier_quantity'],
+                ($model['price'] * $model['supplier_quantity'] * $model['rate_usd']) - ($model['supplier_price'] * $model['supplier_quantity'])
             ];
         }
         $file = \Yii::createObject([

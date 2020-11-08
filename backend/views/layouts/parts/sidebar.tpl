@@ -592,7 +592,7 @@
             </a>
           </li>
           {/if}
-          {if $app->user->cans(['accounting', 'customer_support'])}
+          {if $app->user->cans(['accounting', 'customer_support', 'saler'])}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê dòng tiền</span>
