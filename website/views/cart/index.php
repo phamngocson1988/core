@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-
+use common\components\helpers\StringHelper;
 ?>
 
 <div class="container my-5">
@@ -86,8 +86,8 @@ use yii\bootstrap\ActiveForm;
         <div class="flex-fill w-100">
           <div class="d-flex justify-content-between align-items-center">
             <div class="flex-fill w-100 p-2">
-              <p class="m-0 text-red font-weight-bold"><strike data-target="origin">$<?=number_format($model->getTotalOriginalPrice());?></strike></p>
-              <p class="m-0 text-red font-weight-bold" data-target='price'>$<?=number_format($model->getTotalPrice(), 1);?></p>
+              <p class="m-0 text-red font-weight-bold"><strike data-target="origin">$<?=StringHelper::numberFormat($model->getTotalOriginalPrice(), 2);?></strike></p>
+              <p class="m-0 text-red font-weight-bold" data-target='price'>$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></p>
             </div>
             <div class="flex-fill w-100">
               <?= $form->field($model, 'quantity', [
@@ -130,16 +130,16 @@ use yii\bootstrap\ActiveForm;
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right" data-target="price">$<?=number_format($model->getTotalPrice(), 1);?></div>
+            <div class="flex-fill w-100 text-right" data-target="price">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
           </div>
           <div class="d-flex">
             <div class="flex-fill w-100 text-danger">Discount</div>
-            <div class="flex-fill w-100 text-danger text-right">$0.0</div>
+            <div class="flex-fill w-100 text-danger text-right">$0</div>
           </div>
           <hr />
           <div class="d-flex mb-3">
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right" data-target="price">$<?=number_format($model->getTotalPrice(), 1);?></div>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right" data-target="price">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
           </div>
           <button type="submit" class="btn btn-block btn-payment text-uppercase">Payment method</button>
         </div>

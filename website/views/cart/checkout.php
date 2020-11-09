@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use common\components\helpers\StringHelper;
 $user = Yii::$app->user->getIdentity();
 ?>
 <div class="container my-5">
@@ -42,22 +43,22 @@ $user = Yii::$app->user->getIdentity();
         <h5 class="card-header text-uppercase">Card summary</h5>
         <div class="card-body">
           <p class="card-text text-red font-weight-bold">Game: <?=$model->title;?></p>
-          <p class="text-green card-text font-weight-bold"><?=sprintf("%s %s", number_format($model->getTotalUnit()), strtoupper($model->getUnitName()));?></p>
+          <p class="text-green card-text font-weight-bold"><?=sprintf("%s %s", StringHelper::numberFormat($model->getTotalUnit(), 2), strtoupper($model->getUnitName()));?></p>
           <p class="card-text">Version Global</p>
           <h5 class="card-title">Price Details</h5>
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?></div>
+            <div class="flex-fill w-100 text-right">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
           </div>
           <div class="d-flex">
             <div class="flex-fill w-100 text-danger">Discount</div>
-            <div class="flex-fill w-100 text-danger text-right">$0.0</div>
+            <div class="flex-fill w-100 text-danger text-right">$0</div>
           </div>
           <hr />
           <div class="d-flex mb-3">
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=number_format($model->getTotalPrice(), 1);?>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?>
               <?php if ($isOtherCurrency) : ?>
               <br/><span>(<?=$otherCurrency;?>)</span>
               <?php endif;?>

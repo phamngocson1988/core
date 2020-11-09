@@ -13,6 +13,7 @@ use common\components\helpers\FormatConverter;
 use website\components\payment\PaymentGatewayFactory;
 use website\components\notifications\OrderNotification;
 use common\models\Currency;
+use common\components\helpers\StringHelper;
 // Notification
 
 class OrderPaymentForm extends Model
@@ -236,7 +237,7 @@ class OrderPaymentForm extends Model
         $totalPrice = $cart->getTotalPrice();
         if ($balance >= $totalPrice) {
             $list = array_merge([
-                'kinggems' => sprintf('<div>Blance</div><div class="lead text-red font-weight-bold">%s Kcoin</div>', number_format($balance, 1))
+                'kinggems' => sprintf('<div>Blance</div><div class="lead text-red font-weight-bold">%s Kcoin</div>', StringHelper::numberFormat($balance, 2))
             ], $list);
         }
         return $list;
