@@ -151,9 +151,9 @@ class CartController extends Controller
             $unitName = $model->getUnitName();
             $origin = $model->getTotalOriginalPrice();
             return $this->asJson(['status' => true, 'data' => [
-                'amount' => number_format($amount, 1),
-                'origin' => number_format($origin, 1),
-                'unit' => sprintf("%s %s", number_format($unit), strtoupper($unitName)),
+                'amount' => StringHelper::numberFormat($amount, 2),
+                'origin' => StringHelper::numberFormat($origin, 2),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
             ]]);
         } else {
             $message = $model->getErrorSummary(true);
