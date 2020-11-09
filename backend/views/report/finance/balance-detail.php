@@ -10,6 +10,7 @@ use common\models\Order;
 use common\models\UserWallet;
 use common\models\PaymentTransaction;
 use common\models\Promotion;
+use common\components\helpers\StringHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -150,10 +151,10 @@ $user = $search->getUser();
               <?php foreach ($models as $no => $model) :?>
               <tr>
                 <td>#<?=($pages->offset + $no + 1)?></td>
-                <td style="vertical-align: middle;">
+                <td class="center">
                   <?=$model->description;?>
                 </td>
-                <td style="vertical-align: middle;">
+                <td class="center">
                   <?php if ($model->type == UserWallet::TYPE_INPUT) : ?>
                     <span class="label label-success">Nạp tiền</span>
                   <?php else : ?> 
@@ -163,10 +164,10 @@ $user = $search->getUser();
                     <span class="label label-warning">Khuyễn mãi</span>
                   <?php endif;?>
                 </td>
-                <td style="vertical-align: middle;"><?=$model->payment_at;?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->coin, 1);?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->balance - $model->coin, 1);?></td>
-                <td style="vertical-align: middle;"><?=number_format($model->balance, 1);?></td>
+                <td class="center"><?=$model->payment_at;?></td>
+                <td class="center"><?=StringHelper::numberFormat($model->coin, 2);?></td>
+                <td class="center"><?=StringHelper::numberFormat($model->balance - $model->coin, 2);?></td>
+                <td class="center"><?=StringHelper::numberFormat($model->balance, 2);?></td>
               </tr>
               <?php endforeach;?>
           </tbody>
@@ -176,7 +177,7 @@ $user = $search->getUser();
               <td></td>
               <td></td>
               <td></td>
-              <td>Tổng cộng: <?=number_format($search->getCommand()->sum('coin'), 1);?></td>
+              <td class="center">Tổng cộng: <?=number_format($search->getCommand()->sum('coin'), 1);?></td>
               <td></td>
               <td></td>
             </tr>

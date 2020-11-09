@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use common\components\helpers\StringHelper;
 ?>
 <div id="preloader">
   <a href="/" class="logo">
@@ -38,7 +39,7 @@ use yii\helpers\Url;
                 <a class="dropdown-toggle link-light" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <?=$user->name;?>
                   <br />
-                  <span class="text-green"><?=number_format($user->walletBalance());?> Kcoin</span>
+                  <span class="text-green"><?=StringHelper::numberFormat($user->walletBalance(), 2);?> Kcoin</span>
                 </a>
               
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
