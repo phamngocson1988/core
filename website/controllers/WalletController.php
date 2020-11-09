@@ -6,6 +6,7 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use common\components\helpers\StringHelper;
 
 // models
 use website\models\Paygate;
@@ -97,21 +98,21 @@ class WalletController extends Controller
 
         if ($form->validate()) {
             $calculate = $form->calculate();
-            $totalPayment = $calculate['totalPayment'];
+            $totalPayment = StringHelper::numberFormat($calculate['totalPayment'], 2);
             $paygate = $form->getPaygate();
             if ($paygate->currency != 'USD') {
-                $otherCurrencyTotal = Currency::convertUSDToCurrency($totalPayment, $paygate->currency);
+                $otherCurrencyTotal = Currency::convertUSDToCurrency(StringHelper::numberFormat($totalPayment, 2), $paygate->currency);
                 $currencyModel = Currency::findOne($paygate->currency);
-                $otherCurrency = $currencyModel->addSymbolFormat(number_format($otherCurrencyTotal, 1));
-                $totalPayment = sprintf("%s (%s)", number_format($totalPayment, 1), utf8_encode($otherCurrency));
+                $otherCurrency = $currencyModel->addSymbolFormat(StringHelper::numberFormat($otherCurrencyTotal, 2));
+                $totalPayment = sprintf("%s (%s)", $totalPayment, utf8_encode($otherCurrency));
             }
             $data = [
-                'subTotalKingcoin' => number_format($calculate['subTotalKingcoin'], 1),
-                'bonusKingcoin' => number_format($calculate['bonusKingcoin'], 1),
-                'totalKingcoin' => number_format($calculate['totalKingcoin'], 1),
-                'subTotalPayment' => number_format($calculate['subTotalPayment'], 1),
-                'voucherApply' => number_format($calculate['voucherApply'], 1),
-                'transferFee' => number_format($calculate['transferFee'], 1),
+                'subTotalKingcoin' => StringHelper::numberFormat($calculate['subTotalKingcoin'], 2),
+                'bonusKingcoin' => StringHelper::numberFormat($calculate['bonusKingcoin'], 2),
+                'totalKingcoin' => StringHelper::numberFormat($calculate['totalKingcoin'], 2),
+                'subTotalPayment' => StringHelper::numberFormat($calculate['subTotalPayment'], 2),
+                'voucherApply' => StringHelper::numberFormat($calculate['voucherApply'], 2),
+                'transferFee' => StringHelper::numberFormat($calculate['transferFee'], 2),
                 'totalPayment' => $totalPayment,
             ];
             return $this->asJson(['status' => true, 'data' => $data]);

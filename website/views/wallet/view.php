@@ -1,6 +1,7 @@
 <?php 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use common\components\helpers\StringHelper;
 ?>
 <div class="modal-header d-block">
   <h2 class="modal-title text-center w-100 text-red text-uppercase">Payment Kcoin</h2>
@@ -12,13 +13,13 @@ use yii\helpers\Url;
 <div class="modal-body">
   <div class="row">
     <div class="col-md-6 border-right">
-      <p><span class="list-item">Kcoin:</span><b><?=number_format($payment->coin);?> KC</b></p>
-      <p><span class="list-item">Bonus:</span><b><?=number_format($payment->promotion_coin);?> KC</b></p>
-      <p><span class="list-item">Total KC:</span><b class="text-red"><?=number_format($payment->total_coin);?> KC</b></p>
+      <p><span class="list-item">Kcoin:</span><b><?=StringHelper::numberFormat($payment->coin, 2);?> KC</b></p>
+      <p><span class="list-item">Bonus:</span><b><?=StringHelper::numberFormat($payment->promotion_coin, 2);?> KC</b></p>
+      <p><span class="list-item">Total KC:</span><b class="text-red"><?=StringHelper::numberFormat($payment->total_coin, 2);?> KC</b></p>
       <hr />
-      <p><span class="list-item">Subtotal:</span><b class="text-red"><?=number_format($payment->price, 1);?> USD</b></p>
-      <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=number_format($payment->total_fee, 1);?> USD</b></p>
-      <p><span class="list-item">Total payment:</span><b class="text-red"><?=number_format($payment->total_price, 1);?> USD</b></p>
+      <p><span class="list-item">Subtotal:</span><b class="text-red"><?=StringHelper::numberFormat($payment->price, 2);?> USD</b></p>
+      <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=StringHelper::numberFormat($payment->total_fee, 2);?> USD</b></p>
+      <p><span class="list-item">Total payment:</span><b class="text-red"><?=StringHelper::numberFormat($payment->total_price, 2);?> USD</b></p>
     </div>
     <div class="col-md-6">
       <?=$payment->payment_data;?>

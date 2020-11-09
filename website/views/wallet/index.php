@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use website\widgets\LinkPager;
+use common\components\helpers\StringHelper;
 use yii\widgets\Pjax;
 $user = Yii::$app->user->getIdentity();
 $setting = Yii::$app->settings;
@@ -27,7 +28,7 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
           <div class="card-balance row">
             <div class="col-md-6 p-4 bg-blue">
               <p class="mb-2">Balance</p>
-              <div class="balance-val"><?=number_format($user->walletBalance());?> <span style="font-size: 16px;">Kcoin</span></div>
+              <div class="balance-val"><?=StringHelper::numberFormat($user->walletBalance(), 2);?> <span style="font-size: 16px;">Kcoin</span></div>
             </div>
             <div class="col-md-6 p-4 bg-green">
               <p class="mb-2">Add Kcoin to Wallet</p>
@@ -116,7 +117,7 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
                     <span class="date-time"><?=$pending->created_at;?></span>
                   </th>
                   <td><?=$pending->payment_method;?></td>
-                  <td class="text-center"><span class="text-red"><?=number_format($pending->total_coin);?> KC</span></td>
+                  <td class="text-center"><span class="text-red"><?=StringHelper::numberFormat($pending->total_coin, 2);?> KC</span></td>
                   <td class="text-center"><?=$pending->status;?></td>
                   <td>
                     <?php if (!$pending->payment_id) : ?>
@@ -195,7 +196,7 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
             <span class="date-time"><?=$transaction->created_at;?></span>
           </th>
           <td><?=$transaction->payment_method;?></td>
-          <td class="text-center"><span class="text-red"><?=number_format($transaction->total_coin);?> KC</span></td>
+          <td class="text-center"><span class="text-red"><?=StringHelper::numberFormat($transaction->total_coin, 2);?> KC</span></td>
           <td class="text-center"><?=$transaction->status;?></td>
           <td>
             <?php if ($transaction->evidence) : ?>
@@ -209,7 +210,7 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
         <tr>
           <th scope="row" class="text-right">TOTAL</th>
           <th scope="row" class="text-right"></th>
-          <td colspan="5"><b class="text-red"><?=number_format($search->getCommand()->sum('total_coin'), 1);?> KC</b></td>
+          <td colspan="5"><b class="text-red"><?=StringHelper::numberFormat($search->getCommand()->sum('total_coin'), 2);?> KC</b></td>
         </tr>
       </tbody>
     </table>
@@ -354,6 +355,7 @@ function ShowTransaction(id) {
 }
 
 $('#quantity').on('change', function(e) {
+  $(this).val(Math.floor($(this).val()));
   Calculator();
 });
 $('#applyVocherBtn').on('click', function(e) {

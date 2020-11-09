@@ -7,9 +7,9 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-supplier',
+    'id' => 'app-api',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'supplier\controllers',
+    'controllerNamespace' => 'api\controllers',
     'layout' => 'main.tpl',
     'bootstrap' => [
         'log', 
@@ -33,14 +33,14 @@ return [
             ]          
         ],
         'user' => [
-            'class' => 'supplier\components\User',
-            'identityClass' => 'supplier\models\User',
+            'class' => 'api\components\User',
+            'identityClass' => 'api\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-supplier', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the supplier
-            'name' => 'advanced-supplier',
+            // this is the name of the session cookie used for login on the api
+            'name' => 'advanced-api',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -91,11 +91,11 @@ return [
         'urlManagerBackend' => require('../../backend/config/router.php'),
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@supplier/mail/kinggems',
+            'viewPath' => '@api/mail/kinggems',
         ],
         'supplier_mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@supplier/mail/supplier',
+            'viewPath' => '@api/mail/supplier',
         ],
     ],
     'params' => $params,
