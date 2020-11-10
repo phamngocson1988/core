@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use website\models\OrderFile;
+use common\components\helpers\StringHelper;
 ?>
 <div class="modal-header d-block">
   <h2 class="modal-title text-center w-100 text-red text-uppercase">Order details</h2>
@@ -15,14 +16,14 @@ use website\models\OrderFile;
     <div class="col-md-6 border-right">
       <div><span class="list-item">Game:</span><b><?=$order->game_title;?></b></div>
       <div><span class="list-item">Version:</span><b>Global</b></div>
-      <div><span class="list-item">Pack:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_unit), $order->unit_name);?></b></div>
-      <div><span class="list-item">Quantity:</span><b><?=number_format($order->quantity, 1);?></b></div>
+      <div><span class="list-item">Pack:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_unit), $order->unit_name);?></b></div>
+      <div><span class="list-item">Quantity:</span><b><?=StringHelper::numberFormat($order->quantity, 2);?></b></div>
       <div><span class="list-item">Total Unit:</span><b class="text-red"><?=sprintf("%s %s", $order->total_unit, $order->unit_name);?></b></div>
       <hr />
       <div><span class="list-item">Payment method:</span><b class="text-red"><?=$order->payment_method;?></b></div>
-      <div><span class="list-item">Sub Price:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->sub_total_price, 1), $order->currency);?></b></div>
-      <div><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_fee, 1), $order->currency);?></b></div>
-      <div><span class="list-item">Total Price:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_price, 1), $order->currency);?></b></div>
+      <div><span class="list-item">Sub Price:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->sub_total_price, 2), $order->currency);?></b></div>
+      <div><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_fee, 2), $order->currency);?></b></div>
+      <div><span class="list-item">Total Price:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_price, 2), $order->currency);?></b></div>
     </div>
     <div class="col-md-6">
       <?php if ($order->raw) : ?>

@@ -1,5 +1,6 @@
 <?php 
 use yii\bootstrap\ActiveForm;
+use common\components\helpers\StringHelper;
 use yii\helpers\Url;
 ?>
 <div class="modal-header d-block">
@@ -14,10 +15,10 @@ use yii\helpers\Url;
     <div class="col-md-6 border-right">
       <p><span class="list-item">Game:</span><b><?=$order->game_title;?></b></p>
       <p><span class="list-item">Version:</span><b>Global</b></p>
-      <p><span class="list-item">Total Unit:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_unit), $order->unit_name);?></b></p>
+      <p><span class="list-item">Total Unit:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_unit), $order->unit_name);?></b></p>
       <hr />
-      <p><span class="list-item">Payment:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->sub_total_price, 1), 'USD');?></b></p>
-      <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", number_format($order->total_fee, 1), 'USD');?></b></p>
+      <p><span class="list-item">Payment:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->sub_total_price, 2), 'USD');?></b></p>
+      <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_fee, 2), 'USD');?></b></p>
     </div>
     <div class="col-md-6">
       <?=$order->payment_data;?>
