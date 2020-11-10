@@ -42,6 +42,6 @@ class SupplierWithdrawRequest extends \common\models\SupplierWithdrawRequest
         $labels = self::getStatusList();
         $color = $list[$this->status];
         $label = $labels[$this->status];
-        return sprintf($format, $color, $label);
+        return $format ? sprintf($format, $color, $label) : $label;
     }
 }

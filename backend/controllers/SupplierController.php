@@ -189,11 +189,17 @@ class SupplierController extends Controller
     {
         $this->view->params['main_menu_active'] = 'supplier.withdraw-request';
         $request = Yii::$app->request;
+        $mode = $request->get('mode');
         $form = new \backend\forms\FetchSupplierWithdrawRequestForm([
             'status' => $request->get('status'),
-            'done_from' => $request->get('done_from'),
-            'done_to' => $request->get('done_to'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
         ]);
+
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'danh-sach-yeu-cau-rut-tien.xls';
+            return $form->export($fileName);
+        }
         $command = $form->getCommand();
 
         $pages = new Pagination(['totalCount' => $command->count()]);

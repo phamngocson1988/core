@@ -3,6 +3,8 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use backend\models\User;
+use backend\components\datepicker\DatePicker;
+use yii\widgets\LinkPager;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -37,6 +39,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <i class="icon-settings font-dark"></i>
           <span class="caption-subject bold uppercase"> Các yêu cầu rút tiền</span>
         </div>
+        <div class="actions">
+          <?php if (Yii::$app->user->can('admin')) : ?>
+          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
+          <?php endif;?>
+        </div>
       </div>
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['supplier/withdraw-request']]);?>
@@ -45,6 +52,26 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'status[]']
             ])->dropDownList($search->getStatusList())->label('Trạng thái');?>
+
+            <?= $form->field($search, 'start_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
+            ])->widget(DatePicker::className(), [
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd',
+              ],
+            ])->label('Ngày tạo từ');?>
+
+            <?=$form->field($search, 'end_date', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
+            ])->widget(DatePicker::className(), [
+                'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd',
+              ],
+            ])->label('Ngày tạo đến');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -134,6 +161,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             <?php endif;?>
           </table>
         </div>
+        <?=LinkPager::widget(['pagination' => $pages])?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
