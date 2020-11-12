@@ -40,7 +40,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <span class="caption-subject bold uppercase"> Các yêu cầu rút tiền</span>
         </div>
         <div class="actions">
-          <?php if (Yii::$app->user->can('admin')) : ?>
+          <?php if (Yii::$app->user->cans(['admin', 'accounting'])) : ?>
           <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
           <?php endif;?>
         </div>
