@@ -38,6 +38,7 @@ class m181217_033141_create_order_table extends Migration
             'total_cogs_price' => $this->float(1)->defaultValue(0),
             'total_price_by_currency' => $this->float(1)->defaultValue(0),
             'currency' => $this->string(10)->defaultValue('USD'),
+            'rate_currency' => $this->float(),
             'customer_id' => $this->integer(11)->notNull(),
             'customer_name' => $this->string(255),
             'customer_email' => $this->string(255),
@@ -83,16 +84,11 @@ class m181217_033141_create_order_table extends Migration
             'raw' => $this->text(),
             'bulk' => $this->integer(11),
             'evidence' => $this->string(255),
-            // time process
             'process_start_time' => $this->dateTime(),
             'process_end_time' => $this->dateTime(),
             'process_duration_time' => $this->integer(11),
-            // 'provider_id' => $this->integer(11),
             'supplier_id' => $this->integer(11),
             'reseller_id' => $this->integer(11),
-            // 'supplier_accept' => $this->string(1),
-            // 'supplier_assign_time' => $this->dateTime(),
-            // 'supplier_accept_time' => $this->dateTime(),
         ]);//16868688
 
         if ($this->db->driverName === 'mysql') {
@@ -103,6 +99,9 @@ class m181217_033141_create_order_table extends Migration
             $state = "ALTER TABLE {{%order}} MODIFY `state` ENUM('pending_information', 'pending_confirmation')";
             $commandState = $this->db->createCommand($state);
             $commandState->execute();
+
+            $statusIndex = "CREATE INDEX index_status ON {{%order}} (`status`)";
+            $this->db->createCommand($statusIndex)->execute();
         }
 
         $this->createTable('{{%order_image}}', [

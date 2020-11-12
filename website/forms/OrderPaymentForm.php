@@ -110,6 +110,7 @@ class OrderPaymentForm extends Model
             $order->payment_type = $paygate->getPaymentType();
             $order->payment_data = $paygate->content;
             $order->currency = $paygate->getCurrency();
+            $order->rate_currency = $settings->get('ApplicationSettingForm', sprintf('exchange_rate_%s', strtolower($order->currency)), 1);
 
             // prices
             $order->rate_usd = $rate;
