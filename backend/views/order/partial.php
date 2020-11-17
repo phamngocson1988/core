@@ -171,8 +171,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th col-tag="id"> Mã đơn hàng </th>
                 <th col-tag="customer"> Tên khách hàng </th>
                 <th col-tag="game"> Shop Game </th>
-                <th col-tag="quantity"> Số gói cần nạp </th>
-                <th col-tag="doing"> Số gói đã nạp </th>
+                <th col-tag="quantity"> Số gói </th>
                 <th col-tag="waiting_time"> Tổng TG chờ </th>
                 <!-- <th col-tag="waiting_time"> Tổng TG chờ (P) </th> -->
                 <!-- <th col-tag="waiting_time"> TG phân phối (P) </th> -->
@@ -188,7 +187,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="13" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="12" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $supplier = $model->supplier;?>
@@ -197,8 +196,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
-                  <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
-                  <td col-tag="doing" class="center"><?=StringHelper::numberFormat($model->doing_unit, 2);?></td>
+                  <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->doing_unit, 2);?> / <?=StringHelper::numberFormat($model->quantity, 2);?></td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
                   <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
@@ -249,7 +247,6 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
               <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($search->getSumQuantity(), 2);?></td>
-              <td col-tag="doing" class="center"></td>
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
               <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime());?></td>
               <td col-tag="login_time" class="center"><?=number_format($search->getAverageLoginTime());?></td>

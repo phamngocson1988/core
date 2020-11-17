@@ -137,7 +137,8 @@ $checkNewMessageUrl = Url::to(['order/check-new-message', 'ids' => $orderIds])
           </th>
           <td class="text-center"><?=$order->game_title;?></td>
           <td class="text-center"><span class="text-red">$<?=StringHelper::numberFormat($order->total_price, 2);?></span></td>
-          <td class="text-center"><?=StringHelper::numberFormat($order->quantity, 2);?> / <?=StringHelper::numberFormat($order->original_quantity, 2);?></td>
+          <!-- <td class="text-center"><?=StringHelper::numberFormat($order->quantity, 2);?> / <?=StringHelper::numberFormat($order->original_quantity, 2);?></td> -->
+          <td class="text-center"><?=StringHelper::numberFormat($order->doing_unit, 2);?> / <?=StringHelper::numberFormat($order->quantity, 2);?></td>
           <td class="text-center"><span class="text-red"><?=sprintf("%s %s", number_format($order->total_unit), $order->unit_name);?></span></td>
           <td class="text-center">
             <?=$order->getStatusLabel();?>

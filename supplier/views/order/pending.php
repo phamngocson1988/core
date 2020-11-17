@@ -155,7 +155,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <?php endif;?>
                   </td>
                   <td col-tag="actions" class="center">
-                    <a href="<?=Url::to(['order/edit', 'id' => $model->id]);?>" class="btn btn-sm red tooltips" data-container="body" data-original-title="Bắt đầu xử lý"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý </a>
+                    <!-- <a href="<?=Url::to(['order/edit', 'id' => $model->id]);?>" class="btn btn-sm red tooltips" data-container="body" data-original-title="Bắt đầu xử lý"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý </a> -->
+                    <?= Html::beginForm(['order/move-to-processing', 'id' => $model->id], 'post', ['id' => 'move-processing-form']) ?>
+                    <button type="submit" class="btn btn-sm red tooltips" data-container="body" data-original-title="Bắt đầu xử lý"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý</button>
+                    <?= Html::endForm();?>
+
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -183,3 +187,29 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$moveProcessingJs = <<< JS
+// supplier
+$(document).on('submit', 'body #move-processing-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      console.log(result);
+      if (!result.status)
+       alert(result.errors);
+      else 
+        window.location.href = result.editUrl;
+    }
+  });
+  return false;
+});
+JS;
+$this->registerJs($moveProcessingJs)
+?>
