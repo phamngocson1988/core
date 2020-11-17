@@ -76,7 +76,8 @@ class ReportShopForm extends FetchShopForm
             "TIMESTAMPDIFF(MINUTE , $supplierTable.completed_at, $supplierTable.confirmed_at) as supplier_confirmed_time", 
             "TIMESTAMPDIFF(MINUTE , $table.created_at, IFNULL($table.completed_at, '$now')) as order_completed_time", 
             "TIMESTAMPDIFF(MINUTE , IFNULL($supplierTable.approved_at, '$now'), IFNULL($supplierTable.completed_at, '$now')) as supplier_completed_time", 
-            "TIMESTAMPDIFF(MINUTE , IFNULL($table.pending_at, '$now'), IFNULL($supplierTable.requested_at, '$now')) as distributed_time", 
+            // "TIMESTAMPDIFF(MINUTE , IFNULL($table.pending_at, '$now'), IFNULL($supplierTable.requested_at, '$now')) as distributed_time", 
+            "$supplierTable.distributed_time"
         ]);
         
         $condition = [

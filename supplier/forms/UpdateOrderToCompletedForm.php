@@ -118,11 +118,11 @@ class UpdateOrderToCompletedForm extends Model
 
             $order = $this->getOrder();
             $order->doing_unit += $this->doing;
+            $order->completed_at = date('Y-m-d H:i:s');
             $isCompleted = $this->doing == $supplier->quantity;
             if ($isCompleted) {
                 $order->status = Order::STATUS_COMPLETED;
                 $order->process_end_time = date('Y-m-d H:i:s');
-                $order->completed_at = date('Y-m-d H:i:s');
                 $order->process_duration_time = strtotime($order->process_end_time) - strtotime($order->process_start_time);
                 $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                     $sender = $event->sender; // Order

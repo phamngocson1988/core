@@ -87,6 +87,13 @@ class AssignOrderSupplierForm extends Model
             $order->supplier_id = $this->supplier_id;
             $order->distributed_at = $order->distributed_at ? $order->distributed_at : date('Y-m-d H:i:s');
             $order->save();
+
+            // distributed time
+            $lastDistributedComplete = $order->completed_at ? $order->completed_at : $order->created_at;
+            $date1 = strtotime($lastDistributedComplete);
+            $date2 = strtotime('now');
+            $mins = ($date2 - $date1) / 60;
+
             $orderSupplier = new OrderSupplier([
                 'order_id' => $this->order_id,
                 'supplier_id' => $this->supplier_id,
@@ -97,7 +104,8 @@ class AssignOrderSupplierForm extends Model
                 'rate_usd' => $rate,
                 'status' => OrderSupplier::STATUS_REQUEST,
                 'requested_by' => $this->requester,
-                'requested_at' => date('Y-m-d H:i:s')
+                'requested_at' => date('Y-m-d H:i:s'),
+                'distributed_time' => $mins,
             ]);
             $orderSupplier->save();
             $order->log(sprintf("Chuyển đến nhà cung cấp %s (#%s)", $supplier->user->name, $this->supplier_id));

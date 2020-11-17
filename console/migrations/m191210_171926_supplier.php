@@ -66,6 +66,7 @@ class m191210_171926_supplier extends Migration
             'total_price' => $this->float()->defaultValue(0),
             'rate_usd' => $this->float(),
             'status' => $this->string(10)->notNull(),
+            'distributed_time' => $this->integer(),
             'created_at' => $this->dateTime(),            
             'updated_at' => $this->dateTime(),    
             'requested_at' => $this->dateTime(),  
