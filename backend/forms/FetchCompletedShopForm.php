@@ -41,6 +41,8 @@ class FetchCompletedShopForm extends FetchShopForm
             "TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at) as pending_time",
             "TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at) as approved_time", 
             "TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at) as processing_time", 
+            "$supplierTable.distributed_time",
+            "TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at) as supplier_pending_time",
             
         ]);
         

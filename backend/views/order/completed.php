@@ -178,7 +178,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th col-tag="completed_time"> Tổng TG hoàn thành </th>
                 <th col-tag="supplier_completed_time"> Tổng TG NCC hoàn thành </th>
                 <th col-tag="pending_time">TG duyệt</th>
+                <th col-tag="distributed_time">TG phân phối</th>
                 <th col-tag="approved_time">TG nhận đơn</th>
+                <th col-tag="supplier_pending_time">TG login</th>
                 <th col-tag="processing_time">TG nạp</th>
                 
                 <th col-tag="saler"> Người bán hàng </th>
@@ -190,7 +192,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="13" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="15" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) :?>
               <tr>
@@ -203,7 +205,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <td col-tag="completed_time" class="center"><?=number_format($model->completed_time);?></td>
                 <td col-tag="supplier_completed_time" class="center"><?=number_format($model->supplier_completed_time);?></td>
                 <td col-tag="pending_time" class="center"><?=number_format($model->pending_time);?></td>
+                <td col-tag="distributed_time" class="center"><?=number_format($model->distributed_time);?></td>
                 <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
+                <td col-tag="supplier_pending_time" class="center"><?=number_format($model->supplier_pending_time);?></td>
                 <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>
 
                 <td col-tag="saler"><?=($model->saler) ? $model->saler->name : '';?></td>
@@ -236,8 +240,10 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="completed_time" class="center"><?=number_format($search->getAverageCompletedTime());?></td>
               <td col-tag="supplier_completed_time" class="center"><?=number_format($search->getAverageSupplierCompletedTime());?></td>
               <td col-tag="pending_time" class="center"><?=number_format($search->getAveragePendingTime());?></td>
+              <td col-tag="distributed_time" class="center"></td>
               <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime());?></td>
-              <td col-tag="approved_time" class="center"><?=number_format($search->getAverageProcessingTime());?></td>
+              <td col-tag="supplier_pending_time" class="center"></td>
+              <td col-tag="processing_time" class="center"><?=number_format($search->getAverageProcessingTime());?></td>
               <td col-tag="saler"></td>
               <td col-tag="orderteam"></td>
               <td col-tag="status"></td>

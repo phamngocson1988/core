@@ -19,6 +19,7 @@ class Order extends \common\models\Order
     public $completed_time;
     public $confirmed_time;
     public $supplier_completed_time;
+    public $supplier_pending_time;
 
 
 

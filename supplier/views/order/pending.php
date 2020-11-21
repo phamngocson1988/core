@@ -112,7 +112,12 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <?php foreach ($models as $model) :?>
                 <?php $order = $model->order;?>
                 <tr>
-                  <td col-tag="order_id" class="center" style="max-width: none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
+                  <td col-tag="order_id" class="center" style="max-width: none">
+                    <!-- <a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a> -->
+                    <?= Html::beginForm(['order/move-to-processing', 'id' => $model->id], 'post', ['class' => 'move-processing-form']) ?>
+                    <button type="submit" class="btn btn-link">#<?=$model->order_id;?></button>
+                    <?= Html::endForm();?>
+                  </td>
                   <td col-tag="game_title" class="center"><?=$model->getGameTitle();?></td>
                   <td col-tag="unit" class="center"><?=$model->unit;?></td>
                   <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
@@ -156,7 +161,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   </td>
                   <td col-tag="actions" class="center">
                     <!-- <a href="<?=Url::to(['order/edit', 'id' => $model->id]);?>" class="btn btn-sm red tooltips" data-container="body" data-original-title="Bắt đầu xử lý"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý </a> -->
-                    <?= Html::beginForm(['order/move-to-processing', 'id' => $model->id], 'post', ['id' => 'move-processing-form']) ?>
+                    <?= Html::beginForm(['order/move-to-processing', 'id' => $model->id], 'post', ['class' => 'move-processing-form']) ?>
                     <button type="submit" class="btn btn-sm red tooltips" data-container="body" data-original-title="Bắt đầu xử lý"><i class="fa fa-arrow-up"></i> Bắt đầu xử lý</button>
                     <?= Html::endForm();?>
 
@@ -190,7 +195,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
 <?php
 $moveProcessingJs = <<< JS
 // supplier
-$(document).on('submit', 'body #move-processing-form', function(e) {
+$(document).on('submit', 'body .move-processing-form', function(e) {
   e.preventDefault();
   e.stopImmediatePropagation();
   var form = $(this);
