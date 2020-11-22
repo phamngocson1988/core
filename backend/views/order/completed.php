@@ -230,26 +230,29 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               </tr>
               <?php endforeach;?>
             </tbody>
+            <?php $summary = $search->getSummary();?>
+            <?php if (count($summary)) : ?>
             <tfoot style="background-color: #999;">
-              <td col-tag="id" class="center"><?=number_format($search->count());?></td>
+              <td col-tag="id" class="center"><?=number_format($summary['count']);?></td>
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
-              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($search->getSumQuantity(), 2);?></td>
+              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($summary['quantity'], 2);?></td>
               <td col-tag="created_at"></td>
               <td col-tag="completed_at"></td>
-              <td col-tag="completed_time" class="center"><?=number_format($search->getAverageCompletedTime());?></td>
-              <td col-tag="supplier_completed_time" class="center"><?=number_format($search->getAverageSupplierCompletedTime());?></td>
-              <td col-tag="pending_time" class="center"><?=number_format($search->getAveragePendingTime());?></td>
-              <td col-tag="distributed_time" class="center"></td>
-              <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime());?></td>
-              <td col-tag="supplier_pending_time" class="center"></td>
-              <td col-tag="processing_time" class="center"><?=number_format($search->getAverageProcessingTime());?></td>
+              <td col-tag="completed_time" class="center"><?=number_format($summary['avg_completed_time']);?></td>
+              <td col-tag="supplier_completed_time" class="center"><?=number_format($summary['avg_supplier_completed_time']);?></td>
+              <td col-tag="pending_time" class="center"><?=number_format($summary['avg_pending_time']);?></td>
+              <td col-tag="distributed_time" class="center"><?=number_format($summary['avg_distributed_time']);?></td>
+              <td col-tag="approved_time" class="center"><?=number_format($summary['avg_approved_time']);?></td>
+              <td col-tag="supplier_pending_time" class="center"><?=number_format($summary['avg_supplier_pending_time']);?></td>
+              <td col-tag="processing_time" class="center"><?=number_format($summary['avg_processing_time']);?></td>
               <td col-tag="saler"></td>
               <td col-tag="orderteam"></td>
               <td col-tag="status"></td>
               <td col-tag="supplier"></td>
               <td col-tag="action"></td>
             </tfoot>
+            <?php endif;?>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

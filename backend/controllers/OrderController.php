@@ -344,38 +344,6 @@ class OrderController extends Controller
         ]);
     }
 
-    public function actionCompleted1()
-    {
-        $this->view->params['main_menu_active'] = 'order.completed';
-        $request = Yii::$app->request;
-        $data = [
-            'q' => $request->get('q'),
-            'customer_id' => $request->get('customer_id'),
-            'saler_id' => $request->get('saler_id'),
-            'supplier_id' => $request->get('supplier_id'),
-            'orderteam_id' => $request->get('orderteam_id'),
-            'payment_method' => $request->get('payment_method'),
-            'game_id' => $request->get('game_id'),
-            'completed_from' => $request->get('completed_from'),
-            'completed_to' => $request->get('completed_to'),
-            'status' => Order::STATUS_COMPLETED,
-        ];
-        $form = new FetchOrderForm($data);
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();                    
-
-        return $this->render('completed', [
-            'models' => $models,
-            'pages' => $pages,
-            'search' => $form,
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
     public function actionCompleted()
     {
         $this->view->params['main_menu_active'] = 'order.completed';
@@ -392,7 +360,7 @@ class OrderController extends Controller
             'end_date' => $request->get('end_date'),
         ];
         $form = new \backend\forms\FetchCompletedShopForm($data);
-        $command = $form->getCommand();
+        $command = clone $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
@@ -408,54 +376,6 @@ class OrderController extends Controller
             'search' => $form,
             'suppliers' => $suppliers,
             'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
-    public function actionConfirmed1()
-    {
-        $this->view->params['main_menu_active'] = 'order.confirmed';
-        $request = Yii::$app->request;
-        $mode = $request->get('mode');
-        $data = [
-            'q' => $request->get('q'),
-            'customer_id' => $request->get('customer_id'),
-            'saler_id' => $request->get('saler_id'),
-            'supplier_id' => $request->get('supplier_id'),
-            'orderteam_id' => $request->get('orderteam_id'),
-            'payment_method' => $request->get('payment_method'),
-            'game_id' => $request->get('game_id'),
-            'confirmed_from' => $request->get('confirmed_from'),
-            'confirmed_to' => $request->get('confirmed_to'),
-            'status' => Order::STATUS_CONFIRMED,
-        ];
-        $form = new FetchOrderForm($data);
-        if ($mode === 'export') {
-            $fileName = date('YmdHis') . 'danh-don-hang-da-xac-nhan.xls';
-            return $form->export($fileName);
-        }
-
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();       
-
-        // Check admin/supplier message (required by Thinh (27/8) via chat)
-        $orderIds = ArrayHelper::getColumn($models, 'id');
-        $complains = OrderComplains::find()
-        ->where(['in', 'order_id', $orderIds])             
-        ->andWhere(['in', 'object_name', ['supplier', 'admin']])
-        ->groupBy(['order_id'])
-        ->select(['order_id'])
-        ->all();
-        $existStaffComplainIds = ArrayHelper::getColumn($complains, 'order_id');
-        return $this->render('confirmed', [
-            'models' => $models,
-            'pages' => $pages,
-            'search' => $form,
-            'ref' => Url::to($request->getUrl(), true),
-            'existStaffComplainIds' => $existStaffComplainIds
         ]);
     }
 

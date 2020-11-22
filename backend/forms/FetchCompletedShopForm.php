@@ -75,45 +75,68 @@ class FetchCompletedShopForm extends FetchShopForm
         $this->_command = $command;
     }
 
-    public function count()
-    {
-        return $this->getCommand()->count();
-    }
-
-    public function getSumQuantity()
+    public function getSummary()
     {
         $supplierTable = OrderSupplier::tableName();
-        return $this->getCommand()->sum("$supplierTable.quantity");
-    }
-
-    public function getAverageCompletedTime()
-    {
         $table = Order::tableName();
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, $table.completed_at)");
+        $command = clone $this->getCommand();
+        $count = $command->count();
+        if (!$count) return [];
+
+        return $command->select([
+            "COUNT(*) as count",
+            "SUM($supplierTable.quantity) as quantity",
+            "SUM(TIMESTAMPDIFF(MINUTE , $table.created_at, $table.completed_at)) / $count as avg_completed_time",
+            "SUM(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)) / $count as avg_supplier_completed_time",
+            "SUM(TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at)) / $count as avg_pending_time",
+            "SUM(TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at)) / $count as avg_approved_time",
+            "SUM(TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at)) / $count as avg_processing_time",
+            "SUM($supplierTable.distributed_time) / $count as avg_distributed_time",
+            "SUM(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at)) / $count as avg_supplier_pending_time",
+        ])->asArray()->one();
+        // die($command->createCommand()->getRawSql());
+
     }
 
-    public function getAverageSupplierCompletedTime()
-    {
-        $supplierTable = OrderSupplier::tableName();
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)");
-    }
+    // public function count()
+    // {
+    //     return $this->getCommand()->count();
+    // }
 
-    public function getAveragePendingTime()
-    {
-        $table = Order::tableName();
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at)");
-    }
+    // public function getSumQuantity()
+    // {
+    //     $supplierTable = OrderSupplier::tableName();
+    //     return $this->getCommand()->sum("$supplierTable.quantity");
+    // }
 
-    public function getAverageApprovedTime()
-    {
-        $supplierTable = OrderSupplier::tableName();
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at)");
-    }
+    // public function getAverageCompletedTime()
+    // {
+    //     $table = Order::tableName();
+    //     return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, $table.completed_at)");
+    // }
 
-    public function getAverageProcessingTime()
-    {
-        $supplierTable = OrderSupplier::tableName();
-        return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at)");
-    }
+    // public function getAverageSupplierCompletedTime()
+    // {
+    //     $supplierTable = OrderSupplier::tableName();
+    //     return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)");
+    // }
+
+    // public function getAveragePendingTime()
+    // {
+    //     $table = Order::tableName();
+    //     return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at)");
+    // }
+
+    // public function getAverageApprovedTime()
+    // {
+    //     $supplierTable = OrderSupplier::tableName();
+    //     return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at)");
+    // }
+
+    // public function getAverageProcessingTime()
+    // {
+    //     $supplierTable = OrderSupplier::tableName();
+    //     return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $supplierTable.processing_at, $supplierTable.completed_at)");
+    // }
 
 }
