@@ -143,7 +143,9 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td>
                   <a href='#confirm-pay<?=$model->id;?>' class="btn btn-xs blue tooltips" data-pjax="0" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                   <a href='<?=Url::to(['payment-transaction/send-mail-offline-payment', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips send-mail" data-pjax="0" data-container="body" data-original-title="Send mail"><i class="fa fa-envelope"></i></a>
+                  <?php if ($model->isPending() && Yii::$app->user->cans(['admin', 'accounting'])) : ?>
                   <a class="btn btn-xs red tooltips link-action" href="<?=Url::to(['payment-transaction/move-to-trash', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
+                  <?php endif;?>
                   <div class="modal fade" id="confirm-pay<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
