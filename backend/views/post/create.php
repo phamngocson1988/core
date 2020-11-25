@@ -62,17 +62,14 @@ use common\widgets\TinyMce;
                     'options' => ['rows' => 20]
                   ]);?>
 
-                  <?=$form->field($model, 'category_ids', [
+                  <?=$form->field($model, 'language', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'slug form-control', 'multiple' => true],
+                    'inputOptions' => ['class' => 'form-control input-large'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropdownList($model->fetchCategory());?>
-
-                  <?=$form->field($model, 'operator_id', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'slug form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropdownList($model->fetchOperator(), ['prompt' => Yii::t('app', 'choose_operator')]);?>
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchLanguages(),
+                    'options' => ['class' => 'form-control'],
+                  ])?>
 
                   <?=$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

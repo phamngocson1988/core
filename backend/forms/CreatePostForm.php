@@ -17,6 +17,7 @@ class CreatePostForm extends Model
     public $image_id;
     public $category_ids;
     public $operator_id;
+    public $language;
     public $status;
 
     public function rules()
@@ -24,6 +25,8 @@ class CreatePostForm extends Model
         return [
             [['title', 'content', 'status'], 'required'],
             [['image_id', 'category_ids', 'operator_id'], 'safe'],
+            ['language', 'required'],
+            ['language', 'in', 'range' => array_keys(Yii::$app->params['languages'])],
         ];
     }
 
@@ -35,6 +38,7 @@ class CreatePostForm extends Model
             'category_ids' => Yii::t('app', 'category'),
             'operator' => Yii::t('app', 'operator'),
             'status' => Yii::t('app', 'status'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
     
@@ -46,6 +50,7 @@ class CreatePostForm extends Model
         $post->image_id = $this->image_id;
         $post->operator_id = $this->operator_id;
         $post->status = $this->status;
+        $post->language = $this->language;
         $result = $post->save();
 
         if ($result && $this->category_ids) {
@@ -74,5 +79,10 @@ class CreatePostForm extends Model
     public function fetchStatus()
     {
         return Post::getStatusList();
+    }
+
+    public function fetchLanguages()
+    {
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 }

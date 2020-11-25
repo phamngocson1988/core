@@ -77,13 +77,19 @@ class EditPostForm extends Model
 
     public function fetchCategory()
     {
-        $categories = Category::find()->select(['id', 'title'])->all();
+        $post = $this->getPost();
+        $categories = Category::find()
+        ->where(['language' => $post->language])
+        ->select(['id', 'title'])->all();
         return ArrayHelper::map($categories, 'id', 'title');
     }
 
     public function fetchOperator()
     {
-        $operators = Operator::find()->select(['id', 'name'])->all();
+        $post = $this->getPost();
+        $operators = Operator::find()
+        ->where(['language' => $post->language])
+        ->select(['id', 'name'])->all();
         return ArrayHelper::map($operators, 'id', 'name');
     }
 

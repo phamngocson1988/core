@@ -15,6 +15,7 @@ class CreateOperatorForm extends Model
     public $admin_id;
     public $subadmin_ids;
     public $moderator_ids;
+    public $language;
 
     public $_admin;
     public $_subadmins;
@@ -40,6 +41,9 @@ class CreateOperatorForm extends Model
 
             ['moderator_ids', 'safe'],
             ['moderator_ids', 'validateModerator'],
+
+            ['language', 'required'],
+            ['language', 'in', 'range' => array_keys(Yii::$app->params['languages'])],
         ];
     }
 
@@ -97,6 +101,7 @@ class CreateOperatorForm extends Model
             'admin_id' => Yii::t('app', 'operator_admin'),
             'subadmin_ids' => Yii::t('app', 'operator_subadmin'),
             'moderator_ids' => Yii::t('app', 'operator_moderator'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
 
@@ -108,6 +113,7 @@ class CreateOperatorForm extends Model
             $operator = new Operator();
             $operator->name = $this->name;
             $operator->main_url = $this->main_url;
+            $operator->language = $this->language;
             $operator->save();
 
             $assignAdminForm = new AssignRoleForm([
@@ -156,10 +162,6 @@ class CreateOperatorForm extends Model
             $this->addError('name', $e->getMessage());
             return false;
         }
-        
-
-        
-
     }
 
     public function fetchUsers()
@@ -171,6 +173,11 @@ class CreateOperatorForm extends Model
         ->select(['id', 'email'])
         ->all();
         return ArrayHelper::map($users, 'id', 'email');
+    }
+
+    public function fetchLanguages()
+    {
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 
     public function getAdmin()

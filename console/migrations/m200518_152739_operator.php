@@ -38,6 +38,7 @@ class m200518_152739_operator extends Migration
             'support_currency' => $this->string(255),
             'license' => $this->string(255),
             'logo' => $this->integer(),
+            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'created_by' => $this->integer(),
             'updated_by' => $this->integer(),

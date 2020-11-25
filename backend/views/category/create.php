@@ -53,6 +53,15 @@ use common\widgets\ImageInputWidget;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput();?>
 
+                  <?=$form->field($model, 'language', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control input-large'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchLanguages(),
+                    'options' => ['class' => 'form-control'],
+                  ])?>
+
                   <?=$form->field($model, 'image_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'

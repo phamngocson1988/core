@@ -88,6 +88,15 @@ $userList = $model->fetchUsers();
                     'data' => $userList,
                     'options' => ['class' => 'form-control', 'multiple' => 'true'],
                   ])?>
+
+                  <?=$form->field($model, 'language', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control input-large'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchLanguages(),
+                    'options' => ['class' => 'form-control'],
+                  ])?>
                 </div>
               </div>
             </div>
