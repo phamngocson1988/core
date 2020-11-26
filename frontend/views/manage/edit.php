@@ -17,7 +17,7 @@ $this->title = 'Update Operator';
                   <div class="col-12 col-lg-6">
                     <?= $form->field($model, 'name', [
                       'labelOptions' => ['class' => 'fm-label'],
-                      'inputOptions' => ['class' => 'form-control', 'disabled' => true, 'readonly' => true, 'name' => '']
+                      'inputOptions' => ['class' => 'form-control', 'readonly' => true]
                     ])->textInput();?>
                   </div>
                   <div class="col-12 col-lg-6">

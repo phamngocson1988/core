@@ -20,6 +20,14 @@ class CreatePostForm extends Model
     public $language;
     public $status;
 
+    public function init()
+    {
+        $languages = array_keys(Yii::$app->params['languages']);
+        if (!in_array($this->language, $languages)) {
+            $this->language = reset($languages);
+        }
+    }
+
     public function rules()
     {
         return [
@@ -66,13 +74,17 @@ class CreatePostForm extends Model
 
     public function fetchCategory()
     {
-        $categories = Category::find()->select(['id', 'title'])->all();
+        $categories = Category::find()
+        ->where(['language' => $this->language])
+        ->select(['id', 'title'])->all();
         return ArrayHelper::map($categories, 'id', 'title');
     }
 
     public function fetchOperator()
     {
-        $operators = Operator::find()->select(['id', 'name'])->all();
+        $operators = Operator::find()
+        ->where(['language' => $this->language])
+        ->select(['id', 'name'])->all();
         return ArrayHelper::map($operators, 'id', 'name');
     }
 

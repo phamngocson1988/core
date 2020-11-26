@@ -31,7 +31,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['post/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn green" href="#choose-language" data-toggle="modal"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
       </div>
@@ -108,3 +108,4 @@ use yii\widgets\ActiveForm;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?=\backend\widgets\LanguageModalWidget::widget(['url' => Url::to(['post/create'])]);?>

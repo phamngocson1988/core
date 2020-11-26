@@ -18,6 +18,7 @@ class m200711_164917_forum extends Migration
         $this->createTable('{{%forum_topic}}', [
             'id' => $this->primaryKey(),
             'subject' => $this->string(255)->notNull(),
+            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
             'slug' => $this->string(255),
             'category_id' => $this->integer(),
             'status' => $this->integer(),

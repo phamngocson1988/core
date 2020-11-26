@@ -14,6 +14,7 @@ class FetchTopicForm extends Model
     public $q;
     public $category_id;
     public $user_id;
+    public $language;
 
     private $_command;
     
@@ -23,6 +24,7 @@ class FetchTopicForm extends Model
             'q' => Yii::t('app', 'keyword'),
             'category_id' => Yii::t('app', 'category'),
             'user_id' => Yii::t('app', 'user'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
     protected function createCommand()
@@ -60,5 +62,10 @@ class FetchTopicForm extends Model
     {
         $categories = ForumCategory::find()->select(['id', 'title'])->all();
         return ArrayHelper::map($categories, 'id', 'title');
+    }
+
+    public function fetchLanguages()
+    {
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 }

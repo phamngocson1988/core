@@ -21,12 +21,23 @@ class CreateBonusForm extends Model
     public $minimum_deposit_value;
     public $wagering_requirement;
     public $cashable;
+    public $language;
+
+    public function init()
+    {
+        $languages = array_keys(Yii::$app->params['languages']);
+        if (!in_array($this->language, $languages)) {
+            $this->language = reset($languages);
+        }
+    }
 
     public function rules()
     {
         return [
             [['title', 'status'], 'required'],
             [['image_id', 'operator_id', 'currency', 'bonus_type', 'minimum_deposit', 'minimum_deposit_value', 'wagering_requirement', 'cashable'], 'safe'],
+            ['language', 'required'],
+            ['language', 'in', 'range' => array_keys(Yii::$app->params['languages'])],
         ];
     }
 
@@ -43,6 +54,7 @@ class CreateBonusForm extends Model
             'minimum_deposit_value' => Yii::t('app', 'minimum_deposit_value'),
             'wagering_requirement' => Yii::t('app', 'wagering_requirement'),
             'cashable' => Yii::t('app', 'cashable'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
     
@@ -50,6 +62,7 @@ class CreateBonusForm extends Model
     {
         $bonus = new Bonus();
         $bonus->title = $this->title;
+        $bonus->language = $this->language;
         $bonus->content = $this->content;
         $bonus->image_id = $this->image_id;
         $bonus->operator_id = $this->operator_id;
@@ -65,7 +78,9 @@ class CreateBonusForm extends Model
 
     public function fetchOperator()
     {
-        $operators = Operator::find()->select(['id', 'name'])->all();
+        $operators = Operator::find()
+        ->where(['language' => $this->language])
+        ->select(['id', 'name'])->all();
         return ArrayHelper::map($operators, 'id', 'name');
     }
 
@@ -90,5 +105,10 @@ class CreateBonusForm extends Model
             0 => 'No',
             1 => 'Yes'
         ];
+    }
+
+    public function fetchLanguages()
+    {
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 }

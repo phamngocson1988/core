@@ -30,14 +30,14 @@ class TopOperatorWidget extends Widget
 			limit {$this->limit};
 		");
 		$result = $command->queryAll();
-		$operatorIds = ArrayHelper::getColumn($result, 'operator_id');
+		$operatorIds = ArrayHelper::getColumn($result, 'operator_id');#print_r($operatorIds);die;
         $operators = Operator::find()->where(['in', 'id', $operatorIds])->indexBy('id')->all();
         $topOperators = [];
         foreach ($operatorIds as $id) {
-        	$topOperators[] = $operators[$id];
+        	$topOperators[] = ArrayHelper::getValue($operators, $id);
         }
         return $this->render('top_operator', [
-            'topOperators' => $topOperators,
+            'topOperators' => array_filter($topOperators),
         ]);
     }
 }

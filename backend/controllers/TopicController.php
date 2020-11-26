@@ -34,6 +34,7 @@ class TopicController extends Controller
         $form = new \backend\forms\FetchTopicForm([
             'q' => $request->get('q'),
             'category_id' => $request->get('category_id'),
+            'language' => $request->get('language'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

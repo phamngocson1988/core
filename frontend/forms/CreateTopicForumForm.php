@@ -40,6 +40,7 @@ class CreateTopicForumForm extends Model
             $topic = new ForumTopic();
             $topic->subject = $this->subject;
             $topic->category_id = $this->category_id;
+            $topic->language = Yii::$app->language;
             $topic->save();
 
             $post = new ForumPost();

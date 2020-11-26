@@ -41,6 +41,11 @@ use yii\widgets\ActiveForm;
             'inputOptions' => ['class' => 'form-control', 'name' => 'category_id']
           ])->dropDownList($search->fetchCategory(),  ['prompt' => Yii::t('app', 'choose_category')]);?>
 
+          <?=$form->field($search, 'language', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'language']
+          ])->dropDownList($search->fetchLanguages(),  ['prompt' => Yii::t('app', 'choose_language')]);?>
+
           <div class="form-group col-md-4 col-lg-3">
             <button type="submit" class="btn btn-success table-group-action-submit"
               style="margin-top:

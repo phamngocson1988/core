@@ -5,11 +5,13 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Operator;
+use yii\helpers\ArrayHelper;
 
 class FetchOperatorForm extends Model
 {
     public $q;
     public $status;
+    public $language;
     private $_command;
 
     public function attributeLabels()
@@ -17,6 +19,7 @@ class FetchOperatorForm extends Model
         return [
             'q' => Yii::t('app', 'keyword'),
             'status' => Yii::t('app', 'status'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
 
@@ -34,6 +37,10 @@ class FetchOperatorForm extends Model
         if ($this->status !== '') {
             $command->andWhere(["{$operatorTable}.status" => $this->status]);
         }
+
+        if ($this->language) {
+            $command->andWhere(["{$operatorTable}.language" => $this->language]);
+        }
         $this->_command = $command;
     }
 
@@ -49,5 +56,10 @@ class FetchOperatorForm extends Model
     public function fetchStatus()
     {
         return Operator::getStatusList();
+    }
+
+    public function fetchLanguages()
+    {
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 }

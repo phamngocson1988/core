@@ -24,6 +24,7 @@ class m200608_150429_complain extends Migration
             'title' => $this->string(255)->notNull(),
             'slug' => $this->string(255)->notNull(),
             'description' => $this->text()->notNull(),
+            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
             'account_name' => $this->string(255)->notNull(),
             'account_email' => $this->string(255)->notNull(),
             'status' => $this->integer()->notNull(),

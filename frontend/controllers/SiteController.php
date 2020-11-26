@@ -55,7 +55,9 @@ class SiteController extends Controller
             if (Yii::$app->user->can('admin')) {
                 $user = Yii::$app->user->getIdentity();
                 $operator = Operator::findOne($user->operator_id);
-                $result['next'] = Url::to(['manage/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
+                if ($operator) {
+                    $result['next'] = Url::to(['manage/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
+                }
             }
             return json_encode($result);
         } else {

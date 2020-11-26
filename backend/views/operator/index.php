@@ -33,7 +33,7 @@ use yii\helpers\ArrayHelper;
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['operator/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn green" href="#choose-language" data-toggle="modal"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
       </div>
@@ -49,6 +49,11 @@ use yii\helpers\ArrayHelper;
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'status']
             ])->dropDownList($search->fetchStatus(),  ['prompt' => Yii::t('app', 'choose_status')]);?>
+
+            <?=$form->field($search, 'language', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'language']
+            ])->dropDownList($search->fetchLanguages(),  ['prompt' => Yii::t('app', 'choose_language')]);?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit"
@@ -100,3 +105,4 @@ use yii\helpers\ArrayHelper;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?=\backend\widgets\LanguageModalWidget::widget(['url' => Url::to(['operator/create'])]);?>

@@ -64,12 +64,25 @@ use common\widgets\TinyMce;
 
                   <?=$form->field($model, 'language', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control input-large'],
+                    'inputOptions' => ['class' => 'form-control', 'disabled' => true, 'name' => 'language'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->widget(kartik\select2\Select2::classname(), [
-                    'data' => $model->fetchLanguages(),
-                    'options' => ['class' => 'form-control'],
-                  ])?>
+                  ])->dropDownList($model->fetchLanguages())?>
+                  <?=$form->field($model, 'language', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}'
+                  ])->hiddenInput()?>
+
+                  <?=$form->field($model, 'category_ids', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'multiple' => true],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchCategory());?>
+
+                  <?=$form->field($model, 'operator_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchOperator(), ['prompt' => Yii::t('app', 'choose_operator')]);?>
 
                   <?=$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

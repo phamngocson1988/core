@@ -40,6 +40,7 @@ class OperatorController extends Controller
         $form = new FetchOperatorForm([
             'q' => $request->get('q'),
             'status' => $request->get('status', ''),
+            'language' => $request->get('language', ''),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -59,11 +60,11 @@ class OperatorController extends Controller
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($language)
     {
         $this->view->params['main_menu_active'] = 'operator.index';        
         $request = Yii::$app->request;
-        $model = new CreateOperatorForm();
+        $model = new CreateOperatorForm(['language' => $language]);
         if ($model->load($request->post())) {
             if ($model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

@@ -66,19 +66,19 @@ class CreateComplainForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
+            $operator = $this->getOperator();
             $complain = new Complain();
             $complain->title = $this->title;
             $complain->description = $this->description;
             $complain->user_id = $this->user_id;
             $complain->reason_id = $this->reason_id;
             $complain->operator_id = $this->operator_id;
+            $complain->language = $operator->language;
             $complain->account_name = $this->account_name;
             $complain->account_email = $this->account_email;
             if ($complain->save()) {
                 $user = $this->getUser();
-                $operator = $this->getOperator();
                 $user->addBadge(UserBadge::BADGE_COMPLAIN, $complain->id, sprintf("%s - %s", $operator->name, $complain->title));
-
                 $operatorStaffs = User::find()->where(['operator_id' => $this->operator_id])->all();
                 foreach ($operatorStaffs as $operatorStaff) {
                     ComplainNotification::create(ComplainNotification::NEW_COMPLAIN_PUBLISHED, [

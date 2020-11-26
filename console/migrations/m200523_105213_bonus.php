@@ -29,6 +29,7 @@ class m200523_105213_bonus extends Migration
             'cashable' => $this->boolean(),
             'image_id' => $this->integer(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
+            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
             'created_by' => $this->integer(),
             'updated_by' => $this->integer(),
             'created_at' => $this->dateTime(),

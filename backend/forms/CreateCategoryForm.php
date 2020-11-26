@@ -13,6 +13,14 @@ class CreateCategoryForm extends Model
     public $image_id;
     public $language;
 
+    public function init()
+    {
+        $languages = array_keys(Yii::$app->params['languages']);
+        if (!in_array($this->language, $languages)) {
+            $this->language = reset($languages);
+        }
+    }
+
     public function rules()
     {
         return [

@@ -50,11 +50,11 @@ class BonusController extends Controller
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($language)
     {
         $this->view->params['main_menu_active'] = 'bonus.index';
         $request = Yii::$app->request;
-        $model = new CreateBonusForm();
+        $model = new CreateBonusForm(['language' => $language]);
         if ($model->load($request->post())) {
             if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
