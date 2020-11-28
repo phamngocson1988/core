@@ -11,6 +11,7 @@ use supplier\models\User;
 use common\components\helpers\FormatConverter;
 use common\components\helpers\StringHelper;
 use supplier\models\Order;
+use supplier\models\OrderSupplier;
 
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -71,32 +72,14 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               ]
             ])->label('Tên game')?>
           
-            <?= $form->field($search, 'start_date', [
+            <?=$form->field($search, 'status', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
-            ])->widget(DateTimePicker::className(), [
-              'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd hh:00',
-                'minuteStep' => 1,
-                'endDate' => date('Y-m-d H:i'),
-                'minView' => '1'
-              ],
-            ])->label('Ngày yêu cầu từ');?>
-
-            <?=$form->field($search, 'end_date', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date', 'id' => 'end_date']
-            ])->widget(DateTimePicker::className(), [
-                'clientOptions' => [
-                  'autoclose' => true,
-                  'format' => 'yyyy-mm-dd hh:59',
-                  'todayBtn' => true,
-                  'minuteStep' => 1,
-                  'endDate' => date('Y-m-d H:i'),
-                  'minView' => '1'
-                ],
-            ])->label('Ngày yêu cầu đến');?>
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status', 'onchange' => 'js:$(this).closest("form").submit();']
+            ])->dropDownList([
+                Order::STATE_PENDING_CONFIRMATION => 'Incoming Message',
+                Order::STATE_PENDING_INFORMATION => 'Outgoing Message',
+                OrderSupplier::STATUS_PROCESSING => 'Processing',
+            ], ['prompt' => 'Trạng thái đơn hàng'])->label('Trạng thái');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -125,6 +108,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
+                <?php $order = $model->order;?>
                 <tr>
                   <td col-tag="order_id" class="center" style="max-width: none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->order_id;?></a></td>
                   <td col-tag="game_title" class="center"><?=$model->getGameTitle();?></td>
@@ -136,7 +120,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>
 
                   <td col-tag="status" class="center">
+                    <?php if ($order->state == Order::STATE_PENDING_INFORMATION) : ?>
+                    <span class="label label-primary">Outgoing Message</span>
+                    <?php elseif ($order->state == Order::STATE_PENDING_CONFIRMATION) : ?>
+                    <span class="label label-success">Incoming Message</span>
+                    <?php else : ?>
                     <span class="label label-default">Processing</span>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <?php endforeach;?>

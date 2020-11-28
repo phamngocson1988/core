@@ -160,6 +160,7 @@ if ($canSaler) $numColumn += 1;
                 <th col-tag="waiting_time"> Tổng TG chờ </th>
                 <th col-tag="processing_time"> TG xử lý yêu cầu </th>
                 <th col-tag="response_time"> TG chờ phản hồi </th>
+                <th col-tag="state"> Tình trạng </th>
                 <th col-tag="status"> Trạng thái </th>
                 <th col-tag="message"> Nội dung tin nhắn </th>
                 <th col-tag="saler"> NV hỗ trợ </th>
@@ -170,7 +171,7 @@ if ($canSaler) $numColumn += 1;
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="13" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="14" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <?php $supplier = $model->supplier;?>
@@ -195,16 +196,31 @@ if ($canSaler) $numColumn += 1;
                     ?>
                       
                   </td>
-                  <td col-tag="status">
-                    <?php if ($model->hasCancelRequest()) :?>
-                    <span class="label label-danger">Có yêu cầu hủy</span>
-                    <?php endif;?>
+                  <td col-tag="state">
                     <?php if ($model->state == Order::STATE_PENDING_INFORMATION) : ?>
                     <span class="label label-primary">Outgoing Message</span>
                     <?php elseif ($model->state == Order::STATE_PENDING_CONFIRMATION) : ?>
                     <span class="label label-success">Incoming Message</span>
-                    <?php else : ?>
-                    <span class="label label-default">Pending</span>
+                    <?php endif;?>
+                  </td>
+                  <td col-tag="status">
+                    <?php if ($model->hasCancelRequest()) :?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                    <?php endif;?>
+                    <?php if ($model->tooLongProcess()) :?>
+                    <span class="label label-warning">Xử lý chậm</span>
+                    <?php endif;?>
+
+                    <?php if ($supplier) :?>
+                      <?php if ($supplier->isRequest()) : ?>
+                    <span class="label label-warning"><?=$label;?></span>
+                      <?php elseif ($supplier->isApprove()) : ?>
+                    <span class="label label-info"><?=$label;?></span>
+                      <?php else : ?>
+                    <span class="label label-success"><?=$label;?></span>
+                    <?php endif;?>
+                    <?php else :?>
+                      <?=$model->getStatusLabel();?>
                     <?php endif;?>
                   </td>
                   <td col-tag="message">
@@ -302,6 +318,7 @@ if ($canSaler) $numColumn += 1;
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
               <td col-tag="processing_time"></td>
               <td col-tag="response_time"></td>
+              <td col-tag="state"></td>
               <td col-tag="status"></td>
               <td col-tag="message"></td>
               <td col-tag="saler"></td>

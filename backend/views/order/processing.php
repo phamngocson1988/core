@@ -201,6 +201,8 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                     <?php if ($supplier) :?>
                       <?php if ($supplier->isRequest()) : ?>
                     <span class="label label-warning"><?=$label;?></span>
+                      <?php elseif ($supplier->isApprove()) : ?>
+                    <span class="label label-info"><?=$label;?></span>
                       <?php else : ?>
                     <span class="label label-success"><?=$label;?></span>
                     <?php endif;?>

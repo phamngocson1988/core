@@ -9,10 +9,6 @@ use supplier\models\OrderSupplier;
 
 class FetchProcessingShopForm extends FetchShopForm
 {
-    public function init() 
-    {
-        $this->status = OrderSupplier::STATUS_PROCESSING;
-    }
     protected function createCommand()
     {
         $command = OrderSupplier::find();
@@ -32,7 +28,7 @@ class FetchProcessingShopForm extends FetchShopForm
         $condition = [
             "$supplierTable.order_id" => $this->order_id,
             "$table.game_id" => $this->game_id,
-            "$supplierTable.status" => $this->status,
+            "$supplierTable.status" => OrderSupplier::STATUS_PROCESSING,
             "$supplierTable.supplier_id" => $this->supplier_id,
         ];
         $condition = array_filter($condition);
@@ -43,6 +39,14 @@ class FetchProcessingShopForm extends FetchShopForm
         }
         if ($this->end_date) {
             $command->andWhere(['<=', "$supplierTable.requested_at", $this->end_date]);
+        }
+
+        if ($this->status) {
+            if ($this->status != OrderSupplier::STATUS_PROCESSING) {
+                $command->andWhere(["{$table}.state" => $this->status]);
+            } else {
+                $command->andWhere(["{$table}.state" => null]);
+            }
         }
         // die($command->createCommand()->getRawSql());
         $command->with('order');
