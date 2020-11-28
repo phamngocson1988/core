@@ -79,7 +79,6 @@ class EditPostForm extends Model
     {
         $post = $this->getPost();
         $categories = Category::find()
-        ->where(['language' => $post->language])
         ->select(['id', 'title'])->all();
         return ArrayHelper::map($categories, 'id', 'title');
     }

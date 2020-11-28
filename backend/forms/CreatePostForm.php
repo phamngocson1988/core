@@ -75,7 +75,6 @@ class CreatePostForm extends Model
     public function fetchCategory()
     {
         $categories = Category::find()
-        ->where(['language' => $this->language])
         ->select(['id', 'title'])->all();
         return ArrayHelper::map($categories, 'id', 'title');
     }

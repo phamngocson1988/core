@@ -43,11 +43,11 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function actionCreate($language)
+    public function actionCreate()
     {
         $this->view->params['main_menu_active'] = 'category.index';
         $request = Yii::$app->request;
-        $model = new CreateCategoryForm(['language' => $language]);
+        $model = new CreateCategoryForm();
         if ($model->load($request->post())) {
             if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

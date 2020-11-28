@@ -43,7 +43,6 @@ class m200521_153314_post extends Migration
             'title' => $this->string(255)->notNull(),
             'slug' => $this->string(255),
             'image_id' => $this->integer(),
-            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
         ], $tableOptions);
 
     }
