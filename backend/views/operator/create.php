@@ -1,13 +1,16 @@
 <?php
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 
-$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]]);
-$this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
-$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-tagsinput/bootstrap-tagsinput-typeahead.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('@web/vendor/assets/global/plugins/typeahead/handlebars.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('@web/vendor/assets/global/plugins/typeahead/typeahead.bundle.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$this->registerJsFile('@web/vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $userList = $model->fetchUsers();
 ?>
 <!-- BEGIN PAGE BAR -->
@@ -62,6 +65,126 @@ $userList = $model->fetchUsers();
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()?>
+
+                  <?=$form->field($model, 'backup_url', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                    'pluginOptions' => ['tags' => true]
+                  ])?>
+
+                  <?=$form->field($model, 'rebate', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'type' => 'number'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()->label('Rebate(%)')?>
+
+                  <?=$form->field($model, 'withdrawal_limit', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'type' => 'number'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
+
+                  <?=$form->field($model, 'withdrawal_currency', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchCurrency())?>
+
+                  <?=$form->field($model, 'withdrawal_time', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchWithdrawTime())?>
+
+                  <?=$form->field($model, 'withdrawal_method', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->checkboxList($model->fetchWithdrawMethod(), [
+                    'item' => function($index, $label, $name, $checked, $value) {
+                      $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                      return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                    }
+                  ]);?>
+                  <?=$form->field($model, 'owner', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
+                  <?=$form->field($model, 'established', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchEstablishedYear())?>
+                  <?=$form->field($model, 'support_email', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
+                  <?=$form->field($model, 'support_phone', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
+                  <?=$form->field($model, 'livechat_support', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchLiveChat())?>
+
+                  <?=$form->field($model, 'license', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()?>
+                  <?=$form->field($model, 'support_currency', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->checkboxList($model->fetchCurrency(), [
+                    'item' => function($index, $label, $name, $checked, $value) {
+                      $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                      return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                    }
+                  ])?>
+                  <?=$form->field($model, 'support_language', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->checkboxList($model->fetchLanguage(), [
+                    'item' => function($index, $label, $name, $checked, $value) {
+                      $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                      return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                    }
+                  ]);?>
+                  <?=$form->field($model, 'product', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->checkboxList($model->fetchProduct(), [
+                    'item' => function($index, $label, $name, $checked, $value) {
+                      $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                      return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                    }
+                  ]);?>
+                  <?=$form->field($model, 'deposit_method', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->checkboxList($model->fetchDepositMethod(), [
+                    'item' => function($index, $label, $name, $checked, $value) {
+                      $checkbox = Html::checkbox($name, $checked, ['class' => 'form-check-input', 'value' => $value]);
+                      return Html::tag('label', sprintf('%s<span class="form-check-label">%s</span>',$checkbox, $label), ['class' => 'form-check form-check-inline']);
+                    }
+                  ]);?>
+                  <?=$form->field($model, 'overview', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textArea()?>
 
                   <?=$form->field($model, 'admin_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

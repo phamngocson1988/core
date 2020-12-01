@@ -5,13 +5,33 @@ use Yii;
 use yii\base\Model;
 use backend\models\User;
 use backend\models\Operator;
+use frontend\models\OperatorMeta;
 use yii\helpers\ArrayHelper;
 use backend\forms\AssignRoleForm;
 
 class CreateOperatorForm extends Model
 {
 	public $name;
+    public $overview;
     public $main_url;
+    public $backup_url;
+    public $withdrawal_limit;
+    public $withdrawal_currency;
+    public $withdrawal_time;
+    public $withdrawal_method;
+    public $rebate;
+    public $owner;
+    public $established;
+    public $livechat_support;
+    public $support_email;
+    public $support_phone;
+    public $logo;
+    public $support_language;
+    public $support_currency;
+    public $license;
+    public $product;
+    public $deposit_method;
+
     public $admin_id;
     public $subadmin_ids;
     public $moderator_ids;
@@ -36,17 +56,23 @@ class CreateOperatorForm extends Model
             ['name', 'required'],
             ['name', 'string', 'min' => 2, 'max' => 255],
 
+
             ['main_url', 'trim'],
             ['main_url', 'string', 'max' => 255],
 
+            [['owner', 'support_email', 'support_phone'], 'string', 'max' => 255],
+            ['withdrawal_currency', 'string', 'max' => 16],
+            [['established', 'rebate', 'withdrawal_limit'], 'number'],
+            [['support_language', 'support_currency', 'license', 'withdrawal_time', 'withdrawal_method', 'product', 'deposit_method', 'overview', 'backup_url'], 'safe'],
+
             ['admin_id', 'required'],
-            ['admin_id', 'validateAdmin'],
+            // ['admin_id', 'validateAdmin'],
 
             ['subadmin_ids', 'safe'],
-            ['subadmin_ids', 'validateSubAdmin'],
+            // ['subadmin_ids', 'validateSubAdmin'],
 
             ['moderator_ids', 'safe'],
-            ['moderator_ids', 'validateModerator'],
+            // ['moderator_ids', 'validateModerator'],
 
             ['language', 'required'],
             ['language', 'in', 'range' => array_keys(Yii::$app->params['languages'])],
@@ -99,26 +125,32 @@ class CreateOperatorForm extends Model
         }
     }
 
-    public function attributeLabels()
-    {
-        return [
-            'name' => Yii::t('app', 'operator_name'),
-            'main_url' => Yii::t('app', 'operator_main_url'),
-            'admin_id' => Yii::t('app', 'operator_admin'),
-            'subadmin_ids' => Yii::t('app', 'operator_subadmin'),
-            'moderator_ids' => Yii::t('app', 'operator_moderator'),
-            'language' => Yii::t('app', 'language'),
-        ];
-    }
-
     public function create()
     {
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
             $operator = new Operator();
-            $operator->name = $this->name;
             $operator->main_url = $this->main_url;
+            $operator->overview = $this->overview;
+            $operator->backup_url = $this->backup_url;
+            $operator->withdrawal_limit = $this->withdrawal_limit;
+            $operator->withdrawal_currency = $this->withdrawal_currency;
+            $operator->rebate = $this->rebate;
+            $operator->owner = $this->owner;
+            $operator->established = $this->established;
+            $operator->livechat_support = $this->livechat_support;
+            $operator->support_email = $this->support_email;
+            $operator->support_phone = $this->support_phone;
+
+            // new
+            $operator->support_language = implode(",", (array)$this->support_language);
+            $operator->support_currency = implode(",", (array)$this->support_currency);
+            $operator->withdrawal_method = implode(",", (array)$this->withdrawal_method);
+            $operator->product = implode(",", (array)$this->product);
+            $operator->deposit_method = implode(",", (array)$this->deposit_method);
+            $operator->withdrawal_time = $this->withdrawal_time;
+            $operator->license = $this->license;
             $operator->language = $this->language;
             $operator->save();
 
@@ -208,5 +240,75 @@ class CreateOperatorForm extends Model
             $this->_moderators = User::findAll($this->moderator_ids);
         }
         return $this->_moderators;
+    }
+
+    public function fetchEstablishedYear()
+    {
+        $years = range(1990, date("Y"));
+        return array_combine($years, $years);
+    }
+
+    public function fetchLanguage()
+    {
+        return ArrayHelper::getValue(Yii::$app->params, 'language', []);
+    }
+
+    public function fetchCurrency()
+    {
+        return ArrayHelper::getValue(Yii::$app->params, 'currency', []);
+    }
+
+    public function fetchLiveChat()
+    {
+        return [
+            '1' => 'Yes',
+            '0' => 'No',
+        ];
+    }
+
+    public function fetchWithdrawTime()
+    {
+        return [
+            "E-wallets: 0m – 24h" => "E-wallets: 0m – 24h",
+            "Card Payments: 0m – 24h" => "Card Payments: 0m – 24h",
+            "Bank Transfers: 3-5d" => "Bank Transfers: 3-5d",
+            "Cheques: 3-5d" => "Cheques: 3-5d",
+        ];
+    }
+
+    public function fetchWithdrawMethod()
+    {
+        $withdrawal = OperatorMeta::find()->where(['key' => OperatorMeta::KEY_WITHDRAWVAL_METHOD])->one();
+        $values = $withdrawal ? explode(",", $withdrawal->value) : [];
+        if (count($values)) {
+            return array_combine($values, $values);
+        }
+        return [];
+    }
+
+    public function fetchProduct()
+    {
+        $product = OperatorMeta::find()->where(['key' => OperatorMeta::KEY_PRODUCT])->one();
+        $values = $product ? explode(",", $product->value) : [];
+        if (count($values)) {
+            return array_combine($values, $values);
+        }
+        return [];
+    }
+
+    public function fetchDepositMethod()
+    {
+        $deposit = OperatorMeta::find()->where(['key' => OperatorMeta::KEY_DEPOSIT_METHOD])->one();
+        $values = $deposit ? explode(",", $deposit->value) : [];
+        if (count($values)) {
+            return array_combine($values, $values);
+        }
+        return [];
+    }
+
+    public function fetchBackupUrls()
+    {
+        $urls = explode(',', $this->backup_url);
+        return array_combine($urls, $urls);
     }
 }
