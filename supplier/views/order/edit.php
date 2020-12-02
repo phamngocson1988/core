@@ -140,7 +140,7 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
               <?php if ($order->bulk) : ?>
               <tr>
                 <td> Order detail</td>
-                <td><?=nl2br($order->raw);?></td>
+                <td><?=nl2br(Html::encode($order->raw));?></td>
               </tr>
               <?php else : ?>
               <tr>
