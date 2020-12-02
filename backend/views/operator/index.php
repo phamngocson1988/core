@@ -3,6 +3,7 @@ use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use backend\models\Operator;
 
 ?>
 
@@ -71,7 +72,8 @@ use yii\helpers\ArrayHelper;
                 <th> <?=Yii::t('app', 'id');?> </th>
                 <th> <?=Yii::t('app', 'name');?> </th>
                 <th> <?=Yii::t('app', 'main_url');?> </th>
-                <th> <?=Yii::t('app', 'manager');?> </th>
+                <th> <?=Yii::t('app', 'Admin');?> </th>
+                <th> <?=Yii::t('app', 'status');?> </th>
                 <th> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -85,7 +87,25 @@ use yii\helpers\ArrayHelper;
                   <?=$model->name;?>
                 </td>
                 <td class="left"><?=$model->main_url;?></td>
-                <td class="left"><?=ArrayHelper::getValue($managers, $model->id, '');?></td>
+                <td class="left">
+                  <?php
+                  $staff = ArrayHelper::getValue($managers, $model->id);
+                  echo $staff ? $staff->getName() : '';
+                  ?>
+                </td>
+                <td class="center">
+                  <?php switch ($model->status) {
+                    case Operator::STATUS_ACTIVE:
+                      echo '<span class="label label-success">Active</span>';
+                      break;
+                    case Operator::STATUS_INACTIVE:
+                      echo '<span class="label label-warning">Inactive</span>';
+                      break;
+                    case Operator::STATUS_DELETED:
+                      echo '<span class="label label-danger">Deleted</span>';
+                      break;
+                  }?>
+                </td>
                 <td class="center">
                   <a class="btn btn-xs default tooltips" href="<?=Url::to(['operator/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'edit_operator');?>"><i class="fa fa-pencil"></i></a>
                 </td>

@@ -13,6 +13,7 @@ $this->registerJsFile('vendor/assets/global/plugins/typeahead/typeahead.bundle.m
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+$userList = $model->fetchUsers();
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -186,6 +187,38 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textArea()?>
+
+                  <?=$form->field($model, 'status', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropdownList($model->fetchStatus())?>
+
+                  <?=$form->field($model, 'admin_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control input-large'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $userList,
+                    'options' => ['class' => 'form-control', 'placeholder' => 'Select an admin ...'],
+                  ])?>
+
+                  <?=$form->field($model, 'subadmin_ids', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control input-large'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $userList,
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                  ])?>
+                  <?=$form->field($model, 'moderator_ids', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control input-large'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $userList,
+                    'options' => ['class' => 'form-control', 'multiple' => 'true'],
+                  ])?>
                 </div>
               </div>
             </div>

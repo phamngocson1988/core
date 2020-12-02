@@ -74,7 +74,7 @@ $currentUserId = Yii::$app->user->id;
       <div class="form-comment-right"><span class="text">ASSIGN TO</span>
         <div class="form-group">
           <select class="form-control assign-to-admin">
-            <?php foreach ($operator->listUserByRole('manager') as $manager) :?>
+            <?php foreach ($operator->fetchStaff('manager') as $manager) :?>
             <option value="<?=$manager->id;?>" selected><?=$manager->username;?></option>
             <?php endforeach;?>
           </select>

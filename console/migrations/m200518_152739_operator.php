@@ -79,6 +79,13 @@ class m200518_152739_operator extends Migration
             'key' => $this->string(255)->notNull(),
             'value' => $this->string(255)->notNull(),
         ], $tableOptions);
+
+        $this->createTable('{{%operator_staff}}', [
+            'id' => $this->primaryKey(),
+            'operator_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
+            'role' => $this->smallInteger()->notNull(), 
+        ], $tableOptions);
     }
 
     public function down()
@@ -87,5 +94,6 @@ class m200518_152739_operator extends Migration
         $this->dropTable('{{%operator_favorite}}');
         $this->dropTable('{{%operator_review}}');
         $this->dropTable('{{%operator_meta}}');
+        $this->dropTable('{{%operator_staff}}');
     }
 }

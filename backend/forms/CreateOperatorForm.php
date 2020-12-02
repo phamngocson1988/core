@@ -5,7 +5,8 @@ use Yii;
 use yii\base\Model;
 use backend\models\User;
 use backend\models\Operator;
-use frontend\models\OperatorMeta;
+use backend\models\OperatorMeta;
+use backend\models\OperatorStaff;
 use yii\helpers\ArrayHelper;
 use backend\forms\AssignRoleForm;
 
@@ -66,13 +67,13 @@ class CreateOperatorForm extends Model
             [['support_language', 'support_currency', 'license', 'withdrawal_time', 'withdrawal_method', 'product', 'deposit_method', 'overview', 'backup_url'], 'safe'],
 
             ['admin_id', 'required'],
-            // ['admin_id', 'validateAdmin'],
+            ['admin_id', 'validateAdmin'],
 
             ['subadmin_ids', 'safe'],
-            // ['subadmin_ids', 'validateSubAdmin'],
+            ['subadmin_ids', 'validateSubAdmin'],
 
             ['moderator_ids', 'safe'],
-            // ['moderator_ids', 'validateModerator'],
+            ['moderator_ids', 'validateModerator'],
 
             ['language', 'required'],
             ['language', 'in', 'range' => array_keys(Yii::$app->params['languages'])],
@@ -82,8 +83,10 @@ class CreateOperatorForm extends Model
     public function validateAdmin($attribute, $params = [])
     {
         $user = $this->getAdmin();
-        if ($user && $user->hasOperator()) {
-            $this->addError($attribute, Yii::t('app', 'user_is_belong_to_other_operator'));
+        if (!$user) {
+            $this->addError($attribute, Yii::t('app', 'The user is not exist'));
+        } elseif ($user->isOperatorStaff()) {
+            $this->addError($attribute, Yii::t('app', sprintf("User %s already a staff of another operator", $user->email)));
         }   
     }
 
@@ -92,8 +95,8 @@ class CreateOperatorForm extends Model
         if ($this->hasError()) return;
         $users = $this->getSubAdmins();
         foreach ($users as $user) {
-            if ($user->hasOperator()) {
-                $this->addError($attribute, sprintf("User %s already has operator", $user->email));
+            if ($user->isOperatorStaff()) {
+                $this->addError($attribute, sprintf("User %s already a staff of another operator", $user->email));
                 return;
             }  
         }
@@ -111,8 +114,8 @@ class CreateOperatorForm extends Model
         if ($this->hasError()) return;
         $users = $this->getModerators();
         foreach ($users as $user) {
-            if ($user->hasOperator()) {
-                $this->addError($attribute, sprintf("User %s already has operator", $user->email));
+            if ($user->isOperatorStaff()) {
+                $this->addError($attribute, sprintf("User %s already a staff of another operator", $user->email));
                 return;
             }  
         }
@@ -154,43 +157,26 @@ class CreateOperatorForm extends Model
             $operator->language = $this->language;
             $operator->save();
 
-            $assignAdminForm = new AssignRoleForm([
-                'role' => 'admin',
-                'user_id' => $this->admin_id
-            ]);
-            $assignAdminForm->save();
-            $admin = $this->getAdmin();
-            $admin->operator_id = $operator->id;
-            $admin->save();
+            $adminStaff = new OperatorStaff();
+            $adminStaff->operator_id = $operator->id;
+            $adminStaff->user_id = $this->admin_id;
+            $adminStaff->role = OperatorStaff::ROLE_ADMIN;
+            $adminStaff->save();
 
             foreach ((array)$this->subadmin_ids as $subId) {
-                $assignSubAdminForm = new AssignRoleForm([
-                    'role' => 'manager',
-                    'user_id' => $subId
-                ]);
-                $assignSubAdminForm->save();
-            }
-            $subs = $this->getSubAdmins();
-            if ($subs) {
-                foreach ((array)$subs as $sub) {
-                    $sub->operator_id = $operator->id;
-                    $sub->save();
-                }
+                $subAdminStaff = new OperatorStaff();
+                $subAdminStaff->operator_id = $operator->id;
+                $subAdminStaff->user_id = $subId;
+                $subAdminStaff->role = OperatorStaff::ROLE_SUBADMIN;
+                $subAdminStaff->save();
             }
 
             foreach ((array)$this->moderator_ids as $modId) {
-                $assignModeratorForm = new AssignRoleForm([
-                    'role' => 'moderator',
-                    'user_id' => $modId
-                ]);
-                $assignModeratorForm->save();
-            }
-            $mods = $this->getSubAdmins();
-            if ($mods) {
-                foreach ((array)$mods as $mod) {
-                    $mod->operator_id = $operator->id;
-                    $mod->save();
-                }
+                $moderatorStaff = new OperatorStaff();
+                $moderatorStaff->operator_id = $operator->id;
+                $moderatorStaff->user_id = $modId;
+                $moderatorStaff->role = OperatorStaff::ROLE_MODERATOR;
+                $moderatorStaff->save();
             }
 
             $transaction->commit();
@@ -204,10 +190,7 @@ class CreateOperatorForm extends Model
 
     public function fetchUsers()
     {
-        // $auth = Yii::$app->authManager;
-        // $userIds = $auth->getUserIdsByRole('admin');
         $users = User::find()
-        ->where(['IS', 'operator_id', null])
         ->select(['id', 'email'])
         ->all();
         return ArrayHelper::map($users, 'id', 'email');

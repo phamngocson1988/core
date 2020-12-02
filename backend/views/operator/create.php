@@ -192,7 +192,7 @@ $userList = $model->fetchUsers();
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->widget(kartik\select2\Select2::classname(), [
                     'data' => $userList,
-                    'options' => ['class' => 'form-control'],
+                    'options' => ['class' => 'form-control', 'placeholder' => 'Select an admin ...'],
                   ])?>
 
                   <?=$form->field($model, 'subadmin_ids', [

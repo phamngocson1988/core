@@ -9,7 +9,7 @@ use yii\behaviors\TimestampBehavior;
 use common\behaviors\OperatorReviewBehavior;
 use common\behaviors\OperatorComplainBehavior;
 use common\behaviors\OperatorBonusBehavior;
-use common\behaviors\OperatorRoleBehavior;
+use common\behaviors\OperatorStaffBehavior;
 
 class Operator extends ActiveRecord
 {
@@ -46,16 +46,16 @@ class Operator extends ActiveRecord
             'operatorReview' => OperatorReviewBehavior::className(),
             'operatorComplain' => OperatorComplainBehavior::className(),
             'operatorBonus' => OperatorBonusBehavior::className(),
-            'operatorRole' => OperatorRoleBehavior::className(),
+            'operatorStaff' => OperatorStaffBehavior::className(),
         ];
     }
 
     public static function getStatusList()
     {
         return [
-            self::STATUS_ACTIVE => Yii::t('app', 'active'),
-            self::STATUS_INACTIVE => Yii::t('app', 'inactive'),
-            self::STATUS_DELETED => Yii::t('app', 'disable'),
+            self::STATUS_ACTIVE => Yii::t('app', 'Active'),
+            self::STATUS_INACTIVE => Yii::t('app', 'Inactive'),
+            self::STATUS_DELETED => Yii::t('app', 'Deleted'),
         ];
     }
 

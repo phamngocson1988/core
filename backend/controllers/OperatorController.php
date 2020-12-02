@@ -15,6 +15,7 @@ use backend\forms\EditOperatorForm;
 use backend\forms\CreateOperatorMetaForm;
 // models
 use backend\models\User;
+use backend\models\OperatorStaff;
 
 class OperatorController extends Controller
 {
@@ -46,12 +47,11 @@ class OperatorController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
 
-        $operatorIds = ArrayHelper::getColumn($models, 'id');
-        $managers = User::find()->where(['in', 'operator_id', $operatorIds])
-        ->select(['operator_id', 'firstname', 'lastname'])->all();
-        $managers = ArrayHelper::map($managers, 'operator_id', function($user, $defaultValue) {
-            return sprintf("%s %s", $user->firstname, $user->lastname);
-        });
+        $managers = [];
+        foreach ($models as $model) {
+            $staffs = $model->fetchStaff(OperatorStaff::ROLE_ADMIN);
+            $managers[$model->id] = reset($staffs);
+        }
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,

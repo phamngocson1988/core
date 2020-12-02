@@ -17,7 +17,8 @@ use common\behaviors\UserPointBehavior;
 use common\behaviors\UserBadgeBehavior;
 use common\behaviors\UserMailBehavior;
 use common\behaviors\UserNotificationSettingBehavior;
-;
+use common\behaviors\UserOperatorStaffBehavior;
+
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
@@ -49,6 +50,7 @@ class User extends ActiveRecord implements IdentityInterface
             ],
             'operatorFavorite' => UserOperatorFavoriteBehavior::className(),
             'operatorReview' => UserOperatorReviewBehavior::className(),
+            'operatorStaff' => UserOperatorStaffBehavior::className(),
             'complain' => UserComplainBehavior::className(),
             'setting' => UserSettingBehavior::className(),
             'forum' => UserForumBehavior::className(),
