@@ -39,4 +39,15 @@ class UserOperatorStaffBehavior extends AttributeBehavior
         ])->exists();
     }
 
+    public function getOperatorIdByRole($role) 
+    {
+        $owner = $this->owner; // User
+        $condition = [
+            'user_id' => $owner->id,
+            'role' => $role,
+        ];
+        $staff = OperatorStaff::find()->where($condition)->one();
+        return $staff ? $staff->operator_id : null;
+    }
+
 }

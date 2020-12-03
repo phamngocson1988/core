@@ -12,7 +12,7 @@ class FetchBonusForm extends Model
 {
     public $q;
     public $operator_id;
-    public $status;
+    public $language;
 
     private $_command;
     
@@ -21,7 +21,7 @@ class FetchBonusForm extends Model
         return [
             'q' => Yii::t('app', 'keyword'),
             'operator' => Yii::t('app', 'operator'),
-            'status' => Yii::t('app', 'status'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
     protected function createCommand()
@@ -38,8 +38,8 @@ class FetchBonusForm extends Model
         if ($this->operator_id) {
             $command->andWhere(['operator_id' => $this->operator_id]);
         }
-        if ($this->status) {
-            $command->andWhere(['status' => $this->status]);
+        if ($this->language) {
+            $command->andWhere(['language' => $this->language]);
         }
         $this->_command = $command;
     }
@@ -58,8 +58,8 @@ class FetchBonusForm extends Model
         return ArrayHelper::map($operators, 'id', 'name');
     }
 
-    public function fetchStatus()
+    public function fetchLanguages()
     {
-        return Bonus::getStatusList();
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 }

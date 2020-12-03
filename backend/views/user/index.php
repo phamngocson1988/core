@@ -68,6 +68,7 @@ use yii\helpers\Url;
                 <th> <?=Yii::t('app', 'lastname');?> </th>
                 <th> <?=Yii::t('app', 'email');?> </th>
                 <th> <?=Yii::t('app', 'country');?> </th>
+                <th> <?=Yii::t('app', 'status');?> </th>
                 <th> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -81,8 +82,21 @@ use yii\helpers\Url;
                 <td class="left"><?=$model->lastname;?></td>
                 <td class="left"><?=$model->email;?></td>
                 <td class="left"><?=$model->getCountryName();?></td>
+                <td class="left">
+                  <?php if ($model->isActive()) : ?>
+                  <span class="label label-success">Active</span>
+                  <?php elseif ($model->isInactive()) : ?>
+                  <span class="label label-warning">Inactive</span>
+                  <?php endif;?>
+                </td>
                 <td>
                   <a class="btn btn-xs default tooltips" href="<?=Url::to(['user/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'edit_user');?>"><i class="fa fa-pencil"></i></a>
+
+                  <?php if ($model->isActive()) : ?>
+                  <a class="btn btn-xs default tooltips" href="<?=Url::to(['user/inactive', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'Disable');?>"><i class="fa fa-close"></i></a>
+                  <?php elseif ($model->isInactive()) : ?>
+                  <a class="btn btn-xs default tooltips" href="<?=Url::to(['user/active', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'Enable');?>"><i class="fa fa-eye"></i></a>
+                  <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>

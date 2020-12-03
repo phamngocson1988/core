@@ -40,7 +40,7 @@ class PostController extends Controller
             'q' => $request->get('q'),
             'category_id' => $request->get('category_id'),
             'operator_id' => $request->get('operator_id'),
-            'status' => $request->get('status'),
+            'language' => $request->get('language'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

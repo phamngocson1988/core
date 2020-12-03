@@ -14,6 +14,7 @@ use frontend\forms\LoginForm;
 use frontend\models\Operator;
 use frontend\models\Bonus;
 use frontend\models\Complain;
+use frontend\models\OperatorStaff;;
 
 class SiteController extends Controller
 {
@@ -52,9 +53,10 @@ class SiteController extends Controller
                 'status' => true, 
                 'user_id' => Yii::$app->user->id,
             ];
-            if (Yii::$app->user->can('admin')) {
-                $user = Yii::$app->user->getIdentity();
-                $operator = Operator::findOne($user->operator_id);
+            $user = Yii::$app->user->getIdentity();
+            $operatorId = $user->getOperatorIdByRole(OperatorStaff::ROLE_ADMIN);
+            if ($operatorId) {
+                $operator = Operator::findOne($operatorId);
                 if ($operator) {
                     $result['next'] = Url::to(['manage/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
                 }

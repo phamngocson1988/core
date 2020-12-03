@@ -89,4 +89,28 @@ class UserController extends Controller
             'model' => $model,
         ]);
     }
+
+     public function actionInactive($id)
+    {
+        $form = new \backend\forms\InactiveUserForm(['id' => $id]);
+        if ($form->inactive()) {
+            $user = $form->getUser();
+            Yii::$app->session->setFlash('success', Yii::t('app', 'You have disabled {user} ({id}) successfully', ['user' => $user->username, 'id' => $user->id]));
+        } else {
+            Yii::$app->session->setFlash('error', $form->getFirstErrorMessage());
+        }
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionActive($id)
+    {
+        $form = new \backend\forms\ActiveUserForm(['id' => $id]);
+        if ($form->active()) {
+            $user = $form->getUser();
+            Yii::$app->session->setFlash('success', Yii::t('app', 'You have enabled {user} ({id}) successfully', ['user' => $user->username, 'id' => $user->id]));
+        } else {
+            Yii::$app->session->setFlash('error', $form->getFirstErrorMessage());
+        }
+        return $this->redirect(Yii::$app->request->referrer);
+    }
 }

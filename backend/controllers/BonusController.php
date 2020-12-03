@@ -39,6 +39,7 @@ class BonusController extends Controller
         $form = new FetchBonusForm([
             'q' => $request->get('q'),
             'operator_id' => $request->get('operator_id'),
+            'language' => $request->get('language'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

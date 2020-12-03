@@ -161,7 +161,8 @@ $(".list-language > li").on('click', function() {
     type: "GET",
     success: function(result){
       console.log(result);
-      location.reload();
+      // location.reload();
+      window.location.href = "/";
     },
   });
   return false;

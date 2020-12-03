@@ -67,6 +67,12 @@ $this->registerJsFile('vendor/assets/global/plugins/typeahead/typeahead.bundle.m
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control input-large', 'data-role' => "tagsinput"],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput();?>       
+
+                  <?=$form->field($model, 'license', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control input-large', 'data-role' => "tagsinput"],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput();?>        
 
                 </div>

@@ -113,7 +113,7 @@ $this->title = 'Update Operator';
                     <?= $form->field($model, 'license', [
                       'labelOptions' => ['class' => 'fm-label'],
                       'inputOptions' => ['class' => 'form-control']
-                    ])->textInput();?>
+                    ])->dropdownList($model->fetchLicense(), ['prompt' => Yii::t('app', 'Select license')]);?>
                   </div>
                 </div>
                 <div class="row">

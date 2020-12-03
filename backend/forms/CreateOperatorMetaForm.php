@@ -10,6 +10,7 @@ class CreateOperatorMetaForm extends Model
 	public $product;
     public $deposit_method;
     public $withdrawal_method;
+    public $license;
 
 	/**
      * @inheritdoc
@@ -17,7 +18,7 @@ class CreateOperatorMetaForm extends Model
     public function rules()
     {
         return [
-            [['product', 'deposit_method', 'withdrawal_method'], 'trim'],
+            [['product', 'deposit_method', 'withdrawal_method', 'license'], 'trim'],
         ];
     }
 
@@ -28,6 +29,7 @@ class CreateOperatorMetaForm extends Model
             'product' => Yii::t('app', 'product'),
             'deposit_method' => Yii::t('app', 'deposit_method'),
             'withdrawal_method' => Yii::t('app', 'withdrawal_method'),
+            'license' => Yii::t('app', 'License'),
         ];
     }
 
@@ -44,6 +46,10 @@ class CreateOperatorMetaForm extends Model
         $withdrawal_method = $this->getWithdrawalMethod();
         $withdrawal_method->value = $this->withdrawal_method;
         $withdrawal_method->save();
+
+        $license = $this->getLicense();
+        $license->value = $this->license;
+        $license->save();
         
         return true;
     }
@@ -51,7 +57,13 @@ class CreateOperatorMetaForm extends Model
     public function loadData()
     {
         $product = $this->getProduct();
+        $withdrawal_method = $this->getWithdrawalMethod();
+        $deposit_method = $this->getDepositMethod();
+        $license = $this->getLicense();
         $this->product = $product->value;
+        $this->deposit_method = $deposit_method->value;
+        $this->withdrawal_method = $withdrawal_method->value;
+        $this->license = $license->value;
 
     }
 
@@ -80,5 +92,14 @@ class CreateOperatorMetaForm extends Model
             $model = new OperatorMeta(['key' => 'deposit_method']);
         }
         return $model;
+    }
+
+    public function getLicense()
+    {
+        $license = OperatorMeta::find()->where(['key' => 'license'])->one();
+        if (!$license) {
+            $license = new OperatorMeta(['key' => 'license']);
+        }
+        return $license;
     }
 }

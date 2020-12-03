@@ -15,7 +15,7 @@ class FetchPostForm extends Model
     public $q;
     public $category_id;
     public $operator_id;
-    public $status;
+    public $language;
 
     private $_command;
     
@@ -25,7 +25,7 @@ class FetchPostForm extends Model
             'q' => Yii::t('app', 'keyword'),
             'category_id' => Yii::t('app', 'category'),
             'operator' => Yii::t('app', 'operator'),
-            'status' => Yii::t('app', 'status'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
     protected function createCommand()
@@ -50,8 +50,8 @@ class FetchPostForm extends Model
         if ($this->operator_id) {
             $command->andWhere(["{$postTable}.operator_id" => $this->operator_id]);
         }
-        if ($this->status) {
-            $command->andWhere(["{$postTable}.status" => $this->status]);
+        if ($this->language) {
+            $command->andWhere(["{$postTable}.language" => $this->language]);
         }
         $this->_command = $command;
     }
@@ -76,8 +76,8 @@ class FetchPostForm extends Model
         return ArrayHelper::map($operators, 'id', 'name');
     }
 
-    public function fetchStatus()
+    public function fetchLanguages()
     {
-        return Post::getStatusList();
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 }

@@ -189,20 +189,24 @@ class EditOperatorForm extends Model
             $newAdminStaff->role = OperatorStaff::ROLE_ADMIN;
             $newAdminStaff->save();
 
-            foreach ((array)$this->subadmin_ids as $subId) {
-                $subAdminStaff = new OperatorStaff();
-                $subAdminStaff->operator_id = $operator->id;
-                $subAdminStaff->user_id = $subId;
-                $subAdminStaff->role = OperatorStaff::ROLE_SUBADMIN;
-                $subAdminStaff->save();
+            if ($this->subadmin_ids) {
+                foreach ((array)$this->subadmin_ids as $subId) {
+                    $subAdminStaff = new OperatorStaff();
+                    $subAdminStaff->operator_id = $operator->id;
+                    $subAdminStaff->user_id = $subId;
+                    $subAdminStaff->role = OperatorStaff::ROLE_SUBADMIN;
+                    $subAdminStaff->save();
+                }
             }
 
-            foreach ((array)$this->moderator_ids as $modId) {
-                $moderatorStaff = new OperatorStaff();
-                $moderatorStaff->operator_id = $operator->id;
-                $moderatorStaff->user_id = $modId;
-                $moderatorStaff->role = OperatorStaff::ROLE_MODERATOR;
-                $moderatorStaff->save();
+            if ($this->moderator_ids) {
+                foreach ((array)$this->moderator_ids as $modId) {
+                    $moderatorStaff = new OperatorStaff();
+                    $moderatorStaff->operator_id = $operator->id;
+                    $moderatorStaff->user_id = $modId;
+                    $moderatorStaff->role = OperatorStaff::ROLE_MODERATOR;
+                    $moderatorStaff->save();
+                }
             }
 
             $transaction->commit();
@@ -240,6 +244,7 @@ class EditOperatorForm extends Model
         $this->product = explode(",", $operator->product);
         $this->deposit_method = explode(",", $operator->deposit_method);
         $this->license = $operator->license;
+        $this->status = $operator->status;
 
         // staff
         $staffs = OperatorStaff::find()->where(['operator_id' => $this->id])->all();

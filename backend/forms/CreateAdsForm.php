@@ -20,12 +20,24 @@ class CreateAdsForm extends Model
     public $contact_email;
     public $contact_name;
     public $status;
+    public $language;
+
+
+    public function init()
+    {
+        $languages = array_keys(Yii::$app->params['languages']);
+        if (!in_array($this->language, $languages)) {
+            $this->language = reset($languages);
+        }
+    }
 
     public function rules()
     {
         return [
             [['title', 'link', 'position', 'media_id', 'status', 'start_date', 'end_date', 'contact_phone', 'contact_email', 'contact_name'], 'required'],
             [['fee', 'currency'], 'safe'],
+            ['language', 'required'],
+            ['language', 'in', 'range' => array_keys(Yii::$app->params['languages'])],
         ];
     }
 
@@ -44,6 +56,7 @@ class CreateAdsForm extends Model
             'fee' => Yii::t('app', 'fee'),
             'currency' => Yii::t('app', 'currency'),
             'status' => Yii::t('app', 'status'),
+            'language' => Yii::t('app', 'language'),
         ];
     }
     
@@ -62,6 +75,7 @@ class CreateAdsForm extends Model
         $ads->contact_email = $this->contact_email;
         $ads->contact_name = $this->contact_name;
         $ads->status = $this->status;
+        $ads->language = $this->language;
         return $ads->save();
     }
 
@@ -79,4 +93,10 @@ class CreateAdsForm extends Model
     {
         return ArrayHelper::getValue(Yii::$app->params, 'currency', []);
     }
+
+    public function fetchLanguages()
+    {
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
+    }
+
 }

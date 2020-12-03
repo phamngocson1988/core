@@ -136,7 +136,15 @@ use backend\components\datepicker\DatePicker;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropdownList($model->fetchStatus(), ['prompt' => Yii::t('app', 'choose_status')]);?>
 
-                  
+                  <?=$form->field($model, 'language', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'disabled' => true, 'name' => 'language'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropDownList($model->fetchLanguages())?>
+                  <?=$form->field($model, 'language', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}'
+                  ])->hiddenInput()?>
                 </div>
               </div>
             </div>

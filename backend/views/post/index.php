@@ -3,6 +3,7 @@ use yii\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use common\components\helpers\LanguageHelper;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -53,10 +54,10 @@ use yii\widgets\ActiveForm;
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'category_id']
             ])->dropDownList($search->fetchCategory(), ['prompt' => Yii::t('app', 'choose_category')]);?>
 
-            <?=$form->field($search, 'status', [
+            <?=$form->field($search, 'language', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status']
-            ])->dropDownList($search->fetchStatus(), ['prompt' => Yii::t('app', 'choose_status')]);?>
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'language']
+            ])->dropDownList($search->fetchLanguages(), ['prompt' => Yii::t('app', 'choose_language')]);?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -74,6 +75,7 @@ use yii\widgets\ActiveForm;
                 <th> <?=Yii::t('app', 'category');?> </th>
                 <th> <?=Yii::t('app', 'operator');?> </th>
                 <th> <?=Yii::t('app', 'created_date');?> </th>
+                <th> <?=Yii::t('app', 'language');?> </th>
                 <th> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -94,6 +96,7 @@ use yii\widgets\ActiveForm;
                   </td>
                   <td class="left"><?=$model->operator_id ? $model->operator->name : '';?></td>
                   <td class="left"><?=$model->created_at;?></td>
+                  <td class="left"><?=LanguageHelper::getLanguageName($model->language);?></td>
                   <td class="left">
                     <a href='<?=Url::to(['post/edit', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa"><i class="fa fa-pencil"></i></a>
                   </td>

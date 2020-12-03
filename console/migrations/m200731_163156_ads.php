@@ -29,6 +29,7 @@ class m200731_163156_ads extends Migration
             'contact_phone' => $this->string(255)->notNull(),
             'contact_email' => $this->string(255)->notNull(),
             'contact_name' => $this->string(255)->notNull(),
+            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
             'created_by' => $this->integer(),
             'updated_by' => $this->integer(),
             'created_at' => $this->dateTime(),

@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use backend\models\Operator;
+use common\components\helpers\LanguageHelper;
 
 ?>
 
@@ -74,6 +75,7 @@ use backend\models\Operator;
                 <th> <?=Yii::t('app', 'main_url');?> </th>
                 <th> <?=Yii::t('app', 'Admin');?> </th>
                 <th> <?=Yii::t('app', 'status');?> </th>
+                <th> <?=Yii::t('app', 'language');?> </th>
                 <th> <?=Yii::t('app', 'actions');?> </th>
               </tr>
             </thead>
@@ -106,6 +108,7 @@ use backend\models\Operator;
                       break;
                   }?>
                 </td>
+                <td class="center"><?=LanguageHelper::getLanguageName($model->language);?></td>
                 <td class="center">
                   <a class="btn btn-xs default tooltips" href="<?=Url::to(['operator/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="<?=Yii::t('app', 'edit_operator');?>"><i class="fa fa-pencil"></i></a>
                 </td>
@@ -113,7 +116,7 @@ use backend\models\Operator;
               <?php endforeach;?>
               <?php else : ?>
               <tr>
-                <td colspan="5"><?=Yii::t('app', 'no_data_found');?></td>
+                <td colspan="6"><?=Yii::t('app', 'no_data_found');?></td>
               </tr>
               <?php endif;?>
             </tbody>
