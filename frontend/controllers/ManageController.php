@@ -30,12 +30,19 @@ class ManageController extends Controller
                     [
                         'actions' => ['index', 'edit', 'update-avatar', 'reply-review', 'reply-complain', 'review', 'list-review', 'complain', 'my-complain', 'list-complain', 'list-my-complain', 'detail-complain'],
                         'allow' => true,
-                        'roles' => ['admin', 'manager', 'moderator'],
-                    ],
-                    [
-                        'actions' => ['assign-complain'],
-                        'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $user = Yii::$app->user->getIdentity();
+                            $request = Yii::$app->request;
+                            $operator_id = $request->get('operator_id');
+                            if (!$operator_id) return false;
+
+                            if ($action == 'assign-complain') {
+                                return $user->isOperatorStaffOf($operator_id, OperatorStaff::ROLE_ADMIN);
+                            } else {
+                                return $user->isOperatorStaffOf($operator_id);
+                            }
+                        },
                     ],
                 ],
             ],
@@ -54,7 +61,7 @@ class ManageController extends Controller
         $request = Yii::$app->request;
         $this->operator_id = $request->get('operator_id');
         $operator = $this->getOperator();
-        return $operator;
+        return true;
     }
 
     protected function getOperator()

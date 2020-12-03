@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -71,12 +72,13 @@ use yii\helpers\ArrayHelper;
                 $auth = Yii::$app->authManager;
                 $roles = $auth->getRolesByUser($model->id);
                 $roleNames = ArrayHelper::map($roles, 'name', 'description');
+                echo implode(", ", $roleNames);
                 ?>
-                <?php foreach ($roleNames as $roleName) : ?>
-                <span class="label label-info label-many"><?=$roleName;?></span>
-                <?php endforeach;?>
               </td>
               <td>
+                <?php if ($model->id != Yii::$app->user->id) : ?>
+                <a href='<?=Url::to(['rbac/revoke', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa tooltips"  data-container="body" data-original-title="<?=Yii::t('app', 'Revoke');?>"><i class="fa fa-times"></i></a>
+                <?php endif;?>
               </td>
             </tr>
             <?php endforeach;?>

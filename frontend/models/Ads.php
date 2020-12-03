@@ -2,6 +2,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 class Ads extends \common\models\Ads
 {

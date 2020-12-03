@@ -39,7 +39,7 @@ class AdsController extends Controller
         $form = new FetchAdsForm([
             'contact_email' => $request->get('contact_email'),
             'position' => $request->get('position'),
-            'status' => $request->get('status'),
+            'language' => $request->get('language'),
         ]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);

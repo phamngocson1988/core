@@ -4,12 +4,13 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use backend\models\Ads;
 
 class FetchAdsForm extends Model
 {
     public $position;
-    public $status;
+    public $language;
     public $contact_email;
 
     private $_command;
@@ -18,7 +19,7 @@ class FetchAdsForm extends Model
     {
         return [
             'position' => Yii::t('app', 'position'),
-            'status' => Yii::t('app', 'status'),
+            'language' => Yii::t('app', 'language'),
             'contact_email' => Yii::t('app', 'contact_email'),
         ];
     }
@@ -29,8 +30,8 @@ class FetchAdsForm extends Model
         if ($this->position) {
             $command->andWhere(['position' => $this->position]);
         }
-        if ($this->status) {
-            $command->andWhere(['status' => $this->status]);
+        if ($this->language) {
+            $command->andWhere(['language' => $this->language]);
         }
         if ($this->contact_email) {
             $command->andWhere(['like', 'contact_email', $this->contact_email]);
@@ -51,8 +52,8 @@ class FetchAdsForm extends Model
         return Ads::getPositionList();
     }
 
-    public function fetchStatus()
+    public function fetchLanguages()
     {
-        return Ads::getStatusList();
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
     }
 }

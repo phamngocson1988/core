@@ -68,6 +68,8 @@ return [
     'manage_users' => 'Manage users',
     'manage_roles' => 'Manage roles',
     'assign_role' => 'Assign role',
+    'assign_user' => 'Assign user',
+    'list_user' => 'List user',
     'application_settings' => 'Application settings',
     'reset' => 'Reset',
     'confirm_delete_user' => 'Do you want to delete this user?',

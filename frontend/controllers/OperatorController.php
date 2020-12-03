@@ -63,13 +63,16 @@ class OperatorController extends Controller
         $user = Yii::$app->user->getIdentity();
         $isFavorite = $user && $user->isOperatorFavorite($model->id);
         $isReview = $user && $user->isReview($model->id);
+        $canManageOperator = $user && $user->isOperatorStaffOf($model->id);
         $reviewForm = new \frontend\forms\AddOperatorReviewForm();
+
         return $this->render('view', [
             'model' => $model,
             'isFavorite' => $isFavorite,
             'isReview' => $isReview,
             'user' => $user,
             'reviewForm' => $reviewForm,
+            'canManageOperator' => $canManageOperator
         ]);
     }    
 

@@ -81,6 +81,14 @@ class RbacController extends Controller
         ]);        
     }
 
+    public function actionRevoke($id)
+    {
+        $this->view->params['main_menu_active'] = 'rbac.role';
+        $request = Yii::$app->request;
+        Yii::$app->authManager->revokeAll($id);
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
     public function actionCreate()
     {
         $this->view->params['main_menu_active'] = 'rbac.role';

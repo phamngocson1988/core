@@ -12,6 +12,7 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'layout' => 'main.php',
     'defaultRoute' => 'site',
+    'language' => 'en',
     'bootstrap' => [
         'log', 
     ],

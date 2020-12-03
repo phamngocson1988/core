@@ -42,10 +42,10 @@ use yii\widgets\ActiveForm;
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'position']
             ])->dropDownList($search->fetchPosition(), ['prompt' => Yii::t('app', 'choose_position')]);?>
 
-            <?=$form->field($search, 'status', [
+            <?=$form->field($search, 'language', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status']
-            ])->dropDownList($search->fetchStatus(), ['prompt' => Yii::t('app', 'choose_status')]);?>
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'language']
+            ])->dropDownList($search->fetchLanguages(), ['prompt' => Yii::t('app', 'choose_language')]);?>
 
             <?=$form->field($search, 'contact_email', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
