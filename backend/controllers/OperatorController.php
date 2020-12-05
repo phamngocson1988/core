@@ -70,7 +70,7 @@ class OperatorController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['operator/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                Yii::$app->session->setFlash('error', $model->getErrors());
             }
         }
 
@@ -89,7 +89,7 @@ class OperatorController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['operator/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                Yii::$app->session->setFlash('error', $model->getErrors());
             }
         } else {
             $model->loadData();
@@ -110,7 +110,7 @@ class OperatorController extends Controller
                 if ($model->create()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 } else {
-                    Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                    Yii::$app->session->setFlash('error', $model->getErrors());
                 }
             }
         } else {

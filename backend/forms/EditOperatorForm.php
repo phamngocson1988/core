@@ -327,6 +327,16 @@ class EditOperatorForm extends Model
         return [];
     }
 
+    public function fetchLicense()
+    {
+        $license = OperatorMeta::find()->where(['key' => OperatorMeta::KEY_LICENSE])->one();
+        $values = $license ? explode(",", $license->value) : [];
+        if (count($values)) {
+            return array_combine($values, $values);
+        }
+        return [];
+    }
+
     public function fetchBackupUrls()
     {
         $urls = explode(',', $this->backup_url);

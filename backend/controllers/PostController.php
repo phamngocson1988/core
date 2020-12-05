@@ -80,7 +80,7 @@ class PostController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['post/index']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                Yii::$app->session->setFlash('error', $model->getErrors());
             }
         } else {
             $model->loadData($id);

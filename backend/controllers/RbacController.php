@@ -69,7 +69,7 @@ class RbacController extends Controller
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
                 return $this->redirect(['rbac/role']);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                Yii::$app->session->setFlash('error', $model->getErrors());
             }    
         } else {
             $role = $request->get('role');
@@ -98,7 +98,7 @@ class RbacController extends Controller
                 $ref = Yii::$app->request->get('ref', Url::to(['rbac/role']));
                 return $this->redirect($ref);
             } else {
-                Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+                Yii::$app->session->setFlash('error', $model->getErrors());
             }    
         }
         return $this->render('create', [

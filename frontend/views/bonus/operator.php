@@ -20,7 +20,7 @@ use frontend\widgets\LinkPager;
                         <div class="bonuses-body">
                           <h3 class="bonuses-title"><?=$bonus->title;?></h3>
                           <p class="bonuses-desc"><?=$bonus->getType();?></p>
-                        </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
+                        </div><a class="btn btn-primary" href="<?= $bonus->link ? $bonus->link : 'javascript:;';?>" <?php if ($bonus->link):?>target="_blank"<?php endif;?> ><?=Yii::t('app', 'Get Bonus');?></a>
                       </div>
                       <div class="bonuses-back">
                         <div class="bonuses-icon fas fa-close js-close"></div>
@@ -32,7 +32,7 @@ use frontend\widgets\LinkPager;
                             <?=Yii::t('app', 'Minimum deposit');?>: <?=$bonus->minimum_deposit;?><br>
                             <?=Yii::t('app', 'Wagering requirement');?>: <?=$bonus->wagering_requirement;?>
                           </p>
-                        </div><a class="btn btn-primary" href="javascript:;"><?=Yii::t('app', 'Get Bonus');?></a>
+                        </div><a class="btn btn-primary" href="<?= $bonus->link ? $bonus->link : 'javascript:;';?>" <?php if ($bonus->link):?>target="_blank"<?php endif;?> ><?=Yii::t('app', 'Get Bonus');?></a>
                       </div>
                     </div>
                   </div>

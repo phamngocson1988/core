@@ -22,6 +22,7 @@ class CreateBonusForm extends Model
     public $wagering_requirement;
     public $cashable;
     public $language;
+    public $link;
 
     public function init()
     {
@@ -35,7 +36,7 @@ class CreateBonusForm extends Model
     {
         return [
             [['title', 'status'], 'required'],
-            [['image_id', 'operator_id', 'currency', 'bonus_type', 'minimum_deposit', 'minimum_deposit_value', 'wagering_requirement', 'cashable'], 'safe'],
+            [['image_id', 'operator_id', 'currency', 'bonus_type', 'minimum_deposit', 'minimum_deposit_value', 'wagering_requirement', 'cashable', 'link'], 'safe'],
             ['language', 'required'],
             ['language', 'in', 'range' => array_keys(Yii::$app->params['languages'])],
         ];
@@ -55,6 +56,7 @@ class CreateBonusForm extends Model
             'wagering_requirement' => Yii::t('app', 'wagering_requirement'),
             'cashable' => Yii::t('app', 'cashable'),
             'language' => Yii::t('app', 'language'),
+            'link' => Yii::t('app', 'link'),
         ];
     }
     
@@ -73,6 +75,7 @@ class CreateBonusForm extends Model
         $bonus->minimum_deposit_value = $this->minimum_deposit_value;
         $bonus->wagering_requirement = $this->wagering_requirement;
         $bonus->cashable = $this->cashable;
+        $bonus->link = $this->link;
         return $bonus->save();
     }
 

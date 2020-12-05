@@ -22,6 +22,7 @@ class EditBonusForm extends Model
     public $minimum_deposit_value;
     public $wagering_requirement;
     public $cashable;
+    public $link;
 
     protected $_bonus;
 
@@ -30,7 +31,7 @@ class EditBonusForm extends Model
         return [
             [['id', 'title', 'status'], 'required'],
             ['id', 'validateBonus'],
-            [['image_id', 'operator_id', 'currency', 'bonus_type', 'minimum_deposit', 'minimum_deposit_value', 'wagering_requirement', 'cashable'], 'safe'],
+            [['image_id', 'operator_id', 'currency', 'bonus_type', 'minimum_deposit', 'minimum_deposit_value', 'wagering_requirement', 'cashable', 'link'], 'safe'],
         ];
     }
 
@@ -47,6 +48,7 @@ class EditBonusForm extends Model
             'minimum_deposit_value' => Yii::t('app', 'minimum_deposit_value'),
             'wagering_requirement' => Yii::t('app', 'wagering_requirement'),
             'cashable' => Yii::t('app', 'cashable'),
+            'link' => Yii::t('app', 'link'),
         ];
     }
 
@@ -71,6 +73,7 @@ class EditBonusForm extends Model
         $bonus->minimum_deposit_value = $this->minimum_deposit_value;
         $bonus->wagering_requirement = $this->wagering_requirement;
         $bonus->cashable = $this->cashable;
+        $bonus->link = $this->link;
         return $bonus->save();
     }
 
@@ -99,6 +102,7 @@ class EditBonusForm extends Model
         $this->minimum_deposit_value = $bonus->minimum_deposit_value;
         $this->wagering_requirement = $bonus->wagering_requirement;
         $this->cashable = $bonus->cashable;
+        $this->link = $bonus->link;
     }
 
     public function getBonus()

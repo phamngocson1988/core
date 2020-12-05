@@ -141,7 +141,8 @@ $userList = $model->fetchUsers();
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
+                  ])->dropdownList($model->fetchLicense(), ['prompt' => Yii::t('app', 'choose_license')])?>
+
                   <?=$form->field($model, 'support_currency', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control'],

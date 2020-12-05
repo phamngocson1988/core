@@ -254,4 +254,5 @@ return [
 'create_operator_meta' => 'Create operator meta',
 'manage_staff' => 'Manage staff',
 'manage_role' => 'Manage role',
+'link' => 'Link',
 ];

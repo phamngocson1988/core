@@ -96,6 +96,12 @@ use common\widgets\TinyMce;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropdownList($model->fetchCash(), ['prompt' => Yii::t('app', 'choose_status')]);?>
 
+                  <?=$form->field($model, 'link', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'slug form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput();?>
+
                   <?=$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],

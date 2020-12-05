@@ -1,7 +1,8 @@
 <?php 
 use yii\helpers\Url;
 ?>
-<p class="category-title text-center"><?=$operator->name;?><br><?=Yii::t('app', 'news');?>
+<p class="category-title text-center"><?=$operator->name;?><br><?=Yii::t('app', 'news');?></p>
+<ul class="list-news-cate">
   <?php foreach ($posts as $post) : ?>
   <li><a class="trans" href="<?=Url::to(['news/view', 'id' => $post->id, 'slug' => $post->slug]);?>"><span class="icon"><img src="<?=$post->getImageUrl('50x50');?>" alt="image"></span><span class="name"><?=$post->title;?></span></a></li>
   <?php endforeach;?>
