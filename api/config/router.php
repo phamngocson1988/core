@@ -4,6 +4,7 @@ return [
     'enableStrictParsing' => true,
     'showScriptName' => false,
     'rules' => [
-        ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+        '/login' => 'site/login',
+        '/me' => 'site/me'
     ],
 ];

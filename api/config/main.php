@@ -14,16 +14,6 @@ return [
     'bootstrap' => [
         'log', 
     ],
-    'modules' => [
-        'notifications' => [
-            'class' => 'webzop\notifications\Module',
-            'channels' => [
-                'screen' => [
-                    'class' => 'webzop\notifications\channels\ScreenChannel',
-                ],
-            ],
-        ],
-    ],
 	'language' => 'vi',
 	'sourceLanguage' => 'en-US',
     'components' => [
@@ -33,10 +23,10 @@ return [
             ]          
         ],
         'user' => [
-            'class' => 'api\components\User',
+            'class' => 'yii\web\User',
             'identityClass' => 'api\models\User',
-            'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
+            'enableSession' => false,
+            'loginUrl' => null
         ],
         'session' => [
             // this is the name of the session cookie used for login on the api
@@ -87,8 +77,6 @@ return [
         ],
 
         'urlManager' => require('router.php'),
-        'urlManagerFrontend' => require('../../website/config/router.php'),
-        'urlManagerBackend' => require('../../backend/config/router.php'),
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@api/mail/kinggems',
