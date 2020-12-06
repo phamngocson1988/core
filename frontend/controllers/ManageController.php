@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Operator;
 use frontend\models\OperatorFavorite;
 use frontend\models\OperatorReview;
+use frontend\models\OperatorStaff;
 use frontend\models\Complain;
 
 class ManageController extends Controller
@@ -91,12 +92,15 @@ class ManageController extends Controller
         ])
         ->one();
         $complainForm = new \frontend\forms\ReplyComplainForm();
+
+        $user = Yii::$app->user->identity;
         return $this->render('index', [
             'operator' => $operator,
             'review' => $review,
             'reviewForm' => $reviewForm,
             'complain' => $complain,
             'complainForm' => $complainForm,
+            'isAdmin' => $user->isOperatorStaffOf($operator->id, OperatorStaff::ROLE_ADMIN),
         ]);
     }
 
@@ -200,10 +204,15 @@ class ManageController extends Controller
         $request = Yii::$app->request;
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 10);
-        $command = Complain::find()->where([
+        $condition = [
             'operator_id' => $operator->id,
-            'managed_by' => Yii::$app->user->id,
-        ])->offset($offset)->limit($limit);
+            'managed_by' => Yii::$app->user->id
+        ];
+        // $user = Yii::$app->user->identity;
+        // if (!$user->isOperatorStaffOf($operator->id, OperatorStaff::ROLE_ADMIN)) {
+        //     $condition['managed_by'] = Yii::$app->user->id;
+        // }
+        $command = Complain::find()->where($condition)->offset($offset)->limit($limit);
 
         if ($request->get('sort') == 'date') {
             $type = $request->get('type', 'asc') == 'asc' ? SORT_ASC : SORT_DESC;

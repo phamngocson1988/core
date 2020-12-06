@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\TimeElapsed;
-$complainLink = Yii::$app->user->can('admin') 
+$complainLink = $isAdmin 
   ? Url::to(['manage/complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]) 
   : Url::to(['manage/my-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
 ?>
