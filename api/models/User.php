@@ -11,17 +11,18 @@ class User extends \common\models\User
     }
 
     public function fields()
-{
-    return [
-        'id',
-        'email',
-        'username',
-        'name',
-        'firstname',
-        'lastname',
-        'avatar' => function ($model) {
-            return $model->getAvatarUrl();
-        },
-    ];
-}
+    {
+        return [
+            'id',
+            'email',
+            'username',
+            'name',
+            'firstname',
+            'lastname',
+            'reseller_level',
+            'avatar' => function ($model) {
+                return $model->getAvatarUrl();
+            },
+        ];
+    }
 }

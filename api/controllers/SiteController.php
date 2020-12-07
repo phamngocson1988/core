@@ -41,9 +41,4 @@ class SiteController extends Controller
 			throw new UnauthorizedHttpException("Your request was made with invalid credentials", 1);
 		}
 	}
-
-	public function actionMe()
-	{
-		return Yii::$app->user->identity;
-	}
 }
