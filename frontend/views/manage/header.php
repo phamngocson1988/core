@@ -14,8 +14,8 @@ use yii\helpers\Url;
     </div>
     <div class="heading-right">
       <ul class="profile-link profile-link-custom">
-        <li class="favorites"><a class="trans" href="<?=Url::to(['manage/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>"><i class="fas fa-home"></i><span>BACK TO PAGE</span></a></li>
-        <li class="edit-profile"><a class="trans" href="<?=Url::to(['manage/edit', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>"><i class="fas fa-cog"></i><span>EDIT MY PAGE</span></a></li>
+        <li class="favorites"><a class="trans" href="<?=Url::to(['manage-operator/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>"><i class="fas fa-home"></i><span>BACK TO PAGE</span></a></li>
+        <li class="edit-profile"><a class="trans" href="<?=Url::to(['manage-operator/edit', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>"><i class="fas fa-cog"></i><span>EDIT MY PAGE</span></a></li>
       </ul>
     </div>
   </div>
@@ -65,7 +65,7 @@ uploadImage.callback = function(data) {
 };
 JS;
 $uploadLink = Url::to(['image/ajax-upload']);
-$updateAvatarLink = Url::to(['manage/update-avatar', 'operator_id' => $operator->id]);
+$updateAvatarLink = Url::to(['manage-operator/update-avatar', 'operator_id' => $operator->id]);
 $script = str_replace('###LINK###', $uploadLink, $script);
 $script = str_replace('###UPDATEAVATAR###', $updateAvatarLink, $script);
 $this->registerJs($script);

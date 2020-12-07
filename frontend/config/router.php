@@ -38,8 +38,18 @@ return [
         'complain/operator/<id:\d+>-<slug:[\w\-]+>' => 'complain/operator',
         'complain/<id:\d+>-<slug>' => 'complain/view',
 
-        'manage/<operator_id:\d+>-<slug:[\w\-]+>/dashboard' => 'manage/index',
-        'manage/<operator_id:\d+>-<slug:[\w\-]+>/<action>' => 'manage/<action>',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/dashboard' => 'manage-operator/index',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/edit' => 'manage-operator/edit',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/update-avatar' => 'manage-operator/update-avatar',
+
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/review' => 'manage-review/index',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/review/list' => 'manage-review/list',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/review/reply' => 'manage-review/reply',
+
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/complain' => 'manage-complain/index',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/complain/list' => 'manage-complain/list',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/complain/assign' => 'manage-complain/assign',
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/complain/view/<id:\d+>' => 'manage-complain/view',
 
         'member/<username>/dashboard' => 'member/index',
         '<controller>/<action>' => '<controller>/<action>',

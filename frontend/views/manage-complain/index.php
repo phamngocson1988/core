@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use frontend\models\Complain;
 $currentUserId = Yii::$app->user->id;
-$assignComplainUrl = Url::to(['manage/assign-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
+$assignComplainUrl = Url::to(['manage-complain/assign', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
 ?>
 <main>
   <section class="section-profile-user">
@@ -18,7 +18,6 @@ $assignComplainUrl = Url::to(['manage/assign-complain', 'operator_id' => $operat
                 <ul class="list-sort">
                   <li><a class="trans" href="javascript:;" id='sort-lastest'>Latest</a></li>
                   <li><a class="trans" href="javascript:;" id='sort-oldest'>Oldest</a></li>
-                  <!-- <li><a class="trans" href="javascript:;" id='order-lastest'>Assigned To</a></li> -->
                 </ul>
               </div>
             </div>
@@ -27,11 +26,10 @@ $assignComplainUrl = Url::to(['manage/assign-complain', 'operator_id' => $operat
             <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <ul class="list-tabs tabs-none">
-                <li><a class="trans" href="javascript:;" id='search-all'>All (<?=number_format($operator->totalComplain());?>)</a></li>
-                <li><a class="trans" href="javascript:;" id='search-open'>Open cases (<?=number_format($operator->totalComplainOpen());?>)</a></li>
-                <li><a class="trans" href="javascript:;" id='search-resolve'>Resolved (<?=number_format($operator->totalComplainResolve());?>)</a></li>
-                <li><a class="trans" href="javascript:;" id='search-reject'>Rejected (<?=number_format($operator->totalComplainReject());?>)</a></li>
-                <li><a class="trans" href="<?=Url::to(['manage/my-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Assigned To Me</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>" id='search-all'>All (<?=number_format($operator->totalComplain());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'open']);?>" id='search-open'>Open cases (<?=number_format($operator->totalComplainOpen());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'resolve']);?>" id='search-resolve'>Resolved (<?=number_format($operator->totalComplainResolve());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'reject']);?>" id='search-reject'>Rejected (<?=number_format($operator->totalComplainReject());?>)</a></li>
               </ul>
             </div>
           </div>
@@ -93,32 +91,6 @@ $('#sort-oldest').on('click', function() {
     }
   });
 });
-$('#search-all').on('click', function() {
-  reviewListLoading.reset({
-    request_url: '###REVIEWLIST###',
-  });
-});
-$('#search-open').on('click', function() {
-  reviewListLoading.reset({
-    condition: {
-      status: '###STATUS_OPEN###'
-    }
-  });
-});
-$('#search-resolve').on('click', function() {
-  reviewListLoading.reset({
-    condition: {
-      status: '###STATUS_RESOLVE###'
-    }
-  });
-});
-$('#search-reject').on('click', function() {
-  reviewListLoading.reset({
-    condition: {
-      status: '###STATUS_REJECT###'
-    }
-  });
-});
 
 // Assign complain to member
 $('.review-list').on('click', '.assign-to-me', function(e) {
@@ -149,10 +121,7 @@ function assignComplain(user_id, complain_id) {
   });
 }
 JS;
-$listReviewLink = Url::to(['manage/list-complain', 'operator_id' => $operator->id]);
+$listReviewLink = Url::current();
 $script = str_replace('###REVIEWLIST###', $listReviewLink, $script);
-$script = str_replace('###STATUS_OPEN###', Complain::STATUS_OPEN, $script);
-$script = str_replace('###STATUS_RESOLVE###', Complain::STATUS_RESOLVE, $script);
-$script = str_replace('###STATUS_REJECT###', Complain::STATUS_REJECT, $script);
 $this->registerJs($script);
 ?>

@@ -7,7 +7,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\models\Complain;
 use frontend\models\Operator;
-use frontend\models\OperatorStaff;
 
 class ComplainStatByOperatorWidget extends Widget
 {
@@ -32,18 +31,12 @@ class ComplainStatByOperatorWidget extends Widget
         $reject = ArrayHelper::getValue($stat, Complain::STATUS_REJECT, 0);
         $total = array_sum($stat);
 
-        $user = Yii::$app->user->identity;
-        $isAdmin = $user->isOperatorStaffOf($operator->id, OperatorStaff::ROLE_ADMIN);
-        $complainLink = $isAdmin 
-          ? Url::to(['manage/complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]) 
-          : Url::to(['manage/my-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
-
         return $this->render('complain_stat_by_operator', [
             'total' => $total,
             'open' => $open,
             'resolve' => $resolve,
             'reject' => $reject,
-            'complainLink' => $complainLink
+            'operator' => $operator
         ]);
     }
 

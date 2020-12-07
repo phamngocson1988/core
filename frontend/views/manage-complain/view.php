@@ -89,7 +89,7 @@ use yii\bootstrap\ActiveForm;
             <div class="review-user">
             </div>
             <div class="review-content">
-              <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-complain', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'options' => ['class' => 'reply-complain-form']]); ?>
+              <?php $form = ActiveForm::begin(['action' => Url::to(['manage-complain/reply', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'options' => ['class' => 'reply-complain-form']]); ?>
               <div class="review-reply" style="border: none; margin-top: 0">
                 <?= $form->field($complainForm, 'description', [
                   'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']

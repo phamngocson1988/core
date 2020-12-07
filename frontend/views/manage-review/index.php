@@ -24,9 +24,9 @@ use yii\helpers\Url;
             <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <ul class="list-tabs tabs-none">
-                <li><a class="trans" href="javascript:;" id='search-all'>All (<?=number_format($operator->countReview());?>)</a></li>
-                <li><a class="trans" href="javascript:;" id='search-responded'>Responded (<?=number_format($operator->countResponsedReview());?>)</a></li>
-                <li><a class="trans" href="javascript:;" id='search-unresponded'>Unresponded (<?=number_format($operator->countUnResponsedReview());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-review/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>" id='search-all'>All (<?=number_format($operator->countReview());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-review/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'responded']);?>" id='search-responded'>Responded (<?=number_format($operator->countResponsedReview());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-review/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'unresponded']);?>" id='search-unresponded'>Unresponded (<?=number_format($operator->countUnResponsedReview());?>)</a></li>
               </ul>
             </div>
           </div>
@@ -82,27 +82,8 @@ $('#sort-oldest').on('click', function() {
     }
   });
 });
-$('#search-all').on('click', function() {
-  reviewListLoading.reset({
-    request_url: '###REVIEWLIST###',
-  });
-});
-$('#search-responded').on('click', function() {
-  reviewListLoading.reset({
-    condition: {
-      status: 'responded'
-    }
-  });
-});
-$('#search-unresponded').on('click', function() {
-  reviewListLoading.reset({
-    condition: {
-      status: 'unresponded'
-    }
-  });
-});
 JS;
-$listReviewLink = Url::to(['manage/list-review', 'operator_id' => $operator->id]);
+$listReviewLink = Url::current();
 $script = str_replace('###REVIEWLIST###', $listReviewLink, $script);
 $this->registerJs($script);
 ?>

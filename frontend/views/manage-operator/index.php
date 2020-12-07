@@ -2,9 +2,6 @@
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\TimeElapsed;
-$complainLink = $isAdmin 
-  ? Url::to(['manage/complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]) 
-  : Url::to(['manage/my-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
 ?>
 <main>
   <section class="section-profile-user">
@@ -19,9 +16,8 @@ $complainLink = $isAdmin
                 <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <ul class="list-tabs tabs-none">
-                    <li><a class="trans" href="<?=Url::to(['manage/review', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Reviews (<?=number_format($operator->countReview());?>)</a></li>
-                    <li><a class="trans" href="<?=$complainLink;?>">Complaints (<?=number_format($operator->totalComplain());?>)</a></li>
-                    <!-- <li><a class="trans" href="<?=Url::to(['manage/information', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Page information</a></li> -->
+                    <li><a class="trans" href="<?=Url::to(['manage-review/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Reviews (<?=number_format($operator->countReview());?>)</a></li>
+                    <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>">Complaints (<?=number_format($operator->totalComplain());?>)</a></li>
                   </ul>
                 </div>
               </div>
@@ -85,7 +81,7 @@ $complainLink = $isAdmin
                   <div class="review-content">
                     <div class="review-date">Complained on <span><?=date("F j, Y", strtotime($complain->created_at));?></span></div>
                     <div class="review-complaint-heading">
-                      <h3 class="complaint-title"><a href="<?=Url::to(['manage/detail-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'id' => $complain->id]);?>" class="disabled-link"><?=$complain->title;?></a></h3>
+                      <h3 class="complaint-title"><a href="<?=Url::to(['manage-complain/view', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'id' => $complain->id]);?>" class="disabled-link"><?=$complain->title;?></a></h3>
                       <div class="complaint-status"><i class="fa fa-exclamation-circle"></i> <?=ucfirst($complain->status);?> Case (<?=TimeElapsed::timeElapsed($complain->created_at);?>)</div>
                     </div>
                     <div class="review-complaint-info">

@@ -20,7 +20,7 @@ $currentUserId = Yii::$app->user->id;
   <div class="review-content">
     <div class="review-date">Complained on <span><?=date("F j, Y", strtotime($complain->created_at));?></span></div>
     <div class="review-complaint-heading">
-      <h3 class="complaint-title"><a href="<?=Url::to(['manage/detail-complain', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'id' => $complain->id]);?>" class="disabled-link"><?=$complain->title;?></a></h3>
+      <h3 class="complaint-title"><a href="<?=Url::to(['manage-complain/view', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'id' => $complain->id]);?>" class="disabled-link"><?=$complain->title;?></a></h3>
       <div class="complaint-status"><i class="fa fa-exclamation-circle"></i> <?=ucfirst($complain->status);?> Case (<?=TimeElapsed::timeElapsed($complain->created_at);?>)</div>
     </div>
     <div class="review-complaint-info">
@@ -59,7 +59,7 @@ $currentUserId = Yii::$app->user->id;
       <?=nl2br($complain->description);?>
       <?php if ($lastReply) : ?>
       <?php $lastUserReply = $lastReply->user;?>
-      <p>FEPLIED BY <a href="#"><?=$currentUserId == $lastUserReply->id ? 'YOU' : $lastUserReply->getName();?></a> ON <?=date("F j, Y", strtotime($lastReply->created_at));?></p>
+      <p>REPLIED BY <a href="#"><?=$currentUserId == $lastUserReply->id ? 'YOU' : $lastUserReply->getName();?></a> ON <?=date("F j, Y", strtotime($lastReply->created_at));?></p>
       <?=nl2br($lastReply->description);?>
       <?php endif;?>
     </div>
@@ -84,7 +84,7 @@ $currentUserId = Yii::$app->user->id;
     <?php else :?>
       <?php if ($complain->managed_by == Yii::$app->user->id) : ?>
       <div class="review-reply">
-        <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-complain', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'options' => ['class' => 'reply-complain-form']]); ?>
+        <?php $form = ActiveForm::begin(['action' => Url::to(['manage-complain/reply', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'options' => ['class' => 'reply-complain-form']]); ?>
 
         <?= $form->field($complainForm, 'description', [
           'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']

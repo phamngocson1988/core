@@ -37,7 +37,7 @@ use common\components\helpers\TimeElapsed;
                 <li><a href="#bonus"><i class="fa fa-gift"></i><span class="nav-text"><?=Yii::t('app', 'Bonuses');?> (<?=number_format($model->countBonus());?>)</span></a></li>
                 <li><a href="#complain"><i class="fa fa-thumbs-down"></i><span class="nav-text"><?=Yii::t('app', 'Complaints');?> (<?=number_format($model->totalComplain());?>)</span></a></li>
                 <?php if ($canManageOperator) : ?>
-                <li><a href="<?=Url::to(['manage/index', 'operator_id' => $model->id, 'slug' => $model->slug]);?>"><i class="fa fa-cogs"></i><span class="nav-text"><?=Yii::t('app', 'Settings');?></span></a></li>
+                <li><a href="<?=Url::to(['manage-operator/index', 'operator_id' => $model->id, 'slug' => $model->slug]);?>"><i class="fa fa-cogs"></i><span class="nav-text"><?=Yii::t('app', 'Settings');?></span></a></li>
                 <?php endif;?>
                 <!-- <li><a href="#"><i class="fa fa-newspaper"></i><span class="nav-text">News (22)</span></a></li> -->
               </ul>
