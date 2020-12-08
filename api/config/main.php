@@ -85,6 +85,15 @@ return [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@api/mail/supplier',
         ],
+        'cart' => [
+            'class' => 'api\components\cart\Cart',
+            // you can change default storage class as following:
+            'storageClass' => [
+                'class' => 'yii2mod\cart\storage\SessionStorage',
+                // you can also override some properties 
+                // 'deleteIfEmpty' => true
+            ]
+        ],
     ],
     'params' => $params,
 ];

@@ -8,5 +8,7 @@ return [
         'me' => 'user/me',
         'games' => 'game/index',
         'game/<id:\d+>' => 'game/view',
+        'order/<id:\d+>' => 'order/view',
+        'checkout/<id:\d+>' => 'cart/checkout',
     ],
 ];
