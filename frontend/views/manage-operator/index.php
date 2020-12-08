@@ -116,8 +116,8 @@ use common\components\helpers\TimeElapsed;
                       </div>
                       <?php endforeach;?>
                     </div>
-                    <!-- <div class="review-reply">
-                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-complain', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-complain-form']); ?>
+                    <div class="review-reply">
+                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage-complain/reply', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-complain-form']); ?>
                       <?= $form->field($complainForm, 'description', [
                         'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']
                       ])->textArea()->label(false);?>
@@ -141,7 +141,7 @@ use common\components\helpers\TimeElapsed;
                         <button class="btn btn-primary" type="submit">Post my reply</button>
                       </div>
                       <?php ActiveForm::end();?>
-                    </div> -->
+                    </div>
                   </div>
                 </article>
                 <?php endif;?>

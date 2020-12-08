@@ -79,7 +79,7 @@ class ManageComplainController extends ManageController
             'replies' => $replies,
             'user' => $complain->user,
             'complainForm' => $complainForm,
-            'canReply' => $complain->managed_by == Yii::$app->user->id
+            'canReply' => ($complain->managed_by == Yii::$app->user->id) || $this->isAdmin()
         ]);
     }
 
