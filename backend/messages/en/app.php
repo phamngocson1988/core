@@ -255,4 +255,5 @@ return [
 'manage_staff' => 'Manage staff',
 'manage_role' => 'Manage role',
 'link' => 'Link',
+'language' => 'Language',
 ];

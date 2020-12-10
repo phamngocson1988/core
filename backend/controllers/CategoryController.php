@@ -37,17 +37,23 @@ class CategoryController extends Controller
     {
         $this->view->params['main_menu_active'] = 'category.index';
         $request = Yii::$app->request;
-        $models = Category::find()->all();
-        return $this->render('index.php', [
+        $language = $request->get('language');
+        $form = new \backend\forms\FetchCategoryForm(['language' => $language]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('index', [
             'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($language)
     {
         $this->view->params['main_menu_active'] = 'category.index';
         $request = Yii::$app->request;
-        $model = new CreateCategoryForm();
+        $model = new CreateCategoryForm(['language' => $language]);
         if ($model->load($request->post())) {
             if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

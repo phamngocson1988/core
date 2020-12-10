@@ -4,12 +4,14 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\Category;
+use common\components\helpers\LanguageHelper;
 
 class EditCategoryForm extends Model
 {
     public $id;
     public $title;
     public $image_id;
+    public $language;
 
     protected $_category;
 
@@ -18,7 +20,7 @@ class EditCategoryForm extends Model
         return [
             [['id', 'title'], 'required'],
             ['id', 'validateCategory'],
-            ['image_id', 'safe']
+            [['image_id', 'language'], 'safe']
         ];
     }
 
@@ -51,5 +53,11 @@ class EditCategoryForm extends Model
         $category = $this->getCategory();
         $this->title = $category->title;
         $this->image_id = $category->image_id;
+        $this->language = $category->language;
+    }
+
+    public function fetchLanguages()
+    {
+        return LanguageHelper::fetchLanguages();
     }
 }

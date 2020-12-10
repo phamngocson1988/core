@@ -9,6 +9,7 @@ use backend\models\Category;
 use backend\models\PostCategory;
 use backend\models\Operator;
 use yii\helpers\ArrayHelper;
+use common\components\helpers\LanguageHelper;
 
 class CreatePostForm extends Model
 {
@@ -75,6 +76,7 @@ class CreatePostForm extends Model
     public function fetchCategory()
     {
         $categories = Category::find()
+        ->where(['language' => $this->language])
         ->select(['id', 'title'])->all();
         return ArrayHelper::map($categories, 'id', 'title');
     }
@@ -94,6 +96,6 @@ class CreatePostForm extends Model
 
     public function fetchLanguages()
     {
-        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
+        return LanguageHelper::fetchLanguages();
     }
 }

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use backend\models\Category;
 use yii\helpers\ArrayHelper;
+use common\components\helpers\LanguageHelper;
 
 class CreateCategoryForm extends Model
 {
@@ -51,6 +52,6 @@ class CreateCategoryForm extends Model
 
     public function fetchLanguages()
     {
-        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
+        return LanguageHelper::fetchLanguages();
     }
 }

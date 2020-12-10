@@ -12,5 +12,10 @@ class LanguageHelper
         $data = ArrayHelper::getValue(Yii::$app->params['languages'], $key, []);
         return ArrayHelper::getValue($data, 'title', '');
     }
+
+    public static function fetchLanguages()
+    {
+        return ArrayHelper::map(Yii::$app->params['languages'], 'code', 'title');
+    }
 }
 ?>

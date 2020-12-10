@@ -9,6 +9,7 @@ use backend\models\Category;
 use backend\models\PostCategory;
 use backend\models\Operator;
 use yii\helpers\ArrayHelper;
+use common\components\helpers\LanguageHelper;
 
 class EditPostForm extends Model
 {
@@ -19,6 +20,7 @@ class EditPostForm extends Model
     public $category_ids;
     public $operator_id;
     public $status;
+    public $language;
 
     protected $_post;
 
@@ -27,7 +29,7 @@ class EditPostForm extends Model
         return [
             [['id', 'title', 'content', 'status'], 'required'],
             ['id', 'validatePost'],
-            [['image_id', 'category_ids', 'operator_id'], 'safe'],
+            [['image_id', 'category_ids', 'operator_id', 'language'], 'safe'],
         ];
     }
 
@@ -79,6 +81,7 @@ class EditPostForm extends Model
     {
         $post = $this->getPost();
         $categories = Category::find()
+        ->where(['language' => $post->language])
         ->select(['id', 'title'])->all();
         return ArrayHelper::map($categories, 'id', 'title');
     }
@@ -105,6 +108,7 @@ class EditPostForm extends Model
         $this->image_id = $post->image_id;
         $this->operator_id = $post->operator_id;
         $this->status = $post->status;
+        $this->language = $post->language;
 
         // Categories
         $categories = (array)$post->categories;
@@ -117,5 +121,10 @@ class EditPostForm extends Model
             $this->_post = Post::findOne($this->id);
         }
         return $this->_post;
+    }
+
+    public function fetchLanguages()
+    {
+        return LanguageHelper::fetchLanguages();
     }
 }

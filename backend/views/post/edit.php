@@ -62,6 +62,16 @@ use common\widgets\TinyMce;
                     'options' => ['rows' => 20]
                   ]);?>
 
+                  <?=$form->field($model, 'language', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'disabled' => true, 'name' => 'language'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropDownList($model->fetchLanguages())?>
+                  <?=$form->field($model, 'language', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}'
+                  ])->hiddenInput()?>
+
                   <?=$form->field($model, 'category_ids', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control', 'multiple' => true],
