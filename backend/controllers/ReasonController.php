@@ -34,17 +34,23 @@ class ReasonController extends Controller
     {
         $this->view->params['main_menu_active'] = 'reason.index';
         $request = Yii::$app->request;
-        $models = ComplainReason::find()->all();
-        return $this->render('index.php', [
+        $language = $request->get('language');
+        $form = new \backend\forms\FetchReasonForm(['language' => $language]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('index', [
             'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($language)
     {
         $this->view->params['main_menu_active'] = 'reason.index';
         $request = Yii::$app->request;
-        $model = new \backend\forms\CreateComplainReasonForm();
+        $model = new \backend\forms\CreateComplainReasonForm(['language' => $language]);
         if ($model->load($request->post())) {
             if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

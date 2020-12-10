@@ -256,4 +256,5 @@ return [
 'manage_role' => 'Manage role',
 'link' => 'Link',
 'language' => 'Language',
+'choose_language' => 'Choose language',
 ];

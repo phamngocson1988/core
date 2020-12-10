@@ -4,11 +4,13 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\ComplainReason;
+use common\components\helpers\LanguageHelper;
 
 class EditComplainReasonForm extends Model
 {
     public $id;
     public $title;
+    public $language;
 
     protected $_reason;
 
@@ -16,6 +18,7 @@ class EditComplainReasonForm extends Model
     {
         return [
             [['id', 'title'], 'required'],
+            ['language', 'safe']
         ];
     }
 
@@ -38,5 +41,11 @@ class EditComplainReasonForm extends Model
     {
         $reason = $this->getReason();
         $this->title = $reason->title;
+        $this->language = $reason->language;
+    }
+
+    public function fetchLanguages()
+    {
+        return LanguageHelper::fetchLanguages();
     }
 }

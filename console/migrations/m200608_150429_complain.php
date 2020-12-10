@@ -62,6 +62,7 @@ class m200608_150429_complain extends Migration
         $this->createTable('{{%complain_reason}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
+            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
         ], $tableOptions);
 
         $this->createTable('{{%complain_file}}', [
