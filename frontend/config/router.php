@@ -51,6 +51,8 @@ return [
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/complain/assign' => 'manage-complain/assign',
         'manage/<operator_id:\d+>-<slug:[\w\-]+>/complain/view/<id:\d+>' => 'manage-complain/view',
 
+        'manage/<operator_id:\d+>-<slug:[\w\-]+>/staff/<action>' => 'manage-staff/<action>',
+
         'member/<username>/dashboard' => 'member/index',
         '<controller>/<action>' => '<controller>/<action>',
     ],

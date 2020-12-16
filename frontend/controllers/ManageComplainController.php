@@ -20,6 +20,7 @@ use frontend\models\Complain;
 class ManageComplainController extends ManageController
 {
     protected $_actions = ['index', 'list', 'view', 'reply', 'assign'];
+    protected $_onlyAdminActions = ['assign'];
     public function actionIndex() 
     {
         $request = Yii::$app->request;
