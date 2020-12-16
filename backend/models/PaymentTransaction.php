@@ -20,7 +20,20 @@ class PaymentTransaction extends \common\models\PaymentTransaction
     public function rules()
     {
         return [
-            [['payment_id', 'status'], 'required']
+            ['payment_id', 'trim'],
+            [['payment_id', 'status'], 'required'],
+            ['payment_id', 'validatePaymentId', 'on' => self::SCENARIO_CONFIRM_OFFLINE_PAYMENT]
         ];
+    }
+
+    public function validatePaymentId($attribute, $params = [])
+    {
+        if ($this->hasErrors()) return false;
+        $payment = self::find(['payment_id' => $this->payment_id])->one();
+        if (!$payment) return true;
+        if ($payment->id != $this->id) {
+            $this->addError($attribute, sprintf('Duplicated payment id with transaction num %s', $payment->getId()));
+            return false;
+        }
     }
 }

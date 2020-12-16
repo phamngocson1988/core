@@ -22,6 +22,9 @@ class UpdateTransactionForm extends Model
             [['id', 'payment_id'], 'required'],
             ['id', 'validateTransaction'],
             ['evidence', 'safe'],
+
+            ['payment_id', 'trim'],
+            ['payment_id', 'validatePaymentId'],
         ];
     }
 
@@ -36,6 +39,18 @@ class UpdateTransactionForm extends Model
             $this->addError($attribute, 'Payment transaction cannot be updated anymore.');
         }
 
+    }
+
+    public function validatePaymentId($attribute, $params = [])
+    {
+        if ($this->hasErrors()) return false;
+        $payment = PaymentTransaction::find(['payment_id' => $this->payment_id])->one();
+        if (!$payment) return true;
+        $transaction = $this->getTransaction();
+        if ($payment->id != $transaction->id) {
+            $this->addError($attribute, sprintf('Duplicated payment id with transaction'));
+            return false;
+        }
     }
 
     public function update()

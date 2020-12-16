@@ -129,13 +129,14 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <th>Payment ID</th>
                 <th>Loại thanh toán</th>
                 <th>Trạng thái</th>
+                <th>Người xác nhận</th>
                 <th>Hóa đơn</th>
                 <th>Tác vụ</th>
               </tr>
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="11">No data found</td></tr>
+              <tr><td colspan="12">No data found</td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
@@ -153,6 +154,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td><?=$model->payment_id;?></td>
                 <td><?=$model->payment_type;?></td>
                 <td><?=$model->status;?></td>
+                <td><?=$model->isCompleted() ? $model->updatedBy->getName() : '';?></td>
                 <td>
                   <?php if ($model->evidence) : ?>
                   <a href="<?=$model->evidence;?>" target="_blank">Xem</a>
