@@ -26,6 +26,9 @@ class Game extends ActiveRecord
 
     const SOLDOUT = 1;
     const INSTOCK = 0;
+
+    const AUTO_DISPATCHER_OFF = 0;
+    const AUTO_DISPATCHER_ON = 1;
     /**
      * @inheritdoc
      */
@@ -216,5 +219,10 @@ class Game extends ActiveRecord
     public function isBackToStock()
     {
         return $this->back_to_stock === self::BACKTOSTOCK;
+    }
+
+    public function isAutoDispatcher() 
+    {
+        return $this->auto_dispatcher === self::AUTO_DISPATCHER_ON;
     }
 }

@@ -62,6 +62,14 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 Game::STATUS_VISIBLE => 'Hiển thị',
             ])->label('Trạng thái');?>
 
+            <?=$form->field($search, 'auto_dispatcher', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'auto_dispatcher']
+            ])->dropDownList([
+                Game::AUTO_DISPATCHER_ON => 'ON',
+                Game::AUTO_DISPATCHER_OFF => 'OFF',
+            ], ['prompt' => 'Nothing selected'])->label('Phân phối tự động');?>
+
             <?=$form->field($search, 'soldout', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'soldout']
@@ -92,12 +100,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th> Giá </th>
               <th> Số đơn hàng </th>
               <th> Cập nhật lần cuối </th>
+              <th> Tự động PPĐH </th>
               <th class="dt-center"> Tác vụ </th>
             </tr>
           </thead>
             <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="11" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="12" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>
@@ -154,7 +163,13 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <?= isset($orders[$model->id]) ? number_format($orders[$model->id]) : 0;?>
                 </td>
                 <td class="center"><?=date('d/m/Y H:i', strtotime($model->updated_at));?></td>
-                
+                <td class="center">
+                  <?php if ($model->isAutoDispatcher()) : ?>
+                    <a href="<?=Url::to(['game/dispatcher', 'id' => $model->id, 'action' => 'off']);?>" class="btn btn-sm green link-action tooltips dispatcher-action" data-container="body" data-original-title="Tắt"><i class="fa fa-power-off"></i></a>
+                    <?php else :?>
+                    <a href="<?=Url::to(['game/dispatcher', 'id' => $model->id, 'action' => 'on']);?>" class="btn btn-sm default link-action tooltips dispatcher-action" data-container="body" data-original-title="Bật"><i class="fa fa-power-off"></i></a>
+                  <?php endif;?>
+                </td>
                 <td class="center">
                     <a href='<?=Url::to(['game/edit', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-sm grey-salsa tooltips" data-container="body" data-original-title="Chỉnh sửa" data-pjax="0"><i class="fa fa-pencil"></i></a>
                     <a href='<?=Url::to(['game/delete', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-sm grey-salsa delete-action tooltips" data-container="body" data-original-title="Xóa" data-pjax="0"><i class="fa fa-trash-o"></i></a>
@@ -178,6 +193,15 @@ $(".delete-action").ajax_action({
   callback: function(eletement, data) {
     location.reload();
   }
+});
+
+$(".dispatcher-action").ajax_action({
+  callback: function(eletement, data) {
+    window.location.href = data.next;
+  },
+  error: function(element, errors) {
+      alert(errors);
+  },
 });
 JS;
 $this->registerJs($script);

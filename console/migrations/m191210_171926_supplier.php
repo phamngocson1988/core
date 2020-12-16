@@ -44,7 +44,8 @@ class m191210_171926_supplier extends Migration
             'updated_by' => $this->integer(),  
             'created_at' => $this->dateTime(),            
             'last_created_at' => $this->dateTime(),            
-            'updated_at' => $this->dateTime(),           
+            'updated_at' => $this->dateTime(),     
+            'auto_dispatcher' => $this->integer(4)->notNull()->defaultValue(0),
         ], $tableOptions);
         $this->addPrimaryKey('supplier_game_pk', '{{%supplier_game}}', ['supplier_id', 'game_id']);
         if ($this->db->driverName === 'mysql') {

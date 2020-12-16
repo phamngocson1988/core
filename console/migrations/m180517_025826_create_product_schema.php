@@ -59,6 +59,7 @@ class m180517_025826_create_product_schema extends Migration
             'remark' => $this->text(),
             'price_remark' => $this->text(),
             'google_ads' => $this->text(),
+            'auto_dispatcher' => $this->integer(4)->notNull()->defaultValue(0),
         ], $tableOptions);
 
         if ($this->db->driverName === 'mysql') {

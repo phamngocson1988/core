@@ -11,6 +11,9 @@ class SupplierGame extends ActiveRecord
     const STATUS_DISABLED = 'disabled';
     const STATUS_ENABLED = 'enabled';
 
+    const AUTO_DISPATCHER_OFF = 0;
+    const AUTO_DISPATCHER_ON = 1;
+
     public function behaviors()
     {
         return [
@@ -61,5 +64,10 @@ class SupplierGame extends ActiveRecord
     public function isAvailable()
     {
         return $this->isEnabled() && $this->price;
+    }
+
+    public function isAutoDispatcher() 
+    {
+        return $this->auto_dispatcher === self::AUTO_DISPATCHER_ON;
     }
 }

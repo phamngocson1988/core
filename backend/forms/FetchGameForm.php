@@ -9,6 +9,7 @@ class FetchGameForm extends Model
 {
     public $q;
     public $status;
+    public $auto_dispatcher;
     public $soldout;
 
     private $_command;
@@ -28,6 +29,9 @@ class FetchGameForm extends Model
         }
         if (is_numeric($this->soldout)) {
             $command->andWhere(['soldout' => $this->soldout]);
+        }
+        if (is_numeric($this->auto_dispatcher)) {
+            $command->andWhere(['auto_dispatcher' => $this->auto_dispatcher]);
         }
         if ($q) {
             $command->andWhere(['like', 'title', $q]);
