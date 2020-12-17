@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Complain;
+use frontend\widgets\AddStaffWidget;
 ?>
 <main>
   <section class="section-profile-user">
@@ -10,7 +11,9 @@ use frontend\models\Complain;
       <h2 class="sec-heading-title"><?=Yii::t('app', 'Moderator');?> (<?=count($users);?>)</h2>
       <div class="widget-box timeline-post">
         <div class="timeline-heading">
-          <div class="heading-text mb-0"></div>
+          <div class="heading-text mb-0">
+            <a href="#modalAddStaff" data-toggle="modal" class="btn btn-outline-info" type="button" role="button" aria-pressed="true"><i class="fa fa-plus"></i> <?=Yii::t('app', 'Add');?></a>
+          </div>
           <div class="dropdown dropdown-fillter">
             <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -53,8 +56,8 @@ use frontend\models\Complain;
     </div>
   </section>
 </main>
-<?php
-$script = <<< JS
-JS;
-$this->registerJs($script);
-?>
+<?=AddStaffWidget::widget([
+  'actionUrl' => Url::to(['manage-staff/assign', 'operator_id' => $operator->id, 'slug' => $operator->slug]), 
+  'role' => $role,
+  'operator_id' => $operator->id,
+]);?>

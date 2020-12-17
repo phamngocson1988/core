@@ -153,16 +153,7 @@ use common\components\helpers\TimeElapsed;
           <div class="sidebar-col sidebar-category">
             <?=\frontend\widgets\ReviewStatByOperatorWidget::widget(['operator_id' => $operator->id]);?>
             <?=\frontend\widgets\ComplainStatByOperatorWidget::widget(['operator_id' => $operator->id]);?>
-            
-            <div class="category-row">
-              <p class="category-title"><a class="trans" href="#"><i class="fas fa-users"></i>Manage users</a></p>
-              <div class="category-inner">
-                <ul class="category-list">
-                  <li><a class="trans" href="#">Page admins (0)</a></li>
-                  <li><a class="trans" href="#">Forum representtatives (0)</a></li>
-                </ul>
-              </div>
-            </div>
+            <?=\frontend\widgets\ManageStaffByOperatorWidget::widget(['operator_id' => $operator->id]);?>
           </div>
           <div class="sidebar-col widget-box">
             <div class="widget-title">PAGE'S STATS</div>

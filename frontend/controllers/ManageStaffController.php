@@ -80,6 +80,19 @@ class ManageStaffController extends ManageController
     }
     public function actionAssign() 
     {
-
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        $form = new \frontend\forms\AddStaffForm([
+            'doer_id' => Yii::$app->user->id,
+            'operator_id' => $this->operator_id
+        ]);
+        if ($form->load($request->post()) && $form->assign()) {
+            return json_encode(['status' => true]);
+        } else {
+            $messages = $form->getFirstErrors();
+            $message = reset($messages);
+            return json_encode(['status' => false, 'errors' => $message]);
+        }
     }
 }

@@ -6,7 +6,7 @@ use frontend\models\Complain;
   <section class="section-profile-user">
     <div class="container">
       <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator]);?>
-      <h2 class="sec-heading-title">><?=Yii::t('app', 'Admin');?> (<?=count($users);?>)</h2>
+      <h2 class="sec-heading-title"><?=Yii::t('app', 'Admin');?> (<?=count($users);?>)</h2>
       <div class="widget-box timeline-post">
         <div class="timeline-heading">
           <div class="heading-text mb-0"></div>
