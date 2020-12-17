@@ -5,6 +5,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
+use backend\models\Order;
 
 class PaymentTransaction extends \common\models\PaymentTransaction
 {
@@ -29,7 +30,11 @@ class PaymentTransaction extends \common\models\PaymentTransaction
     public function validatePaymentId($attribute, $params = [])
     {
         if ($this->hasErrors()) return false;
-        $payment = self::find(['payment_id' => $this->payment_id])->one();
+        $order = Order::find()->where(['payment_id' => $this->payment_id])->one();
+        if ($order) {
+            return $this->addError($attribute, sprintf('This payment id was used for order (%s)', $order->id));
+        }
+        $payment = self::find()->where(['payment_id' => $this->payment_id])->one();
         if (!$payment) return true;
         if ($payment->id != $this->id) {
             $this->addError($attribute, sprintf('Duplicated payment id with transaction num %s', $payment->getId()));

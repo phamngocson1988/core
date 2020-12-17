@@ -4,6 +4,7 @@ namespace backend\models;
 use Yii;
 use backend\behaviors\OrderComplainBehavior;
 use backend\behaviors\OrderNotificationBehavior;
+use backend\models\PaymentTransaction;
 /**
  * Order model
  */
@@ -55,6 +56,7 @@ class Order extends \common\models\Order
     public function rules()
     {
         return [
+            ['payment_id', 'trim'],
             [['game_id', 'customer_id', 'quantity'], 'required', 'on' => self::SCENARIO_CREATE],
             [['game_id', 'customer_id', 'total_unit'], 'required', 'on' => self::SCENARIO_VERIFYING],
             [['username', 'password', 'platform', 'login_method', 'character_name'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_VERIFYING]],
@@ -85,12 +87,14 @@ class Order extends \common\models\Order
 
     public function validatePayment($attribute, $params = []) 
     {
-        if (!$this->payment_id) return;
-        $count = self::find()
-        ->where(['payment_id' => $this->payment_id])
-        ->andWhere(['payment_method' => $this->payment_method])->count();
-        if ($count) {
-            $this->addError($attribute, 'SỐ LỆNH GIAO DỊCH đã được sử dụng');
+        $payment = PaymentTransaction::find()->where(['payment_id' => $this->payment_id])->one();
+        if ($payment) {
+            return $this->addError($attribute, sprintf('SỐ LỆNH GIAO DỊCH đã được sử dụng cho giao dich %s', $payment->getId()));
+        }
+        $order = self::find()->where(['payment_id' => $this->payment_id])->one();
+        if (!$order) return true;
+        if ($order->id != $this->id) {
+            return $this->addError($attribute, 'SỐ LỆNH GIAO DỊCH đã được sử dụng');
         }
     }
 }

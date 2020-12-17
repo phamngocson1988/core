@@ -4,6 +4,7 @@ namespace website\forms;
 use Yii;
 use yii\base\Model;
 use website\models\PaymentTransaction;
+use website\models\Order;
 
 class UpdateTransactionForm extends Model
 {
@@ -19,11 +20,10 @@ class UpdateTransactionForm extends Model
     public function rules()
     {
         return [
+            ['payment_id', 'trim'],
             [['id', 'payment_id'], 'required'],
             ['id', 'validateTransaction'],
             ['evidence', 'safe'],
-
-            ['payment_id', 'trim'],
             ['payment_id', 'validatePaymentId'],
         ];
     }
@@ -44,10 +44,13 @@ class UpdateTransactionForm extends Model
     public function validatePaymentId($attribute, $params = [])
     {
         if ($this->hasErrors()) return false;
-        $payment = PaymentTransaction::find(['payment_id' => $this->payment_id])->one();
+        $order = Order::find()->where(['payment_id' => $this->payment_id])->one();
+        if ($order) {
+            return $this->addError($attribute, sprintf('Duplicated payment id with other order'));
+        }
+        $payment = PaymentTransaction::find()->where(['payment_id' => $this->payment_id])->one();
         if (!$payment) return true;
-        $transaction = $this->getTransaction();
-        if ($payment->id != $transaction->id) {
+        if ($payment->id != $this->id) {
             $this->addError($attribute, sprintf('Duplicated payment id with transaction'));
             return false;
         }

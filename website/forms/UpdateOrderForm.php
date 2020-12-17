@@ -4,6 +4,7 @@ namespace website\forms;
 use Yii;
 use yii\base\Model;
 use website\models\Order;
+use website\models\PaymentTransaction;
 
 class UpdateOrderForm extends Model
 {
@@ -19,9 +20,11 @@ class UpdateOrderForm extends Model
     public function rules()
     {
         return [
+            ['payment_id', 'trim'],
             [['id', 'payment_id'], 'required'],
             ['id', 'validateOrder'],
             ['evidence', 'safe'],
+            ['payment_id', 'validatePaymentId'],
         ];
     }
 
@@ -36,6 +39,22 @@ class UpdateOrderForm extends Model
             $this->addError($attribute, 'Order cannot be updated anymore.');
         }
 
+    }
+
+    public function validatePaymentId($attribute, $params = [])
+    {
+        if ($this->hasErrors()) return false;
+        $payment = PaymentTransaction::find()->where(['payment_id' => $this->payment_id])->one();
+        if ($payment) {
+            return $this->addError($attribute, sprintf('Duplicated payment id with other transaction'));
+        }
+
+        $order = Order::find()->where(['payment_id' => $this->payment_id])->one();
+        if (!$order) return true;
+        if ($order->id != $this->id) {
+            $this->addError($attribute, sprintf('Duplicated payment id with other order'));
+            return false;
+        }
     }
 
     public function update()
