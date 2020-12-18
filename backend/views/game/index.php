@@ -197,7 +197,11 @@ $(".delete-action").ajax_action({
 
 $(".dispatcher-action").ajax_action({
   callback: function(eletement, data) {
-    window.location.href = data.next;
+    if (data.action == 'on') {
+      window.location.href = data.next;
+    } else {
+      location.reload();
+    }
   },
   error: function(element, errors) {
       alert(errors);

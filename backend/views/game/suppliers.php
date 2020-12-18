@@ -104,8 +104,14 @@ if (!count($lastPrices)) {
               <div class="row margin-bottom-10">
                 <?=$form->field($search, 'supplier_id', [
                   'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-                    'inputOptions' => ['class' => 'form-control', 'name' => 'supplier_id']
-                ])->dropdownList($search->getSuppliers(), ['prompt' => 'Chọn nhà cung cấp'])->label('Nhà cung cấp')?>
+                ])->widget(kartik\select2\Select2::classname(), [
+                  'data' => $search->getSuppliers(),
+                  'options' => ['class' => 'form-control'],
+                  'pluginOptions' => [
+                    'placeholder' => 'Chọn nhà cung cấp',
+                  ]
+                ])->label('Nhà cung cấp');?>
+
                 <?php if ($showPrice) : ?>
                 <?=$form->field($search, 'price_from', [
                   'options' => ['class' => 'form-group col-md-1 col-lg-1'],
@@ -135,7 +141,7 @@ if (!count($lastPrices)) {
               </div>
               <?php ActiveForm::end()?>
 
-              <?php $numCols = 7;?>
+              <?php $numCols = 9;?>
               <?php if (!$showPrice) $numCols = $numCols - 2;?>
               <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover table-checkable">
@@ -146,8 +152,10 @@ if (!count($lastPrices)) {
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá cũ (VNĐ) </th>
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá hiện tại (VNĐ) </th>
                       <th> Số đơn hoàn thành </th>
-                      <th> Tốc độ trung bình </th>
-                      <th> Tác vụ </th>
+                      <th> TG Nạp </th>
+                      <th> Đơn/lượt </th>
+                      <th> PPTĐ </th>
+                      <th> Đăng ký </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -160,20 +168,32 @@ if (!count($lastPrices)) {
                         <td class="left"><?=$supplier->user->name;?></td>
                         <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
                           <div><?=$supplier->old_price ? number_format($supplier->old_price) : '';?></div>
-                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->updated_at ? date('d/m/y H:i', strtotime($supplier->updated_at)) : '';?></div>
                         </td>
                         <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
                           <div><?=number_format($supplier->price);?></div>
-                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->updated_at ? date('d/m/y H:i', strtotime($supplier->updated_at)) : '';?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
                         </td>
                         <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
-                        <td class="center"><?=isset($avgSpeeds[$supplier->supplier_id]) ? FormatConverter::countDuration(round($avgSpeeds[$supplier->supplier_id]), 'h:i') : FormatConverter::countDuration(0, 'h:i') ;?></td>
+                        <td class="center"><?=$supplier->last_speed ?  number_format($supplier->last_speed) : '-';?></td>
+                        <td class="center">Comming soon...</td>
+                        <td class="center">
+                          <?php if ($supplier->isEnabled()) : ?>
+                            <?php if ($supplier->isAutoDispatcher()) : ?>
+                            <a href="<?=Url::to(['supplier-game/dispatcher', 'game_id' => $id, 'supplier_id' => $supplier->supplier_id, 'action' => 'off']);?>" class="btn btn-sm green dispatcher-action tooltips action-link" data-container="body" data-original-title="Tạm ngưng PPTĐ"><i class="fa fa-power-off"></i></a>
+                            <?php else :?>
+                            <a href="<?=Url::to(['supplier-game/dispatcher', 'game_id' => $id, 'supplier_id' => $supplier->supplier_id, 'action' => 'on']);?>" class="btn btn-sm default dispatcher-action tooltips action-link" data-container="body" data-original-title="Kích hoạt PPTĐ"><i class="fa fa-power-off"></i></a>
+                            <?php endif;?>
+                          <?php else :?>
+                          <a href="javascript:;" class="btn btn-sm default tooltips" data-container="body" data-original-title="Không thể kích hoạt PPTĐ"><i class="fa fa-power-off"></i></a>
+                          <?php endif;?>
+                        </td>
                         <td class="center">
                           <?php if ($supplier->isEnabled()) : ?>
                           <a href="<?=Url::to(['supplier-game/disable', 'game_id' => $id, 'supplier_id' => $supplier->supplier_id]);?>" class="btn btn-sm green link-action tooltips action-link" data-container="body" data-original-title="Tạm ngưng game"><i class="fa fa-power-off"></i></a>
                           <?php else :?>
                           <a href="<?=Url::to(['supplier-game/enable', 'game_id' => $id, 'supplier_id' => $supplier->supplier_id]);?>" class="btn btn-sm default link-action tooltips action-link" data-container="body" data-original-title="Kích hoạt game"><i class="fa fa-power-off"></i></a>
-                        <?php endif;?>
+                          <?php endif;?>
                         </td>
                       </tr>
                       <?php endforeach;?>
@@ -209,6 +229,15 @@ $(".link-action").ajax_action({
   callback: function(eletement, data) {
     location.reload();
   }
+});
+//dispatcher
+$(".dispatcher-action").ajax_action({
+  callback: function(eletement, data) {
+    location.reload();
+  },
+  error: function(element, errors) {
+      alert(errors);
+  },
 });
 JS;
 $redirect = Yii::getAlias('@web/vendor/assets/global/img');

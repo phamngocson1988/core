@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use supplier\models\Order;
 use supplier\models\Supplier;
+use supplier\models\SupplierGame;
 use supplier\models\OrderSupplier;
 use supplier\behaviors\OrderSupplierBehavior;
 use supplier\behaviors\OrderLogBehavior;
@@ -107,6 +108,20 @@ class UpdateOrderToCompletedForm extends Model
         $supplier = $this->getOrderSupplier();
         $game = $supplier->game;
         try {
+            $supplier->on(Order::EVENT_AFTER_UPDATE, function($event) {
+                $sender = $event->sender; // orderSupplier
+                $supplierGame = SupplierGame::find()->where([
+                    'supplier_id' => $sender->supplier_id,
+                    'game_id' => $sender->game_id,
+                ])->one()
+                if ($supplierGame) {
+                    $supplierGame->touch('last_updated_at');
+                }
+                $to_time = strtotime("now");
+                $from_time = strtotime($sender->approved_at);
+                $supplierGame->last_speed = round(abs($to_time - $from_time) / 60);
+                $supplierGame->save();
+            }
             $percent = (int)(($this->doing / $supplier->quantity) * 100);
             $supplier->status = OrderSupplier::STATUS_COMPLETED;
             $supplier->completed_at = date('Y-m-d H:i:s');

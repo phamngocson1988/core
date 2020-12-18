@@ -61,4 +61,24 @@ class SupplierGameController extends Controller
         	return $this->asJson(['status' => false, 'errors' => $error]);
         }
     }
+
+    public function actionDispatcher()
+    {
+        $request = Yii::$app->request;
+        $game_id = $request->get('game_id');
+        $supplier_id = $request->get('supplier_id');
+        $action = $request->get('action');
+        $form = new \backend\forms\SwitchDispatcherSupplierForm([
+            'game_id' => $game_id,
+            'supplier_id' => $supplier_id,
+            'action' => $action,
+        ]);
+        if ($form->change()) {
+            return $this->renderJson(true);
+        } else {
+            $errors = $form->getFirstErrors();
+            return $this->renderJson(false, null, $errors);
+        }
+        return $this->redirectNotFound();
+    }
 }

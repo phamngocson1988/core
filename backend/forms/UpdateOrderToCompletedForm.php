@@ -39,10 +39,6 @@ class UpdateOrderToCompletedForm extends Model
             Order::STATUS_PARTIAL
         ])) return $this->addError($attribute, sprintf('Không thể hoàn tất đơn hàng khi ở trạng thái %s', $order->status));
         if ($order->doing_unit < $order->quantity) return $this->addError($attribute, 'Đơn hàng chưa được nhập đủ số lượng game');
-        // $supplier = $order->supplier;
-        // if (!$supplier) {
-        //     return $this->addError($attribute, 'Bạn không thể complete đơn hàng vì đơn này không có nhà cung cấp quản lý.');
-        // } elseif ($supplier) {}
     }
     
     public function move()
@@ -58,14 +54,8 @@ class UpdateOrderToCompletedForm extends Model
             $order->process_duration_time = strtotime($order->completed_at) - strtotime($order->process_start_time);
             $order->on(Order::EVENT_AFTER_UPDATE, function($event) {
                 $order = $event->sender;
-                // Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                 $order->log("Moved to completed");
                 $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_COMPLETE_ORDER, $order->customer_id);
-                // $order->send(
-                //     'admin_send_complete_order', 
-                //     sprintf("[KingGems] - Completed Order - Order #%s", $order->id), [
-                //         'order_link' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['user/detail', 'id' => $order->id], true),
-                // ]);
             });
             $order->save();
 

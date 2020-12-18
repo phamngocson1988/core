@@ -85,25 +85,6 @@ class UpdateGamePriceForm extends Model
                 $log->config = json_encode(array_merge($event->changedAttributes, $config));
                 $log->save();
 
-                // Send mail to saler
-                // $salerIds = Yii::$app->authManager->getUserIdsByRole('saler');
-                // $saleManagerIds = Yii::$app->authManager->getUserIdsByRole('sale_manager');
-                // $salerTeamIds = array_merge($salerIds, $saleManagerIds);
-                // $salerTeamIds = array_unique($salerTeamIds);
-                // $salerTeams = User::findAll($salerTeamIds);
-                // $salerEmails = ArrayHelper::getColumn($salerTeams, 'email');
-                // $admin = Yii::$app->params['email_admin'];
-                // $siteName = Yii::$app->name;
-                // Yii::$app->mailer->compose('notify_updating_game_price', [
-                //     'game' => $game,
-                //     'changes' => $attrs
-                // ])
-                // ->setTo($salerEmails)
-                // ->setFrom([$admin => $siteName])
-                // ->setSubject(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
-                // ->setTextBody(sprintf("KINGGEMS.US - Game %s have just been updated its price", $game->title))
-                // ->send();
-
                 // Notify to users who subscried the game
                 $subscribers = GameSubscriber::find()->where(['game_id' => $game->id])->select(['user_id'])->all();
                 $subscriberIds = ArrayHelper::getColumn($subscribers, 'user_id');

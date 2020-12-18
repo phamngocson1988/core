@@ -278,7 +278,7 @@ class GameController extends Controller
             'speed_to' => $request->get('speed_to'),
         ]);
         $command = $form->getCommand();
-        $suppliers = $command->orderBy(['status' => SORT_DESC, 'price' => SORT_ASC])->all();
+        $suppliers = $command->orderBy(['status' => SORT_DESC, 'auto_dispatcher' => SORT_DESC, 'price' => SORT_ASC])->all();
         $supplierIds = array_column($suppliers, 'supplier_id');
         $speedCommand = OrderSupplier::find()
         ->where(['game_id' => $id])
@@ -409,7 +409,7 @@ class GameController extends Controller
             'action' => $action,
         ]);
         if ($form->change()) {
-            return $this->renderJson(true, ['next' => Url::to(['game/suppliers', 'id' => $id])]);
+            return $this->renderJson(true, ['next' => Url::to(['game/suppliers', 'id' => $id]), 'action' => $action]);
         } else {
             $errors = $form->getFirstErrors();
             return $this->renderJson(false, null, $errors);
