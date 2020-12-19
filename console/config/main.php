@@ -37,6 +37,14 @@ return [
                 ],
             ],
         ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => false,
+            'rules' => [
+                '<controller>/<action>' => '<controller>/<action>'
+            ],
+        ],
     ],
     'params' => $params,
 ];
