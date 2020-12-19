@@ -32,17 +32,25 @@ class ForumSectionController extends Controller
     {
         $this->view->params['main_menu_active'] = 'forum-section.index';
         $request = Yii::$app->request;
-        $models = ForumSection::find()->all();
-        return $this->render('index.php', [
+        $form = new \backend\forms\FetchForumSectionForm([
+            'q' => $request->get('q'),
+            'language' => $request->get('language'),
+        ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('index', [
             'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($language)
     {
         $this->view->params['main_menu_active'] = 'forum-section.index';
         $request = Yii::$app->request;
-        $model = new \backend\forms\CreateForumSectionForm();
+        $model = new \backend\forms\CreateForumSectionForm(['language' => $language]);
         if ($model->load($request->post())) {
             if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

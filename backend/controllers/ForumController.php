@@ -32,17 +32,26 @@ class ForumController extends Controller
     {
         $this->view->params['main_menu_active'] = 'forum.index';
         $request = Yii::$app->request;
-        $models = ForumCategory::find()->all();
-        return $this->render('index.php', [
-            'models' => $models,
+        $form = new \backend\forms\FetchForumCategoryForm([
+            'q' => $request->get('q'),
+            'language' => $request->get('language'),
         ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('index', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form,
+        ]);
+
     }
 
-    public function actionCreate()
+    public function actionCreate($language)
     {
         $this->view->params['main_menu_active'] = 'forum.index';
         $request = Yii::$app->request;
-        $model = new \backend\forms\CreateForumCategoryForm();
+        $model = new \backend\forms\CreateForumCategoryForm(['language' => $language]);
         if ($model->load($request->post())) {
             if ($model->validate() && $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

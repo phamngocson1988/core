@@ -61,6 +61,15 @@ use common\widgets\ImageInputWidget;
                     'data' => $model->fetchCategory(),
                     'options' => ['class' => 'form-control', 'multiple' => 'true'],
                   ])->label('Categories')?>
+                  <?=$form->field($model, 'language', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control', 'disabled' => true, 'name' => 'language'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropDownList($model->fetchLanguages())?>
+                  <?=$form->field($model, 'language', [
+                    'options' => ['tag' => false],
+                    'template' => '{input}'
+                  ])->hiddenInput()?>
                 </div>
               </div>
             </div>

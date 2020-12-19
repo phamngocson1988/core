@@ -4,12 +4,14 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\ForumCategory;
+use common\components\helpers\LanguageHelper;
 
 class EditForumCategoryForm extends Model
 {
     public $id;
     public $title;
     public $intro;
+    public $language;
 
     protected $_category;
 
@@ -18,7 +20,8 @@ class EditForumCategoryForm extends Model
         return [
             [['id', 'title'], 'required'],
             ['id', 'validateCategory'],
-            ['intro', 'trim']
+            ['intro', 'trim'],
+            ['language', 'safe']
         ];
     }
 
@@ -51,5 +54,11 @@ class EditForumCategoryForm extends Model
         $category = $this->getCategory();
         $this->title = $category->title;
         $this->intro = $category->intro;
+        $this->language = $category->language;
+    }
+
+    public function fetchLanguages()
+    {
+        return LanguageHelper::fetchLanguages();
     }
 }

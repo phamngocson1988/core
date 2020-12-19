@@ -8,17 +8,31 @@ use yii\helpers\ArrayHelper;
 use backend\models\ForumSection;
 use backend\models\ForumCategory;
 use backend\models\ForumSectionCategory;
+use common\components\helpers\LanguageHelper;
 
 class CreateForumSectionForm extends Model
 {
     public $title;
     public $categories;
+    public $language;
+
+    public function init()
+    {
+        $languages = $this->fetchLanguages();
+        $keys = array_keys($languages);
+        if (!in_array($this->language, $keys)) {
+            $this->language = reset($keys);
+        }
+    }
 
     public function rules()
     {
+        $languages = $this->fetchLanguages();
         return [
-            [['title'], 'required'],
-            ['categories', 'safe']
+            [['title', 'language'], 'trim'],
+            [['title', 'language'], 'required'],
+            ['categories', 'safe'],
+            ['language', 'in', 'range' => array_keys($languages)],
         ];
     }
 
@@ -29,6 +43,7 @@ class CreateForumSectionForm extends Model
         try {
             $section = new ForumSection();
             $section->title = $this->title;
+            $section->language = $this->language;
             $section->save();
             $sectionId = $section->id;
             
@@ -53,7 +68,14 @@ class CreateForumSectionForm extends Model
 
     public function fetchCategory()
     {
-        $categories = ForumCategory::find()->all();
+        $categories = ForumCategory::find()
+        ->where(['language' => $this->language])
+        ->all();
         return ArrayHelper::map($categories, 'id', 'title');
+    }
+
+    public function fetchLanguages()
+    {
+        return LanguageHelper::fetchLanguages();
     }
 }

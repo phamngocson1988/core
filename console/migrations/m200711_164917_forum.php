@@ -45,6 +45,7 @@ class m200711_164917_forum extends Migration
             'title' => $this->string(255)->notNull(),
             'slug' => $this->string(255),
             'intro' => $this->text(),
+            'language' => $this->string(16)->notNull()->defaultValue('en-US'),
             'position' => $this->integer(),
         ], $tableOptions);
 

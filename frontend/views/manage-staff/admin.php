@@ -28,7 +28,7 @@ use frontend\models\Complain;
               <div class="review-user">
                 <div class="user-photo"><img src="<?=$user->getAvatarUrl('150x150');?>" alt="<?=$user->getName();?>"></div>
                 <div class="user-name"><a href="<?=Url::to(['member/index', 'username' => $user->username]);?>"><?=$user->username;?></a></div>
-                <div class="user-message"><i class="fas fa-user-secret"></i> ><?=Yii::t('app', 'Admin');?></div>
+                <div class="user-message"><i class="fas fa-user-secret"></i> <?=Yii::t('app', 'Admin');?></div>
               </div>
               <div class="review-content">
                 <div class="review-date"><?=Yii::t('app', 'Joined');?> <span><?=date("F j, Y", strtotime($user->created_at));?></span></div>
