@@ -101,8 +101,11 @@ $('.review-list').on('click', '.assign-to-me', function(e) {
 });
 $('.review-list').on('change', '.assign-to-admin', function(e) {
   e.preventDefault();
+  var admin_id = $(this).val();
+  if (!admin_id) return false;
+  
   var complain_id = $(this).closest('article').data('id');
-  assignComplain($(this).val(), complain_id);
+  assignComplain(admin_id, complain_id);
   return false;
 });
 function assignComplain(user_id, complain_id) {

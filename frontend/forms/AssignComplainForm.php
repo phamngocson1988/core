@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use frontend\models\Complain;
 use frontend\models\User;
+use frontend\models\OperatorStaff;
 use yii\helpers\ArrayHelper;
 
 class AssignComplainForm extends Model
@@ -46,9 +47,10 @@ class AssignComplainForm extends Model
         $user = $this->getUser();
         $complain = $this->getComplain();
         if (!$user) {
-            $this->addError($attribute, Yii::t('app', 'User is not exist'));
-        } elseif ($user->operator_id != $complain->operator_id) {
-            $this->addError($attribute, Yii::t('app', 'Cannot assign this user to the complaint'));
+            return $this->addError($attribute, Yii::t('app', 'User is not exist'));
+        }
+        if (!$user->isOperatorStaffOf($complain->operator_id, OperatorStaff::ROLE_ADMIN) && !$user->isOperatorStaffOf($complain->operator_id, OperatorStaff::ROLE_SUBADMIN)) {
+            $this->addError($attribute, Yii::t('app', 'You are not enough permission to perform this action'));
         }
     }
 

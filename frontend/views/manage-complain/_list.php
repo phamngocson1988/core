@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use common\components\helpers\TimeElapsed;
 use yii\bootstrap\ActiveForm;
+use frontend\models\OperatorStaff;
 
 $currentUserId = Yii::$app->user->id;
 ?>
@@ -74,8 +75,9 @@ $currentUserId = Yii::$app->user->id;
       <div class="form-comment-right"><span class="text">ASSIGN TO</span>
         <div class="form-group">
           <select class="form-control assign-to-admin">
-            <?php foreach ($operator->fetchStaff('manager') as $manager) :?>
-            <option value="<?=$manager->id;?>" selected><?=$manager->username;?></option>
+            <option selected><?=Yii::t('app', 'Choose sub admin');?></option>
+            <?php foreach ($operator->fetchStaff(OperatorStaff::ROLE_SUBADMIN) as $manager) :?>
+            <option value="<?=$manager->id;?>"><?=$manager->username;?></option>
             <?php endforeach;?>
           </select>
         </div>
@@ -91,11 +93,6 @@ $currentUserId = Yii::$app->user->id;
         ])->textArea()->label(false);?>
         
         <div class="form-group">
-          <!-- <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" value="option1"><span>Reject this case</span>
-            </label>
-          </div> -->
           <?= $form->field($complainForm, 'mark_close', [
             'options' => ['class' => 'form-check form-check-inline'],
             'template' => '{input}{label}',
