@@ -9,7 +9,7 @@ use frontend\models\Complain;
 class ManageOperatorController extends ManageController
 {
     protected $_actions = ['index', 'edit', 'update-avatar'];
-    // , 'reply-review', 'reply-complain', 'review', 'list-review', 'complain', 'my-complain', 'list-complain', 'list-my-complain', 'detail-complain'
+    protected $_onlyAdminActions = ['edit', 'update-avatar'];
 
     public function actionIndex()
     {
@@ -38,6 +38,7 @@ class ManageOperatorController extends ManageController
             'reviewForm' => $reviewForm,
             'complain' => $complain,
             'complainForm' => $complainForm,
+            'isAdmin' => $this->isAdmin()
         ]);
     }
 
@@ -58,6 +59,7 @@ class ManageOperatorController extends ManageController
         return $this->render('edit', [
             'model' => $model,
             'operator' => $operator,
+            'isAdmin' => $this->isAdmin()
         ]);
     }
 

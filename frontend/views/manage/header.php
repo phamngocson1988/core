@@ -15,7 +15,9 @@ use yii\helpers\Url;
     <div class="heading-right">
       <ul class="profile-link profile-link-custom">
         <li class="favorites"><a class="trans" href="<?=Url::to(['manage-operator/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>"><i class="fas fa-home"></i><span>BACK TO PAGE</span></a></li>
+        <?php if ($isAdmin) : ?>
         <li class="edit-profile"><a class="trans" href="<?=Url::to(['manage-operator/edit', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>"><i class="fas fa-cog"></i><span>EDIT MY PAGE</span></a></li>
+        <?php endif;?>
       </ul>
     </div>
   </div>

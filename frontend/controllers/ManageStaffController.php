@@ -10,8 +10,8 @@ use yii\filters\VerbFilter;
 
 class ManageStaffController extends ManageController
 {
-    protected $_actions = ['admin', 'sub-admin', 'moderator'];
-    protected $_onlyAdminActions = ['revoke', 'assign'];
+    protected $_actions = ['admin', 'sub-admin', 'moderator', 'revoke', 'assign'];
+    protected $_onlyAdminActions = ['admin', 'sub-admin', 'moderator', 'revoke', 'assign'];
 
     public function behaviors()
     {
@@ -31,6 +31,7 @@ class ManageStaffController extends ManageController
         $operator = $this->getOperator();
         $users = $operator->fetchStaff(OperatorStaff::ROLE_ADMIN);
         return $this->render('admin', [
+            'isAdmin' => $this->isAdmin(),
             'operator' => $operator,
             'users' => $users
         ]);

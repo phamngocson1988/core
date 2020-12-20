@@ -42,19 +42,13 @@ class ManageController extends Controller
                             $operator_id = $request->get('operator_id');
                             if (!$operator_id) return false;
 
-                            if (in_array($action, $this->_onlyAdminActions)) {
+                            if (in_array($action->id, $this->_onlyAdminActions)) {
                                 return $user->isOperatorStaffOf($operator_id, OperatorStaff::ROLE_ADMIN);
                             } else {
                                 return $user->isOperatorStaffOf($operator_id);
                             }
                         },
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'assign-complain' => ['post'],
                 ],
             ],
         ];
@@ -65,7 +59,6 @@ class ManageController extends Controller
         if (!parent::beforeAction($action)) return false;
         $request = Yii::$app->request;
         $this->operator_id = $request->get('operator_id');
-        $operator = $this->getOperator();
         return true;
     }
 

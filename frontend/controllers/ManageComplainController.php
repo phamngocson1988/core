@@ -21,22 +21,29 @@ class ManageComplainController extends ManageController
 {
     protected $_actions = ['index', 'list', 'view', 'reply', 'assign'];
     protected $_onlyAdminActions = ['assign'];
+    
     public function actionIndex() 
     {
         $request = Yii::$app->request;
         $operator = $this->getOperator();
+        $condition = [];
+        $condition['operator_id'] = $operator->id;
+        if (!$this->isAdmin()) {
+            $condition['managed_by'] = Yii::$app->user->id;
+        }
+
         if (!$request->getIsAjax()) {
-            $user = Yii::$app->user->identity;
-            $template = $this->isAdmin() ? 'index' : 'my-complain';
-            return $this->render($template, ['operator' => $operator]);
+            $countComplain = Complain::find()
+            ->where($condition)
+            ->select(['status', 'COUNT(*) as count'])
+            ->groupBy(['status'])
+            ->asArray()
+            ->all();
+            $countByStatus = ArrayHelper::map($countComplain, 'status', 'count');
+            return $this->render('index', ['operator' => $operator, 'countByStatus' => $countByStatus, 'isAdmin' => $this->isAdmin()]);
         } else {
             $offset = $request->get('offset', 0);
             $limit = $request->get('limit', 10);
-            $condition = [];
-            $condition['operator_id'] = $operator->id;
-            if (!$this->isAdmin()) {
-                $condition['managed_by'] = Yii::$app->user->id;
-            }
             $command = Complain::find()->where($condition)->offset($offset)->limit($limit);
 
             if ($request->get('sort') == 'date') {
@@ -51,12 +58,13 @@ class ManageComplainController extends ManageController
             $complains = $command->all();
             $total = $command->count();
 
-            $complainForm = new \frontend\forms\ReplyComplainForm();
+            $complainForm = new \frontend\forms\OperatorReplyComplainForm();
 
             $html = $this->renderPartial('_list', [
                 'operator' => $operator, 
                 'complains' => $complains, 
-                'complainForm' => $complainForm
+                'complainForm' => $complainForm,
+                'isAdmin' => $this->isAdmin(),
             ]);
             return $this->asJson(['status' => true, 'data' => [
                 'items' => $html,
@@ -72,7 +80,7 @@ class ManageComplainController extends ManageController
         $complain = Complain::findOne($id);
         $reason = $complain->reason;
         $replies = $complain->replies;
-        $complainForm = new \frontend\forms\ReplyComplainForm();
+        $complainForm = new \frontend\forms\OperatorReplyComplainForm();
         return $this->render('view', [
             'complain' => $complain,
             'operator' => $operator,
@@ -80,7 +88,8 @@ class ManageComplainController extends ManageController
             'replies' => $replies,
             'user' => $complain->user,
             'complainForm' => $complainForm,
-            'canReply' => ($complain->managed_by == Yii::$app->user->id) || $this->isAdmin()
+            'canReply' => ($complain->managed_by == Yii::$app->user->id) || $this->isAdmin(),
+            'isAdmin' => $this->isAdmin()
         ]);
     }
 
@@ -89,9 +98,10 @@ class ManageComplainController extends ManageController
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        $model = new \frontend\forms\ReplyComplainForm([
+        $model = new \frontend\forms\OperatorReplyComplainForm([
             'user_id' => Yii::$app->user->id,
-            'complain_id' => $request->get('complain_id')
+            'complain_id' => $request->get('complain_id'),
+            'operator_id' => $this->operator_id,
         ]);
         if ($model->load($request->post()) && $model->validate() && $model->add()) {
             return json_encode(['status' => true, 'data' => ['message' => Yii::t('app', 'add_reply_success')]]);

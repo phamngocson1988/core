@@ -65,7 +65,7 @@ $currentUserId = Yii::$app->user->id;
       <?php endif;?>
     </div>
     <?php if ($complain->isOpen()) : ?>
-    <?php if (!$complain->hasManager()):?>
+    <?php if ($isAdmin):?>
     <div class="review-form-comment">
       <div class="form-comment-left form-check">
         <label class="form-check-label">
@@ -77,7 +77,7 @@ $currentUserId = Yii::$app->user->id;
           <select class="form-control assign-to-admin">
             <option selected><?=Yii::t('app', 'Choose sub admin');?></option>
             <?php foreach ($operator->fetchStaff(OperatorStaff::ROLE_SUBADMIN) as $manager) :?>
-            <option value="<?=$manager->id;?>"><?=$manager->username;?></option>
+            <option value="<?=$manager->id;?>" <?php if ($manager->id === $complain->managed_by): ?> selected <?php endif;?>><?=$manager->username;?></option>
             <?php endforeach;?>
           </select>
         </div>

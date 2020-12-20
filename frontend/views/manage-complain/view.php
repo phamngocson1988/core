@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 <main>
   <section class="section-module">
     <div class="container">
-      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator]);?>
+      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator, 'isAdmin' => $isAdmin]);?>
       <section class="operator-detail widget-box">
         <h2 class="widget-head">
           <div class="head-text"><i class="fa fa-info-circle"></i><span class="text">Complaint Info</span></div>
@@ -57,18 +57,6 @@ use yii\bootstrap\ActiveForm;
             </div>
           </article>
           <?php foreach ($replies as $reply) : ?>
-          <?php if ($reply->operator_id) : ?>
-          <article class="review-item complaint-item">
-            <div class="review-user">
-              <div class="user-photo"><img src="<?=$operator->getImageUrl('100x100');?>" alt="<?=$operator->name;?>"></div>
-              <div class="user-name"><a href="<?=Url::to(['operator/view', 'id' => $operator->id, 'slug' => $operator->slug]);?>"><?=$operator->name;?></a></div>
-            </div>
-            <div class="review-content">
-              <div class="review-date">Posted on <?=date("F j, Y", strtotime($reply->created_at));?></div>
-              <div class="review-text"><?=$reply->description;?></div>
-            </div>
-          </article>
-          <?php else : ?>
           <?php $userReply = $reply->user;?>
           <article class="review-item complaint-item">
             <div class="review-user">
@@ -81,7 +69,6 @@ use yii\bootstrap\ActiveForm;
               <div class="review-text"><?=$reply->description;?></div>
             </div>
           </article>
-          <?php endif;?>
           <?php endforeach;?>
           
           <?php if ($canReply) : ?>

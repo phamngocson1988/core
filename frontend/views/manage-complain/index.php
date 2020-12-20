@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;;
 use frontend\models\Complain;
 $currentUserId = Yii::$app->user->id;
 $assignComplainUrl = Url::to(['manage-complain/assign', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
@@ -7,7 +8,7 @@ $assignComplainUrl = Url::to(['manage-complain/assign', 'operator_id' => $operat
 <main>
   <section class="section-profile-user">
     <div class="container">
-      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator]);?>
+      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator, 'isAdmin' => $isAdmin]);?>
       <h2 class="sec-heading-title">Player Complaints</h2>
       <div class="widget-box timeline-post">
         <div class="timeline-heading">
@@ -26,10 +27,10 @@ $assignComplainUrl = Url::to(['manage-complain/assign', 'operator_id' => $operat
             <button class="dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-glass-martini"></i>FILLTER</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <ul class="list-tabs tabs-none">
-                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>" id='search-all'>All (<?=number_format($operator->totalComplain());?>)</a></li>
-                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'open']);?>" id='search-open'>Open cases (<?=number_format($operator->totalComplainOpen());?>)</a></li>
-                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'resolve']);?>" id='search-resolve'>Resolved (<?=number_format($operator->totalComplainResolve());?>)</a></li>
-                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'reject']);?>" id='search-reject'>Rejected (<?=number_format($operator->totalComplainReject());?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);?>" id='search-all'>All (<?=number_format(array_sum($countByStatus));?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'open']);?>" id='search-open'>Open cases (<?=number_format(ArrayHelper::getValue($countByStatus, Complain::STATUS_OPEN, 0));?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'resolve']);?>" id='search-resolve'>Resolved (<?=number_format(ArrayHelper::getValue($countByStatus, Complain::STATUS_RESOLVE, 0));?>)</a></li>
+                <li><a class="trans" href="<?=Url::to(['manage-complain/index', 'operator_id' => $operator->id, 'slug' => $operator->slug, 'status' => 'reject']);?>" id='search-reject'>Rejected (<?=number_format(ArrayHelper::getValue($countByStatus, Complain::STATUS_REJECT, 0));?>)</a></li>
               </ul>
             </div>
           </div>

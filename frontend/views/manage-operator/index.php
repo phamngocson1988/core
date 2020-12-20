@@ -6,7 +6,7 @@ use common\components\helpers\TimeElapsed;
 <main>
   <section class="section-profile-user">
     <div class="container">
-      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator]);?>
+      <?php echo $this->render('@frontend/views/manage/header.php', ['operator' => $operator, 'isAdmin' => $isAdmin]);?>
       <div class="sec-content">
         <div class="mod-column">
           <div class="widget-box timeline-post">
@@ -116,6 +116,7 @@ use common\components\helpers\TimeElapsed;
                       </div>
                       <?php endforeach;?>
                     </div>
+                    <?php if ($isAdmin) : ?>
                     <div class="review-reply">
                       <?php $form = ActiveForm::begin(['action' => Url::to(['manage-complain/reply', 'complain_id' => $complain->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-complain-form']); ?>
                       <?= $form->field($complainForm, 'description', [
@@ -142,6 +143,7 @@ use common\components\helpers\TimeElapsed;
                       </div>
                       <?php ActiveForm::end();?>
                     </div>
+                    <?php endif;?>
                   </div>
                 </article>
                 <?php endif;?>
@@ -153,7 +155,9 @@ use common\components\helpers\TimeElapsed;
           <div class="sidebar-col sidebar-category">
             <?=\frontend\widgets\ReviewStatByOperatorWidget::widget(['operator_id' => $operator->id]);?>
             <?=\frontend\widgets\ComplainStatByOperatorWidget::widget(['operator_id' => $operator->id]);?>
+            <?php if ($isAdmin) :?>
             <?=\frontend\widgets\ManageStaffByOperatorWidget::widget(['operator_id' => $operator->id]);?>
+            <?php endif;?>
           </div>
           <div class="sidebar-col widget-box">
             <div class="widget-title">PAGE'S STATS</div>

@@ -18,6 +18,7 @@ class ManageReviewController extends ManageController
             return $this->render('index', [
                 'operator' => $operator,
                 'user' => $user,
+                'isAdmin' => $this->isAdmin(),
             ]);
         } else {
             $offset = $request->get('offset', 0);
