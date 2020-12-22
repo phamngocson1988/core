@@ -58,7 +58,7 @@ class SiteController extends Controller
             if ($operatorId) {
                 $operator = Operator::findOne($operatorId);
                 if ($operator) {
-                    $result['next'] = Url::to(['manage/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
+                    $result['next'] = Url::to(['manage-operator/index', 'operator_id' => $operator->id, 'slug' => $operator->slug]);
                 }
             }
             return json_encode($result);
