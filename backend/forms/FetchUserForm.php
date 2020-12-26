@@ -26,7 +26,8 @@ class FetchUserForm extends Model
         $userTable = User::tableName();
         if ($this->q) {
             $command->andWhere(['OR',
-               ["like", "{$userTable}.name", $this->q],
+               ["like", "{$userTable}.firstname", $this->q],
+               ["like", "{$userTable}.lastname", $this->q],
                ["like", "{$userTable}.username", $this->q],
                ["like", "{$userTable}.email", $this->q],
            ]);

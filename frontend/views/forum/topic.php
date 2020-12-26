@@ -16,7 +16,7 @@ $user = Yii::$app->user->getIdentity();
           <div class="thread-info"><?=Yii::t('app', 'By {user}', ['user' => sprintf('<a href="%s">%s</a>', Url::to(['member/index', 'username' => $creator->username]), $creator->getName())]);?>, <?=TimeElapsed::timeElapsed($topic->created_at);?></div>
         </div>
         <?php if (!Yii::$app->user->isGuest) : ?>
-        <div class="heading-button"><a class="btn btn-link" href="<?=Url::to(['forum/create']);?>"><?=Yii::t('app', 'Start new topic');?></a><a class="btn btn-primary" href="#reply"><?=Yii::t('app', 'Reply to this topic');?></a></div>
+        <div class="heading-button"><a class="btn btn-link" href="<?=Url::to(['forum/create', 'category_id' => $topic->category_id]);?>"><?=Yii::t('app', 'Start new topic');?></a><a class="btn btn-primary" href="#reply"><?=Yii::t('app', 'Reply to this topic');?></a></div>
         <?php endif;?>
       </section>
       <section class="section-thread">

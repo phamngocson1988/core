@@ -68,7 +68,7 @@ class ForumController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new \frontend\forms\CreateTopicForumForm();
+        $model = new \frontend\forms\CreateTopicForumForm(['category_id' => $request->get('category_id')]);
         if ($model->load($request->post())) {
             if ($model->validate() && $topic = $model->create()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
@@ -85,10 +85,6 @@ class ForumController extends Controller
     public function actionTopic($id, $slug)
     {
         $topic = ForumTopic::findOne($id);
-        // $command = ForumPost::find()
-        // ->where(['topic_id' => $id])
-        // ->with('sender')
-        // ->with('userLike');
         $form = new \frontend\forms\FetchForumPostForm(['topic_id' => $id]);
         $command = $form->getCommand();
         $command->with('sender')->with('userLike');

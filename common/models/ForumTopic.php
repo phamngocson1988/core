@@ -26,7 +26,7 @@ class ForumTopic extends ActiveRecord
             ],
             [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
+                'attribute' => 'subject',
                 'slugAttribute' => 'slug',
                 'immutable' => true,
                 'ensureUnique'=>true,
