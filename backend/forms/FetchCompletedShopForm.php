@@ -63,10 +63,10 @@ class FetchCompletedShopForm extends FetchShopForm
             $command->andWhere(["{$supplierTable}.supplier_id" => $this->supplier_id]);
         }
         if ($this->start_date) {
-            $command->andWhere(['>=', "$table.created_at", $this->start_date]);
+            $command->andWhere(['>=', "$table.completed_at", $this->start_date]);
         }
         if ($this->end_date) {
-            $command->andWhere(['<=', "$table.created_at", $this->end_date]);
+            $command->andWhere(['<=', "$table.completed_at", $this->end_date]);
         }
         $command->indexBy(function ($row) use(&$index){
            return ++$index;

@@ -44,11 +44,17 @@ class UpdateTransactionForm extends Model
     public function validatePaymentId($attribute, $params = [])
     {
         if ($this->hasErrors()) return false;
-        $order = Order::find()->where(['payment_id' => $this->payment_id])->one();
+        $order = Order::find()
+        ->where(['payment_id' => $this->payment_id])
+        ->andWhere(['<>', 'status', Order::STATUS_DELETED])
+        ->one();
         if ($order) {
             return $this->addError($attribute, sprintf('Duplicated payment id with other order'));
         }
-        $payment = PaymentTransaction::find()->where(['payment_id' => $this->payment_id])->one();
+        $payment = PaymentTransaction::find()
+        ->where(['payment_id' => $this->payment_id])
+        ->andWhere(['<>', 'status', PaymentTransaction::STATUS_DELETED])
+        ->one();
         if (!$payment) return true;
         if ($payment->id != $this->id) {
             $this->addError($attribute, sprintf('Duplicated payment id with transaction'));

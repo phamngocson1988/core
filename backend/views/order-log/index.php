@@ -63,7 +63,7 @@ use yii\widgets\ActiveForm;
               <tr>
                 <td style="vertical-align: middle;"><?=$model->id;?></td>
                 <td style="vertical-align: middle;"><?=$model->order_id;?></td>
-                <td style="vertical-align: middle;"><?=sprintf("%s (%s)", $model->user->name, $model->user_id);?></td>
+                <td style="vertical-align: middle;"><?=$model->user ? sprintf("%s (%s)", $model->user->name, $model->user_id) : 'System';?></td>
                 <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                 <td style="vertical-align: middle;"><?=$model->description;?></td>
               </tr>

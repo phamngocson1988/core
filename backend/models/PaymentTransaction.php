@@ -30,11 +30,17 @@ class PaymentTransaction extends \common\models\PaymentTransaction
     public function validatePaymentId($attribute, $params = [])
     {
         if ($this->hasErrors()) return false;
-        $order = Order::find()->where(['payment_id' => $this->payment_id])->one();
+        $order = Order::find()
+        ->where(['payment_id' => $this->payment_id])
+        ->andWhere(['<>', 'status', Order::STATUS_DELETED])
+        ->one();
         if ($order) {
             return $this->addError($attribute, sprintf('This payment id was used for order (%s)', $order->id));
         }
-        $payment = self::find()->where(['payment_id' => $this->payment_id])->one();
+        $payment = self::find()
+        ->where(['payment_id' => $this->payment_id])
+        ->andWhere(['<>', 'status', self::STATUS_DELETED])
+        ->one();
         if (!$payment) return true;
         if ($payment->id != $this->id) {
             $this->addError($attribute, sprintf('Duplicated payment id with transaction num %s', $payment->getId()));

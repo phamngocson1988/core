@@ -121,7 +121,7 @@ class m181217_033141_create_order_table extends Migration
         $this->createTable('{{%order_log}}', [
             'id' => $this->primaryKey(),
             'order_id' => $this->integer(11)->notNull(),
-            'user_id' => $this->integer(11)->notNull(),
+            'user_id' => $this->integer(11),
             'description' => $this->string(255)->notNull(),
             'created_at' => $this->dateTime()->notNull(),
         ]);

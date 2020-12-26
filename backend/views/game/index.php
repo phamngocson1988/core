@@ -95,7 +95,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <th> Tên game </th>
               <th> Trạng thái </th>
               <th> Kho </th>
-              <th> Tốc độ </th>
+              <th> TG TB Nạp </th>
+              <th> Đơn / lượt </th>
               <th> Nhà cung cấp </th>
               <th> Giá </th>
               <th> Số đơn hàng </th>
@@ -106,9 +107,14 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           </thead>
             <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="12" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="13" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
+                <?php 
+                $maxOrder = ArrayHelper::getValue($maxOrders, $model->id, 0);
+                $lastSpeed = ArrayHelper::getValue($lastSpeeds, $model->id, 0);
+                $avgSpeed = $maxOrder ? number_format(round($lastSpeed / $maxOrder)) : '--';
+                ?>
               <tr>
                 <td class="center"><?=$model->id;?></td>
                 <td class="center"><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
@@ -129,13 +135,8 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <span class="label label-success">Còn hàng</span>
                     <?php endif;?>
                 </td>
-                <td  class="center">
-                  <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
-                  ---
-                  <?php else :?>
-                  <?=FormatConverter::countDuration($model->average_speed * 60, 'h:i');?>
-                  <?php endif;?>
-                </td>
+                <td class="center"><?=$avgSpeed;?></td>
+                <td class="center"><?=number_format($maxOrder);?></td>
                 <td class="center">
                   <?php if ($model->isSoldout() || $model->isInvisible()) : ?>
                   ---

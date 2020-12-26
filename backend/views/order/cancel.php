@@ -62,6 +62,9 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
           <span class="caption-subject bold uppercase"> Đơn hàng huỷ</span>
         </div>
         <div class="actions">
+          <?php if (Yii::$app->user->cans(['admin', 'accounting'])) : ?>
+          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">

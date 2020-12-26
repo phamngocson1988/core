@@ -84,6 +84,16 @@ class GameController extends Controller
         $invisibleCount = Game::find()->where(['status' => Game::STATUS_INVISIBLE])->count();
         $soldoutCount = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->andWhere(['soldout' => 1])->count();
 
+        // maxOrders
+        $supplierGames = SupplierGame::find()
+        ->where(['game_id' => $gameIds, 'status' => SupplierGame::STATUS_ENABLED])
+        ->select(['game_id', 'SUM(max_order) as max_order', 'SUM(IFNULL(max_order, 0) * last_speed) as last_speed'])
+        ->asArray()
+        ->groupBy(['game_id'])
+        ->all();
+        $maxOrders = ArrayHelper::map($supplierGames, 'game_id', 'max_order');
+        $lastSpeeds = ArrayHelper::map($supplierGames, 'game_id', 'last_speed');
+
         return $this->render('index.php', [
             'models' => $models,
             'pages' => $pages,
@@ -94,6 +104,8 @@ class GameController extends Controller
             'visibleCount' => $visibleCount,
             'invisibleCount' => $invisibleCount,
             'soldoutCount' => $soldoutCount,
+            'maxOrders' => $maxOrders,
+            'lastSpeeds' => $lastSpeeds,
         ]);
     }
 
@@ -415,5 +427,26 @@ class GameController extends Controller
             return $this->renderJson(false, null, $errors);
         }
         return $this->redirectNotFound();
+    }
+
+    public function actionMaxOrder() 
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\UpdateSupplierMaxOrder([
+            'supplier_id' => $request->get('supplier_id'),
+            'game_id' => $request->get('game_id'),
+        ]);
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->update()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                $errors = $model->getFirstErrors();
+                return $this->asJson(['status' => false, 'error' => reset($errors)]);
+            }
+        }
+        $model->loadData();
+        return $this->renderPartial('_max_order', [
+            'model' => $model,
+        ]);
     }
 }

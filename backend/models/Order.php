@@ -87,11 +87,17 @@ class Order extends \common\models\Order
 
     public function validatePayment($attribute, $params = []) 
     {
-        $payment = PaymentTransaction::find()->where(['payment_id' => $this->payment_id])->one();
+        $payment = PaymentTransaction::find()
+        ->where(['payment_id' => $this->payment_id])
+        ->andWhere(['<>', 'status', PaymentTransaction::STATUS_DELETED])
+        ->one();
         if ($payment) {
             return $this->addError($attribute, sprintf('SỐ LỆNH GIAO DỊCH đã được sử dụng cho giao dich %s', $payment->getId()));
         }
-        $order = self::find()->where(['payment_id' => $this->payment_id])->one();
+        $order = self::find()
+        ->where(['payment_id' => $this->payment_id])
+        ->andWhere(['<>', 'status', self::STATUS_DELETED])
+        ->one();
         if (!$order) return true;
         if ($order->id != $this->id) {
             return $this->addError($attribute, 'SỐ LỆNH GIAO DỊCH đã được sử dụng');

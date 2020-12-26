@@ -154,7 +154,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 <td><?=$model->payment_id;?></td>
                 <td><?=$model->payment_type;?></td>
                 <td><?=$model->status;?></td>
-                <td><?=$model->isCompleted() ? $model->updatedBy->getName() : '';?></td>
+                <td><?=$model->isCompleted() && $model->updatedBy ? $model->updatedBy->getName() : '';?></td>
                 <td>
                   <?php if ($model->evidence) : ?>
                   <a href="<?=$model->evidence;?>" target="_blank">Xem</a>

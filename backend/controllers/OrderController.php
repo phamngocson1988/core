@@ -514,6 +514,11 @@ class OrderController extends Controller
             'end_date' => $request->get('end_date'),
         ];
         $form = new \backend\forms\FetchCancelShopForm($data);
+        $mode = $request->get('mode');
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'don-hang-co-cancel.xls';
+            return $form->export($fileName);
+        }
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)

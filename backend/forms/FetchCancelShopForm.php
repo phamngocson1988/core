@@ -21,6 +21,7 @@ class FetchCancelShopForm extends FetchShopForm
             "$table.customer_name",
             "$table.quantity",
             "$table.doing_unit", 
+            "$table.total_unit",
             "$table.game_id", 
             "$table.game_title", 
             "$table.created_at", 
@@ -133,6 +134,119 @@ class FetchCancelShopForm extends FetchShopForm
         $table = Order::tableName();
         $now = date('Y-m-d H:i:s');
         return $this->getCommand()->average("TIMESTAMPDIFF(MINUTE , $table.pending_at, IFNULL($table.distributed_at, '$now'))");
+    }
+
+    public function export($fileName = null)
+    {
+        $command = $this->getCommand();
+        $fileName = ($fileName) ? $fileName : 'order-list' . date('His') . '.xlsx';
+        $names = [
+            'Mã đơn hàng',
+            'Tên khách hàng',
+            'Shop Game',
+            'Số lượng nạp',
+            'Số gói',
+            // 'Tổng TG chờ',
+            // 'TG duyệt',
+            // 'TG phân phối',
+            // 'TG nhận đơn',
+            'Lý do huỷ',
+            'Người bán hàng',
+            'Nhân viên đơn hàng',
+            'Trạng thái',
+        ];
+        $characters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' ];
+        $titles = array_combine($characters, $names);
+        $totalRow = $command->count();
+        $startRow = 4;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);
+
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $header = [
+            "A1:{$endColumn}1" => sprintf('THỐNG KÊ ĐƠN HÀNG CANCELLED'),
+            "A2:{$endColumn}2" => sprintf('Thời gian thống kê: %s đến %s', $this->start_date, $this->end_date),
+        ];
+        $footer = [
+            // "A$footerRow" => sprintf('Tổng: %s', $command->count()),
+            // "G$footerRow" => sprintf('Tổng: %s', number_format($command->sum('order.doing'), 1)),
+        ];
+        
+        $data = [];
+        // $command->orderBy(['order.created_at' => SORT_DESC]);
+        $models = $command->all();
+        foreach ($models as $model) {
+            $data[] = [
+                '#' . $model->id, 
+                $model->customer_name,
+                $model->game_title, 
+                $model->total_unit, 
+                $model->quantity, 
+                // $model->waiting_time, 
+                // $model->pending_time, 
+                // $model->distributed_time, 
+                // $model->approved_time, 
+                $model->request_cancel_description, 
+                ($model->saler) ? $model->saler->name : '',
+                ($model->orderteam) ? $model->orderteam->name : '',
+                $model->isCancelledOrder() ? 'Cancelled' : 'Cancelling',
+            ];
+        }
+        $file = \Yii::createObject([
+            'class' => 'codemix\excelexport\ExcelFile',
+            'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
+            'sheets' => [
+                'Report by transaction' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    // 'heading' => $heading,
+                    'header' => $header,
+                    'footer' => $footer,
+                    'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+                    'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+                ],
+            ],
+        ]);
+        $file->send($fileName);
     }
 
 }
