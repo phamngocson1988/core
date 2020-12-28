@@ -222,11 +222,11 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                           <?php $nextForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated move-to-pending', 'order-id' => $model->id], 'action' => Url::to(['order/move-to-pending', 'id' => $model->id])]);?>
                           <div class="modal-body"> 
                             <p>Bạn có chắc chắn muốn chuyển đơn hàng <strong>#<?=$model->id;?></strong> sang trạng thái "Pending". Hãy chắc chắn rằng đơn hàng này đã được thanh toán</p>
-                            <p>Số tiền phải nạp: $ <?=number_format($model->total_price, 1);?></p>
+                            <p>Số tiền phải nạp: $ <?=number_format($model->sub_total_price, 1);?></p>
                             <?php if ($model->total_fee) : ?>
                             <p>Phí dịch vụ: $ <?=number_format($model->total_fee, 1);?></p>
                             <?php endif;?>
-                            <p>Tổng cộng: $ <?=number_format($model->total_price + $model->total_fee, 1);?></p>
+                            <p>Tổng cộng: $ <?=number_format($model->total_price, 1);?></p>
                             <?=$nextForm->field($model, 'payment_method', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_method' . $model->id]])->textInput()->label('Phương thức giao dịch');?>
                             <?=$nextForm->field($model, 'payment_id', ['inputOptions' => ['class' => 'form-control', 'id' => 'payment_id' . $model->id]])->textInput()->label('Số lệnh giao dịch');?>
                           </div>
