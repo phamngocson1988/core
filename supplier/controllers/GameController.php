@@ -128,6 +128,7 @@ class GameController extends Controller
             if (!$model) throw new Exception("Supplier chưa đăng ký game này", 1);
             $model->setScenario(SupplierGame::SCENARIO_STATUS);
             $model->status = SupplierGame::STATUS_DISABLED;
+            $model->auto_dispatcher = SupplierGame::AUTO_DISPATCHER_OFF;
             return $this->asJson(['status' => $model->save(), 'errors' => 'Error']);
         } catch (\Exception $e) {
             return $this->asJson(['status' => false, 'errors' => $e->getMessage()]);
@@ -142,7 +143,8 @@ class GameController extends Controller
                 'supplier_id' => Yii::$app->user->id,
                 'game_id' => $id
             ]);
-            if (!$model) throw new Exception("Supplier chưa đăng ký game này", 1);
+            if (!$model) throw new \Exception("Supplier chưa đăng ký game này", 1);
+            if ($model->isAutoDispatcher()) throw new \Exception("Không thể cập nhật giá vì đang ở chế độ tự động nhận đơn", 1);
             $oldPrice = $model->price;
             $model->setScenario(SupplierGame::SCENARIO_EDIT);
             if ($model->load($request->post())) {
