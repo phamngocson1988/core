@@ -97,46 +97,6 @@ if ($isAdvanceMode) $column++;
 
                     <?php if (Yii::$app->user->isAdvanceMode()) : ?>
                     <a href="#price-modal-<?=$model->id;?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Cập nhật giá" data-toggle="modal"><i class="fa fa-arrow-up"></i> Cập nhật giá </a>
-                    <?php if ($supplierGame->isAutoDispatcher()) : ?>
-                    <div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title">Cập nhật giá game <?=$model->title;?></h4>
-                          </div>
-                          
-                          <div class="modal-body"> 
-                            Bạn không thể thực hiện thao tác cập nhật giá, vui lòng liên hệ nhân viên hỗ trợ. Nếu điều này ảnh hưởng đến quyết định nhận đơn, vui lòng chọn <strong>Dừng nhận đơn</strong>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Tiếp tục nhận đơn</button>
-                            <a type="button" class="btn green link-action" href="<?=Url::to(['game/disable', 'id' => $model->id]);?>">Dừng nhận đơn</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <?php else : ?>
-                    <div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title">Cập nhật giá game <?=$model->title;?></h4>
-                          </div>
-                          <?php $priceForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated update-price-form', 'game-id' => $model->id], 'action' => Url::to(['game/price', 'id' => $model->id])]);?>
-                          <div class="modal-body"> 
-                            <?=$priceForm->field($supplierGame, 'price', ['inputOptions' => ['class' => 'form-control', 'id' => 'supplier-price-' . $model->id]])->textInput();?>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn green">Xác nhận</button>
-                          </div>
-                          <?php ActiveForm::end();?>
-                        </div>
-                      </div>
-                    </div>
-                    <?php endif;?>
                     <?php endif;?>
                   </td>
                 </tr>
@@ -150,6 +110,51 @@ if ($isAdvanceMode) $column++;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php if (Yii::$app->user->isAdvanceMode() && $models) : ?>
+<?php foreach ($models as $supplierGame) : ?>
+<?php $model = $supplierGame->game;?>
+<?php if ($supplierGame->isAutoDispatcher()) : ?>
+<div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Cập nhật giá game <?=$model->title;?></h4>
+      </div>
+      
+      <div class="modal-body" style="word-wrap: break-word"> 
+      Tạm thời bạn không thể thực hiện thao tác cập nhật giá, vui lòng liên hệ nhân viên hỗ trợ. Nếu điều này ảnh hưởng đến quyết định nhận đơn, vui lòng chọn <strong>Dừng nhận đơn</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Tiếp tục nhận đơn</button>
+        <a type="button" class="btn green link-action" href="<?=Url::to(['game/disable', 'id' => $model->id]);?>">Dừng nhận đơn</a>
+      </div>
+    </div>
+  </div>
+</div>
+<?php else : ?>
+<div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Cập nhật giá game <?=$model->title;?></h4>
+      </div>
+      <?php $priceForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated update-price-form', 'game-id' => $model->id], 'action' => Url::to(['game/price', 'id' => $model->id])]);?>
+      <div class="modal-body"> 
+        <?=$priceForm->field($supplierGame, 'price', ['inputOptions' => ['class' => 'form-control', 'id' => 'supplier-price-' . $model->id]])->textInput();?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn green">Xác nhận</button>
+      </div>
+      <?php ActiveForm::end();?>
+    </div>
+  </div>
+</div>
+<?php endif;?>
+<?php endforeach;?>
+<?php endif;?>
 <?php
 $script = <<< JS
 $(".link-action").ajax_action({
