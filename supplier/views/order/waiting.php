@@ -136,6 +136,34 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td col-tag="" class="center">
                     <a href='#accept<?=$model->id;?>' class="btn btn-xs blue tooltips" data-pjax="0" data-toggle="modal" data-container="body" data-original-title="Nhận xử lý đơn hàng"><i class="fa fa-check"></i></a>
                     <a href='<?=Url::to(['order/reject', 'id' => $model->id]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Từ chối đơn hàng"><i class="fa fa-times"></i></a>
+                    <div class="modal fade" id="accept<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header" style="border-bottom: none">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <?= Html::beginForm(['order/accept', 'id' => $model->id], 'POST', ['class' => 'accept-form']); ?>
+                        <input type="hidden" class="btn btn-default" name="action" >
+                        <div class="modal-body"> 
+                          <div class="row">
+                            <div class="col-md-12">
+                              + Chọn "nhận đơn" nếu bạn chưa xử lý đơn hàng.<br/>
+                              + Chỉ chọn "<span style="color:red; font-weight: bold;">Bắt đầu xử lý</span>" khi bạn đã sẵn sàng xử lý đơn hàng.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer" style="background-color: #dcfcff">
+                          <div class="col-md-12 text-center">
+                            <button type="submit" class="btn btn-default" name="approve">Nhận đơn</button>
+                            <button type="submit" class="btn dark btn-outline" name="process">Bắt đầu xử lý</button>
+                          </div>
+                        </div>
+                        <?= Html::endForm(); ?>
+                      </div>
+                      <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -157,38 +185,6 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<?php if (!$models) :?>
-<?php foreach ($models as $model) :?>
-<div class="modal fade" id="accept<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header" style="border-bottom: none">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-      </div>
-      <?= Html::beginForm(['order/accept', 'id' => $model->id], 'POST', ['class' => 'accept-form']); ?>
-      <input type="hidden" class="btn btn-default" name="action" >
-      <div class="modal-body"> 
-        <div class="row">
-          <div class="col-md-12">
-            + Chọn "nhận đơn" nếu bạn chưa xử lý đơn hàng.<br/>
-            + Chỉ chọn "<span style="color:red; font-weight: bold;">Bắt đầu xử lý</span>" khi bạn đã sẵn sàng xử lý đơn hàng.
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer" style="background-color: #dcfcff">
-        <div class="col-md-12 text-center">
-          <button type="submit" class="btn btn-default" name="approve">Nhận đơn</button>
-          <button type="submit" class="btn dark btn-outline" name="process">Bắt đầu xử lý</button>
-        </div>
-      </div>
-      <?= Html::endForm(); ?>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-<?php endforeach;?>
-<?php endif;?>
 <?php
 $script = <<< JS
 $(".accept-form button").on('click', function() {
