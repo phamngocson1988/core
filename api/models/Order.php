@@ -29,6 +29,7 @@ class Order extends \common\models\Order
             'total_price',
             'status',
             'created_at',
+            'completed_at',
             'username',
 			'password',
 			'quantity',
