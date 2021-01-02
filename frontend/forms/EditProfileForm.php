@@ -14,6 +14,7 @@ class EditProfileForm extends Model
     public $lastname;
     public $country;
     public $gender;
+    public $birthday;
 
     public function rules()
     {
@@ -26,6 +27,8 @@ class EditProfileForm extends Model
 
             ['country', 'trim'],
             ['gender', 'trim'],
+
+            ['birthday', 'safe'],
         ];
     }
 
@@ -41,6 +44,7 @@ class EditProfileForm extends Model
         $user->lastname = $this->lastname;
         $user->country = $this->country;
         $user->gender = $this->gender;
+        $user->birthday = $this->birthday;
         if (!$user->hasBadge(UserBadge::BADGE_PROFILE)) {
             $user->addBadge(UserBadge::BADGE_PROFILE, $user->id, 'Complete Profile');
             $user->plusPoint(100, 'Complete Profile');
@@ -60,6 +64,7 @@ class EditProfileForm extends Model
         $this->lastname = $user->lastname;
         $this->gender = $user->gender;
         $this->country = $user->country;
+        $this->birthday = $user->birthday;
     }
 
     public function fetchCountry()

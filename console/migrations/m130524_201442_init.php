@@ -19,6 +19,7 @@ class m130524_201442_init extends Migration
             'lastname' => $this->string(255),
             'country' => $this->string(64),
             'gender' => $this->string(1),
+            'birthday' => $this->date(),
             'avatar' => $this->integer(),
             'auth_key' => $this->string(32)->notNull(),
             'password_hash' => $this->string(255)->notNull(),

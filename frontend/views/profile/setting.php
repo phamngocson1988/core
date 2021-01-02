@@ -46,6 +46,16 @@ $user = Yii::$app->user->getIdentity();
 	                    'labelOptions' => ['class' => 'mb-2 text-uppercase'],
 	                    'inputOptions' => ['class' => 'form-control btn-block']
 	                  ])->dropdownList($editProfileForm->fetchGender(), ['prompt' => Yii::t('app', 'app', 'Select gender')]);?>
+
+                    <?= $form->field($editProfileForm, 'birthday', [
+                      'options' => ['class' => 'mb-3'],
+                      'labelOptions' => ['class' => 'mb-2 text-uppercase'],
+                      // 'inputOptions' => ['class' => 'form-control btn-block']
+                    ])->widget(\yii\jui\DatePicker::className(), [
+                      'dateFormat' => 'php:Y-m-d',
+                      'options' => ['class' => 'form-control btn-block', 'autocomplete' => 'off'],
+                      'clientOptions' => ['changeYear' => true, 'changeMonth' => true],
+                    ]) ?>
                   </div>
                 </div>
                 <div class="row">
