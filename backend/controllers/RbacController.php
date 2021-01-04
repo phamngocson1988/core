@@ -25,7 +25,7 @@ class RbacController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
+                        // 'roles' => ['admin'],
                     ],
                 ],
             ],
@@ -37,10 +37,63 @@ class RbacController extends Controller
         $auth = Yii::$app->authManager;
         $auth->removeAll();
 
+        // // User: admin
+        $form = new \backend\forms\SignupForm([
+            'name' => 'Administrator',
+            'username' => 'admin',
+            'email' => 'kinggems.huynhgia@gmail.com',
+            'password' => 'sZAsHWWe6zm5r73h'
+        ]);
+        $user = $form->signup();
+        if (!$user) die("Create user fail");
+
         // Role: admin
         $admin = $auth->createRole('admin');
         $admin->description = 'Admin';
         $auth->add($admin);
+        $auth->assign($admin, $user->id);
+
+        // Role: saler
+        $saler = $auth->createRole('saler');
+        $saler->description = 'Account Manager';
+        $auth->add($saler);
+
+        $sale_manager = $auth->createRole('sale_manager');
+        $sale_manager->description = 'Leader- Account Manager';
+        $auth->add($sale_manager);
+
+        $auth->addChild($sale_manager, $saler);
+        $auth->addChild($admin, $sale_manager);
+
+        // order team
+        $orderteam = $auth->createRole('orderteam');
+        $orderteam->description = 'Order Team Officer';
+        $auth->add($orderteam);
+
+        $orderteam_manager = $auth->createRole('orderteam_manager');
+        $orderteam_manager->description = 'Leader- Order Team';
+        $auth->add($orderteam_manager);
+
+        $auth->addChild($orderteam_manager, $orderteam);
+        $auth->addChild($admin, $orderteam_manager);
+
+        // marketing_officer
+        $marketing_officer = $auth->createRole('marketing_officer');
+        $marketing_officer->description = 'Marketing Officer';
+        $auth->add($marketing_officer);
+
+        $auth->addChild($admin, $marketing_officer);
+
+        // accounting
+        $accounting = $auth->createRole('accounting');
+        $accounting->description = 'Accountant';
+        $auth->add($accounting);
+        $auth->addChild($admin, $accounting);
+
+        // customer
+        $customer = $auth->createRole('customer');
+        $customer->description = 'Customer';
+        $auth->add($customer);
     }
 
     public function actionAssignAdmin($id)

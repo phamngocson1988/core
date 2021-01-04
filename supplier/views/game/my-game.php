@@ -98,7 +98,7 @@ if ($isAdvanceMode) $column++;
                     <?php if (Yii::$app->user->isAdvanceMode()) : ?>
                     <a href="#price-modal-<?=$model->id;?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Cập nhật giá" data-toggle="modal"><i class="fa fa-arrow-up"></i> Cập nhật giá </a>
                     <?php if ($supplierGame->isAutoDispatcher()) : ?>
-                    <div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                    <div class="modal fade" id="price-modal111-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
