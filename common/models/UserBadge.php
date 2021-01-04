@@ -10,6 +10,7 @@ class UserBadge extends ActiveRecord
     const BADGE_PROFILE = 'profile';
     const BADGE_COMPLAIN = 'complain';
     const BADGE_REVIEW = 'review';
+    const BADGE_BIRTHDAY = 'birthday';
     
     public static function tableName()
     {

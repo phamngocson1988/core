@@ -92,7 +92,7 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer(),
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
-            $alterBadge = "ALTER TABLE {{%user_badge}} MODIFY `badge` ENUM('profile', 'complain', 'review') NOT NULL";
+            $alterBadge = "ALTER TABLE {{%user_badge}} MODIFY `badge` ENUM('profile', 'complain', 'review', 'birthday') NOT NULL";
             $command = $this->db->createCommand($alterBadge);
             $command->execute();
         }

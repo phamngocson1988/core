@@ -46,21 +46,23 @@ class ProfileController extends Controller
         $request = Yii::$app->request;
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 10);
-        $command = UserBadge::find()
-        ->where(['user_id' => Yii::$app->user->id])
-        ->orderBy(['id' => SORT_DESC]);
+        $command = UserBadge::find()->where(['user_id' => Yii::$app->user->id]);
         $badge = $request->get('badge');
         if ($badge) {
             $command->andWhere(['badge' => $badge]);
         }
-
+        $command->orderBy(['id' => SORT_DESC]);
         $models = $command->all();
         $total = $command->count();
         $html = $this->renderPartial('badge', ['models' => $models]);
-        return $this->asJson(['status' => true, 'data' => [
-            'items' => $html,
-            'total' => $total
-        ]]);
+        return $this->asJson([
+            'status' => true, 
+            'data' => [
+                'items' => $html,
+                'total' => $total,
+                'raw' => $command->createCommand()->getRawSql()
+            ]
+        ]);
     }
 
     public function actionFavorite()

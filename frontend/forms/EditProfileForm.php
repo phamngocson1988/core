@@ -49,6 +49,10 @@ class EditProfileForm extends Model
             $user->addBadge(UserBadge::BADGE_PROFILE, $user->id, 'Complete Profile');
             $user->plusPoint(100, 'Complete Profile');
         }
+        if (!$user->hasBadge(UserBadge::BADGE_BIRTHDAY) && $user->birthday) {
+            $user->addBadge(UserBadge::BADGE_BIRTHDAY, $user->id, 'Complete Birthday');
+            $user->plusPoint(100, 'Complete Birthday');            
+        }
         return $user->save();
     }
 

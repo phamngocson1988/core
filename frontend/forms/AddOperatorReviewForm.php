@@ -73,8 +73,8 @@ class AddOperatorReviewForm extends Model
         ])->with('user')->all();
         $emailSubscribers = [];
         foreach ($subscribedItems as $item) {
-            $user = $item->user;
-            $emailSubscribers[] = $user->email;
+            $subscribedUser = $item->user;
+            $emailSubscribers[] = $subscribedUser->email;
         }
 
         $review = new OperatorReview();
