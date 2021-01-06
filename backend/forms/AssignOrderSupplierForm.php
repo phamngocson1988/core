@@ -59,10 +59,31 @@ class AssignOrderSupplierForm extends Model
     public function validateOrder($attribute, $params = []) 
     {
         $order = $this->getOrder();
-        if (!$order) $this->addError($attribute, 'Đơn hàng không tồn tại');
-        if (!in_array($order->status, [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_PARTIAL])) $this->addError($attribute, sprintf("Không thể gửi qua nhà cung cấp vì đơn hàng %s đang ở trạng thái %s", $order->id, $order->status));
-
-        if ($order->supplier) $this->addError($attribute, 'Đơn hàng đã có nhà cung cấp');
+        // Check whether this order exist.
+        if (!$order) {
+            return $this->addError($attribute, 'Đơn hàng không tồn tại');
+        }
+        // Check order status
+        $validStatus = in_array($order->status, [
+            Order::STATUS_PENDING,
+            Order::STATUS_PROCESSING,
+            Order::STATUS_PARTIAL,
+        ]);
+        if (!$validStatus) {
+            return $this->addError($attribute, sprintf("Đơn hàng đang ở trạng thái %s nên không thể gửi NCC xử lý", $order->status));
+        }
+        // Check whether this order has supplier
+        $processSupplier = OrderSupplier::find()->where([
+            'order_id' => $order->id,
+            'status' => [
+                OrderSupplier::STATUS_REQUEST,
+                OrderSupplier::STATUS_APPROVE,
+                OrderSupplier::STATUS_PROCESSING,
+            ]
+        ])->one();
+        if ($processSupplier) {
+            return $this->addError($attribute, sprintf("Order đã có nhà cung cấp (%s) xử lý", $processSupplier->supplier_id));
+        }
     }
 
     public function validateSupplier($attribute, $params = [])

@@ -27,9 +27,32 @@ class DispatchOrderForm extends ActionForm
     public function validateOrder($attribute, $params = [])
     {
         $order = $this->getOrder();
+        // Check whether this order exist.
         if (!$order) {
             return $this->addError($attribute, 'Order is not exist');
         }
+        // Check order status
+        $validStatus = in_array($order->status, [
+            Order::STATUS_PENDING,
+            Order::STATUS_PROCESSING,
+            Order::STATUS_PARTIAL,
+        ]);
+        if (!$validStatus) {
+            return $this->addError($attribute, sprintf("Đơn hàng đang ở trạng thái %s nên không thể gửi NCC xử lý", $order->status));
+        }
+        // Check whether this order has supplier
+        $processSupplier = OrderSupplier::find()->where([
+            'order_id' => $order->id,
+            'status' => [
+                OrderSupplier::STATUS_REQUEST,
+                OrderSupplier::STATUS_APPROVE,
+                OrderSupplier::STATUS_PROCESSING,
+            ]
+        ])->one();
+        if ($processSupplier) {
+            return $this->addError($attribute, sprintf("Order đã có nhà cung cấp (%s) xử lý", $processSupplier->supplier_id));
+        }
+
         $suppliers = $this->getSuppliers();
         if (!count($suppliers)) {
             return $this->addError($attribute, 'There is no suppliers register this shop game');
@@ -103,7 +126,9 @@ class DispatchOrderForm extends ActionForm
             // Count current number of orders for each supplier
             $supplierIds = array_keys($suppliers);
             foreach ($suppliers as $supplierId => $supplier) {
-                $suppliers[$supplierId]['num_order'] = OrderSupplier::find()->where([
+                // Get all order this supplier is supporting for
+                $supplierOrders = OrderSupplier::find()
+                ->where([
                     'game_id' => $order->game_id,
                     'supplier_id' => $supplierId,
                     'status' => [
@@ -111,7 +136,18 @@ class DispatchOrderForm extends ActionForm
                         OrderSupplier::STATUS_APPROVE,
                         OrderSupplier::STATUS_PROCESSING,]                     
                     ]
-                )->count();
+                )
+                ->with('order')
+                ->all();
+                // Filter out order is in pending/waiting information (has state data, only happen when Supplier approved order)
+                $supplierOrders = array_filter($supplierOrders, function( $supplierOrder ) {
+                    if ($supplierOrder->status === OrderSupplier::STATUS_APPROVE) {
+                        $order = $supplierOrder->order;
+                        return !$order->state; //Filter out order is in pending/waiting information
+                    }
+                    return true;
+                });
+                $suppliers[$supplierId]['num_order'] = count($supplierOrders);
             }
 
             // Filter out suppliers which are enough orders

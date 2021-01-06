@@ -25,7 +25,7 @@ class RbacController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        // 'roles' => ['admin'],
+                        'roles' => ['admin'],
                     ],
                 ],
             ],
@@ -34,6 +34,7 @@ class RbacController extends Controller
 
     public function actionInitRole()
     {
+        die('do nothing');
         $auth = Yii::$app->authManager;
         $auth->removeAll();
 

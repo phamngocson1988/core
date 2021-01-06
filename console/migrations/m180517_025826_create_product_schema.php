@@ -66,6 +66,8 @@ class m180517_025826_create_product_schema extends Migration
             $alter = "ALTER TABLE {{%game}} MODIFY `status` ENUM('Y', 'N', 'D') NOT NULL DEFAULT 'Y'";
             $command = $this->db->createCommand($alter);
             $command->execute();
+            $gameIndex = "CREATE INDEX index_auto_dispatcher ON {{%game}} (`auto_dispatcher`)";
+            $this->db->createCommand($gameIndex)->execute();
         }
 
         $this->createTable('{{%game_image}}', [

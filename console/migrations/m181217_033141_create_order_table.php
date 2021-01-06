@@ -102,6 +102,8 @@ class m181217_033141_create_order_table extends Migration
 
             $statusIndex = "CREATE INDEX index_status ON {{%order}} (`status`)";
             $this->db->createCommand($statusIndex)->execute();
+            $gameIndex = "CREATE INDEX index_game ON {{%order}} (`game_id`)";
+            $this->db->createCommand($gameIndex)->execute();
         }
 
         $this->createTable('{{%order_image}}', [

@@ -87,6 +87,15 @@ class m191210_171926_supplier extends Migration
             $orderSupplierStatus = "ALTER TABLE {{%order_supplier}} MODIFY `status` ENUM('request','approve','reject','retake','stop','processing','completed','confirmed') NOT NULL DEFAULT 'request'";
             $command = $this->db->createCommand($orderSupplierStatus);
             $command->execute();
+
+            $statusIndex = "CREATE INDEX index_status ON {{%order_supplier}} (`status`)";
+            $this->db->createCommand($statusIndex)->execute();
+            $orderIndex = "CREATE INDEX index_order ON {{%order_supplier}} (`order_id`)";
+            $this->db->createCommand($orderIndex)->execute();
+            $supplierIndex = "CREATE INDEX index_supplier ON {{%order_supplier}} (`supplier_id`)";
+            $this->db->createCommand($supplierIndex)->execute();
+            $gameIndex = "CREATE INDEX index_game ON {{%order_supplier}} (`game_id`)";
+            $this->db->createCommand($gameIndex)->execute();
         }
 
         $this->createTable('{{%supplier_bank}}', [

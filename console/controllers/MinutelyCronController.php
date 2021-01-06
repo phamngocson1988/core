@@ -12,6 +12,7 @@ class MinutelyCronController extends Controller
         $track = new Tracking();
         $track->description = sprintf("Run dispatcher order at %s", date('Y-m-d H:i:s'));
         $form = new \console\forms\OrderDispatcherForm();
+        $track->save();
         return $form->run();
     }
 
@@ -20,6 +21,7 @@ class MinutelyCronController extends Controller
         $track = new Tracking();
         $track->description = sprintf("Run Retaken order at %s", date('Y-m-d H:i:s'));
         $form = new \console\forms\OrderRetakenForm();
+        $track->save();
         return $form->run();
     }
 }
