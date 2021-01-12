@@ -5,6 +5,7 @@ use Yii;
 use yii\rest\Controller;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 use api\models\Order;
 
 class OrderController extends Controller
@@ -15,6 +16,12 @@ class OrderController extends Controller
 	    $behaviors['authenticator'] = [
 	        'class' => HttpBearerAuth::className(),
 	    ];
+	    $behaviors['verbs'] = [
+            'class' => VerbFilter::className(),
+            'actions' => [
+                'cancel' => ['post'],
+            ],
+        ];
 	    return $behaviors;
 	}
 
@@ -29,4 +36,20 @@ class OrderController extends Controller
         }
 		return $order;
 	}
+
+	public function actionCancel($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \api\forms\CancelOrderForm(['id' => $id]);
+        if ($model->validate() && $model->cancel()) {
+            return ['status' => true];
+        } else {
+            $message = $model->getFirstErrors();
+            $message = reset($message);
+            return [
+                'status' => false,
+                'error' => $message
+            ];
+        }
+    }
 }
