@@ -8,7 +8,6 @@ use yii\helpers\Url;
 
 class PushNotificationController extends Controller
 {
-    public $layout = "main.tpl";
 
     public function actionList()
     {
@@ -16,9 +15,9 @@ class PushNotificationController extends Controller
         $list = (new Query())
             ->from('{{%device_notifications}}')
             ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
-            ->andWhere(['>=', 'created_at', strtotime('-24 hours')])
+            ->andWhere(['>=', 'created_at', strtotime('-10 minutes')])
             ->orderBy(['id' => SORT_DESC])
-            ->limit(1)
+            ->limit(3)
             ->all();
         $notifs = $this->prepareNotifications($list);
         return $this->ajaxResponse(['list' => $notifs]);

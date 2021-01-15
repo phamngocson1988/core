@@ -4,7 +4,7 @@ namespace frontend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\User;
+use frontend\models\User;
 
 class PasswordResetRequestForm extends Model
 {

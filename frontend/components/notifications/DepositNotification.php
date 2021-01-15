@@ -36,9 +36,10 @@ class DepositNotification extends Notification
 
     public function getIcon()
     {
+        $setting = Yii::$app->settings;
         switch($this->key){
             case self::NOTIFY_SALER_NEW_ORDER:
-                return 'https://kinggems.us/images/logo_icon.png';
+                return $setting->get('ApplicationSettingForm', 'logo', '');
 
         }
     }

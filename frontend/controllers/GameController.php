@@ -8,9 +8,22 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 use frontend\models\Game;
+use frontend\models\GameGroup;
+use frontend\models\GameSetting;
+use frontend\models\GameMethod;
+use frontend\models\GameVersion;
+use frontend\models\GamePackage;
 use frontend\models\Promotion;
+use frontend\models\GameCategoryItem;
+
+// form
+use frontend\forms\FetchGameForm;
 use frontend\components\cart\CartItem;
+use frontend\models\GameSubscriber;
 
 /**
  * GameController
@@ -19,70 +32,167 @@ class GameController extends Controller
 {
     public function actionIndex()
     {
-        $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'game.index';
         $request = Yii::$app->request;
-        $q = $request->get('q');
-        $sort = $request->get('sort', null);
-        $command = Game::find();
-        if ($q) {
-            $command->andWhere(['like', 'title', $q]);
-        }
-        $orderBy = ['soldout' => SORT_ASC];
-        if ($sort == 'desc') {
-            $orderBy['title'] = SORT_DESC;
-        } elseif ($sort == 'asc') {
-            $orderBy['title'] = SORT_ASC;
-        } else {
-            $orderBy['id'] = SORT_DESC;
-        }
-        $command->orderBy($orderBy);
+        $form = new FetchGameForm([
+            'q' => $request->get('q'),
+            'category_id' => $request->get('category_id'),
+        ]);
+        $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->all();
-        $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
-            'promotions' => $promotions,
-            'q' => $q,
-            'sort' => $sort
+            'search' => $form
         ]);
     }
     public function actionView($id)
     {
     	$request = Yii::$app->request;
-        $game = CartItem::findOne($id);
-        if (!$game) throw new BadRequestHttpException('Can not find the game');
-        $game->setScenario(CartItem::SCENARIO_ADD_CART);
-        if ($game->load($request->post()) && $game->validate()) {
-            if ($request->isAjax) {
-                return $this->asJson(['status' => true, 'data' => [
-                    'origin' => number_format($game->getTotalOriginalPrice(), 1),
-                    'price' => number_format($game->getTotalPrice(), 1),
-                    'unit' => number_format($game->getTotalUnit()),
-                ]]);
-            }
-            $cart = Yii::$app->cart;
-            $cart->clear();
-            $cart->add($game);
-            return $this->redirect(['cart/index']);
+        $model = CartItem::findOne($id);
+
+        if (!$model->group_id) {
+            $games = [];
+            $methods = $versions = $packages = [];
+        } else {
+            $group = GameGroup::findOne($model->group_id);
+            $games = CartItem::find()->where(['group_id' => $model->group_id])->all();
+            $methodIds = ArrayHelper::getColumn($games, 'method');
+            $methodIds = array_filter($methodIds);
+            $methodIds = array_unique($methodIds);
+            $methods = GameMethod::findAll($methodIds);
+
+            $versionIds = ArrayHelper::getColumn($games, 'version');
+            $versionIds = array_filter($versionIds);
+            $versionIds = array_unique($versionIds);
+            $versions = GameVersion::findAll($versionIds);
+
+            $packageIds = ArrayHelper::getColumn($games, 'package');
+            $packageIds = array_filter($packageIds);
+            $packageIds = array_unique($packageIds);
+            $packages = GamePackage::findAll($packageIds);
         }
-        if ($request->isAjax) {
-            return $this->asJson(['status' => false, 'game' => $game, 'error' => $game->getErrorSummary(true)]);
+
+        // Game settings
+        $settingVersionMapping = ArrayHelper::map($versions, 'id', 'title');
+        $settingPackageMapping = ArrayHelper::map($packages, 'id', 'title');
+
+        $mapping = [];
+        foreach ($games as $game) {
+            $gameInfo = [
+                'viewUrl' => Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug], true),
+                'cartUrl' => Url::to(['cart/add', 'id' => $game->id], true),
+                'calculateUrl' => Url::to(['cart/calculate', 'id' => $game->id], true),
+                'title' => $game->title,
+                'content' => $game->content,
+                'image' => $game->getImageUrl(),
+                'save' => sprintf('save %s', number_format($game->getSavedPrice())) . '%',
+            ];
+            $mapping[$game->method][$game->version][$game->package] = $gameInfo;
         }
-        $promotions = Promotion::find()->andWhere(['rule_name' => 'specified_games'])->all();
+
+        
+        // other games
+        $relatedGames = [];
+        $category = null;
+        if ($model->hasCategory()) {
+            $categories = $model->categories;
+            $categoryIds = ArrayHelper::getColumn($categories, 'id');
+            $category =  reset($categories);
+            $categoryGames = GameCategoryItem::find()
+            ->where(['in', 'category_id', $categoryIds])
+            ->andWhere(['<>', 'game_id', $id])
+            ->limit(5)->all();
+            $gameIds = ArrayHelper::getColumn($categoryGames, 'game_id');
+            $relatedGames = Game::findAll($gameIds);
+        }
+
+        // reseller
         $is_reseller = false;
         if (!Yii::$app->user->isGuest) {
             $user = Yii::$app->user->identity;
             $is_reseller = $user->isReseller();
         }
 
+        // Subscribe
+        $isSubscribe = Yii::$app->user->isGuest ? false : GameSubscriber::find()->where([
+            'user_id' => Yii::$app->user->id,
+            'game_id' => $id
+        ])->exists();
+
     	return $this->render('view', [
-            'game' => $game,
-            'promotions' => $promotions,
-            'is_reseller' => $is_reseller
+            'model' => $model,
+            'methods' => $methods,
+            'mapping' => json_encode($mapping),
+            'settingVersionMapping' => json_encode($settingVersionMapping),
+            'settingPackageMapping' => json_encode($settingPackageMapping),
+            'relatedGames' => $relatedGames,
+            'category' => $category,
+            'is_reseller' => $is_reseller,
+            'has_group' => (int)$model->group_id,
+            'isSubscribe' => $isSubscribe
+        ]);
+    }
+
+    public function actionHotDeal()
+    {
+        $form = new FetchGameForm(['hot_deal' => Game::HOT_DEAL]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('index', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form
+        ]);
+    }
+
+    public function actionTopGrossing()
+    {
+        $form = new FetchGameForm(['top_grossing' => Game::TOP_GROSSING]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('top-grossing', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form
+        ]);
+    }
+
+    public function actionNewTrending()
+    {
+        $form = new FetchGameForm(['new_trending' => Game::NEW_TRENDING]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('new-trending', [
+            'models' => $models,
+            'pages' => $pages,
+            'search' => $form
+        ]);
+    }
+
+    public function actionQuick($id, $slug)
+    {
+        $request = Yii::$app->request;
+        $model = CartItem::findOne($id);
+        $versions = GameSetting::fetchVersion();
+        $packages = GameSetting::fetchPackage();
+        $version = ArrayHelper::getValue($versions, $model->version, '');
+        $package = ArrayHelper::getValue($packages, $model->package, '');
+        $user = Yii::$app->user->getIdentity();
+        $balance = $user->getWalletAmount();
+        return $this->render('quick', [
+            'model' => $model,
+            'version' => $version,
+            'package' => $package,
+            'balance' => $balance,
         ]);
     }
 }

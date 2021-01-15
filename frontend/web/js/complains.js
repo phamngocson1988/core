@@ -8,6 +8,7 @@ function Complains(opts) {
         pollInterval: 10000,
         xhrTimeout: 2000,
     }; 
+    this.interval = null;
 
     //constructor
     this.init = function (opts) {
@@ -24,25 +25,48 @@ function Complains(opts) {
         this.options = $.extend(this.options, opts);
         this.showList();
         var that = this;
-        setInterval(function(){ 
+        this.interval = setInterval(function(){ 
             that.showList(); 
         }, this.options.pollInterval);
     };
 
     this.renderRow = function (object) {
-        var className = object.is_customer ? 't-report-me' : 't-report-you';
-        var html =  '<span class="t-report-row" data-id="'+object.id+'">' +
-                    '<div class="t-report-text '+className+'">' +
-                    '<div style="color: grey; font-size: 10px; font-style: italic;">'+object.senderName+'</div>' +
-                    '<div>'+object.content+'</div>' +
-                    '<div class="timeline-body-time" style="color: grey; font-size: 10px; font-style: italic; float: right;">'+object.created_at+'</div>' +
-                    '</div>' +
-                    '</span>';
+        var html = '';
+        if (!object.is_customer) {
+            var content = '';
+            if (object.content_type == 'image') {
+                content = '<img src="' + object.content + '"/>';
+            } else {
+                content ='<div class="bg-light rounded py-2 px-3 mb-2">' + 
+                    '<p class="text-small mb-0 text-muted">'+object.content+'</p>' +
+                '</div>';
+            }
+            html = '<div class="media w-50 mb-3 t-report-row" data-id="'+object.id+'">' +
+          '<img src="/images/icon/young.svg" alt="user" width="50" class="rounded-circle">' +
+          '<div class="media-body ml-3">' + content + 
+            '<p class="small text-muted">'+ object.created_at +'</p>' + 
+          '</div>' + 
+        '</div>';
+        } else {
+            var content = '';
+            if (object.content_type == 'image') {
+                content = '<img src="' + object.content + '"/>';
+            } else {
+                content ='<div class="bg-primary rounded py-2 px-3 mb-2">' +
+                    '<p class="text-small mb-0 text-white">'+object.content+'</p>' +
+                '</div>';
+            }
+            html = '<div class="media w-50 ml-auto mb-3 t-report-row" data-id="'+object.id+'">' +
+          '<div class="media-body">' + content +
+            '<p class="small text-muted timeline-body-time">'+object.created_at+'</p>' +
+          '</div>' +
+        '</div>';
+        }
         return $(html);
     }
 
     this.showList = function () {
-        var list = $(this.options.id);
+        var list = $(this.options.id).find(this.options.container);
         var that = this;
         $.ajax({
             url: this.options.url,
@@ -51,15 +75,14 @@ function Complains(opts) {
             timeout: opts.xhrTimeout,
             success: function(data) {
                 $.each(data.list, function (index, object) {
-                    if(list.find('>span.t-report-row[data-id="' + object.id + '"]').length){
-                        list.find('>span.t-report-row[data-id="' + object.id + '"]').find('.timeline-body-time').html(object.created_at);
+                    if(list.find('>div.t-report-row[data-id="' + object.id + '"]').length){
+                        list.find('>div.t-report-row[data-id="' + object.id + '"]').find('.timeline-body-time').html(object.created_at);
                         return;
                     }
 
                     var item = that.renderRow(object);
                     list.append(item);
                 });
-                that.scrollDown();
             }
         });
     }

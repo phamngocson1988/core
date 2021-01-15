@@ -2,54 +2,21 @@
 namespace frontend\components\payment\clients;
 
 use Yii;
-use yii\base\Model;
-use yii\web\BadRequestHttpException;
-use yii\base\Exception;
-use frontend\components\payment\PaymentGateway;
 
-class OfflinePayment extends PaymentGateway
+class OfflinePayment extends \frontend\models\Paygate
 {
-    public $identifier = 'offline';
-    public $type = 'offline';
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}
 
-    public function loadConfig()
-    {
-        $settings = Yii::$app->settings;
-    }
+	public function getPaymentType()
+	{
+		return $this->paygate_type;
+	}
 
-    protected function loadData()
-    {
-    }
-
-    protected function sendRequest()
-    {
-        return $this->doSuccess();
-    }
-    
-    protected function verify($response)
-    {
-        
-    }
-
-    public function cancelPayment()
-    {
-        return true;
-    }
-
-    public function doSuccess()
-    {
-        $refId = $this->getReferenceId();
-        return $this->redirect($this->getSuccessUrl(['ref' => $refId]));
-    }
-
-    public function doError()
-    {
-        return $this->redirect($this->getErrorUrl());
-    }
-
-    public function getFee($total)
-    {
-        return 0;
-    }
-
+	public function getCurrency()
+	{
+		return $this->currency;
+	}
 }

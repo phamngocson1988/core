@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use Yii;
 use yii\db\ActiveQuery;
 
 class Game extends \common\models\Game
@@ -10,37 +11,40 @@ class Game extends \common\models\Game
 		return new GameQuery(get_called_class());
 	}
 
-	public function findAvailablePromotions($promotions)
-	{
-		$gameId = $this->id;
-		$forGames = array_filter($promotions, function($promotion) use ($gameId) {
-			return $promotion->canApplyGame($gameId);
-		});
-		return $forGames;
-	}
-
-	public function findTheBestPromotion($promotions)
-	{
-		$forGames = $this->findAvailablePromotions($promotions);
-		if (empty($forGames)) return null;
-		$quantity = 0.5;
-		$amount = $this->getPrice() * $quantity;
-		usort($forGames, function($p1, $p2) use ($amount) {
-			$a1 = $p1->calculateBenifit($amount);
-			$a2 = $p2->calculateBenifit($amount);
-			if ($a1 == $a2) return 0;
-		    return ($a1 < $a2) ? -1 : 1;
-		});
-		return reset($forGames);
-	}
-
-    public function getImageUrl($size = null, $default = '/images/no-img.png')
+    public function getImageUrl($size = null, $default = '/images/post-item01.jpg')
     {
         $image = $this->image;
         if ($image) {
             return $image->getUrl($size);
         }
         return $default;
+    }
+
+    public function getPrice()
+    {
+        $flashsale = $this->getFlashSalePrice();
+        if ($flashsale) return $flashsale->price;
+        return parent::getPrice();
+    }   
+
+    public function getResellerPrice($level = User::RESELLER_LEVEL_1)
+    {
+        $flashsale = $this->getFlashSalePrice();
+        if ($flashsale) return $flashsale->price;
+        return parent::getResellerPrice($level);
+    }
+
+    public function getFlashSalePrice() 
+    {
+        $now = date('Y-m-d H:i:s');
+        $flashSaleTable = FlashSale::tableName();
+        $flashSaleGameTable = FlashSaleGame::tableName();
+        return FlashSaleGame::find()
+        ->innerJoin($flashSaleTable, "{$flashSaleTable}.id = {$flashSaleGameTable}.flashsale_id")
+        ->where(['<=', "{$flashSaleTable}.start_from", $now])
+        ->andWhere(['>=', "{$flashSaleTable}.start_to", $now])
+        ->andWhere(["{$flashSaleGameTable}.game_id" => $this->id])
+        ->one();
     }
 }
 

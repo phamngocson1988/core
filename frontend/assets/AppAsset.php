@@ -5,28 +5,32 @@ namespace frontend\assets;
 use yii\web\AssetBundle;
 
 /**
- * Main frontend application asset bundle.
+ * Main website application asset bundle.
  */
 class AppAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/font-awesome-all.css',
-        'css/reset.css',
-        'css/layout.css',
-        'css/jquery.bxslider.css',
+        'css/slick-theme.css',
+        'css/slick.css',
+        'css/intlTelInput.css',
+        'css/slimselect.min.css',
+        'css/aos.css',
+        'css/main.css',
         'css/jquery.fancybox.min.css',
-        'css/ti-style.css',
         'css/theme.css',
-        'css/overlay.css',
-        'css/media.css',
     ];
     public $js = [
-        'js/jquery.bxslider.min.js',
-        'js/ajax_action.js',
+        'js/vendor/modernizr-2.8.3-respond-1.4.2.min.js',
+        ['js/vendor/popper.min.js', 'position' => \yii\web\View::POS_HEAD ],
+        'js/vendor/slick.min.js',
+        'js/vendor/intlTelInput.js',
+        'js/vendor/slimselect.min.js',
+        'js/vendor/aos.js',
+        'js/vendor/main.js',
         'js/jquery.fancybox.min.js',
-        'js/sweetalert.min.js',
+        'js/ajax_action.js',
         'js/function.js',
     ];
     public $depends = [

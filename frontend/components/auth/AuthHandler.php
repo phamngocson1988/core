@@ -6,7 +6,7 @@ use frontend\models\Auth;
 use frontend\models\User;
 use yii\authclient\ClientInterface;
 use yii\helpers\ArrayHelper;
-use website\forms\SignupForm;
+use frontend\forms\SignupForm;
 
 /**
  * AuthHandler handles successful authentication via Yii auth component

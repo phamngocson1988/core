@@ -173,7 +173,7 @@ class OrderNotification extends Notification
 
         }
 
-        $this->order->log(sprintf("frontend notification mail %s to %s", $this->key, $toEmail));
+        $this->order->log(sprintf("website notification mail %s to %s", $this->key, $toEmail));
         $message = $mailer->compose($template, array_merge([
             'user' => $user,
             'order' => $this->order,

@@ -28,7 +28,7 @@ class NotificationsAsset extends \webzop\notifications\NotificationsAsset
      * @inheritdoc
      */
     public $css = [
-        'css/notifications.css',
+        // 'css/notifications.css',
     ];
 
     /**

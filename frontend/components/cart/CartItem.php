@@ -6,121 +6,66 @@ use yii2mod\cart\models\CartItemInterface;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use frontend\models\Game;
+use frontend\models\Promotion;
 
 class CartItem extends Game implements CartItemInterface
 {
-    public $quantity;
+    const SCENARIO_CALCULATE_CART = 'SCENARIO_CALCULATE_CART';
+    const SCENARIO_ADD_CART = 'SCENARIO_ADD_CART';
+    const SCENARIO_UPDATE_CART = 'SCENARIO_UPDATE_CART';
+    const SCENARIO_BULK_CART = 'SCENARIO_BULK_CART';
+
+    public $quantity = 1;
     public $username;
     public $password;
     public $character_name;
     public $recover_code;
+    public $recover_file_id;
     public $server;
     public $note;
-    public $platform;
     public $login_method;
+    public $voucher;
+    public $currency;
     public $raw;
-    public $reception_email;
-    /* Saler */
+    public $bulk;
+
+    // Saler
     public $saler_code;
-    public $unit_price;
-    public $amount;
 
-    const SCENARIO_ADD_CART = 'add_cart';
-    const SCENARIO_EDIT_CART = 'edit_cart';
-    const SCENARIO_INFO_CART = 'info_cart';
-    const SCENARIO_RECEPTION_CART = 'reception_cart';
-    const SCENARIO_IMPORT_CART = 'import_cart';
-    const SCENARIO_IMPORT_RAW = 'import_raw';
-
-    public static $quantites = [
-        '0.5' => 0.5, 
-        1 => 1, 
-        '1.5' => 1.5, 
-        2 => 2, 
-        '2.5' => 2.5, 
-        3 => 3, 
-        '3.5' => 3.5, 
-        4 => 4, 
-        '4.5' => 4.5, 
-        5 => 5, 
-        '5.5' => 5.5, 
-        6 => 6, 
-        '6.5' => 6.5, 
-        7 => 7, 
-        '7.5' => 7.5, 
-        8 => 8, 
-        '8.5' => 8.5, 
-        9 => 9, 
-        '9.5' => 9.5, 
-        10 => 10, 
-        '10.5' => 10.5, 
-        11 => 11, 
-        '11.5' => 11.5, 
-        12 => 12, 
-        '12.5' => 12.5, 
-        13 => 13, 
-        '13.5' => 13.5, 
-        14 => 14,
-        '14.5' => 14.5,
-        15 => 15,
-        '15.5' => 15.5,
-        16 => 16,
-        '16.5' => 16.5,
-        17 => 17,
-        '17.5' => 17.5,
-        18 => 18,
-        '18.5' => 18.5,
-        19 => 19,
-        '19.5' => 19.5,
-        20 => 20,
-        25 => 25,
-        30 => 30,
-        35 => 35,
-        40 => 40,
-        45 => 45,
-        50 => 50,
-    ];
-
-    public function init()
-    {
-        $this->quantity = ($this->quantity > 0) ? $this->quantity : 1;
-        $this->platform = ($this->platform) ? $this->platform : 'android';
-    }
+    protected $_game;
+    protected $_promotion;
 
     public function scenarios()
     {
         return [
-            self::SCENARIO_ADD_CART => ['id', 'quantity'],
-            self::SCENARIO_EDIT_CART => ['id', 'quantity'],
-            self::SCENARIO_INFO_CART => ['id', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note', 'saler_code'],
-            self::SCENARIO_IMPORT_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'platform', 'login_method', 'server', 'recover_code', 'note'],
-            self::SCENARIO_RECEPTION_CART => ['id', 'reception_email'],
-            self::SCENARIO_IMPORT_RAW => ['id', 'raw', 'quantity'],
+            self::SCENARIO_CALCULATE_CART => ['id', 'quantity', 'voucher', 'currency'],
+            self::SCENARIO_ADD_CART => ['id', 'quantity', 'currency'],
+            self::SCENARIO_UPDATE_CART => ['id', 'quantity', 'username', 'password', 'character_name', 'login_method', 'server', 'recover_code', 'recover_file_id', 'note', 'voucher', 'saler_code'],
+            self::SCENARIO_BULK_CART => ['id', 'quantity', 'raw', 'bulk'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['id'], 'required'],
-            [['quantity'], 'required', 'on' => [self::SCENARIO_EDIT_CART, self::SCENARIO_ADD_CART, self::SCENARIO_IMPORT_CART, self::SCENARIO_IMPORT_RAW]],
             ['quantity', 'number'],
+            [['server', 'note', 'recover_code', 'recover_file_id', 'voucher', 'currency', 'bulk', 'saler_code'], 'trim'],
+            ['voucher', 'validateVoucher'],
+            [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
+            [['quantity', 'raw'], 'required', 'on' => self::SCENARIO_BULK_CART],
 
-            [['username', 'password', 'character_name', 'platform'], 'required', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
-            [['server', 'note', 'login_method', 'recover_code'], 'trim', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART]],
             ['recover_code', 'required', 'whenClient' => "function (attribute, value) {
-                return $('#login_method').val() != 'account';
-                return ['facebook', 'google'].includes($('#login_method').val());
+                var loginMethod = $('#login_method').val();
+                loginMethod.trim();
+                if (!loginMethod) return false;
+                return ['facebook', 'google'].includes(loginMethod);
             }",
             'when' =>  [$this, 'validateRecoverCode'],
-            'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART],
+            'on' => [self::SCENARIO_UPDATE_CART],
             'message' => 'Recover code is required in case you choose facebook/google'
             ],
-            ['recover_code', 'match', 'pattern' => '/^\d{8}(\s\d{8})*$/i', 'on' => [self::SCENARIO_INFO_CART, self::SCENARIO_IMPORT_CART], 'message' => 'Recovery codes are invalid.'],
+            ['recover_code', 'match', 'pattern' => '/^\d{8}(\s\d{8})*$/i', 'on' => [self::SCENARIO_UPDATE_CART], 'message' => 'Recovery codes are invalid.'],
 
-            ['reception_email', 'required', 'on' => self::SCENARIO_RECEPTION_CART],
-            ['saler_code', 'trim', 'on' => self::SCENARIO_INFO_CART],
-            ['raw', 'required', 'on' => self::SCENARIO_IMPORT_RAW],
         ];
     }
 
@@ -129,45 +74,141 @@ class CartItem extends Game implements CartItemInterface
         return in_array($model->login_method, ['facebook', 'google']);
     }
 
-    public function getTotalPrice()
+    public function fetchLoginMethod()
     {
-        return $this->getPrice() * (float)$this->quantity;
+        return [
+            'facebook' => 'Facebook',
+            'google' => 'Google',
+            'account' => 'Game Account',
+            'other' => 'Other Method'
+        ];
     }
 
-    public function getPrice()
+    public function fetchPlatform()
     {
-        if (Yii::$app->user->isGuest) return parent::getPrice();
-        $user = Yii::$app->user->getIdentity();
-        if (!$user->isReseller()) return parent::getPrice();
-        return $this->getResellerPrice($user->reseller_level);
+        return [
+            'android' => 'Android',
+            'ios' => 'IOS'
+        ];
     }
 
-    public function getTotalOriginalPrice()
+    public function fetchCurrency()
     {
-        return $this->getOriginalPrice() * (float)$this->quantity;
+        return [
+            'USD' => 'USD',
+            'CNY' => 'CNY',
+        ];
+    }
+
+    public function getUnit() 
+    {
+        return $this->pack;
+    }
+
+    public function getSubtotalUnit()
+    {
+        $unit = $this->getUnit();
+        $quantity = $this->quantity;
+        return $unit * $quantity;   
     }
 
     public function getTotalUnit()
     {
-        $pack = $this->pack;
-        $quantity = $this->quantity;
-        return $pack * $quantity;
+        $subTotal = $this->getSubtotalUnit();
+        $promotion = $this->getPromotion();
+        if ($promotion) {
+            $promotionUnit = $promotion->apply($this->getSubtotalUnit());
+            $subTotal += $promotionUnit;
+        }
+        return $subTotal;
     }
 
-    // ============== implement interface ===========//
-    // public function getPrice()
-    // {
-    //     // return (int)$this->price;
-    //     return $this->getPrice();
-    // }
+    public function getUnitName()
+    {
+        return $this->unit_name;
+    }
 
-    public function getLabel()
+    public function getTotalOriginalPrice()
+    {
+        return $this->getOriginalPrice() * $this->quantity;
+    }
+
+    public function getSubTotalPrice()
+    {
+        $quantity = $this->quantity;
+        return $this->getPrice() * $quantity;        
+    }
+
+    public function getTotalPrice()
+    {
+        $sub = $this->getSubTotalPrice();
+        return $sub;
+    }
+
+    /**
+     * Returns the price for the cart item
+     */
+    public function getPrice()
+    {
+        if (Yii::$app->user->isGuest) return parent::getPrice();
+        $user = Yii::$app->user->getIdentity();
+
+        if (!$user->isReseller()) return parent::getPrice();
+        return $this->getResellerPrice($user->reseller_level);
+    }
+
+    /**
+     * Returns the label for the cart item (displayed in cart etc)
+     *
+     * @return int|string
+     */
+    public function getLabel() 
     {
         return $this->title;
     }
 
-    public function getUniqueId()
+    /**
+     * Returns unique id to associate cart item with product
+     *
+     * @return int|string
+     */
+    public function getUniqueId() 
     {
-        return 'item' . $this->id;
+        return $this->id;
+    }
+
+    // Promotion
+    public function getPromotion()
+    {
+        if (!$this->_promotion) {
+            $this->_promotion = Promotion::findOne(['code' => $this->voucher]);
+        }
+        return $this->_promotion;
+    }
+
+    public function validateVoucher($attribute, $params)
+    {
+        if (!$this->voucher) return;
+        $promotion = $this->getPromotion();
+        if (!$promotion) {
+            $this->addError($attribute, 'This voucher code is not valid');
+            return;
+        }
+        $user = Yii::$app->user->getIdentity();
+        if (!$user->phone) {
+            $this->addError($attribute, 'Your account is not eligible for this promotion.');
+            $this->_promotion = null;
+            return;
+        }
+        if ($promotion->promotion_scenario != Promotion::SCENARIO_BUY_GEMS) {
+            $this->addError($attribute, 'This voucher code is not valid');
+            $this->_promotion = null;
+            return;
+        }
+        if (!$promotion->canApplyForGame($this->id) && !$promotion->canApplyForUser(Yii::$app->user->id)) {
+            $this->addError($attribute, 'This voucher code is not valid for this user');
+            $this->_promotion = null;
+            return;
+        }
     }
 }

@@ -1,110 +1,96 @@
-<?php
+<?php 
+use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\LinkPager;
-use common\components\helpers\FormatConverter;
-
-$this->title = 'Shop';
+use yii\widgets\ActiveForm;
+use frontend\widgets\LinkPager;
 ?>
-<section class="page-title">
-  <div class="container">
-    <div class="row">
-      <div class="col col-sm-12">
-        <div class="page-title-content text-center">
-          <img src="/images/text-shop.png" alt="">
-        </div>
+<div class="container mt-5">
+  <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['game/index'], 'options' => ['autocomplete' => 'off']]);?>
+    <div class="input-group search-category">
+      <?=$form->field($search, 'category_id', [
+        'options' => ['class' => 'input-group-prepend dropdown'],
+        'inputOptions' => ['class' => 'form-control btn btn-outline-secondary select-category', 'name' => 'category_id']
+      ])->dropdownList($search->fetchCategory(), ['prompt' => 'All games'])->label(false);?>
+      <?=$form->field($search, 'q', [
+        'options' => ['tag' => false],
+        'template' => '{input}',
+        'inputOptions' => ['class' => 'form-control', 'name' => 'q', 'placeholder' => 'Enter keyword here.....']
+      ])->textInput()->label(false);?>
+      <div class="input-group-append">
+        <button class="btn" type="submit"><img class="icon-sm" src="/images/icon/search.svg" /></button>
       </div>
     </div>
-  </div>
-</section>
-<section class="shop-search">
-  <div class="container">
-    <div class="row">
-      <div class="col col-sm-12">
-        <div class="shop-search-box">
-          <form method="GET" autocomplete='off'>
-            <div class="shop-search-keyword">
-              <input type="text" placeholder="Search" name="q" value="<?=$q;?>">
-              <input type="submit" value="">
-            </div>
-            <div class="shop-search-paging t-wrap-btn is-desktop">
-              <?=LinkPager::widget(['pagination' => $pages, 'maxButtonCount' => 1, 'hideOnSinglePage' => false]);?>
-            </div>
-            <div class="shop-search-filter">
-              <select name="sort" id="fitler">
-                <option value="">FILTER</option>
-                <option value="asc" <?=($sort == 'asc') ? "selected" : "";?> >A - Z</option>
-                <option value="desc" <?=($sort == 'desc') ? "selected" : "";?> >Z - A</option>
-              </select>
-            </div>
-            <div class="shop-search-paging is-mobile">
-              <?=LinkPager::widget(['pagination' => $pages, 'maxButtonCount' => 1, 'hideOnSinglePage' => false]);?>
-            </div>
-          </form>
-        </div>
+  <?php ActiveForm::end()?>
+</div>
+<div class="container category-page post-list mt-5">
+  <div class="post-wrapper d-flex flex-wrap justify-content-left">
+    <?php foreach ($models as $game) : ?>
+    <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
+    <div class="post-item card">
+      <div class="post-thumb">
+        <a href="<?=$viewUrl;?>" class="hover-img"><img src="<?=$game->getImageUrl('300x300');?>" /></a>
+        <?php if ($game->getSavedPrice()) : ?>
+        <span class="tag save">save <?=number_format($game->getSavedPrice());?>%</span>
+        <?php endif;?>
+        <?php if ($game->promotion_info) : ?>
+        <span class="tag promotion"><?=$game->promotion_info;?></span>
+        <?php endif;?>
+        <?php if ($game->event_info) : ?>
+        <span class="tag bts"><?=$game->event_info;?></span>
+        <?php endif;?>
       </div>
-    </div>
-  </div>
-</section>
-<section class="shop-page">
-  <div class="container">
-    <div class="row">
-      <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
-        <div class="product-listing">
-          <div class="row">
-            <?php foreach ($models as $model) :?>
-			      <div class="col-6 col-lg-20-per col-md-4 prod-item">
-			        <a class="prod-img" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>">
-			        <img src="<?=$model->getImageUrl('300x300');?>" alt="">
-              <?php if (Yii::$app->settings->get('EventForm', 'status')) : ?>
-			        <img src="<?=Yii::$app->settings->get('EventForm', 'image');?>" style="position: absolute; right: 15px; top: 0; width: 25%;" alt="">
-              <?php endif;?>
-			        </a>
-			        <a class="prod-title" href="<?=Url::to(['game/view', 'id' => $model->id, 'slug' => $model->slug]);?>"><?=$model->title;?></a>
-			        <div class="prod-price">
-                <?php if ($model->isSoldout()) : ?>
-                <span style="color:#ffdd00; font-size:11px;">OUT OF STOCK. COMING BACK SOON!</span>
-                <?php else :?>
-                <span><?=number_format($model->pack);?></span> <?=$model->unit_name;?>
-                <div class="price-usd">Only <span>$<?=number_format($model->getPrice(), 1);?></span><span class="price-cny">/ CNY <?=FormatConverter::convertCurrencyToCny($model->getPrice(), 1);?></span></div>
-                <?php endif;?>
-			        </div>
-			        <?php 
-			        $gameId = $model->id;
-			        $unit = $model->pack;
-			        $gamePromotions = array_filter($promotions, function($promotion) use ($gameId) {
-			          return $promotion->canApplyForGame($gameId);
-			        });
-			        usort($gamePromotions, function($p1, $p2) use ($unit) {
-			          return ($p1->apply($unit) < $p2->apply($unit)) ? 1 : -1;
-			        });
-			        $gamePromotion = reset($gamePromotions);
-			        if ($gamePromotion) :
-			          $benefit = $gamePromotion->getBenefit();
-			        ?>
-			        <div class="prod-code">
-			          <div class="prod-code-left">
-			            <p>Nhập mã</p>
-			            <p><?=$gamePromotion->code;?></p>
-			          </div>
-			          <div class="prod-code-right">
-			            <p>+<?=$gamePromotion->apply($model->pack);?> GEMS</p>
-			            <p>cho HFKEJK</p>
-			          </div>
-			        </div>
-			        <?php endif;?>
-			      </div>
-			      <?php endforeach;?>
+      <div class="post-content">
+        <h4 class="post-title">
+          <a href="<?=$viewUrl;?>"><?=$game->title;?></a>
+        </h4>
+        <?php if ($game->hasCategory()) : ?>
+        <div class="tags">
+          <img src="/images/icon/tag.svg" />
+          <?php $categories = array_slice($game->categories, 0, 3);?>
+          <?php foreach ($categories as $category) : ?>
+          <span class="badge badge-primary"><?=$category->name;?></span>
+          <?php endforeach; ?>
+          <?php if (count($game->categories) > 3) :?>
+          <span class="badge badge-primary">...</span>
+          <?php endif;?>
+        </div>
+        <?php endif;?>
+        <div class="d-flex justify-content-between align-items-center py-2">
+          <div class="flex-fill value">
+            <span class="num"><?=number_format($game->pack);?></span>
+            <br />
+            <span class="text"><?=Html::encode($game->unit_name);?></span>
+          </div>
+          <div class="flex-fill price">
+            <?php $price = $game->getPrice();?>
+            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($price, (int)($price != round($price)));?></span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="flex-fill status">
+            <hr>
+            <img class="icon-fire" src="/images/icon/fire.svg" />
+            <?php if ($game->isSoldout()) :?>
+            <span class="text" style="color: gray">out stock</span>
+            <?php else : ?>
+            <span class="text">in stock</span>
+            <?php endif;?>
+          </div>
+          <div class="flex-fill">
+            <a href="<?=$viewUrl;?>" class="main-btn <?=$game->isSoldout() ? 'disable' : '';?>">
+              <span>BUY NOW</span>
+            </a>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-<?php
-$script = <<< JS
-$('#fitler').on('change', function(){
-  $(this).closest('form').submit();
-});
-JS;
-$this->registerJs($script);
-?>
+    </div><!-- END POST ITEM -->
+    <?php endforeach;?>
+  </div> <!-- END POST CATEGORY -->
+</div><!-- END container -->
+
+<div class="container mt-5 mb-5">
+  <nav aria-label="Page navigation" class="mt-2 mb-5">
+    <?=LinkPager::widget(['pagination' => $pages]);?>
+  </nav>
+</div>
+

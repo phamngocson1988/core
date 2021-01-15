@@ -3,7 +3,7 @@ namespace frontend\forms;
 
 use yii\base\Model;
 use yii\base\InvalidParamException;
-use common\models\User;
+use frontend\models\User;
 
 /**
  * Password reset form

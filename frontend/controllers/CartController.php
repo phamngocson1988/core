@@ -4,548 +4,202 @@ namespace frontend\controllers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
-use frontend\components\cart\Cart;
 use frontend\components\cart\CartItem;
-use frontend\components\cart\CartPromotion;
+use frontend\models\Paygate;
 use frontend\models\Order;
-use frontend\models\User;
-use frontend\models\Game;
-use frontend\events\ShoppingEventHandler;
+use common\models\Currency;
+use common\components\helpers\StringHelper;
 
-use frontend\components\payment\cart\PaymentItem;
-use frontend\components\payment\cart\PaymentCart;
-use frontend\components\payment\cart\PaymentPromotion;
-use frontend\components\payment\PaymentGateway;
-use frontend\components\payment\PaymentGatewayFactory;
-use common\components\helpers\FormatConverter;
-use frontend\behaviors\OrderLogBehavior;
-
-// Notification
-use frontend\components\notifications\OrderNotification;
-
-/**
- * CartController
- */
 class CartController extends Controller
 {
-    // public $enableCsrfValidation = false;
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'add', 'update', 'checkout', 'purchase'],
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['calculate', 'add'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk', 'thankyou'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    [
-                        'actions' => ['add', 'update'],
-                        'allow' => true,
-                        'roles' => ['@', '?'],
-                    ],
-                    [
-                        'actions' => ['checkout', 'purchase'],
-                        'allow' => true,
-                        'roles' => ['@']
-                    ]
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'add' => ['post'],
-                    'update' => ['post'],
-                    'purchase' => ['post'],
+
                 ],
             ],
         ];
     }
 
-    public function beforeAction($action)
-    {            
-        if ($action->id == 'verify') {
-            $this->enableCsrfValidation = false;
-        }
+    public function actionCalculate($id) 
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
 
-        return parent::beforeAction($action);
+        $model = CartItem::findOne($id);
+        $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $amount = $model->getTotalPrice();
+            $unit = $model->getTotalUnit();
+            $unitName = $model->getUnitName();
+            $origin = $model->getTotalOriginalPrice();
+            return $this->asJson(['status' => true, 'data' => [
+                'amount' => StringHelper::numberFormat($amount, 2),
+                'origin' => StringHelper::numberFormat($origin, 2),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
+            ]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return $this->asJson(['status' => false, 'errors' => $message]);
+        }
+    }
+
+    public function actionAdd($id) 
+    {
+        $request = Yii::$app->request;
+
+        $model = CartItem::findOne($id);
+        $model->setScenario(CartItem::SCENARIO_ADD_CART);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $cart = Yii::$app->cart;
+            $cart->clear();
+            $cart->add($model);
+            return $this->redirect(['cart/index']);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            Yii::$app->session->setFlash('error', $message);
+            return $this->redirect($request->getReferrer());
+        }
     }
 
     public function actionIndex()
     {
-        $request = Yii::$app->request;
         $cart = Yii::$app->cart;
-        $promotion_code = $request->post('promotion_code');
-        $item = $cart->getItem();
-        if (!$item) return $this->redirect(['site/index']);
-        $game = Game::findOne($item->id);
-        if ($game->isSoldout()) {
-            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
-            return $this->redirect(['site/index']);
-        }
-        $item->setScenario($request->post('scenario'));
-        if ($request->isPost) {
-            if ($item->load($request->post()) && $item->validate()) {
-                $cart->add($item);
-                if ($item->scenario == CartItem::SCENARIO_EDIT_CART) {
-                    $discount = CartPromotion::findOne([
-                        'code' => $promotion_code,
-                        'promotion_scenario' => CartPromotion::SCENARIO_BUY_GEMS,
-                    ]);
-
-                    if ($discount) {
-                        $discount->setScenario(CartPromotion::SCENARIO_ADD_PROMOTION);
-                        $discount->user_id = Yii::$app->user->id;
-                        $discount->game_id = $item->id;
-                        if (!$discount->validate() || !$discount->code) $cart->removePromotionItem();                            
-                        else {
-                            $cart->setPromotionItem($discount);
-                            $cart->applyPromotion();
-                        }
-                    } else {
-                        $cart->removePromotionItem();
-                    }
-                    
-                } elseif ($item->scenario == CartItem::SCENARIO_INFO_CART) {
-                    return $this->redirect(Url::to(['cart/confirm']));
-                } 
-            }
-        }
-
-        return $this->render('index', [
-            'cart' => $cart,
-            'promotion_code' => $promotion_code,
-            'item' => $item
-        ]);
-    }
-
-    public function actionAdd($id)
-    {
-    	$request = Yii::$app->request;
-    	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-    	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
-
-        $cart = Yii::$app->cart;
-        $cart->clear();
-        $item = CartItem::findOne($id);
-        $item->setScenario(CartItem::SCENARIO_ADD_CART);
-        if ($item->load($request->post()) && $item->validate()) {
-            $cart->add($item);
-            return json_encode([
-                'status' => true, 
-                'user_id' => Yii::$app->user->id, 
-                'cart' => $cart->getItems(),
-                'cart_url' => Url::to(['cart/index'])
-            ]);
-        } else {
-            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
-        }
-    }
-
-    public function actionUpdate()
-    {
-    	$request = Yii::$app->request;
-    	if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-    	if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => null, 'errors' => []]);
-        $cart = Yii::$app->cart;
-        $item = $cart->getItem();
-        $item->setScenario(CartItem::SCENARIO_INFO);
-        if ($item->load($request->post()) && $item->validate()) {
-            $cart->add($item);
-            return json_encode(['status' => true, 'user_id' => Yii::$app->user->id, 'checkout_url' => Url::to(['cart/checkout'])]);
-        } else {
-            return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => $item->getErrors()]);
-        }
-    }
-
-    public function actionConfirm()
-    {
-        $request = Yii::$app->request;
-        $user = User::findOne(Yii::$app->user->id);
-        $cart = Yii::$app->cart;
-        $item = $cart->getItem();
-        if (!$item) return $this->redirect(['site/index']);
-        $game = Game::findOne($item->id);
-        if ($game->isSoldout()) {
-            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
-            return $this->redirect(['site/index']);
-        }
-        $item->setScenario(CartItem::SCENARIO_RECEPTION_CART);
-        if ($item->load($request->post()) && $item->validate()) {
-            $cart->add($item);
+        $model = $cart->getItem();
+        $model->setScenario(CartItem::SCENARIO_UPDATE_CART);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $cart = Yii::$app->cart;
+            $cart->clear();
+            $cart->add($model);
             return $this->redirect(['cart/checkout']);
         }
-        if (!$item->reception_email) $item->reception_email = $user->email;
-        return $this->render('confirm', ['cart' => $cart]);
+        return $this->render('index', [
+            'model' => $model,
+        ]);
     }
 
     public function actionCheckout()
     {
-        $settings = Yii::$app->settings;
-        $paypalMode = $settings->get('PaypalSettingForm', 'mode', 'sandbox');
-        if ($paypalMode == 'live') {
-            $clientId = $settings->get('PaypalSettingForm', 'client_id');
-        } else {
-            $clientId = $settings->get('PaypalSettingForm', 'sandbox_client_id');
-        }
-
-        $this->view->registerJsFile("https://www.paypal.com/sdk/js?client-id=$clientId&disable-card=visa,mastercard,amex,discover,jcb,elo,hiper", ['position' => \yii\web\View::POS_HEAD]);
-
+        $request = Yii::$app->request;
         $cart = Yii::$app->cart;
-        $item = $cart->getItem();
-        if (!$item) return $this->redirect(['site/index']);
-        $game = Game::findOne($item->id);
-        if ($game->isSoldout()) {
-            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
-            return $this->redirect(['site/index']);
+        
+        $checkoutForm = new \frontend\forms\OrderPaymentForm(['cart' => $cart]);
+        if ($checkoutForm->load($request->post()) && $checkoutForm->validate() && $id = $checkoutForm->purchase()) {
+            // return $this->redirect(['order/index', '#' => $id]);
+            return $this->redirect(['cart/thankyou', 'id' => $id]);
+        } else {
+            Yii::$app->session->setFlash('error', $checkoutForm->getErrorSummary(true));
         }
+        $model = $cart->getItem();
         $user = Yii::$app->user->getIdentity();
         $balance = $user->getWalletAmount();
         $canPlaceOrder = $balance >= $cart->getTotalPrice();
+        $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+        $isOtherCurrency = $model->currency != 'USD';
+        $otherCurrency = '';
+        if ($isOtherCurrency) {
+            $usdCurrency = Currency::findOne('USD');
+            $otherCurrencyTotal = Currency::convertUSDToCurrency($model->getTotalPrice(), $model->currency);
+            $currencyModel = Currency::findOne($model->currency);
+            $otherCurrency = $currencyModel->addSymbolFormat(number_format($otherCurrencyTotal, 1));
+        }
+
         return $this->render('checkout', [
+            'model' => $model,
             'can_place_order' => $canPlaceOrder,
-            'balance' => $balance
+            'balance' => $balance,
+            'paygates' => $paygates,
+            'checkoutForm' => $checkoutForm,
+            'isOtherCurrency' => $isOtherCurrency,
+            'otherCurrency' => $otherCurrency,
         ]);
     }
 
-    public function actionPurchase()
+    public function actionCalculateBulk($id) 
     {
         $request = Yii::$app->request;
-        $user = Yii::$app->user->getIdentity();
-        $reseller = $user->reseller; 
-        $settings = Yii::$app->settings;
-        $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
-        $identifier = $request->post('identifier');
-        if (!$identifier) {
-            Yii::$app->session->setFlash('error', 'You must choose a payment gateway');
-            return $this->redirect(['cart/checkout']);
-        }
-        $paymentCart = new PaymentCart([
-            'title' => 'Pay for buying Game',
-        ]);
-        $cart = Yii::$app->cart;
-        if (!$cart->getItems()) {
-            Yii::$app->session->setFlash('error', 'Your cart is empty');
-            return $this->redirect(['game/index']);
-        }
-        $cartItem = $cart->getItem();
-        $game = Game::findOne($cartItem->id);
-        if ($game->isSoldout()) {
-            Yii::$app->session->setFlash('error', sprintf("%s is soldout.", $game->title));
-            return $this->redirect(['site/index']);
-        }
-        $paymentCartItem = new PaymentItem([
-            'id' => $cartItem->getUniqueId(),
-            'title' => $cartItem->getLabel(),
-            'quantity' => $cartItem->quantity,
-            'price' => $cartItem->getPrice()
-        ]);
-        $paymentCart->addItem($paymentCartItem);
-        
-        if ($cart->hasPromotion()) {
-            $cart->applyPromotion();
-            if ($cart->getPromotionMoney()) {
-                $promotionItem = $cart->getPromotionItem();
-                $paymentPromotion = new PaymentPromotion([
-                    'id' => $promotionItem->code,
-                    'title' => 'promotion promotion code ' . $promotionItem->code,
-                    'price' => $cart->getPromotionMoney()
-                ]);
-                $paymentCart->setPromotion($paymentPromotion);
-            }
-        }
-        $gateway = PaymentGatewayFactory::getClient($identifier);
-        $gateway->confirm_url = 'cart/verify';
-        $gateway->success_url = 'cart/success';
-        $gateway->cancel_url = 'cart/cancel';
-        $gateway->error_url = 'cart/error';
-        $gateway->setCart($paymentCart);
-        if (!$gateway->validatePayment()) {
-            Yii::$app->session->setFlash('error', $gateway->getErrorSummary(true));
-            return $this->redirect(['cart/checkout']);
-        }
-        
-        try {
-            // Create order
-            $totalPrice = $cart->getTotalPrice();
-            $subTotalPrice = $cart->getSubTotalPrice();
-            $promotionCoin = $cart->getPromotionCoin();
-            $promotionUnit = $cart->getPromotionUnit();
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
 
-            // Order detail
-            $order = new Order();
-            $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->payment_method = $identifier;
-            $order->payment_type = $gateway->type;
-            $order->rate_usd = $rate;
-            $order->price = $cartItem->getPrice();
-            $order->cogs_price = $cartItem->getCogs();
-            $order->sub_total_price = $subTotalPrice;
-            $order->total_discount = $promotionCoin;
-            $order->total_price = $totalPrice;
-            $order->total_fee = $gateway->getFee($totalPrice);
-            $order->total_price_by_currency = FormatConverter::convertCurrencyToCny($totalPrice);
-            $order->currency = $gateway->currency;
-            $order->total_cogs_price = $cartItem->getCogs() * (float)$cartItem->quantity;
-            $order->customer_id = $user->id;
-            $order->customer_name = $user->name;
-            $order->customer_email = $cartItem->reception_email;
-            $order->customer_phone = $user->phone;
-            $order->user_ip = $request->userIP;
-            $order->status = Order::STATUS_VERIFYING;
-            $order->payment_at = date('Y-m-d H:i:s');
-            $order->generateAuthKey();
-
-            // Item detail
-            $order->game_id = $cartItem->id;
-            $order->game_title = $cartItem->getLabel();
-            $order->quantity = $cartItem->quantity;
-            $order->unit_name = $cartItem->unit_name;
-            $order->sub_total_unit = $cartItem->getTotalUnit();
-            $order->promotion_unit = $promotionUnit;
-            $order->promotion_id = $cart->hasPromotion() ? $cart->getPromotionItem()->id : null;
-            $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
-            $order->username = $cartItem->username;
-            $order->password = $cartItem->password;
-            $order->platform = $cartItem->platform;
-            $order->login_method = $cartItem->login_method;
-            $order->character_name = $cartItem->character_name;
-            $order->recover_code = $cartItem->recover_code;
-            $order->server = $cartItem->server;
-            $order->note = $cartItem->note;
-            $gateway->setReferenceId($order->auth_key);
-            
-            if ($reseller) {
-                $order->saler_id = $reseller->manager_id;
-            } elseif ($cartItem->saler_code && !$order->saler_id) {
-                $invitor = User::findOne(['saler_code' => trim($cartItem->saler_code)]);
-                $order->saler_id = ($invitor) ? $invitor->id : null;
-            }
-            if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
-            $order->log(sprintf("Created. Status %s (%s - %s)", $order->status, $identifier, $gateway->type));
-            // Notify saler in case this is offline payment
-            if ($gateway->type == 'offline') {
-                $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
-                $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
-            }
-            $cart->clear();
-            return $gateway->request();
-        } catch (\Exception $e) {
-            die($e->getMessage());
+        $model = CartItem::findOne($id);
+        $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
+        $model->quantity = $request->post('quantity', 0);
+        if ($model->validate()) {
+            $amount = $model->getTotalPrice();
+            $unit = $model->getTotalUnit();
+            $unitName = $model->getUnitName();
+            $origin = $model->getTotalOriginalPrice();
+            return $this->asJson(['status' => true, 'data' => [
+                'amount' => StringHelper::numberFormat($amount, 2),
+                'origin' => StringHelper::numberFormat($origin, 2),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
+            ]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return $this->asJson(['status' => false, 'errors' => $message]);
         }
     }
 
-    public function actionVerify($identifier)
+    public function actionBulk($id)
     {
-        $gateway = PaymentGatewayFactory::getClient($identifier);
-        $gateway->confirm_url = 'cart/verify';
-        $gateway->success_url = 'cart/success';
-        $gateway->cancel_url = 'cart/cancel';
-        $gateway->error_url = 'cart/error';
         $request = Yii::$app->request;
-        $refId = $request->get('ref');
-        try {
-            if ($gateway->confirm()) {
-                $user = Yii::$app->user->getIdentity();
-                $order = Order::findOne([
-                    'payment_method' => $identifier,
-                    'auth_key' => $refId,
-                    'status' => Order::STATUS_VERIFYING
-                ]);
-                if (!$order) throw new \Exception('Order is not exist');
-                $order->attachBehavior('log', OrderLogBehavior::className());
-                // $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
-                $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
-                $order->on(Order::EVENT_AFTER_UPDATE, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
-                $order->status = Order::STATUS_PENDING;
-                $order->payment_at = date('Y-m-d H:i:s');
-                $order->payment_id = $gateway->getPaymentId();
-                $order->save();
-                $order->log(sprintf("Verified, Status is %s", $order->status));
-
-                // Notify to orderteam in case this is online order
-                $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
-                $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_ORDER, $orderTeamIds);
-                $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_PENDING_ORDER, $order->customer_id);
-
-                return $gateway->doSuccess();
+        $items = $request->post();
+        $model = new \frontend\forms\OrderPaymentBulkForm([
+            'id' => $id,
+            'items' => $items,
+        ]);
+        if ($model->validate() && $model->purchase()) {
+            $errors = $model->getErrorList();
+            $success = $model->getSuccessList();
+            if (!count($success)) {
+                return $this->asJson(['status' => false, 'errors' => 'Something went wroing']);
+            } elseif (!count($errors)) {
+                return $this->asJson(['status' => true, 'success' => 'Your orders are placed successfully']);
             } else {
-                return $gateway->doError();
+                return $this->asJson(['status' => true, 'success' => 'Some of orders are placed successfully']);
             }
-        } catch (\Exception $e) {
-            Yii::error($gateway->identifier . $gateway->getReferenceId() . " actionVerify error " . $e->getMessage());
-            return $gateway->doError();
+        } else {
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $errors]);
         }
     }
 
-    public function actionSuccess()
+    public function actionThankyou($id)
     {
-        $this->view->params['main_menu_active'] = 'shop.index';
-        $refId = Yii::$app->request->get('ref');
-        $order = Order::findOne(['auth_key' => $refId]);
-        $gateway = PaymentGatewayFactory::getClient($order->payment_method);
-        $user = Yii::$app->user->getIdentity();
-        return $this->render('success', [
+        $order = Order::findOne($id);
+        if (!$order) {
+            throw new NotFoundHttpException('order does not exist.');
+        }
+        if ($order->customer_id != Yii::$app->user->id) {
+            throw new NotFoundHttpException('order does not exist.');
+        }
+        $viewUrl = Url::to(['order/index', '#' => $id]);
+        return $this->render('thankyou', [
             'order' => $order,
-            'user' => $user,
-            'gateway' => $gateway
-        ]);
-    }
-
-    public function actionCancel()
-    {
-        return $this->render('/site/error', [           
-            'name' => 'Canncel order',
-            'message' => 'Your have cancelled order'
-        ]);
-
-    }
-
-    public function actionError()
-    {
-        return $this->render('/site/error', [           
-            'name' => 'Error order',
-            'message' => 'There is error occurred'
-        ]);
-    }
-
-    public function actionPaypalCapture()
-    {
-        $request = Yii::$app->request;
-        $user = Yii::$app->user->getIdentity();
-        $reseller = $user->reseller;
-        $cart = Yii::$app->cart;
-        $cartItem = $cart->getItem();
-        $totalPrice = $cart->getTotalPrice();
-        $subTotalPrice = $cart->getSubTotalPrice();
-        $promotionCoin = $cart->getPromotionCoin();
-        $promotionUnit = $cart->getPromotionUnit();
-
-        // return $this->asJson(['status' => true, 'post' => $request->post()]);
-        if ($request->isPost && $request->isAjax) {
-            $data = $request->post();
-            Yii::error($data, __METHOD__);
-            $status = ArrayHelper::getValue($data, 'status');
-
-            // Payer information
-            $payer = ArrayHelper::getValue($data, 'payer', []);
-            $payer_email_address = ArrayHelper::getValue($payer, 'email_address');
-
-            // purchase information
-            $purchase_units = ArrayHelper::getValue($data, 'purchase_units', []);
-            $purchase_unit = reset($purchase_units);
-
-            // payment information
-            $payments = ArrayHelper::getValue($purchase_unit, 'payments', []);
-            $captures = ArrayHelper::getValue($payments, 'captures', []);
-            $capture = reset($captures);
-            $captureId = ArrayHelper::getValue($capture, 'id');
-
-            if (strtoupper($status) != "COMPLETED") return $this->asJson(['status' => false]);
-
-            // Order detail
-            $order = new Order();
-            $order->attachBehavior('log', OrderLogBehavior::className());
-            $order->on(Order::EVENT_AFTER_INSERT, [ShoppingEventHandler::className(), 'sendNotificationEmail']);
-            $order->on(Order::EVENT_AFTER_INSERT, [ShoppingEventHandler::className(), 'applyVoucherForUser']);
-            $order->on(Order::EVENT_AFTER_INSERT, [ShoppingEventHandler::className(), 'applyAffiliateProgram']);
-            $order->payment_method = 'paypal';
-            $order->payment_type = 'online';
-            $order->price = $cartItem->getPrice();
-            $order->cogs_price = $cartItem->getCogs();
-            $order->sub_total_price = $subTotalPrice;
-            $order->total_discount = $promotionCoin;
-            $order->total_price = $totalPrice;
-            $order->total_price_by_currency = FormatConverter::convertCurrencyToCny($totalPrice);
-            $order->currency = 'USD';
-            $order->total_cogs_price = $cartItem->getCogs() * (float)$cartItem->quantity;
-            $order->customer_id = $user->id;
-            $order->customer_name = $user->name;
-            $order->customer_email = $cartItem->reception_email;
-            $order->customer_phone = $user->phone;
-            $order->user_ip = $request->userIP;
-            $order->status = $user->isTrust() ? Order::STATUS_PENDING : Order::STATUS_VERIFYING;
-            $order->payment_at = date('Y-m-d H:i:s');
-            $order->payment_id = $captureId;
-            $order->generateAuthKey();
-
-            // Item detail
-            $order->game_id = $cartItem->id;
-            $order->game_title = $cartItem->getLabel();
-            $order->quantity = $cartItem->quantity;
-            $order->unit_name = $cartItem->unit_name;
-            $order->sub_total_unit = $cartItem->getTotalUnit();
-            $order->promotion_unit = $promotionUnit;
-            $order->promotion_id = $cart->hasPromotion() ? $cart->getPromotionItem()->id : null;
-            $order->total_unit = $cartItem->getTotalUnit() + $promotionUnit;
-            $order->username = $cartItem->username;
-            $order->password = $cartItem->password;
-            $order->platform = $cartItem->platform;
-            $order->login_method = $cartItem->login_method;
-            $order->character_name = $cartItem->character_name;
-            $order->recover_code = $cartItem->recover_code;
-            $order->server = $cartItem->server;
-            $order->note = $cartItem->note;
-            if ($reseller) {
-                $order->saler_id = $reseller->manager_id;
-            } elseif ($cartItem->saler_code && !$order->saler_id) {
-                $invitor = User::findOne(['saler_code' => $cartItem->saler_code]);
-                $order->saler_id = ($invitor) ? $invitor->id : null;
-            }
-            if (!$order->save()) throw new BadRequestHttpException("Error Processing Request", 1);
-            $order->log(sprintf("Created and captured by Paypal. Status is %s", $order->id, $order->status));
-            $cart->clear();
-
-            $settings = Yii::$app->settings;
-            $username = $settings->get('PaypalSettingForm', 'username');
-            $password = $settings->get('PaypalSettingForm', 'password');
-            if ($username && $password) {
-                $fromName = sprintf("%s Administrator", Yii::$app->name);
-                $mailer = Yii::createObject([
-                    'class' => 'yii\swiftmailer\Mailer',
-                    'viewPath' => '@frontend/mail',
-                    'transport' => [
-                        'class' => 'Swift_SmtpTransport',
-                        'host' => 'smtp.gmail.com',
-                        'username' => $username,
-                        'password' => $password,
-                        'port' => '587',
-                        'encryption' => 'tls',
-                    ],            
-                    'useFileTransport' => false,
-                ]);
-                try {
-                    $mailer->compose('paypal_confirm_mail', ['data' => $data])
-                    ->setTo($payer_email_address)
-                    ->setFrom([$username => $fromName])
-                    ->setSubject(sprintf("AGREEMENT CONFIRMATION - %s / %s", $order->id, $captureId))
-                    ->setTextBody(sprintf("AGREEMENT CONFIRMATION - %s / %s", $order->id, $captureId))
-                    ->send();
-                } catch (\Exception $e) {
-                    Yii::error($e, __METHOD__);
-                }
-            }
-
-            return $this->asJson([
-                'status' => true, 
-                'order' => $order->id, 
-                'success_link' => Url::to(['cart/success', 'ref' => $order->auth_key], true),
-            ]);
-        }
-        return $this->asJson([
-            'status' => false, 
+            'viewUrl' => $viewUrl
         ]);
     }
 }

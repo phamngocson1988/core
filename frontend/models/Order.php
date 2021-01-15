@@ -9,31 +9,12 @@ use frontend\behaviors\OrderNotificationBehavior;
  */
 class Order extends \common\models\Order
 {
-    const SCENARIO_CANCELORDER = 'cancel_order';
-
     public function behaviors()
     {
         $behaviors = parent::behaviors();
         $behaviors['complain'] = OrderComplainBehavior::className();
         $behaviors['notification'] = OrderNotificationBehavior::className();
         return $behaviors;
-    }
-
-    public function scenarios()
-    {
-        $scenarios = parent::scenarios();
-        $new = [
-            self::SCENARIO_CANCELORDER => ['request_cancel', 'request_cancel_time', 'request_cancel_description'],
-        ];
-        return array_merge($scenarios, $new);
-    }
-
-    public function rules()
-    {
-        return [
-            [['request_cancel', 'request_cancel_time'], 'required', 'on' => self::SCENARIO_CANCELORDER],
-            ['request_cancel_description', 'trim']
-        ];
     }
 
     public static function getStatusList()
@@ -50,7 +31,7 @@ class Order extends \common\models\Order
         ];
     }
 
-    public function getStatusLabel($format = '<span class="%s">%s</span>')
+    public function getStatusLabel($format = '')
     {
         $list = [
             self::STATUS_VERIFYING => 'text-gray-1',

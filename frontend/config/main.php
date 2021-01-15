@@ -7,19 +7,19 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-frontend',
+    'id' => 'app-website',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-frontend',
+            'csrfParam' => '_csrf-website',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'frontend\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
-            'loginUrl' => ['site/login', '#' => 'page-title'],
+            'identityCookie' => ['name' => '_identity-website', 'httpOnly' => true],
+            'loginUrl' => ['site/login'],
         ],
         'view' => [
             'class' => 'frontend\components\web\View',
@@ -40,8 +40,8 @@ return [
             }
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
-            'name' => 'advanced-frontend',
+            // this is the name of the session cookie used for login on the website
+            'name' => 'advanced-website',
             'timeout' => 3600
         ],
         'log' => [
@@ -60,7 +60,7 @@ return [
                     'basePath' => '@webroot',
                     'baseUrl' => '@web',
                     'js' => [
-                        'js/jquery-3.3.1.min.js',
+                        'js/vendor/jquery-3.4.1.min.js',
                     ]
                 ],
                 'yii\bootstrap\BootstrapAsset' => [
@@ -71,7 +71,7 @@ return [
                         'css/bootstrap.min.css',
                     ],
                     'js' => [
-                        'js/bootstrap.min.js'
+                        'js/vendor/bootstrap.min.js'
                     ],
                     'depends' => ['yii\web\YiiAsset']
                 ],
@@ -92,36 +92,16 @@ return [
                 // 'deleteIfEmpty' => true
             ]
         ],
-        'kingcoin' => [
-            'class' => 'frontend\components\kingcoin\Cart',
-            'storageClass' => [
-                'class' => 'yii2mod\cart\storage\DatabaseStorage',
-                'deleteIfEmpty' => true
-            ]
-        ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@frontend/mail',
-        ],
-        'sms' => [
-            'viewPath' => '@frontend/sms',
+    ],
+    'modules' => [
+        'notifications' => [
+            'class' => 'webzop\notifications\Module',
+            'channels' => [
+                'screen' => [
+                    'class' => 'webzop\notifications\channels\ScreenChannel',
+                ],
+            ],
         ],
     ],
-    // 'modules' => [
-    //     'notifications' => [
-    //         'class' => 'webzop\notifications\Module',
-    //         'channels' => [
-    //             'screen' => [
-    //                 'class' => 'webzop\notifications\channels\ScreenChannel',
-    //             ],
-    //             'email' => [
-    //                 'class' => 'webzop\notifications\channels\EmailChannel',
-    //                 'message' => [
-    //                     'from' => 'example@email.com'
-    //                 ],
-    //             ],
-    //         ],
-    //     ],
-    // ],
     'params' => $params,
 ];

@@ -8,16 +8,12 @@ use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use frontend\models\UserCommission;
-use frontend\models\UserCommissionWithdraw;
-use frontend\models\UserAffiliate;
-use frontend\models\User;
-use frontend\behaviors\UserCommissionBehavior;
-use frontend\behaviors\UserAffiliateBehavior;
+// models
+use frontend\models\Affiliate;
+use frontend\models\AffiliateCommissionWithdraw;
+// forms
+use frontend\forms\RegisterAffiliateForm;
 
-/**
- * AffiliateController
- */
 class AffiliateController extends Controller
 {
     public function behaviors()
@@ -27,163 +23,152 @@ class AffiliateController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['register', 'cancel-request'],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            $user = Yii::$app->user->identity;
-                            $aff = $user->affiliate;
-                            if (!$aff) return false;
-                            if (!$aff->isEnable()) return false;
-                            return true;
-                        },
-
                     ],
 
                 ],
-                'denyCallback' => function ($rule, $action) {
-                    if (Yii::$app->user->getIsGuest()) return $this->redirect(Yii::$app->user->loginUrl);
-                    else {
-                        $user = Yii::$app->user->identity;
-                        $aff = $user->affiliate;
-                        if (!$aff) return $this->redirect(['affiliate/register']);
-                        elseif (!$aff->isEnable()) return $this->redirect(['affiliate/register']);
-                        else return ;
-                    }
-                }
-                
             ],
         ];
     }
 
-    public function actionRegister()
-    {
-        $user = Yii::$app->user->identity;
-        
-        $request = Yii::$app->request;
-        $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'affiliate.index';
-
-        $model = UserAffiliate::findOne($user->id);
-        $sent = false;
-        if ($model) {
-            if ($model->isEnable()) return $this->redirect(['affiliate/index']);
-            $sent = true;
-        } else {
-            $model = new UserAffiliate(['user_id' => $user->id]);
-        }
-        if ($model->load($request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
-            $sent = true;
-            return $this->redirect(['affiliate/index']);
-        }
-        return $this->render('register', ['model' => $model, 'sent' => $sent]);
-    }
-
-    public function actionCancelRequest()
-    {
-        $user = Yii::$app->user->identity;
-        $aff = UserAffiliate::findOne($user->id);
-        if ($aff) $aff->delete();
-        return $this->redirect(['affiliate/index']);
-    }
-
     public function actionIndex()
     {
-        $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
         $user = Yii::$app->user->getIdentity();
-        $user->attachBehavior('commission', UserCommissionBehavior::className());
-        $user->attachBehavior('affiliate', UserAffiliateBehavior::className());
         $request = Yii::$app->request;
-        $status = $request->get('status');
-        switch ($status) {
-            case 'pending':
-                $command = $user->getPendingCommission();
-                break;
-            case 'ready':
-                $command = $user->getReadyCommission();
-                break;
-            default :
-                $command = $user->getValidCommission();
-                break;
+
+        if (!$user->isAffiliate()) {
+            return $this->redirect(['affiliate/register']);
         }
 
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
-                            ->all();
-        $member = $user->getAffiliateMembers()->count();
+        $addAccountForm = new \frontend\forms\CreateAffiliateAccountForm([
+            'user_id' => Yii::$app->user->id,
+        ]);
+        $withdrawForm = new \frontend\forms\SendAffiliateWithdrawRequestForm([
+            'user_id' => Yii::$app->user->id,
+        ]);
+
+        $withdrawCommand = AffiliateCommissionWithdraw::find()->where([
+            'user_id' => Yii::$app->user->id
+        ])->limit(10)->orderBy(['id' => SORT_DESC]);
+        $withdraws = $withdrawCommand->all();
+        $withdrawTotalAmount = $withdrawCommand->sum('amount');
+
+        // commissions
+        $affiliateCommissionForm = new \frontend\forms\FetchAffiliateCommissionForm([
+            'user_id' => Yii::$app->user->id,
+            'status' => $request->get('status'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+        ]);
+        $affiliateCommissionCommand = $affiliateCommissionForm->getCommand();
+        $pages = new Pagination(['totalCount' => $affiliateCommissionCommand->count()]);
+        $commissions = $affiliateCommissionCommand->offset($pages->offset)->limit($pages->limit)->all();
+
         return $this->render('index', [
-            'member' => $member,
-            'models' => $models,
-            'status' => $status,
-            'can_withdraw' => $user->canWithDraw(),
-            'pages' => $pages
+            'addAccountForm' => $addAccountForm,
+            'withdrawForm' => $withdrawForm,
+            'withdraws' => $withdraws,
+            'withdrawTotalAmount' => $withdrawTotalAmount,
+            'commissions' => $commissions,
+            'pages' => $pages,
+            'searchCommission' => $affiliateCommissionForm,
         ]);
     }
 
-    public function actionMember()
+    public function actionRegister()
     {
-        $this->view->params['body_class'] = 'global-bg';
         $this->view->params['main_menu_active'] = 'affiliate.index';
-        $user = Yii::$app->user->getIdentity();
-        $user->attachBehavior('affiliate', UserAffiliateBehavior::className());
-        $request = Yii::$app->request;
-        $command = $user->getAffiliateMembers();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
-        return $this->render('member', [
-            'member' => $command->count(),
-            'models' => $models,
-            'pages' => $pages
-        ]);
-    }
-
-    public function actionWithdraw()
-    {
-        $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'affiliate.index';
-        $user = Yii::$app->user->getIdentity();
-        $user->attachBehavior('affiliate', UserAffiliateBehavior::className());
-        $command = UserCommissionWithdraw::find()->where(['user_id' =>$user->id]);
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
-        $member = $user->getAffiliateMembers()->count();
-        return $this->render('withdraw', [
-            'member' => $member,
-            'models' => $models,
-            'pages' => $pages
-        ]);
-    }
-
-    public function actionWithdrawRequest()
-    {
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
-        $this->view->params['body_class'] = 'global-bg';
-        $this->view->params['main_menu_active'] = 'affiliate.index';
-
-        $model = new UserCommissionWithdraw();
-        if ($model->load($request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Your request is sent to administrators');
-            return $this->redirect(['affiliate/withdraw']);
+        if ($user->isAffiliate()) {
+            return $this->redirect(['affiliate/index']);
         }
-        return $this->render('withdraw_request', [
+        $model = new RegisterAffiliateForm(['user_id' => Yii::$app->user->id]);
+        $isRegisterSuccess = false;
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->validate() && $model->register()) {
+                $isRegisterSuccess = true;
+            } else {
+                $message = $model->getErrorSummary(true);
+                $message = reset($message);
+                Yii::$app->session->setFlash('error', $message);
+            }
+        }
+        
+        return $this->render('register',[
             'model' => $model,
-            'user' => $user,
+            'sentRequest' => $user->hasPendingAffiliateRequest(),
+            'isRegisterSuccess' => (int)$isRegisterSuccess
         ]);
+    }
+
+    public function actionCancel()
+    {
+        $aff = Affiliate::find()
+        ->where(['user_id' => Yii::$app->user->id])
+        ->andWhere(['status' => Affiliate::STATUS_DISABLE])
+        ->one();
+        if ($aff) $aff->delete();
+        return $this->redirect(['affiliate/register']);
+    }
+
+    public function actionAddAccount()
+    {
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
+        $model = new \frontend\forms\CreateAffiliateAccountForm(['user_id' => Yii::$app->user->id]);
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->validate() && $model->create()) {
+                return $this->asJson(['status' => true, 'data' => ['message' => 'You have added new account successfullly.']]);
+            } else {
+                $message = $model->getErrorSummary(true);
+                $message = reset($message);
+                return $this->asJson(['status' => false, 'errors' => $message]);
+            }
+        }
+    }
+
+    public function actionDeleteAccount($id)
+    {
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
+        $model = new \frontend\forms\DeleteAffiliateAccountForm([
+            'user_id' => Yii::$app->user->id,
+            'id' => $id,
+        ]);
+        if ($request->isPost) {
+            if ($model->validate() && $model->delete()) {
+                return $this->asJson(['status' => true, 'data' => ['message' => 'You have deleted account successfullly.']]);
+            } else {
+                $message = $model->getErrorSummary(true);
+                $message = reset($message);
+                Yii::$app->session->setFlash('error', $message);
+                return $this->asJson(['status' => false, 'errors' => $message]);
+            }
+        }
+    }
+
+    public function actionSendWithdrawRequest()
+    {
+        $this->view->params['main_menu_active'] = 'affiliate.index';
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
+        $model = new \frontend\forms\SendAffiliateWithdrawRequestForm([
+            'user_id' => Yii::$app->user->id,
+        ]);
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->validate() && $model->create()) {
+                return $this->asJson(['status' => true, 'data' => ['message' => 'You have sent withdraw request successfullly.']]);
+            } else {
+                $message = $model->getErrorSummary(true);
+                $message = reset($message);
+                return $this->asJson(['status' => false, 'errors' => $message]);
+            }
+        }
     }
 
 }

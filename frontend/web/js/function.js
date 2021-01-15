@@ -73,9 +73,6 @@ function activeUserMenu() {
 }
 activeUserMenu();
 
-// Fancybox
-$(".fancybox").fancybox();
-
 // Cookie
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
