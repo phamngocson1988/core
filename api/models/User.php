@@ -23,6 +23,9 @@ class User extends \common\models\User
             'avatar' => function ($model) {
                 return $model->getAvatarUrl();
             },
+            'wallet' => function ($model) {
+                return $model->walletBalance();
+            }
         ];
     }
 }

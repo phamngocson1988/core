@@ -11,6 +11,7 @@ use backend\models\Order;
 use common\models\User;
 use common\components\helpers\FormatConverter;
 use dosamigos\chartjs\ChartJs;
+use common\components\helpers\StringHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
@@ -123,10 +124,10 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <tr>
                     <td><?=$model['game_id'];?></td>
                     <td><?=$model['game']['title'];?></td>
-                    <td><?=number_format($model['sum_doing'], 1);?></td>
-                    <td><?=number_format($model['sum_profit'] / 1000, 1);?></td>
-                    <td><?=number_format($model['sum_fee'] / 1000, 1);?></td>
-                    <td><?=number_format($model['sum_revenue'] / 1000, 1);?></td>
+                    <td><?=StringHelper::numberFormat($model['sum_doing'], 2);?></td>
+                    <td><?=StringHelper::numberFormat($model['sum_profit'] / 1000, 2);?></td>
+                    <td><?=StringHelper::numberFormat($model['sum_fee'] / 1000, 2);?></td>
+                    <td><?=StringHelper::numberFormat($model['sum_revenue'] / 1000, 2);?></td>
                   </tr>
                   <?php endforeach;?>
               </tbody>

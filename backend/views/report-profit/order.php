@@ -10,6 +10,7 @@ use backend\components\datetimepicker\DateTimePicker;
 use backend\models\Order;
 use backend\models\OrderSupplier;
 use common\components\helpers\FormatConverter;
+use common\components\helpers\StringHelper;
 
 $settings = Yii::$app->settings;
 $rate = (float)$settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 22000);
@@ -131,24 +132,23 @@ $orderTable = Order::tableName();
                   <td><?= $model['saler_id'] ? $salers[$model['saler_id']]->name : '-' ;?></td>
                   <td><?=$model['confirmed_at'];?></td>
                   <td><?=$model['game_title'];?></td>
-                  <td><?= $model['supplier_id'] ? sprintf("%s / %s", number_format($model['supplier_doing'], 1), number_format($model['supplier_quantity'], 1)) : $model['order_quantity'];?></td>
-                  <td><?=number_format($model['order_price']);?></td>
-                  <td><?=number_format($model['order_total_price']);?></td>
-                  <td><?= $model['supplier_id'] ? number_format($model['supplier_price']) : '-';?></td>
-                  <td><?= $model['supplier_id'] ? number_format($model['supplier_total_price']) : '-';?></td>
-                  <td><?=number_format($model['profit']);?></td>
+                  <td><?= $model['supplier_id'] ? sprintf("%s / %s", StringHelper::numberFormat($model['supplier_doing'], 2), StringHelper::numberFormat($model['supplier_quantity'], 2)) : $model['order_quantity'];?></td>
+                  <td><?=StringHelper::numberFormat($model['order_price']);?></td>
+                  <td><?=StringHelper::numberFormat($model['order_total_price']);?></td>
+                  <td><?= $model['supplier_id'] ? StringHelper::numberFormat($model['supplier_price']) : '-';?></td>
+                  <td><?= $model['supplier_id'] ? StringHelper::numberFormat($model['supplier_total_price']) : '-';?></td>
+                  <td><?=StringHelper::numberFormat($model['profit']);?></td>
                 </tr>
                 <?php endforeach;?>
             </tbody>
             <tfoot>
               <td>Tổng đơn: <?=number_format($search->getCommand()->count());?></td>
-              <td colspan="4"></td>
-              <td><?=number_format($search->getCommand()->sum("IF({$orderSupplierTable}.supplier_id, {$orderSupplierTable}.doing, {$orderTable}.quantity)"), 1);?></td>
+              <td colspan="5"></td>
+              <td><?=StringHelper::numberFormat($search->getCommand()->sum("IF({$orderSupplierTable}.supplier_id, {$orderSupplierTable}.doing, {$orderTable}.quantity)"), 2);?></td>
+              <td><?=StringHelper::numberFormat($search->getCommand()->sum("IF({$orderSupplierTable}.supplier_id, {$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderTable}.quantity, {$orderTable}.total_price * {$orderTable}.rate_usd)"));?></td>
               <td></td>
-              <td><?=number_format($search->getCommand()->sum("IF({$orderSupplierTable}.supplier_id, {$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderTable}.quantity, {$orderTable}.total_price * {$orderTable}.rate_usd)"));?></td>
-              <td></td>
-              <td><?=number_format($search->getCommand()->sum("COALESCE({$orderSupplierTable}.total_price, 0)"));?></td>
-              <td><?=number_format($search->getCommand()->sum("({$orderTable}.total_price * {$orderTable}.rate_usd * IF({$orderSupplierTable}.supplier_id, {$orderSupplierTable}.doing / {$orderTable}.quantity, 1) - COALESCE({$orderSupplierTable}.total_price, 0))"));?></td>
+              <td><?=StringHelper::numberFormat($search->getCommand()->sum("COALESCE({$orderSupplierTable}.total_price, 0)"));?></td>
+              <td><?=StringHelper::numberFormat($search->getCommand()->sum("({$orderTable}.total_price * {$orderTable}.rate_usd * IF({$orderSupplierTable}.supplier_id, {$orderSupplierTable}.doing / {$orderTable}.quantity, 1) - COALESCE({$orderSupplierTable}.total_price, 0))"));?></td>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>

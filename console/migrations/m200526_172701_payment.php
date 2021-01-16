@@ -31,7 +31,10 @@ class m200526_172701_payment extends Migration
             'created_by' => $this->integer(),  
             'updated_by' => $this->integer(),  
             'created_at' => $this->dateTime(),            
-            'updated_at' => $this->dateTime(),       
+            'updated_at' => $this->dateTime(),     
+            'bank_account' => $this->string(128),  
+            'approved_by' => $this->integer(),  
+            'approved_at' => $this->dateTime(),       
         ], $tableOptions);
 
     }

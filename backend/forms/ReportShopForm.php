@@ -275,10 +275,10 @@ class ReportShopForm extends FetchShopForm
 
 
                 $model['price'],
-                $model['price'] * $model['supplier_quantity'],
+                $model['price'] * $model['doing'],
                 0, //$model['total_price'] - $model['sub_total_price'],
                 0,
-                $model['price'] * $model['supplier_quantity'],
+                $model['price'] * $model['doing'],
                 '',
                 $promotion ? $promotion->code : '',
                 $model['rate_usd'],

@@ -38,8 +38,9 @@ class ReportGameProfitForm extends Model
             "{$orderSupplierTable}.game_id", 
             "SUM({$orderSupplierTable}.total_price) as sum_fee",
             "SUM({$orderSupplierTable}.doing) as sum_doing",
-            "SUM({$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderSupplierTable}.quantity) as sum_profit",
-            "SUM(({$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderSupplierTable}.quantity) - {$orderSupplierTable}.total_price) as sum_revenue",
+            "SUM({$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderTable}.quantity) as sum_profit",
+            // "SUM(({$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderSupplierTable}.quantity) - {$orderSupplierTable}.total_price) as sum_revenue",
+            "SUM(({$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderTable}.quantity) - {$orderSupplierTable}.total_price) as sum_revenue",
         ]);
         $command->groupBy(["{$orderSupplierTable}.game_id"]);
         $command->orderBy(["sum_profit" => SORT_DESC]);
