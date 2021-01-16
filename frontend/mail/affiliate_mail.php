@@ -1,1 +1,0 @@
-<?=sprintf("%s have just sent you a link: %s", $user->name, $link);?>
