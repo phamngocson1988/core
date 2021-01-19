@@ -24,7 +24,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'email'],
+                        'actions' => ['logout', 'index', 'email', 'sql'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -131,5 +131,25 @@ class SiteController extends Controller
             ->setTextBody("Thanks for your deposit")
             ->send();
         var_dump($email);die;
+    }
+
+    public function actionSql()
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\ExecuteSqlForm();
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $result = $model->run()) {
+                Yii::$app->session->setFlash('success', 'Success!');
+                echo '<pre>';
+                var_dump($result);
+                echo '</pre>';
+
+            } else {
+                $messages = $model->getErrorSummary(true);
+                Yii::$app->session->setFlash('error', reset($messages));
+            }
+        } 
+         
+        return $this->render('sql', ['model' => $model]);
     }
 }

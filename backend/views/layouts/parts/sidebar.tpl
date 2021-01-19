@@ -369,6 +369,11 @@
           {/if}
           {if $app->user->can('admin')}
           <li class="nav-item  ">
+            <a href="{url route='/currency'}" class="nav-link " code='currency.index'>
+            <span class="title">Quản lý tiền tệ</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
             <span class="title">Cổng thanh toán</span><span class="arrow"></span>
             </a>
@@ -376,51 +381,6 @@
               <li class="nav-item">
                 <a href="{url route='paygate/index'}" class="nav-link" code='paygate.index'>
                   <i class="cc-paypal"></i> Cổng offline
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/paypal'}" class="nav-link" code='setting.paypal'>
-                  <i class="cc-paypal"></i> Paypal
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/alipay'}" class="nav-link" code='setting.alipay'>
-                  <i class="cc-alipay"></i> Aiipay
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/wechat'}" class="nav-link" code='setting.wechat'>
-                  <i class="cc-alipay"></i> Wechat
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/skrill'}" class="nav-link" code='setting.skrill'>
-                  <i class="cc-alipay"></i> Skrill
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/payoneer'}" class="nav-link" code='setting.payoneer'>
-                  <i class="cc-alipay"></i> Payoneer
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/bitcoin'}" class="nav-link" code='setting.bitcoin'>
-                  <i class="cc-bitcoin"></i> Bitcoin
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/postal-savings-bank-of-china'}" class="nav-link" code='setting.postal-savings-bank-of-china'>
-                  <i class="cc-alipay"></i> Postal Savings Bank of China
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/western_union'}" class="nav-link" code='setting.western_union'>
-                  <i class="cc-western_union"></i> Western Union
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{url route='setting/standard_chartered'}" class="nav-link" code='setting.standard_chartered'>
-                  <i class="cc-standard_chartered"></i> Standard Chartered
                 </a>
               </li>
             </ul

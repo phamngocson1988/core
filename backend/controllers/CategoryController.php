@@ -58,20 +58,6 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function actionIndex1()
-    {
-        $this->view->params['main_menu_active'] = 'category.index';
-        $request = Yii::$app->request;
-        $form = new FetchCategoryForm(['type' => 'post']);
-        $models = $form->fetch();
-        return $this->render('index1.tpl', [
-            'models' => $models,
-            'form' => $form,
-            'searchModel' => new \common\models\Category(),
-            'ref' => Url::to($request->getUrl(), true),
-        ]);
-    }
-
     public function actionCreate()
     {
         $this->view->params['main_menu_active'] = 'category.index';
