@@ -46,6 +46,7 @@ class OrderDispatcherForm extends ActionForm
             'status' => [Order::STATUS_PENDING, Order::STATUS_PROCESSING, Order::STATUS_PARTIAL],
             'game_id' => $gameIds
         ])
+        ->andWhere(['IS', 'state', new \yii\db\Expression('null')])
         ->asArray()
         ->all();
         $orderIds = ArrayHelper::getColumn($orders, 'id');
