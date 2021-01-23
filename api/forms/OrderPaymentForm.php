@@ -115,6 +115,7 @@ class OrderPaymentForm extends Model
             // prices
             $order->rate_usd = $rate;
             $order->price = $cartItem->getPrice();
+            $order->flash_sale = !!$cartItem->getFlashSalePrice();
             $order->cogs_price = $cogsPrice;
             $order->total_cogs_price = $cogsPrice * (float)$cartItem->quantity;
             $order->sub_total_price = $subTotalPrice;
