@@ -41,6 +41,10 @@ function Complains(opts) {
         } else {
             avatar += '<div class="timeline-icon"><i class="icon-user-following font-green-haze"></i></div>';
         }
+        var content = '<span class="font-grey-cascade">'+object.content+'</span>';
+        if (object.content_type == 'image') {
+            content = '<a href="'+object.content+'" target="_blank"><img src="'+object.content+'" class="img-responsive" /></a>';
+        }
         var html =  '<div class="timeline-item" data-id="'+object.id+'">' +
                     '<div class="timeline-badge">' + avatar + '</div>' +
                     '<div class="timeline-body">' +
@@ -52,7 +56,7 @@ function Complains(opts) {
                     '</div>' +
                     '</div>' +
                     '<div class="timeline-body-content">' +
-                    '<span class="font-grey-cascade">'+object.content+'</span>' +
+                    content +
                     '</div>' +
                     '</div>' +
                     '</div>';

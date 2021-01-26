@@ -98,6 +98,7 @@ class OrderComplainController extends Controller
 
             $object = [];
             $object['id'] = $model->id;
+            $object['content_type'] = $model->content_type;
             $object['avatar'] = $sender->getAvatarUrl(null, null);
             $object['senderName'] = $senderName;
             $object['content'] = nl2br($model->content);
