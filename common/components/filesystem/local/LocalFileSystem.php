@@ -24,7 +24,7 @@ class LocalFileSystem extends Model implements FileSystemInterface
 
     public function upload($file, $path, $includeSchema = false)
     {
-        $location = sprintf("%s/%s", $path, date('YmdHis') . $file->name);
+        $location = sprintf("%s/%s", $path, date('YmdHis') . urlencode($file->name));
         $filePath = sprintf("%s/%s", Yii::getAlias($this->file_path), $location);
         $fileDir = dirname($filePath);
         FileHelper::createDirectory($fileDir, 0771);
