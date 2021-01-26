@@ -15,20 +15,27 @@ class m210109_092832_payment_info extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%payment_info}}', [
+        $this->createTable('{{%payment}}', [
             'id' => $this->primaryKey(),
-            'user_id' => $this->integer(11)->notNull(),
-            'payment_id' => $this->string(50),
-            'payment_method' => $this->string(50),
-            'payment_type' => $this->string(10),
+            'payer' => $this->string(255),
+            'payment_id' => $this->string(255),
+            'paygate' => $this->string(255)->notNull(),
+            'payment_type' => $this->string(10), // online, offline
             'payment_data' => $this->text(),
+            'payment_time' => $this->dateTime(),
+            'payment_note' => $this->string(255), // it could be a comment from customer
             'amount' => $this->float(),
             'currency' => $this->string(50),
-            'amount_usd' => $this->float(),
+            'kingcoin' => $this->float(),
             'exchange_rate' => $this->float(),
-            'status' => $this->smallInteger()->notNull()->defaultValue(9), // 10 for complete, 5 for pending, 1 for deleted 
-            'object_ref' => $this->string(50),
+            'note' => $this->string(255), // this field saves staff comment, when he proceed this payment information
+            'file_id' => $this->integer(),
+            'user_id' => $this->integer(), // ref to User table: this payment used for which user
+            'status' => $this->smallInteger()->notNull()->defaultValue(5), // 10 for complete, 5 for pending, 1 for deleted 
+            'object_name' => $this->string(255),
             'object_key' => $this->integer(),
+            'confirmed_by' => $this->integer(),
+            'confirmed_at' => $this->dateTime(),
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(),
             'updated_at' => $this->dateTime(),
@@ -40,7 +47,7 @@ class m210109_092832_payment_info extends Migration
     {
         echo "m200613_083530_affiliate cannot be reverted.\n";
 
-        $this->dropTable('{{%payment_info}}');
+        $this->dropTable('{{%payment}}');
         return false;
     }
 }

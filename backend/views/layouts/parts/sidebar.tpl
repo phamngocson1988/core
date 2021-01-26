@@ -308,6 +308,12 @@
             <span class="title">Thùng rác</span>
             </a>
           </li>
+
+          <li class="nav-item  ">
+            <a href="{url route='payment/index'}" class="nav-link " code='payment.index'>
+            <span class="title">Tab nhận tiền</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

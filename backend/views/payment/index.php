@@ -6,11 +6,14 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
-use backend\models\PaymentTransaction;
+use common\models\Payment;
+use common\components\helpers\TimeHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
+
+$now = date('Y-m-d H:i:s');
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -39,60 +42,126 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <span class="caption-subject bold uppercase"> Giao dịch nạp tiền</span>
         </div>
         <div class="actions">
+          <div class="btn-group btn-group-devided">
+            <a class="btn green" href="<?=Url::to(['payment/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+          </div>
         </div>
       </div>
       <div class="portlet-body">
         <?php Pjax::begin(); ?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable">
+          <table class="table table-striped table-bordered table-hover table-checkable" id="payment-table">
             <thead>
               <tr>
-                <th>Mã GD Kcoin</th>
-                <th>Mã đơn hàng</th>
-                <th>Khách hàng</th>
-                <th>Tài khoản gửi tiền</th>
-                <th>Kcoin/Game</th>
-                <th>Ngày tạo</th>
-                <th>Chờ duyệt</th>
-                <th>Cổng thanh toán</th>
-                <th>Số tham chiếu</th>
-                <th>Số Kcoin</th>
-                <th>Phí giao dịch</th>
-                <th>Tỉ lệ</th>
-                <th>Nhận</th>
-                <th>Đơn vị</th>
-                <th>PIC</th>
-                <th>Trạng thái</th>
+                <th col-tag="id">Mã nhận tiền</th>
+                <th col-tag="object_key">Mã đơn hàng</th>
+                <th col-tag="customer">Khách hàng</th>
+                <th col-tag="object_name">Kcoin/Shop Game</th>
+                <th col-tag="object_created_at">Ngày tạo đơn</th>
+                <th col-tag="created_at">Ngày cập nhật</th>
+                <th col-tag="confirmed_at">Ngày duyệt</th>
+                <th col-tag="payment_time">Ngày nhận hoá đơn</th>
+                <th col-tag="waiting_time">TG chờ cập nhật hoá đơn</th>
+                <th col-tag="confirmed_time">TG chờ duyệt</th>
+                <th col-tag="paygate">Cổng thanh toán</th>
+                <th col-tag="payer">TK người gửi</th>
+                <th col-tag="payment_id">Mã tham chiếu người nhận</th>
+                <th col-tag="payment_note">Ghi chú từ khách hàng</th>
+                <th col-tag="kingcoin">Thực nhận (Kcoin)</th>
+                <th col-tag="created_by">Người nhập</th>
+                <th col-tag="confirmed_by">Người duyệt</th>
+                <th col-tag="status">Trạng thái</th>
+                <th col-tag="object_file">Hoá đơn người gửi</th>
+                <th col-tag="file">Hoá đơn người nhận</th>
+                <th col-tag="payment_note">Ghi chú nhận tiền</th>
+                <th col-tag="action">Tác vụ</th>
               </tr>
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="16">No data found</td></tr>
+              <tr><td colspan="22" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
+              <?php $object = $model->object;?>
               <tr>
-                <td><?=$model->id;?></td>
-                <td><?=$model->object_ref == 'order' ? $model->object_key : '';?></td>
-                <td><?=sprintf("%s (#%s)", $model->user->name, $model->user->id);?></td>
-                <td></td>
-                <td>
-                  <?php $object = $model->object; ?>
-                  <?php if ($model->object_ref == 'order') : ?>
-                    <?=$object->game_title;?>
-                  <?php elseif ($model->object_ref == 'wallet') : ?>
-                    Kcoin
-                  <?php endif;?>
+                <td col-tag="id"><?=$model->getId();?></td>
+                <td col-tag="object_key">
+                <?php 
+                if ($model->isPending()) {
+                  echo '--';
+                } elseif ($model->isClaimed()) {
+                  echo $model->getObjectKey();
+                } elseif ($model->isDeleted()) {
+                  echo $model->object_key;
+                }
+                ?>
                 </td>
-                <td><?=$model->created_at;?></td>
-                <td>
-                  <?php
-                  $endTime = $model->approved_at ? strtotime($model->approved_at) : strtotime('now');
-                  $startTime = strtotime($model->created_at);
-                  echo round(($endTime - $startTime) / 60);
-                  ?>
+                <td col-tag="customer">
+                <?php
+                $user = $model->user;
+                echo $user ? $user->name : '--';
+                ?>
                 </td>
-                <td><?=$model->payment_method;?></td>
-                <td><?=number_format($model->amount_usd, 1);?></td>
+                <td col-tag="object_name">
+                <?php 
+                if ($model->object_name == 'wallet') {
+                  echo 'Kcoin';
+                } elseif ($model->object_name == 'order') {
+                  echo $object ? $object->game_title : 'Không tìm thấy đơn hàng tương ứng';
+                } else {
+                  echo '--';
+                }
+                ?>
+                </td>
+                <td col-tag="object_created_at"><?=$object ? $object->created_at : '--';?></td>
+                <td col-tag="created_at"><?=$model->created_at;?></td>
+                <td col-tag="confirmed_at"><?=$model->confirmed_at ? $model->confirmed_at : '--';?></td>
+                <td col-tag="payment_time"><?=$model->payment_time;?></td>
+                <td col-tag="waiting_time">
+                <?php 
+                if ($model->payment_time) {
+                  echo round(TimeHelper::timeDiff($model->payment_time, $model->created_at, 'minute'));
+                } else {
+                  echo '--';
+                }
+                ?>
+                </td>
+                <td col-tag="confirmed_time">
+                <?php
+                if ($model->isPending()) {
+                  echo round(TimeHelper::timeDiff($model->created_at, $now, 'minute'));
+                } elseif ($model->isClaimed()) {
+                  echo round(TimeHelper::timeDiff($model->created_at, $model->claimed_at, 'minute'));
+                } else {
+                  echo '--';
+                }
+                ?>
+                </td>
+                <td col-tag="paygate"><?=$model->paygate;?></td>
+                <td col-tag="payer"><?=$model->payer;?></td>
+                <td col-tag="payment_id"><?=$model->payment_id;?></td>
+                <td col-tag="payment_note"><?=nl2br($model->payment_note);?></td>
+                <td col-tag="kingcoin"><?=$model->kingcoin;?></td>
+                <td col-tag="created_by"><?=$model->payment_type === Payment::PAYMENTTYPE_OFFLINE ? $model->creator->name : 'Cổng thanh toán ONLINE';?></td>
+                <td col-tag="confirmed_by">
+                <?php
+                if ($model->payment_type === Payment::PAYMENTTYPE_OFFLINE) {
+                  if ($model->isClaimed()) echo $model->confirmer->name;
+                  else echo '--';
+                } else { 
+                  echo 'Cổng thanh toán ONLINE';
+                }
+                ?>
+                </td>
+                <td col-tag="status"><?=$model->status;?></td>
+                <td col-tag="object_file">--</td>
+                <td col-tag="file"><?=$model->file_id ? 'Bill nhận' : '--';?></td>
+                <td col-tag="payment_note"><?=nl2br($model->note);?></td>
+                <td col-tag="action">
+                <?php if ($model->isPending()) :?>
+                <a class="btn btn-xs red tooltips delete-payment-action" href="<?=Url::to(['payment/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
+                <?php endif;?>
+                </td>
               </tr>
               <?php endforeach;?>
             </tbody>
@@ -105,3 +174,21 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php
+$script = <<< JS
+$(".delete-payment-action").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có chắc muốn xóa giao dịch này?',
+  callback: function(eletement, data) {
+    toastr.success('Bạn đã xoá thành công');
+    setTimeout(() => {  
+      location.reload();
+    }, 1000);
+  },
+  error: function(element, errors) {
+      toastr(errors);
+  },
+});
+JS;
+$this->registerJs($script);
+?>

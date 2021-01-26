@@ -45,4 +45,34 @@ class PaymentController extends Controller
         ]);
     }
 
+    public function actionCreate()
+    {
+        $this->view->params['main_menu_active'] = 'payment.index';
+        $request = Yii::$app->request;
+        $model = new \backend\forms\CreatePaymentForm();
+        if ($model->load($request->post())) {
+            if ($model->validate() && $model->create()) {
+                Yii::$app->session->setFlash('success', 'Success!');
+                $ref = $request->get('ref', Url::to(['payment/index']));
+                return $this->redirect($ref);
+            } else {
+                Yii::$app->session->setFlash('error', $model->getFirstErrorMessage());
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionDelete($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\DeletePaymentForm(['id' => $id]);
+        if ($model->delete()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);
+        }
+    }
 }

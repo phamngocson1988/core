@@ -63,6 +63,11 @@ class Order extends ActiveRecord
         ];
     }
 
+    public function getId() 
+    {
+        return $this->id;
+    }
+    
     public static function getStatusList()
     {
         return [
