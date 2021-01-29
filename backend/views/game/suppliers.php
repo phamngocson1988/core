@@ -177,9 +177,7 @@ if (!count($lastPrices)) {
                         <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
                         <td class="center"><?=$supplier->last_speed ?  number_format($supplier->last_speed) : '-';?></td>
                         <td class="center">
-                          <?php if ($supplier->isAutoDispatcher()) : ?>
                           <a href='<?=Url::to(['game/max-order', 'supplier_id' => $supplier->supplier_id, 'game_id' => $supplier->game_id]);?>' data-target="#update-max-order" class="tooltips" data-pjax="0" data-container="body" data-original-title="Cập nhật số đơn / lượt" data-toggle="modal" ><?=$supplier->max_order ? number_format($supplier->max_order) : '-';?></a>
-                          <?php endif;?>
                         </td>
                         <td class="center">
                           <?php if ($supplier->isEnabled()) : ?>
