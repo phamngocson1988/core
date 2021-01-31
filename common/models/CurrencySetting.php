@@ -66,4 +66,11 @@ class CurrencySetting extends ActiveRecord
         if (!$this->exchange_rate) return 0;
         return $number / $this->exchange_rate;
     }
+
+    public function exchangeTo($number, $currency)
+    {
+        if ($this->code == $currency->code) return $number;
+        $kcoin = $this->getKcoin($number);
+        return $kcoin * $currency->exchange_rate;
+    }
 }

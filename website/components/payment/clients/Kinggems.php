@@ -6,6 +6,7 @@ use Yii;
 
 class Kinggems extends \website\models\Paygate
 {
+	public $name = 'Kinggems';
 	public function getIdentifier()
 	{
 		return 'kinggems';

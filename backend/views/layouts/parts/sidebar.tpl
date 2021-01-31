@@ -292,17 +292,20 @@
             <span class="title">Tất cả</span>
             </a>
           </li>
+          
           <li class="nav-item  ">
             <a href="{url route='payment-transaction/offline'}" class="nav-link " code='transaction.offline'>
             <span class="title">Chưa thanh toán</span>
             <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
             </a>
           </li>
+          {*
           <li class="nav-item  ">
             <a href="{url route='payment-transaction/paypal'}" class="nav-link " code='transaction.paypal'>
             <span class="title">Paypal</span>
             </a>
           </li>
+          *}
           <li class="nav-item  ">
             <a href="{url route='payment-transaction/trash'}" class="nav-link " code='transaction.trash'>
             <span class="title">Thùng rác</span>
@@ -310,8 +313,16 @@
           </li>
 
           <li class="nav-item  ">
-            <a href="{url route='payment/index'}" class="nav-link " code='payment.index'>
+            <a href="{url route='payment-reality/index'}" class="nav-link " code='payment_reality.index'>
             <span class="title">Tab nhận tiền</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='payment-commitment/index'}" class="nav-link " code='payment_commitment.index'>
+            <span class="title">Lịch sử giao dịch</span>
+            {if $this->params['new_offline_transaction']}
+            <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
+            {/if}
             </a>
           </li>
         </ul>

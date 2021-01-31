@@ -4,6 +4,8 @@ namespace website\forms;
 use Yii;
 use yii\base\Model;
 use website\models\PaymentTransaction;
+use common\models\PaymentCommitmentWallet;
+use common\models\PaymentReality;
 use website\models\Order;
 
 class UpdateTransactionForm extends Model
@@ -24,7 +26,8 @@ class UpdateTransactionForm extends Model
             [['id', 'payment_id'], 'required'],
             ['id', 'validateTransaction'],
             ['evidence', 'safe'],
-            ['payment_id', 'validatePaymentId'],
+            // ['payment_id', 'validatePaymentId'],
+            ['payment_id', 'unique', 'targetClass' => PaymentReality::className(), 'message' => 'This payment id has been used.'],
         ];
     }
 
@@ -41,35 +44,54 @@ class UpdateTransactionForm extends Model
 
     }
 
-    public function validatePaymentId($attribute, $params = [])
-    {
-        if ($this->hasErrors()) return false;
-        $order = Order::find()
-        ->where(['payment_id' => $this->payment_id])
-        ->andWhere(['<>', 'status', Order::STATUS_DELETED])
-        ->one();
-        if ($order) {
-            return $this->addError($attribute, sprintf('Duplicated payment id with other order'));
-        }
-        $payment = PaymentTransaction::find()
-        ->where(['payment_id' => $this->payment_id])
-        ->andWhere(['<>', 'status', PaymentTransaction::STATUS_DELETED])
-        ->one();
-        if (!$payment) return true;
-        if ($payment->id != $this->id) {
-            $this->addError($attribute, sprintf('Duplicated payment id with transaction'));
-            return false;
-        }
-    }
+    // public function validatePaymentId($attribute, $params = [])
+    // {
+    //     if ($this->hasErrors()) return false;
+    //     $order = Order::find()
+    //     ->where(['payment_id' => $this->payment_id])
+    //     ->andWhere(['<>', 'status', Order::STATUS_DELETED])
+    //     ->one();
+    //     if ($order) {
+    //         return $this->addError($attribute, sprintf('Duplicated payment id with other order'));
+    //     }
+    //     $payment = PaymentTransaction::find()
+    //     ->where(['payment_id' => $this->payment_id])
+    //     ->andWhere(['<>', 'status', PaymentTransaction::STATUS_DELETED])
+    //     ->one();
+    //     if (!$payment) return true;
+    //     if ($payment->id != $this->id) {
+    //         $this->addError($attribute, sprintf('Duplicated payment id with transaction'));
+    //         return false;
+    //     }
+    // }
 
     public function update()
     {
-        $transaction = $this->getTransaction();
-        if (!$transaction->payment_id) {
-            $transaction->payment_id = $this->payment_id;
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            $trn = $this->getTransaction();
+            if (!$trn->payment_id) {
+                $trn->payment_id = $this->payment_id;
+            }
+            $trn->evidence = $this->evidence;
+            $result = $trn->save();
+
+            if ($result) {
+                $commitment = PaymentCommitmentWallet::findOne(['object_key' => $trn->id]);
+                if ($commitment && !$commitment->payment_id) {
+                    $commitment->payment_id = $trn->payment_id;
+                    $commitment->evidence = $trn->evidence;
+                    $commitment->save();
+                }
+            }
+            $transaction->commit();
+            return $result;
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->addError('payment_id', $e->getMessage());
+            return false;
         }
-        $transaction->evidence = $this->evidence;
-        return $transaction->save();
     }
 
 

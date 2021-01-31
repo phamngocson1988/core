@@ -39,3 +39,7 @@
 .hide {
 	display: none;
 }
+
+.pl-5 {
+	padding-left: 5px !important;
+}

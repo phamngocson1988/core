@@ -57,33 +57,33 @@ class PaymentTransactionController extends Controller
         ]);
     }
 
-    public function actionPaypal()
-    {
-        $this->view->params['main_menu_active'] = 'transaction.paypal';
-        $request = Yii::$app->request;
-        $data = [
-            'created_at_from' => $request->get('created_at_from'),
-            'created_at_to' => $request->get('created_at_to'),
-            'id' => $request->get('id'),
-            'remark' => $request->get('remark'),
-            'user_id' => $request->get('user_id'),
-            'status' => PaymentTransaction::STATUS_PENDING,
-            'payment_method' => 'paypal',
-            'payment_type' => 'online',
-        ];
-        $search = new FetchTransactionForm($data);
-        $command = $search->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
-                            ->all();
-        return $this->render('paypal', [
-            'search' => $search,
-            'models' => $models,
-            'pages' => $pages
-        ]);
-    }
+    // public function actionPaypal()
+    // {
+    //     $this->view->params['main_menu_active'] = 'transaction.paypal';
+    //     $request = Yii::$app->request;
+    //     $data = [
+    //         'created_at_from' => $request->get('created_at_from'),
+    //         'created_at_to' => $request->get('created_at_to'),
+    //         'id' => $request->get('id'),
+    //         'remark' => $request->get('remark'),
+    //         'user_id' => $request->get('user_id'),
+    //         'status' => PaymentTransaction::STATUS_PENDING,
+    //         'payment_method' => 'paypal',
+    //         'payment_type' => 'online',
+    //     ];
+    //     $search = new FetchTransactionForm($data);
+    //     $command = $search->getCommand();
+    //     $pages = new Pagination(['totalCount' => $command->count()]);
+    //     $models = $command->offset($pages->offset)
+    //                         ->limit($pages->limit)
+    //                         ->orderBy(['id' => SORT_DESC])
+    //                         ->all();
+    //     return $this->render('paypal', [
+    //         'search' => $search,
+    //         'models' => $models,
+    //         'pages' => $pages
+    //     ]);
+    // }
 
     public function actionOffline()
     {

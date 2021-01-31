@@ -395,6 +395,9 @@ $('#paymentGame').on('click', '#update-payment-button', function(e) {
         if (!result.status) {
           toastr.error(result.errors);
         } else {
+          setTimeout(() => {  
+              location.reload();
+          }, 2000);
           toastr.success(result.message);
         }
       },

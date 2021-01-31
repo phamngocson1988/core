@@ -57,12 +57,13 @@ class Controller extends BaseController
             $this->view->params['new_commission_withdraw'] = $commissionTotal ? $commissionTotal : '';
 
             // Show number of offline transaction
-	        $offlineTransactionForm = new FetchTransactionForm([
-	            'payment_type' => 'offline',
-	            'status' => 'pending',
-	        ]);
-	        $offlineTransactionCommand = $offlineTransactionForm->getCommand();
-	        $offlineTransactionCount = $offlineTransactionCommand->count();
+	        // $offlineTransactionForm = new FetchTransactionForm([
+	        //     'payment_type' => 'offline',
+	        //     'status' => 'pending',
+	        // ]);
+	        // $offlineTransactionCommand = $offlineTransactionForm->getCommand();
+			// $offlineTransactionCount = $offlineTransactionCommand->count();
+			$offlineTransactionCount = \common\models\PaymentCommitment::find()->where(['status' => \common\models\PaymentCommitment::STATUS_PENDING])->count();
             $this->view->params['new_offline_transaction'] = $offlineTransactionCount ? $offlineTransactionCount : '';
             return true;
         }

@@ -3,19 +3,19 @@
 namespace backend\forms;
 
 use Yii;
-use common\models\Payment;
+use common\models\PaymentReality;
 use yii\helpers\ArrayHelper;
 use common\models\CurrencySetting;
 use common\models\Paygate;
 
-class CreatePaymentForm extends ActionForm
+class CreatePaymentRealityForm extends ActionForm
 {
     public $paygate;
     public $payer;
     public $payment_time;
     public $payment_id;
     public $payment_note;
-    public $amount;
+    public $total_amount;
     public $currency;
     public $note;
     public $file_id;
@@ -28,19 +28,20 @@ class CreatePaymentForm extends ActionForm
         $currencyList = $this->fetchCurrency();
         $currencyCodes = array_keys($currencyList);
         return [
-            [['paygate', 'payer', 'payment_id', 'payment_note', 'amount', 'currency', 'note'], 'trim'],
-            [['paygate', 'payer', 'payment_time', 'payment_id', 'amount', 'currency'], 'required'],
+            [['paygate', 'payer', 'payment_id', 'payment_note', 'total_amount', 'currency', 'note'], 'trim'],
+            [['paygate', 'payer', 'payment_time', 'payment_id', 'total_amount', 'currency'], 'required'],
             ['currency', 'in', 'range' => $currencyCodes],
-            ['payment_id', 'unique', 'targetClass' => Payment::className(), 'message' => 'Mã nhận tiền này đã được sử dụng'],
+            ['payment_id', 'unique', 'targetClass' => PaymentReality::className(), 'message' => 'Mã nhận tiền này đã được sử dụng'],
         ];
     }
 
     public function create()
     {
+        if (!$this->validate()) return false;
         $currency = $this->getCurrency();
         $exchange_rate = $currency ? $currency->exchange_rate : 0;
-        $kingcoin = $exchange_rate ? round($this->amount / $exchange_rate, 2) : 0;
-        $payment = new Payment();
+        $kingcoin = $exchange_rate ? round($this->total_amount / $exchange_rate, 2) : 0;
+        $payment = new PaymentReality();
         $payment->paygate = $this->paygate;
         $payment->payer = $this->payer;
         $payment->payment_time = $this->payment_time;
@@ -48,11 +49,11 @@ class CreatePaymentForm extends ActionForm
         $payment->payment_note = $this->payment_note;
         $payment->exchange_rate = $exchange_rate;
         $payment->kingcoin = $kingcoin;
-        $payment->amount = $this->amount;
+        $payment->total_amount = $this->total_amount;
         $payment->currency = $this->currency;
         $payment->note = $this->note;
-        $payment->status = Payment::STATUS_PENDING;
-        $payment->payment_type = Payment::PAYMENTTYPE_OFFLINE;
+        $payment->status = PaymentReality::STATUS_PENDING;
+        $payment->payment_type = PaymentReality::PAYMENTTYPE_OFFLINE;
         return $payment->save();
     }
 

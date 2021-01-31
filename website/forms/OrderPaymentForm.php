@@ -14,6 +14,9 @@ use website\components\payment\PaymentGatewayFactory;
 use website\components\notifications\OrderNotification;
 use common\models\Currency;
 use common\components\helpers\StringHelper;
+use common\models\PaymentCommitment;
+use common\models\CurrencySetting;
+
 // Notification
 
 class OrderPaymentForm extends Model
@@ -203,6 +206,26 @@ class OrderPaymentForm extends Model
             } else {
                 $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
                 $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
+            }
+
+            if ($paygate->getIdentifier() != 'kinggems') {
+                $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+                $targetCurrency = CurrencySetting::findOne(['code' => $order->currency]);
+
+                $commitment = new PaymentCommitment();
+                $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
+                $commitment->object_key = $order->id;
+                $commitment->paygate = $paygate->name;
+                $commitment->payment_type = $paygate->getPaymentType();
+                $commitment->amount = $usdCurrency->exchangeTo($order->sub_total_price, $targetCurrency); //Currency::convertUSDToCurrency($order->sub_total_price, $order->currency);
+                $commitment->fee = $usdCurrency->exchangeTo($order->total_fee, $targetCurrency); //Currency::convertUSDToCurrency($order->sub_total_price, $order->total_fee);
+                $commitment->total_amount = $usdCurrency->exchangeTo($order->total_price, $targetCurrency);
+                $commitment->currency = $order->currency;
+                $commitment->kingcoin = $usdCurrency->getKcoin($order->total_price);
+                $commitment->exchange_rate = $targetCurrency->exchange_rate;
+                $commitment->user_id = $order->customer_id;
+                $commitment->status = PaymentCommitment::STATUS_PENDING;
+                $commitment->save();
             }
 
             // Check flashsale

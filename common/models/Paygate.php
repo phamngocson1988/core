@@ -74,4 +74,9 @@ class Paygate extends ActiveRecord
             return 0;
         }
     }
+
+    public function getPaymentType()
+    {
+        return $this->paygate_type;
+    }
 }

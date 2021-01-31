@@ -88,7 +88,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Ghi chú từ khách hàng');?>
-                  <?=$form->field($model, 'amount', [
+                  <?=$form->field($model, 'total_amount', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

@@ -1,12 +1,11 @@
 <?php
 use yii\widgets\LinkPager;
-use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
-use common\models\Payment;
+use common\models\PaymentReality;
 use common\components\helpers\TimeHelper;
 
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
@@ -43,12 +42,99 @@ $now = date('Y-m-d H:i:s');
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['payment/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn green" href="<?=Url::to(['payment-reality/create']);?>"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>
       </div>
       <div class="portlet-body">
-        <?php Pjax::begin(); ?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['payment-reality/index']]);?>
+          <div class="row margin-bottom-10">
+            <?=$form->field($search, 'id', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-6 col-md-2 col-lg-1 col-xl-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
+            ])->textInput()->label('Mã nhận tiền');?>
+
+            <?=$form->field($search, 'object_key', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-6 col-md-2 col-lg-1 col-xl-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'object_key']
+            ])->textInput()->label('Mã đơn hàng');?>
+
+            <?=$form->field($search, 'customer_id', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'initValueText' => ($search->customer_id && $search->getCustomer()) ? sprintf("%s - %s", $search->getCustomer()->username, $search->getCustomer()->email) : '',
+              'options' => ['class' => 'form-control', 'name' => 'customer_id'],
+              'pluginOptions' => [
+                'placeholder' => 'Chọn khách hàng',
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'ajax' => [
+                    'url' => Url::to(['user/suggestion']),
+                    'dataType' => 'json',
+                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
+                ]
+              ]
+            ])->label('Khách hàng')?>
+
+            <?=$form->field($search, 'payer', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-6 col-md-2 col-lg-1 col-xl-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'payer']
+            ])->textInput()->label('TK người gửi');?>
+
+            <?=$form->field($search, 'payment_id', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'payment_id']
+            ])->textInput()->label('Mã tham chiếu người nhận');?>
+
+            <?=$form->field($search, 'status', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status']
+            ])->dropDownList($search->fetchStatus(), ['prompt' => 'Chọn trạng thái'])->label('Trạng thái');?>
+          </div>
+          <div class="row margin-bottom-10">
+            <?=$form->field($search, 'date_type', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'date_type']
+            ])->dropDownList([
+              'created_at' => 'Ngày cập nhật',
+              'payment_at' => 'Ngày nhận đơn',
+              'object_created_at' => 'Ngày tạo đơn',
+            ], ['prompt' => 'Chọn mốc thời gian'])->label('Lọc theo mốc thời gian');?>
+
+            <?= $form->field($search, 'start_date', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']
+            ])->widget(DateTimePicker::className(), [
+              'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd hh:00',
+                'minuteStep' => 1,
+                'endDate' => date('Y-m-d H:i'),
+                'minView' => '1'
+              ],
+            ])->label('Ngày tạo từ');?>
+
+            <?=$form->field($search, 'end_date', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'end_date']
+            ])->widget(DateTimePicker::className(), [
+                'clientOptions' => [
+                  'autoclose' => true,
+                  'format' => 'yyyy-mm-dd hh:59',
+                  'todayBtn' => true,
+                  'minuteStep' => 1,
+                  'endDate' => date('Y-m-d H:i'),
+                  'minView' => '1'
+                ],
+            ])->label('Ngày tạo đến');?>
+
+            <div class="form-group col-md-4 col-lg-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
+          </div>
+        <?php ActiveForm::end()?>
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover table-checkable" id="payment-table">
             <thead>
@@ -131,7 +217,7 @@ $now = date('Y-m-d H:i:s');
                 if ($model->isPending()) {
                   echo round(TimeHelper::timeDiff($model->created_at, $now, 'minute'));
                 } elseif ($model->isClaimed()) {
-                  echo round(TimeHelper::timeDiff($model->created_at, $model->claimed_at, 'minute'));
+                  echo round(TimeHelper::timeDiff($model->created_at, $model->confirmed_at, 'minute'));
                 } else {
                   echo '--';
                 }
@@ -142,10 +228,10 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="payment_id"><?=$model->payment_id;?></td>
                 <td col-tag="payment_note"><?=nl2br($model->payment_note);?></td>
                 <td col-tag="kingcoin"><?=$model->kingcoin;?></td>
-                <td col-tag="created_by"><?=$model->payment_type === Payment::PAYMENTTYPE_OFFLINE ? $model->creator->name : 'Cổng thanh toán ONLINE';?></td>
+                <td col-tag="created_by"><?=$model->payment_type === PaymentReality::PAYMENTTYPE_OFFLINE ? $model->creator->name : 'Cổng thanh toán ONLINE';?></td>
                 <td col-tag="confirmed_by">
                 <?php
-                if ($model->payment_type === Payment::PAYMENTTYPE_OFFLINE) {
+                if ($model->payment_type === PaymentReality::PAYMENTTYPE_OFFLINE) {
                   if ($model->isClaimed()) echo $model->confirmer->name;
                   else echo '--';
                 } else { 
@@ -154,12 +240,12 @@ $now = date('Y-m-d H:i:s');
                 ?>
                 </td>
                 <td col-tag="status"><?=$model->status;?></td>
-                <td col-tag="object_file">--</td>
-                <td col-tag="file"><?=$model->file_id ? 'Bill nhận' : '--';?></td>
+                <td col-tag="object_evidence"><?=$object ? $object->evidence : '--';?></td>
+                <td col-tag="evidence"><?=$model->evidence ? $model->evidence : '--';?></td>
                 <td col-tag="payment_note"><?=nl2br($model->note);?></td>
                 <td col-tag="action">
                 <?php if ($model->isPending()) :?>
-                <a class="btn btn-xs red tooltips delete-payment-action" href="<?=Url::to(['payment/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
+                <a class="btn btn-xs red tooltips delete-payment-action" href="<?=Url::to(['payment-reality/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
                 <?php endif;?>
                 </td>
               </tr>
@@ -168,7 +254,6 @@ $now = date('Y-m-d H:i:s');
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->

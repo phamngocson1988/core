@@ -9,10 +9,10 @@ use common\models\User;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
-class Payment extends ActiveRecord implements PaymentInterface
+class PaymentCommitment extends ActiveRecord implements PaymentCommitmentInterface
 {
     CONST STATUS_PENDING = 5;
-    const STATUS_CLAIMED = 10;
+    const STATUS_APPROVED = 10;
     const STATUS_DELETED = 1;
 
     const PAYMENTTYPE_ONLINE = 'online';
@@ -40,12 +40,12 @@ class Payment extends ActiveRecord implements PaymentInterface
 
 	public static function tableName()
     {
-        return '{{%payment}}';
+        return '{{%payment_commitment}}';
     }
 
     public static function find()
     {
-        return new PaymentQuery(get_called_class());
+        return new PaymentCommitmentQuery(get_called_class());
     }
 
     public function getId()
@@ -57,7 +57,7 @@ class Payment extends ActiveRecord implements PaymentInterface
     {
         return [
             self::STATUS_PENDING => Yii::t('app', 'pending'),
-            self::STATUS_CLAIMED => Yii::t('app', 'claimed'),
+            self::STATUS_APPROVED => Yii::t('app', 'approved'),
             self::STATUS_DELETED => Yii::t('app', 'deleted'),
         ];
     }
@@ -70,9 +70,9 @@ class Payment extends ActiveRecord implements PaymentInterface
         ];
     }
 
-    public function isClaimed()
+    public function isApproved()
     {
-        return $this->status == self::STATUS_CLAIMED;
+        return $this->status == self::STATUS_APPROVED;
     }
 
     public function isPending()
@@ -83,6 +83,16 @@ class Payment extends ActiveRecord implements PaymentInterface
     public function isDeleted()
     {
         return $this->status == self::STATUS_DELETED;
+    }
+
+    public function isObjectOrder()
+    {
+        return $this->object_name == static::OBJECT_NAME_ORDER;
+    }
+
+    public function isObjectWallet()
+    {
+        return $this->object_name == static::OBJECT_NAME_WALLET;
     }
 
     public function getCreator()
@@ -109,9 +119,20 @@ class Payment extends ActiveRecord implements PaymentInterface
     {
         return '';
     }
+
+    public function getReality()
+    {
+        return $this->hasOne(PaymentReality::className(), ['id' => 'payment_reality_id']);
+    }
+
+    public function getStatusName()
+    {
+        $list = static::getStatusList();
+        return ArrayHelper::getValue($list, $this->status, '');
+    }
 }
 
-class PaymentQuery extends ActiveQuery
+class PaymentCommitmentQuery extends ActiveQuery
 {
     protected function createModels($rows)
     {
@@ -124,11 +145,11 @@ class PaymentQuery extends ActiveQuery
             foreach ($rows as $row) {
                 $object = ArrayHelper::getValue($row, 'object_name');
                 switch ($object) {
-                    case Payment::OBJECT_NAME_ORDER:
-                        $class = OrderPayment::className();
+                    case PaymentCommitment::OBJECT_NAME_ORDER:
+                        $class = PaymentCommitmentOrder::className();
                         break;
-                    case Payment::OBJECT_NAME_WALLET:
-                        $class = WalletPayment::className();
+                    case PaymentCommitment::OBJECT_NAME_WALLET:
+                        $class = PaymentCommitmentWallet::className();
                         break;
                     default:
                         $class = $this->modelClass;
@@ -141,39 +162,5 @@ class PaymentQuery extends ActiveQuery
             }
             return $models;
         }
-    }
-}
-
-interface PaymentInterface
-{
-    public function getObject();
-    public function getObjectKey();
-}
-
-class OrderPayment extends Payment implements PaymentInterface
-{
-    public function getObject()
-    {
-        return $this->hasOne(Order::className(), ['id' => 'object_key']);
-    }
-
-    public function getObjectKey()
-    {
-        $object = $this->object;
-        return $object->getId();
-    }
-}
-
-class WalletPayment extends Payment implements PaymentInterface
-{
-    public function getObject()
-    {
-        return $this->hasOne(PaymentTransaction::className(), ['id' => 'object_key']);
-    }
-
-    public function getObjectKey()
-    {
-        $object = $this->object;
-        return $object->getId();
     }
 }

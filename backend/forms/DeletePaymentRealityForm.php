@@ -3,9 +3,9 @@
 namespace backend\forms;
 
 use Yii;
-use common\models\Payment;
+use common\models\PaymentReality;
 
-class DeletePaymentForm extends ActionForm
+class DeletePaymentRealityForm extends ActionForm
 {
     public $id;
 
@@ -36,13 +36,14 @@ class DeletePaymentForm extends ActionForm
     public function getPayment()
     {
         if (!$this->_payment) {
-            $this->_payment = Payment::findOne($this->id);
+            $this->_payment = PaymentReality::findOne($this->id);
         }
         return $this->_payment;
     }
 
     public function delete()
     {
+        if (!$this->validate()) return false;
         $payment = $this->getPayment();
         return $payment->delete();
     }
