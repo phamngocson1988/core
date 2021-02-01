@@ -292,14 +292,13 @@
             <span class="title">Tất cả</span>
             </a>
           </li>
-          
+          {*
           <li class="nav-item  ">
             <a href="{url route='payment-transaction/offline'}" class="nav-link " code='transaction.offline'>
             <span class="title">Chưa thanh toán</span>
             <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
             </a>
           </li>
-          {*
           <li class="nav-item  ">
             <a href="{url route='payment-transaction/paypal'}" class="nav-link " code='transaction.paypal'>
             <span class="title">Paypal</span>
@@ -489,12 +488,14 @@
             </a>
           </li>
           {if $app->user->can('saler') || $app->user->can('accounting')}
+          {*
           <li class="nav-item  ">
             <a href="{url route='/order/verifying'}" class="nav-link " code='order.verifying'>
             <span class="title">Đơn hàng verifying</span>
             <span class="badge badge-success">{$this->params['new_verifying_order']}</span>
             </a>
           </li>
+          *}
           {/if}
           <li class="nav-item  ">
             <a href="{url route='/order/pending'}" class="nav-link " code='order.pending'>

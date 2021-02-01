@@ -36,7 +36,7 @@ class DeletePaymentCommitmentForm extends ActionForm
 
     public function getCommitment()
     {
-        if ($this->_commitment) {
+        if (!$this->_commitment) {
             $this->_commitment = PaymentCommitment::findOne($this->id);
         }
         return $this->_commitment;

@@ -239,7 +239,7 @@ $now = date('Y-m-d H:i:s');
                 }
                 ?>
                 </td>
-                <td col-tag="status"><?=$model->status;?></td>
+                <td col-tag="status"><?=$model->getStatusName();?></td>
                 <td col-tag="object_evidence"><?=$object ? $object->evidence : '--';?></td>
                 <td col-tag="evidence"><?=$model->evidence ? $model->evidence : '--';?></td>
                 <td col-tag="payment_note"><?=nl2br($model->note);?></td>
