@@ -239,8 +239,14 @@ $now = date('Y-m-d H:i:s');
                 }
                 ?>
                 </td>
-                <td col-tag="status"><?=$model->getStatusName();?></td>
-                <td col-tag="object_evidence"><?=$object ? $object->evidence : '--';?></td>
+                <td col-tag="status">
+                  <?php if ($model->isPending()) : ?>
+                  <span class="label label-info">Pending</span>
+                  <?php elseif ($model->isClaimed()) : ?>
+                  <span class="label label-default">Claimed</span>
+                  <?php endif;?>
+                </td>
+                <td col-tag="object_evidence"><?=$object ? Html::a('Xem', $object->evidence, ['target' => '_blank']) : '--';?></td>
                 <td col-tag="evidence"><?=$model->evidence ? $model->evidence : '--';?></td>
                 <td col-tag="payment_note"><?=nl2br($model->note);?></td>
                 <td col-tag="action">

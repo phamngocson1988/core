@@ -63,6 +63,7 @@ class FetchPaymentRealityForm extends Model
                 }
             }
         }
+        $command->orderBy(['status' => SORT_ASC]);
         $this->_command = $command;
     }
 

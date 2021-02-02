@@ -47,7 +47,6 @@ class PaymentRealityController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
                             ->all();
         return $this->render('index', [
             'search' => $search,

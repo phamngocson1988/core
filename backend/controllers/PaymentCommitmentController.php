@@ -44,7 +44,6 @@ class PaymentCommitmentController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
                             ->all();
         $approveForm = new \backend\forms\ApprovePaymentCommitmentForm();
         $paymentRealities = $approveForm->fetchPendingReality();

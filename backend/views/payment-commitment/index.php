@@ -191,7 +191,13 @@ $now = date('Y-m-d H:i:s');
                 }
                 ?>
                 </td>
-                <td col-tag="status"><?=$model->getStatusName();?></td>
+                <td col-tag="status">
+                  <?php if ($model->isPending()) : ?>
+                  <span class="label label-info">Pending</span>
+                  <?php elseif ($model->isApproved()) : ?>
+                  <span class="label label-default">Approved</span>
+                  <?php endif;?>
+                </td>
                 <td col-tag="action">
                 <?php if ($model->isPending()) :?>
                   <a href='#approve-commitment-modal-<?=$model->id;?>' class="btn btn-xs blue tooltips" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>

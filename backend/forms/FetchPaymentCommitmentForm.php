@@ -46,6 +46,7 @@ class FetchPaymentCommitmentForm extends Model
             $command->andWhere(['<=', "created_at", $this->end_date]);
         }
 
+        $command->orderBy(['status' => SORT_ASC]);
         $this->_command = $command;
     }
 

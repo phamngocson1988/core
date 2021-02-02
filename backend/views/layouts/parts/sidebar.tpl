@@ -383,12 +383,15 @@
             </a>
           </li>
           {/if}
-          {if $app->user->can('admin')}
+          
+          {if $app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/currency'}" class="nav-link " code='currency.index'>
             <span class="title">Quản lý tiền tệ</span>
             </a>
           </li>
+          {/if}
+          {if $app->user->can('admin')}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
             <span class="title">Cổng thanh toán</span><span class="arrow"></span>
