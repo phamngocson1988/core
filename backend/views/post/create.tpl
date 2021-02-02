@@ -79,7 +79,7 @@
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                   ])->widget(common\widgets\ImageInputWidget::className(), [
-                    'template' => '<div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">{image}{input}</div>{buttons}',
+                    'template' => '<div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">{image}{input}</div>{choose_button}{cancel_button}',
                     'imageOptions' => ['width' => 150, 'height' => 150]
                   ])->label('Hình ảnh')}
                 </div>

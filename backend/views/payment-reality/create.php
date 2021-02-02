@@ -103,6 +103,23 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Ghi chú nhận tiền');?>
+                  <?=$form->field($model, 'evidence', [
+                    'options' => ['tag' => false],       
+                  ])->hiddenInput()->label(false);?>
+
+                  <div class="form-group field-createpostform-image_id">
+                    <label class="col-md-2 control-label" for="createpostform-image_id">Hình ảnh</label>
+                    <div class="col-md-10">
+                      <div class="fileinput-preview thumbnail" style="width: 150px; height: 150px;">
+                        <img id="evidence-image" src="<?=$model->evidence ? $model->evidence : '/images/noimage.png';?>" width="150" height="150" alt="" alter-src="<?=$model->evidence ? $model->evidence : '/images/noimage.png';?>">
+                        <input type="file" id="uploadEvidence" name="uploadEvidence" style="display: none" accept="image/*"/>
+                        <?=$form->field($model, 'evidence', ['options' => ['tag' => false]])->hiddenInput(['id' => 'evidence-input'])->label(false);?>
+                      </div>
+                      <span id="uploadElement" class="btn default" onclick="javascript:;">Chọn hình ảnh</span>
+                      <span id="cancelButtonId" class="btn red">Loại bỏ ảnh</span>
+                      <div class="help-block"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -112,3 +129,32 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
       <?php ActiveForm::end()?>
   </div>
 </div>
+
+<!-- Image upload --> 
+<?php
+$imageJs = <<< JS
+var upload = new AjaxUploadFile({
+  trigger_element: '#uploadElement', 
+  file_element: '#uploadEvidence',
+  file_options: {resize: '500xauto'},
+  max: 1
+});
+upload.callback = function(result) {
+  result.forEach(function(element) {
+    console.log(element);
+    $('#evidence-input').val(element.src);
+    $('#evidence-image').attr('src', element.src);
+  });
+};
+
+$('#cancelButtonId').on('click', function(e){
+  e.preventDefault();
+  var alter = $('#evidence-image').attr('alter-src');
+  $('#evidence-image').attr('src', alter);
+  $('#evidence-input').val('');
+  return false;
+});
+JS;
+$this->registerJs($imageJs);
+?>
+<!-- end image upload -->

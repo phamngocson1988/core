@@ -18,7 +18,7 @@ class CreatePaymentRealityForm extends ActionForm
     public $total_amount;
     public $currency;
     public $note;
-    public $file_id;
+    public $evidence;
 
     /**
      * @inheritdoc
@@ -28,7 +28,7 @@ class CreatePaymentRealityForm extends ActionForm
         $currencyList = $this->fetchCurrency();
         $currencyCodes = array_keys($currencyList);
         return [
-            [['paygate', 'payer', 'payment_id', 'payment_note', 'total_amount', 'currency', 'note'], 'trim'],
+            [['paygate', 'payer', 'payment_id', 'payment_note', 'total_amount', 'currency', 'note', 'evidence'], 'trim'],
             [['paygate', 'payer', 'payment_time', 'payment_id', 'total_amount', 'currency'], 'required'],
             ['currency', 'in', 'range' => $currencyCodes],
             ['payment_id', 'unique', 'targetClass' => PaymentReality::className(), 'message' => 'Mã nhận tiền này đã được sử dụng'],
@@ -54,6 +54,7 @@ class CreatePaymentRealityForm extends ActionForm
         $payment->note = $this->note;
         $payment->status = PaymentReality::STATUS_PENDING;
         $payment->payment_type = PaymentReality::PAYMENTTYPE_OFFLINE;
+        $payment->evidence = $this->evidence;
         return $payment->save();
     }
 
