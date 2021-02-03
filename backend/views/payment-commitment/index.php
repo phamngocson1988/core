@@ -133,6 +133,7 @@ $now = date('Y-m-d H:i:s');
                 <th col-tag="kingcoin_difference">Chênh lệch (Kcoin)</th>
                 <th col-tag="exchange_rate">Tỷ giá</th>
                 <th col-tag="currency">Tiền tệ</th>
+                <th col-tag="evidence">Hóa đơn</th>
                 <th col-tag="confirmed_by">Người duyệt</th>
                 <th col-tag="status">Trạng thái</th>
                 <th col-tag="action">Tác vụ</th>
@@ -181,6 +182,7 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="kingcoin_difference"><?=$reality ? $reality->kingcoin - $model->kingcoin : '--';?></td>
                 <td col-tag="exchange_rate"><?=$model->exchange_rate;?></td>
                 <td col-tag="currency"><?=$model->currency;?></td>
+                <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['target' => '_blank']) : '--';?></td>
                 <td col-tag="confirmed_by">
                 <?php
                 if ($model->payment_type === PaymentCommitment::PAYMENTTYPE_OFFLINE) {
