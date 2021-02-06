@@ -26,8 +26,7 @@ class UpdateOrderForm extends Model
             [['id', 'payment_id'], 'required'],
             ['id', 'validateOrder'],
             ['evidence', 'safe'],
-            // ['payment_id', 'validatePaymentId'],
-            ['payment_id', 'unique', 'targetClass' => PaymentReality::className(), 'message' => 'This payment id has been used.'],
+            ['payment_id', 'validatePaymentId'],
         ];
     }
 
@@ -44,27 +43,17 @@ class UpdateOrderForm extends Model
 
     }
 
-    // public function validatePaymentId($attribute, $params = [])
-    // {
-    //     if ($this->hasErrors()) return false;
-    //     $payment = PaymentTransaction::find()
-    //     ->where(['payment_id' => $this->payment_id])
-    //     ->andWhere(['<>', 'status', PaymentTransaction::STATUS_DELETED])
-    //     ->one();
-    //     if ($payment) {
-    //         return $this->addError($attribute, sprintf('Duplicated payment id with other transaction'));
-    //     }
-
-    //     $order = Order::find()
-    //     ->where(['payment_id' => $this->payment_id])
-    //     ->andWhere(['<>', 'status', Order::STATUS_DELETED])
-    //     ->one();
-    //     if (!$order) return true;
-    //     if ($order->id != $this->id) {
-    //         $this->addError($attribute, sprintf('Duplicated payment id with other order'));
-    //         return false;
-    //     }
-    // }
+    public function validatePaymentId($attribute, $params = [])
+    {
+        if ($this->hasErrors()) return false;
+        $reality = PaymentReality::find()->where([
+            'payment_id' => $this->payment_id,
+            'status' => PaymentReality::STATUS_CLAIMED
+        ])->exists();
+        if ($reality) {
+            $this->addError($attribute, 'This payment id has been used.');
+        }
+    }
 
     public function update()
     {
@@ -84,6 +73,26 @@ class UpdateOrderForm extends Model
                 if ($commitment && !$commitment->payment_id) {
                     $commitment->payment_id = $order->payment_id;
                     $commitment->evidence = $order->evidence;
+
+                    $commitment->on(PaymentCommitmentOrder::EVENT_AFTER_UPDATE, function($event) {
+                        $model = $event->sender; //PaymentCommitmentOrder
+                        if (!$model->payment_id) return;
+                        $reality = PaymentReality::find()->where([
+                            'payment_id' => $model->payment_id,
+                            'status' => PaymentReality::STATUS_PENDING,
+                        ])->one();
+                        if (!$reality) return;
+                        $approveTransactionService = new ApprovePaymentCommitmentForm([
+                            'id' => $model->id,
+                            'payment_reality_id' => $reality->id,
+                            'note' => sprintf('Transaction is approved automatically, after updating payment id of %s', $model->getId()),
+                            'confirmed_by' => $model->created_by,
+                        ]);
+                        $approveTransactionService->setReality($reality);
+                        $approveTransactionService->setCommitment($model);
+                        $approveTransactionService->approve();
+                    });
+
                     $commitment->save();
                 }
             }

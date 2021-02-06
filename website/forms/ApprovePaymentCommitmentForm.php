@@ -1,10 +1,11 @@
 <?php
 
-namespace backend\forms;
+namespace website\forms;
 
 use Yii;
 use common\models\PaymentReality;
 use common\models\PaymentCommitment;
+use common\forms\ActionForm;
 use yii\helpers\ArrayHelper;
 
 class ApprovePaymentCommitmentForm extends ActionForm

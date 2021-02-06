@@ -9,7 +9,8 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
 
 $orderIds = ArrayHelper::getColumn($orders, 'id');
 $orderIds = implode(',', $orderIds);
-$checkNewMessageUrl = Url::to(['order/check-new-message', 'ids' => $orderIds])
+$checkNewMessageUrl = Url::to(['order/check-new-message', 'ids' => $orderIds]);
+$myOrderUrl = Url::to(['order/index']);
 ?>
 <div class="container order-page">
   <h1 class="text-uppercase mt-5">my order</h1>
@@ -351,7 +352,7 @@ $('#paymentGame').on('click', '#update-payment-button', function(e) {
           toastr.error(result.errors);
         } else {
           setTimeout(() => {  
-              location.reload();
+            window.location.href = '$myOrderUrl';
           }, 2000);
           toastr.success(result.message); 
         }

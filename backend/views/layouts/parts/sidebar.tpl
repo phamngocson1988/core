@@ -329,7 +329,7 @@
       {/if}
 
       <!-- Cấu hình -->
-      {if ($app->user->cans(['saler', 'marketing_officer']))}
+      {if ($app->user->cans(['saler', 'marketing_officer', 'accounting']))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-settings"></i>
@@ -344,6 +344,7 @@
             </a>
           </li>
           {/if}
+          {if ($app->user->cans(['saler', 'marketing_officer']))}
           <li class="nav-item  ">
             <a href="{url route='/hotnew/index'}" class="nav-link " code='hotnew.index'>
             <span class="title">What's hot news</span>
@@ -354,7 +355,8 @@
             <span class="title">Thông báo ở đầu trang</span>
             </a>
           </li>
-          {if ($app->user->can('sale_manager') || $app->user->can('marketing_officer'))}
+          {/if}
+          {if ($app->user->cans(['sale_manager', 'marketing_officer']))}
           <li class="nav-item  ">
             <a href="{url route='/setting/social'}" class="nav-link " code='setting.social'>
             <span class="title">{Yii::t('app', 'social_networks')}</span>
@@ -371,11 +373,13 @@
             <span class="title">Imports</span>
             </a>
           </li> -->
+          {if ($app->user->cans(['saler', 'marketing_officer']))}
           <li class="nav-item  ">
             <a href="{url route='/setting/gallery'}" class="nav-link " code='setting.gallery'>
             <span class="title">Home banner</span>
             </a>
           </li>
+          {/if}
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/order-complain'}" class="nav-link " code='ordercomplain.index'>

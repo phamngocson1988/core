@@ -4,6 +4,7 @@ namespace backend\forms;
 
 use Yii;
 use common\models\PaymentReality;
+use common\models\PaymentCommitment;
 use yii\helpers\ArrayHelper;
 use common\models\CurrencySetting;
 use common\models\Paygate;
@@ -19,6 +20,8 @@ class CreatePaymentRealityForm extends ActionForm
     public $currency;
     public $note;
     public $evidence;
+
+    public $autoApproveTransaction = true;
 
     /**
      * @inheritdoc
@@ -55,6 +58,28 @@ class CreatePaymentRealityForm extends ActionForm
         $payment->status = PaymentReality::STATUS_PENDING;
         $payment->payment_type = PaymentReality::PAYMENTTYPE_OFFLINE;
         $payment->evidence = $this->evidence;
+
+        // Approve transaction automatically
+        if ($this->autoApproveTransaction) {
+            $payment->on(PaymentReality::EVENT_AFTER_INSERT, function($event) {
+                $model = $event->sender; //PaymentReality
+                if (!$model->payment_id) return;
+                $commitment = PaymentCommitment::find()->where([
+                    'payment_id' => $model->payment_id,
+                    'status' => PaymentCommitment::STATUS_PENDING,
+                ])->one();
+                if (!$commitment) return;
+                $approveTransactionService = new ApprovePaymentCommitmentForm([
+                    'id' => $commitment->id,
+                    'payment_reality_id' => $model->id,
+                    'note' => sprintf('Transaction is approved automatically, after creating %s', $model->getId()),
+                    'confirmed_by' => $model->created_by,
+                ]);
+                $approveTransactionService->setReality($model);
+                $approveTransactionService->setCommitment($commitment);
+                $approveTransactionService->approve();
+            });
+        }
         return $payment->save();
     }
 

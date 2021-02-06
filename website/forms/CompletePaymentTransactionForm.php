@@ -1,9 +1,10 @@
 <?php
-namespace backend\forms;
+namespace website\forms;
 
 use Yii;
-use backend\models\PaymentTransaction;
+use website\models\PaymentTransaction;
 use common\events\PaymentTransactionEvent;
+use common\forms\ActionForm;
 
 class CompletePaymentTransactionForm extends ActionForm
 {
