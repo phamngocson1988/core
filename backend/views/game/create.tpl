@@ -65,6 +65,22 @@
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(CheckboxInput::className())->label(false)}
 
+        <div class="profile-stat">
+          {$form->field($model, 'hot_deal', [
+            'options' => ['class' => '', 'style' => 'width: 50%; float: left; padding-left: 0px; padding-right: 0px']
+          ])->widget(CheckboxInput::className())->label(false)}
+          {$form->field($model, 'new_trending', [
+            'options' => ['class' => '', 'style' => 'width: 50%; float: left; padding-left: 0px; padding-right: 0px']
+          ])->widget(CheckboxInput::className())->label(false)}
+          {$form->field($model, 'top_grossing', [
+            'options' => ['class' => '', 'style' => 'width: 50%; float: left; padding-left: 0px; padding-right: 0px']
+          ])->widget(CheckboxInput::className())->label(false)}
+          {$form->field($model, 'back_to_stock', [
+            'options' => ['class' => '', 'style' => 'width: 50%; float: left; padding-left: 0px; padding-right: 0px']
+          ])->widget(CheckboxInput::className())->label(false)}
+          <div class="spacer" style="clear: both;"></div>
+        </div>
+
         {$form->field($model, 'promotion_info', [
           'options' => ['class' => 'list-separated profile-stat']
         ])->textInput()->label('Thông tin khuyến mãi')}
@@ -111,9 +127,6 @@
                   <a href="#tab_1_3" data-toggle="tab">Danh mục game</a>
                 </li>
                 <li>
-                  <a href="#tab_1_4" data-toggle="tab">Đặc tính</a>
-                </li>
-                <li>
                   <a href="#tab_1_5" data-toggle="tab">Nhóm game</a>
                 </li>
               </ul>
@@ -142,27 +155,6 @@
                     'encode' => false , 
                     'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
                   ])->label('Categories')}
-                </div>
-                <div class="tab-pane" id="tab_1_4">
-                  {$form->field($model, 'hot_deal', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('')}
-
-                  {$form->field($model, 'new_trending', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('')}
-
-                  {$form->field($model, 'top_grossing', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('')}
-
-                  {$form->field($model, 'back_to_stock', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('')}
                 </div>
                 <div class="tab-pane" id="tab_1_5">
                   {$form->field($model, 'group_id', [
