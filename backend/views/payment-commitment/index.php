@@ -179,7 +179,7 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="voucher_value"></td>
                 <td col-tag="kingcoin"><?=$model->kingcoin;?></td>
                 <td col-tag="kingcoin_reality"><?=$reality ? $reality->kingcoin : '--';?></td>
-                <td col-tag="kingcoin_difference"><?=$reality ? $reality->kingcoin - $model->kingcoin : '--';?></td>
+                <td col-tag="kingcoin_difference"><?=$reality ? StringHelper::numberFormat($reality->kingcoin - $model->kingcoin, 2) : '--';?></td>
                 <td col-tag="exchange_rate"><?=$model->exchange_rate;?></td>
                 <td col-tag="currency"><?=$model->currency;?></td>
                 <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['target' => '_blank']) : '--';?></td>

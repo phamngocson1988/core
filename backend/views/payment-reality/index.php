@@ -156,10 +156,10 @@ $now = date('Y-m-d H:i:s');
                 <th col-tag="kingcoin">Thực nhận (Kcoin)</th>
                 <th col-tag="created_by">Người nhập</th>
                 <th col-tag="confirmed_by">Người duyệt</th>
-                <th col-tag="status">Trạng thái</th>
                 <th col-tag="object_file">Hoá đơn người gửi</th>
                 <th col-tag="file">Hoá đơn người nhận</th>
                 <th col-tag="payment_note">Ghi chú nhận tiền</th>
+                <th col-tag="status">Trạng thái</th>
                 <th col-tag="action">Tác vụ</th>
               </tr>
             </thead>
@@ -239,6 +239,9 @@ $now = date('Y-m-d H:i:s');
                 }
                 ?>
                 </td>
+                <td col-tag="object_evidence"><?=($object && $object->evidence) ? Html::a('Xem', $object->evidence, ['target' => '_blank']) : '--';?></td>
+                <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['target' => '_blank']) : '--';?></td>
+                <td col-tag="payment_note"><?=nl2br($model->note);?></td>
                 <td col-tag="status">
                   <?php if ($model->isPending()) : ?>
                   <span class="label label-info">Pending</span>
@@ -246,9 +249,6 @@ $now = date('Y-m-d H:i:s');
                   <span class="label label-default">Claimed</span>
                   <?php endif;?>
                 </td>
-                <td col-tag="object_evidence"><?=($object && $object->evidence) ? Html::a('Xem', $object->evidence, ['target' => '_blank']) : '--';?></td>
-                <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['target' => '_blank']) : '--';?></td>
-                <td col-tag="payment_note"><?=nl2br($model->note);?></td>
                 <td col-tag="action">
                 <?php if ($model->isPending()) :?>
                 <a class="btn btn-xs red tooltips delete-payment-action" href="<?=Url::to(['payment-reality/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>

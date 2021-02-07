@@ -32,7 +32,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
-    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
+    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated', 'id' => 'create-payment-reality-form']]);?>
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
@@ -153,6 +153,15 @@ $('#cancelButtonId').on('click', function(e){
   $('#evidence-image').attr('src', alter);
   $('#evidence-input').val('');
   return false;
+});
+
+// remove enter event from form
+$('#create-payment-reality-form').on('keyup keypress', function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode === 13) { 
+    e.preventDefault();
+    return false;
+  }
 });
 JS;
 $this->registerJs($imageJs);
