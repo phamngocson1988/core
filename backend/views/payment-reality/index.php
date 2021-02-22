@@ -42,6 +42,7 @@ $now = date('Y-m-d H:i:s');
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
+            <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
             <a class="btn green" href="<?=Url::to(['payment-reality/create']);?>"><?=Yii::t('app', 'add_new');?></a>
           </div>
         </div>

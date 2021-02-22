@@ -43,6 +43,11 @@ class PaymentRealityController extends Controller
             'end_date' => $request->get('end_date'),
         ];
         $search = new \backend\forms\FetchPaymentRealityForm($condition);
+        $mode = $request->get('mode');
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'hoa-don-nhan-tien.xls';
+            return $search->export($fileName);
+        }
         $command = $search->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)

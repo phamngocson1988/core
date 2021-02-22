@@ -63,8 +63,11 @@ class Controller extends BaseController
 	        // ]);
 	        // $offlineTransactionCommand = $offlineTransactionForm->getCommand();
 			// $offlineTransactionCount = $offlineTransactionCommand->count();
-			$offlineTransactionCount = \common\models\PaymentCommitment::find()->where(['status' => \common\models\PaymentCommitment::STATUS_PENDING])->count();
-            $this->view->params['new_offline_transaction'] = $offlineTransactionCount ? $offlineTransactionCount : '';
+			$paymentCommentmentCount = \common\models\PaymentCommitment::find()->where(['status' => \common\models\PaymentCommitment::STATUS_PENDING])->count();
+            $this->view->params['payment_commitment'] = $paymentCommentmentCount;
+
+			$payemntRealityCount = \common\models\PaymentReality::find()->where(['status' => \common\models\PaymentReality::STATUS_PENDING])->count();
+            $this->view->params['payment_reality'] = $payemntRealityCount;
             return true;
         }
 

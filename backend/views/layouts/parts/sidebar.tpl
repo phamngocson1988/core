@@ -280,8 +280,8 @@
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-wallet"></i>
         <span class="title">Giao dịch nạp tiền</span>
-        {if $this->params['new_offline_transaction']}
-        <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
+        {if ($this->params['payment_commitment'] || $this->params['payment_reality'])}
+        <span class="badge badge-success">{$this->params['payment_commitment'] + $this->params['payment_reality']}</span>
         {else}
         <span class="arrow"></span>
         {/if}
@@ -292,19 +292,6 @@
             <span class="title">Tất cả</span>
             </a>
           </li>
-          {*
-          <li class="nav-item  ">
-            <a href="{url route='payment-transaction/offline'}" class="nav-link " code='transaction.offline'>
-            <span class="title">Chưa thanh toán</span>
-            <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
-            </a>
-          </li>
-          <li class="nav-item  ">
-            <a href="{url route='payment-transaction/paypal'}" class="nav-link " code='transaction.paypal'>
-            <span class="title">Paypal</span>
-            </a>
-          </li>
-          *}
           <li class="nav-item  ">
             <a href="{url route='payment-transaction/trash'}" class="nav-link " code='transaction.trash'>
             <span class="title">Thùng rác</span>
@@ -313,14 +300,17 @@
 
           <li class="nav-item  ">
             <a href="{url route='payment-reality/index'}" class="nav-link " code='payment_reality.index'>
-            <span class="title">Tab nhận tiền</span>
+            <span class="title">Hóa đơn nhận tiền</span>
+            {if $this->params['payment_reality']}
+            <span class="badge badge-success">{$this->params['payment_reality']}</span>
+            {/if}
             </a>
           </li>
           <li class="nav-item  ">
             <a href="{url route='payment-commitment/index'}" class="nav-link " code='payment_commitment.index'>
             <span class="title">Lịch sử giao dịch</span>
-            {if $this->params['new_offline_transaction']}
-            <span class="badge badge-success">{$this->params['new_offline_transaction']}</span>
+            {if $this->params['payment_commitment']}
+            <span class="badge badge-success">{$this->params['payment_commitment']}</span>
             {/if}
             </a>
           </li>
@@ -395,7 +385,7 @@
             </a>
           </li>
           {/if}
-          {if $app->user->can('admin')}
+          {if $app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
             <span class="title">Cổng thanh toán</span><span class="arrow"></span>
