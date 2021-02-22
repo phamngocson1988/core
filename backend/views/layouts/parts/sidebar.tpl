@@ -452,11 +452,13 @@
             <span class="title">Phiên bản nạp</span>
             </a>
           </li>
+          {if ($app->user->cans(['saler', 'marketing_officer', 'customer_support']))}
           <li class="nav-item  "> 
             <a href="{url route='/flashsale/index'}" class="nav-link " code='flashsale.index'>
             <span class="title">Flash sale</span>
             </a>
           </li>
+          {/if}
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">
             <a href="{url route='/promotion' promotion_scenario=Promotion::SCENARIO_BUY_GEMS}" class="nav-link " code='game.promotion'>
