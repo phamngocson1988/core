@@ -65,7 +65,7 @@ AppAsset::register($this);
                   return ['label' => $category->title, 'url' => Url::to(['news/category', 'id' => $category->id, 'slug' => $category->slug]), 'template' => '<a href="{url}" class="trans">{label}</a>'];
                 }, $categories)
               ];
-              $items[] = ['label' =>  Yii::t('app', 'Forum'), 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
+              // $items[] = ['label' =>  Yii::t('app', 'Forum'), 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'];
               ?>
               <?=yii\widgets\Menu::widget([
                 'options' => ['class' => 'header-nav-list d-flex'],
@@ -88,7 +88,7 @@ AppAsset::register($this);
           <?=\frontend\components\notifications\Notifications::widget();?>
           <?=\frontend\widgets\ProfileMenuWidget::widget();?>
           <?php endif;?>
-          <div class="header-language">
+          <!-- <div class="header-language">
             <div class="button-language js-button-language"><span><?php
             $currentLanguageData = ArrayHelper::getValue(Yii::$app->params['languages'], Yii::$app->language);
             echo $currentLanguageData ? $currentLanguageData['short'] : 'EN';
@@ -100,7 +100,7 @@ AppAsset::register($this);
                 <?php endforeach;?>
               </ul>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="btn-menu" id="btn-menu"><span></span><span></span><span></span></div>
       </div>
@@ -117,7 +117,7 @@ AppAsset::register($this);
               ['label' => Yii::t('app', 'Bonuses'), 'url' => ['bonus/index'], 'active' => $main_menu_active == 'bonus.index'],
               ['label' => Yii::t('app', 'Complaints'), 'url' => ['complain/index'], 'active' => $main_menu_active == 'complain.index'],
               ['label' => Yii::t('app', 'News'), 'url' => ['news/index'], 'active' => $main_menu_active == 'news.index'],
-              ['label' => Yii::t('app', 'Forum'), 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'],
+              // ['label' => Yii::t('app', 'Forum'), 'url' => ['forum/index'], 'active' => $main_menu_active == 'forum.index'],
             ]
           ]);?>
         </div>

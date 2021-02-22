@@ -5,11 +5,11 @@ return [
     'language' => require(__DIR__ . '/language.php'),
     'currency' => require(__DIR__ . '/currency.php'),
     'languages' => [
-		'en-US' => [
-			'code' => 'en-US',
-			'title' => 'English',
-			'short' => 'EN',
-		],
+		// 'en-US' => [
+		// 	'code' => 'en-US',
+		// 	'title' => 'English',
+		// 	'short' => 'EN',
+		// ],
 		'vi-VN' => [
 			'code' => 'vi-VN',
 			'title' => 'Vietnamese',

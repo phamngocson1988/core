@@ -149,6 +149,7 @@ use yii\helpers\Url;
       <?php endif;?>
 
       <?php if (Yii::$app->user->can('system_moderator')) : ?>
+      <!--
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="fa fa-life-ring"></i>
@@ -173,9 +174,8 @@ use yii\helpers\Url;
           </li>
         </ul>
       </li>
+      -->
       <?php endif;?>
-
-      
     </ul>
   </div>
 </div>

@@ -93,6 +93,6 @@ return [
     ],
     'params' => $params,
     'on beforeRequest' => function ($event) {
-        Yii::$app->language = Yii::$app->session->get('language', 'en-US');
+        Yii::$app->language = Yii::$app->session->get('language', 'vi-VN');
     },
 ];
