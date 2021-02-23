@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use common\models\PaymentReality;
 use common\components\helpers\TimeHelper;
+use common\components\helpers\StringHelper;
 
 class FetchPaymentRealityForm extends Model
 {
@@ -97,7 +98,7 @@ class FetchPaymentRealityForm extends Model
     {
         $command = $this->getCommand();
         $fileName = ($fileName) ? $fileName : 'order-list' . date('His') . '.xlsx';
-        $columnKeys = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'];
+        $columnKeys = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE', 'AF'];
         $columnTitles = [
             'Mã nhận tiền',
             'Mã đơn hàng',
@@ -146,13 +147,6 @@ class FetchPaymentRealityForm extends Model
         $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
 
         $heading = 'THỐNG KÊ CẬP NHẬT HOÁ ĐƠN NHẬN TIỀN';
-        $customer = $this->getCustomer();
-        $saler = User::findOne($this->saler_id);
-        $orderteam = User::findOne($this->orderteam_id);
-        $game = Game::findOne($this->game_id);
-        $supplier = User::findOne($this->supplier_id);
-        $allPaymentMethods = $this->fetchPaymentMethods();
-        $paymentMethod = ArrayHelper::getValue($allPaymentMethods, $this->payment_method, '');
         $header = [
             "A3:{$endColumn}3" => sprintf('Thời gian cập nhật: Từ %s đến %s', $this->start_date, $this->end_date)
         ];
@@ -162,15 +156,26 @@ class FetchPaymentRealityForm extends Model
         ];
         
         $data = [];
+        $now = date('Y-m-d H:i:s');
         $models = $command->all();
         foreach ($models as $model) {
             $object = $model->object;
             $user = $model->user;
+            $commitment = $model->commitment;
             $objectName = '--';
+            $fee = '';
+            $promotionCode = '';
+            $discount = '';
             if ($model->object_name == 'wallet') {
                 $objectName = 'Kcoin';
+                $fee = $object->total_fee;
+                $promotionCode = $object->promotion_code;
+                $discount = $object->promotion_coin;
             } elseif ($model->object_name == 'order') {
                 $objectName = $object ? $object->game_title : 'Không tìm thấy đơn hàng tương ứng';
+                $fee = $object->total_fee;
+                $promotionCode = $object->promotion_code;
+                $discount = $object->total_discount;
             }
             $waitingTime = '--';
             if ($model->payment_time) {
@@ -182,9 +187,20 @@ class FetchPaymentRealityForm extends Model
             } elseif ($model->isClaimed()) {
                 $confirmTime = round(TimeHelper::timeDiff($model->created_at, $model->confirmed_at, 'minute'));
             }
+            $creator = $model->creator;
+            $confirmer = $model->confirmer;
+            $confirmerName = '';
+            if ($model->isClaimed()) {
+                $confirmerName = $confirmer ? $confirmer->name : 'System';
+            }
+            $commitmentNote = '--';
+            if ($model->isClaimed()) {
+                $commitmentNote = $commitment ? $commitment->note : '';
+            }
+
             $data[] = [
                 $model->getId(),
-                $model->isClaimed() ? $model->getObjectKey() : '--',
+                $model->isClaimed() ? $model->getObjectKey() . '' : '--',
                 $user ? $user->name : '--',
                 $objectName,
                 $object ? $object->created_at : '--',
@@ -195,26 +211,26 @@ class FetchPaymentRealityForm extends Model
                 $confirmTime,
                 $model->paygate,
                 $model->payer,
-                '', // ma tham chieu nguoi gui
-                $model->payment_id,
+                $commitment ? $commitment->payment_id . '' : '--', // ma tham chieu nguoi gui
+                $model->payment_id . '',
                 $model->payment_note,
                 $model->kingcoin,
-                '',// phi giao dich
-                '', // khuyen mai
-                '', // ma khuyen mai
-                '', //quoc gia
-                '', // tien te
-                '', // thuc nhan (tien te)
-                '', // tyr gia
-                '', // can thanh toan
-                '', //thuc nhan (kcoin)
-                '', //nguoi nhap
-                '', // nguoi duyet
-                '', //trang thai
-                '', // hoa don nguoi gui
-                '', // hoa don nguoi nhan
-                '', //ghi chu duyet don hang
-                '' // ghi chu nhan tien
+                $fee,// phi giao dich
+                $discount, // khuyen mai
+                $promotionCode, // ma khuyen mai
+                $user ? $user->getCountryName() : '', //quoc gia
+                $model->currency, // tien te
+                round($model->total_amount, 1), // thuc nhan (tien te)
+                $model->exchange_rate, // tyr gia
+                round($model->kingcoin, 1), // can thanh toan
+                round($model->kingcoin, 1), //thuc nhan (kcoin)
+                $creator->name, //nguoi nhap
+                $confirmerName, // nguoi duyet
+                $model->getStatusName(), //trang thai
+                $commitment ? $commitment->evidence : '', // hoa don nguoi gui
+                $model->evidence, // hoa don nguoi nhan
+                strlen($commitmentNote) > 25 ? substr($commitmentNote, 0, 25) . '...' : $commitmentNote, //ghi chu duyet don hang
+                strlen($model->payment_note) > 25 ? substr($model->payment_note, 0, 25) : $model->payment_note, // ghi chu nhan tien
             ];
         }
 
@@ -231,6 +247,14 @@ class FetchPaymentRealityForm extends Model
                     'startRow' => $startRow,
                     'titles' => $titles,
                     'styles' => [
+                        "A1" => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                            ],
+                        ],
                         $rangeTitle => [
                             'font' => [
                                 'bold' => true,

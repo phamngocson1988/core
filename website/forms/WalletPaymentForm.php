@@ -126,6 +126,7 @@ class WalletPaymentForm extends Model
             $settings = Yii::$app->settings;
             $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
             $paygate = $this->getPaygate();
+            $promotion = $this->getPromotion();
 
             // Save transaction
             $trn = new PaymentTransaction();
@@ -143,6 +144,8 @@ class WalletPaymentForm extends Model
             // Coin
             $trn->coin = $data['subTotalKingcoin'];
             $trn->promotion_coin = $data['bonusKingcoin'];
+            $trn->promotion_id = $promotion->id;
+            $trn->promotion_code = $promotion->code;
             $trn->total_coin = $data['totalKingcoin'];
             $trn->description = $this->paygate;
             $trn->created_by = $user->id;

@@ -148,6 +148,7 @@ class OrderPaymentForm extends Model
             $order->promotion_unit = $totalUnit - $subtotalUnit;
             $order->total_unit = $totalUnit;
             $order->promotion_id = $promotion ? $promotion->id : null;
+            $order->promotion_code = $promotion ? $promotion->code : null;
             $order->username = $cartItem->username;
             $order->password = $cartItem->password;
             // $order->platform = $cartItem->platform;

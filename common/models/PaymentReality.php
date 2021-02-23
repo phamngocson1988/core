@@ -117,6 +117,11 @@ class PaymentReality extends ActiveRecord implements PaymentRealityInterface
         $list = static::getStatusList();
         return ArrayHelper::getValue($list, $this->status, '');
     }
+
+    public function getCommitment()
+    {
+        return $this->hasOne(PaymentCommitment::className(), ['id' => 'payment_commitment_id']);
+    }
 }
 
 class PaymentRealityQuery extends ActiveQuery
