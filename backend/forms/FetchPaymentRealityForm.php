@@ -98,7 +98,7 @@ class FetchPaymentRealityForm extends Model
     {
         $command = $this->getCommand();
         $fileName = ($fileName) ? $fileName : 'order-list' . date('His') . '.xlsx';
-        $columnKeys = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE', 'AF'];
+        $columnKeys = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE', 'AF', 'AG'];
         $columnTitles = [
             'Mã nhận tiền',
             'Mã đơn hàng',
@@ -125,6 +125,7 @@ class FetchPaymentRealityForm extends Model
             'Tỷ giá',
             'Cần thanh toán (Kcoin)',
             'Thực Nhận (Kcoin)',
+            'Chênh lệch (Kcoin)',
             'Người Nhập',
             'Người duyệt',
             'Trạng Thái',
@@ -200,7 +201,7 @@ class FetchPaymentRealityForm extends Model
 
             $data[] = [
                 $model->getId(),
-                $model->isClaimed() ? $model->getObjectKey() . '' : '--',
+                $model->isClaimed() ? $model->getObjectKey() . ' ' : '--',
                 $user ? $user->name : '--',
                 $objectName,
                 $object ? $object->created_at : '--',
@@ -211,8 +212,8 @@ class FetchPaymentRealityForm extends Model
                 $confirmTime,
                 $model->paygate,
                 $model->payer,
-                $commitment ? $commitment->payment_id . '' : '--', // ma tham chieu nguoi gui
-                $model->payment_id . '',
+                $commitment ? $commitment->payment_id . ' ' : '--', // ma tham chieu nguoi gui
+                $model->payment_id . ' ',
                 $model->payment_note,
                 $model->kingcoin,
                 $fee,// phi giao dich
@@ -222,8 +223,9 @@ class FetchPaymentRealityForm extends Model
                 $model->currency, // tien te
                 round($model->total_amount, 1), // thuc nhan (tien te)
                 $model->exchange_rate, // tyr gia
-                round($model->kingcoin, 1), // can thanh toan
+                $commitment ? round($commitment->kingcoin, 1) : '--', // can thanh toan
                 round($model->kingcoin, 1), //thuc nhan (kcoin)
+                $commitment ? round($model->kingcoin - $commitment->kingcoin, 1) : '--', // chenh lech (kcoin)
                 $creator->name, //nguoi nhap
                 $confirmerName, // nguoi duyet
                 $model->getStatusName(), //trang thai
