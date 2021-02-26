@@ -69,7 +69,7 @@ class UpdateTransactionForm extends Model
 
             if ($result) {
                 $commitment = PaymentCommitmentWallet::findOne(['object_key' => $trn->id]);
-                if ($commitment && !$commitment->payment_id) {
+                if ($commitment) {
                     $commitment->payment_id = $trn->payment_id;
                     $commitment->evidence = $trn->evidence;
 
