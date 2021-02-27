@@ -51,7 +51,7 @@ class CreateGameForm extends Model
     {
         return [
             [['title', 'content', 'unit_name', 'pack'], 'required'],
-            ['status', 'default', 'value' => Game::STATUS_VISIBLE],
+            ['status', 'default', 'value' => Game::STATUS_INVISIBLE],
             [['image_id', 'excerpt', 'units', 'reseller_price'], 'safe'],
             ['pack', 'default', 'value' => 1],
             ['pin', 'default', 'value' => Game::UNPIN],
@@ -144,7 +144,7 @@ class CreateGameForm extends Model
         $post->excerpt = $this->excerpt;
         $post->content = $this->content;
         $post->unit_name = $this->unit_name;
-        $post->status = $this->status;
+        $post->status = Game::STATUS_INVISIBLE;
         $post->image_id = $this->image_id;
         $post->reseller_price = $this->reseller_price;
         $post->original_price = $this->original_price;

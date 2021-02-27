@@ -50,13 +50,6 @@
           'cancelButtonOptions' => ['tag' => 'button', 'options' => ['class' => 'btn btn-circle red btn-sm']]
         ])->label(false)}
 
-        {$form->field($model, 'status', [
-          'options' => ['class' => 'list-separated profile-stat']
-        ])->widget(RadioListInput::className(), [
-          'items' => [Game::STATUS_INVISIBLE => 'Invisible', Game::STATUS_VISIBLE => 'Visible'],
-          'options' => ['class' => 'mt-radio-list']
-        ])}
-
         {$form->field($model, 'pin', [
           'options' => ['class' => 'list-separated profile-stat']
         ])->widget(CheckboxInput::className())->label(false)}
