@@ -6,7 +6,7 @@ return [
     ],
     'name' => 'BW2020',
     'timeZone' => 'Asia/Bangkok',
-    'language' => 'en-US',
+    'language' => 'vi-VN',
     'bootstrap' => [
         'queue', // The component registers its own console commands
     ],

@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'language' => 'vi-VN',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -92,7 +93,4 @@ return [
         ],
     ],
     'params' => $params,
-    'on beforeRequest' => function ($event) {
-        Yii::$app->language = Yii::$app->session->get('language', 'vi-VN');
-    },
 ];
