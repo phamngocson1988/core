@@ -73,7 +73,7 @@ class CloudinaryFileSystem extends Model implements FileSystemInterface
     protected function getRelativePath($id)
     {
         $directory = [];
-        $separator = DIRECTORY_SEPARATOR;
+        $separator = "/";
         while ($id) {
             $directory[] = substr($id, -3);
             if (strlen($id) - 3 < 0) {

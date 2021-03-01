@@ -417,18 +417,18 @@ $sideGallery = array_slice($gallery, -2);
 <?php endif;?>
 <?php
 $script = <<< JS
-$.fancybox.open({
-  src  : '/images/promotion.png',
-  type : 'image',
-  afterShow: function (instance, current) {
-    console.log(instance, current); 
-    $('.fancybox-image').wrap($("<a />", {
-        // set anchor attributes
-        href: 'https://layout.kinggems.us/promotion/', //or your target link
-        target: "_blank" // optional
-    }));
-  }
-});
+// $.fancybox.open({
+//   src  : '/images/promotion.png',
+//   type : 'image',
+//   afterShow: function (instance, current) {
+//     console.log(instance, current); 
+//     $('.fancybox-image').wrap($("<a />", {
+//         // set anchor attributes
+//         href: 'https://layout.kinggems.us/promotion/', //or your target link
+//         target: "_blank" // optional
+//     }));
+//   }
+// });
 JS;
 $this->registerJs($script);
 ?>

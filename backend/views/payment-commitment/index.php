@@ -128,6 +128,7 @@ $now = date('Y-m-d H:i:s');
                 <th col-tag="payment_id">Mã tham chiếu người gửi</th>
                 <th col-tag="voucher_code">Mã khuyến mãi</th>
                 <th col-tag="voucher_value">Khuyến mãi (Kcoin)</th>
+                <th col-tag="paygate">Cổng thanh toán</th>
                 <th col-tag="kingcoin">Số Kcoin</th>
                 <th col-tag="kingcoin_reality">Thực nhận (Kcoin)</th>
                 <th col-tag="kingcoin_difference">Chênh lệch (Kcoin)</th>
@@ -177,6 +178,7 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="payment_id"><?=$model->payment_id;?></td>
                 <td col-tag="voucher_code"></td>
                 <td col-tag="voucher_value"></td>
+                <td col-tag="paygate"><?=$model->paygate;?></td>
                 <td col-tag="kingcoin"><?=$model->kingcoin;?></td>
                 <td col-tag="kingcoin_reality"><?=$reality ? $reality->kingcoin : '--';?></td>
                 <td col-tag="kingcoin_difference"><?=$reality ? StringHelper::numberFormat($reality->kingcoin - $model->kingcoin, 2) : '--';?></td>
@@ -269,11 +271,15 @@ $now = date('Y-m-d H:i:s');
                   </tr>
                   <tr>
                     <td class="left pl-5">Cần tdanh toán (Kcoin)</td>
-                    <td><?=StringHelper::numberFormat($model->kingcoin, 2);?></td>
+                    <td kingcoin="<?=$model->kingcoin;?>" class="commitment-coin"><?=StringHelper::numberFormat($model->kingcoin, 2);?></td>
                   </tr>
                 </tbody>
               </table>
           </div>
+        </div>
+        <div class="row alert hidden" style="color: red">
+          <strong>**CẢNH BÁO:</strong><br>
+          Chênh lệch Kcoin <span class="variance">0</span> vượt quá định mức là <storng><?=StringHelper::numberFormat($approveForm->variance, 2);?></storng>
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -304,6 +310,7 @@ $now = date('Y-m-d H:i:s');
 <?php
 $realityViewUrl = Url::to(['payment-reality/ajax-view']);
 $script = <<< JS
+var variance = parseFloat($approveForm->variance);
 $(".delete-payment-action").ajax_action({
   confirm: true,
   confirm_text: 'Bạn có chắc muốn xóa giao dịch này?',
@@ -340,6 +347,7 @@ $(document).on('submit', 'body .approve-commitment-form', function(e) {
 
 const realityMapFields = ['created_at', 'paygate', 'payer', 'payment_time', 'payment_id', 'kingcoin'];
 $('.payment_reality_id').on('change', function() {
+  $(".alert").addClass('hidden');
   var id = $(this).val();
   var that = this;
   $.ajax({
@@ -348,9 +356,18 @@ $('.payment_reality_id').on('change', function() {
     dataType : 'json',
     success: function (result, textStatus, jqXHR) {
       if (result) {
+        let form = $(that).closest('form');
         realityMapFields.forEach(element => {
           $(that).closest('form').find('.' + element).html(result[element]);
         });
+        var commitmentCoin = parseFloat($(that).closest('form').find('.commitment-coin').attr('kingcoin'));
+        var realityCoin = parseFloat(result.kingcoin);
+        console.log('commitment - reality', commitmentCoin, realityCoin, variance);
+        if (commitmentCoin - realityCoin >= variance) {
+          console.log('show alert');
+          form.find('.variance').html(commitmentCoin - realityCoin);
+          $(".alert").removeClass('hidden');
+        }
       } else {
         toastr.error('Không tìm thấy thông tin Mã nhận tiền');
       }
