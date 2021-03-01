@@ -28,7 +28,7 @@ class ApprovePaymentCommitmentForm extends ActionForm
             [['id', 'payment_reality_id'], 'required'],
             ['id', 'validateCommitment'],
             ['payment_reality_id', 'validateReality'],
-            ['variance', 'validateVariance'],
+            // ['variance', 'validateVariance'],
             ['note', 'trim'],
             ['confirmed_by', 'trim']
         ];

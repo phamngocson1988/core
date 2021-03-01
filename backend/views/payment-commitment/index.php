@@ -363,9 +363,11 @@ $('.payment_reality_id').on('change', function() {
         var commitmentCoin = parseFloat($(that).closest('form').find('.commitment-coin').attr('kingcoin'));
         var realityCoin = parseFloat(result.kingcoin);
         console.log('commitment - reality', commitmentCoin, realityCoin, variance);
-        if (commitmentCoin - realityCoin >= variance) {
+        let diff = commitmentCoin - realityCoin;
+        diff = parseFloat(diff.toFixed(2));
+        if (diff >= variance) {
           console.log('show alert');
-          form.find('.variance').html(commitmentCoin - realityCoin);
+          form.find('.variance').html(diff);
           $(".alert").removeClass('hidden');
         }
       } else {

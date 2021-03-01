@@ -70,7 +70,7 @@ class UpdateOrderForm extends Model
             // update commitment
             if ($result) {
                 $commitment = PaymentCommitmentOrder::findOne(['object_key' => $order->id]);
-                if ($commitment && !$commitment->payment_id) {
+                if ($commitment) {
                     $commitment->payment_id = $order->payment_id;
                     $commitment->evidence = $order->evidence;
 
