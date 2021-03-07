@@ -55,7 +55,7 @@ use common\components\helpers\TimeElapsed;
                       </div>
                     </div>
                     <div class="review-reply">
-                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage/reply-review', 'review_id' => $review->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-review-form']); ?>
+                      <?php $form = ActiveForm::begin(['action' => Url::to(['manage-review/reply', 'review_id' => $review->id, 'operator_id' => $operator->id, 'slug' => $operator->slug]), 'id' => 'reply-review-form']); ?>
                       <?= $form->field($reviewForm, 'reply', [
                         'inputOptions' => ['placeholder' => 'Reply...', 'rows' => 5, 'class' => 'form-control']
                       ])->textArea()->label(false);?>
