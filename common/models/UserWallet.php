@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
 use yii\helpers\ArrayHelper;
@@ -27,6 +28,11 @@ class UserWallet extends ActiveRecord
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
             ],
+            [
+	            'class' => BlameableBehavior::className(),
+	            'createdByAttribute' => 'created_by',
+	            'updatedByAttribute' => false
+	        ],
         ];
     }
 

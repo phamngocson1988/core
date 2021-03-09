@@ -135,7 +135,7 @@ class OrderController extends Controller
                 $inputFile = reset($files);
                 $model->evidence = $inputFile;
             }
-            if ($model->validate() && $model->update()) {
+            if ($model->update()) {
                 return $this->asJson(['status' => true, 'message' => sprintf("You have updated transaction #%s successfully.", $id)]);
             } else {
                 $errors = $model->getErrorSummary(true);

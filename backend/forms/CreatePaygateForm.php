@@ -13,6 +13,7 @@ class CreatePaygateForm extends Model
     public $name;
     public $content;
     public $logo;
+    public $paygate_type;
     public $transfer_fee;
     public $transfer_fee_type;
     public $currency;
@@ -23,9 +24,11 @@ class CreatePaygateForm extends Model
      */
     public function rules()
     {
+        $types = $this->fetchPaygateTypes();
         return [
-            [['name', 'currency'], 'required'],
+            [['name', 'currency', 'paygate_type'], 'required'],
             [['content', 'logo', 'transfer_fee', 'transfer_fee_type', 'status'], 'trim'],
+            ['paygate_type', 'in', 'range' => array_keys($types)],
         ];
     }
 
@@ -33,7 +36,7 @@ class CreatePaygateForm extends Model
     {
         $paygate = new Paygate();
         $paygate->name = $this->name;
-        $paygate->paygate_type = 'offline';
+        $paygate->paygate_type = $this->paygate_type;
         $paygate->content = $this->content;
         $paygate->logo = $this->logo;
         $paygate->transfer_fee = $this->transfer_fee;
@@ -43,7 +46,7 @@ class CreatePaygateForm extends Model
         return $paygate->save();
     }
 
-    public function FetchFeeType()
+    public function fetchFeeType()
     {
         return [
             'fix' => 'Giảm cố định',
@@ -62,6 +65,14 @@ class CreatePaygateForm extends Model
         return [
             Paygate::STATUS_ACTIVE => 'Đang hoạt động',
             Paygate::STATUS_INACTIVE => 'Ngưng hoạt động',
+        ];
+    }
+
+    public function fetchPaygateTypes()
+    {
+        return [
+            Paygate::PAYGATE_TYPE_OFFLINE => 'Offline',
+            Paygate::PAYGATE_TYPE_ONLINE => 'Online',
         ];
     }
 

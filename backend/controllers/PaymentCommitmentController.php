@@ -62,6 +62,7 @@ class PaymentCommitmentController extends Controller
         $model = new \backend\forms\ApprovePaymentCommitmentForm([
             'id' => $id,
             'confirmed_by' => Yii::$app->user->id,
+            'allow_variance' => true
         ]);
         if ($model->load($request->post()) && $model->approve()) {
             return $this->asJson(['status' => true]);

@@ -14,6 +14,10 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-website',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
+    
         ],
         'user' => [
             'identityClass' => 'website\models\User',
@@ -49,7 +53,7 @@ return [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error', 'warning', 'info'],
                 ],
             ],
         ],

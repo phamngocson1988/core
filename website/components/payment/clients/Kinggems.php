@@ -26,4 +26,9 @@ class Kinggems extends \website\models\Paygate
 	{
 		return 0;
 	}
+
+	public function isOnline()
+	{
+		return true;
+	}
 }

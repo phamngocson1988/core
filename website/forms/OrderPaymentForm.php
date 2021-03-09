@@ -35,12 +35,18 @@ class OrderPaymentForm extends Model
         ];
     }
 
-    public function getPaygate()
+    public function getPaygateConfig()
     {
         if (!$this->_paygate) {
-            $this->_paygate = PaymentGatewayFactory::getClient($this->paygate);
+            $this->_paygate = PaymentGatewayFactory::getConfig($this->paygate);
         }
         return $this->_paygate;
+    }
+
+    public function getPaygate()
+    {
+        $config = $this->getPaygateConfig();
+        return PaymentGatewayFactory::getPaygate($config);
     }
 
     public function getUser()
@@ -50,7 +56,7 @@ class OrderPaymentForm extends Model
 
     public function validatePaygate($attribute, $params = [])
     {
-        $paygate = $this->getPaygate();
+        $paygate = $this->getPaygateConfig();
         if (!$paygate) {
             $this->addError($attribute, sprintf('Payment Gateway %s is not available', $this->paygate));
             return;
@@ -86,7 +92,7 @@ class OrderPaymentForm extends Model
         $request = Yii::$app->request;
         $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
         $user = $this->getUser();
-        $paygate = $this->getPaygate();
+        $paygate = $this->getPaygateConfig();
 
         $cart = $this->cart;
         $cartItem = $cart->getItem();
@@ -111,7 +117,7 @@ class OrderPaymentForm extends Model
             // paygate
             $order->payment_method = $paygate->getIdentifier();
             $order->payment_type = $paygate->getPaymentType();
-            $order->payment_data = $paygate->content;
+            $order->payment_content = $paygate->content;
             $order->currency = $paygate->getCurrency();
             $order->rate_currency = $settings->get('ApplicationSettingForm', sprintf('exchange_rate_%s', strtolower($order->currency)), 1);
 
@@ -174,37 +180,7 @@ class OrderPaymentForm extends Model
             $order->log(sprintf("Created. Status %s (%s - %s)", $order->status, $paygate->getIdentifier(), $paygate->getPaymentType()));
 
             // Withdraw from wallet and move status to pending
-            if ($paygate->getPaymentType() == 'online') {
-                // $user->withdraw($totalPrice, $order->id, sprintf("Pay for order #%s", $order->id));
-                $userWalletTotal = UserWallet::find()->where([
-                    'user_id' => $user->id,
-                    'status' => UserWallet::STATUS_COMPLETED
-                ])->sum('coin');
-                $wallet = new UserWallet();
-                $wallet->coin = (-1) * $totalPrice;
-                $wallet->balance = $userWalletTotal + $wallet->coin;
-                $wallet->type = UserWallet::TYPE_OUTPUT;
-                $wallet->description = sprintf("Pay for order #%s", $order->id);
-                $wallet->ref_name = UserWallet::REF_ORDER;
-                $wallet->ref_key = $order->id;
-                $wallet->created_by = $user->id;
-                $wallet->user_id = $user->id;
-                $wallet->status = UserWallet::STATUS_COMPLETED;
-                $wallet->payment_at = date('Y-m-d H:i:s');
-                $wallet->save();
-
-                $order->status = Order::STATUS_PENDING;
-                $order->payment_id = $wallet->id;
-                $order->pending_at = date('Y-m-d H:i:s');
-
-                $order->save();
-                $order->log(sprintf("Verified, Status is %s", $order->status));
-
-                // Notify to orderteam in case this is online order
-                $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
-                $order->pushNotification(OrderNotification::NOTIFY_ORDERTEAM_NEW_ORDER, $orderTeamIds);
-                $order->pushNotification(OrderNotification::NOTIFY_CUSTOMER_PENDING_ORDER, $order->customer_id);
-            } else {
+            if (!$paygate->isOnline()) {
                 $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
                 $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
             }

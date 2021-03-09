@@ -39,7 +39,6 @@ phpunit.phar
 /common/uploads
 /common/runtime
 website/views/cart/coinbase2.php
-website/libraries
 website/web/assets
 composerbk.json
 .gitignore

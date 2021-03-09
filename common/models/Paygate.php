@@ -12,6 +12,9 @@ class Paygate extends ActiveRecord
     const STATUS_INACTIVE = 1;
     const STATUS_ACTIVE = 10;
 
+    const PAYGATE_TYPE_ONLINE = 'online';
+    const PAYGATE_TYPE_OFFLINE = 'offline';
+
 
     /**
      * @inheritdoc
@@ -78,5 +81,10 @@ class Paygate extends ActiveRecord
     public function getPaymentType()
     {
         return $this->paygate_type;
+    }
+
+    public function isOnline() 
+    {
+        return $this->getPaymentType() == self::PAYGATE_TYPE_ONLINE;
     }
 }

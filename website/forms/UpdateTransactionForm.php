@@ -6,6 +6,7 @@ use yii\base\Model;
 use website\models\PaymentTransaction;
 use common\models\PaymentCommitmentWallet;
 use common\models\PaymentReality;
+use common\models\PaymentCommitment;
 use website\models\Order;
 
 class UpdateTransactionForm extends Model
@@ -51,6 +52,13 @@ class UpdateTransactionForm extends Model
             'status' => PaymentReality::STATUS_CLAIMED
         ])->exists();
         if ($reality) {
+            $this->addError($attribute, 'This payment id has been used.');
+        }
+
+        $commitment = PaymentCommitment::find()->where(['payment_id' => $this->payment_id])
+        ->andWhere(['status' => [PaymentCommitment::STATUS_PENDING, PaymentCommitment::STATUS_APPROVED]])
+        ->exists();
+        if ($commitment) {
             $this->addError($attribute, 'This payment id has been used.');
         }
     }

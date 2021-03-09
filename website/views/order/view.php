@@ -21,7 +21,7 @@ use yii\helpers\Url;
       <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_fee, 2), 'USD');?></b></p>
     </div>
     <div class="col-md-6">
-      <?=$order->payment_data;?>
+      <?=$order->getPaymentData();?>
     </div>
     <div class="col-md-12">
       <p class="text-center font-weight-bold mt-5 mb-0">Kindly submit Transaction Number after you do payment successfully</p>

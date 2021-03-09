@@ -258,4 +258,23 @@ class Order extends ActiveRecord
     {
         return $this->hasOne(OrderReseller::className(), ['order_id' => 'id']);
     }
+
+    public function getPaymentData()
+    {
+        $content = $this->payment_content;
+        if ($this->payment_type == 'online') {
+            $data = json_decode($this->payment_data, true);
+            if ($data && is_array($data)) {
+                $params = [];
+                foreach ($data as $key => $value) {
+                    $newKey = sprintf("{%s}", $key);
+                    if (strpos($content, $newKey) !== false) {
+                        $params[$newKey] = $value;
+                    }
+                }
+                $content = str_replace(array_keys($params), array_values($params), $content);
+            }
+        }
+        return $content;
+    }
 }

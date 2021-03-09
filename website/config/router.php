@@ -39,6 +39,7 @@ return [
         'purchase-success' => 'cart/success',
         'purchase-cancel' => 'cart/cancel',
         'purchase-error' => 'cart/error',
+        'payment-coin-base-callback' => 'cart/payment-coin-base-callback',
         
         //user
         'user/dashboard' => 'user/index',

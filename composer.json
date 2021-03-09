@@ -43,7 +43,8 @@
         "yii2mod/yii2-sweet-alert": "*",
         "twilio/sdk": "*",
         "alexandernst/yii2-device-detect": "0.0.12",
-        "yiisoft/yii2-authclient": "~2.1.0"
+        "yiisoft/yii2-authclient": "~2.1.0",
+        "coinbase/coinbase-commerce": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

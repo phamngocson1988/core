@@ -7,6 +7,7 @@ use website\models\Order;
 use website\models\PaymentTransaction;
 use common\models\PaymentCommitmentOrder;
 use common\models\PaymentReality;
+use common\models\PaymentCommitment;
 
 class UpdateOrderForm extends Model
 {
@@ -53,10 +54,18 @@ class UpdateOrderForm extends Model
         if ($reality) {
             $this->addError($attribute, 'This payment id has been used.');
         }
+
+        $commitment = PaymentCommitment::find()->where(['payment_id' => $this->payment_id])
+        ->andWhere(['status' => [PaymentCommitment::STATUS_PENDING, PaymentCommitment::STATUS_APPROVED]])
+        ->exists();
+        if ($commitment) {
+            $this->addError($attribute, 'This payment id has been used.');
+        }
     }
 
     public function update()
     {
+        if (!$this->validate()) return false;
         $order = $this->getOrder();
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();

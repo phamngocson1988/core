@@ -12,6 +12,7 @@ use common\components\helpers\StringHelper;
 use website\models\Paygate;
 use website\models\PaymentTransaction;
 use common\models\Currency;
+use common\models\CurrencySetting;
 
 class WalletController extends Controller
 {
@@ -34,7 +35,7 @@ class WalletController extends Controller
     {
         $this->view->params['main_menu_active'] = 'wallet.index';
         $request = Yii::$app->request;
-        $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+        $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE, 'paygate_type' => Paygate::PAYGATE_TYPE_OFFLINE])->all();
 
         // pending transaction
         $pendings = PaymentTransaction::find()->where([
@@ -101,10 +102,17 @@ class WalletController extends Controller
             $totalPayment = StringHelper::numberFormat($calculate['totalPayment'], 2);
             $paygate = $form->getPaygate();
             if ($paygate->currency != 'USD') {
-                $otherCurrencyTotal = Currency::convertUSDToCurrency(StringHelper::numberFormat($totalPayment, 2), $paygate->currency);
-                $currencyModel = Currency::findOne($paygate->currency);
-                $otherCurrency = $currencyModel->addSymbolFormat(StringHelper::numberFormat($otherCurrencyTotal, 2));
+                $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+                $targetCurrency = CurrencySetting::findOne(['code' => $paygate->currency]);
+                $otherCurrencyTotal = $usdCurrency->exchangeTo($calculate['totalPayment'], $targetCurrency);
+                $otherCurrency = sprintf("%s%s", StringHelper::numberFormat($otherCurrencyTotal, 2), $targetCurrency->getSymbol());
+
+                // $otherCurrencyTotal = Currency::convertUSDToCurrency(StringHelper::numberFormat($calculate['totalPayment'], 2), $paygate->currency);
+                // $currencyModel = Currency::findOne($paygate->currency);
+                // $otherCurrency = $currencyModel->addSymbolFormat(StringHelper::numberFormat($otherCurrencyTotal, 2));
                 $totalPayment = sprintf("%s (%s)", $totalPayment, utf8_encode($otherCurrency));
+
+                
             }
             $data = [
                 'subTotalKingcoin' => StringHelper::numberFormat($calculate['subTotalKingcoin'], 2),

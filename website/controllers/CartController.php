@@ -25,7 +25,7 @@ class CartController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['calculate', 'add'],
+                        'actions' => ['calculate', 'add', 'payment-coin-base-callback'],
                         'allow' => true,
                     ],
                     [
@@ -36,7 +36,22 @@ class CartController extends Controller
 
                 ],
             ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'payment-coin-base-callback' => ['post'],
+                ],
+            ]
         ];
+    }
+
+    public function beforeAction($action)
+    {
+        if ($action->id == 'payment-coin-base-callback') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     public function actionCalculate($id) 
@@ -103,16 +118,17 @@ class CartController extends Controller
     {
         $request = Yii::$app->request;
         $cart = Yii::$app->cart;
+        $user = Yii::$app->user->getIdentity();
         
         $checkoutForm = new \website\forms\OrderPaymentForm(['cart' => $cart]);
         if ($checkoutForm->load($request->post()) && $checkoutForm->validate() && $id = $checkoutForm->purchase()) {
-            // return $this->redirect(['order/index', '#' => $id]);
-            return $this->redirect(['cart/thankyou', 'id' => $id]);
+            $paygate = $checkoutForm->getPaygate();
+            $order = Order::findOne($id);
+            $this->redirect($paygate->createCharge($order, $user));
         } else {
             Yii::$app->session->setFlash('error', $checkoutForm->getErrorSummary(true));
         }
         $model = $cart->getItem();
-        $user = Yii::$app->user->getIdentity();
         $balance = $user->getWalletAmount();
         $canPlaceOrder = $balance >= $cart->getTotalPrice();
         $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
@@ -197,9 +213,22 @@ class CartController extends Controller
             throw new NotFoundHttpException('order does not exist.');
         }
         $viewUrl = Url::to(['order/index', '#' => $id]);
-        return $this->render('thankyou', [
+        $view = 'thankyou';
+        if ($order->payment_type == 'online' && $order->payment_method != 'kinggems') {
+            $view = $order->payment_method;
+        }
+        return $this->render($view, [
             'order' => $order,
             'viewUrl' => $viewUrl
         ]);
+    }
+
+    public function actionPaymentCoinBaseCallback()
+    {
+        Yii::info('start actionPaymentCoinBaseCallback');
+        $identifier = 'coinbase';
+        $config = \website\components\payment\PaymentGatewayFactory::getConfig($identifier);
+        $paygate = \website\components\payment\PaymentGatewayFactory::getPaygate($config);
+        return $paygate->processCharge();
     }
 }

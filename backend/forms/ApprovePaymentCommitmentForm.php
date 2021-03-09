@@ -13,6 +13,7 @@ class ApprovePaymentCommitmentForm extends ActionForm
     public $payment_reality_id;
     public $note;
     public $variance = 0.2;
+    public $allow_variance = false;
     public $confirmed_by;
 
     protected $_commitment;
@@ -28,9 +29,10 @@ class ApprovePaymentCommitmentForm extends ActionForm
             [['id', 'payment_reality_id'], 'required'],
             ['id', 'validateCommitment'],
             ['payment_reality_id', 'validateReality'],
-            // ['variance', 'validateVariance'],
+            ['variance', 'validateVariance'],
             ['note', 'trim'],
-            ['confirmed_by', 'trim']
+            ['confirmed_by', 'trim'],
+            ['allow_variance', 'safe']
         ];
     }
 
@@ -64,7 +66,7 @@ class ApprovePaymentCommitmentForm extends ActionForm
         $reality = $this->getReality();
         $commitment = $this->getCommitment();
         $variance = (float)($reality->kingcoin - $commitment->kingcoin);
-        if ( $variance < (-1) * $this->variance) {
+        if ( $variance < (-1) * $this->variance && !$this->allow_variance) {
             return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhân tiền quá lớn (> %s)', $this->variance));
         }
     }
