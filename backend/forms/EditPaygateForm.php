@@ -76,6 +76,7 @@ class EditPaygateForm extends Model
         $this->transfer_fee_type = $paygate->transfer_fee_type;
         $this->currency = $paygate->currency;
         $this->status = $paygate->status;
+        $this->paygate_type = $paygate->paygate_type;
     }
 
     public function fetchFeeType()

@@ -51,11 +51,11 @@ use common\widgets\TinyMce;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput();?>
 
-                  <?=$form->field($model, 'transfer_fee', [
+                  <?=$form->field($model, 'paygate_type', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput();?>
+                  ])->dropdownList($model->fetchPaygateTypes());?>
 
                   <?=$form->field($model, 'content', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
