@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\components\cart\CartItem;
+use website\models\Order;
 
 class OrderPaymentBulkForm extends Model
 {
@@ -63,6 +64,7 @@ class OrderPaymentBulkForm extends Model
         $model = $this->getCartItem();
         $cart = Yii::$app->cart;
         $bulk = strtotime('now');
+        $user = Yii::$app->user->getIdentity();
         foreach ((array)$items as $index => $info) {
             $cart->clear();
             $cartItem = clone $model;
@@ -74,8 +76,11 @@ class OrderPaymentBulkForm extends Model
                 'cart' => $cart, 
                 'paygate' => 'kinggems'
             ]);
-            if ($checkoutForm->validate() && $checkoutForm->purchase()) {
+            if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
                 $this->successList[] = $index;
+                $paygate = $checkoutForm->getPaygate();
+                $order = Order::findOne($id);
+                $paygate->createCharge($order, $user);
             } else {
                 $messages = $model->getErrorSummary(true);
                 $message = reset($messages);
