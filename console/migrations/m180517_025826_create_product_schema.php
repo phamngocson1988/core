@@ -26,7 +26,7 @@ class m180517_025826_create_product_schema extends Migration
             'unit_name' => $this->string(50),
             'content' => $this->text()->notNull(),
             'image_id' => $this->integer(),
-            'price' => $this->integer()->notNull(),
+            'price' => $this->integer(),
             'reseller_price' => $this->integer(),
             'original_price' => $this->integer(),
             'pack' => $this->integer()->notNull()->defaultValue(1),
