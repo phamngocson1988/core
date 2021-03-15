@@ -881,7 +881,7 @@ class OrderController extends Controller
             $model->load($request->post());
             $model->order_id = $id;
             $model->requester = Yii::$app->user->id;
-            if ($model->validate() && $model->assign()) {
+            if ($model->assign()) {
                 return $this->asJson(['status' => true]);
             }
             $errors = $model->getErrorSummary(true);

@@ -41,4 +41,5 @@ phpunit.phar
 website/views/cart/coinbase2.php
 website/web/assets
 composerbk.json
+/website/web/promotion
 .gitignore

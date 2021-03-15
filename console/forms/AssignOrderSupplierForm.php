@@ -144,6 +144,7 @@ class AssignOrderSupplierForm extends Model
 
     public function assign()
     {
+        if (!$this->validate()) return false;
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
@@ -152,9 +153,20 @@ class AssignOrderSupplierForm extends Model
             $game = $this->getSupplierGame();
             $order = $this->getOrder();
             $supplier = $this->getSupplier();
-            $order->supplier_id = $this->supplier_id;
-            $order->distributed_at = $order->distributed_at ? $order->distributed_at : date('Y-m-d H:i:s');
-            $order->save();
+
+            // Final check to prevent duplicated assigning
+            $countSupplier = OrderSupplier::find()->where([
+                'order_id' => $order->id,
+                'status' => [
+                    OrderSupplier::STATUS_REQUEST,
+                    OrderSupplier::STATUS_APPROVE,
+                    OrderSupplier::STATUS_PROCESSING,
+                ]
+            ])->one();
+            if ($countSupplier) {
+                $this->addError('order_id', sprintf("Order đã có nhà cung cấp (%s) xử lý", $countSupplier->supplier_id));
+                return false;
+            }
 
             // distributed time
             $lastDistributedComplete = $order->completed_at ? $order->completed_at : $order->created_at;
@@ -175,6 +187,11 @@ class AssignOrderSupplierForm extends Model
                 'distributed_time' => $mins,
             ]);
             $orderSupplier->save();
+
+            $order->supplier_id = $this->supplier_id;
+            $order->distributed_at = $order->distributed_at ? $order->distributed_at : date('Y-m-d H:i:s');
+            $order->save();
+
             $order->log(sprintf("Chuyển đến nhà cung cấp %s (#%s)", $supplier->user->name, $this->supplier_id));
             $order->pushNotification(OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER, $this->supplier_id);
 

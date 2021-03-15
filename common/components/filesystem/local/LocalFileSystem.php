@@ -7,6 +7,7 @@ use common\components\filesystem\FileSystemInterface;
 use yii\helpers\FileHelper;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
+use common\components\helpers\StringHelper;
 
 class LocalFileSystem extends Model implements FileSystemInterface
 {
@@ -24,7 +25,7 @@ class LocalFileSystem extends Model implements FileSystemInterface
 
     public function upload($file, $path, $includeSchema = false)
     {
-        $location = sprintf("%s/%s", $path, date('YmdHis') . urlencode($file->name));
+        $location = sprintf("%s/%s", $path, date('YmdHis') . StringHelper::generateSlug($file->name));
         $filePath = sprintf("%s/%s", Yii::getAlias($this->file_path), $location);
         $fileDir = dirname($filePath);
         FileHelper::createDirectory($fileDir, 0771);

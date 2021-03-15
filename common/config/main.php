@@ -79,7 +79,7 @@ return [
 
                 'class' => 'common\components\filesystem\local\LocalFileSystem',
                 'file_path' => '@common/uploads/files',
-                // 'file_url' => 'http://file.kinggerm.com',
+                'file_url' => 'http://file.kinggerm.com',
             ]
         ],
         'queue' => [

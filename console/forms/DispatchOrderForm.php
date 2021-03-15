@@ -76,8 +76,7 @@ class DispatchOrderForm extends ActionForm
                 'order_id' => $this->id,
                 'supplier_id' => $supplier['supplier_id']
             ]);
-            if ($assignForm->validate()) {
-                $assignForm->assign();
+            if ($assignForm->assign()) {
                 $order->log(sprintf('Đơn hàng được PPTĐ thành công cho nhà cung cấp %s', $supplier['supplier_id']));
                 return true; // break the process
             }
