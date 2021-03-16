@@ -59,18 +59,13 @@ class RetakeOrderSupplierForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
-            // $order = $this->getOrder();
-            // if ($order->isProcessingOrder()) {
-            //     $order->status = Order::STATUS_PENDING;
-            //     $order->save();
-            // }
-
+            $order = $this->getOrder();
             $supplier = $this->getSupplier();
+            $order->log(sprintf("Retaken order (%s - %s)", $order->status, $supplier->status));
             $supplier->status = OrderSupplier::STATUS_RETAKE;
             $supplier->retaken_at = date('Y-m-d H:i:s');
             $supplier->retaken_by = $this->requester;
             $supplier->save();
-
             $transaction->commit();
             return true;
         } catch(Exception $e) {
