@@ -5,6 +5,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
+use common\components\helpers\StringHelper;
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -115,10 +116,10 @@ use backend\components\datetimepicker\DateTimePicker;
               <tr>
                 <td>#<?=$id?></td>
                 <td><?=$model['name']?></td>
-                <td><?=number_format($model['period_income']);?></td>
-                <td><?=number_format(abs($model['period_outcome']));?></td>
-                <td><?=number_format($model['beginning_total']);?></td>
-                <td><?=number_format($model['ending_total']);?></td>
+                <td><?=StringHelper::numberFormat($model['period_income'], 2);?></td>
+                <td><?=StringHelper::numberFormat(abs($model['period_outcome']), 2);?></td>
+                <td><?=StringHelper::numberFormat($model['beginning_total'], 2);?></td>
+                <td><?=StringHelper::numberFormat($model['ending_total'], 2);?></td>
                 <td>
                   <a class="btn btn-xs green tooltips" href="<?=Url::to(['supplier/balance-detail', 'id' => $id]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
                   <?php if (Yii::$app->user->can('admin')) : ?>
@@ -129,6 +130,16 @@ use backend\components\datetimepicker\DateTimePicker;
               </tr>
               <?php endforeach;?>
           </tbody>
+          <tfoot style="background-color: #999;">
+            <tr>
+              <th colspan="2"></th>
+              <th> <?=StringHelper::numberFormat($search->getTotalIncome(), 2);?></th>
+              <th> <?=StringHelper::numberFormat(abs($search->getTotalOutcome()), 2);?> </th>
+              <th> </th>
+              <th> <?=StringHelper::numberFormat($search->getTotalEndding(), 2);?> </th>
+              <th> </th>
+            </tr>
+          </tfoot>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
       </div>
