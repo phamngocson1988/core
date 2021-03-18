@@ -144,6 +144,9 @@ class ReportSupplierBalanceForm extends Model
             "$supplierWalletTable.status" => SupplierWallet::STATUS_COMPLETED,
             "$supplierWalletTable.type" => SupplierWallet::TYPE_INPUT,
         ]);
+        if ($this->supplier_id) {
+            $command->andWhere(["$supplierWalletTable.supplier_id" => $this->supplier_id]);
+        }
         if ($this->report_from) {
             $command->andWhere(['>=', "$supplierWalletTable.updated_at", $this->report_from]);
         }
@@ -160,6 +163,9 @@ class ReportSupplierBalanceForm extends Model
             "$supplierWalletTable.status" => SupplierWallet::STATUS_COMPLETED,
             "$supplierWalletTable.type" => SupplierWallet::TYPE_OUTPUT,
         ]);
+        if ($this->supplier_id) {
+            $command->andWhere(["$supplierWalletTable.supplier_id" => $this->supplier_id]);
+        }
         if ($this->report_from) {
             $command->andWhere(['>=', "$supplierWalletTable.updated_at", $this->report_from]);
         }
@@ -175,6 +181,9 @@ class ReportSupplierBalanceForm extends Model
         $command = SupplierWallet::find()->where([
             "$supplierWalletTable.status" => SupplierWallet::STATUS_COMPLETED,
         ]);
+        if ($this->supplier_id) {
+            $command->andWhere(["$supplierWalletTable.supplier_id" => $this->supplier_id]);
+        }
         if ($this->report_to) {
             $command->andWhere(['<=', "$supplierWalletTable.updated_at", $this->report_to]);
         }
