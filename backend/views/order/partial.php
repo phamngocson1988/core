@@ -172,6 +172,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th col-tag="customer"> Tên khách hàng </th>
                 <th col-tag="game"> Shop Game </th>
                 <th col-tag="quantity"> Số gói đã nạp / còn lại </th>
+                <th col-tag="price"> Giá vốn (Vnd) </th>
                 <th col-tag="waiting_time"> Tổng TG chờ </th>
                 <!-- <th col-tag="waiting_time"> Tổng TG chờ (P) </th> -->
                 <!-- <th col-tag="waiting_time"> TG phân phối (P) </th> -->
@@ -197,6 +198,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->doing_unit, 2);?> / <?=StringHelper::numberFormat($model->quantity, 2);?></td>
+                  <td col-tag="price" class="center"><?=StringHelper::numberFormat($model->doing_unit, 2);?> / <?=StringHelper::numberFormat($model->cogs_price * $model->rate_usd, 2);?></td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="approved_time" class="center"><?=number_format($model->approved_time);?></td>
                   <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
@@ -247,6 +249,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
               <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($search->getSumQuantity(), 2);?></td>
+              <td col-tag="price"></td>
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
               <td col-tag="approved_time" class="center"><?=number_format($search->getAverageApprovedTime());?></td>
               <td col-tag="login_time" class="center"><?=number_format($search->getAverageLoginTime());?></td>

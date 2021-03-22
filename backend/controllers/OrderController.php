@@ -954,6 +954,7 @@ class OrderController extends Controller
             'id' => $id,
             'suppliers' => $supplierList,
             'model' => $model,
+            'order' => $order,
             'ref' => Url::to($request->getUrl(), true)
         ]);
     }

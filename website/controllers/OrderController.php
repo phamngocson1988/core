@@ -103,7 +103,7 @@ class OrderController extends Controller
         if ($model->validate() && $model->cancel()) {
             return $this->asJson(['status' => true]);
         } else {
-            return $this->asJson(['status' => false, 'errors' => $order->getErrorSummary(true)]);
+            return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);
         }
     }
 

@@ -3,6 +3,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use common\components\helpers\StringHelper;
 ?>
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -20,7 +21,7 @@ use yii\helpers\Url;
     	<?php else : ?>
     	<?=$form->field($model, 'supplier_id', [
         'options' => ['class' => 'form-group col-md-12 col-lg-12'],
-      ])->dropdownList($suppliers)->label('Chọn nhà cung cấp');?>
+      ])->dropdownList($suppliers)->label('Chọn nhà cung cấp. <strong style="font-size: 18px">Giá vốn (VNĐ): ' . StringHelper::numberFormat($order->cogs_price * $order->rate_usd, 2) . '</strong>');?>
   	<?php endif; ?>
     </div>
   </div>

@@ -157,6 +157,7 @@ if ($canSaler) $numColumn += 1;
                 <th col-tag="game"> Shop Game </th>
                 <th col-tag="total_unit"> Số lượng nạp </th>
                 <th col-tag="quantity"> Số gói </th>
+                <th col-tag="price"> Giá vốn (Vnd) </th>
                 <th col-tag="waiting_time"> Tổng TG chờ </th>
                 <th col-tag="processing_time"> TG xử lý yêu cầu </th>
                 <th col-tag="response_time"> TG chờ phản hồi </th>
@@ -182,6 +183,7 @@ if ($canSaler) $numColumn += 1;
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
                   <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
+                  <td col-tag="price" class="center"><?=StringHelper::numberFormat($model->cogs_price * $model->rate_usd, 2);?></td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="processing_time" class="center">
                     <?php 
@@ -315,6 +317,7 @@ if ($canSaler) $numColumn += 1;
               <td col-tag="game"></td>
               <td col-tag="total_unit" class="center"></td>
               <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($search->getSumQuantity(), 2);?></td>
+              <td col-tag="price"></td>
               <td col-tag="waiting_time" class="center"><?=number_format($search->getAverageWaitingTime());?></td>
               <td col-tag="processing_time"></td>
               <td col-tag="response_time"></td>
@@ -346,7 +349,7 @@ if ($canSaler) $numColumn += 1;
 <?php
 $hiddenColumns = [];
 if (Yii::$app->user->isRole(['orderteam', 'orderteam_manager'])) array_push($hiddenColumns, 'customer', 'saler');
-if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) array_push($hiddenColumns, 'orderteam', 'supplier');
+if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) array_push($hiddenColumns, 'orderteam', 'supplier', 'price');
 $hiddenColumnString = implode(',', $hiddenColumns);
 $script = <<< JS
 var hiddenColumns = '$hiddenColumnString';

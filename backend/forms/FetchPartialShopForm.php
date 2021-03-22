@@ -31,6 +31,9 @@ class FetchPartialShopForm extends FetchShopForm
             "IFNULL($supplierTable.quantity, $table.quantity - $table.doing_unit) as quantity", 
             // "$supplierTable.doing as doing_unit", 
             
+            "$table.cogs_price",
+            "$table.price",
+            "$table.rate_usd",
             "$table.request_cancel",
             "$table.doing_unit",
             "$table.saler_id", 

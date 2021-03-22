@@ -441,7 +441,7 @@ $('.cancel-order-button').ajax_action({
   callback: function(element, data) {
     $(element).replaceWith('Waiting cancellation');
   },
-  error: function(errors) {
+  error: function(element, errors) {
     toastr.error(errors);
   },
 });

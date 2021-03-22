@@ -2,11 +2,11 @@
 namespace website\forms;
 
 use Yii;
-use yii\base\Model;
 use website\models\Order;
 use website\components\notifications\OrderNotification;
+use common\forms\ActionForm;
 
-class CancelOrderForm extends Model
+class CancelOrderForm extends ActionForm
 {
     public $id;
 
@@ -30,6 +30,8 @@ class CancelOrderForm extends Model
             $this->addError($attribute, 'Order is not exist');
         } elseif ($order->customer_id != Yii::$app->user->id) {
             $this->addError($attribute, 'Order is not exist');
+        } elseif ($order->isProcessingOrder()) {
+            $this->addError($attribute, 'Your order is in progress and the cancellation request can not be performed. Kindly contact to our customer service for further asistance !');
         } elseif ($order->isCompletedOrder() 
             || $order->isConfirmedOrder() 
             || $order->isDeletedOrder()

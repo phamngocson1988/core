@@ -171,6 +171,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <th col-tag="customer"> Tên khách hàng </th>
                 <th col-tag="game"> Shop Game </th>
                 <th col-tag="quantity"> Số gói </th>
+                <th col-tag="price"> Giá vốn (Vnd) </th>
                 <th col-tag="created_at"> Thời điểm tạo </th>
                 <th col-tag="completed_at"> Thời điểm hoàn thành </th>
                 
@@ -200,6 +201,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <td col-tag="customer"><?=$model->getCustomerName();?></td>
                 <td col-tag="game"><?=$model->game_title;?></td>
                 <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
+                <td col-tag="price" class="center"><?=StringHelper::numberFormat($model->cogs_price * $model->rate_usd, 2);?></td>
                 <td col-tag="created_at"> <?=$model->created_at;?> </td>
                 <td col-tag="completed_at"> <?=$model->completed_at;?> </td>
                 <td col-tag="completed_time" class="center"><?=number_format($model->completed_time);?></td>
@@ -237,6 +239,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
               <td col-tag="customer"></td>
               <td col-tag="game"></td>
               <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($summary['quantity'], 2);?></td>
+              <td col-tag="price"></td>
               <td col-tag="created_at"></td>
               <td col-tag="completed_at"></td>
               <td col-tag="completed_time" class="center"><?=number_format($summary['avg_completed_time']);?></td>
@@ -264,7 +267,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
 <?php
 $hiddenColumns = [];
 if (Yii::$app->user->isRole(['orderteam', 'orderteam_manager'])) array_push($hiddenColumns, 'customer', 'saler');
-if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) array_push($hiddenColumns, 'orderteam', 'supplier');
+if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) array_push($hiddenColumns, 'orderteam', 'supplier', 'price');
 $hiddenColumnString = implode(',', $hiddenColumns);
 $script = <<< JS
 var hiddenColumns = '$hiddenColumnString';

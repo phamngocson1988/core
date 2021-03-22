@@ -201,6 +201,10 @@ $now = date('Y-m-d H:i:s');
                   <?php elseif ($model->isApproved()) : ?>
                   <span class="label label-default">Approved</span>
                   <?php endif;?>
+
+                  <?php if ($model->isObjectOrder() && $object->hasCancelRequest()): ?>
+                    <span class="label label-danger">Có yêu cầu hủy</span>
+                  <?php endif;?>
                 </td>
                 <td col-tag="action">
                 <?php if ($model->isPending()) :?>
