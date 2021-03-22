@@ -32,7 +32,7 @@ use yii\helpers\Url;
                             </tr>
                             <tr>
                               <td>
-                                <img alt="" border="0" src="https://kinggems.us/promotion/wp-content/uploads/2020/06/banner_deposit-copy.jpg" style="height:auto;width:100%" height="auto" width="100%" tabindex="0">
+                                <img alt="" border="0" src="https://kinggems.us/images/banner_deposit-copy.jpg" style="height:auto;width:100%" height="auto" width="100%" tabindex="0">
                               </td>
                             </tr>
                             <tr bgcolor="#FFFFFF">
