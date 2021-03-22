@@ -12,21 +12,9 @@ use common\models\PaymentTransaction;
 use common\models\Promotion;
 use common\components\helpers\StringHelper;
 
-$this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
-$this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-$this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $user = $search->getUser();
 ?>
 
-<style>
-.hide-text {
-    white-space: nowrap;
-    width: 100%;
-    max-width: 500px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-</style>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -72,29 +60,10 @@ $user = $search->getUser();
         <div class="row margin-bottom-10">
           <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report/finance-balance-detail']]);?>
             <?=$form->field($search, 'user_id', [
-            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'initValueText' => ($search->user_id) ? sprintf("%s - %s", $user->username, $user->email) : '',
-              'options' => ['class' => 'form-control', 'name' => 'user_id'],
-              'pluginOptions' => [
-                'placeholder' => 'Chọn khách hàng',
-                'allowClear' => true,
-                'minimumInputLength' => 3,
-                'ajax' => [
-                    'url' => Url::to(['user/suggestion']),
-                    'dataType' => 'json',
-                    'processResults' => new JsExpression('function (data) {return {results: data.data.items};}')
-                ]
-              ]
-            ])->label('Khách hàng')?>
-
-            <?=$form->field($search, 'type', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'type']
-            ])->dropDownList([
-                UserWallet::TYPE_INPUT => 'Nạp tiền',
-                UserWallet::TYPE_OUTPUT => 'Rút tiền',
-            ], ['prompt' => 'Chọn'])->label('Loại giao dịch');?>
+              'options' => ['tag' => false],
+              'inputOptions' => ['name' => 'user_id'],
+              'template' => '{input}'
+            ])->hiddenInput();?>
 
             <?=$form->field($search, 'start_date', [    
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -132,57 +101,59 @@ $user = $search->getUser();
         </div>
         
         <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
-            <tr>
-              <th style="width: 5%;"> <?=Yii::t('app', 'no');?> </th>
-              <th style="width: 30%;"> Mô tả</th>
-              <th style="width: 10%;"> Loại giao dịch </th>
-              <th style="width: 25%;"> Thời gian hoàn thành </th>
-              <th style="width: 10%;"> Kcoin </th>
-              <th style="width: 10%;"> Số dư ban đầu</th>
-              <th style="width: 10%;"> Số dư hiện tại</th>
-            </tr>
-          </thead>
-          <tbody>
-              <?php if (!$models) :?>
-              <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
-              <?php endif;?>
-              <?php foreach ($models as $no => $model) :?>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-checkable">
+            <thead>
               <tr>
-                <td>#<?=($pages->offset + $no + 1)?></td>
-                <td class="center">
-                  <?=$model->description;?>
-                </td>
-                <td class="center">
-                  <?php if ($model->type == UserWallet::TYPE_INPUT) : ?>
-                    <span class="label label-success">Nạp tiền</span>
-                  <?php else : ?> 
-                    <span class="label label-default">Rút tiền</span>
-                  <?php endif; ?>
-                  <?php if ($model->ref_name == Promotion::className()): ?>
-                    <span class="label label-warning">Khuyễn mãi</span>
-                  <?php endif;?>
-                </td>
-                <td class="center"><?=$model->payment_at;?></td>
-                <td class="center"><?=StringHelper::numberFormat($model->coin, 2);?></td>
-                <td class="center"><?=StringHelper::numberFormat($model->balance - $model->coin, 2);?></td>
-                <td class="center"><?=StringHelper::numberFormat($model->balance, 2);?></td>
+                <th col-tag="id"> <?=Yii::t('app', 'no');?> </th>
+                <th col-tag="description"> Mô tả </th>
+                <th col-tag="type"> Loại giao dịch </th>
+                <th col-tag="payment_at"> Thời gian hoàn thành</th>
+                <th col-tag="coin"> Kcoin</th>
+                <th col-tag="balance_start"> Số dư ban đầu </th>
+                <th col-tag="balance_end"> Số dư hiện tại </th>
               </tr>
-              <?php endforeach;?>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="center">Tổng cộng: <?=number_format($search->getCommand()->sum('coin'), 1);?></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
+            </thead>
+            <tbody>
+                <?php if (!$models) :?>
+                <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <?php endif;?>
+                <?php foreach ($models as $no => $model) :?>
+                <tr>
+                  <td col-tag="id">#<?=($pages->offset + $no + 1)?></td>
+                  <td col-tag="description">
+                    <?=$model['description'];?>
+                  </td>
+                  <td col-tag="type" class="center">
+                    <?php if ($model['type'] == UserWallet::TYPE_INPUT) : ?>
+                      <span class="label label-success">Nạp tiền</span>
+                    <?php else : ?> 
+                      <span class="label label-default">Rút tiền</span>
+                    <?php endif; ?>
+                    <?php if ($model['ref_name'] == Promotion::className()): ?>
+                      <span class="label label-warning">Khuyễn mãi</span>
+                    <?php endif;?>
+                  </td>
+                  <td col-tag="payment_at" class="center"><?=$model['payment_at'];?></td>
+                  <td col-tag="coin" class="center"><?=StringHelper::numberFormat($model['coin'], 2);?></td>
+                  <td col-tag="balance_start" class="center"><?=StringHelper::numberFormat($model['balance_start'], 2);?></td>
+                  <td col-tag="balance_end" class="center"><?=StringHelper::numberFormat($model['balance_end'], 2);?></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th col-tag="id"></th>
+                <th col-tag="description"></th>
+                <th col-tag="type"></th>
+                <th col-tag="payment_at"></th>
+                <th col-tag="coin" class="center">Tổng cộng: <?=number_format($search->getCommand()->sum('coin'), 1);?></th>
+                <th col-tag="balance_start"></th>
+                <th col-tag="balance_end"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
         <?php Pjax::end(); ?>
       </div>

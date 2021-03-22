@@ -114,22 +114,16 @@ class ReportController extends Controller
             'end_date' => $end_date,
             'user_id' => $user_id,
         ];
-        $form = new ReportByBalanceForm($data);
-        if ($mode === 'export') {
-            $fileName = date('YmdHis') . 'so-du-tai-khoan.xls';
-            return $form->export($fileName);
-        }
-        $command = $form->getUserCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->all();
-        $report = $form->fetch();
+        $form = new \backend\forms\ReportUserBalanceForm($data);
+        // if ($mode === 'export') {
+        //     $fileName = date('YmdHis') . 'so-du-tai-khoan.xls';
+        //     return $form->export($fileName);
+        // }
+        $report = $form->getReport();
         return $this->render('finance/balance', [
-            'models' => $models,
-            'pages' => $pages,
-            'search' => $form,
             'report' => $report,
+            'search' => $form,
+            'pages' => $form->getPage(),
         ]);   
     }
 
@@ -138,31 +132,26 @@ class ReportController extends Controller
         $this->view->params['main_menu_active'] = 'report.finance.balance';
         $request = Yii::$app->request;
 
-        $start_date = $request->get('start_date', date('Y-m-01'));
-        $end_date = $request->get('end_date', date('Y-m-t'));
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
         $type = $request->get('type', '');
         $mode = $request->get('mode');
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
             'user_id' => $user_id,
-            'type' => $type,
         ];
-        $form = new ReportByBalanceForm($data);
-        if ($mode === 'export') {
-            $fileName = date('YmdHis') . 'chi-tiet-giao-dich.xls';
-            return $form->exportDetail($fileName);
-        }
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['created_at' => SORT_DESC])
-                            ->all();
+        $form = new \backend\forms\ReportUserBalanceDetailForm($data);
+        // if ($mode === 'export') {
+        //     $fileName = date('YmdHis') . 'chi-tiet-giao-dich.xls';
+        //     return $form->exportDetail($fileName);
+        // }
+        $report = $form->getReport();
+        
         return $this->render('finance/balance-detail', [
-            'models' => $models,
-            'pages' => $pages,
+            'models' => $report,
             'search' => $form,
+            'pages' => $form->getPage(),
         ]);   
     }
 

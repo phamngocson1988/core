@@ -14,23 +14,25 @@ class ReportByBalanceForm extends Model
     public $user_id;
     public $type;
     private $_user;
-    private $_command;
 
-    public function init()
-    {
-        if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
-        if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
-    }
+    protected $_command;
+    protected $_page;
 
-    public function rules()
-    {
-        return [
-            ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
-            ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
-            [['start_date', 'end_date'], 'required'],
-            ['user_id', 'trim']
-        ];
-    }
+    // public function init()
+    // {
+    //     if (!$this->start_date) $this->start_date = date('Y-m-d 00:00', strtotime('-29 days'));
+    //     if (!$this->end_date) $this->end_date = date('Y-m-d 23:59');
+    // }
+
+    // public function rules()
+    // {
+    //     return [
+    //         ['start_date', 'default', 'value' => date('Y-m-d 00:00', strtotime('-29 days'))],
+    //         ['end_date', 'default', 'value' => date('Y-m-d 23:59')],
+    //         [['start_date', 'end_date'], 'required'],
+    //         ['user_id', 'trim']
+    //     ];
+    // }
 
     public function fetch()
     {
