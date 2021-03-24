@@ -120,10 +120,16 @@ class ReportController extends Controller
         //     return $form->export($fileName);
         // }
         $report = $form->getReport();
+        $finalInCome = $form->finalInCome();
+        $finalOutCome = $form->finalOutCome();
+        $finalBalance = $form->finalBalance();
         return $this->render('finance/balance', [
             'report' => $report,
             'search' => $form,
             'pages' => $form->getPage(),
+            'finalInCome' => $finalInCome,
+            'finalOutCome' => $finalOutCome,
+            'finalBalance' => $finalBalance,
         ]);   
     }
 
