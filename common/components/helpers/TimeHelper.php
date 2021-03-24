@@ -14,7 +14,7 @@ class TimeHelper {
     public static function timeDiff($from, $to, $unit = 'second') 
     {
         try {
-            $seconds = strtotime($from) - strtotime($to);
+            $seconds = strtotime($to) - strtotime($from);
             switch ($unit) {
                 case 'minute':
                     return $seconds / 60;
