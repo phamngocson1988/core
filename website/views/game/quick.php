@@ -217,6 +217,7 @@ function getFormData(form){
 }
 $('#checkout-button').on('click', function(e) {
   if ($(this).hasClass('inprogress')) return;
+  showLoader();
   $(this).addClass('inprogress');
   var that = this;
   e.stopPropagation();
@@ -238,7 +239,7 @@ $('#checkout-button').on('click', function(e) {
         if (result.status == false) {
           toastr.error(result.errors);
           $(that).removeClass('inprogress');
-
+          hideLoader();
         } else {
           setTimeout(() => {  
             window.location.href = "$orderLink";
@@ -246,6 +247,9 @@ $('#checkout-button').on('click', function(e) {
           toastr.success(result.success); 
         }
       },
+      error: function(data) {
+        hideLoader();
+      }
   });
   return false;
 });

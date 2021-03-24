@@ -276,7 +276,7 @@ function Purchase() {
   var quantity = quantityElement.val();
   var voucher = voucherElement.val();
   var paygate = paygateElement.val();
-
+  showLoader();
   $.ajax({
       url: '/wallet/purchase.html',
       type: "POST",
@@ -294,6 +294,9 @@ function Purchase() {
             toastr.error(result.errors.join('<br/>')); 
           }
       },
+      complete: function(data) {
+        hideLoader();
+      }
   });
 };
 
@@ -403,7 +406,6 @@ $('#paymentGame').on('click', '#update-payment-button', function(e) {
       },
   });
 });
-// ShowTransaction(16870763); 
 
 // open view detail
 $(".view-detail").on('click', function() {
