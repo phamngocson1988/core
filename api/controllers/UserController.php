@@ -3,21 +3,26 @@ namespace api\controllers;
 
 use Yii;
 use yii\rest\Controller;
-use yii\filters\auth\HttpBearerAuth;
+use yii\data\Pagination;
 
 class UserController extends Controller
 {
-	public function behaviors()
+	public function actionSearch()
 	{
-	    $behaviors = parent::behaviors();
-	    $behaviors['authenticator'] = [
-	        'class' => HttpBearerAuth::className(),
-	    ];
-	    return $behaviors;
-	}
+        $request = Yii::$app->request;
+        $form = new \api\forms\FetchUserForm([
+            'q' => $request->get('q'),
+        ]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $users = $command->offset($pages->offset)->limit($pages->limit)->all();
 
-	public function actionMe()
-	{
-		return Yii::$app->user->identity;
+        return [
+        	'users' => $users,
+        	'count' => $pages->totalCount,
+        	'limit' => $pages->getPageSize(),
+        	'current_page' => $pages->getPage(),
+        	'num_pages' => $pages->getPageCount(),
+        ];
 	}
 }

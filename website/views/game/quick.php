@@ -241,10 +241,8 @@ $('#checkout-button').on('click', function(e) {
           $(that).removeClass('inprogress');
           hideLoader();
         } else {
-          setTimeout(() => {  
-            window.location.href = "$orderLink";
-          }, 2000);
           toastr.success(result.success); 
+          window.location.href = "$orderLink";
         }
       },
       error: function(data) {
