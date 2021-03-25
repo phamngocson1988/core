@@ -9,14 +9,14 @@ use api\models\Game;
 
 class GameController extends Controller
 {
-	public function behaviors()
-	{
-	    $behaviors = parent::behaviors();
-	    $behaviors['authenticator'] = [
-	        'class' => HttpBearerAuth::className(),
-	    ];
-	    return $behaviors;
-	}
+	// public function behaviors()
+	// {
+	//     $behaviors = parent::behaviors();
+	//     $behaviors['authenticator'] = [
+	//         'class' => HttpBearerAuth::className(),
+	//     ];
+	//     return $behaviors;
+	// }
 
 	public function actionIndex()
 	{
@@ -34,6 +34,8 @@ class GameController extends Controller
         	'limit' => $pages->getPageSize(),
         	'current_page' => $pages->getPage(),
         	'num_pages' => $pages->getPageCount(),
+					// 'q' => $request->get('q'),
+					// 'sql' => $command->createCommand()->getRawSql()
         ];
 	}
 

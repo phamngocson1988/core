@@ -16,7 +16,7 @@ class FetchGameForm extends Model
         $q = $this->q;
         $command = Game::find();
         if ($q) {
-            $command->andWhere(["like", "title", $q]);
+            $command->where(["like", "title", $q]);
         }
         $this->_command = $command;
     }
