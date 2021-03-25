@@ -154,6 +154,59 @@ class ReportUserBalanceForm extends Model
         // income/outcome
     }
 
+    public function finalInCome()
+    {
+        $condition = [
+            "status" => UserWallet::STATUS_COMPLETED,
+            "user_id" => $this->user_id,
+            "type" => UserWallet::TYPE_INPUT,
+        ];
+        $condition = array_filter($condition);
+        $command = UserWallet::find()->where($condition);
+        if ($this->start_date) {
+            $command->andWhere(['>=', "updated_at", $this->start_date]);
+        }
+        if ($this->end_date) {
+            $command->andWhere(['<=', "updated_at", $this->end_date]);
+        }
+        return $command->sum("coin");
+    }
+
+    public function finalOutCome()
+    {
+        $condition = [
+            "status" => UserWallet::STATUS_COMPLETED,
+            "user_id" => $this->user_id,
+            "type" => UserWallet::TYPE_OUTPUT,
+        ];
+        $condition = array_filter($condition);
+        $command = UserWallet::find()->where($condition);
+        if ($this->start_date) {
+            $command->andWhere(['>=', "updated_at", $this->start_date]);
+        }
+        if ($this->end_date) {
+            $command->andWhere(['<=', "updated_at", $this->end_date]);
+        }
+        return $command->sum("coin");
+    }
+
+    public function finalBalance()
+    {
+        $condition = [
+            "status" => UserWallet::STATUS_COMPLETED,
+            "user_id" => $this->user_id,
+        ];
+        $condition = array_filter($condition);
+        $command = UserWallet::find()->where($condition);
+        if ($this->start_date) {
+            $command->andWhere(['>=', "updated_at", $this->start_date]);
+        }
+        if ($this->end_date) {
+            $command->andWhere(['<=', "updated_at", $this->end_date]);
+        }
+        return $command->sum("coin");
+    }
+
     public function getUser()
     {
         if (!$this->_user) {

@@ -76,6 +76,7 @@ AppAsset::register($this);
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PDQS4ZB"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+<div class="overlay" style="display: none;">Loading&#8230;</div>
 <?php require_once(Yii::$app->basePath . '/views/layouts/facebook_livechat.php');?>
 <?= NotificationFlash::widget() ?>
 <?php $this->beginBody() ?>

@@ -150,6 +150,17 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 </tr>
                 <?php endforeach;?>
             </tbody>
+            <tfoot>
+              <tr>
+                <th col-tag="id"></th>
+                <th col-tag="customer"></th>
+                <th col-tag="topup"> <?=StringHelper::numberFormat($finalInCome, 2);?> </th>
+                <th col-tag="withdraw"> <?=StringHelper::numberFormat($finalOutCome, 2);?></th>
+                <th col-tag="balance_start"></th>
+                <th col-tag="balance_end"><?=StringHelper::numberFormat($finalBalance, 2);?></th>
+                <th col-tag="actions"></th>
+              </tr>
+            </tfoot>
           </table>
         </div>
         <?=LinkPager::widget(['pagination' => $pages])?>
