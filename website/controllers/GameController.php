@@ -30,6 +30,26 @@ use website\models\GameSubscriber;
  */
 class GameController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'hot-deal', 'top-grossing', 'new-trending'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['quick'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'game.index';
