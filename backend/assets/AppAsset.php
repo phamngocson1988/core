@@ -30,7 +30,8 @@ class AppAsset extends AssetBundle
         'vendor/assets/layouts/layout/css/custom.min.css',
         'css/theme_custom.css',
         'vendor/assets/global/plugins/bootstrap-sweetalert/sweetalert.css',
-        'vendor/assets/global/plugins/bootstrap-toastr/toastr.min.css'
+        'vendor/assets/global/plugins/bootstrap-toastr/toastr.min.css',
+        'css/jquery.fancybox.min.css',
     ];
     public $js = [
         ['vendor/assets/global/plugins/respond.min.js', 'condition' => 'lt IE 9'],
@@ -93,6 +94,7 @@ class AppAsset extends AssetBundle
         'vendor/assets/layouts/global/scripts/quick-sidebar.min.js',
         'vendor/assets/layouts/global/scripts/quick-nav.min.js',
         'js/ajax_action.js',
+        'js/jquery.fancybox.min.js',
         'js/function.js',
     ];
     public $depends = [

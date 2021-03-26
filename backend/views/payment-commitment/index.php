@@ -184,7 +184,7 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="kingcoin_difference"><?=$reality ? StringHelper::numberFormat($reality->kingcoin - $model->kingcoin, 2) : '--';?></td>
                 <td col-tag="exchange_rate"><?=$model->exchange_rate;?></td>
                 <td col-tag="currency"><?=$model->currency;?></td>
-                <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['target' => '_blank']) : '--';?></td>
+                <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['class' => 'fancybox']) : '--';?></td>
                 <td col-tag="confirmed_by">
                 <?php
                 if ($model->payment_type === PaymentCommitment::PAYMENTTYPE_OFFLINE) {
@@ -380,6 +380,8 @@ $('.payment_reality_id').on('change', function() {
     },
   });
 });
+
+$(".fancybox").fancybox();
 JS;
 $this->registerJs($script);
 ?>

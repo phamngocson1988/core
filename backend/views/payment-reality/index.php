@@ -240,8 +240,8 @@ $now = date('Y-m-d H:i:s');
                 }
                 ?>
                 </td>
-                <td col-tag="object_evidence"><?=($object && $object->evidence) ? Html::a('Xem', $object->evidence, ['target' => '_blank']) : '--';?></td>
-                <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['target' => '_blank']) : '--';?></td>
+                <td col-tag="object_evidence"><?=($object && $object->evidence) ? Html::a('Xem', $object->evidence, ['class' => 'fancybox']) : '--';?></td>
+                <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['class' => 'fancybox', 'data-fancybox' => 'group' . $model->getId()]) : '--';?></td>
                 <td col-tag="payment_note"><?=nl2br($model->note);?></td>
                 <td col-tag="status">
                   <?php if ($model->isPending()) : ?>
@@ -281,6 +281,7 @@ $(".delete-payment-action").ajax_action({
       toastr(errors);
   },
 });
+$(".fancybox").fancybox();
 JS;
 $this->registerJs($script);
 ?>
