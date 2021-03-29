@@ -10,7 +10,7 @@ $this->title = 'User Profile';
       <div class="card card-info text-center">
         <img class="card-img-top" src="/images/icon/mask.svg" alt="Card image">
         <div class="card-body">
-          <h4 class="card-title"><?=sprintf("%s %s", $model->firstname, $model->lastname);?></h4>
+          <h4 class="card-title"><?=sprintf("%s", $model->name);?></h4>
           <p class="card-text">@<?=$model->username;?></p>
           <?php if (!$model->is_verify_email) :?>
           <div class="text-red font-weight-bold mb-2"><img class="icon-btn" src="/images/icon/warning.svg"/>UNVERIFIED</div>
@@ -57,8 +57,7 @@ $this->title = 'User Profile';
         <div class="col-md-6">
           <p class="lead">Personal</p>
           <hr />
-          <?= $form->field($model, 'firstname')->textInput(['placeholder' => 'First name'])->label(false);?>
-          <?= $form->field($model, 'lastname')->textInput(['placeholder' => 'Last name'])->label(false);?>
+          <?= $form->field($model, 'name')->textInput(['placeholder' => 'Name'])->label(false);?>
           <?= $form->field($model, 'birthday')->textInput(['placeholder' => 'Date of Birth', 'type' => 'date'])->label(false);?>
         </div>
       </div>

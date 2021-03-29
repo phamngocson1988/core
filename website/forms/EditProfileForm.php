@@ -7,6 +7,7 @@ use website\models\User;
 
 class EditProfileForm extends Model
 {
+    public $name;
     public $firstname;
     public $lastname;
     public $username;
@@ -26,6 +27,9 @@ class EditProfileForm extends Model
     {
         return [
             [['username', 'email'], 'required'],
+
+            ['name', 'trim'],
+            ['name', 'string', 'max' => 255],
 
             ['firstname', 'trim'],
             ['firstname', 'string', 'max' => 255],
@@ -50,6 +54,7 @@ class EditProfileForm extends Model
     public function save()
     {
         $user = $this->getUser();
+        $user->name = $this->name;
         $user->firstname = $this->firstname;
         $user->lastname = $this->lastname;
         $user->birthday = $this->birthday;
@@ -71,6 +76,7 @@ class EditProfileForm extends Model
     public function loadData()
     {
         $user = $this->getUser();
+        $this->name = $user->name;
         $this->firstname = $user->firstname;
         $this->lastname = $user->lastname;
         $this->username = $user->username;
