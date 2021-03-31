@@ -70,7 +70,9 @@ class DispatchOrderForm extends ActionForm
         if (!$this->validate()) return false;
 
         $order = $this->getOrder();
+        $order->log('PPTD Start');
         $suppliers = $this->getSuppliers();
+        $order->log(json_encode($suppliers));
         foreach ($suppliers as $supplier) {
             $assignForm = new AssignOrderSupplierForm([
                 'order_id' => $this->id,
@@ -89,8 +91,9 @@ class DispatchOrderForm extends ActionForm
                     $supplierObject->save();
                 }
             }
-            $errors = $assignForm->getFirstErrors();
-            $order->log(reset($errors));
+            $errors = $assignForm->getErrors();
+            $order->log('PPTD Fail');
+            $order->log(json_encode($errors));
         }
         return true;
     }
@@ -142,7 +145,7 @@ class DispatchOrderForm extends ActionForm
                 $supplierOrders = array_filter($supplierOrders, function( $supplierOrder ) {
                     if ($supplierOrder->status === OrderSupplier::STATUS_APPROVE) {
                         $order = $supplierOrder->order;
-                        return !$order->state; //Filter out order is in pending/waiting information
+                        return $order->state != Order::STATE_PENDING_INFORMATION; //Filter out order is in pending information
                     }
                     return true;
                 });
@@ -159,9 +162,6 @@ class DispatchOrderForm extends ActionForm
                     if (!$a['num_order']) return -1;
                     if (!$b['num_order']) return 1;
                     return (int)((int)$a['last_speed'] < (int)$b['last_speed']);
-                    // if ($a['num_order'] == $b['num_order']) {
-                        // return (int)$a['last_speed'] < (int)$b['last_speed'];
-                    // }
                 });
             }
             $this->_suppliers = $suppliers;

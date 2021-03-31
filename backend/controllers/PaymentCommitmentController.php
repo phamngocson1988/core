@@ -38,6 +38,7 @@ class PaymentCommitmentController extends Controller
             'status' => $request->get('status'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
+            'paygate' => $request->get('paygate'),
         ];
         $search = new \backend\forms\FetchPaymentCommitmentForm($condition);
         $command = $search->getCommand();

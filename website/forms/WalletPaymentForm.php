@@ -167,7 +167,7 @@ class WalletPaymentForm extends Model
             $commitment = new PaymentCommitment();
             $commitment->object_name = PaymentCommitment::OBJECT_NAME_WALLET;
             $commitment->object_key = $trn->id;
-            $commitment->paygate = $paygate->name;
+            $commitment->paygate = $this->paygate;
             $commitment->payment_type = $paygate->getPaymentType();
             $commitment->amount = $usdCurrency->exchangeTo($trn->price, $targetCurrency); // Currency::convertUSDToCurrency($trn->price, $paygate->currency);
             $commitment->fee = $usdCurrency->exchangeTo($trn->total_fee, $targetCurrency); //Currency::convertUSDToCurrency($trn->total_fee, $paygate->currency);

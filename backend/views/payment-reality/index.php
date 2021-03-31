@@ -93,6 +93,11 @@ $now = date('Y-m-d H:i:s');
             ])->dropDownList($search->fetchStatus(), ['prompt' => 'Chọn trạng thái'])->label('Trạng thái');?>
           </div>
           <div class="row margin-bottom-10">
+            <?=$form->field($search, 'paygate', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'paygate']
+            ])->dropDownList($search->fetchPaygate(), ['prompt' => 'Chọn cổng thanh toán'])->label('Lọc theo cổng thanh toán');?>
+
             <?=$form->field($search, 'date_type', [
               'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'date_type']

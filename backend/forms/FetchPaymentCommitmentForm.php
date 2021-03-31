@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use common\models\PaymentCommitment;
+use common\models\Paygate;
 
 class FetchPaymentCommitmentForm extends Model
 {
@@ -15,6 +16,7 @@ class FetchPaymentCommitmentForm extends Model
     public $status;
     public $start_date;
     public $end_date;
+    public $paygate;
 
     private $_command;
 
@@ -32,6 +34,7 @@ class FetchPaymentCommitmentForm extends Model
             'object_key' => preg_replace("/[^\d]/", "", $this->object_key),
             'customer_id' => $this->customer_id,
             'status' => $this->status,
+            'paygate' => $this->paygate,
         ];
         $condition = array_filter($condition);
         if (count($condition)) {
@@ -72,5 +75,11 @@ class FetchPaymentCommitmentForm extends Model
             PaymentCommitment::STATUS_PENDING => 'Pending',
             PaymentCommitment::STATUS_APPROVED => 'Approved',
         ];
+    }
+
+    public function fetchPaygate()
+    {
+        $models = Paygate::find()->all();
+        return ArrayHelper::map($models, 'identifier', 'name');
     }
 }
