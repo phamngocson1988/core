@@ -110,7 +110,7 @@ use common\components\helpers\StringHelper;
           ['label' => 'Home', 'url' => ['site/index'], 'active' => $main_menu_active == 'site.index'],
           ['label' => 'Kcoin wallet', 'url' => ['wallet/index'], 'active' => $main_menu_active == 'wallet.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Games', 'url' => ['game/index'], 'active' => $main_menu_active == 'game.index'],
-          ['label' => 'Promotion', 'url' => '/promotion', 'active' => $main_menu_active == 'site.index2'],
+          ['label' => 'Promotion', 'url' => 'https://promotion.kinggems.us', 'active' => $main_menu_active == 'site.index2'],
           ['label' => 'Affiliate', 'url' => ['affiliate/index'], 'active' => $main_menu_active == 'affiliate.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Referral', 'url' => ['referral/index'], 'active' => $main_menu_active == 'referral.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Help center', 'url' => ['question/index'], 'active' => $main_menu_active == 'question.index'],
