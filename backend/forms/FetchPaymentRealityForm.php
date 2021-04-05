@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use common\models\PaymentReality;
 use common\components\helpers\TimeHelper;
 use common\components\helpers\StringHelper;
+use common\models\Paygate;
 
 class FetchPaymentRealityForm extends Model
 {
@@ -20,6 +21,7 @@ class FetchPaymentRealityForm extends Model
     public $date_type;
     public $start_date;
     public $end_date;
+    public $paygate;
 
     private $_command;
 
@@ -40,6 +42,7 @@ class FetchPaymentRealityForm extends Model
             'customer_id' => $this->customer_id,
             'payment_id' => $this->payment_id,
             'status' => $this->status,
+            'paygate' => $this->paygate,
         ];
         $condition = array_filter($condition);
         if (count($condition)) {
@@ -91,6 +94,12 @@ class FetchPaymentRealityForm extends Model
             PaymentReality::STATUS_PENDING => 'Pending',
             PaymentReality::STATUS_CLAIMED => 'Claimed',
         ];
+    }
+
+    public function fetchPaygate()
+    {
+        $models = Paygate::find()->all();
+        return ArrayHelper::map($models, 'identifier', 'name');
     }
 
     // Export function

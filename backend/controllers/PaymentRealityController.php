@@ -41,6 +41,7 @@ class PaymentRealityController extends Controller
             'date_type' => $request->get('date_type'),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
+            'paygate' => $request->get('paygate'),
         ];
         $search = new \backend\forms\FetchPaymentRealityForm($condition);
         $mode = $request->get('mode');

@@ -76,6 +76,12 @@ $now = date('Y-m-d H:i:s');
                 ]
               ]
             ])->label('Khách hàng')?>
+
+            <?=$form->field($search, 'paygate', [
+              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'paygate']
+            ])->dropDownList($search->fetchPaygate(), ['prompt' => 'Chọn cổng thanh toán'])->label('Lọc theo cổng thanh toán');?>
+
             <?= $form->field($search, 'start_date', [
               'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'start_date']

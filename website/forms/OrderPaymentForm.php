@@ -192,7 +192,7 @@ class OrderPaymentForm extends Model
                 $commitment = new PaymentCommitment();
                 $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
                 $commitment->object_key = $order->id;
-                $commitment->paygate = $paygate->name;
+                $commitment->paygate = $paygate->getIdentifier();
                 $commitment->payment_type = $paygate->getPaymentType();
                 $commitment->amount = $usdCurrency->exchangeTo($order->sub_total_price, $targetCurrency); //Currency::convertUSDToCurrency($order->sub_total_price, $order->currency);
                 $commitment->fee = $usdCurrency->exchangeTo($order->total_fee, $targetCurrency); //Currency::convertUSDToCurrency($order->sub_total_price, $order->total_fee);
