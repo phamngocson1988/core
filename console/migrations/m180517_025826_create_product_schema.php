@@ -139,7 +139,7 @@ class m180517_025826_create_product_schema extends Migration
             'title' => $this->string(255)->notNull(),
             'method' => $this->string(255)->notNull(),
             'version' => $this->string(255)->notNull(),
-            'package' => $this->string(255)->notNull(),
+            // 'package' => $this->string(255),
         ], $tableOptions);
 
         if ($this->db->driverName === 'mysql') {

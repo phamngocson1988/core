@@ -32,7 +32,7 @@ use yii\helpers\Url;
                           </tr>
                           <tr>
                             <td>
-                              <img alt="" border="0" src="https://kinggems.us/promotion/wp-content/uploads/2020/06/banner_kinggems-1.jpg" style="height:auto;width:100%" height="auto" width="100%" tabindex="0">
+                              <img alt="" border="0" src="https://kinggems.us/images/banner_kinggems-1.jpg" style="height:auto;width:100%" height="auto" width="100%" tabindex="0">
                             </td>
                           </tr>
                           <tr bgcolor="#FFFFFF">
@@ -52,7 +52,7 @@ use yii\helpers\Url;
                             </td>
                           </tr>
                           <tr bgcolor="#14565d">
-                            <td style="background: url(https://thienanit.com/wp-content/uploads/2020/06/footer_cv-1.png) no-repeat center;padding-top:15px;padding-bottom:15px;padding-right:30px;padding-left:30px;border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;border-left:1px solid #dddddd">
+                            <td style="background: url(https://kinggems.us/images/footer_cv-1.png) no-repeat center;padding-top:15px;padding-bottom:15px;padding-right:30px;padding-left:30px;border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;border-left:1px solid #dddddd">
                               <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin:0 auto;width:100%">
                                 <tbody>
                                   <tr>
