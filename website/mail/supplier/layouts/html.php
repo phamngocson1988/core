@@ -55,7 +55,7 @@ use yii\helpers\Url;
                               </td>
                             </tr>
                             <tr bgcolor="#14565d">
-                              <td style="background: url(https://thienanit.com/wp-content/uploads/2020/06/footer_cv.png) no-repeat center;padding-top:15px;padding-bottom:15px;padding-right:30px;padding-left:30px;border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;border-left:1px solid #dddddd">
+                              <td style="background: url(https://kinggems.us/images/footer_cv.png) no-repeat center;padding-top:15px;padding-bottom:15px;padding-right:30px;padding-left:30px;border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;border-left:1px solid #dddddd">
                                 <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin:0 auto;width:100%">
                                   <tbody>
                                     <tr>

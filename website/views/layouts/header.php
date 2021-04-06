@@ -75,6 +75,7 @@ use common\components\helpers\StringHelper;
       </div>
     </div>
   </div>
+  <?php if (!Yii::$app->user->isGuest) :?>
   <div class="navbar-header navbar-noti w-100">
     <div class="d-flex justify-content-between">
       <?=\website\components\notifications\Notifications::widget([
@@ -97,6 +98,7 @@ use common\components\helpers\StringHelper;
       </div>
     </div>
   </div>
+  <?php endif;?>
 </nav>
 <div class="navbar-main">
   <div class="container">

@@ -6,6 +6,8 @@ use common\widgets\MultipleImageInputWidget;
 use yii\helpers\Url;
 use common\components\helpers\FormatConverter;
 use yii\web\JsExpression;
+use common\components\helpers\StringHelper;
+use common\models\CurrencySetting;
 
 $this->registerCssFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css', ['depends' => [\backend\assets\AppAsset::className()]]);
 $this->registerCssFile('@web/vendor/assets/pages/css/profile.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
@@ -13,6 +15,10 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/bootstrap-fileinput/boo
 $this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+// Currency
+$usdCurrency = CurrencySetting::find()->where(['code' => 'USD'])->one();
+$vndCurrency = CurrencySetting::find()->where(['code' => 'VND'])->one();
 
 $showPrice = Yii::$app->user->can('orderteam');
 $canUpdatePrice = Yii::$app->user->can('orderteam_manager');
@@ -50,7 +56,7 @@ if (!count($lastPrices)) {
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title"> Danh sách nhà cung cấp </h1>
+<h1 class="page-title"> Danh sách nhà cung cấp (Giá vốn: <?=StringHelper::numberFormat($usdCurrency->exchangeTo($model->getGame()->getCogs(), $vndCurrency), 2);?> VNĐ)</h1>
 <!-- END PAGE TITLE-->
 
 <div class="row">
