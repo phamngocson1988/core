@@ -151,9 +151,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li class="list-inline-item">
             <a href="javascript:;"><img class="icon-lg" src="/images/icon/paypal.svg" /></i></a>
           </li>
-          <li class="list-inline-item">
+          <!-- <li class="list-inline-item">
             <a href="javascript:;"><img class="icon-lg" src="/images/icon/payoneer.svg" /></i></a>
-          </li>
+          </li> -->
           <li class="list-inline-item">
             <a href="javascript:;"><img style="width:100px" src="/images/icon/alipay.png" /></i></a>
           </li>

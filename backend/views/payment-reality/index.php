@@ -103,7 +103,7 @@ $now = date('Y-m-d H:i:s');
               'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'date_type']
             ])->dropDownList([
               'created_at' => 'Ngày cập nhật',
-              'payment_at' => 'Ngày nhận đơn',
+              'payment_time' => 'Ngày nhận hóa đơn',
               'object_created_at' => 'Ngày tạo đơn',
             ], ['prompt' => 'Chọn mốc thời gian'])->label('Lọc theo mốc thời gian');?>
 
