@@ -56,7 +56,7 @@ if (!count($lastPrices)) {
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title"> Danh sách nhà cung cấp (Giá vốn: <?=StringHelper::numberFormat($usdCurrency->exchangeTo($model->getGame()->getCogs(), $vndCurrency), 2);?> VNĐ)</h1>
+<h1 class="page-title"> <?=$model->getGame()->title;?> <strong>(Giá vốn: <?=StringHelper::numberFormat($usdCurrency->exchangeTo($model->getGame()->getCogs(), $vndCurrency), 2);?> VNĐ)</strong></h1>
 <!-- END PAGE TITLE-->
 
 <div class="row">
