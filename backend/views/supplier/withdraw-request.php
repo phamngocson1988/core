@@ -100,7 +100,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="10"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $model) :?>
                 <?php $user = User::findOne($model->supplier_id);?>
@@ -126,7 +126,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                     <?=Html::a('Upload Receipt', 'javascript:;', ['class' => 'upload-link normal-link']);?>
                     <?php ActiveForm::end(); ?>
                     <?php else : ?>
-                    <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">Xem</a> | 
+                    <a href="<?=$model->evidence;?>" class="normal-link fancybox">Xem</a> | 
                     <a href="<?=Url::to(['supplier/remove-evidence-withdraw', 'id' => $model->id]);?>" class="normal-link remove-link">Xóa</a>
                     <?php endif;?>
                     <?php endif;?>
@@ -224,6 +224,7 @@ $(document).on('submit', 'body #cancel-withdraw-form', function(e) {
   });
   return false;
 });
+$(".fancybox").fancybox();
 JS;
 $this->registerJs($script);
 ?>

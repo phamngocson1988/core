@@ -143,11 +143,8 @@ class DispatchOrderForm extends ActionForm
                 ->all();
                 // Filter out order is in pending/waiting information (has state data, only happen when Supplier approved order)
                 $supplierOrders = array_filter($supplierOrders, function( $supplierOrder ) {
-                    if ($supplierOrder->status === OrderSupplier::STATUS_APPROVE) {
-                        $order = $supplierOrder->order;
-                        return $order->state != Order::STATE_PENDING_INFORMATION; //Filter out order is in pending information
-                    }
-                    return true;
+                    $order = $supplierOrder->order;
+                    return $order->state != Order::STATE_PENDING_INFORMATION; //Filter out order is in pending information
                 });
                 $suppliers[$supplierId]['num_order'] = count($supplierOrders);
             }
