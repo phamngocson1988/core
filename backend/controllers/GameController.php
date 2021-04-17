@@ -297,7 +297,7 @@ class GameController extends Controller
         ->andWhere(['in', 'supplier_id', $supplierIds])
         ->andWhere(['in', 'status', [OrderSupplier::STATUS_COMPLETED, OrderSupplier::STATUS_CONFIRMED]])
         ->groupBy(['supplier_id'])
-        ->select(['supplier_id', 'COUNT(*) as count_order', 'AVG(TIMESTAMPDIFF(SECOND, processing_at, completed_at)) as duration'])
+        ->select(['supplier_id', 'COUNT(*) as count_order', 'SUM(quantity) as quantity', 'AVG(TIMESTAMPDIFF(SECOND, processing_at, completed_at)) as duration'])
         ->asArray();
         if ($form->speed_from) {
             $speedCommand->andHaving(['>=', 'duration', $form->speed_from * 60]);
@@ -314,6 +314,7 @@ class GameController extends Controller
             });
         }
         $countOrders = array_column($orderSuppliers, 'count_order', 'supplier_id');
+        $sumQuantity = array_column($orderSuppliers, 'quantity', 'supplier_id');
         $avgSpeeds = array_column($orderSuppliers, 'duration', 'supplier_id');
         $lastPrices = GamePriceLog::find()->where(['game_id' => $id])->orderBy(['updated_at' => SORT_DESC])->limit(2)->all();
 
@@ -323,6 +324,7 @@ class GameController extends Controller
             'id' => $id,
             'search' => $form,
             'countOrders' => $countOrders,
+            'sumQuantity' => $sumQuantity,
             'avgSpeeds' => $avgSpeeds,
             'lastPrices' => $lastPrices
         ]);

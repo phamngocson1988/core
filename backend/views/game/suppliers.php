@@ -157,8 +157,8 @@ if (!count($lastPrices)) {
                       <th> Nhà cung cấp </th>
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá cũ (VNĐ) </th>
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá hiện tại (VNĐ) </th>
-                      <th> Số đơn hoàn thành </th>
                       <th> TG Nạp </th>
+                      <th> Tổng đơn / Tổng gói </th>
                       <th> Đơn/lượt </th>
                       <th> PPTĐ </th>
                       <th> Đăng ký </th>
@@ -180,8 +180,8 @@ if (!count($lastPrices)) {
                           <div><?=number_format($supplier->price);?></div>
                           <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
                         </td>
-                        <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?></td>
                         <td class="center"><?=$supplier->last_speed ?  number_format($supplier->last_speed) : '-';?></td>
+                        <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?> / <?=isset($sumQuantity[$supplier->supplier_id]) ? StringHelper::numberFormat($sumQuantity[$supplier->supplier_id], 2) : 0 ;?></td>
                         <td class="center">
                           <a href='<?=Url::to(['game/max-order', 'supplier_id' => $supplier->supplier_id, 'game_id' => $supplier->game_id]);?>' data-target="#update-max-order" class="tooltips" data-pjax="0" data-container="body" data-original-title="Cập nhật số đơn / lượt" data-toggle="modal" ><?=$supplier->max_order ? number_format($supplier->max_order) : '-';?></a>
                         </td>
