@@ -12,7 +12,7 @@ class UserCommission extends ActiveRecord
 
 	public static function tableName()
     {
-        return '{{%user_commission}}';
+        return '{{%affiliate_commission}}';
     }
 
     public function behaviors()

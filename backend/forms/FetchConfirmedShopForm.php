@@ -88,7 +88,7 @@ class FetchConfirmedShopForm extends FetchShopForm
         $table = Order::tableName();
         return $this->getCommand()->select([
             "COUNT(*) as count",
-            "SUM($supplierTable.quantity) as quantity",
+            "SUM($supplierTable.doing) as quantity",
             "AVG(TIMESTAMPDIFF(MINUTE , $table.created_at, $table.completed_at)) as completed_time",
             "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)) as completed_time",
             "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)) as supplier_completed_time",

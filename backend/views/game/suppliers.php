@@ -147,7 +147,7 @@ if (!count($lastPrices)) {
               </div>
               <?php ActiveForm::end()?>
 
-              <?php $numCols = 9;?>
+              <?php $numCols = 10;?>
               <?php if (!$showPrice) $numCols = $numCols - 2;?>
               <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover table-checkable">
@@ -158,6 +158,7 @@ if (!count($lastPrices)) {
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá cũ (VNĐ) </th>
                       <th <?=$showPrice ? '' : 'class="hide"';?>> Giá hiện tại (VNĐ) </th>
                       <th> TG Nạp </th>
+                      <th>Tổng TG NCC hoàn thành</th>
                       <th> Tổng đơn / Tổng gói </th>
                       <th> Đơn/lượt </th>
                       <th> PPTĐ </th>
@@ -181,6 +182,7 @@ if (!count($lastPrices)) {
                           <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
                         </td>
                         <td class="center"><?=$supplier->last_speed ?  number_format($supplier->last_speed) : '-';?></td>
+                        <td class="center"><?=$supplier->last_completing_time ?  number_format($supplier->last_completing_time) : '-';?></td>
                         <td class="center"><?=isset($countOrders[$supplier->supplier_id]) ? $countOrders[$supplier->supplier_id] : 0 ;?> / <?=isset($sumQuantity[$supplier->supplier_id]) ? StringHelper::numberFormat($sumQuantity[$supplier->supplier_id], 2) : 0 ;?></td>
                         <td class="center">
                           <a href='<?=Url::to(['game/max-order', 'supplier_id' => $supplier->supplier_id, 'game_id' => $supplier->game_id]);?>' data-target="#update-max-order" class="tooltips" data-pjax="0" data-container="body" data-original-title="Cập nhật số đơn / lượt" data-toggle="modal" ><?=$supplier->max_order ? number_format($supplier->max_order) : '-';?></a>

@@ -365,11 +365,6 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::getValue($labels, $this->reseller_level);
     }
 
-    public function getAffiliate()
-    {
-        return $this->hasOne(UserAffiliate::className(), ['user_id' => 'id']);
-    }
-
     /**
      * Active member: là tài khoản có ít nhất 1 giao dịch (top up or mua hàng)
      */

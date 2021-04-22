@@ -4,6 +4,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use website\widgets\LinkPager;
 $user = Yii::$app->user->getIdentity();
+$affiliateLink = Url::to(['site/signup', 'affiliate' => $user->getAffiliateCode()], true);
 $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js', ['position' => \yii\web\View::POS_HEAD]);
 ?>
 <div class="container profile profile-affiliate my-5">
@@ -17,6 +18,9 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
           <p class="font-weight-bold text-red">Balance: <?=number_format($user->walletBalance());?> KCOIN</p>
           <a href="#" class="btn btn-green" data-toggle="modal" data-target="#choosePayment">
             WITHDRAW
+          </a>
+          <a href="#" class="btn" id="affliateLink" data-link="<?=$affiliateLink;?>">
+            GET LINK
           </a>
         </div>
       </div>
@@ -248,6 +252,12 @@ $(".delete-account-link").ajax_action({
     toastr.error(errors);
     return false;
   }
+});
+
+// Copy affiliate link
+$("#affliateLink").on("click", function() {
+  copyToClipboard($(this).data('link'));
+  toastr.success('Your affiliate link was coppied to clipboard.'); 
 });
 JS;
 $this->registerJs($script);

@@ -16,7 +16,7 @@ class UserCommissionWithdraw extends ActiveRecord
 
 	public static function tableName()
     {
-        return '{{%user_commission_withdraw}}';
+        return '{{%affiliate_commission_withdraw}}';
     }
 
     public function getId()

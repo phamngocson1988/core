@@ -13,7 +13,7 @@ class UserAffiliate extends ActiveRecord
 
     public static function tableName()
     {
-        return '{{%user_affiliate}}';
+        return '{{%affiliate}}';
     }
 
     public static function primaryKey()

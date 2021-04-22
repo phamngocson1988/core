@@ -24,7 +24,7 @@ use yii\helpers\Url;
             <button type="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase">submit</button>
           </div>
         <?php ActiveForm::end(); ?>
-        <div class="text-horizontal"><span>or</span></div>
+        <!-- <div class="text-horizontal"><span>or</span></div>
         <p><b>Forgot Email Address</b> - Enter your mobile number</p>
         <?php $phoneform = ActiveForm::begin(['action' => $phoneUrl, 'id' => $phoneFormId]); ?>
           <?= $phoneform->field($phoneModel, 'phone')->textInput(['placeholder' => 'Mobile number', 'required' => 'required', 'class' => 'form-control phoneinp', 'value' => '+84'])->label(false) ?>
@@ -39,7 +39,7 @@ use yii\helpers\Url;
             our
             support</button>
           </p>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

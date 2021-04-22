@@ -117,8 +117,10 @@ class UpdateOrderToCompletedForm extends Model
                 if ($supplierGame) {
                     $supplierGame->touch('last_updated_at');
                     $to_time = strtotime("now");
-                    $from_time = strtotime($sender->processing_at);
-                    $supplierGame->last_speed = round(abs($to_time - $from_time) / 60);
+                    $processing_at = strtotime($sender->processing_at);
+                    $approved_at = strtotime($sender->approved_at);
+                    $supplierGame->last_speed = round(abs($to_time - $processing_at) / 60);
+                    $supplierGame->last_completing_time = round(abs($to_time - $approved_at) / 60); // from approve to complete
                     $supplierGame->save();
                 }
             });

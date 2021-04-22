@@ -88,7 +88,7 @@ class FetchCompletedShopForm extends FetchShopForm
 
         return $command->select([
             "COUNT(*) as count",
-            "SUM($supplierTable.quantity) as quantity",
+            "SUM($supplierTable.doing) as quantity",
             "SUM(TIMESTAMPDIFF(MINUTE , $table.created_at, $table.completed_at)) / $count as avg_completed_time",
             "SUM(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)) / $count as avg_supplier_completed_time",
             "SUM(TIMESTAMPDIFF(MINUTE , $table.created_at, $table.pending_at)) / $count as avg_pending_time",

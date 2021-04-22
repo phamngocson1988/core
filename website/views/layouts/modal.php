@@ -23,6 +23,9 @@ console.log(hash);
 if (hash == 'modalSecure') {
   $('#modalSecure').modal();
 }
+if (hash == 'modalLogin') {
+  $('#modalLogin').modal();
+}
 JS;
 $this->registerJs($script);
 ?>

@@ -44,6 +44,7 @@ class RegisterAffiliateForm extends Model
         $model->channel = $this->channel;
         $model->channel_type = $this->channel_type;
         $model->status = Affiliate::STATUS_DISABLE;
+        $model->generateAffiliateCode();
         return $model->save();
     }
 

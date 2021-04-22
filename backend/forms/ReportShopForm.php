@@ -142,10 +142,10 @@ class ReportShopForm extends FetchShopForm
             'AF' => 'Thực nhận ( Kcoin )',
             'AG' => 'Mã khuyến mãi',
             'AH' => 'Tỷ giá ( VND/Kcoin )',
-            'AI' => 'Doanh thu ( VND )',
-            'AJ' => 'Giá mua ( VND ) ',
-            'AK' => 'Thanh toán NCC ( VND )',
-            'AL' => 'Lợi nhuận ( VND )',
+            // 'AI' => 'Doanh thu ( VND )',
+            'AI' => 'Giá mua ( VND ) ',
+            // 'AJ' => 'Thanh toán NCC ( VND )',
+            // 'AL' => 'Lợi nhuận ( VND )',
         ];
         $totalRow = $command->count();
         $startRow = 4;
@@ -282,10 +282,10 @@ class ReportShopForm extends FetchShopForm
                 '',
                 $promotion ? $promotion->code : '',
                 $model['rate_usd'],
-                $model['price'] * $model['supplier_quantity'] * $model['rate_usd'],
+                // $model['price'] * $model['supplier_quantity'] * $model['rate_usd'],
                 $model['supplier_price'],
-                $model['supplier_price'] * $model['supplier_quantity'],
-                ($model['price'] * $model['supplier_quantity'] * $model['rate_usd']) - ($model['supplier_price'] * $model['supplier_quantity'])
+                // $model['supplier_price'] * $model['supplier_quantity'],
+                // ($model['price'] * $model['supplier_quantity'] * $model['rate_usd']) - ($model['supplier_price'] * $model['supplier_quantity'])
             ];
         }
         $file = \Yii::createObject([

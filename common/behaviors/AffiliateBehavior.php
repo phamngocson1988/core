@@ -24,4 +24,17 @@ class AffiliateBehavior extends AttributeBehavior
 		->andWhere(['status' => Affiliate::STATUS_DISABLE])
 		->exists();
 	}
+
+	public function getAffiliate()
+    {
+		$owner = $this->owner;
+        return $owner->hasOne(Affiliate::className(), ['user_id' => 'id']);
+    }
+
+	public function getAffiliateCode()
+	{
+		$owner = $this->owner;
+		$affiliate = $owner->affiliate;
+		return $affiliate->code;
+	}
 }

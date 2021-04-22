@@ -5,7 +5,7 @@ use Yii;
 use yii\base\Event;
 use yii\base\Model;
 use website\models\User;
-use website\models\UserAffiliate;
+use website\models\Affiliate;
 use website\models\UserRefer;
 use website\models\UserWallet;
 
@@ -39,7 +39,7 @@ class SignupEventHandler extends Model
     {
         $form = $event->sender;
         if (!$form->affiliate) return;
-        $invitor = UserAffiliate::findOne(['code' => $form->affiliate]);
+        $invitor = Affiliate::findOne(['code' => $form->affiliate]);
         if (!$invitor) return;
         if (!$invitor->isEnable()) return;
         $user = $event->user;
