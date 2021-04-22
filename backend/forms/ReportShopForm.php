@@ -16,11 +16,12 @@ use common\models\Country;
 class ReportShopForm extends FetchShopForm
 {
     public $date_time_type;
+    public $role;
 
     public function rules()
     {
         return [
-            [['saler_id','supplier_id','orderteam_id','game_id','start_date','end_date','status', 'date_time_type'], 'safe']
+            [['saler_id','supplier_id','orderteam_id','game_id','start_date','end_date','status', 'date_time_type', 'role'], 'safe']
         ];
     }
 
@@ -49,6 +50,7 @@ class ReportShopForm extends FetchShopForm
             "$table.customer_name", 
             "$table.game_id",
             "$table.game_title", 
+            "$table.payment_type", 
             "$table.payment_method", 
             "$table.price", 
             "$table.sub_total_price", 
@@ -64,7 +66,7 @@ class ReportShopForm extends FetchShopForm
             "$supplierTable.supplier_id",
             "$supplierTable.price as supplier_price", 
             "$supplierTable.quantity as supplier_quantity", 
-            "$supplierTable.doing", 
+            "$supplierTable.doing as quantity", 
             "$supplierTable.requested_at", 
             "$supplierTable.approved_at", 
             "$supplierTable.processing_at", 
@@ -107,46 +109,10 @@ class ReportShopForm extends FetchShopForm
     {
         $command = $this->getCommand();
         $fileName = ($fileName) ? $fileName : 'order-list' . date('His') . '.xlsx';
-        $titles = [
-            'A' => 'Mã đơn hàng',
-            'B' => 'Tên khách hàng',
-            'C' => 'Cấp bậc KH',
-            'D' => 'Quốc gia',
-            'E' => 'Shop game',
-            'F' => 'Phương thức nạp',
-            'G' => 'Số gói',
-            'H' => 'Cổng thanh toán',
-            'I' => 'Thời điểm tạo',
-            'J' => 'Thời điểm NCC nhận đơn',
-            'K' => 'Thời điểm hoàn thành',
-            'L' => 'Thời điểm xác nhận',
-            'M' => 'Tổng TG Hoàn Thành',
-            'N' => 'Tổng TG NCC hoàn thành',
-            'O' => 'TG duyệt',
-            'P' => 'TG phân phối',
-            'Q' => 'TG nhận đơn', 
-            'R' => 'TG login',    
-            'S' => 'TG nạp',  
-            'T' => 'TG xác nhận', 
-            'U' => 'Trạng thái',  
-            'V' => 'Sai thông tin',   
-            'W' => 'Nội dung sai thông tin',  
-            'X' => 'NV Hổ Trợ',   
-            'Y' => 'NV Phân Phối',    
-            'Z' => 'Nhà Cung Cấp',
-            'AA' => 'Giá bán ( Kcoin )',
-            'AB' => 'Giá đơn hàng ( Kcoin )',
-            'AC' => 'Phí phát sinh ( Kcoin )',
-            'AD' => 'Khuyến mãi ( Kcoin )',
-            'AE' => 'KH thanh Toán ( Kcoin )',
-            'AF' => 'Thực nhận ( Kcoin )',
-            'AG' => 'Mã khuyến mãi',
-            'AH' => 'Tỷ giá ( VND/Kcoin )',
-            // 'AI' => 'Doanh thu ( VND )',
-            'AI' => 'Giá mua ( VND ) ',
-            // 'AJ' => 'Thanh toán NCC ( VND )',
-            // 'AL' => 'Lợi nhuận ( VND )',
-        ];
+        $titles = $this->getColumns();
+        $titleKeys = array_keys($titles);
+        $excelKeys = $this->getExcelColumn($titles);
+        $titles = array_combine($excelKeys, $titles);
         $totalRow = $command->count();
         $startRow = 4;
         $endRow = $startRow + $totalRow;
@@ -170,21 +136,10 @@ class ReportShopForm extends FetchShopForm
         $header = [
             "A1:{$endColumn}1" => sprintf('THỐNG KÊ ĐƠN HÀNG'),
             "A2:{$endColumn}2" => sprintf('Thời gian thống kê: %s đến %s', $this->start_date, $this->end_date),
-            // "A3:{$endColumn}3" => sprintf('Khách hàng: %s', $customer ? $customer->name : ''),
-            // "A4:{$endColumn}4" => sprintf('Nhân viên sale: %s', $saler ? $saler->name : ''),
-            // "A5:{$endColumn}5" => sprintf('Nhân viên đơn hàng: %s', $orderteam ? $orderteam->name : ''),
-            // "A6:{$endColumn}6" => sprintf('Tên game: %s', $game ? $game->title : ''),
-            // "A7:{$endColumn}7" => sprintf('Nhà cung cấp: %s', ($supplier) ? $supplier->name : ''),
-            // "A8:{$endColumn}8" => sprintf('Ngày xác nhận từ: %s', ($this->confirmed_from) ? $this->confirmed_from : ''),
-            // "A9:{$endColumn}9" => sprintf('Ngày xác nhận đến: %s', ($this->confirmed_from) ? $this->confirmed_from : ''),
-            // "A10:{$endColumn}10" => sprintf('Phương thức thanh toán: %s', $paymentMethod),
         ];
         $footer = [
-            // "A$footerRow" => sprintf('Tổng: %s', $command->count()),
-            // "G$footerRow" => sprintf('Tổng: %s', number_format($command->sum('order.doing'), 1)),
         ];
         
-        $data = [];
         $command->orderBy(['order.created_at' => SORT_DESC]);
         $models = $command->asArray()
         ->indexBy(function ($row) use(&$index){
@@ -229,6 +184,7 @@ class ReportShopForm extends FetchShopForm
         $suppliers = User::find()->where(['in', 'id', $supplierIds])
         ->indexBy('id')->all();
 
+        $data = [];
         foreach ($models as $model) {
             $user = $users[$model['customer_id']];
             $reseller = ArrayHelper::getValue($resellers, $user->id);
@@ -243,50 +199,45 @@ class ReportShopForm extends FetchShopForm
 
             // Promotion
             $promotion = $model['promotion_id'] ? Promotion::findOne($model['promotion_id']) : null;
-            $data[] = [
-                '#' . $model['id'], 
-                $model['customer_name'],
-                $resellerLevel,
-                $countryName,
-                $model['game_title'], 
-                $model['payment_method'],
-                $model['doing'],
-                $model['payment_method'],
-                $model['created_at'],
-                $model['approved_at'],
-                $model['supplier_completed_at'],
-                $model['order_confirmed_at'],
-                $model['order_completed_time'],
-                $model['supplier_completed_time'],
-                $model['approved_time'],
-                $model['distributed_time'],
-                $model['supplier_approved_time'],
-                $model['supplier_pending_time'],
-                $model['supplier_processing_time'],
-                $model['supplier_confirmed_time'],
-                $model['status'],
-                in_array($model['id'], $existStaffComplainIds) ? 'X' : '',
-                html_entity_decode(strip_tags(ArrayHelper::getValue($contentComplainIds, $model['id'], ''))),
-                $saler ? $saler->getName() : '',
-                $orderteam ? $orderteam->getName() : '',
-                $supplier ? $supplier->getName() : '',
-
-
-
-
-                $model['price'],
-                $model['price'] * $model['doing'],
-                0, //$model['total_price'] - $model['sub_total_price'],
-                0,
-                $model['price'] * $model['doing'],
-                '',
-                $promotion ? $promotion->code : '',
-                $model['rate_usd'],
-                // $model['price'] * $model['supplier_quantity'] * $model['rate_usd'],
-                $model['supplier_price'],
-                // $model['supplier_price'] * $model['supplier_quantity'],
-                // ($model['price'] * $model['supplier_quantity'] * $model['rate_usd']) - ($model['supplier_price'] * $model['supplier_quantity'])
+            $item = [
+                'id' => '#' . $model['id'],
+                'customer_name' => $model['customer_name'],
+                'reseller_level' => $resellerLevel,
+                'country' => $countryName,
+                'game_title' => $model['game_title'],
+                'payment_type' => $model['payment_type'],
+                'quantity' => $model['quantity'],
+                'payment_method' => $model['payment_method'],
+                'created_at' => $model['created_at'],
+                'approved_at' => $model['approved_at'],
+                'supplier_completed_at' => $model['supplier_completed_at'],
+                'order_confirmed_at' => $model['order_confirmed_at'],
+                'order_completed_time' => $model['order_completed_time'],
+                'supplier_completed_time' => $model['supplier_completed_time'],
+                'approved_time' => $model['approved_time'],
+                'distributed_time' => $model['distributed_time'],
+                'supplier_approved_time' => $model['supplier_approved_time'], 
+                'supplier_pending_time' => $model['supplier_pending_time'],    
+                'supplier_processing_time' => $model['supplier_processing_time'],  
+                'supplier_confirmed_time' => $model['supplier_confirmed_time'], 
+                'status' => $model['status'],  
+                'is_wrong' => in_array($model['id'], $existStaffComplainIds) ? 'X' : '',   
+                'wrong_information' => html_entity_decode(strip_tags(ArrayHelper::getValue($contentComplainIds, $model['id'], ''))),  
+                'saler_name' => $saler ? $saler->getName() : '',   
+                'orderteam_name' => $orderteam ? $orderteam->getName() : '',    
+                'supplier_name' => $supplier ? $supplier->getName() : '',
+                'price' => $model['price'],
+                'total_price' => $model['price'] * $model['quantity'],
+                'total_fee' => 0,
+                'total_promotion' => 0,
+                'total_paid' => $model['price'] * $model['quantity'],
+                'total_received' => $model['price'] * $model['quantity'],
+                'promotion_code' => $promotion ? $promotion->code : '',
+                'exchange_rate' => $model['rate_usd'],
+                'supplier_price' => $model['supplier_price'],
             ];
+            $item = array_intersect_key($item, array_flip($titleKeys));
+            $data[] = $item;
         }
         $file = \Yii::createObject([
             'class' => 'codemix\excelexport\ExcelFile',
@@ -337,6 +288,84 @@ class ReportShopForm extends FetchShopForm
             ],
         ]);
         $file->send($fileName);
+    }
+
+    protected function getColumns()
+    {
+        $titles = [
+            'id' => 'Mã đơn hàng',
+            'customer_name' => 'Tên khách hàng',
+            'reseller_level' => 'Cấp bậc KH',
+            'country' => 'Quốc gia',
+            'game_title' => 'Shop game',
+            'payment_type' => 'Phương thức nạp',
+            'quantity' => 'Số gói',
+            'payment_method' => 'Cổng thanh toán',
+            'created_at' => 'Thời điểm tạo',
+            'approved_at' => 'Thời điểm NCC nhận đơn',
+            'supplier_completed_at' => 'Thời điểm hoàn thành',
+            'order_confirmed_at' => 'Thời điểm xác nhận',
+            'order_completed_time' => 'Tổng TG Hoàn Thành',
+            'supplier_completed_time' => 'Tổng TG NCC hoàn thành',
+            'approved_time' => 'TG duyệt',
+            'distributed_time' => 'TG phân phối',
+            'supplier_approved_time' => 'TG nhận đơn', 
+            'supplier_pending_time' => 'TG login',    
+            'supplier_processing_time' => 'TG nạp',  
+            'supplier_confirmed_time' => 'TG xác nhận', 
+            'status' => 'Trạng thái',  
+            'is_wrong' => 'Sai thông tin',   
+            'wrong_information' => 'Nội dung sai thông tin',  
+            'saler_name' => 'NV Hổ Trợ',   
+            'orderteam_name' => 'NV Phân Phối',    
+            'supplier_name' => 'Nhà Cung Cấp',
+            'price' => 'Giá bán ( Kcoin )',
+            'total_price' => 'Giá đơn hàng ( Kcoin )',
+            'total_fee' => 'Phí phát sinh ( Kcoin )',
+            'total_promotion' => 'Khuyến mãi ( Kcoin )',
+            'total_paid' => 'KH thanh Toán ( Kcoin )',
+            'total_received' => 'Thực nhận ( Kcoin )',
+            'promotion_code' => 'Mã khuyến mãi',
+            'exchange_rate' => 'Tỷ giá ( VND/Kcoin )',
+            'supplier_price' => 'Giá mua ( VND ) ',
+        ];
+        if ($this->role == 'saler') {
+            unset($titles['supplier_name']);
+            unset($titles['supplier_price']);
+        } elseif ($this->role == 'orderteam') {
+            unset($titles['customer_name']);
+            unset($titles['reseller_level']);
+            unset($titles['country']);
+            unset($titles['payment_method']);
+            unset($titles['price']);
+            unset($titles['total_price']);
+            unset($titles['total_fee']);
+            unset($titles['total_promotion']);
+            unset($titles['total_paid']);
+            unset($titles['total_received']);
+            unset($titles['promotion_code']);
+        }
+        return $titles;
+    }
+
+    protected function getExcelColumn($titles)
+    {
+        $alphas = range('A', 'Z');
+        $totalColumns = count($titles);
+        $roundAlphabel = ceil($totalColumns / count($alphas));
+        $alphabelColumns = [];
+        if ($roundAlphabel > 1) {
+            $secondAlphas = range('A', 'Z');
+            $roundAlphabel--;
+            while ($roundAlphabel) {
+                $letter = array_shift($secondAlphas);
+                foreach (range('A', 'Z') as $newColumn) {
+                    $alphas[] = $letter . $newColumn;
+                }
+                $roundAlphabel--;
+            }
+        }
+        return array_slice($alphas, 0, $totalColumns);
     }
 
     public function fetchDateTimeType()

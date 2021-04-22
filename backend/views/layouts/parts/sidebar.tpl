@@ -562,7 +562,7 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->cans(['admin', 'accounting'])}
+          {if $app->user->cans(['admin', 'accounting', 'saler', 'orderteam'])}
           <li class="nav-item  ">
             <a href="{url route='/order/report'}" class="nav-link nav-toggle" code='order.report'>
               <span class="title">Thống kê đơn hàng</span>

@@ -982,6 +982,14 @@ class OrderController extends Controller
         $model = new \backend\forms\ReportShopForm();
         if ($model->load($request->post())) {
             $fileName = date('YmdHis') . 'thong-ke-don-hang.xls';
+            $role = '';
+            $user = Yii::$app->user;
+            if ($user->can('admin')) $role = 'admin';
+            elseif ($user->can('admin')) $role = 'admin';
+            elseif ($user->can('accounting')) $role = 'accounting';
+            elseif ($user->can('orderteam')) $role = 'orderteam';
+            elseif ($user->can('saler')) $role = 'saler';
+            $model->role = $role;
             $model->export($fileName);
         }
 
