@@ -38,6 +38,8 @@ class PaymentGatewayFactory extends Model
                         return new \website\components\payment\paygate\Kinggems($paygateModal);
                     case 'coinbase':
                         return new \website\components\payment\paygate\CoinBase($paygateModal);
+                    case 'coinspaid':
+                        return new \website\components\payment\paygate\CoinsPaid($paygateModal);
                 }
         }
         return null;

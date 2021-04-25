@@ -25,7 +25,7 @@ class CartController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['calculate', 'add', 'payment-coin-base-callback'],
+                        'actions' => ['calculate', 'add', 'payment-coin-base-callback', 'payment-coin-paid-callback'],
                         'allow' => true,
                     ],
                     [
@@ -40,6 +40,7 @@ class CartController extends Controller
                 'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'payment-coin-base-callback' => ['post'],
+                    'payment-coin-paid-callback' => ['post'],
                 ],
             ]
         ];
@@ -47,7 +48,7 @@ class CartController extends Controller
 
     public function beforeAction($action)
     {
-        if ($action->id == 'payment-coin-base-callback') {
+        if ($action->id == 'payment-coin-base-callback' || $action->id == 'payment-coin-paid-callback') {
             $this->enableCsrfValidation = false;
         }
 
@@ -227,6 +228,15 @@ class CartController extends Controller
     {
         Yii::info('start actionPaymentCoinBaseCallback');
         $identifier = 'coinbase';
+        $config = \website\components\payment\PaymentGatewayFactory::getConfig($identifier);
+        $paygate = \website\components\payment\PaymentGatewayFactory::getPaygate($config);
+        return $paygate->processCharge();
+    }
+
+    public function actionPaymentCoinPaidCallback()
+    {
+        Yii::info('start actionPaymentCoinPaidCallback');
+        $identifier = 'coinspaid';
         $config = \website\components\payment\PaymentGatewayFactory::getConfig($identifier);
         $paygate = \website\components\payment\PaymentGatewayFactory::getPaygate($config);
         return $paygate->processCharge();

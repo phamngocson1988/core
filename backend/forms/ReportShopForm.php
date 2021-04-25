@@ -8,6 +8,7 @@ use backend\models\Order;
 use backend\models\User;
 use backend\models\UserReseller;
 use backend\models\Game;
+use backend\models\GameMethod;
 use backend\models\OrderComplains;
 use backend\models\OrderSupplier;
 use backend\models\Promotion;
@@ -50,7 +51,6 @@ class ReportShopForm extends FetchShopForm
             "$table.customer_name", 
             "$table.game_id",
             "$table.game_title", 
-            "$table.payment_type", 
             "$table.payment_method", 
             "$table.price", 
             "$table.sub_total_price", 
@@ -147,6 +147,18 @@ class ReportShopForm extends FetchShopForm
         })
         ->all();
         $orderIds = ArrayHelper::getColumn($models, 'id');
+
+        // Game method 
+        $gameIds = ArrayHelper::getColumn($models, 'game_id');
+        $gameIds = array_unique($gameIds);
+        $gameTable = Game::tableName();
+        $methodTable = GameMethod::tableName();
+        $games = Game::find()
+        ->innerJoin($methodTable, "{$methodTable}.id = {$gameTable}.method")
+        ->where(["{$gameTable}.id" => $gameIds])
+        ->select(["{$gameTable}.id as id", "{$methodTable}.title as title"])
+        ->asArray()->all();
+        $gameMethodMapping = ArrayHelper::map($games, 'id', 'title');
         // Get Complain
         $complains = OrderComplains::find()
         ->where(['in', 'order_id', $orderIds])             
@@ -205,7 +217,7 @@ class ReportShopForm extends FetchShopForm
                 'reseller_level' => $resellerLevel,
                 'country' => $countryName,
                 'game_title' => $model['game_title'],
-                'payment_type' => $model['payment_type'],
+                'game_method' => ArrayHelper::getValue($gameMethodMapping, $model['game_id'], ''),
                 'quantity' => $model['quantity'],
                 'payment_method' => $model['payment_method'],
                 'created_at' => $model['created_at'],
@@ -298,7 +310,7 @@ class ReportShopForm extends FetchShopForm
             'reseller_level' => 'Cấp bậc KH',
             'country' => 'Quốc gia',
             'game_title' => 'Shop game',
-            'payment_type' => 'Phương thức nạp',
+            'game_method' => 'Phương thức nạp',
             'quantity' => 'Số gói',
             'payment_method' => 'Cổng thanh toán',
             'created_at' => 'Thời điểm tạo',
