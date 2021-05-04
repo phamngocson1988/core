@@ -13,6 +13,7 @@ class UpdateTransactionForm extends Model
 {
     public $id;
     public $payment_id;
+    public $payment_data;
     public $evidence;
 
     private $_transaction;
@@ -27,6 +28,7 @@ class UpdateTransactionForm extends Model
             [['id', 'payment_id'], 'required'],
             ['id', 'validateTransaction'],
             ['evidence', 'safe'],
+            ['payment_data', 'safe'],
             ['payment_id', 'validatePaymentId'],
         ];
     }
@@ -72,6 +74,7 @@ class UpdateTransactionForm extends Model
             if (!$trn->payment_id) {
                 $trn->payment_id = $this->payment_id;
             }
+            $trn->payment_data = $this->payment_data;
             $trn->evidence = $this->evidence;
             $result = $trn->save();
 

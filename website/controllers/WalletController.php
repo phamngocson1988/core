@@ -11,7 +11,7 @@ use common\components\helpers\StringHelper;
 // models
 use website\models\Paygate;
 use website\models\PaymentTransaction;
-use common\models\Currency;
+// use common\models\Currency;
 use common\models\CurrencySetting;
 
 class WalletController extends Controller
@@ -35,8 +35,10 @@ class WalletController extends Controller
     {
         $this->view->params['main_menu_active'] = 'wallet.index';
         $request = Yii::$app->request;
-        $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE, 'paygate_type' => Paygate::PAYGATE_TYPE_OFFLINE])->all();
-
+        $paygates = Paygate::find()->where(['status' => Paygate::PAYGATE_TYPE_OFFLINE])->all();
+        if (Yii::$app->user->id == 213) {
+            $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+        }
         // pending transaction
         $pendings = PaymentTransaction::find()->where([
             'status' => PaymentTransaction::STATUS_PENDING,
@@ -100,16 +102,12 @@ class WalletController extends Controller
         if ($form->validate()) {
             $calculate = $form->calculate();
             $totalPayment = StringHelper::numberFormat($calculate['totalPayment'], 2);
-            $paygate = $form->getPaygate();
+            $paygate = $form->getPaygateConfig();
             if ($paygate->currency != 'USD') {
                 $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
                 $targetCurrency = CurrencySetting::findOne(['code' => $paygate->currency]);
                 $otherCurrencyTotal = $usdCurrency->exchangeTo($calculate['totalPayment'], $targetCurrency);
                 $otherCurrency = sprintf("%s%s", StringHelper::numberFormat($otherCurrencyTotal, 2), $targetCurrency->getSymbol());
-
-                // $otherCurrencyTotal = Currency::convertUSDToCurrency(StringHelper::numberFormat($calculate['totalPayment'], 2), $paygate->currency);
-                // $currencyModel = Currency::findOne($paygate->currency);
-                // $otherCurrency = $currencyModel->addSymbolFormat(StringHelper::numberFormat($otherCurrencyTotal, 2));
                 $totalPayment = sprintf("%s (%s)", $totalPayment, utf8_encode($otherCurrency));
 
                 
@@ -135,7 +133,7 @@ class WalletController extends Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'errors' => 'You need to login']);
-
+        $user = Yii::$app->user->getIdentity();
         $form = new \website\forms\WalletPaymentForm([
             'quantity' => $request->post('quantity', 0),
             'voucher' => $request->post('voucher', ''),
@@ -143,7 +141,10 @@ class WalletController extends Controller
         ]);
 
         if ($form->validate() && $trnId = $form->purchase()) {
-            return $this->asJson(['status' => true, 'data' => $trnId]);
+            $paygate = $form->getPaygate();
+            $trn = PaymentTransaction::findOne($trnId);
+            $url = $paygate->createCharge($trn, $user);
+            return $this->asJson(['status' => true, 'data' => $trnId, 'url' => $url]);
         } else {
             return $this->asJson(['status' => false, 'errors' => $form->getErrorSummary(true)]);
         }

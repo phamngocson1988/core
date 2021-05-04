@@ -13,6 +13,8 @@ class PaymentTransaction extends ActiveRecord
     const STATUS_COMPLETED = "completed";
     const STATUS_DELETED = "deleted";
 
+    const ID_PREFIX = 'T';
+
     public function behaviors()
     {
         return [
@@ -37,7 +39,7 @@ class PaymentTransaction extends ActiveRecord
 
     public function getId()
     {
-        return "T" . $this->id;
+        return self::ID_PREFIX . $this->id;
     }
 
     public function generateAuthKey()
@@ -76,5 +78,24 @@ class PaymentTransaction extends ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
+    public function getPaymentData()
+    {
+        $content = $this->payment_content;
+        if ($this->payment_type == 'online') {
+            $data = json_decode($this->payment_data, true);
+            if ($data && is_array($data)) {
+                $params = [];
+                foreach ($data as $key => $value) {
+                    $newKey = sprintf("{%s}", $key);
+                    if (strpos($content, $newKey) !== false) {
+                        $params[$newKey] = $value;
+                    }
+                }
+                $content = str_replace(array_keys($params), array_values($params), $content);
+            }
+        }
+        return $content;
     }
 }

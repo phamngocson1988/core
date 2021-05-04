@@ -12,7 +12,7 @@ use website\models\UserWallet;
 use common\components\helpers\FormatConverter;
 use website\components\payment\PaymentGatewayFactory;
 use website\components\notifications\OrderNotification;
-use common\models\Currency;
+// use common\models\Currency;
 use common\components\helpers\StringHelper;
 use common\models\PaymentCommitment;
 use common\models\CurrencySetting;
@@ -90,7 +90,6 @@ class OrderPaymentForm extends Model
     {
         $settings = Yii::$app->settings;
         $request = Yii::$app->request;
-        $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
         $user = $this->getUser();
         $paygate = $this->getPaygateConfig();
 
@@ -104,10 +103,17 @@ class OrderPaymentForm extends Model
         $totalUnit = (int)$cartItem->getTotalUnit();
         $promotion = $cartItem->getPromotion();
 
-        $usdCurrency = Currency::findOne('USD');
-        $otherCurrency = Currency::findOne($paygate->getCurrency());
-        $otherCurrencyTotal = Currency::convertUSDToCurrency($totalPrice, $paygate->getCurrency());
+        // $usdCurrency = Currency::findOne('USD');
+        // $targetCurrency = Currency::findOne($paygate->getCurrency());
 
+        $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+        $targetCurrency = CurrencySetting::findOne(['code' => $paygate->getCurrency()]);
+        $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
+        $targetCurrencyTotal = $usdCurrency->exchangeTo($totalPrice, $targetCurrency);
+        $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
+        if ($vndCurrency) {
+            $rate = $vndCurrency->exchange_rate;
+        }
         // Create order
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
@@ -130,7 +136,7 @@ class OrderPaymentForm extends Model
             $order->sub_total_price = $subTotalPrice;
             $order->total_price = $totalPrice;
             $order->total_fee = $paygate->getFee($subTotalPrice);
-            $order->total_price_by_currency = $otherCurrencyTotal;
+            $order->total_price_by_currency = $targetCurrencyTotal;
 
             // customer
             $order->customer_id = $user->id;
@@ -186,8 +192,7 @@ class OrderPaymentForm extends Model
             }
 
             if ($paygate->getIdentifier() != 'kinggems') {
-                $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
-                $targetCurrency = CurrencySetting::findOne(['code' => $order->currency]);
+                
 
                 $commitment = new PaymentCommitment();
                 $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;

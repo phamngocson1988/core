@@ -22,7 +22,7 @@ use common\components\helpers\StringHelper;
       <p><span class="list-item">Total payment:</span><b class="text-red"><?=StringHelper::numberFormat($payment->total_price, 2);?> USD</b></p>
     </div>
     <div class="col-md-6">
-      <?=$payment->payment_data;?>
+      <?=$payment->getPaymentData();?>
     </div>
     <div class="col-md-12">
       <p class="text-center font-weight-bold mt-5 mb-0">Kindly submit Transaction Number after you do payment

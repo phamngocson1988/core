@@ -42,6 +42,7 @@ class m190313_163324_create_wallet extends Migration
             'payment_method' => $this->string(50)->notNull(),
             'payment_type' => $this->string(10),
             'payment_id' => $this->string(50),
+            'payment_content' => $this->text(),
             'payment_data' => $this->text(),
             'rate_usd' => $this->float(),
             'description' => $this->string(100), 

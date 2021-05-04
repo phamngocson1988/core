@@ -10,6 +10,7 @@ use common\models\PaymentCommitment;
 use common\models\Currency;
 use common\models\CurrencySetting;
 use common\components\helpers\FormatConverter;
+use website\components\payment\PaymentGatewayFactory;
 // Notification
 use website\components\notifications\DepositNotification;
 use website\behaviors\DepositNotificationBehavior;
@@ -28,21 +29,24 @@ class WalletPaymentForm extends Model
         return [
             [['quantity', 'paygate'], 'required'],
             [['voucher'], 'trim'],
-            ['quantity', 'compare', 'compareValue' => 0, 'operator' => '>', 'type' => 'number'],
+            ['quantity', 'compare', 'compareValue' => 15, 'operator' => '>=', 'type' => 'number'],
             ['paygate', 'validatePaygate'],
             ['voucher', 'validateVoucher']
         ];
     }
 
-    public function getPaygate()
+    public function getPaygateConfig()
     {
         if (!$this->_paygate) {
-            $this->_paygate = Paygate::find()
-            ->where(['identifier' => $this->paygate])
-            ->andWhere(['status' => Paygate::STATUS_ACTIVE])
-            ->one();
+            $this->_paygate = PaymentGatewayFactory::getConfig($this->paygate);
         }
         return $this->_paygate;
+    }
+
+    public function getPaygate()
+    {
+        $config = $this->getPaygateConfig();
+        return PaymentGatewayFactory::getPaygate($config);
     }
 
     public function getPromotion()
@@ -55,8 +59,8 @@ class WalletPaymentForm extends Model
 
     public function validatePaygate($attribute, $params = [])
     {
-        $paygate = $this->getPaygate();
-        if (!$paygate) {
+        $config = $this->getPaygateConfig();
+        if (!$config) {
             $this->addError($attribute, sprintf('Payment Gateway %s is not available', $this->paygate));
         }
     }
@@ -89,7 +93,7 @@ class WalletPaymentForm extends Model
 
     public function calculate()
     {
-        $paygate = $this->getPaygate();
+        $paygate = $this->getPaygateConfig();
         $subTotalPayment = $this->quantity;
         $totalPayment = $subTotalPayment;
         $promotion = $this->getPromotion();
@@ -125,16 +129,23 @@ class WalletPaymentForm extends Model
             $request = Yii::$app->request;
             $settings = Yii::$app->settings;
             $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
-            $paygate = $this->getPaygate();
+            $paygate = $this->getPaygateConfig();
             $promotion = $this->getPromotion();
 
+            $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+            $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
+            $targetCurrency = CurrencySetting::findOne(['code' => $paygate->currency]);
+            $rate = $settings->get('ApplicationSettingForm', 'exchange_rate_vnd', 23000);
+            if ($vndCurrency) {
+                $rate = $vndCurrency->exchange_rate;
+            }
             // Save transaction
             $trn = new PaymentTransaction();
             $trn->user_id = $user->id;
             $trn->user_ip = $request->userIP;
-            $trn->payment_method = $this->paygate;
-            $trn->payment_type = 'offline';
-            $trn->payment_data = $paygate->content;
+            $trn->payment_method = $paygate->getIdentifier();
+            $trn->payment_type = $paygate->getPaymentType();
+            $trn->payment_content = $paygate->content;
             $trn->rate_usd = $rate;
             // Price
             $trn->price = $data['subTotalPayment'];
@@ -148,7 +159,7 @@ class WalletPaymentForm extends Model
                 $trn->promotion_id = $promotion->id;
                 $trn->promotion_code = $promotion->code;
             }            
-            $trn->total_coin = $data['totalKingcoin'];
+            $trn->total_coin = $data['totalKingcoin']; // The real kcoin customer will receive
             $trn->description = $this->paygate;
             $trn->created_by = $user->id;
             $trn->status = PaymentTransaction::STATUS_PENDING;
@@ -161,19 +172,16 @@ class WalletPaymentForm extends Model
             $trn->pushNotification(DepositNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
 
             // commitment
-            $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
-            $targetCurrency = CurrencySetting::findOne(['code' => $paygate->currency]);
-
             $commitment = new PaymentCommitment();
             $commitment->object_name = PaymentCommitment::OBJECT_NAME_WALLET;
             $commitment->object_key = $trn->id;
-            $commitment->paygate = $this->paygate;
+            $commitment->paygate = $paygate->getIdentifier();
             $commitment->payment_type = $paygate->getPaymentType();
             $commitment->amount = $usdCurrency->exchangeTo($trn->price, $targetCurrency); // Currency::convertUSDToCurrency($trn->price, $paygate->currency);
             $commitment->fee = $usdCurrency->exchangeTo($trn->total_fee, $targetCurrency); //Currency::convertUSDToCurrency($trn->total_fee, $paygate->currency);
             $commitment->total_amount = $usdCurrency->exchangeTo($trn->total_price, $targetCurrency); //Currency::convertUSDToCurrency($trn->total_price, $paygate->currency);
             $commitment->currency = $paygate->currency;
-            $commitment->kingcoin = $trn->total_price;
+            $commitment->kingcoin = $trn->total_price; // just for compare between other currencis and kcoin
             $commitment->exchange_rate = $targetCurrency->exchange_rate;
             $commitment->user_id = $trn->user_id;
             $commitment->status = PaymentCommitment::STATUS_PENDING;

@@ -13,6 +13,7 @@ class UpdateOrderForm extends Model
 {
     public $id;
     public $payment_id;
+    public $payment_data;
     public $evidence;
 
     private $_order;
@@ -27,6 +28,7 @@ class UpdateOrderForm extends Model
             [['id', 'payment_id'], 'required'],
             ['id', 'validateOrder'],
             ['evidence', 'safe'],
+            ['payment_data', 'safe'],
             ['payment_id', 'validatePaymentId'],
         ];
     }
@@ -73,6 +75,7 @@ class UpdateOrderForm extends Model
             if (!$order->payment_id) {
                 $order->payment_id = $this->payment_id;
             }
+            $order->payment_data = $this->payment_data;
             $order->evidence = $this->evidence;
             $result = $order->save();
 
