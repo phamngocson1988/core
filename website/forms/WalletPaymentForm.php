@@ -26,10 +26,11 @@ class WalletPaymentForm extends Model
 
     public function rules()
     {
+        $validQuantity = $this->paygate === 'coinspaid' ? 15 : 0;
         return [
             [['quantity', 'paygate'], 'required'],
             [['voucher'], 'trim'],
-            ['quantity', 'compare', 'compareValue' => 15, 'operator' => '>=', 'type' => 'number'],
+            ['quantity', 'compare', 'compareValue' => $validQuantity, 'operator' => '>=', 'type' => 'number'],
             ['paygate', 'validatePaygate'],
             ['voucher', 'validateVoucher']
         ];

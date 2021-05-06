@@ -84,6 +84,16 @@ class OrderPaymentForm extends Model
             $this->addError($attribute, 'Cart is empty');
             return;
         }
+        // Check price
+        if ($this->paygate === 'coinspaid') {
+            $paygate = $this->getPaygateConfig();
+            $subTotalPrice = $cart->getSubTotalPrice();
+            $fee = $paygate->getFee($subTotalPrice);
+            $totalPrice = $cart->getTotalPrice() + $fee;
+            if ($totalPrice < 15) {
+                $this->addError($attribute, 'The total price need bigger than 15 USD if you choose COINSPAID');
+            }
+        }
     }
 
     public function purchase()
