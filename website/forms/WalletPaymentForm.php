@@ -26,11 +26,10 @@ class WalletPaymentForm extends Model
 
     public function rules()
     {
-        $validQuantity = $this->paygate === 'coinspaid' ? 15 : 0;
         return [
             [['quantity', 'paygate'], 'required'],
             [['voucher'], 'trim'],
-            ['quantity', 'compare', 'compareValue' => $validQuantity, 'operator' => '>=', 'type' => 'number'],
+            ['quantity', 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
             ['paygate', 'validatePaygate'],
             ['voucher', 'validateVoucher']
         ];
@@ -62,7 +61,10 @@ class WalletPaymentForm extends Model
     {
         $config = $this->getPaygateConfig();
         if (!$config) {
-            $this->addError($attribute, sprintf('Payment Gateway %s is not available', $this->paygate));
+            return $this->addError($attribute, sprintf('Payment Gateway %s is not available', $this->paygate));
+        }
+        if ($this->paygate === 'coinspaid' && $this->quantity < 15) {
+            return $this->addError($attribute, 'The payment must be greater than or equal to 15 USD');
         }
     }
 

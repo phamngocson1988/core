@@ -91,7 +91,7 @@ class OrderPaymentForm extends Model
             $fee = $paygate->getFee($subTotalPrice);
             $totalPrice = $cart->getTotalPrice() + $fee;
             if ($totalPrice < 15) {
-                $this->addError($attribute, 'The total price need bigger than 15 USD if you choose COINSPAID');
+                $this->addError($attribute, 'The payment must be greater than or equal to 15 USD');
             }
         }
     }
