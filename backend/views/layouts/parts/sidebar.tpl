@@ -107,10 +107,12 @@
             <span class="title">Danh sách</span>
             </a>
           </li>
-          {if $app->user->can('accounting')}
           <li class="nav-item  ">
             <a href="{url route='/supplier/withdraw-request'}" class="nav-link " code='supplier.withdraw-request'>
             <span class="title">Yêu cầu rút tiền</span>
+            {if $this->params['withdraw_request']}
+            <span class="badge badge-success">{$this->params['withdraw_request']}</span>
+            {/if}
             </a>
           </li>
           <li class="nav-item  ">
@@ -118,7 +120,6 @@
             <span class="title">Yêu cầu game mới</span>
             </a>
           </li>
-          {/if}
         </ul>
       </li>
       {/if}

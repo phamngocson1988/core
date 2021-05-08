@@ -96,6 +96,20 @@ class OrderPaymentForm extends Model
         }
     }
 
+    public function calculate()
+    {
+        $cart = $this->cart;
+        $paygate = $this->getPaygateConfig();
+        $subTotalPrice = $cart->getSubTotalPrice();
+        $fee = $paygate->getFee($subTotalPrice);
+        $totalPrice = $subTotalPrice + $fee;
+        return [
+            'subTotalPayment' => $subTotalPrice,
+            'transferFee' => $fee,
+            'totalPayment' => $totalPrice,
+        ];
+    }
+
     public function purchase()
     {
         $settings = Yii::$app->settings;

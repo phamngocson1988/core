@@ -49,16 +49,16 @@ $user = Yii::$app->user->getIdentity();
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
+            <div class="flex-fill w-100 text-right" id="subTotal">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
           </div>
           <div class="d-flex">
-            <div class="flex-fill w-100 text-danger">Discount</div>
-            <div class="flex-fill w-100 text-danger text-right">$0</div>
+            <div class="flex-fill w-100">Fee</div>
+            <div class="flex-fill w-100 text-right" id="fee">$0</div>
           </div>
           <hr />
           <div class="d-flex mb-3">
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right" id="total">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?>
               <?php if ($isOtherCurrency) : ?>
               <br/><span>(<?=$otherCurrency;?>)</span>
               <?php endif;?>
@@ -77,6 +77,41 @@ $script = <<< JS
 $('#checkout-button').on('click', function(e) {
   if ($(this).hasClass('inprogress')) return false;
   $(this).addClass('inprogress');
+});
+
+function Calculator() {
+  // Elements
+  var paygateElement = $( "input:checked" );
+  // Calculate
+  var paygate = paygateElement.val();
+
+  $.ajax({
+      url: '/cart/calculate-cart.html',
+      type: "POST",
+      dataType: 'json',
+      data: {
+        paygate: paygate,
+      },
+      success: function (result, textStatus, jqXHR) {
+          console.log('Calculator', result);
+          if (result.status) {
+            ShowSummary(result.data)
+          } else {
+            toastr.error(result.errors.join('<br/>')); 
+          }
+      },
+  });
+};
+
+function ShowSummary(data) {
+  $('#subTotal').html(data.subTotalPayment);
+  $('#total').html(data.totalPayment);
+  $('#fee').html(data.transferFee);
+}
+
+$( "input:radio" ).on('change', function(e) {
+  console.log('radio click');
+  Calculator();
 });
 JS;
 $this->registerJs($script);

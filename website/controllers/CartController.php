@@ -14,6 +14,7 @@ use website\components\cart\CartItem;
 use website\models\Paygate;
 use website\models\Order;
 use common\models\Currency;
+use common\models\CurrencySetting;
 use common\components\helpers\StringHelper;
 
 class CartController extends Controller
@@ -29,7 +30,7 @@ class CartController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk', 'thankyou'],
+                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk', 'thankyou', 'calculate-cart'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -55,7 +56,7 @@ class CartController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionCalculate($id) 
+    public function Cart($id) 
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
@@ -115,6 +116,41 @@ class CartController extends Controller
         ]);
     }
 
+    public function actionCalculateCart() 
+    {
+        $request = Yii::$app->request;
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (Yii::$app->user->isGuest) return json_encode(['status' => false, 'errors' => 'You need to login']);
+
+        $request = Yii::$app->request;
+        $cart = Yii::$app->cart;
+        $user = Yii::$app->user->getIdentity();
+        
+        $form = new \website\forms\OrderPaymentForm([
+            'cart' => $cart,
+            'paygate' => $request->post('paygate'),
+        ]);
+
+        if ($form->validate()) {
+            $calculate = $form->calculate();
+            $subTotalPayment = $calculate['subTotalPayment'];
+            $transferFee = $calculate['transferFee'];
+            $totalPayment = $calculate['totalPayment'];
+            // $totalPayment = StringHelper::numberFormat($calculate['totalPayment'], 2);
+            $paygate = $form->getPaygateConfig();
+            $currency = CurrencySetting::findOne(['code' => $paygate->currency]);
+            $data = [
+                'subTotalPayment' => $currency->showByFormat(StringHelper::numberFormat($subTotalPayment, 2)),
+                'transferFee' => $currency->showByFormat(StringHelper::numberFormat($transferFee, 2)),
+                'totalPayment' => $currency->showByFormat($totalPayment),
+            ];
+            return $this->asJson(['status' => true, 'data' => $data]);
+        } else {
+            return $this->asJson(['status' => false, 'errors' => $form->getErrorSummary(true)]);
+        }
+    }
+
     public function actionCheckout()
     {
         $request = Yii::$app->request;
@@ -153,7 +189,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function actionCalculateBulk($id) 
+    public function CartBulk($id) 
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);

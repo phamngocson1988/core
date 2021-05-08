@@ -56,18 +56,16 @@ class Controller extends BaseController
 	        $commissionTotal = $command->count();
             $this->view->params['new_commission_withdraw'] = $commissionTotal ? $commissionTotal : '';
 
-            // Show number of offline transaction
-	        // $offlineTransactionForm = new FetchTransactionForm([
-	        //     'payment_type' => 'offline',
-	        //     'status' => 'pending',
-	        // ]);
-	        // $offlineTransactionCommand = $offlineTransactionForm->getCommand();
-			// $offlineTransactionCount = $offlineTransactionCommand->count();
 			$paymentCommentmentCount = \common\models\PaymentCommitment::find()->where(['status' => \common\models\PaymentCommitment::STATUS_PENDING])->count();
             $this->view->params['payment_commitment'] = $paymentCommentmentCount;
 
 			$payemntRealityCount = \common\models\PaymentReality::find()->where(['status' => \common\models\PaymentReality::STATUS_PENDING])->count();
             $this->view->params['payment_reality'] = $payemntRealityCount;
+
+			$withdrawRequestForm = new \backend\forms\FetchSupplierWithdrawRequestForm(['status' => [
+				\common\models\SupplierWithdrawRequest::STATUS_REQUEST, \common\models\SupplierWithdrawRequest::STATUS_APPROVE
+			]]);
+			$this->view->params['withdraw_request'] = $withdrawRequestForm->getCommand()->count();
             return true;
         }
 

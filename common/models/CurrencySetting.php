@@ -73,4 +73,11 @@ class CurrencySetting extends ActiveRecord
         $kcoin = $this->getKcoin($number);
         return $kcoin * $currency->exchange_rate;
     }
+
+    public function showByFormat($number) 
+    {
+        $params['{number}'] = $number;
+        $params['{symbol}'] = $this->symbol;
+        return str_replace(array_keys($params), array_values($params), $this->format);
+    }
 }
