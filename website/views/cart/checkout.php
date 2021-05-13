@@ -52,7 +52,7 @@ $user = Yii::$app->user->getIdentity();
             <div class="flex-fill w-100 text-right" id="subTotal">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
           </div>
           <div class="d-flex">
-            <div class="flex-fill w-100">Fee</div>
+            <div class="flex-fill w-100">Transfer fee</div>
             <div class="flex-fill w-100 text-right" id="fee">$0</div>
           </div>
           <hr />

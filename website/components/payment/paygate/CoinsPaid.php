@@ -7,6 +7,7 @@ use website\libraries\payment\gateway\CoinsPaid as CoinsPaidService;
 use website\models\Order;
 use website\models\PaymentTransaction;
 use website\forms\CreatePaymentRealityForm;
+use common\components\helpers\StringHelper;
 
 class CoinsPaid
 {
@@ -32,7 +33,7 @@ class CoinsPaid
         $coinPaid = $this->service;
         $orderUrl = Url::to(['order/index', '#' => $order->id], true);
         $orderData = [
-            'title' => sprintf("#%s - %s", $order->id, $order->game_title),
+            'title' => StringHelper::truncate(sprintf("#%s - %s", $order->id, $order->game_title), 45),
             'currency' => $order->currency,
             'amount' => $order->total_price_by_currency,
             'id' => $order->id,
