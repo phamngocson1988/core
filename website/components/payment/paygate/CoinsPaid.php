@@ -40,6 +40,8 @@ class CoinsPaid
             'url_success' => $orderUrl,
             'url_failed' => $orderUrl,
             'user_email' => $order->customer_email,
+            'sender_currency' => 'USDTT',
+            'timer' => true
         ];
         $charge =  $coinPaid->generateGateWayUrl($orderData);
         $form = new \website\forms\UpdateOrderForm([
@@ -71,6 +73,8 @@ class CoinsPaid
             'url_success' => $orderUrl,
             'url_failed' => $orderUrl,
             'user_email' => $user->email,
+            'sender_currency' => 'USDTT',
+            'timer' => true
         ];
         $charge =  $coinPaid->generateGateWayUrl($orderData);
         $form = new \website\forms\UpdateTransactionForm([

@@ -73,6 +73,7 @@ class CoinsPaid extends BasePayment
             'url_success' => $order['url_success'],
             'url_failed' => $order['url_failed'],
             'email_user' => $order['user_email'],
+            'sender_currency' => $order['sender_currency'],
         ];
 
         return $this->createInvoice($data);
