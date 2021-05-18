@@ -52,7 +52,7 @@ class Notifications extends BaseNotifications
         $html .= Html::begintag('ul', ['class' => 'dropdown-menu']);
         $headerCountNotification = Html::tag('span', sprintf("%s", number_format($count)), ['class' => 'bold header-notifications-count']);
         $header = Html::tag('h3', $headerCountNotification . ' tin mới');
-        $header .= Html::a(Yii::t('modules/notifications', 'Đánh dấu đã đọc'), '#', ['class' => 'read-all']);
+        $header .= Html::a('Đánh dấu đã đọc', '#', ['class' => 'read-all']);
         $html .= Html::tag('li', $header, ['class' => 'external']);
 
         $html .= Html::begintag('li');

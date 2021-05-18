@@ -28,4 +28,10 @@ class PushNotifications extends BaseNotifications
         PushNotificationsAsset::register($view);
         $view->registerJs($js);
     }
+
+    public function run()
+    {
+        $this->registerAssets();
+        return '';
+    }
 }
