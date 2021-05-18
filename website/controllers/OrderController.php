@@ -117,6 +117,9 @@ class OrderController extends Controller
         if ($order->customer_id != Yii::$app->user->id) {
             return $this->asJson(['status' => false, 'errors' => 'Order is not found']);
         }
+        if (!$order->isVerifyingOrder()) {
+            return $this->asJson(['status' => false, 'errors' => 'Order is not found']);
+        }
         $model = new \website\forms\UpdateOrderForm(['id' => $id]);
         $model->loadData();
         return $this->renderPartial('view', [

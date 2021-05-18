@@ -55,7 +55,7 @@ class CoinsPaid
             $order->log(json_encode($form->getErrors()));
         } 
         $order->log(sprintf("[CoinsPaid][createCharge] process success"));
-        return Url::to(['cart/thankyou', 'id' => $order->id], true);
+        return Url::to(['order/index', '#' => $order->id], true);
     }
 
     protected function createChargeFromDeposit($order, $user = null) 

@@ -262,9 +262,9 @@ class OrderPaymentForm extends Model
         $list = ArrayHelper::map($paygates, 'identifier', function($obj) {
             return Html::img($obj->getImageUrl(), ['class' => 'icon']);
         });
-        if (Yii::$app->user->id != 213) {
-            unset($list['coinspaid']);
-        }
+        // if (Yii::$app->user->id != 213) {
+        //     unset($list['coinspaid']);
+        // }
         $user = $this->getUser();
         $balance = $user->getWalletAmount();
         $totalPrice = $cart->getTotalPrice();

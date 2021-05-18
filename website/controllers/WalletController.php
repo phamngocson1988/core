@@ -37,11 +37,11 @@ class WalletController extends Controller
         $request = Yii::$app->request;
         $paygates = Paygate::find()->where([
             'status' => Paygate::STATUS_ACTIVE,
-            'paygate_type' => Paygate::PAYGATE_TYPE_OFFLINE
+            // 'paygate_type' => Paygate::PAYGATE_TYPE_OFFLINE
         ])->all();
-        if (Yii::$app->user->id == 213) {
-            $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
-        }
+        // if (Yii::$app->user->id == 213) {
+        //     $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
+        // }
         // pending transaction
         $pendings = PaymentTransaction::find()->where([
             'status' => PaymentTransaction::STATUS_PENDING,

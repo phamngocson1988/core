@@ -23,6 +23,19 @@ use yii\helpers\Url;
     <div class="col-md-6">
       <?=$order->getPaymentData();?>
     </div>
+    <?php if ($order->payment_type == 'online') : ?>
+    <?php 
+    $paymentData = json_decode($order->payment_data, true);
+    $paymentLink = $paymentData['hosted_url'] ? $paymentData['hosted_url'] : '';
+    ?>
+    <div class="col-md-12">
+      <?php if ($paymentLink) : ?>
+      <div class="text-center btn-wrapper d-block mt-5" role="group">
+        <a type="button" class="btn text-uppercase" style="width: auto" href="<?=$paymentLink;?>" target="_blank">PROCEED WITH PAYMENT</button>
+      </div>
+      <?php endif;?>
+    </div>
+    <?php else : ?>
     <div class="col-md-12">
       <p class="text-center font-weight-bold mt-5 mb-0">Kindly submit Transaction Number after you do payment successfully</p>
       <p class="font-italic text-center"><small>Payment will be auto-confirmed, please make sure Transaction Number is correct</small></p>
@@ -46,5 +59,6 @@ use yii\helpers\Url;
         <a class="link-dark" href="google.com" target="_blank">How to get Transaction Number?</a>
       </p>
     </div>
+    <?php endif;?>
   </div>
 </div>
