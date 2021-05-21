@@ -56,6 +56,15 @@ return [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@yii2mod/settings/messages',
                 ],
+                'notifications*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'notifications' => 'notifications.php',
+                    ],
+                ],
+
             ],
         ],
         'image' => [

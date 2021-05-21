@@ -63,34 +63,34 @@ class TimeElapsed {
         $elapsed = '';
 
         if ($append === null) {
-            $append = ' ' . Yii::t('modules/notifications', 'ago');
+            $append = ' ' . Yii::t('notifications', 'ago');
         }
         if ($human) {
             if ($interval <= 0) {
-                $elapsed = Yii::t('modules/notifications', 'a moment') . $append;
+                $elapsed = Yii::t('notifications', 'a moment') . $append;
             } elseif ($interval < 60) {
-                $elapsed = Yii::t('modules/notifications', '{n, plural, one{one second} other{# seconds}}',
+                $elapsed = Yii::t('notifications', '{n, plural, one{one second} other{# seconds}}',
                         ['n' => $interval]) . $append;
             } elseif ($interval >= 60 && $interval < $intervals['hour']) {
                 $interval = floor($interval / $intervals['minute']);
-                $elapsed = Yii::t('modules/notifications', '{n, plural, one{one minute} other{# minutes}}',
+                $elapsed = Yii::t('notifications', '{n, plural, one{one minute} other{# minutes}}',
                         ['n' => $interval]) . $append;
             } elseif ($interval >= $intervals['hour'] && $interval < $intervals['day']) {
                 $interval = floor($interval / $intervals['hour']);
-                $elapsed = Yii::t('modules/notifications', '{n, plural, one{one hour} other{# hours}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('notifications', '{n, plural, one{one hour} other{# hours}}', ['n' => $interval]) . $append;
             } elseif ($interval >= $intervals['day'] && $interval < $intervals['week']) {
                 $interval = floor($interval / $intervals['day']);
-                $elapsed = Yii::t('modules/notifications', '{n, plural, one{one day} other{# days}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('notifications', '{n, plural, one{one day} other{# days}}', ['n' => $interval]) . $append;
             } elseif ($interval >= $intervals['week'] && $interval < $intervals['month']) {
                 $interval = floor($interval / $intervals['week']);
-                $elapsed = Yii::t('modules/notifications', '{n, plural, one{one week} other{# weeks}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('notifications', '{n, plural, one{one week} other{# weeks}}', ['n' => $interval]) . $append;
             } elseif ($interval >= $intervals['month'] && $interval < $intervals['year']) {
                 $interval = floor($interval / $intervals['month']);
-                $elapsed = Yii::t('modules/notifications', '{n, plural, one{one month} other{# months}}',
+                $elapsed = Yii::t('notifications', '{n, plural, one{one month} other{# months}}',
                         ['n' => $interval]) . $append;
             } elseif ($interval >= $intervals['year']) {
                 $interval = floor($interval / $intervals['year']);
-                $elapsed = Yii::t('modules/notifications', '{n, plural, one{one year} other{# years}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('notifications', '{n, plural, one{one year} other{# years}}', ['n' => $interval]) . $append;
             }
         } else {
             $elapsed = static::time2String($interval, $intervals) . $append;
