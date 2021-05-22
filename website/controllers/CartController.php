@@ -56,8 +56,9 @@ class CartController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function Cart($id) 
+    public function actionCalculate($id) 
     {
+        Yii::info('actionCalculate');
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
