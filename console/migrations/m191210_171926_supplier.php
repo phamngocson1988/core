@@ -107,8 +107,15 @@ class m191210_171926_supplier extends Migration
             'city' => $this->string(128),
             'branch' => $this->string(128),
             'account_number' => $this->string(50)->notNull(),
-            'account_name' => $this->string(50)->notNull()
+            'account_name' => $this->string(50)->notNull(),
+            'verified' => $this->string(1)->notNull(),
+            'auth_key' => $this->string(50),
         ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $bankVerified = "ALTER TABLE {{%supplier_bank}} MODIFY `verified` ENUM('Y','N') NOT NULL DEFAULT 'N'";
+            $command = $this->db->createCommand($bankVerified);
+            $command->execute();
+        }
 
         $this->createTable('{{%supplier_wallet}}', [
             'id' => $this->primaryKey(),
@@ -154,10 +161,15 @@ class m191210_171926_supplier extends Migration
             'note' => $this->dateTime()->notNull(),
             'evidence' => $this->dateTime(),
             'status' => $this->string(10)->notNull()->defaultValue('request'),
+            'verified' => $this->string(1)->notNull(),
+            'auth_key' => $this->string(50),
         ]);
         if ($this->db->driverName === 'mysql') {
             $requestStatus = "ALTER TABLE {{%supplier_withdraw_request}} MODIFY `status` ENUM('request','approve','done','cancel') NOT NULL DEFAULT 'request'";
             $command = $this->db->createCommand($requestStatus);
+            $command->execute();
+            $verifyColumn = "ALTER TABLE {{%supplier_withdraw_request}} MODIFY `verified` ENUM('Y','N') NOT NULL DEFAULT 'N'";
+            $command = $this->db->createCommand($verifyColumn);
             $command->execute();
         }
 

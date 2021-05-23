@@ -43,12 +43,13 @@ use yii\helpers\Url;
               <th> Tỉnh </th>
               <th> Thành phố </th>
               <th> Chi nhánh </th>
+              <th> Xác nhận </th>
               <th class="dt-center"> <?=Yii::t('app', 'actions');?> </th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <?php $bank = $model->bank;?>
@@ -61,7 +62,18 @@ use yii\helpers\Url;
                 <td><?=$model->city;?></td>
                 <td><?=$model->branch;?></td>
                 <td>
-                  <a href="<?=Url::to(['bank/delete', 'id' => $model->id]);?>" class="btn btn-sm purple delete tooltips" data-container="body" data-original-title="Xóa tài khoản"><i class="fa fa-times"></i> Xóa tài khoản </a>
+                <?php if ($model->isNotVerified()) :?>
+                  <span class="badge badge-warning">Chưa xác minh</span> 
+                <?php else : ?>
+                  <span class="badge badge-success">Đã xác minh</span>
+                <?php endif;?>
+                </td>
+                <td>
+                  <a href="<?=Url::to(['bank/delete', 'id' => $model->id]);?>" class="btn btn-sm red delete tooltips" data-container="body" data-original-title="Xóa tài khoản"><i class="fa fa-times"></i> Xóa </a>
+                  <?php if ($model->isNotVerified()) :?>
+                  <a href="<?=Url::to(['bank/verify', 'id' => $model->id]);?>" data-target="#verify-bank-modal" data-toggle="modal" class="btn btn-sm green tooltips" data-container="body" data-original-title="Xác minh tài khoản"><i class="fa fa-check"></i> Xác minh </a>
+                  <?php endif;?>
+
                 </td>
               </tr>
               <?php endforeach;?>
@@ -70,6 +82,13 @@ use yii\helpers\Url;
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
+  </div>
+</div>
+
+<div class="modal fade modal-scroll" id="verify-bank-modal" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog portlet box">
+    <div class="modal-content portlet-body">
+    </div>
   </div>
 </div>
 <?php
@@ -85,6 +104,29 @@ $('.delete').ajax_action({
   error: function(element, errors) {
     location.reload();
   }
+});
+
+// verify
+$(document).on('submit', 'body #verify-bank', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+        toastr.error(result.error); 
+      else {
+        setTimeout(location.reload(), 1000);
+        toastr.success('Thông tin ngân hàng đã được xác thực'); 
+      }
+    },
+  });
+  return false;
 });
 JS;
 $this->registerJs($script);

@@ -74,17 +74,32 @@ class WithdrawController extends Controller
     public function actionCancel($id)
     {
         $request = Yii::$app->request;
-        if( $request->isAjax) {
-            $request = SupplierWithdrawRequest::findOne($id);
-            if (!$request) throw new NotFoundHttpException('Not found');
-            if ($request->isRequest()) {
-                $request->setScenario(SupplierWithdrawRequest::SCENARIO_CANCEL);
-                $request->cancelled_at = date('Y-m-d H:i:s');
-                $request->cancelled_by = Yii::$app->user->id;
-                $request->status = SupplierWithdrawRequest::STATUS_CANCEL;
-                return $this->asJson(['status' => $request->save()]);
+        if ($request->isAjax && $request->isPost) {
+            $model = new \supplier\forms\CancelWithdrawRequestForm(['id' => $id, 'supplier_id' => Yii::$app->user->id]);
+            if ($model->cancel()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                return $this->asJson(['status' => false, 'validate' => $model->validate(), 'error' => $model->getFirstErrorMessage()]);
             }
-            return $this->asJson(['status' => false, 'error' => 'Yêu cầu không hợp lệ']);
         }
+        die('Bad request');
+    }
+
+    public function actionVerify($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \supplier\forms\VerifyWithdrawRequestForm(['id' => $id, 'supplier_id' => Yii::$app->user->id]);
+        if ($request->isAjax) {
+            if ($request->isPost) {
+                if ($model->load($request->post()) && $model->verify()) {
+                    return $this->asJson(['status' => true]);
+                } else {
+                    return $this->asJson(['status' => false, 'error' => $model->getFirstErrorMessage()]);
+                }
+
+            }
+            return $this->renderPartial('verify', ['model' => $model]);            
+        }
+        die('Bad request');
     }
 }

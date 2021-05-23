@@ -56,7 +56,13 @@ use yii\helpers\Url;
                 <td><?=number_format($model->amount);?></td>
                 <td><?=sprintf("(%s) %s - %s", $model->bank_code, $model->account_number, $model->account_name);?></td>
                 <td><?=$model->created_at;?></td>
-                <td><?=$model->getStatusLabel();?></td>
+                <td>
+                <?php if ($model->isNotVerified() && !$model->isCancel()) :?>
+                  <span class="badge badge-warning">Chưa xác minh</span> 
+                <?php else : ?>
+                  <?=$model->getStatusLabel();?>
+                <?php endif;?>
+                </td>
                 <td>
                   <?php if ($model->evidence) : ?>
                   <a href="<?=$model->evidence;?>" class="normal-link" target="_blank">Xem</a> 
@@ -64,8 +70,13 @@ use yii\helpers\Url;
                 </td>
                 <td><?=$model->note;?></td>
                 <td>
+                  <?php if (!$model->isCancel()) :?>
                   <?php if ($model->isRequest()) :?>
                   <a href="<?=Url::to(['withdraw/cancel', 'id' => $model->id]);?>" class="btn btn-sm purple delete tooltips" data-container="body" data-original-title="Hủy yêu cầu"><i class="fa fa-times"></i> Hủy yêu cầu </a>
+                  <?php endif;?>
+                  <?php if ($model->isNotVerified()) :?>
+                  <a href="<?=Url::to(['withdraw/verify', 'id' => $model->id]);?>" data-target="#verify-request-modal" data-toggle="modal" class="btn btn-sm green tooltips" data-container="body" data-original-title="Xác minh tài khoản"><i class="fa fa-check"></i> Xác minh </a>
+                  <?php endif;?>
                   <?php endif;?>
                 </td>
               </tr>
@@ -77,19 +88,49 @@ use yii\helpers\Url;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<div class="modal fade modal-scroll" id="verify-request-modal" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog portlet box">
+    <div class="modal-content portlet-body">
+    </div>
+  </div>
+</div>
 <?php
 $script = <<< JS
 // delete
 $('.delete').ajax_action({
-  method: 'DELETE',
+  method: 'POST',
   confirm: true,
-  confirm_text: 'Bạn có muốn xóa tài khoản này không?',
+  confirm_text: 'Bạn có muốn huỷ yêu cầu rút tiền này không?',
   callback: function(data) {
-    location.reload();
+    setTimeout(location.reload(), 1000);
+    toastr.success('Huỷ thành công'); 
   },
-  error: function(element, errors) {
-    location.reload();
+  error: function(element, error) {
+    toastr.error(error); 
   }
+});
+
+// verify
+$(document).on('submit', 'body #verify-request', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      if (!result.status)
+        toastr.error(result.error); 
+      else {
+        setTimeout(location.reload(), 1000);
+        toastr.success('Yêu cầu rút tiền đã được xác thực'); 
+      }
+    },
+  });
+  return false;
 });
 JS;
 $this->registerJs($script);

@@ -2,6 +2,17 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveQuery;
+
+class SupplierWithdrawRequestQuery extends ActiveQuery
+{
+    public function init()
+    {
+        $this->andOnCondition(['verified' => SupplierWithdrawRequest::VERIFIED_YES]);
+        parent::init();
+    }
+}
+
 
 class SupplierWithdrawRequest extends \common\models\SupplierWithdrawRequest
 {
@@ -9,6 +20,11 @@ class SupplierWithdrawRequest extends \common\models\SupplierWithdrawRequest
     const SCENARIO_APPROVE = 'SCENARIO_APPROVE';
     const SCENARIO_DONE = 'SCENARIO_DONE';
     const SCENARIO_EVIDENCE = 'SCENARIO_EVIDENCE';
+
+    public static function find()
+	{
+		return new SupplierWithdrawRequestQuery(get_called_class());
+	}
 
     public function scenarios()
     {

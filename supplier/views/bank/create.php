@@ -53,7 +53,7 @@ use common\widgets\TinyMce;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($banks);?>
+                  ])->dropDownList($model->fetchBanks());?>
 
                   <?=$form->field($model, 'account_number', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],

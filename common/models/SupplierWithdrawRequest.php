@@ -13,6 +13,9 @@ class SupplierWithdrawRequest extends ActiveRecord
     const STATUS_DONE = "done";
     const STATUS_CANCEL = "cancel";
 
+    const VERIFIED_NO = 'N';
+    const VERIFIED_YES = 'Y';
+
     public static function tableName()
     {
         return '{{%supplier_withdraw_request}}';
@@ -73,5 +76,10 @@ class SupplierWithdrawRequest extends ActiveRecord
     public function isCancel()
     {
         return $this->status == self::STATUS_CANCEL;
+    }
+
+    public function isNotVerified()
+    {
+        return $this->verified === self::VERIFIED_NO;
     }
 }

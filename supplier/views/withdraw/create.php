@@ -8,6 +8,17 @@ use common\widgets\TinyMce;
 use supplier\behaviors\UserSupplierBehavior;
 use supplier\models\SupplierWallet;
 $supplier = $model->getSupplier();
+$banks = $model->fetchBanks();
+$bankOptions = ArrayHelper::map($banks, 'id', function($bank) {
+  return sprintf("(%s) %s - %s", $bank->bank_code, $bank->account_name, $bank->account_number);
+});
+$bankMetaData = ArrayHelper::map($banks, 'id', function($bank) {
+  return [
+    'data-bank_code' => $bank->bank_code,
+    'data-account_number' => $bank->account_number,
+    'data-account_name' => $bank->account_name
+  ];
+});
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -97,16 +108,15 @@ $supplier = $model->getSupplier();
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
-                  <div class="form-group field-bank_id">
-                    <label class="col-md-2 control-label" for="bank_id">Bank Id</label>
-                    <div class="col-md-6">
-                      <select id="bank_id" class="slug form-control">
-                        <?php foreach ($model->fetchBanks() as $bank) : ?>
-                        <option value="4" data-bank_code="<?=$bank->bank_code;?>" data-account_number="<?=$bank->account_number;?>" data-account_name="<?=$bank->account_name;?>"><?=sprintf("(%s) %s - %s", $bank->bank_code, $bank->account_name, $bank->account_number);?></option>
-                        <?php endforeach;?>
-                      </select>
-                    </div>
-                  </div>
+
+                  <?=$form->field($model, 'bank_id', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'bank_id', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->dropDownList($bankOptions, [
+                    'prompt' => 'Chọn ngân hàng',
+                    'options' => $bankMetaData
+                  ])?>
 
                   <?=$form->field($model, 'bank_code', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
