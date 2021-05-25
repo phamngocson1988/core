@@ -34,8 +34,8 @@ class CoinsPaid
         $orderUrl = Url::to(['order/index', '#' => $order->id], true);
         $orderData = [
             'title' => StringHelper::truncate(sprintf("#%s - %s", $order->id, $order->game_title), 45),
-            'currency' => $order->currency,
-            'amount' => $order->total_price_by_currency,
+            'currency' => 'USDTT',// $order->currency,
+            'amount' => $order->total_price, //$order->total_price_by_currency,
             'id' => $order->id,
             'url_success' => $orderUrl,
             'url_failed' => $orderUrl,
@@ -67,7 +67,7 @@ class CoinsPaid
         }
         $orderData = [
             'title' => sprintf("#%s - %s", $order->getId(), 'Deposit'),
-            'currency' => 'USD',
+            'currency' => 'USDTT',
             'amount' => $order->total_price,
             'id' => $order->getId(),
             'url_success' => $orderUrl,
@@ -88,13 +88,18 @@ class CoinsPaid
 
     public function processCharge()
     {
-        Yii::info('start processCharge');
+        Yii::error('start processCharge');
         if (!$this->checkCallbackData()) {
             return false;
         }
         try {
             $request = Yii::$app->request;
+            Yii::error('start processCharge request');
+            Yii::error($request);
             $params = $request->bodyParams;
+            Yii::error('start processCharge params');
+            Yii::error($params);
+
             $orderId = $params['foreign_id'];
             if (strpos($orderId, PaymentTransaction::ID_PREFIX) === false) {
                 $this->processOrder($params);
@@ -102,7 +107,7 @@ class CoinsPaid
                 $this->processDeposit($params);
             }
             
-            Yii::info('end processCharge');
+            Yii::error('end processCharge');
         } catch (\Exception $exception) {
             // log error request
         }
@@ -113,6 +118,8 @@ class CoinsPaid
         $coinPaid = $this->service;
         $headerName = 'X-Processing-Signature';
         $headers = getallheaders();
+        Yii::error('start processCharge header');
+        Yii::error($headers);
         $signatureHeader = isset($headers[$headerName]) ? $headers[$headerName] : null;
         $payload = trim(file_get_contents('php://input'));
         $check = [
