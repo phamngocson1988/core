@@ -79,11 +79,10 @@ class CreateSupplierBankForm extends Model
             $model->province = $this->province;
             $model->city = $this->city;
             $model->branch = $this->branch;
-            $model->auth_key = Yii::$app->security->generateRandomString(10);
             $result = $model->save();
-            $this->sendVerifyEmail($model);
+            // $this->sendVerifyEmail($model);
             $transaction->commit();
-            return $result;
+            return $model;
         } catch(Exception $e) {
             $transaction->rollback();
             return false;

@@ -71,7 +71,7 @@ use yii\helpers\Url;
                 <td>
                   <a href="<?=Url::to(['bank/delete', 'id' => $model->id]);?>" class="btn btn-sm red delete tooltips" data-container="body" data-original-title="Xóa tài khoản"><i class="fa fa-times"></i> Xóa </a>
                   <?php if ($model->isNotVerified()) :?>
-                  <a href="<?=Url::to(['bank/verify', 'id' => $model->id]);?>" data-target="#verify-bank-modal" data-toggle="modal" class="btn btn-sm green tooltips" data-container="body" data-original-title="Xác minh tài khoản"><i class="fa fa-check"></i> Xác minh </a>
+                  <a href="<?=Url::to(['bank/verify', 'id' => $model->id]);?>" class="btn btn-sm green tooltips" data-container="body" data-original-title="Xác minh tài khoản"><i class="fa fa-check"></i> Xác minh </a>
                   <?php endif;?>
 
                 </td>
@@ -82,13 +82,6 @@ use yii\helpers\Url;
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
-  </div>
-</div>
-
-<div class="modal fade modal-scroll" id="verify-bank-modal" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog portlet box">
-    <div class="modal-content portlet-body">
-    </div>
   </div>
 </div>
 <?php
@@ -104,29 +97,6 @@ $('.delete').ajax_action({
   error: function(element, errors) {
     location.reload();
   }
-});
-
-// verify
-$(document).on('submit', 'body #verify-bank', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  form.unbind('submit');
-  $.ajax({
-    url: form.attr('action'),
-    type: form.attr('method'),
-    dataType : 'json',
-    data: form.serialize(),
-    success: function (result, textStatus, jqXHR) {
-      if (!result.status)
-        toastr.error(result.error); 
-      else {
-        setTimeout(location.reload(), 1000);
-        toastr.success('Thông tin ngân hàng đã được xác thực'); 
-      }
-    },
-  });
-  return false;
 });
 JS;
 $this->registerJs($script);

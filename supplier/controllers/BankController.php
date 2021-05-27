@@ -50,10 +50,10 @@ class BankController extends Controller
         $model = new \supplier\forms\CreateSupplierBankForm();
         $model->supplier_id = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->create()) {
+            $newBank = $model->create();
+            if ($newBank) {
                 Yii::$app->session->setFlash('success', 'Success!');
-                $ref = $request->get('ref', Url::to(['bank/index']));
-                return $this->redirect(Url::to(['bank/index']));
+                return $this->redirect(Url::to(['bank/verify', 'id' => $newBank->id]));
             }
         }
         return $this->render('create', [
@@ -74,17 +74,33 @@ class BankController extends Controller
     public function actionVerify($id)
     {
         $request = Yii::$app->request;
-        $model = new \supplier\forms\VerifySupplierBankForm(['id' => $id, 'supplier_id' => Yii::$app->user->id]);
-        if ($request->isAjax) {
-            if ($request->isPost) {
-                if ($model->load($request->post()) && $model->verify()) {
-                    return $this->asJson(['status' => true]);
-                } else {
-                    return $this->asJson(['status' => false, 'error' => $model->getFirstErrorMessage()]);
-                }
-
+        $model = new \supplier\forms\VerifySupplierBankForm([
+            'id' => $id, 
+            'supplier_id' => Yii::$app->user->id,
+            'scenario' => \supplier\forms\VerifySupplierBankForm::SCENARIO_VERIFY
+        ]);
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->verify()) {
+                return $this->redirect(['bank/index']);
             }
-            return $this->renderPartial('verify', ['model' => $model]);            
+        }
+        return $this->render('verify', ['model' => $model]);            
+    }
+
+    public function actionSendValidateCode($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \supplier\forms\VerifySupplierBankForm([
+            'id' => $id, 
+            'supplier_id' => Yii::$app->user->id,
+            'scenario' => \supplier\forms\VerifySupplierBankForm::SCENARIO_SEND
+        ]);
+        if ($request->isAjax) {
+            if ($model->send()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                return $this->asJson(['status' => false, 'error' => $model->getFirstErrorMessage()]);
+            }
         }
         die('Bad request');
     }
