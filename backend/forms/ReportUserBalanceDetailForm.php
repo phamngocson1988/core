@@ -31,7 +31,7 @@ class ReportUserBalanceDetailForm extends Model
         ->select(['id', 'description', 'type', 'updated_at', 'ref_name', 'payment_at', 'coin'])
         ->asArray()
         ->indexBy("id")
-        ->orderBy(["updated_at" => SORT_ASC])
+        ->orderBy(["updated_at" => SORT_DESC])
         ->where($condition)
         ;
         if ($this->start_date) {
@@ -61,15 +61,26 @@ class ReportUserBalanceDetailForm extends Model
         return $this->_command;
     }
 
-    public function getBeginningTotal()
+    // public function getBeginningTotal()
+    // {
+    //     if (!$this->start_date) return 0;
+    //     $command = UserWallet::find()
+    //     ->where([
+    //         "status" => UserWallet::STATUS_COMPLETED,
+    //         "user_id" => $this->user_id
+    //     ])
+    //     ->andWhere(['<', "updated_at", $this->start_date]);
+    //     return $command->sum('coin');
+    // }
+
+    public function getFinalTotal($dateTime)
     {
-        if (!$this->start_date) return 0;
         $command = UserWallet::find()
         ->where([
             "status" => UserWallet::STATUS_COMPLETED,
             "user_id" => $this->user_id
         ])
-        ->andWhere(['<', "updated_at", $this->start_date]);
+        ->andWhere(['<=', "updated_at", $dateTime]);
         return $command->sum('coin');
     }
 
@@ -78,13 +89,18 @@ class ReportUserBalanceDetailForm extends Model
         $command = $this->getCommand();
         $pages = $this->getPage();
         $data = $command->offset($pages->offset)->limit($pages->limit)->all();
-        $beginningTotal = $this->getBeginningTotal();
+        // $beginningTotal = $this->getBeginningTotal();
+        // $balanceStart = $beginningTotal;
        
-        $balanceStart = $beginningTotal;
+        if (!count($data)) return [];
+        $firstRow = reset($data);
+        $dateTime = $firstRow['updated_at'];
+        $balanceEnd = $this->getFinalTotal($dateTime);
         foreach ($data as $key => &$row) {
-            $row['balance_start'] = $balanceStart;
-            $row['balance_end'] = $balanceStart + (float)$row['coin'];
-            $balanceStart += (float)$row['coin'];
+            $row['balance_end'] = $balanceEnd;
+            $row['balance_start'] = $balanceEnd - (float)$row['coin'];
+            // $balanceStart += (float)$row['coin'];
+            $balanceEnd = $row['balance_start'];
         }
         // echo '<pre>';
         // print_r($periodTotal);die;

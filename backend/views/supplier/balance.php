@@ -120,9 +120,9 @@ use common\components\helpers\StringHelper;
                 <td><?=StringHelper::numberFormat(abs($model['period_outcome']), 2);?></td>
                 <td><?=StringHelper::numberFormat($model['beginning_total'], 2);?></td>
                 <td><?=StringHelper::numberFormat($model['ending_total'], 2);?></td>
-                <td>
+                <td class="center">
                   <a class="btn btn-xs green tooltips" href="<?=Url::to(['supplier/balance-detail', 'id' => $id]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
-                  <?php if (Yii::$app->user->can('admin')) : ?>
+                  <?php if (Yii::$app->user->can('accounting')) : ?>
                   <a class="btn btn-xs purple tooltips" href="<?=Url::to(['supplier/topup', 'id' => $id]);?>" data-container="body" data-original-title="Topup wallet" target="_blank" data-pjax="0"><i class="fa fa-plus"></i></a>
                   <a class="btn btn-xs grey tooltips" href="<?=Url::to(['supplier/withdraw', 'id' => $id]);?>" data-container="body" data-original-title="Withdraw wallet" target="_blank" data-pjax="0"><i class="fa fa-minus"></i></a>
                   <?php endif;?>

@@ -142,7 +142,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                   <td col-tag="balance_end" class="center">$<?=StringHelper::numberFormat($r['balance_end'], 2);?></td>
                   <td col-tag="actions" class="center">
                     <a class="btn btn-xs green tooltips" href="<?=Url::to(['report/finance-balance-detail', 'user_id' => $userId, 'start_date' => $search->start_date, 'end_date' => $search->end_date]);?>" data-container="body" data-original-title="Xem chi tiết" target="_blank" data-pjax="0"><i class="fa fa-eye"></i></a>
-                    <?php if (Yii::$app->user->can('admin')) : ?>
+                    <?php if (Yii::$app->user->can('accounting')) : ?>
                     <a class="btn btn-xs purple tooltips" href="<?=Url::to(['wallet/topup', 'id' => $userId]);?>" data-container="body" data-original-title="Topup wallet" target="_blank" data-pjax="0"><i class="fa fa-plus"></i></a>
                     <a class="btn btn-xs grey tooltips" href="<?=Url::to(['wallet/withdraw', 'id' => $userId]);?>" data-container="body" data-original-title="Withdraw wallet" target="_blank" data-pjax="0"><i class="fa fa-minus"></i></a>
                     <?php endif;?>
