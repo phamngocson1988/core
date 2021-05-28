@@ -194,7 +194,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <?php $supplier = $model->supplier;?>
                 <?php $label = $model->getStatusLabel(null); ?>
                 <tr>
-                  <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->doing_unit, 2);?> / <?=StringHelper::numberFormat($model->quantity, 2);?></td>

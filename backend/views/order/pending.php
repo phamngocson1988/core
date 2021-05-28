@@ -187,7 +187,7 @@ if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) arra
                 <?php $supplier = $model->supplier;?>
                 <?php $label = $model->getStatusLabel(null); ?>
                 <tr>
-                  <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td col-tag="id"><a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                   <td col-tag="customer"><?=$model->getCustomerName();?></td>
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>

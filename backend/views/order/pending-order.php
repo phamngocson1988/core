@@ -88,7 +88,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle;"><a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                   <td style="vertical-align: middle;"><?=$model->game_title;?></td>
                   <td style="vertical-align: middle;"><?=$model->created_at;?></td>
                   <td style="vertical-align: middle;"><?=$model->total_unit;?></td>

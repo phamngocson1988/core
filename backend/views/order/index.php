@@ -237,7 +237,7 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <?php endif;?>
                 <?php foreach ($models as $no => $model) :?>
                 <tr>
-                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id, 'ref' => $ref]);?>'>#<?=$model->id;?></a></td>
+                  <td style="vertical-align: middle; max-width:none"><a href='<?=Url::to(['order/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                   <td <?=$showCustomer ? '' : 'class="hide"';?>><?=$model->getCustomerName();?></td>
                   <td><?=$model->game_title;?></td>
                   <td><?=$model->created_at;?></td>

@@ -28,7 +28,7 @@ $bankMetaData = ArrayHelper::map($banks, 'id', function($bank) {
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['bank/index'])?>">Yêu cầu rút tiền</a>
+      <a href="<?=Url::to(['withdraw/index'])?>">Yêu cầu rút tiền</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>

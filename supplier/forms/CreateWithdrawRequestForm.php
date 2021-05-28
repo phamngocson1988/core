@@ -100,10 +100,8 @@ class CreateWithdrawRequestForm extends Model
             $model->account_number = $supplierBank->account_number;
             $model->amount = $this->amount;
             $model->available_balance = $available - $this->amount;
-            $model->auth_key = Yii::$app->security->generateRandomString(10);
             $result = $model->save();
             $transaction->commit();
-            $this->sendVerifyEmail($model);
             return $result;
         } catch(Exception $e) {
             $transaction->rollback();

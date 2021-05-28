@@ -119,7 +119,6 @@ $emailDomain = explode("@", $user->email)[1];
 <?php
 $script = <<< JS
 $("#send-auth-key").ajax_action({
-  confirm: true,
   callback: function(eletement, data) {
     toastr.success('Mã xác nhận đã được gửi tới email của bạn');
   },

@@ -57,10 +57,10 @@ class WithdrawController extends Controller
         $model = new CreateWithdrawRequestForm();
         $model->supplier_id = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->create()) {
+            $withdrawRequest = $model->create();
+            if ($withdrawRequest) {
                 Yii::$app->session->setFlash('success', 'Success!');
-                $ref = $request->get('ref', Url::to(['bank/index']));
-                return $this->redirect(Url::to(['withdraw/index']));
+                return $this->redirect(Url::to(['withdraw/verify', 'id' => $withdrawRequest->id]));
             }
         }
         $user = Yii::$app->user->identity;
@@ -88,17 +88,33 @@ class WithdrawController extends Controller
     public function actionVerify($id)
     {
         $request = Yii::$app->request;
-        $model = new \supplier\forms\VerifyWithdrawRequestForm(['id' => $id, 'supplier_id' => Yii::$app->user->id]);
-        if ($request->isAjax) {
-            if ($request->isPost) {
-                if ($model->load($request->post()) && $model->verify()) {
-                    return $this->asJson(['status' => true]);
-                } else {
-                    return $this->asJson(['status' => false, 'error' => $model->getFirstErrorMessage()]);
-                }
-
+        $model = new \supplier\forms\VerifyWithdrawRequestForm([
+            'id' => $id, 
+            'supplier_id' => Yii::$app->user->id,
+            'scenario' => \supplier\forms\VerifyWithdrawRequestForm::SCENARIO_VERIFY
+        ]);
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->verify()) {
+                return $this->redirect(['withdraw/index']);
             }
-            return $this->renderPartial('verify', ['model' => $model]);            
+        }
+        return $this->render('verify', ['model' => $model]);            
+    }
+
+    public function actionSendValidateCode($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \supplier\forms\VerifyWithdrawRequestForm([
+            'id' => $id, 
+            'supplier_id' => Yii::$app->user->id,
+            'scenario' => \supplier\forms\VerifyWithdrawRequestForm::SCENARIO_SEND
+        ]);
+        if ($request->isAjax) {
+            if ($model->send()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                return $this->asJson(['status' => false, 'error' => $model->getFirstErrorMessage()]);
+            }
         }
         die('Bad request');
     }
