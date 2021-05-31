@@ -54,9 +54,9 @@ class UserReseller extends ActiveRecord
     public static function getLevelList() 
     {
         return [
-            self::RESELLER_LEVEL_1 => 'Silver',
-            self::RESELLER_LEVEL_2 => 'Gold',
-            self::RESELLER_LEVEL_3 => 'Diamond',
+            self::RESELLER_LEVEL_1 => 'Gold',
+            self::RESELLER_LEVEL_2 => 'Diamond',
+            self::RESELLER_LEVEL_3 => 'Platinum',
         ];
     }
 

@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use backend\models\User;
 use yii\web\JsExpression;
+use common\components\helpers\FormatConverter;
 
 // saler team
 $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
@@ -92,14 +93,16 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                 <th col-tag="username"> Tên đăng nhập </th>
                 <th col-tag="email"> Email </th>
                 <th col-tag="phone"> Phone </th>
-                <th col-tag="level"> Level </th>
+                <th col-tag="old_level"> Level cũ </th>
+                <th col-tag="level"> Level mới</th>
+                <th col-tag="level_updated_at"> Thời điểm cập nhật</th>
                 <th col-tag="manager"> Quản lý </th>
                 <th col-tag="action" class="dt-center"> Tác vụ </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="8" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="10" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $key => $model) :?>
                 <tr>
@@ -108,7 +111,9 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   <td col-tag="username"><?=$model->user->username;?></td>
                   <td col-tag="email"><?=$model->user->email;?></td>
                   <td col-tag="phone"><?=$model->user->phone;?></td>
+                  <td col-tag="old_level"><?=$model->user->getOldResellerLabel();?></td>
                   <td col-tag="level"><?=$model->user->getResellerLabel();?></td>
+                  <td col-tag="level_updated_at"><?=$model->user->reseller_updated_at ? FormatConverter::convertToDate(strtotime($model->user->reseller_updated_at), 'd-m-Y H:i') : '';?></td>
                   <td col-tag="manager"><?=($model->manager) ? $model->manager->name : '';?></td>
                   <td col-tag="action">
                     <?php if (Yii::$app->user->can('admin')) : ?>

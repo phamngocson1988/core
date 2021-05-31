@@ -355,12 +355,22 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(UserReseller::className(), ['user_id' => 'id']);
     }
 
+    public function getOldResellerLabel()
+    {
+        $labels = [
+            self::RESELLER_LEVEL_1 => 'Gold',
+            self::RESELLER_LEVEL_2 => 'Diamond',
+            self::RESELLER_LEVEL_3 => 'Platinum',
+        ];
+        return ArrayHelper::getValue($labels, $this->old_reseller_level, '');
+    }
+
     public function getResellerLabel()
     {
         $labels = [
-            self::RESELLER_LEVEL_1 => 'Silver',
-            self::RESELLER_LEVEL_2 => 'Gold',
-            self::RESELLER_LEVEL_3 => 'Diamond',
+            self::RESELLER_LEVEL_1 => 'Gold',
+            self::RESELLER_LEVEL_2 => 'Diamond',
+            self::RESELLER_LEVEL_3 => 'Platinum',
         ];
         return ArrayHelper::getValue($labels, $this->reseller_level);
     }

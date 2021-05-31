@@ -63,8 +63,10 @@ class ResellerController extends Controller
             $model->upgrade();
         });
         $nextLevel = in_array($user->reseller_level + 1, [User::RESELLER_LEVEL_1, User::RESELLER_LEVEL_2, User::RESELLER_LEVEL_3]) ? $user->reseller_level + 1 : $user->reseller_level;
+        $user->old_reseller_level = $user->reseller_level;
+        $user->reseller_updated_at = date('Y-m-d H:i:s');
         $user->reseller_level = $nextLevel;
-        $user->save(false, ['reseller_level']);
+        $user->save(false, ['reseller_level', 'old_reseller_level', 'reseller_updated_at']);
         Yii::$app->session->setFlash('success', sprintf("User %s have upgraded to level %s", $user->name, $user->getResellerLabel()));
         return $this->asJson(['status' => true]);
     }
@@ -78,8 +80,10 @@ class ResellerController extends Controller
             $model->downgrade();
         });
         $nextLevel = in_array($user->reseller_level - 1, [User::RESELLER_LEVEL_1, User::RESELLER_LEVEL_2, User::RESELLER_LEVEL_3]) ? $user->reseller_level - 1 : $user->reseller_level;
+        $user->old_reseller_level = $user->reseller_level;
+        $user->reseller_updated_at = date('Y-m-d H:i:s');
         $user->reseller_level = $nextLevel;
-        $user->save(false, ['reseller_level']);
+        $user->save(false, ['reseller_level', 'old_reseller_level', 'reseller_updated_at']);
         Yii::$app->session->setFlash('success', sprintf("User %s have downgraded to level %s", $user->name, $user->getResellerLabel()));
         return $this->asJson(['status' => true]);
     }
