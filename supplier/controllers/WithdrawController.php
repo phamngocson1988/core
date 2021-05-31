@@ -87,6 +87,7 @@ class WithdrawController extends Controller
 
     public function actionVerify($id)
     {
+        $this->view->params['main_menu_active'] = 'withdraw.index';
         $request = Yii::$app->request;
         $model = new \supplier\forms\VerifyWithdrawRequestForm([
             'id' => $id, 

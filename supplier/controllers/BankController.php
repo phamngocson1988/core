@@ -73,6 +73,7 @@ class BankController extends Controller
 
     public function actionVerify($id)
     {
+        $this->view->params['main_menu_active'] = 'bank.index';
         $request = Yii::$app->request;
         $model = new \supplier\forms\VerifySupplierBankForm([
             'id' => $id, 

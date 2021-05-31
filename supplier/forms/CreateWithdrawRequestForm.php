@@ -100,36 +100,14 @@ class CreateWithdrawRequestForm extends Model
             $model->account_number = $supplierBank->account_number;
             $model->amount = $this->amount;
             $model->available_balance = $available - $this->amount;
-            $result = $model->save();
+            $model->save();
             $transaction->commit();
-            return $result;
+            return $model;
         } catch(Exception $e) {
             $transaction->rollback();
             return false;
         }
     }
-
-    protected function sendVerifyEmail($model) 
-    {
-        $toEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
-        $siteName = Yii::$app->name;
-        $supplier = $this->getSupplier();
-        $supplierBank = $this->getSupplierBank();
-        $bank = $supplierBank->bank;
-        $user = $supplier->user;
-        Yii::$app->supplier_mailer->compose('create_withdraw_request', [
-            'model' => $model,
-            'user' => $user,
-            'bank' => $bank
-        ])
-        ->setTo($user->email)
-        ->setFrom([$toEmail => $siteName])
-        ->setSubject('[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng')
-        ->setTextBody("[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng")
-        ->send();
-        return true;
-    }
-
 
     public function fetchBanks()
     {

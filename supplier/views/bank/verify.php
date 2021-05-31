@@ -44,8 +44,6 @@ $emailDomain = explode("@", $user->email)[1];
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> Xác minh tài khoản
             </button>
-
-            <a type="button" class="btn btn-warning" id="send-auth-key" href="<?=Url::to(['bank/send-validate-code', 'id' => $model->id]);?>"><i class="fa fa-paper-plane"></i> Gửi mã xác minh</a>
           </div>
         </div>
         <div class="portlet-body">
@@ -101,11 +99,19 @@ $emailDomain = explode("@", $user->email)[1];
                 </div>
                 <hr/>
                 <div class="form-body">
-                
                   <?=$form->field($model, 'auth_key', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}
+                    <div class="col-md-6">
+                      <div class="input-group">
+                        {input}
+                        <span class="input-group-btn">
+                          <a type="button" class="btn btn-warning" id="send-auth-key" href="' . Url::to(['bank/send-validate-code', 'id' => $model->id]) . '"><i class="fa fa-paper-plane"></i> Gửi mã xác minh</a>
+                        </span>
+                      </div>
+                      {hint}{error}
+                    </div>'
                   ])->textInput()->label('Mã xác minh')->hint(sprintf('Nhập mã code được gửi tới email %s@%s', str_pad(substr($emailName, 0, 3), strlen($emailName), '*'), $emailDomain));?>
                 </div>
               </div>

@@ -118,8 +118,8 @@ class VerifyWithdrawRequestForm extends \common\forms\ActionForm
         ])
         ->setTo($user->email)
         ->setFrom([$toEmail => $siteName])
-        ->setSubject('[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng')
-        ->setTextBody("[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng")
+        ->setSubject('[HoangGiaNapGame]- Xác nhận yêu cầu rút tiền')
+        ->setTextBody("[HoangGiaNapGame]- Xác nhận yêu cầu rút tiền")
         ->send();
         return true;
     }
