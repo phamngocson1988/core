@@ -24,7 +24,7 @@
         <li class="dropdown dropdown-user">
           <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
           <img alt="Avatar" global="avatar_{$user->id}" class="img-circle" src="{$user->getAvatarUrl('100x100')}"/>
-          <span class="username username-hide-on-mobile"> {$user->getName()} </span>
+          <span class="username username-hide-on-mobile"> {$user->getName()} (#{$user->id}) </span>
           <i class="fa fa-angle-down"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-default">

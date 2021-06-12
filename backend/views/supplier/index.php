@@ -78,7 +78,7 @@ use yii\web\JsExpression;
           <table class="table table-striped table-bordered table-hover table-checkable">
             <thead>
               <tr>
-                <th> STT </th>
+                <th> ID </th>
                 <th> Tên </th>
                 <th> Tên đăng nhập </th>
                 <th> Email </th>
