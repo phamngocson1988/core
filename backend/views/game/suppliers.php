@@ -175,11 +175,11 @@ if (!count($lastPrices)) {
                         <td class="left"><?=$supplier->user->name;?></td>
                         <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
                           <div><?=$supplier->old_price ? number_format($supplier->old_price) : '';?></div>
-                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->updated_at ? date('d/m/y H:i', strtotime($supplier->updated_at)) : '';?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_price_at ? date('d/m/y H:i', strtotime($supplier->last_updated_price_at)) : '';?></div>
                         </td>
                         <td <?=$showPrice ? 'class="center"' : 'class="hide"';?>>
                           <div><?=number_format($supplier->price);?></div>
-                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->last_updated_at ? date('d/m/y H:i', strtotime($supplier->last_updated_at)) : '';?></div>
+                          <div style="font-size: 12px; font-style: italic;"><?=$supplier->updated_price_at ? date('d/m/y H:i', strtotime($supplier->updated_price_at)) : '';?></div>
                         </td>
                         <td class="center"><?=$supplier->last_speed ?  number_format($supplier->last_speed) : '-';?></td>
                         <td class="center"><?=$supplier->last_completing_time ?  number_format($supplier->last_completing_time) : '-';?></td>

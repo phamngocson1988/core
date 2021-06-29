@@ -110,7 +110,7 @@ function AjaxFormSubmit(opts) {
         var that = this;
         this.options = $.extend(this.options, opts);
         $(document).find(this.options.element).unbind('submit');
-        $(document).find(this.options.element).on('submit', function(e) {
+        $(document).on('submit', this.options.element, function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var form = $(this);
@@ -126,7 +126,8 @@ function AjaxFormSubmit(opts) {
                 beforeSend: that.beforeSend(form),
                 success: function (result, textStatus, jqXHR) {
                     if (result.status == false) {
-                        that.error(result.errors);
+                        const error = result.errors || result.error;
+                        that.error(error);
                         return false;
                     } else {
                         that.success(result.data, form);

@@ -93,7 +93,7 @@ use yii\web\JsExpression;
                 <?php endif;?>
                 <?php foreach ($models as $key => $model) :?>
                 <tr>
-                  <td><?=$key + $pages->offset + 1;?></td>
+                  <td>#<?=$model->user->id;?></td>
                   <td><?=$model->user->name;?></td>
                   <td><?=$model->user->username;?></td>
                   <td><?=$model->user->email;?></td>

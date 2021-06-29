@@ -61,20 +61,20 @@ if ($isAdvanceMode) $column++;
                 <tr><td colspan="<?=$column;?>"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $supplierGame) : ?>
-                <?php $model = $supplierGame->game;?>
+                <?php $game = $supplierGame->game;?>
                 <tr>
-                  <td><?=$model->id;?></td>
-                  <td><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
-                  <td><?=$model->title;?></td>
+                  <td><?=$game->id;?></td>
+                  <td><img src="<?=$game->getImageUrl('50x50');?>" width="50px;" /></td>
+                  <td><?=$game->title;?></td>
                   <?php if ($isAdvanceMode) :?>
                   <td><?=number_format($supplierGame->price, 1);?></td>
                   <?php endif;?>
                   <td>
-                    <?php if ($model->isVisible()) : ?>
+                    <?php if ($game->isVisible()) : ?>
                     <span class="label label-success"><?=Yii::t('app', 'visible');?></span>
-                    <?php elseif ($model->isInvisible()) : ?>
+                    <?php elseif ($game->isInvisible()) : ?>
                     <span class="label label-warning"><?=Yii::t('app', 'disable');?></span>
-                    <?php elseif ($model->isDeleted()) : ?>
+                    <?php elseif ($game->isDeleted()) : ?>
                     <span class="label label-default"><?=Yii::t('app', 'deleted');?></span>
                     <?php endif;?>
                   </td>
@@ -86,17 +86,17 @@ if ($isAdvanceMode) $column++;
                     <?php endif;?>
                   </td>
                   <td>
-                    <a href="<?=Url::to(['game/remove', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Hủy đăng ký"><i class="fa fa-times"></i> Hủy đăng ký </a>
+                    <a href="<?=Url::to(['game/remove', 'id' => $game->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Hủy đăng ký"><i class="fa fa-times"></i> Hủy đăng ký </a>
                     <?php if ($supplierGame->isEnabled()) : ?>
-                    <a href="<?=Url::to(['game/disable', 'id' => $model->id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Tạm ngưng"><i class="fa fa-arrow-down"></i> Tạm ngưng </a>
+                    <a href="<?=Url::to(['game/disable', 'id' => $game->id]);?>" class="btn btn-sm yellow link-action tooltips" data-container="body" data-original-title="Tạm ngưng"><i class="fa fa-arrow-down"></i> Tạm ngưng </a>
                     <?php else :?>
                     <?php if ($supplierGame->price > 0) : ?>
-                    <a href="<?=Url::to(['game/enable', 'id' => $model->id]);?>" class="btn btn-sm red link-action tooltips" data-container="body" data-original-title="Kích hoạt"><i class="fa fa-arrow-up"></i> Kích hoạt </a>
+                    <a href="<?=Url::to(['game/enable', 'id' => $game->id]);?>" class="btn btn-sm red link-action tooltips" data-container="body" data-original-title="Kích hoạt"><i class="fa fa-arrow-up"></i> Kích hoạt </a>
                     <?php endif;?>
                     <?php endif;?>
 
                     <?php if (Yii::$app->user->isAdvanceMode()) : ?>
-                    <a href="#price-modal-<?=$model->id;?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Cập nhật giá" data-toggle="modal"><i class="fa fa-arrow-up"></i> Cập nhật giá </a>
+                    <a href="<?=Url::to(['game/price', 'id' => $game->id]);?>" data-target="#price-modal" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Cập nhật giá" data-toggle="modal"><i class="fa fa-arrow-up"></i> Cập nhật giá </a>
                     <?php endif;?>
                   </td>
                 </tr>
@@ -111,49 +111,13 @@ if ($isAdvanceMode) $column++;
   </div>
 </div>
 <?php if (Yii::$app->user->isAdvanceMode() && $models) : ?>
-<?php foreach ($models as $supplierGame) : ?>
-<?php $model = $supplierGame->game;?>
-<?php if ($supplierGame->isAutoDispatcher()) : ?>
-<div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+<div class="modal fade" id="price-modal" tabindex="-1" role="basic" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Cập nhật giá game <?=$model->title;?></h4>
-      </div>
-      
-      <div class="modal-body" style="word-wrap: break-word"> 
-      Tạm thời bạn không thể thực hiện thao tác cập nhật giá, vui lòng liên hệ nhân viên hỗ trợ. Nếu điều này ảnh hưởng đến quyết định nhận đơn, vui lòng chọn <strong>Dừng nhận đơn</strong>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Tiếp tục nhận đơn</button>
-        <a type="button" class="btn green link-action" href="<?=Url::to(['game/disable', 'id' => $model->id]);?>">Dừng nhận đơn</a>
-      </div>
+
     </div>
   </div>
 </div>
-<?php else : ?>
-<div class="modal fade" id="price-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Cập nhật giá game <?=$model->title;?></h4>
-      </div>
-      <?php $priceForm = ActiveForm::begin(['options' => ['class' => 'form-row-seperated update-price-form', 'game-id' => $model->id], 'action' => Url::to(['game/price', 'id' => $model->id])]);?>
-      <div class="modal-body"> 
-        <?=$priceForm->field($supplierGame, 'price', ['inputOptions' => ['class' => 'form-control', 'id' => 'supplier-price-' . $model->id]])->textInput();?>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn green">Xác nhận</button>
-      </div>
-      <?php ActiveForm::end();?>
-    </div>
-  </div>
-</div>
-<?php endif;?>
-<?php endforeach;?>
 <?php endif;?>
 <?php
 $script = <<< JS
@@ -166,27 +130,16 @@ $(".link-action").ajax_action({
 });
 
 // update price
-var updatePriceForm = new AjaxFormSubmit({element: '.update-price-form'});
+var updatePriceForm = new AjaxFormSubmit({element: '#update-price-form'});
 updatePriceForm.success = function (data, form) {
-  location.reload();
+  setTimeout(function(){
+      location.reload();
+  },2000); //delay is in milliseconds 
+  toastr.success('Bạn đã cập nhật giá thành công');
+  
 };
-updatePriceForm.error = function (errors) {
-  alert(errors);
-  console.log('errors', errors);
-  return false;
-}
-
-updatePriceForm.validate = function(form) {
-  var id = $(form).attr('game-id');
-  var price = $.trim($(form).find('#supplier-price-' + id).val());
-  if (price == '') {
-    return false;
-  }
-  return true;
-}
-
-updatePriceForm.invalid = function(form) {
-  alert('Nội dung không được để trống');
+updatePriceForm.error = function (error) {
+  toastr.error(error);
 }
 JS;
 $this->registerJs($script);

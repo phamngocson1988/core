@@ -10,7 +10,6 @@ use yii\data\Pagination;
 use supplier\models\Game;
 use supplier\models\SupplierGame;
 use supplier\forms\FetchGameForm;
-use supplier\behaviors\UserSupplierBehavior;
 
 class GameController extends Controller
 {
@@ -56,9 +55,9 @@ class GameController extends Controller
     public function actionMyGame()
     {
         $this->view->params['main_menu_active'] = 'game.my-game';
-        $supplier = Yii::$app->user->getIdentity();
-        $supplier->attachBehavior('supplier', new UserSupplierBehavior);
-        $command = $supplier->getSupplierGames();
+        $form = new \supplier\forms\FetchMyGameForm(['supplier_id' => Yii::$app->user->id]);
+
+        $command = $form->getCommand();
         $command->with('game');
         $command->orderBy(['created_at' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $command->count()]);
@@ -138,25 +137,19 @@ class GameController extends Controller
     public function actionPrice($id) 
     {
         $request = Yii::$app->request;
-        try {
-            $model = SupplierGame::findOne([
-                'supplier_id' => Yii::$app->user->id,
-                'game_id' => $id
-            ]);
-            if (!$model) throw new \Exception("Supplier chưa đăng ký game này", 1);
-            if ($model->isAutoDispatcher()) throw new \Exception("Không thể cập nhật giá vì đang ở chế độ tự động nhận đơn", 1);
-            $oldPrice = $model->price;
-            $model->setScenario(SupplierGame::SCENARIO_EDIT);
-            if ($model->load($request->post())) {
-                 if ($oldPrice != $model->price) {
-                    $model->last_updated_at = date('Y-m-d H:i:s');
-                    $model->old_price = $oldPrice;
-                }
-                return $this->asJson(['status' => $model->save(), 'errors' => 'Error']);
+        $model = new \supplier\forms\EditGamePriceForm([
+            'supplier_id' => Yii::$app->user->id,
+            'game_id' => $id
+        ]);
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->update()) {
+                return $this->asJson(['status' => true]);
+            } else {
+                $error = $model->getFirstErrorMessage();
+                return $this->asJson(['status' => false, 'error' => $error]);
             }
-        } catch (\Exception $e) {
-            return $this->asJson(['status' => false, 'errors' => $e->getMessage()]);
         }
+        return $this->renderPartial('_price', ['model' => $model]);
     }
 
     public function actionSuggestion()

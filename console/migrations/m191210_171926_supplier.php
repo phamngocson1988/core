@@ -44,6 +44,8 @@ class m191210_171926_supplier extends Migration
             'updated_by' => $this->integer(),  
             'created_at' => $this->dateTime(),            
             'last_created_at' => $this->dateTime(),            
+            'last_updated_price_at' => $this->dateTime(),            
+            'updated_price_at' => $this->dateTime(),            
             'last_speed' => $this->integer(),  // minutes of working time of the last order
             'last_completing_time' => $this->integer(),  // minutes of completing time of the last order (from approved to completed)
             'max_order' => $this->integer(),  // minutes of working time of the last order
