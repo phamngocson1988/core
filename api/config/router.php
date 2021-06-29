@@ -11,6 +11,8 @@ return [
         'user/search' => 'user/search',
         'order/<id:\d+>' => 'order/view',
         'order/cancel/<id:\d+>' => 'order/cancel',
+        'order/send-complain/<id:\d+>' => 'order/send-complain',
+        'order/list-complain/<id:\d+>' => 'order/list-complain',
         'checkout/<id:\d+>' => 'cart/checkout',
     ],
 ];

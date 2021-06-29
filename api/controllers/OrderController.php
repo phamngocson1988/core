@@ -20,6 +20,8 @@ class OrderController extends Controller
             'class' => VerbFilter::className(),
             'actions' => [
                 'cancel' => ['post'],
+                'send-complain' => ['post'],
+                'list-complain' => ['get'],
             ],
         ];
 	    return $behaviors;
@@ -51,5 +53,43 @@ class OrderController extends Controller
                 'error' => $message
             ];
         }
+    }
+
+    public function actionSendComplain($id)
+    {
+        $request = Yii::$app->request;
+        $content = $request->post('content');
+        $ouath_sublink_client_id = $request->post('ouath_sublink_client_id');
+        $user_sublink_id = $request->post('user_sublink_id');
+        $form = new \api\forms\CreateOrderComplainForm([
+            'id' => $id, 
+            'content' => $content,
+            'ouath_sublink_client_id' => $ouath_sublink_client_id,
+            'user_sublink_id' => $user_sublink_id,
+        ]);
+        if (!$form->create()) {
+            $message = $form->getFirstErrors();
+            $message = reset($message);
+            return [
+                'status' => false,
+                'error' => $message
+            ];
+        }
+        return ['status' => true];
+    }
+
+    public function actionListComplain($id)
+    {
+        $form = new \api\forms\ListOrderComplainForm(['id' => $id]);
+        $list = $form->fetch();
+        if (!$list) {
+            $message = $form->getFirstErrors();
+            $message = reset($message);
+            return [
+                'status' => false,
+                'error' => $message
+            ];
+        }
+        return ['status' => true, 'data' => $list];
     }
 }
