@@ -108,7 +108,7 @@ class VerifySupplierBankForm extends \common\forms\ActionForm
             'bank' => $bank
         ])
         ->setTo($user->email)
-        ->setFrom([$toEmail => $siteName])
+        ->setFrom(['napgamehoanggia@gmail.com' => 'Hoàng Gia'])
         ->setSubject('[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng')
         ->setTextBody("[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng")
         ->send();

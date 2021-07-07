@@ -92,7 +92,6 @@ class CreateSupplierBankForm extends Model
     protected function sendVerifyEmail($model) 
     {
         $toEmail = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
-        $siteName = Yii::$app->name;
         $supplier = $this->getSupplier();
         $bank = $this->getBank();
         $user = $supplier->user;
@@ -102,7 +101,7 @@ class CreateSupplierBankForm extends Model
             'bank' => $bank
         ])
         ->setTo($user->email)
-        ->setFrom([$toEmail => $siteName])
+        ->setFrom(['napgamehoanggia@gmail.com' => 'Hoàng Gia'])
         ->setSubject('[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng')
         ->setTextBody("[HoangGiaNapGame]- Xác nhận yêu cầu tạo mới tài khoản ngân hàng")
         ->send();
