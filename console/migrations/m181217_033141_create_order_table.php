@@ -152,6 +152,8 @@ class m181217_033141_create_order_table extends Migration
             'is_read' => $this->integer(1)->defaultValue(0),
             'is_customer' => $this->string(1)->defaultValue('N'),
             'object_name' => $this->string(10),
+            'ouath_sublink_client_id' => $this->string(255),
+            'user_sublink_id' => $this->string(255),
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer(11)->notNull(),
         ]);
