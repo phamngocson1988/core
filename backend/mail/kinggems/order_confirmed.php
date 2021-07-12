@@ -3,7 +3,7 @@
     <P>Dear <?=$order->customer_name;?>,</P>
     We would like to inform that your order has been confirmed.
     <hr>
-    <p>The order is processd with following details:</p>
+    <p>The order is processed with following details:</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
     + Game: <?=$order->game_title;?><br/>
     + Quantity / loaded amount: <?=number_format($order->quantity, 1);?><br/>
