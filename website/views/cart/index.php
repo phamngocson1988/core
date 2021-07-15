@@ -57,7 +57,7 @@ use common\components\helpers\StringHelper;
           'template' => '{input}',
           'inputOptions' => ['id' => 'recover_file_id']
         ])->hiddenInput()->label(false) ?>
-      <p><small>(*) The recovery code should contain 8 degits, and kindly provide at cleast 3 codes. <br />
+      <p><small>(*) The recovery code should contain 8 degits, and kindly provide at least 3 codes. <br />
         Ex: 12345678 12345678 12345678</small></p>
         <p>
           <a class="text-red mr-4" href="https://youtu.be/F3xMAXFRHNE" target="_blank">How to get Google Code?</a><a class="text-red" href="https://youtu.be/sG1GAcsslzs" target="_blank">How to get Facebook Code?</a>
