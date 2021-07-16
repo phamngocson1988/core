@@ -26,7 +26,7 @@ class m190313_163324_create_wallet extends Migration
             'balance' => $this->float()->notNull()->defaultValue(0),
             'ref_name' => $this->string(100), 
             'ref_key' => $this->string(100), 
-            'description' => $this->string(100), 
+            'description' => $this->text(), 
             'created_by' => $this->integer(11),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime(),

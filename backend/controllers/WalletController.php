@@ -71,7 +71,7 @@ class WalletController extends Controller
 			$description = ArrayHelper::getValue($request->post(), 'description');
 			if ($coin) {
 				$admin = Yii::$app->user->identity;
-				$user->topup($coin, null, sprintf("%s (ID: %s) have done this topup with description: %s", $admin->username, $admin->id, $description));
+				$user->topup($coin, null, $description);
 				return $this->redirect(['wallet/index', 'user_id' => $id]);	
 			}
 			Yii::$app->session->setFlash('error', 'Số coin nạp vào không được để trống');
@@ -94,7 +94,7 @@ class WalletController extends Controller
             $description = ArrayHelper::getValue($request->post(), 'description');
             if ($coin && $coin <= $balance) {
                 $admin = Yii::$app->user->identity;
-                $user->withdraw($coin, null, sprintf("%s (ID: %s) have done this withdraw with description: %s", $admin->username, $admin->id, $description));
+                $user->withdraw($coin, null, $description);
                 return $this->redirect(['wallet/index', 'user_id' => $id]);   
             }
             Yii::$app->session->setFlash('error', 'Số coin rút ra không hợp lệ');
