@@ -72,6 +72,24 @@ class WalletController extends Controller
 			if ($coin) {
 				$admin = Yii::$app->user->identity;
 				$user->topup($coin, null, $description);
+                $emailHelper = new \common\components\helpers\MailHelper();
+                $emailHelper
+                ->setMailer(Yii::$app->mailer)
+                ->usingCustomerService()
+                ->usingKinggemsSiteName()
+                ->send(
+                    'King Gems – Balance changed',
+                    $user->email,
+                    'user_balance_change',
+                    [
+                        'userName' => $user->getName(),
+                        'reason' => $description,
+                        'balanceChanged' => $coin,
+                        'balanceBefore' => $balance,
+                        'balanceAfter' => $balance + (float)$coin,
+                        'detailUrl' => 'https://kinggems.us/'
+                    ]
+                );
 				return $this->redirect(['wallet/index', 'user_id' => $id]);	
 			}
 			Yii::$app->session->setFlash('error', 'Số coin nạp vào không được để trống');
@@ -95,6 +113,24 @@ class WalletController extends Controller
             if ($coin && $coin <= $balance) {
                 $admin = Yii::$app->user->identity;
                 $user->withdraw($coin, null, $description);
+                $emailHelper = new \common\components\helpers\MailHelper();
+                $emailHelper
+                ->setMailer(Yii::$app->mailer)
+                ->usingCustomerService()
+                ->usingKinggemsSiteName()
+                ->send(
+                    'King Gems – Balance changed',
+                    $user->email,
+                    'user_balance_change',
+                    [
+                        'userName' => $user->getName(),
+                        'reason' => $description,
+                        'balanceChanged' => $coin,
+                        'balanceBefore' => $balance,
+                        'balanceAfter' => $balance - (float)$coin,
+                        'detailUrl' => 'https://kinggems.us/'
+                    ]
+                );
                 return $this->redirect(['wallet/index', 'user_id' => $id]);   
             }
             Yii::$app->session->setFlash('error', 'Số coin rút ra không hợp lệ');
