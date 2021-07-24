@@ -14,7 +14,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/slick-theme.css',
         'css/slick.css',
-        'css/intlTelInput.css',
+        'vendor/intlTelInput/css/intlTelInput.css',
         'css/slimselect.min.css',
         'css/aos.css',
         'css/main.css',
@@ -25,7 +25,7 @@ class AppAsset extends AssetBundle
         'js/vendor/modernizr-2.8.3-respond-1.4.2.min.js',
         ['js/vendor/popper.min.js', 'position' => \yii\web\View::POS_HEAD ],
         'js/vendor/slick.min.js',
-        'js/vendor/intlTelInput.js',
+        'vendor/intlTelInput/js/intlTelInput.js',
         'js/vendor/slimselect.min.js',
         'js/vendor/aos.js',
         'js/vendor/main.js',

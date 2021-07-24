@@ -181,10 +181,6 @@ $(document).ready(function () {
     })
   }
 
-  if ($('.phoneinp').length) {
-    $(".phoneinp").intlTelInput();
-  }
-
   if ($("[data-toggle='tooltip'").length) {
     $('[data-toggle="tooltip"]').tooltip()
   }

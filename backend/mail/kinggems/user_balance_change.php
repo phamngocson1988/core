@@ -1,7 +1,7 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?=$userName;?>,</P>
-    We would like to inform that your balance has just been changed as detailed below:
+    We would like to inform that your balance has just been changed as detailed below:<br/>
     - Balance before: <?=$balanceBefore;?><br/>
     - Balance after: <?=$balanceAfter;?><br/>
     - Amount changed: <?=$balanceChanged;?><br/>

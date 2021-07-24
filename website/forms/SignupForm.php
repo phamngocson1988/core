@@ -18,6 +18,8 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $username;
+    public $country_code;
+    public $phone;
     public $name;
 
     // In case refer
@@ -40,7 +42,10 @@ class SignupForm extends Model
 
             [['refer', 'affiliate'], 'safe'],
 
-            [['username', 'name'], 'trim']
+            [['username', 'name'], 'trim'],
+
+            [['country_code', 'phone'], 'trim'],
+            ['phone', 'required'],
         ];
     }
 
@@ -54,6 +59,8 @@ class SignupForm extends Model
         if (!$this->validate())  return null;
         $user = new User();
         $user->email = $this->email;
+        $user->phone = $this->phone;
+        $user->country_code = $this->country_code;
         $user->username = $this->username ? $this->username : $this->email;
         $user->name = $this->name ? $this->name : $this->email;
         $user->refer_code = Yii::$app->security->generateRandomString(6);

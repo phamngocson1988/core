@@ -43,7 +43,7 @@ $this->title = 'User Profile';
           <hr />
           <?= $form->field($model, 'username')->textInput(['placeholder' => 'Username', 'readonly' => true])->label(false);?>
           <?= $form->field($model, 'email')->textInput(['placeholder' => 'Email', 'readonly' => true])->label(false);?>
-          <?= $form->field($model, 'phone')->textInput(['placeholder' => 'Phone number', 'class' => 'form-control phoneinp', 'readonly' => true, 'disabled' => true])->label(false);?>
+          <?= $form->field($model, 'phone')->widget(\website\widgets\PhoneInputWidget::class)->label(false);?>
           <div class="form-group">
             <div class="input-group mb-3">
               <input type="text" class="form-control inp-changepw" disabled placeholder="*********" aria-label="Example text with button addon" aria-describedby="">

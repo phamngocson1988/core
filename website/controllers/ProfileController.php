@@ -3,7 +3,7 @@ namespace website\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use yii\helpers\Url;
+use yii\web\BadRequestHttpException;
 
 class ProfileController extends Controller
 {
@@ -14,7 +14,7 @@ class ProfileController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
