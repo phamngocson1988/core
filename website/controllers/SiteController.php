@@ -149,6 +149,8 @@ class SiteController extends Controller
             $model->affiliate = Yii::$app->session->get('affiliate');
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
+        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'notifyStaff']);
+
         if ($model->load($request->post()) && $model->validate()) {
             $user = $model->signup();
             if ($user) {

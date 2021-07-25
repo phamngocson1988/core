@@ -8,6 +8,7 @@ use website\models\User;
 use website\models\Affiliate;
 use website\models\UserRefer;
 use website\models\UserWallet;
+use website\components\notifications\AccountNotification;
 
 class SignupEventHandler extends Model
 {
@@ -49,4 +50,19 @@ class SignupEventHandler extends Model
         $user->save();
     }
 
+    public static function notifyStaff(AfterSignupEvent $event) 
+    {
+        $adminIds = Yii::$app->authManager->getUserIdsByRole('admin');
+        $salerIds = Yii::$app->authManager->getUserIdsByRole('saler');
+        $userIds = array_unique(array_merge($adminIds, $salerIds));
+        $form = $event->sender;
+        $account = $event->user;
+
+        foreach ($userIds as $userId) {
+	        AccountNotification::create(AccountNotification::NOTIFY_STAFF_NEW_ACCOUNT, [
+	            'account' => $account,
+	            'userId' => $userId
+	        ])->send();
+    	}
+    }
 }
