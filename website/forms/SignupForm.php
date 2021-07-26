@@ -46,6 +46,7 @@ class SignupForm extends Model
 
             [['country_code', 'phone'], 'trim'],
             ['phone', 'required'],
+            ['phone', 'string', 'min' => 7],
         ];
     }
 

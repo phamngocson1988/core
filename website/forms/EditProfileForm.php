@@ -39,8 +39,10 @@ class EditProfileForm extends Model
             ['lastname', 'string', 'max' => 255],
 
             ['birthday', 'trim'],
-            ['phone', 'trim'],
-            ['country_code', 'trim'],
+
+            [['country_code', 'phone'], 'trim'],
+            ['phone', 'required'],
+            ['phone', 'string', 'min' => 7],
 
             ['is_verify_email', 'safe'],
 
