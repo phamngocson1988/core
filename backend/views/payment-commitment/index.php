@@ -215,7 +215,7 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="action">
                 <?php if ($model->isPending()) :?>
                   <a href='#approve-commitment-modal-<?=$model->id;?>' class="btn btn-xs blue tooltips" data-container="body" data-original-title="Xác nhận đã thanh toán" data-toggle="modal" ><i class="fa fa-exchange"></i></a>
-                  <?php if (Yii::$app->user->can('admin')) :?>
+                  <?php if (Yii::$app->user->can('sale_manager')) :?>
                   <a class="btn btn-xs red tooltips delete-payment-action" href="<?=Url::to(['payment-commitment/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
                 <?php endif;?>

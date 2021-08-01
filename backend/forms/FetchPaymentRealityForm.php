@@ -241,7 +241,7 @@ class FetchPaymentRealityForm extends Model
                 $commitment ? $commitment->evidence : '', // hoa don nguoi gui
                 $model->evidence, // hoa don nguoi nhan
                 strlen($commitmentNote) > 25 ? substr($commitmentNote, 0, 25) . '...' : $commitmentNote, //ghi chu duyet don hang
-                strlen($model->payment_note) > 25 ? substr($model->payment_note, 0, 25) : $model->payment_note, // ghi chu nhan tien
+                strlen($model->note) > 25 ? substr($model->note, 0, 25) : $model->note, // ghi chu nhan tien
             ];
         }
 

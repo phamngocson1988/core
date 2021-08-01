@@ -7,7 +7,7 @@ use common\models\Order;
 
 class AutoConfirmOrderForm extends ActionForm
 {
-    public $duration = 36;
+    public $duration = 72;
     public $startTime = '2021-07-10 00:00:00';
 
     protected $_countResult = 0;

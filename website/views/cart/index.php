@@ -227,7 +227,6 @@ $('form#update-cart-form').on('submit', function() {
 // upload image
 var uploadRecover = new AjaxUploadFile({
   file_element: '#inputGroupFile02',
-  file_options: {resize: '500xauto'}
 });
 uploadRecover.callback = function(result) {
   result.forEach(function(element) {

@@ -257,7 +257,7 @@ $now = date('Y-m-d H:i:s');
                 </td>
                 <td col-tag="action">
                 <?php if ($model->isPending()) :?>
-                  <?php if (Yii::$app->user->can('admin')) :?>
+                  <?php if (Yii::$app->user->can('sale_manager')) :?>
                 <a class="btn btn-xs red tooltips delete-payment-action" href="<?=Url::to(['payment-reality/delete', 'id' => $model->id]);?>" data-container="body" data-original-title="Cho vào thùng rác"><i class="fa fa-trash"></i></a>
                   <?php endif;?>
                 <?php endif;?>
