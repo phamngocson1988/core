@@ -452,7 +452,7 @@ $imageJs = <<< JS
 var upload = new AjaxUploadFile({
   trigger_element: '#uploadElement', 
   file_element: '#uploadEvidence',
-  file_options: {resize: '500xauto'},
+  // file_options: {resize: '500xauto'},
   max: 5
 });
 upload.callback = function(result) {

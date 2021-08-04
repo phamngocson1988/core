@@ -164,7 +164,8 @@ $bankMetaData = ArrayHelper::map($banks, 'id', function($bank) {
       <strong>* Lưu ý: </strong>
       <p>
         - Các yêu cầu rút tiền sau 13:00 (GMT+7) ngày thứ Sáu sẽ được xem xét phê duyệt và xử lý vào ngày thứ Hai. <br/>
-        - Giao dịch rút tiền từ 50,000,000 VND (Năm mươi triệu đồng) có thể mất từ 48-72 giờ để xử lý.C33 <br/>
+        - Giao dịch rút tiền từ 50,000,000 VND (Năm mươi triệu đồng) có thể mất từ 48-72 giờ để xử lý. <br/>
+        - Số lệnh rút tiền tối đa trong ngày: 02 giao dịch <br/>
         - Số tiền tối thiểu có thể rút= 200,000 VND (Hai trăm nghìn đồng) <br/>
         - Đối với các hình thức nhận tiền qua tài khoản ngân hàng, khoản chuyển sẽ được hoàn tất ngay khi trạng thái lệnh "Hoàn tất". <br/>
       </p>

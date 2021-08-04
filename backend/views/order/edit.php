@@ -347,7 +347,7 @@ $imageJs = <<< JS
 var upload = new AjaxUploadFile({
   trigger_element: '#uploadElement', 
   file_element: '#uploadEvidence',
-  file_options: {resize: '500xauto'}
+  // file_options: {resize: '500xauto'}
 });
 upload.callback = function(result) {
   result.forEach(function(element) {
@@ -370,7 +370,7 @@ upload.callback = function(result) {
 var uploadAfter = new AjaxUploadFile({
   trigger_element: '#uploadElementAfter', 
   file_element: '#uploadEvidenceAfter',
-  file_options: {resize: '500xauto'}
+  // file_options: {resize: '500xauto'}
 });
 uploadAfter.callback = function(result) {
   result.forEach(function(element) {
