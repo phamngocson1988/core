@@ -23,6 +23,8 @@ class CreateWithdrawRequestForm extends Model
     protected $_available;
     protected $_supplierBank;
 
+    const LIMIT_REQUEST_PER_DAY = 2;
+
     public function init() 
     {
         $supplierBank = $this->getSupplierBank();
@@ -40,6 +42,7 @@ class CreateWithdrawRequestForm extends Model
                 return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
             }],
             ['amount', 'validateAmount'],
+            ['amount', 'validateNumberRequest'],
             ['bank_id', 'validateBank']
         ];
     }
@@ -49,6 +52,19 @@ class CreateWithdrawRequestForm extends Model
         $available = $this->getAvailableAmount();
         if ($this->amount > $available) {
             $this->addError($attribute, sprintf('Bạn không thể yêu cầu rút số tiền nhiều hơn số dư khả dụng là %s', number_format($available)));
+        }
+    }
+
+    public function validateNumberRequest($attribute, $params = []) 
+    {
+        // get number of requests
+        $today = date('Y-m-d');
+        $count = SupplierWithdrawRequest::find()->where([
+            'supplier_id' => $this->supplier_id,
+            'date(created_at)' => $today
+        ])->count();
+        if ($count >= self::LIMIT_REQUEST_PER_DAY) {
+            $this->addError($attribute, sprintf('Bạn đã vượt quá giới hạn gửi yêu cầu rút tiền mỗi ngày là %s lần', self::LIMIT_REQUEST_PER_DAY));
         }
     }
 
