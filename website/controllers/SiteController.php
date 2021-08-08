@@ -106,7 +106,8 @@ class SiteController extends Controller
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
 
-        $model = new LoginForm();
+        $scenario = $request->post('scenario');
+        $model = new LoginForm(['scenario' => $scenario]);
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id]);
         } else {

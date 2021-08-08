@@ -66,9 +66,9 @@ class AccountNotification extends Notification
             'desktop' => [
                 self::NOTIFY_STAFF_NEW_ACCOUNT,
             ],
-            'email' => [
-                self::NOTIFY_STAFF_NEW_ACCOUNT,
-            ],
+            // 'email' => [
+            //     self::NOTIFY_STAFF_NEW_ACCOUNT,
+            // ],
 
         ];
     }

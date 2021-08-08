@@ -9,29 +9,30 @@ use website\forms\LoginForm;
 class LoginFormWidget extends Widget
 {
     public $formId = 'flash-login-form';
-    protected $url;
 
     public function run()
     {
-        $this->url = Url::to(['site/login'], true);
         $model = new LoginForm();
         $this->registerClientScript();
         return $this->render('login', [
             'model' => $model, 
             'id' => $this->formId,
-            'url' => $this->url,
+            'scenario' => LoginForm::SCENARIO_LOGIN
         ]);
     }
 
     protected function getScriptCode()
     {
         $id = $this->formId;
-        $url = $this->url;
+        $loginUrl = Url::to(['site/login'], true);
+        $loginScenario = LoginForm::SCENARIO_LOGIN;
+        $verifyScenario = LoginForm::SCENARIO_VERIFY;
         return "
 $('html').on('submit', 'form#flash-login-form', function() {
+    showLoader();
     var form = $(this);
     $.ajax({
-        url: '$url',
+        url: '$loginUrl',
         type: 'post',
         dataType : 'json',
         data: form.serialize(),
@@ -41,13 +42,29 @@ $('html').on('submit', 'form#flash-login-form', function() {
                 toastr.error(result.errors);
                 return false;
             } else {
-                location.reload();
+                let scenario = $('#scenario').val();
+                if (scenario === '$loginScenario') {
+                    $('#scenario').val('$verifyScenario');
+                    $('#securityCode').closest('div').attr('style', 'display:block');
+                    $('#username').attr('style', 'display:none');
+                    $('#password').attr('style', 'display:none');
+                    $('#rememberMe').attr('style', 'display:none');
+                    $('#submit').text('Verify');
+                } else {
+                    location.reload();
+                }
             }
         },
+        complete: hideLoader
     });
-            return false;
+    return false;
 });
 ";
+    }
+
+    protected function getCssCode()
+    {
+        return '.hint-block {color: #ffc107; margin-left: 10px;}';
     }
 
     protected function registerClientScript()
@@ -56,6 +73,8 @@ $('html').on('submit', 'form#flash-login-form', function() {
         $view = $this->getView();
         $js = $this->getScriptCode();
         $view->registerJs($js);
+        $css = $this->getCssCode();
+        $view->registerCss($css);
     }
 
 

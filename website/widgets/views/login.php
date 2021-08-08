@@ -28,11 +28,15 @@ use yii\helpers\Url;
         </ul>
         <div class="text-horizontal"><span>or</span></div>
         <?php $form = ActiveForm::begin(['id' => $id]); ?>
-          <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => 'Username', 'required' => 'required'])->label(false) ?>
-          <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'required' => 'required'])->label(false) ?>
+          <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'id' => 'username', 'placeholder' => 'Username', 'required' => 'required'])->label(false) ?>
+          <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'id' => 'password', 'required' => 'required'])->label(false) ?>
+          <?= $form->field($model, 'securityCode', ['options' => ['style' => 'display:none'], 'hintOptions' => ['class' => 'hint-block']])
+          ->textInput(['placeholder' => 'Verification Code', 'id' => 'securityCode'])
+          ->hint('Verification code is sent to your email')
+          ->label(false) ?>
           <div class="d-flex bd-highlight">
           	<?=$form->field($model, 'rememberMe', [
-				      'options' => ['class' => 'form-check flex-fill'],
+				      'options' => ['class' => 'form-check flex-fill', 'id' => 'rememberMe'],
               'labelOptions' => ['class' => 'form-check-label'],
               'template' => '{input}{label}'
 				    ])->checkbox(['class' => 'form-check-input', 'style' => "margin-top:6px"], false);?>
@@ -41,8 +45,10 @@ use yii\helpers\Url;
               login?</a>
             </div>
           </div>
+          
+          <input type="hidden" id="scenario" name="scenario" value="<?=$scenario;?>" />
           <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase">Login</button>
+            <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase">Login</button>
           </div>
         <?php ActiveForm::end(); ?>
 
