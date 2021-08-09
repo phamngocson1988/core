@@ -69,6 +69,7 @@ class FetchConfirmedShopForm extends FetchShopForm
             "$supplierTable.order_id",
             "COUNT(*) as count",
             "SUM($supplierTable.quantity) as quantity",
+            "SUM($supplierTable.doing) as doing",
             "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.completed_at)) as completed_time",
             "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.requested_at, $supplierTable.approved_at)) as approved_time",
             "AVG(TIMESTAMPDIFF(MINUTE , $supplierTable.approved_at, $supplierTable.processing_at)) as login_time",

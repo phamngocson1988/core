@@ -149,7 +149,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <td col-tag="order_id"><?=number_format($summary['count']);?></td>
               <td col-tag="game_title"></td>
               <td col-tag="unit" class="center"></td>
-              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($summary['quantity'], 2);?></td>
+              <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($summary['doing'], 2);?></td>
               <td col-tag="approved_at"></td>
               <td col-tag="completed_time" class="center"><?=number_format($summary['completed_time']);?></td>
               <td col-tag="approved_time" class="center"><?=number_format($summary['approved_time']);?></td>
