@@ -169,8 +169,26 @@ function renderSummary() {
 }
 $('#bulk-cart').on('change', '.quantity-value', function() {  
   var form = $(this).closest('form.row-item-form');
+  standarizeQuantity(this);
   calculateCart(form);
 });
+function standarizeQuantity(ele) {
+  if (!validateQuantity(ele)) {
+    $(ele).val(1);
+  }
+}
+function validateQuantity(ele) {
+    var num = $(ele).val();
+    num = parseFloat(num);
+    $(ele).val(num);
+    if (num <= 0) {
+        return false;
+    }
+    if (isNaN(num)) {
+        return false;
+    }
+    return true;
+}
 $('#bulk-cart').on('click', '.trash', function() {
   var len = $('#bulk-cart').find('form.row-item-form').length;
   if (len > 1) {

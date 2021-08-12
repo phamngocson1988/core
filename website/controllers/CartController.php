@@ -190,7 +190,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function CartBulk($id) 
+    public function actionCalculateBulk($id) 
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);

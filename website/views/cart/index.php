@@ -214,8 +214,28 @@ function calculateCart() {
   });
 }
 $('#quantity').on('change', function() {  
+  standarizeQuantity();
   calculateCart();
 });
+
+function standarizeQuantity() {
+  if (!validateQuantity()) {
+    $('#quantity').val(1);
+  }
+}
+
+function validateQuantity() {
+    var num = $("#quantity").val();
+    num = parseFloat(num);
+    $('#quantity').val(num);
+    if (num <= 0) {
+        return false;
+    }
+    if (isNaN(num)) {
+        return false;
+    }
+    return true;
+}
 
 $('form#update-cart-form').on('submit', function() {
   if (!$('#policy1').is(':checked') || !$('#policy2').is(':checked')) {
