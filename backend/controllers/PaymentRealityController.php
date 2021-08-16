@@ -42,6 +42,7 @@ class PaymentRealityController extends Controller
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
             'paygate' => $request->get('paygate'),
+            'confirmed_by' => $request->get('confirmed_by'),
         ];
         $search = new \backend\forms\FetchPaymentRealityForm($condition);
         $mode = $request->get('mode');
@@ -54,7 +55,43 @@ class PaymentRealityController extends Controller
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->all();
+        $deleteForm = new \backend\forms\DeletePaymentRealityForm();
         return $this->render('index', [
+            'search' => $search,
+            'models' => $models,
+            'pages' => $pages,
+            'deleteForm' => $deleteForm
+        ]);
+    }
+
+    public function actionDeletedItems()
+    {
+        $this->view->params['main_menu_active'] = 'payment_reality.index';
+        $request = Yii::$app->request;
+        $condition = [
+            'id' => $request->get('id'),
+            'object_key' => $request->get('object_key'),
+            'customer_id' => $request->get('customer_id'),
+            'payment_id' => $request->get('payment_id'),
+            'payer' => $request->get('payer'),
+            'date_type' => $request->get('date_type'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'paygate' => $request->get('paygate'),
+        ];
+        $condition['status'] = \common\models\PaymentReality::STATUS_DELETED;
+        $search = new \backend\forms\FetchPaymentRealityForm($condition);
+        $mode = $request->get('mode');
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'hoa-don-nhan-tien.xls';
+            return $search->export($fileName);
+        }
+        $command = $search->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+        return $this->render('deleted', [
             'search' => $search,
             'models' => $models,
             'pages' => $pages
@@ -85,7 +122,7 @@ class PaymentRealityController extends Controller
     {
         $request = Yii::$app->request;
         $model = new \backend\forms\DeletePaymentRealityForm(['id' => $id]);
-        if ($model->delete()) {
+        if ($model->load($request->post()) && $model->delete()) {
             return $this->asJson(['status' => true]);
         } else {
             return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);

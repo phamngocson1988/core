@@ -151,12 +151,13 @@ function renderSummary() {
 
   $.each(prices, function( index, pItem ) {
     var q = $(pItem).html();
+    q=q.replace(/\,/g,'');
     if (isNaN(q)) q = 0;
     price += parseFloat(q);
   });
 
   $('.summary-quantity').html(quantity);
-  $('.summary-price').html('$' + price);
+  $('.summary-price').html('$' + formatMoney(price));
   $('.summary-total-order').html(items.length);
 
   // Check wallet
@@ -167,6 +168,8 @@ function renderSummary() {
     $('#checkout-button').show();
   }
 }
+
+
 $('#bulk-cart').on('change', '.quantity-value', function() {  
   var form = $(this).closest('form.row-item-form');
   standarizeQuantity(this);

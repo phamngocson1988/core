@@ -8,7 +8,7 @@ use common\models\PaymentReality;
 class DeletePaymentRealityForm extends ActionForm
 {
     public $id;
-
+    public $deleted_note;
     protected $_payment;
 
     /**
@@ -18,7 +18,9 @@ class DeletePaymentRealityForm extends ActionForm
     {
         return [
             ['id', 'required'],
-            ['id', 'validatePayment']
+            ['id', 'validatePayment'],
+            ['deleted_note', 'trim'],
+            ['deleted_note', 'required']
         ];
     }
 
@@ -30,6 +32,10 @@ class DeletePaymentRealityForm extends ActionForm
         }
         if ($payment->isClaimed()) {
             return $this->addError($attribute, 'Giao dịch này đã được duyệt nên không thể bị xoá');
+        }
+
+        if ($payment->isDeleted()) {
+            return $this->addError($attribute, 'Giao dịch này đã bị xoá trước đó');
         }
     }
 
@@ -45,7 +51,12 @@ class DeletePaymentRealityForm extends ActionForm
     {
         if (!$this->validate()) return false;
         $payment = $this->getPayment();
-        return $payment->delete();
+        $payment->status = PaymentReality::STATUS_DELETED;
+        $payment->deleted_note = $this->deleted_note;
+        $payment->deleted_by = Yii::$app->user->id;
+        $payment->deleted_at = date('Y-m-d h:i:s');
+        return $payment->save();
     }
+
 
 }

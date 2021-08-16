@@ -14,6 +14,13 @@ function initDatePicker() {
         disableTouchKeyboard: true,
     });
 }
+// function numberWithCommas(x) {
+//     x = x.toString();
+//     var pattern = /(-?\d+)(\d{3})/;
+//     while (pattern.test(x))
+//         x = x.replace(pattern, "$1,$2");
+//     return x;
+// }
 function formatMoney(n, c, d, t) {
   var c = isNaN(c = Math.abs(c)) ? 2 : c,
     d = d == undefined ? "." : d,

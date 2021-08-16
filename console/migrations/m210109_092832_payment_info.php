@@ -42,6 +42,9 @@ class m210109_092832_payment_info extends Migration
             'created_by' => $this->integer(),
             'updated_at' => $this->dateTime(),
             'updated_by' => $this->integer(),
+            'deleted_at' => $this->dateTime(),
+            'deleted_by' => $this->integer(),
+            'deleted_note' => $this->string(255),
         ], $tableOptions);
 
         // creates index for column `object_name`

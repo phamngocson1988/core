@@ -23,13 +23,13 @@ $now = date('Y-m-d H:i:s');
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Giao dịch nạp tiền</span>
+      <span>Giao dịch nạp tiền đã bị xoá</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Giao dịch nạp tiền</h1>
+<h1 class="page-title">Giao dịch nạp tiền đã bị xoá</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -38,18 +38,11 @@ $now = date('Y-m-d H:i:s');
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Giao dịch nạp tiền</span>
-        </div>
-        <div class="actions">
-          <div class="btn-group btn-group-devided">
-            <a class="btn default" href="<?=Url::to(['payment-reality/deleted-items']);?>">Xem thùng rác</a>
-            <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
-            <a class="btn green" href="<?=Url::to(['payment-reality/create']);?>"><?=Yii::t('app', 'add_new');?></a>
-          </div>
+          <span class="caption-subject bold uppercase"> Giao dịch nạp tiền đã bị xoá</span>
         </div>
       </div>
       <div class="portlet-body">
-        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['payment-reality/index']]);?>
+        <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['payment-reality/deleted-items']]);?>
           <div class="row margin-bottom-10">
             <?=$form->field($search, 'id', [
               'options' => ['class' => 'form-group col-xs-12 col-sm-6 col-md-2 col-lg-1 col-xl-1'],
@@ -87,16 +80,6 @@ $now = date('Y-m-d H:i:s');
               'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'payment_id']
             ])->textInput()->label('Mã tham chiếu người nhận');?>
-
-            <?=$form->field($search, 'status', [
-              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
-              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'status']
-            ])->dropDownList($search->fetchStatus(), ['prompt' => 'Chọn trạng thái'])->label('Trạng thái');?>
-
-            <?=$form->field($search, 'confirmed_by', [
-              'options' => ['class' => 'form-group col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2'],
-              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'confirmed_by']
-            ])->dropDownList($search->fetchStaffs(), ['prompt' => 'Chọn người xác nhận'])->label('Người xác nhận');?>
           </div>
           <div class="row margin-bottom-10">
             <?=$form->field($search, 'paygate', [
@@ -157,27 +140,25 @@ $now = date('Y-m-d H:i:s');
                 <th col-tag="object_name">Kcoin/Shop Game</th>
                 <th col-tag="object_created_at">Ngày tạo đơn</th>
                 <th col-tag="created_at">Ngày cập nhật</th>
-                <th col-tag="confirmed_at">Ngày duyệt</th>
                 <th col-tag="payment_time">Ngày nhận hoá đơn</th>
                 <th col-tag="waiting_time">TG chờ cập nhật hoá đơn</th>
-                <th col-tag="confirmed_time">TG chờ duyệt</th>
                 <th col-tag="paygate">Cổng thanh toán</th>
                 <th col-tag="payer">TK người gửi</th>
                 <th col-tag="payment_id">Mã tham chiếu người nhận</th>
                 <th col-tag="payment_note">Ghi chú từ khách hàng</th>
                 <th col-tag="kingcoin">Thực nhận (Kcoin)</th>
                 <th col-tag="created_by">Người nhập</th>
-                <th col-tag="confirmed_by">Người duyệt</th>
+                <th col-tag="deleted_by">Người xoá</th>
+                <th col-tag="deleted_note">Lý do xoá</th>
                 <th col-tag="object_file">Hoá đơn người gửi</th>
                 <th col-tag="file">Hoá đơn người nhận</th>
                 <th col-tag="payment_note">Ghi chú nhận tiền</th>
                 <th col-tag="status">Trạng thái</th>
-                <th col-tag="action">Tác vụ</th>
               </tr>
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="22" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="20" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <?php $object = $model->object;?>
@@ -213,7 +194,6 @@ $now = date('Y-m-d H:i:s');
                 </td>
                 <td col-tag="object_created_at"><?=$object ? $object->created_at : '--';?></td>
                 <td col-tag="created_at"><?=$model->created_at;?></td>
-                <td col-tag="confirmed_at"><?=$model->confirmed_at ? $model->confirmed_at : '--';?></td>
                 <td col-tag="payment_time"><?=$model->payment_time;?></td>
                 <td col-tag="waiting_time">
                 <?php 
@@ -224,16 +204,6 @@ $now = date('Y-m-d H:i:s');
                 }
                 ?>
                 </td>
-                <td col-tag="confirmed_time">
-                <?php
-                if ($model->isPending()) {
-                  echo round(TimeHelper::timeDiff($model->created_at, $now, 'minute'));
-                } elseif ($model->isClaimed()) {
-                  echo round(TimeHelper::timeDiff($model->created_at, $model->confirmed_at, 'minute'));
-                } else {
-                  echo '--';
-                }
-                ?>
                 </td>
                 <td col-tag="paygate"><?=$model->paygate;?></td>
                 <td col-tag="payer"><?=$model->payer;?></td>
@@ -241,34 +211,21 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="payment_note"><?=nl2br($model->payment_note);?></td>
                 <td col-tag="kingcoin"><?=$model->kingcoin;?></td>
                 <td col-tag="created_by"><?=$model->payment_type === PaymentReality::PAYMENTTYPE_OFFLINE ? $model->creator->name : 'Cổng thanh toán ONLINE';?></td>
-                <td col-tag="confirmed_by">
+                <td col-tag="deleted_by">
                 <?php
-                if ($model->payment_type === PaymentReality::PAYMENTTYPE_OFFLINE) {
-                  if ($model->isClaimed()) echo $model->confirmer->name;
-                  else echo '--';
-                } else { 
-                  echo 'Cổng thanh toán ONLINE';
+                if ($model->deletedBy) {
+                  echo $model->deletedBy->name;
+                } else {
+                  echo '--';
                 }
                 ?>
                 </td>
+                <td col-tag="deleted_note"><?=nl2br($model->deleted_note);?></td>
                 <td col-tag="object_evidence"><?=($object && $object->evidence) ? Html::a('Xem', $object->evidence, ['class' => 'fancybox']) : '--';?></td>
                 <td col-tag="evidence"><?=$model->evidence ? Html::a('Xem', $model->evidence, ['class' => 'fancybox', 'data-fancybox' => 'group' . $model->getId()]) : '--';?></td>
                 <td col-tag="payment_note"><?=nl2br($model->note);?></td>
                 <td col-tag="status">
-                  <?php if ($model->isPending()) : ?>
-                  <span class="label label-info">Pending</span>
-                  <?php elseif ($model->isClaimed()) : ?>
-                  <span class="label label-default">Claimed</span>
-                  <?php elseif ($model->isDeleted()) : ?>
                   <span class="label label-default">Deleted</span>
-                  <?php endif;?>
-                </td>
-                <td col-tag="action">
-                <?php if (Yii::$app->user->cans(['sale_manager', 'accounting'])) :?>
-                  <?php if ($model->isPending()) :?>
-                  <a class="btn btn-xs red tooltips" href='#delete-reality-modal-<?=$model->id;?>' data-container="body" data-original-title="Cho vào thùng rác" data-toggle="modal"><i class="fa fa-trash"></i></a>
-                  <?php endif;?>
-                <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -281,65 +238,8 @@ $now = date('Y-m-d H:i:s');
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-
-<!-- Models confirm delete --> 
-<?php if (Yii::$app->user->cans(['sale_manager', 'accounting'])) :?>
-<?php foreach ($models as $model) :?>
-<?php if ($model->isPending()) :?>
-<div class="modal fade" id="delete-reality-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Xoá hoá đơn số (<?=$model->getId();?>)</h4>
-      </div>
-      <?php $form = ActiveForm::begin([
-        'options' => ['class' => 'delete-reality-form'], 
-        'action' => Url::to(['payment-reality/delete', 'id' => $model->id])
-      ]);?>
-      <div class="modal-body"> 
-        <div class="row">
-            <?=$form->field($deleteForm, 'deleted_note', [
-              'options' => ['class' => 'form-group col-md-12 col-lg-12'],
-            ])->textArea()->label('Lý do xoá');?>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Xoá</button>
-        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-      </div>
-      <?php ActiveForm::end()?>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-<?php endif;?>
-<?php endforeach;?>
-<?php endif;?>
-<!-- End confirm delete --> 
 <?php
 $script = <<< JS
-$(document).on('submit', 'body .delete-reality-form', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  form.unbind('submit');
-  $.ajax({
-    url: form.attr('action'),
-    type: form.attr('method'),
-    dataType : 'json',
-    data: form.serialize(),
-    success: function (result, textStatus, jqXHR) {
-      if (!result.status)
-       toastr.error(result.errors);
-      else 
-        location.reload();
-    },
-  });
-  return false;
-});
-
 $(".fancybox").fancybox();
 JS;
 $this->registerJs($script);

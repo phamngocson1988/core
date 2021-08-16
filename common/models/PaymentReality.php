@@ -122,6 +122,11 @@ class PaymentReality extends ActiveRecord implements PaymentRealityInterface
     {
         return $this->hasOne(PaymentCommitment::className(), ['id' => 'payment_commitment_id']);
     }
+
+    public function getDeletedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'deleted_by']);
+    }
 }
 
 class PaymentRealityQuery extends ActiveQuery

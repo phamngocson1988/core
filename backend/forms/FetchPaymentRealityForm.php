@@ -9,6 +9,7 @@ use common\models\PaymentReality;
 use common\components\helpers\TimeHelper;
 use common\components\helpers\StringHelper;
 use common\models\Paygate;
+use common\models\User;
 
 class FetchPaymentRealityForm extends Model
 {
@@ -22,6 +23,7 @@ class FetchPaymentRealityForm extends Model
     public $start_date;
     public $end_date;
     public $paygate;
+    public $confirmed_by;
 
     private $_command;
 
@@ -43,6 +45,7 @@ class FetchPaymentRealityForm extends Model
             'payment_id' => $this->payment_id,
             'status' => $this->status,
             'paygate' => $this->paygate,
+            'confirmed_by' => $this->confirmed_by,
         ];
         $condition = array_filter($condition);
         if (count($condition)) {
@@ -50,6 +53,9 @@ class FetchPaymentRealityForm extends Model
         }
         if ($this->payer) {
             $command->andWhere(['like', 'payer', $this->payer]);
+        }
+        if (!$this->status) {
+            $command->andWhere(['<>', 'status', PaymentReality::STATUS_DELETED]);
         }
 
         if ($this->date_type) {
@@ -94,6 +100,21 @@ class FetchPaymentRealityForm extends Model
             PaymentReality::STATUS_PENDING => 'Pending',
             PaymentReality::STATUS_CLAIMED => 'Claimed',
         ];
+    }
+
+    public function fetchStaffs()
+    {
+        $staffRoles = ['admin', 'sale_manager', 'accounting'];
+        $staffIds = [];
+        foreach ($staffRoles as $role) {
+            $userIds = Yii::$app->authManager->getUserIdsByRole($role);
+            $staffIds = $staffIds + $userIds;
+        }
+        $staffIds = array_unique($staffIds);
+        $staffs = User::findAll($staffIds);
+        return ArrayHelper::map($staffs, 'id', function ($obj) {
+            return sprintf('%s - %s', $obj->getName(), $obj->email);
+        });
     }
 
     public function fetchPaygate()
