@@ -61,7 +61,8 @@ class CreateWithdrawRequestForm extends Model
         $today = date('Y-m-d');
         $count = SupplierWithdrawRequest::find()->where([
             'supplier_id' => $this->supplier_id,
-            'date(created_at)' => $today
+            'date(created_at)' => $today,
+            'status' => [SupplierWithdrawRequest::STATUS_REQUEST, SupplierWithdrawRequest::STATUS_APPROVE]
         ])->count();
         if ($count >= self::LIMIT_REQUEST_PER_DAY) {
             $this->addError($attribute, sprintf('Bạn đã vượt quá giới hạn gửi yêu cầu rút tiền mỗi ngày là %s lần', self::LIMIT_REQUEST_PER_DAY));

@@ -34,8 +34,19 @@ class CreatePaymentRealityForm extends ActionForm
             [['paygate', 'payer', 'payment_id', 'payment_note', 'total_amount', 'currency', 'note', 'evidence'], 'trim'],
             [['paygate', 'payer', 'payment_time', 'payment_id', 'total_amount', 'currency'], 'required'],
             ['currency', 'in', 'range' => $currencyCodes],
-            ['payment_id', 'unique', 'targetClass' => PaymentReality::className(), 'message' => 'Mã nhận tiền này đã được sử dụng'],
+            ['payment_id', 'validatePaymentId'],
         ];
+    }
+
+    public function validatePaymentId($attribute, $params) 
+    {
+        $count = PaymentReality::find()->where([
+            'payment_id' => $this->payment_id,
+            'status' => [PaymentReality::STATUS_PENDING, PaymentReality::STATUS_CLAIMED]
+        ])->count();
+        if ($count) {
+            $this->addError($attribute, 'Mã nhận tiền này đã được sử dụng');
+        }
     }
 
     public function create()

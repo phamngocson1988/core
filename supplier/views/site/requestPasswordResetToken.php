@@ -1,50 +1,23 @@
-<?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+<?php 
+use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-
 $this->title = 'Forgot password';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-
-<section class="page-title" id="page-title">
-  <div class="container">
-    <div class="row">
-      <div class="col col-sm-12">
-        <div class="page-title-content text-center pad-bot">
-          <img src="/images/text-register.png" alt="">
-          <p>Forgot password</p>
-        </div>
-      </div>
-    </div>
+<!-- BEGIN LOGIN FORM -->
+<?php $form = ActiveForm::begin(['id' => 'login-form', 'class' => 'login-form']); ?>
+  <h3 class="form-title font-green">Quên mật khẩu</h3>
+  <div class="alert alert-danger display-hide">
+    <button class="close" data-close="alert"></button>
+    <span> {Yii::t('app', 'enter_username_and_password')} </span>
   </div>
-</section>
-
-<section class="register-page">
-  <div class="container">
-    <div class="small-container">
-      <div class="row">
-        <div class="col col-12 col-lg-7 col-md-7 col-sm-12">
-          <div class="register-block">
-            <?php $form = ActiveForm::begin(['id' => 'form-login', 'options' => ['autocomplete' => 'off']]); ?>
-              <p>We will send an email to you.</p>
-              <?= $form->field($model, 'email', [
-                'template' => '{input}{label}{error}',
-                'options' => ['class' => 'form-group t-input'],
-                'labelOptions' => ['class' => 'placeholder'],
-                'inputOptions' => ['placeholder' => ' ']
-              ])->textInput()->label('Email <span class="required">*</span>') ?>
-              <div class="register-action">
-                <button type="submit" class="cus-btn yellow has-shadow">Send</button>
-              </div>
-            <?php ActiveForm::end(); ?>
-          </div>
-        </div>
-        <div class="col col-12 col-lg-1 col-md-1 col-sm-12"></div>
-        <div class="col col-12 col-lg-4 col-md-4 col-sm-12">
-          <?php echo $this->render('@frontend/views/site/_reg_deposit.php');?>
-        </div>
-      </div>
-    </div>
+  <?= $form->field($model, 'email', [
+    'labelOptions' => ['class' => 'control-label visible-ie8 visible-ie9'],
+    'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'autofocus' => true, 'placeholder' => Yii::t('app', 'email')]
+  ])->textInput();?>
+  
+  <div class="form-actions" style="display:flex; justify-content: center;">
+    <button type="submit" class="btn green uppercase">Submit</button>
   </div>
-</section>
+  <a href="<?=Url::to(['site/login']);?>">Trở lại đăng nhập</a>
+<?php ActiveForm::end(); ?>
+<!-- END LOGIN FORM -->

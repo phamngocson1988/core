@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use backend\models\Paygate;
 use yii\helpers\ArrayHelper;
-use common\models\Currency;
+use common\models\CurrencySetting;
 
 class EditPaygateForm extends Model
 {
@@ -89,8 +89,8 @@ class EditPaygateForm extends Model
 
     public function fetchCurrency()
     {
-        $models = Currency::fetchAll();
-        return ArrayHelper::map($models, 'name', 'name');
+        $models = CurrencySetting::find()->all();
+        return ArrayHelper::map($models, 'code', 'name');
     }
 
     public function fetchStatus()

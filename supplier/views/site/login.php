@@ -1,5 +1,6 @@
 <?php 
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 ?>
 <!-- BEGIN LOGIN FORM -->
 <?php $form = ActiveForm::begin(['id' => 'login-form', 'class' => 'login-form']); ?>
@@ -17,7 +18,7 @@ use yii\widgets\ActiveForm;
     'inputOptions' => ['class' => 'form-control form-control-solid placeholder-no-fix', 'autocomplete' => 'off', 'placeholder' => Yii::t('app', 'password')]
   ])->passwordInput();?>
   
-  <div class="form-actions">
+  <div class="form-actions" style="display:flex; justify-content: center;">
     <button type="submit" class="btn green uppercase">Submit</button>
     <?=$form->field($model, 'rememberMe', [
       'options' => ['tag' => false]
@@ -26,5 +27,6 @@ use yii\widgets\ActiveForm;
       'labelOptions' => ['class' => 'rememberme check mt-checkbox mt-checkbox-outline']
     ]);?>
   </div>
+  <a href="<?=Url::to(['site/request-password-reset']);?>">Quên mật khẩu</a>
 <?php ActiveForm::end(); ?>
 <!-- END LOGIN FORM -->
