@@ -148,7 +148,7 @@ class UserController extends Controller
             }
         }
 
-        return $this->render('create.tpl', [
+        return $this->render('create', [
             'model' => $model,
             'roles' => $roles,
             'back' => $request->get('ref', Url::to(['user/index']))
@@ -174,7 +174,7 @@ class UserController extends Controller
             $model->loadData();
         }
 
-        return $this->render('edit.tpl', [
+        return $this->render('edit', [
             'model' => $model,
             'roles' => $roles,
             'back' => $request->get('ref', Url::to(['user/index']))

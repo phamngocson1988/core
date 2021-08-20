@@ -100,7 +100,7 @@ use yii\web\JsExpression;
                   <td><?=$model->user->phone;?></td>
                   <td><?=number_format($model->walletTotal());?></td>
                   <td>
-                    <?php if (Yii::$app->user->can('admin')) : ?>
+                    <?php if (Yii::$app->user->can('orderteam_manager')) : ?>
                     <a class="btn btn-sm purple tooltips" target="_blank" href="<?=Url::to(['supplier/edit', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                     <?php endif;?>
                     <?php if (Yii::$app->user->can('accounting')) : ?>

@@ -29,7 +29,7 @@ class WalletPaymentForm extends Model
         return [
             [['quantity', 'paygate'], 'required'],
             [['voucher'], 'trim'],
-            ['quantity', 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
+            ['quantity', 'compare', 'compareValue' => 0, 'operator' => '>', 'type' => 'number'],
             ['paygate', 'validatePaygate'],
             ['voucher', 'validateVoucher']
         ];

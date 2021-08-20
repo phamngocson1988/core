@@ -105,9 +105,7 @@ class EditSupplierForm extends BaseSignupForm
 			if (!$this->validate()) {
 	            return false;
 	        }
-	        
 	        $user = $this->getUser();
-            // $user->setScenario(User::SCENARIO_EDIT);
             $user->name = $this->name;        
 	        $user->email = $this->email;        
             $user->phone = $this->phone;
@@ -121,12 +119,10 @@ class EditSupplierForm extends BaseSignupForm
 	        $user->save();
 	        
             $supplier = $this->getSupplier();
-            // $supplier->setScenario(Supplier::SCENARIO_EDIT);
             $supplier->password = $this->advance_password;
             $supplier->save();
 
    			$transaction->commit();
-			// $this->sendEmail();
             Yii::$app->syslog->log('edit_supplier', 'edit new supplier', $user);
 			return $user;
 		} catch (\Exception $e) {

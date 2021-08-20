@@ -77,7 +77,7 @@ class SupplierController extends Controller
             }
         }
 
-        return $this->render('create.tpl', [
+        return $this->render('create', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['user/index']))
         ]);
@@ -100,7 +100,7 @@ class SupplierController extends Controller
             $model->loadData();
         }
 
-        return $this->render('edit.tpl', [
+        return $this->render('edit', [
             'model' => $model,
             'back' => $request->get('ref', Url::to(['user/index']))
         ]);
