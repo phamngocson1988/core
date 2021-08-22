@@ -20,4 +20,7 @@ use yii\helpers\Url;
   <li <?php if ($tab == 'event') echo 'class="active"' ;?> >
     <a href="<?=Url::to(['setting/event']);?>">Sự kiện</a>
   </li>
+  <li <?php if ($tab == 'import') echo 'class="active"' ;?> >
+    <a href="<?=Url::to(['setting/import']);?>">Mẫu import</a>
+  </li>
 </ul>

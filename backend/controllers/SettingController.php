@@ -86,7 +86,7 @@ class SettingController extends Controller
                 'class' => SettingsAction::class,
                 'modelClass' => ImportSettingForm::class,
                 'view' => 'import.tpl',
-                'layoutParams' => ['main_menu_active' => 'setting.import']
+                'layoutParams' => ['main_menu_active' => 'setting.application']
             ],
             'paypal' => [
                 'class' => SettingsAction::class,

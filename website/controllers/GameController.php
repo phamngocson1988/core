@@ -201,6 +201,21 @@ class GameController extends Controller
     public function actionQuick($id, $slug)
     {
         $request = Yii::$app->request;
+        $initData = [];
+        if ($request->isPost) {
+            $file = \yii\web\UploadedFile::getInstanceByName('excel');
+            $objPHPExcel = \PHPExcel_IOFactory::load($file->tempName);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            foreach ($sheetData as $rowIndex => $row) {
+                if ($rowIndex >= 5 && $row['C'] && $row['D']) {
+                    $content = [$row['D'], $row['C']];
+                    $initData[] = $content;
+                }
+            }
+            
+        } else {
+            $initData[] = [1, ''];
+        }
         $model = CartItem::findOne($id);
         $versions = GameSetting::fetchVersion();
         $packages = GameSetting::fetchPackage();
@@ -213,6 +228,7 @@ class GameController extends Controller
             'version' => $version,
             'package' => $package,
             'balance' => $balance,
+            'initData' => array_filter($initData)
         ]);
     }
 }

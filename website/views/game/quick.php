@@ -1,19 +1,35 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 $calculateUrl = Url::to(['cart/calculate-bulk', 'id' => $model->id]);
 $addCartUrl = Url::to(['cart/bulk', 'id' => $model->id]);
 $orderLink = Url::to(['order/index']);
+$templateFile = Yii::$app->settings->get('ImportSettingForm', 'import_reseller_template');
 ?>
 <div class="container my-5 single-order">
   <div class="row">
     <div class="col-md-12">
       <h1 class="text-uppercase text-red">Quick buy For "<?=$model->title;?>"</h1>
     </div>
+    <?= Html::beginForm(['game/quick', 'id' => $model->id, 'slug' => $model->slug], 'POST', ['enctype' => 'multipart/form-data']); ?>
+    <?=Html::fileInput('excel', null, ['accept' => '.xlsx', 'style' => 'display: none', 'id' => 'upload-excel-input']);?>
+    <?= Html::endForm(); ?>
     <div class="col-md-12" id="bulk-cart">
-      <p class="lead mb-2">Your cart</p>
-      <hr/>
+      <div style="display:flex; justify-content: space-between;">
+        <p class="lead mb-2">Your cart</p>
+        <div>
+          <a href="<?=$templateFile;?>" class="btn btn-primary" role="button" aria-pressed="true">
+            <img class="icon-btn" src="/images/icon/more.svg"/> Download
+          </a>
+          <button type="button" class="btn btn-green" id="upload-excel-button">
+            <img class="icon-btn" src="/images/icon/more.svg"/> Upload
+          </button>
+        </div>
+      </div>
+    <hr/>
       <!-- ORDER ITEM -->
+      <?php foreach ($initData as $data) : ?>
       <?php $form = ActiveForm::begin(['action' => $addCartUrl, 'options' => ['class' => 'row-item-form']]);?>
       <div class="order-item mb-3 d-flex justify-content-between align-items-center">
         <img class="thumb flex-fill mr-3" src="<?=$model->getImageUrl('150x150');?>" />
@@ -25,8 +41,8 @@ $orderLink = Url::to(['order/index']);
         <div class="flex-fill w-100">
           <div class="d-flex justify-content-between align-items-center">
             <div class="flex-fill w-100 p-2">
-              <p class="m-0 text-red font-weight-bold"><strike>$<span class="game-original-price"><?=number_format($model->getOriginalPrice());?></span></strike></p>
-              <p class="m-0 text-red font-weight-bold">$<span class="game-price"><?=number_format($model->getPrice());?></span></p>
+              <p class="m-0 text-red font-weight-bold"><strike>$<span class="game-original-price"><?=number_format($model->getOriginalPrice() * (int)$data[0]);?></span></strike></p>
+              <p class="m-0 text-red font-weight-bold">$<span class="game-price"><?=number_format($model->getPrice() * (int)$data[0]);?></span></p>
             </div>
             <div class="flex-fill w-100">
               <div class="add-quantity d-flex justify-content-between align-items-center">
@@ -36,7 +52,7 @@ $orderLink = Url::to(['order/index']);
                 <?= $form->field($model, 'quantity', [
                   'options' => ['tag' => false],
                   'template' => '{input}',
-                  'inputOptions' => ['class' => 'quantity-value flex-fill text-center', 'name' => 'quantity']
+                  'inputOptions' => ['class' => 'quantity-value flex-fill text-center', 'name' => 'quantity', 'value' => $data[0]]
                 ])->textInput()->label(false) ?>
                 <span class="flex-fill plus">
                   <img class="icon-sm" src="/images/icon/plus.svg"/>
@@ -51,10 +67,11 @@ $orderLink = Url::to(['order/index']);
         <?= $form->field($model, 'raw', [
           'options' => ['class' => 'flex-fill w-100'],
           'template' => '{label}{input}',
-          'inputOptions' => ['class' => 'form-control raw', 'rows' => '3', 'placeholder' => 'Enter infomation here ...', 'name' => 'raw']
+          'inputOptions' => ['class' => 'form-control raw', 'rows' => '3', 'placeholder' => 'Enter infomation here ...', 'name' => 'raw', 'value' => $data[1]]
         ])->textArea() ?>
       </div><!-- END ORDER ITEM -->
       <?php ActiveForm::end(); ?>
+      <?php endforeach; ?>
     </div>
     <div class="col-md-12 text-right">
       <button type="button" class="btn btn-red" id="add-row">
@@ -273,7 +290,14 @@ $('#checkout-button').on('click', function(e) {
   return false;
 });
 
-
+// Upload CSV
+$('#upload-excel-button').click(function() {
+  console.log('click');
+  $('#upload-excel-input').trigger('click');
+});
+$('#upload-excel-input').on('change', function() {
+  $(this).closest('form').submit();
+});
 JS;
 $this->registerJs($script);
 ?>

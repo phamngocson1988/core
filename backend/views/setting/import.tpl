@@ -66,7 +66,7 @@ var csvUpload = new AjaxUploadFile({
 csvUpload.callback = function(result) {
   var file = result[0];
   console.log(file);
-  $('#csv_url').val(file.path);
+  $('#csv_url').val(file.src);
 }
 {/literal}
 {/registerJs}
