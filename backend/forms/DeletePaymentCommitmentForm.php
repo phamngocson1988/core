@@ -46,6 +46,8 @@ class DeletePaymentCommitmentForm extends ActionForm
     {
         if (!$this->validate()) return false;
         $commitment = $this->getCommitment();
+        $object = $commitment->object;
+        $object->delete();
         return $commitment->delete();
     }
 

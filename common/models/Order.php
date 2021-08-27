@@ -277,4 +277,10 @@ class Order extends ActiveRecord
         }
         return $content;
     }
+
+    public function delete()
+    {
+        $this->status = self::STATUS_DELETED;
+        return $this->save();
+    }
 }

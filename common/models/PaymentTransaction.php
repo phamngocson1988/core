@@ -98,4 +98,17 @@ class PaymentTransaction extends ActiveRecord
         }
         return $content;
     }
+
+    public function delete()
+    {
+        if ($this->isDeleted()) {
+            // If the object is marked as deleted, we will delete it from database
+            return parent::delete();
+        } else {
+            // If it is not marked as deleted, just set status to deleted
+            $this->status = self::STATUS_DELETED;
+            return $this->save();
+        }
+        
+    }
 }
