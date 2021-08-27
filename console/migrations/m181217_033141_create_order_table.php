@@ -91,6 +91,7 @@ class m181217_033141_create_order_table extends Migration
             'process_end_time' => $this->dateTime(),
             'process_duration_time' => $this->integer(11),
             'supplier_id' => $this->integer(11),
+            'order_from_sublink' => $this->boolean()->defaultValue(false),
             'reseller_id' => $this->integer(11),
         ]);//16868688
 

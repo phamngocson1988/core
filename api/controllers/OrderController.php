@@ -22,6 +22,7 @@ class OrderController extends Controller
                 'cancel' => ['post'],
                 'send-complain' => ['post'],
                 'list-complain' => ['get'],
+                'move-to-confirmed' => ['post'],
             ],
         ];
 	    return $behaviors;
@@ -91,5 +92,19 @@ class OrderController extends Controller
             ];
         }
         return ['status' => true, 'data' => $list];
+    }
+
+    public function actionMoveToConfirmed()
+    {
+        $request = Yii::$app->request;
+        $id = $request->post('id');
+        $model = new \api\forms\ConfirmOrderForm(['id' => $id]);
+        if ($model->save()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(false);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        }
     }
 }

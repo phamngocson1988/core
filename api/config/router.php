@@ -13,6 +13,7 @@ return [
         'order/cancel/<id:\d+>' => 'order/cancel',
         'order/send-complain/<id:\d+>' => 'order/send-complain',
         'order/list-complain/<id:\d+>' => 'order/list-complain',
+        'order/confirm' => 'order/move-to-confirmed',
         'checkout/<id:\d+>' => 'cart/checkout',
     ],
 ];
