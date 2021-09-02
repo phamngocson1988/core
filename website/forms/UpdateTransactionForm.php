@@ -59,8 +59,8 @@ class UpdateTransactionForm extends Model
 
         $commitment = PaymentCommitment::find()->where(['payment_id' => $this->payment_id])
         ->andWhere(['status' => [PaymentCommitment::STATUS_PENDING, PaymentCommitment::STATUS_APPROVED]])
-        ->exists();
-        if ($commitment) {
+        ->one();
+        if ($commitment && (!$commitment->isObjectWallet() || $commitment->object_key != $this->id)) {
             $this->addError($attribute, 'This payment id has been used.');
         }
     }

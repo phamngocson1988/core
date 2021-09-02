@@ -320,9 +320,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getWalletAmount()
     {
-        $wallets = $this->wallet;
-        $arr = ArrayHelper::getColumn($wallets, 'coin');
-        return array_sum($arr);
+        $command = $this->getWallet();
+        return $command->sum('coin');
     }
 
     public function getWalletTopupAmount()
