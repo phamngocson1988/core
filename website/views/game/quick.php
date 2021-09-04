@@ -163,8 +163,10 @@ function renderSummary() {
   $.each(items, function( index, item ) {
     var q = $(item).val();
     if (isNaN(q)) q = 0;
+    console.log('item', q, parseFloat(q));
     quantity += parseFloat(q);
   });
+  quantity = parseFloat(quantity).toFixed(2);
 
   $.each(prices, function( index, pItem ) {
     var q = $(pItem).html();

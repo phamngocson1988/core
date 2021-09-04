@@ -15,6 +15,7 @@ class ReportUserBalanceDetailForm extends Model
     public $end_date;
     public $user_id;
     public $type;
+    public $ref_key;
     private $_user;
 
     protected $_command;
@@ -25,10 +26,12 @@ class ReportUserBalanceDetailForm extends Model
         $condition = [
             "status" => UserWallet::STATUS_COMPLETED,
             "user_id" => $this->user_id,
+            "type" => $this->type,
+            "ref_key" => $this->ref_key,
         ];
         $condition = array_filter($condition);
         $command = UserWallet::find()
-        ->select(['id', 'description', 'type', 'updated_at', 'ref_name', 'payment_at', 'coin'])
+        ->select(['id', 'description', 'type', 'updated_at', 'ref_name', 'ref_key', 'payment_at', 'coin'])
         ->asArray()
         ->indexBy("id")
         ->orderBy(["updated_at" => SORT_DESC])
@@ -61,18 +64,6 @@ class ReportUserBalanceDetailForm extends Model
         return $this->_command;
     }
 
-    // public function getBeginningTotal()
-    // {
-    //     if (!$this->start_date) return 0;
-    //     $command = UserWallet::find()
-    //     ->where([
-    //         "status" => UserWallet::STATUS_COMPLETED,
-    //         "user_id" => $this->user_id
-    //     ])
-    //     ->andWhere(['<', "updated_at", $this->start_date]);
-    //     return $command->sum('coin');
-    // }
-
     public function getFinalTotal($dateTime)
     {
         $command = UserWallet::find()
@@ -89,8 +80,6 @@ class ReportUserBalanceDetailForm extends Model
         $command = $this->getCommand();
         $pages = $this->getPage();
         $data = $command->offset($pages->offset)->limit($pages->limit)->all();
-        // $beginningTotal = $this->getBeginningTotal();
-        // $balanceStart = $beginningTotal;
        
         if (!count($data)) return [];
         $firstRow = reset($data);
@@ -99,13 +88,9 @@ class ReportUserBalanceDetailForm extends Model
         foreach ($data as $key => &$row) {
             $row['balance_end'] = $balanceEnd;
             $row['balance_start'] = $balanceEnd - (float)$row['coin'];
-            // $balanceStart += (float)$row['coin'];
             $balanceEnd = $row['balance_start'];
         }
-        // echo '<pre>';
-        // print_r($periodTotal);die;
         return $data;
-        // income/outcome
     }
 
     public function getUser()
@@ -114,5 +99,13 @@ class ReportUserBalanceDetailForm extends Model
             $this->_user = User::findOne($this->user_id);
         }
         return $this->_user;
+    }
+
+    public function fetchType()
+    {
+        return [
+            UserWallet::TYPE_INPUT => "Nạp vào",
+            UserWallet::TYPE_OUTPUT => "Rút ra"
+        ];
     }
 }

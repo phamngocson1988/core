@@ -141,11 +141,14 @@ class ReportController extends Controller
         $start_date = $request->get('start_date');
         $end_date = $request->get('end_date');
         $type = $request->get('type', '');
+        $ref_key = $request->get('ref_key', '');
         $mode = $request->get('mode');
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
             'user_id' => $user_id,
+            'type' => $type,
+            'ref_key' => $ref_key,
         ];
         $form = new \backend\forms\ReportUserBalanceDetailForm($data);
         // if ($mode === 'export') {

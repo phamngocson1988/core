@@ -92,6 +92,16 @@ $user = $search->getUser();
                 ],
             ])->label('Ngày tạo đến');?>
 
+            <?=$form->field($search, 'ref_key', [
+              'options' => ['class' => 'form-group col-md-2 col-lg-1'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'ref_key']
+            ])->textInput()->label('Mã đơn hàng');?>
+
+            <?=$form->field($search, 'type', [
+              'options' => ['class' => 'form-group col-md-2 col-lg-1'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'type']
+            ])->dropDownList($search->fetchType(), ['prompt' => 'Chọn loại giao dịch'])->label('Loại giao dịch');?>
+
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
