@@ -83,7 +83,7 @@ class OrderController extends Controller
     {
         $form = new \api\forms\ListOrderComplainForm(['id' => $id]);
         $list = $form->fetch();
-        if (!$list) {
+        if ($list === false) {
             $message = $form->getFirstErrors();
             $message = reset($message);
             return [

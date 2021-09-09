@@ -40,7 +40,7 @@ class Order extends \common\models\Order
 			'server',
 			'note',
 			'login_method',
-            'order_from _sublink',
+            'order_from_sublink',
             'game' => function ($model) {
             	return $model->game;
             },
