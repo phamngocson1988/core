@@ -27,7 +27,6 @@ class ReportUserBalanceDetailForm extends Model
             "status" => UserWallet::STATUS_COMPLETED,
             "user_id" => $this->user_id,
             "type" => $this->type,
-            "ref_key" => $this->ref_key,
         ];
         $condition = array_filter($condition);
         $command = UserWallet::find()
@@ -43,6 +42,11 @@ class ReportUserBalanceDetailForm extends Model
         if ($this->end_date) {
             $command->andWhere(['<=', "updated_at", $this->end_date]);
         }
+
+        if ($this->ref_key) {
+            $command->andWhere(['like', 'description', $this->ref_key]);
+        }
+        // echo $command->createCommand()->getRawSql();die;
         return $command;
     }
 
