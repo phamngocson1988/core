@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\models\Game;
 use website\models\Promotion;
+use common\models\CurrencySetting;
 
 class CartItem extends Game implements CartItemInterface
 {
@@ -94,10 +95,11 @@ class CartItem extends Game implements CartItemInterface
 
     public function fetchCurrency()
     {
-        return [
-            'USD' => 'USD',
-            'CNY' => 'CNY',
-        ];
+        $models = CurrencySetting::find()
+        ->where(['status' => CurrencySetting::STATUS_ACTIVE])
+        ->orderBy(['is_fix' => SORT_DESC])
+        ->all();
+        return ArrayHelper::map($models, 'code', 'code');
     }
 
     public function getUnit() 

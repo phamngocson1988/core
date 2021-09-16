@@ -173,10 +173,10 @@ class CartController extends Controller
         $isOtherCurrency = $model->currency != 'USD';
         $otherCurrency = '';
         if ($isOtherCurrency) {
-            $usdCurrency = Currency::findOne('USD');
-            $otherCurrencyTotal = Currency::convertUSDToCurrency($model->getTotalPrice(), $model->currency);
-            $currencyModel = Currency::findOne($model->currency);
-            $otherCurrency = $currencyModel->addSymbolFormat(number_format($otherCurrencyTotal, 1));
+            $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+            $currencyModel = CurrencySetting::findOne(['code' => $model->currency]);
+            $otherCurrencyTotal = $usdCurrency->exchangeTo($model->getTotalPrice(), $currencyModel);
+            $otherCurrency = $currencyModel->showByFormat($otherCurrencyTotal);
         }
 
         return $this->render('checkout', [
