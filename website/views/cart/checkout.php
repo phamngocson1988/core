@@ -56,14 +56,16 @@ $user = Yii::$app->user->getIdentity();
             <div class="flex-fill w-100 text-right" id="fee">$0</div>
           </div>
           <hr />
-          <div class="d-flex mb-3">
+          <div class="d-flex mb-3" <?php if ($isOtherCurrency) : ?> style="margin-bottom: 0!important" <?php endif;?> >
             <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right" id="total">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?>
-              <?php if ($isOtherCurrency) : ?>
-              <br/><span>(<?=$otherCurrency;?>)</span>
-              <?php endif;?>
-            </div>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right" id="total">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
           </div>
+          <?php if ($isOtherCurrency) : ?>
+          <div class="d-flex mb-3">
+            <div class="flex-fill text-red font-weight-bold w-100 text-right" id="otherCurrency">(<?=$otherCurrency;?>)</div>
+          </div>
+          <?php endif;?>
+
           <button type="submit" id="checkout-button" class="btn btn-block btn-payment text-uppercase">Payment</button>
         </div>
       </div>
@@ -107,6 +109,12 @@ function ShowSummary(data) {
   $('#subTotal').html(data.subTotalPayment);
   $('#total').html(data.totalPayment);
   $('#fee').html(data.transferFee);
+  if (data.isOtherCurrency) {
+    $('#otherCurrency').show();
+    $('#otherCurrency').html('('+data.otherCurrency+')');
+  } else {
+    $('#otherCurrency').hide();
+  }
 }
 
 $( "input:radio" ).on('change', function(e) {

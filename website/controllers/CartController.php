@@ -138,13 +138,17 @@ class CartController extends Controller
             $subTotalPayment = $calculate['subTotalPayment'];
             $transferFee = $calculate['transferFee'];
             $totalPayment = $calculate['totalPayment'];
-            // $totalPayment = StringHelper::numberFormat($calculate['totalPayment'], 2);
             $paygate = $form->getPaygateConfig();
-            $currency = CurrencySetting::findOne(['code' => $paygate->currency]);
+            $currencyModel = CurrencySetting::findOne(['code' => $paygate->getCurrency()]);
+            $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+            $otherCurrencyTotal = $usdCurrency->exchangeTo($totalPayment, $currencyModel);
+            $otherCurrency = $currencyModel->showByFormat(StringHelper::numberFormat($otherCurrencyTotal, 2));
             $data = [
-                'subTotalPayment' => $currency->showByFormat(StringHelper::numberFormat($subTotalPayment, 2)),
-                'transferFee' => $currency->showByFormat(StringHelper::numberFormat($transferFee, 2)),
-                'totalPayment' => $currency->showByFormat($totalPayment),
+                'subTotalPayment' => $usdCurrency->showByFormat(StringHelper::numberFormat($subTotalPayment, 2)),
+                'transferFee' => $usdCurrency->showByFormat(StringHelper::numberFormat($transferFee, 2)),
+                'totalPayment' => $usdCurrency->showByFormat($totalPayment),
+                'otherCurrency' => $otherCurrency,
+                'isOtherCurrency' => $paygate->getCurrency() != 'USD'
             ];
             return $this->asJson(['status' => true, 'data' => $data]);
         } else {
@@ -176,7 +180,7 @@ class CartController extends Controller
             $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
             $currencyModel = CurrencySetting::findOne(['code' => $model->currency]);
             $otherCurrencyTotal = $usdCurrency->exchangeTo($model->getTotalPrice(), $currencyModel);
-            $otherCurrency = $currencyModel->showByFormat($otherCurrencyTotal);
+            $otherCurrency = $currencyModel->showByFormat(StringHelper::numberFormat($otherCurrencyTotal, 2));
         }
 
         return $this->render('checkout', [

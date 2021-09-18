@@ -1407,7 +1407,8 @@ input::placeholder {
 }
 
 .single-order .info .alert-danger {
-   background: #f95d5e;
+   /* background: #f95d5e; */
+   background-color: rgb(0 132 255);
    color: #f1f1f1;
    font-style: italic;
 }
