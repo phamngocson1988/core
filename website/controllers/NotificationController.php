@@ -16,6 +16,7 @@ class NotificationController extends DefaultController
         $list = (new Query())
             ->from('{{%notifications}}')
             ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
+            ->andWhere(['read' => 0])
             ->orderBy(['id' => SORT_DESC])
             ->limit(3)
             ->all();
@@ -67,6 +68,16 @@ class NotificationController extends DefaultController
     public function actionReadAll()
     {
         Yii::$app->getDb()->createCommand()->update('{{%notifications}}', ['read' => true, 'seen' => true])->execute();
+        if(Yii::$app->getRequest()->getIsAjax()){
+            return $this->ajaxResponse(1);
+        }
+        die('404');
+    }
+
+    public function actionRead($id)
+    {
+        Yii::$app->getDb()->createCommand()->update('{{%notifications}}', ['read' => true, 'seen' => true], ['id' => $id])->execute();
+
         if(Yii::$app->getRequest()->getIsAjax()){
             return $this->ajaxResponse(1);
         }

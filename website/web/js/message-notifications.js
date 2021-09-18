@@ -27,7 +27,7 @@ var MessageNotifications = (function(opts) {
      * @returns {jQuery|HTMLElement|*}
      */
     var renderRow = function (object) {
-        var html =  '<li class="notification-box' + (object.read != '0' ? ' read' : '') + '"' +
+        var html =  '<li class="notification-box message' + (object.read != '0' ? ' read' : '') + '"' +
                     ' data-id="' + object.id + '"' +
                     ' data-class="' + object.class + '"' +
                     ' data-key="' + object.key + '">' +
@@ -57,7 +57,6 @@ var MessageNotifications = (function(opts) {
             type: "GET",
             dataType: "json",
             timeout: opts.xhrTimeout,
-            //loader: list.parent(),
             success: function(data) {
                 var seen = 0;
 
@@ -77,43 +76,25 @@ var MessageNotifications = (function(opts) {
 
                     var item = renderRow(object);
 
-                    // item.on('click', function(e) {
-                    //     e.stopPropagation();
-                    //     // if(item.hasClass('read')){
-                    //     //     return;
-                    //     // }
-                    //     $.ajax({
-                    //         url: options.readUrl,
-                    //         type: "GET",
-                    //         data: {id: item.data('id')},
-                    //         dataType: "json",
-                    //         timeout: opts.xhrTimeout,
-                    //         success: function (data) {
-                    //             item.removeClass('read');
-                    //             item.addClass('read');
-                    //             if(object.url){
-                    //                 document.location = object.url;
-                    //             }
-                    //         }
-                    //     });
-
-                    // });
-
-                    // if(object.seen == '0'){
-                    //     seen += 1;
-                    // }
                     item.on('click', function(e){
                         e.stopPropagation();
+                        $.ajax({
+                            url: options.readUrl,
+                            type: "GET",
+                            data: {id: item.data('id')},
+                            dataType: "json",
+                            timeout: opts.xhrTimeout,
+                            success: function (data) {
+                                item.removeClass('read');
+                                item.addClass('read');
+                            }
+                        });
                         if (object.url) {
-                            document.location = object.url;
+                            document.location.href = object.url;
                         }
                     });
                     item.insertBefore(list.find('li:last'));
                 });
-
-                // setCount(seen, true);
-
-                // startPoll(true);
             }
         });
     };

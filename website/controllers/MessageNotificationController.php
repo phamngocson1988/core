@@ -19,8 +19,11 @@ class MessageNotificationController extends Controller
         $orderTable = Order::tableName();
         $list = OrderComplains::find()
         ->innerJoin($orderTable, "{$orderTable}.id = {$complainTable}.order_id")
-        ->where(["{$orderTable}.customer_id" => $userId])
-        ->andWhere(["{$complainTable}.is_customer" => OrderComplains::IS_NOT_CUSTOMER])
+        ->where([
+            "{$orderTable}.customer_id" => $userId,
+            "{$complainTable}.is_customer" => OrderComplains::IS_NOT_CUSTOMER,
+            "{$complainTable}.is_read" => 0
+        ])
         ->orderBy(["{$complainTable}.created_at" => SORT_DESC])
         ->select(["{$complainTable}.*"])
         ->asArray()
@@ -34,7 +37,7 @@ class MessageNotificationController extends Controller
     public function actionRead($id)
     {
         $model = OrderComplains::findOne($id);
-        if (!$model) {
+        if ($model) {
             $model->is_read = 1;
             $model->save();
         }
@@ -110,17 +113,6 @@ class MessageNotificationController extends Controller
             return $this->ajaxResponse(1);
         }
         die('404');
-
-        
     }
 
-    // public function actionCount()
-    // {
-    //     $userId = Yii::$app->getUser()->getId();
-    //     $count = OrderComplains::find()
-    //     ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
-    //     ->andWhere(['seen' => false])
-    //     ->count();
-    //     $this->ajaxResponse(['count' => $count]);
-    // }
 }

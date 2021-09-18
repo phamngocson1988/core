@@ -65,7 +65,10 @@ class MessageNotifications extends BaseNotifications
         $view = $this->getView();
 
         MessageNotificationsAsset::register($view);
-
         $view->registerJs($js);
+
+        $css[] = ".overflow-text>p {overflow: hidden !important;text-overflow: ellipsis;}";
+        $css[] = ".read a {color: #ccc}";
+        $view->registerCss(implode(";", $css));
     }
 }
