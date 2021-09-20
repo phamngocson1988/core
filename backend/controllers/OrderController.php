@@ -39,6 +39,12 @@ use backend\forms\UpdateOrderToPartialForm;
 use backend\forms\StopOrderForm;
 use backend\forms\ApproveCancelOrder;
 
+use backend\models\UserReseller;
+use backend\models\GameMethod;
+use backend\models\OrderSupplier;
+use backend\models\Promotion;
+use common\models\Country;
+
 // Notification
 use backend\components\notifications\OrderNotification;
 
@@ -979,20 +985,152 @@ class OrderController extends Controller
     {
         $this->view->params['main_menu_active'] = 'order.report';
         $request = Yii::$app->request;
-        $model = new \backend\forms\ReportShopForm();
-        if ($model->load($request->post())) {
-            $fileName = date('YmdHis') . 'thong-ke-don-hang.xls';
-            $role = '';
-            $user = Yii::$app->user;
-            if ($user->can('admin')) $role = 'admin';
-            elseif ($user->can('admin')) $role = 'admin';
-            elseif ($user->can('accounting')) $role = 'accounting';
-            elseif ($user->can('orderteam')) $role = 'orderteam';
-            elseif ($user->can('saler')) $role = 'saler';
-            $model->role = $role;
-            $model->export($fileName);
+        $data = [
+            'saler_id' => $request->get('saler_id'),
+            'supplier_id' => $request->get('supplier_id'),
+            'orderteam_id' => $request->get('orderteam_id'),
+            'game_id' => $request->get('game_id'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'status' => $request->get('status'),
+            'date_time_type' => $request->get('date_time_type'),
+        ];
+        $mode = $request->get('mode');
+        $form = new \backend\forms\ReportShopForm($data);
+        $fileName = date('YmdHis') . 'thong-ke-don-hang.xls';
+        $role = '';
+        $user = Yii::$app->user;
+        if ($user->can('admin')) $role = 'admin';
+        elseif ($user->can('admin')) $role = 'admin';
+        elseif ($user->can('accounting')) $role = 'accounting';
+        elseif ($user->can('orderteam')) $role = 'orderteam';
+        elseif ($user->can('saler')) $role = 'saler';
+        $form->role = $role;
+
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . 'danh-don-hang-da-xac-nhan.xls';
+            return $form->export($fileName);
         }
 
-        return $this->render('report', ['search' => $model]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['order.created_at' => SORT_DESC])
+                            ->asArray()
+                            ->indexBy(function ($row) use(&$index){
+                                return ++$index;
+                             })
+                            ->all();
+
+                            $orderIds = ArrayHelper::getColumn($models, 'id');
+
+        // Game method 
+        $gameIds = ArrayHelper::getColumn($models, 'game_id');
+        $gameIds = array_unique($gameIds);
+        $gameTable = Game::tableName();
+        $methodTable = GameMethod::tableName();
+        $games = Game::find()
+        ->innerJoin($methodTable, "{$methodTable}.id = {$gameTable}.method")
+        ->where(["{$gameTable}.id" => $gameIds])
+        ->select(["{$gameTable}.id as id", "{$methodTable}.title as title"])
+        ->asArray()->all();
+        $gameMethodMapping = ArrayHelper::map($games, 'id', 'title');
+        // Get Complain
+        $complains = OrderComplains::find()
+        ->where(['in', 'order_id', $orderIds])             
+        ->andWhere(['in', 'object_name', [OrderComplains::OBJECT_NAME_ADMIN, OrderComplains::OBJECT_NAME_SUPPLIER]])
+        ->groupBy(['order_id'])
+        ->select(['order_id', 'content'])
+        ->all();
+        $existStaffComplainIds = ArrayHelper::getColumn($complains, 'order_id');
+        $contentComplainIds = ArrayHelper::map($complains, 'order_id', 'content');
+        // Get Reseller
+        $userIds = ArrayHelper::getColumn($models, 'customer_id');
+        $users = User::find()
+        ->where(['in', 'id', $userIds])
+        ->indexBy('id')->all();
+
+        // Get resellers 
+        $resellers = UserReseller::find()
+        ->where(['in', 'user_id', $userIds])
+        ->indexBy('user_id')->all();
+
+        // Get salers 
+        $salerIds = ArrayHelper::getColumn($models, 'saler_id');
+        $salers = User::find()
+        ->where(['in', 'id', $salerIds])
+        ->indexBy('id')->all();
+
+        // order team
+        $orderteamIds = ArrayHelper::getColumn($models, 'orderteam_id');
+        $orderteams = User::find()
+        ->where(['in', 'id', $orderteamIds])
+        ->indexBy('id')->all();
+
+        // Supplier
+        $supplierIds = ArrayHelper::getColumn($models, 'supplier_id');
+        $suppliers = User::find()->where(['in', 'id', $supplierIds])
+        ->indexBy('id')->all();
+
+        $data = [];
+        foreach ($models as $model) {
+            $user = $users[$model['customer_id']];
+            $reseller = ArrayHelper::getValue($resellers, $user->id);
+            $resellerLevel = $reseller ? $reseller->getLevelLabel() : '';
+
+            $country = Country::findOne($user->country_code);
+            $countryName = $country ? $country->country_name : '';
+            
+            $supplier = ArrayHelper::getValue($suppliers, $model['supplier_id']);
+            $saler = ArrayHelper::getValue($salers, $model['saler_id']);
+            $orderteam = ArrayHelper::getValue($orderteams, $model['orderteam_id']);
+
+            // Promotion
+            $promotion = $model['promotion_id'] ? Promotion::findOne($model['promotion_id']) : null;
+            $item = [
+                'id' => '#' . $model['id'],
+                'customer_name' => $model['customer_name'],
+                'reseller_level' => $resellerLevel,
+                'country' => $countryName,
+                'game_title' => $model['game_title'],
+                'game_method' => ArrayHelper::getValue($gameMethodMapping, $model['game_id'], ''),
+                'quantity' => $model['quantity'],
+                'payment_method' => $model['payment_method'],
+                'created_at' => $model['created_at'],
+                'approved_at' => $model['approved_at'],
+                'supplier_completed_at' => $model['supplier_completed_at'],
+                'order_confirmed_at' => $model['order_confirmed_at'],
+                'order_completed_time' => $model['order_completed_time'],
+                'supplier_completed_time' => $model['supplier_completed_time'],
+                'approved_time' => $model['approved_time'],
+                'distributed_time' => $model['distributed_time'],
+                'supplier_approved_time' => $model['supplier_approved_time'], 
+                'supplier_pending_time' => $model['supplier_pending_time'],    
+                'supplier_processing_time' => $model['supplier_processing_time'],  
+                'supplier_confirmed_time' => $model['supplier_confirmed_time'], 
+                'status' => $model['status'],  
+                'is_wrong' => in_array($model['id'], $existStaffComplainIds) ? 'X' : '',   
+                'wrong_information' => html_entity_decode(strip_tags(ArrayHelper::getValue($contentComplainIds, $model['id'], ''))),  
+                'saler_name' => $saler ? $saler->getName() : '',   
+                'orderteam_name' => $orderteam ? $orderteam->getName() : '',    
+                'supplier_name' => $supplier ? $supplier->getName() : '',
+                'price' => $model['price'],
+                'total_price' => $model['price'] * $model['quantity'],
+                'total_fee' => 0,
+                'total_promotion' => 0,
+                'total_paid' => $model['price'] * $model['quantity'],
+                'total_received' => $model['price'] * $model['quantity'],
+                'promotion_code' => $promotion ? $promotion->code : '',
+                'exchange_rate' => $model['rate_usd'],
+                'supplier_price' => $model['supplier_price'],
+            ];
+            $data[] = $item;
+        }
+        return $this->render('report', [
+            'search' => $form,
+            'models' => $data,
+            'pages' => $pages,
+        ]);
     }
 }

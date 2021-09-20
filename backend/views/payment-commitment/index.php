@@ -135,7 +135,8 @@ $now = date('Y-m-d H:i:s');
                 <th col-tag="voucher_code">Mã khuyến mãi</th>
                 <th col-tag="voucher_value">Khuyến mãi (Kcoin)</th>
                 <th col-tag="paygate">Cổng thanh toán</th>
-                <th col-tag="kingcoin">Số Kcoin</th>
+                <th col-tag="amount">Số tiền phải trả (Kcoin)</th>
+                <th col-tag="fee">Phí chuyển tiền (Kcoin)</th>
                 <th col-tag="kingcoin_reality">Thực nhận (Kcoin)</th>
                 <th col-tag="kingcoin_difference">Chênh lệch (Kcoin)</th>
                 <th col-tag="exchange_rate">Tỷ giá</th>
@@ -148,7 +149,7 @@ $now = date('Y-m-d H:i:s');
             </thead>
             <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="17" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="18" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <?php $object = $model->object;?>
@@ -185,7 +186,8 @@ $now = date('Y-m-d H:i:s');
                 <td col-tag="voucher_code"></td>
                 <td col-tag="voucher_value"></td>
                 <td col-tag="paygate"><?=$model->paygate;?></td>
-                <td col-tag="kingcoin"><?=$model->kingcoin;?></td>
+                <td col-tag="amount"><?=StringHelper::numberFormat($model->amount / $model->exchange_rate, 2);?></td>
+                <td col-tag="fee"><?=StringHelper::numberFormat($model->fee / $model->exchange_rate, 2);?></td>
                 <td col-tag="kingcoin_reality"><?=$reality ? $reality->kingcoin : '--';?></td>
                 <td col-tag="kingcoin_difference"><?=$reality ? StringHelper::numberFormat($reality->kingcoin - $model->kingcoin, 2) : '--';?></td>
                 <td col-tag="exchange_rate"><?=$model->exchange_rate;?></td>
