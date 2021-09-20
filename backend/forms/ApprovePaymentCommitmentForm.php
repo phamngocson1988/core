@@ -66,7 +66,7 @@ class ApprovePaymentCommitmentForm extends ActionForm
         $reality = $this->getReality();
         $commitment = $this->getCommitment();
         $variance = (float)($reality->kingcoin - $commitment->kingcoin);
-        if ( $variance < (-1) * $this->variance && !$this->allow_variance) {
+        if ( $variance && !$this->allow_variance) {
             return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhân tiền quá lớn (> %s)', $this->variance));
         }
     }
