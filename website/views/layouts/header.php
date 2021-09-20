@@ -2,11 +2,11 @@
 use yii\helpers\Url;
 use common\components\helpers\StringHelper;
 ?>
-<div id="preloader">
+<!-- <div id="preloader">
   <a href="/" class="logo">
     <img src="/images/logo.png" alt="logo kinggems" />
   </a>
-</div>
+</div> -->
 <nav class="navbar navbar-top" role="navigation">
   <div class="container">
     <div class="navbar-header w-100">

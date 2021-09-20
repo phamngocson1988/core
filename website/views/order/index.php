@@ -155,7 +155,7 @@ $myOrderUrl = Url::to(['order/index']);
             <?php endif;?>
           </td>
           <td class="text-center">
-            <?php if ($order->isPendingOrder() || $order->isProcessingOrder() || $order->isPartialOrder()) : ?>
+            <?php if ($order->isPendingOrder()) : ?>
             <?php if ($order->request_cancel) : ?>
               Waiting cancellation
             <?php else :?>

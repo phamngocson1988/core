@@ -30,9 +30,9 @@ class CancelOrderForm extends ActionForm
             $this->addError($attribute, 'Order is not exist');
         } elseif ($order->customer_id != Yii::$app->user->id) {
             $this->addError($attribute, 'Order is not exist');
-        } elseif ($order->isProcessingOrder()) {
-            $this->addError($attribute, 'Your order is in progress and the cancellation request can not be performed. Kindly contact to our customer service for further asistance !');
-        } elseif ($order->isCompletedOrder() 
+        } elseif ($order->isProcessingOrder()
+            || $order->isPartialOrder() 
+            || $order->isCompletedOrder() 
             || $order->isConfirmedOrder() 
             || $order->isDeletedOrder()
             || $order->isCancelledOrder()
