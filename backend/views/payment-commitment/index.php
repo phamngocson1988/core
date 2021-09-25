@@ -236,7 +236,7 @@ $now = date('Y-m-d H:i:s');
 <?php foreach ($models as $model) :?>
 <?php if ($model->isPending()) :?>
 <div class="modal fade" id="approve-commitment-modal-<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -293,7 +293,7 @@ $now = date('Y-m-d H:i:s');
         </div>
         <div class="row alert hidden" style="color: red">
           <strong>**CẢNH BÁO:</strong><br>
-          Chênh lệch Kcoin <span class="variance">0</span> vượt quá định mức là <storng><?=StringHelper::numberFormat($approveForm->variance, 2);?></storng>
+          Chênh lệch Kcoin giữa giao dịch và mã nhân tiền là <span class="variance">0</span>
         </div>
         <div class="row">
           <div class="col-md-12">

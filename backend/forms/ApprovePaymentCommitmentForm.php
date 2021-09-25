@@ -62,12 +62,11 @@ class ApprovePaymentCommitmentForm extends ActionForm
     public function validateVariance($attribute)
     {
         if ($this->hasErrors()) return;
-        if (!$this->variance) return;
         $reality = $this->getReality();
         $commitment = $this->getCommitment();
-        $variance = (float)($reality->kingcoin - $commitment->kingcoin);
+        $variance = abs((float)($reality->kingcoin - $commitment->kingcoin));
         if ( $variance && !$this->allow_variance) {
-            return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhân tiền quá lớn (> %s)', $this->variance));
+            return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhân tiền quá lớn (%s Kcoin)', $variance));
         }
     }
 

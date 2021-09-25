@@ -51,6 +51,11 @@ class UserReseller extends ActiveRecord
     	return $this->hasOne(User::className(), ['id' => 'manager_id']);
     }
 
+    public function getLevelUpdater()
+    {
+    	return $this->hasOne(User::className(), ['id' => 'level_updated_by']);
+    }
+
     public static function getLevelList() 
     {
         return [

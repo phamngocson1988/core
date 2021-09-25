@@ -46,11 +46,14 @@ class ResellerController extends Controller
         $command->orderBy(['created_at' => SORT_DESC]);
         $models = $command->offset($pages->offset)->limit($pages->limit)->all();
 
+        $changeLevelService = new \backend\forms\ChangeResellerLevelForm();
+
         return $this->render('index.php', [
             'models' => $models,
             'search' => $form,
             'pages' => $pages,
             'ref' => Url::to($request->getUrl(), true),
+            'changeLevelService' => $changeLevelService
         ]);
     }
 
@@ -86,6 +89,17 @@ class ResellerController extends Controller
         $user->save(false, ['reseller_level', 'old_reseller_level', 'reseller_updated_at']);
         Yii::$app->session->setFlash('success', sprintf("User %s have downgraded to level %s", $user->name, $user->getResellerLabel()));
         return $this->asJson(['status' => true]);
+    }
+
+    public function actionChangeLevel($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\ChangeResellerLevelForm(['user_id' => $id]);
+        if ($model->load($request->post()) && $model->process()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);
+        }
     }
 
     public function actionDelete($id)
