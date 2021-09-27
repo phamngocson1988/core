@@ -293,7 +293,7 @@ $now = date('Y-m-d H:i:s');
         </div>
         <div class="row alert hidden" style="color: red">
           <strong>**CẢNH BÁO:</strong><br>
-          Chênh lệch Kcoin giữa giao dịch và mã nhân tiền là <span class="variance">0</span>
+          Chênh lệch Kcoin giữa giao dịch và mã nhân tiền là <span class="variance">0</span> Kcoin
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -378,7 +378,7 @@ $('.payment_reality_id').on('change', function() {
         var realityCoin = parseFloat(result.kingcoin);
         console.log('commitment - reality', commitmentCoin, realityCoin, variance);
         let diff = commitmentCoin - realityCoin;
-        diff = parseFloat(diff.toFixed(2));
+        diff = Math.abs(parseFloat(diff.toFixed(2)));
         if (diff >= variance) {
           console.log('show alert');
           form.find('.variance').html(diff);

@@ -46,7 +46,7 @@ class PaymentCommitmentController extends Controller
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
                             ->all();
-        $approveForm = new \backend\forms\ApprovePaymentCommitmentForm(['variance' => 0]);
+        $approveForm = new \backend\forms\ApprovePaymentCommitmentForm();
         $paymentRealities = $approveForm->fetchPendingReality();
         return $this->render('index', [
             'search' => $search,
@@ -63,7 +63,7 @@ class PaymentCommitmentController extends Controller
         $model = new \backend\forms\ApprovePaymentCommitmentForm([
             'id' => $id,
             'confirmed_by' => Yii::$app->user->id,
-            'variance' => 0
+            'allow_variance' => true
         ]);
         if ($model->load($request->post()) && $model->approve()) {
             return $this->asJson(['status' => true]);
