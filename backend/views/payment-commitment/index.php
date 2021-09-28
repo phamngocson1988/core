@@ -208,6 +208,8 @@ $now = date('Y-m-d H:i:s');
                   <span class="label label-info">Pending</span>
                   <?php elseif ($model->isApproved()) : ?>
                   <span class="label label-default">Approved</span>
+                  <?php elseif ($model->isDeleted()) : ?>
+                  <span class="label label-default">Deleted</span>
                   <?php endif;?>
 
                   <?php if ($model->isObjectOrder() && $object->hasCancelRequest()): ?>

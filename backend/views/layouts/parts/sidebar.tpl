@@ -415,7 +415,7 @@
         <ul class="sub-menu">
           <li class="nav-item  "> 
             <a href="{url route='/game'}" class="nav-link " code='game.index'>
-            <span class="title">Game status</span>
+            <span class="title">Shop Game</span>
             </a>
           </li>
           <li class="nav-item  ">

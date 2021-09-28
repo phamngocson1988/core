@@ -205,7 +205,8 @@ use backend\behaviors\UserSupplierBehavior;
                 <?php if ($model->isReseller()) : ?>
                 <a href="<?=Url::to(['user/downgrade-reseller', 'id' => $model->id]);?>" class="btn btn-sm purple link-action tooltips" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i> Reseller </a>
                 <?php else : ?>
-                <a href="<?=Url::to(['user/upgrade-reseller', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="fa fa-arrow-up"></i> Reseller </a>
+                <!-- <a href="<?=Url::to(['user/upgrade-reseller', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Nâng cấp lên nhà bán lẻ"><i class="fa fa-arrow-up"></i> Reseller </a> -->
+                <a href='#create-reseller<?=$model->id;?>' class="btn btn-sm default tooltips" data-container="body" data-original-title="Tạo nhà bán lẻ"data-toggle="modal" data-level="up" ><i class="fa fa-arrow-up"></i>Reseller</a>
                 <?php endif; ?>
 
                 <?php if ($model->isSupplier()) : ?>
@@ -253,6 +254,36 @@ use backend\behaviors\UserSupplierBehavior;
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<?php foreach ($models as $model) : ?>
+<div class="modal fade" id="create-reseller<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Tạo nhà bán lẻ</h4>
+      </div>
+      <?php $createResellerForm = ActiveForm::begin([
+        'action' => Url::to(['reseller/create', 'id' => $model->id]),
+        'options' => ['class' => 'create-reseller-form']
+      ]);?>
+      <div class="modal-body"> 
+        <div class="row">
+          <div class="col-md-12">
+            <?=$createResellerForm->field($createResellerService, 'task_code')->textInput()->label('Mã đề xuất');?>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Tạo</button>
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+      </div>
+      <?php ActiveForm::end()?>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<?php endforeach;?>
 <?php
 $script = <<< JS
 $(".delete-user").ajax_action({
@@ -276,6 +307,19 @@ $(".link-action").ajax_action({
     location.reload();
   }
 });
+
+var createResellerAjax = new AjaxFormSubmit({element: '.create-reseller-form'});
+createResellerAjax.success = function (data, form) {
+  setTimeout(() => {  
+      location.reload();
+  }, 1000);
+  toastr.success('Bạn đã tạo nhà bán lẻ thành công'); 
+};
+createResellerAjax.error = function (errors) {
+  toastr.error(errors);
+  console.log(errors);
+  return false;
+}
 JS;
 $this->registerJs($script);
 ?>

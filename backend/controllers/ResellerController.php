@@ -57,6 +57,17 @@ class ResellerController extends Controller
         ]);
     }
 
+    public function actionCreate($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\CreateResellerForm(['user_id' => $id]);
+        if ($model->load($request->post()) && $model->process()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);
+        }
+    }
+
     public function actionUpgrade($id)
     {
         $user = User::findOne($id);

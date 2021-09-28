@@ -31,7 +31,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'upgrade-reseller', 'downgrade-reseller', 'active', 'inactive', 'update-trust', 'update-not-trust', 'no-order'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'active', 'inactive', 'update-trust', 'update-not-trust', 'no-order'],
                         'roles' => ['admin'],
                     ],
                     [
@@ -84,13 +84,15 @@ class UserController extends Controller
             'delete' => Url::to(['user/change-status', 'status' => 'delete']),
             'active' => Url::to(['user/change-status', 'status' => 'active'])
         ];
+        $createResellerService = new \backend\forms\CreateResellerForm();
 
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
             'search' => $form,
             'ref' => Url::to($request->getUrl(), true),
-            'links' => $links
+            'links' => $links,
+            'createResellerService' => $createResellerService
         ]);
     }
 
@@ -271,37 +273,37 @@ class UserController extends Controller
         }
     }
 
-    public function actionUpgradeReseller($id)
-    {
-        $request = Yii::$app->request;
-        if( $request->isAjax) {
-            $user = User::findOne($id);
-            if (!$user) throw new NotFoundHttpException('Not found');
-            $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
-                $model = $event->sender;
-                $model->attachBehavior('reseller', UserResellerBehavior::className());
-                $model->createReseller();
-            });
-            $user->is_reseller = User::IS_RESELLER;
-            return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
-        }
-    }
+    // public function actionUpgradeReseller($id)
+    // {
+    //     $request = Yii::$app->request;
+    //     if( $request->isAjax) {
+    //         $user = User::findOne($id);
+    //         if (!$user) throw new NotFoundHttpException('Not found');
+    //         $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
+    //             $model = $event->sender;
+    //             $model->attachBehavior('reseller', UserResellerBehavior::className());
+    //             $model->createReseller();
+    //         });
+    //         $user->is_reseller = User::IS_RESELLER;
+    //         return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
+    //     }
+    // }
 
-    public function actionDowngradeReseller($id)
-    {
-        $request = Yii::$app->request;
-        if( $request->isAjax) {
-            $user = User::findOne($id);
-            if (!$user) throw new NotFoundHttpException('Not found');
-            $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
-                $model = $event->sender;
-                $model->attachBehavior('reseller', UserResellerBehavior::className());
-                $model->deleteReseller();
-            });
-            $user->is_reseller = User::IS_NOT_RESELLER;
-            return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
-        }
-    }
+    // public function actionDowngradeReseller($id)
+    // {
+    //     $request = Yii::$app->request;
+    //     if( $request->isAjax) {
+    //         $user = User::findOne($id);
+    //         if (!$user) throw new NotFoundHttpException('Not found');
+    //         $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
+    //             $model = $event->sender;
+    //             $model->attachBehavior('reseller', UserResellerBehavior::className());
+    //             $model->deleteReseller();
+    //         });
+    //         $user->is_reseller = User::IS_NOT_RESELLER;
+    //         return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
+    //     }
+    // }
 
     public function actionUpdateTrust($id)
     {

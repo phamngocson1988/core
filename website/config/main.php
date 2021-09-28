@@ -23,7 +23,7 @@ return [
             'identityClass' => 'website\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-website', 'httpOnly' => true],
-            'loginUrl' => ['site/login'],
+            'loginUrl' => ['site/index'],
         ],
         'view' => [
             'class' => 'website\components\web\View',
