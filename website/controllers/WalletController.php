@@ -11,7 +11,6 @@ use common\components\helpers\StringHelper;
 // models
 use website\models\Paygate;
 use website\models\PaymentTransaction;
-// use common\models\Currency;
 use common\models\CurrencySetting;
 
 class WalletController extends Controller
@@ -37,11 +36,7 @@ class WalletController extends Controller
         $request = Yii::$app->request;
         $paygates = Paygate::find()->where([
             'status' => Paygate::STATUS_ACTIVE,
-            // 'paygate_type' => Paygate::PAYGATE_TYPE_OFFLINE
         ])->all();
-        // if (Yii::$app->user->id == 213) {
-        //     $paygates = Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
-        // }
         // pending transaction
         $pendings = PaymentTransaction::find()->where([
             'status' => PaymentTransaction::STATUS_PENDING,
@@ -111,7 +106,7 @@ class WalletController extends Controller
                 $targetCurrency = CurrencySetting::findOne(['code' => $paygate->currency]);
                 $otherCurrencyTotal = $usdCurrency->exchangeTo($calculate['totalPayment'], $targetCurrency);
                 $otherCurrency = sprintf("%s%s", StringHelper::numberFormat($otherCurrencyTotal, 2), $targetCurrency->getSymbol());
-                $totalPayment = sprintf("%s (%s)", $totalPayment, utf8_encode($otherCurrency));
+                $totalPayment = sprintf("%s (%s)", $totalPayment, $otherCurrency);
 
                 
             }

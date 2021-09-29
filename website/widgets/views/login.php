@@ -28,22 +28,20 @@ use yii\helpers\Url;
         </ul>
         <div class="text-horizontal"><span>or</span></div>
         <?php $form = ActiveForm::begin(['id' => $id]); ?>
-          <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'id' => 'username', 'placeholder' => 'Username', 'required' => 'required'])->label(false) ?>
-          <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'id' => 'password', 'required' => 'required'])->label(false) ?>
-          <?= $form->field($model, 'securityCode', ['options' => ['style' => 'display:none'], 'hintOptions' => ['class' => 'hint-block']])
+          <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'id' => 'username', 'scenario' => $loginScenario, 'placeholder' => 'Username', 'required' => 'required'])->label(false) ?>
+          <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'id' => 'password', 'scenario' => $loginScenario, 'required' => 'required'])->label(false) ?>
+          <?= $form->field($model, 'securityCode', ['options' => ['style' => 'display:none', 'scenario' => $verifyScenario], 'hintOptions' => ['class' => 'hint-block']])
           ->textInput(['placeholder' => 'Verification Code', 'id' => 'securityCode'])
           ->hint('Verification code is sent to your email')
           ->label(false) ?>
-          <div class="d-flex bd-highlight">
+          <div class="d-flex bd-highlight" style="justify-content: space-between">
           	<?=$form->field($model, 'rememberMe', [
-				      'options' => ['class' => 'form-check flex-fill', 'id' => 'rememberMe'],
+				      'options' => ['class' => 'form-check flex-fill', 'id' => 'rememberMe', 'scenario' => $loginScenario],
               'labelOptions' => ['class' => 'form-check-label'],
               'template' => '{input}{label}'
 				    ])->checkbox(['class' => 'form-check-input', 'style' => "margin-top:6px"], false);?>
-            <div class="flex-fill ml-auto">
-              <a href="#modalProblem" data-toggle="modal" style="cursor: pointer;" data-dismiss="modal">Problem to
-              login?</a>
-            </div>
+            <a href="javascript:;" id="back-login-form" scenario="<?=$verifyScenario;?>" style="cursor: pointer; display: none">Back to login</a>
+            <a href="#modalProblem" data-toggle="modal" style="cursor: pointer;" data-dismiss="modal">Problem to login?</a>
           </div>
           
           <input type="hidden" id="scenario" name="scenario" value="<?=$scenario;?>" />
@@ -53,6 +51,7 @@ use yii\helpers\Url;
         <?php ActiveForm::end(); ?>
 
         <div class="text-center">
+          <p style="margin-bottom: 5px" scenario="<?=$verifyScenario;?>">Cannot receive the code?<a href="javascript:;" id="login-resend-code-button" style="cursor: pointer;"> Resend code</a></p>
           <p>Not a member yet?<a href="#modalSignup" data-toggle="modal" style="cursor: pointer;"
             data-dismiss="modal"> Sign up</a></p>
         </div>

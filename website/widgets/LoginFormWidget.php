@@ -14,10 +14,14 @@ class LoginFormWidget extends Widget
     {
         $model = new LoginForm();
         $this->registerClientScript();
+        $loginScenario = LoginForm::SCENARIO_LOGIN;
+        $verifyScenario = LoginForm::SCENARIO_VERIFY;
         return $this->render('login', [
             'model' => $model, 
             'id' => $this->formId,
-            'scenario' => LoginForm::SCENARIO_LOGIN
+            'scenario' => LoginForm::SCENARIO_LOGIN,
+            'loginScenario' => $loginScenario,
+            'verifyScenario' => $verifyScenario,
         ]);
     }
 
@@ -45,10 +49,13 @@ $('html').on('submit', 'form#flash-login-form', function() {
                 let scenario = $('#scenario').val();
                 if (scenario === '$loginScenario') {
                     $('#scenario').val('$verifyScenario');
-                    $('#securityCode').closest('div').attr('style', 'display:block');
-                    $('#username').attr('style', 'display:none');
-                    $('#password').attr('style', 'display:none');
-                    $('#rememberMe').attr('style', 'display:none');
+                    // $('#securityCode').closest('div').attr('style', 'display:block');
+                    // $('#back-login-form').attr('style', 'display:block');
+                    // $('#username').attr('style', 'display:none');
+                    // $('#password').attr('style', 'display:none');
+                    // $('#rememberMe').attr('style', 'display:none');
+                    $(\"[scenario='$loginScenario']\").attr('style', 'display:none');
+                    $(\"[scenario='$verifyScenario']\").attr('style', 'display:block');
                     $('#submit').text('Verify');
                 } else {
                     location.reload();
@@ -58,6 +65,22 @@ $('html').on('submit', 'form#flash-login-form', function() {
         complete: hideLoader
     });
     return false;
+});
+$('html').on('click', '#back-login-form', function() {
+    // $('#securityCode').closest('div').attr('style', 'display:none');
+    // $('#back-login-form').attr('style', 'display:none');
+    // $('#username').attr('style', 'display:block');
+    // $('#password').attr('style', 'display:block');
+    // $('#rememberMe').attr('style', 'display:block');
+
+    $(\"[scenario='$verifyScenario']\").attr('style', 'display:none');
+    $(\"[scenario='$loginScenario']\").attr('style', 'display:block');
+    $('#submit').text('Login');
+    $('#scenario').val('$loginScenario');
+});
+$('html').on('click', '#login-resend-code-button', function() {
+    $('#scenario').val('$loginScenario');
+    $('html').find('form#flash-login-form').submit();
 });
 ";
     }
