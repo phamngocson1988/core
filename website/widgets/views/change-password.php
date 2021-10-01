@@ -14,9 +14,9 @@ use yii\helpers\Url;
       </div>
       <?php $form = ActiveForm::begin(['action' => $actionUrl, 'id' => $id]); ?>
       <div class="modal-body">
-          <?= $form->field($model, 'old_password')->passwordInput(['placeholder' => 'Old password']);?>
-          <?= $form->field($model, 'new_password')->passwordInput(['placeholder' => 'New password']);?>
-          <?= $form->field($model, 're_password')->passwordInput(['placeholder' => 'Re-type new password']);?>
+          <?= $form->field($model, 'old_password')->passwordInput(['placeholder' => 'Old password'])->label(false);?>
+          <?= $form->field($model, 'new_password')->passwordInput(['placeholder' => 'New password'])->label(false);?>
+          <?= $form->field($model, 're_password')->passwordInput(['placeholder' => 'Re-type new password'])->label(false);?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

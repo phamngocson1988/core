@@ -25,21 +25,11 @@ AppAsset::register($this);
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-PDQS4ZB');</script>
     <!-- End Google Tag Manager -->
-    <script>
-    // var hm = hm || [];
-    // hm.push('setClient', 'HM-001068');
-    // (function() {
-    //     var dom = document.createElement('script'); dom.type = 'text/javascript';
-    //     dom.async = true;
-    //     dom.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dashboard.heatmap.vn/js/tracker.production.js?id=1141db4bf944362a9fb7';
-    //     var s = document.getElementsByTagName('script')[0];
-    //     s.parentNode.insertBefore(dom, s);
-    // })();
-    </script>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><?= Html::encode($this->title) ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <META NAME="webmoney.attestation.label" CONTENT="webmoney attestation label#6CD7944E-3EDF-4E7D-BB7D-1BFBB2530BC5">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <?= Html::csrfMetaTags() ?>
@@ -76,6 +66,13 @@ AppAsset::register($this);
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PDQS4ZB"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
+<!-- webmoney attestation label#6CD7944E-3EDF-4E7D-BB7D-1BFBB2530BC5 begin -->
+<a href="http://passport.wmtransfer.com/asp/certview.asp?wmid=679742853702" target="_blank">
+<img src="http://passport.wmtransfer.com/images/atstimg/certifyed1.gif" border="0">
+</a>
+<!-- webmoney attestation label#6CD7944E-3EDF-4E7D-BB7D-1BFBB2530BC5 end -->
+
 <div class="overlay" style="display: none;">Loading&#8230;</div>
 <?php require_once(Yii::$app->basePath . '/views/layouts/facebook_livechat.php');?>
 <?= NotificationFlash::widget() ?>

@@ -51,7 +51,7 @@ use yii\helpers\Url;
         <?php ActiveForm::end(); ?>
 
         <div class="text-center">
-          <p style="margin-bottom: 5px" scenario="<?=$verifyScenario;?>">Cannot receive the code?<a href="javascript:;" id="login-resend-code-button" style="cursor: pointer;"> Resend code</a></p>
+          <p style="margin-bottom: 5px; display: none" scenario="<?=$verifyScenario;?>">Cannot receive the code?<a href="javascript:;" id="login-resend-code-button" style="cursor: pointer;"> Resend code</a></p>
           <p>Not a member yet?<a href="#modalSignup" data-toggle="modal" style="cursor: pointer;"
             data-dismiss="modal"> Sign up</a></p>
         </div>

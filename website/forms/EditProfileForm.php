@@ -23,6 +23,11 @@ class EditProfileForm extends Model
     public $social_telegram;
     public $social_wechat;
     public $social_other;
+    public function init() 
+    {
+        $user = $this->getUser();
+        $this->birthday = $user->birthday;
+    }
 
     public function rules()
     {
@@ -61,7 +66,7 @@ class EditProfileForm extends Model
         $user->name = $this->name;
         $user->firstname = $this->firstname;
         $user->lastname = $this->lastname;
-        $user->birthday = $this->birthday;
+        // $user->birthday = $this->birthday;
         $user->phone = $this->phone;
         $user->country_code = $this->country_code;
         $user->social_facebook = $this->social_facebook;

@@ -24,6 +24,15 @@ class ChangePasswordForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'old_password' => 'Old Password',
+            'new_password' => 'New Password',
+            're_password' => 'Re-type New Password',
+        ];
+    }
+
     public function change()
     {
         if ($this->validate()) {

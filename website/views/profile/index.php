@@ -58,7 +58,7 @@ $this->title = 'User Profile';
           <p class="lead">Personal</p>
           <hr />
           <?= $form->field($model, 'name')->textInput(['placeholder' => 'Name'])->label(false);?>
-          <?= $form->field($model, 'birthday')->textInput(['placeholder' => 'Date of Birth', 'type' => 'date'])->label(false);?>
+          <?= $form->field($model, 'birthday')->textInput(['placeholder' => 'Date of Birth', 'type' => 'date', 'disabled' => true])->label(false);?>
         </div>
       </div>
       <div class="row mt-5">
