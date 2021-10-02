@@ -69,14 +69,14 @@ $('html').on('submit', 'form#$phoneFormId', function() {
                 toastr.error(result.errors);
                 return false;
             } else {
-                setTimeout(() => {  
-                    location.reload();
-                }, 2000);
-                toastr.success('We have sent a SMS message to you. Please check your phone'); 
+                $('#email_suggestion').html(result.email);
             }
         },
     });
     return false;
+});
+$('.show_find_email_button').on('click', function() {
+    $('.forgot-password').toggle('fast');
 });
 ";
     }

@@ -213,11 +213,12 @@ class SiteController extends Controller
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
         $model = new AskEmailRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->send()) {
-                return json_encode(['status' => true]);
+        if ($model->load(Yii::$app->request->post())) {
+            $email = $model->askEmail();
+            if ($email) {
+                return json_encode(['status' => true, 'email' => $email]);
             } else {
-                return json_encode(['status' => false, 'errors' => sprintf('Sorry, we cannot send an SMS to %s', $model->phone)]);
+                return json_encode(['status' => false, 'errors' => sprintf('Sorry, we cannot find any email match with your phone number %s', $model->phone)]);
             }
         } else {
             $message = $model->getErrorSummary(true);
