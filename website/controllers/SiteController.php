@@ -41,7 +41,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail'],
+                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term'],
                         'allow' => true,
                     ],
                     [

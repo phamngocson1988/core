@@ -30,12 +30,12 @@ use yii\helpers\Url;
         <?php $form = ActiveForm::begin(['action' => Url::to(['site/login']), 'id' => $id]); ?>
           <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'Email', 'required' => 'required'])->label(false) ?>
           <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'required' => 'required'])->label(false) ?>
-          <?= $form->field($model, 'phone')->widget(\website\widgets\PhoneInputWidget::class)->label(false);?>
+          <?= $form->field($model, 'phone', ['inputOptions' => ['placeholder' => 'Phone']])->widget(\website\widgets\PhoneInputWidget::class)->label(false);?>
           <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase">Signup</button>
           </div>
         <?php ActiveForm::end(); ?>
-        <p class="text-center">By signing up you agree to the <a href="#" class="terms">terms of service and privacy
+        <p class="text-center">By signing up you agree to the <a href="<?=Url::to(['site/term', 'slug' => 'member']);?>" target="_blank" class="terms">terms of service and privacy
           policy</a>
         </p>
         <div class="text-center">
