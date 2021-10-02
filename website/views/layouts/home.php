@@ -160,6 +160,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li class="list-inline-item">
             <a href="javascript:;"><img style="width:100px" src="/images/icon/skrill.svg" /></i></a>
           </li>
+          <li class="list-inline-item">
+            <!-- begin WebMoney Transfer : accept label -->
+            <a href="https://www.megastock.com" target="_blank"><img src="https://www.webmoney.ru/img/icons/88x31_wm_blue.png" alt="www.megastock.com" border="0"/></a>
+            <!-- end WebMoney Transfer : accept label -->
+          </li>
+          <li class="list-inline-item">
+            <!-- begin WebMoney Transfer : attestation label -->
+            <a href="https://passport.webmoney.ru/asp/certview.asp?wmid=679742853702" target="_blank"><img src="https://www.megastock.ru/Doc/Logo/v_blue_on_white_en.png" alt="Here you can find information as to the passport for our WM-identifier 679742853702" border="0"><br><span style="font-size: 0.7em;">Check passport</span></a>
+            <!-- end WebMoney Transfer : attestation label -->
+          </li>
         </ul>
       </div>
     </div>
