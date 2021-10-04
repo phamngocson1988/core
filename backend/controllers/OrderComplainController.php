@@ -93,8 +93,10 @@ class OrderComplainController extends Controller
             $sender = $model->sender;
             $senderName = $sender->name;
             if ($model->isSupplier()) {
-                $senderName = Yii::$app->user->can('admin') ? $senderName : 'Supplier';
-            } 
+                $senderName = Yii::$app->user->can('orderteam') ? $senderName : 'Supplier';
+            } elseif ($model->isCustomer()) {
+                $senderName = Yii::$app->user->can('saler') ? $senderName : 'Buyer';
+            }
 
             $object = [];
             $object['id'] = $model->id;

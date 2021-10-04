@@ -1,7 +1,4 @@
-<?php
-// if (!Yii::$app->user->can('view_customer')) return '';
-if (!Yii::$app->user->can('saler')) return '';
-?>
+<?php if (Yii::$app->user->can('saler')) : ?>
 <div class="portlet blue-hoki box">
   <div class="portlet-title">
     <div class="caption">
@@ -24,3 +21,4 @@ if (!Yii::$app->user->can('saler')) return '';
     </div>
   </div>
 </div>
+<?php endif;?>
