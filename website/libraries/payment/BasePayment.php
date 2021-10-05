@@ -1,7 +1,7 @@
 <?php
 namespace website\libraries\payment;
 
-
+use Yii;
 use yii\base\ErrorException;
 
 abstract class BasePayment implements IPayment
@@ -11,6 +11,8 @@ abstract class BasePayment implements IPayment
      * @var array|void
      */
     protected $gateWayConfig;
+
+    protected $mode = 'sandbox'; // sandbox production
 
     public function __construct($gateWayId)
     {
@@ -23,17 +25,20 @@ abstract class BasePayment implements IPayment
      * change get config base on framework
      * @return array|void
      */
-    function getGateWayConfig()
+    public function getGateWayConfig()
     {
-        $configList = include 'PaymentConfigs.php';
-        if (isset($configList[$this->gateWayId])) {
-            if (isset($configList[$this->gateWayId])) {
-                return $configList[$this->gateWayId][$configList['mode']];
-            }
-        }
+        $configList = Yii::$app->params['payment'][$this->gateWayId];
+        return $configList[$this->mode];
+    }
 
-        // Log error
-        throw new ErrorException('Internal Error');
+    /**
+     * Check whether config is production
+     *
+     * @return boolean
+     */
+    public function isProduction()
+    {
+        return $this->mode === 'production';
     }
 
     /**

@@ -19,6 +19,8 @@ class CoinBase extends BasePayment
     const TRANSACTION_STATUS_DELAYED= 'charge:delayed';
     const TRANSACTION_STATUS_PENDING = 'charge:pending';
 
+    protected $mode = 'production'; // production
+    
     public function __construct()
     {
         parent::__construct(PaymentConstants::GATEWAY_COIN_BASE);

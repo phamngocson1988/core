@@ -24,17 +24,30 @@ use yii\helpers\Url;
       <?=$order->getPaymentData();?>
     </div>
     <?php if ($order->payment_type == 'online') : ?>
-    <?php 
-    $paymentData = json_decode($order->payment_data, true);
-    $paymentLink = $paymentData['hosted_url'] ? $paymentData['hosted_url'] : '';
-    ?>
+    <?php $paymentData = json_decode($order->payment_data, true);?>
+    <?php if (in_array($order->payment_method, ['coinspaid'])) : ?>
+    <?php $paymentLink = $paymentData['hosted_url'] ? $paymentData['hosted_url'] : '';?>
     <div class="col-md-12">
       <?php if ($paymentLink) : ?>
       <div class="text-center btn-wrapper d-block mt-5" role="group">
-        <a type="button" class="btn text-uppercase" style="width: auto" href="<?=$paymentLink;?>" target="_blank">PROCEED WITH PAYMENT</button>
+        <a type="button" class="btn text-uppercase" style="width: auto" href="<?=$paymentLink;?>" target="_blank">PROCEED WITH PAYMENT</a>
       </div>
       <?php endif;?>
     </div>
+    <?php elseif (in_array($order->payment_method, ['webmoney'])) : ?>
+    <div class="col-md-12">
+      <?php $paymentLink = $paymentData['paygate_url'];?>
+      <?php unset($paymentData['paygate_url']);?>
+      <div class="text-center btn-wrapper d-block mt-5" role="group">
+      <form method="POST" action="<?=$paymentLink;?>" accept-charset="utf-8">
+        <?php foreach ($paymentData as $paymentKey => $paymentValue) : ?>
+        <input type="hidden" name="<?=$paymentKey;?>" value="<?=$paymentValue;?>"/>
+        <?php endforeach;?>
+        <input type="submit" class="btn text-uppercase" style="width: auto" value="PROCEED WITH PAYMENT" />
+      </form>
+      </div>
+    </div>
+    <?php endif;?>
     <?php else : ?>
     <div class="col-md-12">
       <p class="text-center font-weight-bold mt-5 mb-0">Kindly submit Transaction Number after you do payment successfully</p>

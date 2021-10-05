@@ -26,7 +26,7 @@ class CartController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['calculate', 'add', 'payment-coin-base-callback', 'payment-coin-paid-callback'],
+                        'actions' => ['calculate', 'add', 'payment-coin-base-callback', 'payment-coin-paid-callback', 'payment-webmoney-callback'],
                         'allow' => true,
                     ],
                     [
@@ -42,6 +42,7 @@ class CartController extends Controller
                 'actions' => [
                     'payment-coin-base-callback' => ['post'],
                     'payment-coin-paid-callback' => ['post'],
+                    'payment-webmoney-callback' => ['post'],
                 ],
             ]
         ];
@@ -49,7 +50,12 @@ class CartController extends Controller
 
     public function beforeAction($action)
     {
-        if ($action->id == 'payment-coin-base-callback' || $action->id == 'payment-coin-paid-callback') {
+        $paymentActions = [
+            'payment-coin-base-callback',
+            'payment-coin-paid-callback',
+            'payment-webmoney-callback'
+        ];
+        if (in_array($action->id, $paymentActions)) {
             $this->enableCsrfValidation = false;
         }
 
@@ -278,6 +284,15 @@ class CartController extends Controller
     {
         Yii::info('start actionPaymentCoinPaidCallback');
         $identifier = 'coinspaid';
+        $config = \website\components\payment\PaymentGatewayFactory::getConfig($identifier);
+        $paygate = \website\components\payment\PaymentGatewayFactory::getPaygate($config);
+        return $paygate->processCharge();
+    }
+
+    public function actionPaymentWebmoneyCallback()
+    {
+        Yii::info('start actionPaymentWebmoneyCallback');
+        $identifier = 'webmoney';
         $config = \website\components\payment\PaymentGatewayFactory::getConfig($identifier);
         $paygate = \website\components\payment\PaymentGatewayFactory::getPaygate($config);
         return $paygate->processCharge();

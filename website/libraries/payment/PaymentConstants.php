@@ -9,4 +9,5 @@ class PaymentConstants
     // const GATEWAY_WE_CHAT = 'weChatPay';
     // const GATEWAY_SKRILL = 'skrill';
     const GATEWAY_COIN_BASE = 'coinbase';
+    const GATEWAY_WEBMONEY = 'webmoney';
 }

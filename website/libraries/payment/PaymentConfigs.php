@@ -10,4 +10,5 @@ return [
     // PaymentConstants::GATEWAY_WE_CHAT => Yii::$app->params['payment'][PaymentConstants::GATEWAY_WE_CHAT],
     // PaymentConstants::GATEWAY_SKRILL => Yii::$app->params['payment'][PaymentConstants::GATEWAY_SKRILL],
     PaymentConstants::GATEWAY_COIN_BASE => Yii::$app->params['payment'][PaymentConstants::GATEWAY_COIN_BASE],
+    PaymentConstants::GATEWAY_WEBMONEY => Yii::$app->params['payment'][PaymentConstants::GATEWAY_WEBMONEY],
 ];

@@ -40,6 +40,7 @@ return [
         'purchase-cancel' => 'cart/cancel',
         'purchase-error' => 'cart/error',
         'payment-coin-base-callback' => 'cart/payment-coin-base-callback',
+        'payment-webmoney-callback' => 'cart/payment-webmoney-callback',
         
         //user
         'user/dashboard' => 'user/index',

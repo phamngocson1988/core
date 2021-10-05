@@ -19,6 +19,8 @@ class CoinsPaid extends BasePayment
     const TRANSACTION_STATUS_PROCESSING = 'processing';
     const TRANSACTION_STATUS_PENDING = 'pending';
 
+    protected $mode = 'production'; // production
+    
     public function __construct()
     {
         parent::__construct(PaymentConstants::GATEWAY_COIN_PAID);

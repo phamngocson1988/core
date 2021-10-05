@@ -71,12 +71,6 @@ AppAsset::register($this);
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<!-- webmoney attestation label#6CD7944E-3EDF-4E7D-BB7D-1BFBB2530BC5 begin -->
-<a href="http://passport.wmtransfer.com/asp/certview.asp?wmid=679742853702" target="_blank">
-<img src="http://passport.wmtransfer.com/images/atstimg/certifyed1.gif" border="0">
-</a>
-<!-- webmoney attestation label#6CD7944E-3EDF-4E7D-BB7D-1BFBB2530BC5 end -->
-
 <div class="overlay" style="display: none;">Loading&#8230;</div>
 <?php require_once(Yii::$app->basePath . '/views/layouts/facebook_livechat.php');?>
 <?= NotificationFlash::widget() ?>
