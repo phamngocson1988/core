@@ -42,6 +42,8 @@ class PaymentGatewayFactory extends Model
                         return new \website\components\payment\paygate\CoinsPaid($paygateModal);
                     case 'webmoney':
                         return new \website\components\payment\paygate\WebMoney($paygateModal);
+                    case 'binance':
+                        return new \website\components\payment\paygate\Binance($paygateModal);
                 }
         }
         return null;

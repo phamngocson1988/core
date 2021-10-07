@@ -35,6 +35,15 @@ use common\components\helpers\StringHelper;
       </div>
       <?php endif;?>
     </div>
+    <?php elseif (in_array($payment->payment_method, ['binance'])) : ?>
+    <?php $paymentLink = $paymentData['qrcodeLink'] ? $paymentData['qrcodeLink'] : '';?>
+    <div class="col-md-12">
+      <?php if ($paymentLink) : ?>
+      <div class="text-center btn-wrapper d-block mt-5" role="group">
+        <img src="<?=$paymentLink;?>" alt="PROCEED WITH PAYMENT" width="300" height="300">
+      </div>
+      <?php endif;?>
+    </div>
     <?php elseif (in_array($payment->payment_method, ['webmoney'])) : ?>
     <div class="col-md-12">
       <?php $paymentLink = $paymentData['paygate_url'];?>

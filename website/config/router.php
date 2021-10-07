@@ -39,8 +39,10 @@ return [
         'purchase-success' => 'cart/success',
         'purchase-cancel' => 'cart/cancel',
         'purchase-error' => 'cart/error',
+        'payment-success' => 'cart/payment-success',
         'payment-coin-base-callback' => 'cart/payment-coin-base-callback',
         'payment-webmoney-callback' => 'cart/payment-webmoney-callback',
+        'payment-binance-callback' => 'cart/payment-binance-callback',
         
         //user
         'user/dashboard' => 'user/index',

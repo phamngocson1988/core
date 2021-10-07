@@ -26,11 +26,11 @@ class CartController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['calculate', 'add', 'payment-coin-base-callback', 'payment-coin-paid-callback', 'payment-webmoney-callback'],
+                        'actions' => ['calculate', 'add', 'payment-coin-base-callback', 'payment-coin-paid-callback', 'payment-webmoney-callback', 'payment-binance-callback'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk', 'thankyou', 'calculate-cart'],
+                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk', 'thankyou', 'calculate-cart', 'payment-success'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -43,6 +43,7 @@ class CartController extends Controller
                     'payment-coin-base-callback' => ['post'],
                     'payment-coin-paid-callback' => ['post'],
                     'payment-webmoney-callback' => ['post'],
+                    'payment-binance-callback' => ['post']
                 ],
             ]
         ];
@@ -53,7 +54,8 @@ class CartController extends Controller
         $paymentActions = [
             'payment-coin-base-callback',
             'payment-coin-paid-callback',
-            'payment-webmoney-callback'
+            'payment-webmoney-callback',
+            'payment-binance-callback'
         ];
         if (in_array($action->id, $paymentActions)) {
             $this->enableCsrfValidation = false;
@@ -271,6 +273,11 @@ class CartController extends Controller
         ]);
     }
 
+    public function actionPaymentSuccess()
+    {
+        return $this->render('payment-success');
+    }
+
     public function actionPaymentCoinBaseCallback()
     {
         Yii::info('start actionPaymentCoinBaseCallback');
@@ -293,6 +300,15 @@ class CartController extends Controller
     {
         Yii::info('start actionPaymentWebmoneyCallback');
         $identifier = 'webmoney';
+        $config = \website\components\payment\PaymentGatewayFactory::getConfig($identifier);
+        $paygate = \website\components\payment\PaymentGatewayFactory::getPaygate($config);
+        return $paygate->processCharge();
+    }
+
+    public function actionPaymentBinanceCallback()
+    {
+        Yii::info('start actionPaymentBinanceCallback');
+        $identifier = 'binance';
         $config = \website\components\payment\PaymentGatewayFactory::getConfig($identifier);
         $paygate = \website\components\payment\PaymentGatewayFactory::getPaygate($config);
         return $paygate->processCharge();

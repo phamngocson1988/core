@@ -10,4 +10,5 @@ class PaymentConstants
     // const GATEWAY_SKRILL = 'skrill';
     const GATEWAY_COIN_BASE = 'coinbase';
     const GATEWAY_WEBMONEY = 'webmoney';
+    const GATEWAY_BINANCE = 'binance';
 }

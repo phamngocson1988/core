@@ -37,11 +37,11 @@ class WalletController extends Controller
         $paygates = Paygate::find()->where([
             'status' => Paygate::STATUS_ACTIVE,
         ])->all();
-        if (!in_array(Yii::$app->user->id, [213, 910])) {
-            $paygates = array_filter($paygates, function ($obj) {
-                return $obj->identifier != 'webmoney';
-            });
-        }
+        // if (!in_array(Yii::$app->user->id, [213, 910])) {
+        //     $paygates = array_filter($paygates, function ($obj) {
+        //         return !in_array($obj->identifier, ['webmoney', 'binance']);
+        //     });
+        // }
         // pending transaction
         $pendings = PaymentTransaction::find()->where([
             'status' => PaymentTransaction::STATUS_PENDING,
