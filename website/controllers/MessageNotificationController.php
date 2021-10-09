@@ -9,9 +9,42 @@ use yii\helpers\ArrayHelper;
 
 use website\models\OrderComplains;
 use website\models\Order;
+use yii\data\Pagination;
 
 class MessageNotificationController extends Controller
 {
+    public function actionIndex()
+    {
+        $userId = Yii::$app->getUser()->getId();
+        $complainTable = OrderComplains::tableName();
+        $orderTable = Order::tableName();
+        $query = OrderComplains::find()
+        ->innerJoin($orderTable, "{$orderTable}.id = {$complainTable}.order_id")
+        ->where([
+            "{$orderTable}.customer_id" => $userId,
+            "{$complainTable}.is_customer" => OrderComplains::IS_NOT_CUSTOMER
+        ])
+        ->orderBy(["{$complainTable}.created_at" => SORT_DESC])
+        ->select(["{$complainTable}.*"]);
+
+        $pagination = new Pagination([
+            'pageSize' => 20,
+            'totalCount' => $query->count(),
+        ]);
+
+        $list = $query->asArray()
+        ->offset($pagination->offset)
+        ->limit($pagination->limit)
+        ->all();
+
+        $notifs = $this->prepareNotifications($list);
+
+        return $this->render('index', [
+            'notifications' => $notifs,
+            'pagination' => $pagination,
+        ]);
+    }
+
     public function actionList()
     {
         $userId = Yii::$app->getUser()->getId();

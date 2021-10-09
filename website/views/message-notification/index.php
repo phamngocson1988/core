@@ -46,7 +46,7 @@ use yii\widgets\ActiveForm;
           <td class="text-center"><?=$notification['timeago'];?></td>
           <td class="text-center">
             <?php if (!$notification['read']) : ?>
-              <a href='<?=Url::to(['notification/read', 'id' => $notification['id']]);?>' class="notification-read-button btn btn-outline-success btn-sm" type="button">Mark as read</a>
+              <a href='<?=Url::to(['message-notification/read', 'id' => $notification['id']]);?>' class="notification-read-button btn btn-outline-success btn-sm" type="button">Mark as read</a>
             <?php endif;?>
             <a href="<?=$notification['url'];?>" class="btn btn-outline-info btn-sm" type="button">Link</a>
           </td>
@@ -61,7 +61,7 @@ use yii\widgets\ActiveForm;
 </div>
 
 <?php
-$readAllUrl = Url::to(['notification/read-all']);
+$readAllUrl = Url::to(['message-notification/read-all']);
 $script = <<< JS
 $('#notification-read-all-button').on('click', function(e){
   e.stopPropagation();

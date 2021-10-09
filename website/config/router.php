@@ -62,6 +62,7 @@ return [
 
         // notifications
         'notifications' => 'notification/index',
+        'message-notifications' => 'message-notification/index',
         'notifications/default/index' => 'notifications/default/index',
         'notifications/default/list' => 'notifications/default/list',
         'notifications/default/count' => 'notifications/default/count',
