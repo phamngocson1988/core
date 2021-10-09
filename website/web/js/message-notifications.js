@@ -89,8 +89,8 @@ var MessageNotifications = (function(opts) {
                                 item.addClass('read');
                             }
                         });
-                        if (object.url) {
-                            document.location.href = object.url;
+                        if (object.dispatch) {
+                            document.location.href = object.dispatch;
                         }
                     });
                     item.insertBefore(list.find('li:last'));

@@ -41,6 +41,7 @@ class NotificationController extends DefaultController
         foreach($list as $notif){
             $route = @unserialize($notif['route']);
             $notif['url'] = !empty($route) ? Url::to($route) : '';
+            $notif['dispatch'] = Url::to(['notification/dispatch', 'id' => $notif['id']]);
             $notif['timeago'] = \common\components\helpers\TimeElapsed::timeElapsed($notif['created_at']);
             $notifs[] = $notif;
         }
@@ -94,5 +95,22 @@ class NotificationController extends DefaultController
             ->count();
 
         $this->ajaxResponse(['count' => $count]);
+    }
+
+    public function actionDispatch($id)
+    {
+        $userId = Yii::$app->user->id;
+        $list = (new Query())
+        ->from('{{%notifications}}')
+        ->andWhere(['or', 'user_id = 0', 'user_id = :user_id'], [':user_id' => $userId])
+        ->andWhere(['id' => $id])
+        ->all();
+
+        if (count($list)) {
+            $notifications = $this->prepareNotifications($list);
+            $notification = reset($notifications);
+            return $this->redirect($notification['url']);
+        }
+        return $this->redirect(['site/index']);
     }
 }

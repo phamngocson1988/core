@@ -100,6 +100,7 @@ class MessageNotificationController extends Controller
         foreach($list as $notif){
             $route = ['order/index', '#' => $notif['order_id']];
             $notif['url'] = !empty($route) ? Url::to($route) : '';
+            $notif['dispatch'] = Url::to(['message-notification/dispatch', 'id' => $notif['id']]);
             $notif['read'] = $notif['is_read'];
             $notif['key'] = $notif['id'];
             $notif['class'] = $notif['object_name'];
@@ -146,6 +147,29 @@ class MessageNotificationController extends Controller
             return $this->ajaxResponse(1);
         }
         die('404');
+    }
+
+    public function actionDispatch($id)
+    {
+        $userId = Yii::$app->user->id;
+        $complainTable = OrderComplains::tableName();
+        $orderTable = Order::tableName();
+        $list = OrderComplains::find()
+        ->innerJoin($orderTable, "{$orderTable}.id = {$complainTable}.order_id")
+        ->where([
+            "{$orderTable}.customer_id" => $userId,
+            "{$complainTable}.id" => $id
+        ])
+        ->select(["{$complainTable}.*"])
+        ->asArray()
+        ->all();
+
+        if (count($list)) {
+            $notifications = $this->prepareNotifications($list);
+            $notification = reset($notifications);
+            return $this->redirect($notification['url']);
+        }
+        return $this->redirect(['site/index']);
     }
 
 }

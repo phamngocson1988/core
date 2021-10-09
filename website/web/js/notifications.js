@@ -75,33 +75,6 @@ var Notifications = (function(opts) {
                     }
 
                     var item = renderRow(object);
-
-                    item.on('click', function(e) {
-                        e.stopPropagation();
-                        if(item.hasClass('read')){
-                            return;
-                        }
-                        $.ajax({
-                            url: options.readUrl,
-                            type: "GET",
-                            data: {id: item.data('id')},
-                            dataType: "json",
-                            timeout: opts.xhrTimeout,
-                            success: function (data) {
-                                console.log('success', object);
-                                item.removeClass('read');
-                                item.addClass('read');
-                                if(object.url){
-                                    document.location = object.url;
-                                }
-                            }
-                        });
-
-                    });
-
-                    // if(object.seen == '0'){
-                    //     seen += 1;
-                    // }
                     item.on('click', function(e){
                         e.stopPropagation();
                         if (!item.hasClass('read')) {
@@ -118,8 +91,8 @@ var Notifications = (function(opts) {
                                 }
                             });
                         }
-                        if (object.url) {
-                            document.location = object.url;
+                        if (object.dispatch) {
+                            document.location = object.dispatch;
                         }
                     });
                     item.insertBefore(list.find('li:last'));
