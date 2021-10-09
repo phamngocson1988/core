@@ -45,7 +45,7 @@ class Notifications extends BaseNotifications
         $firstLiWrapper = Html::tag('div', $firstLiContent, ['class' => 'row']);
         $firstLi = Html::tag('li', $firstLiWrapper, ['class' => 'head text-light']);
 
-        $viewAllLink = Html::a('View All', 'javascript:;', ['class' => 'text-light']);
+        $viewAllLink = Html::a('View All', ['notification/index'], ['class' => 'text-light']);
         $lastLi = Html::tag('li', $viewAllLink, ['class' => 'text-center view-all']);
         $html .= Html::tag('ul', $firstLi . $lastLi, ['class' => 'dropdown-menu']);
 
