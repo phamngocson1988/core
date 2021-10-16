@@ -207,6 +207,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 <?php
 $hiddenColumns = [];
 if (Yii::$app->user->isRole('admin')) $hiddenColumns = [];
+elseif (Yii::$app->user->isRole('sale_manager')) array_push($hiddenColumns, 'manager');
 elseif (Yii::$app->user->isRole('saler')) array_push($hiddenColumns, 'manager', 'action');
 $hiddenColumnString = implode(',', $hiddenColumns);
 

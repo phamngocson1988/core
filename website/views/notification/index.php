@@ -48,7 +48,7 @@ use yii\widgets\ActiveForm;
             <?php if (!$notification['read']) : ?>
               <a href='<?=Url::to(['notification/read', 'id' => $notification['id']]);?>' class="notification-read-button btn btn-outline-success btn-sm" type="button">Mark as read</a>
             <?php endif;?>
-            <a href="<?=$notification['url'];?>" class="btn btn-outline-info btn-sm" type="button">Link</a>
+            <a href="<?=$notification['url'];?>" class="btn btn-outline-info btn-sm" type="button">View details</a>
           </td>
         </tr>
       	<?php endforeach;?>
