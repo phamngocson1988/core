@@ -45,6 +45,7 @@ class m180517_025826_create_product_schema extends Migration
             'method' => $this->integer(),
             'version' => $this->integer(),
             'package' => $this->integer(),
+            'min_quantity' => $this->integer(),
             'created_at' => $this->dateTime(),            
             'created_by' => $this->integer(),
             'updated_at' => $this->dateTime(),

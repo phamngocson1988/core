@@ -46,6 +46,7 @@ class CreateGameForm extends Model
     public $version;
     public $package;
     public $categories;
+    public $min_quantity;
 
     public function rules()
     {
@@ -64,7 +65,8 @@ class CreateGameForm extends Model
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
             [['group_id', 'method', 'package', 'version'], 'safe'],
-            ['group_id', 'validateGroup']
+            ['group_id', 'validateGroup'],
+            ['min_quantity', 'number']
         ];
     }
 
@@ -108,6 +110,7 @@ class CreateGameForm extends Model
             'price_remark' => 'Remark',
             'google_ads' => 'Google Ads',
             'categories' => 'Danh mục game',
+            'min_quantity' => 'Số gói nhỏ nhất khi đặt hàng'
         ];
     }
 
@@ -174,6 +177,7 @@ class CreateGameForm extends Model
         $post->method = $this->method;
         $post->version = $this->version;
         $post->package = $this->package;
+        $post->min_quantity = $this->min_quantity;
         return $post;
     }
 
@@ -218,40 +222,6 @@ class CreateGameForm extends Model
         return ArrayHelper::map($packages, 'id', 'title');
     }
 
-    // public function getMethods()
-    // {
-    //     if (!$this->group_id) return [];
-    //     $group = GameGroup::findOne($this->group_id);
-    //     $methods = explode(',', $group->method);
-    //     $keys = array_map(function($val) {
-    //         return Inflector::slug($val);
-    //     }, $methods);
-    //     return array_combine($keys, $methods);
-    // }
-
-    // public function getVersions()
-    // {
-    //     if (!$this->group_id) return [];
-    //     $group = GameGroup::findOne($this->group_id);
-    //     $versions = explode(',', $group->version);
-    //     $keys = array_map(function($val) {
-    //         return Inflector::slug($val);
-    //     }, $versions);
-    //     return array_combine($keys, $versions);
-    // }
-
-    // public function getPackages()
-    // {
-    //     if (!$this->group_id) return [];
-    //     $group = GameGroup::findOne($this->group_id);
-    //     $packages = explode(',', $group->package);
-    //     $keys = array_map(function($val) {
-    //         return Inflector::slug($val);
-    //     }, $packages);
-    //     return array_combine($keys, $packages);
-    // }
-
-
     public function getGroupData()
     {
         $groups = GameGroup::find()->all();
@@ -264,5 +234,4 @@ class CreateGameForm extends Model
         });
 
     }
-
 }

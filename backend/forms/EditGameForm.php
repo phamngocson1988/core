@@ -47,6 +47,7 @@ class EditGameForm extends Model
     public $version;
     public $package;
     public $categories;
+    public $min_quantity;
 
     protected $_game;
     protected $_groups;
@@ -67,7 +68,8 @@ class EditGameForm extends Model
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
             [['group_id', 'method', 'package', 'version'], 'safe'],
-            ['group_id', 'validateGroup']
+            ['group_id', 'validateGroup'],
+            ['min_quantity', 'number']
         ];
     }
 
@@ -117,6 +119,7 @@ class EditGameForm extends Model
             'price_remark' => 'Remark',
             'google_ads' => 'Google Ads',
             'categories' => 'Danh mục game',
+            'min_quantity' => 'Số gói nhỏ nhất khi đặt hàng'
         ];
     }
 
@@ -169,6 +172,7 @@ class EditGameForm extends Model
             $game->method = $this->method;
             $game->version = $this->version;
             $game->package = $this->package;
+            $game->min_quantity = $this->min_quantity;
             $game->save();
             $newId = $game->id;
 
@@ -235,6 +239,7 @@ class EditGameForm extends Model
         $this->method = $game->method;
         $this->version = $game->version;
         $this->package = $game->package;
+        $this->min_quantity = $game->min_quantity;
 
         $categories = GameCategoryItem::find()->where(['game_id' => $this->id])->all();
         $this->categories = ArrayHelper::getColumn($categories, 'category_id');

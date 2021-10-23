@@ -54,6 +54,7 @@ class CartItem extends Game implements CartItemInterface
             ['voucher', 'validateVoucher'],
             [['username', 'password', 'character_name', 'login_method'], 'required', 'on' => self::SCENARIO_UPDATE_CART],
             [['quantity', 'raw'], 'required', 'on' => self::SCENARIO_BULK_CART],
+            ['quantity', 'validateQuantity'],
 
             ['recover_code', 'required', 'whenClient' => "function (attribute, value) {
                 var loginMethod = $('#login_method').val();
@@ -211,6 +212,14 @@ class CartItem extends Game implements CartItemInterface
             $this->addError($attribute, 'This voucher code is not valid for this user');
             $this->_promotion = null;
             return;
+        }
+    }
+
+    public function validateQuantity($attribute, $params) 
+    {
+        if ($this->min_quantity && $this->quantity < $this->min_quantity) {
+            $message = sprintf('Action is failed. Min order should be: %s', number_format($this->min_quantity));
+            $this->addError($attribute, $message);
         }
     }
 }
