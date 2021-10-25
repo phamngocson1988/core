@@ -6,3 +6,4 @@ Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
 Yii::setAlias('@supplier', dirname(dirname(__DIR__)) . '/supplier');
 Yii::setAlias('@api', dirname(dirname(__DIR__)) . '/api');
 Yii::setAlias('@website', dirname(dirname(__DIR__)) . '/website');
+Yii::setAlias('@payment', dirname(dirname(__DIR__)) . '/payment');

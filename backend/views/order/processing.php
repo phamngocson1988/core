@@ -186,7 +186,10 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
                   <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
-                  <td col-tag="price" class="center"><?=StringHelper::numberFormat($model->cogs_price * $model->rate_usd, 2);?></td>
+                  <td col-tag="price" class="center">
+                  <?php //StringHelper::numberFormat($model->cogs_price * $model->rate_usd, 2);?>
+                  <?=$supplier ? StringHelper::numberFormat($supplier->price, 2) : '-' ;?>
+                  </td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="login_time" class="center"><?=number_format($model->login_time);?></td>
                   <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>

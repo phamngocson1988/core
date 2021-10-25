@@ -183,7 +183,9 @@ if ($canSaler) $numColumn += 1;
                   <td col-tag="game"><?=$model->game_title;?></td>
                   <td col-tag="total_unit" class="center"><?=number_format($model->total_unit);?></td>
                   <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
-                  <td col-tag="price" class="center"><?=StringHelper::numberFormat($model->cogs_price * $model->rate_usd, 2);?></td>
+                  <td col-tag="price" class="center">
+                    <?=$supplier ? StringHelper::numberFormat($supplier->price, 2) : '-' ;?>
+                  </td>
                   <td col-tag="waiting_time" class="center"><?=number_format($model->waiting_time);?></td>
                   <td col-tag="processing_time" class="center">
                     <?php 

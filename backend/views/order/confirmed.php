@@ -204,7 +204,13 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <td col-tag="customer"><?=$model->getCustomerName();?></td>
                 <td col-tag="game"><?=$model->game_title;?></td>
                 <td col-tag="quantity" class="center"><?=StringHelper::numberFormat($model->quantity, 2);?></td>
-                <td col-tag="price" class="center"><?=StringHelper::numberFormat($model->cogs_price * $model->rate_usd, 2);?></td>
+                <td col-tag="price" class="center">
+                  <?php
+                  $suppliers = $model->suppliers;
+                  $supplier = $suppliers ? end($suppliers) : null;
+                  echo $supplier ? StringHelper::numberFormat($supplier->price, 2) : '-' ;
+                  ?>
+                </td>
                 <td col-tag="created_at"> <?=$model->created_at;?> </td>
                 <td col-tag="completed_at"> <?=$model->completed_at;?> </td>
                 <td col-tag="confirmed_at"> <?=$model->confirmed_at;?> </td>
