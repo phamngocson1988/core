@@ -1,0 +1,1 @@
+<h1 style="text-align: center; margin-top: 200px;font-size:5"><?=$message;?></h1>

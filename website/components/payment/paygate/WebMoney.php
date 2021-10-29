@@ -4,7 +4,7 @@ namespace website\components\payment\paygate;
 use Yii;
 use yii\helpers\Url;
 use website\models\Order;
-use website\models\PaymentTransaction;
+use common\models\PaymentTransaction;
 use website\forms\CreatePaymentRealityForm;
 use common\components\helpers\StringHelper;
 use website\libraries\payment\gateway\WebMoney as WebMoneyService;

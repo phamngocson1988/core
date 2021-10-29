@@ -132,6 +132,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                     <a href='#change-level<?=$model->user_id;?>' class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Giảm cấp nhà bán lẻ"data-toggle="modal" data-level="down" ><i class="fa fa-arrow-down"></i></a>
                     <?php endif; ?>
                     <a href='#assign<?=$model->user_id;?>' class="btn btn-sm default tooltips" data-container="body" data-original-title="Chọn nhân viên quản lý"data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                    <a class="btn btn-sm green tooltips generate-code" href="<?=Url::to(['reseller/generate-code', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Copy mã thanh toán" data-name="<?=$model->user->name;?>"><i class="fa fa-files-o"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -223,6 +224,20 @@ $('.action-link').ajax_action({
   callback: function(data) {
     location.reload();
   },
+});
+
+//generate-code
+$('.generate-code').ajax_action({
+  method: 'POST',
+  confirm: false,
+  callback: function(el, code) {
+    const name = $(el).data('name');
+    const link = 'http://sub-payment.com/'+code+'.html';
+    copyToClipboard(link);
+    // toastr.success('Mã thanh toán của Reseller ' + name + ' đã được lưu trong clipboard'); 
+    alert('Link thanh toán của Reseller '+name+' là: ' + link);
+    $(el).data('code', code);
+  }
 });
 
 var sendForm = new AjaxFormSubmit({element: '.assign-form'});

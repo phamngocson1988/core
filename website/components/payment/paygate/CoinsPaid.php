@@ -5,7 +5,7 @@ use Yii;
 use yii\helpers\Url;
 use website\libraries\payment\gateway\CoinsPaid as CoinsPaidService;
 use website\models\Order;
-use website\models\PaymentTransaction;
+use common\models\PaymentTransaction;
 use website\forms\CreatePaymentRealityForm;
 use common\components\helpers\StringHelper;
 

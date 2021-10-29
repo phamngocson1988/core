@@ -1,0 +1,596 @@
+********************************************************************************
+* DUPLICATOR-PRO: Install-Log
+* STEP-0 START @ 04:30:07
+* VERSION: 3.8.7
+* NOTICE: Do NOT post to public sites or forums!!
+********************************************************************************
+PACKAGE INFO________ ORIGINAL SERVER                        |CURRENT SERVER
+OS__________________: Linux                                 |Linux
+PHP VERSION_________: 7.2.28                                |7.2.28
+********************************************************************************
+CURRENT SERVER INFO
+PHP_________________: 7.2.28 | SAPI: litespeed
+PHP MEMORY__________: 4294967296 | SUHOSIN: disabled
+SERVER______________: LiteSpeed
+DOC ROOT____________: "/home/kinggems/public_html/website/web/promotion"
+LOG FILE 644________: false
+REQUEST URL_________: "http://layout.kinggems.us/promotion/dup-installer/main.installer.php"
+********************************************************************************
+INSTALLER INFO
+PATH_NEW____________: "/home/kinggems/public_html/website/web/promotion"
+URL_NEW_____________: "http://layout.kinggems.us/promotion"
+********************************************************************************
+
+--------------------------------------
+ARCHIVE INFO
+--------------------------------------
+ARCHIVE NAME________: "/home/kinggems/public_html/website/web/promotion/20200812_promotionkinggems_78cde6a8d6c41a737776_20200812040645_archive.zip"
+ARCHIVE SIZE________: 79.03MB
+CREATED_____________: 2020-08-12 04:06:45
+WP VERSION__________: 5.4.2
+DUP VERSION_________: 3.8.7
+DB VERSION__________: 5.6.47
+DB FILE SIZE________: 1.78MB
+DB TABLES___________: 14
+DB ROWS_____________: 440
+ORIGINAL URL________: https://kinggems.us/promotion
+PATH HOME___________: /home/kinggems/public_html/frontend/web/promotion
+PATH ABS____________: /home/kinggems/public_html/frontend/web/promotion
+PATH WPCONFIG_______: /home/kinggems/public_html/frontend/web/promotion
+PATH WPCONTENT______: /home/kinggems/public_html/frontend/web/promotion/wp-content
+PATH UPLOADS________: /home/kinggems/public_html/frontend/web/promotion/wp-content/uploads
+PATH PLUGINS________: /home/kinggems/public_html/frontend/web/promotion/wp-content/plugins
+PATH MUPLUGINS______: /home/kinggems/public_html/frontend/web/promotion/wp-content/mu-plugins
+PATH THEMES_________: /home/kinggems/public_html/frontend/web/promotion/wp-content/themes
+***  PLUGINS ***
+PLUGIN [SLUG:akismet/akismet.php                               ][ON:false] Akismet Anti-Spam
+PLUGIN [SLUG:duplicator-pro/duplicator-pro.php                 ][ON:true ] Duplicator Pro
+PLUGIN [SLUG:hello.php                                         ][ON:false] Hello Dolly
+PLUGIN [SLUG:litespeed-cache/litespeed-cache.php               ][ON:false] LiteSpeed Cache
+PLUGIN [SLUG:really-simple-ssl/rlrsssl-really-simple-ssl.php   ][ON:true ] Really Simple SSL
+--------------------------------------
+--------------------------------------
+
+********************************************************************************
+* DUPLICATOR-PRO: Install-Log
+* STEP-1 START @ 04:30:21
+* NOTICE: Do NOT post to public sites or forums!!
+********************************************************************************
+USER INPUTS
+HOME URL OLD________: "https://kinggems.us/promotion"
+HOME URL NEW________: "http://layout.kinggems.us/promotion"
+SITE URL OLD________: "https://kinggems.us/promotion"
+SITE URL NEW________: "http://layout.kinggems.us/promotion"
+CONTENT URL OLD_____: "https://kinggems.us/promotion/wp-content"
+CONTENT URL NEW_____: "http://layout.kinggems.us/promotion/wp-content"
+UPLOAD URL OLD______: "https://kinggems.us/promotion/wp-content/uploads"
+UPLOAD URL NEW______: "http://layout.kinggems.us/promotion/wp-content/uploads"
+PLUGINS URL OLD_____: "https://kinggems.us/promotion/wp-content/plugins"
+PLUGINS URL NEW_____: "http://layout.kinggems.us/promotion/wp-content/plugins"
+MUPLUGINS URL OLD___: "https://kinggems.us/promotion/wp-content/mu-plugins"
+MUPLUGINS URL NEW___: "http://layout.kinggems.us/promotion/wp-content/mu-plugins"
+HOME PATH OLD_______: "/home/kinggems/public_html/frontend/web/promotion"
+HOME PATH NEW_______: "/home/kinggems/public_html/website/web/promotion"
+SITE PATH OLD_______: "/home/kinggems/public_html/frontend/web/promotion"
+SITE PATH NEW_______: "/home/kinggems/public_html/website/web/promotion"
+CONTENT PATH OLD____: "/home/kinggems/public_html/frontend/web/promotion/wp-content"
+CONTENT PATH NEW____: "/home/kinggems/public_html/website/web/promotion/wp-content"
+UPLOAD PATH OLD_____: "/home/kinggems/public_html/frontend/web/promotion/wp-content/uploads"
+UPLOAD PATH NEW_____: "/home/kinggems/public_html/website/web/promotion/wp-content/uploads"
+PLUGINS PATH OLD____: "/home/kinggems/public_html/frontend/web/promotion/wp-content/plugins"
+PLUGINS PATH NEW____: "/home/kinggems/public_html/website/web/promotion/wp-content/plugins"
+MUPLUGINS PATH OLD__: "/home/kinggems/public_html/frontend/web/promotion/wp-content/mu-plugins"
+MUPLUGINS PATH NEW__: "/home/kinggems/public_html/website/web/promotion/wp-content/mu-plugins"
+ARCHIVE ENGINE______: "ziparchivechunking"
+CLIENT KICKOFF______: false
+SET DIR PERMS_______: true
+DIR PERMS VALUE_____: 755
+SET FILE PERMS______: true
+FILE PERMS VALUE____: 644
+SAFE MODE___________: 0
+LOGGING_____________: 1
+WP CONFIG___________: "modify"
+HTACCESS CONFIG_____: "new"
+OTHER CONFIG________: "new"
+FILE TIME___________: "current"
+REMOVE RENDUNDANT___: false
+********************************************************************************
+
+--------------------------------------
+
+PATHS MAPPING_______: "/home/kinggems/public_html/website/web/promotion"
+--------------------------------------
+
+
+
+START ZIP FILE EXTRACTION CHUNKING >>> 
+ARCHIVE OFFSET 0
+Expected total archive extract time: 20.050826403226
+Total extraction elapsed time until now: 20.050826403226
+
+
+CONTINUE ZIP FILE EXTRACTION CHUNKING >>> 
+ARCHIVE OFFSET 4165
+Expected total archive extract time: 18.02101905471
+Total extraction elapsed time until now: 18.02101905471
+
+
+CONTINUE ZIP FILE EXTRACTION CHUNKING >>> 
+ARCHIVE OFFSET 4651
+Archive just got done processing last file in list of 6102
+Expected total archive extract time: 17.738939587867
+Total extraction elapsed time until now: 17.738939587867
+Resetting permissions
+
+WEB SERVER CONFIGURATION FILE STATUS:
+- .htaccess file was not reset or backed up.
+- .user.ini file was not reset or backed up.
+- web.config file was not reset or backed up.
+
+STEP-1 COMPLETE @ 04:30:49 - RUNTIME: 28.4813 sec.
+
+-------------------------
+AJAX ACTION dbtest
+
+
+
+********************************************************************************
+* DUPLICATOR PRO INSTALL-LOG
+* STEP-2 START @ 04:31:13
+* NOTICE: Do NOT post to public sites or forums!!
+********************************************************************************
+USER INPUTS
+VIEW MODE___________: "basic"
+DB ACTION___________: "empty"
+DB HOST_____________: "**OBSCURED**"
+DB NAME_____________: "**OBSCURED**"
+DB PASS_____________: "**OBSCURED**"
+DB PORT_____________: "**OBSCURED**"
+TABLE PREFIX________: "wp_"
+MYSQL MODE__________: "DEFAULT"
+MYSQL MODE OPTS_____: ""
+NON-BREAKING SPACES_: false
+CHARSET_____________: "utf8"
+CHARSET FB__________: false
+CHARSET FB VAL______: "big5"
+COLLATE_____________: "utf8_general_ci"
+COLLATE FB__________: false
+COLLATE FB VAL______: "big5_chinese_ci"
+CUNKING_____________: true
+VIEW CREATION_______: true
+STORED PROCEDURE____: true
+********************************************************************************
+
+--------------------------------------
+DATABASE-ENVIRONMENT
+--------------------------------------
+MYSQL VERSION:	This Server: 5.6.47 -- Build Server: 5.6.47
+FILE SIZE:	dup-database__78cde6a-12040645.sql (1.76MB)
+TIMEOUT:	5000
+MAXPACK:	268435456
+SQLMODE-GLOBAL:	NO_ENGINE_SUBSTITUTION
+SQLMODE-SESSION:NO_AUTO_VALUE_ON_ZERO
+COLLATE FB:	Off
+DB CHUNKING:	enabled
+DB VIEWS:	enabled
+DB PROCEDURES:	enabled
+--------------------------------------
+DATABASE RESULTS
+--------------------------------------
+--------------------------------------
+** DATABASE CHUNK install start
+--------------------------------------
+DATABASE CHUNK SEEK POSITION: 0
+Auto Commit set to false successfully
+Auto Commit set to true successfully
+--------------------------------------
+** DATABASE CHUNK install end
+--------------------------------------
+Starting Cleanup Routine...
+Cleanup Routine Complete
+ERRORS FOUND:	0
+DROPPED TABLES:	0
+RENAMED TABLES:	0
+QUERIES RAN:	0
+
+TABLES ROWS
+
+TABLE "wp_commentmeta"__________________________________[ROWS:     0]
+TABLE "wp_comments"_____________________________________[ROWS:     0]
+TABLE "wp_duplicator_pro_entities"______________________[ROWS:     5]
+TABLE "wp_duplicator_pro_packages"______________________[ROWS:     0]
+TABLE "wp_links"________________________________________[ROWS:     0]
+TABLE "wp_options"______________________________________[ROWS:   135]
+TABLE "wp_postmeta"_____________________________________[ROWS:   107]
+TABLE "wp_posts"________________________________________[ROWS:   134]
+TABLE "wp_term_relationships"___________________________[ROWS:     0]
+TABLE "wp_term_taxonomy"________________________________[ROWS:     1]
+TABLE "wp_termmeta"_____________________________________[ROWS:     0]
+TABLE "wp_terms"________________________________________[ROWS:     1]
+TABLE "wp_usermeta"_____________________________________[ROWS:    21]
+TABLE "wp_users"________________________________________[ROWS:     1]
+
+DATABASE CACHE/TRANSITIENT [ROWS:    35]
+
+INSERT DATA RUNTIME: 0.0098 sec.
+STEP-2 COMPLETE @ 04:31:13 - RUNTIME: 0.0119 sec.
+
+====================================
+SET SEARCH AND REPLACE LIST
+====================================
+
+
+********************************************************************************
+DUPLICATOR PRO INSTALL-LOG
+STEP-3 START @ 04:31:19
+NOTICE: Do NOT post to public sites or forums
+********************************************************************************
+CHARSET SERVER:	"utf8"
+CHARSET CLIENT:	"utf8"
+********************************************************************************
+OPTIONS:
+blogname______________: "Promotion Kinggems"
+url_old_______________: "https://kinggems.us/promotion"
+url_new_______________: "http://layout.kinggems.us/promotion"
+siteurl_______________: "http://layout.kinggems.us/promotion"
+path_new______________: "/home/kinggems/public_html/website/web/promotion"
+path_old______________: "/home/kinggems/public_html/frontend/web/promotion"
+replace_mode__________: "legacy"
+empty_schedule_storage: true
+mode_chunking_________: 1
+wp_username___________: ""
+wp_mail_______________: ""
+wp_nickname___________: ""
+wp_first_name_________: ""
+wp_last_name__________: ""
+cross_search__________: true
+postguid______________: false
+fullsearch____________: false
+replaceMail___________: false
+maxSerializeStrlen____: 4000000
+auth_keys_and_salts___: false
+action_mu_mode________: -1
+DISALLOW_FILE_EDIT____: Array
+(
+    [value] => 
+    [inWpConfig] => 
+)
+
+AUTOSAVE_INTERVAL_____: Array
+(
+    [value] => 60
+    [inWpConfig] => 
+)
+
+WP_POST_REVISIONS_____: Array
+(
+    [value] => 1
+    [inWpConfig] => 
+)
+
+FORCE_SSL_ADMIN_______: Array
+(
+    [value] => 1
+    [inWpConfig] => 
+)
+
+WP_AUTO_UPDATE_CORE___: Array
+(
+    [value] => false
+    [inWpConfig] => 
+)
+
+WP_CACHE______________: Array
+(
+    [value] => 
+    [inWpConfig] => 
+)
+
+WPCACHEHOME___________: Array
+(
+    [value] => 
+    [inWpConfig] => 
+)
+
+WP_DEBUG______________: Array
+(
+    [value] => 
+    [inWpConfig] => 1
+)
+
+WP_DEBUG_LOG__________: Array
+(
+    [value] => 
+    [inWpConfig] => 
+)
+
+WP_DEBUG_DISPLAY______: Array
+(
+    [value] => 1
+    [inWpConfig] => 
+)
+
+SCRIPT_DEBUG__________: Array
+(
+    [value] => 
+    [inWpConfig] => 
+)
+
+SAVEQUERIES___________: Array
+(
+    [value] => 
+    [inWpConfig] => 
+)
+
+COOKIE_DOMAIN_________: Array
+(
+    [value] => 
+    [inWpConfig] => 
+)
+
+WP_MEMORY_LIMIT_______: Array
+(
+    [value] => 40M
+    [inWpConfig] => 
+)
+
+WP_MAX_MEMORY_LIMIT___: Array
+(
+    [value] => 512M
+    [inWpConfig] => 
+)
+
+********************************************************************************
+
+
+====================================
+RUN SEARCH AND REPLACE
+====================================
+
+EVALUATE TABLE: "wp_commentmeta"__________________________________[ROWS:     0][PG:   0][SCAN:no columns  ]
+
+EVALUATE TABLE: "wp_comments"_____________________________________[ROWS:     0][PG:   0][SCAN:no columns  ]
+
+EVALUATE TABLE: "wp_duplicator_pro_entities"______________________[ROWS:     5][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+
+EVALUATE TABLE: "wp_duplicator_pro_packages"______________________[ROWS:     0][PG:   0][SCAN:no columns  ]
+
+EVALUATE TABLE: "wp_links"________________________________________[ROWS:     0][PG:   0][SCAN:no columns  ]
+
+EVALUATE TABLE: "wp_options"______________________________________[ROWS:   135][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+
+EVALUATE TABLE: "wp_postmeta"_____________________________________[ROWS:   107][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+
+EVALUATE TABLE: "wp_posts"________________________________________[ROWS:   134][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+
+EVALUATE TABLE: "wp_term_relationships"___________________________[ROWS:     0][PG:   0][SCAN:no columns  ]
+
+EVALUATE TABLE: "wp_term_taxonomy"________________________________[ROWS:     1][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+
+EVALUATE TABLE: "wp_termmeta"_____________________________________[ROWS:     0][PG:   0][SCAN:no columns  ]
+
+EVALUATE TABLE: "wp_terms"________________________________________[ROWS:     1][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+
+EVALUATE TABLE: "wp_usermeta"_____________________________________[ROWS:    21][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+
+EVALUATE TABLE: "wp_users"________________________________________[ROWS:     1][PG:   1][SCAN:text columns]
+	SEARCH  1:"/home/kinggems/public_html/frontend/web/promotion/" => "/home/kinggems/public_html/website/web/promotion/"
+	SEARCH  2:"\/home\/kinggems\/public_html\/frontend\/web\/promotion\/" => "\/home\/kinggems\/public_html\/website\/web\/promotion\/"
+	SEARCH  3:"%2Fhome%2Fkinggems%2Fpublic_html%2Ffrontend%2Fweb%2Fpromotion%2F" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion%2F"
+	SEARCH  4:"\home\kinggems\public_html\frontend\web\promotion" => "/home/kinggems/public_html/website/web/promotion"
+	SEARCH  5:"\\home\\kinggems\\public_html\\frontend\\web\\promotion" => "\/home\/kinggems\/public_html\/website\/web\/promotion"
+	SEARCH  6:"%5Chome%5Ckinggems%5Cpublic_html%5Cfrontend%5Cweb%5Cpromotion" => "%2Fhome%2Fkinggems%2Fpublic_html%2Fwebsite%2Fweb%2Fpromotion"
+	SEARCH  7:"//kinggems.us/promotion" =========================> "//layout.kinggems.us/promotion"
+	SEARCH  8:"\/\/kinggems.us\/promotion" ======================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH  9:"%2F%2Fkinggems.us%2Fpromotion" ===================> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 10:"//www.kinggems.us/promotion" =====================> "//layout.kinggems.us/promotion"
+	SEARCH 11:"\/\/www.kinggems.us\/promotion" ==================> "\/\/layout.kinggems.us\/promotion"
+	SEARCH 12:"%2F%2Fwww.kinggems.us%2Fpromotion" ===============> "%2F%2Flayout.kinggems.us%2Fpromotion"
+	SEARCH 13:"https://layout.kinggems.us/promotion" ============> "http://layout.kinggems.us/promotion"
+	SEARCH 14:"https:\/\/layout.kinggems.us\/promotion" =========> "http:\/\/layout.kinggems.us\/promotion"
+	SEARCH 15:"https%3A%2F%2Flayout.kinggems.us%2Fpromotion" ====> "http%3A%2F%2Flayout.kinggems.us%2Fpromotion"
+--------------------------------------
+SCANNED:	Tables:14 	|	 Rows:405 	|	 Cells:4169 
+UPDATED:	Tables:4 	|	 Rows:139 	|	 Cells:140 
+ERRORS:		0 
+RUNTIME:	0.057400 sec
+
+====================================
+REMOVE MAINTENANCE MODE
+====================================
+
+====================================
+REMOVE LICENSE KEY
+====================================
+
+====================================
+CREATE NEW ADMIN USER
+====================================
+
+====================================
+CONFIGURATION FILE UPDATES
+====================================
+	UPDATE DB_NAME ""kinggems_protest""
+	UPDATE DB_USER ""kinggems_protest""
+	UPDATE DB_PASSWORD "** OBSCURED **"
+	UPDATE DB_HOST ""localhost""
+	WP CONFIG UPDATE WP_DEBUG false
+	
+*** UPDATED WP CONFIG FILE ***
+
+====================================
+HTACCESS UPDATE
+====================================
+[PHP ERR][WARN] MSG:rename(/home/kinggems/public_html/website/web/promotion/.htaccess__78cde6a-12040645,/home/kinggems/public_html/website/web/promotion/htaccess.orig1783461494): No such file or directory [CODE:2|FILE:/home/kinggems/public_html/website/web/promotion/dup-installer/classes/config/class.conf.srv.php|LINE:124]
+
+Reset original .htaccess content from .htaccess__[HASH]
+
+WEB SERVER CONFIGURATION FILE UPDATED:
+- Preparing .htaccess file with basic setup.
+- Successfully updated the .htaccess file setting.
+
+====================================
+GENERAL UPDATES
+====================================
+
+====================================
+MANAGE PLUGINS
+====================================
+Activated plugins listed here will be deactivated: Array
+(
+)
+
+
+====================================
+GENERAL CLEANUP
+====================================
+- Removed '0' schedule storage items
+
+====================================
+NOTICES TEST
+====================================
+No General Notices Found
+
+
+====================================
+CLEANUP TMP FILES
+====================================
+
+====================================
+FINAL REPORT NOTICES
+====================================
+[PHP ERR][WARN] MSG:file_get_contents(): Filename cannot be empty [CODE:2|FILE:/home/kinggems/public_html/website/web/promotion/dup-installer/classes/class.s3.func.php|LINE:1702]
+
+STEP-3 COMPLETE @ 04:31:19 - RUNTIME: 0.0764 sec. 
+
+
+====================================
+FINAL REPORT NOTICES LIST
+====================================
+-----------------------
+[INFO] No general notices
+	SECTIONS: general
+
+-----------------------
+[INFO] No errors in database
+	SECTIONS: database
+
+-----------------------
+[INFO] No search and replace data errors
+	SECTIONS: search_replace
+
+-----------------------
+[INFO] No files extraction errors
+	SECTIONS: files
+
+-----------------------
+[WARNING] Deactivated plugin: Really Simple SSL
+	SECTIONS: plugins
+	LONG MSG: This plugin is deactivated because you are migrating from SSL (HTTPS) to Non-SSL (HTTP).<br>If it was not deactivated, you would not able to login.
+
+====================================

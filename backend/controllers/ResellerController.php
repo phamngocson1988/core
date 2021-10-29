@@ -137,4 +137,16 @@ class ResellerController extends Controller
         $user->assignManager($manager_id);
         return $this->asJson(['status' => true]);
     }
+
+    public function actionGenerateCode($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \backend\forms\GenerateResellerCodeForm(['user_id' => $id]);
+        $code = $model->generate();
+        if ($code) {
+            return $this->asJson(['status' => true, 'data' => $code]);
+        } else {
+            return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);
+        }
+    }
 }
