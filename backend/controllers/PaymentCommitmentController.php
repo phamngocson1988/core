@@ -82,4 +82,18 @@ class PaymentCommitmentController extends Controller
             return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);
         }
     }
+
+    public function actionDeleteAll()
+    {
+        $request = Yii::$app->request;
+        $ids = $request->post('ids', []);
+        $failIds = [];
+        foreach ($ids as $id) {
+            $model = new \backend\forms\DeletePaymentCommitmentForm(['id' => $id]);
+            if (!$model->delete()) {
+                $failIds[$id] = $model->getFirstErrorMessage();
+            }
+        }
+        return $this->asJson(['status' => true, 'errors' => $failIds]);
+    }
 }

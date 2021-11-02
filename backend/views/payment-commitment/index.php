@@ -118,6 +118,9 @@ $now = date('Y-m-d H:i:s');
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
               </button>
+              <button type="button" class="btn btn-danger table-group-action-submit" id="delete_all" style="margin-top: 25px; display: none">
+                <i class="fa fa-close"></i> Xoá tất cả
+              </button>
             </div>
           </div>
         <?php ActiveForm::end()?>
@@ -125,6 +128,7 @@ $now = date('Y-m-d H:i:s');
           <table class="table table-striped table-bordered table-hover table-checkable" id="payment-table">
             <thead>
               <tr>
+                <th col-tag="check_all"><input type="checkbox" id="checkall"/></th>
                 <th col-tag="object_key">Mã đơn hàng</th>
                 <th col-tag="payment_reality_id">Mã nhận tiền</th>
                 <th col-tag="customer">Khách hàng</th>
@@ -156,6 +160,11 @@ $now = date('Y-m-d H:i:s');
               <?php $reality = $model->reality;?>
               <?php  $user = $model->user;?>
               <tr>
+                <td col-tag="checkbox">
+                  <?php if (Yii::$app->user->can('sale_manager') && $model->isPending()) :?>
+                  <input type="checkbox" name="checked[]" value="<?=$model->id;?>"/>
+                  <?php endif;?>
+                </td>
                 <td col-tag="object_key"><?=$object->getId();?></td>
                 <td col-tag="payment_reality_id"><?=$reality ? $reality->getId() : '--';?></td>
                 <td col-tag="customer"><?=$user ? $user->name : '--';?></td>
@@ -325,6 +334,7 @@ $now = date('Y-m-d H:i:s');
 <?php endforeach;?>
 <?php
 $realityViewUrl = Url::to(['payment-reality/ajax-view']);
+$deleteAllUrl = Url::to(['payment-commitment/delete-all']);
 $script = <<< JS
 var variance = parseFloat($approveForm->variance);
 $(".delete-payment-action").ajax_action({
@@ -394,6 +404,51 @@ $('.payment_reality_id').on('change', function() {
 });
 
 $(".fancybox").fancybox();
+
+// Check all
+$('#checkall').on('click', function() {
+  $("tbody :checkbox").prop( "checked", $(this).is(':checked') );
+  $('#delete_all').toggle($(this).is(':checked'));
+});
+$("tbody :checkbox").on('click', function() {
+  let checked = $("tbody :checkbox:checked").length;
+  let checkboxes = $("tbody :checkbox").length;
+  $('#checkall').prop( "checked", checked === checkboxes );
+  $('#delete_all').toggle(checked > 0);
+});
+$('#delete_all').on('click', function() {
+  let checked = $("tbody :checkbox:checked");
+  let number = checked.length;
+  if (number) {
+    var ids = checked.map(function(){
+      return $(this).val();
+    }).get();
+    $.ajax({
+      url: '$deleteAllUrl',
+      type: 'POST',
+      dataType : 'json',
+      data: { ids },
+      success: function (result, textStatus, jqXHR) {
+        console.log(result);
+        var errors = result.errors || {};
+        var hasErrors = Object.keys(errors).length;
+        if (hasErrors) {
+          var errorStrings = Object.keys(errors).reduce((p, c) => {
+            var m = errors[c];
+            return p.concat('#' + c + ': ' + m);
+          }, []);
+          alert(errorStrings.join("\\n"));
+          location.reload();
+        } else {
+          toastr.success('Tất cả mục chọn đã được xoá');
+          setTimeout(() => {  
+            location.reload();
+          }, 1000);
+        }
+      },
+    });
+  }
+});
 JS;
 $this->registerJs($script);
 ?>
