@@ -208,16 +208,41 @@ $('#paymentGame').on('click', '#update-payment-button', function(e) {
       data: form,
       success: function (result, textStatus, jqXHR) {
         if (!result.status) {
-          toastr.error(result.errors);
+          // toastr.error(result.errors);
+          Swal.fire({
+            text: result.errors,
+            icon: 'error',
+          });
         } else {
-          setTimeout(() => {  
-              location.reload();
-          }, 2000);
-          toastr.success(result.message);
+          $('#paymentGame').modal('hide');
+          Swal.fire({
+            text: result.message,
+            icon: 'success',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Copy Tracking No',
+            cancelButtonText: 'Close',
+            backdrop: true,
+            allowOutsideClick: false,
+            didClose: function() {
+              console.log('close');
+            }
+          }).then((r) => {
+            if (r.isConfirmed) {
+              copyToClipboard(result.id);
+              Swal.fire({
+                backdrop: true,
+                allowOutsideClick: false,
+                text: 'Your tracking no is copied to clipboard',
+                icon: 'success'
+              });
+            };
+          });
         }
       },
   });
 });
+
 
 JS;
 $this->registerJs($script);

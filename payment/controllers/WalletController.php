@@ -136,7 +136,26 @@ class WalletController extends \yii\web\Controller
                 $model->evidence = $inputFile;
             }
             if ($model->validate() && $model->update()) {
-                return $this->asJson(['status' => true, 'message' => sprintf("You have updated transaction #%s successfully.", $id)]);
+                $transaction = $model->getTransaction();
+                $user = Yii::$app->user->getIdentity();
+                $tId = $transaction->getId();
+                // Sending email
+                $emailHelper = new \common\components\helpers\MailHelper();
+                $emailHelper
+                ->setMailer(Yii::$app->mailer)
+                ->usingCustomerService()
+                ->usingKinggemsSiteName()
+                ->send(
+                    'Reseller Topup',
+                    $user->email,
+                    'notify',
+                    [
+                        'transaction' => $transaction,
+                        'user' => $user
+                    ]
+                );
+                
+                return $this->asJson(['status' => true, 'message' => sprintf("Thanks for shopping with us. Your payment is on processing. Kindly save your tracking number: %s", $tId), 'id' => $tId]);
             } else {
                 $errors = $model->getErrorSummary(true);
                 $error = reset($errors);
@@ -144,4 +163,25 @@ class WalletController extends \yii\web\Controller
             }
         }
     }
+
+    // public function actionTestMail()
+    // {
+    //     $transaction = \common\models\PaymentTransaction::findOne(16879454);
+    //     $user = Yii::$app->user->getIdentity();
+    //     $emailHelper = new \common\components\helpers\MailHelper();
+    //     $emailHelper
+    //     ->setMailer(Yii::$app->mailer)
+    //     ->usingCustomerService()
+    //     ->usingKinggemsSiteName()
+    //     ->send(
+    //         'Reseller Topup',
+    //         'phamngocson1988@gmail.com',
+    //         'notify',
+    //         [
+    //             'transaction' => $transaction,
+    //             'user' => $user
+    //         ]
+    //     );
+    //     die('Sent');
+    // }
 }

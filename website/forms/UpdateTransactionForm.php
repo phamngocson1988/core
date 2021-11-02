@@ -116,7 +116,7 @@ class UpdateTransactionForm extends Model
     }
 
 
-    protected function getTransaction()
+    public function getTransaction()
     {
         if (!$this->_transaction) {
             $this->_transaction = PaymentTransaction::findOne($this->id);

@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use common\models\PaymentCommitment;
 use common\models\Paygate;
+use common\models\User;
 
 class FetchPaymentCommitmentForm extends Model
 {
@@ -19,6 +20,7 @@ class FetchPaymentCommitmentForm extends Model
     public $paygate;
 
     private $_command;
+    protected $_customer;
 
     public function fetch()
     {
@@ -32,7 +34,7 @@ class FetchPaymentCommitmentForm extends Model
         $condition = [
             'payment_id' => $this->payment_id,
             'object_key' => preg_replace("/[^\d]/", "", $this->object_key),
-            'customer_id' => $this->customer_id,
+            'user_id' => $this->customer_id,
             'status' => $this->status,
             'paygate' => $this->paygate,
         ];
