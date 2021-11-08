@@ -46,7 +46,9 @@ class WalletController extends Controller
         $pendings = PaymentTransaction::find()->where([
             'status' => PaymentTransaction::STATUS_PENDING,
             'user_id' => Yii::$app->user->id
-        ])->all();
+        ])
+        ->orderBy(["id" => SORT_DESC])
+        ->all();
 
         // history transaction
         $form = new \website\forms\FetchPaymentTransactionForm([

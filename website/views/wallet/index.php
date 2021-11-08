@@ -104,11 +104,12 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
                   <th scope="col">Status</th>
                   <th scope="col">Transaction</th>
                   <th scope="col">Receipt</th>
+                  <th scope="col">Details</th>
                 </tr>
               </thead>
               <tbody>
                 <?php if (!$pendings) : ?>
-                <tr><td colspan="6" class="text-center">No data found</td></tr>
+                <tr><td colspan="7" class="text-center">No data found</td></tr>
                 <?php endif;?>
                 <?php foreach ($pendings as $pending) : ?>
                 <tr>
@@ -132,6 +133,7 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
                       <a href="<?=$pending->evidence;?>" target="_blank">View</a>
                     <?php endif;?>
                   </td>
+                  <td><?=$pending->remark;?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>

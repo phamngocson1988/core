@@ -7,7 +7,7 @@
     + Payment method: <?=sprintf("%s (%s)", $transaction->payment_method, $transaction->payment_type)?><br/>
     + Tracking No.: <?=$transaction->getId();?><br/>
     <p>So we will check and credit balance into your wallet accordingly. </p>
-    <p>Kcoin Amoun:  <?=$transaction->total_coin;?></p>
+    <p>Kcoin Amount:  <?=$transaction->total_coin;?></p>
     <p>You may check details on "Transaction history" with the said tracking No. </p>
     <p>Thanks for your cooperation! </p>
     <p>Kinggems Payment Team!</p>

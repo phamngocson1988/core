@@ -146,7 +146,7 @@ class WalletController extends \yii\web\Controller
                 ->usingCustomerService()
                 ->usingKinggemsSiteName()
                 ->send(
-                    'Reseller Topup',
+                    sprintf("Deposit Notification [%s - Amount]", $transaction->remark),
                     $user->email,
                     'notify',
                     [

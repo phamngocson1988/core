@@ -3,6 +3,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
 $this->title = 'User Profile';
+$user = Yii::$app->user->getIdentity();
 ?>
 <div class="container profile my-5">
   <div class="row">
@@ -22,6 +23,23 @@ $this->title = 'User Profile';
           <?php endif;?>
         </div>
       </div>
+      <?php if ($user->isReseller()) : ?>
+        <?php
+        $reseller = $user->reseller;
+        if ($reseller && $reseller->code) :
+        $resellerCodeLink = sprintf("https://sub-payment.com/%s.html", $reseller->code);
+        ?>
+      <div class="card card-info text-center" style="margin-top: 20px">
+      <?php
+      $qc = new \common\components\qr\GoogleQR();
+      $qc->URL($resellerCodeLink);
+      $data = $qc->QRCODE(400);
+      ?>
+        <img src='data:image/png;base64, <?=$data;?>'/>
+        <a class="btn btn-orange" id="download-qr-button" download="FILENAME.png" href="data:image/png;base64,<?=$data;?>">Download QR code</a>
+      </div>
+        <?php endif;?>
+      <?php endif;?>
     </div>
     <div class="col-md-9">
       <?php $form = ActiveForm::begin(); ?>
