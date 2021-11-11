@@ -121,3 +121,15 @@ use common\components\helpers\StringHelper;
     ?>
   </div>
 </div>
+<?php
+$script = <<< JS
+var browser_token_name = 'browser_token';
+var browser_token_value = getCookie(browser_token_name);
+if (!browser_token_value) {
+  browser_token_value = generateUUID();
+}
+setCookie(browser_token_name, browser_token_value, 365);
+console.log('browser_token', browser_token_value);
+JS;
+$this->registerJs($script);
+?>

@@ -46,14 +46,12 @@ $('html').on('submit', 'form#flash-login-form', function() {
                 toastr.error(result.errors);
                 return false;
             } else {
+                if (result.user_id) {
+                    return location.reload();
+                }
                 let scenario = $('#scenario').val();
                 if (scenario === '$loginScenario') {
                     $('#scenario').val('$verifyScenario');
-                    // $('#securityCode').closest('div').attr('style', 'display:block');
-                    // $('#back-login-form').attr('style', 'display:block');
-                    // $('#username').attr('style', 'display:none');
-                    // $('#password').attr('style', 'display:none');
-                    // $('#rememberMe').attr('style', 'display:none');
                     $(\"[scenario='$loginScenario']\").attr('style', 'display:none');
                     $(\"[scenario='$verifyScenario']\").attr('style', 'display:block');
                     $('#submit').text('Verify');
@@ -67,12 +65,6 @@ $('html').on('submit', 'form#flash-login-form', function() {
     return false;
 });
 $('html').on('click', '#back-login-form', function() {
-    // $('#securityCode').closest('div').attr('style', 'display:none');
-    // $('#back-login-form').attr('style', 'display:none');
-    // $('#username').attr('style', 'display:block');
-    // $('#password').attr('style', 'display:block');
-    // $('#rememberMe').attr('style', 'display:block');
-
     $(\"[scenario='$verifyScenario']\").attr('style', 'display:none');
     $(\"[scenario='$loginScenario']\").attr('style', 'display:block');
     $('#submit').text('Login');

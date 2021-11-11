@@ -107,7 +107,7 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) return json_encode(['status' => false, 'user_id' => Yii::$app->user->id, 'errors' => []]);
 
         $scenario = $request->post('scenario');
-        $model = new LoginForm(['scenario' => $scenario]);
+        $model = new LoginForm(['scenario' => $scenario, 'browser_token' => $_COOKIE['browser_token']]);
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return json_encode(['status' => true, 'user_id' => Yii::$app->user->id]);
         } else {
@@ -273,29 +273,9 @@ class SiteController extends Controller
 
     public function actionTestMail()
     {
-        $o = \website\models\Order::findOne(16883597);
-        $supplier = $o->workingSupplier;
-        $o->pushNotification(\website\components\notifications\OrderNotification::NOTIFY_SUPPLIER_CANCEL_ORDER, $supplier->supplier_id);
-        // $user = \website\models\User::findOne($supplier->supplier_id);
-        // $toEmail = $user->email;
-        $o->log(sprintf("log something"));
-
-        //
-        // $user = \website\models\User::findOne($supplier->supplier_id);
-        // $supplierMailer = Yii::$app->supplier_mailer;
-        // $message = $supplierMailer->compose('test_mail', [
-        //     'user' => $user,
-        //     'order' => $o,
-        // ]);
-
-        // $message->setFrom('napgamehoanggia@gmail.com');
-        // $message->setTo('phamngocson1988@gmail.com');
-        // $message->setSubject('Test');
-        // $message->send();
-
-        // print_r($supplier->supplier_id);
-        // print_r($o);
-        die('send');
+        $browser = $_SERVER['REMOTE_ADDR'];
+        print_r($browser);
+        die('OK');
     }
 
 }

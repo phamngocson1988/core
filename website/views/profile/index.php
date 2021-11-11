@@ -36,7 +36,7 @@ $user = Yii::$app->user->getIdentity();
       $data = $qc->QRCODE(400);
       ?>
         <img src='data:image/png;base64, <?=$data;?>'/>
-        <a class="btn btn-orange" id="download-qr-button" download="FILENAME.png" href="data:image/png;base64,<?=$data;?>">Download QR code</a>
+        <a class="btn btn-orange" download="qrcode.png" href="data:image/png;base64,<?=$data;?>">Download QR code <br/>Sub-Payment link</a>
       </div>
         <?php endif;?>
       <?php endif;?>

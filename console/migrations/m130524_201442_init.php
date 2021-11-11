@@ -179,6 +179,18 @@ class m130524_201442_init extends Migration
         ]);
 
         $this->addForeignKey('fk-auth-user_id-user-id', '{{%auth}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
+
+        // devices
+        $this->createTable('{{%user_devices}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'browser_info' => $this->string()->notNull(),
+            'browser_token' => $this->string()->notNull(),
+            'last_login' => $this->dateTime()->notNull(),
+            'last_login_location' => $this->string()->notNull(),
+        ]);
+
+        $this->addForeignKey('fk-devices-user_id-user-id', '{{%user_devices}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()
