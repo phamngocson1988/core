@@ -423,26 +423,26 @@
             <span class="title">Danh mục game</span>
             </a>
           </li>
-          <li class="nav-item  "> 
+          {*<li class="nav-item  "> 
             <a href="{url route='/game-group/index'}" class="nav-link " code='game.group'>
             <span class="title">Nhóm game</span>
             </a>
-          </li>
+          </li>*}
           {*<li class="nav-item  "> 
             <a href="{url route='/game-group/setting'}" class="nav-link " code='game.setting'>
             <span class="title">Thuộc tính</span>
             </a>
           </li>*}
-          <li class="nav-item  "> 
+          {*<li class="nav-item  "> 
             <a href="{url route='/game-method/index'}" class="nav-link " code='gamemethod.index'>
             <span class="title">Phương thức nạp</span>
             </a>
-          </li>
-          <li class="nav-item  "> 
+          </li>*}
+          {*<li class="nav-item  "> 
             <a href="{url route='/game-version/index'}" class="nav-link " code='gameversion.index'>
             <span class="title">Phiên bản nạp</span>
             </a>
-          </li>
+          </li>*}
           {if ($app->user->cans(['saler', 'marketing_officer', 'customer_support']))}
           <li class="nav-item  "> 
             <a href="{url route='/flashsale/index'}" class="nav-link " code='flashsale.index'>

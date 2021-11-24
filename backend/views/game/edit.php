@@ -168,31 +168,45 @@ $canShowPrice = $user->can('orderteam');
                 <div class="tab-pane" id="tab_1_5">
                   <?=$form->field($model, 'group_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'group_id']
-                  ])->dropdownList($model->getGroups(), [
-                    'prompt' => 'Chọn nhóm game',
-                    'options'=> $model->getGroupData()
-                  ])->label('Nhóm game');?>
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchGroups(),
+                    'options' => ['class' => 'form-control'],
+                    'pluginOptions' => ['tags' => true]
+                  ]);?>
 
                   <?=$form->field($model, 'method', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'method']
-                  ])->dropdownList($model->getMethods(), ['prompt' => 'Chọn phương thức'])->label('Phương thức nạp');?>
+                  ])
+                  ->hint('<i>Công thức nhập Phương thức nạp: Tên phương thức(speed:[number]|safe:[number]|price:[number])</i>')
+                  ->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchMethods(),
+                    'options' => ['class' => 'form-control'],
+                    'pluginOptions' => ['tags' => true],
+                  ]);?>
 
                   <?=$form->field($model, 'version', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'version']
-                  ])->dropdownList($model->getVersions(), ['prompt' => 'Chọn version'])->label('Version');?>
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchVersions(),
+                    'options' => ['class' => 'form-control'],
+                    'pluginOptions' => ['tags' => true]
+                  ]);?>
 
                   <?=$form->field($model, 'package', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'package']
-                  ])->dropdownList($model->getPackages(), ['prompt' => 'Chọn loại gói'])->label('Loại gói');?>
-
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchPackages(),
+                    'options' => ['class' => 'form-control'],
+                    'pluginOptions' => ['tags' => true],
+                  ]);?>
                 </div>
               </div>
             </div>
@@ -204,28 +218,3 @@ $canShowPrice = $user->can('orderteam');
   </div>
 </div>
 <?php ActiveForm::end()?>
-
-<?php
-$script = <<< JS
-$("#group_id").on('change', function(){
-  var method = $(this).find('option:selected').data('method');
-  var package = $(this).find('option:selected').data('package');
-  var version = $(this).find('option:selected').data('version');
-  $('#method').html(buildOptions(method));
-  $('#package').html(buildOptions(package));
-  $('#version').html(buildOptions(version));
-});
-
-function buildOptions(obj, sel) {
-  console.log('buildOptions', obj);
-  html = '';
-  for (var index in obj) {
-    var item = obj[index];
-    var selected = sel == index ? 'selected' : '';
-    html += '<option value="'+index+'" '+selected+'>'+item+'</option>';
-  };
-  return html;
-}
-JS;
-$this->registerJs($script);
-?>

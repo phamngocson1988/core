@@ -153,30 +153,45 @@
                 <div class="tab-pane" id="tab_1_5">
                   {$form->field($model, 'group_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'group_id']
-                  ])->dropdownList($model->getGroups(), [
-                    'prompt' => 'Chọn nhóm game',
-                    'options'=> $model->getGroupData()
-                  ])->label('Nhóm game')}
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchGroups(),
+                    'options' => ['class' => 'form-control', 'prompt' => 'Chọn nhóm game'],
+                    'pluginOptions' => ['tags' => true]
+                  ])}
 
                   {$form->field($model, 'method', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'method']
-                  ])->dropdownList($model->getMethods(), ['prompt' => 'Chọn phương thức'])->label('Phương thức nạp')}
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])
+                  ->hint('<i>Công thức nhập Phương thức nạp: Tên phương thức(speed:[number]|safe:[number]|price:[number])</i>')
+                  ->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchMethods(),
+                    'options' => ['class' => 'form-control', 'prompt' => 'Chọn phương thức'],
+                    'pluginOptions' => ['tags' => true]
+                  ])}
 
                   {$form->field($model, 'version', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'version']
-                  ])->dropdownList($model->getVersions(), ['prompt' => 'Chọn version'])->label('Version')}
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchVersions(),
+                    'options' => ['class' => 'form-control', 'prompt' => 'Chọn phiên bản'],
+                    'pluginOptions' => ['tags' => true]
+                  ])}
 
                   {$form->field($model, 'package', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>',
-                    'inputOptions' => ['class' => 'form-control', 'id' => 'package']
-                  ])->dropdownList($model->getPackages(), ['prompt' => 'Chọn loại gói'])->label('Loại gói')}
+                    'inputOptions' => ['class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchPackages(),
+                    'options' => ['class' => 'form-control', 'prompt' => 'Chọn gói game'],
+                    'pluginOptions' => ['tags' => true]
+                  ])}
                 </div>
               </div>
             </div>

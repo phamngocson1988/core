@@ -8,8 +8,10 @@ use backend\models\Game;
 use backend\models\GameCategory;
 use backend\models\GameCategoryItem;
 use backend\models\GameGroup;
-use backend\models\GameSetting;
+use backend\models\GamePackage;
 use backend\models\GameSubscriber;
+use backend\models\GameMethod;
+use backend\models\GameVersion;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use backend\components\notifications\GameNotification;
@@ -50,7 +52,10 @@ class EditGameForm extends Model
     public $min_quantity;
 
     protected $_game;
-    protected $_groups;
+    protected $_group;
+    protected $_method;
+    protected $_package;
+    protected $_version;
 
     public function rules()
     {
@@ -119,7 +124,12 @@ class EditGameForm extends Model
             'price_remark' => 'Remark',
             'google_ads' => 'Google Ads',
             'categories' => 'Danh mục game',
-            'min_quantity' => 'Số gói nhỏ nhất khi đặt hàng'
+            'min_quantity' => 'Số gói nhỏ nhất khi đặt hàng',
+            'group_id' => 'Nhóm game',
+            'method' => 'Phương thức nạp',
+            'version' => 'Phiên bản nạp',
+            'package' => 'Loại gói'
+
         ];
     }
 
@@ -142,6 +152,57 @@ class EditGameForm extends Model
                 $key = $game->soldout ? GameNotification::NOTIFY_OUT_STOCK : GameNotification::NOTIFY_IN_STOCK ;
                 $game->pushNotification($key, $subscriberIds);
             });
+
+            // Create group
+            $method = $this->getMethod();
+            if (!$method) {
+                $method = new GameMethod();
+                $title = $this->method;
+                $lastPos = strrpos($this->method, "(");
+                if ($lastPos !== false) {
+                    $match = substr($this->method, $lastPos + 1, strlen($this->method) - $lastPos - 2);
+                    $title = substr($title, 0, $lastPos);
+                    $weights = explode('|', $match);
+                    foreach ($weights as $value) {
+                        $pairs = explode(':', $value);
+                        $key = strtolower(trim(array_shift($pairs)));
+                        if (in_array($key, ['speed', 'safe', 'price'])) {
+                            $method->$key = array_shift($pairs);
+                        }
+                    }
+                }
+                
+                $method->title = trim($title);
+                $method->description = trim($title);
+                $method->save();
+            }
+            $version = $this->getVersion();
+            if (!$version) {
+                $version = new GameVersion();
+                $version->title = $this->version;
+                $version->save();
+            }
+
+            $group = $this->getGroup();
+            if (!$group) {
+                $group = new GameGroup();
+                $group->title = $this->group_id;
+                $group->method = $method->id;
+                $group->version = $version->id;
+            } else {
+                $group->method = in_array($method->id, explode(',', $group->method)) ? $group->method : sprintf('%s,%s', $group->method, $method->id);
+                $group->version = in_array($version->id, explode(',', $group->version)) ? $group->version : sprintf('%s,%s', $group->version, $version->id);
+            }
+            $group->save();
+
+
+            $package = $this->getPackages();
+            if (!$package) {
+                $package = new GamePackage();
+                $package->title = $this->package;
+                $package->group_id = $group->id;
+                $package->save();
+            }
 
             $game->title = $this->title;
             $game->excerpt = $this->excerpt;
@@ -168,10 +229,10 @@ class EditGameForm extends Model
             $game->top_grossing = $this->top_grossing;
             $game->new_trending = $this->new_trending;
             $game->back_to_stock = $this->back_to_stock;
-            $game->group_id = $this->group_id;
-            $game->method = $this->method;
-            $game->version = $this->version;
-            $game->package = $this->package;
+            $game->group_id = $group->id;
+            $game->method = $method->id;
+            $game->version = $version->id;
+            $game->package = $package->id;
             $game->min_quantity = $this->min_quantity;
             $game->save();
             $newId = $game->id;
@@ -189,6 +250,11 @@ class EditGameForm extends Model
             
 
             $transaction->commit();
+            $this->group_id = $group->id;
+            $this->method = $method->id;
+            $this->version = $version->id;
+            $this->package = $package->id;
+
             return $newId;
         } catch (Exception $e) {
             $transaction->rollBack();                
@@ -205,6 +271,38 @@ class EditGameForm extends Model
             $this->_game = Game::findOne($this->id);
         }
         return $this->_game;
+    }
+
+    protected function getGroup()
+    {
+        if (!$this->_group) {
+            $this->_group = GameGroup::findOne($this->group_id);
+        }
+        return $this->_group;
+    }
+
+    protected function getMethod()
+    {
+        if (!$this->_method) {
+            $this->_method = GameMethod::findOne($this->method);
+        }
+        return $this->_method;
+    }
+
+    protected function getVersion()
+    {
+        if (!$this->_version) {
+            $this->_version = GameVersion::findOne($this->version);
+        }
+        return $this->_version;
+    }
+
+    protected function getPackages()
+    {
+        if (!$this->_package) {
+            $this->_package = GamePackage::findOne($this->package);
+        }
+        return $this->_package;
     }
 
     public function loadData()
@@ -256,81 +354,26 @@ class EditGameForm extends Model
         return $categories;
     }
 
-    public function getGroups()
+    public function fetchGroups()
     {
-        $groups = GameGroup::find()->all();
-        return ArrayHelper::map($groups, 'id', 'title');
+        return ArrayHelper::map(GameGroup::find()->all(), 'id', 'title');
     }
 
-    public function getMethods()
+    public function fetchMethods()
     {
-        if (!$this->group_id) return [];
-        $group = GameGroup::findOne($this->group_id);
-        $methods = $group->getMethods();
-        return ArrayHelper::map($methods, 'id', 'title');
-    }
-
-    public function getVersions()
-    {
-        if (!$this->group_id) return [];
-        $group = GameGroup::findOne($this->group_id);
-        $versions = $group->getVersions();
-        return ArrayHelper::map($versions, 'id', 'title');
-    }
-
-    public function getPackages()
-    {
-        if (!$this->group_id) return [];
-        $group = GameGroup::findOne($this->group_id);
-        $packages = $group->packages;
-        return ArrayHelper::map($packages, 'id', 'title');
-    }
-
-    // public function getMethods()
-    // {
-    //     if (!$this->group_id) return [];
-    //     $group = GameGroup::findOne($this->group_id);
-    //     $methods = explode(',', $group->method);
-    //     $keys = array_map(function($val) {
-    //         return Inflector::slug($val);
-    //     }, $methods);
-    //     return array_combine($keys, $methods);
-    // }
-
-    // public function getVersions()
-    // {
-    //     if (!$this->group_id) return [];
-    //     $group = GameGroup::findOne($this->group_id);
-    //     $versions = explode(',', $group->version);
-    //     $keys = array_map(function($val) {
-    //         return Inflector::slug($val);
-    //     }, $versions);
-    //     return array_combine($keys, $versions);
-    // }
-
-    // public function getPackages()
-    // {
-    //     if (!$this->group_id) return [];
-    //     $group = GameGroup::findOne($this->group_id);
-    //     $packages = explode(',', $group->package);
-    //     $keys = array_map(function($val) {
-    //         return Inflector::slug($val);
-    //     }, $packages);
-    //     return array_combine($keys, $packages);
-    // }
-
-
-    public function getGroupData()
-    {
-        $groups = GameGroup::find()->all();
-        return ArrayHelper::map($groups, 'id', function($obj) {
-            return [
-                'data-method' => ArrayHelper::map($obj->getMethods(), 'id', 'title'),
-                'data-version' => ArrayHelper::map($obj->getVersions(), 'id', 'title'),
-                'data-package' => ArrayHelper::map($obj->packages, 'id', 'title'),
-            ];
+        return ArrayHelper::map(GameMethod::find()->all(), 'id', function($obj) {
+            return sprintf("%s(Speed:%s|Safe:%s|Price:%s)", $obj->title, (int)$obj->speed, (int)$obj->safe, (int)$obj->price);
         });
-
     }
 
+    public function fetchVersions()
+    {
+        return ArrayHelper::map(GameVersion::find()->all(), 'id', 'title');
+    }
+
+    public function fetchPackages()
+    {
+        if (!$this->group_id) return [];
+        return ArrayHelper::map(GamePackage::find()->all(), 'id', 'title');
+    }
 }

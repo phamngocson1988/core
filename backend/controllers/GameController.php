@@ -144,8 +144,9 @@ class GameController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
             }
+        } else {
+            $model->loadData();
         }
-        $model->loadData();
         $numSupplier = SupplierGame::find()->where(['game_id' => $id])->count();
 
         return $this->render('edit.php', [
