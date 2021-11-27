@@ -66,16 +66,18 @@ use common\components\helpers\StringHelper;
         'inputOptions' => ['class' => 'form-control input-number', 'aria-describedby' => 'emailHelp', 'placeholder' => 'Enter transaction number here...', 'disabled' => (boolean)$model->payment_id]
       ])->textInput()->label(false) ?>
 
+      <center id="upload-name" style="color: #9b0e00;font-weight: bold;font-style: italic;"></center>
       <div class="text-center btn-wrapper d-block" role="group">
         <button type="button" class="btn text-uppercase" id="update-payment-button">Submit</button>
         <label class="btn text-uppercase btn-upload">
-          Upload picture <input type="file" name="evidence" hidden accept='image/*'>
+          Upload picture <input type="file" name="evidence" id="file-upload" hidden accept='image/*'>
         </label>
         <?=$form->field($model, 'evidence', [
           'options' => ['tag' => false],          
           'template' => '{input}',
         ])->hiddenInput()->label(false) ?>
       </div>
+      
       <?php ActiveForm::end(); ?>
       <p class="text-center">
         <a class="link-dark" href="google.com" target="_blank">How to get Transaction Number?</a>

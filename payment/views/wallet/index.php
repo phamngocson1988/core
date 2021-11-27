@@ -243,6 +243,11 @@ $('#paymentGame').on('click', '#update-payment-button', function(e) {
   });
 });
 
+$('html').on('change', '#file-upload', function() {
+  var file = $('#file-upload')[0].files[0].name;
+  console.log(file);
+  $('html').find('#upload-name').html(file);
+});
 
 JS;
 $this->registerJs($script);

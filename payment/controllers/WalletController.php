@@ -146,7 +146,7 @@ class WalletController extends \yii\web\Controller
                 ->usingCustomerService()
                 ->usingKinggemsSiteName()
                 ->send(
-                    sprintf("Deposit Notification [%s - Amount]", $transaction->remark),
+                    sprintf("Deposit Notification [%s - %s]", $transaction->remark, $transaction->total_price),
                     $user->email,
                     'notify',
                     [
@@ -163,25 +163,4 @@ class WalletController extends \yii\web\Controller
             }
         }
     }
-
-    // public function actionTestMail()
-    // {
-    //     $transaction = \common\models\PaymentTransaction::findOne(16879454);
-    //     $user = Yii::$app->user->getIdentity();
-    //     $emailHelper = new \common\components\helpers\MailHelper();
-    //     $emailHelper
-    //     ->setMailer(Yii::$app->mailer)
-    //     ->usingCustomerService()
-    //     ->usingKinggemsSiteName()
-    //     ->send(
-    //         'Reseller Topup',
-    //         'phamngocson1988@gmail.com',
-    //         'notify',
-    //         [
-    //             'transaction' => $transaction,
-    //             'user' => $user
-    //         ]
-    //     );
-    //     die('Sent');
-    // }
 }
