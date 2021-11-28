@@ -33,9 +33,9 @@ class Post extends ActiveRecord
     const POST_TYPE_POST = 'post';
     const POST_TYPE_PAGE = 'page';
 
-    const STATUS_INVISIBLE = 'N';
-    const STATUS_VISIBLE = 'Y';
-    const STATUS_DELETE = 'D';
+    const STATUS_INVISIBLE = 5;
+    const STATUS_VISIBLE = 10;
+    const STATUS_DELETE = 1;
 
     /**
      * @inheritdoc
@@ -99,7 +99,7 @@ class Post extends ActiveRecord
     {
         $creator = $this->creator;
         if ($creator) {
-            return $creator->username;
+            return $creator->getName();
         }
         return '';
     }

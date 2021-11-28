@@ -33,6 +33,9 @@ class ApplicationSettingForm extends Model
     public $kcoin_banner_mobile;
     public $kcoin_banner_link;
 
+    //post banner
+    public $post_banner;
+
     public function init()
     {
         parent::init();
@@ -49,7 +52,8 @@ class ApplicationSettingForm extends Model
             ['exchange_rate_cny', 'number'],
             [['logo', 'customer_service_email', 'supplier_service_email'], 'safe'],
             [['managing_cost_rate', 'investing_cost_rate', 'desired_profit', 'reseller_desired_profit'], 'number'],
-            [['affiliate_banner', 'affiliate_banner_mobile', 'affiliate_banner_link', 'refer_banner', 'refer_banner_mobile', 'refer_banner_link', 'kcoin_banner', 'kcoin_banner_mobile', 'kcoin_banner_link'], 'safe']
+            [['affiliate_banner', 'affiliate_banner_mobile', 'affiliate_banner_link', 'refer_banner', 'refer_banner_mobile', 'refer_banner_link', 'kcoin_banner', 'kcoin_banner_mobile', 'kcoin_banner_link'], 'safe'],
+            ['post_banner', 'safe']
         ];
     }
 
@@ -82,6 +86,7 @@ class ApplicationSettingForm extends Model
             'kcoin_banner_mobile' => 'Banner for KCoin (mobile)',
             'kcoin_banner_link' => 'Link for KCoin banner',
             'accountant_email' => 'Email kế toán',
+            'post_banner' => 'Banner trang tin tức',
         ];
     }
 }

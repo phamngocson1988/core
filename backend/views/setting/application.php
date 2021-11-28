@@ -166,6 +166,13 @@ use yii\helpers\Url;
                   'inputOptions' => ['class' => 'form-control'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                 ])->textInput();?>
+
+                <hr/>
+                <?=$form->field($model, 'post_banner', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'post_banner'],
+                  'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="post_banner_upload">Upload</button><input type="file" id="file_post_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
+                ])->textInput();?>
               </div>
             </div>
           </div>
@@ -253,6 +260,17 @@ kcoinBannerMobileUpload.callback = function(result) {
   var file = result[0];
   console.log(file);
   $('#kcoin_banner_mobile').val(file.src);
+}
+
+var postBannerUpload = new AjaxUploadFile({
+  trigger_element: '#post_banner_upload', 
+  file_element: '#file_post_banner_upload',
+  link_upload: '$uploadLink'
+});
+postBannerUpload.callback = function(result) {
+  var file = result[0];
+  console.log(file);
+  $('#post_banner').val(file.src);
 }
 JS;
 $this->registerJs($script);

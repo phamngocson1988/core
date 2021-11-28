@@ -158,7 +158,7 @@ class SettingController extends Controller
             'gallery' => [
                 'class' => SettingsAction::class,
                 'modelClass' => GallerySettingForm::class,
-                'view' => 'gallery.tpl',
+                'view' => 'gallery.php',
                 'layoutParams' => ['main_menu_active' => 'setting.gallery'],
             ],
             'top_notice' => [

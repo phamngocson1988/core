@@ -24,6 +24,7 @@ class EditPostForm extends Model
     public $meta_keyword;
     public $meta_description;
     public $status;
+    public $hot;
 
     private $_post;
     /**
@@ -45,7 +46,7 @@ class EditPostForm extends Model
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['id', 'title', 'content', 'excerpt', 'categories', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'status'];
+        $scenarios[self::SCENARIO_DEFAULT] = ['id', 'title', 'content', 'excerpt', 'categories', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'status', 'hot'];
         return $scenarios;
     }
 
@@ -63,6 +64,7 @@ class EditPostForm extends Model
                 $post->meta_keyword = $this->meta_keyword;
                 $post->meta_description = $this->meta_description;
                 $post->status = $this->status;
+                $post->hot = $this->hot ? 1 : 0;
                 $result = $post->save();
 
                 // categories
@@ -112,6 +114,7 @@ class EditPostForm extends Model
         $this->meta_keyword = $post->meta_keyword;
         $this->meta_description = $post->meta_description;
         $this->status = $post->status;
+        $this->hot = $post->hot;
     }
 
     public function hasImage()

@@ -21,6 +21,7 @@ class CreatePostForm extends Model
     public $image_id;
     public $type;
     public $status;
+    public $hot;
     public $categories;
     public $meta_title;
     public $meta_keyword;
@@ -39,7 +40,7 @@ class CreatePostForm extends Model
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['title', 'content', 'excerpt', 'categories', 'image_id', 'type', 'meta_title', 'meta_keyword', 'meta_description', 'status'];
+        $scenarios[self::SCENARIO_DEFAULT] = ['title', 'content', 'excerpt', 'categories', 'image_id', 'type', 'meta_title', 'meta_keyword', 'meta_description', 'status', 'hot'];
         return $scenarios;
     }
 
@@ -91,6 +92,7 @@ class CreatePostForm extends Model
         $post->created_by = Yii::$app->user->id;
         $post->created_at = strtotime('now');
         $post->status = $this->status;
+        $post->hot = $this->hot ? 1 : 0;
         return $post;
     }
 
