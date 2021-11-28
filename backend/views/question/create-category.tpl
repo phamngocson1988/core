@@ -1,5 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='common\widgets\CheckboxInput'}
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -57,28 +58,22 @@
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                   ])->textArea()}
 
-                  <div class="form-group">
-                    <label class="control-label col-md-2">{Yii::t('app', 'image')}</label>
-                    <div class="col-md-10">
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;">
-                                <img src="" id="image" />
-                            </div>
-                            <div>
-                              <span class="help-block"> {Yii::t('app', 'image_size_at_least', ['size' => '940x630'])} </span>
-                              <span class="btn default btn-file">
-                                <span class="fileinput-new" id="upload-image"> {Yii::t('app', 'choose_image')} </span>
-                                {$form->field($model, 'icon_id', [
-                                  'inputOptions' => ['id' => 'image_id'], 
-                                  'template' => '{input}', 
-                                  'options' => ['tag' => null]
-                                ])->hiddenInput()->label(false)}
-                              </span>
-                              <a href="javascript:void(0)" onclick="removeMainImage()" class="btn red fileinput-exists" data-dismiss="fileinput"> {Yii::t('app', 'remove')} </a>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
+                  {$form->field($model, 'icon_url', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'title', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->textInput()}
+
+                  {$form->field($model, 'link', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'title', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->textInput()}
+
+                  {$form->field($model, 'hot', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label', 'style' => 'padding-top: 0px'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())}
                 </div>
               </div>
             </div>

@@ -34,6 +34,9 @@ class m190812_073943_question extends Migration
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
             'slug' => $this->string(255)->notNull(),
+            'link' => $this->string(512),
+            'hot' => $this->smallInteger()->defaultValue(0),// 1||0
+            'position' => $this->integer()->defaultValue(0),
         ], $tableOptions);
 
     }

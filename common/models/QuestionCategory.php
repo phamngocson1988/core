@@ -29,7 +29,7 @@ class QuestionCategory extends ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['description', 'icon_url'], 'trim'],
+            [['description', 'icon_url', 'link', 'hot'], 'trim'],
         ];
     }
 

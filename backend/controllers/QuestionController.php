@@ -121,12 +121,10 @@ class QuestionController extends Controller
         $request = Yii::$app->request;
         $model = new QuestionCategory();
         if ($model->load($request->post()) && $model->save()) {
-            // return $this->renderJson(true, []);
             Yii::$app->session->setFlash('success', 'Tạo danh mục thành công');
             return $this->redirect('question/category');
         } else {
             Yii::$app->session->setFlash('error', $model->getErrors());
-            // return $this->renderJson(false, [], $model->getErrorSummary(true));
         }
         return $this->render('create-category.tpl', ['model' => $model]);
     }

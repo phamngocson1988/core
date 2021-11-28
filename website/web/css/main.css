@@ -1233,6 +1233,12 @@ input::placeholder {
    color: #949dac;
 }
 
+.qa-category .qa-category-item .icon-new {
+   position: absolute;
+   left: 30px;
+   top: 14px;
+}
+
 .multi-choose .btn {
    background-color: #e7e2de;
    border-color: #e7e2de;

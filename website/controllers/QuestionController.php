@@ -17,7 +17,7 @@ class QuestionController extends Controller
     {
         $this->view->params['main_menu_active'] = 'question.index';
         $request = Yii::$app->request;
-        $categories = QuestionCategory::find()->all();
+        $categories = QuestionCategory::find()->orderBy(['position' => SORT_ASC])->all();
         $countQuestions = Question::find()->select(['category_id', 'COUNT(*) as count'])->groupBy(['category_id'])->asArray()->all();
         $stat = ArrayHelper::map($countQuestions, 'category_id', 'count');
 

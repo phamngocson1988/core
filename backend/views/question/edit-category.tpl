@@ -1,5 +1,6 @@
 {use class='yii\helpers\Html'}
 {use class='yii\widgets\ActiveForm' type='block'}
+{use class='common\widgets\CheckboxInput'}
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -62,6 +63,17 @@
                     'inputOptions' => ['id' => 'title', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                   ])->textInput()}
+
+                  {$form->field($model, 'link', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'title', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->textInput()}
+
+                  {$form->field($model, 'hot', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label', 'style' => 'padding-top: 0px'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())}
                 </div>
               </div>
             </div>

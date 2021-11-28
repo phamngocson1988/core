@@ -17,9 +17,13 @@ use yii\helpers\Url;
 <div class="container mb-5">
   <div class="row qa-category">
     <?php foreach ($categories as $category) : ?>
+    <?php $link = $category->link ? $category->link : Url::to(['question/list', 'id' => $category->id]);?>
     <div class="col-md-4 text-center">
       <div class="qa-category-item">
-        <a href="<?=Url::to(['question/list', 'id' => $category->id]);?>">
+      <?php if ($category->hot) : ?>
+      <img class="icon-new" src="/images/icon/new.gif"/>
+      <?php endif;?>
+        <a href="<?=$link;?>">
           <img class="icon" src="<?=$category->icon_url;?>"/>
         </a>
         <h4 class="text-center"><a href="<?=Url::to(['question/list', 'id' => $category->id]);?>"><?=$category->title;?> <span class="num">(<?= ArrayHelper::getValue($stat, $category->id, 0);?>)</span></a></h4>
