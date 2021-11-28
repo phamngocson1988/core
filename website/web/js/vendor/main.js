@@ -1,10 +1,6 @@
 $(document).ready(function () {
   if ($('.main-slider').length) {
-    console.log('main-slider');
-    $('.main-slider').slick({
-      autoplay: true,
-      autoplaySpeed: 3000,
-    });
+    $('.main-slider').slick();
   }
   if ($('.single-img-slider').length) {
     $('.single-img-slider').slick();
@@ -38,14 +34,14 @@ $(document).ready(function () {
         {
           breakpoint: 480,
           settings: {
-            slidesToShow: 1.5,
+            slidesToShow: 1,
             slidesToScroll: 1
           }
         },
         {
           breakpoint: 425,
           settings: {
-            slidesToShow: 1.5,
+            slidesToShow: 1,
             slidesToScroll: 1
           }
         }
@@ -181,8 +177,8 @@ $(document).ready(function () {
     })
   }
 
-  if ($("[data-toggle='tooltip'").length) {
-    $('[data-toggle="tooltip"]').tooltip()
+  if ($('.phoneinp').length) {
+    $(".phoneinp").intlTelInput();
   }
 
   $('.modal').on('shown.bs.modal', function (e) {
@@ -190,7 +186,6 @@ $(document).ready(function () {
         $('.modal-slider').slick('setPosition'); 
     }
   })
-
 
   $(document).on('show.bs.modal', '.modal', function () {
 
@@ -209,47 +204,14 @@ $(document).ready(function () {
 
   $('.contact-apps>li').click(function(event){
     event.preventDefault();
-    $('.inp-url').show();
+    $('.inputDisabled').prop("disabled", false);
   })
-
-  $(".btn-seemore").click(function(){
-    $('.description').toggleClass('show-all');   
-    $(this).html(function(i, text){
-        return text === "<img class='icon-sm' src='https://image.flaticon.com/icons/svg/892/892687.svg'/>" ? "<img class='icon-sm' src='https://image.flaticon.com/icons/svg/892/892629.svg'/>" : "<img class='icon-sm' src='https://image.flaticon.com/icons/svg/892/892687.svg'/>";
-    }) 
-  });
-
-  $('.btn-request-token1').click(function(){
-    $(this).prop('disabled', true);
-    (function(){
-      var counter = 60*2;
-      $('.btn-request-token').html("<span id='count'>120</span>");
-      setInterval(function() {
-        counter--;
-        if (counter >= 0) {
-          span = document.getElementById("count");
-          span.innerHTML = counter;
-        }
-        // Display 'counter' wherever you want to display it.
-        if (counter === 0) {
-        //    alert('this is where it happens');
-            clearInterval(counter);
-            $('.btn-request-token').html("Security token<br /><small>Request Token</small></button>");
-            $('.btn-request-token').prop('disabled', false);
-        }
-    
-      }, 1000);
-    
-    })();
-  });
 
   AOS.init({
     easing: 'ease', // default easing for AOS animations
     mirror: false, // whether elements should animate out while scrolling past them
 
   });
-
-
 
 });
 

@@ -89,3 +89,17 @@
    from {transform: rotate(0deg);}
    to {transform: rotate(359deg);}
 }
+
+.post-image-container-overflow {
+   height: 265px;
+   overflow: hidden;
+}
+
+.hot-news .post-thumb {
+   overflow: hidden;
+   height: 70px;
+}
+p.Normal>img {
+   width: 100%;
+   border-radius: calc(0.25rem - 1px);
+}

@@ -116,6 +116,7 @@ use common\components\helpers\StringHelper;
           ['label' => 'Affiliate', 'url' => ['affiliate/index'], 'active' => $main_menu_active == 'affiliate.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Referral', 'url' => ['referral/index'], 'active' => $main_menu_active == 'referral.index', 'visible' => !Yii::$app->user->isGuest],
           ['label' => 'Help center', 'url' => ['question/index'], 'active' => $main_menu_active == 'question.index'],
+          ['label' => 'News', 'url' => ['post/index'], 'active' => $main_menu_active == 'post.index'],
         ],
       ]);
     ?>

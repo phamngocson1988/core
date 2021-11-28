@@ -70,6 +70,11 @@ return [
         'notifications/default/read-all' => 'notifications/default/read-all',
         'notifications/default/delete-all' => 'notifications/default/delete-all',
 
+        // post
+        'news' => 'post/index',
+        'news/<id:\d+>-<slug:[\w\-]+>' => 'post/view',
+        'news/category/<id:\d+>-<slug:[\w\-]+>' => 'post/category',
+
         '<controller>/<action>' => '<controller>/<action>',
     ],
 ];

@@ -14,48 +14,56 @@ $gallery = [
         'content' => $setting->get('GallerySettingForm', 'content1'),
         'link' => $setting->get('GallerySettingForm', 'link1'),
         'href' => $setting->get('GallerySettingForm', 'href1'),
+        'type' => $setting->get('GallerySettingForm', 'type1'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title2'),
         'content' => $setting->get('GallerySettingForm', 'content2'),
         'link' => $setting->get('GallerySettingForm', 'link2'),
         'href' => $setting->get('GallerySettingForm', 'href2'),
+        'type' => $setting->get('GallerySettingForm', 'type2'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title3'),
         'content' => $setting->get('GallerySettingForm', 'content3'),
         'link' => $setting->get('GallerySettingForm', 'link3'),
         'href' => $setting->get('GallerySettingForm', 'href3'),
+        'type' => $setting->get('GallerySettingForm', 'type3'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title4'),
         'content' => $setting->get('GallerySettingForm', 'content4'),
         'link' => $setting->get('GallerySettingForm', 'link4'),
         'href' => $setting->get('GallerySettingForm', 'href4'),
+        'type' => $setting->get('GallerySettingForm', 'type4'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title5'),
         'content' => $setting->get('GallerySettingForm', 'content5'),
         'link' => $setting->get('GallerySettingForm', 'link5'),
         'href' => $setting->get('GallerySettingForm', 'href5'),
+        'type' => $setting->get('GallerySettingForm', 'type5'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title6'),
         'content' => $setting->get('GallerySettingForm', 'content6'),
         'link' => $setting->get('GallerySettingForm', 'link6'),
         'href' => $setting->get('GallerySettingForm', 'href6'),
+        'type' => $setting->get('GallerySettingForm', 'type6'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title7'),
         'content' => $setting->get('GallerySettingForm', 'content7'),
         'link' => $setting->get('GallerySettingForm', 'link7'),
         'href' => $setting->get('GallerySettingForm', 'href7'),
+        'type' => $setting->get('GallerySettingForm', 'type7'),
     ],
     [
         'title' => $setting->get('GallerySettingForm', 'title8'),
         'content' => $setting->get('GallerySettingForm', 'content8'),
         'link' => $setting->get('GallerySettingForm', 'link8'),
         'href' => $setting->get('GallerySettingForm', 'href8'),
+        'type' => $setting->get('GallerySettingForm', 'type8'),
     ]
 ];
 $gallery = array_filter($gallery, function($data) {
@@ -70,9 +78,26 @@ $sideGallery = array_slice($gallery, -2);
       <div class="col-sm-8 flex-fill">
         <div class="main-slider" data-aos="zoom-in" data-aos-duration="500">
           <?php foreach ($gallery as $data) : ?>
+            <?php if ($data['type'] === 'youtube') :?>
+            <a class="hover-img" href="<?=$data['href'];?>">
+              <div class="scale-video">
+                <iframe width="560" height="315" src="<?=$data['link'];?>" frameborder="0" allowfullscreen></iframe>
+              </div>
+            </a>
+            <?php elseif($data['type'] === 'mp4') : ?>
+            <a class="hover-img" href="<?=$data['href'];?>">
+              <div class="scale-video">
+                <video controls>
+                  <source src="<?=$data['link'];?>" type="video/mp4">
+                  Your browser does not support HTML video.
+                </video>
+              </div>
+            </a>
+            <?php else : ?>
             <a class="hover-img" href="<?=$data['href'];?>">
             <img src="<?=$data['link'];?>" />
             </a>
+            <?php endif;?>
           <?php endforeach;?>
         </div>
       </div>
