@@ -2162,16 +2162,32 @@ input::placeholder {
 }
 
 .page-news .nav.nav-divider .nav-item + .nav-item:before {
-   content: "•";
+   content: "";
    color: inherit;
-   padding-left: 0.65rem;
-   padding-right: 0.75rem;
+   padding-left: 0.55rem;
+   padding-right: 0.65rem;
    opacity: 0.8;
    font-size: 70%;
+   color: #e1e1e1;
 }
 .page-news .nav.nav-divider .nav-item,
 .page-news .nav.nav-divider .nav-item a{
    color: #595d69;
+}
+
+.page-news .nav.nav-divider .nav-item .btn{
+   margin-bottom: 5px;
+}
+
+.page-news .nav.nav-divider .nav-item .btn:focus{
+   outline: none;
+   box-shadow: none;
+}
+
+.page-news .nav.nav-divider .nav-item img{
+   width: 20px;
+   margin-right: 5px;
+   margin-top: -5px;
 }
 
 .page-news .btn-primary-soft {

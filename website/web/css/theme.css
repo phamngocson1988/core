@@ -99,6 +99,12 @@
    overflow: hidden;
    height: 70px;
 }
+
+.related-posts .position-relative {
+   overflow: hidden;
+   height: 170px;
+}
+
 p.Normal>img {
    width: 100%;
    border-radius: calc(0.25rem - 1px);

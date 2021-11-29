@@ -35,7 +35,7 @@ class Binance
             'amount' => $order->total_price,
             'description' => sprintf("#%s - %s", $order->id, $order->game_title),
             'id' => $order->id,
-            'title' => $order->game_title
+            'title' => $this->cleanString($order->game_title)
         ];
         $response = $this->service->createOrder($info);
         if ($response['status'] === 'SUCCESS') {
@@ -223,4 +223,13 @@ class Binance
             ->send();
         }
     }
+
+    protected function cleanString($string) {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+        $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+     
+        $string = preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+        $string = str_replace('-', ' ', $string); // Replaces all hyphens with spaces.
+        return $string;
+     }
 }

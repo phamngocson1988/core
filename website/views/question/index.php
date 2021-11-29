@@ -26,7 +26,7 @@ use yii\helpers\Url;
         <a href="<?=$link;?>">
           <img class="icon" src="<?=$category->icon_url;?>"/>
         </a>
-        <h4 class="text-center"><a href="<?=Url::to(['question/list', 'id' => $category->id]);?>"><?=$category->title;?> <span class="num">(<?= ArrayHelper::getValue($stat, $category->id, 0);?>)</span></a></h4>
+        <h4 class="text-center"><a href="<?=Url::to(['question/list', 'id' => $category->id]);?>"><?=$category->title;?> <?php if (!$category->link) :?><span class="num">(<?= ArrayHelper::getValue($stat, $category->id, 0);?>)</span><?php endif;?></a></h4>
         <p class="text-center text-des"><?=$category->description;?></p>
       </div>
     </div>

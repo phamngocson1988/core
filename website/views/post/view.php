@@ -14,13 +14,12 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
     <div class="col-lg-9">
       <!-- Title -->
       <div class="mb-2">
-        
         <div class="w-100 mt-auto">
           <?php foreach ($model->categories as $category) : ?>
           <?php 
-              $backgrouds = array_rand($cateColors, 1);
-              $backgroud = $cateColors[$backgrouds];
-          ?>
+            $backgrouds = array_rand($cateColors, 1);
+            $backgroud = $cateColors[$backgrouds];
+            ?>
           <a href="<?=Url::to(['post/category', 'id' => $category->id, 'slug' => $category->slug]);?>" class="badge <?=$backgroud;?> mb-2"><i class="fas fa-circle me-2 small fw-bold"></i><?=$category->name;?></a>
           <?php endforeach;?>
           <!-- Card category -->
@@ -43,17 +42,20 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
             <div class="position-relative">
               <img class="card-img" src="<?=$model->getImageUrl(null, '/images/thumb-demo.jpg');?>" alt="Card image">
               <div class="card-img-overlay d-flex align-items-start flex-column p-3">
-            </div>
+              </div>
             </div>
             <div class="card-body px-0 pt-3">
               <div class="post-content">
                 <?=$model->content;?>
               </div>
+              <hr/>
+              <?=\website\widgets\PostSocial::widget(['post_id' => $model->id, 'view_count' => $model->view_count]);?>
             </div>
           </div>
         </div>
         <!-- Card item END -->
       </div>
+      <?=\website\widgets\RelatedPost::widget(['post_id' => $model->id]);?>
     </div>
     <!-- Main Post END -->
     <!-- Sidebar START -->

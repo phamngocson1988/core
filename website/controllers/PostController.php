@@ -13,6 +13,31 @@ use yii\helpers\Url;
 
 class PostController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['like'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['index', 'view', 'category'],
+                        'allow' => true,
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'like' => ['post'],
+                ],
+            ]
+        ];
+    }
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'post.index';
@@ -34,6 +59,7 @@ class PostController extends Controller
     {
         $this->view->params['main_menu_active'] = 'post.index';
         $post = \common\models\Post::findOne($id);
+        $post->updateCounters(['view_count' => 1]);
         return $this->render('view', ['model' => $post]);
     }
 
@@ -54,5 +80,20 @@ class PostController extends Controller
             'pages' => $pages,
             'category' => $category
         ]);
+    }
+
+    public function actionLike($id) 
+    {
+        $userId = Yii::$app->user->id;
+        $likeData = ['post_id' => $id, 'user_id' => $userId];
+        $like = \common\models\PostLike::find()->where($likeData)->one();
+        if ($like) {
+            $like->delete();
+            return $this->asJson(['status' => true, 'is_like' => false]);
+        } else {
+            $like = new \common\models\PostLike($likeData);
+            $like->save();
+            return $this->asJson(['status' => true, 'is_like' => true]);
+        }
     }
 }

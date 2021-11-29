@@ -123,13 +123,18 @@ class m130524_201442_init extends Migration
             'meta_title' => $this->string(160),
             'meta_keyword' => $this->string(160),
             'meta_description' => $this->string(160),
-            // 'status' => $this->string()->comment('Enum: Y,N,D')->defaultValue('Y')->notNull(),
-            // 'hot' => $this->string()->comment('Enum: Y,N')->defaultValue('N')->notNull(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10), // Y: 10, N: 5, D: 1
             'hot' => $this->smallInteger()->defaultValue(0),// 1||0
+            'view_count' => $this->integer()->defaultValue(0),
             'position' => $this->integer(),
             'created_at' => $this->integer(),
+            'published_at' => $this->integer(),
             'created_by' => $this->integer(),
+        ], $tableOptions);
+
+        $this->createTable('{{%post_like}}', [
+            'post_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
         ], $tableOptions);
 
         /* Category table */
