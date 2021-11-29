@@ -3,7 +3,7 @@ namespace website\widgets;
 
 use Yii;
 use yii\base\Widget;
-use common\models\Post;
+use website\models\Post;
 use common\models\PostCategory;
 
 class RelatedPost extends Widget

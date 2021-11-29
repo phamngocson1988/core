@@ -4,7 +4,7 @@ namespace website\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\Post;
+use website\models\Post;
 use common\models\Category;
 use common\models\PostCategory;
 

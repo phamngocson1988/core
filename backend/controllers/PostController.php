@@ -62,6 +62,7 @@ class PostController extends Controller
     public function actionCreate()
     {
         $this->view->params['main_menu_active'] = 'post.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new CreatePostForm();
         $model->type = Post::POST_TYPE_POST;
@@ -73,15 +74,15 @@ class PostController extends Controller
             }
         }
 
-        return $this->render('create.tpl', [
+        return $this->render('create', [
             'model' => $model,
-            'back' => $request->get('ref', Url::to(['post/index']))
         ]);
     }
 
     public function actionEdit($id)
     {
         $this->view->params['main_menu_active'] = 'post.index';
+        $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
         $model = new EditPostForm();
         if ($model->load(Yii::$app->request->post())) {
@@ -94,9 +95,8 @@ class PostController extends Controller
             $model->loadData($id);
         }
 
-        return $this->render('edit.tpl', [
+        return $this->render('edit', [
             'model' => $model,
-            'back' => $request->get('ref', Url::to(['post/index']))
         ]);
     }
 

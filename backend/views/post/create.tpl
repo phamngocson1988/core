@@ -2,6 +2,7 @@
 {use class='yii\widgets\ActiveForm' type='block'}
 {use class='common\widgets\TinyMce' type='block'}
 {use class='common\widgets\CheckboxInput'}
+{use class='backend\components\datetimepicker\DateTimePicker'}
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -83,14 +84,26 @@
                     'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
                   ])->label('Categories')}
                   <hr/>
+
                   {$form->field($model, 'status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->radioList($model->getStatusList('%s<span></span>'), [
-                    'class' => 'md-radio-list', 
-                    'encode' => false , 
-                    'itemOptions' => ['labelOptions' => ['class'=>'mt-radio', 'style' => 'display: block']]
-                  ])->label('Status')}
+                  ])->dropdownList($model->getStatusList(), ['id' => 'status'])->label('Status')}
+                  
+
+                  {$form->field($model, 'published_at', [    
+                    'inputOptions' => ['id' => 'published_at', 'class' => 'form-control'],
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(DateTimePicker::className(), [
+                    'clientOptions' => [
+                      'autoclose' => true,
+                      'format' => 'yyyy-mm-dd hh:00',
+                      'minuteStep' => 1,
+                      'endDate' => date('Y-m-d H:i'),
+                      'minView' => '1'
+                    ]
+                  ])->label('Từ ngày')}
                   <hr/>
 
                   {$form->field($model, 'hot', [
@@ -115,3 +128,19 @@
       {/ActiveForm}
   </div>
 </div>
+{registerJs}
+{literal}
+$('#status').on('change', function() {
+  changeStatus($(this).val());
+});
+changeStatus($('#status').val());
+
+function changeStatus(val) {
+  if (val == 6) {
+    $('#published_at').closest('.form-group').show();
+  } else {
+    $('#published_at').closest('.form-group').hide();
+  }
+}
+{/literal}
+{/registerJs}

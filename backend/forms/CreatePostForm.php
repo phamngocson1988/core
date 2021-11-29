@@ -26,6 +26,7 @@ class CreatePostForm extends Model
     public $meta_title;
     public $meta_keyword;
     public $meta_description;
+    public $published_at;
 
     /**
      * @inheritdoc
@@ -40,7 +41,7 @@ class CreatePostForm extends Model
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['title', 'content', 'excerpt', 'categories', 'image_id', 'type', 'meta_title', 'meta_keyword', 'meta_description', 'status', 'hot'];
+        $scenarios[self::SCENARIO_DEFAULT] = ['title', 'content', 'excerpt', 'categories', 'image_id', 'type', 'meta_title', 'meta_keyword', 'meta_description', 'status', 'hot', 'published_at'];
         return $scenarios;
     }
 
@@ -89,10 +90,17 @@ class CreatePostForm extends Model
         $post->meta_title = $this->meta_title;
         $post->meta_keyword = $this->meta_keyword;
         $post->meta_description = $this->meta_description;
-        $post->created_by = Yii::$app->user->id;
-        $post->created_at = strtotime('now');
         $post->status = $this->status;
+        $post->published_at = $this->published_at;
         $post->hot = $this->hot ? 1 : 0;
+        if ($post->status === Post::STATUS_SCHEDULED) {
+            if (!$post->published_at
+                || (strtotime($post->published_at) <= strtotime('now'))
+            ) {
+                $post->status = Post::STATUS_VISIBLE;
+                $post->published_at = date('Y-m-d H:i:s');
+            }
+        }
         return $post;
     }
 
@@ -111,12 +119,8 @@ class CreatePostForm extends Model
         return $categories;
     }
 
-    public function getStatusList($format = '%s')
+    public function getStatusList()
     {
-        $list = Post::getStatusList();
-        $list = array_map(function($name) use ($format) {
-            return sprintf($format, $name);
-        }, $list);
-        return $list;
+        return Post::getStatusList();
     }
 }

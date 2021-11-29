@@ -24,4 +24,14 @@ class MinutelyCronController extends Controller
         $track->save();
         return $form->run();
     }
+
+    // php yii minutely-cron/publish-post
+    public function actionPublishPost()
+    {
+        $track = new Tracking();
+        $track->description = sprintf("Run actionPublishPost at %s", date('Y-m-d H:i:s'));
+        $form = new \console\forms\PublishPostForm();
+        $track->save();
+        return $form->run();
+    }
 }

@@ -8,6 +8,8 @@ use common\models\Category;
 use common\models\PostCategory;
 use common\models\User;
 use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * Post model
@@ -33,6 +35,7 @@ class Post extends ActiveRecord
     const POST_TYPE_POST = 'post';
     const POST_TYPE_PAGE = 'page';
 
+    const STATUS_SCHEDULED = 6;
     const STATUS_INVISIBLE = 5;
     const STATUS_VISIBLE = 10;
     const STATUS_DELETE = 1;
@@ -55,14 +58,26 @@ class Post extends ActiveRecord
                 'immutable' => true,
                 'ensureUnique'=>true,
             ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'updated_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => date('Y-m-d H:i:s'),
+            ],
         ];
     }
 
     public static function getStatusList()
     {
         return [
-            self::STATUS_INVISIBLE => 'Invisible',
-            self::STATUS_VISIBLE => 'Visible',
+            self::STATUS_VISIBLE => 'Publish',
+            self::STATUS_SCHEDULED => 'Scheduled',
+            self::STATUS_INVISIBLE => 'Draft',
             self::STATUS_DELETE => 'Deleted'
         ];
     }
@@ -84,7 +99,7 @@ class Post extends ActiveRecord
     public function getCreatedAt($format = false, $default = 'F j, Y, g:i a')
     {
         if ($format == true) {
-            return date($default, $this->created_at);
+            return date($default, strtotime($this->created_at));
         }
         return $this->created_at;
     }

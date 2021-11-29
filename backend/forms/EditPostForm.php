@@ -25,6 +25,7 @@ class EditPostForm extends Model
     public $meta_description;
     public $status;
     public $hot;
+    public $published_at;
 
     private $_post;
     /**
@@ -46,7 +47,7 @@ class EditPostForm extends Model
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DEFAULT] = ['id', 'title', 'content', 'excerpt', 'categories', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'status', 'hot'];
+        $scenarios[self::SCENARIO_DEFAULT] = ['id', 'title', 'content', 'excerpt', 'categories', 'image_id', 'meta_title', 'meta_keyword', 'meta_description', 'status', 'hot', 'published_at'];
         return $scenarios;
     }
 
@@ -65,6 +66,14 @@ class EditPostForm extends Model
                 $post->meta_description = $this->meta_description;
                 $post->status = $this->status;
                 $post->hot = $this->hot ? 1 : 0;
+                if ($post->status === Post::STATUS_SCHEDULED) {
+                    if (!$post->published_at
+                        || (strtotime($post->published_at) <= strtotime('now'))
+                    ) {
+                        $post->status = Post::STATUS_VISIBLE;
+                        $post->published_at = date('Y-m-d H:i:s');
+                    }
+                }
                 $result = $post->save();
 
                 // categories

@@ -127,9 +127,11 @@ class m130524_201442_init extends Migration
             'hot' => $this->smallInteger()->defaultValue(0),// 1||0
             'view_count' => $this->integer()->defaultValue(0),
             'position' => $this->integer(),
-            'created_at' => $this->integer(),
-            'published_at' => $this->integer(),
+            'created_at' => $this->dateTime()->notNull(),
+            'updated_at' => $this->dateTime()->notNull(),
+            'published_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer(),
+            'updated_by' => $this->integer(),
         ], $tableOptions);
 
         $this->createTable('{{%post_like}}', [
