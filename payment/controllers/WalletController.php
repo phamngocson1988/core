@@ -106,11 +106,12 @@ class WalletController extends \yii\web\Controller
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $user = Yii::$app->user->getIdentity();
-        $form = new \website\forms\WalletPaymentForm([
+        $customerName = $request->post('name');
+        $form = new \payment\forms\WalletPaymentForm([
             'quantity' => $request->post('quantity', 0),
             'paygate' => $request->post('paygate'),
+            'remark' => $customerName
         ]);
-        $customerName = $request->post('name');
 
         if ($form->validate() && $trnId = $form->purchase()) {
             $paygate = $form->getPaygate();

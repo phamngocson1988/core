@@ -136,6 +136,7 @@ $now = date('Y-m-d H:i:s');
                 <th col-tag="object_created_at">Ngày tạo đơn</th>
                 <th col-tag="confirmed_time">TG duyệt</th>
                 <th col-tag="payment_id">Mã tham chiếu người gửi</th>
+                <th col-tag="object_remark">Tên người gửi</th>
                 <th col-tag="voucher_code">Mã khuyến mãi</th>
                 <th col-tag="voucher_value">Khuyến mãi (Kcoin)</th>
                 <th col-tag="paygate">Cổng thanh toán</th>
@@ -192,6 +193,7 @@ $now = date('Y-m-d H:i:s');
                 ?>
                 </td>
                 <td col-tag="payment_id"><?=$model->payment_id;?></td>
+                <td col-tag="object_remark"><?=$model->isObjectWallet() ? $object->remark : '';?></td>
                 <td col-tag="voucher_code"></td>
                 <td col-tag="voucher_value"></td>
                 <td col-tag="paygate"><?=$model->paygate;?></td>

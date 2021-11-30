@@ -114,15 +114,15 @@ class m130524_201442_init extends Migration
         /* Post table */
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
-            'title' => $this->string(100)->notNull(),
-            'slug' => $this->string(100)->notNull()->unique(),
-            'excerpt' => $this->string(100),
+            'title' => $this->string(512)->notNull(),
+            'slug' => $this->string(512)->notNull()->unique(),
+            'excerpt' => $this->string(512),
             'content' => $this->text()->notNull(),
             'image_id' => $this->integer(),
             'type' => $this->string()->defaultValue('post')->comment('enum: post,product')->notNull(),
-            'meta_title' => $this->string(160),
-            'meta_keyword' => $this->string(160),
-            'meta_description' => $this->string(160),
+            'meta_title' => $this->string(512),
+            'meta_keyword' => $this->string(512),
+            'meta_description' => $this->string(512),
             'status' => $this->smallInteger()->notNull()->defaultValue(10), // Y: 10, N: 5, D: 1
             'hot' => $this->smallInteger()->defaultValue(0),// 1||0
             'view_count' => $this->integer()->defaultValue(0),
@@ -142,14 +142,14 @@ class m130524_201442_init extends Migration
         /* Category table */
         $this->createTable('{{%category}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(100)->notNull(),
+            'name' => $this->string(512)->notNull(),
             'type' => $this->string(),
-            'slug' => $this->string(100)->notNull()->unique(),
-            'parent_id' => $this->string(),
+            'slug' => $this->string(512)->notNull()->unique(),
+            'parent_id' => $this->integer(),
             'image_id' => $this->integer(),
-            'meta_title' => $this->string(160),
-            'meta_keyword' => $this->string(160),
-            'meta_description' => $this->string(160),
+            'meta_title' => $this->string(512),
+            'meta_keyword' => $this->string(512),
+            'meta_description' => $this->string(512),
             'icon' => $this->string(50),
             'visible' => $this->string(1)->comment('enum: Y,N')->defaultValue('Y'),
         ], $tableOptions);
