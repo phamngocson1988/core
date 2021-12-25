@@ -4,6 +4,23 @@ use yii\bootstrap\ActiveForm;
 use common\components\helpers\StringHelper;
 $user = Yii::$app->user->getIdentity();
 ?>
+<style type="text/css">
+.blinking {
+  /* margin: 20% 45% 0; */
+  display:inline-block;
+  padding: 5px;
+  
+  border: 4px solid #fe0000;
+  animation-name: blinking;
+  animation-duration: 1s;
+  animation-iteration-count: 100;
+}
+@keyframes blinking {
+  50% {
+    border-color: #febb00;
+  }
+}
+</style>
 <div class="container my-5">
   <div class="d-flex multi-step justify-content-between align-items-center active_step2">
     <div class="flex-fill">
@@ -73,6 +90,7 @@ $user = Yii::$app->user->getIdentity();
     </div>
   </div>
   <?php ActiveForm::end();?>
+  <center class="mt-5 font-weight-bold" style="color: #180774; font-size: 1.2rem">Did you know about "Sub-payment"- An ultimated method for your business, <a href="https://kinggems.us/news/6-guidance-to-use-sub-payment-for-reseller-2021.html" class="blinking">Click here for more information</a></center>
 </div>
 <?php
 $script = <<< JS

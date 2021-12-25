@@ -32,7 +32,7 @@ class UserController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'active', 'inactive', 'update-trust', 'update-not-trust', 'no-order'],
-                        'roles' => ['admin'],
+                        'roles' => ['admin', 'hr'],
                     ],
                     [
                         'allow' => true,

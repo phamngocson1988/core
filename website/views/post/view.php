@@ -31,31 +31,32 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
           <div class="card">
             <!-- Card img -->
             <h1 class="post-title"><?=$model->title;?></h1>
-            <div class="post-description"><?=$model->getExcerpt();?></div>
             <!-- Card info -->
-            <ul class="nav nav-divider align-items-center d-none d-sm-inline-block mb-3 py-2">
+            <ul class="nav nav-divider align-items-center mb-3 py-2">
               <li class="nav-item">
-                <span class="ms-3">By <a href="#" class="stretched-link text-reset btn-link"><?=$model->getCreatorName();?></a></span>
+                <span class="ms-3">By <a href="#" class="stretched-link text-reset btn-link"><?=sprintf('%s - Kinggems.us', $model->getCreatorName());?></a></span>
               </li>
               <li class="nav-item"><?=$model->getCreatedAt(true, 'F j, Y');?></li>
             </ul>
-            <div class="position-relative">
-              <img class="card-img" src="<?=$model->getImageUrl(null, '/images/thumb-demo.jpg');?>" alt="Card image">
-              <div class="card-img-overlay d-flex align-items-start flex-column p-3">
-              </div>
-            </div>
             <div class="card-body px-0 pt-3">
               <div class="post-content">
                 <?=$model->content;?>
               </div>
+
+              <!-- Rating Stars Box -->
+              <?=\website\widgets\PostRatingWidget::widget(['post_id' => $model->id]);?>
+              
               <hr/>
               <?=\website\widgets\PostSocial::widget(['post_id' => $model->id, 'view_count' => $model->view_count]);?>
             </div>
           </div>
         </div>
         <!-- Card item END -->
+        
       </div>
       <?=\website\widgets\RelatedPost::widget(['post_id' => $model->id]);?>
+      <hr/>
+      <?=\website\widgets\PostCommentWidget::widget();?>
     </div>
     <!-- Main Post END -->
     <!-- Sidebar START -->

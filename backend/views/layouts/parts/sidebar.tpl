@@ -28,7 +28,7 @@
       </li>
 
       <!-- Ban quản trị -->
-      {if Yii::$app->user->can('admin')}
+      {if Yii::$app->user->can('hr')}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
         <i class="icon-lock"></i>
@@ -94,7 +94,7 @@
       {/if}
 
       <!-- Supplier -->
-      {if ($app->user->cans(['accounting', 'orderteam']))}
+      {if ($app->user->cans(['accounting', 'orderteam']) && ($app->user->id != 189))}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-link"></i>
@@ -556,6 +556,7 @@
       {/if}
 
       <!-- Thống kê -->
+      {if $app->user->cans(['admin', 'accounting', 'saler', 'orderteam', 'customer_support', 'saler', 'sale_manager'])}
       <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
           <i class="fa fa-line-chart"></i>
@@ -563,7 +564,7 @@
           <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-          {if $app->user->cans(['admin', 'accounting', 'saler', 'orderteam'])}
+          {if $app->user->cans(['admin', 'accounting', 'saler', 'orderteam', 'orderteam_manager'])}
           <li class="nav-item  ">
             <a href="{url route='/order/report'}" class="nav-link nav-toggle" code='order.report'>
               <span class="title">Thống kê đơn hàng</span>
@@ -721,6 +722,7 @@
           {/if}
         </ul>
       </li>
+      {/if}
     </ul>
   </div>
 </div>

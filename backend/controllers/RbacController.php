@@ -25,7 +25,7 @@ class RbacController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['hr'],
                     ],
                 ],
             ],

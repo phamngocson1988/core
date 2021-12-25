@@ -110,6 +110,7 @@ $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\Jq
                   <?=$form->field($model, 'meta_title')->textInput();?>
                   <?=$form->field($model, 'meta_keyword')->textInput();?>
                   <?=$form->field($model, 'meta_description')->textInput();?>
+                  <?=$form->field($model, 'author')->textInput();?>
                   <?=$form->field($model, 'content')->widget(TinyMce::className(), ['options' => ['rows' => 30]]);?>
                 </div>
               </div>

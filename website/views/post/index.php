@@ -23,7 +23,7 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
                 <div class="card">
                     <!-- Card img -->
                     <div class="position-relative post-image-container-overflow">
-                        <img class="card-img" src="<?=$model->getImageUrl('500x500', '/images/thumb-demo.jpg');?>" alt="<?=$model->title;?>">
+                        <img class="card-img" src="<?=$model->getImageUrl(null, '/images/thumb-demo.jpg');?>" alt="<?=$model->title;?>">
                         <div class="card-img-overlay d-flex align-items-start flex-column p-3">
                             <!-- Card overlay bottom -->
                             <div class="w-100 mt-auto">

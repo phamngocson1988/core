@@ -84,7 +84,7 @@ class PostController extends Controller
         $this->view->params['main_menu_active'] = 'post.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new EditPostForm();
+        $model = new EditPostForm(['id' => $id]);
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

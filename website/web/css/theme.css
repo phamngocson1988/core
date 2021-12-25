@@ -109,3 +109,15 @@ p.Normal>img {
    width: 100%;
    border-radius: calc(0.25rem - 1px);
 }
+
+@media only screen and (max-width: 768px) {
+.page-news .nav.nav-divider .nav-item + .nav-item:before {
+      content: "";
+      color: inherit;
+      padding-left: 0px;
+      padding-right: 0px;
+      opacity: 0.8;
+      font-size: 70%;
+      color: #e1e1e1;
+   }
+}

@@ -112,6 +112,7 @@ class Post extends ActiveRecord
 
     public function getCreatorName()
     {
+        if ($this->author) return $this->author;
         $creator = $this->creator;
         if ($creator) {
             return $creator->getName();

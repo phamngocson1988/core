@@ -20,7 +20,7 @@ class PostController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['like'],
+                        'actions' => ['like', 'rating'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -34,6 +34,7 @@ class PostController extends Controller
                 'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'like' => ['post'],
+                    'rating' => ['post'],
                 ],
             ]
         ];
@@ -95,5 +96,30 @@ class PostController extends Controller
             $like->save();
             return $this->asJson(['status' => true, 'is_like' => true]);
         }
+    }
+
+    public function actionRating($id) 
+    {
+        $request = Yii::$app->request;
+        $userId = Yii::$app->user->id;
+        $likeData = ['post_id' => $id, 'user_id' => $userId];
+        $like = \common\models\PostRating::find()->where($likeData)->one();
+        if (!$like) {
+            $like = new \common\models\PostRating($likeData);
+        }
+        $like->rating = $request->post('rating', 1);
+        $like->save();
+        return $this->asJson(['status' => true, 'like' => $like]);
+    }
+
+    public function actionComments($id)
+    {
+        $form = new \website\forms\FetchPostCommentForm(['post_id' => $id]);
+        $command = $form->getCommand();
+        $pages = new Pagination(['totalCount' => $command->count()]);
+        $models = $command->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->all();
     }
 }

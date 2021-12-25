@@ -126,6 +126,7 @@ class m130524_201442_init extends Migration
             'status' => $this->smallInteger()->notNull()->defaultValue(10), // Y: 10, N: 5, D: 1
             'hot' => $this->smallInteger()->defaultValue(0),// 1||0
             'view_count' => $this->integer()->defaultValue(0),
+            'author' => $this->string(512),
             'position' => $this->integer(),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
@@ -138,6 +139,29 @@ class m130524_201442_init extends Migration
             'post_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
         ], $tableOptions);
+        $this->addPrimaryKey('post_like_pk', '{{%post_like}}', ['post_id', 'user_id']);
+
+        $this->createTable('{{%post_rating}}', [
+            'post_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
+            'rating' => $this->integer()->notNull()->default(1),
+        ], $tableOptions);
+        $this->addPrimaryKey('post_rating_pk', '{{%post_rating}}', ['post_id', 'user_id']);
+
+        $this->createTable('{{%post_comment}}', [
+            'id' => $this->primaryKey(),
+            'post_id' => $this->integer()->notNull(),
+            'comment' => $this->text()->notNull(),
+            'parent_id' => $this->integer(),
+            'created_by' => $this->integer()->notNull(),
+            'created_at' => $this->dateTime()->notNull(),
+        ], $tableOptions);
+
+        $this->createTable('{{%post_comment_like}}', [
+            'comment_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
+        ], $tableOptions);
+        $this->addPrimaryKey('post_comment_like_pk', '{{%post_comment_like}}', ['comment_id', 'user_id']);
 
         /* Category table */
         $this->createTable('{{%category}}', [

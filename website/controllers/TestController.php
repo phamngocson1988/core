@@ -1,5 +1,5 @@
 <?php
-namespace frontend\controllers;
+namespace website\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -20,6 +20,15 @@ class TestController extends Controller
                 'successCallback' => [$this, 'onAuthSuccess'],
             ],
         ];
+    }
+
+    public function beforeAction($action)
+    {            
+        if ($action->id == 'personal') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     public function actionIndex() 
@@ -210,6 +219,52 @@ class TestController extends Controller
 
     public function actionPush()
     {
-        return $this->render('push');
+
+        \Cloudinary::config(array(
+            "cloud_name" => 'sonpham',
+            "api_key" => '365324843952423',
+            "api_secret" => 'kvaLj2sSrKLJvYkrR4xo_2bq2F4'
+        ));
+        $path = "order/16887499/customer/bill.jpg";
+        $public_id = sprintf("%s", $path);
+        \Cloudinary\Uploader::destroy($public_id);
+        die('ok');
+    }
+
+    public function actionPersonal()
+    {
+        $request = Yii::$app->request;
+        $headers = $request->headers;
+        $info = [];
+        $userId = '';
+        $method = $request->isPost ? 'POST' : 'GET';
+        if ($method === 'POST') {
+            $userId = $request->post('userId');
+        } else {
+            $userId = $request->get('userId');
+        }
+        if ($userId) {
+            $info = [
+                'lastName' => sprintf('%s - Sample external lastName', $method), 
+                'firstName' => sprintf('%s - Sample external firstName', $method), 
+                'fullName' => sprintf('%s - Sample external fullName', $method), 
+                'address' => sprintf('%s - Sample external address', $method), 
+                'city' => sprintf('%s - Sample external city', $method), 
+                'phoneNumber' => sprintf('%s - Sample external phoneNumber', $method), 
+                'email' => sprintf('%s - Sample external email', $method), 
+                'FIELD1' => sprintf('%s - Sample external FIELD1', $method), 
+                'maritalStatus' => 'single',
+                'gender' => 'male'
+            ];
+            if ($headers->has('Access-Token')) {
+                $info['FIELD2'] = sprintf('Header Access Token: %s', $headers->get('Access-Token'));
+            }
+            $paramUserID = $method === 'GET' ? $request->get('UserID') : $request->post('UserID');
+            if ($paramUserID) {
+                $info['FIELD3'] = sprintf('%s - param UserID: %s', $method, $paramUserID);
+            }
+        }
+        
+        return $this->asJson($info);
     }
 }
