@@ -9,6 +9,9 @@ use common\models\PostComment;
 class FetchPostCommentForm extends Model
 {
     public $post_id;
+    public $sort = 'desc';
+    public $limit = 10;
+    public $lastKey;
     
     private $_command;
     
@@ -21,7 +24,19 @@ class FetchPostCommentForm extends Model
     protected function createCommand()
     {
         $command = PostComment::find()->where(['post_id' => $this->post_id])->andWhere(['is', 'parent_id', new \yii\db\Expression('null')]);
+        $orderBy = 'ASC' === strtoupper($this->sort) ? SORT_ASC : SORT_DESC;
+        $operatorCompare = 'ASC' === strtoupper($this->sort) ? '>' : '<';
+        if ($this->lastKey) {
+            $command->andWhere([$operatorCompare, 'id', $this->lastKey]);
+        }
+        $command->orderBy(['id' => $orderBy]);
+        $command->limit($this->limit);
         $this->_command = $command;
+    }
+
+    public function getTotal() 
+    {
+        return PostComment::find()->where(['post_id' => $this->post_id])->andWhere(['is', 'parent_id', new \yii\db\Expression('null')])->count();
     }
 
     public function getCommand()

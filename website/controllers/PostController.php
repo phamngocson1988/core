@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use website\models\User;
 
 class PostController extends Controller
 {
@@ -20,12 +21,12 @@ class PostController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['like', 'rating'],
+                        'actions' => ['like', 'rating', 'comment'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['index', 'view', 'category'],
+                        'actions' => ['index', 'view', 'category', 'comments', 'replies'],
                         'allow' => true,
                     ],
                 ],
@@ -35,6 +36,7 @@ class PostController extends Controller
                 'actions' => [
                     'like' => ['post'],
                     'rating' => ['post'],
+                    'comment' => ['post'],
                 ],
             ]
         ];
@@ -112,14 +114,74 @@ class PostController extends Controller
         return $this->asJson(['status' => true, 'like' => $like]);
     }
 
-    public function actionComments($id)
+    public function actionComments()
     {
-        $form = new \website\forms\FetchPostCommentForm(['post_id' => $id]);
-        $command = $form->getCommand();
-        $pages = new Pagination(['totalCount' => $command->count()]);
-        $models = $command->offset($pages->offset)
-                            ->limit($pages->limit)
-                            ->orderBy(['id' => SORT_DESC])
-                            ->all();
+        $request = Yii::$app->request;
+        $sort = $request->get('sort', 'desc');
+        $lastKey = $request->get('lastKey', 0);
+        $post_id = $request->get('post_id');
+        $form = new \website\forms\FetchPostCommentForm([
+            'post_id' => $post_id,
+            'sort' => $sort,
+            'lastKey' => $lastKey
+        ]);
+        $total = $form->getTotal();
+        $comments = $form->fetch();
+
+        if ($comments === false) {
+            return $this->asJson(['status' => false]);
+        }
+        $userIds = ArrayHelper::getColumn($comments, 'created_by');
+        $userIds = array_unique($userIds);
+        $users = User::findAll($userIds);
+        $userNameMapping = ArrayHelper::map($users, 'id', function($u) {
+            return $u->getName();
+        });
+        $comments = array_map(function($r) use ($userNameMapping) {
+            $replyContent = $r->attributes;
+            $replyContent['creator'] = $userNameMapping[$r->created_by];
+            return $replyContent;
+        }, $comments);
+
+        return $this->asJson(['status' => true, 'comments' => $comments, 'total' => $total]);
+    }
+
+    public function actionComment($id)
+    {
+        $request = Yii::$app->request;
+        $content = $request->post('content');
+        $parentId = $request->post('parent_id');
+        $form = new \website\forms\CreatePostCommentForm([
+            'post_id' => $id, 
+            'content' => $content,
+            'user_id' => Yii::$app->user->id,
+            'parent_id' => $parentId
+        ]);
+        $newComment = $form->save();
+        return $this->asJson(['status' => !!$newComment, 'comment' => $newComment]);
+    }
+
+    public function actionReplies($id)
+    {
+        $request = Yii::$app->request;
+        $form = new \website\forms\FetchCommentReplyForm([
+            'id' => $id, 
+        ]);
+        $replies = $form->fetch();
+        if ($replies === false) {
+            return $this->asJson(['status' => false]);
+        }
+        $userIds = ArrayHelper::getColumn($replies, 'created_by');
+        $userIds = array_unique($userIds);
+        $users = User::findAll($userIds);
+        $userNameMapping = ArrayHelper::map($users, 'id', function($u) {
+            return $u->getName();
+        });
+        $replies = array_map(function($r) use ($userNameMapping) {
+            $replyContent = $r->attributes;
+            $replyContent['creator'] = $userNameMapping[$r->created_by];
+            return $replyContent;
+        }, $replies);
+        return $this->asJson(['status' => true, 'comments' => $replies]);
     }
 }

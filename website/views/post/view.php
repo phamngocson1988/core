@@ -55,8 +55,7 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
         
       </div>
       <?=\website\widgets\RelatedPost::widget(['post_id' => $model->id]);?>
-      <hr/>
-      <?=\website\widgets\PostCommentWidget::widget();?>
+      <?=\website\widgets\PostCommentWidget::widget(['post_id' => $model->id]);?>
     </div>
     <!-- Main Post END -->
     <!-- Sidebar START -->
