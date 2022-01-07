@@ -111,7 +111,9 @@ class PostController extends Controller
         }
         $like->rating = $request->post('rating', 1);
         $like->save();
-        return $this->asJson(['status' => true, 'like' => $like]);
+        $total = \common\models\PostRating::find()->where(['post_id' => $id])->count();
+        $average = \common\models\PostRating::find()->where(['post_id' => $id])->average('rating');
+        return $this->asJson(['status' => true, 'average' => number_format($average, 1), 'total' => number_format($total)]);
     }
 
     public function actionComments()

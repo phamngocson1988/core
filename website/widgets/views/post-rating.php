@@ -9,6 +9,7 @@
             </li>
             <?php endfor;?>
         </ul>
-        <span class="ml-2"><span id='total-rating'><?=number_format($total);?></span> reviews</span>
+        <span class="ml-2">[Total:</span><span id='total-rating'> <?=$total;?></span>
+        <span class="ml-2">Average: </span><span id='average-rating'> <?=$average;?></span>]
     </div>
 </div>

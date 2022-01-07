@@ -22,13 +22,15 @@ class PostRatingWidget extends Widget
         if (!$this->post_id) return;
         $total = $this->getTotalRating();
         $stars = $this->getUserStar();
+        $average = $this->getAverage();
 
         if ($this->canRating()) {
             $this->registerClientScript();
         }
         return $this->render('post-rating', [
-            'total' => $total,
+            'total' => number_format($total),
             'stars' => $stars,
+            'average' => number_format($average, 1),
             'sectionId' => $this->sectionId
         ]);
     }
@@ -71,27 +73,24 @@ class PostRatingWidget extends Widget
         if (!$this->_average) {
             $this->_average = \common\models\PostRating::find()->where(['post_id' => $this->post_id])->average('rating');
         }
-        return (int)$this->_average;
+        return $this->_average;
     }
 
     protected function getScriptCode()
     {
         $ratingUrl = Url::to(['post/rating', 'id' => $this->post_id]);
         $sectionId = $this->sectionId;
-        $total = $this->getTotalRating();
-        $totalAfterRating = number_format($total + 1);
-        // $average = $this->getAverage();
-        // $averageAfterRating = ($average * $total) + $val / ( $total + 1);
         return "
         var ratingStarsSelector = '#$sectionId #post-stars';
         var starItemSelector = ratingStarsSelector + '>li';
         var userRatingSelector = '#$sectionId #user-rating';
         var totalRatingSelector = '#$sectionId #total-rating';
+        var averageRatingSelector = '#$sectionId #average-rating';
         $(starItemSelector).on('click', function() {
             $(starItemSelector).removeClass('selected');
             var rating = parseInt($(this).data('value'));
             selectStar(rating);
-            $(totalRatingSelector).html($totalAfterRating);
+            
             $.ajax({
               url: '$ratingUrl',
               type: 'post',
@@ -99,6 +98,8 @@ class PostRatingWidget extends Widget
               data: { rating },
               success: function (result, textStatus, jqXHR) {
                   console.log(result);
+                  $(totalRatingSelector).html(result.total);
+                  $(averageRatingSelector).html(result.average);
                   $(starItemSelector).unbind();
               },
           });
