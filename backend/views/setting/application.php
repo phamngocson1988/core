@@ -44,73 +44,73 @@ use yii\helpers\Url;
                 <?=$form->field($model, 'admin_email', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'contact_phone', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'contact_email', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'customer_service_email', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'supplier_service_email', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'accountant_email', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'exchange_rate_cny', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'exchange_rate_vnd', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'managing_cost_rate', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'investing_cost_rate', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'desired_profit', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'reseller_desired_profit', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'logo', [
@@ -132,7 +132,7 @@ use yii\helpers\Url;
                 <?=$form->field($model, 'affiliate_banner_link', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'refer_banner', [
@@ -148,7 +148,7 @@ use yii\helpers\Url;
                 <?=$form->field($model, 'refer_banner_link', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <?=$form->field($model, 'kcoin_banner', [
@@ -164,7 +164,7 @@ use yii\helpers\Url;
                 <?=$form->field($model, 'kcoin_banner_link', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                 ])->textInput();?>
 
                 <hr/>
@@ -173,6 +173,13 @@ use yii\helpers\Url;
                   'inputOptions' => ['class' => 'form-control', 'readonly' => true, 'id' => 'post_banner'],
                   'template' => '{label}<div class="col-md-6"><div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-default" type="button" id="post_banner_upload">Upload</button><input type="file" id="file_post_banner_upload" style="display: none" name="file" /></span>{hint}{error}</div></div>',
                 ])->textInput();?>
+
+                <hr/>
+                <?=$form->field($model, 'hot_post_id', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control', 'id' => 'hot_post_id'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
+                ])->dropdownList($model->fetchPosts(), ['prompt' => 'Chọn bài viết']);?>
               </div>
             </div>
           </div>

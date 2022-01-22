@@ -41,6 +41,7 @@ body {
    background-color: #F7F4F2;
    font-family: 'Muli', sans-serif;
    overflow-x: hidden;
+   scroll-behavior: smooth;
 }
 
 h1,
@@ -328,6 +329,30 @@ section {
 
 .block-title .num:first-child {
    margin-left: 20px;
+}
+
+.hotnews .block-title{
+   min-width: 130px;
+}
+
+.hotnews .post-title{
+   min-height: auto;
+}
+
+.hotnews .post-title a {
+   font-size: 25px;
+   color: #000e40;
+   text-decoration: none;
+   line-height: 1;
+   min-height: auto;
+   display: inline-block;
+   width: 100%;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 2;
+   -webkit-box-orient: vertical;
+   font-family: 'Teko', sans-serif;
 }
 
 .post-item {
@@ -2272,6 +2297,85 @@ input::placeholder {
    padding-left: 3rem !important;
 }
 
+/* SECTION NAV */
+.section-nav{
+   background: #fafafa;
+   border: solid 1px #e1e1e1;
+   margin: 10px 0;
+   font-weight: 600;
+}
+.tableofcontents{
+   width: 100%;
+   background: rgba(229,229,229,0.95);
+   padding: 10px;
+   cursor: pointer;
+}
+.tableofcontents:hover{
+   background: rgba(209,209,209,1);
+}
+.section-nav ol{
+   list-style-type: none;
+   margin: 0;
+   padding: 15px 20px 15px 30px;
+   max-height: 300px;
+   overflow-y: scroll;
+   animation: all 5s;
+}
+.section-nav li a{
+   padding: 2px 4px;
+   margin: 2px 0;
+}
+.section-nav li > a,
+.section-nav li > span>a{
+   color: #444444;
+   font-weight: 600;   
+}
+.section-nav li ul li > a{
+   font-weight: 300;
+
+   display: block;
+}
+.section-nav .active>a,
+.section-nav .active>span>a{
+   background-color: #e1e1e1;
+}
+
+.section-nav.active{
+   display: block;
+   position: fixed;
+   right: 10px;
+   top: 50%;
+   transform: translateY(-50%);
+   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+   max-width: 500px;
+   z-index: 999;
+   background: #ffffff;
+}
+.post-content section{
+   padding-top: 30px;
+   padding-bottom: 0;
+}
+span.panel-heading{
+   position: relative;
+   cursor: pointer;
+}
+span.panel-heading:before {
+   content: "";
+   width: 15px;
+   height: 15px;
+   position: absolute;
+   transition: all 0.5s;
+   background-image: url(../images/icon/down-arrow.svg);
+   left: -20px;
+   top: 3px;
+   transform: rotate(0deg);
+}
+span.collapsed.panel-heading:before {
+	-webkit-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+	transform: rotate(270deg);
+} 
+
 /* RESPONSIVE */
 @media only screen and (max-width: 1200px) {
    .navbar-header .logo img {
@@ -2420,7 +2524,9 @@ input::placeholder {
    .top-grossing .post-thumb{
       margin-right: 0;
    }
-
+   .section-nav.active{
+      max-width: 100%;
+   }
 }
 
 @media only screen and (max-width: 575px) {

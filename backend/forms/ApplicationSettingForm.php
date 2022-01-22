@@ -36,6 +36,9 @@ class ApplicationSettingForm extends Model
     //post banner
     public $post_banner;
 
+    //hot-new
+    public $hot_post_id;
+
     public function init()
     {
         parent::init();
@@ -53,7 +56,8 @@ class ApplicationSettingForm extends Model
             [['logo', 'customer_service_email', 'supplier_service_email'], 'safe'],
             [['managing_cost_rate', 'investing_cost_rate', 'desired_profit', 'reseller_desired_profit'], 'number'],
             [['affiliate_banner', 'affiliate_banner_mobile', 'affiliate_banner_link', 'refer_banner', 'refer_banner_mobile', 'refer_banner_link', 'kcoin_banner', 'kcoin_banner_mobile', 'kcoin_banner_link'], 'safe'],
-            ['post_banner', 'safe']
+            ['post_banner', 'safe'],
+            ['hot_post_id', 'safe'],
         ];
     }
 
@@ -87,6 +91,15 @@ class ApplicationSettingForm extends Model
             'kcoin_banner_link' => 'Link for KCoin banner',
             'accountant_email' => 'Email kế toán',
             'post_banner' => 'Banner trang tin tức',
+            'hot_post_id' => 'Hot new trang chủ',
         ];
+    }
+
+    public function fetchPosts()
+    {
+        $form = new \backend\forms\FetchPostForm();
+        $command = $form->getCommand();
+        $posts = $command->all();
+        return ArrayHelper::map($posts, 'id', 'title');
     }
 }

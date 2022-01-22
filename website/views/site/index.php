@@ -71,9 +71,9 @@ $gallery = array_filter($gallery, function($data) {
 });
 $sideGallery = array_slice($gallery, -2);
 ?>
-<!-- <div class="container">
-  <h2>Hello word</h2>
-</div> -->
+
+<?=\website\widgets\HotNewHomePage::widget();?>
+
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">

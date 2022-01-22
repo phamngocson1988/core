@@ -205,7 +205,29 @@ $(document).ready(function () {
   $('.contact-apps>li').click(function(event){
     event.preventDefault();
     $('.inputDisabled').prop("disabled", false);
-  })
+  });
+
+  if($('.section-nav')){
+    var sectionNavHeight = $('.section-nav').outerHeight();
+    $('.section-nav-wrapper').css({
+      'min-height':sectionNavHeight
+    })
+    $('.tableofcontents').click(function(){
+      setTimeout(function() { 
+          var sectionNavHeight = $('.section-nav').outerHeight();
+          $('.section-nav-wrapper').css({
+            'min-height':sectionNavHeight
+          })
+      }, 400);
+    })
+    $('.panel-collapse').on('show.bs.collapse', function () {
+      $(this).siblings('.panel-heading').addClass('active');
+    });
+  
+    $('.panel-collapse').on('hide.bs.collapse', function () {
+      $(this).siblings('.panel-heading').removeClass('active');
+    });
+  }
 
   AOS.init({
     easing: 'ease', // default easing for AOS animations
@@ -215,6 +237,43 @@ $(document).ready(function () {
 
 });
 
+$(window).on('scroll', function() {
+  var scrollTop = $(this).scrollTop();
+  var toc = $('.section-nav').outerHeight();
+  $('.section-nav-wrapper').each(function() {
+      var topDistance = $(this).offset().top;
+      setTimeout(function() { 
+        var sectionNavHeight = $('.section-nav').outerHeight();
+        $('.section-nav-wrapper').css({
+          'min-height':sectionNavHeight
+        })
+    }, 400);
+      if ( (topDistance+toc) < scrollTop ) {
+          $('.section-nav').addClass('active')
+      } else{
+          $('.section-nav').removeClass('active')
+      }
+  });
+});
+
 $(window).on('load', function () {
   $('#preloader').addClass('loaded');
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+	const observer = new IntersectionObserver(entries => {
+		entries.forEach(entry => {
+			const id = entry.target.getAttribute('id');
+			if (entry.intersectionRatio > 0) {
+				document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+			} else {
+				document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.remove('active');
+			}
+		});
+	});
+
+	// Track all sections that have an `id` applied
+	document.querySelectorAll('section[id]').forEach((section) => {
+		observer.observe(section);
+	});
 });

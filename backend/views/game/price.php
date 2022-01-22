@@ -68,9 +68,9 @@ use common\components\helpers\FormatConverter;
               <th> STT </th>
               <th> Tên game </th>
               <th> Giá bán lẻ </th>
-              <th> Giá reseller cấp 1 </th>
-              <th> Giá reseller cấp 2 </th>
-              <th> Giá reseller cấp 3 </th>
+              <th> Giá Gold </th>
+              <th> Giá Diamond </th>
+              <th> Giá Platium </th>
             </tr>
           </thead>
           <tbody>
