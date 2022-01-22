@@ -8,6 +8,7 @@ return [
     'suffix' => '.html',
     'rules' => [
         '/' => 'wallet/index',
+        '/o/<token>' => 'wallet/order',
         '/<code>' => 'site/login',
         '<controller>/<action>' => '<controller>/<action>',
     ],

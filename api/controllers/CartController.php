@@ -33,6 +33,7 @@ class CartController extends Controller
         $item->server = $request->post('server');
         $item->note = $request->post('note');
         $item->login_method = $request->post('login_method');
+        $amount = $request->post('amount');
         if (!$item->validate()) {
             $message = $item->getErrorSummary(true);
             $message = reset($message);

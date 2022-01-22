@@ -1,5 +1,5 @@
 <?php
-namespace frontend\queue;
+namespace website\queue;
 
 use Yii;
 use yii\base\BaseObject;

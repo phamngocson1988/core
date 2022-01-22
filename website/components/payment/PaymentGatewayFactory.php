@@ -4,7 +4,7 @@ namespace website\components\payment;
 use Yii;
 use yii\base\Model;
 use website\components\payment\clients\OfflinePayment;
-use website\components\payment\clients\Kinggems;
+use common\components\payment\clients\Kinggems;
 use website\models\Paygate;
 
 class PaymentGatewayFactory extends Model

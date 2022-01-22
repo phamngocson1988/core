@@ -14,6 +14,7 @@ class PaymentTransaction extends ActiveRecord
     const STATUS_DELETED = "deleted";
 
     const ID_PREFIX = 'T';
+    const JOB_HANDLER = 'PaymentTransaction';
 
     public function behaviors()
     {
@@ -102,6 +103,11 @@ class PaymentTransaction extends ActiveRecord
     public function delete()
     {
         if ($this->isDeleted()) {
+            // remove all job handlers
+            $jobs = JobHandler::find()->where(['identifier' => self::JOB_HANDLER, 'object_id' => $this->id])->all();
+            foreach ($jobs as $job) {
+                $job->delete();
+            }
             // If the object is marked as deleted, we will delete it from database
             return parent::delete();
         } else {
@@ -110,5 +116,19 @@ class PaymentTransaction extends ActiveRecord
             return $this->save();
         }
         
+    }
+
+    public function runJobHandlers($event = null)
+    {
+        $jobs = JobHandler::find()->where(['identifier' => self::JOB_HANDLER, 'object_id' => $this->id])->all();
+        foreach ($jobs as $job) {
+            $job->run();
+        }
+    }
+
+    public function addJobHandler($jobId) 
+    {
+        $job = new JobHandler(['identifier' => self::JOB_HANDLER, 'object_id' => $this->id, 'job_id' => $jobId]);
+        return $job->save();
     }
 }

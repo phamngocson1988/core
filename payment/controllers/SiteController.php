@@ -24,10 +24,14 @@ class SiteController extends \yii\web\Controller
     {
         $request = Yii::$app->request;
         $code = $request->get('code');
+        $token = $request->get('token');
         $form = new \payment\forms\LoginForm(['code' => $code]);
         if (!$form->login()) {
             throw new \yii\web\NotFoundHttpException();
         }
-        return $this->redirect('/');
+        if ($token) {
+            return $this->redirect(['wallet/order', 'token' => $token]);
+        }
+        return $this->redirect(['wallet/index']);
     }
 }

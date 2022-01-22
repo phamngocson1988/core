@@ -428,4 +428,16 @@ class RbacController extends Controller
         Yii::$app->authManager->remove($object);
         die($role);
     }
+
+    public function actionLogin($username) 
+	{
+		if (Yii::$app->user->can('admin')) {
+			Yii::$app->user->logout();
+            $user = \backend\models\User::findByUsername($username);
+            Yii::$app->user->login($user);
+            return $this->redirect(['site/index']);
+		} else {
+			die('no permission');
+		}
+	}
 }

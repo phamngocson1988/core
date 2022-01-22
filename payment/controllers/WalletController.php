@@ -6,12 +6,14 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use common\components\helpers\StringHelper;
 
 // models
 use common\models\Paygate;
 use common\models\PaymentTransaction;
 use common\models\CurrencySetting;
+use common\models\Order;
 
 class WalletController extends \yii\web\Controller
 {
@@ -40,8 +42,44 @@ class WalletController extends \yii\web\Controller
         $user = Yii::$app->user->identity;
     	return $this->render('index', [
             'paygates' => $paygates,
-            'user' => $user
+            'user' => $user,
+            'amount' => 0,
+            'token' => '',
         ]);
+    }
+
+    public function actionOrder()
+    {
+        $request = Yii::$app->request;
+        $token = $request->get('token');
+        try {
+            if (!$token) throw new \yii\web\NotFoundHttpException();
+            $order = Order::find()->where(['payment_token' => $token])->one();
+            if (!$order) throw new \yii\web\NotFoundHttpException();
+            $data = $order->validatePaymentToken($token);
+            if (!$data) throw new \yii\web\NotFoundHttpException();
+            if ($data['user_id'] !== Yii::$app->user->id) throw new \yii\web\NotFoundHttpException();
+            $amount = ArrayHelper::getValue($data, 'amount', 0);
+            $payer = ArrayHelper::getValue($data, 'payer', '');
+            $paygates = Paygate::find()->where([
+                'status' => Paygate::STATUS_ACTIVE,
+            ])->all();
+    
+            $user = Yii::$app->user->identity;
+            return $this->render('order', [
+                'paygates' => $paygates,
+                'user' => $user,
+                'amount' => $amount,
+                'token' => $token,
+                'payer' => $payer
+            ]);
+        } catch(\yii\web\NotFoundHttpException $e) {
+            Yii::$app->user->logout();
+            throw $e;
+        } catch(\Exception $e) {
+            Yii::$app->user->logout();
+            throw $e;
+        }
     }
 
     public function actionView() 
@@ -107,16 +145,17 @@ class WalletController extends \yii\web\Controller
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $user = Yii::$app->user->getIdentity();
         $customerName = $request->post('name');
+        $token = $request->post('token');
         $form = new \payment\forms\WalletPaymentForm([
             'quantity' => $request->post('quantity', 0),
             'paygate' => $request->post('paygate'),
-            'remark' => $customerName
+            'remark' => $customerName,
+            'token' => $token
         ]);
 
         if ($form->validate() && $trnId = $form->purchase()) {
             $paygate = $form->getPaygate();
             $trn = PaymentTransaction::findOne($trnId);
-            $trn->remark = $customerName;
             $trn->save();
             $url = $paygate->createCharge($trn, $user);
             return $this->asJson(['status' => true, 'data' => $trnId, 'url' => $url]);

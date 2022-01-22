@@ -99,5 +99,14 @@ return [
             'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
             'as log' => \yii\queue\LogBehavior::class,
         ],
+
+        'queueManual' => [
+            'class' => \common\queue\drivers\db\Queue::class,
+            'db' => 'db', // DB connection component or its config 
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'manual', // Queue channel key
+            'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
+            'as log' => \yii\queue\LogBehavior::class,
+        ],
     ],
 ];

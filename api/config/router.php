@@ -14,6 +14,8 @@ return [
         'order/send-complain/<id:\d+>' => 'order/send-complain',
         'order/list-complain/<id:\d+>' => 'order/list-complain',
         'order/confirm' => 'order/move-to-confirmed',
+        'order/create/<id:\d+>' => 'order/create',
+        'order/pay/<id:\d+>' => 'order/pay',
         'checkout/<id:\d+>' => 'cart/checkout',
     ],
 ];

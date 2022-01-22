@@ -37,7 +37,9 @@ class CompletePaymentTransactionForm extends ActionForm
         $payment->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'topupUserWallet']);
         $payment->on(PaymentTransaction::EVENT_AFTER_UPDATE, [PaymentTransactionEvent::className(), 'applyReferGift']);
         $payment->status = PaymentTransaction::STATUS_COMPLETED;
-        return $payment->save();
+        $result = $payment->save();
+        $payment->runJobHandlers();
+        return $result;
     }
 
     public function getPayment()

@@ -25,6 +25,7 @@ class Order extends \common\models\Order
         return [
             'id',
             'payment_method',
+            'payment_token',
             'price',
             'quantity',
             'doing_unit',

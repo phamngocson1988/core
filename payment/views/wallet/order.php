@@ -14,13 +14,14 @@ use yii\helpers\Url;
             <div class="col-md-6 p-4 bg-blue">
               <p class="mb-2">Your name</p>
               <div class="input-group inp-deposit">
-                <input type="text" step="100" id="customer_name" class="form-control" placeholder="Type your name">
+                <input type="text" id="customer_name" class="form-control" placeholder="Type your name" value="<?=$payer;?>">
+                <input type="hidden" id="token" class="form-control" value="<?=$token;?>">
               </div>
             </div>
             <div class="col-md-6 p-4 bg-green">
               <p class="mb-2">Amount (USD)</p>
               <div class="input-group inp-deposit">
-                <input type="number" step="100" id="quantity" class="form-control">
+                <input type="text" id="quantity" value="<?=$amount;?>" <?php if ($amount): ?>disabled="true" read-only="true" <?php endif;?> class="form-control">
               </div>
             </div>
           </div>
@@ -176,9 +177,9 @@ function ShowTransaction(id) {
 }
 
 $('#quantity').on('change', function(e) {
-  $(this).val(Math.floor($(this).val()));
   Calculator();
 });
+$('#quantity').trigger('change');
 $( "input[name=identifier]:radio" ).on('change', function(e) {
   console.log('radio click');
   Calculator();

@@ -120,7 +120,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   <td col-tag="level_updated_by"><?=($model->levelUpdater) ? $model->levelUpdater->name : '';?></td>
                   <td col-tag="manager"><?=($model->manager) ? $model->manager->name : '';?></td>
                   <td col-tag="action">
-                    <?php if (Yii::$app->user->can('admin')) : ?>
+                    <?php if (Yii::$app->user->can('sale_manager')) : ?>
                     <a class="btn btn-sm blue tooltips" target="_blank" href="<?=Url::to(['user/edit', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                     <?php endif;?>
 
@@ -230,9 +230,9 @@ $('.action-link').ajax_action({
 $('.generate-code').ajax_action({
   method: 'POST',
   confirm: false,
-  callback: function(el, code) {
+  callback: function(el, data) {
+    const { link, code } = data;
     const name = $(el).data('name');
-    const link = 'http://sub-payment.com/'+code+'.html';
     copyToClipboard(link);
     // toastr.success('Mã thanh toán của Reseller ' + name + ' đã được lưu trong clipboard'); 
     alert('Link thanh toán của Reseller '+name+' là: ' + link);

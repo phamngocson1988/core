@@ -1,12 +1,15 @@
 <?php
-namespace website\components\payment\clients;
+namespace common\components\payment\clients;
 
 use Yii;
 // use yii\base\Model;
 
-class Kinggems extends \website\models\Paygate
+class Kinggems extends \api\models\Paygate
 {
+	public $content = '';
+	public $exchange_rate = 1;
 	public $name = 'Kinggems';
+	
 	public function getIdentifier()
 	{
 		return 'kinggems';

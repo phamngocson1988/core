@@ -160,6 +160,23 @@ class Order extends ActiveRecord
         $this->auth_key = Yii::$app->security->generateRandomString(10);
     }
 
+    public function generatePaymentToken($data)
+    {
+        if (!$this->auth_key) return;
+        $this->payment_token = \Firebase\JWT\JWT::encode($data, $this->auth_key, 'HS256');
+    }
+
+    public function validatePaymentToken($token) 
+    {
+        try {
+            if (!$this->auth_key) return false;
+            $decoded = \Firebase\JWT\JWT::decode($token, $this->auth_key, ['HS256']);
+            return (array)$decoded;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function isVerifyingOrder()
     {
         return $this->status === self::STATUS_VERIFYING;

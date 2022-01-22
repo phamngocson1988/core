@@ -38,7 +38,7 @@ use backend\behaviors\UserSupplierBehavior;
           <span class="caption-subject bold uppercase"> Quản lý khách hàng</span>
         </div>
         <div class="actions">
-          <?php if (Yii::$app->user->can('admin')) : ?>
+          <?php if (Yii::$app->user->can('sale_manager')) : ?>
           <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['user/create', 'ref' => $ref]);?>"><?=Yii::t('app', 'add_new');?></a>
@@ -227,7 +227,7 @@ use backend\behaviors\UserSupplierBehavior;
                 <a class="btn btn-xs green tooltips link-action" href="<?=Url::to(['user/active', 'id' => $model->id]);?>" data-container="body" data-original-title="Active this user"><i class="fa fa-check"></i></a>
                 <?php endif;?>
                 <?php endif;?>
-                <?php if (Yii::$app->user->can('admin')) : ?>
+                <?php if (Yii::$app->user->can('sale_manager')) : ?>
                 <a class="btn btn-xs default tooltips" href="<?=Url::to(['user/edit', 'id' => $model->id]);?>" data-container="body" data-original-title="Edit user"><i class="fa fa-pencil"></i></a>
                 <?php endif;?>
 

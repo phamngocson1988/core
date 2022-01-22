@@ -10,7 +10,7 @@ use api\models\Order;
 use api\models\User;
 use api\models\UserWallet;
 use common\components\helpers\FormatConverter;
-use api\components\payment\PaymentGatewayFactory;
+use common\components\payment\PaymentGatewayFactory;
 use api\components\notifications\OrderNotification;
 use common\models\Currency;
 use common\components\helpers\StringHelper;
@@ -20,6 +20,7 @@ class OrderPaymentForm extends Model
 {
     public $cart;
     public $paygate = 'kinggems';
+    public $amount;
 
     protected $_paygate;
 
@@ -134,6 +135,9 @@ class OrderPaymentForm extends Model
             $order->status = Order::STATUS_VERIFYING;
             $order->payment_at = date('Y-m-d H:i:s');
             $order->generateAuthKey();
+            if ($this->amount) { // active payment token 
+                $order->generatePaymentToken(['amount' => $this->amount, 'user_id' => Yii::$app->user->id]);
+            }
 
             // Item detail
             $order->game_id = $cartItem->id;

@@ -1,10 +1,10 @@
 <?php
-namespace backend\forms;
+namespace common\forms;
 
 use Yii;
 use common\forms\ActionForm;
-use backend\models\User;
-use backend\models\UserReseller;
+use common\models\User;
+use common\models\UserReseller;
 
 class GenerateResellerCodeForm extends ActionForm
 {

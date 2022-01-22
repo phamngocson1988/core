@@ -1,9 +1,9 @@
 <?php
-namespace api\components\payment;
+namespace common\components\payment;
 
 use Yii;
 use yii\base\Model;
-use api\components\payment\clients\Kinggems;
+use common\components\payment\clients\Kinggems;
 
 class PaymentGatewayFactory extends Model
 {

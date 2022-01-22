@@ -23,6 +23,8 @@ class OrderController extends Controller
                 'send-complain' => ['post'],
                 'list-complain' => ['get'],
                 'move-to-confirmed' => ['post'],
+                'create' => ['post'],
+                'pay' => ['post'],
             ],
         ];
 	    return $behaviors;
@@ -106,5 +108,72 @@ class OrderController extends Controller
             $error = reset($errors);
             return $this->asJson(['status' => false, 'errors' => $error]);
         }
+    }
+
+    public function actionCreate($id)
+    {
+        $cart = Yii::$app->cart;
+        $request = Yii::$app->request;
+        $user = Yii::$app->user->getIdentity();
+        $item = \api\components\cart\CartItem::findOne($id);
+        $item->setScenario(\api\components\cart\CartItem::SCENARIO_ADD_CART);
+        $item->quantity = $request->post('quantity');
+        $item->username = $request->post('username');
+        $item->password = $request->post('password');
+        $item->character_name = $request->post('character_name');
+        $item->recover_code = $request->post('recover_code');
+        $item->server = $request->post('server');
+        $item->note = $request->post('note');
+        $item->login_method = $request->post('login_method');
+        if (!$item->validate()) {
+            $message = $item->getErrorSummary(true);
+            $message = reset($message);
+            return [
+                'status' => false,
+                'error' => $message
+            ];
+        }
+
+        // Add cart
+        $cart = Yii::$app->cart;
+        $cart->clear();
+        $cart->add($item);
+
+        // Checkout
+        $checkoutForm = new \common\forms\CreateOrderForm(['cart' => $cart, 'user_ip' => $request->userIP]);
+        $id = $checkoutForm->purchase();
+        if (!$id) {
+            $error = $checkoutForm->getFirstErrorMessage();
+            return ['status' => false, 'error' => $error];
+        }
+        $amount = $request->post('amount');
+        $payer = $request->post('payer');
+        $result = ['status' => true, 'order_id' => $id];
+        if ($amount) {
+            $order = Order::findOne($id);
+            $userId = Yii::$app->user->id;
+            $order->generatePaymentToken(['amount' => $amount, 'payer' => $payer, 'user_id' => $userId]);
+            $order->save();
+            $generateLinkForm = new \common\forms\GenerateResellerCodeForm(['user_id' => $userId]);
+            $code = $generateLinkForm->generate();
+            if ($code) {
+                $paymentLink = sprintf('%s/%s.html?token=%s', Yii::$app->params['payment_url'], $code, $order->payment_token);
+                $result['payment_link'] = $paymentLink;
+            }
+        }
+        return $this->asJson($result);
+    }
+
+    public function actionPay($id)
+    {
+        $purchaseForm = new \common\forms\PurchaseOrderByWalletForm([
+            'order_id' => $id,
+            'user_id' => Yii::$app->user->id
+        ]);
+        if (!$purchaseForm->run()) {
+            $error = $purchaseForm->getFirstErrorMessage();
+            return $this->asJson(['status' => false, 'error' => $error]);
+        }
+        return $this->asJson(['status' => true]);
     }
 }

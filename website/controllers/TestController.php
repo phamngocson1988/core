@@ -267,4 +267,27 @@ class TestController extends Controller
         
         return $this->asJson($info);
     }
+
+    public function actionEncript()
+    {
+        $secretData = ['amount' => 'The data encripted'];
+        $secretKey = 'secretKey';
+        $token = \Firebase\JWT\JWT::encode($secretData, $secretKey, 'HS256');
+        $decoded = \Firebase\JWT\JWT::decode($token, $secretKey, ['HS256']);
+        var_dump($token);
+        var_dump($decoded);
+
+        die();
+    }
+
+    public function actionQueue()
+    {
+        Yii::$app->queue->push(new \website\queue\TestQueue(['user_id' => Yii::$app->user->id]));
+        die('Queued');
+    }
+
+    public function actionRunQueue() {
+        Yii::$app->queueManual->executeSingleJob(7);
+        die('Run Queue');
+    }
 }

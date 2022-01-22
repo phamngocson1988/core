@@ -141,10 +141,13 @@ class ResellerController extends Controller
     public function actionGenerateCode($id)
     {
         $request = Yii::$app->request;
-        $model = new \backend\forms\GenerateResellerCodeForm(['user_id' => $id]);
+        $model = new \common\forms\GenerateResellerCodeForm(['user_id' => $id]);
         $code = $model->generate();
         if ($code) {
-            return $this->asJson(['status' => true, 'data' => $code]);
+            return $this->asJson(['status' => true, 'data' => [
+                'code' => $code,
+                'link' => sprintf('%s/%s.html', Yii::$app->params['payment_url'], $code)
+            ]]);
         } else {
             return $this->asJson(['status' => false, 'errors' => $model->getFirstErrorMessage()]);
         }
