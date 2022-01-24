@@ -117,6 +117,7 @@ class m130524_201442_init extends Migration
             'title' => $this->string(512)->notNull(),
             'slug' => $this->string(512)->notNull()->unique(),
             'excerpt' => $this->string(512),
+            'table_index' => $this->text(),
             'content' => $this->text()->notNull(),
             'image_id' => $this->integer(),
             'type' => $this->string()->defaultValue('post')->comment('enum: post,product')->notNull(),

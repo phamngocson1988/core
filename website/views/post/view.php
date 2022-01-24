@@ -31,6 +31,7 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
           <div class="card">
             <!-- Card img -->
             <h1 class="post-title"><?=$model->title;?></h1>
+            <div class="post-description"><?=$model->excerpt;?></div>
             <!-- Card info -->
             <ul class="nav nav-divider align-items-center mb-3 py-2">
               <li class="nav-item">
@@ -38,6 +39,18 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
               </li>
               <li class="nav-item"><?=$model->getCreatedAt(true, 'F j, Y');?></li>
             </ul>
+            <!-- table of contents -->
+            <?php if ($model->table_index) : ?>
+            <div class="section-nav-wrapper">
+              <nav class="section-nav">
+                <div class="tableofcontents" data-toggle="collapse" data-target="#section-collapse"><img style="margin-right: 10px;" width="20" src="/images/icon/content.png"/>Mục lục</div>
+                <div id="section-collapse" class="show">
+                  <?=$model->table_index;?>
+                </div>
+              </nav>
+            </div>
+            <?php endif;?>
+            <!-- end table of contents -->
             <div class="card-body px-0 pt-3">
               <div class="post-content">
                 <?=$model->content;?>
@@ -66,3 +79,15 @@ $cateColors = ['bg-primary', 'bg-danger', 'bg-warning', 'bg-info'];
     <!-- Row end -->
   </div>
 </section>
+
+<?php
+$script = <<< JS
+$("#section-collapse").find("li:has(> ul,ol)").each(function(index){
+  let id = 'section-collapse-item' + index;
+  let control = '<span data-toggle="collapse" data-target="#'+id+'" class="panel-heading"></span>';
+  $(this).find('ul,ol').attr('id', id).addClass('show');
+  $(this).prepend(control);
+})
+JS;
+$this->registerJs($script);
+?>

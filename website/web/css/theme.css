@@ -121,3 +121,7 @@ p.Normal>img {
       color: #e1e1e1;
    }
 }
+
+.section-nav {
+   font-weight: normal;
+}
