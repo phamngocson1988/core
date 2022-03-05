@@ -96,13 +96,29 @@ class OrderController extends Controller
         return ['status' => true, 'data' => $list];
     }
 
-    public function actionMoveToConfirmed()
+    public function actionMoveToConfirmed($id)
     {
         $request = Yii::$app->request;
-        $id = $request->post('id');
-        $model = new \api\forms\ConfirmOrderForm(['id' => $id]);
+        $rating = $request->post('evaluate');
+        $model = new \api\forms\ConfirmOrderForm(['id' => $id, 'rating' => $rating]);
         if ($model->save()) {
             return $this->asJson(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(false);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        }
+    }
+
+    public function actionSurvey($id)
+    {
+        $request = Yii::$app->request;
+        $model = new \api\forms\SurveyOrderForm([
+            'id' => $id,
+            'rating' => $request->post('rating', 1),
+        ]);
+        if ($model->survey()) {
+            return $this->asJson(['status' => true, 'rating' => $model->rating]);
         } else {
             $errors = $model->getErrorSummary(false);
             $error = reset($errors);

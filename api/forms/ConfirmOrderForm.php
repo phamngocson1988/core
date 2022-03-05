@@ -10,13 +10,15 @@ use common\models\OrderSupplier;
 class ConfirmOrderForm extends Model
 {
     public $id;
+    public $rating;
     private $_order;
 
     public function rules()
     {
         return [
             ['id', 'required'],
-            ['id', 'validateOrder']
+            ['id', 'validateOrder'],
+            ['rating', 'safe']
         ];
     }
 
@@ -38,6 +40,7 @@ class ConfirmOrderForm extends Model
         $transaction = $connection->beginTransaction();
         try {
             $order->status = Order::STATUS_CONFIRMED;
+            $order->rating = $this->rating ? $this->rating : null;
             $order->confirmed_at = date('Y-m-d H:i:s');
             $result = $order->save();
             $order->log("Moved to confirmed");

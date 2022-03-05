@@ -5,9 +5,19 @@ use Yii;
 use yii\rest\Controller;
 use yii\data\Pagination;
 use api\models\Game;
+use yii\filters\auth\HttpBearerAuth;
 
 class GameController extends Controller
 {
+	public function behaviors()
+	{
+	    $behaviors = parent::behaviors();
+	    $behaviors['authenticator'] = [
+	        'class' => HttpBearerAuth::className(),
+	    ];
+	    return $behaviors;
+	}
+
 	public function actionIndex()
 	{
         $request = Yii::$app->request;
