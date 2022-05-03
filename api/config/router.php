@@ -17,5 +17,6 @@ return [
         'order/create/<id:\d+>' => 'order/create',
         'order/pay/<id:\d+>' => 'order/pay',
         'checkout/<id:\d+>' => 'cart/checkout',
+        'test-order/<id:\d+>' => 'order/test',
     ],
 ];

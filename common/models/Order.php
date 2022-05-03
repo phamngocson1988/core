@@ -14,6 +14,7 @@ use common\behaviors\OrderComplainBehavior;
 use common\behaviors\OrderSupplierBehavior;
 use common\behaviors\OrderMailBehavior;
 use common\behaviors\OrderLogBehavior;
+use common\components\wings\WingsBehavior;
 /**
  * Order model
  */
@@ -60,6 +61,7 @@ class Order extends ActiveRecord
             ['class' => OrderLogBehavior::className()],
             ['class' => OrderSupplierBehavior::className()],
             ['class' => OrderMailBehavior::className()],
+            'wings' => WingsBehavior::className(),
         ];
     }
 

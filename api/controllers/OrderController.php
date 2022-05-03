@@ -25,6 +25,7 @@ class OrderController extends Controller
                 'move-to-confirmed' => ['post'],
                 'create' => ['post'],
                 'pay' => ['post'],
+                'test' => ['get'],
             ],
         ];
 	    return $behaviors;
@@ -64,11 +65,13 @@ class OrderController extends Controller
         $content = $request->post('content');
         $ouath_sublink_client_id = $request->post('ouath_sublink_client_id');
         $user_sublink_id = $request->post('user_sublink_id');
+        $is_customer = $request->post('is_customer');
         $form = new \api\forms\CreateOrderComplainForm([
             'id' => $id, 
             'content' => $content,
             'ouath_sublink_client_id' => $ouath_sublink_client_id,
             'user_sublink_id' => $user_sublink_id,
+            'is_customer' => $is_customer ? 'Y' : 'N'
         ]);
         if (!$form->create()) {
             $message = $form->getFirstErrors();
@@ -191,5 +194,15 @@ class OrderController extends Controller
             return $this->asJson(['status' => false, 'error' => $error]);
         }
         return $this->asJson(['status' => true]);
+    }
+
+    public function actionTest($id) 
+    {
+        $status = Yii::$app->request->get('status');
+        Yii::$app->queue->push(new \common\components\wings\WingsNotifyStatusJob([
+            'id' => $id,
+            'status' => $status
+        ]));
+        return $this->asJson(['id' => $id, 'status' => $status]);
     }
 }

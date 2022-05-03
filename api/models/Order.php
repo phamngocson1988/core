@@ -42,6 +42,7 @@ class Order extends \common\models\Order
 			'note',
 			'login_method',
             'order_from_sublink',
+            'reseller_id',
             'game' => function ($model) {
             	return $model->game;
             },

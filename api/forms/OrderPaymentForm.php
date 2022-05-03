@@ -161,6 +161,8 @@ class OrderPaymentForm extends Model
             $order->raw = $cartItem->raw;
             $order->bulk = $cartItem->bulk;
 
+            $order->reseller_id = Yii::$app->user->id;
+
             // Check saler
             $reseller = $user->reseller; 
             if ($reseller) {

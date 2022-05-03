@@ -12,6 +12,7 @@ class CreateOrderComplainForm extends Model
     public $content;
     public $ouath_sublink_client_id;
     public $user_sublink_id;
+    public $is_customer;
 
     private $_order;
 
@@ -24,6 +25,7 @@ class CreateOrderComplainForm extends Model
             [['id', 'content'], 'required'],
             [['ouath_sublink_client_id', 'user_sublink_id'], 'trim'],
             ['id', 'validateOrder'],
+            ['is_customer', 'safe']
         ];
     }
 
@@ -49,6 +51,7 @@ class CreateOrderComplainForm extends Model
         $model->ouath_sublink_client_id = $this->ouath_sublink_client_id;
         $model->user_sublink_id = $this->user_sublink_id;
         $model->content_type = 'text';
+        $model->is_customer = $this->is_customer;
         $model->object_name = OrderComplains::OBJECT_NAME_CUSTOMER;
         $model->save();
 

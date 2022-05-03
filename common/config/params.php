@@ -229,5 +229,11 @@ return [
     // ],
     'twilioSid' => 'AC1c4ea1a103xx2xxx53ba3d3b1xx40830', //replace with your sid
     'twiliotoken' => '3xx460c3516xx8xx535f5b4181d00xx5', //replace with your token
-    'twilioNumber'=>'+19999123456'//replace with your Twilio phone number
+    'twilioNumber'=>'+19999123456',//replace with your Twilio phone number
+
+    'wings' => [
+        'grant_type' => 'client_credentials',
+        'client_id'  => 9,
+        'client_secret' =>'95e3c2b4-e65a-4a9f-98dd-9f1283bf7f7a'
+    ]
 ];
