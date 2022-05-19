@@ -46,11 +46,11 @@ class ListOrderComplainForm extends Model
             $object['senderName'] = $senderName;
             $object['content'] = nl2br($model->content);
             $object['content_type'] = $model->content_type;
-            // $object['created_at'] = \common\components\helpers\TimeElapsed::timeElapsed($model->created_at);
             $object['created_at'] = date('d/m/Y H:i', strtotime($model->created_at));
             $object['is_customer'] = $model->isCustomer();
             $object['ouath_sublink_client_id'] = $model->ouath_sublink_client_id;
             $object['user_sublink_id'] = $model->user_sublink_id;
+            $object['is_reseller'] = $model->created_by == Yii::$app->user->id && $model->is_customer != OrderComplains::IS_CUSTOMER;
             return $object;
         }, $models);
     }
