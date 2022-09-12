@@ -95,6 +95,16 @@ class m130524_201442_init extends Migration
             'manager_id' => $this->integer(),
         ], $tableOptions);
 
+        $this->createTable('{{%reseller_price}}', [
+            'reseller_id' => $this->primaryKey(),
+            'game_id' => $this->primaryKey(),
+            'created_at' => $this->dateTime()->notNull(),
+            'created_by' => $this->integer()->notNull(),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(),
+            'invalid_by' => $this->dateTime(),
+        ], $tableOptions);
+
 
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
