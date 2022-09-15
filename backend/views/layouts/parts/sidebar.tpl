@@ -449,6 +449,11 @@
             <span class="title">Flash sale</span>
             </a>
           </li>
+          <li class="nav-item  "> 
+            <a href="{url route='/reseller-price/index'}" class="nav-link " code='reseller-price.index'>
+            <span class="title">Giá Reseller</span>
+            </a>
+          </li>
           {/if}
           {if $app->user->can('sale_manager')}
           <li class="nav-item  ">

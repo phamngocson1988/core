@@ -30,4 +30,14 @@ class ResellerPrice extends ActiveRecord
             ]
         ];
     }
+
+    public function getUser()
+    {
+    	return $this->hasOne(User::className(), ['id' => 'reseller_id']);
+    }
+
+    public function getGame()
+    {
+    	return $this->hasOne(Game::className(), ['id' => 'game_id']);
+    }
 }

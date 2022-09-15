@@ -108,9 +108,9 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
           <?php if (!$model->isSoldout()) :?>
           <div class="w-100 flex-fill p-2">
             <?php if (Yii::$app->user->isGuest) : ?>
-            <a href="#modalLogin" class="btn btn-buy" data-toggle="modal">Buy now</a>
+            <a href="#modalLogin" class="btn btn-buy" id='btn-buy' data-toggle="modal">Buy now</a>
             <?php else :?>
-            <button type="submit" class="btn btn-buy">Buy now</button>
+            <button type="submit" class="btn btn-buy" id='btn-buy'>Buy now</button>
             <?php endif;?>
           </div>
           <?php if ($is_reseller) : ?>
@@ -307,7 +307,14 @@ function calculateCart() {
         if (result.status == false) {
             toastr.error(errors);
         } else {
-            $('#price').html('$' + result.data.amount);
+            var canSale = parseInt(result.data.amount);
+            if (canSale) {
+              $('#price').html('$' + result.data.amount);
+              $('#btn-buy').show();
+            } else {
+              $('#price').html('Contact');
+              $('#btn-buy').hide();
+            }
             $('#game-unit').html(result.data.unit);
         }
       },

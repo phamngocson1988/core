@@ -157,7 +157,18 @@ class CartItem extends Game implements CartItemInterface
         $user = Yii::$app->user->getIdentity();
 
         if (!$user->isReseller()) return parent::getPrice();
-        return $this->getResellerPrice($user->reseller_level);
+        else {
+            $now = date('Y-m-d H:i:s');
+            $resellerPrice = ResellerPrice::find()
+            ->select(['price'])
+            ->where([
+                'reseller_id' => $user->id,
+                'game_id' => $this->id
+            ])
+            ->andWhere(['<', 'invalid_at', $now]);
+            return $resellerPrice ? $resellerPrice->price : 0;
+            // return $this->getResellerPrice($user->reseller_level);
+        }
     }
 
     /**

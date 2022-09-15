@@ -84,6 +84,11 @@ class OrderPaymentForm extends Model
             $this->addError($attribute, 'Cart is empty');
             return;
         }
+
+        if ($cart->getTotalPrice() <=0) {
+            return $this->addError($attribute, 'Total price is not valid');
+        }
+        
         // Check price
         if ($this->paygate === 'coinspaid') {
             $paygate = $this->getPaygateConfig();
