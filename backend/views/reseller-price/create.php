@@ -48,16 +48,22 @@ use yii\web\JsExpression;
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body">
-                  <?=$form->field($model, 'supplier_id', [
+                  <?=$form->field($model, 'reseller_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($model->fetchSuppliers());?>
+                  ])->widget(kartik\select2\Select2::classname(), [
+                    'data' => $model->fetchResellers(),
+                    'options' => ['class' => 'form-control', 'prompt' => 'Chọn Reseller'],
+                  ])->label('Reseller');?>
                   <?=$form->field($model, 'game_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'slug form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($model->fetchGames());?>
+                    ])->widget(kartik\select2\Select2::classname(), [
+                      'data' => $model->fetchGames(),
+                      'options' => ['class' => 'form-control', 'prompt' => 'Chọn Game'],
+                    ])->label('Game');?>
                   <?=$form->field($model, 'price', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],

@@ -98,6 +98,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%reseller_price}}', [
             'reseller_id' => $this->integer()->notNull(),
             'game_id' => $this->integer()->notNull(),
+            'price' => $this->integer()->notNull(),
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer()->notNull(),
             'updated_at' => $this->dateTime(),

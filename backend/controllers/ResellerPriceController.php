@@ -37,17 +37,20 @@ class ResellerPriceController extends Controller
     {
         $this->view->params['main_menu_active'] = 'reseller-price.index';
         $request = Yii::$app->request;
-        $supplier_id = $request->get('supplier_id');
+        $reseller_id = $request->get('reseller_id');
         $game_id = $request->get('game_id');
-        $form = new FetchResellerPriceForm(['supplier_id' => $supplier_id, 'game_id' => $game_id]);
+        $form = new FetchResellerPriceForm(['reseller_id' => $reseller_id, 'game_id' => $game_id]);
         $command = $form->getCommand();
         $pages = new Pagination(['totalCount' => $command->count()]);
         $models = $command->offset($pages->offset)
                             ->limit($pages->limit)
-                            ->orderBy(['position' => SORT_DESC])
+                            ->orderBy(['updated_at' => SORT_DESC])
                             ->all();
-
-        return $this->render('index.php', ['models' => $models]);
+        return $this->render('index.php', [
+            'models' => $models, 
+            'search' => $form,
+            'pages' => $pages
+        ]);
     }
 
     public function actionCreate()

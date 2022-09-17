@@ -72,15 +72,16 @@ class CreateResellerPriceForm extends Model
 
     public function getResellerPrice()
     {
-        if (!$this->reseller_price) {
+        if (!$this->_reseller_price) {
             $this->_reseller_price = ResellerPrice::findOne(['reseller_id' => $this->reseller_id, 'game_id' => $this->game_id]);
-        } else {
+        } 
+        if (!$this->_reseller_price) {
             $this->_reseller_price = new ResellerPrice();
         }
         return $this->_reseller_price;
     }
 
-    public function run()
+    public function save()
     {
         if (!$this->validate()) {
             return false;
@@ -88,6 +89,7 @@ class CreateResellerPriceForm extends Model
         $resellerPrice = $this->getResellerPrice();
         $resellerPrice->reseller_id = $this->reseller_id;
         $resellerPrice->game_id = $this->game_id;
+        $resellerPrice->price = $this->price;
         $resellerPrice->invalid_at = date('Y-m-d H:i:s', strtotime("+$this->duration days"));
         return $resellerPrice->save();
     }

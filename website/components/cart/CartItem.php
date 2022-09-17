@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\models\Game;
 use website\models\Promotion;
+use website\models\ResellerPrice;
 use common\models\CurrencySetting;
 
 class CartItem extends Game implements CartItemInterface
@@ -151,7 +152,7 @@ class CartItem extends Game implements CartItemInterface
     /**
      * Returns the price for the cart item
      */
-    public function getPrice()
+    public function getPrice() : int
     {
         if (Yii::$app->user->isGuest) return parent::getPrice();
         $user = Yii::$app->user->getIdentity();
@@ -164,8 +165,7 @@ class CartItem extends Game implements CartItemInterface
             ->where([
                 'reseller_id' => $user->id,
                 'game_id' => $this->id
-            ])
-            ->andWhere(['<', 'invalid_at', $now]);
+            ])->one();
             return $resellerPrice ? $resellerPrice->price : 0;
             // return $this->getResellerPrice($user->reseller_level);
         }

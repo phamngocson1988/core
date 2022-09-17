@@ -118,7 +118,7 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             <?php if (Yii::$app->user->isGuest) : ?>
             <a href="#modalLogin" class="btn btn-quickbuy" data-toggle="modal"><img class="icon-sm" src="/images/icon/timer.svg" />Buy now</a>
             <?php else :?>
-            <a href="<?=Url::to(['game/quick', 'id' => $model->id, 'slug' => $model->slug]);?>" class="btn btn-quickbuy"><img class="icon-sm" src="/images/icon/timer.svg" /> Quick
+            <a href="<?=Url::to(['game/quick', 'id' => $model->id, 'slug' => $model->slug]);?>" id='btn-quickbuy' class="btn btn-quickbuy"><img class="icon-sm" src="/images/icon/timer.svg" /> Quick
               Buy</a>
             <?php endif;?>
           </div>
@@ -311,9 +311,11 @@ function calculateCart() {
             if (canSale) {
               $('#price').html('$' + result.data.amount);
               $('#btn-buy').show();
+              $('#btn-quickbuy').show();
             } else {
               $('#price').html('Contact');
               $('#btn-buy').hide();
+              $('#btn-quickbuy').hide();
             }
             $('#game-unit').html(result.data.unit);
         }

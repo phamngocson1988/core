@@ -7,7 +7,13 @@ use yii\widgets\ActiveForm;
 use backend\models\User;
 use yii\web\JsExpression;
 use common\components\helpers\FormatConverter;
+$now = strtotime('now');
 ?>
+<style>
+  tr.invalid { 
+    background-color: grey !important;
+  };
+</style>
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -36,18 +42,44 @@ use common\components\helpers\FormatConverter;
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['reseller-price/create']);?>}">Thêm mới</a>
+            <a class="btn green" href="<?=Url::to(['reseller-price/create']);?>">Thêm mới</a>
           </div>
         </div>
       </div>
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['reseller-price/index'])]);?>
         <div class="row margin-bottom-10">
-          TODO
+          <?=$form->field($search, 'reseller_id', [
+            'options' => ['class' => 'form-group col-md-6 col-lg-4'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'reseller_id']
+          ])->widget(kartik\select2\Select2::classname(), [
+            'data' => $search->fetchResellers(),
+            'options' => ['class' => 'form-control', 'prompt' => 'Tìm theo reseller'],
+            'pluginOptions' => [
+              'allowClear' => true
+            ],
+          ])->label('Reseller')?>
+
+          <?=$form->field($search, 'game_id', [
+            'options' => ['class' => 'form-group col-md-6 col-lg-4'],
+            'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+          ])->widget(kartik\select2\Select2::classname(), [
+            'data' => $search->fetchGames(),
+            'options' => ['class' => 'form-control', 'prompt' => 'Tìm theo game'],
+            'pluginOptions' => [
+              'allowClear' => true
+            ],
+          ])->label('Tên game')?>
+
+          <div class="form-group col-md-4 col-lg-3">
+            <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+              <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+            </button>
+          </div>
         </div>
         <?php ActiveForm::end()?>
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover table-checkable hidden" id="price-table">
+          <table class="table table-striped table-bordered table-hover table-checkable" id="price-table">
             <thead>
               <tr>
                 <th col-tag="no"> STT </th>
@@ -63,14 +95,14 @@ use common\components\helpers\FormatConverter;
                 <tr><td colspan="6" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $key => $model) :?>
-                <tr>
+                <tr class="<?=strtotime($model->invalid_at) <= $now ? 'invalid' : 'valid';?>">
                   <td col-tag="no"><?=$key + $pages->offset + 1;?></td>
                   <td col-tag="reseller_id"><?=$model->user->name;?></td>
                   <td col-tag="game_id"><?=$model->game->title;?></td>
                   <td col-tag="price"><?=$model->price;?></td>
                   <td col-tag="valid"><?=FormatConverter::convertToDate(strtotime($model->invalid_at), Yii::$app->params['date_time_format']);?></td>
                   <td col-tag="action">
-                  <a href='<?=Url::to(['reseller-price/delete', 'supplier_id' => $model->supplier_id, 'game_id' => $model->game_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>
+                  <a href='<?=Url::to(['reseller-price/delete', 'reseller_id' => $model->reseller_id, 'game_id' => $model->game_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>
