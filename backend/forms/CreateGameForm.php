@@ -23,6 +23,7 @@ class CreateGameForm extends Model
     public $image_id;
     public $reseller_price;
     public $original_price;
+    public $expected_profit;
     public $pack;
     public $pin;
     public $soldout;
@@ -67,6 +68,8 @@ class CreateGameForm extends Model
             ['soldout', 'default', 'value' => 0],
             ['original_price', 'trim'],
             ['original_price', 'double'],
+            ['expected_profit', 'trim'],
+            ['expected_profit', 'double'],
             [['price1', 'price2', 'price3'], 'double'],
             [['meta_title', 'meta_keyword', 'meta_description', 'promotion_info', 'event_info'], 'trim'],
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
@@ -105,6 +108,7 @@ class CreateGameForm extends Model
             'image_id' => 'Hình ảnh',
             'reseller_price' => 'Giá dành cho đại lý',
             'original_price' => 'Giá gốc (Kcoin) / gói game',
+            'expected_profit' => 'Lợi nhuận mong đợi',
             'pack' => 'Số đơn vị game trong gói',
             'pin' => 'Ưu tiên hiển thị',
             'soldout' => 'Hết hàng',
@@ -189,6 +193,7 @@ class CreateGameForm extends Model
             $game->image_id = $this->image_id;
             $game->reseller_price = $this->reseller_price;
             $game->original_price = $this->original_price;
+            $game->expected_profit = $this->expected_profit;
             $game->pack = $this->pack;
             $game->pin = $this->pin;
             $game->soldout = $this->soldout;

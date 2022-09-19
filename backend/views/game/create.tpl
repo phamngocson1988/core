@@ -129,6 +129,7 @@
                 <div class="tab-pane active" id="tab_1_1">
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'original_price')->textInput()}
+                  {$form->field($model, 'expected_profit')->textInput()}
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'min_quantity')->textInput()}
