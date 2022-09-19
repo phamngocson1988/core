@@ -95,6 +95,18 @@ class m130524_201442_init extends Migration
             'manager_id' => $this->integer(),
         ], $tableOptions);
 
+        $this->createTable('{{%reseller_price}}', [
+            'reseller_id' => $this->integer()->notNull(),
+            'game_id' => $this->integer()->notNull(),
+            'price' => $this->integer()->notNull(),
+            'created_at' => $this->dateTime()->notNull(),
+            'created_by' => $this->integer()->notNull(),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(),
+            'invalid_at' => $this->dateTime(),
+        ], $tableOptions);
+        $this->addPrimaryKey('reseller_price_pk', '{{%reseller_price}}', ['reseller_id', 'game_id']);
+
 
         $form = new \backend\forms\SignupForm([
             'name' => 'Administrator',
@@ -115,7 +127,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(512)->notNull(),
-            'slug' => $this->string(512)->notNull()->unique(),
+            'slug' => $this->string(512)->notNull(),
             'excerpt' => $this->string(512),
             'table_index' => $this->text(),
             'content' => $this->text()->notNull(),
@@ -147,7 +159,7 @@ class m130524_201442_init extends Migration
             'user_id' => $this->integer()->notNull(),
             'rating' => $this->integer()->notNull()->default(1),
         ], $tableOptions);
-        $this->addPrimaryKey('post_rating_pk', '{{%post_rating}}', ['post_id', 'user_id']);
+        // $this->addPrimaryKey('post_rating_pk', '{{%post_rating}}', ['post_id', 'user_id']);
 
         $this->createTable('{{%post_comment}}', [
             'id' => $this->primaryKey(),
@@ -162,14 +174,14 @@ class m130524_201442_init extends Migration
             'comment_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
         ], $tableOptions);
-        $this->addPrimaryKey('post_comment_like_pk', '{{%post_comment_like}}', ['comment_id', 'user_id']);
+        // $this->addPrimaryKey('post_comment_like_pk', '{{%post_comment_like}}', ['comment_id', 'user_id']);
 
         /* Category table */
         $this->createTable('{{%category}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(512)->notNull(),
             'type' => $this->string(),
-            'slug' => $this->string(512)->notNull()->unique(),
+            'slug' => $this->string(512)->notNull(),
             'parent_id' => $this->integer(),
             'image_id' => $this->integer(),
             'meta_title' => $this->string(512),

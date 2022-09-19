@@ -43,3 +43,9 @@ website/web/assets
 composerbk.json
 /website/web/promotion
 .gitignore
+frontend/config/main-local.php
+frontend/config/params-local.php
+frontend/config/test-local.php
+frontend/web/index-test.php
+frontend/web/index.php
+frontend/web/robots.txt
