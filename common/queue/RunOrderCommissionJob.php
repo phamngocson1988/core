@@ -1,8 +1,9 @@
 <?php
-namespace common\components\wings;
+namespace common\queue;
 
 use Yii;
 use yii\base\BaseObject;
+use common\models\Tracking;
 
 class RunOrderCommissionJob extends BaseObject implements \yii\queue\JobInterface
 {
@@ -10,7 +11,13 @@ class RunOrderCommissionJob extends BaseObject implements \yii\queue\JobInterfac
     
     public function execute($queue)
     {
-        $service = new Wings();
-		$service->notifyStatus(['id' => $this->id, 'status' => $this->status]);
+        $form = new \common\forms\RunOrderCommissionForm(['order_id' => $this->id]);
+        if (!$form->run()) {
+            $errors = $form->getErrors();
+            $track = new Tracking();
+            $description = sprintf("RunOrderCommissionJob %s fail %s", $this->id, json_encode($errors));
+            $track->description = $description;
+            $track->save();
+        }
     }
 }
