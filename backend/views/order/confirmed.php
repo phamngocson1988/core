@@ -221,8 +221,20 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                 <td col-tag="processing_time" class="center"><?=number_format($model->processing_time);?></td>
                 <td col-tag="confirmed_time" class="center"><?=number_format($model->confirmed_time);?></td>
 
-                <td col-tag="saler"><?=($model->saler) ? $model->saler->name : '';?></td>
-                <td col-tag="orderteam"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                <td col-tag="saler">
+                  <?php $commission = $model->saler_order_commission + $model->saler_sellout_commission ?> 
+                  <?=($model->saler) 
+                    ? sprintf("%s %s", $model->saler->name, $commission ? "(" . number_format($commission) . ")" : "" ) 
+                    : '';
+                  ?>
+                </td>
+                <td col-tag="orderteam">
+                  <?php $commission = $model->orderteam_order_commission + $model->orderteam_sellout_commission;?> 
+                  <?=($model->orderteam) 
+                    ? sprintf("%s %s", $model->orderteam->name, $commission ? "(" . number_format($commission) . ")" : "" ) 
+                    : '';
+                  ?>
+                </td>
                 <td col-tag="status">
                   <?=$model->getStatusLabel();?>
                 </td>

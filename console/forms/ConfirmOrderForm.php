@@ -65,6 +65,7 @@ class ConfirmOrderForm extends ActionForm
                 $supplier->topup($amount, $source, $key, $description);
             }
 
+            Yii::$app->queue->push(new \common\queue\RunOrderCommissionJob(['id' => $order->id]));
             $transaction->commit();
             return $result;
         } catch(Exception $e) {

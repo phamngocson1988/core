@@ -4,6 +4,7 @@ namespace common\forms;
 use Yii;
 use common\models\Order;
 use common\models\OrderSupplier;
+use yii\helpers\ArrayHelper;
 
 class RunOrderCommissionForm extends ActionForm
 {
@@ -28,6 +29,7 @@ class RunOrderCommissionForm extends ActionForm
         if (!$order) {
             return $this->addError($attribute, 'Order is not exist');
         }
+
         if (!$order->isConfirmedOrder()) {
             return $this->addError($attribute, 'Order has not confirmed yet');
         }
@@ -61,20 +63,25 @@ class RunOrderCommissionForm extends ActionForm
 
         $expectedProfit = $order->quantity * $game->expected_profit;
         $realOutcome = array_sum(ArrayHelper::getColumn($suppliers, 'total_price'));
-        $realIncome = $order->quantity * $order->price;
+        $realIncome = $order->quantity * $order->price * $order->rate_usd;
         $overcome = $realIncome - $realOutcome;
         $commission = max(0, $overcome - $expectedProfit);
-
         $order->expected_profit = $expectedProfit;
         $order->real_profit = $overcome;
         $order->profit_rate = $this->profit_rate;
         if ($order->saler_id) {
           $order->saler_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
           $order->saler_sellout_commission = $commission ? $this->flat_commission : 0;
+        } else {
+          $order->saler_order_commission = 0;
+          $order->saler_sellout_commission = 0;
         }
         if ($order->orderteam_id) {
-          $order->orderteam_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);;
+          $order->orderteam_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
           $order->orderteam_sellout_commission = $commission ? $this->flat_commission : 0;
+        } else {
+          $order->orderteam_order_commission = 0;
+          $order->orderteam_sellout_commission = 0;
         }
         $order->save();
         return true;

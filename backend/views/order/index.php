@@ -246,8 +246,20 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td><?=$model->quantity;?></td>
                   <td class="hidden-xs"><?=$model->process_start_time;?></td>
                   <td><?=FormatConverter::countDuration($model->getProcessDurationTime());?></td>
-                  <td class="hidden-xs"><?=($model->saler) ? $model->saler->name : '';?></td>
-                  <td class="hidden-xs"><?=($model->orderteam) ? $model->orderteam->name : '';?></td>
+                  <td class="hidden-xs">
+                    <?php $commission = $model->saler_order_commission + $model->saler_sellout_commission ?> 
+                    <?=($model->saler) 
+                      ? sprintf("%s %s", $model->saler->name, $commission ? "(" . number_format($commission) . ")" : "" ) 
+                      : '';
+                    ?>
+                  </td>
+                  <td class="hidden-xs">
+                    <?php $commission = $model->orderteam_order_commission + $model->orderteam_sellout_commission;?> 
+                    <?=($model->orderteam) 
+                      ? sprintf("%s %s", $model->orderteam->name, $commission ? "(" . number_format($commission) . ")" : "" ) 
+                      : '';
+                    ?>
+                  </td>
                   <td>
                     <?=$model->getStatusLabel();?>
                     <?php if ($model->hasCancelRequest()) :?>

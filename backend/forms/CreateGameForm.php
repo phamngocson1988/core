@@ -108,7 +108,7 @@ class CreateGameForm extends Model
             'image_id' => 'Hình ảnh',
             'reseller_price' => 'Giá dành cho đại lý',
             'original_price' => 'Giá gốc (Kcoin) / gói game',
-            'expected_profit' => 'Lợi nhuận mong đợi',
+            'expected_profit' => 'Lợi nhuận mong đợi (VND)',
             'pack' => 'Số đơn vị game trong gói',
             'pin' => 'Ưu tiên hiển thị',
             'soldout' => 'Hết hàng',
