@@ -727,6 +727,11 @@
             </ul>
           </li>
           {/if}
+          <li class="nav-item  ">
+          <a href="{url route='/report-commission/index'}" class="nav-link nav-toggle" code='report.commission.index'>
+            <span class="title">Theo hoa hồng</span>
+          </a>
+          </li>
         </ul>
       </li>
       {/if}
