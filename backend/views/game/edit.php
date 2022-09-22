@@ -144,7 +144,11 @@ $canShowPrice = $user->can('orderteam');
                 <div class="tab-pane active" id="main">
                   <?=$form->field($model, 'title')->textInput();?>
                   <?=$form->field($model, 'original_price')->textInput();?>
+                  <?php if (Yii::$app->user->can('admin')) : ?>
                   <?=$form->field($model, 'expected_profit')->textInput();?>
+                  <?php else : ?>
+                    <?=$form->field($model, 'expected_profit', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()->label(false);?>
+                  <?php endif; ?>
                   <?=$form->field($model, 'pack')->textInput();?>
                   <?=$form->field($model, 'unit_name')->textInput();?>
                   <?=$form->field($model, 'min_quantity')->textInput();?>

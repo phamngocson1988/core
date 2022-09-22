@@ -657,6 +657,11 @@ class OrderController extends Controller
             Yii::$app->session->setFlash('error', $message);
             return $this->asJson(['status' => false, 'error' => $message]);
         }
+        if ($order->isCompletedOrder() || $order->isConfirmedOrder()) {
+            $message = "Order $id is finished";
+            Yii::$app->session->setFlash('error', $message);
+            return $this->asJson(['status' => false, 'error' => $message]);
+        }
         $order->attachBehavior('assign', \backend\behaviors\OrderBehavior::className());
         if ($order->assignOrderTeam(Yii::$app->user->id)) {
             // Yii::$app->session->setFlash('success', "You have taken order #$id successfully.");
@@ -671,6 +676,11 @@ class OrderController extends Controller
         $order = Order::findOne($id);
         if (!$order) {
             $message = "Order #id not found";
+            Yii::$app->session->setFlash('error', $message);
+            return $this->asJson(['status' => false, 'error' => $message]);
+        }
+        if ($order->isCompletedOrder() || $order->isConfirmedOrder()) {
+            $message = "Order $id is finished";
             Yii::$app->session->setFlash('error', $message);
             return $this->asJson(['status' => false, 'error' => $message]);
         }

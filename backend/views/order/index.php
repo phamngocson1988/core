@@ -249,14 +249,14 @@ $showCustomer = $user->can('saler') || $user->can('accounting');
                   <td class="hidden-xs">
                     <?php $commission = $model->saler_order_commission + $model->saler_sellout_commission ?> 
                     <?=($model->saler) 
-                      ? sprintf("%s %s", $model->saler->name, $commission ? "(" . number_format($commission) . ")" : "" ) 
+                      ? sprintf("%s %s", $model->saler->name, $commission ? "(" . number_format(round($commission / 1000, 1)) . ")" : "" ) 
                       : '';
                     ?>
                   </td>
                   <td class="hidden-xs">
                     <?php $commission = $model->orderteam_order_commission + $model->orderteam_sellout_commission;?> 
                     <?=($model->orderteam) 
-                      ? sprintf("%s %s", $model->orderteam->name, $commission ? "(" . number_format($commission) . ")" : "" ) 
+                      ? sprintf("%s %s", $model->orderteam->name, $commission ? "(" . number_format(round($commission / 1000, 1)) . ")" : "" ) 
                       : '';
                     ?>
                   </td>
