@@ -66,19 +66,20 @@ class RunOrderCommissionForm extends ActionForm
         $realIncome = $order->quantity * $order->price * $order->rate_usd;
         $overcome = $realIncome - $realOutcome;
         $commission = max(0, $overcome - $expectedProfit);
+        $selloutCommission = $this->flat_commission * $order->quantity / 2;
         $order->expected_profit = $expectedProfit;
         $order->real_profit = $overcome;
         $order->profit_rate = $this->profit_rate;
         if ($order->saler_id) {
           $order->saler_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
-          $order->saler_sellout_commission = $commission ? $this->flat_commission : 0;
+          $order->saler_sellout_commission = $commission ? $selloutCommission : 0;
         } else {
           $order->saler_order_commission = 0;
           $order->saler_sellout_commission = 0;
         }
         if ($order->orderteam_id) {
           $order->orderteam_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
-          $order->orderteam_sellout_commission = $commission ? $this->flat_commission : 0;
+          $order->orderteam_sellout_commission = $commission ? $selloutCommission : 0;
         } else {
           $order->orderteam_order_commission = 0;
           $order->orderteam_sellout_commission = 0;
