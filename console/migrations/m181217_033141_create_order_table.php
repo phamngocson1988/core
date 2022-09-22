@@ -94,6 +94,15 @@ class m181217_033141_create_order_table extends Migration
             'supplier_id' => $this->integer(11),
             'order_from_sublink' => $this->boolean()->defaultValue(false),
             'reseller_id' => $this->integer(11),
+
+            // commission
+            'expected_profit' => $this->integer(), //vnd
+            'real_profit' => $this->integer(),
+            'profit_rate' => $this->float(), // profit for kinggems
+            'saler_order_commission' => $this->integer(), // refer to saler_id
+            'orderteam_order_commission' => $this->integer(), // refer to orderteam_id
+            'saler_sellout_commission' => $this->integer(), // refer to saler_id
+            'orderteam_sellout_commission' => $this->integer(), // refer to orderteam_id
         ]);//16868688
 
         if ($this->db->driverName === 'mysql') {

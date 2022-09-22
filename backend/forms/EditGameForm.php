@@ -27,6 +27,7 @@ class EditGameForm extends Model
     public $image_id;
     public $reseller_price;
     public $original_price;
+    public $expected_profit;
     public $pack;
     public $pin;
     public $soldout;
@@ -69,6 +70,8 @@ class EditGameForm extends Model
             ['soldout', 'default', 'value' => 0],
             ['original_price', 'trim'],
             ['original_price', 'double'],
+            ['expected_profit', 'trim'],
+            ['expected_profit', 'double'],
             [['meta_title', 'meta_keyword', 'meta_description', 'promotion_info', 'event_info'], 'trim'],
             [['average_speed', 'number_supplier', 'remark', 'price_remark', 'google_ads', 'categories'], 'safe'],
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
@@ -115,6 +118,7 @@ class EditGameForm extends Model
             'image_id' => 'Hình ảnh',
             'reseller_price' => 'Giá dành cho đại lý',
             'original_price' => 'Giá gốc (Kcoin) / gói game',
+            'expected_profit' => 'Lợi nhuận mong đợi (VND)',
             'pack' => 'Số đơn vị game trong gói',
             'pin' => 'Ưu tiên hiển thị',
             'soldout' => 'Hết hàng',
@@ -212,6 +216,7 @@ class EditGameForm extends Model
             $game->image_id = $this->image_id;
             $game->reseller_price = $this->reseller_price;
             $game->original_price = $this->original_price;
+            $game->expected_profit = $this->expected_profit;
             $game->pack = $this->pack;
             $game->pin = $this->pin;
             $game->soldout = $this->soldout;
@@ -316,6 +321,7 @@ class EditGameForm extends Model
         $this->image_id = $game->image_id;
         $this->reseller_price = $game->reseller_price;
         $this->original_price = $game->original_price;
+        $this->expected_profit = $game->expected_profit;
         $this->pack = $game->pack;
         $this->pin = $game->pin;
         $this->soldout = $game->soldout;
