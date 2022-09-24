@@ -33,10 +33,14 @@ class ReportCommissionController extends Controller
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'report.commission.index';
-        $form = new \backend\forms\ReportCommissionForm(['role' => 'orderteam']);
-        $models = $form->fetch();
+        $request = Yii::$app->request;
+        $form = new \backend\forms\ReportCommissionForm([
+            'user_ids' => $request->get('user_ids', [Yii::$app->user->id]),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+        ]);
+        $form->run();
         return $this->render('index', [
-            'models' => $models,
             'search' => $form,
         ]);
         return $this->render('index');

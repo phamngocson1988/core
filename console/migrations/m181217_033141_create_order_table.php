@@ -183,6 +183,27 @@ class m181217_033141_create_order_table extends Migration
             'customer_email' => $this->string(255)->notNull(),
             'status' => $this->integer(11)->notNull()->defaultValue(1),
         ]);
+
+        $this->createTable('{{%order_commission}}', [
+            'order_id' => $this->integer(11)->notNull(),
+            'user_id' => $this->integer(11)->notNull(),
+            'commission_type' => $this->string()->notNull(),
+            'role' => $this->string()->notNull(),
+            'username' => $this->string(),
+            'user_commission' => $this->integer(),
+            'description' => $this->string(),
+            'created_at' => $this->dateTime()->notNull(),
+        ]);
+        $this->addPrimaryKey('order_commission_pk', '{{%order_commission}}', ['order_id', 'user_id', 'commission_type', 'role']);
+        if ($this->db->driverName === 'mysql') {
+            $commissionTypeEnum = "ALTER TABLE {{%order_commission}} MODIFY `commission_type` ENUM('order', 'sellout')";
+            $command = $this->db->createCommand($commissionTypeEnum);
+            $command->execute();
+
+            $commissionRoleEnum = "ALTER TABLE {{%order_commission}} MODIFY `role` ENUM('saler', 'orderteam')";
+            $command = $this->db->createCommand($commissionRoleEnum);
+            $command->execute();
+        }
     }
 
     /**
