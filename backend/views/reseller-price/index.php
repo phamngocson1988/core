@@ -9,11 +9,6 @@ use yii\web\JsExpression;
 use common\components\helpers\FormatConverter;
 $now = strtotime('now');
 ?>
-<style>
-  tr.invalid { 
-    background-color: grey !important;
-  };
-</style>
 
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -86,7 +81,7 @@ $now = strtotime('now');
                 <th col-tag="reseller_id"> Reseller </th>
                 <th col-tag="game_id"> Game </th>
                 <th col-tag="price"> Price </th>
-                <th col-tag="valid"> Valid </th>
+                <th col-tag="created_at"> Created At </th>
                 <th col-tag="action" class="dt-center"> Tác vụ </th>
               </tr>
             </thead>
@@ -100,9 +95,10 @@ $now = strtotime('now');
                   <td col-tag="reseller_id"><?=$model->user->name;?></td>
                   <td col-tag="game_id"><?=$model->game->title;?></td>
                   <td col-tag="price"><?=$model->price;?></td>
-                  <td col-tag="valid"><?=FormatConverter::convertToDate(strtotime($model->invalid_at), Yii::$app->params['date_time_format']);?></td>
+                  <td col-tag="created_at"><?=FormatConverter::convertToDate(strtotime($model->created_at), Yii::$app->params['date_time_format']);?></td>
                   <td col-tag="action">
                   <a href='<?=Url::to(['reseller-price/delete', 'reseller_id' => $model->reseller_id, 'game_id' => $model->game_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>
+                  <a href='<?=Url::to(['reseller-price/create', 'reseller_id' => $model->reseller_id, 'game_id' => $model->game_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                   </td>
                 </tr>
                 <?php endforeach;?>

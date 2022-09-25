@@ -99,6 +99,7 @@ class m130524_201442_init extends Migration
             'reseller_id' => $this->integer()->notNull(),
             'game_id' => $this->integer()->notNull(),
             'price' => $this->integer()->notNull(),
+            'amplitude' => $this->float(),
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer()->notNull(),
             'updated_at' => $this->dateTime(),

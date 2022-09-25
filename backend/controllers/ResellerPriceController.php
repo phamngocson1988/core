@@ -57,7 +57,13 @@ class ResellerPriceController extends Controller
     {
         $this->view->params['main_menu_active'] = 'reseller-price.index';
         $request = Yii::$app->request;
-        $model = new CreateResellerPriceForm();
+        $game_id = $request->get('game_id');
+        $reseller_id = $request->get('reseller_id');
+        $modeEdit = $game_id && $reseller_id;
+        $model = new CreateResellerPriceForm([
+            'game_id' => $game_id,
+            'reseller_id' => $reseller_id,
+        ]);
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Success!');
@@ -67,6 +73,7 @@ class ResellerPriceController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'modeEdit' => $modeEdit,
         ]);
     }
 
