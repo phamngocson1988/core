@@ -13,7 +13,7 @@ use yii\web\JsExpression;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['reseller/index']);?>">Reseller</a>
+      <a href="<?=Url::to(['reseller-price/index']);?>">Giá Reseller</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
@@ -31,7 +31,7 @@ use yii\web\JsExpression;
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
-            <a href="{$back}" class="btn default">
+            <a href="<?=Url::to(['reseller-price/index']);?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
@@ -54,7 +54,7 @@ use yii\web\JsExpression;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->widget(kartik\select2\Select2::classname(), [
                     'data' => $model->fetchResellers(),
-                    'options' => ['class' => 'form-control', 'prompt' => 'Chọn Reseller'],
+                    'options' => ['class' => 'form-control', 'prompt' => 'Chọn Reseller', 'disabled' => $modeEdit],
                   ])->label('Reseller');?>
                   <?=$form->field($model, 'game_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
@@ -62,13 +62,18 @@ use yii\web\JsExpression;
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                     ])->widget(kartik\select2\Select2::classname(), [
                       'data' => $model->fetchGames(),
-                      'options' => ['class' => 'form-control', 'prompt' => 'Chọn Game'],
+                      'options' => ['class' => 'form-control', 'prompt' => 'Chọn Game', 'disabled' => $modeEdit],
                     ])->label('Game');?>
                   <?=$form->field($model, 'price', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()?>
+                  ])->textInput()->label('Giá Reseller (USD)')?>
+                  <?=$form->field($model, 'amplitude', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
+                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                  ])->textInput()->label('Biên độ giá (USD)')?>
                 </div>
               </div>
             </div>
