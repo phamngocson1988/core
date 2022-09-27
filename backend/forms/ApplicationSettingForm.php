@@ -39,6 +39,9 @@ class ApplicationSettingForm extends Model
     //hot-new
     public $hot_post_id;
 
+    // white list
+    public $white_list;
+
     public function init()
     {
         parent::init();
@@ -58,6 +61,7 @@ class ApplicationSettingForm extends Model
             [['affiliate_banner', 'affiliate_banner_mobile', 'affiliate_banner_link', 'refer_banner', 'refer_banner_mobile', 'refer_banner_link', 'kcoin_banner', 'kcoin_banner_mobile', 'kcoin_banner_link'], 'safe'],
             ['post_banner', 'safe'],
             ['hot_post_id', 'safe'],
+            ['white_list', 'safe'],
         ];
     }
 
@@ -92,6 +96,7 @@ class ApplicationSettingForm extends Model
             'accountant_email' => 'Email kế toán',
             'post_banner' => 'Banner trang tin tức',
             'hot_post_id' => 'Hot new trang chủ',
+            'white_list' => 'White list IP',
         ];
     }
 

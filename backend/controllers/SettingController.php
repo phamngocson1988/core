@@ -69,6 +69,10 @@ class SettingController extends Controller
                 'modelClass' => ApplicationSettingForm::class,
                 'view' => 'application',
                 'layoutParams' => ['main_menu_active' => 'setting.application'],
+                'on beforeSave' => function ($event) {
+                    $form = $event->form;
+                    $form->white_list = serialize($form->white_list);
+                },
             ],
             'social' => [
                 'class' => SettingsAction::class,
