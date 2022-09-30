@@ -69,11 +69,6 @@ use yii\web\JsExpression;
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Giá Reseller (USD)')?>
-                  <?=$form->field($model, 'amplitude', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Biên độ giá (USD)')?>
                 </div>
               </div>
             </div>
