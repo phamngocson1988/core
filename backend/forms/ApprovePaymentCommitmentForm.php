@@ -15,6 +15,7 @@ class ApprovePaymentCommitmentForm extends ActionForm
     public $variance = 1;
     public $allow_variance = false;
     public $confirmed_by;
+    public $ignore_variance = false;
 
     protected $_commitment;
     protected $_reality;
@@ -32,7 +33,8 @@ class ApprovePaymentCommitmentForm extends ActionForm
             ['variance', 'validateVariance'],
             ['note', 'trim'],
             ['confirmed_by', 'trim'],
-            ['allow_variance', 'safe']
+            ['allow_variance', 'safe'],
+            ['ignore_variance', 'safe']
         ];
     }
 
@@ -62,14 +64,15 @@ class ApprovePaymentCommitmentForm extends ActionForm
     public function validateVariance($attribute)
     {
         if ($this->hasErrors()) return;
+        if ($this->ignore_variance) return;
         $reality = $this->getReality();
         $commitment = $this->getCommitment();
         $variance = abs((float)($reality->kingcoin - $commitment->kingcoin));
         if ( $variance && !$this->allow_variance) {
-            return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhân tiền quá lớn (%s Kcoin)', $variance));
+            return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhận tiền quá lớn (%s Kcoin)', $variance));
         }
         if ($this->allow_variance && $variance > $this->variance) {
-            return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhân tiền vượt mức quy định (> %s Kcoin)', $this->variance));
+            return $this->addError($attribute, sprintf('Chênh lệch giữa giao dịch và mã nhận tiền vượt mức quy định (> %s Kcoin)', $this->variance));
         }
     }
 

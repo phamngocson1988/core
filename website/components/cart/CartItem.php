@@ -161,7 +161,7 @@ class CartItem extends Game implements CartItemInterface
         else {
             $now = date('Y-m-d H:i:s');
             $resellerPrice = ResellerPrice::find()
-            ->select(['price', 'amplitude'])
+            ->select(['price'])
             ->where([
                 'reseller_id' => $user->id,
                 'game_id' => $this->id
