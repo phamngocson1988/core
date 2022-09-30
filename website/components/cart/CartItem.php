@@ -166,7 +166,7 @@ class CartItem extends Game implements CartItemInterface
                 'reseller_id' => $user->id,
                 'game_id' => $this->id
             ])->one();
-            return $resellerPrice ? max(0, $resellerPrice->price + (float)$resellerPrice->amplitude) : 0;
+            return $resellerPrice ? max(0, $resellerPrice->price + (float)$this->reseller_price_amplitude) : 0;
             // return $this->getResellerPrice($user->reseller_level);
         }
     }

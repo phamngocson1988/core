@@ -17,7 +17,6 @@ class CreateResellerPriceForm extends Model
     public $reseller_id;
     public $game_id;
     public $price;
-    public $amplitude = 0;
     public $duration = 3; // days
 
     protected $_reseller_price;
@@ -31,7 +30,6 @@ class CreateResellerPriceForm extends Model
     {
         return [
             [['reseller_id', 'game_id', 'price'], 'required'],
-            ['amplitude', 'safe'],
             ['game_id', 'validateGame'],
             ['reseller_id', 'validateReseller'],
         ];
@@ -42,7 +40,6 @@ class CreateResellerPriceForm extends Model
         if ($this->game_id && $this->reseller_id) {
             $resellerPrice = $this->getResellerPrice();
             $this->price = $resellerPrice->price;
-            $this->amplitude = (float)$resellerPrice->amplitude;
         }
     }
 
@@ -101,7 +98,6 @@ class CreateResellerPriceForm extends Model
         $resellerPrice->reseller_id = $this->reseller_id;
         $resellerPrice->game_id = $this->game_id;
         $resellerPrice->price = $this->price;
-        $resellerPrice->amplitude = (float)$this->amplitude;
         $resellerPrice->invalid_at = date('Y-m-d H:i:s', strtotime("+$this->duration days"));
         return $resellerPrice->save();
     }
