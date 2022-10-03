@@ -51,11 +51,6 @@ class NewMemberRule extends PromotionRuleAbstract implements PromotionRuleInterf
     {
         $user = User::findOne($userId);
         if (!$user) return false;
-        if ($user->isReseller()) return false;
-        return PaymentTransaction::find()->where([
-            'user_id' => $userId,
-            'status' => PaymentTransaction::STATUS_COMPLETED,
-            'promotion_id' => $this->promotion_id
-        ])->count() == 0;
+        return strtotime($user->created_at) > strtotime($this->user_created_at . ' 00:00:00');
     }
 }
