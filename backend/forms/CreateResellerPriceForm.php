@@ -109,6 +109,6 @@ class CreateResellerPriceForm extends Model
 
     public function fetchGames()
     {
-        return ArrayHelper::map(Game::find()->select(['id', 'title'])->all(), 'id', 'title');
+        return Game::find()->select(['id', 'title', 'price1', 'expected_profit'])->all();
     }
 }

@@ -5,9 +5,13 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use backend\models\User;
+use common\models\CurrencySetting;
 use yii\web\JsExpression;
 use common\components\helpers\FormatConverter;
 $now = strtotime('now');
+
+$currencyModel = CurrencySetting::findOne(['code' => 'VND']);
+$rate = (int)$currencyModel->exchange_rate;
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -81,13 +85,14 @@ $now = strtotime('now');
                 <th col-tag="reseller_id"> Reseller </th>
                 <th col-tag="game_id"> Game </th>
                 <th col-tag="price"> Price </th>
+                <th col-tag="game_supplier_price"> Giá bán chuẩn </th>
                 <th col-tag="created_at"> Created At </th>
                 <th col-tag="action" class="dt-center"> Tác vụ </th>
               </tr>
             </thead>
             <tbody>
                 <?php if (!$models) :?>
-                <tr><td colspan="6" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="7" id="no-data"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($models as $key => $model) :?>
                 <tr class="<?=strtotime($model->invalid_at) <= $now ? 'invalid' : 'valid';?>">
@@ -95,6 +100,7 @@ $now = strtotime('now');
                   <td col-tag="reseller_id"><?=$model->user->name;?></td>
                   <td col-tag="game_id"><?=$model->game->title;?></td>
                   <td col-tag="price"><?=$model->price;?></td>
+                  <td col-tag="game_supplier_price"><?=number_format((int)$model->game->price1 + ((int)$model->game->expected_profit / $rate), 1);?></td>
                   <td col-tag="created_at"><?=FormatConverter::convertToDate(strtotime($model->created_at), Yii::$app->params['date_time_format']);?></td>
                   <td col-tag="action">
                   <a href='<?=Url::to(['reseller-price/delete', 'reseller_id' => $model->reseller_id, 'game_id' => $model->game_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>

@@ -67,11 +67,11 @@ if (!count($lastPrices)) {
         <img id="image_game-image_id" class="img-responsive" src="<?=$model->getGame()->getImageUrl('500x500');?>">
         <?php if ($canUpdatePrice) : ?>
         <?=$form->field($model, 'price1', [
-          'options' => ['class' => 'list-separated profile-stat hide'],
+          'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
           'parts' => ['{log}' => $old_price_1, '{hint}' => $supplierPriceRangeTime],
           'template' => '<strong>{label}</strong><div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
-        ])->textInput()->label('Giá nhà cung cấp 1 (USD)');?>
+        ])->textInput()->label('Giá nhà cung cấp (USD)');?>
         
         <?=$form->field($model, 'price2', [
           'options' => ['class' => 'list-separated profile-stat hide'],
