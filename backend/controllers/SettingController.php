@@ -29,6 +29,7 @@ use backend\forms\AffiliateProgramForm;
 use backend\forms\ReferProgramForm;
 use backend\forms\TermsConditionForm;
 use backend\forms\EventForm;
+use backend\forms\WhitelistSettingForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
 use yii\data\Pagination;
@@ -69,10 +70,6 @@ class SettingController extends Controller
                 'modelClass' => ApplicationSettingForm::class,
                 'view' => 'application',
                 'layoutParams' => ['main_menu_active' => 'setting.application'],
-                'on beforeSave' => function ($event) {
-                    $form = $event->form;
-                    $form->white_list = serialize($form->white_list);
-                },
             ],
             'social' => [
                 'class' => SettingsAction::class,
@@ -210,6 +207,17 @@ class SettingController extends Controller
                 'modelClass' => EventForm::class,
                 'view' => 'event.php',
                 'layoutParams' => ['main_menu_active' => 'setting.application'],
+            ],
+            'whitelist' => [
+                'class' => SettingsAction::class,
+                'modelClass' => WhitelistSettingForm::class,
+                'view' => 'whitelist.php',
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
+                'on beforeSave' => function ($event) {
+                    $form = $event->form;
+                    $form->whitelist = serialize($form->whitelist);
+                    $form->unwhitelist = serialize($form->unwhitelist);
+                },
             ],
         ];
     }

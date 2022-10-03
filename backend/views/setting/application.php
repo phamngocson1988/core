@@ -180,16 +180,6 @@ use yii\helpers\Url;
                   'inputOptions' => ['class' => 'form-control', 'id' => 'hot_post_id'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
                 ])->dropdownList($model->fetchPosts(), ['prompt' => 'Chọn bài viết']);?>
-                <hr/>
-                <?php $model->white_list = @unserialize($model->white_list);?>
-                <?=$form->field($model, 'white_list', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'inputOptions' => ['class' => 'form-control'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->widget(kartik\select2\Select2::classname(), [
-                  'options' => ['class' => 'form-control', 'multiple' => true],
-                  'pluginOptions' => ['tags' => true]
-                ]);?>
               </div>
             </div>
           </div>
