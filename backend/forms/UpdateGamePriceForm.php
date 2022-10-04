@@ -7,6 +7,7 @@ use backend\models\Game;
 use backend\models\GamePriceLog;
 use backend\models\User;
 use backend\models\GameSubscriber;
+use backend\models\ResellerPrice;
 use yii\helpers\ArrayHelper;
 use backend\components\notifications\GameNotification;
 
@@ -91,12 +92,26 @@ class UpdateGamePriceForm extends Model
                 // Notify to users who subscried the game
                 $subscribers = GameSubscriber::find()->where(['game_id' => $game->id])->select(['user_id'])->all();
                 $subscriberIds = ArrayHelper::getColumn($subscribers, 'user_id');
-                if (!count($subscriberIds)) return; // there is no user subscribe this game
-                $game->pushNotification(GameNotification::NOTIFY_NEW_PRICE, $subscriberIds);
+
+                // Notify reseller
+                $resellers = ResellerPrice::find()->where(['game_id' => $game->id])->select(['reseller_id'])->all();
+                $resellerIds = ArrayHelper::getColumn($subscribers, 'reseller_id');
+
+                // Notify saler
+                $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+                $salerTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('sale_manager');
+                $salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds);
+                $salerTeamIds = array_unique($salerTeamIds);
+
+                $userIds = array_merge($subscriberIds, $resellerIds, $salerTeamIds);
+
+                if (!count($userIds)) return; // there is no user subscribe this game
+                $game->pushNotification(GameNotification::NOTIFY_NEW_PRICE, $userIds);
             });
+            // reduce from 3 fields to 1 field. That's why we set the three field have same value
             $model->price1 = $this->price1;
-            $model->price2 = $this->price2;
-            $model->price3 = $this->price3;
+            $model->price2 = $this->price1;
+            $model->price3 = $this->price1;
             $model->price_remark = $this->price_remark;
             $model->reseller_price_amplitude = $this->reseller_price_amplitude;
             $result = $model->save();

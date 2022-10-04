@@ -4,6 +4,19 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
+use common\models\CurrencySetting;
+use common\components\helpers\StringHelper;
+$currencyModel = CurrencySetting::findOne(['code' => 'VND']);
+$rate = (int)$currencyModel->exchange_rate;
+
+$games = $model->fetchGames();
+$gameTitles = ArrayHelper::map($games, 'id', 'title');
+$gameOptions = ArrayHelper::map($games, 'id', function($game) use ($rate) {
+  return [
+    'data-amplitude' => StringHelper::numberFormat($game->reseller_price_amplitude),
+    'data-supplier-price' => StringHelper::numberFormat((int)$game->price1 + ((int)$game->expected_profit / $rate), 1)
+  ];
+});
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -58,17 +71,30 @@ use yii\web\JsExpression;
                   ])->label('Reseller');?>
                   <?=$form->field($model, 'game_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'slug form-control'],
+                    'inputOptions' => ['class' => 'slug form-control', 'id' => 'game_id'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                     ])->widget(kartik\select2\Select2::classname(), [
-                      'data' => $model->fetchGames(),
-                      'options' => ['class' => 'form-control', 'prompt' => 'Chọn Game', 'disabled' => $modeEdit],
+                      'data' => $gameTitles,
+                      'options' => ['class' => 'form-control', 'prompt' => 'Chọn Game', 'disabled' => $modeEdit, 'options' => $gameOptions],
                     ])->label('Game');?>
                   <?=$form->field($model, 'price', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Giá Reseller (USD)')?>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Biên độ</label>
+                    <div class="col-md-6">
+                      <input type="text" id="game-amplitude" disabled readonly class="form-control" aria-required="true" aria-invalid="true">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Giá bán chuẩn (USD)</label>
+                    <div class="col-md-6">
+                      <input type="text" id="game-supplier-price" disabled readonly class="form-control" aria-required="true" aria-invalid="true">
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -78,3 +104,17 @@ use yii\web\JsExpression;
       <?php ActiveForm::end()?>
   </div>
 </div>
+<?php
+$script = <<< JS
+$('#game_id').on('change', function(){
+  var val = $(this).val();
+  var optAmplitude = $(this).find(":selected").data('amplitude');
+  var optPrice = $(this).find(":selected").data('supplier-price');
+  
+  $('#game-amplitude').val(optAmplitude || 0);
+  $('#game-supplier-price').val(optPrice || 0);
+});
+$('#game_id').trigger('change');
+JS;
+$this->registerJs($script);
+?>
