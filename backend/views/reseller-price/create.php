@@ -5,13 +5,17 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use common\models\CurrencySetting;
+use common\components\helpers\StringHelper;
 $currencyModel = CurrencySetting::findOne(['code' => 'VND']);
 $rate = (int)$currencyModel->exchange_rate;
 
 $games = $model->fetchGames();
 $gameTitles = ArrayHelper::map($games, 'id', 'title');
 $gameOptions = ArrayHelper::map($games, 'id', function($game) use ($rate) {
-  return ['data-supplier-price' => number_format((int)$game->price1 + ((int)$game->expected_profit / $rate), 1)];
+  return [
+    'data-amplitude' => StringHelper::numberFormat($game->reseller_price_amplitude),
+    'data-supplier-price' => StringHelper::numberFormat((int)$game->price1 + ((int)$game->expected_profit / $rate), 1)
+  ];
 });
 ?>
 <!-- BEGIN PAGE BAR -->
@@ -80,6 +84,12 @@ $gameOptions = ArrayHelper::map($games, 'id', function($game) use ($rate) {
                   ])->textInput()->label('Giá Reseller (USD)')?>
 
                   <div class="form-group">
+                    <label class="col-md-2 control-label">Biên độ</label>
+                    <div class="col-md-6">
+                      <input type="text" id="game-amplitude" disabled readonly class="form-control" aria-required="true" aria-invalid="true">
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="col-md-2 control-label">Giá bán chuẩn (USD)</label>
                     <div class="col-md-6">
                       <input type="text" id="game-supplier-price" disabled readonly class="form-control" aria-required="true" aria-invalid="true">
@@ -98,8 +108,11 @@ $gameOptions = ArrayHelper::map($games, 'id', function($game) use ($rate) {
 $script = <<< JS
 $('#game_id').on('change', function(){
   var val = $(this).val();
-  var opt = $(this).find(":selected").data('supplier-price');
-  $('#game-supplier-price').val(opt || 0);
+  var optAmplitude = $(this).find(":selected").data('amplitude');
+  var optPrice = $(this).find(":selected").data('supplier-price');
+  
+  $('#game-amplitude').val(optAmplitude || 0);
+  $('#game-supplier-price').val(optPrice || 0);
 });
 $('#game_id').trigger('change');
 JS;

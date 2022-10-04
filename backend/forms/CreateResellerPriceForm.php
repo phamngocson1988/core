@@ -109,6 +109,6 @@ class CreateResellerPriceForm extends Model
 
     public function fetchGames()
     {
-        return Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title', 'price1', 'expected_profit'])->all();
+        return Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title', 'price1', 'expected_profit', 'reseller_price_amplitude'])->all();
     }
 }
