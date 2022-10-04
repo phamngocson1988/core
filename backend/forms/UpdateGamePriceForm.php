@@ -19,6 +19,8 @@ class UpdateGamePriceForm extends Model
     public $price3;
     public $price_remark;
     public $reseller_price_amplitude;
+    public $change_price_request_code;
+    // public change_price_request_time;
 
     protected $_game;
 
@@ -27,7 +29,8 @@ class UpdateGamePriceForm extends Model
         return [
             [['id'], 'required'],
             [['price1', 'price2', 'price3', 'price_remark'], 'safe'],
-            ['reseller_price_amplitude', 'safe']
+            ['reseller_price_amplitude', 'safe'],
+            ['change_price_request_code', 'safe'],
         ];
     }
 
@@ -38,7 +41,8 @@ class UpdateGamePriceForm extends Model
             'price2' => 'Giá nhà cung cấp 2',
             'price3' => 'Giá nhà cung cấp 3',
             'price_remark' => 'Price Remark',
-            'reseller_price_amplitude' => 'Biên độ giá reseller'
+            'reseller_price_amplitude' => 'Biên độ giá reseller',
+            'change_price_request_code' => 'Mã đề xuất'
         ];
     }
 
