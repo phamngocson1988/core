@@ -30,7 +30,7 @@ class m180517_025826_create_product_schema extends Migration
             'reseller_price' => $this->integer(),
             'reseller_price_amplitude' => $this->float(),
             'original_price' => $this->integer(),
-            'expected_profit' => $this->integer(), //vnd
+            'expected_profit' => $this->float(), //usd
             'pack' => $this->integer()->notNull()->defaultValue(1),
             'promotion_info' => $this->string(255),
             'event_info' => $this->string(255),

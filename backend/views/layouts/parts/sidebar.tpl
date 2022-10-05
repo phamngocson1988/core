@@ -450,10 +450,17 @@
             </a>
           </li>
           {/if}
-          {if $app->user->can('accounting')}
+          {if $app->user->cans(['accounting', 'saler'])}
           <li class="nav-item  "> 
             <a href="{url route='/reseller-price/index'}" class="nav-link " code='reseller-price.index'>
             <span class="title">Giá Reseller</span>
+            </a>
+          </li>
+          {/if}
+          {if $app->user->can('admin')}
+          <li class="nav-item  ">
+            <a href="{url route='game-profit/index'}" class="nav-link " code='game-profit.index'>
+            <span class="title">Lợi nhuận chuẩn</span>
             </a>
           </li>
           {/if}
