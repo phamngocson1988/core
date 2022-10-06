@@ -18,6 +18,7 @@ class CreateResellerPriceForm extends Model
     public $game_id;
     public $price;
     public $duration = 3; // days
+    public $change_price_request_code;
 
     protected $_reseller_price;
     protected $_user;
@@ -29,7 +30,7 @@ class CreateResellerPriceForm extends Model
     public function rules()
     {
         return [
-            [['reseller_id', 'game_id', 'price'], 'required'],
+            [['reseller_id', 'game_id', 'price', 'change_price_request_code'], 'required'],
             ['game_id', 'validateGame'],
             ['reseller_id', 'validateReseller'],
         ];
@@ -99,6 +100,8 @@ class CreateResellerPriceForm extends Model
         $resellerPrice->game_id = $this->game_id;
         $resellerPrice->price = $this->price;
         $resellerPrice->invalid_at = date('Y-m-d H:i:s', strtotime("+$this->duration days"));
+        $resellerPrice->change_price_request_code = $this->change_price_request_code;
+        $resellerPrice->change_price_request_time = date('Y-m-d H:i:s');
         return $resellerPrice->save();
     }
 

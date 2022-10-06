@@ -35,15 +35,15 @@ $gameOptions = ArrayHelper::map($games, 'id', function($game) {
 <!-- BEGIN PAGE TITLE-->
 <h1 class="page-title">Tạo giá Reseller</h1>
 <!-- END PAGE TITLE-->
+<?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
 <div class="row">
   <div class="col-md-12">
-  	<?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
             <a href="<?=Url::to(['reseller-price/index']);?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-            <button type="submit" class="btn btn-success">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#code-request">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
             </button>
           </div>
@@ -98,9 +98,34 @@ $gameOptions = ArrayHelper::map($games, 'id', function($game) {
           </div>
         </div>
       </div>
-      <?php ActiveForm::end()?>
   </div>
 </div>
+
+<div class="modal fade" id="code-request" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Nhập mã đề xuất</h4>
+      </div>
+      <div class="modal-body"> 
+        <div class="row">
+          <div class="col-md-12">
+            <?=$form->field($model, 'change_price_request_code', ['options' => ['class' => '']])->textInput()->label('Mã đề xuất')?>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Lưu</button>
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<?php ActiveForm::end()?>
+
 <?php
 $script = <<< JS
 $('#game_id').on('change', function(){
