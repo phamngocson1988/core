@@ -63,7 +63,7 @@ class RunOrderCommissionForm extends ActionForm
           return true;
         }
 
-        $expectedProfit = $order->quantity * $game->expected_profit;
+        $expectedProfit = $order->quantity * $game->expected_profit * $order->rate_usd;
         $realOutcome = array_sum(ArrayHelper::getColumn($suppliers, 'total_price'));
         $realIncome = $order->quantity * $order->price * $order->rate_usd;
         $overcome = $realIncome - $realOutcome;
