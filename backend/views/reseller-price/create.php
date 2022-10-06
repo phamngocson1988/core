@@ -4,17 +4,14 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
-use common\models\CurrencySetting;
 use common\components\helpers\StringHelper;
-$currencyModel = CurrencySetting::findOne(['code' => 'VND']);
-$rate = (int)$currencyModel->exchange_rate;
 
 $games = $model->fetchGames();
 $gameTitles = ArrayHelper::map($games, 'id', 'title');
-$gameOptions = ArrayHelper::map($games, 'id', function($game) use ($rate) {
+$gameOptions = ArrayHelper::map($games, 'id', function($game) {
   return [
     'data-amplitude' => StringHelper::numberFormat($game->reseller_price_amplitude),
-    'data-supplier-price' => StringHelper::numberFormat((int)$game->price1 + ((int)$game->expected_profit / $rate), 1)
+    'data-supplier-price' => StringHelper::numberFormat($game->price1 + $game->expected_profit, 1)
   ];
 });
 ?>

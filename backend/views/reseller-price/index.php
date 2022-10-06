@@ -5,15 +5,11 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use backend\models\User;
-use common\models\CurrencySetting;
 use yii\web\JsExpression;
 use common\components\helpers\FormatConverter;
 use common\components\helpers\StringHelper;
 
 $now = strtotime('now');
-
-$currencyModel = CurrencySetting::findOne(['code' => 'VND']);
-$rate = (int)$currencyModel->exchange_rate;
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -102,7 +98,7 @@ $rate = (int)$currencyModel->exchange_rate;
                   <td class="center" col-tag="no"><?=$key + $pages->offset + 1;?></td>
                   <td col-tag="reseller_id"><?=$model->user->name;?></td>
                   <td col-tag="game_id"><?=$model->game->title;?></td>
-                  <td class="center" col-tag="game_supplier_price"><?=StringHelper::numberFormat((int)$model->game->price1 + ((int)$model->game->expected_profit / $rate), 1);?></td>
+                  <td class="center" col-tag="game_supplier_price"><?=StringHelper::numberFormat($model->game->price1 + $model->game->expected_profit, 1);?></td>
                   <td class="center" col-tag="price"><?=$model->price;?></td>
                   <td class="center" col-tag="reseller_price_amplitude"><?=number_format((int)$model->game->reseller_price_amplitude);?></td>
                   <td class="center" col-tag="created_at"><?=FormatConverter::convertToDate(strtotime($model->created_at), Yii::$app->params['date_time_format']);?></td>
