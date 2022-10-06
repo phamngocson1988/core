@@ -20,7 +20,6 @@ class UpdateGamePriceForm extends Model
     public $price_remark;
     public $reseller_price_amplitude;
     public $change_price_request_code;
-    // public change_price_request_time;
 
     protected $_game;
 
@@ -118,6 +117,8 @@ class UpdateGamePriceForm extends Model
             $model->price3 = $this->price1;
             $model->price_remark = $this->price_remark;
             $model->reseller_price_amplitude = $this->reseller_price_amplitude;
+            $model->change_price_request_code = $this->change_price_request_code;
+            $model->change_price_request_time = date('Y-m-d H:i:s');
             $result = $model->save();
 
             $transaction->commit();
@@ -147,5 +148,6 @@ class UpdateGamePriceForm extends Model
         $this->price3 = $game->price3;
         $this->price_remark = $game->price_remark;
         $this->reseller_price_amplitude = $game->reseller_price_amplitude;
+        $this->change_price_request_code = $game->change_price_request_code;
     }
 }
