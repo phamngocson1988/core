@@ -61,18 +61,24 @@ if (!count($lastPrices)) {
 
 <div class="row">
   <div class="col-md-12">
+    <?php $form = ActiveForm::begin(['action' => ['game/update-price', 'id' => $id], 'options' => ['class' => 'form-horizontal form-row-seperated form', 'id' => 'update-price-form']]);?>
     <div class="profile-sidebar">
-      <?php $form = ActiveForm::begin(['action' => ['game/update-price', 'id' => $id], 'options' => ['class' => 'form-horizontal form-row-seperated form', 'id' => 'update-price-form']]);?>
       <div class="portlet light">
         <img id="image_game-image_id" class="img-responsive" src="<?=$model->getGame()->getImageUrl('500x500');?>">
         <?php if ($canUpdatePrice) : ?>
         <?=$form->field($model, 'price1', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
+          'inputOptions' => ['class' => 'form-control', 'data-value' => $model->price1, 'id' => 'price1'],
           'parts' => ['{log}' => $old_price_1, '{hint}' => $supplierPriceRangeTime],
           'template' => '<strong>{label}</strong><div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp (USD)');?>
-        
+        <?php if ($model->change_price_request_code) :?>
+        <div class="profile-stat">
+          <label style="font-weight: 900" for="updategamepriceform-reseller_price_amplitude">Mã đề xuất</label>
+          <input type="text" class="form-control" disabled value="<?=$model->change_price_request_code;?>">
+        </div>
+        <?php endif;?>
         <?=$form->field($model, 'price2', [
           'options' => ['class' => 'list-separated profile-stat hide'],
           'labelOptions' => ['style' => 'font-weight: 900'],
@@ -102,8 +108,31 @@ if (!count($lastPrices)) {
         <?=Html::a(Yii::t('app', 'cancel'), Url::to(['game/index']), ['class' => 'btn default']);?>
         <?php endif;?>
       </div>
-      <?php ActiveForm::end()?>
     </div>
+    <div class="modal fade" id="code-request" tabindex="-1" role="basic" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Nhập mã đề xuất</h4>
+          </div>
+          <div class="modal-body"> 
+            <div class="row">
+              <div class="col-md-12">
+                <?=$form->field($model, 'change_price_request_code', ['options' => ['class' => ''], 'inputOptions' => ['class' => 'form-control', 'id' => 'change_price_request_code', 'value' => '']])->textInput()->label('Mã đề xuất')?>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Lưu</button>
+            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <?php ActiveForm::end()?>
     <!-- END BEGIN PROFILE SIDEBAR -->
     <!-- BEGIN PROFILE CONTENT -->
     <div class="profile-content">
@@ -232,8 +261,24 @@ if (!count($lastPrices)) {
 </div>
 <?php
 $script = <<< JS
+$('#code-request').on('hidden.bs.modal', function (e) {
+  $(this).find('#change_price_request_code').val('');
+})
 App.setAssetsPath('/vendor/assets/');
 var sendForm = new AjaxFormSubmit({element: '#update-price-form'});
+sendForm.validate = function(form) {
+  var ele = form.find('#price1');
+  var oldPrice = ele.data('value');
+  var newPrice = ele.val();
+  var code = $('#code-request').find('#change_price_request_code').val();
+  console.log('price change', oldPrice, newPrice, code);
+  if (oldPrice != newPrice && !code.trim()) {
+    $('#code-request').modal('show');
+    return false;
+  }
+  console.log('valid form');
+  return true;
+}
 sendForm.beforeSend = function(form) {
   App.blockUI({
       target: '#update-price-form',

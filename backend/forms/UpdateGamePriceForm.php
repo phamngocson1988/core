@@ -19,6 +19,7 @@ class UpdateGamePriceForm extends Model
     public $price3;
     public $price_remark;
     public $reseller_price_amplitude;
+    public $change_price_request_code;
 
     protected $_game;
 
@@ -27,7 +28,8 @@ class UpdateGamePriceForm extends Model
         return [
             [['id'], 'required'],
             [['price1', 'price2', 'price3', 'price_remark'], 'safe'],
-            ['reseller_price_amplitude', 'safe']
+            ['reseller_price_amplitude', 'safe'],
+            ['change_price_request_code', 'safe'],
         ];
     }
 
@@ -38,7 +40,8 @@ class UpdateGamePriceForm extends Model
             'price2' => 'Giá nhà cung cấp 2',
             'price3' => 'Giá nhà cung cấp 3',
             'price_remark' => 'Price Remark',
-            'reseller_price_amplitude' => 'Biên độ giá reseller'
+            'reseller_price_amplitude' => 'Biên độ giá reseller',
+            'change_price_request_code' => 'Mã đề xuất'
         ];
     }
 
@@ -114,6 +117,8 @@ class UpdateGamePriceForm extends Model
             $model->price3 = $this->price1;
             $model->price_remark = $this->price_remark;
             $model->reseller_price_amplitude = $this->reseller_price_amplitude;
+            $model->change_price_request_code = $this->change_price_request_code;
+            $model->change_price_request_time = date('Y-m-d H:i:s');
             $result = $model->save();
 
             $transaction->commit();
@@ -143,5 +148,6 @@ class UpdateGamePriceForm extends Model
         $this->price3 = $game->price3;
         $this->price_remark = $game->price_remark;
         $this->reseller_price_amplitude = $game->reseller_price_amplitude;
+        $this->change_price_request_code = $game->change_price_request_code;
     }
 }
