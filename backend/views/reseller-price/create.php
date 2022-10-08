@@ -10,7 +10,7 @@ $games = $model->fetchGames();
 $gameTitles = ArrayHelper::map($games, 'id', 'title');
 $gameOptions = ArrayHelper::map($games, 'id', function($game) {
   return [
-    'data-amplitude' => StringHelper::numberFormat($game->reseller_price_amplitude),
+    'data-amplitude' => StringHelper::numberFormat($game->reseller_price_amplitude, 1),
     'data-supplier-price' => StringHelper::numberFormat($game->price1 + $game->expected_profit, 1)
   ];
 });

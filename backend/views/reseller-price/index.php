@@ -100,7 +100,7 @@ $now = strtotime('now');
                   <td col-tag="game_id"><?=$model->game->title;?></td>
                   <td class="center" col-tag="game_supplier_price"><?=StringHelper::numberFormat($model->game->price1 + $model->game->expected_profit, 1);?></td>
                   <td class="center" col-tag="price"><?=sprintf("%s (%s)", $model->price, $model->change_price_request_code ?: "-");?></td>
-                  <td class="center" col-tag="reseller_price_amplitude"><?=number_format((int)$model->game->reseller_price_amplitude);?></td>
+                  <td class="center" col-tag="reseller_price_amplitude"><?=StringHelper::numberFormat($model->game->reseller_price_amplitude, 1);?></td>
                   <td class="center" col-tag="created_at"><?=FormatConverter::convertToDate(strtotime($model->created_at), Yii::$app->params['date_time_format']);?></td>
                   <td class="center" col-tag="action">
                     <a href='<?=Url::to(['reseller-price/delete', 'reseller_id' => $model->reseller_id, 'game_id' => $model->game_id]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Xoá"><i class="fa fa-close"></i></a>

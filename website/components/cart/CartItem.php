@@ -152,7 +152,7 @@ class CartItem extends Game implements CartItemInterface
     /**
      * Returns the price for the cart item
      */
-    public function getPrice() : int
+    public function getPrice()
     {
         if (Yii::$app->user->isGuest) return parent::getPrice();
         $user = Yii::$app->user->getIdentity();
