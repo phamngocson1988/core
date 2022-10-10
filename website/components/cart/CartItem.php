@@ -145,8 +145,13 @@ class CartItem extends Game implements CartItemInterface
 
     public function getTotalPrice()
     {
-        $sub = $this->getSubTotalPrice();
-        return $sub;
+        $subTotal = $this->getSubTotalPrice();
+        $promotion = $this->getPromotion();
+        if ($promotion) {
+            $discount = $promotion->apply($subTotal);
+            $subTotal -= $discount;
+        }
+        return $subTotal;
     }
 
     /**

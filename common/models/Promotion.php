@@ -133,6 +133,11 @@ class Promotion extends ActiveRecord
                 'title' => 'Gift Game Unit',
                 'promotion_scenario' => self::SCENARIO_BUY_GEMS
             ],
+            'promotion_discount_cart' => [
+                'class' => '\common\models\promotions\PromotionDiscountOrderBenefit',
+                'title' => 'Discount cart',
+                'promotion_scenario' => self::SCENARIO_BUY_GEMS
+            ],
         ];
         if (!$type) return $list;
         return array_filter($list, function($benefit) use ($type) {
