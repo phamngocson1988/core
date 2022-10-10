@@ -651,20 +651,17 @@ class OrderController extends Controller
     public function actionTaken($id)
     {
         $request = Yii::$app->request;
-        $order = Order::findOne($id);
-        if (!$order) {
-            $message = "Order #id not found";
-            Yii::$app->session->setFlash('error', $message);
-            return $this->asJson(['status' => false, 'error' => $message]);
-        }
-        if ($order->isCompletedOrder() || $order->isConfirmedOrder()) {
-            $message = "Order $id is finished";
-            Yii::$app->session->setFlash('error', $message);
-            return $this->asJson(['status' => false, 'error' => $message]);
-        }
-        $order->attachBehavior('assign', \backend\behaviors\OrderBehavior::className());
-        if ($order->assignOrderTeam(Yii::$app->user->id)) {
-            // Yii::$app->session->setFlash('success', "You have taken order #$id successfully.");
+        $form = new \backend\forms\AssignOrderTeamToOrderForm([
+            'order_id' => $id,
+            'user_id' => Yii::$app->user->id,
+            'force_update' => Yii::$app->user->can('admin')
+        ]);
+        if (!$form->run()) {
+            $errors = $form->getFirstErrors();
+            $error = reset($errors);
+            Yii::$app->session->setFlash('error', $error);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        } else {
             return $this->asJson(['status' => true]);
         }
     }
@@ -673,20 +670,17 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $userId = $request->post('user_id');
-        $order = Order::findOne($id);
-        if (!$order) {
-            $message = "Order #id not found";
-            Yii::$app->session->setFlash('error', $message);
-            return $this->asJson(['status' => false, 'error' => $message]);
-        }
-        if ($order->isCompletedOrder() || $order->isConfirmedOrder()) {
-            $message = "Order $id is finished";
-            Yii::$app->session->setFlash('error', $message);
-            return $this->asJson(['status' => false, 'error' => $message]);
-        }
-        $order->attachBehavior('assign', \backend\behaviors\OrderBehavior::className());
-        if ($order->assignOrderTeam($userId)) {
-            // Yii::$app->session->setFlash('success', "You have assign order #$id successfully.");
+        $form = new \backend\forms\AssignOrderTeamToOrderForm([
+            'order_id' => $id,
+            'user_id' => $userId,
+            'force_update' => Yii::$app->user->can('admin')
+        ]);
+        if (!$form->run()) {
+            $errors = $form->getFirstErrors();
+            $error = reset($errors);
+            Yii::$app->session->setFlash('error', $error);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        } else {
             return $this->asJson(['status' => true]);
         }
     }
@@ -695,14 +689,17 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $userId = $request->post('user_id');
-        $order = Order::findOne($id);
-        if (!$order) {
-            $message = "Order #id not found";
-            Yii::$app->session->setFlash('error', $message);
-            return $this->asJson(['status' => false, 'error' => $message]);
-        }
-        $order->saler_id = $userId;
-        if ($order->save()) {
+        $form = new \backend\forms\AssignSalerToOrderForm([
+            'order_id' => $id,
+            'user_id' => $userId,
+            'force_update' => Yii::$app->user->can('admin')
+        ]);
+        if (!$form->run()) {
+            $errors = $form->getFirstErrors();
+            $error = reset($errors);
+            Yii::$app->session->setFlash('error', $error);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        } else {
             return $this->asJson(['status' => true]);
         }
     }

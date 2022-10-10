@@ -9,7 +9,15 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 use backend\behaviors\UserSupplierBehavior;
+use yii\helpers\Html;
 
+// saler team
+$salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+$salerTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('saler_manager');
+$salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds);
+$salerTeamIds = array_unique($salerTeamIds);
+$salerTeamObjects = User::findAll($salerTeamIds);
+$salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -180,6 +188,7 @@ use backend\behaviors\UserSupplierBehavior;
               <th> Số dư hiện tại</th>
               <th> Reseller/Khách hàng </th>
               <th> Đại lý/người bán </th>
+              <th> Nhân viên quản lý </th>
               <th> Tác vụ </th>
             </tr>
           </thead>
@@ -218,6 +227,7 @@ use backend\behaviors\UserSupplierBehavior;
                 <?php endif; ?>
               </td>
               <td></td>
+              <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
               <td>
                 <?php if (Yii::$app->user->can('sale_manager')) : ?>
                 <?php if ($model->isActive()) : ?>
@@ -237,12 +247,43 @@ use backend\behaviors\UserSupplierBehavior;
                 <?php else : ?>
                 <a href="<?=Url::to(['user/update-trust', 'id' => $model->id]);?>" class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Khách này chưa được tín nhiệm"><i class="fa fa-shield"></i> </a>
                 <?php endif; ?>
+
+                <a href='#assign-saler<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý cho AM" data-toggle="modal" ><i class="fa fa-headphones" aria-hidden="true"></i></i></a>
+                <div class="modal fade" id="assign-saler<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Gửi đơn hàng cho nhân viên AM</h4>
+                      </div>
+                      <?= Html::beginForm(['user/assign-saler', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
+                      <div class="modal-body"> 
+                        <div class="row">
+                          <div class="col-md-12">
+                            <?= kartik\select2\Select2::widget([
+                              'name' => 'saler_id',
+                              'data' => $salerTeams,
+                              'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
+                            ]); ?>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Gửi</button>
+                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                      </div>
+                      <?= Html::endForm(); ?>
+                    </div>
+                    <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+                </div>
               </td>
             </tr>
             <?php endforeach;?>
             <?php else : ?>
             <tr>
-              <td colspan="15"><?=Yii::t('app', 'no_data_found');?></td>
+              <td colspan="16"><?=Yii::t('app', 'no_data_found');?></td>
             </tr>
             <?php endif;?>
           </tbody>
@@ -307,6 +348,11 @@ $(".link-action").ajax_action({
     location.reload();
   }
 });
+
+var assignForm = new AjaxFormSubmit({element: '.assign-form'});
+assignForm.success = function (data, form) {
+  location.reload();
+}
 
 var createResellerAjax = new AjaxFormSubmit({element: '.create-reseller-form'});
 createResellerAjax.success = function (data, form) {

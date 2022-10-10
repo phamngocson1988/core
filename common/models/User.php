@@ -388,4 +388,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->trust == self::IS_TRUST;
     }
+
+    public function getPassword()
+    {
+        return '';
+    }
+
+    public function getSaler()
+    {
+        return $this->hasOne(User::className(), ['id' => 'saler_id']);
+    }
+
 }

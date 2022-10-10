@@ -91,7 +91,7 @@ class RunOrderCommissionForm extends ActionForm
         $order->save();
 
         // save for order_commission
-        if ($commission > 0) {
+        if ($commission >= 0) {
           if ($order->saler_id) {
             $saler = User::findOne($order->saler_id);
             $orderCommissionDescriptionSaler = json_encode([

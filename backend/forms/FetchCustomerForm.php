@@ -4,7 +4,7 @@ namespace backend\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\User;
+use backend\models\User;
 use common\models\Country;
 use backend\models\Game;
 use backend\models\Order;
@@ -23,7 +23,7 @@ class FetchCustomerForm extends User
     public $game_id;
     public $purchase_start;
     public $purchase_end;
-    public $saler_id;
+    public $order_saler_id;
     public $is_supplier;
     // public $is_reseller;
     public $last_purchase_start;
@@ -78,7 +78,7 @@ class FetchCustomerForm extends User
 
         $heading = 'CUSTOMER LIST';
         $game = Game::findOne($this->game_id);
-        $saler = User::findOne($this->saler_id);
+        $saler = User::findOne($this->order_saler_id);
         $resellerStatus = self::getResellerStatus();
         $customerType = ArrayHelper::getValue($resellerStatus, $this->is_reseller, '');
         $country = Country::findOne($this->country_code);
@@ -206,8 +206,8 @@ class FetchCustomerForm extends User
             $command->andWhere(["{$orderTable}.game_id" => $this->game_id]);
         }
 
-        if ($this->saler_id) {
-            $command->andWhere(["{$orderTable}.saler_id" => $this->saler_id]);
+        if ($this->order_saler_id) {
+            $command->andWhere(["{$orderTable}.saler_id" => $this->order_saler_id]);
         }
 
         if ($this->is_reseller) {
