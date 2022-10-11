@@ -195,6 +195,13 @@ class Promotion extends ActiveRecord
         return $benefit->apply($amount);
     }
 
+    public function applyCart(&$cart)
+    {
+        $benefit = $this->getBenefit();
+        if (!$benefit) return 0;
+        return $benefit->applyCart($cart);
+    }
+
     // Validate a promotion is valid
     public function isEnable()
     {

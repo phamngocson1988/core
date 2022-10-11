@@ -9,6 +9,7 @@ use website\models\Paygate;
 use website\models\Order;
 use website\models\User;
 use website\models\UserWallet;
+use website\models\PromotionApply;
 use common\components\helpers\FormatConverter;
 use website\components\payment\PaymentGatewayFactory;
 use website\components\notifications\OrderNotification;
@@ -106,10 +107,13 @@ class OrderPaymentForm extends Model
         $cart = $this->cart;
         $paygate = $this->getPaygateConfig();
         $subTotalPrice = $cart->getSubTotalPrice();
+        $totalPrice = $cart->getTotalPrice();
+        $promotionDiscount = $cart->getPromotionDiscount();
         $fee = $paygate->getFee($subTotalPrice);
-        $totalPrice = $subTotalPrice + $fee;
+        $totalPrice += $fee;
         return [
             'subTotalPayment' => $subTotalPrice,
+            'promotionDiscount' => $promotionDiscount,
             'transferFee' => $fee,
             'totalPayment' => $totalPrice,
         ];
@@ -125,6 +129,7 @@ class OrderPaymentForm extends Model
         $cart = $this->cart;
         $cartItem = $cart->getItem();
         $subTotalPrice = $cart->getSubTotalPrice();
+        $discount = $cart->getPromotionDiscount();
         $fee = $paygate->getFee($subTotalPrice);
         $totalPrice = $cart->getTotalPrice() + $fee;
         $cogsPrice = $cartItem->getCogs();
@@ -147,7 +152,6 @@ class OrderPaymentForm extends Model
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
-
             $order = new Order();
             // paygate
             $order->payment_method = $paygate->getIdentifier();
@@ -164,6 +168,7 @@ class OrderPaymentForm extends Model
             $order->total_cogs_price = $cogsPrice * (float)$cartItem->quantity;
             $order->sub_total_price = $subTotalPrice;
             $order->total_price = $totalPrice;
+            $order->total_discount = $discount;
             $order->total_fee = $paygate->getFee($subTotalPrice);
             $order->total_price_by_currency = $targetCurrencyTotal;
 
@@ -221,8 +226,6 @@ class OrderPaymentForm extends Model
             }
 
             if ($paygate->getIdentifier() != 'kinggems') {
-                
-
                 $commitment = new PaymentCommitment();
                 $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
                 $commitment->object_key = $order->id;
@@ -244,6 +247,14 @@ class OrderPaymentForm extends Model
             if ($flashsale && $flashsale->limit) {
                 $flashsale->remain = min($flashsale->limit, $flashsale->remain) - 1;
                 $flashsale->save();
+            }
+
+            // Mark promotion is used by user
+            if ($promotion) {
+                $promotionApply = new PromotionApply();
+                $promotionApply->promotion_id = $promotion->id;
+                $promotionApply->user_id = Yii::$app->user->id;
+                $promotionApply->save();
             }
 
             $transaction->commit();

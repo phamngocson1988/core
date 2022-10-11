@@ -67,8 +67,11 @@ class PromotionDiscountOrderBenefit extends PromotionBenefitAbstract implements 
         return $this->calculate($amount);
     }
 
+    /**
+     * @var website\components\cart\CartItem
+     */
     public function applyCart(&$cart)
     {
-        $cart->setPromotionUnit($this->calculate($cart->getSubTotalPrice()));
+        $cart->setPromotionDiscount($this->calculate($cart->getSubTotalPrice()));
     }
 }

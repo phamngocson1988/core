@@ -66,8 +66,14 @@ $user = Yii::$app->user->getIdentity();
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right" id="subTotal">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
+            <div class="flex-fill w-100 text-right" id="subTotal">$<?=StringHelper::numberFormat($model->getSubTotalPrice(), 2);?></div>
           </div>
+          <?php if ($model->getPromotionDiscount()) : ?>
+          <div class="d-flex">
+            <div class="flex-fill w-100">Discount</div>
+            <div class="flex-fill w-100 text-right">(<span id="promotionDiscount">$<?=StringHelper::numberFormat($model->getPromotionDiscount(), 2);?></span>)</div>
+          </div>
+          <?php endif;?>
           <div class="d-flex">
             <div class="flex-fill w-100">Transfer fee</div>
             <div class="flex-fill w-100 text-right" id="fee">$0</div>
@@ -125,6 +131,7 @@ function Calculator() {
 
 function ShowSummary(data) {
   $('#subTotal').html(data.subTotalPayment);
+  $('#promotionDiscount').html(data.promotionDiscount);
   $('#total').html(data.totalPayment);
   $('#fee').html(data.transferFee);
   if (data.isOtherCurrency) {

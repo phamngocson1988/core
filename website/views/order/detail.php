@@ -21,9 +21,13 @@ use common\components\helpers\StringHelper;
       <div><span class="list-item">Total Unit:</span><b class="text-red"><?=sprintf("%s %s", $order->total_unit, $order->unit_name);?></b></div>
       <hr />
       <div><span class="list-item">Payment method:</span><b class="text-red"><?=$order->payment_method;?></b></div>
-      <div><span class="list-item">Sub Price:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->sub_total_price, 2), $order->currency);?></b></div>
-      <div><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_fee, 2), $order->currency);?></b></div>
-      <div><span class="list-item">Total Price:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_price, 2), $order->currency);?></b></div>
+      <div><span class="list-item">Sub Price:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->sub_total_price, 2), 'USD');?></b></div>
+      <?php if ($order->total_discount) : ?>
+      <div><span class="list-item">Discount:</span><b class="text-red"><?=sprintf("(%s) %s", StringHelper::numberFormat($order->total_discount, 2), 'USD');?></b></div>
+      <?php endif;?>
+      <div><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_fee, 2), 'USD');?></b></div>
+      <hr />
+      <div><span class="list-item">Total Price:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_price, 2), 'USD');?></b></div>
     </div>
     <div class="col-md-6">
       <?php if ($order->raw) : ?>

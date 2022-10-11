@@ -67,8 +67,11 @@ class PromotionUnitBenefit extends PromotionBenefitAbstract implements Promotion
         return $this->calculate($amount);
     }
 
+    /**
+     * @var website\components\cart\CartItem
+     */
     public function applyCart(&$cart)
     {
-        $cart->setPromotionUnit($this->calculate($cart->getSubTotalUnit()));
+        $cart->setPromotionUnit($this->calculate($cart->getSubtotalUnit()));
     }
 }
