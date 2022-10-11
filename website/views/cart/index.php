@@ -130,11 +130,11 @@ use common\components\helpers\StringHelper;
           <hr />
           <div class="d-flex">
             <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right" data-target="price">$<?=StringHelper::numberFormat($model->getTotalPrice(), 2);?></div>
+            <div class="flex-fill w-100 text-right" data-target="sub-price">$<?=StringHelper::numberFormat($model->getSubTotalPrice(), 2);?></div>
           </div>
           <div class="d-flex">
             <div class="flex-fill w-100 text-danger">Discount</div>
-            <div class="flex-fill w-100 text-danger text-right">$0</div>
+            <div class="flex-fill w-100 text-danger text-right" data-target="promotion-discount">$<?=StringHelper::numberFormat($model->getPromotionDiscount(), 2);?></div>
           </div>
           <hr />
           <div class="d-flex mb-3">
@@ -206,6 +206,8 @@ function calculateCart() {
             toastr.error(result.errors);
         } else {
             $('[data-target="price"]').html('$' + result.data.amount);
+            $('[data-target="sub-price"]').html('$' + result.data['sub-price']);
+            $('[data-target="promotion-discount"]').html('$' + result.data['promotion-discount']);
             $('[data-target="origin"]').html('$' + result.data.origin);
             $('[data-target="total-unit"]').html(result.data.unit);
             $('[data-target="quantity"]').html($('#quantity').val());

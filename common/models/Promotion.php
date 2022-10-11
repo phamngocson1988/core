@@ -103,7 +103,11 @@ class Promotion extends ActiveRecord
             ],
             'first_topup' => [
                 'class' => '\common\models\promotions\FirstTopupRule',
-                'title' => 'Khuyến mãi cho đơn hàng đầu tiên'
+                'title' => 'Khuyến mãi cho Topup đầu tiên'
+            ],
+            'new_member' => [
+                'class' => '\common\models\promotions\NewMemberRule',
+                'title' => 'Khuyến mãi cho khách hàng mới'
             ],
             'customer_only' => [
                 'class' => '\common\models\promotions\CustomerOnlyRule',
@@ -127,6 +131,11 @@ class Promotion extends ActiveRecord
             'promotion_unit' => [
                 'class' => '\common\models\promotions\PromotionUnitBenefit',
                 'title' => 'Gift Game Unit',
+                'promotion_scenario' => self::SCENARIO_BUY_GEMS
+            ],
+            'promotion_discount_cart' => [
+                'class' => '\common\models\promotions\PromotionDiscountOrderBenefit',
+                'title' => 'Discount cart',
                 'promotion_scenario' => self::SCENARIO_BUY_GEMS
             ],
         ];
@@ -184,6 +193,13 @@ class Promotion extends ActiveRecord
         $benefit = $this->getBenefit();
         if (!$benefit) return 0;
         return $benefit->apply($amount);
+    }
+
+    public function applyCart(&$cart)
+    {
+        $benefit = $this->getBenefit();
+        if (!$benefit) return 0;
+        return $benefit->applyCart($cart);
     }
 
     // Validate a promotion is valid

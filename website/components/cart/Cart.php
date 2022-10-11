@@ -22,7 +22,13 @@ class Cart extends \yii2mod\cart\Cart
     public function getSubTotalPrice()
     {
         $item = $this->getItem();
-        return $item->getTotalPrice();
+        return $item->getSubTotalPrice();
+    }
+
+    public function getPromotionDiscount()
+    {
+        $item = $this->getItem();
+        return $item->getPromotionDiscount();
     }
 
     public function getTotalPrice()
