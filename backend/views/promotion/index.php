@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
           </thead>
           <tbody>
               <?php if (!$models) :?>
-              <tr><td colspan="8"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="9"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $model) :?>
               <tr>

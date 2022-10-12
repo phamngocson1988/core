@@ -270,7 +270,7 @@ if ($canSaler) $numColumn += 1;
                     <?php endif;?>
 
                     <!-- Saler team -->
-                    <?php if ($canSaler && ($user->id == $model->saler_id || !$model->saler_id)) :?>
+                    <?php if (Yii::$app->user->can('admin') || (Yii::$app->user->can('saler') && !$model->saler_id)) :?>
                     <a href='#assign-saler<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chọn nhân viên hỗ trợ" data-toggle="modal" ><i class="fa fa-headphones"></i></a>
                     <div class="modal fade" id="assign-saler<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
                       <div class="modal-dialog">

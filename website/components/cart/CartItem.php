@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\models\Game;
 use website\models\Promotion;
+use website\models\PromotionApply;
 use website\models\ResellerPrice;
 use common\models\CurrencySetting;
 
@@ -36,6 +37,11 @@ class CartItem extends Game implements CartItemInterface
 
     protected $_game;
     protected $_promotion;
+
+    // Promotion benefit
+    protected $_promotion_coin;
+    protected $_promotion_discount;
+    protected $_promotion_unit;
 
     public function scenarios()
     {
@@ -121,8 +127,8 @@ class CartItem extends Game implements CartItemInterface
         $subTotal = $this->getSubtotalUnit();
         $promotion = $this->getPromotion();
         if ($promotion) {
-            $promotionUnit = $promotion->apply($this->getSubtotalUnit());
-            $subTotal += $promotionUnit;
+            $promotion->applyCart($this);
+            $subTotal += $this->getPromotionUnit();
         }
         return $subTotal;
     }
@@ -145,14 +151,20 @@ class CartItem extends Game implements CartItemInterface
 
     public function getTotalPrice()
     {
-        $sub = $this->getSubTotalPrice();
-        return $sub;
+        $subTotal = $this->getSubTotalPrice();
+        $promotion = $this->getPromotion();
+
+        if ($promotion) {
+            $promotion->applyCart($this);
+            $subTotal -= $this->getPromotionDiscount();
+        }
+        return $subTotal;
     }
 
     /**
      * Returns the price for the cart item
      */
-    public function getPrice() : int
+    public function getPrice()
     {
         if (Yii::$app->user->isGuest) return parent::getPrice();
         $user = Yii::$app->user->getIdentity();
@@ -161,12 +173,12 @@ class CartItem extends Game implements CartItemInterface
         else {
             $now = date('Y-m-d H:i:s');
             $resellerPrice = ResellerPrice::find()
-            ->select(['price', 'amplitude'])
+            ->select(['price'])
             ->where([
                 'reseller_id' => $user->id,
                 'game_id' => $this->id
             ])->one();
-            return $resellerPrice ? max(0, $resellerPrice->price + (float)$resellerPrice->amplitude) : 0;
+            return $resellerPrice ? max(0, $resellerPrice->price + (float)$this->reseller_price_amplitude) : 0;
             // return $this->getResellerPrice($user->reseller_level);
         }
     }
@@ -224,6 +236,14 @@ class CartItem extends Game implements CartItemInterface
             $this->_promotion = null;
             return;
         }
+        if ($promotion->user_using) {
+            $totalUsing = PromotionApply::find()->where(['promotion_id' => $promotion->id, 'user_id' => Yii::$app->user->id])->count();
+            if ($totalUsing >= $promotion->user_using) {
+                $this->addError($attribute, sprintf("You have been using this voucher %d times", $totalUsing));
+                $this->_promotion = null;
+                return;
+            }
+        }
     }
 
     public function validateQuantity($attribute, $params) 
@@ -232,5 +252,36 @@ class CartItem extends Game implements CartItemInterface
             $message = sprintf('Action is failed. Min order should be: %s', number_format($this->min_quantity));
             $this->addError($attribute, $message);
         }
+    }
+
+    // Get/Set function for promomtion benefit
+    public function setPromotionCoin($coin)
+    {
+        $this->_promotion_coin = $coin;
+    }
+
+    public function getPromotionCoin()
+    {
+        return $this->_promotion_coin;
+    }
+
+    public function setPromotionDiscount($discount)
+    {
+        $this->_promotion_discount = $discount;
+    }
+
+    public function getPromotionDiscount()
+    {
+        return $this->_promotion_discount;
+    }
+
+    public function setPromotionUnit($unit)
+    {
+        $this->_promotion_unit = $unit;
+    }
+
+    public function getPromotionUnit()
+    {
+        return $this->_promotion_unit;
     }
 }

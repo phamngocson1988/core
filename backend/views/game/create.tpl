@@ -129,11 +129,6 @@
                 <div class="tab-pane active" id="tab_1_1">
                   {$form->field($model, 'title')->textInput()}
                   {$form->field($model, 'original_price')->textInput()}
-                  {if $app->user->can('admin')}
-                  {$form->field($model, 'expected_profit')->textInput()}
-                  {else}
-                  {$form->field($model, 'expected_profit', ['template' => '{input}', 'options' => ['tag' => null]])->hiddenInput()->label(false)}
-                  {/if}
                   {$form->field($model, 'pack')->textInput()}
                   {$form->field($model, 'unit_name')->textInput()}
                   {$form->field($model, 'min_quantity')->textInput()}

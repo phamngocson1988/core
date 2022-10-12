@@ -31,7 +31,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'active', 'inactive', 'update-trust', 'update-not-trust', 'no-order'],
+                        'actions' => ['index', 'create', 'edit', 'invite', 'change-status', 'active', 'inactive', 'update-trust', 'update-not-trust', 'no-order', 'assign-saler'],
                         'roles' => ['admin', 'hr', 'sale_manager'],
                     ],
                     [
@@ -273,38 +273,6 @@ class UserController extends Controller
         }
     }
 
-    // public function actionUpgradeReseller($id)
-    // {
-    //     $request = Yii::$app->request;
-    //     if( $request->isAjax) {
-    //         $user = User::findOne($id);
-    //         if (!$user) throw new NotFoundHttpException('Not found');
-    //         $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
-    //             $model = $event->sender;
-    //             $model->attachBehavior('reseller', UserResellerBehavior::className());
-    //             $model->createReseller();
-    //         });
-    //         $user->is_reseller = User::IS_RESELLER;
-    //         return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
-    //     }
-    // }
-
-    // public function actionDowngradeReseller($id)
-    // {
-    //     $request = Yii::$app->request;
-    //     if( $request->isAjax) {
-    //         $user = User::findOne($id);
-    //         if (!$user) throw new NotFoundHttpException('Not found');
-    //         $user->on(User::EVENT_AFTER_UPDATE, function ($event) {
-    //             $model = $event->sender;
-    //             $model->attachBehavior('reseller', UserResellerBehavior::className());
-    //             $model->deleteReseller();
-    //         });
-    //         $user->is_reseller = User::IS_NOT_RESELLER;
-    //         return $this->asJson(['status' => $user->save(true, ['is_reseller'])]);
-    //     }
-    // }
-
     public function actionUpdateTrust($id)
     {
         $request = Yii::$app->request;
@@ -324,6 +292,25 @@ class UserController extends Controller
             if (!$user) throw new NotFoundHttpException('Not found');
             $user->trust = User::IS_NOT_TRUST;
             return $this->asJson(['status' => $user->save(true, ['trust'])]);
+        }
+    }
+
+    public function actionAssignSaler($id)
+    {
+        $request = Yii::$app->request;
+        $salerId = $request->post('saler_id');
+        $form = new \backend\forms\AssignSalerToUserForm([
+            'user_id' => $id,
+            'saler_id' => $salerId,
+            'force_update' => Yii::$app->user->can('admin')
+        ]);
+        if (!$form->run()) {
+            $errors = $form->getFirstErrors();
+            $error = reset($errors);
+            Yii::$app->session->setFlash('error', $error);
+            return $this->asJson(['status' => false, 'errors' => $error]);
+        } else {
+            return $this->asJson(['status' => true]);
         }
     }
 }

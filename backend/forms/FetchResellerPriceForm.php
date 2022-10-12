@@ -50,6 +50,6 @@ class FetchResellerPriceForm extends Model
 
     public function fetchGames()
     {
-        return ArrayHelper::map(Game::find()->select(['id', 'title'])->all(), 'id', 'title');
+        return ArrayHelper::map(Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all(), 'id', 'title');
     }
 }

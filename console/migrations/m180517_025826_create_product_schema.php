@@ -28,8 +28,9 @@ class m180517_025826_create_product_schema extends Migration
             'image_id' => $this->integer(),
             'price' => $this->integer(),
             'reseller_price' => $this->integer(),
+            'reseller_price_amplitude' => $this->float(),
             'original_price' => $this->integer(),
-            'expected_profit' => $this->integer(), //vnd
+            'expected_profit' => $this->float(), //usd
             'pack' => $this->integer()->notNull()->defaultValue(1),
             'promotion_info' => $this->string(255),
             'event_info' => $this->string(255),
@@ -53,6 +54,8 @@ class m180517_025826_create_product_schema extends Migration
             'updated_by' => $this->integer(),
             'deleted_at' => $this->dateTime(),
             'deleted_by' => $this->integer(),
+            'change_price_request_code' => $this->string(50),
+            'change_price_request_time' => $this->dateTime(),            
             'price1' => $this->float(),
             'price2' => $this->float(),
             'price3' => $this->float(),

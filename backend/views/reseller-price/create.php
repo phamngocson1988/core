@@ -4,6 +4,16 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
+use common\components\helpers\StringHelper;
+
+$games = $model->fetchGames();
+$gameTitles = ArrayHelper::map($games, 'id', 'title');
+$gameOptions = ArrayHelper::map($games, 'id', function($game) {
+  return [
+    'data-amplitude' => StringHelper::numberFormat($game->reseller_price_amplitude, 1),
+    'data-supplier-price' => StringHelper::numberFormat($game->price1 + $game->expected_profit, 1)
+  ];
+});
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -25,15 +35,15 @@ use yii\web\JsExpression;
 <!-- BEGIN PAGE TITLE-->
 <h1 class="page-title">Tạo giá Reseller</h1>
 <!-- END PAGE TITLE-->
+<?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
 <div class="row">
   <div class="col-md-12">
-  	<?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal form-row-seperated']]);?>
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
             <a href="<?=Url::to(['reseller-price/index']);?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
-            <button type="submit" class="btn btn-success">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#code-request">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
             </button>
           </div>
@@ -58,28 +68,75 @@ use yii\web\JsExpression;
                   ])->label('Reseller');?>
                   <?=$form->field($model, 'game_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'slug form-control'],
+                    'inputOptions' => ['class' => 'slug form-control', 'id' => 'game_id'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                     ])->widget(kartik\select2\Select2::classname(), [
-                      'data' => $model->fetchGames(),
-                      'options' => ['class' => 'form-control', 'prompt' => 'Chọn Game', 'disabled' => $modeEdit],
+                      'data' => $gameTitles,
+                      'options' => ['class' => 'form-control', 'prompt' => 'Chọn Game', 'disabled' => $modeEdit, 'options' => $gameOptions],
                     ])->label('Game');?>
                   <?=$form->field($model, 'price', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Giá Reseller (USD)')?>
-                  <?=$form->field($model, 'amplitude', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['id' => 'name', 'class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Biên độ giá (USD)')?>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Biên độ</label>
+                    <div class="col-md-6">
+                      <input type="text" id="game-amplitude" disabled readonly class="form-control" aria-required="true" aria-invalid="true">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Giá bán chuẩn (USD)</label>
+                    <div class="col-md-6">
+                      <input type="text" id="game-supplier-price" disabled readonly class="form-control" aria-required="true" aria-invalid="true">
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <?php ActiveForm::end()?>
   </div>
 </div>
+
+<div class="modal fade" id="code-request" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Nhập mã đề xuất</h4>
+      </div>
+      <div class="modal-body"> 
+        <div class="row">
+          <div class="col-md-12">
+            <?=$form->field($model, 'change_price_request_code', ['options' => ['class' => '']])->textInput()->label('Mã đề xuất')?>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Lưu</button>
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<?php ActiveForm::end()?>
+
+<?php
+$script = <<< JS
+$('#game_id').on('change', function(){
+  var val = $(this).val();
+  var optAmplitude = $(this).find(":selected").data('amplitude');
+  var optPrice = $(this).find(":selected").data('supplier-price');
+  
+  $('#game-amplitude').val(optAmplitude || 0);
+  $('#game-supplier-price').val(optPrice || 0);
+});
+$('#game_id').trigger('change');
+JS;
+$this->registerJs($script);
+?>

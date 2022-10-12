@@ -16,11 +16,11 @@ $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootst
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
-$adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
+// $adminTeamIds = Yii::$app->authManager->getUserIdsByRole('admin');
 // order team
 $orderTeamIds = Yii::$app->authManager->getUserIdsByRole('orderteam');
 $orderTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('orderteam_manager');
-$orderTeamIds = array_merge($orderTeamIds, $orderTeamManagerIds, $adminTeamIds);
+$orderTeamIds = array_merge($orderTeamIds, $orderTeamManagerIds);
 $orderTeamIds = array_unique($orderTeamIds);
 $orderTeamObjects = User::findAll($orderTeamIds);
 $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
@@ -28,7 +28,7 @@ $orderTeams = ArrayHelper::map($orderTeamObjects, 'id', 'email');
 // saler team
 $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
 $salerTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('saler_manager');
-$salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds, $adminTeamIds);
+$salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds);
 $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
 $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
@@ -268,6 +268,39 @@ if (Yii::$app->user->isRole(['customer_support', 'saler', 'sale_manager'])) arra
                     <a href='<?=Url::to(['order/remove-supplier', 'id' => $model->id, 'ref' => $ref]);?>' class="btn btn-xs grey-salsa ajax-link tooltips" data-pjax="0" data-container="body" data-original-title="Thu hồi đơn hàng"><i class="fa fa-user-times"></i></a>
                     <?php endif;?> <!-- end if canBeTaken -->
                     <?php endif;?> <!-- end if orderteam -->
+
+                    <?php if (Yii::$app->user->can('admin') || (Yii::$app->user->can('saler') && !$model->saler_id)) :?>
+                    <a href='#assign-saler<?=$model->id;?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Gán quyền quản lý cho AM" data-toggle="modal" ><i class="fa fa-headphones" aria-hidden="true"></i></i></a>
+                    <div class="modal fade" id="assign-saler<?=$model->id;?>" tabindex="-1" role="basic" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Gửi đơn hàng cho nhân viên AM</h4>
+                          </div>
+                          <?= Html::beginForm(['order/assign-saler', 'id' => $model->id], 'POST', ['class' => 'assign-form']); ?>
+                          <div class="modal-body"> 
+                            <div class="row">
+                              <div class="col-md-12">
+                                <?= kartik\select2\Select2::widget([
+                                  'name' => 'user_id',
+                                  'data' => $salerTeams,
+                                  'options' => ['placeholder' => 'Select user ...', 'class' => 'form-control'],
+                                ]); ?>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-default" data-toggle="modal"><i class="fa fa-send"></i> Gửi</button>
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                          </div>
+                          <?= Html::endForm(); ?>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                      <!-- /.modal-dialog -->
+                    </div>
+                    <?php endif;?> <!-- end if saler -->
                   </td>
                 </tr>
                 <?php endforeach;?>

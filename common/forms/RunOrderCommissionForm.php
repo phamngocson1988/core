@@ -63,7 +63,7 @@ class RunOrderCommissionForm extends ActionForm
           return true;
         }
 
-        $expectedProfit = $order->quantity * $game->expected_profit;
+        $expectedProfit = $order->quantity * $game->expected_profit * $order->rate_usd;
         $realOutcome = array_sum(ArrayHelper::getColumn($suppliers, 'total_price'));
         $realIncome = $order->quantity * $order->price * $order->rate_usd;
         $overcome = $realIncome - $realOutcome;
@@ -91,7 +91,7 @@ class RunOrderCommissionForm extends ActionForm
         $order->save();
 
         // save for order_commission
-        if ($commission > 0) {
+        if ($commission >= 0) {
           if ($order->saler_id) {
             $saler = User::findOne($order->saler_id);
             $orderCommissionDescriptionSaler = json_encode([

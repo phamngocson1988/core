@@ -74,12 +74,16 @@ class CartController extends Controller
         $model = CartItem::findOne($id);
         $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $amount = $model->getTotalPrice();
+            $totalPrice = $model->getTotalPrice();
+            $subTotalPrice = $model->getSubTotalPrice();
+            $promotionDiscount = $model->getPromotionDiscount();
             $unit = $model->getTotalUnit();
             $unitName = $model->getUnitName();
             $origin = $model->getTotalOriginalPrice();
             return $this->asJson(['status' => true, 'data' => [
-                'amount' => StringHelper::numberFormat($amount, 2),
+                'sub-price' => StringHelper::numberFormat($subTotalPrice, 2),
+                'promotion-discount' => StringHelper::numberFormat($promotionDiscount, 2),
+                'amount' => StringHelper::numberFormat($totalPrice, 2),
                 'origin' => StringHelper::numberFormat($origin, 2),
                 'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
             ]]);
@@ -144,6 +148,7 @@ class CartController extends Controller
         if ($form->validate()) {
             $calculate = $form->calculate();
             $subTotalPayment = $calculate['subTotalPayment'];
+            $promotionDiscount = $calculate['promotionDiscount'];
             $transferFee = $calculate['transferFee'];
             $totalPayment = $calculate['totalPayment'];
             $paygate = $form->getPaygateConfig();
@@ -153,6 +158,7 @@ class CartController extends Controller
             $otherCurrency = $currencyModel->showByFormat(StringHelper::numberFormat($otherCurrencyTotal, 2));
             $data = [
                 'subTotalPayment' => $usdCurrency->showByFormat(StringHelper::numberFormat($subTotalPayment, 2)),
+                'promotionDiscount' => $usdCurrency->showByFormat(StringHelper::numberFormat($promotionDiscount, 2)),
                 'transferFee' => $usdCurrency->showByFormat(StringHelper::numberFormat($transferFee, 2)),
                 'totalPayment' => $usdCurrency->showByFormat($totalPayment),
                 'otherCurrency' => $otherCurrency,

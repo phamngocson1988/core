@@ -17,8 +17,8 @@ class CreateResellerPriceForm extends Model
     public $reseller_id;
     public $game_id;
     public $price;
-    public $amplitude = 0;
     public $duration = 3; // days
+    public $change_price_request_code;
 
     protected $_reseller_price;
     protected $_user;
@@ -30,8 +30,7 @@ class CreateResellerPriceForm extends Model
     public function rules()
     {
         return [
-            [['reseller_id', 'game_id', 'price'], 'required'],
-            ['amplitude', 'safe'],
+            [['reseller_id', 'game_id', 'price', 'change_price_request_code'], 'required'],
             ['game_id', 'validateGame'],
             ['reseller_id', 'validateReseller'],
         ];
@@ -42,7 +41,6 @@ class CreateResellerPriceForm extends Model
         if ($this->game_id && $this->reseller_id) {
             $resellerPrice = $this->getResellerPrice();
             $this->price = $resellerPrice->price;
-            $this->amplitude = (float)$resellerPrice->amplitude;
         }
     }
 
@@ -101,8 +99,9 @@ class CreateResellerPriceForm extends Model
         $resellerPrice->reseller_id = $this->reseller_id;
         $resellerPrice->game_id = $this->game_id;
         $resellerPrice->price = $this->price;
-        $resellerPrice->amplitude = (float)$this->amplitude;
         $resellerPrice->invalid_at = date('Y-m-d H:i:s', strtotime("+$this->duration days"));
+        $resellerPrice->change_price_request_code = $this->change_price_request_code;
+        $resellerPrice->change_price_request_time = date('Y-m-d H:i:s');
         return $resellerPrice->save();
     }
 
@@ -113,6 +112,6 @@ class CreateResellerPriceForm extends Model
 
     public function fetchGames()
     {
-        return ArrayHelper::map(Game::find()->select(['id', 'title'])->all(), 'id', 'title');
+        return Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title', 'price1', 'expected_profit', 'reseller_price_amplitude'])->all();
     }
 }

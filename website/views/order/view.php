@@ -17,8 +17,12 @@ use yii\helpers\Url;
       <p><span class="list-item">Version:</span><b>Global</b></p>
       <p><span class="list-item">Total Unit:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_unit), $order->unit_name);?></b></p>
       <hr />
-      <p><span class="list-item">Payment:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->sub_total_price, 2), 'USD');?></b></p>
+      <?php if ($order->total_discount) : ?>
+      <p><span class="list-item">Discount:</span><b class="text-red"><?=sprintf("(%s) %s", StringHelper::numberFormat($order->total_discount, 2), 'USD');?></b></p>
+      <?php endif;?>
       <p><span class="list-item">Transfer fee:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_fee, 2), 'USD');?></b></p>
+      <hr />
+      <p><span class="list-item">Final Payment:</span><b class="text-red"><?=sprintf("%s %s", StringHelper::numberFormat($order->total_price, 2), 'USD');?></b></p>
     </div>
     <div class="col-md-6">
       <?=$order->getPaymentData();?>

@@ -7,6 +7,7 @@ use backend\models\Game;
 use backend\models\GamePriceLog;
 use backend\models\User;
 use backend\models\GameSubscriber;
+use backend\models\ResellerPrice;
 use yii\helpers\ArrayHelper;
 use backend\components\notifications\GameNotification;
 
@@ -17,6 +18,8 @@ class UpdateGamePriceForm extends Model
     public $price2;
     public $price3;
     public $price_remark;
+    public $reseller_price_amplitude;
+    public $change_price_request_code;
 
     protected $_game;
 
@@ -25,6 +28,8 @@ class UpdateGamePriceForm extends Model
         return [
             [['id'], 'required'],
             [['price1', 'price2', 'price3', 'price_remark'], 'safe'],
+            ['reseller_price_amplitude', 'safe'],
+            ['change_price_request_code', 'safe'],
         ];
     }
 
@@ -34,7 +39,9 @@ class UpdateGamePriceForm extends Model
             'price1' => 'Giá nhà cung cấp 1',
             'price2' => 'Giá nhà cung cấp 2',
             'price3' => 'Giá nhà cung cấp 3',
-            'price_remark' => 'Price Remark'
+            'price_remark' => 'Price Remark',
+            'reseller_price_amplitude' => 'Biên độ giá reseller',
+            'change_price_request_code' => 'Mã đề xuất'
         ];
     }
 
@@ -88,13 +95,30 @@ class UpdateGamePriceForm extends Model
                 // Notify to users who subscried the game
                 $subscribers = GameSubscriber::find()->where(['game_id' => $game->id])->select(['user_id'])->all();
                 $subscriberIds = ArrayHelper::getColumn($subscribers, 'user_id');
-                if (!count($subscriberIds)) return; // there is no user subscribe this game
-                $game->pushNotification(GameNotification::NOTIFY_NEW_PRICE, $subscriberIds);
+
+                // Notify reseller
+                $resellers = ResellerPrice::find()->where(['game_id' => $game->id])->select(['reseller_id'])->all();
+                $resellerIds = ArrayHelper::getColumn($subscribers, 'reseller_id');
+
+                // Notify saler
+                $salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+                $salerTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('sale_manager');
+                $salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds);
+                $salerTeamIds = array_unique($salerTeamIds);
+
+                $userIds = array_merge($subscriberIds, $resellerIds, $salerTeamIds);
+
+                if (!count($userIds)) return; // there is no user subscribe this game
+                $game->pushNotification(GameNotification::NOTIFY_NEW_PRICE, $userIds);
             });
+            // reduce from 3 fields to 1 field. That's why we set the three field have same value
             $model->price1 = $this->price1;
-            $model->price2 = $this->price2;
-            $model->price3 = $this->price3;
+            $model->price2 = $this->price1;
+            $model->price3 = $this->price1;
             $model->price_remark = $this->price_remark;
+            $model->reseller_price_amplitude = $this->reseller_price_amplitude;
+            $model->change_price_request_code = $this->change_price_request_code;
+            $model->change_price_request_time = date('Y-m-d H:i:s');
             $result = $model->save();
 
             $transaction->commit();
@@ -123,5 +147,7 @@ class UpdateGamePriceForm extends Model
         $this->price2 = $game->price2;
         $this->price3 = $game->price3;
         $this->price_remark = $game->price_remark;
+        $this->reseller_price_amplitude = $game->reseller_price_amplitude;
+        $this->change_price_request_code = $game->change_price_request_code;
     }
 }
