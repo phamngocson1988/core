@@ -41,7 +41,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term'],
+                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term', 'request-access'],
                         'allow' => true,
                     ],
                     [
@@ -251,18 +251,18 @@ class SiteController extends Controller
 
     public function actionTest()
     {
-        $request = Yii::$app->request;
-        $username = $request->get('username');
-        $currentUser = Yii::$app->user->getIdentity();
-        if (Yii::$app->user->can('admin')) {
-            echo 'admin';
-            Yii::$app->user->logout();
-            $newUser = \website\models\User::findByUsername($username);
-            if ($newUser) {
-                Yii::$app->user->login($newUser, 3600 * 24 * 30);
-                echo $username;
-            }
-        }
+        // $request = Yii::$app->request;
+        // $username = $request->get('username');
+        // $currentUser = Yii::$app->user->getIdentity();
+        // if (Yii::$app->user->can('admin')) {
+        //     echo 'admin';
+        //     Yii::$app->user->logout();
+        //     $newUser = \website\models\User::findByUsername($username);
+        //     if ($newUser) {
+        //         Yii::$app->user->login($newUser, 3600 * 24 * 30);
+        //         echo $username;
+        //     }
+        // }
         die('end');
     }
 
@@ -276,6 +276,11 @@ class SiteController extends Controller
         $browser = $_SERVER['REMOTE_ADDR'];
         print_r($browser);
         die('OK');
+    }
+
+    public function actionRequestAccess()
+    {
+        return $this->render('request-access');
     }
 
 }

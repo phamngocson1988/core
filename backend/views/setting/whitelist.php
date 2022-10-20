@@ -83,7 +83,7 @@ use yii\helpers\Url;
                         <th> <?=$ip;?> </th>
                         <th> 
                           <a href='javascript:;' class="btn btn-xs grey-salsa tooltips approve" data-ip="192.168.0.2" data-pjax="0" data-container="body" data-original-title="Approve"><i class="fa fa-check"></i></a>
-                          <a href='<?=Url::to(['order/edit', 'id' => $ip]);?>' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Delete"><i class="fa fa-close"></i></a>
+                          <a href='javascript:;' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Delete"><i class="fa fa-close"></i></a>
                         </th>
                       </tr>
                       <?php endforeach;?>
