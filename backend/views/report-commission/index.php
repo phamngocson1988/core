@@ -96,7 +96,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
           <div class="col-md-12">
             <?php
             $dataByUser = $search->getCommissionByUser();
-            $users = ArrayHelper::getColumn($dataByUser, 'username', []);
+            $users = ArrayHelper::getColumn($dataByUser, 'name', []);
             $orderCommissions = ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_ORDER, []);
             $selloutCommissions = ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_SELLOUT, []);
             echo ChartJs::widget([
@@ -107,23 +107,20 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 'datasets' => [
                   [
                     'label' => "Hoa hồng",
-                    'backgroundColor' => "#439510",
-                    'borderColor' => "#439510",
-                    'pointBackgroundColor' => "#439510",
-                    'pointBorderColor' => "#fff",
-                    'pointHoverBackgroundColor' => "#fff",
-                    'pointHoverBorderColor' => "#439510",
+                    'backgroundColor' => "rgba(54, 162, 235, 0.5)",
+                    'borderColor' => "rgb(54, 162, 235)",
+                    'borderWidth' => 2,
+                    'borderRadius' => '10px',
+                    'borderSkipped' => false,
                     'data' => $orderCommissions,
                     'stack' => 'user_id',
                   ],
                   [
                     'label' => "Sellout",
-                    'backgroundColor' => "#cb1e1ed4",
-                    'borderColor' => "#cb1e1ed4",
-                    'pointBackgroundColor' => "#cb1e1ed4",
-                    'pointBorderColor' => "#fff",
-                    'pointHoverBackgroundColor' => "#fff",
-                    'pointHoverBorderColor' => "#cb1e1ed4",
+                    'backgroundColor' => "rgba(255, 99, 132, 0.5)",
+                    'borderColor' => "rgb(255, 99, 132)",
+                    'borderWidth' => 2,
+                    'borderRadius' => '10px',
                     'data' => $selloutCommissions,
                     'stack' => 'user_id',
                   ],
