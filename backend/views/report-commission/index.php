@@ -101,6 +101,10 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
             <?php
             $dataByUser = $search->getCommissionByUser();
             $users = ArrayHelper::getColumn($dataByUser, 'name', []);
+            $minColumns = 4;
+            if (count($users) < $minColumns) {
+              array_push($users, ...array_fill(0, $minColumns - count($users), []));
+            }
             $orderCommissions = ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_ORDER, []);
             $selloutCommissions = ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_SELLOUT, []);
             echo ChartJs::widget([
@@ -109,7 +113,6 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                 'height' => 100,
               ],
               'clientOptions' => [
-                'events' => ['click'],
                 'onClick' => new JsExpression(
                   "function(event, items) {
                     console.log('click', items);
@@ -203,6 +206,11 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                             </tr>
                             <?php endforeach;?>
                           </tbody>
+                          <tfooter>
+                            <td class="right"></td>
+                            <td class="center"><?=StringHelper::numberFormat(array_sum(array_column($commissionOrders, 'user_commission')), 1);?></td>
+                            <td></td>
+                          </tfooter>
                         </table>
                         <h5>Hoa hồng sellout</h5>
                         <table class="table table-bordered">
@@ -225,6 +233,11 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                             </tr>
                             <?php endforeach;?>
                           </tbody>
+                          <tfooter>
+                            <td class="right"></td>
+                            <td class="center"><?=StringHelper::numberFormat(array_sum(array_column($commissionSellOuts, 'user_commission')), 1);?></td>
+                            <td></td>
+                          </tfooter>
                         </table>
                       </div>
                     </div>
@@ -259,9 +272,9 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                 <?php endif;?>
                 <?php foreach ($commissions as $no => $commission) :?>
                 <tr>
-                  <td style="vertical-align: middle;"><?=$commission['username'];?></td>
-                  <td style="vertical-align: middle;"><?=$commission['commission_type'];?></td>
-                  <td style="vertical-align: middle;"><?=round($commission['user_commission']);?></td>
+                  <td class="center"><?=$commission['name'];?></td>
+                  <td class="center"><?=$commission['commission_type'];?></td>
+                  <td class="center"><?=StringHelper::numberFormat($commission['user_commission'], 1);?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>

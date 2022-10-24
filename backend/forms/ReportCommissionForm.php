@@ -53,6 +53,7 @@ class ReportCommissionForm extends Model
             "$userTable.username", 
             "$userTable.name", 
         ]);
+        // echo $command->createCommand()->getRawSql();die;
         $command->asArray();
         $this->_command = $command;
     }

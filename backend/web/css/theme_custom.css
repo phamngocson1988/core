@@ -31,6 +31,11 @@
 	vertical-align: middle !important;
 }
 
+.table td.right {
+	text-align: right !important;
+	vertical-align: middle !important;
+}
+
 .table th {
 	text-align: center;
 	vertical-align: middle !important;
