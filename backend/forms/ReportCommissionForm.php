@@ -49,6 +49,7 @@ class ReportCommissionForm extends Model
             "$commissionTable.commission_type", 
             "$commissionTable.role",
             "$commissionTable.user_commission", 
+            "$commissionTable.created_at", 
             "$userTable.username", 
             "$userTable.name", 
         ]);
