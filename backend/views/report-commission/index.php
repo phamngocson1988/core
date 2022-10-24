@@ -101,7 +101,43 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
             $selloutCommissions = ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_SELLOUT, []);
             echo ChartJs::widget([
               'type' => 'bar',
-              'options' => ['height' => 100],
+              'options' => [
+                'height' => 100,
+              //   'plugins' => [
+              //     'tooltip' => [
+              //       'enabled' => true,
+              //       'external' => new JsExpression(
+              //         'function(context) {
+              //           console.log(context);
+              //         }'
+              //       )
+              //     ]
+              //   ]
+              ],
+              'clientOptions' => [
+                'events' => ['click'],
+                'onClick' => new JsExpression(
+                  "function(event, item) {
+                    console.log('click', item);
+                  }"
+                ),
+                'tooltips' => [
+                  'enabled' => true,
+                  'external' => new JsExpression(
+                    "function(context) {
+                      console.log(context);
+                    }"
+                  ),
+                  'callbacks' => [
+                    'label' => new JsExpression(
+                      "function(label) {
+                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(label.value);
+                    }"
+                    )
+                  ]
+                ],
+                
+              ],
               'data' => [
                 'labels' => $users,
                 'datasets' => [
@@ -189,6 +225,20 @@ var sendForm = new AjaxFormSubmit({element: '.assign-form'});
 sendForm.success = function (data, form) {
   location.reload();
 }
+
+
+
+
+const footer = (tooltipItems) => {
+  let sum = 0;
+
+  tooltipItems.forEach(function(tooltipItem) {
+    sum += tooltipItem.parsed.y;
+  });
+  return 'Sum: ' + sum;
+};
+
+
 JS;
 $this->registerJs($script);
 ?>
