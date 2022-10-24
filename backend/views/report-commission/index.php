@@ -200,7 +200,7 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                             <?php endif;?>
                             <?php foreach ($commissionOrders as $detail) : ?>
                             <tr>
-                              <td class="center"><a href='<?=Url::to(['order/edit', 'id' => $detail['order_id']]);?>'> Order #<?=$detail['order_id'];?></a></td>
+                              <td class="center"><a href='<?=Url::to(['order/edit', 'id' => $detail['order_id']], true);?>' target='_blank'> Order #<?=$detail['order_id'];?></a></td>
                               <td class="center"><?=StringHelper::numberFormat($detail['user_commission'], 1);?></td>
                               <td class="center"><?=FormatConverter::convertToDate(strtotime($detail['created_at']), Yii::$app->params['date_time_format']);?></td>
                             </tr>
@@ -227,7 +227,7 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                             <?php endif;?>
                             <?php foreach ($commissionSellOuts as $detail) : ?>
                             <tr>
-                              <td class="center"><a href='<?=Url::to(['order/edit', 'id' => $detail['order_id']]);?>'> Order #<?=$detail['order_id'];?></a></td>
+                              <td class="center"><a href='<?=Url::to(['order/edit', 'id' => $detail['order_id']], true);?>' target='_blank'> Order #<?=$detail['order_id'];?></a></td>
                               <td class="center"><?=StringHelper::numberFormat($detail['user_commission'], 1);?></td>
                               <td class="center"><?=FormatConverter::convertToDate(strtotime($detail['created_at']), Yii::$app->params['date_time_format']);?></td>
                             </tr>
