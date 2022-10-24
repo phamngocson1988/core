@@ -132,24 +132,25 @@ class RunOrderCommissionForm extends ActionForm
 
     protected function generateOrderCommission($order, $user, $type, $role, $amount, $description) 
     {
-      $orderCommission = OrderCommission::findOne([
-        'order_id' => $order->id,
-        'user_id' => $user->id,
-        'commission_type' => $type,
-        'role' => $role
-      ]);
-      if (!$orderCommission) {
-        $orderCommission = new OrderCommission();
-      }
-      $orderCommission->order_id = $order->id;
-      $orderCommission->user_id = $user->id;
-      $orderCommission->commission_type = $type;
-      $orderCommission->role = $role;
-      $orderCommission->username = $user->username;
-      $orderCommission->user_commission = $amount;
-      $orderCommission->description = $description;
-      $orderCommission->created_at = $order->confirmed_at;
-      return $orderCommission->save();
+        if (!$amount) return;
+        $orderCommission = OrderCommission::findOne([
+          'order_id' => $order->id,
+          'user_id' => $user->id,
+          'commission_type' => $type,
+          'role' => $role
+        ]);
+        if (!$orderCommission) {
+          $orderCommission = new OrderCommission();
+        }
+        $orderCommission->order_id = $order->id;
+        $orderCommission->user_id = $user->id;
+        $orderCommission->commission_type = $type;
+        $orderCommission->role = $role;
+        $orderCommission->username = $user->username;
+        $orderCommission->user_commission = $amount;
+        $orderCommission->description = $description;
+        $orderCommission->created_at = $order->confirmed_at;
+        return $orderCommission->save();
     }
 
     protected function getUserRateProfit()

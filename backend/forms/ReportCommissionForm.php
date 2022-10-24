@@ -16,7 +16,7 @@ class ReportCommissionForm extends Model
 
     private $_command;
     /**
-     * Array: [["user_id", "username", "commission_type", "role", "user_commission"], ...]
+     * Array: [["user_id", "username", "name", "commission_type", "role", "user_commission"], ...]
      */
     protected $reportData = [];
 
@@ -34,22 +34,26 @@ class ReportCommissionForm extends Model
 
     protected function createCommand()
     {
+        $commissionTable = OrderCommission::tableName();
+        $userTable = User::tableName();
         $command = OrderCommission::find();
-        
+        $command->leftJoin($userTable, "{$commissionTable}.user_id = {$userTable}.id");
         if (count($this->user_ids)) {
             $command->andWhere(['user_id' => $this->user_ids]);
         }
-        $command->andWhere(['between', "created_at", $this->start_date . " 00:00:00",  $this->end_date . " 23:59:59"]);
-        $command->groupBy(['user_id', 'commission_type']);
+        $command->andWhere(["between", "$commissionTable.created_at", $this->start_date . " 00:00:00",  $this->end_date . " 23:59:59"]);
 
         $command->select([
-            "user_id",
-            "username",
-            "order_id",
-            "commission_type", 
-            "role",
-            "SUM(user_commission) as user_commission", 
+            "$commissionTable.user_id",
+            "$commissionTable.order_id",
+            "$commissionTable.commission_type", 
+            "$commissionTable.role",
+            "$commissionTable.user_commission", 
+            "$commissionTable.created_at", 
+            "$userTable.username", 
+            "$userTable.name", 
         ]);
+        // echo $command->createCommand()->getRawSql();die;
         $command->asArray();
         $this->_command = $command;
     }
@@ -76,7 +80,7 @@ class ReportCommissionForm extends Model
         $userIds = array_unique($userIds);
         $users = User::findAll($userIds);
 
-        return ArrayHelper::map($users, 'id', 'username');   
+        return ArrayHelper::map($users, 'id', 'name');   
     }
 
     public function getData() 
@@ -85,14 +89,15 @@ class ReportCommissionForm extends Model
     }
 
     /**
-     * @return [username => 'abc', 'total' => 10]
+     * @return [[user_id => 1, username => 'abc', 'total' => 10]]
      */
     public function getCommissionByUser()
     {
-        $groups = ArrayHelper::index($this->getData(), null, 'username');
+        $groups = ArrayHelper::index($this->getData(), null, 'user_id');
         $result = [];
         foreach (array_keys($groups) as $key) {
             $rows = $groups[$key];
+            $row = reset($rows);
             $commissionRows = array_filter($rows, function($row){
                 return $row['commission_type'] === OrderCommission::COMMSSION_TYPE_ORDER;
             });
@@ -100,7 +105,8 @@ class ReportCommissionForm extends Model
                 return $row['commission_type'] === OrderCommission::COMMSSION_TYPE_SELLOUT;
             });
             $result[] = [
-                'username' => $key, 
+                'user_id' => $key,
+                'name' => $row['name'] ? $row['name'] : $row['username'], 
                 OrderCommission::COMMSSION_TYPE_ORDER => array_sum(ArrayHelper::getColumn($commissionRows, 'user_commission')),
                 OrderCommission::COMMSSION_TYPE_SELLOUT => array_sum(ArrayHelper::getColumn($selloutRows, 'user_commission'))
             ];
