@@ -17,6 +17,7 @@ return [
         'signup/refer/<refer:[\w]+>' => 'site/signup',
         'signup/affiliate/<affiliate:[\w]+>' => 'site/signup',
         'signup' => 'site/signup',
+        'request-access' => 'site/request-access',
         // 'register/refer/<refer:[\w]+>' => 'site/register',
         // 'register/affiliate/<affiliate:[\w]+>' => 'site/register',
         // 'register' => 'site/register',

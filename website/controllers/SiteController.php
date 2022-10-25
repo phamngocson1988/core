@@ -37,6 +37,33 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+            'blockip' => [
+                'class' => AccessControl::className(),
+                'except' => ['request-access'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            $clientIp = Yii::$app->request->userIP;
+                            $clientIp = '14.161.27.138';
+                            $url = "ipinfo.io/$clientIp";
+                            $ch = curl_init();
+                            curl_setopt($ch, CURLOPT_URL, $url);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                            $response = curl_exec($ch);
+                            $payload = json_decode($response, true);
+                            curl_close($ch);
+                            if (isset($payload['country']) && $payload['country'] == 'VN') {
+                                return false;
+                            }
+                            return true;
+                        },
+                    ],
+                ],
+                'denyCallback' => function ($rule, $action) {
+                    return Yii::$app->response->redirect(['site/request-access']);
+                }
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
