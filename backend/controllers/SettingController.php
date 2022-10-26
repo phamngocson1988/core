@@ -213,11 +213,6 @@ class SettingController extends Controller
                 'modelClass' => WhitelistSettingForm::class,
                 'view' => 'whitelist.php',
                 'layoutParams' => ['main_menu_active' => 'setting.application'],
-                'on beforeSave' => function ($event) {
-                    $form = $event->form;
-                    $form->whitelist = serialize($form->whitelist);
-                    $form->unwhitelist = serialize($form->unwhitelist);
-                },
             ],
         ];
     }
@@ -243,6 +238,13 @@ class SettingController extends Controller
         ]);
     }
 
-    
-    
+    public function actionWhitelistAction()
+    {
+        $request = Yii::$app->request;
+        $ip = $request->get('ip');
+        $action = $request->get('action');
+        $service = new \backend\forms\AccessRequestActionForm(['ip' => $ip, 'action' => $action]);
+        $service->run();
+        return $this->redirect(['setting/whitelist']);
+    }
 }

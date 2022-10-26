@@ -1,6 +1,8 @@
 <?php
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+
+$records = $model->fetch();
 ?>
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -50,40 +52,26 @@ use yii\helpers\Url;
                   'itemOptions' => ['labelOptions' => ['class'=>'mt-checkbox', 'style' => 'display: block']]
                 ])->label('Chặn IP Việt Nam');?>
                 <hr/>
-                <?php $model->whitelist = @unserialize($model->whitelist);?>
-                <?=$form->field($model, 'whitelist', [
-                  'labelOptions' => ['class' => 'col-md-2 control-label'],
-                  'inputOptions' => ['class' => 'form-control', 'id' => 'whitelist'],
-                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                ])->widget(kartik\select2\Select2::classname(), [
-                  'options' => ['class' => 'form-control', 'multiple' => true],
-                  'pluginOptions' => ['tags' => true]
-                ]);?>
-                <?=$form->field($model, 'unwhitelist', [
-                  'labelOptions' => ['class' => ''],
-                  'inputOptions' => ['class' => '', 'id' => 'unwhitelist'],
-                  'template' => '{input}'
-                ])->hiddenInput();?>
-                <hr/>
-                <?php $uips = explode(",", $model->unwhitelist);?>
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <thead>
                       <tr>
                         <th> IP </th>
+                        <th> Name </th>
                         <th> Action </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <?php if (!$model->whitelist) :?>
-                      <tr><td colspan="2"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                      <?php if (!count($records)) :?>
+                      <tr><td colspan="3" class="center"><?=Yii::t('app', 'no_data_found');?></td></tr>
                       <?php else:?>
-                      <?php foreach ((array)$model->whitelist as $ip) :?>
+                      <?php foreach ($records as $record) :?>
                       <tr>
-                        <th> <?=$ip;?> </th>
+                        <th> <?=$record->ip;?> </th>
+                        <th> <?=$record->name;?> </th>
                         <th> 
-                          <a href='javascript:;' class="btn btn-xs grey-salsa tooltips approve" data-ip="192.168.0.2" data-pjax="0" data-container="body" data-original-title="Approve"><i class="fa fa-check"></i></a>
-                          <a href='javascript:;' class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Delete"><i class="fa fa-close"></i></a>
+                          <a href='<?=Url::to(['setting/whitelist-action', 'ip' => $record->ip, 'action' => 'approve']);?>' class="btn btn-xs grey-salsa tooltips approve" data-pjax="0" data-container="body" data-original-title="Approve"><i class="fa fa-check"></i></a>
+                          <a href='<?=Url::to(['setting/whitelist-action', 'ip' => $record->ip, 'action' => 'delete']);?>' class="btn btn-xs grey-salsa tooltips delete" data-pjax="0" data-container="body" data-original-title="Delete"><i class="fa fa-close"></i></a>
                         </th>
                       </tr>
                       <?php endforeach;?>
@@ -100,46 +88,3 @@ use yii\helpers\Url;
     <?php ActiveForm::end();?>
   </div>
 </div>
-
-<?php
-$script = <<< JS
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
-
-function getOptions(selectId) {
-  var options = [];
-  $(selectId + " option").each(function() {
-    options.push($(this).val());
-  });
-  return options;
-}
-
-function approve(ip) {
-  var options = getOptions('#whitelist');
-  if (options.indexOf(ip) <= -1) {
-    var newOption = new Option(ip, ip, false, false);
-    $('#whitelist').append(newOption);
-  }
-  var selectedOptions = $('#whitelist').val();
-  selectedOptions = Array.isArray(selectedOptions) ? selectedOptions : [];
-  selectedOptions.push(ip);
-  selectedOptions = selectedOptions.filter(onlyUnique);
-  $('#whitelist').val(null);
-  $('#whitelist').val(selectedOptions);
-  return false;
-}
-function remove(ip) {
-  var ips = $('#unwhitelist').val();
-  ips = ips.split(',').filter(function (x){ return x }).filter(function(x){ return x != ip });
-  $('#unwhitelist').val(ips.join(","));
-}
-$('.approve').on('click', function() {
-  approve($(this).data('ip'));
-});
-$('.remove').on('click', function() {
-  approve($(this).data('ip'));
-});
-JS;
-$this->registerJs($script);
-?>

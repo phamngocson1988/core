@@ -20,6 +20,8 @@ class m221025_110826_whitelist_ip extends Migration
             'name' => $this->string(50)->notNull(),
             'status' => $this->smallInteger()->notNull()->defaultValue(0), // 10 for active, 5 for disactive 
             'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
         ], $tableOptions);
         $this->addPrimaryKey('whitelist_ip_pk', '{{%whitelist_ip}}', ['ip']);
     }

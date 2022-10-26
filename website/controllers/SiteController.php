@@ -45,18 +45,8 @@ class SiteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             $clientIp = Yii::$app->request->userIP;
-                            $clientIp = '14.161.27.138';
-                            $url = "ipinfo.io/$clientIp";
-                            $ch = curl_init();
-                            curl_setopt($ch, CURLOPT_URL, $url);
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-                            $response = curl_exec($ch);
-                            $payload = json_decode($response, true);
-                            curl_close($ch);
-                            if (isset($payload['country']) && $payload['country'] == 'VN') {
-                                return false;
-                            }
-                            return true;
+                            $checker = new \website\forms\BlockIpAccessForm(['ip' => $clientIp]);
+                            return $checker->run();
                         },
                     ],
                 ],
@@ -307,7 +297,19 @@ class SiteController extends Controller
 
     public function actionRequestAccess()
     {
-        return $this->render('request-access');
+        $request = Yii::$app->request;
+        $model = new \website\forms\RequestAccessForm(['ip' => $request->userIP]);
+        $saveSuccess = false;
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->save()) {
+                $saveSuccess = true;
+            } else {
+                $message = $model->getErrorSummary(true);
+                $message = reset($message);
+                Yii::$app->session->setFlash('error', $message);
+            }
+        }
+        return $this->render('request-access', ['model' => $model, 'saveSuccess' => $saveSuccess]);
     }
 
 }
