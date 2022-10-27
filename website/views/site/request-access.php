@@ -2,26 +2,21 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 ?>
-<div class="section-md">
-    <div class="container container-wide" style="padding-bottom: 40px; padding-top: 40px">
-        <div class="col-md-7 mx-auto">
-            <div class="card card-summary">
-                <h5 class="card-header text-uppercase" style="color: #ff6129">Request Admin to access page</h5>
-                <div class="card-body">
-                    <div class="text-center">
-                        <?php if ($saveSuccess) :?>
-                        <p>Your request is handling by admin</p>
-                        <?php else : ?>
-                        <?php $form = ActiveForm::begin(); ?>
-                        <p>Input your name</p>
-                        <?= $form->field($model, 'name')->textInput()->label(false) ?>
-                        <?= Html::submitButton('Submit') ?>
-                        <?php ActiveForm::end();?>
-                        <?php endif;?>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<?php if ($saveSuccess) : ?>
+    <h1>ACCESS RESTRICTION!</h1>
+<div>
+    <p>Your request is sent to our team. Thank you!</p>
+    <p>&mdash; The [Admin] Team</p>
 </div>
+<?php else : ?>
+<h1>ACCESS RESTRICTION!</h1>
+<div>
+    <p>Sorry for the inconvenience. We&rsquo;re restric request from your area. Please <span style="color: #721b1b;font-weight:bold">type your name</span> and send a request to Admin team. We will process to grant permission to your account for this website.</p>
+    <p>&mdash; The [Admin] Team</p>
+</div>
+<?php $form = ActiveForm::begin(); ?>
+<?= $form->field($model, 'name')->textInput()->label(false) ?>
+<?= Html::submitButton('Submit') ?>
+<?php ActiveForm::end();?>
+<?php endif;?>
+

@@ -38,21 +38,8 @@ class SiteController extends Controller
     {
         return [
             'blockip' => [
-                'class' => AccessControl::className(),
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
                 'except' => ['request-access'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            $clientIp = Yii::$app->request->userIP;
-                            $checker = new \website\forms\BlockIpAccessForm(['ip' => $clientIp]);
-                            return $checker->run();
-                        },
-                    ],
-                ],
-                'denyCallback' => function ($rule, $action) {
-                    return Yii::$app->response->redirect(['site/request-access']);
-                }
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -297,6 +284,7 @@ class SiteController extends Controller
 
     public function actionRequestAccess()
     {
+        $this->layout = 'restriction';
         $request = Yii::$app->request;
         $model = new \website\forms\RequestAccessForm(['ip' => $request->userIP]);
         $saveSuccess = false;
