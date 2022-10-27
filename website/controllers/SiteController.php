@@ -37,11 +37,15 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+            'blockip' => [
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
+                'except' => ['request-access'],
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term'],
+                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term', 'request-access'],
                         'allow' => true,
                     ],
                     [
@@ -251,18 +255,18 @@ class SiteController extends Controller
 
     public function actionTest()
     {
-        $request = Yii::$app->request;
-        $username = $request->get('username');
-        $currentUser = Yii::$app->user->getIdentity();
-        if (Yii::$app->user->can('admin')) {
-            echo 'admin';
-            Yii::$app->user->logout();
-            $newUser = \website\models\User::findByUsername($username);
-            if ($newUser) {
-                Yii::$app->user->login($newUser, 3600 * 24 * 30);
-                echo $username;
-            }
-        }
+        // $request = Yii::$app->request;
+        // $username = $request->get('username');
+        // $currentUser = Yii::$app->user->getIdentity();
+        // if (Yii::$app->user->can('admin')) {
+        //     echo 'admin';
+        //     Yii::$app->user->logout();
+        //     $newUser = \website\models\User::findByUsername($username);
+        //     if ($newUser) {
+        //         Yii::$app->user->login($newUser, 3600 * 24 * 30);
+        //         echo $username;
+        //     }
+        // }
         die('end');
     }
 
@@ -276,6 +280,24 @@ class SiteController extends Controller
         $browser = $_SERVER['REMOTE_ADDR'];
         print_r($browser);
         die('OK');
+    }
+
+    public function actionRequestAccess()
+    {
+        $this->layout = 'restriction';
+        $request = Yii::$app->request;
+        $model = new \website\forms\RequestAccessForm(['ip' => $request->userIP]);
+        $saveSuccess = false;
+        if ($request->isPost) {
+            if ($model->load($request->post()) && $model->save()) {
+                $saveSuccess = true;
+            } else {
+                $message = $model->getErrorSummary(true);
+                $message = reset($message);
+                Yii::$app->session->setFlash('error', $message);
+            }
+        }
+        return $this->render('request-access', ['model' => $model, 'saveSuccess' => $saveSuccess]);
     }
 
 }

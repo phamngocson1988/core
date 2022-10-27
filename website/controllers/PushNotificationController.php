@@ -5,10 +5,19 @@ namespace website\controllers;
 use Yii;
 use yii\db\Query;
 use yii\helpers\Url;
+use yii\filters\AccessControl;
 
 class PushNotificationController extends Controller
 {
-
+    public function behaviors()
+    {
+        return [
+            'blockip' => [
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
+            ],
+        ];
+    }
+    
     public function actionList()
     {
         $userId = Yii::$app->getUser()->getId();

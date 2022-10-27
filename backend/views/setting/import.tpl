@@ -34,11 +34,7 @@
       </div>
       <div class="portlet-body">
         <div class="tabbable-bordered">
-          <ul class="nav nav-tabs">
-            <li class="active">
-              <a href="#tab_general" data-toggle="tab"> {Yii::t('app', 'main_content')} </a>
-            </li>
-          </ul>
+          {$this->render('@backend/views/setting/_widget_tabs.php', ['tab' => 'import'])}
           <div class="tab-content">
             <div class="tab-pane active" id="tab_general">
               <div class="form-body">

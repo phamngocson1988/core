@@ -11,6 +11,9 @@ class OrderComplainController extends Controller
     public function behaviors()
     {
         return [
+            'blockip' => [
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [

@@ -23,4 +23,7 @@ use yii\helpers\Url;
   <li <?php if ($tab == 'import') echo 'class="active"' ;?> >
     <a href="<?=Url::to(['setting/import']);?>">Mẫu import</a>
   </li>
+  <li <?php if ($tab == 'whitelist') echo 'class="active"' ;?> >
+    <a href="<?=Url::to(['setting/whitelist']);?>">White List</a>
+  </li>
 </ul>

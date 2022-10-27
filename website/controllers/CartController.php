@@ -22,6 +22,15 @@ class CartController extends Controller
     public function behaviors()
     {
         return [
+            'blockip' => [
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
+                'except' => [
+                    'payment-coin-base-callback',
+                    'payment-coin-paid-callback',
+                    'payment-webmoney-callback',
+                    'payment-binance-callback'
+                ]
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [

@@ -29,6 +29,7 @@ use backend\forms\AffiliateProgramForm;
 use backend\forms\ReferProgramForm;
 use backend\forms\TermsConditionForm;
 use backend\forms\EventForm;
+use backend\forms\WhitelistSettingForm;
 use backend\models\PaymentTransaction;
 use backend\models\UserWallet;
 use yii\data\Pagination;
@@ -207,6 +208,12 @@ class SettingController extends Controller
                 'view' => 'event.php',
                 'layoutParams' => ['main_menu_active' => 'setting.application'],
             ],
+            'whitelist' => [
+                'class' => SettingsAction::class,
+                'modelClass' => WhitelistSettingForm::class,
+                'view' => 'whitelist.php',
+                'layoutParams' => ['main_menu_active' => 'setting.application'],
+            ],
         ];
     }
 
@@ -231,6 +238,13 @@ class SettingController extends Controller
         ]);
     }
 
-    
-    
+    public function actionWhitelistAction()
+    {
+        $request = Yii::$app->request;
+        $ip = $request->get('ip');
+        $action = $request->get('action');
+        $service = new \backend\forms\AccessRequestActionForm(['ip' => $ip, 'action' => $action]);
+        $service->run();
+        return $this->redirect(['setting/whitelist']);
+    }
 }

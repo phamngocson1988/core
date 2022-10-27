@@ -6,6 +6,7 @@ use Yii;
 use yii\db\Query;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 
 use website\models\OrderComplains;
 use website\models\Order;
@@ -13,6 +14,15 @@ use yii\data\Pagination;
 
 class MessageNotificationController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'blockip' => [
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
+            ],
+        ];
+    }
+    
     public function actionIndex()
     {
         $userId = Yii::$app->getUser()->getId();

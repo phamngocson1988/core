@@ -6,10 +6,19 @@ use Yii;
 use yii\db\Query;
 use yii\helpers\Url;
 use webzop\notifications\controllers\DefaultController;
+use yii\filters\AccessControl;
 
 class NotificationController extends DefaultController
 {
-
+    public function behaviors()
+    {
+        return [
+            'blockip' => [
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
+            ],
+        ];
+    }
+    
     public function actionList()
     {
         $userId = Yii::$app->getUser()->getId();

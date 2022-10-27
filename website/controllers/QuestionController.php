@@ -13,6 +13,15 @@ use website\models\Question;
 
 class QuestionController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'blockip' => [
+                'class' => \website\components\filters\BlockIpAccessControl::className(),
+            ],
+        ];
+    }
+
 	public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'question.index';
