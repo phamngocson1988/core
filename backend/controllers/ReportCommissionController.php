@@ -45,4 +45,10 @@ class ReportCommissionController extends Controller
         ]);
         return $this->render('index');
     }
+
+    public function actionOrderDetail($id, $type, $role)
+    {
+        $order = \backend\models\Order::findOne($id);
+        return $this->renderPartial('_order-detail', ['order' => $order, 'id' => $id, 'type' => $type, 'role' => $role]);
+    }
 }
