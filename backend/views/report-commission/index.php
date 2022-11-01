@@ -260,21 +260,25 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
             <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
               <thead>
                 <tr>
-                  <th style="width: 30%;"> Nhân viên </th>
-                  <th style="width: 20%;"> Loại hoa hồng </th>
-                  <th style="width: 20%;"> Số tiền </th>
+                  <th> Đơn hàng </th>
+                  <th> Nhân viên </th>
+                  <th> Loại hoa hồng </th>
+                  <th> Số tiền </th>
                 </tr>
               </thead>
               <tbody>
                 <?php $commissions = $search->getData();?>
                 <?php if (!$commissions) :?>
-                <tr><td colspan="3"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($commissions as $no => $commission) :?>
                 <tr>
+                  <td class="center"><a href="<?=Url::to(['order/edit', 'id' => $commission['order_id']]);?>" target="_blank">#<?=$commission['order_id'];?></a></td>
                   <td class="center"><?=$commission['name'];?></td>
                   <td class="center"><?=$commission['commission_type'];?></td>
-                  <td class="center"><?=StringHelper::numberFormat($commission['user_commission'], 1);?></td>
+                  <td class="center">
+                    <a href='<?=Url::to(['report-commission/order-detail', 'id' => $commission['order_id'], 'type' => $commission['commission_type'], 'role' => $commission['role']]);?>' data-target="#order-detail" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chi tiết đơn hàng" data-toggle="modal" ><?=StringHelper::numberFormat($commission['user_commission'], 1);?></a>
+                  </td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
@@ -287,6 +291,14 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+
+<div class="modal fade" id="order-detail" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
 <?php
 $script = <<< JS
 $(".ajax-link").ajax_action({
