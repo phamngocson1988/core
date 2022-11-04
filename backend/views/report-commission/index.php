@@ -94,252 +94,36 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
           </div>
         </div>
         <?php ActiveForm::end()?>
-        <?php Pjax::begin(); ?>
-        
         <div class="row">
           <div class="col-md-12">
-            <?php
-            $dataByUser = $search->getCommissionByUser();
-            $users = ArrayHelper::getColumn($dataByUser, 'name', []);
-            $minColumns = 4;
-            if (count($users) < $minColumns) {
-              array_push($users, ...array_fill(0, $minColumns - count($users), []));
-            }
-            $orderCommissions = ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_ORDER, []);
-            $selloutCommissions = ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_SELLOUT, []);
-            echo ChartJs::widget([
-              'type' => 'bar',
-              'options' => [
-                'height' => 100,
-              ],
-              'clientOptions' => [
-                'onClick' => new JsExpression(
-                  "function(event, items) {
-                    console.log('click', items);
-                    if (!items.length) return;
-                    $('#commission-detail-' + items[0]._index).modal('show');
-                  }"
-                ),
-                'tooltips' => [
-                  'enabled' => true,
-                  'external' => new JsExpression(
-                    "function(context) {
-                      console.log(context);
-                    }"
-                  ),
-                  'callbacks' => [
-                    'label' => new JsExpression(
-                      "function(label) {
-                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(label.value);
-                    }"
-                    )
-                  ]
-                ],
-                
-              ],
-              'data' => [
-                'labels' => $users,
-                'datasets' => [
-                  [
-                    'label' => "Hoa hồng",
-                    'backgroundColor' => "rgba(54, 162, 235, 0.5)",
-                    'borderColor' => "rgb(54, 162, 235)",
-                    'borderWidth' => 2,
-                    'borderRadius' => '10px',
-                    'borderSkipped' => false,
-                    'data' => $orderCommissions,
-                    'stack' => 'user_id',
-                  ],
-                  [
-                    'label' => "Sellout",
-                    'backgroundColor' => "rgba(255, 99, 132, 0.5)",
-                    'borderColor' => "rgb(255, 99, 132)",
-                    'borderWidth' => 2,
-                    'borderRadius' => '10px',
-                    'data' => $selloutCommissions,
-                    'stack' => 'user_id',
-                  ],
-                ]
-              ]
-            ]);
-            ?>
-            <?php 
-            foreach ($dataByUser as $userIndex => $user) : 
-            ?>
-            <div class="modal fade" id="commission-detail-<?=$userIndex;?>" tabindex="-1" role="basic" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Nhân viên <?=$user['name'] ? $user['name'] : $user['username'];?></h4>
-                  </div>
-                  <div class="modal-body"> 
-                    <div class="row">
-                      <div class="col-md-12">
-                        <?php 
-                        $commissionDetailByUser = ArrayHelper::getValue($commissionDetailByUsers, $user['user_id'], []);
-                        $commissionOrders = array_filter($commissionDetailByUser, function($row) {
-                          return $row['commission_type'] === OrderCommission::COMMSSION_TYPE_ORDER;
-                        });
-                        $commissionSellOuts = array_filter($commissionDetailByUser, function($row) {
-                          return $row['commission_type'] === OrderCommission::COMMSSION_TYPE_SELLOUT;
-                        });
-                        ?>
-                        <h5>Hoa hồng đơn hàng</h5>
-                        <table class="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th> Mã đơn hàng </th>
-                              <th> Số tiền </th>
-                              <th> Ngày nhận </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php if (!$commissionOrders) :?>
-                            <tr><td colspan="3"><?=Yii::t('app', 'no_data_found');?></td></tr>
-                            <?php endif;?>
-                            <?php foreach ($commissionOrders as $detail) : ?>
-                            <tr>
-                              <td class="center"><a href='<?=Url::to(['order/edit', 'id' => $detail['order_id']], true);?>' target='_blank'> Order #<?=$detail['order_id'];?></a></td>
-                              <td class="center"><?=StringHelper::numberFormat($detail['user_commission'], 1);?></td>
-                              <td class="center"><?=FormatConverter::convertToDate(strtotime($detail['created_at']), Yii::$app->params['date_time_format']);?></td>
-                            </tr>
-                            <?php endforeach;?>
-                          </tbody>
-                          <tfooter>
-                            <td class="right"></td>
-                            <td class="center"><?=StringHelper::numberFormat(array_sum(array_column($commissionOrders, 'user_commission')), 1);?></td>
-                            <td></td>
-                          </tfooter>
-                        </table>
-                        <h5>Hoa hồng sellout</h5>
-                        <table class="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th> Mã đơn hàng </th>
-                              <th> Số tiền </th>
-                              <th> Ngày nhận </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php if (!$commissionSellOuts) :?>
-                            <tr><td colspan="3"><?=Yii::t('app', 'no_data_found');?></td></tr>
-                            <?php endif;?>
-                            <?php foreach ($commissionSellOuts as $detail) : ?>
-                            <tr>
-                              <td class="center"><a href='<?=Url::to(['order/edit', 'id' => $detail['order_id']], true);?>' target='_blank'> Order #<?=$detail['order_id'];?></a></td>
-                              <td class="center"><?=StringHelper::numberFormat($detail['user_commission'], 1);?></td>
-                              <td class="center"><?=FormatConverter::convertToDate(strtotime($detail['created_at']), Yii::$app->params['date_time_format']);?></td>
-                            </tr>
-                            <?php endforeach;?>
-                          </tbody>
-                          <tfooter>
-                            <td class="right"></td>
-                            <td class="center"><?=StringHelper::numberFormat(array_sum(array_column($commissionSellOuts, 'user_commission')), 1);?></td>
-                            <td></td>
-                          </tfooter>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
-                <!-- /.modal-content -->
-              </div>
-              <!-- /.modal-dialog -->
-            </div>
-            <?php
-            endforeach;
-            ?>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <table class="table table-striped table-bordered table-hover table-checkable" data-sortable="true" data-url="<?=Url::to(['order/index']);?>">
+            <table class="table table-striped table-bordered table-hover table-checkable">
               <thead>
                 <tr>
-                  <th> Đơn hàng </th>
                   <th> Nhân viên </th>
-                  <th> Loại hoa hồng </th>
-                  <th> Số tiền </th>
+                  <th> Sell out </th>
+                  <th> Order </th>
+                  <th> Tổng </th>
                 </tr>
               </thead>
               <tbody>
-                <?php $commissions = $search->getData();?>
-                <?php if (!$commissions) :?>
+                <?php $dataByUser = $search->getCommissionByUser();?>
+                <?php if (!count($dataByUser)) :?>
                 <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
-                <?php foreach ($commissions as $no => $commission) :?>
+                <?php foreach ($dataByUser as $userId => $commission) :?>
                 <tr>
-                  <td class="center"><a href="<?=Url::to(['order/edit', 'id' => $commission['order_id']]);?>" target="_blank">#<?=$commission['order_id'];?></a></td>
                   <td class="center"><?=$commission['name'];?></td>
-                  <td class="center"><?=$commission['commission_type'];?></td>
-                  <td class="center">
-                    <a href='<?=Url::to(['report-commission/order-detail', 'id' => $commission['order_id'], 'type' => $commission['commission_type'], 'role' => $commission['role']]);?>' data-target="#order-detail" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chi tiết đơn hàng" data-toggle="modal" ><?=StringHelper::numberFormat($commission['user_commission'], 1);?></a>
-                  </td>
+                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_SELLOUT]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT], 0);?></a></td>
+                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_ORDER]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></a></td>
+                  <td class="center"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT] + $commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
             </table>
           </div>
         </div>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-
-<div class="modal fade" id="order-detail" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    </div>
-  </div>
-</div>
-
-<?php
-$script = <<< JS
-$(".ajax-link").ajax_action({
-  method: 'POST',
-  callback: function(eletement, data) {
-    location.reload();
-  },
-  error: function(element, errors) {
-    console.log(errors);
-    alert(errors);
-  }
-});
-
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa đơn hàng này không?',
-  callback: function(data) {
-    location.reload();
-  },
-});
-
-var sendForm = new AjaxFormSubmit({element: '.assign-form'});
-sendForm.success = function (data, form) {
-  location.reload();
-}
-
-
-
-
-const footer = (tooltipItems) => {
-  let sum = 0;
-
-  tooltipItems.forEach(function(tooltipItem) {
-    sum += tooltipItem.parsed.y;
-  });
-  return 'Sum: ' + sum;
-};
-
-
-JS;
-$this->registerJs($script);
-?>
