@@ -187,11 +187,13 @@ class m181217_033141_create_order_table extends Migration
         $this->createTable('{{%order_commission}}', [
             'order_id' => $this->integer(11)->notNull(),
             'user_id' => $this->integer(11)->notNull(),
+            'game_id' => $this->integer(11)->notNull(),
+            'quantity' => $this->float(1)->notNull(),
             'commission_type' => $this->string()->notNull(),
             'role' => $this->string()->notNull(),
             'username' => $this->string(),
             'user_commission' => $this->integer(),
-            'description' => $this->string(),
+            'description' => $this->text(),
             'created_at' => $this->dateTime()->notNull(),
         ]);
         $this->addPrimaryKey('order_commission_pk', '{{%order_commission}}', ['order_id', 'user_id', 'commission_type', 'role']);

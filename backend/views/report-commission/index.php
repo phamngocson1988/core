@@ -19,6 +19,8 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstra
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $commissions = $search->getData();
+$orderIds = ArrayHelper::getColumn($commissions, 'order_id');
+$orderIds = array_unique($orderIds);
 $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
 ?>
 
@@ -57,10 +59,20 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report-commission/index']]);?>
         <div class="row">
-        <?=$form->field($search, 'user_ids', [
+          <?=$form->field($search, 'user_ids', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'user_ids[]']
+          ])->dropDownList($search->fetchUsers())->label('Nhân viên');?>
+          <?=$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'user_ids[]']
-            ])->dropDownList($search->fetchUsers())->label('Nhân viên');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->widget(kartik\select2\Select2::classname(), [
+              'data' => $search->fetchGames(),
+              'options' => ['class' => 'form-control', 'placeholder' => 'Chọn game ...'],
+              'pluginOptions' => [
+                'allowClear' => true
+              ],
+            ])->label('Tìm theo game')?>
           <?=$form->field($search, 'start_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
@@ -107,6 +119,8 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
               </thead>
               <tbody>
                 <?php $dataByUser = $search->getCommissionByUser();?>
+                <?php $sumSelloutCommission = array_sum(ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_SELLOUT));?>
+                <?php $sumOrderCommission = array_sum(ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_ORDER));?>
                 <?php if (!count($dataByUser)) :?>
                 <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
@@ -119,6 +133,12 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                 </tr>
                 <?php endforeach;?>
               </tbody>
+              <tfoot style="background-color: #999;">
+                <td class="center">Total Orders: <?=count($orderIds);?></td>
+                <td class="center"><?=StringHelper::numberFormat($sumSelloutCommission, 0);?></td>
+                <td class="center"><?=StringHelper::numberFormat($sumOrderCommission, 0);?></td>
+                <td class="center"></td>
+              </tfoot>
             </table>
           </div>
         </div>

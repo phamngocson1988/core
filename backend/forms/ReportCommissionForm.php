@@ -7,12 +7,14 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\OrderCommission;
 use backend\models\User;
+use backend\models\Game;
 
 class ReportCommissionForm extends Model
 {
     public $user_ids = [];
     public $start_date;
     public $end_date;
+    public $game_id;
 
     private $_command;
     /**
@@ -41,15 +43,20 @@ class ReportCommissionForm extends Model
         if (count($this->user_ids)) {
             $command->andWhere(['user_id' => $this->user_ids]);
         }
+        if ($this->game_id) {
+            $command->andWhere(['game_id' => $this->game_id]);
+        }
         $command->andWhere(["between", "$commissionTable.created_at", $this->start_date . " 00:00:00",  $this->end_date . " 23:59:59"]);
 
         $command->select([
             "$commissionTable.user_id",
             "$commissionTable.order_id",
+            "$commissionTable.quantity",
             "$commissionTable.commission_type", 
             "$commissionTable.role",
             "$commissionTable.user_commission", 
             "$commissionTable.created_at", 
+            "$commissionTable.description", 
             "$userTable.username", 
             "$userTable.name", 
         ]);
@@ -81,6 +88,12 @@ class ReportCommissionForm extends Model
         $users = User::findAll($userIds);
 
         return ArrayHelper::map($users, 'id', 'name');   
+    }
+
+    public function fetchGames()
+    {
+        $games = Game::find()->select(['id', 'title'])->all();
+        return ArrayHelper::map($games, 'id', 'title');   
     }
 
     public function getData() 

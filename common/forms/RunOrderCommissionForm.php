@@ -95,6 +95,7 @@ class RunOrderCommissionForm extends ActionForm
           if ($order->saler_id) {
             $saler = User::findOne($order->saler_id);
             $orderCommissionDescriptionSaler = json_encode([
+              'game_title' => $order->game_title,
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'profit_rate' => $order->profit_rate,
@@ -102,6 +103,7 @@ class RunOrderCommissionForm extends ActionForm
             ]);
             $this->generateOrderCommission($order, $saler, OrderCommission::COMMSSION_TYPE_ORDER, OrderCommission::USER_ROLE_SALER, $order->saler_order_commission, $orderCommissionDescriptionSaler);
             $selloutCommissionDescriptionSaler = json_encode([
+              'game_title' => $order->game_title,
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'commission' => $commission,
@@ -112,6 +114,7 @@ class RunOrderCommissionForm extends ActionForm
           if ($order->orderteam_id) {
             $orderteam = User::findOne($order->orderteam_id);
             $orderCommissionDescriptionOT = json_encode([
+              'game_title' => $order->game_title,
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'profit_rate' => $order->profit_rate,
@@ -119,6 +122,7 @@ class RunOrderCommissionForm extends ActionForm
             ]);
             $this->generateOrderCommission($order, $orderteam, OrderCommission::COMMSSION_TYPE_ORDER, OrderCommission::USER_ROLE_ORDERTEAM, $order->orderteam_order_commission, $orderCommissionDescriptionOT);
             $selloutCommissionDescriptionOT = json_encode([
+              'game_title' => $order->game_title,
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'commission' => $commission,
@@ -144,6 +148,8 @@ class RunOrderCommissionForm extends ActionForm
         }
         $orderCommission->order_id = $order->id;
         $orderCommission->user_id = $user->id;
+        $orderCommission->game_id = $order->game_id;
+        $orderCommission->quantity = $order->quantity;
         $orderCommission->commission_type = $type;
         $orderCommission->role = $role;
         $orderCommission->username = $user->username;
