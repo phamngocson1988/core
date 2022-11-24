@@ -63,9 +63,9 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'user_ids[]']
           ])->dropDownList($search->fetchUsers())->label('Nhân viên');?>
-          <?=$form->field($search, 'game_id', [
+          <?=$form->field($search, 'game_ids', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+              'inputOptions' => ['multiple' => 'true', 'class' => 'form-control', 'name' => 'game_ids[]']
             ])->widget(kartik\select2\Select2::classname(), [
               'data' => $search->fetchGames(),
               'options' => ['class' => 'form-control', 'placeholder' => 'Chọn game ...'],
@@ -113,7 +113,7 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                 <tr>
                   <th> Nhân viên </th>
                   <th> Sell out </th>
-                  <th> Order </th>
+                  <th> Hoa hồng </th>
                   <th> Tổng </th>
                 </tr>
               </thead>
@@ -127,8 +127,8 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                 <?php foreach ($dataByUser as $userId => $commission) :?>
                 <tr>
                   <td class="center"><?=$commission['name'];?></td>
-                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_SELLOUT]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT], 0);?></a></td>
-                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_ORDER]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></a></td>
+                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'game_ids' => $search->game_ids, 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_SELLOUT]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT], 0);?></a></td>
+                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'game_ids' => $search->game_ids, 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_ORDER]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></a></td>
                   <td class="center"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT] + $commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></td>
                 </tr>
                 <?php endforeach;?>

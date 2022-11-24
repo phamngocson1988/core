@@ -17,7 +17,10 @@ use common\components\helpers\StringHelper;
 $this->registerCssFile('vendor/assets/global/plugins/bootstrap-select/css/bootstrap-select.css', ['depends' => ['\yii\bootstrap\BootstrapAsset']]);
 $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
-
+$orderIds = ArrayHelper::getColumn($data, 'order_id');
+$orderIds = array_unique($orderIds);
+$sumQuantity = array_sum(ArrayHelper::getColumn($data, 'quantity'));
+$sumCommission = array_sum(ArrayHelper::getColumn($data, 'user_commission'));
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -84,6 +87,15 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 </tr>
                 <?php endforeach;?>
               </tbody>
+              <tfoot style="background-color: #999;">
+                <td class="center"></td>
+                <td class="center">Total Orders: <?=count($orderIds);?></td>
+                <td class="center"></td>
+                <td class="center"><?=StringHelper::numberFormat($sumQuantity, 0);?></td>
+                <td class="center"></td>
+                <td class="center"></td>
+                <td class="center"><?=StringHelper::numberFormat($sumCommission, 0);?></td>
+              </tfoot>
             </table>
           </div>
         </div>

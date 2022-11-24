@@ -14,7 +14,7 @@ class ReportCommissionForm extends Model
     public $user_ids = [];
     public $start_date;
     public $end_date;
-    public $game_id;
+    public $game_ids = [];
 
     private $_command;
     /**
@@ -43,8 +43,8 @@ class ReportCommissionForm extends Model
         if (count($this->user_ids)) {
             $command->andWhere(['user_id' => $this->user_ids]);
         }
-        if ($this->game_id) {
-            $command->andWhere(['game_id' => $this->game_id]);
+        if ($this->game_ids && count($this->game_ids)) {
+            $command->andWhere(['game_id' => $this->game_ids]);
         }
         $command->andWhere(["between", "$commissionTable.created_at", $this->start_date . " 00:00:00",  $this->end_date . " 23:59:59"]);
 
