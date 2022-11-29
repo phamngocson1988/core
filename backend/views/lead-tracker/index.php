@@ -68,7 +68,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <tr>
                 <td><?=$no + 1;?></td>
                 <td class="center"><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
-                <td><?=$model->name;?></td>
+                <td><?=sprintf("%s - %s", $model->name, $model->data);?></td>
                 <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
                 <td><?=$model->getCountryName();?></td>
                 <td><?=$model->phone;?></td>
@@ -90,7 +90,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <?php endif;?>
                 </td>
                 <td class="center">
-                  <a href="#" class="btn btn-sm green btn-outline filter-submit margin-bottom">Convert</a>
+                  <a href="<?=Url::to(['lead-tracker/convert', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Convert</a>
                 </td>
               </tr>
               <?php endforeach;?>

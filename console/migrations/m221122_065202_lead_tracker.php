@@ -17,7 +17,8 @@ class m221122_065202_lead_tracker extends Migration
 
         $this->createTable('{{%lead_tracker}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(1024),
+            'name' => $this->string(255),
+            'data' => $this->string(1024),
             'saler_id' => $this->integer(11),
             'country_code' => $this->string(10),
             'phone' => $this->string(50),

@@ -14,6 +14,7 @@ use backend\models\User;
 class CreateLeadTrackerForm extends Model
 {
     public $name;
+    public $data;
     public $saler_id;
     public $country_code;
     public $phone;
@@ -31,7 +32,7 @@ class CreateLeadTrackerForm extends Model
         return [
             ['name', 'trim'],
             ['name', 'required'],
-            [['name', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'is_potential', 'is_target'], 'safe'],
+            [['name', 'data', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'is_potential', 'is_target'], 'safe'],
         ];
     }
 
@@ -42,6 +43,7 @@ class CreateLeadTrackerForm extends Model
         }
         $leadTracker = new LeadTracker();
         $leadTracker->name = $this->name;
+        $leadTracker->data = $this->data;
         $leadTracker->saler_id = $this->saler_id;
         $leadTracker->country_code = $this->country_code;
         $leadTracker->phone = $this->phone;

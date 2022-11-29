@@ -14,7 +14,7 @@ class m130524_201442_init extends Migration
 
         $this->createTable('{{%user}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string()->notNull(),
+            'name' => $this->string(255)->notNull(),
             'firstname' => $this->string(255),
             'lastname' => $this->string(255),
             'username' => $this->string()->notNull()->unique(),

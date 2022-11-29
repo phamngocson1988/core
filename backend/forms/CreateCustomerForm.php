@@ -13,11 +13,13 @@ class CreateCustomerForm extends Model
     public $name;
     public $username;
     public $email;
+    public $country_code;
     public $phone;
     public $address;
     public $birthday;
     public $password;
     public $status;
+    public $saler_id;
     public $send_mail = false;
 
     /**
@@ -46,23 +48,8 @@ class CreateCustomerForm extends Model
 
             ['status', 'in', 'range' => array_keys(User::getUserStatus())],
 
-            [['phone', 'address', 'birthday', 'send_mail'], 'trim'],
+            [['phone', 'country_code', 'address', 'birthday', 'send_mail', 'saler_id'], 'trim'],
             ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'name' => Yii::t('app', 'name'),
-            'username' => Yii::t('app', 'username'),
-            'email' => Yii::t('app', 'email'),
-            'phone' => Yii::t('app', 'contact_phone'),
-            'address' => Yii::t('app', 'address'),
-            'birthday' => Yii::t('app', 'birthday'),
-            'password' => Yii::t('app', 'password'),
-            'status' => Yii::t('app', 'status'),
-            'send_mail' => Yii::t('app', 'send_mail_to_customer'),
         ];
     }
 
@@ -81,9 +68,11 @@ class CreateCustomerForm extends Model
         $user->name = $this->name;
         $user->username = $this->username;
         $user->email = $this->email;
+        $user->country_code = $this->country_code;
         $user->phone = $this->phone;
         $user->address = $this->address;
         $user->birthday = $this->birthday;
+        $user->saler_id = $this->saler_id;
         $user->status = $this->status;
         $user->setPassword($this->password);
         $user->generateAuthKey();

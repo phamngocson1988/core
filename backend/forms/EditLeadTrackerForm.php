@@ -16,6 +16,7 @@ class EditLeadTrackerForm extends Model
 {
     public $id;
     public $name;
+    public $data;
     public $saler_id;
     public $country_code;
     public $phone;
@@ -36,7 +37,7 @@ class EditLeadTrackerForm extends Model
             ['name', 'trim'],
             [['id', 'name'], 'required'],
             [['id'], 'validateLeadTracker'],
-            [['name', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'is_potential', 'is_target'], 'safe'],
+            [['name', 'data', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'is_potential', 'is_target'], 'safe'],
         ];
     }
 
@@ -63,6 +64,7 @@ class EditLeadTrackerForm extends Model
         }
         $leadTracker = $this->getLeadTracker();
         $leadTracker->name = $this->name;
+        $leadTracker->data = $this->data;
         $leadTracker->saler_id = $this->saler_id;
         $leadTracker->country_code = $this->country_code;
         $leadTracker->phone = $this->phone;
@@ -80,6 +82,7 @@ class EditLeadTrackerForm extends Model
     {
         $leadTracker = $this->getLeadTracker();
         $this->name = $leadTracker->name;
+        $this->data = $leadTracker->data;
         $this->saler_id = $leadTracker->saler_id;
         $this->country_code = $leadTracker->country_code;
         $this->phone = $leadTracker->phone;
