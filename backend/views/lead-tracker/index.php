@@ -1,6 +1,11 @@
 <?php
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+
+$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
+$this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => [\backend\assets\AppAsset::className()]]);
+$this->registerJsFile('@web/vendor/assets/global/plugins/datatables/datatables.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -34,15 +39,15 @@ use yii\helpers\Url;
         </div>
       </div>
       <div class="portlet-body">
-        <table class="table table-striped table-bordered table-hover table-checkable">
-          <thead>
+        <table class="table table-striped table-bordered table-hover table-checkable" id="myTable">
+          <thead style="font-weight: bold; color: white; background-color: black">
             <tr>
-              <td rowspan="2">No.</td>
-              <th colspan="3">General Information</th>
-              <th colspan="5">Personal Information</th>
-              <th rowspan="2">Potential Lead</th>
-              <th rowspan="2">Targeted Lead</th>
-              <th rowspan="2">Convert to Customer</th>
+              <td rowspan="2" class="center">No.</td>
+              <th colspan="3" class="center">General Information</th>
+              <th colspan="5" class="center">Personal Information</th>
+              <th rowspan="2" class="center">Potential Lead</th>
+              <th rowspan="2" class="center">Targeted Lead</th>
+              <th rowspan="2" class="center">Convert to Customer</th>
             </tr>
             <tr>
               <th>Index</th>
@@ -62,17 +67,31 @@ use yii\helpers\Url;
               <?php foreach ($models as $no => $model) : ?>
               <tr>
                 <td><?=$no + 1;?></td>
-                <td><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
+                <td class="center"><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                 <td><?=$model->name;?></td>
-                <td><?=$model->saler_id;?></td>
-                <td><?=$model->country_code;?></td>
+                <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
+                <td><?=$model->getCountryName();?></td>
                 <td><?=$model->phone;?></td>
                 <td><?=$model->email;?></td>
                 <td><?=$model->channel;?></td>
                 <td><?=$model->game;?></td>
-                <td><?=$model->is_potential;?></td>
-                <td><?=$model->is_target;?></td>
-                <td>Convert</td>
+                <td class="center">
+                  <?php if ($model->is_potential) :?>
+                  <span class="label label-success">YES</span>
+                  <?php else : ?>
+                  <span class="label label-default">NO</span>
+                  <?php endif;?>
+                </td>
+                <td class="center">
+                  <?php if ($model->is_target) :?>
+                  <span class="label label-success">YES</span>
+                  <?php else : ?>
+                  <span class="label label-default">NO</span>
+                  <?php endif;?>
+                </td>
+                <td class="center">
+                  <a href="#" class="btn btn-sm green btn-outline filter-submit margin-bottom">Convert</a>
+                </td>
               </tr>
               <?php endforeach;?>
           </tbody>
@@ -84,19 +103,7 @@ use yii\helpers\Url;
 </div>
 <?php
 $script = <<< JS
-// delete
-$('.delete').ajax_action({
-  method: 'DELETE',
-  confirm: true,
-  confirm_text: 'Bạn có muốn xóa danh mục game này không?',
-  callback: function(el, data) {
-    location.reload();
-    setTimeout(() => {  
-        location.reload();
-    }, 2000);
-    toastr.success(data.message); 
-  },
-});
+  $('#myTable').DataTable();
 JS;
 $this->registerJs($script);
 ?>

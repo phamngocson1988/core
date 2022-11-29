@@ -33,7 +33,8 @@ class EditLeadTrackerForm extends Model
     public function rules()
     {
         return [
-            [['id'], 'required'],
+            ['name', 'trim'],
+            [['id', 'name'], 'required'],
             [['id'], 'validateLeadTracker'],
             [['name', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'is_potential', 'is_target'], 'safe'],
         ];

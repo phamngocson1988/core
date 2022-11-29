@@ -29,6 +29,8 @@ class CreateLeadTrackerForm extends Model
     public function rules()
     {
         return [
+            ['name', 'trim'],
+            ['name', 'required'],
             [['name', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'is_potential', 'is_target'], 'safe'],
         ];
     }
