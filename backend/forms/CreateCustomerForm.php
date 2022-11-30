@@ -28,28 +28,22 @@ class CreateCustomerForm extends Model
     public function rules()
     {
         return [
-            ['name', 'trim'],
-            ['name', 'required'],
-
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('app', 'validate_alphanumeric')],
-            ['username', 'unique', 'targetClass' => '\backend\models\User', 'message' => Yii::t('app', 'validate_username_unique')],
-
-
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\backend\models\User', 'message' => Yii::t('app', 'validate_email_unique')],
+            ['email', 'unique', 'targetClass' => User::className(), 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
-            ['status', 'in', 'range' => array_keys(User::getUserStatus())],
+            [['username', 'name'], 'trim'],
 
-            [['phone', 'country_code', 'address', 'birthday', 'send_mail', 'saler_id'], 'trim'],
-            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
+            [['country_code', 'phone'], 'trim'],
+            ['phone', 'required'],
+            ['phone', 'string', 'min' => 7],
+
+            [['saler_id', 'address', 'birthday', 'status', 'send_mail'], 'safe']
         ];
     }
 
@@ -76,24 +70,47 @@ class CreateCustomerForm extends Model
         $user->status = $this->status;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        return $user->save() ? $user : null;
+        $user->save() ? $user : null;
+        if ($this->send_mail) {
+            $this->status ? $this->sendEmailNotification($user) : $this->sendMailActivation($user);
+        }
+        return true;
     }
 
-    public function getUserStatus()
-    {
-        return User::getUserStatus();
-    }
-
-    public function sendEmail()
+    public function sendMailActivation($user)
     {
         $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        $email = $this->email;
-        return Yii::$app->mailer->compose('invite_customer', ['mail' => $this])
-            ->setTo($email)
-            ->setFrom([$adminEmail => Yii::$app->name])
-            ->setSubject("[Kinggems][Notification email] Bạn nhận được thông báo từ " . Yii::$app->name)
-            ->setTextBody('Bạn nhận được thông báo về thông tin tài khoản từ kinggems.us')
-            ->send();
+        $mailer = Yii::$app->mailer;
+        $subject = sprintf('King Gems - New account is created');
+        $template = 'active_customer';
+        $fromEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+        $toEmail = $user->email;
+        $message = $mailer->compose($template, [
+            'activeUrl' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['site/activate', 'id' => $user->id, 'key' => $user->auth_key], true),
+            'user' => $user,
+            'password' => $this->password
+        ]);
+        $message->setFrom($fromEmail);
+        $message->setTo($toEmail);
+        $message->setSubject($subject);
+        $message->send($mailer);
+    }
+
+    public function sendEmailNotification($user)
+    {
+        $settings = Yii::$app->settings;
+        $mailer = Yii::$app->mailer;
+        $subject = sprintf('King Gems - New account is created');
+        $template = 'invite_customer';
+        $fromEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+        $toEmail = $user->email;
+        $message = $mailer->compose($template, [
+            'user' => $user,
+            'password' => $this->password
+        ]);
+        $message->setFrom($fromEmail);
+        $message->setTo($toEmail);
+        $message->setSubject($subject);
+        $message->send($mailer);
     }
 }

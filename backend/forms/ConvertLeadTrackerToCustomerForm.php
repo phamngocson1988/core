@@ -36,7 +36,8 @@ class ConvertLeadTrackerToCustomerForm extends Model
 
         $service = $this->getService($leadTracker);
         if (!$service->validate()) {
-            return $this->addError($attribute, 'Cannot convert this tracker to customer');
+            $errors = $service->getFirstErrors();
+            return $this->addError($attribute, reset($errors));
         }
     }
 
@@ -77,6 +78,11 @@ class ConvertLeadTrackerToCustomerForm extends Model
         $password = Yii::$app->security->generateRandomString(8);
         $service = $this->getService($leadTracker);
         $service->password = $password;
-        return $service->create();
+        if ($service->create()) {
+            $leadTracker->delete();
+            return true;
+        } else {
+            return false;
+        }
     }
 }
