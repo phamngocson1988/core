@@ -90,7 +90,11 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <?php endif;?>
                 </td>
                 <td class="center">
+                  <?php if ($model->email) : ?>
                   <a href="<?=Url::to(['lead-tracker/convert', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Convert</a>
+                  <?php else : ?>
+                  <a href="#" class="btn btn-sm grey btn-outline filter-submit margin-bottom">Need email to convert</a>
+                  <?php endif;?>
                 </td>
               </tr>
               <?php endforeach;?>
