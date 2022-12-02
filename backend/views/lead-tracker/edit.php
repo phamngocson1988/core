@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
+use common\widgets\CheckboxInput;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -44,6 +45,9 @@ use yii\web\JsExpression;
             <ul class="nav nav-tabs">
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
+              </li>
+              <li>
+                <a href="#tab_question" data-toggle="tab"> Đánh giá</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -89,16 +93,47 @@ use yii\web\JsExpression;
                     'inputOptions' => ['class' => 'bs-select form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList($model->fetchSalers(), ['prompt' => 'Chọn nhân viên sale'])->label('Nhân viên sale');?>
-                  <?=$form->field($model, 'is_potential', [
+
+                </div>
+              </div>
+              <div class="tab-pane" id="tab_question">
+                <div class="form-body">
+                  <?=$form->field($model, 'question_1', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($model->getBooleanList())->label('Khách hàng tiềm năng')?>
-                  <?=$form->field($model, 'is_target', [
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                    ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_2', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control'],
-                    'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($model->getBooleanList())->label('Khách hàng mục tiêu')?>
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_3', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_4', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_5', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_6', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_7', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_8', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
+                  <?=$form->field($model, 'question_9', [
+                    'labelOptions' => ['class' => 'col-md-2 control-label'],
+                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                  ])->widget(CheckboxInput::className())->label('');?>
 
                 </div>
               </div>

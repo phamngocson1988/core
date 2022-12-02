@@ -27,6 +27,17 @@ class m221122_065202_lead_tracker extends Migration
             'game' => $this->string(255),
             'is_potential' => $this->boolean()->defaultValue(false),
             'is_target' => $this->boolean()->defaultValue(false),
+
+            'question_1' => $this->boolean()->defaultValue(false),
+            'question_2' => $this->boolean()->defaultValue(false),
+            'question_3' => $this->boolean()->defaultValue(false),
+            'question_4' => $this->boolean()->defaultValue(false),
+            'question_5' => $this->boolean()->defaultValue(false),
+            'question_6' => $this->boolean()->defaultValue(false),
+            'question_7' => $this->boolean()->defaultValue(false),
+            'question_8' => $this->boolean()->defaultValue(false),
+            'question_9' => $this->boolean()->defaultValue(false),
+
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(11),
             'updated_at' => $this->dateTime(),

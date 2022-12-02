@@ -66,7 +66,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
-                <td><?=$no + 1;?></td>
+                <td class="center"><?=$no + 1;?></td>
                 <td class="center"><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                 <td><?=sprintf("%s - %s", $model->name, $model->data);?></td>
                 <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
