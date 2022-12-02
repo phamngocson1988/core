@@ -112,7 +112,7 @@ class LeadTracker extends ActiveRecord
 
     public function calculatePointTarget()
     {
-        $points = 0;
+        $point = 0;
         foreach (self::TARGET_COLUMNS as $key) {
             $index = array_search($key, array_column(self::QUESTIONS, 'key'));
             if ($index !== false) {
@@ -129,7 +129,7 @@ class LeadTracker extends ActiveRecord
 
     public function calculatePointPotential()
     {
-        $points = 0;
+        $point = 0;
         foreach (self::POTENTIAL_COLUMNS as $key) {
             $index = array_search($key, array_column(self::QUESTIONS, 'key'));
             if ($index !== false) {
