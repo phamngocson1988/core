@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
 $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => [\backend\assets\AppAsset::className()]]);
@@ -39,6 +40,58 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         </div>
       </div>
       <div class="portlet-body">
+      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['lead-tracker/index']]);?>
+        <div class="row margin-bottom-10">
+            <?=$form->field($search, 'id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
+            ])->textInput()->label('Index');?>
+            <?=$form->field($search, 'saler_id', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
+              'data' => $search->fetchSalers(),
+              'pluginOptions' => [
+                'allowClear' => true
+              ],
+            ])->label('Account Manager')?>
+            <?=$form->field($search, 'country_code', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            ])->widget(kartik\select2\Select2::classname(), [
+              'options' => ['class' => 'form-control', 'name' => 'country_code'],
+              'data' => $search->listCountries(),
+              'pluginOptions' => [
+                'allowClear' => true
+              ],
+            ])->label('Nationality')?>
+            <?=$form->field($search, 'phone', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'phone']
+            ])->textInput()->label('Phone');?>
+            <?=$form->field($search, 'email', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'email']
+            ])->textInput()->label('Email');?>
+            <?=$form->field($search, 'game', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game']
+            ])->textInput()->label('Game');?>
+            <?=$form->field($search, 'is_potential', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'is_potential']
+            ])->dropDownList($search->getBooleanList())->label('Potential Lead');?>
+            <?=$form->field($search, 'is_target', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'is_target']
+            ])->dropDownList($search->getBooleanList())->label('Target Lead');?>
+
+            <div class="form-group col-md-4 col-lg-3">
+              <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
+                <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
+              </button>
+            </div>
+        </div>
+        <?php ActiveForm::end()?>
         <table class="table table-striped table-bordered table-hover table-checkable" id="myTable">
           <thead style="font-weight: bold; color: white; background-color: #36c5d3">
             <tr>

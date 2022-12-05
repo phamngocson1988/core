@@ -30,8 +30,24 @@ class LeadTrackerController extends Controller
     public function actionIndex()
     {
         $this->view->params['main_menu_active'] = 'lead-tracker.index';
-        $models = \backend\models\LeadTracker::find()->all();
-        return $this->render('index', ['models' => $models]);
+        $request = Yii::$app->request;
+        $form = new \backend\forms\FetchLeadTrackerForm([
+            'id' => $request->get('id'),
+            'saler_id' => $request->get('saler_id'),
+            'country_code' => $request->get('country_code'),
+            'phone' => $request->get('phone'),
+            'game' => $request->get('game'),
+            'email' => $request->get('email'),
+            'is_potential' => $request->get('is_potential'),
+            'is_target' => $request->get('is_target'),
+        ]);
+        $models = $form->getCommand()->all();
+
+        return $this->render('index', [
+            'models' => $models,
+            'search' => $form,
+        ]);
+
     }
 
     public function actionCreate()
