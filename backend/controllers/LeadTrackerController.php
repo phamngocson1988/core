@@ -4,6 +4,8 @@ namespace backend\controllers;
 use Yii;
 use backend\controllers\Controller;
 use yii\filters\AccessControl;
+use backend\models\LeadTracker;
+use backend\models\LeadTrackerComment;
 
 class LeadTrackerController extends Controller
 {
@@ -53,7 +55,8 @@ class LeadTrackerController extends Controller
         } else {
             $model->loadData();
         }
-        return $this->render('edit', ['model' => $model]);
+        $comments = LeadTrackerComment::find()->where(['lead_tracker_id' => $id])->all();
+        return $this->render('edit', ['model' => $model, 'comments' => $comments]);
     }
 
     public function actionConvert($id)
@@ -66,5 +69,20 @@ class LeadTrackerController extends Controller
             Yii::$app->session->setFlash('success', 'Success');
         }
         return $this->redirect(['lead-tracker/index']);
+    }
+
+    public function actionAddComment($id)
+    {
+        $request = Yii::$app->request;
+        if ($request->isGet) {
+            return $this->renderPartial('_comment', ['id' => $id]);
+        } else {
+            $leadTracker = LeadTracker::findOne($id);
+            $content = $request->post('content');
+            if (trim($content)) {
+                $leadTracker->addComment($content);
+            }
+            return $this->renderJson(true);
+        }
     }
 }

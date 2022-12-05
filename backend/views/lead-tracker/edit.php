@@ -6,6 +6,7 @@ use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\widgets\CheckboxInput;
+use common\components\helpers\TimeElapsed;
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -49,6 +50,11 @@ use common\widgets\CheckboxInput;
               <li>
                 <a href="#tab_question" data-toggle="tab"> Đánh giá</a>
               </li>
+              <?php if ($comments): ?>
+              <li>
+                <a href="#tab_comment" data-toggle="tab"> Ghi chú</a>
+              </li>
+              <?php endif;?>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
@@ -137,6 +143,45 @@ use common\widgets\CheckboxInput;
 
                 </div>
               </div>
+              <?php if ($comments): ?>
+              <div class="tab-pane" id="tab_comment">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="portlet light portlet-fit bordered">
+                      <div class="portlet-body">
+                        <div class="timeline" id="comment-list" style="max-height: 500px; overflow-y: scroll;">
+                          <?php foreach ($comments as $comment) :?>
+                            <div class="timeline-item" data-id="<?=$comment->id;?>">
+                              <div class="timeline-badge">
+                                <?php if ($comment->creator->avatarImage) :?>
+                                <img class="timeline-badge-userpic" src="<?=$comment->creator->getAvatarUrl();?>"> 
+                                <?php else : ?>
+                                  <div class="timeline-icon">
+                                    <i class="icon-user-following font-green-haze"></i>
+                                  </div>
+                                <?php endif; ?>
+                              </div>
+                              <div class="timeline-body">
+                                <div class="timeline-body-arrow"> </div>
+                                <div class="timeline-body-head">
+                                  <div class="timeline-body-head-caption">
+                                    <a href="javascript:;" class="timeline-body-title font-blue-madison"><?=$comment->creator->getName();?></a>
+                                    <span class="timeline-body-time font-grey-cascade"><?=TimeElapsed::timeElapsed($comment->created_at);?></span>
+                                  </div>
+                                </div>
+                                <div class="timeline-body-content">
+                                  <span class="font-grey-cascade"><?=$comment->content;?></span>
+                                </div>
+                              </div>
+                            </div>
+                          <?php endforeach;?>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <?php endif;?>
             </div>
           </div>
         </div>

@@ -68,7 +68,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <tr>
                 <td class="center"><?=$no + 1;?></td>
                 <td class="center"><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
-                <td><?=sprintf("%s - %s", $model->name, $model->data);?></td>
+                <td><a href="<?=$model->data;?>" target="_blank"><?=$model->name;?></a></td>
                 <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
                 <td><?=$model->getCountryName();?></td>
                 <td><?=$model->phone;?></td>
@@ -95,6 +95,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <?php else : ?>
                   <a href="#" class="btn btn-sm grey btn-outline filter-submit margin-bottom">Need email to convert</a>
                   <?php endif;?>
+                  <a href='<?=Url::to(['lead-tracker/add-comment', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" ><i class="fa fa-comment"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -105,9 +106,36 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
+<div class="modal fade" id="add-comment" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 <?php
 $script = <<< JS
-  $('#myTable').DataTable();
+$('#myTable').DataTable();
+
+  // comment
+$(document).on('submit', 'body #add-comment-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      console.log(result);
+      $('#add-comment').modal('hide');
+    },
+  });
+  return false;
+});
 JS;
 $this->registerJs($script);
 ?>
