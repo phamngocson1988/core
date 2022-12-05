@@ -119,6 +119,7 @@ class LeadTracker extends ActiveRecord
                 $point += $this->$key ? self::QUESTIONS[$index]['point_yes'] : self::QUESTIONS[$index]['point_no'];
             }
         }
+        return $point;
     }
 
     public function calculateIsTarget()
@@ -136,6 +137,7 @@ class LeadTracker extends ActiveRecord
                 $point += $this->$key ? self::QUESTIONS[$index]['point_yes'] : self::QUESTIONS[$index]['point_no'];
             }
         }
+        return $point;
     }
 
     public function calculateIsPotential()

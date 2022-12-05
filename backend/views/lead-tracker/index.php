@@ -40,7 +40,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
       </div>
       <div class="portlet-body">
         <table class="table table-striped table-bordered table-hover table-checkable" id="myTable">
-          <thead style="font-weight: bold; color: white; background-color: black">
+          <thead style="font-weight: bold; color: white; background-color: #36c5d3">
             <tr>
               <td rowspan="2" class="center">No.</td>
               <th colspan="3" class="center">General Information</th>
