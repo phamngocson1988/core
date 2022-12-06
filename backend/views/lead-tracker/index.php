@@ -36,6 +36,9 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         <div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['lead-tracker/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <?php if (Yii::$app->user->can('admin')) : ?>
+            <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
+            <?php endif;?>
           </div>
         </div>
       </div>
@@ -49,7 +52,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
             <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
-              'options' => ['class' => 'form-control', 'name' => 'saler_id'],
+              'options' => ['class' => 'form-control', 'name' => 'saler_id', 'prompt' => 'Select Account Manager'],
               'data' => $search->fetchSalers(),
               'pluginOptions' => [
                 'allowClear' => true
@@ -58,7 +61,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
             <?=$form->field($search, 'country_code', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
-              'options' => ['class' => 'form-control', 'name' => 'country_code'],
+              'options' => ['class' => 'form-control', 'name' => 'country_code', 'prompt' => 'Select Country'],
               'data' => $search->listCountries(),
               'pluginOptions' => [
                 'allowClear' => true
@@ -79,11 +82,11 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
             <?=$form->field($search, 'is_potential', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'is_potential']
-            ])->dropDownList($search->getBooleanList())->label('Potential Lead');?>
+            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Potential Lead');?>
             <?=$form->field($search, 'is_target', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'is_target']
-            ])->dropDownList($search->getBooleanList())->label('Target Lead');?>
+            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Target Lead');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">

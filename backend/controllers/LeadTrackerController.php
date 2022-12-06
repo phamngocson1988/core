@@ -41,6 +41,11 @@ class LeadTrackerController extends Controller
             'is_potential' => $request->get('is_potential'),
             'is_target' => $request->get('is_target'),
         ]);
+        $mode = $request->get('mode');
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . '-lead-tracker.xls';
+            return $form->export($fileName);
+        }
         $models = $form->getCommand()->all();
 
         return $this->render('index', [
