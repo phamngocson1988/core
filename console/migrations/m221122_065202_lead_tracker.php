@@ -16,6 +16,7 @@ class m221122_065202_lead_tracker extends Migration
         }
 
         $this->createTable('{{%lead_tracker}}', [
+            // lead tracker
             'id' => $this->primaryKey(),
             'name' => $this->string(255),
             'data' => $this->string(1024),
@@ -40,6 +41,20 @@ class m221122_065202_lead_tracker extends Migration
             'created_by' => $this->integer(11),
             'updated_at' => $this->dateTime(),
             'updated_by' => $this->integer(11),
+
+            // customer tracker
+            'user_id' => $this->integer(11),
+            'converted_at' => $this->dateTime(),
+            'converted_by' => $this->integer(11),
+            'registered_at' => $this->dateTime(),
+            'sale_month_1' => $this->float(),
+            'sale_month_2' => $this->float(),
+            'sale_month_3' => $this->float(),
+            'growth_rate_1' => $this->float(),
+            'gronth_rate_2' => $this->float(),
+            'gronth_performance' => $this->float(), // growth_rate_1 - growth_rate_2
+            'is_loyalty' => $this->boolean()->defaultValue(false)
+
         ], $tableOptions);
         $this->createTable('{{%lead_tracker_comment}}', [
             'id' => $this->primaryKey(),

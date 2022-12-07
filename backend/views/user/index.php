@@ -278,6 +278,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                   </div>
                   <!-- /.modal-dialog -->
                 </div>
+                <a href="<?=Url::to(['customer-tracker/convert', 'id' => $model->id]);?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Kích hoạt customer tracker"><i class="fa fa-certificate"></i> Customer Tracker </a>
               </td>
             </tr>
             <?php endforeach;?>

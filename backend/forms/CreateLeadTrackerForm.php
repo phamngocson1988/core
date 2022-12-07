@@ -69,8 +69,10 @@ class CreateLeadTrackerForm extends Model
         $leadTracker->question_9 = $this->question_9;
         $leadTracker->is_potential = $leadTracker->calculateIsPotential();
         $leadTracker->is_target = $leadTracker->calculateIsTarget();
-        $leadTracker->save();
-        return true;
+        if ($leadTracker->save()) {
+            return $leadTracker;
+        }
+        return false;
     }
 
     public function getBooleanList() 

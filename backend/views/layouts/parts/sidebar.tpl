@@ -74,6 +74,11 @@
             <span class="title">Lead Tracker</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/customer-tracker/index'}" class="nav-link " code='customer-tracker.index'>
+            <span class="title">Customer Tracker</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

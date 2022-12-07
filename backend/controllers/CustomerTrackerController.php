@@ -4,10 +4,10 @@ namespace backend\controllers;
 use Yii;
 use backend\controllers\Controller;
 use yii\filters\AccessControl;
-use backend\models\LeadTracker;
+use backend\models\CustomerTracker;
 use backend\models\LeadTrackerComment;
 
-class LeadTrackerController extends Controller
+class CustomerTrackerController extends Controller
 {
     /**
      * @inheritdoc
@@ -29,7 +29,7 @@ class LeadTrackerController extends Controller
 
     public function actionIndex()
     {
-        $this->view->params['main_menu_active'] = 'lead-tracker.index';
+        $this->view->params['main_menu_active'] = 'customer-tracker.index';
         $request = Yii::$app->request;
         $form = new \backend\forms\FetchLeadTrackerForm([
             'id' => $request->get('id'),
@@ -43,7 +43,7 @@ class LeadTrackerController extends Controller
         ]);
         $mode = $request->get('mode');
         if ($mode === 'export') {
-            $fileName = date('YmdHis') . '-lead-tracker.xls';
+            $fileName = date('YmdHis') . '-customer-tracker.xls';
             return $form->export($fileName);
         }
         $models = $form->getCommand()->all();
@@ -55,41 +55,18 @@ class LeadTrackerController extends Controller
 
     }
 
-    public function actionCreate()
-    {
-        $request = Yii::$app->request;
-        $this->view->params['main_menu_active'] = 'lead-tracker.index';
-        $model = new \backend\forms\CreateLeadTrackerForm();
-        if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['lead-tracker/index']);
-        }
-        return $this->render('edit', ['model' => $model]);
-    }
-
     public function actionEdit($id)
     {
         $request = Yii::$app->request;
-        $this->view->params['main_menu_active'] = 'lead-tracker.index';
+        $this->view->params['main_menu_active'] = 'customer-tracker.index';
         $model = new \backend\forms\EditLeadTrackerForm(['id' => $id]);
         if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['lead-tracker/index']);
+            return $this->redirect(['customer-tracker/index']);
         } else {
             $model->loadData();
         }
         $comments = LeadTrackerComment::find()->where(['lead_tracker_id' => $id])->all();
         return $this->render('edit', ['model' => $model, 'comments' => $comments]);
-    }
-
-    public function actionConvert($id)
-    {
-        $model = new \backend\forms\ConvertLeadTrackerToCustomerForm(['id' => $id]);
-        if (!$model->convert()) {
-            $errors = $model->getFirstErrors();
-            Yii::$app->session->setFlash('error', reset($errors));
-        } else {
-            Yii::$app->session->setFlash('success', 'Success');
-        }
-        return $this->redirect(['lead-tracker/index']);
     }
 
     public function actionAddComment($id)
@@ -98,7 +75,7 @@ class LeadTrackerController extends Controller
         if ($request->isGet) {
             return $this->renderPartial('_comment', ['id' => $id]);
         } else {
-            $leadTracker = LeadTracker::findOne($id);
+            $leadTracker = CustomerTracker::findOne($id);
             $content = $request->post('content');
             if (trim($content)) {
                 $leadTracker->addComment($content);
@@ -107,9 +84,9 @@ class LeadTrackerController extends Controller
         }
     }
 
-    public function actionConvertUserToTracker($id)
+    public function actionConvert($id)
     {
-        $model = new \backend\forms\ConvertLeadTrackerToCustomerForm(['id' => $id]);
+        $model = new \backend\forms\ConvertCustomerToCustomerTrackerForm(['id' => $id]);
         if (!$model->convert()) {
             $errors = $model->getFirstErrors();
             Yii::$app->session->setFlash('error', reset($errors));
