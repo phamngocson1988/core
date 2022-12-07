@@ -31,7 +31,7 @@ class CustomerTrackerController extends Controller
     {
         $this->view->params['main_menu_active'] = 'customer-tracker.index';
         $request = Yii::$app->request;
-        $form = new \backend\forms\FetchLeadTrackerForm([
+        $form = new \backend\forms\FetchCustomerTrackerForm([
             'id' => $request->get('id'),
             'saler_id' => $request->get('saler_id'),
             'country_code' => $request->get('country_code'),

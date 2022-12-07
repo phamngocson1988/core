@@ -35,7 +35,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['lead-tracker/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn green" href="<?=Url::to(['customer-tracker/create']);?>"><?=Yii::t('app', 'add_new');?></a>
             <?php if (Yii::$app->user->can('admin')) : ?>
             <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
             <?php endif;?>
@@ -43,7 +43,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         </div>
       </div>
       <div class="portlet-body">
-      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['lead-tracker/index']]);?>
+      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer-tracker/index']]);?>
         <div class="row margin-bottom-10">
             <?=$form->field($search, 'id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -123,7 +123,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <?php foreach ($models as $no => $model) : ?>
               <tr>
                 <td class="center"><?=$no + 1;?></td>
-                <td class="center"><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
+                <td class="center"><a href='<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                 <td><a href="<?=$model->data;?>" target="_blank"><?=$model->name;?></a></td>
                 <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
                 <td><?=$model->getCountryName();?></td>
@@ -147,11 +147,11 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 </td>
                 <td class="center">
                   <?php if ($model->email) : ?>
-                  <a href="<?=Url::to(['lead-tracker/convert', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Convert</a>
+                  <a href="<?=Url::to(['customer-tracker/convert', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Convert</a>
                   <?php else : ?>
                   <a href="#" class="btn btn-sm grey btn-outline filter-submit margin-bottom">Need email to convert</a>
                   <?php endif;?>
-                  <a href='<?=Url::to(['lead-tracker/add-comment', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" ><i class="fa fa-comment"></i></a>
+                  <a href='<?=Url::to(['customer-tracker/add-comment', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" ><i class="fa fa-comment"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>

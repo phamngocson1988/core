@@ -70,11 +70,14 @@ class CreateCustomerForm extends Model
         $user->status = $this->status;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->save() ? $user : null;
-        if ($this->send_mail) {
-            $this->status ? $this->sendEmailNotification($user) : $this->sendMailActivation($user);
+        if ($user->save()) {
+            if ($this->send_mail) {
+                $this->status ? $this->sendEmailNotification($user) : $this->sendMailActivation($user);
+            }
+            return $user;
         }
-        return true;
+        $this->addError('email', 'Fail to create user');
+        return false;
     }
 
     public function sendMailActivation($user)

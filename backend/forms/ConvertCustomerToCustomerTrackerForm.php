@@ -62,6 +62,11 @@ class ConvertCustomerToCustomerTrackerForm extends Model
         return $this->_leadTracker;
     }
 
+    public function setLeadTracker($leadTracker)
+    {
+        $this->_leadTracker = $leadTracker;
+    }
+
     /**
      * Signs user up.
      *

@@ -78,8 +78,14 @@ class ConvertLeadTrackerToCustomerForm extends Model
         $password = Yii::$app->security->generateRandomString(8);
         $service = $this->getService($leadTracker);
         $service->password = $password;
+        $user = $service->create();
         if ($service->create()) {
-            $leadTracker->delete();
+            $convertCustomerTracker = new \backend\forms\ConvertCustomerToCustomerTrackerForm([
+                'id' => $user->id,
+                'lead_tracker_id' => $this->id
+            ]);
+            $convertCustomerTracker->setLeadTracker($leadTracker);
+            $convertCustomerTracker->convert();
             return true;
         } else {
             return false;
