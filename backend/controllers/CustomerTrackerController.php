@@ -32,14 +32,16 @@ class CustomerTrackerController extends Controller
         $this->view->params['main_menu_active'] = 'customer-tracker.index';
         $request = Yii::$app->request;
         $form = new \backend\forms\FetchCustomerTrackerForm([
-            'id' => $request->get('id'),
+            'name' => $request->get('name'),
             'saler_id' => $request->get('saler_id'),
             'country_code' => $request->get('country_code'),
             'phone' => $request->get('phone'),
             'game' => $request->get('game'),
             'email' => $request->get('email'),
-            'is_potential' => $request->get('is_potential'),
-            'is_target' => $request->get('is_target'),
+            'sale_growth' => $request->get('sale_growth'),
+            'product_growth' => $request->get('product_growth'),
+            'is_loyalty' => $request->get('is_loyalty'),
+            'is_dangerous' => $request->get('is_dangerous'),
         ]);
         $mode = $request->get('mode');
         if ($mode === 'export') {

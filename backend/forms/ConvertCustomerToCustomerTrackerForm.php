@@ -106,6 +106,9 @@ class ConvertCustomerToCustomerTrackerForm extends Model
         $leadTracker->converted_at = date('Y-m-d H:i:s');
         $leadTracker->converted_by = Yii::$app->user->id;
         $leadTracker->registered_at = $user->created_at;
-        return $leadTracker->save();
+        if ($leadTracker->save()) {
+            Yii::$app->queue->push(new \common\queue\RunCustomerTrackerPerformanceJob(['id' => $leadTracker->id]));
+        }
+        return true;
     }
 }

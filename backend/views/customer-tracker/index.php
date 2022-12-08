@@ -16,13 +16,13 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Quản lý lead tracker</span>
+      <span>Quản lý customer tracker</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Quản lý lead tracker</h1>
+<h1 class="page-title">Quản lý customer tracker</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">
@@ -31,11 +31,11 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
       <div class="portlet-title">
         <div class="caption font-dark">
           <i class="icon-settings font-dark"></i>
-          <span class="caption-subject bold uppercase"> Quản lý lead tracker</span>
+          <span class="caption-subject bold uppercase"> Quản lý customer tracker</span>
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['lead-tracker/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn green" href="<?=Url::to(['customer-tracker/create']);?>"><?=Yii::t('app', 'add_new');?></a>
             <?php if (Yii::$app->user->can('admin')) : ?>
             <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
             <?php endif;?>
@@ -43,21 +43,14 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         </div>
       </div>
       <div class="portlet-body">
-      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['lead-tracker/index']]);?>
+      <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer-tracker/index']]);?>
         <div class="row margin-bottom-10">
-            <?=$form->field($search, 'id', [
+            
+            
+            <?=$form->field($search, 'name', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'id']
-            ])->textInput()->label('Index');?>
-            <?=$form->field($search, 'saler_id', [
-              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-            ])->widget(kartik\select2\Select2::classname(), [
-              'options' => ['class' => 'form-control', 'name' => 'saler_id', 'prompt' => 'Select Account Manager'],
-              'data' => $search->fetchSalers(),
-              'pluginOptions' => [
-                'allowClear' => true
-              ],
-            ])->label('Account Manager')?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'name']
+            ])->textInput()->label('Name');?>
             <?=$form->field($search, 'country_code', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
@@ -79,14 +72,34 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'game']
             ])->textInput()->label('Game');?>
-            <?=$form->field($search, 'is_potential', [
+            <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'is_potential']
-            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Potential Lead');?>
-            <?=$form->field($search, 'is_target', [
+            ])->widget(kartik\select2\Select2::classname(), [
+              'options' => ['class' => 'form-control', 'name' => 'saler_id', 'prompt' => 'Select Account Manager'],
+              'data' => $search->fetchSalers(),
+              'pluginOptions' => [
+                'allowClear' => true
+              ],
+            ])->label('Account Manager')?>
+            <?=$form->field($search, 'sale_growth', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'is_target']
-            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Target Lead');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'sale_growth']
+            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Sales Growth');?>
+            <?=$form->field($search, 'product_growth', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'product_growth']
+            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Product Growth');?>
+
+            <?=$form->field($search, 'is_loyalty', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'is_loyalty']
+            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Loyalty customer');?>
+
+            <?=$form->field($search, 'is_dangerous', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'form-control', 'name' => 'is_dangerous']
+            ])->dropDownList($search->getBooleanList(), ['prompt' => '--Select--'])->label('Customer "in dangerous"');?>
+			
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -98,60 +111,81 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         <table class="table table-striped table-bordered table-hover table-checkable" id="myTable">
           <thead style="font-weight: bold; color: white; background-color: #36c5d3">
             <tr>
-              <td rowspan="2" class="center">No.</td>
-              <th colspan="3" class="center">General Information</th>
-              <th colspan="5" class="center">Personal Information</th>
-              <th rowspan="2" class="center">Potential Lead</th>
-              <th rowspan="2" class="center">Targeted Lead</th>
-              <th rowspan="2" class="center">Convert to Customer</th>
+              <td rowspan="3" class="center">No.</td>
+              <th rowspan="2" colspan="7" class="center">General Information</th>
+              <th colspan="8" class="center">Potential Customer</th>
+              <th colspan="4" class="center">Key Customer</th>
+              <th rowspan="3" class="center">Loyalty customer</th>
+              <th rowspan="3" class="center">Customer in dangerous</th>
             </tr>
             <tr>
-              <th>Index</th>
-              <th>Lead Name & Link Account</th>
-              <th>Account Manger</th>
+              <td colspan="4" class="center">Sales Performance</td>
+              <th colspan="2" class="center">Growth rate</th>
+              <th class="center">Growth speed</th>
+              <th rowspan="2" class="center">Evaluation (1st date)</th>
+              <th colspan="3" class="center">Development</th>
+              <th rowspan="2" class="center">Evaluation (1st date)</th>
+            </tr>
+            <tr>
+              <th>Name</th>
               <th>Nationality</th>
               <th>Phone</th>
               <th>Email</th>
               <th>Channel</th>
               <th>Game</th>
+              <th>Account Manager</th>
+              <th>1st month</th>
+              <th>2nd month</th>
+              <th>3rd month</th>
+              <th>Monthly Sales Target</th>
+              <th>G1</th>
+              <th>G2</th>
+              <th>G2 - G1</th>
+              <th>Sales Growth</th>
+              <th>Product Growth</th>
+              <th>% Result/ KPI</th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="12"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="22"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
                 <td class="center"><?=$no + 1;?></td>
-                <td class="center"><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
+                <td class="center"><a href='<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                 <td><a href="<?=$model->data;?>" target="_blank"><?=$model->name;?></a></td>
-                <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
                 <td><?=$model->getCountryName();?></td>
                 <td><?=$model->phone;?></td>
                 <td><?=$model->email;?></td>
                 <td><?=$model->channel;?></td>
                 <td><?=$model->game;?></td>
+                <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
+                <td><?=$model->sale_month_1;?></td>
+                <td><?=$model->sale_month_2;?></td>
+                <td><?=$model->sale_month_3;?></td>
+                <td><?=$model->sale_target;?></td>
+                <td><?=$model->growth_rate_1;?></td>
+                <td><?=$model->growth_rate_2;?></td>
+                <td><?=$model->growth_speed;?></td>
+                <td></td>
+                <td><?=$model->sale_growth;?></td>
+                <td><?=$model->product_growth;?></td>
+                <td><?=$model->kpi_growth;?></td>
+                <td></td>
                 <td class="center">
-                  <?php if ($model->is_potential) :?>
+                  <?php if ($model->is_loyalty) :?>
                   <span class="label label-success">YES</span>
                   <?php else : ?>
                   <span class="label label-default">NO</span>
                   <?php endif;?>
                 </td>
                 <td class="center">
-                  <?php if ($model->is_target) :?>
+                  <?php if ($model->is_dangerous) :?>
                   <span class="label label-success">YES</span>
                   <?php else : ?>
                   <span class="label label-default">NO</span>
                   <?php endif;?>
-                </td>
-                <td class="center">
-                  <?php if ($model->email) : ?>
-                  <a href="<?=Url::to(['lead-tracker/convert', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Convert</a>
-                  <?php else : ?>
-                  <a href="#" class="btn btn-sm grey btn-outline filter-submit margin-bottom">Need email to convert</a>
-                  <?php endif;?>
-                  <a href='<?=Url::to(['lead-tracker/add-comment', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" ><i class="fa fa-comment"></i></a>
                 </td>
               </tr>
               <?php endforeach;?>

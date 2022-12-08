@@ -50,10 +50,16 @@ class m221122_065202_lead_tracker extends Migration
             'sale_month_1' => $this->float(),
             'sale_month_2' => $this->float(),
             'sale_month_3' => $this->float(),
+            'sale_target' => $this->float(),
             'growth_rate_1' => $this->float(),
-            'gronth_rate_2' => $this->float(),
-            'gronth_performance' => $this->float(), // growth_rate_1 - growth_rate_2
-            'is_loyalty' => $this->boolean()->defaultValue(false)
+            'growth_rate_2' => $this->float(),
+            'growth_speed' => $this->float(), // growth_rate_1 - growth_rate_2
+
+            'sale_growth' => $this->boolean()->defaultValue(false),
+            'product_growth' => $this->boolean()->defaultValue(false),
+            'kpi_growth' => $this->float(),
+            'is_loyalty' => $this->boolean()->defaultValue(false),
+            'is_dangerous' => $this->boolean()->defaultValue(false)
 
         ], $tableOptions);
         $this->createTable('{{%lead_tracker_comment}}', [

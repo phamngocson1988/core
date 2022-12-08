@@ -10,14 +10,16 @@ use backend\models\User;
 
 class FetchCustomerTrackerForm extends Model
 {
-    public $id;
+    public $name;
     public $saler_id;
     public $country_code;
     public $phone;
     public $game;
     public $email;
-    public $is_potential;
-    public $is_target;
+    public $sale_growth;
+    public $product_growth;
+    public $is_loyalty;
+    public $is_dangerous;
     
     private $_command;
     
@@ -31,7 +33,7 @@ class FetchCustomerTrackerForm extends Model
     {
         $command = CustomerTracker::find();
         $condition = [
-            'id' => $this->id,
+            'name' => $this->name,
             'saler_id' => $this->saler_id,
             'country_code' => $this->country_code,
             'phone' => $this->phone,
@@ -41,11 +43,17 @@ class FetchCustomerTrackerForm extends Model
         $condition = array_filter($condition);
 
         $booleanList = $this->getBooleanList();
-        if (array_key_exists($this->is_potential, $booleanList)) {
-          $condition['is_potential'] = $this->is_potential === 'yes';
+        if (array_key_exists($this->sale_growth, $booleanList)) {
+          $condition['sale_growth'] = $this->sale_growth === 'yes';
         }
-        if (array_key_exists($this->is_target, $booleanList)) {
-          $condition['is_target'] = $this->is_target === 'yes';
+        if (array_key_exists($this->product_growth, $booleanList)) {
+          $condition['product_growth'] = $this->product_growth === 'yes';
+        }
+        if (array_key_exists($this->is_loyalty, $booleanList)) {
+            $condition['is_loyalty'] = $this->is_loyalty === 'yes';
+        }
+        if (array_key_exists($this->is_dangerous, $booleanList)) {
+            $condition['is_dangerous'] = $this->is_dangerous === 'yes';
         }
         
         if (count($condition)) {
@@ -137,8 +145,10 @@ class FetchCustomerTrackerForm extends Model
                 $model->email, 
                 $model->channel, 
                 $model->game, 
-                $model->is_potential ? 'YES' : 'NO',
-                $model->is_target ? 'YES' : 'NO',
+                $model->sale_growth ? 'YES' : 'NO',
+                $model->product_growth ? 'YES' : 'NO',
+                $model->is_loyalty ? 'YES' : 'NO',
+                $model->is_dangerous ? 'YES' : 'NO',
             ];
         }
         $file = \Yii::createObject([
