@@ -47,6 +47,8 @@ class m221122_065202_lead_tracker extends Migration
             'converted_at' => $this->dateTime(),
             'converted_by' => $this->integer(11),
             'registered_at' => $this->dateTime(),
+            // sale performance
+            'first_order_at' => $this->dateTime(),
             'sale_month_1' => $this->float(),
             'sale_month_2' => $this->float(),
             'sale_month_3' => $this->float(),
@@ -54,17 +56,34 @@ class m221122_065202_lead_tracker extends Migration
             'growth_rate_1' => $this->float(),
             'growth_rate_2' => $this->float(),
             'growth_speed' => $this->float(), // growth_rate_1 - growth_rate_2
+            'is_potential_customer' => $this->boolean()->defaultValue(false),
+            'potential_customer_at' => $this->dateTime(),
 
+            // key customer
             'sale_growth' => $this->boolean()->defaultValue(false),
             'product_growth' => $this->boolean()->defaultValue(false),
             'kpi_growth' => $this->float(),
-            'is_loyalty' => $this->boolean()->defaultValue(false),
-            'is_dangerous' => $this->boolean()->defaultValue(false)
+            'is_key_customer' => $this->boolean()->defaultValue(false),
+            'key_customer_at' => $this->dateTime(),
+
+            'is_loyalty' => $this->boolean()->defaultValue(false), // has order in every last 6 months
+            'is_dangerous' => $this->boolean()->defaultValue(false),
+            'customer_tracker_status' => $this->boolean()->defaultValue(false),
 
         ], $tableOptions);
         $this->createTable('{{%lead_tracker_comment}}', [
             'id' => $this->primaryKey(),
             'lead_tracker_id' => $this->integer(11)->notNull(),
+            'content' => $this->text(),
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        $this->createTable('{{%lead_tracker_action_log}}', [
+            'id' => $this->primaryKey(),
+            'lead_tracker_id' => $this->integer(11)->notNull(),
+            'action' => $this->string(50)->notNull(),
             'content' => $this->text(),
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(11),

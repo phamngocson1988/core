@@ -82,12 +82,21 @@ class LeadTrackerController extends Controller
 
     public function actionConvert($id)
     {
-        $model = new \backend\forms\ConvertLeadTrackerToCustomerForm(['id' => $id]);
-        if (!$model->convert()) {
-            $errors = $model->getFirstErrors();
+        $convertCustomerService = new \backend\forms\ConvertLeadTrackerToCustomerForm(['id' => $id]);
+        $user = $convertCustomerService->convert();
+        if (!$user) {
+            $errors = $convertCustomerService->getFirstErrors();
             Yii::$app->session->setFlash('error', reset($errors));
         } else {
-            Yii::$app->session->setFlash('success', 'Success');
+            Yii::$app->session->setFlash('success', 'Create new user successfully');
+            $convertTrackerService = new \backend\forms\ConvertCustomerToCustomerTrackerForm([
+                'id' => $user->id,
+                'lead_tracker_id' => $id
+            ]);
+            if (!$convertTrackerService->convert()) {
+                $errors = $convertTrackerService->getFirstErrors();
+                Yii::$app->session->setFlash('error', reset($errors));
+            }
         }
         return $this->redirect(['lead-tracker/index']);
     }

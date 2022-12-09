@@ -111,29 +111,42 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         <table class="table table-striped table-bordered table-hover table-checkable" id="myTable">
           <thead style="font-weight: bold; color: white; background-color: #36c5d3">
             <tr>
-              <td rowspan="3" class="center">No.</td>
+              <th rowspan="3" class="center">No.</th>
+              <th></th>
+              <th></th>
               <th rowspan="2" colspan="7" class="center">General Information</th>
-              <th colspan="8" class="center">Potential Customer</th>
-              <th colspan="4" class="center">Key Customer</th>
-              <th rowspan="3" class="center">Loyalty customer</th>
-              <th rowspan="3" class="center">Customer in dangerous</th>
+              <th colspan="11" class="center">Sales Performance</th>
+              <th colspan="2" class="center">Potential Customer</th>
+              <th colspan="2" class="center">Key Customer</th>
+              <th class="center">Loyalty customer</th>
+              <th class="center">Customer in dangerous</th>
+              <th rowspan="3" class="center">Actions</th>
             </tr>
             <tr>
-              <td colspan="4" class="center">Sales Performance</td>
+              <th></th>
+              <th></th>
+              <th colspan="5" class="center">Normal Customer</th>
               <th colspan="2" class="center">Growth rate</th>
               <th class="center">Growth speed</th>
-              <th rowspan="2" class="center">Evaluation (1st date)</th>
               <th colspan="3" class="center">Development</th>
               <th rowspan="2" class="center">Evaluation (1st date)</th>
+              <th rowspan="2" class="center">Date (1st date)</th>
+              <th rowspan="2" class="center">Evaluation (1st date)</th>
+              <th rowspan="2" class="center">Date (1st date)</th>              								
+              <th rowspan="2" class="center">Active 6months continously</th>              								
+              <th rowspan="2" class="center">(G1, G2<0)</th>              								
             </tr>
             <tr>
+              <th>Status</th>
+              <th>Monthly Status Customer</th>
               <th>Name</th>
               <th>Nationality</th>
               <th>Phone</th>
               <th>Email</th>
               <th>Channel</th>
-              <th>Game</th>
+              <th>Game chủ đạo</th>
               <th>Account Manager</th>
+              <th>1st order date</th>
               <th>1st month</th>
               <th>2nd month</th>
               <th>3rd month</th>
@@ -148,12 +161,31 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
           </thead>
           <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="22"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="28"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
-                <td class="center"><?=$no + 1;?></td>
                 <td class="center"><a href='<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
+                <td class="center">
+                  <?php if ($model->is_key_customer) :?>
+                  <?php if ($model->customer_tracker_status) :?>
+                  <span class="label label-success">YES</span>
+                  <?php else : ?>
+                  <span class="label label-default">NO</span>
+                  <?php endif;?>
+                  <?php else : ?>
+                    -
+                  <?php endif;?>
+                </td>
+                <td class="center">
+                  <?php if ($model->is_key_customer) :?>
+                  Key Customer
+                  <?php elseif ($model->is_potential_customer) : ?>
+                  Potential Customer
+                  <?php else : ?>
+                  Normal Custormer
+                  <?php endif;?>
+                </td>
                 <td><a href="<?=$model->data;?>" target="_blank"><?=$model->name;?></a></td>
                 <td><?=$model->getCountryName();?></td>
                 <td><?=$model->phone;?></td>
@@ -161,6 +193,8 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td><?=$model->channel;?></td>
                 <td><?=$model->game;?></td>
                 <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
+
+                <td><?=$model->first_order_at;?></td>
                 <td><?=$model->sale_month_1;?></td>
                 <td><?=$model->sale_month_2;?></td>
                 <td><?=$model->sale_month_3;?></td>
@@ -168,11 +202,25 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td><?=$model->growth_rate_1;?></td>
                 <td><?=$model->growth_rate_2;?></td>
                 <td><?=$model->growth_speed;?></td>
-                <td></td>
                 <td><?=$model->sale_growth;?></td>
                 <td><?=$model->product_growth;?></td>
                 <td><?=$model->kpi_growth;?></td>
-                <td></td>
+                <td class="center">
+                  <?php if ($model->is_potential_customer) :?>
+                  <span class="label label-success">YES</span>
+                  <?php else : ?>
+                  <span class="label label-default">NO</span>
+                  <?php endif;?>
+                </td>
+                <td><?=$model->potential_customer_at;?></td>
+                <td class="center">
+                  <?php if ($model->is_key_customer) :?>
+                  <span class="label label-success">YES</span>
+                  <?php else : ?>
+                  <span class="label label-default">NO</span>
+                  <?php endif;?>
+                </td>
+                <td><?=$model->key_customer_at;?></td>
                 <td class="center">
                   <?php if ($model->is_loyalty) :?>
                   <span class="label label-success">YES</span>
@@ -186,6 +234,10 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <?php else : ?>
                   <span class="label label-default">NO</span>
                   <?php endif;?>
+                </td>
+                <td class="center">
+                  <a href="<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Edit</a>
+                  <a href="<?=Url::to(['customer-tracker/calculate', 'id' => $model->id]);?>" class="btn btn-sm blue btn-outline filter-submit margin-bottom ajax-link">Calculate</a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -225,6 +277,17 @@ $(document).on('submit', 'body #add-comment-form', function(e) {
     },
   });
   return false;
+});
+
+$(".ajax-link").ajax_action({
+  method: 'GET',
+  callback: function(eletement, data) {
+    location.reload();
+  },
+  error: function(element, errors) {
+    console.log(errors);
+    alert(errors);
+  }
 });
 JS;
 $this->registerJs($script);

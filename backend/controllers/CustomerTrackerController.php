@@ -61,7 +61,7 @@ class CustomerTrackerController extends Controller
     {
         $request = Yii::$app->request;
         $this->view->params['main_menu_active'] = 'customer-tracker.index';
-        $model = new \backend\forms\EditLeadTrackerForm(['id' => $id]);
+        $model = new \backend\forms\EditCustomerTrackerForm(['id' => $id]);
         if ($model->load($request->post()) && $model->save()) {
             return $this->redirect(['customer-tracker/index']);
         } else {
@@ -71,7 +71,7 @@ class CustomerTrackerController extends Controller
         return $this->render('edit', ['model' => $model, 'comments' => $comments]);
     }
 
-    public function actionAddComment($id)
+    public function actionAddAction($id, $action)
     {
         $request = Yii::$app->request;
         if ($request->isGet) {
@@ -80,7 +80,7 @@ class CustomerTrackerController extends Controller
             $leadTracker = CustomerTracker::findOne($id);
             $content = $request->post('content');
             if (trim($content)) {
-                $leadTracker->addComment($content);
+                $leadTracker->addAction($action, $content);
             }
             return $this->renderJson(true);
         }
@@ -96,5 +96,11 @@ class CustomerTrackerController extends Controller
             Yii::$app->session->setFlash('success', 'Success');
         }
         return $this->redirect(['customer-tracker/index']);
+    }
+
+    public function actionCalculate($id)
+    {
+        $model = new \common\forms\CalculateCustomerTrackerPerformanceForm(['id' => $id]);
+        return $this->asJson(['status' => $model->run()]);
     }
 }

@@ -97,7 +97,7 @@ class ConvertCustomerToCustomerTrackerForm extends Model
               'question_9' => true,
             ]);
             $leadTracker = $createForm->save();
-            if (!$createForm->save()) {
+            if (!$leadTracker) {
               $errors = $createForm->getFirstErrors();
               return $this->addError('id', reset($errors));
             }
