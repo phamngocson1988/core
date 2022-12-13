@@ -63,7 +63,8 @@ class LeadTrackerController extends Controller
         if ($model->load($request->post()) && $model->save()) {
             return $this->redirect(['lead-tracker/index']);
         }
-        return $this->render('edit', ['model' => $model]);
+        $comments = [];
+        return $this->render('edit', ['model' => $model, 'comments' => $comments]);
     }
 
     public function actionEdit($id)

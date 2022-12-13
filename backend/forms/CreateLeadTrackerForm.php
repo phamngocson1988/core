@@ -75,6 +75,21 @@ class CreateLeadTrackerForm extends Model
         return false;
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'question_1' => $this->getQuestionTitle('question_1'),
+            'question_2' => $this->getQuestionTitle('question_2'),
+            'question_3' => $this->getQuestionTitle('question_3'),
+            'question_4' => $this->getQuestionTitle('question_4'),
+            'question_5' => $this->getQuestionTitle('question_5'),
+            'question_6' => $this->getQuestionTitle('question_6'),
+            'question_7' => $this->getQuestionTitle('question_7'),
+            'question_8' => $this->getQuestionTitle('question_8'),
+            'question_9' => $this->getQuestionTitle('question_9'),
+        ];
+    }
+
     public function getBooleanList() 
     {
         return [
@@ -109,6 +124,8 @@ class CreateLeadTrackerForm extends Model
         $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         return $salerTeam;
     }    
+
+    public function fetchChannels()
 
     public function getQuestionTitle($question) 
     {

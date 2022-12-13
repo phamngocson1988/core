@@ -16,17 +16,17 @@ use common\components\helpers\TimeElapsed;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['task/index'])?>">Quản lý lead tracker</a>
+      <a href="<?=Url::to(['task/index'])?>">Quản lý customer tracker</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <span>Tạo / chỉnh sửa lead tracker</span>
+      <span>Tạo / chỉnh sửa customer tracker</span>
     </li>
   </ul>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
-<h1 class="page-title">Tạo / chỉnh sửa lead tracker</h1>
+<h1 class="page-title">Tạo / chỉnh sửa customer tracker</h1>
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-12">

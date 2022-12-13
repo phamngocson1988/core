@@ -35,7 +35,6 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         </div>
         <div class="actions">
           <div class="btn-group btn-group-devided">
-            <a class="btn green" href="<?=Url::to(['customer-tracker/create']);?>"><?=Yii::t('app', 'add_new');?></a>
             <?php if (Yii::$app->user->can('admin')) : ?>
             <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
             <?php endif;?>
@@ -45,8 +44,6 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
       <div class="portlet-body">
       <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['customer-tracker/index']]);?>
         <div class="row margin-bottom-10">
-            
-            
             <?=$form->field($search, 'name', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'name']
@@ -165,7 +162,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
-                <td class="center"><a href='<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
+                <td class="center"><a href='<?=Url::to(['customer-tracker/view', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                 <td class="center">
                   <?php if ($model->is_key_customer) :?>
                   <?php if ($model->customer_tracker_status) :?>

@@ -15,6 +15,17 @@ class UserTracker extends ActiveRecord
 {
 	const POTENTIAL_COLUMNS = ['question_1', 'question_2', 'question_3', 'question_4'];
 	const TARGET_COLUMNS = ['question_5', 'question_6', 'question_7', 'question_8', 'question_9'];
+    const CHANNELS = [
+        'facebook' => 'Facebook', 
+        'google'  => 'Google',
+        'twitter'  => 'Twitter',
+        'instagram'  => 'Instagram',
+        'whatsapp'  => 'Whatsapp',
+        'telegram'  => 'Telegram',
+        'line'  => 'Line',
+        'skype'  => 'Skype',
+        'Email' => 'Email',
+    ];
     const QUESTIONS = [
         [
             'key' => 'question_1',

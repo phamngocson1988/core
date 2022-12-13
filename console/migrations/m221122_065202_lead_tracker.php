@@ -61,6 +61,7 @@ class m221122_065202_lead_tracker extends Migration
 
             // key customer
             'sale_growth' => $this->boolean()->defaultValue(false),
+            'number_of_game' => $this->integer(11),
             'product_growth' => $this->boolean()->defaultValue(false),
             'kpi_growth' => $this->float(),
             'is_key_customer' => $this->boolean()->defaultValue(false),

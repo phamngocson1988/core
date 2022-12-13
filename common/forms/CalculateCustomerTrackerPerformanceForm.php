@@ -53,7 +53,8 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
         $tracker->growth_speed = $tracker->growth_rate_2 - $tracker->growth_rate_1;
         $tracker->sale_growth = (max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 150)
             && (min($tracker->growth_rate_1, $tracker->growth_rate_2, $tracker->gronth_speed) > 0);
-        $tracker->product_growth = $this->findNumberOfGame($tracker->user_id) >= 2;
+        $tracker->number_of_game = $this->findNumberOfGame($tracker->user_id);
+        $tracker->product_growth = $this->number_of_game >= 2;
         if ($tracker->sale_target) {
             $tracker->kpi_growth = round($tracker->sale_month_3 / $tracker->sale_target, 2);
         }
