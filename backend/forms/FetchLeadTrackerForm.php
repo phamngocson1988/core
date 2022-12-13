@@ -14,7 +14,7 @@ class FetchLeadTrackerForm extends Model
     public $saler_id;
     public $country_code;
     public $phone;
-    public $game;
+    public $game_id;
     public $email;
     public $is_potential;
     public $is_target;
@@ -35,7 +35,7 @@ class FetchLeadTrackerForm extends Model
             'saler_id' => $this->saler_id,
             'country_code' => $this->country_code,
             'phone' => $this->phone,
-            'game' => $this->game,
+            'game_id' => $this->game_id,
             'email' => $this->email,
         ];
         $condition = array_filter($condition);
@@ -136,7 +136,7 @@ class FetchLeadTrackerForm extends Model
                 $model->phone, 
                 $model->email, 
                 $model->channel, 
-                $model->game, 
+                $model->game ? $model->game->title : '-', 
                 $model->is_potential ? 'YES' : 'NO',
                 $model->is_target ? 'YES' : 'NO',
             ];

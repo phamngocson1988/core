@@ -8,6 +8,7 @@ use backend\models\LeadTracker;
 use yii\helpers\ArrayHelper;
 use common\models\Country;
 use backend\models\User;
+use backend\models\Game;
 
 /**
  * EditLeadTrackerForm is the model behind the contact form.
@@ -22,7 +23,7 @@ class EditLeadTrackerForm extends Model
     public $phone;
     public $email;
     public $channel;
-    public $game;
+    public $game_id;
     public $question_1;
     public $question_2;
     public $question_3;
@@ -44,7 +45,7 @@ class EditLeadTrackerForm extends Model
             ['name', 'trim'],
             [['id', 'name'], 'required'],
             [['id'], 'validateLeadTracker'],
-            [['name', 'data', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game'], 'safe'],
+            [['name', 'data', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game_id'], 'safe'],
             [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
         ];
     }
@@ -78,7 +79,7 @@ class EditLeadTrackerForm extends Model
         $leadTracker->phone = $this->phone;
         $leadTracker->email = $this->email;
         $leadTracker->channel = $this->channel;
-        $leadTracker->game = $this->game;
+        $leadTracker->game_id = $this->game_id;
         $leadTracker->question_1 = $this->question_1;
         $leadTracker->question_2 = $this->question_2;
         $leadTracker->question_3 = $this->question_3;
@@ -120,7 +121,7 @@ class EditLeadTrackerForm extends Model
         $this->phone = $leadTracker->phone;
         $this->email = $leadTracker->email;
         $this->channel = $leadTracker->channel;
-        $this->game = $leadTracker->game;
+        $this->game_id = $leadTracker->game_id;
         $this->question_1 = $leadTracker->question_1;
         $this->question_2 = $leadTracker->question_2;
         $this->question_3 = $leadTracker->question_3;
@@ -165,6 +166,17 @@ class EditLeadTrackerForm extends Model
         $salerTeamObjects = User::find()->where(['id' => $salerTeamIds])->select(['id', 'email'])->all();
         $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         return $salerTeam;
+    }
+
+    public function fetchChannels()
+    {
+        return LeadTracker::CHANNELS;
+    }
+
+    public function fetchGames()
+    {
+        $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
+        return ArrayHelper::map($games, 'id', 'title');
     }
 
     public function getQuestionTitle($question) 

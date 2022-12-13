@@ -86,14 +86,14 @@ use common\components\helpers\TimeElapsed;
                   ])->textInput()->label('Email');?>
                   <?=$form->field($model, 'channel', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control'],
+                    'inputOptions' => ['class' => 'bs-select form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Channel');?>
-                  <?=$form->field($model, 'game', [
+                  ])->dropDownList($model->fetchChannels(), ['prompt' => 'Chọn channel'])->label('Channel');?>
+                  <?=$form->field($model, 'game_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control'],
+                    'inputOptions' => ['class' => 'bs-select form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Game');?>
+                  ])->dropDownList($model->fetchGames(), ['prompt' => 'Chọn game'])->label('Game');?>
                   <?=$form->field($model, 'saler_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'bs-select form-control'],
@@ -104,6 +104,7 @@ use common\components\helpers\TimeElapsed;
               </div>
               <div class="tab-pane" id="tab_question">
                 <div class="form-body">
+                  <h3>Potential Lead</h3>
                   <?=$form->field($model, 'question_1', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
@@ -120,6 +121,8 @@ use common\components\helpers\TimeElapsed;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
                   ])->widget(CheckboxInput::className())->label('');?>
+                  <hr/>
+                  <h3>Target Lead</h3>
                   <?=$form->field($model, 'question_5', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'

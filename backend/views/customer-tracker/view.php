@@ -129,7 +129,7 @@ use common\components\helpers\TimeElapsed;
               <tbody>
                 <tr>
                   <td>Monthly Sales Target</td>
-                  <td><?=round($model->sale_target * 100, 2);?>% - Achieve (x/%) - Remaining (y/%)</td>
+                  <td><?=$model->sale_target;?> - Achieve (<?=round($model->kpi_growth * 100, 2);?>%) - Remaining (<?=100 - round($model->kpi_growth * 100, 2);?>%)</td>
                 </tr>
                 <tr>
                   <td>No.of games</td>
@@ -141,11 +141,11 @@ use common\components\helpers\TimeElapsed;
                 </tr>
                 <tr>
                   <td>A.Monthly Sale volume		</td>
-                  <td>?</td>
+                  <td>???</td>
                 </tr>
                 <tr>
                   <td>A.By plan Sale volume</td>
-                  <td>?</td>
+                  <td>???</td>
                 </tr>
               </tbody>
             </table>
@@ -178,31 +178,31 @@ use common\components\helpers\TimeElapsed;
               <tbody>
                 <tr>
                   <td>Engagement</td>
-                  <td><?=round($model->sale_target * 100, 2);?></td>
-                  <td><?=round($model->sale_target * 100, 2);?></td>
-                  <td><?=round($model->sale_target * 100, 2);?></td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_1');?></td>
+                  <td><?=$model->question_1 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
                   <td rowspan="2">Network</td>
-                  <td><?=$model->number_of_game;?></td>
-                  <td><?=$model->number_of_game;?></td>
-                  <td><?=$model->number_of_game;?></td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_2');?></td>
+                  <td><?=$model->question_2 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_3');?></td>
+                  <td><?=$model->question_3 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
                   <td>Legit account</td>
-                  <td><?=$model->first_order_at;?></td>
-                  <td><?=$model->first_order_at;?></td>
-                  <td><?=$model->first_order_at;?></td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_4');?></td>
+                  <td><?=$model->question_4 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
                   <td colspan="2">Evaluation</td>
-                  <td>Score</td>
-                  <td>Yes/ No</td>
+                  <td><?=$model->calculatePointPotential();?></td>
+                  <td><?=$model->is_potential ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
             </table>
@@ -234,31 +234,36 @@ use common\components\helpers\TimeElapsed;
               </thead>
               <tbody>
                 <tr>
-                  <td rowspan="3">Demand availability</td>
-                  <td><?=round($model->sale_target * 100, 2);?></td>
-                  <td><?=round($model->sale_target * 100, 2);?></td>
-                  <td><?=round($model->sale_target * 100, 2);?></td>
+                  <td rowspan="4">Demand availability</td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_5');?></td>
+                  <td><?=$model->question_5 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
-                  <td><?=$model->number_of_game;?></td>
-                  <td><?=$model->number_of_game;?></td>
-                  <td><?=$model->number_of_game;?></td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_6');?></td>
+                  <td><?=$model->question_6 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_7');?></td>
+                  <td><?=$model->question_7 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
+                </tr>
+                <tr>
+                  <td><?=CustomerTracker::getQuestionTitle('question_8');?></td>
+                  <td><?=$model->question_8 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
                   <td>Referred</td>
-                  <td><?=$model->first_order_at;?></td>
-                  <td><?=$model->first_order_at;?></td>
-                  <td><?=$model->first_order_at;?></td>
+                  <td><?=CustomerTracker::getQuestionTitle('question_9');?></td>
+                  <td><?=$model->question_9 ? 'YES' : 'NO';?></td>
+                  <td> Update</td>
                 </tr>
                 <tr>
                   <td colspan="2">Evaluation</td>
-                  <td>Score</td>
-                  <td>Yes/ No</td>
+                  <td><?=$model->calculatePointTarget();?></td>
+                  <td><?=$model->is_target ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
             </table>
@@ -298,13 +303,13 @@ use common\components\helpers\TimeElapsed;
               </thead>
               <tbody>
                 <tr>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td><?=round($model->sale_month_1, 2);?></td>
+                  <td><?=round($model->sale_month_2, 2);?></td>
+                  <td><?=round($model->sale_month_3, 2);?></td>
+                  <td><?=round($model->growth_rate_1, 2);?></td>
+                  <td><?=round($model->growth_rate_2, 2);?></td>
+                  <td><?=round($model->growth_speed, 2);?></td>
+                  <td><?=$model->potential_customer_at;?></td>
                 </tr>
               </tbody>
             </table>
@@ -339,10 +344,10 @@ use common\components\helpers\TimeElapsed;
               </thead>
               <tbody>
                 <tr>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td><?=round($model->sale_growth, 2);?></td>
+                  <td><?=round($model->product_growth, 2);?></td>
+                  <td><?=round($model->kpi_growth * 100, 2);?>%</td>
+                  <td><?=$model->key_customer_at;?></td>
                 </tr>
               </tbody>
             </table>
@@ -367,11 +372,11 @@ use common\components\helpers\TimeElapsed;
               <tbody>
                 <tr>
                   <td>Loyalty customer (6months in row)</td>
-                  <td>Yes/No</td>
+                  <td><?=$model->is_loyalty ? 'YES' : 'NO';?></td>
                 </tr>
                 <tr>
                   <td>Customer in dangerous (G1, G2<0)</td>
-                  <td>Yes/No</td>
+                  <td><?=$model->is_dangerous ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
             </table>

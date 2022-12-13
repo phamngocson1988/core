@@ -114,6 +114,12 @@ class UserTracker extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'saler_id']);
     }
 
+    public function getGame()
+    {
+        if (!$this->game_id) return null;
+        return $this->hasOne(Game::className(), ['id' => 'game_id']);
+    }
+
     public function getCountryName()
     {
         if (!$this->country_code) return '';

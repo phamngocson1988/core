@@ -25,7 +25,7 @@ class m221122_065202_lead_tracker extends Migration
             'phone' => $this->string(50),
             'email' => $this->string(255),
             'channel' => $this->string(255),
-            'game' => $this->string(255),
+            'game_id' => $this->integer(11),
             'is_potential' => $this->boolean()->defaultValue(false),
             'is_target' => $this->boolean()->defaultValue(false),
             'question_1' => $this->boolean()->defaultValue(false),

@@ -75,10 +75,10 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'email']
             ])->textInput()->label('Email');?>
-            <?=$form->field($search, 'game', [
+            <?=$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'game']
-            ])->textInput()->label('Game');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'is_target']
+            ])->dropDownList($search->fetchGames(), ['prompt' => '--Select--'])->label('Game');?>
             <?=$form->field($search, 'is_potential', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'is_potential']
@@ -130,7 +130,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td><?=$model->phone;?></td>
                 <td><?=$model->email;?></td>
                 <td><?=$model->channel;?></td>
-                <td><?=$model->game;?></td>
+                <td><?=$model->game ? $model->game->title : '-';?></td>
                 <td class="center">
                   <?php if ($model->is_potential) :?>
                   <span class="label label-success">YES</span>
