@@ -45,8 +45,8 @@ class EditLeadTrackerForm extends Model
             [['name', 'email', 'phone'], 'trim'],
             [['id', 'name'], 'required'],
             [['id'], 'validateLeadTracker'],
-            ['email', 'validateEmail'],
-            ['phone', 'validatePhone'],
+            // ['email', 'validateEmail'],
+            // ['phone', 'validatePhone'],
             [['name', 'link', 'saler_id', 'country_code', 'channel', 'game_id'], 'safe'],
             [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
         ];

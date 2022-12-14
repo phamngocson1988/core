@@ -15,7 +15,9 @@ $salerTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('saler_manager')
 $salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds, $adminTeamIds);
 $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
-$salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
+$salerTeams = ArrayHelper::map($salerTeamObjects, 'id', function($item) {
+  return $item->getName();
+});
 ?>
 
 <!-- BEGIN PAGE BAR -->

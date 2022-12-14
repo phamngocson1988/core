@@ -65,10 +65,10 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'email']
             ])->textInput()->label('Email');?>
-            <?=$form->field($search, 'game', [
+            <?=$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'game']
-            ])->textInput()->label('Game');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->dropDownList($search->fetchGames(), ['prompt' => '--Select--'])->label('Game');?>
             <?php if (Yii::$app->user->can('admin')):?>
             <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -185,25 +185,25 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   Normal Custormer
                   <?php endif;?>
                 </td>
-                <td><a href="<?=$model->link;?>" target="_blank"><?=$model->name;?></a></td>
-                <td><?=$model->getCountryName();?></td>
-                <td><?=$model->phone;?></td>
-                <td><?=$model->email;?></td>
-                <td><?=$model->channel;?></td>
-                <td><?=$model->game;?></td>
-                <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
+                <td class="center"><a href="<?=$model->link;?>" target="_blank"><?=$model->name;?></a></td>
+                <td class="center"><?=$model->getCountryName();?></td>
+                <td class="center"><?=$model->phone;?></td>
+                <td class="center"><?=$model->email;?></td>
+                <td class="center"><?=$model->channel;?></td>
+                <td class="center"><?=$model->game ? $model->game->title : '-';?></td>
+                <td class="center"><?=$model->saler ? $model->saler->getName() : '-';?></td>
 
-                <td><?=$model->first_order_at;?></td>
-                <td><?=$model->sale_month_1;?></td>
-                <td><?=$model->sale_month_2;?></td>
-                <td><?=$model->sale_month_3;?></td>
-                <td><?=$model->sale_target;?></td>
-                <td><?=$model->growth_rate_1;?></td>
-                <td><?=$model->growth_rate_2;?></td>
-                <td><?=$model->growth_speed;?></td>
-                <td><?=$model->sale_growth;?></td>
-                <td><?=$model->product_growth;?></td>
-                <td><?=$model->kpi_growth;?></td>
+                <td class="center"><?=$model->first_order_at;?></td>
+                <td class="center"><?=$model->sale_month_1;?></td>
+                <td class="center"><?=$model->sale_month_2;?></td>
+                <td class="center"><?=$model->sale_month_3;?></td>
+                <td class="center"><?=$model->sale_target;?></td>
+                <td class="center"><?=$model->growth_rate_1;?></td>
+                <td class="center"><?=$model->growth_rate_2;?></td>
+                <td class="center"><?=$model->growth_speed;?></td>
+                <td class="center"><?=$model->sale_growth;?></td>
+                <td class="center"><?=$model->product_growth;?></td>
+                <td class="center"><?=$model->kpi_growth;?></td>
                 <td class="center">
                   <?php if ($model->is_potential_customer) :?>
                   <span class="label label-success">YES</span>
@@ -211,7 +211,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <span class="label label-default">NO</span>
                   <?php endif;?>
                 </td>
-                <td><?=$model->potential_customer_at;?></td>
+                <td class="center"><?=$model->potential_customer_at;?></td>
                 <td class="center">
                   <?php if ($model->is_key_customer) :?>
                   <span class="label label-success">YES</span>
@@ -219,7 +219,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <span class="label label-default">NO</span>
                   <?php endif;?>
                 </td>
-                <td><?=$model->key_customer_at;?></td>
+                <td class="center"><?=$model->key_customer_at;?></td>
                 <td class="center">
                   <?php if ($model->is_loyalty) :?>
                   <span class="label label-success">YES</span>

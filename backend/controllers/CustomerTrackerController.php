@@ -37,7 +37,7 @@ class CustomerTrackerController extends Controller
             'saler_id' => $isAdmin ? $request->get('saler_id') : Yii::$app->user->id,
             'country_code' => $request->get('country_code'),
             'phone' => $request->get('phone'),
-            'game' => $request->get('game'),
+            'game_id' => $request->get('game_id'),
             'email' => $request->get('email'),
             'sale_growth' => $request->get('sale_growth'),
             'product_growth' => $request->get('product_growth'),

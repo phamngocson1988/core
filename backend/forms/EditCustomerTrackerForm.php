@@ -8,6 +8,7 @@ use backend\models\CustomerTracker;
 use yii\helpers\ArrayHelper;
 use common\models\Country;
 use backend\models\User;
+use backend\models\Game;
 
 /**
  * EditCustomerTrackerForm is the model behind the contact form.
@@ -22,7 +23,7 @@ class EditCustomerTrackerForm extends Model
     public $phone;
     public $email;
     public $channel;
-    public $game;
+    public $game_id;
     public $sale_target;
     public $customer_tracker_status;
 
@@ -37,7 +38,7 @@ class EditCustomerTrackerForm extends Model
             ['name', 'trim'],
             [['id', 'name'], 'required'],
             [['id'], 'validateCustomerTracker'],
-            [['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'customer_tracker_status', 'sale_target'], 'safe'],
+            [['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game_id', 'customer_tracker_status', 'sale_target'], 'safe'],
         ];
     }
 
@@ -70,7 +71,7 @@ class EditCustomerTrackerForm extends Model
         $leadTracker->phone = $this->phone;
         $leadTracker->email = $this->email;
         $leadTracker->channel = $this->channel;
-        $leadTracker->game = $this->game;
+        $leadTracker->game_id = $this->game_id;
         $leadTracker->customer_tracker_status = $this->customer_tracker_status;
         $leadTracker->sale_target = $this->sale_target;
         $leadTracker->save();
@@ -88,7 +89,7 @@ class EditCustomerTrackerForm extends Model
         $this->phone = $leadTracker->phone;
         $this->email = $leadTracker->email;
         $this->channel = $leadTracker->channel;
-        $this->game = $leadTracker->game;
+        $this->game_id = $leadTracker->game_id;
         $this->customer_tracker_status = $leadTracker->customer_tracker_status;
         $this->sale_target = $leadTracker->sale_target;
         if ($shouldCalculatePerformance) {
@@ -135,5 +136,16 @@ class EditCustomerTrackerForm extends Model
     {
         $customerTracker = $this->getCustomerTracker();
         return $customerTracker ? $customerTracker->is_key_customer : false;
+    }
+
+    public function fetchChannels()
+    {
+        return CustomerTracker::CHANNELS;
+    }
+
+    public function fetchGames()
+    {
+        $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
+        return ArrayHelper::map($games, 'id', 'title');
     }
 }

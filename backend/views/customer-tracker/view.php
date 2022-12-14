@@ -13,8 +13,41 @@ use backend\models\CustomerTracker;
   .general-information tr>td:first-child, 
   .personal-information tr>td:first-child,
   .record-information tr>td:first-child {
-    background-color: #8bb4e7;
+    background-color: #061932;
+    color: white;
+    font-weight: bold;
   }
+  .general-information tr td:not(:first-child), 
+  .personal-information tr td:not(:first-child),
+  .record-information tr td:not(:first-child) {
+    inline-size: 70%;
+    word-break: break-all;
+  }
+
+  table .highlight-yellow {
+    background-color: #817706;
+    color: white;
+    font-weight: bold;
+  }
+
+  table .highlight-green {
+    background-color: #068154;
+    color: white;
+    font-weight: bold;
+  }
+
+  table .highlight-red {
+    background-color: #810c06;
+    color: white;
+    font-weight: bold;
+  }
+
+  table .highlight-blue {
+    background-color: #337ab7;
+    color: white;
+    font-weight: bold;
+  }
+  
 </style>
 <div class="page-bar">
   <ul class="page-breadcrumb">
@@ -30,10 +63,18 @@ use backend\models\CustomerTracker;
       <span>Profile cá nhân</span>
     </li>
   </ul>
+  <div class="page-toolbar">
+    <div class="btn">
+        <a href="<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>" class="btn green btn-sm btn-outline"> Edit
+            <i class="fa fa-pencil"></i>
+        </a>
+    </div>
+</div>
 </div>
 <!-- END PAGE BAR -->
 <!-- BEGIN PAGE TITLE-->
 <h1 class="page-title">Profile cá nhân</h1>
+
 <!-- END PAGE TITLE-->
 <div class="row">
   <div class="col-md-4">
@@ -154,11 +195,11 @@ use backend\models\CustomerTracker;
                 </tr>
                 <tr>
                   <td>Status</td>
-                  <td>???</td>
+                  <td><?=$model->customer_tracker_status ? 'YES' : 'NO';?></td>
                 </tr>
                 <tr>
                   <td>Monthly Status Customer</td>
-                  <td>???</td>
+                  <td><?=$model->customer_tracker_status ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
             </table>
@@ -181,7 +222,7 @@ use backend\models\CustomerTracker;
           <div class="panel panel-success">
             <table class="table Potential-Leads">
               <thead>
-                <tr>
+                <tr class="highlight-yellow">
                   <th>Topic</th>
                   <th>Criteria</th>
                   <th>Result</th>
@@ -190,13 +231,13 @@ use backend\models\CustomerTracker;
               </thead>
               <tbody>
                 <tr>
-                  <td>Engagement</td>
+                  <td class="highlight-yellow">Engagement</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_1');?></td>
                   <td><?=$model->question_1 ? 'YES' : 'NO';?></td>
                   <td> Update</td>
                 </tr>
                 <tr>
-                  <td rowspan="2">Network</td>
+                  <td class="highlight-yellow" rowspan="2">Network</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_2');?></td>
                   <td><?=$model->question_2 ? 'YES' : 'NO';?></td>
                   <td> Update</td>
@@ -207,12 +248,12 @@ use backend\models\CustomerTracker;
                   <td> Update</td>
                 </tr>
                 <tr>
-                  <td>Legit account</td>
+                  <td class="highlight-yellow">Legit account</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_4');?></td>
                   <td><?=$model->question_4 ? 'YES' : 'NO';?></td>
                   <td> Update</td>
                 </tr>
-                <tr>
+                <tr class="highlight-yellow">
                   <td colspan="2">Evaluation</td>
                   <td><?=$model->calculatePointPotential();?></td>
                   <td><?=$model->is_potential ? 'YES' : 'NO';?></td>
@@ -238,7 +279,7 @@ use backend\models\CustomerTracker;
           <div class="panel panel-success">
             <table class="table Target-Leads">
               <thead>
-                <tr>
+                <tr class="highlight-yellow">
                   <th>Topic</th>
                   <th>Criteria</th>
                   <th>Result</th>
@@ -247,7 +288,7 @@ use backend\models\CustomerTracker;
               </thead>
               <tbody>
                 <tr>
-                  <td rowspan="4">Demand availability</td>
+                  <td class="highlight-yellow" rowspan="4">Demand availability</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_5');?></td>
                   <td><?=$model->question_5 ? 'YES' : 'NO';?></td>
                   <td> Update</td>
@@ -268,12 +309,12 @@ use backend\models\CustomerTracker;
                   <td> Update</td>
                 </tr>
                 <tr>
-                  <td>Referred</td>
+                  <td class="highlight-yellow">Referred</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_9');?></td>
                   <td><?=$model->question_9 ? 'YES' : 'NO';?></td>
                   <td> Update</td>
                 </tr>
-                <tr>
+                <tr class="highlight-yellow">
                   <td colspan="2">Evaluation</td>
                   <td><?=$model->calculatePointTarget();?></td>
                   <td><?=$model->is_target ? 'YES' : 'NO';?></td>
@@ -299,7 +340,7 @@ use backend\models\CustomerTracker;
           <div class="panel panel-success">
             <table class="table Sales-Performance">
               <thead>
-                <tr>
+                <tr class="highlight-green">
                   <th colspan="3">Normal Customer</th>
                   <th colspan="2">Growth rate</th>
                   <th>Growth speed</th>
@@ -351,11 +392,11 @@ use backend\models\CustomerTracker;
             <table class="table Loyalty-Customer">
               <tbody>
                 <tr>
-                  <td>Loyalty customer (6months in row)</td>
+                  <td class="highlight-red">Loyalty customer (6 months in row)</td>
                   <td><?=$model->is_loyalty ? 'YES' : 'NO';?></td>
                 </tr>
                 <tr>
-                  <td>Customer in dangerous (G1, G2<0)</td>
+                  <td class="highlight-red">Customer in dangerous (G1, G2<0)</td>
                   <td><?=$model->is_dangerous ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
@@ -379,7 +420,7 @@ use backend\models\CustomerTracker;
           <div class="panel panel-success">
             <table class="table Loyalty-Customer">
               <thead>
-                <tr>
+                <tr class="highlight-blue">
                   <th>No.</th>
                   <th>Date & Time</th>
                   <th>Reason to contact</th>

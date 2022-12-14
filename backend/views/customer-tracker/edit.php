@@ -83,14 +83,14 @@ use common\components\helpers\TimeElapsed;
                   ])->textInput()->label('Email');?>
                   <?=$form->field($model, 'channel', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control'],
+                    'inputOptions' => ['class' => 'bs-select form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Channel');?>
-                  <?=$form->field($model, 'game', [
+                  ])->dropDownList($model->fetchChannels(), ['prompt' => 'Chọn channel'])->label('Channel');?>
+                  <?=$form->field($model, 'game_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'form-control'],
+                    'inputOptions' => ['class' => 'bs-select form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->textInput()->label('Game');?>
+                  ])->dropDownList($model->fetchGames(), ['prompt' => 'Chọn game'])->label('Game');?>
                   <?=$form->field($model, 'saler_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'bs-select form-control'],

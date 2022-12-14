@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use backend\models\CustomerTracker;
 use common\models\Country;
 use backend\models\User;
+use backend\models\Game;
 
 class FetchCustomerTrackerForm extends Model
 {
@@ -14,7 +15,7 @@ class FetchCustomerTrackerForm extends Model
     public $saler_id;
     public $country_code;
     public $phone;
-    public $game;
+    public $game_id;
     public $email;
     public $sale_growth;
     public $product_growth;
@@ -37,7 +38,7 @@ class FetchCustomerTrackerForm extends Model
             'saler_id' => $this->saler_id,
             'country_code' => $this->country_code,
             'phone' => $this->phone,
-            'game' => $this->game,
+            'game_id' => $this->game_id,
             'email' => $this->email,
         ];
         $condition = array_filter($condition);
@@ -75,6 +76,17 @@ class FetchCustomerTrackerForm extends Model
             'no' => 'No',
             'yes' => 'Yes'
         ];
+    }
+
+    public function fetchChannels()
+    {
+        return LeadTracker::CHANNELS;
+    }
+
+    public function fetchGames()
+    {
+        $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
+        return ArrayHelper::map($games, 'id', 'title');
     }
 
     public function listCountries()
