@@ -61,7 +61,7 @@ use common\components\helpers\TimeElapsed;
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->textInput()->label('Lead Name');?>
-                  <?=$form->field($model, 'data', [
+                  <?=$form->field($model, 'link', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'

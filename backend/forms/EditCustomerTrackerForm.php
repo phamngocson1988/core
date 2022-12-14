@@ -16,7 +16,7 @@ class EditCustomerTrackerForm extends Model
 {
     public $id;
     public $name;
-    public $data;
+    public $link;
     public $saler_id;
     public $country_code;
     public $phone;
@@ -37,7 +37,7 @@ class EditCustomerTrackerForm extends Model
             ['name', 'trim'],
             [['id', 'name'], 'required'],
             [['id'], 'validateCustomerTracker'],
-            [['name', 'data', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'customer_tracker_status', 'sale_target'], 'safe'],
+            [['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game', 'customer_tracker_status', 'sale_target'], 'safe'],
         ];
     }
 
@@ -64,7 +64,7 @@ class EditCustomerTrackerForm extends Model
         }
         $leadTracker = $this->getCustomerTracker();
         $leadTracker->name = $this->name;
-        $leadTracker->data = $this->data;
+        $leadTracker->link = $this->link;
         $leadTracker->saler_id = $this->saler_id;
         $leadTracker->country_code = $this->country_code;
         $leadTracker->phone = $this->phone;
@@ -82,7 +82,7 @@ class EditCustomerTrackerForm extends Model
         $leadTracker = $this->getCustomerTracker();
         $shouldCalculatePerformance = $this->sale_target != $leadTracker->sale_target;
         $this->name = $leadTracker->name;
-        $this->data = $leadTracker->data;
+        $this->link = $leadTracker->link;
         $this->saler_id = $leadTracker->saler_id;
         $this->country_code = $leadTracker->country_code;
         $this->phone = $leadTracker->phone;

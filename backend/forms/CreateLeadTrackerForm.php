@@ -15,7 +15,7 @@ use backend\models\Game;
 class CreateLeadTrackerForm extends Model
 {
     public $name;
-    public $data;
+    public $link;
     public $saler_id;
     public $country_code;
     public $phone;
@@ -38,11 +38,31 @@ class CreateLeadTrackerForm extends Model
     public function rules()
     {
         return [
-            ['name', 'trim'],
+            [['name', 'email', 'phone'], 'trim'],
             ['name', 'required'],
-            [['name', 'data', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game_id'], 'safe'],
+            ['email', 'validateEmail'],
+            ['phone', 'validatePhone'],
+            [['name', 'link', 'saler_id', 'country_code', 'channel', 'game_id'], 'safe'],
             [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
         ];
+    }
+
+    public function validateEmail($attribute, $params)
+    {
+        if ($this->email) {
+            if (User::find()->where(['email' => $this->email])->exists()) {
+                return $this->addError($attribute, 'Email đã có tài khoản trong kinggems');
+            }
+        }
+    }
+
+    public function validatePhone($attribute, $params)
+    {
+        if ($this->phone) {
+            if (User::find()->where(['phone' => $this->phone])->exists()) {
+                return $this->addError($attribute, 'Phone đã có tài khoản trong kinggems');
+            }
+        }
     }
 
     public function save()
@@ -52,7 +72,7 @@ class CreateLeadTrackerForm extends Model
         }
         $leadTracker = new LeadTracker();
         $leadTracker->name = $this->name;
-        $leadTracker->data = $this->data;
+        $leadTracker->link = $this->link;
         $leadTracker->saler_id = $this->saler_id;
         $leadTracker->country_code = $this->country_code;
         $leadTracker->phone = $this->phone;

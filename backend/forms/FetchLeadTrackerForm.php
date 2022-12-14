@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use backend\models\LeadTracker;
+use backend\models\Game;
 use common\models\Country;
 use backend\models\User;
 
@@ -67,6 +68,17 @@ class FetchLeadTrackerForm extends Model
             'no' => 'No',
             'yes' => 'Yes'
         ];
+    }
+
+    public function fetchChannels()
+    {
+        return LeadTracker::CHANNELS;
+    }
+
+    public function fetchGames()
+    {
+        $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
+        return ArrayHelper::map($games, 'id', 'title');
     }
 
     public function listCountries()

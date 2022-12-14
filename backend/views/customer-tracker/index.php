@@ -69,6 +69,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'game']
             ])->textInput()->label('Game');?>
+            <?php if (Yii::$app->user->can('admin')):?>
             <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
@@ -78,6 +79,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 'allowClear' => true
               ],
             ])->label('Account Manager')?>
+            <?php endif;?>
             <?=$form->field($search, 'sale_growth', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'sale_growth']
@@ -183,7 +185,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   Normal Custormer
                   <?php endif;?>
                 </td>
-                <td><a href="<?=$model->data;?>" target="_blank"><?=$model->name;?></a></td>
+                <td><a href="<?=$model->link;?>" target="_blank"><?=$model->name;?></a></td>
                 <td><?=$model->getCountryName();?></td>
                 <td><?=$model->phone;?></td>
                 <td><?=$model->email;?></td>

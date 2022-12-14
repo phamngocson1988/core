@@ -7,6 +7,7 @@ use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\widgets\CheckboxInput;
 use common\components\helpers\TimeElapsed;
+use backend\models\CustomerTracker;
 ?>
 <style>
   .general-information tr>td:first-child, 
@@ -59,7 +60,7 @@ use common\components\helpers\TimeElapsed;
                 </tr>
                 <tr>
                   <td>Link Account</td>
-                  <td> <?=$model->data;?> </td>
+                  <td> <?=$model->link;?> </td>
                 </tr>
                 <tr>
                   <td>Account Manger</td>
@@ -106,6 +107,10 @@ use common\components\helpers\TimeElapsed;
                   <td>Registration date</td>
                   <td><?=$model->registered_at;?> </td>
                 </tr>
+                <tr>
+                  <td>1st order date</td>
+                  <td><?=$model->first_order_at;?> </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -145,6 +150,14 @@ use common\components\helpers\TimeElapsed;
                 </tr>
                 <tr>
                   <td>A.By plan Sale volume</td>
+                  <td>???</td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>???</td>
+                </tr>
+                <tr>
+                  <td>Monthly Status Customer</td>
                   <td>???</td>
                 </tr>
               </tbody>
@@ -278,19 +291,19 @@ use common\components\helpers\TimeElapsed;
       <div class="portlet-title">
         <div class="caption">
           <i class="icon-share font-red-sunglo"></i>
-          <span class="caption-subject font-red-sunglo bold uppercase">Potential Customer</span>
+          <span class="caption-subject font-red-sunglo bold uppercase">Sales Performance</span>
         </div>
       </div>
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
-            <table class="table Potential-Customer">
+            <table class="table Sales-Performance">
               <thead>
                 <tr>
-                  <th colspan="3">Sales Performance</th>
+                  <th colspan="3">Normal Customer</th>
                   <th colspan="2">Growth rate</th>
                   <th>Growth speed</th>
-                  <th rowspan="2">Evaluation (1st date)</th>
+                  <th colspan="3">Development</th>
                 </tr>
                 <tr>
                   <th>1st month</th>
@@ -299,6 +312,9 @@ use common\components\helpers\TimeElapsed;
                   <th>G1</th>
                   <th>G2</th>
                   <th>G2-G1</th>
+                  <th>Sales Growth</th>
+                  <th>Product Growth</th>
+                  <th>% Result/ KPI</th>
                 </tr>
               </thead>
               <tbody>
@@ -309,45 +325,9 @@ use common\components\helpers\TimeElapsed;
                   <td><?=round($model->growth_rate_1, 2);?></td>
                   <td><?=round($model->growth_rate_2, 2);?></td>
                   <td><?=round($model->growth_speed, 2);?></td>
-                  <td><?=$model->potential_customer_at;?></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-12">
-    <!-- BEGIN PORTLET-->
-    <div class="portlet light bordered">
-      <div class="portlet-title">
-        <div class="caption">
-          <i class="icon-share font-red-sunglo"></i>
-          <span class="caption-subject font-red-sunglo bold uppercase">Key Customer</span>
-        </div>
-      </div>
-      <div class="portlet-body">
-        <div class="clearfix">
-          <div class="panel panel-success">
-            <table class="table Key-Customer">
-              <thead>
-                <tr>
-                  <th colspan="3">Development</th>
-                  <th rowspan="2">Evaluation (1st date)</th>
-                </tr>
-                <tr>
-                  <th>Sales Growth</th>
-                  <th>Product Growth</th>
-                  <th>% Result/ KPI</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
                   <td><?=round($model->sale_growth, 2);?></td>
                   <td><?=round($model->product_growth, 2);?></td>
                   <td><?=round($model->kpi_growth * 100, 2);?>%</td>
-                  <td><?=$model->key_customer_at;?></td>
                 </tr>
               </tbody>
             </table>

@@ -31,12 +31,13 @@ class LeadTrackerController extends Controller
     {
         $this->view->params['main_menu_active'] = 'lead-tracker.index';
         $request = Yii::$app->request;
+        $isAdmin = Yii::$app->user->can('admin');
         $form = new \backend\forms\FetchLeadTrackerForm([
             'id' => $request->get('id'),
-            'saler_id' => $request->get('saler_id'),
+            'saler_id' => $isAdmin ? $request->get('saler_id') : Yii::$app->user->id,
             'country_code' => $request->get('country_code'),
             'phone' => $request->get('phone'),
-            'game' => $request->get('game'),
+            'game_id' => $request->get('game_id'),
             'email' => $request->get('email'),
             'is_potential' => $request->get('is_potential'),
             'is_target' => $request->get('is_target'),
