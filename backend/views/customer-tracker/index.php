@@ -132,7 +132,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th rowspan="2" class="center">Date (1st date)</th>
               <th rowspan="2" class="center">Evaluation (1st date)</th>
               <th rowspan="2" class="center">Date (1st date)</th>              								
-              <th rowspan="2" class="center">Active 6months continously</th>              								
+              <th rowspan="2" class="center">Active 6 months continously</th>              								
               <th rowspan="2" class="center">(G1, G2<0)</th>              								
             </tr>
             <tr>

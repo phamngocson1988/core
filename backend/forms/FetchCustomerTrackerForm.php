@@ -111,35 +111,61 @@ class FetchCustomerTrackerForm extends Model
     {
         $command = $this->getCommand();
         $names = [
-            'No',
-            'Index',
-            'Lead Name & Link Account',
-            'Account Manager',
-            'Nationality',
-            'Phone',
-            'Email',
-            'Channel',
-            'Game',
-            'Is Potential',
-            'Is Target',
+            'A4:A6' => 'No.',
+            'B6' => 'Status',
+            'C6' => 'Monthly Status Customer',
+            'D6' => 'Name',
+            'E6' => 'Nationality',
+            'F6' => 'Phone',
+            'G6' => 'Email',
+            'H6' => 'Channel',
+            'I6' => 'Game chủ đạo',
+            'J6' => 'Account Manager',
+            'K6' => '1st order date',
+            'L6' => '1st order',
+            'M6' => '2nd order',
+            'N6' => '3rd order',
+            'O6' => 'Monthly sales target',
+            'P6' => 'G1',
+            'Q6' => 'G2',
+            'R6' => 'G2-G1',
+            'S6' => 'Sales Growth',
+            'T6' => 'Product Growth',
+            'U6' => '%Result/KPI',
+            'V5:V6' => 'Evaluation (1st date)',
+            'W5:W6' => 'Date (1st date)',
+            'X5:X6' => 'Evaluation (1st date)',
+            'Y5:Y6' => 'Date (1st date)',
+            'Z5:Z6' => 'Active 6 months continously',
+            'AA5:AA6' => 'G1,G2<0',
+            'D4:J5' => 'General Information',
+            'K4:U4' => 'Sales Performance',
+            'K5:O5' => 'Normal Customer',
+            'P5:Q5' => 'Growth Rate',
+            'R5' => 'Growth Speed',
+            'S5:U5' => 'Development',
+            'V4:W4' => 'Potential Customer',
+            'X4:Y4' => 'Key Customer',
+            'Z4' => 'Loyalty customer',
+            'AA4' => 'Customer in dangerous'
         ];
-        $characters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' ];
-        $titles = array_combine($characters, $names);
+        $characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'];
+        $titles = $names;
         $totalRow = $command->count();
         $startRow = 4;
-        $endRow = $startRow + $totalRow;
+        $startColumn = 'A';
+        $endColumn = 'AA';
+        $startDataRow = 7;
+        $endRow = $startDataRow + $totalRow;
         $footerRow = $endRow + 1;
-        $columns = array_keys($titles);
-        $startColumn = reset($columns);
-        $endColumn = end($columns);
 
-        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
-        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow + 2);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startDataRow, $endColumn, $endRow);
         $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
         $headerRange = "A1:{$endColumn}1";
 
         $header = [
-            $headerRange => sprintf('DANH SÁCH LEAD TRACKER'),
+            $headerRange => sprintf('DANH SÁCH CUSTOMER TRACKER'),
         ];
         $footer = [
         ];
@@ -148,75 +174,96 @@ class FetchCustomerTrackerForm extends Model
         $models = $command->all();
         foreach ($models as $no => $model) {
             $data[] = [
-                $no + 1, 
-                '#' . $model->id, 
+                $model->id,
+                $model->is_key_customer ? ($model->customer_tracker_status ? 'YES' : 'NO') : '-',
+                $model->is_key_customer ? 'Key Customer' : ($model->is_potential_customer ? 'Potential Customer' : 'Normal Custormer'),
                 $model->name,
-                $model->saler ? $model->saler->getName() : '-', 
-                $model->getCountryName(), 
-                $model->phone, 
-                $model->email, 
-                $model->channel, 
-                $model->game, 
-                $model->sale_growth ? 'YES' : 'NO',
-                $model->product_growth ? 'YES' : 'NO',
+                $model->getCountryName(),
+                $model->phone,
+                $model->email,
+                $model->channel,
+                $model->game ? $model->game->title : '-',
+                $model->saler ? $model->saler->getName() : '-',
+                $model->first_order_at,
+                $model->sale_month_1,
+                $model->sale_month_2,
+                $model->sale_month_3,
+                $model->sale_target,
+                $model->growth_rate_1,
+                $model->growth_rate_2,
+                $model->growth_speed,
+                $model->sale_growth,
+                $model->product_growth,
+                $model->kpi_growth,
+                $model->is_potential_customer ? 'YES' : 'NO',
+                $model->potential_customer_at,
+                $model->is_key_customer ? 'YES' : 'NO',
+                $model->key_customer_at,
                 $model->is_loyalty ? 'YES' : 'NO',
                 $model->is_dangerous ? 'YES' : 'NO',
             ];
         }
+        $sheet = [
+            'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+            'header' => $header,
+            'footer' => $footer,
+            'data' => $data,
+            'startRow' => $startDataRow,
+            'titles' => $titles,
+            'overwriteTitles' => true,
+            'styles' => [
+                $headerRange => [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    ],
+                ],
+                $rangeTitle => [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    ],
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_THIN
+                        )
+                    )
+                ],
+                $rangeTable => [
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_THIN
+                        )
+                    )
+                ],
+            ],
+            
+            'on beforeRender' => function ($event) {
+                $sender = $event->sender;
+                $sheet = $sender->getSheet();
+                $sender->renderHeader();
+                $sender->renderFooter();
+                $columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'];
+                foreach ($columns as $column) {
+                    $sheet->getColumnDimension($column)->setAutoSize(true);
+                }
+                $titles = $sender->getTitles();
+                $sender->renderCells($titles, null);
+            },
+            'on afterRender' => function($event) {
+                $sheet = $event->sender->getSheet();
+                $sheet->setSelectedCell("A1");
+            }
+        ];
         $file = \Yii::createObject([
             'class' => 'codemix\excelexport\ExcelFile',
             'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
             'sheets' => [
-                'Report by transaction' => [
-                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
-                    // 'heading' => $heading,
-                    'header' => $header,
-                    'footer' => $footer,
-                    'data' => $data,
-                    'startRow' => $startRow,
-                    'titles' => $titles,
-                    'styles' => [
-                        $headerRange => [
-                            'font' => [
-                                'bold' => true,
-                            ],
-                            'alignment' => [
-                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                            ],
-                        ],
-                        $rangeTitle => [
-                            'font' => [
-                                'bold' => true,
-                            ],
-                            'alignment' => [
-                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                            ],
-                        ],
-                        $rangeTable => [
-                            'borders' => array(
-                                'allborders' => array(
-                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
-                                )
-                            )
-                        ],
-                    ],
-                    
-                    'on beforeRender' => function ($event) {
-                        $sender = $event->sender;
-                        $sheet = $sender->getSheet();
-                        $sender->renderHeader();
-                        $sender->renderFooter();
-                        $titles = $sender->getTitles();
-                        $columns = array_keys($titles);
-                        foreach ($columns as $column) {
-                            $sheet->getColumnDimension($column)->setAutoSize(true);
-                        }
-                    },
-                    'on afterRender' => function($event) {
-                        $sheet = $event->sender->getSheet();
-                        $sheet->setSelectedCell("A1");
-                    }
-                ],
+                'Customer Tracker' => $sheet,
             ],
         ]);
         $file->send($fileName);

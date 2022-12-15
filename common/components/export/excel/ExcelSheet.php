@@ -11,11 +11,12 @@ class ExcelSheet extends \codemix\excelexport\ExcelSheet
     public $heading;
     public $header = [];
     public $footer = [];
+    public $overwriteTitles = false;
 
     public function renderHeader()
     {
         // First row
-        $this->renderHeading();
+        // $this->renderHeading();
 
         foreach ($this->header as $cell => $value) {
             if ($this->isRange($cell)) $this->_sheet->mergeCells($cell);
@@ -31,6 +32,26 @@ class ExcelSheet extends \codemix\excelexport\ExcelSheet
                 ],
             ]);
         }
+    }
+
+    public function renderCells($cells, $styles = null)
+    {
+        foreach ($cells as $cell => $value) {
+            if ($this->isRange($cell)) $this->_sheet->mergeCells($cell);
+            $firstCell = $this->getFirstCellInRange($cell);
+            $this->_sheet->setCellValue($firstCell, $value);
+            if ($styles) {
+                $this->_sheet->getStyle($firstCell)->applyFromArray($styles);
+            }
+        }
+    }
+
+    protected function renderTitle()
+    {
+        if ($this->overwriteTitles) { 
+            return;
+        }
+        parent::renderTitle();
     }
 
     public function renderHeading()
