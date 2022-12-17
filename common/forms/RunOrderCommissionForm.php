@@ -53,6 +53,10 @@ class RunOrderCommissionForm extends ActionForm
         if (!$game || !$game->expected_profit) {
           return true;
         }
+
+        $customer = $order->customer;
+        $durationNewCustomer = 1296000; // 15 days in second 60*60*24*15
+        $isNewCustomer = (strtotime($customer->created_at) - strtotime($order->created_at)) <= $durationNewCustomer; // 15 days in second
         $suppliers = OrderSupplier::find()
             ->where([
               'order_id' => $order->id,
@@ -77,6 +81,10 @@ class RunOrderCommissionForm extends ActionForm
         if ($order->saler_id) {
           $order->saler_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
           $order->saler_sellout_commission = $commission ? $selloutCommission : 0;
+          if ($isNewCustomer) {
+            $order->saler_order_commission = $order->saler_order_commission * 150 / 100;
+            $order->saler_sellout_commission = $order->saler_sellout_commission * 150 / 100;
+          }
         } else {
           $order->saler_order_commission = 0;
           $order->saler_sellout_commission = 0;
@@ -84,6 +92,10 @@ class RunOrderCommissionForm extends ActionForm
         if ($order->orderteam_id) {
           $order->orderteam_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
           $order->orderteam_sellout_commission = $commission ? $selloutCommission : 0;
+          if ($isNewCustomer) {
+            $order->orderteam_order_commission = $order->orderteam_order_commission * 150 / 100;
+            $order->orderteam_sellout_commission = $order->orderteam_sellout_commission * 150 / 100;
+          }
         } else {
           $order->orderteam_order_commission = 0;
           $order->orderteam_sellout_commission = 0;
@@ -99,7 +111,9 @@ class RunOrderCommissionForm extends ActionForm
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'profit_rate' => $order->profit_rate,
-              'user_profit_rate' => $this->getUserRateProfit()
+              'user_profit_rate' => $this->getUserRateProfit(), 
+              'is_new_customer' => $isNewCustomer,
+              'duration_new_customer' => $durationNewCustomer
             ]);
             $this->generateOrderCommission($order, $saler, OrderCommission::COMMSSION_TYPE_ORDER, OrderCommission::USER_ROLE_SALER, $order->saler_order_commission, $orderCommissionDescriptionSaler);
             $selloutCommissionDescriptionSaler = json_encode([
@@ -107,7 +121,9 @@ class RunOrderCommissionForm extends ActionForm
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'commission' => $commission,
-              'sellout_commission' => $order->saler_sellout_commission
+              'sellout_commission' => $order->saler_sellout_commission,
+              'is_new_customer' => $isNewCustomer,
+              'duration_new_customer' => $durationNewCustomer
             ]);
             $this->generateOrderCommission($order, $saler, OrderCommission::COMMSSION_TYPE_SELLOUT, OrderCommission::USER_ROLE_SALER, $order->saler_sellout_commission, $selloutCommissionDescriptionSaler);
           }
@@ -118,7 +134,9 @@ class RunOrderCommissionForm extends ActionForm
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'profit_rate' => $order->profit_rate,
-              'user_profit_rate' => $this->getUserRateProfit()
+              'user_profit_rate' => $this->getUserRateProfit(),
+              'is_new_customer' => $isNewCustomer,
+              'duration_new_customer' => $durationNewCustomer
             ]);
             $this->generateOrderCommission($order, $orderteam, OrderCommission::COMMSSION_TYPE_ORDER, OrderCommission::USER_ROLE_ORDERTEAM, $order->orderteam_order_commission, $orderCommissionDescriptionOT);
             $selloutCommissionDescriptionOT = json_encode([
@@ -126,7 +144,9 @@ class RunOrderCommissionForm extends ActionForm
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
               'commission' => $commission,
-              'sellout_commission' => $order->orderteam_sellout_commission
+              'sellout_commission' => $order->orderteam_sellout_commission,
+              'is_new_customer' => $isNewCustomer,
+              'duration_new_customer' => $durationNewCustomer
             ]);
             $this->generateOrderCommission($order, $orderteam, OrderCommission::COMMSSION_TYPE_SELLOUT, OrderCommission::USER_ROLE_ORDERTEAM, $order->orderteam_sellout_commission, $selloutCommissionDescriptionOT);
           }
