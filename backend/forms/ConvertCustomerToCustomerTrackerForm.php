@@ -78,11 +78,13 @@ class ConvertCustomerToCustomerTrackerForm extends Model
             return false;
         }
         $user = $this->getUser();
+        $reseller = $user->reseller;
         $leadTracker = $this->getLeadTracker();
+
         if (!$leadTracker) {
             $createForm = new \backend\forms\CreateLeadTrackerForm([
               'name' => $user->getName(),
-              'saler_id' => $user->saler_id,
+              'saler_id' => $reseller ? $reseller->saler_id : $user->saler_id,
               'country_code' => $user->country_code,
               'phone' => $user->phone,
               'email' => $user->email,

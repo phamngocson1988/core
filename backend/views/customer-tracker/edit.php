@@ -105,7 +105,7 @@ use common\components\helpers\TimeElapsed;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'bs-select form-control', 'readonly' => !$model->canUpdateCustomerStatus()],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($model->getBooleanList())->label('Status');?>
+                  ])->dropDownList($model->fetchCustomerStatus(), ['prompt' => '--Chọn--'])->label('Status');?>
 
                 </div>
               </div>

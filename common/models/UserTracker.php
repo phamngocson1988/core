@@ -15,7 +15,7 @@ class UserTracker extends ActiveRecord
 {
 	const POTENTIAL_COLUMNS = ['question_1', 'question_2', 'question_3', 'question_4'];
 	const TARGET_COLUMNS = ['question_5', 'question_6', 'question_7', 'question_8', 'question_9'];
-    const CHANNELS = [
+    const CONTACTS = [
         'facebook' => 'Facebook', 
         'google'  => 'Google',
         'twitter'  => 'Twitter',
@@ -24,7 +24,20 @@ class UserTracker extends ActiveRecord
         'telegram'  => 'Telegram',
         'line'  => 'Line',
         'skype'  => 'Skype',
-        'Email' => 'Email',
+        'email' => 'Email',
+        'wechat' => 'Wechat'
+    ];
+    const CHANNELS = [
+        'facebook' => 'Facebook', 
+        'forum' => 'Forum',
+        'ecommerce' => 'E-Commerce',
+        'website' => 'Website',
+        'chat' => 'Group Chat'
+    ];
+    const CUSTOMER_STATUS = [
+        1 => 'Normal Customer', 
+        2 => 'Potential Customer',
+        3 => 'Key Customer'
     ];
     const QUESTIONS = [
         [

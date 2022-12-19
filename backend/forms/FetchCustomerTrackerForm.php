@@ -80,7 +80,12 @@ class FetchCustomerTrackerForm extends Model
 
     public function fetchChannels()
     {
-        return LeadTracker::CHANNELS;
+        return CustomerTracker::CHANNELS;
+    }
+
+    public function fetchCustomerStatus() 
+    {
+        return CustomerTracker::CUSTOMER_STATUS;
     }
 
     public function fetchGames()

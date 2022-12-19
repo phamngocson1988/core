@@ -175,7 +175,11 @@ use backend\models\CustomerTracker;
               <tbody>
                 <tr>
                   <td>Monthly Sales Target</td>
-                  <td><?=$model->sale_target;?> - Achieve (<?=round($model->kpi_growth * 100, 2);?>%) - Remaining (<?=100 - round($model->kpi_growth * 100, 2);?>%)</td>
+                  <td>
+                    <?php if ($model->sale_target) : ?>
+                    <?=$model->sale_target;?> - Achieve (<?=round($model->kpi_growth * 100, 2);?>%) - Remaining (<?=100 - round($model->kpi_growth * 100, 2);?>%)
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <td>No.of games</td>
@@ -187,11 +191,11 @@ use backend\models\CustomerTracker;
                 </tr>
                 <tr>
                   <td>A.Monthly Sale volume		</td>
-                  <td>???</td>
+                  <td><?=$model->monthly_sale_volumn;?><td>
                 </tr>
                 <tr>
                   <td>A.By plan Sale volume</td>
-                  <td>???</td>
+                  <td><?=$model->daily_sale_volumn;?><td>
                 </tr>
                 <tr>
                   <td>Status</td>
@@ -360,44 +364,15 @@ use backend\models\CustomerTracker;
               </thead>
               <tbody>
                 <tr>
-                  <td><?=round($model->sale_month_1, 2);?></td>
-                  <td><?=round($model->sale_month_2, 2);?></td>
-                  <td><?=round($model->sale_month_3, 2);?></td>
-                  <td><?=round($model->growth_rate_1, 2);?></td>
-                  <td><?=round($model->growth_rate_2, 2);?></td>
-                  <td><?=round($model->growth_speed, 2);?></td>
-                  <td><?=round($model->sale_growth, 2);?></td>
-                  <td><?=round($model->product_growth, 2);?></td>
-                  <td><?=round($model->kpi_growth * 100, 2);?>%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-12">
-    <!-- BEGIN PORTLET-->
-    <div class="portlet light bordered">
-      <div class="portlet-title">
-        <div class="caption">
-          <i class="icon-share font-red-sunglo"></i>
-          <span class="caption-subject font-red-sunglo bold uppercase">Loyalty customer</span>
-        </div>
-      </div>
-      <div class="portlet-body">
-        <div class="clearfix">
-          <div class="panel panel-success">
-            <table class="table Loyalty-Customer">
-              <tbody>
-                <tr>
-                  <td class="highlight-red">Loyalty customer (6 months in row)</td>
-                  <td><?=$model->is_loyalty ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td class="highlight-red">Customer in dangerous (G1, G2<0)</td>
-                  <td><?=$model->is_dangerous ? 'YES' : 'NO';?></td>
+                  <td class="center"><?=round($model->sale_month_1, 2);?></td>
+                  <td class="center"><?=round($model->sale_month_2, 2);?></td>
+                  <td class="center"><?=round($model->sale_month_3, 2);?></td>
+                  <td class="center"><?=round($model->growth_rate_1, 2);?></td>
+                  <td class="center"><?=round($model->growth_rate_2, 2);?></td>
+                  <td class="center"><?=round($model->growth_speed, 2);?></td>
+                  <td class="center"><?=round($model->sale_growth, 2);?></td>
+                  <td class="center"><?=round($model->product_growth, 2);?></td>
+                  <td class="center"><?=round($model->kpi_growth * 100, 2);?>%</td>
                 </tr>
               </tbody>
             </table>

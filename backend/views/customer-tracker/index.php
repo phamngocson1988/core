@@ -128,9 +128,9 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th colspan="2" class="center">Growth rate</th>
               <th class="center">Growth speed</th>
               <th colspan="3" class="center">Development</th>
-              <th rowspan="2" class="center">Evaluation (1st date)</th>
+              <th rowspan="2" class="center">Evaluation</th>
               <th rowspan="2" class="center">Date (1st date)</th>
-              <th rowspan="2" class="center">Evaluation (1st date)</th>
+              <th rowspan="2" class="center">Evaluation</th>
               <th rowspan="2" class="center">Date (1st date)</th>              								
               <th rowspan="2" class="center">Active 6 months continously</th>              								
               <th rowspan="2" class="center">(G1, G2<0)</th>              								
@@ -166,24 +166,10 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <tr>
                 <td class="center"><a href='<?=Url::to(['customer-tracker/view', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                 <td class="center">
-                  <?php if ($model->is_key_customer) :?>
-                  <?php if ($model->customer_tracker_status) :?>
-                  <span class="label label-success">YES</span>
-                  <?php else : ?>
-                  <span class="label label-default">NO</span>
-                  <?php endif;?>
-                  <?php else : ?>
-                    -
-                  <?php endif;?>
+                  <?=$model->getCustomerTrackerLabel();?>
                 </td>
                 <td class="center">
-                  <?php if ($model->is_key_customer) :?>
-                  Key Customer
-                  <?php elseif ($model->is_potential_customer) : ?>
-                  Potential Customer
-                  <?php else : ?>
-                  Normal Custormer
-                  <?php endif;?>
+                  <?=$model->getCustomerMonthlyLabel();?>
                 </td>
                 <td class="center"><a href="<?=$model->link;?>" target="_blank"><?=$model->name;?></a></td>
                 <td class="center"><?=$model->getCountryName();?></td>
@@ -201,8 +187,14 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td class="center"><?=$model->growth_rate_1;?></td>
                 <td class="center"><?=$model->growth_rate_2;?></td>
                 <td class="center"><?=$model->growth_speed;?></td>
-                <td class="center"><?=$model->sale_growth;?></td>
-                <td class="center"><?=$model->product_growth;?></td>
+                <td class="center">
+                  <?php if ($model->sale_growth) :?>
+                  <span class="label label-success">YES</span>
+                  <?php else : ?>
+                  <span class="label label-default">NO</span>
+                  <?php endif;?>
+                </td>
+                <td class="center"><?=$model->number_of_game;?></td>
                 <td class="center"><?=$model->kpi_growth;?></td>
                 <td class="center">
                   <?php if ($model->is_potential_customer) :?>

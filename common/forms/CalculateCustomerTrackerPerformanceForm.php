@@ -52,26 +52,31 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
         $tracker->growth_rate_2 = $tracker->sale_month_3 - $tracker->sale_month_2;
         $tracker->growth_speed = $tracker->growth_rate_2 - $tracker->growth_rate_1;
         $tracker->sale_growth = (max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 150)
-            && (min($tracker->growth_rate_1, $tracker->growth_rate_2, $tracker->gronth_speed) > 0);
+            && (min($tracker->growth_rate_1, $tracker->growth_rate_2, $tracker->growth_speed) > 0);
         $tracker->number_of_game = $this->findNumberOfGame($tracker->user_id);
-        $tracker->product_growth = $this->number_of_game >= 2;
+        $tracker->product_growth = $tracker->number_of_game >= 2;
         if ($tracker->sale_target) {
             $tracker->kpi_growth = round($tracker->sale_month_3 / $tracker->sale_target, 2);
         }
-        $is_potential_customer = max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 150;
-        if ($is_potential_customer && !$tracker->is_potential_customer) {
+        $is_potential_customer = max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 105;
+        if ($is_potential_customer && !$tracker->potential_customer_at) {
             $tracker->potential_customer_at = $now;
+            $tracker->customer_monthly_status = max($this->customer_monthly_status, 2);
         }
         $tracker->is_potential_customer = $is_potential_customer;
         
         $is_key_customer = (max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 150)
             && ((float)$tracker->kpi_growth >= 0.7);
-        if ($is_key_customer && !$tracker->is_key_customer) {
+        if ($is_key_customer && !$tracker->key_customer_at) {
             $tracker->key_customer_at = $now;
+            $tracker->customer_monthly_status = max($this->customer_monthly_status, 3);
         }
         $tracker->is_key_customer = $is_key_customer;
         $tracker->is_loyalty = $this->checkLoyalty($tracker->user_id);
         $tracker->is_dangerous = max($tracker->growth_rate_1, $tracker->growth_rate_2) < 0;
+
+        $tracker->monthly_sale_volumn = round(($tracker->sale_month_1 + $tracker->sale_month_2 + $tracker->sale_month_3) / 3, 2);
+        $tracker->daily_sale_volumn = $this->getDailySaleAvg($tracker->user_id);
         return $tracker->save();
     }
 
@@ -121,5 +126,16 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
             }
         }
         return true;
+    }
+
+    protected function getDailySaleAvg($userId)
+    {
+        $month = "-1 month";
+        $start = date("Y-m-01 00:00:00", strtotime($month));
+        $end = date("Y-m-t 23:59:59", strtotime($month));
+        $check = Order::find()
+            ->where(['customer_id' => $userId])
+            ->andWhere(["between", "created_at", $start,  $end])
+            ->average("quantity");
     }
 }

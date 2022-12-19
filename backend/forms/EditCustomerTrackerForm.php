@@ -143,6 +143,11 @@ class EditCustomerTrackerForm extends Model
         return CustomerTracker::CHANNELS;
     }
 
+    public function fetchCustomerStatus()
+    {
+        return CustomerTracker::CUSTOMER_STATUS;
+    }
+
     public function fetchGames()
     {
         $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
