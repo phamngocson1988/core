@@ -82,7 +82,6 @@ class RunOrderCommissionForm extends ActionForm
           $order->saler_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
           $order->saler_sellout_commission = $commission ? $selloutCommission : 0;
           if ($isNewCustomer) {
-            $order->saler_order_commission = $order->saler_order_commission * 150 / 100;
             $order->saler_sellout_commission = $order->saler_sellout_commission * 150 / 100;
           }
         } else {
@@ -93,7 +92,6 @@ class RunOrderCommissionForm extends ActionForm
           $order->orderteam_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
           $order->orderteam_sellout_commission = $commission ? $selloutCommission : 0;
           if ($isNewCustomer) {
-            $order->orderteam_order_commission = $order->orderteam_order_commission * 150 / 100;
             $order->orderteam_sellout_commission = $order->orderteam_sellout_commission * 150 / 100;
           }
         } else {
