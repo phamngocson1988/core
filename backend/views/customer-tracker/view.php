@@ -183,7 +183,13 @@ use backend\models\CustomerTracker;
                 </tr>
                 <tr>
                   <td>No.of games</td>
-                  <td><?=$model->number_of_game;?></td>
+                  <td>
+                    <?php if ($model->number_of_game) :?>
+                    <a href="#game-list-modal" data-toggle="modal"><?=$model->number_of_game;?></a>
+                    <?php else : ?>
+                    0
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <td>First order	</td>
@@ -421,4 +427,30 @@ use backend\models\CustomerTracker;
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="game-list-modal" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Danh sách game</h4>
+      </div>
+      <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
+        <?php
+          $games = $form->getNumberOfGames();
+        ?>
+        <ul>
+          <?php foreach ($games as $game) : ?>
+          <li><?=sprintf("%s: %s", $game['game_title'], round($game['quantity'], 2));?></li>
+          <?php endforeach;?>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>

@@ -62,8 +62,9 @@ class CustomerTrackerController extends Controller
     {
         $request = Yii::$app->request;
         $this->view->params['main_menu_active'] = 'customer-tracker.index';
-        $model = \backend\models\CustomerTracker::findOne($id);
-        return $this->render('view', ['model' => $model]);
+        $form = new \backend\forms\CustomerTrackerDetailForm(['id' => $id]);
+        $model = $form->getCustomerTracker();
+        return $this->render('view', ['model' => $model, 'form' => $form]);
     }
 
     public function actionEdit($id)
