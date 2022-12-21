@@ -176,6 +176,7 @@ class OrderController extends Controller
         $data = [
             'id' => $request->get('id'),
             'supplier_id' => $request->get('supplier_id'),
+            'customer_id' => $request->get('customer_id'),
             'orderteam_id' => $request->get('orderteam_id'),
             'saler_id' => $request->get('saler_id'),
             'game_id' => $request->get('game_id'),
