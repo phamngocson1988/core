@@ -184,11 +184,7 @@ use backend\models\CustomerTracker;
                 <tr>
                   <td>No.of games</td>
                   <td>
-                    <?php if ($model->number_of_game) :?>
-                    <a href="#game-list-modal" data-toggle="modal"><?=$model->number_of_game;?></a>
-                    <?php else : ?>
-                    0
-                    <?php endif;?>
+                    <a href="#game-list-modal" data-toggle="modal"><?=$form->getNumberOfGames();?></a>
                   </td>
                 </tr>
                 <tr>
@@ -438,7 +434,7 @@ use backend\models\CustomerTracker;
       </div>
       <div class="modal-body" style="height: 200px; position: relative; overflow: auto; display: block;"> 
         <?php
-          $games = $form->getNumberOfGames();
+          $games = $form->getListOfGames();
         ?>
         <ul>
           <?php foreach ($games as $game) : ?>

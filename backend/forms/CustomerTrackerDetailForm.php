@@ -35,6 +35,15 @@ class CustomerTrackerDetailForm extends Model
         return Order::find()->where([
             'customer_id' => $customerTracker->user_id,
             'status' => Order::STATUS_CONFIRMED
+        ])->select('game_id')->distinct()->count();
+    }
+
+    public function getListOfGames()
+    {
+        $customerTracker = $this->getCustomerTracker();
+        return Order::find()->where([
+            'customer_id' => $customerTracker->user_id,
+            'status' => Order::STATUS_CONFIRMED
         ])->select(['game_id', 'game_title', 'SUM(quantity) as quantity'])
         ->groupBy('game_id')
         ->asArray()
