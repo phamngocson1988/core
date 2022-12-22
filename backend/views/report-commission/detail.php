@@ -65,14 +65,14 @@ $sumCommission = array_sum(ArrayHelper::getColumn($data, 'user_commission'));
                   <th> Mô tả </th>
                   <th> Tên game </th>
                   <th> Số gói </th>
-                  <th> LNG thực tế </th>
-                  <th> LNG chuẩn </th>
+                  <th class="hide"> LNG thực tế </th>
+                  <th class="hide"> LNG chuẩn </th>
                   <th> Số tiền </th>
                 </tr>
               </thead>
               <tbody>
                 <?php if (!count($data)) :?>
-                <tr><td colspan="7"><?=Yii::t('app', 'no_data_found');?></td></tr>
+                <tr><td colspan="5"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($data as $no => $commission) :?>
                 <?php $description = json_decode($commission['description'], true);?>
@@ -81,8 +81,8 @@ $sumCommission = array_sum(ArrayHelper::getColumn($data, 'user_commission'));
                   <td class="center"> Mã đơn hàng <a href='<?=Url::to(['report-commission/order-detail', 'id' => $commission['order_id'], 'type' => $commission['commission_type'], 'role' => $commission['role']]);?>' data-target="#order-detail" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Chi tiết đơn hàng" data-toggle="modal" >#<?=$commission['order_id'];?></a></td>
                   <td class="left"> <?=ArrayHelper::getValue($description, 'game_title');?></td>
                   <td class="center"><?=StringHelper::numberFormat($commission['quantity'], 1);?></td>
-                  <td class="center"><?=StringHelper::numberFormat(ArrayHelper::getValue($description, 'real_profit', 0), 0);?> ₫</td>
-                  <td class="center"><?=StringHelper::numberFormat(ArrayHelper::getValue($description, 'expected_profit', 0), 0);?> ₫</td>
+                  <td class="center hide"><?=StringHelper::numberFormat(ArrayHelper::getValue($description, 'real_profit', 0), 0);?> ₫</td>
+                  <td class="center hide"><?=StringHelper::numberFormat(ArrayHelper::getValue($description, 'expected_profit', 0), 0);?> ₫</td>
                   <td class="center"><?=StringHelper::numberFormat($commission['user_commission'], 0);?> ₫</td>
                 </tr>
                 <?php endforeach;?>
@@ -92,8 +92,8 @@ $sumCommission = array_sum(ArrayHelper::getColumn($data, 'user_commission'));
                 <td class="center">Total Orders: <?=count($orderIds);?></td>
                 <td class="center"></td>
                 <td class="center"><?=StringHelper::numberFormat($sumQuantity, 0);?></td>
-                <td class="center"></td>
-                <td class="center"></td>
+                <td class="center hide"></td>
+                <td class="center hide"></td>
                 <td class="center"><?=StringHelper::numberFormat($sumCommission, 0);?></td>
               </tfoot>
             </table>

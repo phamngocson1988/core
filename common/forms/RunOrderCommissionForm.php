@@ -56,7 +56,7 @@ class RunOrderCommissionForm extends ActionForm
 
         $customer = $order->customer;
         $durationNewCustomer = 1296000; // 15 days in second 60*60*24*15
-        $isNewCustomer = (strtotime($customer->created_at) - strtotime($order->created_at)) <= $durationNewCustomer; // 15 days in second
+        $isNewCustomer = (strtotime($order->created_at) - strtotime($customer->created_at)) <= $durationNewCustomer; // 15 days in second
         $suppliers = OrderSupplier::find()
             ->where([
               'order_id' => $order->id,
