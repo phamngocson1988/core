@@ -41,6 +41,11 @@ class ReportCommissionController extends Controller
             'game_ids' => $request->get('game_ids', []),
         ]);
         $form->run();
+        $mode = $request->get('mode');
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . '-report-commission.xls';
+            return $form->export($fileName);
+        }
         return $this->render('index', [
             'search' => $form,
         ]);

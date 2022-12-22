@@ -54,6 +54,9 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
           <span class="caption-subject bold uppercase"> Thống kê theo hoa hồng và sellout</span>
         </div>
         <div class="actions">
+          <?php if (Yii::$app->user->cans(['admin', 'accounting'])) : ?>
+          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
