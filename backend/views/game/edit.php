@@ -18,6 +18,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/jquery.sparkline.min.js
 $this->registerJsFile('@web/vendor/assets/pages/scripts/profile.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/jquery.number.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
+Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
 $user = Yii::$app->user;
 $canShowPrice = $user->can('orderteam');
 ?>
@@ -48,6 +49,7 @@ $canShowPrice = $user->can('orderteam');
       <!-- PORTLET MAIN -->
       <div class="portlet light">
         <!-- SIDEBAR USERPIC -->
+        <a href="<?=Yii::$app->urlManagerFrontend->createAbsoluteUrl(['game/view', 'id' => $id, 'slug' => $model->getSlug()], true);?>" target="_blank">Go to Shop</a>
         <?=$form->field($model, 'image_id', [
           'options' => ['tag' => false, 'class' => 'profile-userpic'],
           'template' => '{input}{hint}{error}'

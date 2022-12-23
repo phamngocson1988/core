@@ -265,6 +265,12 @@ class EditGameForm extends Model
         }
     }
 
+    public function getSlug()
+    {
+        $game = $this->getGame();
+        return $game ? $game->slug : '';
+    }
+
     protected function getGame()
     {
         if (!$this->_game) {

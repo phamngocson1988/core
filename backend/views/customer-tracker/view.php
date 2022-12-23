@@ -47,6 +47,10 @@ use backend\models\CustomerTracker;
     color: white;
     font-weight: bold;
   }
+
+  /* table, th, td {
+    border: 1px solid black;
+  } */
   
 </style>
 <div class="page-bar">
@@ -436,11 +440,24 @@ use backend\models\CustomerTracker;
         <?php
           $games = $form->getListOfGames();
         ?>
-        <ul>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Game</th>
+              <th>First Order</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
           <?php foreach ($games as $game) : ?>
-          <li><?=sprintf("%s: %s", $game['game_title'], round($game['quantity'], 2));?></li>
+            <tr>
+              <td><?=$game['game_title'];?></td>
+              <td class="center"><?=$game['created_at'];?></td>
+              <td class="center"><?=round($game['quantity'], 2);?></td>
+            </tr>
           <?php endforeach;?>
-        </ul>
+          <tbody>
+          </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
