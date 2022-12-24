@@ -38,8 +38,14 @@ class ReportCommissionController extends Controller
             'user_ids' => $request->get('user_ids', [Yii::$app->user->id]),
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
+            'game_ids' => $request->get('game_ids', []),
         ]);
         $form->run();
+        $mode = $request->get('mode');
+        if ($mode === 'export') {
+            $fileName = date('YmdHis') . '-report-commission.xls';
+            return $form->export($fileName);
+        }
         return $this->render('index', [
             'search' => $form,
         ]);
@@ -56,6 +62,7 @@ class ReportCommissionController extends Controller
             'user_ids' => [$request->get('user_id')],
             'start_date' => $request->get('start_date'),
             'end_date' => $request->get('end_date'),
+            'game_ids' => $request->get('game_ids'),
         ]);
         $form->run();
         $data = $form->getData();

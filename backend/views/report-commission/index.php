@@ -19,6 +19,8 @@ $this->registerJsFile('vendor/assets/global/plugins/bootstrap-select/js/bootstra
 $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.min.js', ['depends' => '\backend\assets\AppAsset']);
 
 $commissions = $search->getData();
+$orderIds = ArrayHelper::getColumn($commissions, 'order_id');
+$orderIds = array_unique($orderIds);
 $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
 ?>
 
@@ -52,15 +54,28 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
           <span class="caption-subject bold uppercase"> Thống kê theo hoa hồng và sellout</span>
         </div>
         <div class="actions">
+          <?php if (Yii::$app->user->cans(['admin', 'accounting'])) : ?>
+          <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
+          <?php endif;?>
         </div>
       </div>
       <div class="portlet-body">
         <?php $form = ActiveForm::begin(['method' => 'GET', 'action' => ['report-commission/index']]);?>
         <div class="row">
-        <?=$form->field($search, 'user_ids', [
+          <?=$form->field($search, 'user_ids', [
+            'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+            'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'user_ids[]']
+          ])->dropDownList($search->fetchUsers())->label('Nhân viên');?>
+          <?=$form->field($search, 'game_ids', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['multiple' => 'true', 'class' => 'bs-select form-control', 'name' => 'user_ids[]']
-            ])->dropDownList($search->fetchUsers())->label('Nhân viên');?>
+              'inputOptions' => ['multiple' => 'true', 'class' => 'form-control', 'name' => 'game_ids[]']
+            ])->widget(kartik\select2\Select2::classname(), [
+              'data' => $search->fetchGames(),
+              'options' => ['class' => 'form-control', 'placeholder' => 'Chọn game ...'],
+              'pluginOptions' => [
+                'allowClear' => true
+              ],
+            ])->label('Tìm theo game')?>
           <?=$form->field($search, 'start_date', [
             'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             'inputOptions' => ['class' => 'form-control', 'name' => 'start_date', 'id' => 'start_date']
@@ -101,24 +116,32 @@ $commissionDetailByUsers = ArrayHelper::index($commissions, null, 'user_id');
                 <tr>
                   <th> Nhân viên </th>
                   <th> Sell out </th>
-                  <th> Order </th>
+                  <th> Hoa hồng </th>
                   <th> Tổng </th>
                 </tr>
               </thead>
               <tbody>
                 <?php $dataByUser = $search->getCommissionByUser();?>
+                <?php $sumSelloutCommission = array_sum(ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_SELLOUT));?>
+                <?php $sumOrderCommission = array_sum(ArrayHelper::getColumn($dataByUser, OrderCommission::COMMSSION_TYPE_ORDER));?>
                 <?php if (!count($dataByUser)) :?>
                 <tr><td colspan="4"><?=Yii::t('app', 'no_data_found');?></td></tr>
                 <?php endif;?>
                 <?php foreach ($dataByUser as $userId => $commission) :?>
                 <tr>
                   <td class="center"><?=$commission['name'];?></td>
-                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_SELLOUT]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT], 0);?></a></td>
-                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_ORDER]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></a></td>
+                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'game_ids' => $search->game_ids, 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_SELLOUT]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT], 0);?></a></td>
+                  <td class="center"><a href="<?=Url::to(['report-commission/detail', 'user_id' => $commission['user_id'], 'game_ids' => $search->game_ids, 'start_date' => $search->start_date, 'end_date' => $search->end_date, 'type' => OrderCommission::COMMSSION_TYPE_ORDER]);?>" target="_blank"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></a></td>
                   <td class="center"><?=StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT] + $commission[OrderCommission::COMMSSION_TYPE_ORDER], 0);?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
+              <tfoot style="background-color: #999;">
+                <td class="center">Total Orders: <?=count($orderIds);?></td>
+                <td class="center"><?=StringHelper::numberFormat($sumSelloutCommission, 0);?></td>
+                <td class="center"><?=StringHelper::numberFormat($sumOrderCommission, 0);?></td>
+                <td class="center"></td>
+              </tfoot>
             </table>
           </div>
         </div>
