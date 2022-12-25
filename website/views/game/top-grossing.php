@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use website\widgets\LinkPager;
+$user = Yii::$app->user->getIdentity();
+$isReseller = $user && $user->isReseller();
 ?>
 
 <div class="container category-page post-list mt-5">
@@ -44,8 +46,9 @@ use website\widgets\LinkPager;
             <span class="text"><?=Html::encode($game->unit_name);?></span>
           </div>
           <div class="flex-fill price">
-            <?php $price = $game->getPrice();?>
-            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($price, (int)($price != round($price)));?></span>
+            <?php $price = $isReseller ? $game->getResellerPrice($user->reseller_level) : $game->getPrice();?>
+            <?php $priceShow = $price ? sprintf("$%s", number_format($price, (int)($price != round($price)))) : 'CONTACT';?>
+            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num"><?=$priceShow;?></span>
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-center">
