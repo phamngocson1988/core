@@ -66,6 +66,7 @@ if (!count($lastPrices)) {
       <div class="portlet light">
         <img id="image_game-image_id" class="img-responsive" src="<?=$model->getGame()->getImageUrl('500x500');?>">
         <?php if ($canUpdatePrice) : ?>
+        <?php if ($model->canUpdatePrice) : ?>
         <?=$form->field($model, 'price1', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
@@ -73,6 +74,7 @@ if (!count($lastPrices)) {
           'parts' => ['{log}' => $old_price_1, '{hint}' => $supplierPriceRangeTime],
           'template' => '<strong>{label}</strong><div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp (USD)');?>
+        <?php endif;?>
         <?php if ($model->change_price_request_code) :?>
         <div class="profile-stat">
           <label style="font-weight: 900" for="updategamepriceform-reseller_price_amplitude">Mã đề xuất</label>
@@ -93,11 +95,12 @@ if (!count($lastPrices)) {
           'template' => '{label}<div class="flex-container" style="display: flex; flex-wrap: justify-content; justify-content: center; "><input type="text" disabled="" value="{log}" class="form-control">{input}</div>{hint}'
         ])->textInput()->label('Giá nhà cung cấp 3 (USD)');?>
 
+        <?php if ($model->canUpdatePrice) : ?>
         <?=$form->field($model, 'reseller_price_amplitude', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
         ])->textInput();?>
-
+        <?php endif;?>
         <?=$form->field($model, 'price_remark', [
           'options' => ['class' => 'list-separated profile-stat'],
           'labelOptions' => ['style' => 'font-weight: 900'],
