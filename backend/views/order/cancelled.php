@@ -33,7 +33,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 
 $user = Yii::$app->user;
 $showSupplier = $user->can('orderteam') || $user->can('accounting');
-$showCustomer = $user->can('saler') || $user->can('accounting');
+$showCustomer = $user->can('saler') || $user->can('accounting') || $user->can('orderteam');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
