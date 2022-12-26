@@ -49,7 +49,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'id']
             ])->textInput()->label('Index');?>
-            <?php if (Yii::$app->user->can('admin')):?>
+            <?php if (Yii::$app->user->cans(['admin', 'sale_manager'])):?>
             <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
             ])->widget(kartik\select2\Select2::classname(), [
@@ -154,6 +154,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <a href="#" class="btn btn-sm grey btn-outline filter-submit margin-bottom">Need email to convert</a>
                   <?php endif;?>
                   <a href='<?=Url::to(['lead-tracker/add-comment', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" ><i class="fa fa-comment"></i></a>
+                  <a href="<?=Url::to(['lead-tracker/delete', 'id' => $model->id]);?>" class="btn btn-sm red btn-outline delete margin-bottom">Delete</a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -193,6 +194,14 @@ $(document).on('submit', 'body #add-comment-form', function(e) {
     },
   });
   return false;
+});
+
+$(".delete").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có muốn xoá lead tracker này không?',
+  callback: function(eletement, data) {
+    location.reload();
+  }
 });
 JS;
 $this->registerJs($script);

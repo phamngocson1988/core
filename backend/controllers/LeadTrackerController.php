@@ -31,7 +31,7 @@ class LeadTrackerController extends Controller
     {
         $this->view->params['main_menu_active'] = 'lead-tracker.index';
         $request = Yii::$app->request;
-        $isAdmin = Yii::$app->user->can('admin');
+        $isAdmin = Yii::$app->user->cans(['admin', 'sale_manager']);
         $form = new \backend\forms\FetchLeadTrackerForm([
             'id' => $request->get('id'),
             'saler_id' => $isAdmin ? $request->get('saler_id') : Yii::$app->user->id,
@@ -128,5 +128,16 @@ class LeadTrackerController extends Controller
             Yii::$app->session->setFlash('success', 'Success');
         }
         return $this->redirect(['customer-tracker/index']);
+    }
+
+    public function actionDelete($id)
+    {
+        $convertCustomerService = new \backend\forms\ConvertLeadTrackerToCustomerForm(['id' => $id]);
+        $user = \backend\models\LeadTracker::findOne($id);
+        if ($user) {
+            $user->delete();
+        }
+        Yii::$app->session->setFlash('success', 'Success');
+        return $this->asJson(['status' => true]);
     }
 }

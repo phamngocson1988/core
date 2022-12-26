@@ -42,6 +42,8 @@ class CreateLeadTrackerForm extends Model
             ['name', 'required'],
             // ['email', 'validateEmail'],
             // ['phone', 'validatePhone'],
+            ['email', 'unique', 'targetClass' => LeadTracker::className(), 'message' => 'This email address has already been taken.'],
+            ['phone', 'unique', 'targetClass' => LeadTracker::className(), 'message' => 'This phone has already been taken.'],
             [['name', 'link', 'saler_id', 'country_code', 'channel', 'game_id'], 'safe'],
             [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
         ];
