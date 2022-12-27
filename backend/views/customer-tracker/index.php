@@ -129,9 +129,9 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th class="center">Growth speed</th>
               <th colspan="3" class="center">Development</th>
               <th rowspan="2" class="center">Evaluation</th>
-              <th rowspan="2" class="center">Date (1st date)</th>
+              <th rowspan="2" class="center">1st date</th>
               <th rowspan="2" class="center">Evaluation</th>
-              <th rowspan="2" class="center">Date (1st date)</th>              								
+              <th rowspan="2" class="center">1st date</th>              								
               <th rowspan="2" class="center">Active 6 months continously</th>              								
               <th rowspan="2" class="center">(G1, G2<0)</th>              								
             </tr>
@@ -168,10 +168,10 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td class="center">
                   <?=$model->getCustomerTrackerLabel();?>
                 </td>
-                <td class="center">
+                <td class="center" <?php if ($model->is_loyalty):?> style="background-color: purple" <?php endif;?>>
                   <?=$model->getCustomerMonthlyLabel();?>
                 </td>
-                <td class="center"><a href="<?=$model->link;?>" target="_blank"><?=$model->name;?></a></td>
+                <td class="center" <?php if ($model->is_dangerous):?> style="background-color: red" <?php endif;?>><a href="<?=$model->link;?>" target="_blank"><?=$model->name;?></a></td>
                 <td class="center"><?=$model->getCountryName();?></td>
                 <td class="center"><?=$model->phone;?></td>
                 <td class="center"><?=$model->email;?></td>
@@ -229,6 +229,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td class="center">
                   <a href="<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Edit</a>
                   <a href="<?=Url::to(['customer-tracker/calculate', 'id' => $model->id]);?>" class="btn btn-sm blue btn-outline filter-submit margin-bottom ajax-link">Calculate</a>
+                  <a href="<?=Url::to(['customer-tracker/delete', 'id' => $model->id]);?>" class="btn btn-sm red btn-outline delete margin-bottom">Delete</a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -249,7 +250,9 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
 </div>
 <?php
 $script = <<< JS
-$('#myTable').DataTable();
+$('#myTable').DataTable({
+  order: [],
+});
 
   // comment
 $(document).on('submit', 'body #add-comment-form', function(e) {
@@ -278,6 +281,14 @@ $(".ajax-link").ajax_action({
   error: function(element, errors) {
     console.log(errors);
     alert(errors);
+  }
+});
+
+$(".delete").ajax_action({
+  confirm: true,
+  confirm_text: 'Bạn có muốn xoá customer tracker này không?',
+  callback: function(eletement, data) {
+    location.reload();
   }
 });
 JS;

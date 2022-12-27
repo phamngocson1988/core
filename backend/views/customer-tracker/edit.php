@@ -16,7 +16,7 @@ use common\components\helpers\TimeElapsed;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['task/index'])?>">Quản lý customer tracker</a>
+      <a href="<?=Url::to(['customer-tracker/index'])?>">Quản lý customer tracker</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
@@ -34,7 +34,7 @@ use common\components\helpers\TimeElapsed;
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
-            <a href="{$back}" class="btn default">
+            <a href="<?=Url::to(['customer-tracker/view', 'id' => $model->id]);?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
@@ -103,7 +103,7 @@ use common\components\helpers\TimeElapsed;
                   ])->textInput()->label('Monthly Sale Target');?>
                   <?=$form->field($model, 'customer_tracker_status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'bs-select form-control', 'readonly' => !$model->canUpdateCustomerStatus()],
+                    'inputOptions' => ['class' => 'bs-select form-control', 'disabled' => !$model->canUpdateCustomerStatus(),  'readonly' => !$model->canUpdateCustomerStatus()],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList($model->fetchCustomerStatus(), ['prompt' => '--Chọn--'])->label('Status');?>
 

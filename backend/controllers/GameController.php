@@ -279,7 +279,10 @@ class GameController extends Controller
         if (!Yii::$app->user->can('orderteam')) throw new NotFoundHttpException('Not found');
         $request = Yii::$app->request;
         // $model = Game::findOne($id);
-        $model = new \backend\forms\UpdateGamePriceForm(['id' => $id]);
+        $model = new \backend\forms\UpdateGamePriceForm([
+            'id' => $id,
+            'canUpdatePrice' => Yii::$app->user->can('admin')
+        ]);
         $model->loadData();
         
         $form = new FetchSupplierGameForm([

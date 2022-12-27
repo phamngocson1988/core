@@ -32,14 +32,20 @@ class CreateLeadTrackerForm extends Model
     public $question_8;
     public $question_9;
 
-    /**
-     * @inheritdoc
-     */
+    // public function scenarios()
+    // {
+    //     $scenarios = parent::scenarios();
+    //     $scenarios[self::SCENARIO_CREATE] = ['name', 'country_code', 'phone', 'address', 'birthday', 'status', 'password'];
+    //     $scenarios[self::SCENARIO_CONVERT] = ['id', 'name', 'country_code', 'phone', 'address', 'birthday', 'status'];
+    //     return $scenarios;
+    // }
+
     public function rules()
     {
         return [
             [['name', 'email', 'phone'], 'trim'],
             ['name', 'required'],
+            ['email', 'email'],
             // ['email', 'validateEmail'],
             // ['phone', 'validatePhone'],
             ['email', 'unique', 'targetClass' => LeadTracker::className(), 'message' => 'This email address has already been taken.'],

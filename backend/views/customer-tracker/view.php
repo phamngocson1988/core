@@ -60,7 +60,7 @@ use backend\models\CustomerTracker;
       <i class="fa fa-circle"></i>
     </li>
     <li>
-      <a href="<?=Url::to(['task/index'])?>">Quản lý customer tracker</a>
+      <a href="<?=Url::to(['customer-tracker/index'])?>">Quản lý customer tracker</a>
       <i class="fa fa-circle"></i>
     </li>
     <li>
@@ -236,7 +236,6 @@ use backend\models\CustomerTracker;
                   <th>Topic</th>
                   <th>Criteria</th>
                   <th>Result</th>
-                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -244,28 +243,24 @@ use backend\models\CustomerTracker;
                   <td class="highlight-yellow">Engagement</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_1');?></td>
                   <td><?=$model->question_1 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr>
                   <td class="highlight-yellow" rowspan="2">Network</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_2');?></td>
                   <td><?=$model->question_2 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr>
                   <td><?=CustomerTracker::getQuestionTitle('question_3');?></td>
                   <td><?=$model->question_3 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr>
                   <td class="highlight-yellow">Legit account</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_4');?></td>
                   <td><?=$model->question_4 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr class="highlight-yellow">
-                  <td colspan="2">Evaluation</td>
-                  <td><?=$model->calculatePointPotential();?></td>
+                  <td>Evaluation</td>
+                  <td class="center"><?=$model->calculatePointPotential();?></td>
                   <td><?=$model->is_potential ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
@@ -293,7 +288,6 @@ use backend\models\CustomerTracker;
                   <th>Topic</th>
                   <th>Criteria</th>
                   <th>Result</th>
-                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -301,32 +295,27 @@ use backend\models\CustomerTracker;
                   <td class="highlight-yellow" rowspan="4">Demand availability</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_5');?></td>
                   <td><?=$model->question_5 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr>
                   <td><?=CustomerTracker::getQuestionTitle('question_6');?></td>
                   <td><?=$model->question_6 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr>
                   <td><?=CustomerTracker::getQuestionTitle('question_7');?></td>
                   <td><?=$model->question_7 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr>
                   <td><?=CustomerTracker::getQuestionTitle('question_8');?></td>
                   <td><?=$model->question_8 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr>
                   <td class="highlight-yellow">Referred</td>
                   <td><?=CustomerTracker::getQuestionTitle('question_9');?></td>
                   <td><?=$model->question_9 ? 'YES' : 'NO';?></td>
-                  <td> Update</td>
                 </tr>
                 <tr class="highlight-yellow">
-                  <td colspan="2">Evaluation</td>
-                  <td><?=$model->calculatePointTarget();?></td>
+                  <td>Evaluation</td>
+                  <td class="center"><?=$model->calculatePointTarget();?></td>
                   <td><?=$model->is_target ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>

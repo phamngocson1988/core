@@ -60,6 +60,7 @@ class FetchCustomerTrackerForm extends Model
         if (count($condition)) {
             $command->andWhere($condition);
         }
+        $command->orderBy("id desc");
         $this->_command = $command;
     }
 
