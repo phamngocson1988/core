@@ -152,15 +152,15 @@ use backend\models\CustomerTracker;
                 </tr>
                 <tr>
                   <td class="highlight-dark">Channel</td>
-                  <td><?=$model->channel;?></td>
+                  <td><?=$model->getChannelLabels();?></td>
+                </tr>
+                <tr>
+                  <td class="highlight-dark">Contacts</td>
+                  <td><?=$model->getContactLabels();?></td>
                 </tr>
                 <tr>
                   <td class="highlight-dark">Registration date</td>
                   <td><?=$model->registered_at;?> </td>
-                </tr>
-                <tr>
-                  <td class="highlight-dark">1st order date</td>
-                  <td><?=$model->first_order_at;?> </td>
                 </tr>
               </tbody>
             </table>

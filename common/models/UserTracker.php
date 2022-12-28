@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\helpers\ArrayHelper;
 use common\models\User;
 use common\models\Country;
 
@@ -25,7 +26,8 @@ class UserTracker extends ActiveRecord
         'line'  => 'Line',
         'skype'  => 'Skype',
         'email' => 'Email',
-        'wechat' => 'Wechat'
+        'wechat' => 'Wechat',
+        'other' => 'Khác'
     ];
     const CHANNELS = [
         'facebook' => 'Facebook', 
@@ -182,6 +184,34 @@ class UserTracker extends ActiveRecord
             if ($question['key'] === $questionId) {
                 return $question['question'];
             }
+        }
+        return '';
+    }
+
+    public function getChannelLabels()
+    {
+        if ($this->channels) {
+            $channels = explode(',', $this->channels);
+            $titles = [];
+            foreach ($channels as $channel) {
+                $titles[] = ArrayHelper::getValue(self::CHANNELS, $channel);
+            }
+            $titles = array_filter($titles);
+            return implode(', ', $titles);
+        }
+        return '';
+    }
+
+    public function getContactLabels()
+    {
+        if ($this->contacts) {
+            $contacts = explode(',', $this->contacts);
+            $titles = [];
+            foreach ($contacts as $contact) {
+                $titles[] = ArrayHelper::getValue(self::CONTACTS, $contact);
+            }
+            $titles = array_filter($titles);
+            return implode(', ', $titles);
         }
         return '';
     }

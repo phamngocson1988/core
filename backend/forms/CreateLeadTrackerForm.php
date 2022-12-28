@@ -20,7 +20,8 @@ class CreateLeadTrackerForm extends Model
     public $country_code;
     public $phone;
     public $email;
-    public $channel;
+    public $channels = [];
+    public $contacts = [];
     public $game_id;
     public $question_1;
     public $question_2;
@@ -32,25 +33,30 @@ class CreateLeadTrackerForm extends Model
     public $question_8;
     public $question_9;
 
-    // public function scenarios()
-    // {
-    //     $scenarios = parent::scenarios();
-    //     $scenarios[self::SCENARIO_CREATE] = ['name', 'country_code', 'phone', 'address', 'birthday', 'status', 'password'];
-    //     $scenarios[self::SCENARIO_CONVERT] = ['id', 'name', 'country_code', 'phone', 'address', 'birthday', 'status'];
-    //     return $scenarios;
-    // }
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_CONVERT = 'convert';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $attributes = ['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channels', 'contacts', 'game_id', 'question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'];
+        $scenarios[self::SCENARIO_CREATE] = $attributes;
+        $scenarios[self::SCENARIO_CONVERT] = $attributes;
+        return $scenarios;
+    }
 
     public function rules()
     {
         return [
-            [['name', 'email', 'phone'], 'trim'],
+            [['name', 'email', 'phone', 'link'], 'trim'],
             ['name', 'required'],
             ['email', 'email'],
-            // ['email', 'validateEmail'],
-            // ['phone', 'validatePhone'],
+            ['email', 'validateEmail', 'on' => self::SCENARIO_CREATE],
+            ['phone', 'validatePhone', 'on' => self::SCENARIO_CREATE],
+            ['link', 'required', 'on' => self::SCENARIO_CREATE],
             ['email', 'unique', 'targetClass' => LeadTracker::className(), 'message' => 'This email address has already been taken.'],
             ['phone', 'unique', 'targetClass' => LeadTracker::className(), 'message' => 'This phone has already been taken.'],
-            [['name', 'link', 'saler_id', 'country_code', 'channel', 'game_id'], 'safe'],
+            [['name', 'link', 'saler_id', 'country_code', 'channels', 'contacts', 'game_id'], 'safe'],
             [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
         ];
     }
@@ -85,7 +91,8 @@ class CreateLeadTrackerForm extends Model
         $leadTracker->country_code = $this->country_code;
         $leadTracker->phone = $this->phone;
         $leadTracker->email = $this->email;
-        $leadTracker->channel = $this->channel;
+        $leadTracker->channels = implode(',', (array)$this->channels);
+        $leadTracker->contacts = implode(',', (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
         $leadTracker->question_1 = $this->question_1;
         $leadTracker->question_2 = $this->question_2;
@@ -157,6 +164,11 @@ class CreateLeadTrackerForm extends Model
     public function fetchChannels()
     {
         return LeadTracker::CHANNELS;
+    }
+
+    public function fetchContacts()
+    {
+        return LeadTracker::CONTACTS;
     }
 
     public function fetchGames()

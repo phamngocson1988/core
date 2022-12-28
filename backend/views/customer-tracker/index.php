@@ -171,7 +171,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td class="center"><?=$model->getCountryName();?></td>
                 <td class="center"><?=$model->phone;?></td>
                 <td class="center"><?=$model->email;?></td>
-                <td class="center"><?=$model->channel;?></td>
+                <td class="center"><?=$model->getChannelLabels();?></td>
                 <td class="center"><?=$model->game ? $model->game->title : '-';?></td>
                 <td class="center"><?=$model->saler ? $model->saler->getName() : '-';?></td>
 

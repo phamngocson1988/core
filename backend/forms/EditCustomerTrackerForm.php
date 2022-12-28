@@ -22,7 +22,8 @@ class EditCustomerTrackerForm extends Model
     public $country_code;
     public $phone;
     public $email;
-    public $channel;
+    public $channels = [];
+    public $contacts = [];
     public $game_id;
     public $sale_target;
     public $customer_tracker_status;
@@ -35,10 +36,10 @@ class EditCustomerTrackerForm extends Model
     public function rules()
     {
         return [
-            ['name', 'trim'],
-            [['id', 'name'], 'required'],
+            [['name', 'link'], 'trim'],
+            [['id', 'name', 'link'], 'required'],
             [['id'], 'validateCustomerTracker'],
-            [['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channel', 'game_id', 'customer_tracker_status', 'sale_target'], 'safe'],
+            [['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channels', 'contacts', 'game_id', 'customer_tracker_status', 'sale_target'], 'safe'],
         ];
     }
 
@@ -64,37 +65,40 @@ class EditCustomerTrackerForm extends Model
             return false;
         }
         $leadTracker = $this->getCustomerTracker();
+        $shouldCalculatePerformance = $this->sale_target != $leadTracker->sale_target;
         $leadTracker->name = $this->name;
         $leadTracker->link = $this->link;
         $leadTracker->saler_id = $this->saler_id;
         $leadTracker->country_code = $this->country_code;
         $leadTracker->phone = $this->phone;
         $leadTracker->email = $this->email;
-        $leadTracker->channel = $this->channel;
+        $leadTracker->channels = implode(",", (array)$this->channels);
+        $leadTracker->contacts = implode(",", (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
         $leadTracker->customer_tracker_status = $this->customer_tracker_status;
         $leadTracker->sale_target = $this->sale_target;
         $leadTracker->save();
+
+        if ($shouldCalculatePerformance) {
+            Yii::$app->queue->push(new \common\queue\RunCustomerTrackerPerformanceJob(['id' => $this->id]));
+        }
         return true;
     }
 
     public function loadData()
     {
         $leadTracker = $this->getCustomerTracker();
-        $shouldCalculatePerformance = $this->sale_target != $leadTracker->sale_target;
         $this->name = $leadTracker->name;
         $this->link = $leadTracker->link;
         $this->saler_id = $leadTracker->saler_id;
         $this->country_code = $leadTracker->country_code;
         $this->phone = $leadTracker->phone;
         $this->email = $leadTracker->email;
-        $this->channel = $leadTracker->channel;
+        $this->channels = explode(',', $leadTracker->channels);
+        $this->contacts = explode(',', $leadTracker->contacts);
         $this->game_id = $leadTracker->game_id;
         $this->customer_tracker_status = $leadTracker->customer_tracker_status;
         $this->sale_target = $leadTracker->sale_target;
-        if ($shouldCalculatePerformance) {
-            Yii::$app->queue->push(new \common\queue\RunCustomerTrackerPerformanceJob(['id' => $this->id]));
-        }
     }
 
     public function getBooleanList() 
@@ -135,6 +139,11 @@ class EditCustomerTrackerForm extends Model
     public function fetchChannels()
     {
         return CustomerTracker::CHANNELS;
+    }
+
+    public function fetchContacts()
+    {
+        return CustomerTracker::CONTACTS;
     }
 
     public function fetchCustomerStatus()

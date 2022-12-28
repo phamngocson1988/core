@@ -61,6 +61,7 @@ class LeadTrackerController extends Controller
         $request = Yii::$app->request;
         $this->view->params['main_menu_active'] = 'lead-tracker.index';
         $model = new \backend\forms\CreateLeadTrackerForm();
+        $model->setScenario(\backend\forms\CreateLeadTrackerForm::SCENARIO_CREATE);
         if ($model->load($request->post()) && $model->save()) {
             return $this->redirect(['lead-tracker/index']);
         }
@@ -74,7 +75,7 @@ class LeadTrackerController extends Controller
         $this->view->params['main_menu_active'] = 'lead-tracker.index';
         $model = new \backend\forms\EditLeadTrackerForm(['id' => $id]);
         if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['lead-tracker/index']);
+            Yii::$app->session->setFlash('success', 'Edit user successfully');
         } else {
             $model->loadData();
         }

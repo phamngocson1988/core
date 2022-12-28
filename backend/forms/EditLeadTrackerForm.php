@@ -22,7 +22,8 @@ class EditLeadTrackerForm extends Model
     public $country_code;
     public $phone;
     public $email;
-    public $channel;
+    public $channels = [];
+    public $contacts = [];
     public $game_id;
     public $question_1;
     public $question_2;
@@ -42,12 +43,13 @@ class EditLeadTrackerForm extends Model
     public function rules()
     {
         return [
-            [['name', 'email', 'phone'], 'trim'],
-            [['id', 'name'], 'required'],
+            [['name', 'email', 'phone', 'link'], 'trim'],
+            [['id', 'name', 'link'], 'required'],
             [['id'], 'validateLeadTracker'],
-            // ['email', 'validateEmail'],
-            // ['phone', 'validatePhone'],
-            [['name', 'link', 'saler_id', 'country_code', 'channel', 'game_id'], 'safe'],
+            ['email', 'email'],
+            ['email', 'validateEmail'],
+            ['phone', 'validatePhone'],
+            [['name', 'link', 'saler_id', 'country_code', 'channels', 'contacts', 'game_id'], 'safe'],
             [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
         ];
     }
@@ -98,7 +100,8 @@ class EditLeadTrackerForm extends Model
         $leadTracker->country_code = $this->country_code;
         $leadTracker->phone = $this->phone;
         $leadTracker->email = $this->email;
-        $leadTracker->channel = $this->channel;
+        $leadTracker->channels = implode(',', (array)$this->channels);
+        $leadTracker->contacts = implode(',', (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
         $leadTracker->question_1 = $this->question_1;
         $leadTracker->question_2 = $this->question_2;
@@ -140,7 +143,8 @@ class EditLeadTrackerForm extends Model
         $this->country_code = $leadTracker->country_code;
         $this->phone = $leadTracker->phone;
         $this->email = $leadTracker->email;
-        $this->channel = $leadTracker->channel;
+        $this->channels = $leadTracker->channels ? explode(',', $leadTracker->channels) : [];
+        $this->contacts = $leadTracker->contacts ? explode(',', $leadTracker->contacts) : [];
         $this->game_id = $leadTracker->game_id;
         $this->question_1 = $leadTracker->question_1;
         $this->question_2 = $leadTracker->question_2;
@@ -191,6 +195,11 @@ class EditLeadTrackerForm extends Model
     public function fetchChannels()
     {
         return LeadTracker::CHANNELS;
+    }
+
+    public function fetchContacts()
+    {
+        return LeadTracker::CONTACTS;
     }
 
     public function fetchGames()

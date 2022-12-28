@@ -98,10 +98,13 @@ class ConvertCustomerToCustomerTrackerForm extends Model
               'question_8' => true,
               'question_9' => true,
             ]);
+            $createForm->setScenario(\backend\forms\CreateLeadTrackerForm::SCENARIO_CONVERT);
+
             $leadTracker = $createForm->save();
             if (!$leadTracker) {
               $errors = $createForm->getFirstErrors();
-              return $this->addError('id', reset($errors));
+              $this->addError('id', reset($errors));
+              return false;
             }
         }
         $leadTracker->user_id = $this->id;
@@ -110,6 +113,9 @@ class ConvertCustomerToCustomerTrackerForm extends Model
         $leadTracker->registered_at = $user->created_at;
         if ($leadTracker->save()) {
             Yii::$app->queue->push(new \common\queue\RunCustomerTrackerPerformanceJob(['id' => $leadTracker->id]));
+        } else {
+            $this->addError('id', 'some thing wrong');
+            return false;
         }
         return true;
     }

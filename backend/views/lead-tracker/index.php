@@ -131,7 +131,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td><?=$model->getCountryName();?></td>
                 <td><?=$model->phone;?></td>
                 <td><?=$model->email;?></td>
-                <td><?=$model->channel;?></td>
+                <td><?=$model->getChannelLabels();?></td>
                 <td><?=$model->game ? $model->game->title : '-';?></td>
                 <td class="center">
                   <?php if ($model->is_potential) :?>
