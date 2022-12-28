@@ -61,7 +61,7 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
         $is_potential_customer = max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 105;
         if ($is_potential_customer && !$tracker->potential_customer_at) {
             $tracker->potential_customer_at = $now;
-            $tracker->customer_monthly_status = max($this->customer_monthly_status, 2);
+            $tracker->customer_monthly_status = max($tracker->customer_monthly_status, 2);
         }
         $tracker->is_potential_customer = $is_potential_customer;
         
@@ -69,7 +69,7 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
             && ((float)$tracker->kpi_growth >= 0.7);
         if ($is_key_customer && !$tracker->key_customer_at) {
             $tracker->key_customer_at = $now;
-            $tracker->customer_monthly_status = max($this->customer_monthly_status, 3);
+            $tracker->customer_monthly_status = max($tracker->customer_monthly_status, 3);
         }
         $tracker->is_key_customer = $is_key_customer;
         $tracker->is_loyalty = $this->checkLoyalty($tracker->user_id);

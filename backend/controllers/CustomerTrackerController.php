@@ -31,7 +31,7 @@ class CustomerTrackerController extends Controller
     {
         $this->view->params['main_menu_active'] = 'customer-tracker.index';
         $request = Yii::$app->request;
-        $isAdmin = Yii::$app->user->can('admin');
+        $isAdmin = Yii::$app->user->cans(['admin', 'sale_manager']);
         $form = new \backend\forms\FetchCustomerTrackerForm([
             'name' => $request->get('name'),
             'saler_id' => $isAdmin ? $request->get('saler_id') : Yii::$app->user->id,

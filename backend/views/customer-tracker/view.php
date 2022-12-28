@@ -10,7 +10,7 @@ use common\components\helpers\TimeElapsed;
 use backend\models\CustomerTracker;
 ?>
 <style>
-  .general-information tr>td:first-child, 
+  /* .general-information tr>td:first-child, 
   .personal-information tr>td:first-child,
   .record-information tr>td:first-child {
     background-color: #061932;
@@ -22,6 +22,12 @@ use backend\models\CustomerTracker;
   .record-information tr td:not(:first-child) {
     inline-size: 70%;
     word-break: break-all;
+  } */
+
+  table .highlight-dark {
+    background-color: #061932;
+    color: white;
+    font-weight: bold;
   }
 
   table .highlight-yellow {
@@ -96,19 +102,19 @@ use backend\models\CustomerTracker;
             <table class="table general-information">
               <tbody>
                 <tr>
-                  <td>Index</td>
+                  <td class="highlight-dark">Index</td>
                   <td>#<?=$model->id;?> </td>
                 </tr>
                 <tr>
-                  <td>Name</td>
+                  <td class="highlight-dark">Name</td>
                   <td> <?=$model->name;?> </td>
                 </tr>
                 <tr>
-                  <td>Link Account</td>
+                  <td class="highlight-dark">Link Account</td>
                   <td> <?=$model->link;?> </td>
                 </tr>
                 <tr>
-                  <td>Account Manger</td>
+                  <td class="highlight-dark">Account Manger</td>
                   <td><?=$model->saler ? $model->saler->getName() : '-';?> </td>
                 </tr>
               </tbody>
@@ -133,27 +139,27 @@ use backend\models\CustomerTracker;
             <table class="table personal-information">
               <tbody>
                 <tr>
-                  <td>Nationality</td>
+                  <td class="highlight-dark">Nationality</td>
                   <td><?=$model->getCountryName();?></td>
                 </tr>
                 <tr>
-                  <td>Phone</td>
+                  <td class="highlight-dark">Phone</td>
                   <td><?=$model->phone;?></td>
                 </tr>
                 <tr>
-                  <td>Email</td>
+                  <td class="highlight-dark">Email</td>
                   <td><?=$model->email;?></td>
                 </tr>
                 <tr>
-                  <td>Channel</td>
+                  <td class="highlight-dark">Channel</td>
                   <td><?=$model->channel;?></td>
                 </tr>
                 <tr>
-                  <td>Registration date</td>
+                  <td class="highlight-dark">Registration date</td>
                   <td><?=$model->registered_at;?> </td>
                 </tr>
                 <tr>
-                  <td>1st order date</td>
+                  <td class="highlight-dark">1st order date</td>
                   <td><?=$model->first_order_at;?> </td>
                 </tr>
               </tbody>
@@ -178,38 +184,42 @@ use backend\models\CustomerTracker;
             <table class="table record-information">
               <tbody>
                 <tr>
-                  <td>Monthly Sales Target</td>
-                  <td>
+                  <td class="highlight-dark">Monthly Sales Target</td>
+                  <td class="center">
                     <?php if ($model->sale_target) : ?>
-                    <?=$model->sale_target;?> - Achieve (<?=round($model->kpi_growth * 100, 2);?>%) - Remaining (<?=100 - round($model->kpi_growth * 100, 2);?>%)
                     <?php endif;?>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=min(1, $model->kpi_growth);?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=min(100, $model->kpi_growth * 100);?>%">
+                        <?=round($model->kpi_growth * 100, 2);?>%
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <tr>
-                  <td>No.of games</td>
+                  <td class="highlight-dark">No.of games</td>
                   <td>
                     <a href="#game-list-modal" data-toggle="modal"><?=$form->getNumberOfGames();?></a>
                   </td>
                 </tr>
                 <tr>
-                  <td>First order	</td>
+                  <td class="highlight-dark">First order	</td>
                   <td><?=$model->first_order_at;?></td>
                 </tr>
                 <tr>
-                  <td>A.Monthly Sale volume		</td>
+                  <td class="highlight-dark">A.Monthly Sale volume		</td>
                   <td><?=$model->monthly_sale_volumn;?><td>
                 </tr>
                 <tr>
-                  <td>A.By plan Sale volume</td>
+                  <td class="highlight-dark">A. Daily Sale volume</td>
                   <td><?=$model->daily_sale_volumn;?><td>
                 </tr>
                 <tr>
-                  <td>Status</td>
-                  <td><?=$model->customer_tracker_status ? 'YES' : 'NO';?></td>
+                  <td class="highlight-dark">Status</td>
+                  <td><?=$model->getCustomerTrackerLabel();?></td>
                 </tr>
                 <tr>
-                  <td>Monthly Status Customer</td>
-                  <td><?=$model->customer_tracker_status ? 'YES' : 'NO';?></td>
+                  <td class="highlight-dark">Monthly Status Customer</td>
+                  <td><?=$model->getCustomerMonthlyLabel();?></td>
                 </tr>
               </tbody>
             </table>

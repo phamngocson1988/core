@@ -103,7 +103,7 @@ use common\components\helpers\TimeElapsed;
                   ])->textInput()->label('Monthly Sale Target');?>
                   <?=$form->field($model, 'customer_tracker_status', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'inputOptions' => ['class' => 'bs-select form-control', 'disabled' => !$model->canUpdateCustomerStatus(),  'readonly' => !$model->canUpdateCustomerStatus()],
+                    'inputOptions' => ['class' => 'bs-select form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
                   ])->dropDownList($model->fetchCustomerStatus(), ['prompt' => '--Chọn--'])->label('Status');?>
 

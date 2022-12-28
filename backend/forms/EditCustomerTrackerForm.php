@@ -132,12 +132,6 @@ class EditCustomerTrackerForm extends Model
         return $salerTeam;
     }
 
-    public function canUpdateCustomerStatus()
-    {
-        $customerTracker = $this->getCustomerTracker();
-        return $customerTracker ? $customerTracker->is_key_customer : false;
-    }
-
     public function fetchChannels()
     {
         return CustomerTracker::CHANNELS;

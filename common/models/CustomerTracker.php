@@ -17,9 +17,6 @@ class CustomerTracker extends UserTracker
 
   public function getCustomerTrackerStatus()
   {
-    if (!$this->is_key_customer) {
-      return 0;
-    }
     return $this->customer_tracker_status;
   }
   public function getCustomerTrackerLabel()

@@ -117,9 +117,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th colspan="11" class="center">Sales Performance</th>
               <th colspan="2" class="center">Potential Customer</th>
               <th colspan="2" class="center">Key Customer</th>
-              <th class="center">Loyalty customer</th>
-              <th class="center">Customer in dangerous</th>
-              <th rowspan="3" class="center">Actions</th>
+              <th rowspan="3" class="center">Tác vụ</th>
             </tr>
             <tr>
               <th></th>
@@ -132,8 +130,6 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th rowspan="2" class="center">1st date</th>
               <th rowspan="2" class="center">Evaluation</th>
               <th rowspan="2" class="center">1st date</th>              								
-              <th rowspan="2" class="center">Active 6 months continously</th>              								
-              <th rowspan="2" class="center">(G1, G2<0)</th>              								
             </tr>
             <tr>
               <th>Status</th>
@@ -160,7 +156,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
           </thead>
           <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="28"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="26"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
@@ -195,7 +191,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <?php endif;?>
                 </td>
                 <td class="center"><?=$model->number_of_game;?></td>
-                <td class="center"><?=$model->kpi_growth;?></td>
+                <td class="center"><?=$model->kpi_growth * 100;?>%</td>
                 <td class="center">
                   <?php if ($model->is_potential_customer) :?>
                   <span class="label label-success">YES</span>
@@ -212,20 +208,6 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                   <?php endif;?>
                 </td>
                 <td class="center"><?=$model->key_customer_at;?></td>
-                <td class="center">
-                  <?php if ($model->is_loyalty) :?>
-                  <span class="label label-success">YES</span>
-                  <?php else : ?>
-                  <span class="label label-default">NO</span>
-                  <?php endif;?>
-                </td>
-                <td class="center">
-                  <?php if ($model->is_dangerous) :?>
-                  <span class="label label-success">YES</span>
-                  <?php else : ?>
-                  <span class="label label-default">NO</span>
-                  <?php endif;?>
-                </td>
                 <td class="center">
                   <a href="<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Edit</a>
                   <a href="<?=Url::to(['customer-tracker/calculate', 'id' => $model->id]);?>" class="btn btn-sm blue btn-outline filter-submit margin-bottom ajax-link">Calculate</a>
