@@ -7,6 +7,7 @@ $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.
 $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => [\backend\assets\AppAsset::className()]]);
 $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/datatables.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$saleForUser = $search->countSaleByUser();
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -68,7 +69,13 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
             <?=$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
-            ])->dropDownList($search->fetchGames(), ['prompt' => '--Select--'])->label('Game');?>
+            ])->widget(kartik\select2\Select2::classname(), [
+              'data' => $search->fetchGames(),
+              'options' => ['class' => 'form-control', 'placeholder' => '--Select--'],
+              'pluginOptions' => [
+                'allowClear' => true
+              ],
+            ])->label('Game')?>
             <?php if (Yii::$app->user->can('admin')):?>
             <?=$form->field($search, 'saler_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
@@ -114,7 +121,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th></th>
               <th></th>
               <th rowspan="2" colspan="7" class="center">General Information</th>
-              <th colspan="11" class="center">Sales Performance</th>
+              <th colspan="12" class="center">Sales Performance</th>
               <th colspan="2" class="center" data-toggle="popover" data-placement="top" data-content="1st/2nd/3rd >= 105">Potential Customer</th>
               <th colspan="2" class="center" data-toggle="popover" data-placement="top" data-content="1st/2nd/3rd >= 150 AND %Result/ KPI >= 70%">Key Customer</th>
               <th rowspan="3" class="center">Tác vụ</th>
@@ -125,7 +132,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th colspan="5" class="center">Normal Customer</th>
               <th colspan="2" class="center">Growth rate</th>
               <th class="center">Growth speed</th>
-              <th colspan="3" class="center">Development</th>
+              <th colspan="4" class="center">Development</th>
               <th rowspan="2" class="center">Evaluation</th>
               <th rowspan="2" class="center">1st date</th>
               <th rowspan="2" class="center">Evaluation</th>
@@ -151,12 +158,13 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th>G2 - G1</th>
               <th>Sales Growth</th>
               <th>Product Growth</th>
-              <th>% Result/ KPI</th>
+              <th>% Result/ KPI (last month)</th>
+              <th>% Result/ KPI (this month)</th>
             </tr>
           </thead>
           <tbody>
               <?php if (!$models) : ?>
-              <tr><td colspan="26"><?=Yii::t('app', 'no_data_found');?></td></tr>
+              <tr><td colspan="27"><?=Yii::t('app', 'no_data_found');?></td></tr>
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
@@ -179,7 +187,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 <td class="center"><?=$model->sale_month_1;?></td>
                 <td class="center"><?=$model->sale_month_2;?></td>
                 <td class="center"><?=$model->sale_month_3;?></td>
-                <td class="center"><?=$model->sale_target;?></td>
+                <td class="center"><?=$model->getCurrentSaleTarget();?></td>
                 <td class="center"><?=$model->growth_rate_1;?></td>
                 <td class="center"><?=$model->growth_rate_2;?></td>
                 <td class="center"><?=$model->growth_speed;?></td>
@@ -192,6 +200,17 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
                 </td>
                 <td class="center"><?=$model->number_of_game;?></td>
                 <td class="center"><?=$model->kpi_growth * 100;?>%</td>
+                <td class="center">
+                  <?php
+                  $currentSaleTarget = $model->getCurrentSaleTarget();
+                  if ($currentSaleTarget) {
+                    $currentSale = ArrayHelper::getValue($saleForUser, $model->user_id, 0);
+                    echo sprintf("%s%s", round(( $currentSale / $currentSaleTarget) * 100, 2), "%");
+                  } else {
+                    echo '0%';
+                  }
+                  ?>
+                </td>
                 <td class="center">
                   <?php if ($model->is_potential_customer) :?>
                   <span class="label label-success">YES</span>

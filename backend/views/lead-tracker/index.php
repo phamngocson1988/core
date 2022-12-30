@@ -79,8 +79,14 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
             ])->textInput()->label('Email');?>
             <?=$form->field($search, 'game_id', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
-              'inputOptions' => ['class' => 'form-control', 'name' => 'is_target']
-            ])->dropDownList($search->fetchGames(), ['prompt' => '--Select--'])->label('Game');?>
+              'inputOptions' => ['class' => 'form-control', 'name' => 'game_id']
+            ])->widget(kartik\select2\Select2::classname(), [
+              'data' => $search->fetchGames(),
+              'options' => ['class' => 'form-control', 'placeholder' => '--Select--'],
+              'pluginOptions' => [
+                'allowClear' => true
+              ],
+            ])->label('Game')?>
             <?=$form->field($search, 'is_potential', [
               'options' => ['class' => 'form-group col-md-4 col-lg-3'],
               'inputOptions' => ['class' => 'form-control', 'name' => 'is_potential']

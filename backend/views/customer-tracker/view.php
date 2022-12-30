@@ -184,15 +184,44 @@ use backend\models\CustomerTracker;
             <table class="table record-information">
               <tbody>
                 <tr>
-                  <td class="highlight-dark">Monthly Sales Target</td>
+                  <td class="highlight-dark">Monthly Sales Target (Last month)</td>
                   <td class="center">
-                    <?php if ($model->sale_target) : ?>
-                    <?php endif;?>
+                    <?php if ($model->getSaleTarget(date('Ym', strtotime('last month')))) : ?>
                     <div class="progress">
                       <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=min(1, $model->kpi_growth);?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=min(100, $model->kpi_growth * 100);?>%">
                         <?=round($model->kpi_growth * 100, 2);?>%
                       </div>
                     </div>
+                    <?php else :?>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        0%
+                      </div>
+                    </div>
+                    <?php endif;?>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="highlight-dark">Monthly Sales Target (This month)</td>
+                  <td class="center">
+                    <?php 
+                    $currentSaleTarget = $model->getCurrentSaleTarget();
+                    if ($currentSaleTarget) : 
+                      $currentSale = $form->getCurrentSale();
+                      $kpiGrowth = round($currentSale / $currentSaleTarget, 2);
+                    ?>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=min(1, $kpiGrowth);?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=min(100, $kpiGrowth * 100);?>%">
+                        <?=round($kpiGrowth * 100, 2);?>%
+                      </div>
+                    </div>
+                    <?php else :?>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        0%
+                      </div>
+                    </div>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <tr>

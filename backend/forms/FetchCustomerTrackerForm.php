@@ -8,6 +8,7 @@ use backend\models\CustomerTracker;
 use common\models\Country;
 use backend\models\User;
 use backend\models\Game;
+use backend\models\Order;
 
 class FetchCustomerTrackerForm extends Model
 {
@@ -91,7 +92,10 @@ class FetchCustomerTrackerForm extends Model
 
     public function fetchGames()
     {
-        $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
+        $games = Game::find()
+        ->where(['<>', 'status', Game::STATUS_DELETE])
+        ->orderBy('title asc')
+        ->select(['id', 'title'])->all();
         return ArrayHelper::map($games, 'id', 'title');
     }
 
@@ -112,6 +116,20 @@ class FetchCustomerTrackerForm extends Model
         $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'email');
         return $salerTeam;
     }    
+
+    public function countSaleByUser()
+    {
+        $start = date("Y-m-01 00:00:00");
+        $data = Order::find()->where([
+            'status' => Order::STATUS_CONFIRMED
+        ])
+        ->andWhere([">=", "confirmed_at", $start])
+        ->groupBy('customer_id')
+        ->select(['customer_id', 'SUM(quantity) as quantity'])
+        ->asArray()
+        ->all();
+        return ArrayHelper::map($data, 'customer_id', 'quantity');
+    }
 
     public function export($fileName = null)
     {

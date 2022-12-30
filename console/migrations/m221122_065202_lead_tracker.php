@@ -55,7 +55,7 @@ class m221122_065202_lead_tracker extends Migration
             'sale_month_1' => $this->float(),
             'sale_month_2' => $this->float(),
             'sale_month_3' => $this->float(),
-            'sale_target' => $this->float(),
+            'sale_target' => $this->text(),
             'growth_rate_1' => $this->float(),
             'growth_rate_2' => $this->float(),
             'growth_speed' => $this->float(), // growth_rate_1 - growth_rate_2

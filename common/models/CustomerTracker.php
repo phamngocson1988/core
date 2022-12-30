@@ -28,6 +28,43 @@ class CustomerTracker extends UserTracker
   {
     return ArrayHelper::getValue(self::CUSTOMER_STATUS, $this->customer_monthly_status, 'Normal Custormer');
   }
+
+  /**
+   * @var $month string 
+   * @example 202212
+   */
+  public function getSaleTarget($month)
+  {
+    try {
+      $data = json_decode($this->sale_target, true);
+      return ArrayHelper::getValue($data, $month, 0);
+    } catch (Exception $e) {
+      return 0;
+    }
+  }
+
+  public function getCurrentSaleTarget()
+  {
+    $month = date("Ym");
+    return $this->getSaleTarget($month);
+  }
+
+  public function setSaleTarget($month, $value) 
+  {
+    try {
+      $data = json_decode($this->sale_target, true);
+    } catch (Exception $e) {
+      $data = [];
+    }
+    $data[$month] = $value;
+    $this->sale_target = json_encode($data);
+  }
+
+  public function setCurrentSaleTarget($value)
+  {
+    $month = date("Ym");
+    return $this->setSaleTarget($month, $value);
+  }
 }
 
 class CustomerTrackerQuery extends ActiveQuery

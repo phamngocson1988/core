@@ -65,7 +65,7 @@ class EditCustomerTrackerForm extends Model
             return false;
         }
         $leadTracker = $this->getCustomerTracker();
-        $shouldCalculatePerformance = $this->sale_target != $leadTracker->sale_target;
+        $shouldCalculatePerformance = $this->sale_target != $leadTracker->getCurrentSaleTarget();
         $leadTracker->name = $this->name;
         $leadTracker->link = $this->link;
         $leadTracker->saler_id = $this->saler_id;
@@ -76,7 +76,7 @@ class EditCustomerTrackerForm extends Model
         $leadTracker->contacts = implode(",", (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
         $leadTracker->customer_tracker_status = $this->customer_tracker_status;
-        $leadTracker->sale_target = $this->sale_target;
+        $leadTracker->setCurrentSaleTarget($this->sale_target);
         $leadTracker->save();
 
         if ($shouldCalculatePerformance) {
@@ -98,7 +98,7 @@ class EditCustomerTrackerForm extends Model
         $this->contacts = explode(',', $leadTracker->contacts);
         $this->game_id = $leadTracker->game_id;
         $this->customer_tracker_status = $leadTracker->customer_tracker_status;
-        $this->sale_target = $leadTracker->sale_target;
+        $this->sale_target = $leadTracker->getCurrentSaleTarget();
     }
 
     public function getBooleanList() 

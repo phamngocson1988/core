@@ -111,6 +111,11 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
                 <i class="fa fa-check"></i> <?=Yii::t('app', 'search')?>
               </button>
+              <?php if ($search->user_id) :?>
+              <a role="button" target="_blank"  href="<?=Url::to(['wallet/topup', 'id' => $search->user_id]);?>" class="btn purple" style="margin-top: 25px;">
+                <i class="fa fa-plus"></i> Topup
+              </a> 
+              <?php endif;?>
             </div>
           <?php ActiveForm::end()?>
         </div>

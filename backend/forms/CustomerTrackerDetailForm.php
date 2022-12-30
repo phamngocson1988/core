@@ -51,4 +51,15 @@ class CustomerTrackerDetailForm extends Model
         ->all();
     }
 
+    public function getCurrentSale()
+    {
+        $customerTracker = $this->getCustomerTracker();
+        $start = date("Y-m-01 00:00:00");
+        return Order::find()->where([
+            'customer_id' => $customerTracker->user_id,
+            'status' => Order::STATUS_CONFIRMED
+        ])
+        ->andWhere([">=", "confirmed_at", $start])
+        ->sum('quantity');
+    }
 }

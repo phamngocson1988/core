@@ -41,6 +41,7 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
         if (!$this->validate()) return false;
         $tracker = $this->getCustomerTracker();
         $now = date('Y-m-d H:i:s');
+        $lastMonthSaleTarget = $tracker->getSaleTarget(date('Ym', strtotime('last month')));
         // sale performance
         if (!$tracker->first_order_at) {
             $tracker->first_order_at = $this->getFirstOrderDate($tracker->user_id);
@@ -55,8 +56,8 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
             && (min($tracker->growth_rate_1, $tracker->growth_rate_2, $tracker->growth_speed) > 0);
         $tracker->number_of_game = $this->findNumberOfGame($tracker->user_id);
         $tracker->product_growth = $tracker->number_of_game >= 2;
-        if ($tracker->sale_target) {
-            $tracker->kpi_growth = round($tracker->sale_month_3 / $tracker->sale_target, 2);
+        if ($lastMonthSaleTarget) {
+            $tracker->kpi_growth = round($tracker->sale_month_3 / $lastMonthSaleTarget, 2);
         }
         $lastOrder3Months = $this->getLastOrder($tracker->user_id, 3);
         $is_potential_customer = max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 105;

@@ -77,7 +77,10 @@ class FetchLeadTrackerForm extends Model
 
     public function fetchGames()
     {
-        $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
+        $games = Game::find()
+        ->where(['<>', 'status', Game::STATUS_DELETE])
+        ->orderBy('title asc')
+        ->select(['id', 'title'])->all();
         return ArrayHelper::map($games, 'id', 'title');
     }
 
