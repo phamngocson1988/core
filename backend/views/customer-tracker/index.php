@@ -115,8 +115,8 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <th></th>
               <th rowspan="2" colspan="7" class="center">General Information</th>
               <th colspan="11" class="center">Sales Performance</th>
-              <th colspan="2" class="center">Potential Customer</th>
-              <th colspan="2" class="center">Key Customer</th>
+              <th colspan="2" class="center" data-toggle="popover" data-placement="top" data-content="1st/2nd/3rd >= 105">Potential Customer</th>
+              <th colspan="2" class="center" data-toggle="popover" data-placement="top" data-content="1st/2nd/3rd >= 150 AND %Result/ KPI >= 70%">Key Customer</th>
               <th rowspan="3" class="center">Tác vụ</th>
             </tr>
             <tr>
@@ -272,6 +272,11 @@ $(".delete").ajax_action({
   callback: function(eletement, data) {
     location.reload();
   }
+});
+
+$('[data-toggle="popover"]').popover({
+  container: 'body',
+  trigger: 'hover'
 });
 JS;
 $this->registerJs($script);

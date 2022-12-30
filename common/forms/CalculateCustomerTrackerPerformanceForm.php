@@ -58,9 +58,10 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
         if ($tracker->sale_target) {
             $tracker->kpi_growth = round($tracker->sale_month_3 / $tracker->sale_target, 2);
         }
+        $lastOrder3Months = $this->getLastOrder($tracker->user_id, 3);
         $is_potential_customer = max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 105;
         if ($is_potential_customer && !$tracker->potential_customer_at) {
-            $tracker->potential_customer_at = $now;
+            $tracker->potential_customer_at = $lastOrder3Months;
             $tracker->customer_monthly_status = max($tracker->customer_monthly_status, 2);
         }
         $tracker->is_potential_customer = $is_potential_customer;
@@ -68,13 +69,18 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
         $is_key_customer = (max($tracker->sale_month_1, $tracker->sale_month_2, $tracker->sale_month_3) >= 150)
             && ((float)$tracker->kpi_growth >= 0.7);
         if ($is_key_customer && !$tracker->key_customer_at) {
-            $tracker->key_customer_at = $now;
+            $tracker->key_customer_at = $lastOrder3Months;
             $tracker->customer_monthly_status = max($tracker->customer_monthly_status, 3);
         }
         $tracker->is_key_customer = $is_key_customer;
         $tracker->is_loyalty = $this->checkLoyalty($tracker->user_id);
+        if ($tracker->is_loyalty && !$tracker->loyalty_customer_at) {
+            $tracker->loyalty_customer_at = $this->getLastOrder($tracker->user_id, 6);
+        }
         $tracker->is_dangerous = max($tracker->growth_rate_1, $tracker->growth_rate_2) < 0;
-
+        if ($tracker->is_dangerous && !$tracker->dangerous_customer_at) {
+            $tracker->dangerous_customer_at = $lastOrder3Months;
+        }
         $tracker->monthly_sale_volumn = round(($tracker->sale_month_1 + $tracker->sale_month_2 + $tracker->sale_month_3) / 3, 2);
         $tracker->daily_sale_volumn = $this->getDailySaleAvg($tracker->user_id);
         return $tracker->save();
@@ -108,6 +114,19 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
     protected function getFirstOrderDate($userId) 
     {
         $order = Order::find()->where(['customer_id' => $userId])->select(['created_at'])->one();
+        return $order ? $order->created_at : null;
+    }
+
+    protected function getLastOrder($userId, $month) 
+    {
+        $month = "-$month month";
+        $start = date("Y-m-01 00:00:00", strtotime($month));
+        $end = date("Y-m-t 23:59:59", strtotime($month));
+        $order = Order::find()
+        ->where(['customer_id' => $userId])
+        ->andWhere(["between", "created_at", $start,  $end])
+        ->orderBy("id desc")
+        ->select(['created_at'])->one();
         return $order ? $order->created_at : null;
     }
 

@@ -84,6 +84,7 @@ class CreateLeadTrackerForm extends Model
         if (!$this->validate()) {
             return false;
         }
+        $now = date('Y-m-d H:i:s');
         $leadTracker = new LeadTracker();
         $leadTracker->name = $this->name;
         $leadTracker->link = $this->link;
@@ -105,6 +106,12 @@ class CreateLeadTrackerForm extends Model
         $leadTracker->question_9 = $this->question_9;
         $leadTracker->is_potential = $leadTracker->calculateIsPotential();
         $leadTracker->is_target = $leadTracker->calculateIsTarget();
+        if ($leadTracker->is_potential && !$leadTracker->potential_lead_at) {
+            $leadTracker->potential_lead_at = $now;
+        }
+        if ($leadTracker->is_target && !$leadTracker->target_lead_at) {
+            $leadTracker->target_lead_at = $now;
+        }
         if ($leadTracker->save()) {
             return $leadTracker;
         }

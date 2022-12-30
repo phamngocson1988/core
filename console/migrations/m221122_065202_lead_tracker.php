@@ -28,7 +28,9 @@ class m221122_065202_lead_tracker extends Migration
             'contacts' => $this->string(255),
             'game_id' => $this->integer(11),
             'is_potential' => $this->boolean()->defaultValue(false),
+            'potential_lead_at' => $this->dateTime(),
             'is_target' => $this->boolean()->defaultValue(false),
+            'target_lead_at' => $this->dateTime(),
             'question_1' => $this->boolean()->defaultValue(false),
             'question_2' => $this->boolean()->defaultValue(false),
             'question_3' => $this->boolean()->defaultValue(false),
@@ -72,7 +74,9 @@ class m221122_065202_lead_tracker extends Migration
             'daily_sale_volumn' => $this->float(),
 
             'is_loyalty' => $this->boolean()->defaultValue(false), // has order in every last 6 months
+            'loyalty_customer_at' => $this->dateTime(),
             'is_dangerous' => $this->boolean()->defaultValue(false),
+            'dangerous_customer_at' => $this->dateTime(),
             'customer_tracker_status' => $this->integer(11),
             'customer_monthly_status' => $this->integer(11),
 
