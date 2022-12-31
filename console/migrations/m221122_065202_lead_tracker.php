@@ -52,6 +52,8 @@ class m221122_065202_lead_tracker extends Migration
             'registered_at' => $this->dateTime(),
             // sale performance
             'first_order_at' => $this->dateTime(),
+            'is_normal_customer' => $this->boolean()->defaultValue(false),
+            'normal_customer_at' => $this->dateTime(),
             'sale_month_1' => $this->float(),
             'sale_month_2' => $this->float(),
             'sale_month_3' => $this->float(),

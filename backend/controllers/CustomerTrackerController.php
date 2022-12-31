@@ -67,6 +67,14 @@ class CustomerTrackerController extends Controller
         return $this->render('view', ['model' => $model, 'form' => $form]);
     }
 
+    public function actionReport()
+    {
+        $request = Yii::$app->request;
+        $this->view->params['main_menu_active'] = 'customer-tracker.index';
+        $form = new \backend\forms\CustomerTrackerReportForm();
+        return $this->render('report', ['form' => $form]);
+    }
+
     public function actionEdit($id)
     {
         $request = Yii::$app->request;

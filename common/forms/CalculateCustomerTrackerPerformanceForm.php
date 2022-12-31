@@ -45,6 +45,10 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
         // sale performance
         if (!$tracker->first_order_at) {
             $tracker->first_order_at = $this->getFirstOrderDate($tracker->user_id);
+            if ($tracker->first_order_at) {
+                $tracker->is_normal_customer = true;
+                $tracker->normal_customer_at = $now;
+            }
         }
         $tracker->sale_month_1 = $this->findTotalPayment($tracker->user_id, "-3 month");
         $tracker->sale_month_2 = $this->findTotalPayment($tracker->user_id, "-2 month");

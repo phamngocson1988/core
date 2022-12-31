@@ -37,6 +37,7 @@ $saleForUser = $search->countSaleByUser();
         <div class="actions">
           <div class="btn-group btn-group-devided">
             <?php if (Yii::$app->user->can('admin')) : ?>
+            <a role="button" class="btn green" href="<?=Url::to(['customer-tracker/report'])?>"><i class="fa fa-search"></i> Report</a>
             <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
             <?php endif;?>
           </div>
