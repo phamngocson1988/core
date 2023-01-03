@@ -300,17 +300,19 @@ class ReportCommissionForm extends Model
 
         $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
         $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
-        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow + 1);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
 
-        $users = $this->fetchUsers();
+        $users = ['All'];
         if ($this->user_ids && count($this->user_ids)) {
+            $users = $this->fetchUsers();
             $users = array_intersect_key(
                 $users,  // the array with all keys
                 array_flip($this->user_ids) // keys to be extracted
             );
         }
-        $games = $this->fetchGames();
+        $games = ['All'];
         if ($this->game_ids && count($this->game_ids)) {
+            $games = $this->fetchGames();
             $games = array_intersect_key(
                 $games,  // the array with all keys
                 array_flip($this->game_ids) // keys to be extracted
