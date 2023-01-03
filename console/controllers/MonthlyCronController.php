@@ -15,4 +15,22 @@ class MonthlyCronController extends Controller
         $track->save();
         return $form->run();
     }
+
+    // php yii monthly-cron/calculate-customer-tracker
+    public function actionCalculateCustomerTracker()
+    {
+        $track = new Tracking();
+        $track->description = sprintf("Run actionCalculateCustomerTracker at %s", date('Y-m-d H:i:s'));
+        $track->save();
+        $trackers = \common\models\CustomerTracker::find()->select(['id'])->all();
+        foreach ($trackers as $tracker) {
+            $form = new \common\forms\CalculateCustomerTrackerPerformanceForm(['id' => $tracker->id]);
+            if (!$form->run()) {
+                $errors = $form->getErrors();
+                $track = new Tracking();
+                $track->description = sprintf("CalculateCustomerTracker failure for %s - %s", $tracker->id, json_encode($errors));
+                $track->save();
+            }
+        }
+    }
 }
