@@ -3,6 +3,6 @@ namespace backend\models;
 
 use Yii;
 
-class LeadTrackerActionLog extends \common\models\LeadTrackerActionLog
+class CustomerTrackerActionLog extends \common\models\CustomerTrackerActionLog
 {
 }

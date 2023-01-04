@@ -95,8 +95,9 @@ class m221122_065202_lead_tracker extends Migration
         $this->createTable('{{%lead_tracker_action_log}}', [
             'id' => $this->primaryKey(),
             'lead_tracker_id' => $this->integer(11)->notNull(),
-            'action' => $this->string(50)->notNull(),
+            'reason' => $this->text(),
             'content' => $this->text(),
+            'plan' => $this->text(),
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(11),
             'updated_at' => $this->dateTime(),

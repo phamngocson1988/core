@@ -419,6 +419,8 @@ use backend\models\CustomerTracker;
     <!-- BEGIN PORTLET-->
     <div class="portlet light bordered">
       <div class="portlet-title">
+        <a href='<?=Url::to(['customer-tracker/add-action', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" >Contact Log</i></a>
+
         <div class="caption">
           <i class="icon-share font-red-sunglo"></i>
           <span class="caption-subject font-red-sunglo bold uppercase">Contact Log</span>
@@ -495,3 +497,36 @@ use backend\models\CustomerTracker;
   </div>
   <!-- /.modal-dialog -->
 </div>
+
+<div class="modal fade" id="add-comment" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<?php
+$script = <<< JS
+$(document).on('submit', 'body #add-comment-form', function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var form = $(this);
+  form.unbind('submit');
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    dataType : 'json',
+    data: form.serialize(),
+    success: function (result, textStatus, jqXHR) {
+      console.log(result);
+      if (result.status) {
+        location.reload();
+      }
+    },
+  });
+  return false;
+});
+JS;
+$this->registerJs($script);
+?>

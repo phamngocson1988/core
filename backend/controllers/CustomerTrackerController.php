@@ -89,17 +89,15 @@ class CustomerTrackerController extends Controller
         return $this->render('edit', ['model' => $model, 'comments' => $comments]);
     }
 
-    public function actionAddAction($id, $action)
+    public function actionAddAction($id)
     {
         $request = Yii::$app->request;
+        $model = new \backend\forms\CreateCustomerContactLogForm(['lead_tracker_id' => $id]);
         if ($request->isGet) {
-            return $this->renderPartial('_comment', ['id' => $id]);
+            return $this->renderPartial('_comment', ['model' => $model]);
         } else {
-            $leadTracker = CustomerTracker::findOne($id);
-            $content = $request->post('content');
-            if (trim($content)) {
-                $leadTracker->addAction($action, $content);
-            }
+            $model->load($request->post());
+            $model->save();
             return $this->renderJson(true);
         }
     }
