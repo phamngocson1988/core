@@ -6,7 +6,7 @@ use yii\helpers\Url;
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
   <h4 class="modal-title">Nhập contact log</h4>
 </div>
-<?php $form = ActiveForm::begin();?>
+<?php $form = ActiveForm::begin(['id' => 'add-comment-form']);?>
 <div class="modal-body"> 
   <?=$form->field($model, 'reason')->textInput()->label('Lý do');?>
   <?=$form->field($model, 'content')->textInput()->label('Ghi chú');?>

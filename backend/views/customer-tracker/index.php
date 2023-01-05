@@ -232,7 +232,6 @@ $saleForUser = $search->countSaleByUser();
                   <a href="<?=Url::to(['customer-tracker/edit', 'id' => $model->id]);?>" class="btn btn-sm green btn-outline filter-submit margin-bottom">Edit</a>
                   <a href="<?=Url::to(['customer-tracker/calculate', 'id' => $model->id]);?>" class="btn btn-sm blue btn-outline filter-submit margin-bottom ajax-link">Calculate</a>
                   <a href="<?=Url::to(['customer-tracker/delete', 'id' => $model->id]);?>" class="btn btn-sm red btn-outline delete margin-bottom">Delete</a>
-                  <a href='<?=Url::to(['customer-tracker/add-action', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" >Contact Log</i></a>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -243,37 +242,10 @@ $saleForUser = $search->countSaleByUser();
     <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
-<div class="modal fade" id="add-comment" tabindex="-1" role="basic" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
 <?php
 $script = <<< JS
 $('#myTable').DataTable({
   order: [],
-});
-
-  // comment
-$(document).on('submit', 'body #add-comment-form', function(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  var form = $(this);
-  form.unbind('submit');
-  $.ajax({
-    url: form.attr('action'),
-    type: form.attr('method'),
-    dataType : 'json',
-    data: form.serialize(),
-    success: function (result, textStatus, jqXHR) {
-      console.log(result);
-      $('#add-comment').modal('hide');
-    },
-  });
-  return false;
 });
 
 $(".ajax-link").ajax_action({

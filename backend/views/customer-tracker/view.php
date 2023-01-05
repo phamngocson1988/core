@@ -419,17 +419,18 @@ use backend\models\CustomerTracker;
     <!-- BEGIN PORTLET-->
     <div class="portlet light bordered">
       <div class="portlet-title">
-        <a href='<?=Url::to(['customer-tracker/add-action', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" >Contact Log</i></a>
-
         <div class="caption">
           <i class="icon-share font-red-sunglo"></i>
           <span class="caption-subject font-red-sunglo bold uppercase">Contact Log</span>
+        </div>
+        <div class="actions">
+            <a href='<?=Url::to(['customer-tracker/add-action', 'id' => $model->id]);?>' data-target="#add-comment" class="btn btn-xs grey-salsa tooltips" data-pjax="0" data-container="body" data-original-title="Thêm ghi chú" data-toggle="modal" >Thêm contact log</a>
         </div>
       </div>
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
-            <table class="table Loyalty-Customer">
+            <table class="table table-striped table-bordered table-hover table-checkable dataTable no-footer">
               <thead>
                 <tr class="highlight-blue">
                   <th>No.</th>
@@ -439,17 +440,18 @@ use backend\models\CustomerTracker;
                   <th>Next Action</th>
                   <th>PIC</th>
                 </tr>
-                
               </thead>
               <tbody>
+                <?php foreach ($form->getContacts() as $no => $contact) : ?>
                 <tr>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td><?= $no + 1;?></td>
+                  <td><?=$contact->created_at;?></td>
+                  <td><?=$contact->reason;?></td>
+                  <td><?=$contact->content;?></td>
+                  <td><?=$contact->plan;?></td>
+                  <td><?=$contact->creator->getName();?></td>
                 </tr>
+                <?php endforeach;?>
               </tbody>
             </table>
           </div>

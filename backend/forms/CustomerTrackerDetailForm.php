@@ -5,6 +5,7 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use backend\models\CustomerTracker;
+use backend\models\CustomerTrackerActionLog;
 use yii\helpers\ArrayHelper;
 use common\models\Country;
 use backend\models\User;
@@ -61,5 +62,10 @@ class CustomerTrackerDetailForm extends Model
         ])
         ->andWhere([">=", "confirmed_at", $start])
         ->sum('quantity');
+    }
+
+    public function getContacts()
+    {
+        return CustomerTrackerActionLog::find()->where(['lead_tracker_id' => $this->id])->all();
     }
 }
