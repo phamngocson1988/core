@@ -22,10 +22,17 @@ class TestController extends Controller
         ->asArray()
         ->all();
         print_r($orders);
+        $settings = Yii::$app->settings;
+        $am = $settings->get('ApplicationSettingForm', 'am_commission_rate');
+        $ot = $settings->get('ApplicationSettingForm', 'ot_commission_rate');
         foreach ($orders as $order) {
             $orderId = $order['id'];
             print_r(sprintf("Running order %s", $orderId));
-            $form = new \common\forms\RunOrderCommissionForm(['order_id' => $orderId]);
+            $form = new \common\forms\RunOrderCommissionForm([
+                'order_id' => $orderId,
+                'am_commission_rate' => round($am / 100, 2),
+                'ot_commission_rate' => round($ot / 100, 2),
+            ]);
             $result = $form->run();
             if (!$result) {
                 print_r($form->getErrors());
