@@ -39,4 +39,14 @@ class TestController extends Controller
             }    
         }
     }
+
+    public function actionRunCustomerTrackerPeriodic()
+    {
+        $form = new \common\forms\CollectCustomerTrackerReportForm([
+            'id' => 7,
+            'year' => 2022,
+            'month' => 12,
+        ]);
+        $form->run();
+    }
 }

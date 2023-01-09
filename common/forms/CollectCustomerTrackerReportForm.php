@@ -3,19 +3,23 @@ namespace common\forms;
 
 use Yii;
 use common\models\CustomerTracker;
+use common\models\LeadTrackerPeriodic;
 use common\models\Order;
 
 class CollectCustomerTrackerReportForm extends ActionForm
 {
     public $id; // lead_tracker_id
+    public $month;
+    public $year;
 
     protected $_customerTracker;
+    protected $_trackerPeriodic;
 
     public function rules()
     {
         return [
-            ['id', 'trim'],
-            ['id', 'required'],
+            [['id', 'month', 'year'], 'trim'],
+            [['id', 'month', 'year'], 'required'],
             ['id', 'validateTracker']
         ];
     }
@@ -36,17 +40,45 @@ class CollectCustomerTrackerReportForm extends ActionForm
         return $this->_customerTracker;
     }
 
+    public function getTrackerPeriodic()
+    {
+        if (!$this->_trackerPeriodic) {
+            $condition = [
+                'month' => "$this->year$this->month",
+                'lead_tracker_id' => $this->id,
+            ];
+            $this->_trackerPeriodic = LeadTrackerPeriodic::findOne($condition);
+            if (!$this->_trackerPeriodic) {
+                $this->_trackerPeriodic = new LeadTrackerPeriodic($condition);
+            }
+        }
+        return $this->_trackerPeriodic;
+    }
+
     public function run()
     {
         if (!$this->validate()) return false;
+        $y = $this->year;
+        $m = $this->month;
+        $start = "$y-$m-01 00:00:00";
+        $end = date("Y-m-t 23:59:59", strtotime($start));
+
         $tracker = $this->getCustomerTracker();
-        $now = date('Y-m-d H:i:s');        
+        $periodic = $this->getTrackerPeriodic();
+        $periodic->quantity = $this->findTotalPayment($tracker->user_id, $start, $end);
+        $periodic->target = $tracker->getSaleTarget("$y$m");
+        if ($tracker->key_customer_at && strtotime($end) >= strtotime($tracker->key_customer_at)) {
+            $periodic->monthly_status = 3;
+        } elseif ($tracker->potential_customer_at && strtotime($end) >= strtotime($tracker->potential_customer_at)) { 
+            $periodic->monthly_status = 2;
+        } elseif ($tracker->potential_customer_at && strtotime($end) >= strtotime($tracker->potential_customer_at)) {
+            $periodic->monthly_status = 1;
+        }
+        return $periodic->save();
     }
 
-    protected function findTotalPayment($userId, $month)
+    protected function findTotalPayment($userId, $start, $end)
     {
-        $start = date("Y-m-01 00:00:00", strtotime($month));
-        $end = date("Y-m-t 23:59:59", strtotime($month));
         return Order::find()->where([
             'customer_id' => $userId,
             'status' => Order::STATUS_CONFIRMED
@@ -55,63 +87,4 @@ class CollectCustomerTrackerReportForm extends ActionForm
         ->sum('quantity');
     }
 
-    protected function findNumberOfGame($userId)
-    {
-        $start = date("Y-m-01 00:00:00", strtotime("-3 month"));
-        $end = date("Y-m-t 23:59:59", strtotime("-1 month"));
-        return Order::find()->where([
-            'customer_id' => $userId,
-            'status' => Order::STATUS_CONFIRMED
-        ])
-        ->andWhere(["between", "confirmed_at", $start,  $end])
-        ->select('game_id')
-        ->distinct()->count();
-    }
-
-    protected function getFirstOrderDate($userId) 
-    {
-        $order = Order::find()->where(['customer_id' => $userId])->select(['created_at'])->one();
-        return $order ? $order->created_at : null;
-    }
-
-    protected function getLastOrder($userId, $month) 
-    {
-        $month = "-$month month";
-        $start = date("Y-m-01 00:00:00", strtotime($month));
-        $end = date("Y-m-t 23:59:59", strtotime($month));
-        $order = Order::find()
-        ->where(['customer_id' => $userId])
-        ->andWhere(["between", "created_at", $start,  $end])
-        ->orderBy("id desc")
-        ->select(['created_at'])->one();
-        return $order ? $order->created_at : null;
-    }
-
-    protected function checkLoyalty($userId)
-    {
-        for ($i = 1; $i <= 6; $i++) {
-            $month = "-$i month";
-            $start = date("Y-m-01 00:00:00", strtotime($month));
-            $end = date("Y-m-t 23:59:59", strtotime($month));
-            $check = Order::find()
-                ->where(['customer_id' => $userId])
-                ->andWhere(["between", "created_at", $start,  $end])
-                ->exists();
-            if (!$check) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    protected function getDailySaleAvg($userId)
-    {
-        $month = "-1 month";
-        $start = date("Y-m-01 00:00:00", strtotime($month));
-        $end = date("Y-m-t 23:59:59", strtotime($month));
-        $check = Order::find()
-            ->where(['customer_id' => $userId])
-            ->andWhere(["between", "created_at", $start,  $end])
-            ->average("quantity");
-    }
 }

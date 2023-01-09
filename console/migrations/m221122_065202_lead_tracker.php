@@ -107,31 +107,12 @@ class m221122_065202_lead_tracker extends Migration
         $this->createTable('{{%lead_tracker_periodic}}', [
             'month' => $this->integer(11)->notNull(), //YYYYMM
             'lead_tracker_id' => $this->integer(11)->notNull(),
-            'total_potential_lead' => $this->integer(11)->default(0),
-            'total_potential_lead_quantity' => $this->integer(11)->default(0),
-            'total_potential_lead_target' => $this->integer(11)->default(0),
-
-            'total_target_lead' => $this->integer(11)->default(0),
-            'total_target_lead_quantity' => $this->integer(11)->default(0),
-            'total_target_lead_target' => $this->integer(11)->default(0),
-
-            'total_normal_customer' => $this->integer(11)->default(0),
-            'total_normal_customer_quantity' => $this->integer(11)->default(0),
-            'total_normal_customer_target' => $this->integer(11)->default(0),
-
-            'total_potential_customer' => $this->integer(11)->default(0),
-            'total_potential_customer_quantity' => $this->integer(11)->default(0),
-            'total_potential_customer_target' => $this->integer(11)->default(0),
-            
-            'total_loyalty_customer' => $this->integer(11)->default(0),
-            'total_loyalty_customer_quantity' => $this->integer(11)->default(0),
-            'total_loyalty_customer_target' => $this->integer(11)->default(0),
-
-            'total_customer_in_dangerous' => $this->integer(11)->default(0),
-            'total_customer_in_dangerous_quantity' => $this->integer(11)->default(0),
-            'total_customer_in_dangerous_target' => $this->integer(11)->default(0),
+            'monthly_status' => $this->integer(11)->default(0),
+            'quantity' => $this->integer(11)->default(0),
+            'target' => $this->integer(11)->default(0),
 
             'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
         ], $tableOptions);
         $this->addPrimaryKey('lead_tracker_report_pk', '{{%lead_tracker_report}}', ['month', 'lead_tracker_id']);
     }

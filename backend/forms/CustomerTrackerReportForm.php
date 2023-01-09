@@ -11,6 +11,7 @@ use backend\models\User;
 use backend\models\Game;
 use backend\models\Order;
 use common\models\UserTracker;
+use common\models\LeadTrackerPeriodic;
 
 /**
  * CustomerTrackerReportForm is the model behind the contact form.
@@ -230,6 +231,30 @@ class CustomerTrackerReportForm extends Model
             $measurementData[$key] = $data;
         }
         return $measurementData;
+    }
+
+    public function reportPerformance()
+    {
+        $month3 = date('Ym', strtotime('-1 month'));
+        $month2 = date('Ym', strtotime('-2 month'));
+        $month1 = date('Ym', strtotime('-3 month'));
+        return [
+            'month1' => $this->getPerformanceByMonth($month1),
+            'month2' => $this->getPerformanceByMonth($month2),
+            'month3' => $this->getPerformanceByMonth($month3),
+        ];
+    }
+
+    protected function getPerformanceByMonth($month)
+    {
+        $report = LeadTrackerPeriodic::find()
+        ->where(['month' => $month, 'monthly_status' => [1, 2, 3]])
+        ->groupBy('monthly_status')
+        ->select(['monthly_status', 'COUNT(1) as count', 'SUM(quantity) as quantity', 'SUM(target) as target'])
+        ->asArray()
+        ->indexBy('monthly_status')
+        ->all();
+        return $report;
     }
 
     public function topTenUsers()
