@@ -74,6 +74,11 @@ class CollectCustomerTrackerReportForm extends ActionForm
         } elseif ($tracker->potential_customer_at && strtotime($end) >= strtotime($tracker->potential_customer_at)) {
             $periodic->monthly_status = 1;
         }
+        if (!$periodic->is_loyalty) {
+            $periodic->is_loyalty = $tracker->loyalty_customer_at && strtotime($end) >= strtotime($tracker->loyalty_customer_at);
+        } else {
+            $periodic->is_loyalty = true;
+        }
         return $periodic->save();
     }
 

@@ -110,6 +110,7 @@ class m221122_065202_lead_tracker extends Migration
             'monthly_status' => $this->integer(11)->default(0),
             'quantity' => $this->integer(11)->default(0),
             'target' => $this->integer(11)->default(0),
+            'is_loyalty' => $this->boolean()->defaultValue(false),
 
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),

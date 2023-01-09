@@ -2,6 +2,7 @@
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use common\components\helpers\FormatConverter;
 
 $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
 $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => [\backend\assets\AppAsset::className()]]);
@@ -118,7 +119,7 @@ $saleForUser = $search->countSaleByUser();
         <table class="table table-striped table-bordered table-hover table-checkable" id="myTable">
           <thead style="font-weight: bold; color: white; background-color: #36c5d3">
             <tr>
-              <th rowspan="3" class="center">No.</th>
+              <th rowspan="3" class="center">Date</th>
               <th></th>
               <th></th>
               <th rowspan="2" colspan="7" class="center">General Information</th>
@@ -169,7 +170,8 @@ $saleForUser = $search->countSaleByUser();
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
-                <td class="center"><a href='<?=Url::to(['customer-tracker/view', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
+                <td class="center">
+                  <a href='<?=Url::to(['customer-tracker/view', 'id' => $model->id]);?>'><?=FormatConverter::convertToDate(strtotime($model->converted_at), 'd-m-Y H:i');?></a></td>
                 <td class="center">
                   <?=$model->getCustomerTrackerLabel();?>
                 </td>

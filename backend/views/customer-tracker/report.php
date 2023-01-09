@@ -258,6 +258,7 @@ $performance = $form->reportPerformance();
         <div class="clearfix">
           <div class="panel panel-success">
             <?php 
+            // month1
             $normalCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 1 , []);
             $countNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'count', 0);
             $targetNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'target', 0);
@@ -273,8 +274,15 @@ $performance = $form->reportPerformance();
             $targetKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'target', 0);
             $quantityKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'quantity', 0);
 
+            $totalCount1 = array_sum([$countNormal1, $countPotential1, $countKey1]);
+            $totalQuantity1 = array_sum([$quantityNormal1, $quantityPotential1, $quantityKey1]);
+            $totalTarget1 = array_sum([$targetNormal1, $targetPotential1, $targetKey1]);
 
+            $percentNormal1 = $totalQuantity1 ? round(($quantityNormal1 / $totalQuantity1) * 100, 2) . '%' : '-';
+            $percentPotential1 = $totalQuantity1 ? round(($quantityPotential1 / $totalQuantity1) * 100, 2) . '%' : '-';
+            $percentKey1 = $totalQuantity1 ? round(($quantityKey1 / $totalQuantity1) * 100, 2) . '%' : '-';
             
+            // month2
             $normalCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 1 , []);
             $countNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'count', 0);
             $targetNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'target', 0);
@@ -290,10 +298,15 @@ $performance = $form->reportPerformance();
             $targetKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'target', 0);
             $quantityKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'quantity', 0);
 
+            $totalCount2 = array_sum([$countNormal2, $countPotential2, $countKey2]);
+            $totalQuantity2 = array_sum([$quantityNormal2, $quantityPotential2, $quantityKey2]);
+            $totalTarget2 = array_sum([$targetNormal2, $targetPotential2, $targetKey2]);
 
+            $percentNormal2 = $totalQuantity2 ? round(($quantityNormal2 / $totalQuantity2) * 100, 2) . '%' : '-';
+            $percentPotential2 = $totalQuantity2 ? round(($quantityPotential2 / $totalQuantity2) * 100, 2) . '%' : '-';
+            $percentKey2 = $totalQuantity2 ? round(($quantityKey2 / $totalQuantity2) * 100, 2) . '%' : '-';
 
-
-
+            // month3
             $normalCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 1 , []);
             $countNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'count', 0);
             $targetNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'target', 0);
@@ -308,6 +321,14 @@ $performance = $form->reportPerformance();
             $countKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'count', 0);
             $targetKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'target', 0);
             $quantityKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'quantity', 0);
+
+            $totalCount3 = array_sum([$countNormal3, $countPotential3, $countKey3]);
+            $totalQuantity3 = array_sum([$quantityNormal3, $quantityPotential3, $quantityKey3]);
+            $totalTarget3 = array_sum([$targetNormal3, $targetPotential3, $targetKey3]);
+
+            $percentNormal3 = $totalQuantity3 ? round(($quantityNormal3 / $totalQuantity3) * 100, 2) . '%' : '-';
+            $percentPotential3 = $totalQuantity3 ? round(($quantityPotential3 / $totalQuantity3) * 100, 2) . '%' : '-';
+            $percentKey3 = $totalQuantity3 ? round(($quantityKey3 / $totalQuantity3) * 100, 2) . '%' : '-';
             ?>
             <table class="table table-striped table-bordered table-hover table-checkable dataTable no-footer">
               <thead>
@@ -338,63 +359,63 @@ $performance = $form->reportPerformance();
               <tbody>
                 <tr>
                   <td>Normal Customer</td>
-                  <td><?=$countNormal1;?></td>
-                  <td><?=round($targetNormal1, 2);?></td>
-                  <td><?=round($quantityNormal1, 2);?></td>
-                  <td><?=($targetNormal1) ? round(($quantityNormal1 / $targetNormal1) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countNormal1;?></td>
+                  <td class="center"><?=round($targetNormal1, 2);?></td>
+                  <td class="center"><?=round($quantityNormal1, 2);?></td>
+                  <td class="center"><?=($targetNormal1) ? round(($quantityNormal1 / $targetNormal1) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentNormal1;?></td>
 
-                  <td><?=$countNormal2;?></td>
-                  <td><?=round($targetNormal2, 2);?></td>
-                  <td><?=round($quantityNormal2, 2);?></td>
-                  <td><?=($targetNormal2) ? round(($quantityNormal2 / $targetNormal2) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countNormal2;?></td>
+                  <td class="center"><?=round($targetNormal2, 2);?></td>
+                  <td class="center"><?=round($quantityNormal2, 2);?></td>
+                  <td class="center"><?=($targetNormal2) ? round(($quantityNormal2 / $targetNormal2) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentNormal2;?></td>
 
-                  <td><?=$countNormal3;?></td>
-                  <td><?=round($targetNormal3, 2);?></td>
-                  <td><?=round($quantityNormal3, 2);?></td>
-                  <td><?=($targetNormal3) ? round(($quantityNormal3 / $targetNormal3) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countNormal3;?></td>
+                  <td class="center"><?=round($targetNormal3, 2);?></td>
+                  <td class="center"><?=round($quantityNormal3, 2);?></td>
+                  <td class="center"><?=($targetNormal3) ? round(($quantityNormal3 / $targetNormal3) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentNormal3;?></td>
                 </tr>
                 <tr>
                   <td>Potential Customer</td>
-                  <td><?=$countPotential1;?></td>
-                  <td><?=round($targetPotential1, 2);?></td>
-                  <td><?=round($quantityPotential1, 2);?></td>
-                  <td><?=($targetPotential1) ? round(($quantityPotential1 / $targetPotential1) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countPotential1;?></td>
+                  <td class="center"><?=round($targetPotential1, 2);?></td>
+                  <td class="center"><?=round($quantityPotential1, 2);?></td>
+                  <td class="center"><?=($targetPotential1) ? round(($quantityPotential1 / $targetPotential1) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentPotential1;?></td>
 
-                  <td><?=$countPotential2;?></td>
-                  <td><?=round($targetPotential2, 2);?></td>
-                  <td><?=round($quantityPotential2, 2);?></td>
-                  <td><?=($targetPotential2) ? round(($quantityPotential2 / $targetPotential2) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countPotential2;?></td>
+                  <td class="center"><?=round($targetPotential2, 2);?></td>
+                  <td class="center"><?=round($quantityPotential2, 2);?></td>
+                  <td class="center"><?=($targetPotential2) ? round(($quantityPotential2 / $targetPotential2) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentPotential2;?></td>
 
-                  <td><?=$countPotential3;?></td>
-                  <td><?=round($targetPotential3, 2);?></td>
-                  <td><?=round($quantityPotential3, 2);?></td>
-                  <td><?=($targetPotential3) ? round(($quantityPotential3 / $targetPotential3) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countPotential3;?></td>
+                  <td class="center"><?=round($targetPotential3, 2);?></td>
+                  <td class="center"><?=round($quantityPotential3, 2);?></td>
+                  <td class="center"><?=($targetPotential3) ? round(($quantityPotential3 / $targetPotential3) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentPotential3;?></td>
                 </tr>
                 <tr>
                   <td>Key Customer</td>
-                  <td><?=$countKey1;?></td>
-                  <td><?=round($targetKey1, 2);?></td>
-                  <td><?=round($quantityKey1, 2);?></td>
-                  <td><?=($targetKey1) ? round(($quantityKey1 / $targetKey1) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countKey1;?></td>
+                  <td class="center"><?=round($targetKey1, 2);?></td>
+                  <td class="center"><?=round($quantityKey1, 2);?></td>
+                  <td class="center"><?=($targetKey1) ? round(($quantityKey1 / $targetKey1) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentKey1;?></td>
 
-                  <td><?=$countKey2;?></td>
-                  <td><?=round($targetKey2, 2);?></td>
-                  <td><?=round($quantityKey2, 2);?></td>
-                  <td><?=($targetKey2) ? round(($quantityKey2 / $targetKey2) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countKey2;?></td>
+                  <td class="center"><?=round($targetKey2, 2);?></td>
+                  <td class="center"><?=round($quantityKey2, 2);?></td>
+                  <td class="center"><?=($targetKey2) ? round(($quantityKey2 / $targetKey2) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentKey2;?></td>
 
-                  <td><?=$countKey3;?></td>
-                  <td><?=round($targetKey3, 2);?></td>
-                  <td><?=round($quantityKey3, 2);?></td>
-                  <td><?=($targetKey3) ? round(($quantityKey3 / $targetKey3) * 100, 2) . '%' : '-';?></td>
-                  <td>xxx</td>
+                  <td class="center"><?=$countKey3;?></td>
+                  <td class="center"><?=round($targetKey3, 2);?></td>
+                  <td class="center"><?=round($quantityKey3, 2);?></td>
+                  <td class="center"><?=($targetKey3) ? round(($quantityKey3 / $targetKey3) * 100, 2) . '%' : '-';?></td>
+                  <td class="center"><?=$percentKey3;?></td>
                 </tr>
                 <tr>
                   <td>Loyalty Customer</td>
@@ -418,23 +439,23 @@ $performance = $form->reportPerformance();
                 </tr>
                 <tr>
                   <td>Total</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td class="center"><?=$totalCount1;?></td>
+                  <td class="center"><?=$totalQuantity1;?></td>
+                  <td class="center"><?=$totalTarget1;?></td>
+                  <td class="center"></td>
+                  <td class="center"></td>
 
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td class="center"><?=$totalCount2;?></td>
+                  <td class="center"><?=$totalQuantity2;?></td>
+                  <td class="center"><?=$totalTarget2;?></td>
+                  <td class="center"></td>
+                  <td class="center"></td>
 
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td class="center"><?=$totalCount3;?></td>
+                  <td class="center"><?=$totalQuantity3;?></td>
+                  <td class="center"><?=$totalTarget3;?></td>
+                  <td class="center"></td>
+                  <td class="center"></td>
                 </tr>
 
                 

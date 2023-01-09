@@ -2,6 +2,7 @@
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use common\components\helpers\FormatConverter;
 
 $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/datatables.min.css', ['depends' => [\backend\assets\AppAsset::className()]]);
 $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css', ['depends' => [\backend\assets\AppAsset::className()]]);
@@ -106,7 +107,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         <table class="table table-striped table-bordered table-hover table-checkable" id="myTable">
           <thead style="font-weight: bold; color: white; background-color: #36c5d3">
             <tr>
-              <td rowspan="2" class="center">No.</td>
+              <td rowspan="2" class="center">Date</td>
               <th colspan="3" class="center">General Information</th>
               <th colspan="5" class="center">Personal Information</th>
               <th rowspan="2" class="center">Potential Lead</th>
@@ -130,7 +131,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <?php endif;?>
               <?php foreach ($models as $no => $model) : ?>
               <tr>
-                <td class="center"><?=$no + 1;?></td>
+                <td class="center"><?=FormatConverter::convertToDate(strtotime($model->created_at), 'd-m-Y H:i');?></td>
                 <td class="center"><a href='<?=Url::to(['lead-tracker/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
                 <td><a href="<?=$model->link;?>" target="_blank"><?=$model->name;?></a></td>
                 <td><?=$model->saler ? $model->saler->getName() : '-';?></td>
