@@ -79,14 +79,25 @@ class CalculateCustomerTrackerPerformanceForm extends ActionForm
             $tracker->customer_monthly_status = max($tracker->customer_monthly_status, 3);
         }
         $tracker->is_key_customer = $is_key_customer;
-        $tracker->is_loyalty = $this->checkLoyalty($tracker->user_id);
-        if ($tracker->is_loyalty && !$tracker->loyalty_customer_at) {
-            $tracker->loyalty_customer_at = $this->getLastOrder($tracker->user_id, 6);
+        $is_loyalty = $this->checkLoyalty($tracker->user_id);
+        if ($is_loyalty !== $tracker->is_loyalty) {
+            $tracker->is_loyalty = $is_loyalty;
+            $tracker->loyalty_customer_updated_at = $this->getLastOrder($tracker->user_id, 6);
+            if ($tracker->is_loyalty && !$tracker->loyalty_customer_at) {
+                $tracker->loyalty_customer_at = $tracker->loyalty_customer_updated_at;
+            }
         }
-        $tracker->is_dangerous = max($tracker->growth_rate_1, $tracker->growth_rate_2) < 0;
-        if ($tracker->is_dangerous && !$tracker->dangerous_customer_at) {
-            $tracker->dangerous_customer_at = $lastOrder3Months;
+        
+
+        $is_dangerous = max($tracker->growth_rate_1, $tracker->growth_rate_2) < 0;
+        if ($is_dangerous !== $tracker->is_dangerous) {
+            $tracker->is_dangerous = $is_dangerous;
+            $tracker->dangerous_customer_updated_at = $lastOrder3Months;
+            if ($tracker->is_dangerous && !$tracker->dangerous_customer_at) {
+                $tracker->dangerous_customer_at = $lastOrder3Months;
+            }
         }
+        
         $tracker->monthly_sale_volumn = round(($tracker->sale_month_1 + $tracker->sale_month_2 + $tracker->sale_month_3) / 3, 2);
         $tracker->daily_sale_volumn = $this->getDailySaleAvg($tracker->user_id);
         return $tracker->save();

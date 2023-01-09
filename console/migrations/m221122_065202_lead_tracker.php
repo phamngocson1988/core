@@ -77,8 +77,10 @@ class m221122_065202_lead_tracker extends Migration
 
             'is_loyalty' => $this->boolean()->defaultValue(false), // has order in every last 6 months
             'loyalty_customer_at' => $this->dateTime(),
+            'loyalty_customer_updated_at' => $this->dateTime(),
             'is_dangerous' => $this->boolean()->defaultValue(false),
             'dangerous_customer_at' => $this->dateTime(),
+            'dangerous_customer_updated_at' => $this->dateTime(),
             'customer_tracker_status' => $this->integer(11),
             'customer_monthly_status' => $this->integer(11),
 
@@ -111,6 +113,7 @@ class m221122_065202_lead_tracker extends Migration
             'quantity' => $this->integer(11)->default(0),
             'target' => $this->integer(11)->default(0),
             'is_loyalty' => $this->boolean()->defaultValue(false),
+            'is_dangerous' => $this->boolean()->defaultValue(false),
 
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
