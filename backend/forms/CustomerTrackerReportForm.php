@@ -257,6 +257,30 @@ class CustomerTrackerReportForm extends Model
         return $report;
     }
 
+    //============ LOYALTY =============
+    public function reportLoyaltyPerformance()
+    {
+        $month3 = date('Ym', strtotime('-1 month'));
+        $month2 = date('Ym', strtotime('-2 month'));
+        $month1 = date('Ym', strtotime('-3 month'));
+        return [
+            'month1' => $this->getLoyaltyPerformanceByMonth($month1),
+            'month2' => $this->getLoyaltyPerformanceByMonth($month2),
+            'month3' => $this->getLoyaltyPerformanceByMonth($month3),
+        ];
+    }
+
+    protected function getLoyaltyPerformanceByMonth($month)
+    {
+        $report = LeadTrackerPeriodic::find()
+        ->where(['month' => $month, 'is_loyalty' => true])
+        ->groupBy('month')
+        ->select(['month', 'COUNT(1) as count', 'SUM(quantity) as quantity', 'SUM(target) as target'])
+        ->asArray()
+        ->one();
+        return $report;
+    }
+
     public function topTenUsers()
     {
         $totalQuantity = Order::find()

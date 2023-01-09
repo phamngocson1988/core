@@ -11,7 +11,39 @@ $monthlyConversionRate = $form->monthlyConversionRate();
 $topTenUser = $form->topTenUsers();
 $topTenGame = $form->topTenGames();
 $performance = $form->reportPerformance();
+$loyaltyPerformance = $form->reportLoyaltyPerformance();
 ?>
+<style>
+  table .highlight-yellow {
+    background-color: #817706;
+    color: white;
+    font-weight: bold;
+  }
+
+  table .highlight-orange {
+    background-color: #e59b14;
+    color: white;
+    font-weight: bold;
+  }
+
+  table .highlight-green {
+    background-color: #068154;
+    color: white;
+    font-weight: bold;
+  }
+
+  table .highlight-red {
+    background-color: #810c06;
+    color: white;
+    font-weight: bold;
+  }
+
+  table .highlight-grey {
+    background-color: #8c9299;
+    color: white;
+    font-weight: bold;
+  }
+</style>
 <div class="page-bar">
   <ul class="page-breadcrumb">
     <li>
@@ -329,16 +361,30 @@ $performance = $form->reportPerformance();
             $percentNormal3 = $totalQuantity3 ? round(($quantityNormal3 / $totalQuantity3) * 100, 2) . '%' : '-';
             $percentPotential3 = $totalQuantity3 ? round(($quantityPotential3 / $totalQuantity3) * 100, 2) . '%' : '-';
             $percentKey3 = $totalQuantity3 ? round(($quantityKey3 / $totalQuantity3) * 100, 2) . '%' : '-';
+
+            // Loyalty
+            $countLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1', 0);
+            $targetLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1', 0);
+            $quantityLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1', 0);
+
+            $countLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2', 0);
+            $targetLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2', 0);
+            $quantityLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2', 0);
+
+            $countLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3', 0);
+            $targetLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3', 0);
+            $quantityLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3', 0);
+
             ?>
             <table class="table table-striped table-bordered table-hover table-checkable dataTable no-footer">
               <thead>
-                <tr class="highlight-blue">
-                  <th rowspan="2">Month</th>
-                  <th colspan="5">1st Month</th>
-                  <th colspan="5">2nd Month</th>
-                  <th colspan="5">3rd Month</th>
-                </tr>
                 <tr>
+                  <th rowspan="2" class="highlight-red">Month</th>
+                  <th colspan="5" class="highlight-orange">1st Month</th>
+                  <th colspan="5" class="highlight-yellow">2nd Month</th>
+                  <th colspan="5" class="highlight-green">3rd Month</th>
+                </tr>
+                <tr class="highlight-grey">
                   <th>No. of customers</th>
                   <th>Target</th>
                   <th>Result</th>
@@ -358,7 +404,7 @@ $performance = $form->reportPerformance();
               </thead>
               <tbody>
                 <tr>
-                  <td>Normal Customer</td>
+                  <td class="highlight-grey">Normal Customer</td>
                   <td class="center"><?=$countNormal1;?></td>
                   <td class="center"><?=round($targetNormal1, 2);?></td>
                   <td class="center"><?=round($quantityNormal1, 2);?></td>
@@ -378,7 +424,7 @@ $performance = $form->reportPerformance();
                   <td class="center"><?=$percentNormal3;?></td>
                 </tr>
                 <tr>
-                  <td>Potential Customer</td>
+                  <td class="highlight-grey">Potential Customer</td>
                   <td class="center"><?=$countPotential1;?></td>
                   <td class="center"><?=round($targetPotential1, 2);?></td>
                   <td class="center"><?=round($quantityPotential1, 2);?></td>
@@ -398,7 +444,7 @@ $performance = $form->reportPerformance();
                   <td class="center"><?=$percentPotential3;?></td>
                 </tr>
                 <tr>
-                  <td>Key Customer</td>
+                  <td class="highlight-grey">Key Customer</td>
                   <td class="center"><?=$countKey1;?></td>
                   <td class="center"><?=round($targetKey1, 2);?></td>
                   <td class="center"><?=round($quantityKey1, 2);?></td>
@@ -418,27 +464,27 @@ $performance = $form->reportPerformance();
                   <td class="center"><?=$percentKey3;?></td>
                 </tr>
                 <tr>
-                  <td>Loyalty Customer</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td class="highlight-grey">Loyalty Customer</td>
+                  <td class="center"><?=round($countLoyalty1, 2);?></td>
+                  <td class="center"><?=round($targetLoyalty1, 2);?></td>
+                  <td class="center"><?=round($quantityLoyalty1, 2);?></td>
+                  <td class="center">-</td>
+                  <td class="center">-</td>
 
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td class="center"><?=round($countLoyalty2, 2);?></td>
+                  <td class="center"><?=round($targetLoyalty2, 2);?></td>
+                  <td class="center"><?=round($quantityLoyalty2, 2);?></td>
+                  <td class="center">-</td>
+                  <td class="center">-</td>
 
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
-                  <td>xxx</td>
+                  <td class="center"><?=round($countLoyalty3, 2);?></td>
+                  <td class="center"><?=round($targetLoyalty3, 2);?></td>
+                  <td class="center"><?=round($quantityLoyalty3, 2);?></td>
+                  <td class="center">-</td>
+                  <td class="center">-</td>
                 </tr>
                 <tr>
-                  <td>Total</td>
+                  <td class="center highlight-red">Total</td>
                   <td class="center"><?=$totalCount1;?></td>
                   <td class="center"><?=$totalQuantity1;?></td>
                   <td class="center"><?=$totalTarget1;?></td>
