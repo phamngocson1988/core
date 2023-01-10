@@ -233,6 +233,7 @@ class CustomerTrackerReportForm extends Model
         return $measurementData;
     }
 
+    // ========= Customer tracker performance ======
     public function reportPerformance()
     {
         $month3 = date('Ym', strtotime('-1 month'));
@@ -274,6 +275,30 @@ class CustomerTrackerReportForm extends Model
     {
         $report = LeadTrackerPeriodic::find()
         ->where(['month' => $month, 'is_loyalty' => true])
+        ->groupBy('month')
+        ->select(['month', 'COUNT(1) as count', 'SUM(quantity) as quantity', 'SUM(target) as target'])
+        ->asArray()
+        ->one();
+        return $report;
+    }
+
+    //========= DANGEROUS =========
+    public function reportDangerousPerformance()
+    {
+        $month3 = date('Ym', strtotime('-1 month'));
+        $month2 = date('Ym', strtotime('-2 month'));
+        $month1 = date('Ym', strtotime('-3 month'));
+        return [
+            'month1' => $this->getDangerousPerformanceByMonth($month1),
+            'month2' => $this->getDangerousPerformanceByMonth($month2),
+            'month3' => $this->getDangerousPerformanceByMonth($month3),
+        ];
+    }
+
+    protected function getDangerousPerformanceByMonth($month)
+    {
+        $report = LeadTrackerPeriodic::find()
+        ->where(['month' => $month, 'is_dangerous' => true])
         ->groupBy('month')
         ->select(['month', 'COUNT(1) as count', 'SUM(quantity) as quantity', 'SUM(target) as target'])
         ->asArray()

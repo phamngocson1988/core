@@ -10,8 +10,98 @@ $monthlyConversionMeasurementData = $form->monthlyConversionMeasurement();
 $monthlyConversionRate = $form->monthlyConversionRate();
 $topTenUser = $form->topTenUsers();
 $topTenGame = $form->topTenGames();
+
 $performance = $form->reportPerformance();
 $loyaltyPerformance = $form->reportLoyaltyPerformance();
+$dangerousPerformance = $form->reportDangerousPerformance();
+// month1
+$normalCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 1 , []);
+$countNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'count', 0);
+$targetNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'target', 0);
+$quantityNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'quantity', 0);
+
+$potentialCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 2 , []);
+$countPotential1 = ArrayHelper::getValue($potentialCustomerPerformance1, 'count', 0);
+$targetPotential1 = ArrayHelper::getValue($potentialCustomerPerformance1, 'target', 0);
+$quantityPotential1 = ArrayHelper::getValue($potentialCustomerPerformance1, 'quantity', 0);
+
+$keyCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 3 , []);
+$countKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'count', 0);
+$targetKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'target', 0);
+$quantityKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'quantity', 0);
+
+$totalCount1 = array_sum([$countNormal1, $countPotential1, $countKey1]);
+$totalQuantity1 = array_sum([$quantityNormal1, $quantityPotential1, $quantityKey1]);
+$totalTarget1 = array_sum([$targetNormal1, $targetPotential1, $targetKey1]);
+
+$percentNormal1 = $totalQuantity1 ? round(($quantityNormal1 / $totalQuantity1) * 100, 2) . '%' : '-';
+$percentPotential1 = $totalQuantity1 ? round(($quantityPotential1 / $totalQuantity1) * 100, 2) . '%' : '-';
+$percentKey1 = $totalQuantity1 ? round(($quantityKey1 / $totalQuantity1) * 100, 2) . '%' : '-';
+
+// month2
+$normalCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 1 , []);
+$countNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'count', 0);
+$targetNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'target', 0);
+$quantityNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'quantity', 0);
+
+$potentialCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 2 , []);
+$countPotential2 = ArrayHelper::getValue($potentialCustomerPerformance2, 'count', 0);
+$targetPotential2 = ArrayHelper::getValue($potentialCustomerPerformance2, 'target', 0);
+$quantityPotential2 = ArrayHelper::getValue($potentialCustomerPerformance2, 'quantity', 0);
+
+$keyCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 3 , []);
+$countKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'count', 0);
+$targetKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'target', 0);
+$quantityKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'quantity', 0);
+
+$totalCount2 = array_sum([$countNormal2, $countPotential2, $countKey2]);
+$totalQuantity2 = array_sum([$quantityNormal2, $quantityPotential2, $quantityKey2]);
+$totalTarget2 = array_sum([$targetNormal2, $targetPotential2, $targetKey2]);
+
+$percentNormal2 = $totalQuantity2 ? round(($quantityNormal2 / $totalQuantity2) * 100, 2) . '%' : '-';
+$percentPotential2 = $totalQuantity2 ? round(($quantityPotential2 / $totalQuantity2) * 100, 2) . '%' : '-';
+$percentKey2 = $totalQuantity2 ? round(($quantityKey2 / $totalQuantity2) * 100, 2) . '%' : '-';
+
+// month3
+$normalCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 1 , []);
+$countNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'count', 0);
+$targetNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'target', 0);
+$quantityNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'quantity', 0);
+
+$potentialCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 2 , []);
+$countPotential3 = ArrayHelper::getValue($potentialCustomerPerformance3, 'count', 0);
+$targetPotential3 = ArrayHelper::getValue($potentialCustomerPerformance3, 'target', 0);
+$quantityPotential3 = ArrayHelper::getValue($potentialCustomerPerformance3, 'quantity', 0);
+
+$keyCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 3 , []);
+$countKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'count', 0);
+$targetKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'target', 0);
+$quantityKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'quantity', 0);
+
+$totalCount3 = array_sum([$countNormal3, $countPotential3, $countKey3]);
+$totalQuantity3 = array_sum([$quantityNormal3, $quantityPotential3, $quantityKey3]);
+$totalTarget3 = array_sum([$targetNormal3, $targetPotential3, $targetKey3]);
+
+$percentNormal3 = $totalQuantity3 ? round(($quantityNormal3 / $totalQuantity3) * 100, 2) . '%' : '-';
+$percentPotential3 = $totalQuantity3 ? round(($quantityPotential3 / $totalQuantity3) * 100, 2) . '%' : '-';
+$percentKey3 = $totalQuantity3 ? round(($quantityKey3 / $totalQuantity3) * 100, 2) . '%' : '-';
+
+// Loyalty
+$countLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1.count', 0);
+$targetLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1.target', 0);
+$quantityLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1.quantity', 0);
+
+$countLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2.count', 0);
+$targetLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2.target', 0);
+$quantityLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2.quantity', 0);
+
+$countLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3.count', 0);
+$targetLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3.target', 0);
+$quantityLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3.quantity', 0);
+
+$countDangerous1 = ArrayHelper::getValue($dangerousPerformance, 'month1.count', 0);
+$countDangerous2 = ArrayHelper::getValue($dangerousPerformance, 'month2.count', 0);
+$countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 0);
 ?>
 <style>
   table .highlight-yellow {
@@ -86,15 +176,49 @@ $loyaltyPerformance = $form->reportLoyaltyPerformance();
                         <th>3rd Month</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php foreach ($monthlyConversionMeasurementData as $key => $value) :?>
+                <tbody>                
                     <tr>
-                        <td><?=$value['label'];?></td>
-                        <?php foreach ($reportMonths as $yearMonth) : ?>
-                        <td class="center"><?=ArrayHelper::getValue($value['data'], $yearMonth, 0);?></td>
-                        <?php endforeach;?>
+                      <td>Potential Lead</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
                     </tr>
-                    <?php endforeach;?>
+                    <tr>
+                      <td>Target Lead</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                    <tr>
+                      <td>Normal Customer</td>
+                      <td><?=$countNormal1;?></td>
+                      <td><?=$countNormal2;?></td>
+                      <td><?=$countNormal3;?></td>
+                    </tr>
+                    <tr>
+                      <td>Potential Customer</td>
+                      <td><?=$countPotential1;?></td>
+                      <td><?=$countPotential2;?></td>
+                      <td><?=$countPotential3;?></td>
+                    </tr>
+                    <tr>
+                      <td>Key Customer</td>
+                      <td><?=$countKey1;?></td>
+                      <td><?=$countKey2;?></td>
+                      <td><?=$countKey3;?></td>
+                    </tr>
+                    <tr>
+                      <td>Loyalty Customer</td>
+                      <td><?=$countLoyalty1;?></td>
+                      <td><?=$countLoyalty2;?></td>
+                      <td><?=$countLoyalty3;?></td>
+                    </tr>
+                    <tr>
+                      <td>Cus "in dangerous"</td>
+                      <td><?=$countDangerous1;?></td>
+                      <td><?=$countDangerous2;?></td>
+                      <td><?=$countDangerous3;?></td>
+                    </tr>
                 </tbody>
             </table>
           </div>
@@ -131,37 +255,45 @@ $loyaltyPerformance = $form->reportLoyaltyPerformance();
                 'width' => 200
             ],
             'data' => [
-                'labels' => array_values($labels),
+                'labels' => [
+                  'Potential Lead',
+                  'Target Lead',
+                  'Normal Customer',
+                  'Potential Customer',
+                  'Key Customer',
+                  'Loyalty Customer',
+                  'Cus "in dangerous"',
+                ],
                 'datasets' => [
                     [
-                        'label' => 'month1',
+                        'label' => 'month 1',
                         'backgroundColor' => "rgba(179,181,198,0.2)",
                         'borderColor' => "rgba(179,181,198,1)",
                         'pointBackgroundColor' => "rgba(179,181,198,1)",
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
                         'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                        'data' => $datasets[0]
+                        'data' => [0, 0, $countNormal1, $countPotential1, $countKey1, $countLoyalty1, $countDangerous1]
                     ],
                     [
-                        'label' => "month2",
+                        'label' => "month 2",
                         'backgroundColor' => "rgba(255,99,132,0.2)",
                         'borderColor' => "rgba(255,99,132,1)",
                         'pointBackgroundColor' => "rgba(255,99,132,1)",
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
                         'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                        'data' => $datasets[1]
+                        'data' => [0, 0, $countNormal2, $countPotential2, $countKey2, $countLoyalty2, $countDangerous2]
                     ],
                     [
-                        'label' => "month3",
-                        'backgroundColor' => "rgba(255,99,132,0.2)",
-                        'borderColor' => "rgba(255,99,132,1)",
-                        'pointBackgroundColor' => "rgba(255,99,132,1)",
+                        'label' => "month 3",
+                        'backgroundColor' => "rgba(251,188,4,0.2)",
+                        'borderColor' => "rgba(251,188,4,1)",
+                        'pointBackgroundColor' => "rgba(251,188,4,1)",
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
-                        'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                        'data' => $datasets[2]
+                        'pointHoverBorderColor' => "rgba(251,188,4,1)",
+                        'data' => [0, 0, $countNormal3, $countPotential3, $countKey3, $countLoyalty3, $countDangerous3]
                     ]
                 ]
             ]
@@ -289,93 +421,7 @@ $loyaltyPerformance = $form->reportLoyaltyPerformance();
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
-            <?php 
-            // month1
-            $normalCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 1 , []);
-            $countNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'count', 0);
-            $targetNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'target', 0);
-            $quantityNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'quantity', 0);
-
-            $potentialCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 2 , []);
-            $countPotential1 = ArrayHelper::getValue($potentialCustomerPerformance1, 'count', 0);
-            $targetPotential1 = ArrayHelper::getValue($potentialCustomerPerformance1, 'target', 0);
-            $quantityPotential1 = ArrayHelper::getValue($potentialCustomerPerformance1, 'quantity', 0);
             
-            $keyCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 3 , []);
-            $countKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'count', 0);
-            $targetKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'target', 0);
-            $quantityKey1 = ArrayHelper::getValue($keyCustomerPerformance1, 'quantity', 0);
-
-            $totalCount1 = array_sum([$countNormal1, $countPotential1, $countKey1]);
-            $totalQuantity1 = array_sum([$quantityNormal1, $quantityPotential1, $quantityKey1]);
-            $totalTarget1 = array_sum([$targetNormal1, $targetPotential1, $targetKey1]);
-
-            $percentNormal1 = $totalQuantity1 ? round(($quantityNormal1 / $totalQuantity1) * 100, 2) . '%' : '-';
-            $percentPotential1 = $totalQuantity1 ? round(($quantityPotential1 / $totalQuantity1) * 100, 2) . '%' : '-';
-            $percentKey1 = $totalQuantity1 ? round(($quantityKey1 / $totalQuantity1) * 100, 2) . '%' : '-';
-            
-            // month2
-            $normalCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 1 , []);
-            $countNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'count', 0);
-            $targetNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'target', 0);
-            $quantityNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'quantity', 0);
-
-            $potentialCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 2 , []);
-            $countPotential2 = ArrayHelper::getValue($potentialCustomerPerformance2, 'count', 0);
-            $targetPotential2 = ArrayHelper::getValue($potentialCustomerPerformance2, 'target', 0);
-            $quantityPotential2 = ArrayHelper::getValue($potentialCustomerPerformance2, 'quantity', 0);
-            
-            $keyCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 3 , []);
-            $countKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'count', 0);
-            $targetKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'target', 0);
-            $quantityKey2 = ArrayHelper::getValue($keyCustomerPerformance2, 'quantity', 0);
-
-            $totalCount2 = array_sum([$countNormal2, $countPotential2, $countKey2]);
-            $totalQuantity2 = array_sum([$quantityNormal2, $quantityPotential2, $quantityKey2]);
-            $totalTarget2 = array_sum([$targetNormal2, $targetPotential2, $targetKey2]);
-
-            $percentNormal2 = $totalQuantity2 ? round(($quantityNormal2 / $totalQuantity2) * 100, 2) . '%' : '-';
-            $percentPotential2 = $totalQuantity2 ? round(($quantityPotential2 / $totalQuantity2) * 100, 2) . '%' : '-';
-            $percentKey2 = $totalQuantity2 ? round(($quantityKey2 / $totalQuantity2) * 100, 2) . '%' : '-';
-
-            // month3
-            $normalCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 1 , []);
-            $countNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'count', 0);
-            $targetNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'target', 0);
-            $quantityNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'quantity', 0);
-
-            $potentialCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 2 , []);
-            $countPotential3 = ArrayHelper::getValue($potentialCustomerPerformance3, 'count', 0);
-            $targetPotential3 = ArrayHelper::getValue($potentialCustomerPerformance3, 'target', 0);
-            $quantityPotential3 = ArrayHelper::getValue($potentialCustomerPerformance3, 'quantity', 0);
-            
-            $keyCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 3 , []);
-            $countKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'count', 0);
-            $targetKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'target', 0);
-            $quantityKey3 = ArrayHelper::getValue($keyCustomerPerformance3, 'quantity', 0);
-
-            $totalCount3 = array_sum([$countNormal3, $countPotential3, $countKey3]);
-            $totalQuantity3 = array_sum([$quantityNormal3, $quantityPotential3, $quantityKey3]);
-            $totalTarget3 = array_sum([$targetNormal3, $targetPotential3, $targetKey3]);
-
-            $percentNormal3 = $totalQuantity3 ? round(($quantityNormal3 / $totalQuantity3) * 100, 2) . '%' : '-';
-            $percentPotential3 = $totalQuantity3 ? round(($quantityPotential3 / $totalQuantity3) * 100, 2) . '%' : '-';
-            $percentKey3 = $totalQuantity3 ? round(($quantityKey3 / $totalQuantity3) * 100, 2) . '%' : '-';
-
-            // Loyalty
-            $countLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1', 0);
-            $targetLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1', 0);
-            $quantityLoyalty1 = ArrayHelper::getValue($loyaltyPerformance, 'month1', 0);
-
-            $countLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2', 0);
-            $targetLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2', 0);
-            $quantityLoyalty2 = ArrayHelper::getValue($loyaltyPerformance, 'month2', 0);
-
-            $countLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3', 0);
-            $targetLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3', 0);
-            $quantityLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3', 0);
-
-            ?>
             <table class="table table-striped table-bordered table-hover table-checkable dataTable no-footer">
               <thead>
                 <tr>
