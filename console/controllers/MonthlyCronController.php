@@ -24,8 +24,8 @@ class MonthlyCronController extends Controller
         $track = new Tracking();
         $track->description = sprintf("Run actionCalculateCustomerTracker at %s", date('Y-m-d H:i:s'));
         $track->save();
-        $trackers = \common\models\CustomerTracker::find()->select(['id'])->all();
-        foreach ($trackers as $tracker) {
+        $customerTrackers = \common\models\CustomerTracker::find()->select(['id'])->all();
+        foreach ($customerTrackers as $tracker) {
             $form = new \common\forms\CalculateCustomerTrackerPerformanceForm(['id' => $tracker->id]);
             if (!$form->run()) {
                 $errors = $form->getErrors();
@@ -43,6 +43,21 @@ class MonthlyCronController extends Controller
                 $errors = $periodic->getErrors();
                 $track = new Tracking();
                 $track->description = sprintf("CollectCustomerTrackerReport failure for %s - %s", $tracker->id, json_encode($errors));
+                $track->save();
+            }
+        }
+
+        $leadTrackers = \common\models\LeadTracker::find()->select(['id'])->all();
+        foreach ($leadTrackers as $tracker) {
+            $periodic = new \common\forms\CollectLeadTrackerReportForm([
+                'id' => $tracker->id,
+                'year' => $year,
+                'month' => $month,
+            ]);
+            if (!$periodic->run()) {
+                $errors = $periodic->getErrors();
+                $track = new Tracking();
+                $track->description = sprintf("CollectLeadTrackerReport failure for %s - %s", $tracker->id, json_encode($errors));
                 $track->save();
             }
         }

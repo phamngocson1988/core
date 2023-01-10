@@ -6,7 +6,6 @@ use dosamigos\chartjs\ChartJs;
 
 
 $reportMonths = [date('Ym', strtotime('-3 month')), date('Ym', strtotime('-2 month')), date('Ym', strtotime('-1 month'))];
-$monthlyConversionMeasurementData = $form->monthlyConversionMeasurement();
 $monthlyConversionRate = $form->monthlyConversionRate();
 $topTenUser = $form->topTenUsers();
 $topTenGame = $form->topTenGames();
@@ -15,6 +14,12 @@ $performance = $form->reportPerformance();
 $loyaltyPerformance = $form->reportLoyaltyPerformance();
 $dangerousPerformance = $form->reportDangerousPerformance();
 // month1
+$potentialLeadPerformance1 = ArrayHelper::getValue($performance['month1'], -2, []);
+$countPotentialLead1 = ArrayHelper::getValue($potentialLeadPerformance1, 'count', 0);
+
+$targetLeadPerformance1 = ArrayHelper::getValue($performance['month1'], -1, []);
+$countTargetLead1 = ArrayHelper::getValue($targetLeadPerformance1, 'count', 0);
+
 $normalCustomerPerformance1 = ArrayHelper::getValue($performance['month1'], 1 , []);
 $countNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'count', 0);
 $targetNormal1 = ArrayHelper::getValue($normalCustomerPerformance1, 'target', 0);
@@ -39,6 +44,12 @@ $percentPotential1 = $totalQuantity1 ? round(($quantityPotential1 / $totalQuanti
 $percentKey1 = $totalQuantity1 ? round(($quantityKey1 / $totalQuantity1) * 100, 2) . '%' : '-';
 
 // month2
+$potentialLeadPerformance2 = ArrayHelper::getValue($performance['month2'], -2, []);
+$countPotentialLead2 = ArrayHelper::getValue($potentialLeadPerformance2, 'count', 0);
+
+$targetLeadPerformance2 = ArrayHelper::getValue($performance['month2'], -1, []);
+$countTargetLead2 = ArrayHelper::getValue($targetLeadPerformance2, 'count', 0);
+
 $normalCustomerPerformance2 = ArrayHelper::getValue($performance['month2'], 1 , []);
 $countNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'count', 0);
 $targetNormal2 = ArrayHelper::getValue($normalCustomerPerformance2, 'target', 0);
@@ -63,6 +74,12 @@ $percentPotential2 = $totalQuantity2 ? round(($quantityPotential2 / $totalQuanti
 $percentKey2 = $totalQuantity2 ? round(($quantityKey2 / $totalQuantity2) * 100, 2) . '%' : '-';
 
 // month3
+$potentialLeadPerformance3 = ArrayHelper::getValue($performance['month3'], -2, []);
+$countPotentialLead3 = ArrayHelper::getValue($potentialLeadPerformance3, 'count', 0);
+
+$targetLeadPerformance3 = ArrayHelper::getValue($performance['month3'], -1, []);
+$countTargetLead3 = ArrayHelper::getValue($targetLeadPerformance3, 'count', 0);
+
 $normalCustomerPerformance3 = ArrayHelper::getValue($performance['month3'], 1 , []);
 $countNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'count', 0);
 $targetNormal3 = ArrayHelper::getValue($normalCustomerPerformance3, 'target', 0);
@@ -167,7 +184,7 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
-            <table class="table">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>Group of Cus</th>
@@ -179,45 +196,45 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
                 <tbody>                
                     <tr>
                       <td>Potential Lead</td>
-                      <td>0</td>
-                      <td>0</td>
-                      <td>0</td>
+                      <td class="center"><?=$countPotentialLead1;?></td>
+                      <td class="center"><?=$countPotentialLead2;?></td>
+                      <td class="center"><?=$countPotentialLead3;?></td>
                     </tr>
                     <tr>
                       <td>Target Lead</td>
-                      <td>0</td>
-                      <td>0</td>
-                      <td>0</td>
+                      <td class="center"><?=$countTargetLead1;?></td>
+                      <td class="center"><?=$countTargetLead2;?></td>
+                      <td class="center"><?=$countTargetLead3;?></td>
                     </tr>
                     <tr>
                       <td>Normal Customer</td>
-                      <td><?=$countNormal1;?></td>
-                      <td><?=$countNormal2;?></td>
-                      <td><?=$countNormal3;?></td>
+                      <td class="center"><?=$countNormal1;?></td>
+                      <td class="center"><?=$countNormal2;?></td>
+                      <td class="center"><?=$countNormal3;?></td>
                     </tr>
                     <tr>
                       <td>Potential Customer</td>
-                      <td><?=$countPotential1;?></td>
-                      <td><?=$countPotential2;?></td>
-                      <td><?=$countPotential3;?></td>
+                      <td class="center"><?=$countPotential1;?></td>
+                      <td class="center"><?=$countPotential2;?></td>
+                      <td class="center"><?=$countPotential3;?></td>
                     </tr>
                     <tr>
                       <td>Key Customer</td>
-                      <td><?=$countKey1;?></td>
-                      <td><?=$countKey2;?></td>
-                      <td><?=$countKey3;?></td>
+                      <td class="center"><?=$countKey1;?></td>
+                      <td class="center"><?=$countKey2;?></td>
+                      <td class="center"><?=$countKey3;?></td>
                     </tr>
                     <tr>
                       <td>Loyalty Customer</td>
-                      <td><?=$countLoyalty1;?></td>
-                      <td><?=$countLoyalty2;?></td>
-                      <td><?=$countLoyalty3;?></td>
+                      <td class="center"><?=$countLoyalty1;?></td>
+                      <td class="center"><?=$countLoyalty2;?></td>
+                      <td class="center"><?=$countLoyalty3;?></td>
                     </tr>
                     <tr>
                       <td>Cus "in dangerous"</td>
-                      <td><?=$countDangerous1;?></td>
-                      <td><?=$countDangerous2;?></td>
-                      <td><?=$countDangerous3;?></td>
+                      <td class="center"><?=$countDangerous1;?></td>
+                      <td class="center"><?=$countDangerous2;?></td>
+                      <td class="center"><?=$countDangerous3;?></td>
                     </tr>
                 </tbody>
             </table>
@@ -238,16 +255,6 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
-          <?php 
-          $labels = array_map(function($item) {
-            return $item['label'];
-          }, $monthlyConversionMeasurementData);
-          foreach ($reportMonths as $ym) {
-            $datasets[] = ArrayHelper::getColumn($monthlyConversionMeasurementData, function ($element) use ($ym) {
-                return ArrayHelper::getValue($element['data'], $ym, 0);
-            });
-          }
-          ?>
           <?= ChartJs::widget([
             'type' => 'bar',
             'options' => [
@@ -273,7 +280,7 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
                         'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                        'data' => [0, 0, $countNormal1, $countPotential1, $countKey1, $countLoyalty1, $countDangerous1]
+                        'data' => [$countPotentialLead1, $countTargetLead1, $countNormal1, $countPotential1, $countKey1, $countLoyalty1, $countDangerous1]
                     ],
                     [
                         'label' => "month 2",
@@ -283,7 +290,7 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
                         'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                        'data' => [0, 0, $countNormal2, $countPotential2, $countKey2, $countLoyalty2, $countDangerous2]
+                        'data' => [$countPotentialLead2, $countTargetLead2, $countNormal2, $countPotential2, $countKey2, $countLoyalty2, $countDangerous2]
                     ],
                     [
                         'label' => "month 3",
@@ -293,7 +300,7 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
                         'pointHoverBorderColor' => "rgba(251,188,4,1)",
-                        'data' => [0, 0, $countNormal3, $countPotential3, $countKey3, $countLoyalty3, $countDangerous3]
+                        'data' => [$countPotentialLead3, $countTargetLead3, $countNormal3, $countPotential3, $countKey3, $countLoyalty3, $countDangerous3]
                     ]
                 ]
             ]
@@ -422,7 +429,7 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
         <div class="clearfix">
           <div class="panel panel-success">
             
-            <table class="table table-striped table-bordered table-hover table-checkable dataTable no-footer">
+            <table class="table table-striped table-bordered">
               <thead>
                 <tr>
                   <th rowspan="2" class="highlight-red">Month</th>

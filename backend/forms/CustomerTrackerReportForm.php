@@ -249,7 +249,7 @@ class CustomerTrackerReportForm extends Model
     protected function getPerformanceByMonth($month)
     {
         $report = LeadTrackerPeriodic::find()
-        ->where(['month' => $month, 'monthly_status' => [1, 2, 3]])
+        ->where(['month' => $month, 'monthly_status' => [-2, -1, 1, 2, 3]])
         ->groupBy('monthly_status')
         ->select(['monthly_status', 'COUNT(1) as count', 'SUM(quantity) as quantity', 'SUM(target) as target'])
         ->asArray()
