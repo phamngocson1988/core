@@ -115,6 +115,14 @@ class m221122_065202_lead_tracker extends Migration
             'is_loyalty' => $this->boolean()->defaultValue(false),
             'is_dangerous' => $this->boolean()->defaultValue(false),
 
+            'is_become_potential_lead' => $this->boolean()->defaultValue(false),
+            'is_become_target_lead' => $this->boolean()->defaultValue(false),
+            'is_become_normal_customer' => $this->boolean()->defaultValue(false),
+            'is_become_potential_customer' => $this->boolean()->defaultValue(false),
+            'is_become_key_customer' => $this->boolean()->defaultValue(false),
+            'is_become_loyalty_customer' => $this->boolean()->defaultValue(false),
+            'is_become_dangerous_customer' => $this->boolean()->defaultValue(false),
+
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);

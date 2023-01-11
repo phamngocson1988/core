@@ -71,11 +71,23 @@ class CollectCustomerTrackerReportForm extends ActionForm
             $periodic->monthly_status = 3;
         } elseif ($tracker->potential_customer_at && strtotime($end) >= strtotime($tracker->potential_customer_at)) { 
             $periodic->monthly_status = 2;
-        } elseif ($tracker->potential_customer_at && strtotime($end) >= strtotime($tracker->potential_customer_at)) {
+        } elseif ($tracker->normal_customer_at && strtotime($end) >= strtotime($tracker->normal_customer_at)) {
             $periodic->monthly_status = 1;
+        } elseif ($tracker->target_lead_at && strtotime($end) >= strtotime($tracker->target_lead_at)) {
+            $periodic->monthly_status = -1;
+        } elseif ($tracker->potential_lead_at && strtotime($end) >= strtotime($tracker->potential_lead_at)) { 
+            $periodic->monthly_status = -2;
         }
         $periodic->is_loyalty = $tracker->is_loyalty && $tracker->loyalty_customer_updated_at && strtotime($end) >= strtotime($tracker->loyalty_customer_updated_at);
         $periodic->is_dangerous = $tracker->is_dangerous && $tracker->dangerous_customer_updated_at && strtotime($end) >= strtotime($tracker->dangerous_customer_updated_at);
+
+        $periodic->is_become_potential_lead = $tracker->potential_lead_at && date('Ym', strtotime($tracker->potential_lead_at)) == "$y$m";
+        $periodic->is_become_target_lead = $tracker->target_lead_at && date('Ym', strtotime($tracker->target_lead_at)) == "$y$m";
+        $periodic->is_become_normal_customer = $tracker->normal_customer_at && date('Ym', strtotime($tracker->normal_customer_at)) == "$y$m";
+        $periodic->is_become_potential_customer = $tracker->potential_customer_at && date('Ym', strtotime($tracker->potential_customer_at)) == "$y$m";
+        $periodic->is_become_key_customer = $tracker->key_customer_at && date('Ym', strtotime($tracker->key_customer_at)) == "$y$m";
+        $periodic->is_become_loyalty_customer = $tracker->is_loyalty && $tracker->loyalty_customer_updated_at && date('Ym', strtotime($tracker->loyalty_customer_updated_at)) == "$y$m";
+        $periodic->is_become_dangerous_customer = $tracker->is_dangerous && $tracker->dangerous_customer_updated_at && date('Ym', strtotime($tracker->dangerous_customer_updated_at)) == "$y$m";
         return $periodic->save();
     }
 

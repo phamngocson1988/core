@@ -6,13 +6,14 @@ use dosamigos\chartjs\ChartJs;
 
 
 $reportMonths = [date('Ym', strtotime('-3 month')), date('Ym', strtotime('-2 month')), date('Ym', strtotime('-1 month'))];
-$monthlyConversionRate = $form->monthlyConversionRate();
+// $monthlyConversionRate = $form->monthlyConversionRate();
 $topTenUser = $form->topTenUsers();
 $topTenGame = $form->topTenGames();
 
 $performance = $form->reportPerformance();
 $loyaltyPerformance = $form->reportLoyaltyPerformance();
 $dangerousPerformance = $form->reportDangerousPerformance();
+$leadTrackerCreation = $form->reportLeadTrackerCreation();
 // month1
 $potentialLeadPerformance1 = ArrayHelper::getValue($performance['month1'], -2, []);
 $countPotentialLead1 = ArrayHelper::getValue($potentialLeadPerformance1, 'count', 0);
@@ -119,6 +120,38 @@ $quantityLoyalty3 = ArrayHelper::getValue($loyaltyPerformance, 'month3.quantity'
 $countDangerous1 = ArrayHelper::getValue($dangerousPerformance, 'month1.count', 0);
 $countDangerous2 = ArrayHelper::getValue($dangerousPerformance, 'month2.count', 0);
 $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 0);
+
+// Rate
+// - Monthly Convertion Rate (PL-TL): TL/PL với TL = số TL được tạo trong tháng, PL = số PL hiện có cho tới cuối tháng đang tính.
+$PLTL1 = $countPotentialLead1 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month1.is_become_target_lead', 0)  * 100 / $countPotentialLead1, 2) : 0;
+$PLTL2 = $countPotentialLead2 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month2.is_become_target_lead', 0)  * 100 / $countPotentialLead2, 2) : 0;
+$PLTL3 = $countPotentialLead3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month3.is_become_target_lead', 0)  * 100 / $countPotentialLead3, 2) : 0;
+
+$TLNC1 = $countTargetLead1 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month1.is_become_normal_customer', 0)  * 100 / $countTargetLead1, 2) : 0;
+$TLNC2 = $countTargetLead2 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month2.is_become_normal_customer', 0)  * 100 / $countTargetLead2, 2) : 0;
+$TLNC3 = $countTargetLead3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month3.is_become_normal_customer', 0)  * 100 / $countTargetLead3, 2) : 0;
+
+$NCPC1 = $countNormal1 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month1.is_become_potential_customer', 0)  * 100 / $countNormal1, 2) : 0;
+$NCPC2 = $countNormal2 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month2.is_become_potential_customer', 0)  * 100 / $countNormal2, 2) : 0;
+$NCPC3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month3.is_become_potential_customer', 0)  * 100 / $countNormal3, 2) : 0;
+
+$PCKC1 = $countPotential1 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month1.is_become_key_customer', 0)  * 100 / $countPotential1, 2) : 0;
+$PCKC2 = $countPotential2 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month2.is_become_key_customer', 0)  * 100 / $countPotential2, 2) : 0;
+$PCKC3 = $countPotential3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month3.is_become_key_customer', 0)  * 100 / $countPotential3, 2) : 0;
+
+$NCL1 = $countNormal1 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month1.is_become_loyalty_customer', 0)  * 100 / $countNormal1, 2) : 0;
+$NCL2 = $countNormal2 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month2.is_become_loyalty_customer', 0)  * 100 / $countNormal2, 2) : 0;
+$NCL3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month3.is_become_loyalty_customer', 0)  * 100 / $countNormal3, 2) : 0;
+
+$NCLC1 = $countNormal1 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month1.is_become_loyalty_customer', 0)  * 100 / $countNormal1, 2) : 0;
+$NCLC2 = $countNormal2 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month2.is_become_loyalty_customer', 0)  * 100 / $countNormal2, 2) : 0;
+$NCLC3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month3.is_become_loyalty_customer', 0)  * 100 / $countNormal3, 2) : 0;
+
+
+$NCCI1 = $countNormal1 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month1.is_become_dangerous_customer', 0)  * 100 / $countNormal1, 2) : 0;
+$NCCI2 = $countNormal2 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month2.is_become_dangerous_customer', 0)  * 100 / $countNormal2, 2) : 0;
+$NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'month3.is_become_dangerous_customer', 0)  * 100 / $countNormal3, 2) : 0;
+
 ?>
 <style>
   table .highlight-yellow {
@@ -325,7 +358,7 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
-            <table class="table">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
 
@@ -336,14 +369,42 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($monthlyConversionRate as $key => $value) :?>
                     <tr>
-                        <td><?=$key;?></td>
-                        <?php foreach ($reportMonths as $yearMonth) : ?>
-                        <td class="center"><?=ArrayHelper::getValue($value, $yearMonth, 0);?></td>
-                        <?php endforeach;?>
+                      <td>PL-TL</td>
+                      <td class="center"><?=$PLTL1;?>%</td>
+                      <td class="center"><?=$PLTL2;?>%</td>
+                      <td class="center"><?=$PLTL3;?>%</td>
                     </tr>
-                    <?php endforeach;?>
+                    <tr>
+                      <td>TL-NC</td>
+                      <td class="center"><?=$TLNC1;?>%</td>
+                      <td class="center"><?=$TLNC2;?>%</td>
+                      <td class="center"><?=$TLNC3;?>%</td>
+                    </tr>
+                    <tr>
+                      <td>NC-PC</td>
+                      <td class="center"><?=$NCPC1;?>%</td>
+                      <td class="center"><?=$NCPC2;?>%</td>
+                      <td class="center"><?=$NCPC3;?>%</td>
+                    </tr>
+                    <tr>
+                      <td>PC-KC</td>
+                      <td class="center"><?=$PCKC1;?>%</td>
+                      <td class="center"><?=$PCKC2;?>%</td>
+                      <td class="center"><?=$PCKC3;?>%</td>
+                    </tr>
+                    <tr>
+                      <td>NC-LC</td>
+                      <td class="center"><?=$NCCI1;?>%</td>
+                      <td class="center"><?=$NCCI2;?>%</td>
+                      <td class="center"><?=$NCCI3;?>%</td>
+                    </tr>
+                    <tr>
+                      <td>NC-CI</td>
+                      <td class="center"><?=$NCCI1;?>%</td>
+                      <td class="center"><?=$NCCI2;?>%</td>
+                      <td class="center"><?=$NCCI3;?>%</td>
+                    </tr>
                 </tbody>
             </table>
           </div>
@@ -363,15 +424,6 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
-          <?php 
-          $labels = array_keys($monthlyConversionRate);
-          foreach ($reportMonths as $ym) {
-            $datasets[] = ArrayHelper::getColumn($monthlyConversionRate, function ($element) use ($ym) {
-                return ArrayHelper::getValue($element, $ym, 0);
-            });
-          }
-
-          ?>
           <?= ChartJs::widget([
             'type' => 'bar',
             'options' => [
@@ -379,37 +431,37 @@ $countDangerous3 = ArrayHelper::getValue($dangerousPerformance, 'month3.count', 
                 'width' => 200
             ],
             'data' => [
-                'labels' => array_values($labels),
+                'labels' => ['PL-TL', 'TL-NC', 'NC-PC', 'PC-KC', 'NC-LC', 'NC-CI'],
                 'datasets' => [
                     [
-                        'label' => 'month1',
+                        'label' => 'month 1',
                         'backgroundColor' => "rgba(179,181,198,0.2)",
                         'borderColor' => "rgba(179,181,198,1)",
                         'pointBackgroundColor' => "rgba(179,181,198,1)",
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
                         'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                        'data' => $datasets[0]
+                        'data' => [$PLTL1, $TLNC1, $NCPC1, $PCKC1, $NCLC1, $NCCI1]
                     ],
                     [
-                        'label' => "month2",
+                        'label' => "month 2",
                         'backgroundColor' => "rgba(255,99,132,0.2)",
                         'borderColor' => "rgba(255,99,132,1)",
                         'pointBackgroundColor' => "rgba(255,99,132,1)",
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
                         'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                        'data' => $datasets[1]
+                        'data' => [$PLTL2, $TLNC2, $NCPC2, $PCKC2, $NCLC2, $NCCI2]
                     ],
                     [
-                        'label' => "month3",
-                        'backgroundColor' => "rgba(255,99,132,0.2)",
-                        'borderColor' => "rgba(255,99,132,1)",
-                        'pointBackgroundColor' => "rgba(255,99,132,1)",
+                        'label' => "month 3",
+                        'backgroundColor' => "rgba(251,188,4,0.2)",
+                        'borderColor' => "rgba(251,188,4,1)",
+                        'pointBackgroundColor' => "rgba(251,188,4,1)",
                         'pointBorderColor' => "#fff",
                         'pointHoverBackgroundColor' => "#fff",
-                        'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                        'data' => $datasets[2]
+                        'pointHoverBorderColor' => "rgba(251,188,4,1)",
+                        'data' => [$PLTL3, $TLNC3, $NCPC3, $PCKC3, $NCLC3, $NCCI3]                    
                     ]
                 ]
             ]

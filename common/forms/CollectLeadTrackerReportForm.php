@@ -69,6 +69,8 @@ class CollectLeadTrackerReportForm extends ActionForm
         } elseif ($tracker->potential_lead_at && strtotime($end) >= strtotime($tracker->potential_lead_at)) { 
             $periodic->monthly_status = -2;
         }
+        $periodic->is_become_potential_lead = $tracker->potential_lead_at && date('Ym', strtotime($tracker->potential_lead_at)) == "$y$m";
+        $periodic->is_become_target_lead = $tracker->target_lead_at && date('Ym', strtotime($tracker->target_lead_at)) == "$y$m";
         return $periodic->save();
     }
 }

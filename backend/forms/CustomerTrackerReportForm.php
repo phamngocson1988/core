@@ -18,219 +18,34 @@ use common\models\LeadTrackerPeriodic;
  */
 class CustomerTrackerReportForm extends Model
 {
-    const CUSTOMER_STATUS_MEASUREMENT = [
-        'potential_lead_at' => 'potential_lead_at',
-        'target_lead_at' => 'target_lead_at',
-        'normal_customer_at' => 'first_order_at',
-        'potential_customer_at' => 'potential_customer_at',
-        'key_customer_at' => 'key_customer_at',
-        'loyalty_customer_at' => 'loyalty_customer_at',
-        'dangerous_customer_at' => 'dangerous_customer_at',
-    ];
 
-    protected $_monthlyConversionTotal = [];
-    protected $_monthlyTotal = [];
-    /**
-     * @return [
-     *  potential_lead_at => [
-     *      'label' => 'xxx',
-     *      'data' => [
-     *          '202210' => 10,
-     *          '202211' => 13,
-     *          '202212' => 14
-     *      ]
-     *  ],
-     * ]
-     */
-    public function monthlyConversionMeasurement()
+    public function reportLeadTrackerCreation()
     {
-        if (count($this->_monthlyConversionTotal)) {
-            return $this->_monthlyConversionTotal;
-        }
-        $start = date("Y-m-01 00:00:00", strtotime("-3 month"));
-        $end = date("Y-m-t 23:59:59", strtotime("-1 month"));
-        $measurements = [
-            'potential_lead_at' => [
-                'column' => 'potential_lead_at',
-                'label' => 'Potential Lead'
-            ],
-            'target_lead_at' => [
-                'column' => 'target_lead_at',
-                'label' => 'Target Lead'
-            ],
-            'normal_customer_at' => [
-                'column' => 'normal_customer_at',
-                'label' => 'Normal Customer'
-            ],
-            'potential_customer_at' => [
-                'column' => 'potential_customer_at',
-                'label' => 'Potential Customer'
-            ],
-            'key_customer_at' => [
-                'column' => 'key_customer_at',
-                'label' => 'Key Customer'
-            ],
-            'loyalty_customer_at' => [
-                'column' => 'loyalty_customer_at',
-                'label' => 'Loyalty Customer'
-            ],
-            'dangerous_customer_at' => [
-                'column' => 'dangerous_customer_at',
-                'label' => 'Cus "in dangerous"'
-            ],
-        ];
-        $measurementData = [];
-        foreach ($measurements as $key => $measurement) {
-            $column = $measurement['column'];
-            $label = $measurement['label'];
-            $data = [];
-            $data['label'] = $measurement['label'];
-            $records = UserTracker::find()
-                ->select(["EXTRACT(YEAR_MONTH FROM $column) AS year_and_month", "COUNT(1) as `count`"])
-                ->where(['between', $column, $start, $end])
-                ->groupBy('year_and_month')
-                ->all();
-            $data['data'] = ArrayHelper::map($records, 'year_and_month', 'count');
-            $measurementData[$key] = $data;
-        }
-        $this->_monthlyConversionTotal = $measurementData;
-        return $measurementData;
-    }
+        $month3 = date('Ym', strtotime('-1 month'));
+        $month2 = date('Ym', strtotime('-2 month'));
+        $month1 = date('Ym', strtotime('-3 month'));
 
-    /**
-     * @return [
-     *  potential_lead_at => [
-     *      'label' => 'xxx',
-     *      'data' => [
-     *          '202210' => 10,
-     *          '202211' => 13,
-     *          '202212' => 14
-     *      ]
-     *  ],
-     * ]
-     */
-    public function monthlyCustomerStatusTotal()
-    {
-        if (count($this->_monthlyTotal)) {
-            return $this->_monthlyTotal;
-        }
-        $measurements = [
-            'potential_lead_at' => [
-                'column' => 'potential_lead_at',
-                'compare_column' => 'target_lead_at',
-                'label' => 'Potential Lead'
-            ],
-            'target_lead_at' => [
-                'column' => 'target_lead_at',
-                'compare_column' => 'normal_customer_at',
-                'label' => 'Target Lead'
-            ],
-            'normal_customer_at' => [
-                'column' => 'normal_customer_at',
-                'compare_column' => 'potential_customer_at',
-                'label' => 'Normal Customer'
-            ],
-            'potential_customer_at' => [
-                'column' => 'potential_customer_at',
-                'compare_column' => 'key_customer_at',
-                'label' => 'Potential Customer'
-            ],
-            'key_customer_at' => [
-                'column' => 'key_customer_at',
-                'compare_column' => 'loyalty_customer_at',
-                'label' => 'Key Customer'
-            ],
-            'loyalty_customer_at' => [
-                'column' => 'loyalty_customer_at',
-                'compare_column' => 'dangerous_customer_at',
-                'label' => 'Loyalty Customer'
-            ],
-            'dangerous_customer_at' => [
-                'column' => 'dangerous_customer_at',
-                'compare_column' => 'normal_customer_at',
-                'label' => 'Cus "in dangerous"'
-            ],
+        $report = LeadTrackerPeriodic::find()
+        ->where(['month' => [$month1, $month2, $month3]])
+        ->groupBy('month')
+        ->select([
+            'month',
+            'sum(is_become_potential_lead) as is_become_potential_lead',
+            'sum(is_become_target_lead) as is_become_target_lead',
+            'sum(is_become_normal_customer) as is_become_normal_customer',
+            'sum(is_become_potential_customer) as is_become_potential_customer',
+            'sum(is_become_key_customer) as is_become_key_customer',
+            'sum(is_become_loyalty_customer) as is_become_loyalty_customer',
+            'sum(is_become_dangerous_customer) as is_become_dangerous_customer',
+        ])
+        ->asArray()
+        ->indexBy('month')
+        ->all();
+        return [
+            'month1' => ArrayHelper::getValue($report, $month1, []),
+            'month2' => ArrayHelper::getValue($report, $month2, []),
+            'month3' => ArrayHelper::getValue($report, $month3, []),
         ];
-        $measurementData = [];
-        foreach ($measurements as $key => $measurement) {
-            $label = $measurement['label'];
-            $column = $measurement['column'];
-            $compare_column = $measurement['compare_column'];
-            $data = [];
-            $data['label'] = $measurement['label'];
-            $data['data'] = [];
-            for ($i = 1; $i <= 3; $i++) {
-                $start = date("Y-m-01 00:00:00", strtotime("-$i month"));
-                $end = date("Y-m-t 23:59:59", strtotime("-$i month"));
-                $ym = date('Ym', strtotime($start));
-                $data['data'][$ym] = UserTracker::find()
-                    ->where(['<=', $column, $end])
-                    ->andWhere(['or',
-                        ['between', $compare_column, $start, $end],
-                        ['is', $compare_column, new \yii\db\Expression('null')]
-                    ])
-                    ->count();
-            }
-            $measurementData[$key] = $data;
-        }
-        $this->_monthlyTotal = $measurementData;
-        return $measurementData;
-    }
-
-    /**
-     * @return [
-     *  PL-TL => [
-     *     '202210' => 10,
-     *     '202211' => 13,
-     *     '202212' => 14
-     *  ],
-     * ]
-     */
-    public function monthlyConversionRate()
-    {
-        $conversionMeasurement = $this->monthlyConversionMeasurement();
-        $totalStatus = $this->monthlyCustomerStatusTotal();
-        $formula = [
-            'PL-TL' => [
-                't' => 'target_lead_at',
-                'm' => 'potential_lead_at'
-            ],
-            'TL-NC' => [
-                't' => 'normal_customer_at',
-                'm' => 'target_lead_at'
-            ],
-            'NC-PC' => [
-                't' => 'potential_customer_at',
-                'm' => 'normal_customer_at'
-            ],
-            'PC-KC' => [
-                't' => 'key_customer_at',
-                'm' => 'potential_customer_at'
-            ],
-            'NC-LC' => [
-                't' => 'loyalty_customer_at',
-                'm' => 'normal_customer_at'
-            ],
-            'NC-CI' => [
-                't' => 'dangerous_customer_at',
-                'm' => 'normal_customer_at'
-            ],
-            
-        ];
-        $measurementData = [];
-        foreach ($formula as $key => $f) {
-            $t = $f['t'];
-            $m = $f['m'];
-            $data = [];
-            for ($i = 3; $i >= 1; $i--) {
-                $ym = date('Ym', strtotime("-$i month"));
-                $tv = ArrayHelper::getValue($conversionMeasurement[$t]['data'], $ym, 0);
-                $mv = ArrayHelper::getValue($totalStatus[$m]['data'], $ym, 0);
-                $data[$ym] = $mv ? round($tv / $mv, 2) : 0;
-            }
-            $measurementData[$key] = $data;
-        }
-        return $measurementData;
     }
 
     // ========= Customer tracker performance ======
