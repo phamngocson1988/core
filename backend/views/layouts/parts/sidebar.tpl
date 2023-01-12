@@ -69,6 +69,16 @@
             <span class="title">Chưa có giao dịch</span>
             </a>
           </li>
+          <li class="nav-item  ">
+            <a href="{url route='/lead-tracker/index'}" class="nav-link " code='lead-tracker.index'>
+            <span class="title">Lead Tracker</span>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a href="{url route='/customer-tracker/index'}" class="nav-link " code='customer-tracker.index'>
+            <span class="title">Customer Tracker</span>
+            </a>
+          </li>
         </ul>
       </li>
       {/if}

@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use backend\models\OrderCommission;
 use backend\models\User;
 use backend\models\Game;
+use backend\models\Order;
 use common\components\helpers\StringHelper;
 
 class ReportCommissionForm extends Model
@@ -129,7 +130,32 @@ class ReportCommissionForm extends Model
         return $result;
     }
 
-    public function export($fileName = null)
+    public function getCommissionByOrder()
+    {
+        $groups = ArrayHelper::index($this->getData(), null, 'order_id');
+        $orderIds = array_keys($groups);
+        $orders = Order::find()->where(['id' => $orderIds])->all();
+        $result = [];
+        foreach ($orders as $order) {
+            $saler = $order->saler;
+            $orderTeam = $order->orderteam;
+            $result[] = [
+                'created_at' => $order->confirmed_at,
+                'order_id' => $order->id,
+                'customer_name' => $order->customer_name,
+                'game_title' => $order->game_title,
+                'quantity' => $order->quantity,
+                'sellout' => $order->saler_sellout_commission + $order->orderteam_sellout_commission,
+                'commission' => $order->saler_order_commission + $order->orderteam_order_commission,
+                'saler' => $saler ? $saler->getName() : '-',
+                'orderteam' => $orderTeam ? $orderTeam->getName() : '-',
+            ];
+        }
+
+        return $result;
+    }
+
+    public function export1($fileName = null)
     {
         $dataByUser = $this->getCommissionByUser();
         $fileName = ($fileName) ? $fileName : 'order-commission' . date('His') . '.xlsx';
@@ -194,6 +220,127 @@ class ReportCommissionForm extends Model
                 StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT], 0),
                 StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_ORDER], 0),
                 StringHelper::numberFormat($commission[OrderCommission::COMMSSION_TYPE_SELLOUT] + $commission[OrderCommission::COMMSSION_TYPE_ORDER], 0)
+            ];
+        }
+        $file = \Yii::createObject([
+            'class' => 'codemix\excelexport\ExcelFile',
+            'writerClass' => '\PHPExcel_Writer_Excel5', //\PHPExcel_Writer_Excel2007
+            'sheets' => [
+                'Report by transaction' => [
+                    'class' => 'common\components\export\excel\ExcelSheet',//'codemix\excelexport\ExcelSheet',
+                    // 'heading' => $heading,
+                    'header' => $header,
+                    'footer' => $footer,
+                    'data' => $data,
+                    'startRow' => $startRow,
+                    'titles' => $titles,
+                    'styles' => [
+                        $rangeTitle => [
+                            'font' => [
+                                'bold' => true,
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            ],
+                        ],
+                        $rangeTable => [
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        ],
+                    ],
+                    
+                    'on beforeRender' => function ($event) {
+                        $sender = $event->sender;
+                        $sheet = $sender->getSheet();
+                        $sender->renderHeader();
+                        $sender->renderFooter();
+                        $titles = $sender->getTitles();
+                        $columns = array_keys($titles);
+                        foreach ($columns as $column) {
+                            $sheet->getColumnDimension($column)->setAutoSize(true);
+                        }
+                    },
+                    'on afterRender' => function($event) {
+                        $sheet = $event->sender->getSheet();
+                        $sheet->setSelectedCell("A1");
+                    }
+                ],
+            ],
+        ]);
+        $file->send($fileName);
+    }
+
+    public function export($fileName = null)
+    {
+        $dataByOrder = $this->getCommissionByOrder();
+        $fileName = ($fileName) ? $fileName : 'order-commission' . date('His') . '.xlsx';
+        $names = [
+            'Ngày',
+            'Mã đơn hàng',
+            'Tên Reseller',
+            'Tên Game',
+            'Số gói',
+            'Sell out',
+            'Hoa hồng',
+            'NV thực hiện đơn hàng (AM)',
+            'NV phân phối đơn hàng (OT)'
+        ];
+        $characters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' ];
+        $titles = array_combine($characters, $names);
+        $totalRow = count($dataByOrder);
+        $startRow = 6;
+        $endRow = $startRow + $totalRow;
+        $footerRow = $endRow + 1;
+        $columns = array_keys($titles);
+        $startColumn = reset($columns);
+        $endColumn = end($columns);
+
+        $rangeTitle = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $startRow);
+        $rangeData = sprintf('%s%s:%s%s', $startColumn, $startRow + 1, $endColumn, $endRow);
+        $rangeTable = sprintf('%s%s:%s%s', $startColumn, $startRow, $endColumn, $endRow);
+
+        $users = ['All'];
+        if ($this->user_ids && count($this->user_ids)) {
+            $users = $this->fetchUsers();
+            $users = array_intersect_key(
+                $users,  // the array with all keys
+                array_flip($this->user_ids) // keys to be extracted
+            );
+        }
+        $games = ['All'];
+        if ($this->game_ids && count($this->game_ids)) {
+            $games = $this->fetchGames();
+            $games = array_intersect_key(
+                $games,  // the array with all keys
+                array_flip($this->game_ids) // keys to be extracted
+            );
+        }
+
+        $header = [
+            "A1:{$endColumn}1" => sprintf('THỐNG KÊ HOA HỒNG THEO ĐƠN HÀNG'),
+            "A2:{$endColumn}2" => sprintf('Thời gian thống kê: %s đến %s', $this->start_date, $this->end_date),
+            "A3:{$endColumn}3" => sprintf('Nhân viên: %s', implode(", ", $users)),
+            "A4:{$endColumn}4" => sprintf('Games: %s', implode(", ", $games)),
+        ];
+
+        $footer = [
+        ];
+        
+        $data = [];
+        foreach ($dataByOrder as $order) {
+            $data[] = [
+                $order['created_at'],
+                $order['order_id'],
+                $order['customer_name'],
+                $order['game_title'],
+                StringHelper::numberFormat($order['quantity'], 2),
+                StringHelper::numberFormat($order['sellout'], 0),
+                StringHelper::numberFormat($order['commission'], 0),
+                $order['saler'],
+                $order['orderteam'],
             ];
         }
         $file = \Yii::createObject([

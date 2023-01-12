@@ -15,7 +15,9 @@ $salerTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('saler_manager')
 $salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds, $adminTeamIds);
 $salerTeamIds = array_unique($salerTeamIds);
 $salerTeamObjects = User::findAll($salerTeamIds);
-$salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
+$salerTeams = ArrayHelper::map($salerTeamObjects, 'id', function($item) {
+  return $item->getName();
+});
 ?>
 
 <!-- BEGIN PAGE BAR -->
@@ -133,6 +135,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
                     <?php endif; ?>
                     <a href='#assign<?=$model->user_id;?>' class="btn btn-sm default tooltips" data-container="body" data-original-title="Chọn nhân viên quản lý"data-toggle="modal" ><i class="fa fa-exchange"></i></a>
                     <a class="btn btn-sm green tooltips generate-code" href="<?=Url::to(['reseller/generate-code', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Copy mã thanh toán" data-name="<?=$model->user->name;?>"><i class="fa fa-files-o"></i></a>
+                    <a href="<?=Url::to(['customer-tracker/convert', 'id' => $model->user_id]);?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Kích hoạt customer tracker"><i class="fa fa-certificate"></i> </a>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -208,8 +211,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'email');
 <?php
 $hiddenColumns = [];
 if (Yii::$app->user->isRole('admin')) $hiddenColumns = [];
-elseif (Yii::$app->user->isRole('sale_manager')) array_push($hiddenColumns, 'manager');
-elseif (Yii::$app->user->isRole('saler')) array_push($hiddenColumns, 'manager', 'action');
+elseif (Yii::$app->user->isRole('saler')) array_push($hiddenColumns, 'action');
 $hiddenColumnString = implode(',', $hiddenColumns);
 
 $script = <<< JS

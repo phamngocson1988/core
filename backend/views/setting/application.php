@@ -180,6 +180,19 @@ use yii\helpers\Url;
                   'inputOptions' => ['class' => 'form-control', 'id' => 'hot_post_id'],
                   'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
                 ])->dropdownList($model->fetchPosts(), ['prompt' => 'Chọn bài viết']);?>
+
+                <hr/>
+                <?=$form->field($model, 'am_commission_rate', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->textInput();?>
+
+                <?=$form->field($model, 'ot_commission_rate', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
+                ])->textInput();?>
               </div>
             </div>
           </div>

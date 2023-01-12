@@ -13,11 +13,13 @@ class CreateCustomerForm extends Model
     public $name;
     public $username;
     public $email;
+    public $country_code;
     public $phone;
     public $address;
     public $birthday;
     public $password;
     public $status;
+    public $saler_id;
     public $send_mail = false;
 
     /**
@@ -26,43 +28,22 @@ class CreateCustomerForm extends Model
     public function rules()
     {
         return [
-            ['name', 'trim'],
-            ['name', 'required'],
-
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('app', 'validate_alphanumeric')],
-            ['username', 'unique', 'targetClass' => '\backend\models\User', 'message' => Yii::t('app', 'validate_username_unique')],
-
-
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\backend\models\User', 'message' => Yii::t('app', 'validate_email_unique')],
+            ['email', 'unique', 'targetClass' => User::className(), 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
-            ['status', 'in', 'range' => array_keys(User::getUserStatus())],
+            [['username', 'name'], 'trim'],
 
-            [['phone', 'address', 'birthday', 'send_mail'], 'trim'],
-            ['phone', 'match', 'pattern' => '/^[0-9]+((\.|\s)?[0-9]+)*$/i'],
-        ];
-    }
+            [['country_code', 'phone'], 'trim'],
+            ['phone', 'required'],
+            ['phone', 'string', 'min' => 7],
 
-    public function attributeLabels()
-    {
-        return [
-            'name' => Yii::t('app', 'name'),
-            'username' => Yii::t('app', 'username'),
-            'email' => Yii::t('app', 'email'),
-            'phone' => Yii::t('app', 'contact_phone'),
-            'address' => Yii::t('app', 'address'),
-            'birthday' => Yii::t('app', 'birthday'),
-            'password' => Yii::t('app', 'password'),
-            'status' => Yii::t('app', 'status'),
-            'send_mail' => Yii::t('app', 'send_mail_to_customer'),
+            [['saler_id', 'address', 'birthday', 'status', 'send_mail'], 'safe']
         ];
     }
 
@@ -81,30 +62,58 @@ class CreateCustomerForm extends Model
         $user->name = $this->name;
         $user->username = $this->username;
         $user->email = $this->email;
+        $user->country_code = $this->country_code;
         $user->phone = $this->phone;
         $user->address = $this->address;
         $user->birthday = $this->birthday;
+        $user->saler_id = $this->saler_id;
         $user->status = $this->status;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        return $user->save() ? $user : null;
+        if ($user->save()) {
+            if ($this->send_mail) {
+                $this->status ? $this->sendEmailNotification($user) : $this->sendMailActivation($user);
+            }
+            return $user;
+        }
+        $this->addError('email', 'Fail to create user');
+        return false;
     }
 
-    public function getUserStatus()
-    {
-        return User::getUserStatus();
-    }
-
-    public function sendEmail()
+    public function sendMailActivation($user)
     {
         $settings = Yii::$app->settings;
-        $adminEmail = $settings->get('ApplicationSettingForm', 'admin_email', null);
-        $email = $this->email;
-        return Yii::$app->mailer->compose('invite_customer', ['mail' => $this])
-            ->setTo($email)
-            ->setFrom([$adminEmail => Yii::$app->name])
-            ->setSubject("[Kinggems][Notification email] Bạn nhận được thông báo từ " . Yii::$app->name)
-            ->setTextBody('Bạn nhận được thông báo về thông tin tài khoản từ kinggems.us')
-            ->send();
+        $mailer = Yii::$app->mailer;
+        $subject = sprintf('King Gems - New account is created');
+        $template = 'active_customer';
+        $fromEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+        $toEmail = $user->email;
+        $message = $mailer->compose($template, [
+            'activeUrl' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['site/activate', 'id' => $user->id, 'key' => $user->auth_key], true),
+            'user' => $user,
+            'password' => $this->password
+        ]);
+        $message->setFrom($fromEmail);
+        $message->setTo($toEmail);
+        $message->setSubject($subject);
+        $message->send($mailer);
+    }
+
+    public function sendEmailNotification($user)
+    {
+        $settings = Yii::$app->settings;
+        $mailer = Yii::$app->mailer;
+        $subject = sprintf('King Gems - New account is created');
+        $template = 'invite_customer';
+        $fromEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
+        $toEmail = $user->email;
+        $message = $mailer->compose($template, [
+            'user' => $user,
+            'password' => $this->password
+        ]);
+        $message->setFrom($fromEmail);
+        $message->setTo($toEmail);
+        $message->setSubject($subject);
+        $message->send($mailer);
     }
 }

@@ -70,6 +70,8 @@ $gallery = array_filter($gallery, function($data) {
     return $data['link'];
 });
 $sideGallery = array_slice($gallery, -2);
+$user = Yii::$app->user->getIdentity();
+$isReseller = $user && $user->isReseller();
 ?>
 
 <?=\website\widgets\HotNewHomePage::widget();?>
@@ -217,8 +219,9 @@ $sideGallery = array_slice($gallery, -2);
             <span class="text"><?=Html::encode($game->unit_name);?></span>
           </div>
           <div class="flex-fill price">
-            <?php $price = $game->getPrice();?>
-            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($price, (int)($price != round($price)));?></span>
+            <?php $price = $isReseller ? $game->getResellerPrice($user->reseller_level) : $game->getPrice();?>
+            <?php $priceShow = $price ? sprintf("$%s", number_format($price, (int)($price != round($price)))) : 'CONTACT';?>
+            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num"><?=$priceShow;?></span>
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-center">
@@ -308,8 +311,9 @@ $sideGallery = array_slice($gallery, -2);
                   <span class="text"><?=Html::encode($game->unit_name);?></span>
                 </div>
                 <div class="flex-fill price">
-                  <?php $price = $game->getPrice();?>
-                  <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($price, (int)($price != round($price)));?></span>
+                  <?php $price = $isReseller ? $game->getResellerPrice($user->reseller_level) : $game->getPrice();?>
+                  <?php $priceShow = $price ? sprintf("$%s", number_format($price, (int)($price != round($price)))) : 'CONTACT';?>
+                  <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num"><?=$priceShow;?></span>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center">
@@ -383,8 +387,9 @@ $sideGallery = array_slice($gallery, -2);
                   <span class="text"><?=Html::encode($game->unit_name);?></span>
                 </div>
                 <div class="flex-fill price">
-                  <?php $price = $game->getPrice();?>
-                  <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($price, (int)($price != round($price)));?></span>
+                <?php $price = $isReseller ? $game->getResellerPrice($user->reseller_level) : $game->getPrice();?>
+                  <?php $priceShow = $price ? sprintf("$%s", number_format($price, (int)($price != round($price)))) : 'CONTACT';?>
+                  <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num"><?=$priceShow;?></span>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center">

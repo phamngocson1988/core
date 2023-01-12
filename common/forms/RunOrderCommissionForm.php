@@ -11,8 +11,9 @@ use yii\helpers\ArrayHelper;
 class RunOrderCommissionForm extends ActionForm
 {
     public $order_id; // order
-    public $profit_rate = 0.6;
     public $flat_commission = 10000;
+    public $am_commission_rate = 0.2;
+    public $ot_commission_rate = 0.2;
 
     protected $_order;
 
@@ -77,9 +78,10 @@ class RunOrderCommissionForm extends ActionForm
         // Save for order
         $order->expected_profit = $expectedProfit;
         $order->real_profit = $overcome;
-        $order->profit_rate = $this->profit_rate;
+        $order->am_commission_rate = $this->am_commission_rate;
+        $order->ot_commission_rate = $this->ot_commission_rate;
         if ($order->saler_id) {
-          $order->saler_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
+          $order->saler_order_commission = max(0, $this->am_commission_rate * $commission);
           $order->saler_sellout_commission = $commission ? $selloutCommission : 0;
           if ($isNewCustomer) {
             $order->saler_sellout_commission = $order->saler_sellout_commission * 150 / 100;
@@ -89,7 +91,7 @@ class RunOrderCommissionForm extends ActionForm
           $order->saler_sellout_commission = 0;
         }
         if ($order->orderteam_id) {
-          $order->orderteam_order_commission = max(0, ((1 - $this->profit_rate) / 2) * $commission);
+          $order->orderteam_order_commission = max(0, $this->ot_commission_rate * $commission);
           $order->orderteam_sellout_commission = $commission ? $selloutCommission : 0;
           if ($isNewCustomer) {
             $order->orderteam_sellout_commission = $order->orderteam_sellout_commission * 150 / 100;
@@ -108,8 +110,7 @@ class RunOrderCommissionForm extends ActionForm
               'game_title' => $order->game_title,
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
-              'profit_rate' => $order->profit_rate,
-              'user_profit_rate' => $this->getUserRateProfit(), 
+              'user_profit_rate' => $this->am_commission_rate, 
               'is_new_customer' => $isNewCustomer,
               'duration_new_customer' => $durationNewCustomer
             ]);
@@ -131,8 +132,7 @@ class RunOrderCommissionForm extends ActionForm
               'game_title' => $order->game_title,
               'expected_profit' => $order->expected_profit,
               'real_profit' => $order->real_profit,
-              'profit_rate' => $order->profit_rate,
-              'user_profit_rate' => $this->getUserRateProfit(),
+              'user_profit_rate' => $this->ot_commission_rate,
               'is_new_customer' => $isNewCustomer,
               'duration_new_customer' => $durationNewCustomer
             ]);
@@ -175,10 +175,5 @@ class RunOrderCommissionForm extends ActionForm
         $orderCommission->description = $description;
         $orderCommission->created_at = $order->confirmed_at;
         return $orderCommission->save();
-    }
-
-    protected function getUserRateProfit()
-    {
-      return (1 - $this->profit_rate) / 2; // balance for saler and orderteam
     }
 }

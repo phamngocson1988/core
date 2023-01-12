@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use backend\components\datetimepicker\DateTimePicker;
 $user = Yii::$app->user;
-$showCustomer = $user->can('saler') || $user->can('accounting');
+$showCustomer = $user->can('saler') || $user->can('accounting') || $user->can('orderteam');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">

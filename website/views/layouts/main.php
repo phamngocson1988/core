@@ -38,13 +38,13 @@ AppAsset::register($this);
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <?= Html::csrfMetaTags() ?>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CZLJZ67BQG"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZYRNBYH2H"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-CZLJZ67BQG');
+      gtag('config', 'G-JZYRNBYH2H');
     </script>
     <!-- Facebook Pixel Code -->
     <script>

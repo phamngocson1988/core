@@ -1,8 +1,9 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
-    <P>Xin chào <?= $mail->name;?>, tài khoản khách hàng của bạn trên hệ thống kinggems.us đã được tạo bởi admin</P>
-    <p><strong>Website:</strong> <a href="https://kinggems.us/dang-nhap.html" target="_blank">Link đăng nhập</a></p>
-	<p><strong>Tài khoản:</strong> <?= $mail->username ?></p>
-	<p><strong>Mật khẩu:</strong> <?= $mail->password ?></p>
+    <P>Hello <?= $user->name;?></P>
+    <P>Congrats! Your account has been created on Kinggems.us with the follow details:</P>
+    <p>Username: <?=$user->username;?></p>
+    <p>Password: <?=$password;?> (Please change the password later)</p>
+    <p>Thanks for your cooperation & Hope you enjoy the journey with us!</p>
   </td>
 </tr>

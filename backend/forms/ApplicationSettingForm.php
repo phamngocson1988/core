@@ -32,6 +32,8 @@ class ApplicationSettingForm extends Model
     public $kcoin_banner;
     public $kcoin_banner_mobile;
     public $kcoin_banner_link;
+    public $am_commission_rate;
+    public $ot_commission_rate;
 
     //post banner
     public $post_banner;
@@ -58,7 +60,16 @@ class ApplicationSettingForm extends Model
             [['affiliate_banner', 'affiliate_banner_mobile', 'affiliate_banner_link', 'refer_banner', 'refer_banner_mobile', 'refer_banner_link', 'kcoin_banner', 'kcoin_banner_mobile', 'kcoin_banner_link'], 'safe'],
             ['post_banner', 'safe'],
             ['hot_post_id', 'safe'],
+            [['am_commission_rate', 'ot_commission_rate'], 'number', 'max' => 100],
+            [['am_commission_rate', 'ot_commission_rate'], 'validateCommissionRate'],
         ];
+    }
+
+    public function validateCommissionRate($attribute, $params)
+    {
+        if (($this->am_commission_rate + $this->ot_commission_rate) > 100) {
+            return $this->addError($attribute, 'Tổng tỉ lệ hoa hồng  của AM và OT phải nhỏ hơn 100%');
+        }
     }
 
     /**
@@ -92,6 +103,8 @@ class ApplicationSettingForm extends Model
             'accountant_email' => 'Email kế toán',
             'post_banner' => 'Banner trang tin tức',
             'hot_post_id' => 'Hot new trang chủ',
+            'am_commission_rate' => 'Phần trăm hoa hồng cho AM (%)',
+            'ot_commission_rate' => 'Phần trăm hoa hồng cho OT (%)',
         ];
     }
 

@@ -279,7 +279,10 @@ class GameController extends Controller
         if (!Yii::$app->user->can('orderteam')) throw new NotFoundHttpException('Not found');
         $request = Yii::$app->request;
         // $model = Game::findOne($id);
-        $model = new \backend\forms\UpdateGamePriceForm(['id' => $id]);
+        $model = new \backend\forms\UpdateGamePriceForm([
+            'id' => $id,
+            'canUpdatePrice' => Yii::$app->user->can('admin')
+        ]);
         $model->loadData();
         
         $form = new FetchSupplierGameForm([
@@ -336,7 +339,10 @@ class GameController extends Controller
         $this->view->params['main_menu_active'] = 'game.provider';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new \backend\forms\UpdateGamePriceForm(['id' => $id]);
+        $model = new \backend\forms\UpdateGamePriceForm([
+            'id' => $id,
+            'canUpdatePrice' => Yii::$app->user->can('admin')
+        ]);
         if ($request->isPost) {
             if ($model->load($request->post()) && $model->validate() && $model->save()) {
                 if ($request->isAjax) {
