@@ -47,9 +47,14 @@ class ProfileController extends Controller
             $model->loadData();
         }
 
+        $referrers = \website\models\User::find()
+        ->select(['id', 'name', 'username', 'created_at', 'first_order_at'])
+        ->where(['referred_by' => Yii::$app->user->id])->all();
+
         return $this->render('index', [
             'model' => $model,
-            'passwordModel' => new \website\forms\ChangePasswordForm()
+            'passwordModel' => new \website\forms\ChangePasswordForm(),
+            'referrers' => $referrers
         ]);
     }
 

@@ -51,6 +51,7 @@ class m130524_201442_init extends Migration
             'social_telegram' => $this->string(255),
             'social_wechat' => $this->string(255),
             'social_other' => $this->string(255),
+            'first_order_at' => $this->dateTime(),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
         ], $tableOptions);

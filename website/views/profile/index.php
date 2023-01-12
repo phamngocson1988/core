@@ -129,7 +129,33 @@ $user = Yii::$app->user->getIdentity();
     </div>
   </div>
 </div>
-
+<div class="container profile my-5">  
+  <div class="row">
+    <div class="table-wrapper table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Tên</th>
+            <th>Ngày tạo</th>
+            <th>Đơn hàng đầu tiên</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (!count($referrers)) :?>
+          <tr><td colspan="3" class="center">Không có dữ liệu</td></tr>
+          <?php endif;?>
+          <?php foreach ($referrers as $referrer) :?>
+          <tr>
+            <td><?=$referrer->getName();?></td>
+            <td><?=date('d/m/Y H:i', strtotime($referrer->created_at));?></td>
+            <td><?=date('d/m/Y H:i', strtotime($referrer->first_order_at));?></td>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 <?php // website\widgets\VerifyAccountFormWidget::widget();?>
 <?=\website\widgets\VerifyEmailFormWidget::widget();?>
 <?=\website\widgets\ChangePasswordFormWidget::widget();?>
