@@ -142,7 +142,7 @@ $user = Yii::$app->user->getIdentity();
         </thead>
         <tbody>
           <?php if (!count($referrers)) :?>
-          <tr><td colspan="3" class="center">Không có dữ liệu</td></tr>
+          <tr><td class="text-center" colspan="3">No data found</td></tr>
           <?php endif;?>
           <?php foreach ($referrers as $referrer) :?>
           <tr>
