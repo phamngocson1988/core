@@ -291,7 +291,7 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
           <?= ChartJs::widget([
             'type' => 'bar',
             'options' => [
-                'height' => 120,
+                'height' => 100,
                 'width' => 200
             ],
             'data' => [
@@ -418,7 +418,7 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
       <div class="portlet-title">
         <div class="caption">
           <i class="icon-share font-red-sunglo"></i>
-          <span class="caption-subject font-red-sunglo bold uppercase">MONTHLY CONVERSION VISUALIZATION</span>
+          <span class="caption-subject font-red-sunglo bold uppercase">MONTHLY CONVERSION RATE</span>
         </div>
       </div>
       <div class="portlet-body">
@@ -631,7 +631,7 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
             <div class="portlet-body">
                 <div class="clearfix">
                 <div class="panel panel-success">
-                    <table class="table">
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -645,15 +645,15 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
                             <tr>
                                 <td><?=$no + 1;?></td>
                                 <td><?=$value['name'];?></td>
-                                <td><?=$value['quantity'];?></td>
-                                <td><?=$value['percent'];?>%</td>
+                                <td class="center"><?=$value['quantity'];?></td>
+                                <td class="center"><?=$value['percent'];?>%</td>
                             </tr>
                             <?php endforeach;?>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="2" class="right">Total</td>
-                                <td><?=$topTenUser['total'];?></td>
+                                <td class="center"><?=$topTenUser['total'];?></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -687,7 +687,7 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
             <?= ChartJs::widget([
                 'type' => 'bar',
                 'options' => [
-                    'height' => 180,
+                    'height' => 120,
                     'width' => 200
                 ],
                 'data' => [
@@ -726,7 +726,7 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
             <div class="portlet-body">
                 <div class="clearfix">
                 <div class="panel panel-success">
-                    <table class="table">
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -740,15 +740,15 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
                             <tr>
                                 <td><?=$no + 1;?></td>
                                 <td><?=$value['name'];?></td>
-                                <td><?=$value['quantity'];?></td>
-                                <td><?=$value['percent'];?>%</td>
+                                <td class="center"><?=$value['quantity'];?></td>
+                                <td class="center"><?=$value['percent'];?>%</td>
                             </tr>
                             <?php endforeach;?>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="2" class="right">Total</td>
-                                <td><?=$topTenGame['total'];?></td>
+                                <td class="center"><?=$topTenGame['total'];?></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -782,7 +782,7 @@ $NCCI3 = $countNormal3 ? round(ArrayHelper::getValue($leadTrackerCreation, 'mont
             <?= ChartJs::widget([
                 'type' => 'bar',
                 'options' => [
-                    'height' => 180,
+                    'height' => 120,
                     'width' => 200
                 ],
                 'data' => [
