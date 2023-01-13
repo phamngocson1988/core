@@ -49,4 +49,20 @@ class TestController extends Controller
         ]);
         $form->run();
     }
+
+    public function actionUpdateFirstOrder()
+    {
+        $users = Order::find()
+            ->select(['customer_id', 'created_at'])->where(['staus' => Order::STATUS_CONFIRMED])
+            ->groupBy('customer_id')
+            ->asArray()
+            ->all();
+        $user = User::find()->select(['id', 'first_order_at'])->where(['id' => $this->user_id])->one();
+        if ($user && !$user->first_order_at) {
+          $order = Order::find()->select(['created_at'])->where(['id' => $this->order_id])->one();
+          $user->first_order_at = $order->created_at;
+          $user->save();
+        }
+        return true;
+    }
 }

@@ -62,6 +62,7 @@ class ConfirmOrderForm extends Model
             }
 
             Yii::$app->queue->push(new \common\queue\RunOrderCommissionJob(['id' => $order->id]));
+            Yii::$app->queue->push(new \common\queue\UpdateUserFirstOrderJob(['order_id' => $order->id, 'user_id' => $order->customer_id]));
 
             $transaction->commit();
             return $result;
