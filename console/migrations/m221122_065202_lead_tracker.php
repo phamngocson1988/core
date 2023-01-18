@@ -127,6 +127,23 @@ class m221122_065202_lead_tracker extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
         $this->addPrimaryKey('lead_tracker_report_pk', '{{%lead_tracker_report}}', ['month', 'lead_tracker_id']);
+
+        $this->createTable('{{%lead_tracker_question}}', [
+            'id' => $this->primaryKey(),
+            'type' => $this->varchar(10)->notNull(), // lead target or potential target
+            'question' => $this->text()->notNull(),
+            'point_yes' => $this->integer()->defaultValue(0),
+            'point_no' => $this->integer()->defaultValue(0),
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterUserTrust = "ALTER TABLE {{%lead_tracker_question}} MODIFY `type` ENUM('lead', 'potential') NOT NULL DEFAULT 'lead'";
+            $command = $this->db->createCommand($alterUserTrust);
+            $command->execute();
+        }
     }
 
     public function down()
@@ -137,6 +154,7 @@ class m221122_065202_lead_tracker extends Migration
         $this->dropTable('{{%lead_tracker_comment}}');
         $this->dropTable('{{%lead_tracker_action_log}}');
         $this->dropTable('{{%lead_tracker_report}}');
+        $this->dropTable('{{%lead_tracker_question}}');
         return false;
     }
 }

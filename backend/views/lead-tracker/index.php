@@ -37,6 +37,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
         <div class="actions">
           <div class="btn-group btn-group-devided">
             <a class="btn green" href="<?=Url::to(['lead-tracker/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <a class="btn grey" href="<?=Url::to(['lead-tracker-question/index']);?>">Quản lý câu hỏi</a>
             <?php if (Yii::$app->user->can('admin')) : ?>
             <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
             <?php endif;?>
