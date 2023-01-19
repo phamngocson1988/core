@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Country;
 use backend\models\User;
 use backend\models\Game;
+use common\models\LeadTrackerQuestion;
 /**
  * CreateLeadTrackerForm is the model behind the contact form.
  */
@@ -23,15 +24,9 @@ class CreateLeadTrackerForm extends Model
     public $channels = [];
     public $contacts = [];
     public $game_id;
-    public $question_1;
-    public $question_2;
-    public $question_3;
-    public $question_4;
-    public $question_5;
-    public $question_6;
-    public $question_7;
-    public $question_8;
-    public $question_9;
+    public $questions = [];
+
+    protected $_questions;
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_CONVERT = 'convert';
@@ -39,8 +34,8 @@ class CreateLeadTrackerForm extends Model
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $attributes = ['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channels', 'contacts', 'game_id', 'question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'];
-        $scenarios[self::SCENARIO_CREATE] = $attributes;
+        $attributes = ['name', 'link', 'saler_id', 'country_code', 'phone', 'email', 'channels', 'contacts', 'game_id'];
+        $scenarios[self::SCENARIO_CREATE] = array_merge($attributes, ['questions']);
         $scenarios[self::SCENARIO_CONVERT] = $attributes;
         return $scenarios;
     }
@@ -56,8 +51,7 @@ class CreateLeadTrackerForm extends Model
             ['link', 'required', 'on' => self::SCENARIO_CREATE],
             ['email', 'unique', 'targetClass' => LeadTracker::className(), 'message' => 'This email address has already been taken.'],
             ['phone', 'unique', 'targetClass' => LeadTracker::className(), 'message' => 'This phone has already been taken.'],
-            [['name', 'link', 'saler_id', 'country_code', 'channels', 'contacts', 'game_id'], 'safe'],
-            [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
+            [['name', 'link', 'saler_id', 'country_code', 'channels', 'contacts', 'game_id', 'questions'], 'safe'],
         ];
     }
 
@@ -79,10 +73,21 @@ class CreateLeadTrackerForm extends Model
         }
     }
 
+    protected function getQuestions() 
+    {
+        if (!$this->_questions) {
+            $this->_questions = LeadTrackerQuestion::find()->all();
+        }
+        return $this->_questions;
+    }
+
     public function save()
     {
         if (!$this->validate()) {
             return false;
+        }
+        if ($this->scenario === self::SCENARIO_CONVERT) {
+            $this->questions = ArrayHelper::getColumn($this->getQuestions(), 'id');
         }
         $now = date('Y-m-d H:i:s');
         $leadTracker = new LeadTracker();
@@ -95,15 +100,7 @@ class CreateLeadTrackerForm extends Model
         $leadTracker->channels = implode(',', (array)$this->channels);
         $leadTracker->contacts = implode(',', (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
-        $leadTracker->question_1 = $this->question_1;
-        $leadTracker->question_2 = $this->question_2;
-        $leadTracker->question_3 = $this->question_3;
-        $leadTracker->question_4 = $this->question_4;
-        $leadTracker->question_5 = $this->question_5;
-        $leadTracker->question_6 = $this->question_6;
-        $leadTracker->question_7 = $this->question_7;
-        $leadTracker->question_8 = $this->question_8;
-        $leadTracker->question_9 = $this->question_9;
+        $leadTracker->lead_questions = implode(',', (array)$this->questions);
         $leadTracker->is_potential = $leadTracker->calculateIsPotential();
         $leadTracker->is_target = $leadTracker->calculateIsTarget();
         if ($leadTracker->is_potential && !$leadTracker->potential_lead_at) {
@@ -118,21 +115,6 @@ class CreateLeadTrackerForm extends Model
         return false;
     }
 
-    public function attributeLabels()
-    {
-        return [
-            'question_1' => $this->getQuestionTitle('question_1'),
-            'question_2' => $this->getQuestionTitle('question_2'),
-            'question_3' => $this->getQuestionTitle('question_3'),
-            'question_4' => $this->getQuestionTitle('question_4'),
-            'question_5' => $this->getQuestionTitle('question_5'),
-            'question_6' => $this->getQuestionTitle('question_6'),
-            'question_7' => $this->getQuestionTitle('question_7'),
-            'question_8' => $this->getQuestionTitle('question_8'),
-            'question_9' => $this->getQuestionTitle('question_9'),
-        ];
-    }
-
     public function getBooleanList() 
     {
         return [
@@ -144,6 +126,20 @@ class CreateLeadTrackerForm extends Model
     public function listCountries()
     {
         return ArrayHelper::map(Country::fetchAll(), 'country_code', 'country_name');
+    }
+
+    public function listTargetLeadQuestions()
+    {
+        return ArrayHelper::map(array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_LEAD_TARGET;
+        }), 'id', 'question');
+    }
+
+    public function listPotentialLeadQuestions()
+    {
+        return ArrayHelper::map(array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_POTENTIAL_TARGET;
+        }), 'id', 'question');
     }
 
     public function listCountryAttributes()
@@ -182,10 +178,5 @@ class CreateLeadTrackerForm extends Model
     {
         $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
         return ArrayHelper::map($games, 'id', 'title');
-    }
-
-    public function getQuestionTitle($question) 
-    {
-        return LeadTracker::getQuestionTitle($question);
     }
 }

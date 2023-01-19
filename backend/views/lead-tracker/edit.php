@@ -110,45 +110,20 @@ use common\components\helpers\TimeElapsed;
               <div class="tab-pane" id="tab_question">
                 <div class="form-body">
                   <h3>Potential Lead</h3>
-                  <?=$form->field($model, 'question_1', [
+                  <?php foreach ($model->listPotentialLeadQuestions() as $id => $question) : ?>
+                    <?=$form->field($model, "questions[$id]", [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                    ])->widget(CheckboxInput::className())->label('');?>
-                  <?=$form->field($model, 'question_2', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
-                  <?=$form->field($model, 'question_3', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
-                  <?=$form->field($model, 'question_4', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
+                    ])->widget(CheckboxInput::className(), ['options' => ['label' => $question, 'checked' => in_array($id, $model->questions)]])->label('');?>
+                  <?php endforeach ;?>
                   <hr/>
                   <h3>Target Lead</h3>
-                  <?=$form->field($model, 'question_5', [
+                  <?php foreach ($model->listTargetLeadQuestions() as $id => $question) : ?>
+                    <?=$form->field($model, "questions[$id]", [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
-                  <?=$form->field($model, 'question_6', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
-                  <?=$form->field($model, 'question_7', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
-                  <?=$form->field($model, 'question_8', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
-                  <?=$form->field($model, 'question_9', [
-                    'labelOptions' => ['class' => 'col-md-2 control-label'],
-                    'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                  ])->widget(CheckboxInput::className())->label('');?>
-
+                    ])->widget(CheckboxInput::className(), ['options' => ['label' => $question]])->label('');?>
+                  <?php endforeach ;?>
                 </div>
               </div>
               <?php if ($comments): ?>

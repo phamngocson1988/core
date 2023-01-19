@@ -86,7 +86,7 @@ class UserTracker extends ActiveRecord
         ],	 
         [
             'key' => 'question_8',
-            'question' => 'Có người quen đã từng sử dụng qua loiaj hình dịch vụ này',
+            'question' => 'Có người quen đã từng sử dụng qua loại hình dịch vụ này',
             'point_yes' => 1,
             'point_no' => 0
         ],	 
