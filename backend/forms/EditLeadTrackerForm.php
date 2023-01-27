@@ -110,8 +110,8 @@ class EditLeadTrackerForm extends Model
         $leadTracker->contacts = implode(',', (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
         $leadTracker->lead_questions = implode(',', $this->questions);
-        $leadTracker->is_potential = $leadTracker->calculateIsPotential();
-        $leadTracker->is_target = $leadTracker->calculateIsTarget();
+        $leadTracker->is_potential = $this->calculateIsPotential();
+        $leadTracker->is_target = $this->calculateIsTarget();
         if ($leadTracker->is_potential && !$leadTracker->potential_lead_at) {
             $leadTracker->potential_lead_at = $now;
         }
@@ -205,5 +205,31 @@ class EditLeadTrackerForm extends Model
         return ArrayHelper::map(array_filter($this->getQuestions(), function($item) {
             return $item->type === LeadTrackerQuestion::TYPE_POTENTIAL_TARGET;
         }), 'id', 'question');
+    }
+
+    protected function calculateIsPotential()
+    {
+        $questions = array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_POTENTIAL_TARGET;
+        });
+        $point = 0;
+        foreach ($questions as $question) {
+            $flag = in_array($question->id, $this->questions);
+            $point += $flag ? $question->point_yes : $question->point_no;
+        }
+        return $point >= 2;
+    }
+
+    protected function calculateIsTarget()
+    {
+        $questions = array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_LEAD_TARGET;
+        });
+        $point = 0;
+        foreach ($questions as $question) {
+            $flag = in_array($question->id, $this->questions);
+            $point += $flag ? $question->point_yes : $question->point_no;
+        }
+        return $point >= 3;
     }
 }

@@ -8,6 +8,9 @@ use yii\web\JsExpression;
 use common\widgets\CheckboxInput;
 use common\components\helpers\TimeElapsed;
 use backend\models\CustomerTracker;
+use common\models\LeadTrackerQuestion;
+
+$questions = LeadTrackerQuestion::find()->all();
 ?>
 <style>
   /* .general-information tr>td:first-child, 
@@ -269,6 +272,12 @@ use backend\models\CustomerTracker;
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
+            <?php
+            $lead_questions = explode(',', $model->lead_questions);
+            $potentialQuestions = array_filter($questions, function($item) {
+              return $item->type === LeadTrackerQuestion::TYPE_POTENTIAL_TARGET;
+            });
+            ?>
             <table class="table Potential-Leads">
               <thead>
                 <tr class="highlight-yellow">
@@ -278,28 +287,16 @@ use backend\models\CustomerTracker;
                 </tr>
               </thead>
               <tbody>
+                <?php foreach ($potentialQuestions as $question) : ?>
                 <tr>
                   <td class="highlight-yellow">Engagement</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_1');?></td>
-                  <td><?=$model->question_1 ? 'YES' : 'NO';?></td>
+                  <td><?=$question->question;?></td>
+                  <td><?=in_array($question->id, $lead_questions) ? 'YES' : 'NO';?></td>
                 </tr>
-                <tr>
-                  <td class="highlight-yellow" rowspan="2">Network</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_2');?></td>
-                  <td><?=$model->question_2 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_3');?></td>
-                  <td><?=$model->question_3 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td class="highlight-yellow">Legit account</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_4');?></td>
-                  <td><?=$model->question_4 ? 'YES' : 'NO';?></td>
-                </tr>
+                <?php endforeach;?>
                 <tr class="highlight-yellow">
                   <td>Evaluation</td>
-                  <td class="center"><?=$model->calculatePointPotential();?></td>
+                  <td class="center"><?=$model->point_potential;?></td>
                   <td><?=$model->is_potential ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
@@ -321,6 +318,11 @@ use backend\models\CustomerTracker;
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
+            <?php 
+            $leadQuestions = array_filter($questions, function($item) {
+              return $item->type === LeadTrackerQuestion::TYPE_LEAD_TARGET;
+            });
+            ?>
             <table class="table Target-Leads">
               <thead>
                 <tr class="highlight-yellow">
@@ -330,31 +332,16 @@ use backend\models\CustomerTracker;
                 </tr>
               </thead>
               <tbody>
+                <?php foreach ($leadQuestions as $question) : ?>
                 <tr>
-                  <td class="highlight-yellow" rowspan="4">Demand availability</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_5');?></td>
-                  <td><?=$model->question_5 ? 'YES' : 'NO';?></td>
+                  <td class="highlight-yellow">Demand availability</td>
+                  <td><?=$question->question;?></td>
+                  <td><?=in_array($question->id, $lead_questions) ? 'YES' : 'NO';?></td>
                 </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_6');?></td>
-                  <td><?=$model->question_6 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_7');?></td>
-                  <td><?=$model->question_7 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_8');?></td>
-                  <td><?=$model->question_8 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td class="highlight-yellow">Referred</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_9');?></td>
-                  <td><?=$model->question_9 ? 'YES' : 'NO';?></td>
-                </tr>
+                <?php endforeach;?>
                 <tr class="highlight-yellow">
                   <td>Evaluation</td>
-                  <td class="center"><?=$model->calculatePointTarget();?></td>
+                  <td class="center"><?=$model->point_target;?></td>
                   <td><?=$model->is_target ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>

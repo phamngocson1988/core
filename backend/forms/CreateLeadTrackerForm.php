@@ -88,9 +88,10 @@ class CreateLeadTrackerForm extends Model
         }
         if ($this->scenario === self::SCENARIO_CONVERT) {
             $this->questions = ArrayHelper::getColumn($this->getQuestions(), 'id');
+        } else {
+            $this->questions = array_keys(array_filter($this->questions));
         }
         $now = date('Y-m-d H:i:s');
-        $this->questions = array_keys(array_filter($this->questions));
         $leadTracker = new LeadTracker();
         $leadTracker->name = $this->name;
         $leadTracker->link = $this->link;
@@ -102,8 +103,10 @@ class CreateLeadTrackerForm extends Model
         $leadTracker->contacts = implode(',', (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
         $leadTracker->lead_questions = implode(',', $this->questions);
-        $leadTracker->is_potential = $leadTracker->calculateIsPotential();
-        $leadTracker->is_target = $leadTracker->calculateIsTarget();
+        $leadTracker->is_potential = $this->calculateIsPotential();
+        $leadTracker->point_potential = $this->calculatePointPotential();
+        $leadTracker->is_target = $this->calculateIsTarget();
+        $leadTracker->point_target = $this->calculatePointTarget();
         if ($leadTracker->is_potential && !$leadTracker->potential_lead_at) {
             $leadTracker->potential_lead_at = $now;
         }
@@ -122,14 +125,6 @@ class CreateLeadTrackerForm extends Model
             '0' => 'No',
             '1' => 'Yes'
         ];
-    }
-
-    protected function extractQuestionAnswer()
-    {
-        if (!is_array($this->questions)) {
-            $this->questions = [];
-        }
-        return array_keys(array_filter($this->questions));
     }
 
     public function listCountries()
@@ -187,5 +182,41 @@ class CreateLeadTrackerForm extends Model
     {
         $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
         return ArrayHelper::map($games, 'id', 'title');
+    }
+
+    protected function calculatePointPotential()
+    {
+        $questions = array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_POTENTIAL_TARGET;
+        });
+        $point = 0;
+        foreach ($questions as $question) {
+            $flag = in_array($question->id, $this->questions);
+            $point += $flag ? $question->point_yes : $question->point_no;
+        }
+        return $point;
+    }
+
+    protected function calculateIsPotential()
+    {
+        return $this->calculatePointPotential() >= 2;
+    }
+
+    protected function calculatePointTarget()
+    {
+        $questions = array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_LEAD_TARGET;
+        });
+        $point = 0;
+        foreach ($questions as $question) {
+            $flag = in_array($question->id, $this->questions);
+            $point += $flag ? $question->point_yes : $question->point_no;
+        }
+        return $point;
+    }
+
+    protected function calculateIsTarget()
+    {
+        return $this->calculatePointTarget() >= 3;
     }
 }
