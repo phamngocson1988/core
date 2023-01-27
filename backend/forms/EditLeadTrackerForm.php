@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Country;
 use backend\models\User;
 use backend\models\Game;
+use common\models\LeadTrackerQuestion;
 
 /**
  * EditLeadTrackerForm is the model behind the contact form.
@@ -25,21 +26,16 @@ class EditLeadTrackerForm extends Model
     public $channels = [];
     public $contacts = [];
     public $game_id;
-    public $question_1;
-    public $question_2;
-    public $question_3;
-    public $question_4;
-    public $question_5;
-    public $question_6;
-    public $question_7;
-    public $question_8;
-    public $question_9;
+    public $questions = [];
 
     /** LeadTracker */
     private $_leadTracker;
+
+    protected $_questions;
     /**
      * @inheritdoc
      */
+
     public function rules()
     {
         return [
@@ -50,7 +46,7 @@ class EditLeadTrackerForm extends Model
             ['email', 'validateEmail'],
             ['phone', 'validatePhone'],
             [['name', 'link', 'saler_id', 'country_code', 'channels', 'contacts', 'game_id'], 'safe'],
-            [['question_1', 'question_2', 'question_3', 'question_4', 'question_5', 'question_6', 'question_7', 'question_8', 'question_9'], 'safe'],    
+            [['questions'], 'safe'],    
         ];
     }
 
@@ -88,11 +84,20 @@ class EditLeadTrackerForm extends Model
         return $this->_leadTracker;
     }
 
+    protected function getQuestions() 
+    {
+        if (!$this->_questions) {
+            $this->_questions = LeadTrackerQuestion::find()->all();
+        }
+        return $this->_questions;
+    }
+
     public function save()
     {
         if (!$this->validate()) {
             return false;
         }
+        $this->questions = array_keys(array_filter($this->questions));
         $now = date('Y-m-d H:i:s');
         $leadTracker = $this->getLeadTracker();
         $leadTracker->name = $this->name;
@@ -104,15 +109,7 @@ class EditLeadTrackerForm extends Model
         $leadTracker->channels = implode(',', (array)$this->channels);
         $leadTracker->contacts = implode(',', (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
-        $leadTracker->question_1 = $this->question_1;
-        $leadTracker->question_2 = $this->question_2;
-        $leadTracker->question_3 = $this->question_3;
-        $leadTracker->question_4 = $this->question_4;
-        $leadTracker->question_5 = $this->question_5;
-        $leadTracker->question_6 = $this->question_6;
-        $leadTracker->question_7 = $this->question_7;
-        $leadTracker->question_8 = $this->question_8;
-        $leadTracker->question_9 = $this->question_9;
+        $leadTracker->lead_questions = implode(',', $this->questions);
         $leadTracker->is_potential = $leadTracker->calculateIsPotential();
         $leadTracker->is_target = $leadTracker->calculateIsTarget();
         if ($leadTracker->is_potential && !$leadTracker->potential_lead_at) {
@@ -124,22 +121,6 @@ class EditLeadTrackerForm extends Model
         $leadTracker->save();
         return true;
     }
-
-    public function attributeLabels()
-    {
-        return [
-            'question_1' => $this->getQuestionTitle('question_1'),
-            'question_2' => $this->getQuestionTitle('question_2'),
-            'question_3' => $this->getQuestionTitle('question_3'),
-            'question_4' => $this->getQuestionTitle('question_4'),
-            'question_5' => $this->getQuestionTitle('question_5'),
-            'question_6' => $this->getQuestionTitle('question_6'),
-            'question_7' => $this->getQuestionTitle('question_7'),
-            'question_8' => $this->getQuestionTitle('question_8'),
-            'question_9' => $this->getQuestionTitle('question_9'),
-        ];
-    }
-
 
     public function loadData()
     {
@@ -153,15 +134,7 @@ class EditLeadTrackerForm extends Model
         $this->channels = $leadTracker->channels ? explode(',', $leadTracker->channels) : [];
         $this->contacts = $leadTracker->contacts ? explode(',', $leadTracker->contacts) : [];
         $this->game_id = $leadTracker->game_id;
-        $this->question_1 = $leadTracker->question_1;
-        $this->question_2 = $leadTracker->question_2;
-        $this->question_3 = $leadTracker->question_3;
-        $this->question_4 = $leadTracker->question_4;
-        $this->question_5 = $leadTracker->question_5;
-        $this->question_6 = $leadTracker->question_6;
-        $this->question_7 = $leadTracker->question_7;
-        $this->question_8 = $leadTracker->question_8;
-        $this->question_9 = $leadTracker->question_9;
+        $this->questions = (array)explode(',', $leadTracker->lead_questions);
     }
 
     public function getBooleanList() 
@@ -218,5 +191,19 @@ class EditLeadTrackerForm extends Model
     public function getQuestionTitle($question) 
     {
         return LeadTracker::getQuestionTitle($question);
+    }
+
+    public function listTargetLeadQuestions()
+    {
+        return ArrayHelper::map(array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_LEAD_TARGET;
+        }), 'id', 'question');
+    }
+
+    public function listPotentialLeadQuestions()
+    {
+        return ArrayHelper::map(array_filter($this->getQuestions(), function($item) {
+            return $item->type === LeadTrackerQuestion::TYPE_POTENTIAL_TARGET;
+        }), 'id', 'question');
     }
 }

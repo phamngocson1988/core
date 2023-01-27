@@ -90,6 +90,7 @@ class CreateLeadTrackerForm extends Model
             $this->questions = ArrayHelper::getColumn($this->getQuestions(), 'id');
         }
         $now = date('Y-m-d H:i:s');
+        $this->questions = array_keys(array_filter($this->questions));
         $leadTracker = new LeadTracker();
         $leadTracker->name = $this->name;
         $leadTracker->link = $this->link;
@@ -100,7 +101,7 @@ class CreateLeadTrackerForm extends Model
         $leadTracker->channels = implode(',', (array)$this->channels);
         $leadTracker->contacts = implode(',', (array)$this->contacts);
         $leadTracker->game_id = $this->game_id;
-        $leadTracker->lead_questions = implode(',', (array)$this->questions);
+        $leadTracker->lead_questions = implode(',', $this->questions);
         $leadTracker->is_potential = $leadTracker->calculateIsPotential();
         $leadTracker->is_target = $leadTracker->calculateIsTarget();
         if ($leadTracker->is_potential && !$leadTracker->potential_lead_at) {
@@ -121,6 +122,14 @@ class CreateLeadTrackerForm extends Model
             '0' => 'No',
             '1' => 'Yes'
         ];
+    }
+
+    protected function extractQuestionAnswer()
+    {
+        if (!is_array($this->questions)) {
+            $this->questions = [];
+        }
+        return array_keys(array_filter($this->questions));
     }
 
     public function listCountries()

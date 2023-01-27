@@ -122,7 +122,7 @@ use common\components\helpers\TimeElapsed;
                     <?=$form->field($model, "questions[$id]", [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                    ])->widget(CheckboxInput::className(), ['options' => ['label' => $question]])->label('');?>
+                    ])->widget(CheckboxInput::className(), ['options' => ['label' => $question, 'checked' => in_array($id, $model->questions)]])->label('');?>
                   <?php endforeach ;?>
                 </div>
               </div>

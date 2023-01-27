@@ -34,7 +34,7 @@ use common\components\helpers\TimeElapsed;
       <div class="portlet">
         <div class="portlet-title">
           <div class="actions btn-set">
-            <a href="{$back}" class="btn default">
+            <a href="<?=Url::to(['lead-tracker-question/index']);?>" class="btn default">
             <i class="fa fa-angle-left"></i> <?=Yii::t('app', 'back')?></a>
             <button type="submit" class="btn btn-success">
             <i class="fa fa-check"></i> <?=Yii::t('app', 'save')?>
