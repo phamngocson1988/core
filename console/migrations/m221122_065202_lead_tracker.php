@@ -135,10 +135,37 @@ class m221122_065202_lead_tracker extends Migration
             'updated_by' => $this->integer(11),
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
-            $alterUserTrust = "ALTER TABLE {{%lead_tracker_question}} MODIFY `type` ENUM('lead', 'potential') NOT NULL DEFAULT 'lead'";
-            $command = $this->db->createCommand($alterUserTrust);
+            $alterQuestionType = "ALTER TABLE {{%lead_tracker_question}} MODIFY `type` ENUM('lead', 'potential') NOT NULL DEFAULT 'lead'";
+            $command = $this->db->createCommand($alterQuestionType);
             $command->execute();
         }
+
+        $this->createTable('{{%lead_tracker_survey}}', [
+            'id' => $this->primaryKey(),
+            'question' => $this->text()->notNull(),
+            'type' => $this->varchar(10)->notNull(), // text, checkbox, radio, textarea
+            'options' => $this->text(),
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterSurveyType = "ALTER TABLE {{%lead_tracker_survey}} MODIFY `type` ENUM('text', 'checkbox', 'radio', 'textarea') NOT NULL DEFAULT 'text'";
+            $command = $this->db->createCommand($alterSurveyType);
+            $command->execute();
+        }
+
+        $this->createTable('{{%lead_tracker_survey_answer}}', [
+            'lead_tracker_id' => $this->integer(11)->notNull(),
+            'survey_id' => $this->integer(11)->notNull(),
+            'answer' => $this->text(),
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        $this->addPrimaryKey('lead_tracker_survey_answer_pk', '{{%lead_tracker_survey_answer}}', ['survey_id', 'lead_tracker_id']);
     }
 
     public function down()
@@ -150,6 +177,8 @@ class m221122_065202_lead_tracker extends Migration
         $this->dropTable('{{%lead_tracker_action_log}}');
         $this->dropTable('{{%lead_tracker_report}}');
         $this->dropTable('{{%lead_tracker_question}}');
+        $this->dropTable('{{%lead_tracker_survey}}');
+        $this->dropTable('{{%lead_tracker_survey_answer}}');
         return false;
     }
 }
