@@ -66,12 +66,13 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                   <div class="form-group" v-if="this.isShowOptions()">
                     <label class="col-md-2 control-label">Options</label>
                     <div class="col-md-6">
-                      <div class="input-group" style="margin-bottom: 10px" v-for="op in options" :key="op">
-                          <input type="text" class="form-control" :value="op">
+                      <div class="input-group" style="margin-bottom: 10px" v-for="op in options" :key="op.id">
+                          <input type="text" class="form-control" :value="op.value">
                           <span class="input-group-btn">
-                              <button class="btn red" :disabled="isDisableDeleteOption()  ? '' : disabled" type="button">Delete</button>
+                              <button class="btn red" :disabled="isDisableDeleteOption()  ? '' : disabled" type="button" @click="removeOption(op.id)">Delete</button>
                           </span>
                       </div>
+                      <a href="javascript:;" class="btn btn-info" @click="addOption()"><i class="fa fa-plus"></i> Add</a>
                     </div>
                   </div>
                 </div>
@@ -91,7 +92,7 @@ var app = new Vue({
   data: {
       question: '$model->question',
       type: '$model->type' || 'text',
-      options: ['aaa', 'vvvv']
+      options: [{ id: '1', value: 'Option 1'}]
   },
   watch: {
     type() {
@@ -112,6 +113,12 @@ var app = new Vue({
     },
     isDisableDeleteOption() {
       return this.options.length <= 1;
+    },
+    removeOption(oid) {
+      this.options = this.option.filter(({ id }) => id !== oid);
+    },
+    addOption() {
+      this.options = {...this.options, 'aaa': '' };
     }
   },
   created() {
