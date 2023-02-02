@@ -67,7 +67,7 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                     <label class="col-md-2 control-label">Options</label>
                     <div class="col-md-6">
                       <div class="input-group" style="margin-bottom: 10px" v-for="op in options" :key="op.id">
-                          <input type="text" class="form-control" :value="op.value">
+                          <input type="text" class="form-control" :blur="addOptionValue(op.id)">
                           <span class="input-group-btn">
                               <button class="btn red" :disabled="isDisableDeleteOption()  ? '' : disabled" type="button" @click="removeOption(op.id)">Delete</button>
                           </span>
@@ -118,12 +118,29 @@ var app = new Vue({
       this.options = this.option.filter(({ id }) => id !== oid);
     },
     addOption() {
-      this.options = {...this.options, 'aaa': '' };
+      if (this.validateOptions()) {
+        this.options = [...this.options, {id: this.uuidv4(), value: ''} ];
+      }
+      console.log(this.options);
+    },
+    addOptionValue(id, event) {
+
+    },
+    validateOptions() {
+      if (this.options.some(item => !item.value.trim())) {
+        this.showAlert('Option must not be empty');
+        return false;
+      }
+      return true;
+    },
+    showAlert(str) {
+      alert(str);
+    },
+    uuidv4() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
     }
-  },
-  created() {
-    // props are exposed on `this`
-    console.log('created', this.type)
   }
 });
 JS;
