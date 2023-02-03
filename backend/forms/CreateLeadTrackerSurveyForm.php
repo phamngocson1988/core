@@ -12,7 +12,7 @@ class CreateLeadTrackerSurveyForm extends Model
 {
     public $question;
     public $type;
-    public $options = [['id' => 1, 'value' => 'Option 1']];
+    public $options = ['xxx' => 'XXX'];
 
     public function rules()
     {

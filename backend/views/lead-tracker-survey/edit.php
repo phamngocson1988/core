@@ -67,10 +67,10 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                     <label class="col-md-2 control-label">Options</label>
                     <div class="col-md-6">
                       <div class="input-group" style="margin-bottom: 10px" v-for="op in options" :key="op.id">
-                          <input type="text" class="form-control" :blur="addOptionValue(op.id)">
-                          <span class="input-group-btn">
-                              <button class="btn red" :disabled="isDisableDeleteOption()  ? '' : disabled" type="button" @click="removeOption(op.id)">Delete</button>
-                          </span>
+                        <input type="text" :name="'CreateLeadTrackerSurveyForm[options][' + op.id + ']'" class="form-control" @blur="(event) => addOptionValue(op.id, event)">
+                        <span class="input-group-btn">
+                          <button class="btn red" type="button" @click="removeOption(op.id)">Delete</button>
+                        </span>
                       </div>
                       <a href="javascript:;" class="btn btn-info" @click="addOption()"><i class="fa fa-plus"></i> Add</a>
                     </div>
@@ -86,13 +86,22 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
 </div>
 
 <?php
+$vueOptions = [];
+foreach ($model->options as $ok => $ov) {
+  $vueItem = [];
+  $vueItem['id'] = $ok;
+  $vueItem['value'] = $ov;
+  $vueOptions[] = $vueItem;
+}
+$vueOptionsJson = json_encode($vueOptions);
 $script = <<< JS
+console.log($vueOptionsJson);
 var app = new Vue({
   el: '#vue-app',
   data: {
       question: '$model->question',
       type: '$model->type' || 'text',
-      options: [{ id: '1', value: 'Option 1'}]
+      options: $vueOptionsJson, // [{id: 'xxx', value: 'yyy'},]
   },
   watch: {
     type() {
@@ -115,7 +124,7 @@ var app = new Vue({
       return this.options.length <= 1;
     },
     removeOption(oid) {
-      this.options = this.option.filter(({ id }) => id !== oid);
+      this.options = this.options.filter(({ id }) => id !== oid);
     },
     addOption() {
       if (this.validateOptions()) {
@@ -124,7 +133,12 @@ var app = new Vue({
       console.log(this.options);
     },
     addOptionValue(id, event) {
-
+      this.options = this.options.map(o => {
+        if (o.id === id) {
+          o.value = event.target.value;
+        }
+        return o;
+      })
     },
     validateOptions() {
       if (this.options.some(item => !item.value.trim())) {
