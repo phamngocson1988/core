@@ -49,14 +49,11 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
               <li class="active">
                 <a href="#tab_general" data-toggle="tab"> <?=Yii::t('app', 'main_content')?></a>
               </li>
-              <li>
-                <a href="#tab_questions" data-toggle="tab"> Câu hỏi</a>
-              </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_general">
                 <div class="form-body" id="vue-app">
-                <?=$form->field($model, 'content', [
+                  <?=$form->field($model, 'content', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
@@ -66,28 +63,6 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>',
                     'inputOptions' => ['class' => 'form-control']
                   ])->dropDownList($model->fetchCustomerTypes());?>
-                </div>
-              </div>
-              <div class="tab-pane" id="tab_questions">
-                <div class="form-body">
-                <table class="table table-striped table-bordered">
-                  <thead>
-                    <tr class="highlight-yellow">
-                      <th>Question</th>
-                      <th>Type</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach ($model->fetchQuestions() as $question) : ?>
-                    <tr>
-                      <td><?=$question->question;?></td>
-                      <td><?=$question->getTypeLabel();?></td>
-                      <td class="center"><a href='<?=Url::to(['lead-tracker-survey/edit-question', 'id' => $question->id]);?>' target="_blank"><i class="fa fa-pencil"></i> </a></td>
-                    </tr>
-                    <?php endforeach;?>
-                  </tbody>
-                </table>
                 </div>
               </div>
             </div>

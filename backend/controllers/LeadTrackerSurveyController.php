@@ -44,10 +44,10 @@ class LeadTrackerSurveyController extends Controller
         $this->view->params['main_menu_active'] = 'customer-tracker.index';
         $model = new \backend\forms\CreateLeadTrackerSurveyForm();
         if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['customer-tracker-question/index']);
+            Yii::$app->session->setFlash('success', 'Create survey successfully');
+            return $this->redirect(['lead-tracker-survey/index']);
         }
-        $comments = [];
-        return $this->render('edit', ['model' => $model, 'comments' => $comments]);
+        return $this->render('create', ['model' => $model]);
     }
 
     public function actionEdit($id)
@@ -56,11 +56,39 @@ class LeadTrackerSurveyController extends Controller
         $this->view->params['main_menu_active'] = 'customer-tracker.index';
         $model = new \backend\forms\EditLeadTrackerSurveyForm(['id' => $id]);
         if ($model->load($request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Edit user successfully');
+            Yii::$app->session->setFlash('success', 'Edit survey question successfully');
+            return $this->redirect(['lead-tracker-survey/index']);
         } else {
             $model->loadData();
         }
         return $this->render('edit', ['model' => $model]);
+    }
+
+    public function actionCreateQuestion()
+    {
+        $request = Yii::$app->request;
+        $this->view->params['main_menu_active'] = 'customer-tracker.index';
+        $model = new \backend\forms\CreateLeadTrackerSurveyQuestionForm();
+        if ($model->load($request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Create survey question successfully');
+            return $this->redirect(['lead-tracker-survey/index']);
+        }
+        $comments = [];
+        return $this->render('create-question', ['model' => $model, 'comments' => $comments]);
+    }
+
+    public function actionEditQuestion($id)
+    {
+        $request = Yii::$app->request;
+        $this->view->params['main_menu_active'] = 'customer-tracker.index';
+        $model = new \backend\forms\EditLeadTrackerSurveyQuestionForm(['id' => $id]);
+        if ($model->load($request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Edit survey question successfully');
+            return $this->redirect(['lead-tracker-survey/index']);
+        } else {
+            $model->loadData();
+        }
+        return $this->render('edit-question', ['model' => $model]);
     }
 
 

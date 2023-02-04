@@ -9,10 +9,10 @@ use yii\helpers\ArrayHelper;
 
 class LeadTrackerSurvey extends ActiveRecord
 {
-    const TYPE_TEXT = 'text';
-    const TYPE_CHECKBOX = 'checkbox';
-    const TYPE_RADIO = 'radio';
-    const TYPE_TEXTAREA = 'textarea';
+    const CUSTOMER_TYPE_NORMAL = 'normal';
+    const CUSTOMER_TYPE_POTENTIAL = 'potential';
+    const CUSTOMER_TYPE_LOYALTY = 'loyalty';
+    const CUSTOMER_TYPE_DANGEROUS = 'dangerous';
 
     /**
      * @inheritdoc
@@ -39,18 +39,28 @@ class LeadTrackerSurvey extends ActiveRecord
         ];
     }
 
-    public function getTypeLabel()
+    public function getCustomerTypeLabel()
     {
-        return ArrayHelper::getValue(self::typeLabels(), $this->type, '-');
+        return ArrayHelper::getValue(self::customerTypeLabels(), $this->customer_type, '-');
     }
 
-    public static function typeLabels()
+    public static function customerTypeLabels()
     {
         return [
-            self::TYPE_TEXT => 'Text',
-            self::TYPE_CHECKBOX => 'Check Box',
-            self::TYPE_RADIO => 'Radio',
-            self::TYPE_TEXTAREA => 'Textarea',
+            self::CUSTOMER_TYPE_NORMAL => 'Normal',
+            self::CUSTOMER_TYPE_POTENTIAL => 'Potential',
+            self::CUSTOMER_TYPE_LOYALTY => 'Loyalty',
+            self::CUSTOMER_TYPE_DANGEROUS => 'Dangerous',
         ];
+    }
+
+    public function getQuestions()
+    {
+        return $this->hasMany(LeadTrackerSurveyQuestion::className(), ['survey_id' => 'id']);
+    }
+
+    public function getTotalQuestion()
+    {
+        return count($this->questions);
     }
 }

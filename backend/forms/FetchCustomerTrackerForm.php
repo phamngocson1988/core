@@ -9,6 +9,7 @@ use common\models\Country;
 use backend\models\User;
 use backend\models\Game;
 use backend\models\Order;
+use common\models\LeadTrackerSurvey;
 
 class FetchCustomerTrackerForm extends Model
 {
@@ -22,6 +23,8 @@ class FetchCustomerTrackerForm extends Model
     public $product_growth;
     public $is_loyalty;
     public $is_dangerous;
+
+    private $_surveys = null;
     
     private $_command;
     
@@ -129,6 +132,22 @@ class FetchCustomerTrackerForm extends Model
         ->asArray()
         ->all();
         return ArrayHelper::map($data, 'customer_id', 'quantity');
+    }
+
+    protected function fetchAllSurveys()
+    {
+        if (!$this->_surveys) {
+            $this->_surveys = LeadTrackerSurvey::find()->all();
+        }
+        return $this->_surveys;
+    }
+
+    public function fetchSurveys($customerType)
+    {
+        $surveys = $this->fetchAllSurveys();
+        return array_filter($surveys, function($s) use ($customerType) {
+            return $s->customer_type === $customerType;
+        });
     }
 
     public function export($fileName = null)

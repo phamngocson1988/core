@@ -5,21 +5,20 @@ namespace backend\forms;
 use Yii;
 use yii\base\Model;
 use common\models\LeadTrackerSurvey;
+use common\models\LeadTrackerSurveyQuestion;
 /**
  * CreateLeadTrackerSurveyForm is the model behind the contact form.
  */
 class CreateLeadTrackerSurveyForm extends Model
 {
-    public $question;
-    public $type;
-    public $options = ['xxx' => 'XXX'];
+    public $content;
+    public $customer_type;
 
     public function rules()
     {
         return [
-            [['question', 'type'], 'trim'],
-            [['question', 'type'], 'required'],
-            ['options', 'safe']
+            [['content', 'customer_type'], 'trim'],
+            [['content', 'customer_type'], 'required'],
         ];
     }
 
@@ -29,16 +28,14 @@ class CreateLeadTrackerSurveyForm extends Model
         if (!$this->validate()) {
             return false;
         }
-        $leadTracker = new LeadTrackerSurvey();
-        $leadTracker->question = $this->question;
-        $leadTracker->type = $this->type;
-        $leadTracker->options = $this->options;
-        return $leadTracker->save();
+        $survey = new LeadTrackerSurvey();
+        $survey->content = $this->content;
+        $survey->customer_type = $this->customer_type;
+        return $survey->save();
     }
 
-    public function fetchTypes() 
+    public function fetchCustomerTypes() 
     {
-        return LeadTrackerSurvey::typeLabels();
+        return LeadTrackerSurvey::customerTypeLabels();
     }
-
 }

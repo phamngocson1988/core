@@ -45,10 +45,8 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
           <thead style="font-weight: bold; color: white; background-color: #36c5d3">
             <tr>
               <td class="center">ID</td>
-              <th class="center">Type</th>
-              <th class="center">Question</th>
-              <th class="center">Point for YES</th>
-              <th class="center">Point for NO</th>
+              <th class="center">Customer Type</th>
+              <th class="center">Content</th>
               <th class="center">Date</th>
             </tr>
           </thead>
@@ -59,10 +57,8 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
               <?php foreach ($models as $no => $model) : ?>
               <tr>
                 <td class="center"><a href='<?=Url::to(['lead-tracker-survey/edit', 'id' => $model->id]);?>'>#<?=$model->id;?></a></td>
-                <td class="center"><?=$model->getTypeLabel();?></td>
-                <td><?=$model->question;?></td>
-                <td class="center"><?=$model->point_yes;?></td>
-                <td class="center"><?=$model->point_no;?></td>
+                <td class="center"><?=$model->getCustomerTypeLabel();?></td>
+                <td><?=$model->content;?></td>
                 <td class="center"><?=FormatConverter::convertToDate(strtotime($model->updated_at), 'd-m-Y H:i');?></td>
               </tr>
               <?php endforeach;?>

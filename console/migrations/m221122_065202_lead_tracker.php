@@ -142,8 +142,24 @@ class m221122_065202_lead_tracker extends Migration
 
         $this->createTable('{{%lead_tracker_survey}}', [
             'id' => $this->primaryKey(),
+            'content' => $this->text()->notNull(),
+            'customer_type' => $this->varchar(10)->notNull(), // normal, potential, loyalty, dangerous
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterSurveyCustomerType = "ALTER TABLE {{%lead_tracker_survey}} MODIFY `customer_type` ENUM('normal', 'potential', 'loyalty', 'dangerous') NOT NULL DEFAULT 'normal'";
+            $command = $this->db->createCommand($alterSurveyCustomerType);
+            $command->execute();
+        }
+
+        $this->createTable('{{%lead_tracker_survey_question}}', [
+            'id' => $this->primaryKey(),
             'question' => $this->text()->notNull(),
-            'type' => $this->varchar(10)->notNull(), // text, checkbox, radio, textarea
+            'survey_id' => $this->integer(11)->notNull(),
+            'type' => $this->varchar(10)->notNull(), // text, checkbox, radio, textarea, select
             'options' => $this->text(),
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(11),
@@ -151,7 +167,7 @@ class m221122_065202_lead_tracker extends Migration
             'updated_by' => $this->integer(11),
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
-            $alterSurveyType = "ALTER TABLE {{%lead_tracker_survey}} MODIFY `type` ENUM('text', 'checkbox', 'radio', 'textarea') NOT NULL DEFAULT 'text'";
+            $alterSurveyType = "ALTER TABLE {{%lead_tracker_survey_question}} MODIFY `type` ENUM('text', 'checkbox', 'radio', 'textarea', 'select') NOT NULL DEFAULT 'text'";
             $command = $this->db->createCommand($alterSurveyType);
             $command->execute();
         }
