@@ -9,6 +9,7 @@ use common\widgets\CheckboxInput;
 use common\components\helpers\TimeElapsed;
 use backend\models\CustomerTracker;
 use common\models\LeadTrackerQuestion;
+use common\models\LeadTrackerSurvey;
 
 $questions = LeadTrackerQuestion::find()->all();
 ?>
@@ -396,6 +397,61 @@ $questions = LeadTrackerQuestion::find()->all();
                   <td class="center"><?=round($model->kpi_growth * 100, 2);?>%</td>
                 </tr>
               </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <!-- BEGIN PORTLET-->
+    <div class="portlet light bordered">
+      <div class="portlet-title">
+        <div class="caption">
+          <i class="icon-share font-red-sunglo"></i>
+          <span class="caption-subject font-red-sunglo bold uppercase">Customer Relationship </span>
+        </div>
+      </div>
+      <div class="portlet-body">
+        <div class="clearfix">
+          <div class="panel panel-success">
+            <table class="table table-bordered">
+            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_NORMAL) as $survey) :?>
+            <tr>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <?php foreach ($survey->questions as $question) :?>
+              <td><?=$question->getAnswer('xxx');?></td>
+              <?php endforeach;?>
+            </tr>
+            <?php endforeach ;?>
+            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_POTENTIAL) as $survey) :?>
+            <tr>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <?php foreach ($survey->questions as $question) :?>
+              <td><?=$question->getAnswer('xxx');?></td>
+              <?php endforeach;?>
+            </tr>
+            <?php endforeach ;?>
+            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_LOYALTY) as $survey) :?>
+            <tr>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <?php foreach ($survey->questions as $question) :?>
+              <td><?=$question->getAnswer('xxx');?></td>
+              <?php endforeach;?>
+            </tr>
+            <?php endforeach ;?>
+            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_DANGEROUS) as $survey) :?>
+            <tr>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
+              <?php foreach ($survey->questions as $question) :?>
+              <td><?=$question->getAnswer('xxx');?></td>
+              <?php endforeach;?>
+            </tr>
+            <?php endforeach ;?>
             </table>
           </div>
         </div>
