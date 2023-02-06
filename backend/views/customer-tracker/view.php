@@ -417,40 +417,18 @@ $questions = LeadTrackerQuestion::find()->all();
           <div class="panel panel-success">
             <table class="table table-bordered">
             <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_NORMAL) as $survey) :?>
+            <?php $questions = $survey->questions;?>
+            <?php $firstQuestion = array_shift($questions);?>
             <tr>
               <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
               <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <?php foreach ($survey->questions as $question) :?>
-              <td><?=$question->getAnswer('xxx');?></td>
-              <?php endforeach;?>
+              <td><?=$firstQuestion ? $firstQuestion->getAnswer('xxx') : '';?></td>
             </tr>
-            <?php endforeach ;?>
-            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_POTENTIAL) as $survey) :?>
+              <?php foreach ($questions as $question) :?>
             <tr>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <?php foreach ($survey->questions as $question) :?>
-              <td><?=$question->getAnswer('xxx');?></td>
-              <?php endforeach;?>
+            <td><?=$question->getAnswer('xxx');?></td>
             </tr>
-            <?php endforeach ;?>
-            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_LOYALTY) as $survey) :?>
-            <tr>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <?php foreach ($survey->questions as $question) :?>
-              <td><?=$question->getAnswer('xxx');?></td>
               <?php endforeach;?>
-            </tr>
-            <?php endforeach ;?>
-            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_DANGEROUS) as $survey) :?>
-            <tr>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <?php foreach ($survey->questions as $question) :?>
-              <td><?=$question->getAnswer('xxx');?></td>
-              <?php endforeach;?>
-            </tr>
             <?php endforeach ;?>
             </table>
           </div>

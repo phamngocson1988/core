@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Country;
 use backend\models\User;
 use backend\models\Game;
+use common\models\LeadTrackerSurvey;
 
 /**
  * EditCustomerTrackerForm is the model behind the contact form.
@@ -30,6 +31,8 @@ class EditCustomerTrackerForm extends Model
 
     /** CustomerTracker */
     private $_leadTracker;
+
+    private $_surveys = null;
     /**
      * @inheritdoc
      */
@@ -155,5 +158,21 @@ class EditCustomerTrackerForm extends Model
     {
         $games = Game::find()->where(['<>', 'status', Game::STATUS_DELETE])->select(['id', 'title'])->all();
         return ArrayHelper::map($games, 'id', 'title');
+    }
+
+    protected function fetchAllSurveys()
+    {
+        if (!$this->_surveys) {
+            $this->_surveys = LeadTrackerSurvey::find()->all();
+        }
+        return $this->_surveys;
+    }
+
+    public function fetchSurveys($customerType)
+    {
+        $surveys = $this->fetchAllSurveys();
+        return array_filter($surveys, function($s) use ($customerType) {
+            return $s->customer_type === $customerType;
+        });
     }
 }
