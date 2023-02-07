@@ -7,6 +7,8 @@ use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\widgets\CheckboxInput;
 use common\components\helpers\TimeElapsed;
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', ['depends' => ['\yii\web\JqueryAsset']]);
+$this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -154,6 +156,7 @@ use common\components\helpers\TimeElapsed;
               </div>
               <div class="tab-pane" id="tab_survey">
                 <div class="row">
+                  <todo_list v-bind:todo_list_prop="todoList"/>
                   <div class="col-md-3 col-sm-3 col-xs-3">
                     <ul class="nav nav-tabs tabs-left">
                       <li class="active">
@@ -276,24 +279,6 @@ use common\components\helpers\TimeElapsed;
                             </div>
                           </div>
                           <div class="form-group">
-                            <label class="control-label col-md-6">Street</label>
-                            <div class="col-md-6">
-                              <input type="text" class="form-control"> 
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">City</label>
-                            <div class="col-md-6">
-                              <input type="text" class="form-control"> 
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">State</label>
-                            <div class="col-md-6">
-                              <input type="text" class="form-control"> 
-                            </div>
-                          </div>
-                          <div class="form-group">
                             <label class="control-label col-md-6">Post Code</label>
                             <div class="col-md-6">
                               <input type="text" class="form-control"> 
@@ -330,6 +315,42 @@ $('#country_code').on('change', function(){
 if (!$('#phone').val()) {
   $('#country_code').trigger('change');
 }
+JS;
+$this->registerJs($script);
+?>
+
+<?php
+$script = <<< JS
+Vue.component("todo_list", {
+  props: ["todo_list_prop"],
+  template: `<ol>
+                 <todo_item v-for="item in todo_list_prop"
+                            v-bind:todo_item_prop="item"
+                            v-bind:key="item.id"/>
+             </ol>`,
+})
+
+// Renderer for each to do item (accepts one item as props)
+Vue.component("todo_item", {
+  props: ["todo_item_prop"],
+  template: `<li v-bind:class="{ strike: todo_item_prop.done }">
+              {{ todo_item_prop.text }}
+            </li>`,
+})
+
+var app = new Vue({
+  el: '#tab_survey',
+  data: {
+    todoList: [
+      { id: 0, text: "Brush teeth", done: true },
+      { id: 1, text: "Buy chocolate", done: false },
+      { id: 2, text: "Sell laptop", done: false },
+    ],
+  },
+  methods: {
+    
+  }
+});
 JS;
 $this->registerJs($script);
 ?>

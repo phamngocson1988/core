@@ -175,6 +175,7 @@ class m221122_065202_lead_tracker extends Migration
         $this->createTable('{{%lead_tracker_survey_answer}}', [
             'lead_tracker_id' => $this->integer(11)->notNull(),
             'survey_id' => $this->integer(11)->notNull(),
+            'question_id' => $this->integer(11)->notNull(),
             'answer' => $this->text(),
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(11),
