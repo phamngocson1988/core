@@ -130,4 +130,11 @@ class CustomerTrackerController extends Controller
         Yii::$app->session->setFlash('success', 'Success');
         return $this->asJson(['status' => true]);
     }
+
+    public function actionUpdateSurveyAnswer() 
+    {
+        $request = Yii::$app->request;
+        $content = $request->post();
+        return $this->asJson([$id, $content]);
+    }
 }

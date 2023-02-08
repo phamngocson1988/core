@@ -156,7 +156,6 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
               </div>
               <div class="tab-pane" id="tab_survey">
                 <div class="row">
-                  <todo_list v-bind:todo_list_prop="todoList"/>
                   <div class="col-md-3 col-sm-3 col-xs-3">
                     <ul class="nav nav-tabs tabs-left">
                       <li class="active">
@@ -170,126 +169,15 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                   <div class="col-md-9 col-sm-9 col-xs-9">
                     <div class="tab-content">
                       <div class="tab-pane active" id="tab_6_1">
-                        <div class="form-body">
-                          <div class="form-group">
-                            <label class="control-label col-md-6">First Name</label>
-                            <div class="col-md-6">
-                              <input type="text" placeholder="small" class="form-control">
-                              <span class="help-block"> This is inline help </span>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">Last Name</label>
-                            <div class="col-md-6">
-                              <input type="text" placeholder="medium" class="form-control">
-                              <span class="help-block"> This is inline help </span>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">Gender</label>
-                            <div class="col-md-6">
-                              <select class="form-control">
-                                <option value="">Male</option>
-                                <option value="">Female</option>
-                              </select>
-                              <span class="help-block"> Select your gender. </span>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">Date of Birth</label>
-                            <div class="col-md-6">
-                              <input type="text" class="form-control" placeholder="dd/mm/yyyy"> 
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">Category</label>
-                            <div class="col-md-6">
-                              <select class="form-control">
-                                <option value="Category 1">Category 1</option>
-                                <option value="Category 2">Category 2</option>
-                                <option value="Category 3">Category 5</option>
-                                <option value="Category 4">Category 4</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">Multi-Value Select</label>
-                            <div class="col-md-6">
-                              <select class="form-control" multiple="">
-                                <optgroup label="NFC EAST">
-                                  <option>Dallas Cowboys</option>
-                                  <option>New York Giants</option>
-                                  <option>Philadelphia Eagles</option>
-                                  <option>Washington Redskins</option>
-                                </optgroup>
-                                <optgroup label="NFC NORTH">
-                                  <option>Chicago Bears</option>
-                                  <option>Detroit Lions</option>
-                                  <option>Green Bay Packers</option>
-                                  <option>Minnesota Vikings</option>
-                                </optgroup>
-                                <optgroup label="NFC SOUTH">
-                                  <option>Atlanta Falcons</option>
-                                  <option>Carolina Panthers</option>
-                                  <option>New Orleans Saints</option>
-                                  <option>Tampa Bay Buccaneers</option>
-                                </optgroup>
-                                <optgroup label="NFC WEST">
-                                  <option>Arizona Cardinals</option>
-                                  <option>St. Louis Rams</option>
-                                  <option>San Francisco 49ers</option>
-                                  <option>Seattle Seahawks</option>
-                                </optgroup>
-                                <optgroup label="AFC EAST">
-                                  <option>Buffalo Bills</option>
-                                  <option>Miami Dolphins</option>
-                                  <option>New England Patriots</option>
-                                  <option>New York Jets</option>
-                                </optgroup>
-                                <optgroup label="AFC NORTH">
-                                  <option>Baltimore Ravens</option>
-                                  <option>Cincinnati Bengals</option>
-                                  <option>Cleveland Browns</option>
-                                  <option>Pittsburgh Steelers</option>
-                                </optgroup>
-                                <optgroup label="AFC SOUTH">
-                                  <option>Houston Texans</option>
-                                  <option>Indianapolis Colts</option>
-                                  <option>Jacksonville Jaguars</option>
-                                  <option>Tennessee Titans</option>
-                                </optgroup>
-                                <optgroup label="AFC WEST">
-                                  <option>Denver Broncos</option>
-                                  <option>Kansas City Chiefs</option>
-                                  <option>Oakland Raiders</option>
-                                  <option>San Diego Chargers</option>
-                                </optgroup>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">Membership Membership Membership Membership Membership Membership Membership</label>
-                            <div class="col-md-6">
-                              <div class="radio-list">
-                                <label>
-                                <input type="radio" name="optionsRadios2" value="option1"> Free </label>
-                                <label>
-                                <input type="radio" name="optionsRadios2" value="option2" checked=""> Professional </label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-6">Post Code</label>
-                            <div class="col-md-6">
-                              <input type="text" class="form-control"> 
-                            </div>
-                          </div>
-                          <div class="form-group last">
-                            <label class="control-label col-md-6">Country</label>
-                            <div class="col-md-6">
-                              <select class="form-control"> </select>
-                            </div>
-                          </div>
+                        <div class="form-body">   
+                          <template v-for="question in questions">
+                            <template v-if="question.type === 'text'">
+                              <text-control :id="question.id" :question="question.question" :answer="question.answer" @onupdateanswer="onUpdateAnswer"/>
+                            </template>    
+                            <template v-if="question.type === 'select'">
+                              <select-control :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
+                            </template>                      
+                          </template>                       
                         </div>
                       </div>
                       <div class="tab-pane fade" id="tab_6_2">
@@ -308,6 +196,9 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
 </div>
 
 <?php
+$updateSurveyAnswerUrl = Url::to(['customer-tracker/update-survey-answer', 'id' => $model->id], true);
+$csrfTokenName = Yii::$app->request->csrfParam;
+$csrfToken = Yii::$app->request->csrfToken;
 $script = <<< JS
 $('#country_code').on('change', function(){
   $('#phone').val($(this).find('option:selected').attr('data-dialling'));
@@ -321,34 +212,66 @@ $this->registerJs($script);
 
 <?php
 $script = <<< JS
-Vue.component("todo_list", {
-  props: ["todo_list_prop"],
-  template: `<ol>
-                 <todo_item v-for="item in todo_list_prop"
-                            v-bind:todo_item_prop="item"
-                            v-bind:key="item.id"/>
-             </ol>`,
-})
-
 // Renderer for each to do item (accepts one item as props)
-Vue.component("todo_item", {
-  props: ["todo_item_prop"],
-  template: `<li v-bind:class="{ strike: todo_item_prop.done }">
-              {{ todo_item_prop.text }}
-            </li>`,
+Vue.component("textControl", {
+  props: ["id", "question", "answer"],
+  data() {
+    return {
+      value: this.answer
+    }
+  },
+  methods: {
+    onChange (event) {
+      this.\$emit('onupdateanswer', { id: this.id, value: this.value});
+    }
+  },
+  template: `<div class="form-group">
+              <label class="control-label col-md-6">{{question}}</label>
+              <div class="col-md-6">
+                <input type="text" @blur="onChange" placeholder="small" class="form-control" v-model="value">
+              </div>
+            </div>`,
+});
+Vue.component("selectControl", {
+  props: ["id", "question", "answer", "options"],
+  data() {
+    return {
+      value: this.answer
+    }
+  },
+  methods: {
+    onChange (event) {
+      this.\$emit('onupdateanswer', { id: this.id, value: this.value});
+    }
+  },
+  template: `<div class="form-group">
+              <label class="control-label col-md-6">{{question}}</label>
+              <div class="col-md-6">
+                <select class="form-control" v-model="value" @change="onChange">
+                  <option v-for="option in options" v-bind:value="option.id">{{option.value}}</option>
+                </select>
+                <span class="help-block"> Select your gender. </span>
+              </div>
+            </div>`,
 })
 
 var app = new Vue({
   el: '#tab_survey',
   data: {
-    todoList: [
-      { id: 0, text: "Brush teeth", done: true },
-      { id: 1, text: "Buy chocolate", done: false },
-      { id: 2, text: "Sell laptop", done: false },
+    questions: [
+      { id: 1, question: 'How it work', type: 'text', answer: "Brush teeth" },
+      { id: 2, question: 'How it work', type: 'select', answer: 1, options: [{id: 1, value: 'ot1'}, {id: 2, value: 'ot2'}] },
     ],
   },
   methods: {
-    
+    onUpdateAnswer(data) {
+      console.log('onUpdateAnswer', data);
+      axios.post('$updateSurveyAnswerUrl', { 
+        lead_tracker_id: $model->id,
+        content: data.value, 
+        '$csrfTokenName': '$csrfToken' 
+      });
+    }
   }
 });
 JS;
