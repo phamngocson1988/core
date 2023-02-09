@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
@@ -172,15 +173,18 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                             <template v-if="question.type === 'text'">
                               <text-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" @onupdateanswer="onUpdateAnswer"/>
                             </template>    
-                            <template v-if="question.type === 'select'">
+                            <template v-else-if="question.type === 'select'">
                               <select-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
+                            </template>
+                            <template v-else-if="question.type === 'checkbox'">
+                              <checkbox-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
+                            </template>
+                            <template v-else-if="question.type === 'radio'">
+                              <radio-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
                             </template>                      
                           </template> 
-                                               
+                                 
                         </div>
-                      </div>
-                      <div class="tab-pane fade" id="tab_6_2">
-                        form 2
                       </div>
                     </div>
                   </div>
@@ -209,7 +213,7 @@ foreach (LeadTrackerSurvey::customerTypeLabels() as $type => $label) {
         'id' => $question->id,
         'type' => $question->type,
         'question' => $question->question,
-        'answer' => $answers[$question->id] ? $answers[$question->id]->answer : '',
+        'answer' => isset($answers[$question->id]) && $answers[$question->id] ? $answers[$question->id]->answer : '',
         'options' => $question->getOptions(),
         'survey_id' => $question->survey_id,
       ];
@@ -272,11 +276,67 @@ Vue.component("selectControl", {
               <label class="control-label col-md-6">{{question}}</label>
               <div class="col-md-6">
                 <select class="form-control" v-model="value" @change="onChange">
+                  <option value="">---Select---</option>
                   <option v-for="optionKey in Object.keys(options)" v-bind:value="optionKey">{{options[optionKey]}}</option>
                 </select>
               </div>
             </div>`,
-})
+});
+Vue.component("checkboxControl", {
+  props: ["id", "question", "answer", "options", "surveyId"],
+  data() {
+    return {
+      value: this.answer ? this.answer.split(',') : []
+    }
+  },
+  methods: {
+    onChange (event) {
+      if (event.target.checked) {
+        if (!this.value.includes(event.target.value)) {
+          this.value.push(event.target.value);
+        }
+      } else {
+        this.value = this.value.filter(x => x && x !== event.target.value);
+      }
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: this.value.join(',')});
+    }
+  },
+  template: `<div class="form-group">
+              <label class="col-md-6 control-label">{{question}}</label>
+              <div class="col-md-6">
+                <div class="mt-checkbox-list">
+                  <label class="mt-checkbox" v-for="optionKey in Object.keys(options)">
+                    <input type="checkbox" :checked="value.includes(optionKey)" :value="optionKey" @change="onChange"> {{ options[optionKey] }}
+                    <span></span>
+                  </label>
+                </div>
+              </div>
+            </div>`,
+});
+Vue.component("radioControl", {
+  props: ["id", "question", "answer", "options", "surveyId"],
+  data() {
+    return {
+      value: this.answer
+    }
+  },
+  methods: {
+    onChange (event) {
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: event.target.value});
+    }
+  },
+  template: `<div class="form-group">
+              <label class="col-md-6 control-label">{{ question }}</label>
+              <div class="col-md-6">
+                <div class="mt-radio-list">
+                  <label class="mt-radio" v-for="optionKey in Object.keys(options)">
+                    <input type="radio" :name="id" :value="optionKey" :checked="value === optionKey" @change="onChange"> {{ options[optionKey]}}
+                    <span></span>
+                  </label>
+                </div>
+              </div>
+          </div>`,
+});
 
 var app = new Vue({
   el: '#tab_survey',
