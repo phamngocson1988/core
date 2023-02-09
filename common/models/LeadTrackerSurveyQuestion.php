@@ -68,4 +68,12 @@ class LeadTrackerSurveyQuestion extends ActiveRecord
         }
         return $answers;
     }
+
+    public function getOptions()
+    {
+        if (!in_array($this->type, [self::TYPE_TEXT, self::TYPE_TEXTAREA])) {
+            return json_decode($this->options, true);
+        }
+        return $this->options;
+    }
 }

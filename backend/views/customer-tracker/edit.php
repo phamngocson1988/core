@@ -7,6 +7,7 @@ use dosamigos\datepicker\DateRangePicker;
 use yii\web\JsExpression;
 use common\widgets\CheckboxInput;
 use common\components\helpers\TimeElapsed;
+use common\models\LeadTrackerSurvey;
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', ['depends' => ['\yii\web\JqueryAsset']]);
 $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
 ?>
@@ -158,26 +159,24 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                 <div class="row">
                   <div class="col-md-3 col-sm-3 col-xs-3">
                     <ul class="nav nav-tabs tabs-left">
-                      <li class="active">
-                        <a href="#tab_6_1" data-toggle="tab"> Home </a>
-                      </li>
-                      <li>
-                        <a href="#tab_6_2" data-toggle="tab"> Profile </a>
+                      <li v-for="(questionSet, index) in tabs" :class="index || 'active'">
+                        <a :href="`#tab_6_${index}`" data-toggle="tab"> {{ questionSet.label }} </a>
                       </li>
                     </ul>
                   </div>
                   <div class="col-md-9 col-sm-9 col-xs-9">
                     <div class="tab-content">
-                      <div class="tab-pane active" id="tab_6_1">
+                      <div class="tab-pane" v-for="(questionSet, index) in tabs" :id="`tab_6_${index}`" :class="index || 'active'">
                         <div class="form-body">   
-                          <template v-for="question in questions">
+                          <template v-for="question in questionSet.questions">
                             <template v-if="question.type === 'text'">
-                              <text-control :id="question.id" :question="question.question" :answer="question.answer" @onupdateanswer="onUpdateAnswer"/>
+                              <text-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" @onupdateanswer="onUpdateAnswer"/>
                             </template>    
                             <template v-if="question.type === 'select'">
-                              <select-control :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
+                              <select-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
                             </template>                      
-                          </template>                       
+                          </template> 
+                                               
                         </div>
                       </div>
                       <div class="tab-pane fade" id="tab_6_2">
@@ -196,6 +195,31 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
 </div>
 
 <?php
+$questions = [];
+$answers = $model->fetchAllAnswers();
+foreach (LeadTrackerSurvey::customerTypeLabels() as $type => $label) {
+  $questionsByType = [
+    'type' => $type,
+    'label' => $label,
+    'questions' => []
+  ];
+  foreach ($model->fetchSurveys($type) as $survey) {
+    foreach ($survey->questions as $question) {
+      $questionsByType['questions'][] = [
+        'id' => $question->id,
+        'type' => $question->type,
+        'question' => $question->question,
+        'answer' => $answers[$question->id] ? $answers[$question->id]->answer : '',
+        'options' => $question->getOptions(),
+        'survey_id' => $question->survey_id,
+      ];
+    }
+  }
+  $questions[] = $questionsByType;
+}
+
+$questionsJson = json_encode($questions);
+
 $updateSurveyAnswerUrl = Url::to(['customer-tracker/update-survey-answer', 'id' => $model->id], true);
 $csrfTokenName = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->csrfToken;
@@ -214,7 +238,7 @@ $this->registerJs($script);
 $script = <<< JS
 // Renderer for each to do item (accepts one item as props)
 Vue.component("textControl", {
-  props: ["id", "question", "answer"],
+  props: ["id", "question", "answer", "surveyId"],
   data() {
     return {
       value: this.answer
@@ -222,18 +246,18 @@ Vue.component("textControl", {
   },
   methods: {
     onChange (event) {
-      this.\$emit('onupdateanswer', { id: this.id, value: this.value});
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: this.value});
     }
   },
   template: `<div class="form-group">
               <label class="control-label col-md-6">{{question}}</label>
               <div class="col-md-6">
-                <input type="text" @blur="onChange" placeholder="small" class="form-control" v-model="value">
+                <input type="text" @blur="onChange" class="form-control" v-model="value">
               </div>
             </div>`,
 });
 Vue.component("selectControl", {
-  props: ["id", "question", "answer", "options"],
+  props: ["id", "question", "answer", "options", "surveyId"],
   data() {
     return {
       value: this.answer
@@ -241,16 +265,15 @@ Vue.component("selectControl", {
   },
   methods: {
     onChange (event) {
-      this.\$emit('onupdateanswer', { id: this.id, value: this.value});
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: this.value});
     }
   },
   template: `<div class="form-group">
               <label class="control-label col-md-6">{{question}}</label>
               <div class="col-md-6">
                 <select class="form-control" v-model="value" @change="onChange">
-                  <option v-for="option in options" v-bind:value="option.id">{{option.value}}</option>
+                  <option v-for="optionKey in Object.keys(options)" v-bind:value="optionKey">{{options[optionKey]}}</option>
                 </select>
-                <span class="help-block"> Select your gender. </span>
               </div>
             </div>`,
 })
@@ -258,18 +281,21 @@ Vue.component("selectControl", {
 var app = new Vue({
   el: '#tab_survey',
   data: {
-    questions: [
-      { id: 1, question: 'How it work', type: 'text', answer: "Brush teeth" },
-      { id: 2, question: 'How it work', type: 'select', answer: 1, options: [{id: 1, value: 'ot1'}, {id: 2, value: 'ot2'}] },
-    ],
+    tabs: $questionsJson,
   },
   methods: {
     onUpdateAnswer(data) {
       console.log('onUpdateAnswer', data);
       axios.post('$updateSurveyAnswerUrl', { 
         lead_tracker_id: $model->id,
-        content: data.value, 
+        survey_id: data.surveyId, 
+        question_id: data.id, 
+        answer: data.value, 
         '$csrfTokenName': '$csrfToken' 
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
     }
   }

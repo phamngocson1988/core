@@ -134,7 +134,13 @@ class CustomerTrackerController extends Controller
     public function actionUpdateSurveyAnswer() 
     {
         $request = Yii::$app->request;
-        $content = $request->post();
-        return $this->asJson([$id, $content]);
+        $form = new \backend\forms\UpdateLeadTrackerSurveyAnswerForm([
+            'lead_tracker_id' => $request->post('lead_tracker_id'), 
+            'survey_id' => $request->post('survey_id'), 
+            'question_id' => $request->post('question_id'), 
+            'answer' => $request->post('answer'), 
+        ]);
+        Yii::$app->session->setFlash('success', 'Success');
+        return $this->asJson(['status' => $form->save()]);
     }
 }

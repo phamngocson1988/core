@@ -10,6 +10,7 @@ use common\models\Country;
 use backend\models\User;
 use backend\models\Game;
 use common\models\LeadTrackerSurvey;
+use common\models\LeadTrackerSurveyAnswer;
 
 /**
  * EditCustomerTrackerForm is the model behind the contact form.
@@ -33,6 +34,7 @@ class EditCustomerTrackerForm extends Model
     private $_leadTracker;
 
     private $_surveys = null;
+    private $_answers = null;
     /**
      * @inheritdoc
      */
@@ -166,6 +168,14 @@ class EditCustomerTrackerForm extends Model
             $this->_surveys = LeadTrackerSurvey::find()->all();
         }
         return $this->_surveys;
+    }
+
+    public function fetchAllAnswers()
+    {
+        if (!$this->_answers) {
+            $this->_answers = LeadTrackerSurveyAnswer::find()->where(['lead_tracker_id' => $this->id])->indexBy('question_id')->all();
+        }
+        return $this->_answers;
     }
 
     public function fetchSurveys($customerType)

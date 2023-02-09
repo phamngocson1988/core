@@ -19,7 +19,7 @@ class LeadTrackerSurveyAnswer extends ActiveRecord
 
     public static function primaryKey()
     {
-        return ['survey_id', 'lead_tracker_id'];
+        return ['survey_id', 'lead_tracker_id', 'question_id'];
     }
 
     public function behaviors()

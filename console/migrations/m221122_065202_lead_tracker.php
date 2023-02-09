@@ -182,7 +182,7 @@ class m221122_065202_lead_tracker extends Migration
             'updated_at' => $this->dateTime(),
             'updated_by' => $this->integer(11),
         ], $tableOptions);
-        $this->addPrimaryKey('lead_tracker_survey_answer_pk', '{{%lead_tracker_survey_answer}}', ['survey_id', 'lead_tracker_id']);
+        $this->addPrimaryKey('lead_tracker_survey_answer_pk', '{{%lead_tracker_survey_answer}}', ['survey_id', 'lead_tracker_id', 'question_id']);
     }
 
     public function down()
