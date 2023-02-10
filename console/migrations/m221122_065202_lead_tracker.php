@@ -167,7 +167,7 @@ class m221122_065202_lead_tracker extends Migration
             'updated_by' => $this->integer(11),
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
-            $alterSurveyType = "ALTER TABLE {{%lead_tracker_survey_question}} MODIFY `type` ENUM('text', 'checkbox', 'radio', 'textarea', 'select') NOT NULL DEFAULT 'text'";
+            $alterSurveyType = "ALTER TABLE {{%lead_tracker_survey_question}} MODIFY `type` ENUM('text', 'checkbox', 'radio', 'textarea', 'select', 'select_am', 'date') NOT NULL DEFAULT 'text'";
             $command = $this->db->createCommand($alterSurveyType);
             $command->execute();
         }
@@ -177,6 +177,7 @@ class m221122_065202_lead_tracker extends Migration
             'survey_id' => $this->integer(11)->notNull(),
             'question_id' => $this->integer(11)->notNull(),
             'answer' => $this->text(),
+            'value' => $this->text(),
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(11),
             'updated_at' => $this->dateTime(),

@@ -9,8 +9,17 @@ use yii\web\JsExpression;
 use common\widgets\CheckboxInput;
 use common\components\helpers\TimeElapsed;
 use common\models\LeadTrackerSurvey;
+use common\models\User;
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', ['depends' => ['\yii\web\JqueryAsset']]);
 $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
+
+$salerTeamIds = Yii::$app->authManager->getUserIdsByRole('saler');
+$salerTeamManagerIds = Yii::$app->authManager->getUserIdsByRole('sale_manager');
+$salerTeamIds = array_merge($salerTeamIds, $salerTeamManagerIds);
+$salerTeamIds = array_unique($salerTeamIds);
+$salerTeamObjects = User::findAll($salerTeamIds);
+$salerTeams = ArrayHelper::map($salerTeamObjects, 'id', 'name');
+$salerTeamsJson = json_encode($salerTeams);
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -173,8 +182,14 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                             <template v-if="question.type === 'text'">
                               <text-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" @onupdateanswer="onUpdateAnswer"/>
                             </template>    
+                            <template v-if="question.type === 'date'">
+                              <date-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" @onupdateanswer="onUpdateAnswer"/>
+                            </template>    
                             <template v-else-if="question.type === 'select'">
                               <select-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
+                            </template>
+                            <template v-else-if="question.type === 'select_am'">
+                              <select-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" :options="amList" @onupdateanswer="onUpdateAnswer"/>
                             </template>
                             <template v-else-if="question.type === 'checkbox'">
                               <checkbox-control :survey-id=question.survey_id :id="question.id" :question="question.question" :answer="question.answer" :options="question.options" @onupdateanswer="onUpdateAnswer"/>
@@ -250,13 +265,32 @@ Vue.component("textControl", {
   },
   methods: {
     onChange (event) {
-      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: this.value});
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, key: this.value, value: this.value });
     }
   },
   template: `<div class="form-group">
               <label class="control-label col-md-6">{{question}}</label>
               <div class="col-md-6">
                 <input type="text" @blur="onChange" class="form-control" v-model="value">
+              </div>
+            </div>`,
+});
+Vue.component("dateControl", {
+  props: ["id", "question", "answer", "surveyId"],
+  data() {
+    return {
+      value: this.answer
+    }
+  },
+  methods: {
+    onChange (event) {
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, key: this.value, value: this.value });
+    }
+  },
+  template: `<div class="form-group">
+              <label class="control-label col-md-6">{{question}}</label>
+              <div class="col-md-6">
+                <input type="date" @blur="onChange" class="form-control" v-model="value">
               </div>
             </div>`,
 });
@@ -269,7 +303,7 @@ Vue.component("selectControl", {
   },
   methods: {
     onChange (event) {
-      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: this.value});
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, key: this.value, value: this.options[this.value] });
     }
   },
   template: `<div class="form-group">
@@ -298,7 +332,8 @@ Vue.component("checkboxControl", {
       } else {
         this.value = this.value.filter(x => x && x !== event.target.value);
       }
-      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: this.value.join(',')});
+      const textValues = this.value.map(key => this.options[key]);
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, key: this.value.join(','), value: textValues.join(', ') });
     }
   },
   template: `<div class="form-group">
@@ -322,7 +357,7 @@ Vue.component("radioControl", {
   },
   methods: {
     onChange (event) {
-      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, value: event.target.value});
+      this.\$emit('onupdateanswer', { surveyId: this.surveyId, id: this.id, key: event.target.value, value: this.options[event.target.value] });
     }
   },
   template: `<div class="form-group">
@@ -342,6 +377,7 @@ var app = new Vue({
   el: '#tab_survey',
   data: {
     tabs: $questionsJson,
+    amList: $salerTeamsJson
   },
   methods: {
     onUpdateAnswer(data) {
@@ -350,7 +386,8 @@ var app = new Vue({
         lead_tracker_id: $model->id,
         survey_id: data.surveyId, 
         question_id: data.id, 
-        answer: data.value, 
+        answer: data.key, 
+        value: data.value, 
         '$csrfTokenName': '$csrfToken' 
       }, {
         headers: {

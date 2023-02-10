@@ -12,6 +12,7 @@ use backend\models\User;
 use backend\models\Game;
 use backend\models\Order;
 use common\models\LeadTrackerSurvey;
+use common\models\LeadTrackerSurveyAnswer;
 
 /**
  * CustomerTrackerDetailForm is the model behind the contact form.
@@ -23,6 +24,7 @@ class CustomerTrackerDetailForm extends Model
     /** CustomerTracker */
     private $_leadTracker;
     private $_surveys = null;
+    private $_answers = null;
 
     public function getCustomerTracker()
     {
@@ -77,6 +79,15 @@ class CustomerTrackerDetailForm extends Model
             $this->_surveys = LeadTrackerSurvey::find()->all();
         }
         return $this->_surveys;
+    }
+
+    public function fetchAllAnswers()
+    {
+        if (!$this->_answers) {
+            $answers = LeadTrackerSurveyAnswer::find()->select(['question_id', 'value'])->where(['lead_tracker_id' => $this->id])->indexBy('question_id')->all();
+            $this->_answers = ArrayHelper::map($answers, 'question_id', 'value');
+        }
+        return $this->_answers;
     }
 
     public function fetchSurveys($customerType)

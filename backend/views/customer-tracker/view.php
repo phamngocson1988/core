@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
@@ -416,19 +417,27 @@ $questions = LeadTrackerQuestion::find()->all();
         <div class="clearfix">
           <div class="panel panel-success">
             <table class="table table-bordered">
-            <?php foreach ($form->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_NORMAL) as $survey) :?>
+            <?php $answers = $form->fetchAllAnswers();?>
+            <?php foreach (LeadTrackerSurvey::customerTypeLabels() as $type => $label) :?>
+            <?php foreach ($form->fetchSurveys($type) as $survey) :?>
             <?php $questions = $survey->questions;?>
             <?php $firstQuestion = array_shift($questions);?>
             <tr>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <td rowspan="<?=$survey->getTotalQuestion();?>">aaaaaaa</td>
-              <td><?=$firstQuestion ? $firstQuestion->getAnswer('xxx') : '';?></td>
+              <td rowspan="<?=$survey->getTotalQuestion();?>"><?=$label;?></td>
+              <td><?=$firstQuestion ? $firstQuestion->question : '-' ;?></td>
+              <td><?=$firstQuestion ? ArrayHelper::getValue($answers, $firstQuestion->id) : '';?></td>
             </tr>
-              <?php foreach ($questions as $question) :?>
+            <?php foreach ($questions as $question) :?>
             <tr>
-            <td><?=$question->getAnswer('xxx');?></td>
+              <td>
+                <?=$question ? $question->question : '-' ;?>
+              </td>
+              <td>
+                <?=ArrayHelper::getValue($answers, $question->id);?>
+              </td>
             </tr>
-              <?php endforeach;?>
+            <?php endforeach;?>
+            <?php endforeach;?>
             <?php endforeach ;?>
             </table>
           </div>

@@ -15,6 +15,7 @@ class UpdateLeadTrackerSurveyAnswerForm extends Model
     public $survey_id;
     public $question_id;
     public $answer;
+    public $value;
 
     protected $_leadTracker;
     protected $_question;
@@ -22,7 +23,7 @@ class UpdateLeadTrackerSurveyAnswerForm extends Model
     public function rules()
     {
         return [
-            [['lead_tracker_id', 'survey_id', 'question_id', 'answer'], 'trim'],
+            [['lead_tracker_id', 'survey_id', 'question_id', 'answer', 'value'], 'trim'],
             [['lead_tracker_id', 'survey_id', 'question_id'], 'required'],
             ['lead_tracker_id', 'validateLeadTracker'],
             ['question_id', 'validateQuestion']
@@ -79,6 +80,7 @@ class UpdateLeadTrackerSurveyAnswerForm extends Model
         $answer->survey_id = $this->survey_id;
         $answer->question_id = $this->question_id;
         $answer->answer = $this->answer;
+        $answer->value = $this->value;
         return $answer->save();
     }
 }

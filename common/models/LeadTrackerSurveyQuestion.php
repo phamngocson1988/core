@@ -14,6 +14,8 @@ class LeadTrackerSurveyQuestion extends ActiveRecord
     const TYPE_RADIO = 'radio';
     const TYPE_TEXTAREA = 'textarea';
     const TYPE_SELECT = 'select';
+    const TYPE_SELECT_AM = 'select_am';
+    const TYPE_DATE = 'date';
 
     /**
      * @inheritdoc
@@ -59,7 +61,7 @@ class LeadTrackerSurveyQuestion extends ActiveRecord
     public function getAnswer($answers)
     {
         if (!in_array($this->type, [self::TYPE_TEXT, self::TYPE_TEXTAREA])) {
-            $options = json_decode($this->options, true);
+            $options = $this->getOptions();
             $result = array_map(function($answer) use ($options) {
                 return ArrayHelper::getValue($options, $answer, null);
             }, (array)$answers);

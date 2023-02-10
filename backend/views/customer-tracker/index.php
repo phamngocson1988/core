@@ -10,6 +10,7 @@ $this->registerCssFile('@web/vendor/assets/global/plugins/datatables/plugins/boo
 $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/datatables.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $saleForUser = $search->countSaleByUser();
+$surveyAnswers = ArrayHelper::index($surveyAnswers, null, 'lead_tracker_id');
 ?>
 <!-- BEGIN PAGE BAR -->
 <div class="page-bar">
@@ -257,24 +258,41 @@ $saleForUser = $search->countSaleByUser();
                   <a href="<?=Url::to(['customer-tracker/calculate', 'id' => $model->id]);?>" class="btn btn-sm blue btn-outline filter-submit margin-bottom ajax-link">Calculate</a>
                   <a href="<?=Url::to(['customer-tracker/delete', 'id' => $model->id]);?>" class="btn btn-sm red btn-outline delete margin-bottom">Delete</a>
                 </td>
+                <?php 
+                $surveyAnswersByTracker = ArrayHelper::getValue($surveyAnswers, $model->id, []);
+                $surveyAnswersByQuestion = ArrayHelper::map($surveyAnswersByTracker, 'question_id', 'value');
+                ?>
                 <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_NORMAL) as $survey) :?>
+                  <?php $isShowQuestion = count($survey->questions) >= 2;?>
                   <?php foreach ($survey->questions as $question) :?>
-                  <td><?=$question->getAnswer('xxx');?></td>
+                  <td>
+                    <?=$isShowQuestion ? $question->question . ": " : '';?>
+                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
+                  </td>
                   <?php endforeach;?>
                 <?php endforeach ;?>
                 <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_POTENTIAL) as $survey) :?>
                   <?php foreach ($survey->questions as $question) :?>
-                  <td><?=$question->getAnswer('xxx');?></td>
+                  <td>
+                    <?=$isShowQuestion ? $question->question . ": " : '';?>
+                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
+                  </td>
                   <?php endforeach;?>
                 <?php endforeach ;?>
                 <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_LOYALTY) as $survey) :?>
                   <?php foreach ($survey->questions as $question) :?>
-                  <td><?=$question->getAnswer('xxx');?></td>
+                  <td>
+                    <?=$isShowQuestion ? $question->question . ": " : '';?>
+                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
+                  </td>
                   <?php endforeach;?>
                 <?php endforeach ;?>
                 <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_DANGEROUS) as $survey) :?>
                   <?php foreach ($survey->questions as $question) :?>
-                  <td><?=$question->getAnswer('xxx');?></td>
+                  <td>
+                    <?=$isShowQuestion ? $question->question . ": " : '';?>
+                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
+                  </td>
                   <?php endforeach;?>
                 <?php endforeach ;?>
               </tr>

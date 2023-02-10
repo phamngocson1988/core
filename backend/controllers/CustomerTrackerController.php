@@ -6,6 +6,7 @@ use backend\controllers\Controller;
 use yii\filters\AccessControl;
 use backend\models\CustomerTracker;
 use backend\models\LeadTrackerComment;
+use common\models\LeadTrackerSurveyAnswer;
 
 class CustomerTrackerController extends Controller
 {
@@ -50,10 +51,11 @@ class CustomerTrackerController extends Controller
             return $form->export($fileName);
         }
         $models = $form->getCommand()->all();
-
+        $surveyAnswers = LeadTrackerSurveyAnswer::find()->select(['lead_tracker_id', 'question_id', 'value'])->asArray()->all();
         return $this->render('index', [
             'models' => $models,
             'search' => $form,
+            'surveyAnswers' => $surveyAnswers
         ]);
 
     }
@@ -139,6 +141,7 @@ class CustomerTrackerController extends Controller
             'survey_id' => $request->post('survey_id'), 
             'question_id' => $request->post('question_id'), 
             'answer' => $request->post('answer'), 
+            'value' => $request->post('value'), 
         ]);
         Yii::$app->session->setFlash('success', 'Success');
         return $this->asJson(['status' => $form->save()]);
