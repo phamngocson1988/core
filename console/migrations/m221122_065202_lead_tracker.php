@@ -150,7 +150,7 @@ class m221122_065202_lead_tracker extends Migration
             'updated_by' => $this->integer(11),
         ], $tableOptions);
         if ($this->db->driverName === 'mysql') {
-            $alterSurveyCustomerType = "ALTER TABLE {{%lead_tracker_survey}} MODIFY `customer_type` ENUM('normal', 'potential', 'loyalty', 'dangerous') NOT NULL DEFAULT 'normal'";
+            $alterSurveyCustomerType = "ALTER TABLE {{%lead_tracker_survey}} MODIFY `customer_type` ENUM('normal', 'potential', 'key', 'loyalty', 'dangerous') NOT NULL DEFAULT 'normal'";
             $command = $this->db->createCommand($alterSurveyCustomerType);
             $command->execute();
         }

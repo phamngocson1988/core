@@ -11,6 +11,7 @@ class LeadTrackerSurvey extends ActiveRecord
 {
     const CUSTOMER_TYPE_NORMAL = 'normal';
     const CUSTOMER_TYPE_POTENTIAL = 'potential';
+    const CUSTOMER_TYPE_KEY = 'key';
     const CUSTOMER_TYPE_LOYALTY = 'loyalty';
     const CUSTOMER_TYPE_DANGEROUS = 'dangerous';
 
@@ -49,6 +50,7 @@ class LeadTrackerSurvey extends ActiveRecord
         return [
             self::CUSTOMER_TYPE_NORMAL => 'Normal',
             self::CUSTOMER_TYPE_POTENTIAL => 'Potential',
+            self::CUSTOMER_TYPE_KEY => 'Key',
             self::CUSTOMER_TYPE_LOYALTY => 'Loyalty',
             self::CUSTOMER_TYPE_DANGEROUS => 'Dangerous',
         ];
