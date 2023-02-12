@@ -84,7 +84,7 @@ class LeadTrackerSurveyController extends Controller
         $model = new \backend\forms\EditLeadTrackerSurveyQuestionForm(['id' => $id]);
         if ($model->load($request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Edit survey question successfully');
-            return $this->redirect(['lead-tracker-survey/index']);
+            return $this->redirect(['lead-tracker-survey/edit', 'id' => $model->survey_id, '#' => 'tab_questions']);
         } else {
             $model->loadData();
         }

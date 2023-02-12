@@ -69,25 +69,34 @@ $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' =>
                 </div>
               </div>
               <div class="tab-pane" id="tab_questions">
+                <div class="portlet">
+                  <div class="portlet-title">
+                    <div class="actions">
+                      <a class="btn btn-transparent dark btn-outline btn-circle btn-sm" href="<?=Url::to(['lead-tracker-survey/create-question']);?>">
+                        <i class="icon-plus"></i> Thêm mới câu hỏi
+                      </a>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-body">
-                <table class="table table-striped table-bordered">
-                  <thead>
-                    <tr class="highlight-yellow">
-                      <th>Question</th>
-                      <th>Type</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach ($model->fetchQuestions() as $question) : ?>
-                    <tr>
-                      <td><?=$question->question;?></td>
-                      <td><?=$question->getTypeLabel();?></td>
-                      <td class="center"><a href='<?=Url::to(['lead-tracker-survey/edit-question', 'id' => $question->id]);?>' target="_blank"><i class="fa fa-pencil"></i> </a></td>
-                    </tr>
-                    <?php endforeach;?>
-                  </tbody>
-                </table>
+                  <table class="table table-striped table-bordered">
+                    <thead>
+                      <tr class="highlight-yellow">
+                        <th>Question</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php foreach ($model->fetchQuestions() as $question) : ?>
+                      <tr>
+                        <td><?=$question->question;?></td>
+                        <td><?=$question->getTypeLabel();?></td>
+                        <td class="center"><a href='<?=Url::to(['lead-tracker-survey/edit-question', 'id' => $question->id]);?>'><i class="fa fa-pencil"></i> </a></td>
+                      </tr>
+                      <?php endforeach;?>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

@@ -111,7 +111,7 @@ var app = new Vue({
   },
   methods: {
     isShowOptions() {
-      return this.type && !['text', 'textarea'].includes(this.type);
+      return this.type && ['checkbox', 'select', 'radio'].includes(this.type);
     },
     isDisableDeleteOption() {
       return this.options.length <= 1;

@@ -54,7 +54,9 @@ class LeadTrackerSurveyQuestion extends ActiveRecord
             self::TYPE_CHECKBOX => 'Check Box',
             self::TYPE_RADIO => 'Radio',
             self::TYPE_TEXTAREA => 'Textarea',
-            self::TYPE_SELECT => 'Select'
+            self::TYPE_SELECT => 'Select',
+            self::TYPE_SELECT_AM => 'Select AM',
+            self::TYPE_DATE => 'Date'
         ];
     }
 
