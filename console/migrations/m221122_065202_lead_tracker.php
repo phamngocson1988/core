@@ -28,18 +28,12 @@ class m221122_065202_lead_tracker extends Migration
             'contacts' => $this->string(255),
             'game_id' => $this->integer(11),
             'is_potential' => $this->boolean()->defaultValue(false),
+            'point_potential' => $this->integer(5),
             'potential_lead_at' => $this->dateTime(),
             'is_target' => $this->boolean()->defaultValue(false),
+            'point_target' => $this->integer(5),
             'target_lead_at' => $this->dateTime(),
-            'question_1' => $this->boolean()->defaultValue(false),
-            'question_2' => $this->boolean()->defaultValue(false),
-            'question_3' => $this->boolean()->defaultValue(false),
-            'question_4' => $this->boolean()->defaultValue(false),
-            'question_5' => $this->boolean()->defaultValue(false),
-            'question_6' => $this->boolean()->defaultValue(false),
-            'question_7' => $this->boolean()->defaultValue(false),
-            'question_8' => $this->boolean()->defaultValue(false),
-            'question_9' => $this->boolean()->defaultValue(false),
+            'lead_questions' => $this->string(255),
             'created_at' => $this->dateTime(),
             'created_by' => $this->integer(11),
             'updated_at' => $this->dateTime(),
@@ -50,6 +44,7 @@ class m221122_065202_lead_tracker extends Migration
             'converted_at' => $this->dateTime(),
             'converted_by' => $this->integer(11),
             'registered_at' => $this->dateTime(),
+            'customer_surveys' => $this->string(255),
             // sale performance
             'first_order_at' => $this->dateTime(),
             'is_normal_customer' => $this->boolean()->defaultValue(false),
@@ -127,6 +122,68 @@ class m221122_065202_lead_tracker extends Migration
             'updated_at' => $this->dateTime(),
         ], $tableOptions);
         $this->addPrimaryKey('lead_tracker_report_pk', '{{%lead_tracker_report}}', ['month', 'lead_tracker_id']);
+
+        $this->createTable('{{%lead_tracker_question}}', [
+            'id' => $this->primaryKey(),
+            'type' => $this->varchar(10)->notNull(), // lead target or potential target
+            'question' => $this->text()->notNull(),
+            'point_yes' => $this->integer()->defaultValue(0),
+            'point_no' => $this->integer()->defaultValue(0),
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterQuestionType = "ALTER TABLE {{%lead_tracker_question}} MODIFY `type` ENUM('lead', 'potential') NOT NULL DEFAULT 'lead'";
+            $command = $this->db->createCommand($alterQuestionType);
+            $command->execute();
+        }
+
+        $this->createTable('{{%lead_tracker_survey}}', [
+            'id' => $this->primaryKey(),
+            'content' => $this->text()->notNull(),
+            'customer_type' => $this->varchar(10)->notNull(), // normal, potential, loyalty, dangerous
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterSurveyCustomerType = "ALTER TABLE {{%lead_tracker_survey}} MODIFY `customer_type` ENUM('normal', 'potential', 'key', 'loyalty', 'dangerous') NOT NULL DEFAULT 'normal'";
+            $command = $this->db->createCommand($alterSurveyCustomerType);
+            $command->execute();
+        }
+
+        $this->createTable('{{%lead_tracker_survey_question}}', [
+            'id' => $this->primaryKey(),
+            'question' => $this->text()->notNull(),
+            'survey_id' => $this->integer(11)->notNull(),
+            'type' => $this->varchar(10)->notNull(), // text, checkbox, radio, textarea, select
+            'options' => $this->text(),
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        if ($this->db->driverName === 'mysql') {
+            $alterSurveyType = "ALTER TABLE {{%lead_tracker_survey_question}} MODIFY `type` ENUM('text', 'checkbox', 'radio', 'textarea', 'select', 'select_am', 'date') NOT NULL DEFAULT 'text'";
+            $command = $this->db->createCommand($alterSurveyType);
+            $command->execute();
+        }
+
+        $this->createTable('{{%lead_tracker_survey_answer}}', [
+            'lead_tracker_id' => $this->integer(11)->notNull(),
+            'survey_id' => $this->integer(11)->notNull(),
+            'question_id' => $this->integer(11)->notNull(),
+            'answer' => $this->text(),
+            'value' => $this->text(),
+            'created_at' => $this->dateTime(),
+            'created_by' => $this->integer(11),
+            'updated_at' => $this->dateTime(),
+            'updated_by' => $this->integer(11),
+        ], $tableOptions);
+        $this->addPrimaryKey('lead_tracker_survey_answer_pk', '{{%lead_tracker_survey_answer}}', ['survey_id', 'lead_tracker_id', 'question_id']);
     }
 
     public function down()
@@ -137,6 +194,9 @@ class m221122_065202_lead_tracker extends Migration
         $this->dropTable('{{%lead_tracker_comment}}');
         $this->dropTable('{{%lead_tracker_action_log}}');
         $this->dropTable('{{%lead_tracker_report}}');
+        $this->dropTable('{{%lead_tracker_question}}');
+        $this->dropTable('{{%lead_tracker_survey}}');
+        $this->dropTable('{{%lead_tracker_survey_answer}}');
         return false;
     }
 }

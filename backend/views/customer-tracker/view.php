@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use dosamigos\datepicker\DateRangePicker;
@@ -8,6 +9,10 @@ use yii\web\JsExpression;
 use common\widgets\CheckboxInput;
 use common\components\helpers\TimeElapsed;
 use backend\models\CustomerTracker;
+use common\models\LeadTrackerQuestion;
+use common\models\LeadTrackerSurvey;
+
+$questions = LeadTrackerQuestion::find()->all();
 ?>
 <style>
   /* .general-information tr>td:first-child, 
@@ -269,6 +274,12 @@ use backend\models\CustomerTracker;
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
+            <?php
+            $lead_questions = explode(',', $model->lead_questions);
+            $potentialQuestions = array_filter($questions, function($item) {
+              return $item->type === LeadTrackerQuestion::TYPE_POTENTIAL_TARGET;
+            });
+            ?>
             <table class="table Potential-Leads">
               <thead>
                 <tr class="highlight-yellow">
@@ -278,28 +289,16 @@ use backend\models\CustomerTracker;
                 </tr>
               </thead>
               <tbody>
+                <?php foreach ($potentialQuestions as $question) : ?>
                 <tr>
                   <td class="highlight-yellow">Engagement</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_1');?></td>
-                  <td><?=$model->question_1 ? 'YES' : 'NO';?></td>
+                  <td><?=$question->question;?></td>
+                  <td><?=in_array($question->id, $lead_questions) ? 'YES' : 'NO';?></td>
                 </tr>
-                <tr>
-                  <td class="highlight-yellow" rowspan="2">Network</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_2');?></td>
-                  <td><?=$model->question_2 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_3');?></td>
-                  <td><?=$model->question_3 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td class="highlight-yellow">Legit account</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_4');?></td>
-                  <td><?=$model->question_4 ? 'YES' : 'NO';?></td>
-                </tr>
+                <?php endforeach;?>
                 <tr class="highlight-yellow">
                   <td>Evaluation</td>
-                  <td class="center"><?=$model->calculatePointPotential();?></td>
+                  <td class="center"><?=$model->point_potential;?></td>
                   <td><?=$model->is_potential ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
@@ -321,6 +320,11 @@ use backend\models\CustomerTracker;
       <div class="portlet-body">
         <div class="clearfix">
           <div class="panel panel-success">
+            <?php 
+            $leadQuestions = array_filter($questions, function($item) {
+              return $item->type === LeadTrackerQuestion::TYPE_LEAD_TARGET;
+            });
+            ?>
             <table class="table Target-Leads">
               <thead>
                 <tr class="highlight-yellow">
@@ -330,31 +334,16 @@ use backend\models\CustomerTracker;
                 </tr>
               </thead>
               <tbody>
+                <?php foreach ($leadQuestions as $question) : ?>
                 <tr>
-                  <td class="highlight-yellow" rowspan="4">Demand availability</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_5');?></td>
-                  <td><?=$model->question_5 ? 'YES' : 'NO';?></td>
+                  <td class="highlight-yellow">Demand availability</td>
+                  <td><?=$question->question;?></td>
+                  <td><?=in_array($question->id, $lead_questions) ? 'YES' : 'NO';?></td>
                 </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_6');?></td>
-                  <td><?=$model->question_6 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_7');?></td>
-                  <td><?=$model->question_7 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td><?=CustomerTracker::getQuestionTitle('question_8');?></td>
-                  <td><?=$model->question_8 ? 'YES' : 'NO';?></td>
-                </tr>
-                <tr>
-                  <td class="highlight-yellow">Referred</td>
-                  <td><?=CustomerTracker::getQuestionTitle('question_9');?></td>
-                  <td><?=$model->question_9 ? 'YES' : 'NO';?></td>
-                </tr>
+                <?php endforeach;?>
                 <tr class="highlight-yellow">
                   <td>Evaluation</td>
-                  <td class="center"><?=$model->calculatePointTarget();?></td>
+                  <td class="center"><?=$model->point_target;?></td>
                   <td><?=$model->is_target ? 'YES' : 'NO';?></td>
                 </tr>
               </tbody>
@@ -409,6 +398,47 @@ use backend\models\CustomerTracker;
                   <td class="center"><?=round($model->kpi_growth * 100, 2);?>%</td>
                 </tr>
               </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <!-- BEGIN PORTLET-->
+    <div class="portlet light bordered">
+      <div class="portlet-title">
+        <div class="caption">
+          <i class="icon-share font-red-sunglo"></i>
+          <span class="caption-subject font-red-sunglo bold uppercase">Customer Relationship </span>
+        </div>
+      </div>
+      <div class="portlet-body">
+        <div class="clearfix">
+          <div class="panel panel-success">
+            <table class="table table-bordered">
+            <?php $answers = $form->fetchAllAnswers();?>
+            <?php foreach (LeadTrackerSurvey::customerTypeLabels() as $type => $label) :?>
+            <?php foreach ($form->fetchSurveys($type) as $survey) :?>
+            <?php $questions = $survey->questions;?>
+            <?php $firstQuestion = array_shift($questions);?>
+            <tr>
+              <td rowspan="<?=$survey->getTotalQuestion();?>"><?=$label;?></td>
+              <td><?=$firstQuestion ? $firstQuestion->question : '-' ;?></td>
+              <td><?=$firstQuestion ? ArrayHelper::getValue($answers, $firstQuestion->id) : '';?></td>
+            </tr>
+            <?php foreach ($questions as $question) :?>
+            <tr>
+              <td>
+                <?=$question ? $question->question : '-' ;?>
+              </td>
+              <td>
+                <?=ArrayHelper::getValue($answers, $question->id);?>
+              </td>
+            </tr>
+            <?php endforeach;?>
+            <?php endforeach;?>
+            <?php endforeach ;?>
             </table>
           </div>
         </div>

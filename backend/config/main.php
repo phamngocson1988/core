@@ -19,7 +19,10 @@ return [
 	'sourceLanguage' => 'en-US',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-backend',            
+            'csrfParam' => '_csrf-backend',    
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]           
         ],
         'user' => [
             'class' => 'backend\components\User',
