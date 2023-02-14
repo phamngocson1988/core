@@ -198,101 +198,96 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- DES -->
-  <div class="card bg-light mt-3">
-      <div class="card-body">
-        <h4 class="card-title">Description</h4>
-        <div class="card-text description">
-          <?=$model->content;?>
-        </div>
-      </div>
-      <div class="card-footer text-center">
-        <a class="btn-seemore">
-          <img class="icon-sm" src="https://image.flaticon.com/icons/svg/892/892629.svg"/>
-        </a>
-      </div>
-    </div>
-</div><!-- END MAIN SINGLE -->
-<?php if ($relatedGames) : ?>
-<div class="container my-5">
-  <div class="d-flex justify-content-between align-items-center mb-5">
-    <h2 class="block-title text-uppercase mb-0 flex-fill">You may also like</h2>
-    <div class="flex-fill">
-      <a href="<?=Url::to(['game/index', 'category_id' => $category->id]);?>" class="link-dark font-weight-bold">View all <img class="icon-sm" src="/images/icon/next.svg"/></a>
-    </div>
-  </div>
-  <div class="post-wrapper post-slider">
-    <?php foreach ($relatedGames as $game) : ?>
-    <?php $viewUrl = Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug]);?>
-    <div class="post-item card">
-      <div class="post-thumb">
-        <a href="<?=$viewUrl;?>" class="hover-img">
-          <img src="<?=$game->getImageUrl('300x300');?>" />
-        </a>
-        <?php if ($game->getSavedPrice()) : ?>
-        <span class="tag save">save <?=number_format($game->getSavedPrice());?>%</span>
-        <?php endif;?>
-        <?php if ($game->promotion_info) : ?>
-        <span class="tag promotion"><?=$game->promotion_info;?></span>
-        <?php endif;?>
-        <?php if ($game->event_info) : ?>
-        <span class="tag bts"><?=$game->event_info;?></span>
-        <?php endif;?>
-      </div>
-      <div class="post-content">
-        <h4 class="post-title">
-          <a href="<?=$viewUrl;?>"><?=Html::encode($game->title);?></a>
-        </h4>
-        <?php if ($game->hasCategory()) : ?>
-        <div class="tags">
-          <img src="/images/icon/tag.svg" />
-          <?php $categories = array_slice($game->categories, 0, 3);?>
-          <?php foreach ($categories as $category) : ?>
-          <span class="badge badge-primary"><?=$category->name;?></span>
-          <?php endforeach; ?>
-          <?php if (count($game->categories) > 3) :?>
-          <span class="badge badge-primary">...</span>
-          <?php endif;?>
-        </div>
-        <?php endif;?>
-        <div class="d-flex justify-content-between align-items-center py-2">
-          <div class="flex-fill value">
-            <span class="num"><?=number_format($game->pack);?></span>
-            <br />
-            <span class="text"><?=Html::encode($game->unit_name);?></span>
-          </div>
-          <div class="flex-fill price">
-            <?php $price = $game->getPrice();?>
-            <strike>$<?=number_format($game->getOriginalPrice());?></strike> <span class="num">$<?=number_format($price, (int)($price != round($price)));?></span>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="flex-fill status">
-            <hr>
-            <img class="icon-fire" src="/images/icon/fire.svg" />
-            <?php if ($game->isSoldout()) :?>
-            <span class="text" style="color: gray">out stock</span>
-            <?php else : ?>
-            <span class="text">in stock</span>
-            <?php endif;?>
-          </div>
-          <div class="flex-fill">
-            <a href="<?=$viewUrl;?>" class="main-btn <?=$game->isSoldout() ? 'disable' : '';?>">
-            <span>BUY NOW</span>
+        <hr />
+        <div style="display:flex; justify-content: space-between;">
+          <p class="lead mb-2"></p>
+          <div>
+            <a href="#" class="btn btn-primary" role="button" aria-pressed="true">
+              <img class="icon-btn" src="/images/icon/more.svg"/> Download
             </a>
+            <button type="button" class="btn btn-green" id="upload-excel-button">
+              <img class="icon-btn" src="/images/icon/more.svg"/> Upload
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <?php endforeach;?>
-  </div> <!-- END POST SLIDER -->
-</div><!-- END container -->
-<?php endif;?>
+  </div>
 
-<?php
+  
+</div><!-- END MAIN SINGLE -->
+
+
+<div class="container my-5 single-order">
+  <div class="d-flex align-items-centert bg-white">
+    <div class="col-md-12">
+      <hr/>
+      <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="flex-fill mr-0 mb-0 w-100">
+          <h3>Account Info : </h3>
+          <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
+          <div class="add-quantity d-flex justify-content-between align-items-center">
+            <span class="flex-fill minus">
+            <img class="icon-sm" src="/images/icon/minus.svg">
+            </span>
+            <input type="text" id="cartitem-quantity" class="quantity-value flex-fill text-center" name="quantity" value="1">
+            <span class="flex-fill plus">
+            <img class="icon-sm" src="/images/icon/plus.svg">
+            </span>
+          </div>
+        </div>
+        <div class="flex-fill w-100 field-cartitem-raw">
+          <textarea id="cartitem-raw" class="form-control raw" name="raw" rows="3" placeholder="Enter infomation here ..."></textarea>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <a href="javascript:;" class="trash"><img class="icon-sm" src="/images/icon/trash-can.svg"></a>
+        <button type="button" class="btn btn-red" id="add-row">
+        <img class="icon-btn" src="/images/icon/more.svg"/> Add order
+        </button>
+      </div>
+    </div>
+
+    
+    
+  </div>
+  <div class="d-flex align-items-centert bg-white">
+    <div class="col-md-12">
+      <hr/>
+      <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="flex-fill mr-0 mb-0 w-100">
+          <h3>Account Info : </h3>
+          <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
+          <div class="add-quantity d-flex justify-content-between align-items-center">
+            <span class="flex-fill minus">
+            <img class="icon-sm" src="/images/icon/minus.svg">
+            </span>
+            <input type="text" id="cartitem-quantity" class="quantity-value flex-fill text-center" name="quantity" value="1">
+            <span class="flex-fill plus">
+            <img class="icon-sm" src="/images/icon/plus.svg">
+            </span>
+          </div>
+        </div>
+        <div class="flex-fill w-100 field-cartitem-raw">
+          <textarea id="cartitem-raw" class="form-control raw" name="raw" rows="3" placeholder="Enter infomation here ..."></textarea>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <a href="javascript:;" class="trash"><img class="icon-sm" src="/images/icon/trash-can.svg"></a>
+        <button type="button" class="btn btn-red" id="add-row">
+        <img class="icon-btn" src="/images/icon/more.svg"/> Add order
+        </button>
+      </div>
+    </div>
+
+    
+    
+  </div>
+</div>
+
+  <?php
 $script = <<< JS
 // Review Form
 function calculateCart() {
