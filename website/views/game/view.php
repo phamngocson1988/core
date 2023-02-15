@@ -220,8 +220,8 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
 
 
 <div class="container my-5 single-order" id="cart_items">
-  <template v-for="(item, index) in items">
-    <cart-item :quantity="item.quantity" :add-item="addItem" :delete-item="deleteItem" :index="index"/>
+  <template v-for="item in items">
+    <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity"/>
   </template>
 </div>
 
@@ -403,15 +403,17 @@ $this->registerJs($script);
 
 <?php
 $script = <<< JS
-// Renderer for each to do item (accepts one item as props)
 Vue.component("cartItem", {
-  props: ["quantity", "addItem", "deleteItem", "index"],
+  props: ["id", "quantity", "addItem", "deleteItem", "updateQuantity"],
   data() {
     return {
-      
+      raw: ''
     }
   },
   methods: {
+    minusQuantity() {
+      this.updateQuantity(this.id,  Math.max(1, this.quantity - 1));
+    }
   },
   template: `<div class="d-flex align-items-centert bg-white">
     <div class="col-md-12">
@@ -421,23 +423,18 @@ Vue.component("cartItem", {
           <h3>Account Info : </h3>
           <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
           <div class="add-quantity d-flex justify-content-between align-items-center">
-            <span class="flex-fill minus">
-            <img class="icon-sm" src="/images/icon/minus.svg">
-            </span>
-            <input type="text" id="cartitem-quantity" class="quantity-value flex-fill text-center" :value="quantity">
-            <span class="flex-fill plus">
-            <img class="icon-sm" src="/images/icon/plus.svg">
-            </span>
+            <span class="flex-fill minus" @click="minusQuantity()"><img class="icon-sm" src="/images/icon/minus.svg"></span>
+            <input type="text" class="quantity-value flex-fill text-center" :value="quantity" @blur="event => updateQuantity(id, event.target.value)">
+            <span class="flex-fill plus" @click="updateQuantity(id, quantity + 1)"><img class="icon-sm" src="/images/icon/plus.svg"></span>
           </div>
         </div>
         <div class="flex-fill w-100 field-cartitem-raw">
-          <textarea id="cartitem-raw" class="form-control raw" name="raw" rows="3" placeholder="Enter infomation here ..."></textarea>
+          <textarea class="form-control raw" :model="raw" rows="3" placeholder="Enter infomation here ...">{{ id }}</textarea>
         </div>
       </div>
-
       <div class="text-right">
-        <a href="javascript:;" class="trash" @click="event => deleteItem(index)"><img class="icon-sm" src="/images/icon/trash-can.svg"></a>
-        <button type="button" class="btn btn-red" @click="event => addItem(index)">
+        <a href="javascript:;" class="trash" @click="event => deleteItem(id)"><img class="icon-sm" src="/images/icon/trash-can.svg"></a>
+        <button type="button" class="btn btn-red" @click="event => addItem(id)">
           <img class="icon-btn" src="/images/icon/more.svg"/> Add order
         </button>
       </div>
@@ -449,21 +446,43 @@ var app = new Vue({
   el: '#cart_items',
   data: {
     price: 10,
-    items: [
-      { quantity: 1 }
-    ]
+    items: []
+  },
+  watch: {
+    items(newItems) {
+     console.log('wathc newItems', newItems); 
+    }
   },
   methods: {
     addItem() {
-      this.items = [...this.items, { quantity: 1 }];
+      this.items = [...this.items, { id: this.uuidv4(), quantity: 1 }];
     },
-    deleteItem(i) {
-      this.items = this.items.filter((item, index) => i !== index);
+    deleteItem(id) {
+      if (this.items.length <= 1) {
+        alert('You need to keep at least one item');
+        return;
+      }
+      this.items = this.items.filter((item) => {
+        return item.id !== id;
+      });
+    },
+    updateQuantity(id, quantity) {
+      this.items = this.items.map(item => {
+        if (item.id === id) {
+          item.quantity = quantity;
+        }
+        return item;
+      });
     },
     uuidv4() {
       return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
       );
+    }
+  },
+  created() {
+    if (!this.items.length) {
+      this.addItem();
     }
   }
 });
