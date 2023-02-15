@@ -4,7 +4,8 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\FormatConverter;
-
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', ['depends' => ['\yii\web\JqueryAsset']]);
+$this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
 $this->registerMetaTag(['property' => 'og:image', 'content' => $model->getImageUrl('150x150')], 'og:image');
 $this->registerMetaTag(['property' => 'og:title', 'content' => $model->getMetaTitle()], 'og:title');
 $this->registerMetaTag(['property' => 'og:description', 'content' => $model->getMetaDescription()], 'og:description');
@@ -218,76 +219,13 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
 </div><!-- END MAIN SINGLE -->
 
 
-<div class="container my-5 single-order">
-  <div class="d-flex align-items-centert bg-white">
-    <div class="col-md-12">
-      <hr/>
-      <div class="mb-3 d-flex justify-content-between align-items-center">
-        <div class="flex-fill mr-0 mb-0 w-100">
-          <h3>Account Info : </h3>
-          <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
-          <div class="add-quantity d-flex justify-content-between align-items-center">
-            <span class="flex-fill minus">
-            <img class="icon-sm" src="/images/icon/minus.svg">
-            </span>
-            <input type="text" id="cartitem-quantity" class="quantity-value flex-fill text-center" name="quantity" value="1">
-            <span class="flex-fill plus">
-            <img class="icon-sm" src="/images/icon/plus.svg">
-            </span>
-          </div>
-        </div>
-        <div class="flex-fill w-100 field-cartitem-raw">
-          <textarea id="cartitem-raw" class="form-control raw" name="raw" rows="3" placeholder="Enter infomation here ..."></textarea>
-        </div>
-      </div>
-
-      <div class="text-right">
-        <a href="javascript:;" class="trash"><img class="icon-sm" src="/images/icon/trash-can.svg"></a>
-        <button type="button" class="btn btn-red" id="add-row">
-        <img class="icon-btn" src="/images/icon/more.svg"/> Add order
-        </button>
-      </div>
-    </div>
-
-    
-    
-  </div>
-  <div class="d-flex align-items-centert bg-white">
-    <div class="col-md-12">
-      <hr/>
-      <div class="mb-3 d-flex justify-content-between align-items-center">
-        <div class="flex-fill mr-0 mb-0 w-100">
-          <h3>Account Info : </h3>
-          <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
-          <div class="add-quantity d-flex justify-content-between align-items-center">
-            <span class="flex-fill minus">
-            <img class="icon-sm" src="/images/icon/minus.svg">
-            </span>
-            <input type="text" id="cartitem-quantity" class="quantity-value flex-fill text-center" name="quantity" value="1">
-            <span class="flex-fill plus">
-            <img class="icon-sm" src="/images/icon/plus.svg">
-            </span>
-          </div>
-        </div>
-        <div class="flex-fill w-100 field-cartitem-raw">
-          <textarea id="cartitem-raw" class="form-control raw" name="raw" rows="3" placeholder="Enter infomation here ..."></textarea>
-        </div>
-      </div>
-
-      <div class="text-right">
-        <a href="javascript:;" class="trash"><img class="icon-sm" src="/images/icon/trash-can.svg"></a>
-        <button type="button" class="btn btn-red" id="add-row">
-        <img class="icon-btn" src="/images/icon/more.svg"/> Add order
-        </button>
-      </div>
-    </div>
-
-    
-    
-  </div>
+<div class="container my-5 single-order" id="cart_items">
+  <template v-for="(item, index) in items">
+    <cart-item :quantity="item.quantity" :add-item="addItem" :delete-item="deleteItem" :index="index"/>
+  </template>
 </div>
 
-  <?php
+<?php
 $script = <<< JS
 // Review Form
 function calculateCart() {
@@ -458,6 +396,76 @@ $('#subscribe').on('click', function() {
       }
     },
   });
+});
+JS;
+$this->registerJs($script);
+?>
+
+<?php
+$script = <<< JS
+// Renderer for each to do item (accepts one item as props)
+Vue.component("cartItem", {
+  props: ["quantity", "addItem", "deleteItem", "index"],
+  data() {
+    return {
+      
+    }
+  },
+  methods: {
+  },
+  template: `<div class="d-flex align-items-centert bg-white">
+    <div class="col-md-12">
+      <hr/>
+      <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="flex-fill mr-0 mb-0 w-100">
+          <h3>Account Info : </h3>
+          <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
+          <div class="add-quantity d-flex justify-content-between align-items-center">
+            <span class="flex-fill minus">
+            <img class="icon-sm" src="/images/icon/minus.svg">
+            </span>
+            <input type="text" id="cartitem-quantity" class="quantity-value flex-fill text-center" :value="quantity">
+            <span class="flex-fill plus">
+            <img class="icon-sm" src="/images/icon/plus.svg">
+            </span>
+          </div>
+        </div>
+        <div class="flex-fill w-100 field-cartitem-raw">
+          <textarea id="cartitem-raw" class="form-control raw" name="raw" rows="3" placeholder="Enter infomation here ..."></textarea>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <a href="javascript:;" class="trash" @click="event => deleteItem(index)"><img class="icon-sm" src="/images/icon/trash-can.svg"></a>
+        <button type="button" class="btn btn-red" @click="event => addItem(index)">
+          <img class="icon-btn" src="/images/icon/more.svg"/> Add order
+        </button>
+      </div>
+    </div> 
+  </div>`,
+});
+
+var app = new Vue({
+  el: '#cart_items',
+  data: {
+    price: 10,
+    items: [
+      { quantity: 1 }
+    ]
+  },
+  methods: {
+    addItem() {
+      this.items = [...this.items, { quantity: 1 }];
+    },
+    deleteItem(i) {
+      this.items = this.items.filter((item, index) => i !== index);
+    },
+    uuidv4() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+    }
+  }
 });
 JS;
 $this->registerJs($script);
