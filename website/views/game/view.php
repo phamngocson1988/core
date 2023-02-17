@@ -218,12 +218,87 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
   
 </div><!-- END MAIN SINGLE -->
 
-
-<div class="container my-5 single-order" id="cart_items">
+<template id="cart_items">
+<div class="container my-5 single-order">
   <template v-for="item in items">
     <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity"/>
   </template>
 </div>
+<div class="container my-5 single-order">
+  <div class="row">
+    <div class="col-md-5 info">
+      <p class="lead mb-2">Payment method</p>
+      <hr/>
+      <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
+        <label class="btn flex-fill btn-secondary active">
+          <input type="radio" name="options" id="option1" autocomplete="off" checked>
+          <div>Blance</div>
+          <div class="lead text-red font-weight-bold">460 Kcoin</div>
+        </label>
+        <label class="btn flex-fill btn-secondary">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <img class="icon" src="./images/icon/skrill.svg"/>
+        </label>
+        <label class="btn flex-fill btn-secondary">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <img class="icon" src="./images/icon/skrill.svg"/>
+        </label>
+        <label class="btn flex-fill btn-secondary">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <img class="icon" src="./images/icon/skrill.svg"/>
+        </label>
+        <label class="btn flex-fill btn-secondary">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <img class="icon" src="./images/icon/skrill.svg"/>
+        </label>
+        <label class="btn flex-fill btn-secondary">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <img class="icon" src="./images/icon/skrill.svg"/>
+        </label>
+        <label class="btn flex-fill btn-secondary">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <img class="icon" src="./images/icon/skrill.svg"/>
+        </label>
+        <label class="btn flex-fill btn-secondary">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <img class="icon" src="./images/icon/skrill.svg"/>
+        </label>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <!-- CART SUMMARY -->
+      <div class="card card-summary">
+        <h5 class="card-header text-uppercase">Card summary</h5>
+        <div class="card-body">
+          <p class="card-text text-red font-weight-bold">Game: State of Survival - Discard (Pack Offer)</p>
+          <p class="text-green card-text font-weight-bold">600 GEMS</p>
+          <p class="card-text">Version Global</p>
+          <h5 class="card-title">Price Details</h5>
+          <hr />
+          <div class="d-flex">
+            <div class="flex-fill w-100">Price</div>
+            <div class="flex-fill w-100 text-right">$100.0</div>
+          </div>
+          <div class="d-flex">
+            <div class="flex-fill w-100">Transfer fee</div>
+            <div class="flex-fill w-100 text-right" id="fee">$0</div>
+          </div>
+          <hr />
+          <div class="d-flex mb-3">
+            <div class="flex-fill text-red font-weight-bold w-100">Total</div>
+            <div class="flex-fill text-red font-weight-bold w-100 text-right">$43.0</div>
+          </div>
+          <div class="d-flex mb-3">
+            <div class="flex-fill text-red font-weight-bold w-100 text-right">(other currency)</div>
+          </div>
+          <a href="#" class="btn btn-block btn-payment text-uppercase">Payment</a>
+        </div>
+      </div>
+      <!-- END SUMMARY -->
+    </div>
+  </div>
+</div>
+</template>
 
 <?php
 $script = <<< JS
