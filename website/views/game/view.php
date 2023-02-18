@@ -4,11 +4,31 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use common\components\helpers\FormatConverter;
+use website\models\Paygate;
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', ['depends' => ['\yii\web\JqueryAsset']]);
 $this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
 $this->registerMetaTag(['property' => 'og:image', 'content' => $model->getImageUrl('150x150')], 'og:image');
 $this->registerMetaTag(['property' => 'og:title', 'content' => $model->getMetaTitle()], 'og:title');
 $this->registerMetaTag(['property' => 'og:description', 'content' => $model->getMetaDescription()], 'og:description');
+
+$paygateObjects = Paygate::find()->where([
+  'status' => Paygate::STATUS_ACTIVE
+])->all();
+$paygateArray = array_map(function($obj) {
+  return [
+    'id' => $obj->id, 
+    'identifier' => $obj->identifier,
+    'currency' => $obj->currency,
+    'transfer_fee' => $obj->transfer_fee,
+    'transfer_fee_type' => $obj->transfer_fee_type,
+    'image' => $obj->getImageUrl()
+  ];
+}, $paygateObjects);
+$paygateJson = json_encode($paygateArray);
+
+$user = Yii::$app->user->getIdentity();
+$balance = $user->getWalletAmount();
+
 ?>
 <div class="container my-5 single">
   <div class="d-flex justify-content-between align-items-centert bg-white" id="game-header">
@@ -218,87 +238,61 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => $model->get
   
 </div><!-- END MAIN SINGLE -->
 
-<template id="cart_items">
-<div class="container my-5 single-order">
-  <template v-for="item in items">
-    <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity"/>
-  </template>
-</div>
-<div class="container my-5 single-order">
-  <div class="row">
-    <div class="col-md-5 info">
-      <p class="lead mb-2">Payment method</p>
-      <hr/>
-      <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
-        <label class="btn flex-fill btn-secondary active">
-          <input type="radio" name="options" id="option1" autocomplete="off" checked>
-          <div>Blance</div>
-          <div class="lead text-red font-weight-bold">460 Kcoin</div>
-        </label>
-        <label class="btn flex-fill btn-secondary">
-        <input type="radio" name="options" id="option2" autocomplete="off">
-        <img class="icon" src="./images/icon/skrill.svg"/>
-        </label>
-        <label class="btn flex-fill btn-secondary">
-        <input type="radio" name="options" id="option2" autocomplete="off">
-        <img class="icon" src="./images/icon/skrill.svg"/>
-        </label>
-        <label class="btn flex-fill btn-secondary">
-        <input type="radio" name="options" id="option2" autocomplete="off">
-        <img class="icon" src="./images/icon/skrill.svg"/>
-        </label>
-        <label class="btn flex-fill btn-secondary">
-        <input type="radio" name="options" id="option2" autocomplete="off">
-        <img class="icon" src="./images/icon/skrill.svg"/>
-        </label>
-        <label class="btn flex-fill btn-secondary">
-        <input type="radio" name="options" id="option2" autocomplete="off">
-        <img class="icon" src="./images/icon/skrill.svg"/>
-        </label>
-        <label class="btn flex-fill btn-secondary">
-        <input type="radio" name="options" id="option2" autocomplete="off">
-        <img class="icon" src="./images/icon/skrill.svg"/>
-        </label>
-        <label class="btn flex-fill btn-secondary">
-        <input type="radio" name="options" id="option2" autocomplete="off">
-        <img class="icon" src="./images/icon/skrill.svg"/>
-        </label>
-      </div>
-    </div>
-    <div class="col-md-7">
-      <!-- CART SUMMARY -->
-      <div class="card card-summary">
-        <h5 class="card-header text-uppercase">Card summary</h5>
-        <div class="card-body">
-          <p class="card-text text-red font-weight-bold">Game: State of Survival - Discard (Pack Offer)</p>
-          <p class="text-green card-text font-weight-bold">600 GEMS</p>
-          <p class="card-text">Version Global</p>
-          <h5 class="card-title">Price Details</h5>
-          <hr />
-          <div class="d-flex">
-            <div class="flex-fill w-100">Price</div>
-            <div class="flex-fill w-100 text-right">$100.0</div>
-          </div>
-          <div class="d-flex">
-            <div class="flex-fill w-100">Transfer fee</div>
-            <div class="flex-fill w-100 text-right" id="fee">$0</div>
-          </div>
-          <hr />
-          <div class="d-flex mb-3">
-            <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">$43.0</div>
-          </div>
-          <div class="d-flex mb-3">
-            <div class="flex-fill text-red font-weight-bold w-100 text-right">(other currency)</div>
-          </div>
-          <a href="#" class="btn btn-block btn-payment text-uppercase">Payment</a>
+<div id="cart_items">
+  <div class="container my-5 single-order">
+    <template v-for="item in items">
+      <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity"/>
+    </template>
+  </div>
+  <div class="container my-5 single-order">
+    <div class="row">
+      <div class="col-md-5 info">
+        <p class="lead mb-2">Payment method</p>
+        <hr/>
+        <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
+          <template v-for="paygate in availablePaygates">
+            <paygate-item
+            :id="paygate.id"
+            :image="paygate.image"
+            :select="choosePaygate"
+            />
+          </template>
         </div>
       </div>
-      <!-- END SUMMARY -->
+      <div class="col-md-7">
+        <!-- CART SUMMARY -->
+        <div class="card card-summary">
+          <h5 class="card-header text-uppercase">Card summary</h5>
+          <div class="card-body">
+            <p class="card-text text-red font-weight-bold">Game: State of Survival - Discard (Pack Offer)</p>
+            <p class="text-green card-text font-weight-bold">600 GEMS</p>
+            <p class="card-text">Version Global</p>
+            <h5 class="card-title">Price Details</h5>
+            <hr />
+            <div class="d-flex">
+              <div class="flex-fill w-100">Price</div>
+              <div class="flex-fill w-100 text-right">$100.0</div>
+            </div>
+            <div class="d-flex">
+              <div class="flex-fill w-100">Transfer fee</div>
+              <div class="flex-fill w-100 text-right">${{ transferFee }}</div>
+            </div>
+            <hr />
+            <div class="d-flex mb-3">
+              <div class="flex-fill text-red font-weight-bold w-100">Total</div>
+              <div class="flex-fill text-red font-weight-bold w-100 text-right">$43.0</div>
+            </div>
+            <div class="d-flex mb-3">
+              <div class="flex-fill text-red font-weight-bold w-100 text-right">(other currency)</div>
+            </div>
+            <a href="#" class="btn btn-block btn-payment text-uppercase">Payment</a>
+          </div>
+        </div>
+        <!-- END SUMMARY -->
+      </div>
     </div>
   </div>
 </div>
-</template>
 
 <?php
 $script = <<< JS
@@ -516,16 +510,50 @@ Vue.component("cartItem", {
     </div> 
   </div>`,
 });
+Vue.component("paygateItem", {
+  props: ['id', 'image', 'select'],
+  template: `<label class="btn flex-fill btn-secondary">
+      <input type="radio" name="options" autocomplete="off" @click="e => select(id)">
+      <img class="icon" :src="image"/>
+    </label>`
+})
+
+const paygates = $paygateJson;
+const balance = $balance;
 
 var app = new Vue({
   el: '#cart_items',
   data: {
     price: 10,
-    items: []
+    paygate: null,
+    items: [],
+    currency: 'USD',
   },
   watch: {
-    items(newItems) {
-     console.log('wathc newItems', newItems); 
+  },
+  computed: {
+    availablePaygates() {
+      return paygates.filter(({ currency }) => currency == this.currency);
+    },
+    quantity() {
+      return this.items.reduce((p,c) => p + c.quantity, 0);
+    },
+    subPrice() {
+      return this.price * this.quantity;
+    },
+    transferFee() {
+      if (!this.paygate) return 0;
+      const paygate = this.availablePaygates.find(({ id }) => id === this.paygate);
+      const fee = paygate.transfer_fee;
+      if (fee) {
+          const type = paygate.transfer_fee_type;
+          return type === 'fix' ? fee : fee * this.quantity;
+      } else {
+          return 0;
+      }
+    },
+    totalPrice() {
+      return this.subPrice + this. this.transferFee;
     }
   },
   methods: {
@@ -548,6 +576,9 @@ var app = new Vue({
         }
         return item;
       });
+    },
+    choosePaygate(id) {
+      this.paygate = id;
     },
     uuidv4() {
       return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
