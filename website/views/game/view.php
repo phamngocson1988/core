@@ -99,13 +99,17 @@ $balance = $user->getWalletAmount();
             <div class="col-md-4">
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Version</label>
-                <select class="form-control" id="version"></select>
+                <select class="form-control" v-model="version">
+                  <option v-for="option in versionOptions" :value="option.value">
+                  {{ option.text }}
+                </option>
+                </select>
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Pack</label>
-                <select class="form-control" id="package"></select>
+                <select class="form-control" v-model="package"></select>
               </div>
             </div>
             <div class="col-md-4">
@@ -358,6 +362,9 @@ var mapping = $mapping;
 var has_group = $has_group;
 var settingVersionMapping = $settingVersionMapping;
 var settingPackageMapping = $settingPackageMapping;
+console.log('mapping', mapping);
+console.log('settingVersionMapping', settingVersionMapping);
+console.log('settingPackageMapping', settingPackageMapping);
 
 $(":radio[name=method]").on('change', function() {
   currentMethod = $(this).attr('id');
@@ -530,8 +537,14 @@ var app = new Vue({
     paygate: null,
     items: [],
     currency: 'USD',
+    method,
+    version,
+    package
   },
   watch: {
+    // version() {
+
+    // }
   },
   computed: {
     availablePaygates() {
@@ -556,6 +569,12 @@ var app = new Vue({
     },
     totalPrice() {
       return this.subPrice + this. this.transferFee;
+    }
+    versionOptions() {
+      const versionKeys = Object.keys(mapping[method] || {});
+      return versionKeys.map(key => {
+        return { value: key, text: settingVersionMapping[key] };
+      })
     }
   },
   methods: {
