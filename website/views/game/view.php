@@ -51,23 +51,13 @@ $balance = $user->getWalletAmount();
           </nav>
           <h1 class="text-red mb-0" id="title"><?=$model->title;?></h1>
           <p class="lead" id="package-name"></p>
-          <?php if ($methods) : ?>
           <div class="btn-group-toggle multi-choose row" data-toggle="buttons">
-            <?php foreach ($methods as $method) : ?>
-            <?php 
-            $settingMethodPrice = $method->price;
-            $settingMethodSpeed = $method->speed;
-            $settingMethodSafe = $method->safe;
-            $settingMethodTitle = $method->title;
-            ?>
-            <div class="col-lg-4 col-md-6 col-xs-12 mb-3">
-              <label class="btn btn-secondary w-100 <?=($method->id == $model->method) ? 'active' : '';?>" data-toggle="tooltip" data-placement="top" title="<?=$settingMethodTitle;?>">
-                <input type="radio" name="method" id="<?=$method->id;?>" autocomplete="off" <?=($method->id == $model->method) ? 'checked' : '';?> data-price="<?=$settingMethodPrice;?>" data-speed="<?=$settingMethodSpeed;?>" data-safe="<?=$settingMethodSafe;?>"><?=$settingMethodTitle;?>
+            <div class="col-lg-4 col-md-6 col-xs-12 mb-3" v-for="methodData of methodList">
+              <label class="btn btn-secondary w-100" :class="{ active: method === methodData.id }" data-toggle="tooltip" data-placement="top" :title="methodData.title">
+                <input type="radio" name="method" autocomplete="off" v-model="method" :checked="method === methodData.id"> {{ methodData.title }}
               </label>
             </div>
-            <?php endforeach;?>
           </div>
-          <?php endif;?>
           <div class="price py-3">
             <span class="price-value text-red mr-2" id="price">$<?=number_format($model->getPrice(), 1);?></span>
             <span class="badge badge-danger" id="save"><?=sprintf("save %s", number_format($model->getSavedPrice()));?>%</span>
@@ -101,15 +91,19 @@ $balance = $user->getWalletAmount();
                 <label for="exampleFormControlSelect1">Version</label>
                 <select class="form-control" v-model="version">
                   <option v-for="option in versionOptions" :value="option.value">
-                  {{ option.text }}
-                </option>
+                    {{ option.text }}
+                  </option>
                 </select>
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Pack</label>
-                <select class="form-control" v-model="package"></select>
+                <select class="form-control" v-model="package">
+                  <option v-for="option in packageOptions" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
               </div>
             </div>
             <div class="col-md-4">
@@ -301,6 +295,17 @@ $balance = $user->getWalletAmount();
 </div>
 
 <?php
+$methodArray = [];
+foreach($methods as $method) {
+  $methodTempRow = [];
+  $methodTempRow['id'] = $method->id;
+  $methodTempRow['price'] = $method->price;
+  $methodTempRow['speed'] = $method->speed;
+  $methodTempRow['safe'] = $method->safe;
+  $methodTempRow['title'] = $method->title;
+  $methodArray[$method->id] = $methodTempRow;
+}
+$settingMethodMapping = json_encode($methodArray);
 $script = <<< JS
 // Review Form
 function calculateCart() {
@@ -360,9 +365,11 @@ var currentVersion = '$model->version';
 var currentPackage = "$model->package";
 var mapping = $mapping;
 var has_group = $has_group;
+var settingMethodMapping = $settingMethodMapping;
 var settingVersionMapping = $settingVersionMapping;
 var settingPackageMapping = $settingPackageMapping;
 console.log('mapping', mapping);
+console.log('settingMethodMapping', settingMethodMapping);
 console.log('settingVersionMapping', settingVersionMapping);
 console.log('settingPackageMapping', settingPackageMapping);
 
@@ -533,13 +540,16 @@ const balance = $balance;
 var app = new Vue({
   el: '#cart_items',
   data: {
-    price: 10,
+    price: $model->price,
     paygate: null,
     items: [],
     currency: 'USD',
-    method,
-    version,
-    package
+    methodList: settingMethodMapping,
+    versionList: settingVersionMapping,
+    packageList: settingPackageMapping,
+    method: $model->method,
+    version: $model->version,
+    package: $model->package
   },
   watch: {
     // version() {
@@ -569,11 +579,17 @@ var app = new Vue({
     },
     totalPrice() {
       return this.subPrice + this. this.transferFee;
-    }
+    },
     versionOptions() {
-      const versionKeys = Object.keys(mapping[method] || {});
+      const versionKeys = Object.keys(mapping[this.method] || {});
       return versionKeys.map(key => {
-        return { value: key, text: settingVersionMapping[key] };
+        return { value: key, text: this.versionList[key] };
+      })
+    },
+    packageOptions() {
+      const packageKeys = Object.keys(mapping[this.method][this.version] || {});
+      return packageKeys.map(key => {
+        return { value: key, text: this.packageList[key] };
       })
     }
   },
