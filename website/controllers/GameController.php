@@ -108,6 +108,7 @@ class GameController extends Controller
                 'viewUrl' => Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug], true),
                 'cartUrl' => Url::to(['cart/add', 'id' => $game->id], true),
                 'calculateUrl' => Url::to(['cart/calculate', 'id' => $game->id], true),
+                'checkoutsUrl' => Url::to(['cart/checkouts', 'id' => $game->id], true),
                 'title' => $game->title,
                 'content' => $game->content,
                 'image' => $game->getImageUrl(),

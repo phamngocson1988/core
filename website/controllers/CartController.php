@@ -39,7 +39,7 @@ class CartController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'checkout', 'bulk', 'calculate-bulk', 'thankyou', 'calculate-cart', 'payment-success'],
+                        'actions' => ['index', 'checkout', 'checkouts', 'bulk', 'calculate-bulk', 'thankyou', 'calculate-cart', 'payment-success'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -77,12 +77,13 @@ class CartController extends Controller
     {
         Yii::info('actionCalculate');
         $request = Yii::$app->request;
-        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
-
+        // if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        // if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $model = CartItem::findOne($id);
         $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        $model->quantity = $request->post('quantity');
+        $model->currency = $request->post('currency');
+        if ($model->validate()) {
             $totalPrice = $model->getTotalPrice();
             $subTotalPrice = $model->getSubTotalPrice();
             $promotionDiscount = $model->getPromotionDiscount();
@@ -102,6 +103,7 @@ class CartController extends Controller
             return $this->asJson(['status' => false, 'errors' => $message]);
         }
     }
+
 
     public function actionAdd($id) 
     {
@@ -250,6 +252,33 @@ class CartController extends Controller
         $model = new \website\forms\OrderPaymentBulkForm([
             'id' => $id,
             'items' => $items,
+        ]);
+        if ($model->validate() && $model->purchase()) {
+            $errors = $model->getErrorList();
+            $success = $model->getSuccessList();
+            if (!count($success)) {
+                return $this->asJson(['status' => false, 'errors' => 'Something went wroing']);
+            } elseif (!count($errors)) {
+                return $this->asJson(['status' => true, 'success' => 'Your orders are placed successfully']);
+            } else {
+                return $this->asJson(['status' => true, 'success' => 'Some of orders are placed successfully']);
+            }
+        } else {
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $errors]);
+        }
+    }
+
+    public function actionCheckouts($id)
+    {
+        $request = Yii::$app->request;
+        $items = $request->post('items');
+        $paygate = $request->post('paygate');
+        $model = new \website\forms\OrderPaymentBulkForm([
+            'id' => $id,
+            'items' => $items,
+            'paygate' => $paygate
         ]);
         if ($model->validate() && $model->purchase()) {
             $errors = $model->getErrorList();

@@ -21,14 +21,14 @@ $paygateArray = array_map(function($obj) {
     'currency' => $obj->currency,
     'transfer_fee' => $obj->transfer_fee,
     'transfer_fee_type' => $obj->transfer_fee_type,
-    'image' => $obj->getImageUrl()
+    'image' => $obj->getImageUrl(),
   ];
 }, $paygateObjects);
 $paygateJson = json_encode($paygateArray);
 
 $user = Yii::$app->user->getIdentity();
 $balance = $user->getWalletAmount();
-
+$orderUrl = Url::to(['order/index']);
 ?>
 <div id="cart_items">
   <div class="container my-5 single">
@@ -53,13 +53,14 @@ $balance = $user->getWalletAmount();
           <p class="lead" id="package-name"></p>
           <div class="btn-group-toggle multi-choose row" data-toggle="buttons">
             <div class="col-lg-4 col-md-6 col-xs-12 mb-3" v-for="methodData of methodList">
-              <label class="btn btn-secondary w-100" :class="{ active: method === methodData.id }" data-toggle="tooltip" data-placement="top" :title="methodData.title">
-                <input type="radio" name="method" autocomplete="off" v-model="method" :checked="method === methodData.id"> {{ methodData.title }}
+              <label class="btn btn-secondary w-100" :class="{ active: method == methodData.id }" data-toggle="tooltip" data-placement="top" :title="methodData.title">
+                <input type="radio" name="method" autocomplete="off" v-model="method" :checked="method == methodData.id"> {{ methodData.title }}
               </label>
             </div>
           </div>
           <div class="price py-3">
-            <span class="price-value text-red mr-2" id="price">$<?=number_format($model->getPrice(), 1);?></span>
+            <span class="price-value text-red mr-2" v-if="canSale">${{ price }}</span>
+            <span class="price-value text-red mr-2" v-if="!canSale">Contact</span>
             <span class="badge badge-danger" id="save"><?=sprintf("save %s", number_format($model->getSavedPrice()));?>%</span>
             <?php if (!Yii::$app->user->isGuest) : ?>
             <span class="btn-group-toggle bell" data-toggle="buttons" id="subscribe" data-subscribe="<?=Url::to(['user/subscribe']);?>" data-unsubscribe="<?=Url::to(['user/unsubscribe']);?>">
@@ -71,7 +72,7 @@ $balance = $user->getWalletAmount();
           </div>
           <div class="d-flex align-content-end">
             <div class="w-100 flex-fill">
-              <span class="gems-value" id="game-unit"><?=sprintf("%s %s", number_format($model->getUnit()), strtoupper($model->getUnitName()));?></span>
+              <span class="gems-value">{{ unit }}</span>
             </div>
             <div class="w-100 flex-fill">
               <div class="d-flex bd-highlight">
@@ -84,9 +85,8 @@ $balance = $user->getWalletAmount();
               </div>
             </div>
           </div>
-          <?php $form = ActiveForm::begin(['action' => Url::to(['cart/add', 'id' => $model->id]), 'options' => ['id' => 'add-cart-form', 'data-calculatecart-url' => Url::to(['cart/calculate', 'id' => $model->id])]]);?>
-          <div class="row multi-select p-2">
-            <div class="col-md-4">
+          <div class="row multi-select p-2" v-if="versionOptions.length && packageOptions.length">
+            <div class="col-md-6" v-if="versionOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Version</label>
                 <select class="form-control" v-model="version">
@@ -96,7 +96,7 @@ $balance = $user->getWalletAmount();
                 </select>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6" v-if="packageOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Pack</label>
                 <select class="form-control" v-model="package">
@@ -106,68 +106,27 @@ $balance = $user->getWalletAmount();
                 </select>
               </div>
             </div>
-            <div class="col-md-4">
-              <?= $form->field($model, 'currency', [
-                'inputOptions' => ['v-model' => 'currency']
-              ])->dropdownList($model->fetchCurrency())->label('Currency') ?>
-            </div>
           </div>
-          <div class="multi-button d-flex justify-content-between align-items-center">
-            <div class="w-100 flex-fill p-2">
-              <?= $form->field($model, 'quantity', [
-                'options' => ['class' => 'd-flex justify-content-between align-items-center'],
-                'labelOptions' => ['class' => 'w-100 flex-fill', 'tag' => 'div'],
-                'template' => '{label}<div class="w-100 flex-fill single-order"><div class="add-quantity d-flex justify-content-between align-items-center">
-                    <span class="flex-fill minus">
-                      <img class="icon-sm" src="/images/icon/minus.svg"/>
-                    </span>{input}<span class="flex-fill plus">
-                    <img class="icon-sm" src="/images/icon/plus.svg"/>
-                  </span>
-                </div></div>',
-                'inputOptions' => ['class' => 'quantity-value', 'id' => 'quantity']
-              ])->textInput()->label('Quantity') ?>
-            </div>
-            <?php if (!$model->isSoldout()) :?>
-            <div class="w-100 flex-fill p-2">
-              <?php if (Yii::$app->user->isGuest) : ?>
-              <a href="#modalLogin" class="btn btn-buy" id='btn-buy' data-toggle="modal">Buy now</a>
-              <?php else :?>
-              <button type="submit" class="btn btn-buy" id='btn-buy'>Buy now</button>
-              <?php endif;?>
-            </div>
-            <?php if ($is_reseller) : ?>
-            <div class="w-100 flex-fill p-2">
-              <?php if (Yii::$app->user->isGuest) : ?>
-              <a href="#modalLogin" class="btn btn-quickbuy" data-toggle="modal"><img class="icon-sm" src="/images/icon/timer.svg" />Buy now</a>
-              <?php else :?>
-              <a href="<?=Url::to(['game/quick', 'id' => $model->id, 'slug' => $model->slug]);?>" id='btn-quickbuy' class="btn btn-quickbuy"><img class="icon-sm" src="/images/icon/timer.svg" /> Quick
-                Buy</a>
-              <?php endif;?>
-            </div>
-            <?php endif;?>
-            <?php endif;?>
-          </div>
-          <?php ActiveForm::end(); ?>
           <hr />
           <div class="multi-rating d-flex justify-content-between align-items-center">
             <div class="p-2 flex-fill bd-highlight">
               <!-- Rating Stars Box -->
               <div class='rating-stars text-center'>
                 Price
-                <ul id='star-price'>
-                  <li class='star' title='Poor'>
+                <ul id='star-speed'>
+                  <li class='star' title='Poor' data-value='1'>
                     <span class="icon-star"></span>
                   </li>
-                  <li class='star' title='Fair'>
+                  <li class='star' title='Fair' data-value='2'>
                     <span class="icon-star"></span>
                   </li>
-                  <li class='star' title='Good'>
+                  <li class='star' title='Good' data-value='3'>
                     <span class="icon-star"></span>
                   </li>
-                  <li class='star' title='Excellent'>
+                  <li class='star' title='Excellent' data-value='4'>
                     <span class="icon-star"></span>
                   </li>
-                  <li class='star' title='WOW!!!'>
+                  <li class='star' title='WOW!!!' data-value='5'>
                     <span class="icon-star"></span>
                   </li>
                 </ul>
@@ -200,7 +159,7 @@ $balance = $user->getWalletAmount();
               <!-- Rating Stars Box -->
               <div class='rating-stars text-center'>
                 Safe
-                <ul id='star-safe'>
+                <ul id='star-speed'>
                   <li class='star' title='Poor' data-value='1'>
                     <span class="icon-star"></span>
                   </li>
@@ -221,7 +180,7 @@ $balance = $user->getWalletAmount();
             </div>
           </div>
           <hr />
-          <div style="display:flex; justify-content: space-between;">
+          <div style="display:flex; justify-content: space-between;" v-show="canSale">
             <p class="lead mb-2"></p>
             <div>
               <a href="#" class="btn btn-primary" role="button" aria-pressed="true">
@@ -239,12 +198,13 @@ $balance = $user->getWalletAmount();
     
   </div><!-- END MAIN SINGLE -->
 
-  <div class="container my-5 single-order">
+  <div class="container my-5 single-order" v-show="canSale">
     <template v-for="item in items">
-      <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity"/>
+      <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity" :update-raw="updateRaw"/>
     </template>
   </div>
-  <div class="container my-5 single-order">
+
+  <div class="container my-5 single-order" v-show="canSale">
     <div class="row">
       <div class="col-md-5 info">
         <p class="lead mb-2">Payment method</p>
@@ -253,8 +213,11 @@ $balance = $user->getWalletAmount();
           <template v-for="paygate in availablePaygates">
             <paygate-item
             :id="paygate.id"
+            :identifier="paygate.identifier"
             :image="paygate.image"
             :on-select="choosePaygate"
+            :total-price="totalPrice"
+            :balance="balance"
             />
           </template>
         </div>
@@ -264,11 +227,18 @@ $balance = $user->getWalletAmount();
         <div class="card card-summary">
           <h5 class="card-header text-uppercase">Card summary</h5>
           <div class="card-body">
-            <p class="card-text text-red font-weight-bold">Game: State of Survival - Discard (Pack Offer)</p>
-            <p class="text-green card-text font-weight-bold">600 GEMS</p>
-            <p class="card-text">Version Global</p>
+            <p class="card-text text-red font-weight-bold">{{ game && game.title }}</p>
+            <p class="text-green card-text font-weight-bold">{{ unit }} x {{ quantity }}</p>
             <h5 class="card-title">Price Details</h5>
             <hr />
+            <div class="d-flex">
+              <div class="flex-fill w-100">Total Order</div>
+              <div class="flex-fill w-100 text-right">{{ totalOrder }}</div>
+            </div>
+            <div class="d-flex">
+              <div class="flex-fill w-100">Total Pack</div>
+              <div class="flex-fill w-100 text-right">{{ quantity }}</div>
+            </div>
             <div class="d-flex">
               <div class="flex-fill w-100">Price</div>
               <div class="flex-fill w-100 text-right">${{ subPrice }}</div>
@@ -280,12 +250,20 @@ $balance = $user->getWalletAmount();
             <hr />
             <div class="d-flex mb-3">
               <div class="flex-fill text-red font-weight-bold w-100">Total</div>
-              <div class="flex-fill text-red font-weight-bold w-100 text-right">$43.0</div>
+              <div class="flex-fill text-red font-weight-bold w-100 text-right">${{ totalPrice }}</div>
             </div>
-            <div class="d-flex mb-3">
-              <div class="flex-fill text-red font-weight-bold w-100 text-right">(other currency)</div>
+
+            <div class="mb-3">
+              <div class="custom-control custom-checkbox" >
+                <input type="checkbox" class="custom-control-input" :checked="policy1">
+                <label class="custom-control-label" @click="togglePolicy('policy1')">I’ve read & agreed with <a class="text-red" href="javascript:;" data-toggle="modal" data-target="#disclaimer_policies">Disclaimer policies</a> of service</label>
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" :checked="policy2">
+                <label class="custom-control-label" @click="togglePolicy('policy2')">By making this purchase, I’m confirming that I totally under-stand <a class="text-red" href="javascript:;" data-toggle="modal" data-target="#noRefundModal">no refund policy</a></label>
+              </div>
             </div>
-            <a href="#" class="btn btn-block btn-payment text-uppercase">Payment</a>
+            <a href="#" class="btn btn-block btn-payment text-uppercase" @click="checkOut()">Check out</a>
           </div>
         </div>
         <!-- END SUMMARY -->
@@ -293,6 +271,48 @@ $balance = $user->getWalletAmount();
     </div>
   </div>
 </div>
+
+<?php 
+$noRefundContent = Yii::$app->settings->get('TermsConditionForm', 'no_refund');
+$disclaimerPolicies = Yii::$app->settings->get('TermsConditionForm', 'disclaimer_policies');
+?>
+<div class="modal fade" id="noRefundModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">No Refund Policy</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?=$noRefundContent;?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="disclaimer_policies" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Disclaimer policies</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?=$disclaimerPolicies;?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <?php
 $methodArray = [];
@@ -306,165 +326,27 @@ foreach($methods as $method) {
   $methodArray[$method->id] = $methodTempRow;
 }
 $settingMethodMapping = json_encode($methodArray);
+$calculateUrl = Url::to(['cart/calculate', 'id' => $model->id], true);
+$checkoutsUrl = Url::to(['cart/checkouts', 'id' => $model->id], true);
 $script = <<< JS
-// Review Form
-function calculateCart() {
-  var form = $('form#add-cart-form');
-  var calculateUrl = form.attr('data-calculatecart-url');
-  $.ajax({
-      url: calculateUrl,
-      type: 'POST',
-      dataType : 'json',
-      data: form.serialize(),
-      success: function (result, textStatus, jqXHR) {
-        if (result.status == false) {
-            toastr.error(errors);
-        } else {
-            var canSale = parseInt(result.data.amount);
-            if (canSale) {
-              $('#price').html('$' + result.data.amount);
-              $('#btn-buy').show();
-              $('#btn-quickbuy').show();
-            } else {
-              $('#price').html('Contact');
-              $('#btn-buy').hide();
-              $('#btn-quickbuy').hide();
-            }
-            $('#game-unit').html(result.data.unit);
-        }
-      },
-  });
-}
-$('#quantity').on('change', function() {  
-  standarizeQuantity();
-  calculateCart();
-});
-
-function standarizeQuantity() {
-  if (!validateQuantity()) {
-    $('#quantity').val(1);
-  }
-}
-
-function validateQuantity() {
-    var num = $("#quantity").val();
-    num = parseFloat(num);
-    $('#quantity').val(num);
-    if (num <= 0) {
-        return false;
-    }
-    if (isNaN(num)) {
-        return false;
-    }
-    return true;
-}
 
 // React view on attributes
 var currentMethod = '$model->method';
 var currentVersion = '$model->version';
 var currentPackage = "$model->package";
+var currentTitle = "$model->title";
 var mapping = $mapping;
 var has_group = $has_group;
 var settingMethodMapping = $settingMethodMapping;
 var settingVersionMapping = $settingVersionMapping;
 var settingPackageMapping = $settingPackageMapping;
+var orderUrl = '$orderUrl';
+var calculateUrl = '$calculateUrl';
+var checkoutsUrl = '$checkoutsUrl';
 console.log('mapping', mapping);
 console.log('settingMethodMapping', settingMethodMapping);
 console.log('settingVersionMapping', settingVersionMapping);
 console.log('settingPackageMapping', settingPackageMapping);
-
-$(":radio[name=method]").on('change', function() {
-  currentMethod = $(this).attr('id');
-  var method = mapping[currentMethod];
-  currentVersion = Object.keys(method)[0];
-  var version = Object.values(method)[0];
-  currentPackage = Object.keys(version)[0];
-  changeView();
-  changeStar();
-});
-$("#version").on('change', function() {
-  currentVersion = $(this).val();
-  var method = mapping[currentMethod];
-  var version = method[currentVersion];
-  currentPackage = Object.keys(version)[0];
-  changeView();
-});
-$("#package").on('change', function() {
-  currentPackage = $(this).val();
-  $('#package-name').html(settingPackageMapping[currentPackage]);
-  changeView();
-});
-changeStar();
-
-function changeView() {
-  if (!has_group) return;
-  var method = mapping[currentMethod];
-  console.log('method', method, mapping);
-  var versions = Object.keys(method).reduce((p, c) => {
-    p[c] = settingVersionMapping[c];
-    return p;
-  }, {});
-  var version = method[currentVersion];
-  console.log('version', version);
-  var packages = Object.keys(version).reduce((p, c) => {
-    p[c] = settingPackageMapping[c];
-    return p;
-  }, {});
-  var game = version[currentPackage];
-  console.log('game', game);
-  $('#version').html(buildOptions(versions, currentVersion));
-  $('#package').html(buildOptions(packages, currentPackage));
-  var viewUrl = game['viewUrl'];
-  var cartUrl = game['cartUrl'];
-  var calculateUrl = game['calculateUrl'];
-  var save = game['save'];
-  var title = game['title'];
-  var content = game['content'];
-  var image = game['image'];
-  history.pushState({}, '', viewUrl);
-  $('#add-cart-form').attr('action', cartUrl);
-  $('#add-cart-form').attr('data-calculatecart-url', calculateUrl);
-  $('#title').html(title);
-  $('#image').attr('src', image);
-  $('.breadcrumb-item:last').html(title);
-  $('#content').html('<h4 class="card-title">Description</h4>' + content);
-  $('#save').html(save);
-  $('#quantity').val(1).trigger('change');
-};
-function changeStar() {
-  if (!has_group) return;
-  console.log('changeStar', currentMethod);
-  var method = $('#' + currentMethod);
-  console.log('changeStar', method);
-  var price = method.data('price');
-  var speed = method.data('speed');
-  var safe = method.data('safe');
-  console.log('method', price, speed, safe);
-
-  $('#star-price li, #star-speed li, #star-safe li').removeClass('selected');
-  $('#star-price li').filter(function( index ) {
-    return index + 1 <= price;
-  }).addClass('selected');
-
-  $('#star-speed li').filter(function( index ) {
-    return index + 1 <= speed;
-  }).addClass('selected');
-
-  $('#star-safe li').filter(function( index ) {
-    return index + 1 <= safe;
-  }).addClass('selected');
-}
-function buildOptions(obj, sel) {
-  console.log('buildOptions', obj);
-  html = '';
-  for (var index in obj) {
-    var item = obj[index];
-    var selected = sel == index ? 'selected' : '';
-    html += '<option value="'+index+'" '+selected+'>'+item+'</option>';
-  };
-  return html;
-}
-changeView();
 
 // subscribe
 $('#subscribe').on('click', function() {
@@ -487,17 +369,41 @@ $this->registerJs($script);
 ?>
 
 <?php
+$csrfTokenName = Yii::$app->request->csrfParam;
+$csrfToken = Yii::$app->request->csrfToken;
 $script = <<< JS
 Vue.component("cartItem", {
-  props: ["id", "quantity", "addItem", "deleteItem", "updateQuantity"],
+  props: ["id", "quantity", "addItem", "deleteItem", "updateQuantity", "updateRaw"],
   data() {
     return {
+      value: this.quantity,
       raw: ''
     }
   },
   methods: {
     minusQuantity() {
-      this.updateQuantity(this.id,  Math.max(1, this.quantity - 1));
+      this.changeQuantity(this.value - 1);
+    },
+    plusQuantity() {
+      this.changeQuantity(this.value + 1);
+    },
+    validateQuantity(num) {
+      if (num <= 0) {
+        return false;
+      }
+      if (isNaN(num)) {
+        return false;
+      }
+      return true;
+    },
+    changeQuantity(value) {
+      value = parseFloat(value);
+      if (this.validateQuantity(value)) {
+        this.updateQuantity(this.id, value);
+        this.value = value;
+      } else {
+        this.value = this.quantity;
+      }
     }
   },
   template: `<div class="d-flex align-items-centert bg-white">
@@ -509,12 +415,12 @@ Vue.component("cartItem", {
           <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
           <div class="add-quantity d-flex justify-content-between align-items-center">
             <span class="flex-fill minus" @click="minusQuantity()"><img class="icon-sm" src="/images/icon/minus.svg"></span>
-            <input type="text" class="quantity-value flex-fill text-center" :value="quantity" @blur="event => updateQuantity(id, event.target.value)">
-            <span class="flex-fill plus" @click="updateQuantity(id, quantity + 1)"><img class="icon-sm" src="/images/icon/plus.svg"></span>
+            <input type="text" class="quantity-value flex-fill text-center" v-model="value" @blur="event => changeQuantity(event.target.value)">
+            <span class="flex-fill plus" @click="plusQuantity()"><img class="icon-sm" src="/images/icon/plus.svg"></span>
           </div>
         </div>
         <div class="flex-fill w-100 field-cartitem-raw">
-          <textarea class="form-control raw" :model="raw" rows="3" placeholder="Enter infomation here ...">{{ id }}</textarea>
+          <textarea class="form-control raw" v-model="raw" @blur="updateRaw(id, raw)" rows="3" placeholder="Enter infomation here ...">{{ id }}</textarea>
         </div>
       </div>
       <div class="text-right">
@@ -527,12 +433,57 @@ Vue.component("cartItem", {
   </div>`,
 });
 Vue.component("paygateItem", {
-  props: ['id', 'image', 'onSelect'],
-  template: `<label class="btn flex-fill btn-secondary" @click="onSelect(id)">
-      <input type="radio" name="paygates" autocomplete="off">
-      <img class="icon" :src="image"/>
+  props: ['id', 'image', 'onSelect', 'identifier', "totalPrice", "balance"],
+  methods: {
+    selectPaygate(id) {
+      if (!this.disabled) {
+        this.onSelect(id);
+      } else {
+        this.onSelect(null);
+      }
+    }
+  },
+  computed: {
+    disabled() {
+      if (this.identifier === 'kinggems') {
+        return this.totalPrice > this.balance;
+      }
+      return false;
+    }
+  },
+  template: `<label class="btn flex-fill btn-secondary" @click="selectPaygate(id)" :class="{disabled: disabled}" >
+      <input type="radio" name="paygates" autocomplete="off" :disabled="disabled">
+      <img v-if="identifier !== 'kinggems'" class="icon" :src="image"/>
+      <template v-else>
+      <div>Balance</div>
+      <div class="lead text-red font-weight-bold">{{image}}</div>
+      </template>
     </label>`
-})
+});
+Vue.component("starItem", {
+  props: ['title', 'selectStar'],
+  data() {
+    return {
+      list: [
+        { title: 'Poor' },
+        { title: 'Fair' },
+        { title: 'Good' },
+        { title: 'Excellent' },
+        { title: 'WOW!!!' }
+      ]
+    }
+  },
+  template: `<div class="p-2 flex-fill bd-highlight">
+              <div class='rating-stars text-center'>
+                {{ title }}
+                <ul id='star-safe'>
+                  <li v-for="(item, index) in list" :class='{star: true, selected: index < selectStar}' :title='item.title' :data-value='index + 1' :key="index" >
+                    <span class="icon-star"></span>
+                  </li>
+                </ul>
+              </div>
+            </div>`
+});
 
 const paygates = $paygateJson;
 const balance = $balance;
@@ -540,28 +491,48 @@ const balance = $balance;
 var app = new Vue({
   el: '#cart_items',
   data: {
-    price: $model->price,
+    price: 0,
+    unit: 0,
     paygate: null,
     items: [],
     currency: 'USD',
     methodList: settingMethodMapping,
     versionList: settingVersionMapping,
     packageList: settingPackageMapping,
-    method: $model->method,
-    version: $model->version,
-    package: $model->package
+    method: currentMethod,
+    version: currentVersion,
+    package: currentPackage,
+    game: {
+      title: currentTitle,
+      calculateUrl: calculateUrl,
+      checkoutsUrl: checkoutsUrl,
+    },
+    canSale: false,
+    policy1: false,
+    policy2: false,
+    balance: balance
   },
   watch: {
-    // version() {
-
-    // }
+    package() {
+      this.getGameInfor();
+    }
   },
   computed: {
     availablePaygates() {
-      return paygates.filter(({ currency }) => currency == this.currency);
+      return [{
+        identifier: 'kinggems',
+        currency: 'USD',
+        id: 'kinggems',
+        image: balance + ' Kcoin',
+        transfer_fee: 0,
+        transfer_fee_type: 'fix',
+      }, ...paygates];
     },
     quantity() {
-      return this.items.reduce((p,c) => p + c.quantity, 0);
+      return this.items.reduce((p,c) => p + parseFloat(c.quantity), 0);
+    },
+    totalOrder() {
+      return this.items.length;
     },
     subPrice() {
       return this.price * this.quantity;
@@ -572,25 +543,48 @@ var app = new Vue({
       const fee = paygate.transfer_fee;
       if (fee) {
           const type = paygate.transfer_fee_type;
-          return type === 'fix' ? fee : fee * this.quantity;
+          return type === 'fix' ? fee * this.totalOrder : fee * this.quantity;
       } else {
           return 0;
       }
     },
     totalPrice() {
-      return this.subPrice + this. this.transferFee;
+      return this.subPrice + this.transferFee;
     },
     versionOptions() {
+      if (!mapping.length) return [];
       const versionKeys = Object.keys(mapping[this.method] || {});
       return versionKeys.map(key => {
         return { value: key, text: this.versionList[key] };
       })
     },
     packageOptions() {
+      if (!mapping.length) return [];
       const packageKeys = Object.keys(mapping[this.method][this.version] || {});
       return packageKeys.map(key => {
         return { value: key, text: this.packageList[key] };
       })
+    },
+    methodPrice() {
+      try {
+        return this.methodList[this.method].price;
+      } catch (e) {
+        return 0;
+      }
+    },
+    methodSpeed() {
+      try {
+        return this.methodList[this.method].speed;
+      } catch (e) {
+        return 0;
+      }
+    },
+    methodSafe() {
+      try {
+        return this.methodList[this.method].safe;
+      } catch (e) {
+        return 0;
+      }
     }
   },
   methods: {
@@ -614,20 +608,106 @@ var app = new Vue({
         return item;
       });
     },
+    updateRaw(id, raw) {
+      this.items = this.items.map(item => {
+        if (item.id === id) {
+          item.raw = raw;
+        }
+        return item;
+      });
+    },
     choosePaygate(id) {
-      console.log('choosePaygate', id);
       this.paygate = id;
     },
     uuidv4() {
       return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
       );
+    },
+    getGameInfor() {
+      if (!this.game) return;
+      
+      axios.post(this.game.calculateUrl, {
+        'currency': this.currency,
+        'quantity': this.quantity,
+        '$csrfTokenName': '$csrfToken' 
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(( { data: result }) => {
+        const { status = false, data } = result || {};
+        console.log('data', data);
+        this.canSale = parseInt(result.data.amount);
+        this.unit = data.unit;
+        this.price = data.amount;
+      });
+    },
+    togglePolicy(policy) {
+      this[policy] = !this[policy];
+    },
+    validate() {
+      if (!this.policy1 || !this.policy2) {
+        alert('Please agree with our policy');
+        return false;
+      }
+      if (!this.paygate) {
+        alert('Please choose paygate');
+        return false;
+      }
+      if (!this.quantity) {
+        alert('Not valid to make purchase');
+        return false;
+      }
+      if (!this.game) {
+        alert('Game information is not valid');
+        return false;
+      }
+      if (!this.totalOrder) {
+        alert('Please add your order');
+        return false;
+      }
+      if (this.items.some((item) => {
+        return !item.quantity || !item.raw.trim()
+      })) {
+        alert('One of item is not valid');
+        return false;
+      }
+      return true;
+    },
+    checkOut() {
+      if (!this.validate()) return false;
+      const paygate = this.availablePaygates.find(( { id }) => id === this.paygate);
+
+      axios.post(this.game.checkoutsUrl, {
+        'paygate': paygate.identifier,
+        'items': this.items,
+        '$csrfTokenName': '$csrfToken' 
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((result) => {
+        const { data } = result;
+        const { status, success, errors } = data;
+        if (status === true) {
+          alert(success);
+          window.location.href = orderUrl;
+        } else {
+          alert(errors);
+        }
+      });
     }
   },
   created() {
+    // init game
+    if (!this.game) {
+      this.game = mapping[this.method][this.version][this.package];
+    }
     if (!this.items.length) {
       this.addItem();
     }
+    this.getGameInfor();    
   }
 });
 JS;
