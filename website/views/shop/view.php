@@ -27,8 +27,9 @@ $paygateArray = array_map(function($obj) {
 $paygateJson = json_encode($paygateArray);
 
 $user = Yii::$app->user->getIdentity();
-$balance = $user->getWalletAmount();
+$balance = $user ? $user->getWalletAmount() : 0;
 $orderUrl = Url::to(['order/index']);
+$isGuest = Yii::$app->user->isGuest;
 ?>
 <div id="cart_items">
   <div class="container my-5 single">
@@ -112,7 +113,7 @@ $orderUrl = Url::to(['order/index']);
             <star-item v-for="item in starList" :title="item.title" :select-star="item.selectStar" v-bind:key="item.title"/>
           </div>
           <hr />
-          <div style="display:flex; justify-content: space-between;" v-show="canSale">
+          <div style="display:flex; justify-content: space-between;" v-show="canSale && isUserLogin">
             <p class="lead mb-2"></p>
             <div>
               <a href="#" class="btn btn-primary" role="button" aria-pressed="true">
@@ -130,13 +131,13 @@ $orderUrl = Url::to(['order/index']);
     
   </div><!-- END MAIN SINGLE -->
 
-  <div class="container my-5 single-order" v-show="canSale">
+  <div class="container my-5 single-order" v-show="canSale && isUserLogin">
     <template v-for="item in items">
       <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity" :update-raw="updateRaw"/>
     </template>
   </div>
 
-  <div class="container my-5 single-order" v-show="canSale">
+  <div class="container my-5 single-order" v-show="canSale && isUserLogin">
     <div class="row">
       <div class="col-md-5 info">
         <p class="lead mb-2">Payment method</p>
@@ -420,7 +421,7 @@ Vue.component("starItem", {
 
 const paygates = $paygateJson;
 const balance = $balance;
-
+const isUserLogin = !$isGuest;
 var app = new Vue({
   el: '#cart_items',
   data: {
@@ -429,6 +430,7 @@ var app = new Vue({
     paygate: null,
     items: [],
     currency: 'USD',
+    isUserLogin: isUserLogin,
     methodList: settingMethodMapping,
     versionList: settingVersionMapping,
     packageList: settingPackageMapping,
