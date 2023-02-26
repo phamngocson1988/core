@@ -29,7 +29,7 @@ $paygateJson = json_encode($paygateArray);
 $user = Yii::$app->user->getIdentity();
 $balance = $user ? $user->getWalletAmount() : 0;
 $orderUrl = Url::to(['order/index']);
-$isGuest = Yii::$app->user->isGuest;
+$isGuest = Yii::$app->user->isGuest ? 1 : 0;
 ?>
 <div id="cart_items">
   <div class="container my-5 single">
