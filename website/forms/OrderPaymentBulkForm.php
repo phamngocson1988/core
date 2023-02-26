@@ -11,6 +11,7 @@ class OrderPaymentBulkForm extends Model
 {
     public $id;
     public $items = [];
+    public $paygate = 'kinggems';
 
     protected $_cartItem;
     protected $successList = [];
@@ -74,7 +75,7 @@ class OrderPaymentBulkForm extends Model
             $cart->add($cartItem);
             $checkoutForm = new \website\forms\OrderPaymentForm([
                 'cart' => $cart, 
-                'paygate' => 'kinggems'
+                'paygate' => $this->paygate
             ]);
             if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
                 $this->successList[] = $index;
