@@ -35,7 +35,7 @@ class CartController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['calculate', 'add', 'payment-coin-base-callback', 'payment-coin-paid-callback', 'payment-webmoney-callback', 'payment-binance-callback'],
+                        'actions' => ['calculate', 'calculates', 'add', 'payment-coin-base-callback', 'payment-coin-paid-callback', 'payment-webmoney-callback', 'payment-binance-callback'],
                         'allow' => true,
                     ],
                     [
@@ -77,13 +77,11 @@ class CartController extends Controller
     {
         Yii::info('actionCalculate');
         $request = Yii::$app->request;
-        // if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
-        // if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $model = CartItem::findOne($id);
         $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
-        $model->quantity = $request->post('quantity');
-        $model->currency = $request->post('currency');
-        if ($model->validate()) {
+        if ($model->load($request->post()) && $model->validate()) {
             $totalPrice = $model->getTotalPrice();
             $subTotalPrice = $model->getSubTotalPrice();
             $promotionDiscount = $model->getPromotionDiscount();
@@ -267,6 +265,38 @@ class CartController extends Controller
             $errors = $model->getErrorSummary(true);
             $error = reset($errors);
             return $this->asJson(['status' => false, 'errors' => $errors]);
+        }
+    }
+
+    // New method to serve axios request
+    public function actionCalculates($id) 
+    {
+        Yii::info('actionCalculate');
+        $request = Yii::$app->request;
+        // if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
+        // if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
+        $model = CartItem::findOne($id);
+        $model->setScenario(CartItem::SCENARIO_CALCULATE_CART);
+        $model->quantity = $request->post('quantity');
+        $model->currency = $request->post('currency');
+        if ($model->validate()) {
+            $totalPrice = $model->getTotalPrice();
+            $subTotalPrice = $model->getSubTotalPrice();
+            $promotionDiscount = $model->getPromotionDiscount();
+            $unit = $model->getTotalUnit();
+            $unitName = $model->getUnitName();
+            $origin = $model->getTotalOriginalPrice();
+            return $this->asJson(['status' => true, 'data' => [
+                'sub-price' => StringHelper::numberFormat($subTotalPrice, 2),
+                'promotion-discount' => StringHelper::numberFormat($promotionDiscount, 2),
+                'amount' => StringHelper::numberFormat($totalPrice, 2),
+                'origin' => StringHelper::numberFormat($origin, 2),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
+            ]]);
+        } else {
+            $message = $model->getErrorSummary(true);
+            $message = reset($message);
+            return $this->asJson(['status' => false, 'errors' => $message]);
         }
     }
 
