@@ -183,7 +183,9 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
 </div>
 <?php
 $script = <<< JS
-$('#myTable').DataTable();
+$('#myTable').DataTable({
+  order: [],
+});
 
   // comment
 $(document).on('submit', 'body #add-comment-form', function(e) {
