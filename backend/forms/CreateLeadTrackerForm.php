@@ -23,7 +23,7 @@ class CreateLeadTrackerForm extends Model
     public $email;
     public $channels = [];
     public $contacts = [];
-    public $game_id;
+    public $game_id = [];
     public $questions = [];
 
     protected $_questions;
@@ -101,7 +101,7 @@ class CreateLeadTrackerForm extends Model
         $leadTracker->email = $this->email;
         $leadTracker->channels = implode(',', (array)$this->channels);
         $leadTracker->contacts = implode(',', (array)$this->contacts);
-        $leadTracker->game_id = $this->game_id;
+        $leadTracker->game_id = implode(',', (array)$this->game_id);
         $leadTracker->lead_questions = implode(',', $this->questions);
         $leadTracker->is_potential = $this->calculateIsPotential();
         $leadTracker->point_potential = $this->calculatePointPotential();
