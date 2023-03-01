@@ -136,8 +136,8 @@ class EditCustomerTrackerForm extends Model
 
         $salerTeamIds = array_merge($member, $manager, $admin);
         $salerTeamIds = array_unique($salerTeamIds);
-        $salerTeamObjects = User::find()->where(['id' => $salerTeamIds])->select(['id', 'email'])->all();
-        $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'email');
+        $salerTeamObjects = User::find()->where(['id' => $salerTeamIds])->select(['id', 'name'])->all();
+        $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'name');
         return $salerTeam;
     }
 

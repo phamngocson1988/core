@@ -52,6 +52,7 @@ class FetchLeadTrackerForm extends Model
         if (count($condition)) {
             $command->andWhere($condition);
         }
+        $command->orderBy("created_at desc");
         $this->_command = $command;
     }
 
