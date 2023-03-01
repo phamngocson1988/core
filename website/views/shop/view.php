@@ -344,7 +344,7 @@ Vue.component("cartItem", {
       <hr/>
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <div class="flex-fill mr-0 mb-0 w-100">
-          <h3>Account Info : </h3>
+          <h3>Account Info</h3>
           <p style="color: #CCC;font-style: italic;font-size: 0.9rem;">Kindly provide correct information to avoid long waiting time. Thank you</p>
           <div class="add-quantity d-flex justify-content-between align-items-center">
             <span class="flex-fill minus" @click="minusQuantity()"><img class="icon-sm" src="/images/icon/minus.svg"></span>
