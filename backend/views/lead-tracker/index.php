@@ -185,6 +185,7 @@ $this->registerJsFile('@web/vendor/assets/global/plugins/datatables/plugins/boot
 $script = <<< JS
 $('#myTable').DataTable({
   order: [],
+  scrollY: 500
 });
 
   // comment

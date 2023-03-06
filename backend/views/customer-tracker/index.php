@@ -130,10 +130,6 @@ $surveyAnswers = ArrayHelper::index($surveyAnswers, null, 'lead_tracker_id');
               <th colspan="2" class="center" data-toggle="popover" data-placement="top" data-content="1st/2nd/3rd >= 105">Potential Customer</th>
               <th colspan="2" class="center" data-toggle="popover" data-placement="top" data-content="1st/2nd/3rd >= 150 AND %Result/ KPI >= 70%">Key Customer</th>
               <th rowspan="3" class="center">Tác vụ</th>
-              <th colspan="9" class="center">Normal Customer</th>
-              <th colspan="4" class="center">Potential Customer</th>
-              <th colspan="6" class="center">Loyalty Customer</th>
-              <th colspan="8" class="center">Dangerous Customer</th>
             </tr>
             <tr>
               <th></th>
@@ -146,10 +142,6 @@ $surveyAnswers = ArrayHelper::index($surveyAnswers, null, 'lead_tracker_id');
               <th rowspan="2" class="center">1st date</th>
               <th rowspan="2" class="center">Evaluation</th>
               <th rowspan="2" class="center">1st date</th>              								
-              <th colspan="9" class="center">Tạo lập mối quan hệ</th>
-              <th colspan="4" class="center">Tìm hiểu chuyên sâu đối tác</th>
-              <th colspan="6" class="center">Đánh giá của KH về Kinggems, lí do KH gắn bó</th>
-              <th colspan="8" class="center">Điều gì khiến KH không hài lòng tại KingGems</th>
             </tr>
             <tr>
               <th>Status</th>
@@ -173,18 +165,6 @@ $surveyAnswers = ArrayHelper::index($surveyAnswers, null, 'lead_tracker_id');
               <th>Product Growth</th>
               <th>% Result/ KPI (last month)</th>
               <th>% Result/ KPI (this month)</th>
-              <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_NORMAL) as $survey) :?>
-              <th colspan="<?=$survey->getTotalQuestion();?>"><?=$survey->content;?></th>
-              <?php endforeach ;?>
-              <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_POTENTIAL) as $survey) :?>
-              <th colspan="<?=$survey->getTotalQuestion();?>"><?=$survey->content;?></th>
-              <?php endforeach ;?>
-              <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_LOYALTY) as $survey) :?>
-              <th colspan="<?=$survey->getTotalQuestion();?>"><?=$survey->content;?></th>
-              <?php endforeach ;?>
-              <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_DANGEROUS) as $survey) :?>
-              <th colspan="<?=$survey->getTotalQuestion();?>"><?=$survey->content;?></th>
-              <?php endforeach ;?>
             </tr>
           </thead>
           <tbody>
@@ -258,43 +238,6 @@ $surveyAnswers = ArrayHelper::index($surveyAnswers, null, 'lead_tracker_id');
                   <a href="<?=Url::to(['customer-tracker/calculate', 'id' => $model->id]);?>" class="btn btn-sm blue btn-outline filter-submit margin-bottom ajax-link">Calculate</a>
                   <a href="<?=Url::to(['customer-tracker/delete', 'id' => $model->id]);?>" class="btn btn-sm red btn-outline delete margin-bottom">Delete</a>
                 </td>
-                <?php 
-                $surveyAnswersByTracker = ArrayHelper::getValue($surveyAnswers, $model->id, []);
-                $surveyAnswersByQuestion = ArrayHelper::map($surveyAnswersByTracker, 'question_id', 'value');
-                ?>
-                <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_NORMAL) as $survey) :?>
-                  <?php $isShowQuestion = count($survey->questions) >= 2;?>
-                  <?php foreach ($survey->questions as $question) :?>
-                  <td>
-                    <?=$isShowQuestion ? $question->question . ": " : '';?>
-                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
-                  </td>
-                  <?php endforeach;?>
-                <?php endforeach ;?>
-                <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_POTENTIAL) as $survey) :?>
-                  <?php foreach ($survey->questions as $question) :?>
-                  <td>
-                    <?=$isShowQuestion ? $question->question . ": " : '';?>
-                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
-                  </td>
-                  <?php endforeach;?>
-                <?php endforeach ;?>
-                <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_LOYALTY) as $survey) :?>
-                  <?php foreach ($survey->questions as $question) :?>
-                  <td>
-                    <?=$isShowQuestion ? $question->question . ": " : '';?>
-                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
-                  </td>
-                  <?php endforeach;?>
-                <?php endforeach ;?>
-                <?php foreach ($search->fetchSurveys(LeadTrackerSurvey::CUSTOMER_TYPE_DANGEROUS) as $survey) :?>
-                  <?php foreach ($survey->questions as $question) :?>
-                  <td>
-                    <?=$isShowQuestion ? $question->question . ": " : '';?>
-                    <?=ArrayHelper::getValue($surveyAnswersByQuestion, $question->id, '-');?>
-                  </td>
-                  <?php endforeach;?>
-                <?php endforeach ;?>
               </tr>
               <?php endforeach;?>
           </tbody>
@@ -308,6 +251,7 @@ $surveyAnswers = ArrayHelper::index($surveyAnswers, null, 'lead_tracker_id');
 $script = <<< JS
 $('#myTable').DataTable({
   order: [],
+  scrollY: 500
 });
 
 $(".ajax-link").ajax_action({
