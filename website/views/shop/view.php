@@ -30,6 +30,9 @@ $user = Yii::$app->user->getIdentity();
 $balance = $user ? $user->getWalletAmount() : 0;
 $orderUrl = Url::to(['order/index']);
 $isGuest = Yii::$app->user->isGuest ? 1 : 0;
+
+$currencies = $model->fetchCurrency();
+$currencyJson = json_encode($currencies);
 ?>
 <div id="cart_items">
   <div class="container my-5 single">
@@ -87,7 +90,7 @@ $isGuest = Yii::$app->user->isGuest ? 1 : 0;
             </div>
           </div>
           <div class="row multi-select p-2" v-if="versionOptions.length && packageOptions.length">
-            <div class="col-md-6" v-if="versionOptions.length">
+            <div class="col-md-4" v-if="versionOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Version</label>
                 <select class="form-control" v-model="version">
@@ -97,7 +100,7 @@ $isGuest = Yii::$app->user->isGuest ? 1 : 0;
                 </select>
               </div>
             </div>
-            <div class="col-md-6" v-if="packageOptions.length">
+            <div class="col-md-4" v-if="packageOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Pack</label>
                 <select class="form-control" v-model="package">
@@ -107,6 +110,16 @@ $isGuest = Yii::$app->user->isGuest ? 1 : 0;
                 </select>
               </div>
             </div>
+            <div class="col-md-4" v-if="currencyOptions.length">
+              <div class="form-group">
+                <label for="exampleFormControlSelect2">Currency</label>
+                <select class="form-control" v-model="currency">
+                  <option v-for="option in currencyOptions" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+          </div>
           </div>
           <hr />
           <div class="multi-rating d-flex justify-content-between align-items-center">
@@ -174,7 +187,7 @@ $isGuest = Yii::$app->user->isGuest ? 1 : 0;
             </div>
             <div class="d-flex">
               <div class="flex-fill w-100">Price</div>
-              <div class="flex-fill w-100 text-right">${{ subPrice }}</div>
+              <div class="flex-fill w-100 text-right">${{ price }}</div>
             </div>
             <div class="d-flex">
               <div class="flex-fill w-100">Transfer fee</div>
@@ -184,6 +197,9 @@ $isGuest = Yii::$app->user->isGuest ? 1 : 0;
             <div class="d-flex mb-3">
               <div class="flex-fill text-red font-weight-bold w-100">Total</div>
               <div class="flex-fill text-red font-weight-bold w-100 text-right">${{ totalPrice }}</div>
+            </div>
+            <div class="d-flex mb-3" v-if="currency !== 'USD'">
+              <div class="flex-fill text-red font-weight-bold w-100 text-right">(${{ totalPrice }}) {{ currency }}</div>
             </div>
 
             <div class="mb-3">
@@ -273,6 +289,7 @@ var has_group = $has_group;
 var settingMethodMapping = $settingMethodMapping;
 var settingVersionMapping = $settingVersionMapping;
 var settingPackageMapping = $settingPackageMapping;
+var currencyList = $currencyJson;
 var orderUrl = '$orderUrl';
 var calculateUrl = '$calculateUrl';
 var checkoutsUrl = '$checkoutsUrl';
@@ -280,6 +297,7 @@ console.log('mapping', mapping);
 console.log('settingMethodMapping', settingMethodMapping);
 console.log('settingVersionMapping', settingVersionMapping);
 console.log('settingPackageMapping', settingPackageMapping);
+console.log('currencyList', currencyList);
 
 // subscribe
 $('#subscribe').on('click', function() {
@@ -492,6 +510,13 @@ var app = new Vue({
       const versionKeys = Object.keys(mapping[this.method] || {});
       return versionKeys.map(key => {
         return { value: key, text: this.versionList[key] };
+      })
+    },
+    currencyOptions() {
+      if (!Object.keys(currencyList).length) return [];
+      const versionKeys = Object.keys(currencyList || {});
+      return versionKeys.map(key => {
+        return { value: key, text: currencyList[key] };
       })
     },
     packageOptions() {
