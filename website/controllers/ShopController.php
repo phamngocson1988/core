@@ -19,6 +19,7 @@ use website\models\GameVersion;
 use website\models\GamePackage;
 use website\models\Promotion;
 use website\models\GameCategoryItem;
+use common\models\CurrencySetting;
 
 // form
 use website\forms\FetchGameForm;
@@ -146,6 +147,13 @@ class ShopController extends Controller
             'game_id' => $id
         ])->exists();
 
+        $currencies = CurrencySetting::find()
+        ->where(['status' => CurrencySetting::STATUS_ACTIVE])
+        ->select(['code', 'exchange_rate'])
+        ->orderBy(['is_fix' => SORT_DESC])
+        ->asArray()
+        ->all();
+
     	return $this->render('view', [
             'model' => $model,
             'methods' => $methods,
@@ -156,7 +164,8 @@ class ShopController extends Controller
             'category' => $category,
             'is_reseller' => $is_reseller,
             'has_group' => (int)$model->group_id,
-            'isSubscribe' => $isSubscribe
+            'isSubscribe' => $isSubscribe,
+            'currencies' => $currencies
         ]);
     }
 

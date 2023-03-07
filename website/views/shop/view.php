@@ -31,7 +31,6 @@ $balance = $user ? $user->getWalletAmount() : 0;
 $orderUrl = Url::to(['order/index']);
 $isGuest = Yii::$app->user->isGuest ? 1 : 0;
 
-$currencies = $model->fetchCurrency();
 $currencyJson = json_encode($currencies);
 ?>
 <div id="cart_items">
@@ -199,7 +198,7 @@ $currencyJson = json_encode($currencies);
               <div class="flex-fill text-red font-weight-bold w-100 text-right">${{ totalPrice }}</div>
             </div>
             <div class="d-flex mb-3" v-if="currency !== 'USD'">
-              <div class="flex-fill text-red font-weight-bold w-100 text-right">(${{ totalPrice }}) {{ currency }}</div>
+              <div class="flex-fill text-red font-weight-bold w-100 text-right">({{ otherPrice }}) {{ currency }}</div>
             </div>
 
             <div class="mb-3">
@@ -513,10 +512,9 @@ var app = new Vue({
       })
     },
     currencyOptions() {
-      if (!Object.keys(currencyList).length) return [];
-      const versionKeys = Object.keys(currencyList || {});
-      return versionKeys.map(key => {
-        return { value: key, text: currencyList[key] };
+      if (!currencyList.length) return [];
+      return currencyList.map(({ code }) => {
+        return { value: code, text: code };
       })
     },
     packageOptions() {
@@ -553,7 +551,15 @@ var app = new Vue({
         { title: 'Speed', selectStar: this.methodSpeed },
         { title: 'Safe', selectStar: this.methodSafe },
       ]
-    } 
+    },
+    otherPrice() {
+      const currencyInfo = currencyList.find(({ code }) => code === this.currency);
+      if (currencyInfo) {
+        const { exchange_rate = 1 } = currencyInfo;
+        return this.totalPrice * exchange_rate;
+      }
+      return this.totalPrice;
+    }
   },
   methods: {
     addItem() {
