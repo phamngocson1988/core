@@ -6,6 +6,10 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\components\cart\CartItem;
 use website\models\Order;
+use website\components\payment\PaymentGatewayFactory;
+use common\models\PaymentCommitment;
+use common\models\CurrencySetting;
+
 
 class OrderPaymentBulkForm extends Model
 {
@@ -16,14 +20,41 @@ class OrderPaymentBulkForm extends Model
     protected $_cartItem;
     protected $successList = [];
     protected $errorList = [];
+    protected $_paygate;
 
     public function rules()
     {
         return [
             [['id', 'items'], 'required'],
-            ['items', 'validateWallet'],
-            ['items', 'validateItems']
+            ['items', 'validateItems'],
+            ['paygate', 'validatePaygate'],
         ];
+    }
+
+    public function validatePaygate($attribute, $params = [])
+    {
+        $paygate = $this->getPaygateConfig();
+        if (!$paygate) {
+            $this->addError($attribute, sprintf('Payment Gateway %s is not available', $this->paygate));
+            return;
+        }
+        if ($paygate->getIdentifier() == 'kinggems') {
+            return $this->validateWallet($attribute, $params);
+        }
+    }
+
+    public function getPaygateConfig()
+    {
+        if (!$this->_paygate) {
+            $this->_paygate = PaymentGatewayFactory::getConfig($this->paygate);
+        }
+        return $this->_paygate;
+    }
+
+    public function getPaygate()
+    {
+        $config = $this->getPaygateConfig();
+        return PaymentGatewayFactory::getPaygate($config);
     }
 
     public function validateWallet($attribute, $params = [])
@@ -66,6 +97,7 @@ class OrderPaymentBulkForm extends Model
         $cart = Yii::$app->cart;
         $bulk = strtotime('now');
         $user = Yii::$app->user->getIdentity();
+        $paygate = $this->getPaygateConfig();
         foreach ((array)$items as $index => $info) {
             $cart->clear();
             $cartItem = clone $model;
@@ -87,6 +119,28 @@ class OrderPaymentBulkForm extends Model
                 $message = reset($messages);
                 $this->errorList[$index] = $message;
             }
+        }
+        $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+        $targetCurrency = CurrencySetting::findOne(['code' => $paygate->getCurrency()]);
+        $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
+        $sub_total_price = 0; // total of sub price
+        $total_fee = 0; // total of fee
+        $total_price = 0; // total of price
+        if ($paygate->getIdentifier() != 'kinggems') {
+            $commitment = new PaymentCommitment();
+            $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
+            $commitment->object_key = ''; // list of $order->id;
+            $commitment->paygate = $paygate->getIdentifier();
+            $commitment->payment_type = $paygate->getPaymentType();
+            $commitment->amount = $usdCurrency->exchangeTo($sub_total_price, $targetCurrency);
+            $commitment->fee = $usdCurrency->exchangeTo($total_fee, $targetCurrency);
+            $commitment->total_amount = $usdCurrency->exchangeTo($total_price, $targetCurrency);
+            $commitment->currency = $paygate->getCurrency();
+            $commitment->kingcoin = $usdCurrency->getKcoin($total_price);
+            $commitment->exchange_rate = $targetCurrency->exchange_rate;
+            $commitment->user_id = $user->id;
+            $commitment->status = PaymentCommitment::STATUS_PENDING;
+            $commitment->save();
         }
         return true;
     }

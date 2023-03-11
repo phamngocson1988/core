@@ -24,6 +24,7 @@ class OrderPaymentForm extends Model
 {
     public $cart;
     public $paygate;
+    public $isBulk = false;
 
     protected $_paygate;
 
@@ -225,7 +226,7 @@ class OrderPaymentForm extends Model
                 $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
             }
 
-            if ($paygate->getIdentifier() != 'kinggems') {
+            if ($paygate->getIdentifier() != 'kinggems' && !$this->isBulk) {
                 $commitment = new PaymentCommitment();
                 $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
                 $commitment->object_key = $order->id;
