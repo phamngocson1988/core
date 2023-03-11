@@ -30,10 +30,13 @@ $user = Yii::$app->user->getIdentity();
 $balance = $user ? $user->getWalletAmount() : 0;
 $orderUrl = Url::to(['order/index']);
 $isGuest = Yii::$app->user->isGuest ? 1 : 0;
+$templateFile = Yii::$app->settings->get('ImportSettingForm', 'import_reseller_template');
 
 $currencyJson = json_encode($currencies);
 ?>
+
 <div id="cart_items">
+  <input id="fileInput" type="file" accept=".xlsx" style="display:none" @change="uploadFile"/>
   <div class="container my-5 single">
     <div class="d-flex justify-content-between align-items-centert bg-white" id="game-header">
       <div class="w-50 flex-fill">
@@ -128,10 +131,10 @@ $currencyJson = json_encode($currencies);
           <div style="display:flex; justify-content: space-between;" v-show="canSale && isUserLogin">
             <p class="lead mb-2"></p>
             <div>
-              <a href="#" class="btn btn-primary" role="button" aria-pressed="true">
+              <a href="<?=$templateFile;?>" class="btn btn-primary" role="button" aria-pressed="true">
                 <img class="icon-btn" src="/images/icon/more.svg"/> Download
               </a>
-              <button type="button" class="btn btn-green" id="upload-excel-button">
+              <button type="button" class="btn btn-green" onclick="document.getElementById('fileInput').click()">
                 <img class="icon-btn" src="/images/icon/more.svg"/> Upload
               </button>
             </div>
@@ -144,8 +147,8 @@ $currencyJson = json_encode($currencies);
   </div><!-- END MAIN SINGLE -->
 
   <div class="container my-5 single-order" v-show="canSale && isUserLogin">
-    <template v-for="item in items">
-      <cart-item :quantity="item.quantity" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity" :update-raw="updateRaw"/>
+    <template v-for="item in items" :key="item.id">
+      <cart-item :quantity="item.quantity" :information="item.raw" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity" :update-raw="updateRaw"/>
     </template>
   </div>
 
@@ -276,6 +279,7 @@ foreach($methods as $method) {
 $settingMethodMapping = json_encode($methodArray);
 $calculateUrl = Url::to(['cart/calculates', 'id' => $model->id], true);
 $checkoutsUrl = Url::to(['cart/checkouts', 'id' => $model->id], true);
+$uploadUrl = Url::to(['shop/upload', 'id' => $model->id], true);
 $script = <<< JS
 
 // React view on attributes
@@ -292,6 +296,7 @@ var currencyList = $currencyJson;
 var orderUrl = '$orderUrl';
 var calculateUrl = '$calculateUrl';
 var checkoutsUrl = '$checkoutsUrl';
+var uploadUrl = '$uploadUrl';
 console.log('mapping', mapping);
 console.log('settingMethodMapping', settingMethodMapping);
 console.log('settingVersionMapping', settingVersionMapping);
@@ -314,6 +319,7 @@ $('#subscribe').on('click', function() {
     },
   });
 });
+
 JS;
 $this->registerJs($script);
 ?>
@@ -323,11 +329,11 @@ $csrfTokenName = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->csrfToken;
 $script = <<< JS
 Vue.component("cartItem", {
-  props: ["id", "quantity", "addItem", "deleteItem", "updateQuantity", "updateRaw"],
+  props: ["id", "quantity", "information", "addItem", "deleteItem", "updateQuantity", "updateRaw"],
   data() {
     return {
       value: this.quantity,
-      raw: ''
+      raw: this.information
     }
   },
   methods: {
@@ -671,6 +677,24 @@ var app = new Vue({
           alert(errors);
         }
       });
+    },
+    uploadFile(event) {
+      console.log(event);
+      const file = event.target.files[0];
+      var formData = new FormData();
+      formData.append("excel", file);
+      formData.append('$csrfTokenName', '$csrfToken');
+      axios.post(uploadUrl, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(( { data: result }) => {
+        console.log('upload', result);
+        const items = result.map(row => {
+          return { id: this.uuidv4(), quantity: parseFloat(row[0]), raw: row[1] }
+        });
+        this.items = [...this.items, ...items];
+      })
     }
   },
   created() {

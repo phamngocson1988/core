@@ -45,7 +45,7 @@ class ShopController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['quick'],
+                        'actions' => ['quick', 'upload'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -243,5 +243,26 @@ class ShopController extends Controller
             'balance' => $balance,
             'initData' => array_filter($initData)
         ]);
+    }
+
+    public function actionUpload($id)
+    {
+        $request = Yii::$app->request;
+        $initData = [];
+        if ($request->isPost) {
+            $file = \yii\web\UploadedFile::getInstanceByName('excel');
+            $objPHPExcel = \PHPExcel_IOFactory::load($file->tempName);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            foreach ($sheetData as $rowIndex => $row) {
+                if ($rowIndex >= 5 && $row['C'] && $row['D']) {
+                    $content = [$row['D'], $row['C']];
+                    $initData[] = $content;
+                }
+            }
+            
+        } else {
+            $initData[] = [1, ''];
+        }
+        return $this->asJson($initData);
     }
 }
