@@ -107,7 +107,8 @@ class OrderPaymentBulkForm extends Model
             $cart->add($cartItem);
             $checkoutForm = new \website\forms\OrderPaymentForm([
                 'cart' => $cart, 
-                'paygate' => $this->paygate
+                'paygate' => $this->paygate,
+                'isBulk' => true
             ]);
             if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
                 $this->successList[] = $index;
