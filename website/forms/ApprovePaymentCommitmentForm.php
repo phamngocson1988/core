@@ -127,10 +127,14 @@ class ApprovePaymentCommitmentForm extends ActionForm
 
             // Update object
             if ($commitment->object_name == PaymentCommitment::OBJECT_NAME_ORDER) {
-                $movePendingForm = new UpdateOrderStatusPendingForm(['id' => $commitment->object_key]);
-                if (!$movePendingForm->save()) {
-                    throw new \Exception($movePendingForm->getFirstErrorMessage());
+                $orderIds = explode(",", $commitment->object_key);
+                foreach ($orderIds as $orderId) {
+                    $movePendingForm = new UpdateOrderStatusPendingForm(['id' => $orderId]);
+                    if (!$movePendingForm->save()) {
+                        throw new \Exception($movePendingForm->getFirstErrorMessage());
+                    }
                 }
+                
             } elseif ($commitment->object_name == PaymentCommitment::OBJECT_NAME_WALLET) {
                 $movePendingForm = new CompletePaymentTransactionForm(['id' => $commitment->object_key]);
                 if (!$movePendingForm->save()) {

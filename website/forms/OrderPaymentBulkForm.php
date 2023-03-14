@@ -111,38 +111,44 @@ class OrderPaymentBulkForm extends Model
                 'isBulk' => true
             ]);
             if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
-                $this->successList[] = $index;
-                $paygate = $checkoutForm->getPaygate();
-                $order = Order::findOne($id);
-                $paygate->createCharge($order, $user);
+                $this->successList[] = $id;
+                
             } else {
                 $messages = $model->getErrorSummary(true);
                 $message = reset($messages);
-                $this->errorList[$index] = $message;
+                $this->errorList[$info['id']] = $message;
             }
         }
-        $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
-        $targetCurrency = CurrencySetting::findOne(['code' => $paygate->getCurrency()]);
-        $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
-        $sub_total_price = 0; // total of sub price
-        $total_fee = 0; // total of fee
-        $total_price = 0; // total of price
-        if ($paygate->getIdentifier() != 'kinggems') {
-            $commitment = new PaymentCommitment();
-            $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
-            $commitment->object_key = ''; // list of $order->id;
-            $commitment->paygate = $paygate->getIdentifier();
-            $commitment->payment_type = $paygate->getPaymentType();
-            $commitment->amount = $usdCurrency->exchangeTo($sub_total_price, $targetCurrency);
-            $commitment->fee = $usdCurrency->exchangeTo($total_fee, $targetCurrency);
-            $commitment->total_amount = $usdCurrency->exchangeTo($total_price, $targetCurrency);
-            $commitment->currency = $paygate->getCurrency();
-            $commitment->kingcoin = $usdCurrency->getKcoin($total_price);
-            $commitment->exchange_rate = $targetCurrency->exchange_rate;
-            $commitment->user_id = $user->id;
-            $commitment->status = PaymentCommitment::STATUS_PENDING;
-            $commitment->save();
+        
+        if (count($this->successList) > 0) {
+            $orderIds = $this->getSuccessList();
+            $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+            $targetCurrency = CurrencySetting::findOne(['code' => $paygate->getCurrency()]);
+            $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
+            $orders = Order::find()->where(['id' => $orderIds])->select(['sub_total_price', 'total_price', 'total_fee'])->asArray()->all();
+            $sub_total_price = array_sum(array_column($orders, 'sub_total_price')); // total of sub price
+            $total_fee = array_sum(array_column($orders, 'total_fee'));; // total of fee
+            $total_price = array_sum(array_column($orders, 'total_price')); // total of price
+            if ($paygate->getIdentifier() != 'kinggems') {
+                $commitment = new PaymentCommitment();
+                $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
+                $commitment->object_key = implode(",", $orderIds); // list of $order->id;
+                $commitment->paygate = $paygate->getIdentifier();
+                $commitment->payment_type = $paygate->getPaymentType();
+                $commitment->amount = $usdCurrency->exchangeTo($sub_total_price, $targetCurrency);
+                $commitment->fee = $usdCurrency->exchangeTo($total_fee, $targetCurrency);
+                $commitment->total_amount = $usdCurrency->exchangeTo($total_price, $targetCurrency);
+                $commitment->currency = $paygate->getCurrency();
+                $commitment->kingcoin = $usdCurrency->getKcoin($total_price);
+                $commitment->exchange_rate = $targetCurrency->exchange_rate;
+                $commitment->user_id = $user->id;
+                $commitment->status = PaymentCommitment::STATUS_PENDING;
+                $commitment->save();
+            }
+            $order = Order::findOne($id);
+            $paygate->createCharge($order, $user);
         }
+        
         return true;
     }
 
