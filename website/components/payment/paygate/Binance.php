@@ -8,6 +8,7 @@ use common\models\PaymentTransaction;
 use website\forms\CreatePaymentRealityForm;
 use common\components\helpers\StringHelper;
 use website\libraries\payment\gateway\Binance as BinanceService;
+use common\models\PaymentCommitmentOrder;
 
 class Binance
 {
@@ -22,11 +23,74 @@ class Binance
 
     public function createCharge($order, $user = null)
     {
-        if ($order instanceof Order) {
-            return $this->createChargeFromOrder($order, $user);
-        } elseif ($order instanceof PaymentTransaction) {
-            return $this->createChargeFromDeposit($order, $user);
+        if (is_array($order)) {
+            if ($order['bulk']) {
+                return $this->createChargeFromBulk($order, $user);
+            }
+        } else {
+            if ($order instanceof Order) {
+                return $this->createChargeFromOrder($order, $user);
+            } elseif ($order instanceof PaymentTransaction) {
+                return $this->createChargeFromDeposit($order, $user);
+            }
         }
+        
+    }
+
+    /**
+     * Convert payment information from bulk
+     * Then send to paygate to create order on paygate platform
+     * 
+     * @param Array  $order  information of orders
+     * @example ['total_price' => 10, 'description' => 'Some description', 'bulk' => 1020384839, 'title' => 'Title of order', 'orderIds' => [1,2,3]]
+     * @param User  $user information of user who place the order
+     */
+    protected function createChargeFromBulk($order, $user = null) 
+    {
+        $info = [
+            'amount' => $order['total_price'],
+            'description' => $order['description'],
+            'id' => $order['bulk'],
+            'title' => $order['title']
+        ];
+        $response = $this->service->createOrder($info);
+        if ($response['status'] === 'SUCCESS') {
+            /**
+             * array (size=5)
+             *   'prepayId' => string '119048806996172800' (length=18)
+             *   'tradeType' => string 'WEB' (length=3)
+             *   'expireTime' => int 1633276820989
+             *   'qrcodeLink' => string 'https://public.bnbstatic.com/static/payment/20211003/40174d1b-e69c-4474-9b97-6bdeabd75f31.jpg' (length=93)
+             *   'qrContent' => string 'https://app.binance.com/qr/dplk3e07da82190a4949ab1c8c9d0c81031a' (length=63)
+             */ 
+            $responseData = $response['data'];
+            foreach ($order['orderIds'] as $orderId) {
+                $form = new \website\forms\UpdateOrderForm([
+                    'id' => $orderId, 
+                    'payment_id' => $responseData['prepayId'],
+                    'payment_data' => json_encode($responseData)
+                ]);
+                if (!$form->update()) {
+                    $orderObject = Order::findOne($orderId);
+                    $orderObject->log(sprintf("[Binance][createCharge] process fail responseData"));
+                    $orderObject->log(json_encode($responseData));
+                    $orderObject->log(json_encode($form->getErrors()));
+                } 
+            }
+            // For the bulk
+            $commitment = PaymentCommitmentOrder::findOne(['object_key' => implode(",", $order['orderIds'])]);
+            if ($commitment) {
+                $commitment->payment_id = $responseData['prepayId'];
+                $commitment->save();
+            }
+        } else {
+            foreach ($order['orderIds'] as $orderId) {
+                $orderObject = Order::findOne($orderId);
+                $orderObject->log(sprintf("[Binance][createCharge] process fail response"));
+                $orderObject->log(json_encode($response));
+            }
+        }
+        return Url::to(['order/bulk'], true);
     }
 
     protected function createChargeFromOrder($order, $user = null)
@@ -148,18 +212,21 @@ class Binance
 
     protected function processOrder($params) 
     {
-        $orderId = $params['data']['merchantTradeNo'];
-        $order = Order::findOne($orderId);
-        $paymentId = $params['bizId'];
+        $orderIds = explode(",", $params['data']['merchantTradeNo']);
+        $paymentId = $params['bizId'];      
+        $orders = Order::find()->where(['id' => $orderIds])->select(['total_price', 'customer_name'])->asArray()->all();
+        $total_price = array_sum(array_column($order, 'total_price'));
+        $customer_names = array_column($order, 'customer_name');
+        $customer_name = reset($customer_names);
         // Create payment-reality
         $order->log("[Binance][Callback] Create reality payment data");
         $realityData = [
             'paygate' => $this->config->getIdentifier(),
-            'payer' => $order->customer_name,
+            'payer' => $customer_name,
             'payment_time' => date('Y-m-d H:i:s'),
             'payment_id' => $paymentId,
             'payment_note' => '',
-            'total_amount' => $order->total_price,
+            'total_amount' => $total_price,
             'currency' => 'USD',
             'note' => 'This payment is charged automatically by Binance ' . $paymentId,
             'payment_type' => $this->config->getPaymentType()
