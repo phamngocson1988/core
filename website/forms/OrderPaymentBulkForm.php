@@ -97,7 +97,8 @@ class OrderPaymentBulkForm extends Model
         $cart = Yii::$app->cart;
         $bulk = strtotime('now');
         $user = Yii::$app->user->getIdentity();
-        $paygate = $this->getPaygateConfig();
+        $paygateModel = $this->getPaygateConfig();
+        $paygate = $this->getPaygate();
         foreach ((array)$items as $index => $info) {
             $cart->clear();
             $cartItem = clone $model;
@@ -123,22 +124,22 @@ class OrderPaymentBulkForm extends Model
         if (count($this->successList) > 0) {
             $orderIds = $this->getSuccessList();
             $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
-            $targetCurrency = CurrencySetting::findOne(['code' => $paygate->getCurrency()]);
+            $targetCurrency = CurrencySetting::findOne(['code' => $paygateModel->getCurrency()]);
             $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
             $orders = Order::find()->where(['id' => $orderIds])->select(['sub_total_price', 'total_price', 'total_fee'])->asArray()->all();
             $sub_total_price = array_sum(array_column($orders, 'sub_total_price')); // total of sub price
             $total_fee = array_sum(array_column($orders, 'total_fee'));; // total of fee
             $total_price = array_sum(array_column($orders, 'total_price')); // total of price
-            if ($paygate->getIdentifier() != 'kinggems') {
+            if ($paygateModel->getIdentifier() != 'kinggems') {
                 $commitment = new PaymentCommitment();
                 $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
                 $commitment->object_key = implode(",", $orderIds); // list of $order->id;
-                $commitment->paygate = $paygate->getIdentifier();
-                $commitment->payment_type = $paygate->getPaymentType();
+                $commitment->paygate = $paygateModel->getIdentifier();
+                $commitment->payment_type = $paygateModel->getPaymentType();
                 $commitment->amount = $usdCurrency->exchangeTo($sub_total_price, $targetCurrency);
                 $commitment->fee = $usdCurrency->exchangeTo($total_fee, $targetCurrency);
                 $commitment->total_amount = $usdCurrency->exchangeTo($total_price, $targetCurrency);
-                $commitment->currency = $paygate->getCurrency();
+                $commitment->currency = $paygateModel->getCurrency();
                 $commitment->kingcoin = $usdCurrency->getKcoin($total_price);
                 $commitment->exchange_rate = $targetCurrency->exchange_rate;
                 $commitment->user_id = $user->id;

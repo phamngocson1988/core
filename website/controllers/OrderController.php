@@ -6,6 +6,7 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 // models
 use website\models\Order;
@@ -13,6 +14,7 @@ use website\models\OrderFile;
 use website\models\Paygate;
 // forms
 use website\forms\FetchOrderForm;
+use common\models\PaymentCommitmentOrder;
 
 
 class OrderController extends Controller
@@ -59,6 +61,41 @@ class OrderController extends Controller
     		'orders' => $orders,
     		'search' => $form,
     		'pages' => $pages
+    	]);
+    }
+
+    public function actionBulk()
+    {
+    	$userId = Yii::$app->user->id;
+    	$request = Yii::$app->request;
+    	$models = PaymentCommitmentOrder::find()->where([
+            'user_id' => Yii::$app->user->id,
+            'status' => PaymentCommitmentOrder::STATUS_PENDING
+        ])->all();
+        $orderIds = ArrayHelper::getColumn($models, 'object_key');
+        $orderIds = explode(",", implode(",", $orderIds));
+        $orders = Order::find()->where(['id' => $orderIds])
+            ->select(['id', 'customer_name', 'game_title', 'quantity', 'total_unit'])
+            ->asArray()
+            ->indexBy('id')
+            ->all();
+        $mappingOrders = [];
+        foreach ($models as $model) {
+            $orderDetail = [];
+            $objectKeys = explode(",", $model->object_key);
+            $childrenOrders = array_map(function($id) use ($orders) {
+                return $orders[$id] ? $orders[$id] : null;
+            }, $objectKeys);
+            $childrenOrders = array_filter($childrenOrders);
+            $orderDetail['game_title'] = count($childrenOrders) ? $childrenOrders[0]['game_title'] : '';
+            $orderDetail['quantity'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'quantity')) : 0;
+            $orderDetail['total_unit'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'total_unit')) : 0;
+            $mappingOrders[$model->id] = $orderDetail;
+            
+        }
+    	return $this->render('bulk', [
+    		'models' => $models,
+            'mappingOrders' => $mappingOrders
     	]);
     }
 
