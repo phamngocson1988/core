@@ -50,7 +50,7 @@ class Binance
         $info = [
             'amount' => $order['total_price'],
             'description' => $order['description'],
-            'id' => $order['bulk'],
+            'id' => 'B' . $order['id'],
             'title' => $order['title']
         ];
         $response = $this->service->createOrder($info);
@@ -65,9 +65,10 @@ class Binance
              */ 
             $responseData = $response['data'];
             foreach ($order['orderIds'] as $orderId) {
+                $paymentId = sprintf("%s_%s", $responseData['prepayId'], $orderId);
                 $form = new \website\forms\UpdateOrderForm([
                     'id' => $orderId, 
-                    'payment_id' => $responseData['prepayId'],
+                    'payment_id' => $paymentId,
                     'payment_data' => json_encode($responseData)
                 ]);
                 if (!$form->update()) {
@@ -76,13 +77,14 @@ class Binance
                     $orderObject->log(json_encode($responseData));
                     $orderObject->log(json_encode($form->getErrors()));
                 } 
+                // For the bulk
+                $commitment = PaymentCommitmentOrder::findOne(['object_key' => $orderId]);
+                if ($commitment) {
+                    $commitment->payment_id = $paymentId;
+                    $commitment->save();
+                }
             }
-            // For the bulk
-            $commitment = PaymentCommitmentOrder::findOne(['object_key' => implode(",", $order['orderIds'])]);
-            if ($commitment) {
-                $commitment->payment_id = $responseData['prepayId'];
-                $commitment->save();
-            }
+            
         } else {
             foreach ($order['orderIds'] as $orderId) {
                 $orderObject = Order::findOne($orderId);
@@ -175,10 +177,12 @@ class Binance
             Yii::info($params);
 
             $orderId = $params['data']['merchantTradeNo'];
-            if (strpos($orderId, PaymentTransaction::ID_PREFIX) === false) {
-                $this->processOrder($params);
-            } else {
+            if (strpos($orderId, PaymentTransaction::ID_PREFIX) !== false) {
                 $this->processDeposit($params);
+            } else if (strpos($orderId, 'B') !== false) {
+                $this->processBulk($params);
+            } else {
+                $this->processOrder($params);
             }
             
             Yii::info('end processCharge');
@@ -212,21 +216,18 @@ class Binance
 
     protected function processOrder($params) 
     {
-        $orderIds = explode(",", $params['data']['merchantTradeNo']);
-        $paymentId = $params['bizId'];      
-        $orders = Order::find()->where(['id' => $orderIds])->select(['total_price', 'customer_name'])->asArray()->all();
-        $total_price = array_sum(array_column($order, 'total_price'));
-        $customer_names = array_column($order, 'customer_name');
-        $customer_name = reset($customer_names);
+        $orderId = $params['data']['merchantTradeNo'];
+        $order = Order::findOne($orderId);
+        $paymentId = $params['bizId'];
         // Create payment-reality
         $order->log("[Binance][Callback] Create reality payment data");
         $realityData = [
             'paygate' => $this->config->getIdentifier(),
-            'payer' => $customer_name,
+            'payer' => $order->customer_name,
             'payment_time' => date('Y-m-d H:i:s'),
             'payment_id' => $paymentId,
             'payment_note' => '',
-            'total_amount' => $total_price,
+            'total_amount' => $order->total_price,
             'currency' => 'USD',
             'note' => 'This payment is charged automatically by Binance ' . $paymentId,
             'payment_type' => $this->config->getPaymentType()
@@ -289,6 +290,27 @@ class Binance
             ->setTextBody($message)
             ->send();
         }
+    }
+
+    protected function processBulk($params) 
+    {
+        $idWithPrefix = $params['data']['merchantTradeNo'];
+        $id = str_replace("B", "", $idWithPrefix);
+        $commitment = PaymentCommitment::findOne($id);
+        $user = User::findOne($commitment->user_id);
+        $paymentId = $params['bizId'];
+        $childCommitments = PaymentCommitment::find()->where(['parent' => $id])->all();
+
+        // Create payment-reality
+        foreach ($childCommitments as $childCommitment) {
+            $singleOrderParams = [
+            'data' => ['merchantTradeNo' => $childCommitment->object_key],
+            'bizId' => sprintf("%s_%s", $paymentId, $childCommitment->object_key)
+            ];
+            $this->processOrder($singleOrderParams);
+        }
+        
+        return true;
     }
 
     protected function cleanString($string) {

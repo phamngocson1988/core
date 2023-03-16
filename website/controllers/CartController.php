@@ -255,7 +255,7 @@ class CartController extends Controller
             $errors = $model->getErrorList();
             $success = $model->getSuccessList();
             if (!count($success)) {
-                return $this->asJson(['status' => false, 'errors' => 'Something went wroing']);
+                return $this->asJson(['status' => false, 'errors' => 'Something went wrong']);
             } elseif (!count($errors)) {
                 return $this->asJson(['status' => true, 'success' => 'Your orders are placed successfully']);
             } else {
@@ -314,7 +314,7 @@ class CartController extends Controller
             $errors = $model->getErrorList();
             $success = $model->getSuccessList();
             if (!count($success)) {
-                return $this->asJson(['status' => false, 'errors' => 'Something went wroing']);
+                return $this->asJson(['status' => false, 'errors' => 'Something went wrong']);
             } elseif (!count($errors)) {
                 return $this->asJson(['status' => true, 'success' => 'Your orders are placed successfully']);
             } else {

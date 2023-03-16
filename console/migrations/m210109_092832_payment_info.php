@@ -75,6 +75,8 @@ class m210109_092832_payment_info extends Migration
             'exchange_rate' => $this->float(),
             'evidence' => $this->string(255),
             'user_id' => $this->integer(), // ref to User table: this payment used for which user
+            'parent' => $this->integer()->defaultValue(0),
+            'bulk' => $this->integer(),
             'status' => $this->smallInteger()->notNull()->defaultValue(5), // 10 for approved, 5 for pending
             'object_name' => $this->string(255)->notNull(),
             'object_key' => $this->integer()->notNull(),

@@ -108,8 +108,7 @@ class OrderPaymentBulkForm extends Model
             $cart->add($cartItem);
             $checkoutForm = new \website\forms\OrderPaymentForm([
                 'cart' => $cart, 
-                'paygate' => $this->paygate,
-                'isBulk' => true
+                'paygate' => $this->paygate
             ]);
             if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
                 $this->successList[] = $id;
@@ -126,14 +125,17 @@ class OrderPaymentBulkForm extends Model
             $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
             $targetCurrency = CurrencySetting::findOne(['code' => $paygateModel->getCurrency()]);
             $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
-            $orders = Order::find()->where(['id' => $orderIds])->select(['sub_total_price', 'total_price', 'total_fee'])->asArray()->all();
-            $sub_total_price = array_sum(array_column($orders, 'sub_total_price')); // total of sub price
-            $total_fee = array_sum(array_column($orders, 'total_fee'));; // total of fee
-            $total_price = array_sum(array_column($orders, 'total_price')); // total of price
+            
             if ($paygateModel->getIdentifier() != 'kinggems') {
+                $orders = Order::find()->where(['id' => $orderIds])->select(['sub_total_price', 'total_price', 'total_fee', 'game_title'])->asArray()->all();
+                $order = $orders[0];
+                $sub_total_price = array_sum(array_column($orders, 'sub_total_price')); // total of sub price
+                $total_fee = array_sum(array_column($orders, 'total_fee'));; // total of fee
+                $total_price = array_sum(array_column($orders, 'total_price')); // total of price
+                
                 $commitment = new PaymentCommitment();
                 $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
-                $commitment->object_key = implode(",", $orderIds); // list of $order->id;
+                $commitment->object_key = $bulk; // $bulk
                 $commitment->paygate = $paygateModel->getIdentifier();
                 $commitment->payment_type = $paygateModel->getPaymentType();
                 $commitment->amount = $usdCurrency->exchangeTo($sub_total_price, $targetCurrency);
@@ -144,10 +146,30 @@ class OrderPaymentBulkForm extends Model
                 $commitment->exchange_rate = $targetCurrency->exchange_rate;
                 $commitment->user_id = $user->id;
                 $commitment->status = PaymentCommitment::STATUS_PENDING;
+                $commitment->bulk = $bulk;
                 $commitment->save();
+
+                PaymentCommitment::updateAll(
+                    ['parent' => $commitment->id], 
+                    [
+                        'object_name' => PaymentCommitment::OBJECT_NAME_ORDER,
+                        'object_key' => $orderIds,
+                        'bulk' => $bulk,
+                    ]
+                );
+                $paygate->createCharge([
+                    'total_price' => $commitment->total_amount,
+                    'description' => sprintf("Pay for %s orders of %s", count($orderIds), $order['game_title']),
+                    'id' => $commitment->id,
+                    'title' => $order['game_title']
+                ], $user);
+            } else {
+                $orders = Order::find()->where(['id' => $orderIds])->all();
+                foreach ($orders as $order) {
+                    $paygate->createCharge($order, $user);
+                }
             }
-            $order = Order::findOne($id);
-            $paygate->createCharge($order, $user);
+            
         }
         
         return true;

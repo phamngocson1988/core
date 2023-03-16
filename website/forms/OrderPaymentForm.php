@@ -24,7 +24,6 @@ class OrderPaymentForm extends Model
 {
     public $cart;
     public $paygate;
-    public $isBulk = false;
 
     protected $_paygate;
 
@@ -226,7 +225,7 @@ class OrderPaymentForm extends Model
                 $order->pushNotification(OrderNotification::NOTIFY_SALER_NEW_ORDER, $salerTeamIds);
             }
 
-            if ($paygate->getIdentifier() != 'kinggems' && !$this->isBulk) {
+            if ($paygate->getIdentifier() != 'kinggems') {
                 $commitment = new PaymentCommitment();
                 $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
                 $commitment->object_key = $order->id;
@@ -240,6 +239,7 @@ class OrderPaymentForm extends Model
                 $commitment->exchange_rate = $targetCurrency->exchange_rate;
                 $commitment->user_id = $order->customer_id;
                 $commitment->status = PaymentCommitment::STATUS_PENDING;
+                $commitment->bulk = $order->bulk;
                 $commitment->save();
             }
 
