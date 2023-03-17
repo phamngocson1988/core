@@ -161,7 +161,8 @@ class OrderPaymentBulkForm extends Model
                     'total_price' => $commitment->total_amount,
                     'description' => sprintf("Pay for %s orders of %s", count($orderIds), $order['game_title']),
                     'id' => $commitment->id,
-                    'title' => $order['game_title']
+                    'title' => $order['game_title'],
+                    'orderIds' => $orderIds
                 ], $user);
             } else {
                 $orders = Order::find()->where(['id' => $orderIds])->all();

@@ -28,7 +28,7 @@ $paygateJson = json_encode($paygateArray);
 
 $user = Yii::$app->user->getIdentity();
 $balance = $user ? $user->getWalletAmount() : 0;
-$orderUrl = Url::to(['order/index']);
+$orderUrl = Url::to(['order/bulk']);
 $isGuest = Yii::$app->user->isGuest ? 1 : 0;
 $templateFile = Yii::$app->settings->get('ImportSettingForm', 'import_reseller_template');
 

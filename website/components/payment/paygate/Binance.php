@@ -4,6 +4,7 @@ namespace website\components\payment\paygate;
 use Yii;
 use yii\helpers\Url;
 use website\models\Order;
+use website\models\User;
 use common\models\PaymentTransaction;
 use website\forms\CreatePaymentRealityForm;
 use common\components\helpers\StringHelper;
@@ -24,9 +25,7 @@ class Binance
     public function createCharge($order, $user = null)
     {
         if (is_array($order)) {
-            if ($order['bulk']) {
-                return $this->createChargeFromBulk($order, $user);
-            }
+            return $this->createChargeFromBulk($order, $user);
         } else {
             if ($order instanceof Order) {
                 return $this->createChargeFromOrder($order, $user);
@@ -76,13 +75,13 @@ class Binance
                     $orderObject->log(sprintf("[Binance][createCharge] process fail responseData"));
                     $orderObject->log(json_encode($responseData));
                     $orderObject->log(json_encode($form->getErrors()));
-                } 
-                // For the bulk
-                $commitment = PaymentCommitmentOrder::findOne(['object_key' => $orderId]);
-                if ($commitment) {
-                    $commitment->payment_id = $paymentId;
-                    $commitment->save();
-                }
+                }                 
+            }
+            // For the bulk
+            $commitment = PaymentCommitmentOrder::findOne($order['id']);
+            if ($commitment) {
+                $commitment->payment_id = $responseData['prepayId'];
+                $commitment->save();
             }
             
         } else {
@@ -296,18 +295,27 @@ class Binance
     {
         $idWithPrefix = $params['data']['merchantTradeNo'];
         $id = str_replace("B", "", $idWithPrefix);
-        $commitment = PaymentCommitment::findOne($id);
+        $commitment = PaymentCommitmentOrder::findOne($id);
         $user = User::findOne($commitment->user_id);
         $paymentId = $params['bizId'];
-        $childCommitments = PaymentCommitment::find()->where(['parent' => $id])->all();
+        $childCommitments = PaymentCommitmentOrder::find()->where(['parent' => $id])->all();
 
         // Create payment-reality
         foreach ($childCommitments as $childCommitment) {
             $singleOrderParams = [
-            'data' => ['merchantTradeNo' => $childCommitment->object_key],
-            'bizId' => sprintf("%s_%s", $paymentId, $childCommitment->object_key)
+                'data' => ['merchantTradeNo' => $childCommitment->object_key],
+                'bizId' => sprintf("%s_%s", $paymentId, $childCommitment->object_key)
             ];
             $this->processOrder($singleOrderParams);
+        }
+
+        $unCompleted = PaymentCommitmentOrder::find()->where(['parent' => $id, 'status' => PaymentCommitmentOrder::STATUS_PENDING])->exists();
+        if (!$unCompleted) {
+            $commitment->note = 'All child commitment are done';
+            $commitment->confirmed_at = date('Y-m-d H:i:s');
+            $commitment->confirmed_by = $commitment->created_by;
+            $commitment->status = PaymentCommitmentOrder::STATUS_APPROVED;
+            $commitment->save();
         }
         
         return true;

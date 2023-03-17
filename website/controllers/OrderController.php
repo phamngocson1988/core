@@ -70,26 +70,36 @@ class OrderController extends Controller
     	$request = Yii::$app->request;
     	$models = PaymentCommitmentOrder::find()->where([
             'user_id' => Yii::$app->user->id,
-            'status' => PaymentCommitmentOrder::STATUS_PENDING
+            'status' => PaymentCommitmentOrder::STATUS_PENDING,
+            'parent' => 0,
         ])->all();
-        $orderIds = ArrayHelper::getColumn($models, 'object_key');
-        $orderIds = explode(",", implode(",", $orderIds));
-        $orders = Order::find()->where(['id' => $orderIds])
-            ->select(['id', 'customer_name', 'game_title', 'quantity', 'total_unit'])
-            ->asArray()
+        $bulks = ArrayHelper::getColumn($models, 'object_key');
+        $orders = Order::find()->where(['bulk' => $bulks])
             ->indexBy('id')
             ->all();
+        $orders = ArrayHelper::toArray($orders, [
+            'website\models\Order' => [
+                'id', 'customer_name', 'game_title', 'quantity', 'total_unit', 'bulk', 'payment_id',
+                'payment_data',
+                'payment_data_content' => function ($order) {
+                    return strlen($order->getPaymentData());
+                },
+            ],
+        ]);
+        
+        $mappingBulks = ArrayHelper::index($orders, null, 'bulk');
         $mappingOrders = [];
         foreach ($models as $model) {
-            $orderDetail = [];
-            $objectKeys = explode(",", $model->object_key);
-            $childrenOrders = array_map(function($id) use ($orders) {
-                return $orders[$id] ? $orders[$id] : null;
-            }, $objectKeys);
-            $childrenOrders = array_filter($childrenOrders);
+            $childrenOrders = ArrayHelper::getValue($mappingBulks, $model->bulk, []);
             $orderDetail['game_title'] = count($childrenOrders) ? $childrenOrders[0]['game_title'] : '';
             $orderDetail['quantity'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'quantity')) : 0;
             $orderDetail['total_unit'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'total_unit')) : 0;
+            $orderDetail['payment_data'] = count($childrenOrders) ? $childrenOrders[0]['payment_data'] : '';
+            $orderDetail['payment_data_content'] = count($childrenOrders) ? $childrenOrders[0]['payment_data_content'] : '';
+            $orderDetail['total_amount'] = $model->total_amount;
+            $orderDetail['currency'] = $model->currency;
+            $orderDetail['payment_method'] = $model->payment_method;
+            $orderDetail['payment_type'] = $model->payment_type;
             $mappingOrders[$model->id] = $orderDetail;
             
         }

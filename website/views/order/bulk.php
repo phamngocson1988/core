@@ -6,8 +6,11 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', ['depends' => ['\yii\web\JqueryAsset']]);
+$this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
 
 ?>
+<div id="app">
 <div class="container order-page">
   <h1 class="text-uppercase mt-5">my order</h1>
   <nav aria-label="breadcrumb">
@@ -29,12 +32,11 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
           <th class="text-center" scope="col">Status</th>
           <th class="text-center" scope="col">Transaction number</th>
           <th class="text-center" scope="col">Bank invoice</th>
-          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
         <?php if (!$models) : ?>
-        <tr><td class="text-center" colspan="9">No data found.</td></tr>
+        <tr><td class="text-center" colspan="8">No data found.</td></tr>
         <?php endif;?>
       	<?php foreach ($models as $order) : ?>
         <tr>
@@ -48,8 +50,13 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
           <td><?=$mappingOrders[$order->id]['total_unit'];?></td>
           <td><?=$order->status;?></td>
           <td><?=$order->payment_id;?></td>
-          <td><?=$order->payment_id;?></td>
-          <td>xxx</td>
+          <td>
+            <?php if ($order->payment_id) : ?>
+          	<?=$order->payment_id;?>
+          	<?php else : ?>
+            <a href='#' @click="this.chooseId($order->id)" class="btn btn-primary">Submit</a>
+          	<?php endif;?>
+          </td>
         </tr>
       	<?php endforeach;?>
       </tbody>
@@ -59,13 +66,63 @@ $this->registerJsFile('@web/js/complains.js', ['depends' => [\yii\web\JqueryAsse
 </div>
 <!-- END TABLE -->
 
-<!-- Modal order detail-->
-<div class="modal fade modal-kg" id="detailOrder" tabindex="-1" role="dialog"
-  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!-- Modal order view-->
+<div class="modal fade modal-kg" id="paymentGame" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
-      
+    <div class="modal-header d-block">
+      <h2 class="modal-title text-center w-100 text-red text-uppercase">Payment game</h2>
+      <p class="text-center d-block">Bulk ID: #{{ id }}</p>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6 border-right">
+          <p><span class="list-item">Game:</span><b>{{ info.game_title }}</b></p>
+          <hr />
+          <p><span class="list-item">Final Payment:</span><b class="text-red">{{ info.total_amount }} {{ info.currency }}</b></p>
+        </div>
+        <div class="col-md-6">
+          {{ info.payment_data_content }}
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </div>
-<!-- end modal order detail -->
+<!-- end modal order view -->
+</div>
+
+
+<?php
+$mappingOrders = json_encode($mappingOrders);
+$csrfTokenName = Yii::$app->request->csrfParam;
+$csrfToken = Yii::$app->request->csrfToken;
+$script = <<< JS
+var mappingOrders = $mappingOrders;
+var app = new Vue({
+  el: '#app',
+  data: {
+    id: null
+  },
+  computed: {
+    info() {
+      return this.id ? mappingOrders[this.id] : {};
+    }
+  },
+  method() {
+    chooseId(id) {
+      console.log('choose id', id);
+      this.id = id;
+      $('#paymentGame').modal('show');
+    }
+  },
+  created() {
+    console.log('app created')
+  }
+});
+JS;
+$this->registerJs($script);
+?>
