@@ -15,6 +15,7 @@ use website\models\Paygate;
 // forms
 use website\forms\FetchOrderForm;
 use common\models\PaymentCommitmentOrder;
+use common\models\PaymentReality;
 
 
 class OrderController extends Controller
@@ -137,6 +138,23 @@ class OrderController extends Controller
         }
         $commitment->payment_id = $payment_id;
         $commitment->save();
+
+        $reality = PaymentReality::find()->where([
+            'payment_id' => $payment_id,
+            'status' => PaymentReality::STATUS_PENDING,
+        ])->one();
+        if ($reality) {
+            $approveTransactionService = new \website\forms\ApprovePaymentCommitmentForm([
+                'id' => $commitment->id,
+                'payment_reality_id' => $reality->id,
+                'note' => sprintf('Transaction is approved automatically, after updating payment id of %s', $commitment->id),
+                'confirmed_by' => $commitment->created_by,
+            ]);
+            $approveTransactionService->setReality($reality);
+            $approveTransactionService->setCommitment($commitment);
+            $approveTransactionService->approve();
+        }
+        
         return $this->asJson(['status' => true, 'success' => $success]);
 
         
