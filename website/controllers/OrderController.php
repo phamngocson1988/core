@@ -82,7 +82,7 @@ class OrderController extends Controller
                 'id', 'customer_name', 'game_title', 'quantity', 'total_unit', 'bulk', 'payment_id',
                 'payment_data',
                 'payment_data_content' => function ($order) {
-                    return strlen($order->getPaymentData());
+                    return $order->getPaymentData();
                 },
             ],
         ]);
@@ -91,6 +91,7 @@ class OrderController extends Controller
         $mappingOrders = [];
         foreach ($models as $model) {
             $childrenOrders = ArrayHelper::getValue($mappingBulks, $model->bulk, []);
+            $orderDetail['id'] = $model->id;
             $orderDetail['game_title'] = count($childrenOrders) ? $childrenOrders[0]['game_title'] : '';
             $orderDetail['quantity'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'quantity')) : 0;
             $orderDetail['total_unit'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'total_unit')) : 0;
@@ -98,7 +99,7 @@ class OrderController extends Controller
             $orderDetail['payment_data_content'] = count($childrenOrders) ? $childrenOrders[0]['payment_data_content'] : '';
             $orderDetail['total_amount'] = $model->total_amount;
             $orderDetail['currency'] = $model->currency;
-            $orderDetail['payment_method'] = $model->payment_method;
+            $orderDetail['payment_method'] = $model->paygate;
             $orderDetail['payment_type'] = $model->payment_type;
             $mappingOrders[$model->id] = $orderDetail;
             
@@ -107,6 +108,38 @@ class OrderController extends Controller
     		'models' => $models,
             'mappingOrders' => $mappingOrders
     	]);
+    }
+    public function actionUpdateBulk($id)
+    {
+        $request = Yii::$app->request;
+        $payment_id = $request->post('payment_id');
+        $commitment = PaymentCommitmentOrder::findOne($id);
+        $orders = Order::find()->where(['bulk' => $commitment->bulk])->all();
+        $success = [];
+        foreach ($orders as $order) {
+            $model = new \website\forms\UpdateOrderForm([
+                'id' => $order->id,
+                'payment_id' => sprintf("%s_%s", $payment_id, $order->id),
+            ]);
+            $files = Yii::$app->file->upload('evidence', "evidence/$order->id", true);
+            if ($files) {
+                $inputFile = reset($files);
+                $model->evidence = $inputFile;
+                $commitment->evidence = $inputFile;
+            }
+            if (!$model->update()) {
+                $errors = $model->getErrorSummary(true);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'errors' => $error]);
+            } else {
+                $success[] = $order->id;
+            }
+        }
+        $commitment->payment_id = $payment_id;
+        $commitment->save();
+        return $this->asJson(['status' => true, 'success' => $success]);
+
+        
     }
 
     public function actionDetail($id)

@@ -15,6 +15,7 @@ class OfflinePaygate
 
     public function createCharge($order, $user = null) 
     {
-        return Url::to(['cart/thankyou', 'id' => $order->id], true);
+        $id = is_array($order) ? $order['id'] : $order->id;
+        return Url::to(['cart/thankyou', 'id' => $id], true);
     }
 }
