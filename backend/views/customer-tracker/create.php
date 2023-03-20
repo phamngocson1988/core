@@ -90,7 +90,7 @@ use common\components\helpers\TimeElapsed;
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'bs-select form-control'],
                     'template' => '{label}<div class="col-md-6">{input}{hint}{error}</div>'
-                  ])->dropDownList($model->fetchGames(), ['prompt' => 'Chọn game'])->label('Game');?>
+                  ])->dropDownList($model->fetchGames(), ['multiple' => 'multiple', 'prompt' => 'Chọn game'])->label('Game');?>
                   <?=$form->field($model, 'saler_id', [
                     'labelOptions' => ['class' => 'col-md-2 control-label'],
                     'inputOptions' => ['class' => 'bs-select form-control'],

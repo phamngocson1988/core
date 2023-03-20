@@ -6,23 +6,55 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use website\components\cart\CartItem;
 use website\models\Order;
+use website\components\payment\PaymentGatewayFactory;
+use common\models\PaymentCommitment;
+use common\models\CurrencySetting;
+
 
 class OrderPaymentBulkForm extends Model
 {
     public $id;
     public $items = [];
+    public $paygate = 'kinggems';
 
     protected $_cartItem;
     protected $successList = [];
     protected $errorList = [];
+    protected $_paygate;
 
     public function rules()
     {
         return [
             [['id', 'items'], 'required'],
-            ['items', 'validateWallet'],
-            ['items', 'validateItems']
+            ['items', 'validateItems'],
+            ['paygate', 'validatePaygate'],
         ];
+    }
+
+    public function validatePaygate($attribute, $params = [])
+    {
+        $paygate = $this->getPaygateConfig();
+        if (!$paygate) {
+            $this->addError($attribute, sprintf('Payment Gateway %s is not available', $this->paygate));
+            return;
+        }
+        if ($paygate->getIdentifier() == 'kinggems') {
+            return $this->validateWallet($attribute, $params);
+        }
+    }
+
+    public function getPaygateConfig()
+    {
+        if (!$this->_paygate) {
+            $this->_paygate = PaymentGatewayFactory::getConfig($this->paygate);
+        }
+        return $this->_paygate;
+    }
+
+    public function getPaygate()
+    {
+        $config = $this->getPaygateConfig();
+        return PaymentGatewayFactory::getPaygate($config);
     }
 
     public function validateWallet($attribute, $params = [])
@@ -65,6 +97,8 @@ class OrderPaymentBulkForm extends Model
         $cart = Yii::$app->cart;
         $bulk = strtotime('now');
         $user = Yii::$app->user->getIdentity();
+        $paygateModel = $this->getPaygateConfig();
+        $paygate = $this->getPaygate();
         foreach ((array)$items as $index => $info) {
             $cart->clear();
             $cartItem = clone $model;
@@ -74,19 +108,71 @@ class OrderPaymentBulkForm extends Model
             $cart->add($cartItem);
             $checkoutForm = new \website\forms\OrderPaymentForm([
                 'cart' => $cart, 
-                'paygate' => 'kinggems'
+                'paygate' => $this->paygate
             ]);
             if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
-                $this->successList[] = $index;
-                $paygate = $checkoutForm->getPaygate();
-                $order = Order::findOne($id);
-                $paygate->createCharge($order, $user);
+                $this->successList[] = $id;
+                
             } else {
                 $messages = $model->getErrorSummary(true);
                 $message = reset($messages);
-                $this->errorList[$index] = $message;
+                $this->errorList[$info['id']] = $message;
             }
         }
+        
+        if (count($this->successList) > 0) {
+            $orderIds = $this->getSuccessList();
+            $usdCurrency = CurrencySetting::findOne(['code' => 'USD']);
+            $targetCurrency = CurrencySetting::findOne(['code' => $paygateModel->getCurrency()]);
+            $vndCurrency = CurrencySetting::findOne(['code' => 'VND']);
+            
+            if ($paygateModel->getIdentifier() != 'kinggems') {
+                $orders = Order::find()->where(['id' => $orderIds])->select(['sub_total_price', 'total_price', 'total_fee', 'game_title'])->asArray()->all();
+                $order = $orders[0];
+                $sub_total_price = array_sum(array_column($orders, 'sub_total_price')); // total of sub price
+                $total_fee = array_sum(array_column($orders, 'total_fee'));; // total of fee
+                $total_price = array_sum(array_column($orders, 'total_price')); // total of price
+                
+                $commitment = new PaymentCommitment();
+                $commitment->object_name = PaymentCommitment::OBJECT_NAME_ORDER;
+                $commitment->object_key = $bulk; // $bulk
+                $commitment->paygate = $paygateModel->getIdentifier();
+                $commitment->payment_type = $paygateModel->getPaymentType();
+                $commitment->amount = $usdCurrency->exchangeTo($sub_total_price, $targetCurrency);
+                $commitment->fee = $usdCurrency->exchangeTo($total_fee, $targetCurrency);
+                $commitment->total_amount = $usdCurrency->exchangeTo($total_price, $targetCurrency);
+                $commitment->currency = $paygateModel->getCurrency();
+                $commitment->kingcoin = $usdCurrency->getKcoin($total_price);
+                $commitment->exchange_rate = $targetCurrency->exchange_rate;
+                $commitment->user_id = $user->id;
+                $commitment->status = PaymentCommitment::STATUS_PENDING;
+                $commitment->bulk = $bulk;
+                $commitment->save();
+
+                PaymentCommitment::updateAll(
+                    ['parent' => $commitment->id], 
+                    [
+                        'object_name' => PaymentCommitment::OBJECT_NAME_ORDER,
+                        'object_key' => $orderIds,
+                        'bulk' => $bulk,
+                    ]
+                );
+                $paygate->createCharge([
+                    'total_price' => $commitment->total_amount,
+                    'description' => sprintf("Pay for %s orders of %s", count($orderIds), $order['game_title']),
+                    'id' => $commitment->id,
+                    'title' => $order['game_title'],
+                    'orderIds' => $orderIds
+                ], $user);
+            } else {
+                $orders = Order::find()->where(['id' => $orderIds])->all();
+                foreach ($orders as $order) {
+                    $paygate->createCharge($order, $user);
+                }
+            }
+            
+        }
+        
         return true;
     }
 

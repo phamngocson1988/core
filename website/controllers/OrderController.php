@@ -6,6 +6,7 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 // models
 use website\models\Order;
@@ -13,6 +14,8 @@ use website\models\OrderFile;
 use website\models\Paygate;
 // forms
 use website\forms\FetchOrderForm;
+use common\models\PaymentCommitmentOrder;
+use common\models\PaymentReality;
 
 
 class OrderController extends Controller
@@ -60,6 +63,101 @@ class OrderController extends Controller
     		'search' => $form,
     		'pages' => $pages
     	]);
+    }
+
+    public function actionBulk()
+    {
+    	$userId = Yii::$app->user->id;
+    	$request = Yii::$app->request;
+    	$models = PaymentCommitmentOrder::find()->where([
+            'user_id' => Yii::$app->user->id,
+            'status' => PaymentCommitmentOrder::STATUS_PENDING,
+            'parent' => 0,
+        ])->all();
+        $bulks = ArrayHelper::getColumn($models, 'object_key');
+        $orders = Order::find()->where(['bulk' => $bulks])
+            ->indexBy('id')
+            ->all();
+        $orders = ArrayHelper::toArray($orders, [
+            'website\models\Order' => [
+                'id', 'customer_name', 'game_title', 'quantity', 'total_unit', 'bulk', 'payment_id',
+                'payment_data',
+                'payment_data_content' => function ($order) {
+                    return $order->getPaymentData();
+                },
+            ],
+        ]);
+        
+        $mappingBulks = ArrayHelper::index($orders, null, 'bulk');
+        $mappingOrders = [];
+        foreach ($models as $model) {
+            $childrenOrders = ArrayHelper::getValue($mappingBulks, $model->bulk, []);
+            $orderDetail['id'] = $model->id;
+            $orderDetail['game_title'] = count($childrenOrders) ? $childrenOrders[0]['game_title'] : '';
+            $orderDetail['quantity'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'quantity')) : 0;
+            $orderDetail['total_unit'] = count($childrenOrders) ? array_sum(array_column($childrenOrders, 'total_unit')) : 0;
+            $orderDetail['payment_data'] = count($childrenOrders) ? $childrenOrders[0]['payment_data'] : '';
+            $orderDetail['payment_data_content'] = count($childrenOrders) ? $childrenOrders[0]['payment_data_content'] : '';
+            $orderDetail['total_amount'] = $model->total_amount;
+            $orderDetail['currency'] = $model->currency;
+            $orderDetail['payment_method'] = $model->paygate;
+            $orderDetail['payment_type'] = $model->payment_type;
+            $mappingOrders[$model->id] = $orderDetail;
+            
+        }
+    	return $this->render('bulk', [
+    		'models' => $models,
+            'mappingOrders' => $mappingOrders
+    	]);
+    }
+    public function actionUpdateBulk($id)
+    {
+        $request = Yii::$app->request;
+        $payment_id = $request->post('payment_id');
+        $commitment = PaymentCommitmentOrder::findOne($id);
+        $orders = Order::find()->where(['bulk' => $commitment->bulk])->all();
+        $success = [];
+        foreach ($orders as $order) {
+            $model = new \website\forms\UpdateOrderForm([
+                'id' => $order->id,
+                'payment_id' => sprintf("%s_%s", $payment_id, $order->id),
+            ]);
+            $files = Yii::$app->file->upload('evidence', "evidence/$order->id", true);
+            if ($files) {
+                $inputFile = reset($files);
+                $model->evidence = $inputFile;
+                $commitment->evidence = $inputFile;
+            }
+            if (!$model->update()) {
+                $errors = $model->getErrorSummary(true);
+                $error = reset($errors);
+                return $this->asJson(['status' => false, 'errors' => $error]);
+            } else {
+                $success[] = $order->id;
+            }
+        }
+        $commitment->payment_id = $payment_id;
+        $commitment->save();
+
+        $reality = PaymentReality::find()->where([
+            'payment_id' => $payment_id,
+            'status' => PaymentReality::STATUS_PENDING,
+        ])->one();
+        if ($reality) {
+            $approveTransactionService = new \website\forms\ApprovePaymentCommitmentForm([
+                'id' => $commitment->id,
+                'payment_reality_id' => $reality->id,
+                'note' => sprintf('Transaction is approved automatically, after updating payment id of %s', $commitment->id),
+                'confirmed_by' => $commitment->created_by,
+            ]);
+            $approveTransactionService->setReality($reality);
+            $approveTransactionService->setCommitment($commitment);
+            $approveTransactionService->approve();
+        }
+        
+        return $this->asJson(['status' => true, 'success' => $success]);
+
+        
     }
 
     public function actionDetail($id)

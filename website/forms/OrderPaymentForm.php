@@ -239,6 +239,7 @@ class OrderPaymentForm extends Model
                 $commitment->exchange_rate = $targetCurrency->exchange_rate;
                 $commitment->user_id = $order->customer_id;
                 $commitment->status = PaymentCommitment::STATUS_PENDING;
+                $commitment->bulk = $order->bulk;
                 $commitment->save();
             }
 
