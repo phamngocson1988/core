@@ -78,10 +78,9 @@ class OrderPaymentBulkForm extends Model
                 'paygate' => $this->paygate
             ]);
             if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
-                $this->successList[] = $index;
                 $paygate = $checkoutForm->getPaygate();
                 $order = Order::findOne($id);
-                $paygate->createCharge($order, $user);
+                $this->successList[$index] = $paygate->createCharge($order, $user);
             } else {
                 $messages = $model->getErrorSummary(true);
                 $message = reset($messages);
