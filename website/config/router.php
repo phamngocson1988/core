@@ -32,6 +32,7 @@ return [
         // game
         'game/<id:\d+>-<slug:[\w\-]+>' => 'game/view',
         'shop' => 'game/index', 
+        'shop/<id:\d+>-<slug:[\w\-]+>' => 'shop/view',
 
         // cart
         'shopping-cart' => 'cart/index',

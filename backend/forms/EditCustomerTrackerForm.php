@@ -26,7 +26,7 @@ class EditCustomerTrackerForm extends Model
     public $email;
     public $channels = [];
     public $contacts = [];
-    public $game_id;
+    public $game_id = [];
     public $sale_target;
     public $customer_tracker_status;
 
@@ -79,7 +79,7 @@ class EditCustomerTrackerForm extends Model
         $leadTracker->email = $this->email;
         $leadTracker->channels = implode(",", (array)$this->channels);
         $leadTracker->contacts = implode(",", (array)$this->contacts);
-        $leadTracker->game_id = $this->game_id;
+        $leadTracker->game_id = implode(",", (array)$this->game_id);
         $leadTracker->customer_tracker_status = $this->customer_tracker_status;
         $leadTracker->setCurrentSaleTarget($this->sale_target);
         $leadTracker->save();
@@ -101,7 +101,7 @@ class EditCustomerTrackerForm extends Model
         $this->email = $leadTracker->email;
         $this->channels = explode(',', $leadTracker->channels);
         $this->contacts = explode(',', $leadTracker->contacts);
-        $this->game_id = $leadTracker->game_id;
+        $this->game_id = explode(',', $leadTracker->game_id);
         $this->customer_tracker_status = $leadTracker->customer_tracker_status;
         $this->sale_target = $leadTracker->getCurrentSaleTarget();
     }
@@ -136,8 +136,8 @@ class EditCustomerTrackerForm extends Model
 
         $salerTeamIds = array_merge($member, $manager, $admin);
         $salerTeamIds = array_unique($salerTeamIds);
-        $salerTeamObjects = User::find()->where(['id' => $salerTeamIds])->select(['id', 'email'])->all();
-        $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'email');
+        $salerTeamObjects = User::find()->where(['id' => $salerTeamIds])->select(['id', 'name'])->all();
+        $salerTeam = ArrayHelper::map($salerTeamObjects, 'id', 'name');
         return $salerTeam;
     }
 
