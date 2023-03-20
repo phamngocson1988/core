@@ -58,7 +58,7 @@ $currencyJson = json_encode($currencies);
           <h1 class="text-red mb-0" id="title"><?=$model->title;?></h1>
           <p class="lead" id="package-name"></p>
           <div class="btn-group-toggle multi-choose row" data-toggle="buttons">
-            <div class="col-lg-4 col-md-6 col-xs-12 mb-3" v-for="methodData of methodList">
+            <div class="col-lg-4 col-md-6 col-xs-12 mb-3" v-for="methodData of methodList" :key="methodData.id">
               <label class="btn btn-secondary w-100" :class="{ active: method == methodData.id }" data-toggle="tooltip" data-placement="top" :title="methodData.title">
                 <input type="radio" name="method" autocomplete="off" v-model="method" :checked="method == methodData.id"> {{ methodData.title }}
               </label>
@@ -96,7 +96,7 @@ $currencyJson = json_encode($currencies);
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Version</label>
                 <select class="form-control" v-model="version">
-                  <option v-for="option in versionOptions" :value="option.value">
+                  <option v-for="option in versionOptions" :key="option.value" :value="option.value">
                     {{ option.text }}
                   </option>
                 </select>
@@ -106,7 +106,7 @@ $currencyJson = json_encode($currencies);
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Pack</label>
                 <select class="form-control" v-model="package">
-                  <option v-for="option in packageOptions" :value="option.value">
+                  <option v-for="option in packageOptions" :key="option.value" :value="option.value">
                     {{ option.text }}
                   </option>
                 </select>
@@ -116,7 +116,7 @@ $currencyJson = json_encode($currencies);
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Currency</label>
                 <select class="form-control" v-model="currency">
-                  <option v-for="option in currencyOptions" :value="option.value">
+                  <option v-for="option in currencyOptions" :key="option.value" :value="option.value">
                     {{ option.text }}
                   </option>
                 </select>
@@ -147,9 +147,7 @@ $currencyJson = json_encode($currencies);
   </div><!-- END MAIN SINGLE -->
 
   <div class="container my-5 single-order" v-show="canSale && isUserLogin">
-    <template v-for="item in items" :key="item.id">
-      <cart-item :quantity="item.quantity" :information="item.raw" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity" :update-raw="updateRaw"/>
-    </template>
+    <cart-item v-for="item in items" :key="item.id" :quantity="item.quantity" :information="item.raw" :id="item.id" :add-item="addItem" :delete-item="deleteItem" :update-quantity="updateQuantity" :update-raw="updateRaw"/>
   </div>
 
   <div class="container my-5 single-order" v-show="canSale && isUserLogin">
@@ -158,16 +156,16 @@ $currencyJson = json_encode($currencies);
         <p class="lead mb-2">Payment method</p>
         <hr/>
         <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
-          <template v-for="paygate in availablePaygates">
-            <paygate-item
+          <paygate-item
+            v-for="paygate in availablePaygates"
+            :key="paygate.id"
             :id="paygate.id"
             :identifier="paygate.identifier"
             :image="paygate.image"
             :on-select="choosePaygate"
             :total-price="totalPrice"
             :balance="balance"
-            />
-          </template>
+          />
         </div>
       </div>
       <div class="col-md-7">
@@ -562,7 +560,8 @@ var app = new Vue({
       const currencyInfo = currencyList.find(({ code }) => code === this.currency);
       if (currencyInfo) {
         const { exchange_rate = 1 } = currencyInfo;
-        return this.totalPrice * exchange_rate;
+        const otherCurrency = this.totalPrice * exchange_rate;
+        return otherCurrency.toFixed(2);
       }
       return this.totalPrice;
     }
@@ -572,13 +571,18 @@ var app = new Vue({
       this.items = [...this.items, { id: this.uuidv4(), quantity: 1, raw: '' }];
     },
     deleteItem(id) {
+      console.log('deleteItem', id);
       if (this.items.length <= 1) {
         alert('You need to keep at least one item');
         return;
       }
-      this.items = this.items.filter((item) => {
+
+      console.log('deleteItem items before', this.items);
+      const items = this.items.filter((item) => {
         return item.id !== id;
       });
+      this.items = [...items];
+      console.log('deleteItem items after', this.items);
     },
     updateQuantity(id, quantity) {
       this.items = this.items.map(item => {
@@ -693,7 +697,8 @@ var app = new Vue({
         const items = result.map(row => {
           return { id: this.uuidv4(), quantity: parseFloat(row[0]), raw: row[1] }
         });
-        this.items = [...this.items, ...items];
+        this.items = items;
+        console.log('uploadFile', this.items);
       })
     }
   },
