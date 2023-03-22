@@ -92,7 +92,7 @@ $currencyJson = json_encode($currencies);
             </div>
           </div>
           <div class="row multi-select p-2" v-if="versionOptions.length && packageOptions.length">
-            <div class="col-md-4" v-if="versionOptions.length">
+            <div class="col-md-6" v-if="versionOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Version</label>
                 <select class="form-control" v-model="version">
@@ -102,7 +102,7 @@ $currencyJson = json_encode($currencies);
                 </select>
               </div>
             </div>
-            <div class="col-md-4" v-if="packageOptions.length">
+            <div class="col-md-6" v-if="packageOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Pack</label>
                 <select class="form-control" v-model="package">
@@ -112,16 +112,6 @@ $currencyJson = json_encode($currencies);
                 </select>
               </div>
             </div>
-            <div class="col-md-4" v-if="currencyOptions.length">
-              <div class="form-group">
-                <label for="exampleFormControlSelect2">Currency</label>
-                <select class="form-control" v-model="currency">
-                  <option v-for="option in currencyOptions" :key="option.value" :value="option.value">
-                    {{ option.text }}
-                  </option>
-                </select>
-              </div>
-          </div>
           </div>
           <hr />
           <div class="multi-rating d-flex justify-content-between align-items-center">
@@ -452,7 +442,6 @@ var app = new Vue({
     unit: 0,
     paygate: null,
     items: [],
-    currency: 'USD',
     isUserLogin: isUserLogin,
     methodList: settingMethodMapping,
     versionList: settingVersionMapping,
@@ -518,12 +507,6 @@ var app = new Vue({
         return { value: key, text: this.versionList[key] };
       })
     },
-    currencyOptions() {
-      if (!currencyList.length) return [];
-      return currencyList.map(({ code }) => {
-        return { value: code, text: code };
-      })
-    },
     packageOptions() {
       if (!Object.keys(mapping).length) return [];
       const packageKeys = Object.keys(mapping[this.method][this.version] || {});
@@ -567,6 +550,10 @@ var app = new Vue({
         return otherCurrency.toFixed(2);
       }
       return this.totalPrice;
+    },
+    currency() {
+      const paygateInfo = this.availablePaygates.find(({ id }) => id === this.paygate);
+      return paygateInfo ? paygateInfo.currency : 'USD';
     }
   },
   methods: {
