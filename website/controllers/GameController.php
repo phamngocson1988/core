@@ -19,6 +19,7 @@ use website\models\GameVersion;
 use website\models\GamePackage;
 use website\models\Promotion;
 use website\models\GameCategoryItem;
+use common\models\CurrencySetting;
 
 // form
 use website\forms\FetchGameForm;
@@ -71,7 +72,105 @@ class GameController extends Controller
             'search' => $form
         ]);
     }
+
     public function actionView($id)
+    {
+    	$request = Yii::$app->request;
+        $model = CartItem::findOne($id);
+
+        if (!$model->group_id) {
+            $games = [];
+            $methods = $versions = $packages = [];
+        } else {
+            $group = GameGroup::findOne($model->group_id);
+            $games = CartItem::find()->where(['group_id' => $model->group_id])->all();
+            $methodIds = ArrayHelper::getColumn($games, 'method');
+            $methodIds = array_filter($methodIds);
+            $methodIds = array_unique($methodIds);
+            $methods = GameMethod::findAll($methodIds);
+
+            $versionIds = ArrayHelper::getColumn($games, 'version');
+            $versionIds = array_filter($versionIds);
+            $versionIds = array_unique($versionIds);
+            $versions = GameVersion::findAll($versionIds);
+
+            $packageIds = ArrayHelper::getColumn($games, 'package');
+            $packageIds = array_filter($packageIds);
+            $packageIds = array_unique($packageIds);
+            $packages = GamePackage::findAll($packageIds);
+        }
+
+        // Game settings
+        $settingVersionMapping = ArrayHelper::map($versions, 'id', 'title');
+        $settingPackageMapping = ArrayHelper::map($packages, 'id', 'title');
+
+        $mapping = [];
+        foreach ($games as $game) {
+            $gameInfo = [
+                'viewUrl' => Url::to(['game/view', 'id' => $game->id, 'slug' => $game->slug], true),
+                'cartUrl' => Url::to(['cart/add', 'id' => $game->id], true),
+                'calculateUrl' => Url::to(['cart/calculates', 'id' => $game->id], true),
+                'checkoutsUrl' => Url::to(['cart/checkouts', 'id' => $game->id], true),
+                'title' => $game->title,
+                'content' => $game->content,
+                'image' => $game->getImageUrl(),
+                'save' => sprintf('save %s', number_format($game->getSavedPrice())) . '%',
+            ];
+            $mapping[$game->method][$game->version][$game->package] = $gameInfo;
+        }
+
+        
+        // other games
+        $relatedGames = [];
+        $category = null;
+        if ($model->hasCategory()) {
+            $categories = $model->categories;
+            $categoryIds = ArrayHelper::getColumn($categories, 'id');
+            $category =  reset($categories);
+            $categoryGames = GameCategoryItem::find()
+            ->where(['in', 'category_id', $categoryIds])
+            ->andWhere(['<>', 'game_id', $id])
+            ->limit(5)->all();
+            $gameIds = ArrayHelper::getColumn($categoryGames, 'game_id');
+            $relatedGames = Game::findAll($gameIds);
+        }
+
+        // reseller
+        $is_reseller = false;
+        if (!Yii::$app->user->isGuest) {
+            $user = Yii::$app->user->identity;
+            $is_reseller = $user->isReseller();
+        }
+
+        // Subscribe
+        $isSubscribe = Yii::$app->user->isGuest ? false : GameSubscriber::find()->where([
+            'user_id' => Yii::$app->user->id,
+            'game_id' => $id
+        ])->exists();
+
+        $currencies = CurrencySetting::find()
+        ->where(['status' => CurrencySetting::STATUS_ACTIVE])
+        ->select(['code', 'exchange_rate'])
+        ->orderBy(['is_fix' => SORT_DESC])
+        ->asArray()
+        ->all();
+
+    	return $this->render('view', [
+            'model' => $model,
+            'methods' => $methods,
+            'mapping' => json_encode($mapping),
+            'settingVersionMapping' => json_encode($settingVersionMapping),
+            'settingPackageMapping' => json_encode($settingPackageMapping),
+            'relatedGames' => $relatedGames,
+            'category' => $category,
+            'is_reseller' => $is_reseller,
+            'has_group' => (int)$model->group_id,
+            'isSubscribe' => $isSubscribe,
+            'currencies' => $currencies
+        ]);
+    }
+    
+    public function actionView1($id)
     {
     	$request = Yii::$app->request;
         $model = CartItem::findOne($id);

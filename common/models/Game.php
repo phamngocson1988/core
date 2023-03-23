@@ -188,7 +188,8 @@ class Game extends ActiveRecord
     public function getSavedPrice()
     {
         $ori = $this->getOriginalPrice();
-        return round(($this->getPrice() - $ori) * 100/ $ori, 2);
+        if (!$ori) return $this->getPrice();
+        return round(($this->getPrice() - $ori) * 100 / $ori, 2);
     }
 
     public function getImages()
