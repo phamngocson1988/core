@@ -67,7 +67,7 @@ $currencyJson = json_encode($currencies);
           <div class="price py-3">
             <span class="price-value text-red mr-2" v-if="canSale">${{ price }}</span>
             <span class="price-value text-red mr-2" v-if="!canSale">Contact</span>
-            <span class="badge badge-danger" id="save"><?=sprintf("save %s", number_format($model->getSavedPrice()));?>%</span>
+            <span class="badge badge-danger" v-if="canSale && game">{{ game.save }}</span>
             <?php if (!Yii::$app->user->isGuest) : ?>
             <span class="btn-group-toggle bell" data-toggle="buttons" id="subscribe" data-subscribe="<?=Url::to(['user/subscribe']);?>" data-unsubscribe="<?=Url::to(['user/unsubscribe']);?>">
               <label class="btn <?=$isSubscribe ? 'active' : '';?>" data-toggle="tooltip" data-placement="top" title="Notify me when price is changed or new promotions">

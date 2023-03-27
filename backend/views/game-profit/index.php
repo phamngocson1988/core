@@ -73,7 +73,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <tr>
                 <td class="center"><?=$model->id;?></td>
                 <td class="center"><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
-                <td class="left"><?=$model->title;?></td>
+                <td class="left"><?=sprintf("%s (%s-%s-%s)", $model->title, $model->method_title, $model->version_title, $model->package_title);?></td>
                 <td  class="center">
                   <?php if ($model->status == 'Y') :  ?>
                   <span class="label label-success"><?=Yii::t('app', 'visible');?></span>
