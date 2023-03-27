@@ -59,8 +59,8 @@ $currencyJson = json_encode($currencies);
           <p class="lead" id="package-name"></p>
           <div class="btn-group-toggle multi-choose row" data-toggle="buttons">
             <div class="col-lg-4 col-md-6 col-xs-12 mb-3" v-for="methodData of methodList" :key="methodData.id">
-              <label class="btn btn-secondary w-100" :class="{ active: method == methodData.id }" data-toggle="tooltip" data-placement="top" :title="methodData.title">
-                <input type="radio" name="method" autocomplete="off" v-model="method" :checked="method == methodData.id"> {{ methodData.title }}
+              <label class="btn btn-secondary w-100" :class="{ active: method == methodData.id }" data-toggle="tooltip" data-placement="top" :title="methodData.title" @click="changeMethod(methodData.id)">
+                <input type="radio" name="method" autocomplete="off" :checked="method == methodData.id"> {{ methodData.title }}
               </label>
             </div>
           </div>
@@ -433,7 +433,7 @@ Vue.component("starItem", {
 });
 
 const paygates = $paygateJson;
-const balance = $balance;
+const balance = parseFloat('$balance');
 const isUserLogin = !$isGuest;
 var app = new Vue({
   el: '#cart_items',
@@ -457,10 +457,17 @@ var app = new Vue({
     canSale: false,
     policy1: false,
     policy2: false,
-    balance: balance,
+    balance: balance || 0,
     isSubmiting: false
   },
   watch: {
+    method() {
+      this.version = this.versionOptions.length ? this.versionOptions[0].value : '';
+      this.package = this.packageOptions.length ? this.packageOptions[0].value : '';
+    },
+    version() {
+      this.package = this.packageOptions.length ? this.packageOptions[0].value : '';
+    },
     package() {
       this.getGameInfor();
     }
@@ -599,6 +606,8 @@ var app = new Vue({
       );
     },
     getGameInfor() {
+      this.game = mapping[this.method][this.version][this.package];
+      console.log('Game Info', this.method, this.version, this.package, this.game);
       if (!this.game) return;
       
       axios.post(this.game.calculateUrl, {
@@ -615,6 +624,7 @@ var app = new Vue({
         this.canSale = parseInt(result.data.amount);
         this.unit = data.unit;
         this.price = data.amount;
+        history.pushState({}, this.game.title, this.game.viewUrl);
       });
     },
     togglePolicy(policy) {
@@ -729,6 +739,9 @@ var app = new Vue({
         this.items = items;
         console.log('uploadFile', this.items);
       })
+    },
+    changeMethod(method) {
+      this.method = method;
     }
   },
   created() {
