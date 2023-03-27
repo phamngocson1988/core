@@ -231,8 +231,11 @@ class EditGameForm extends Model
             $game->back_to_stock = $this->back_to_stock;
             $game->group_id = $group->id;
             $game->method = $method->id;
+            $game->method_title = $method->title;
             $game->version = $version->id;
+            $game->version_title = $version->title;
             $game->package = $package->id;
+            $game->package_title = $package->title;
             $game->min_quantity = $this->min_quantity;
             $game->save();
             $newId = $game->id;
