@@ -51,7 +51,8 @@ class GameController extends Controller
             'q' => $request->get('q'),
             'status' => $request->get('status'),
             'auto_dispatcher' => $request->get('auto_dispatcher'),
-            'soldout' => $request->get('soldout')
+            'soldout' => $request->get('soldout'),
+            'method' => $request->get('method'),
         ]);
         $command = $form->getCommand();
         $command->orderBy(['updated_at' => SORT_DESC]);

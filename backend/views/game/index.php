@@ -78,6 +78,10 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 Game::INSTOCK => 'Còn hàng',
             ], ['prompt' => 'Chọn trạng thái kho'])->label('Trạng thái kho');?>
 
+            <?=$form->field($search, 'method', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'method']
+            ])->dropDownList($search->fetchMethod(), ['prompt' => 'Chọn phương thức nạp'])->label('Phương thức nạp');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
