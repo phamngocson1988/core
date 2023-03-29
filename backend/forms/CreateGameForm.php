@@ -49,6 +49,8 @@ class CreateGameForm extends Model
     public $package;
     public $categories;
     public $min_quantity;
+    public $expected_profit;
+    public $canUpdateProfit = false;
 
     protected $_group;
     protected $_method;
@@ -73,7 +75,8 @@ class CreateGameForm extends Model
             [['hot_deal', 'new_trending', 'top_grossing', 'back_to_stock'], 'safe'],
             [['group_id', 'method', 'package', 'version'], 'safe'],
             ['group_id', 'validateGroup'],
-            ['min_quantity', 'number']
+            ['min_quantity', 'number'],
+            ['expected_profit', 'safe'],
         ];
     }
 
@@ -217,6 +220,9 @@ class CreateGameForm extends Model
             $game->package = $package->id;
             $game->package_title = $package->title;
             $game->min_quantity = $this->min_quantity;
+            if ($this->canUpdateProfit) {
+                $game->expected_profit = $this->expected_profit;
+            }
             $game->save();
             $newId = $game->id;
 

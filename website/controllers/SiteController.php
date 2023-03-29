@@ -255,18 +255,19 @@ class SiteController extends Controller
 
     public function actionTest()
     {
-        // $request = Yii::$app->request;
-        // $username = $request->get('username');
-        // $currentUser = Yii::$app->user->getIdentity();
-        // if (Yii::$app->user->can('admin')) {
-        //     echo 'admin';
-        //     Yii::$app->user->logout();
-        //     $newUser = \website\models\User::findByUsername($username);
-        //     if ($newUser) {
-        //         Yii::$app->user->login($newUser, 3600 * 24 * 30);
-        //         echo $username;
-        //     }
-        // }
+        $request = Yii::$app->request;
+        // die($request->getUserIP());
+        $username = $request->get('username');
+        $currentUser = Yii::$app->user->getIdentity();
+        if ($currentUser) {
+            echo $username;
+            Yii::$app->user->logout();
+            $newUser = \website\models\User::findByUsername($username);
+            if ($newUser) {
+                echo "Login with new user";
+                Yii::$app->user->login($newUser, 3600 * 24 * 30);
+            }
+        }
         die('end');
     }
 

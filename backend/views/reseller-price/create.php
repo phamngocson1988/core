@@ -7,7 +7,9 @@ use yii\web\JsExpression;
 use common\components\helpers\StringHelper;
 
 $games = $model->fetchGames();
-$gameTitles = ArrayHelper::map($games, 'id', 'title');
+$gameTitles = ArrayHelper::map($games, 'id', function($game) {
+  return sprintf("%s (%s-%s-%s)", $game->title, $game->method_title, $game->version_title, $game->package_title);
+});
 $gameOptions = ArrayHelper::map($games, 'id', function($game) {
   return [
     'data-amplitude' => StringHelper::numberFormat($game->reseller_price_amplitude, 1),

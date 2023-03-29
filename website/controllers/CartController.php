@@ -93,7 +93,7 @@ class CartController extends Controller
                 'promotion-discount' => StringHelper::numberFormat($promotionDiscount, 2),
                 'amount' => StringHelper::numberFormat($totalPrice, 2),
                 'origin' => StringHelper::numberFormat($origin, 2),
-                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), $unitName),
             ]]);
         } else {
             $message = $model->getErrorSummary(true);
@@ -291,7 +291,7 @@ class CartController extends Controller
                 'promotion-discount' => StringHelper::numberFormat($promotionDiscount, 2),
                 'amount' => StringHelper::numberFormat($totalPrice, 2),
                 'origin' => StringHelper::numberFormat($origin, 2),
-                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), $unitName),
             ]]);
         } else {
             $message = $model->getErrorSummary(true);

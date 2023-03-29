@@ -60,7 +60,7 @@ class GameQuery extends ActiveQuery
 {
     public function init()
     {
-        $this->andOnCondition(['status' => Game::STATUS_VISIBLE]);
+        $this->andOnCondition(['status' => Game::STATUS_VISIBLE, 'soldout' => Game::INSTOCK]);
         parent::init();
     }
 }

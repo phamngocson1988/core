@@ -108,6 +108,12 @@ $canShowPrice = $user->can('orderteam');
           'options' => ['class' => 'list-separated profile-stat']
         ])->textInput()->label(sprintf('Số nhà cung cấp (Hiện có %s)', $numSupplier));?>
 
+        <?php if ($model->canUpdateProfit) : ?>
+        <?=$form->field($model, 'expected_profit', [
+          'options' => ['class' => 'list-separated profile-stat']
+        ])->textInput()->label('Lợi nhuận mong đợi');?>
+        <?php endif;?>
+        
         <?=$form->field($model, 'remark', [
           'options' => ['class' => 'list-separated profile-stat'],
           'inputOptions' => ['style' => 'resize: vertical', 'class' => 'form-control']
