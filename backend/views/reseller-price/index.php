@@ -97,7 +97,7 @@ $now = strtotime('now');
                 <tr class="<?=strtotime($model->invalid_at) <= $now ? 'invalid' : 'valid';?>">
                   <td class="center" col-tag="no"><?=$key + $pages->offset + 1;?></td>
                   <td col-tag="reseller_id"><?=$model->user->name;?></td>
-                  <td col-tag="game_id"><?=$model->game->title;?></td>
+                  <td col-tag="game_id"><?=sprintf("%s (%s-%s-%s)", $model->game->title, $model->game->method_title, $model->game->version_title, $model->game->package_title);?></td>
                   <td class="center" col-tag="game_supplier_price"><?=StringHelper::numberFormat($model->game->price1 + $model->game->expected_profit, 1);?></td>
                   <td class="center" col-tag="price"><?=sprintf("%s (%s)", $model->price, $model->change_price_request_code ?: "-");?></td>
                   <td class="center" col-tag="reseller_price_amplitude"><?=StringHelper::numberFormat($model->game->reseller_price_amplitude, 1);?></td>

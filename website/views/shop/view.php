@@ -92,7 +92,7 @@ $currencyJson = json_encode($currencies);
             </div>
           </div>
           <div class="row multi-select p-2" v-if="versionOptions.length && packageOptions.length">
-            <div class="col-md-4" v-if="versionOptions.length">
+            <div class="col-md-6" v-if="versionOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Version</label>
                 <select class="form-control" v-model="version">
@@ -102,7 +102,7 @@ $currencyJson = json_encode($currencies);
                 </select>
               </div>
             </div>
-            <div class="col-md-4" v-if="packageOptions.length">
+            <div class="col-md-6" v-if="packageOptions.length">
               <div class="form-group">
                 <label for="exampleFormControlSelect2">Pack</label>
                 <select class="form-control" v-model="package">
@@ -112,16 +112,6 @@ $currencyJson = json_encode($currencies);
                 </select>
               </div>
             </div>
-            <div class="col-md-4" v-if="currencyOptions.length">
-              <div class="form-group">
-                <label for="exampleFormControlSelect2">Currency</label>
-                <select class="form-control" v-model="currency">
-                  <option v-for="option in currencyOptions" :key="option.value" :value="option.value">
-                    {{ option.text }}
-                  </option>
-                </select>
-              </div>
-          </div>
           </div>
           <hr />
           <div class="multi-rating d-flex justify-content-between align-items-center">
@@ -278,6 +268,7 @@ $settingMethodMapping = json_encode($methodArray);
 $calculateUrl = Url::to(['cart/calculates', 'id' => $model->id], true);
 $checkoutsUrl = Url::to(['cart/checkouts', 'id' => $model->id], true);
 $uploadUrl = Url::to(['shop/upload', 'id' => $model->id], true);
+$walletUrl = Url::to(['wallet/index'], true);
 $script = <<< JS
 
 // React view on attributes
@@ -295,6 +286,7 @@ var orderUrl = '$orderUrl';
 var calculateUrl = '$calculateUrl';
 var checkoutsUrl = '$checkoutsUrl';
 var uploadUrl = '$uploadUrl';
+var walletUrl = '$walletUrl';
 console.log('mapping', mapping);
 console.log('settingMethodMapping', settingMethodMapping);
 console.log('settingVersionMapping', settingVersionMapping);
@@ -450,7 +442,6 @@ var app = new Vue({
     unit: 0,
     paygate: null,
     items: [],
-    currency: 'USD',
     isUserLogin: isUserLogin,
     methodList: settingMethodMapping,
     versionList: settingVersionMapping,
@@ -466,7 +457,8 @@ var app = new Vue({
     canSale: false,
     policy1: false,
     policy2: false,
-    balance: balance
+    balance: balance,
+    isSubmiting: false
   },
   watch: {
     package() {
@@ -515,12 +507,6 @@ var app = new Vue({
         return { value: key, text: this.versionList[key] };
       })
     },
-    currencyOptions() {
-      if (!currencyList.length) return [];
-      return currencyList.map(({ code }) => {
-        return { value: code, text: code };
-      })
-    },
     packageOptions() {
       if (!Object.keys(mapping).length) return [];
       const packageKeys = Object.keys(mapping[this.method][this.version] || {});
@@ -564,6 +550,10 @@ var app = new Vue({
         return otherCurrency.toFixed(2);
       }
       return this.totalPrice;
+    },
+    currency() {
+      const paygateInfo = this.availablePaygates.find(({ id }) => id === this.paygate);
+      return paygateInfo ? paygateInfo.currency : 'USD';
     }
   },
   methods: {
@@ -631,36 +621,59 @@ var app = new Vue({
       this[policy] = !this[policy];
     },
     validate() {
+      let flag = true;
+      let message = '';
       if (!this.policy1 || !this.policy2) {
-        toastr.error('Please agree with our policy');
-        return false;
-      }
-      if (!this.paygate) {
-        toastr.error('Please choose paygate');
-        return false;
-      }
-      if (!this.quantity) {
-        toastr.error('Not valid to make purchase');
-        return false;
-      }
-      if (!this.game) {
-        toastr.error('Game information is not valid');
-        return false;
-      }
-      if (!this.totalOrder) {
-        toastr.error('Please add your order');
-        return false;
-      }
-      if (this.items.some((item) => {
+        message = 'Please agree with our policy';
+        flag = false;
+      } else if (!this.paygate) {
+        message = 'Please choose paygate';
+        flag = false;
+      } else if (!this.quantity) {
+        message = 'Not valid to make purchase';
+        flag = false;
+      } else if (!this.game) {
+        message = 'Game information is not valid';
+        flag = false;
+      } else if (!this.totalOrder) {
+        message = 'Please add your order';
+        flag = false;
+      } else if (this.paygate === 'kinggems' && this.balance < this.totalPrice) {
+        message = 'Not enough amount in your wallet.';
+        flag = false;
+      } else if (this.items.some((item) => {
         return !item.quantity || !item.raw.trim()
       })) {
-        toastr.error('One of item is not valid');
+        message = 'One of item is not valid';
+        flag = false;
+      }
+      if (!flag) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: message,
+          allowOutsideClick: false
+        });
+        return false;
+      }
+      if (this.items.length > 1 && this.paygate !== 'kinggems') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          html: 'To use this feature you must deposit Kcoin first. <a href="' + walletUrl + '">Click here!</a>',
+          confirmButtonText: 'OK',
+          allowOutsideClick: false
+        });
         return false;
       }
       return true;
     },
     checkOut() {
-      if (!this.validate()) return false;
+      if (this.isSubmiting || !this.validate() ) {
+        return false;
+      }        
+      this.isSubmiting = true;
+      Swal.showLoading();
       const paygate = this.availablePaygates.find(( { id }) => id === this.paygate);
 
       axios.post(this.game.checkoutsUrl, {
@@ -675,10 +688,26 @@ var app = new Vue({
         const { data } = result;
         const { status, success, errors } = data;
         if (status === true) {
-          alert(success);
-          window.location.href = orderUrl;
+          Swal.close();
+          Swal.fire({
+            title: 'Success',
+            confirmButtonText: 'Go to orders',
+            allowOutsideClick: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = success;
+            }
+          })
         } else {
-          alert(errors);
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: errors,
+            confirmButtonText: 'OK',
+            allowOutsideClick: false
+          });
+          this.isSubmiting = false;
         }
       });
     },

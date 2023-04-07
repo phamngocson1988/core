@@ -27,7 +27,7 @@ $user = Yii::$app->user->getIdentity();
         <?php
         $reseller = $user->reseller;
         if ($reseller && $reseller->code) :
-        $resellerCodeLink = sprintf("https://subpayment.online/%s.html", $reseller->code);
+        $resellerCodeLink = sprintf("%s/%s.html", Yii::$app->params['payment_url'], $reseller->code);
         ?>
       <div class="card card-info text-center" style="margin-top: 20px">
       <?php

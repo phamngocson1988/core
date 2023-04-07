@@ -93,7 +93,7 @@ class CartController extends Controller
                 'promotion-discount' => StringHelper::numberFormat($promotionDiscount, 2),
                 'amount' => StringHelper::numberFormat($totalPrice, 2),
                 'origin' => StringHelper::numberFormat($origin, 2),
-                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), $unitName),
             ]]);
         } else {
             $message = $model->getErrorSummary(true);
@@ -291,7 +291,7 @@ class CartController extends Controller
                 'promotion-discount' => StringHelper::numberFormat($promotionDiscount, 2),
                 'amount' => StringHelper::numberFormat($totalPrice, 2),
                 'origin' => StringHelper::numberFormat($origin, 2),
-                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), strtoupper($unitName)),
+                'unit' => sprintf("%s %s", StringHelper::numberFormat($unit), $unitName),
             ]]);
         } else {
             $message = $model->getErrorSummary(true);
@@ -313,13 +313,7 @@ class CartController extends Controller
         if ($model->validate() && $model->purchase()) {
             $errors = $model->getErrorList();
             $success = $model->getSuccessList();
-            if (!count($success)) {
-                return $this->asJson(['status' => false, 'errors' => 'Something went wroing']);
-            } elseif (!count($errors)) {
-                return $this->asJson(['status' => true, 'success' => 'Your orders are placed successfully']);
-            } else {
-                return $this->asJson(['status' => true, 'success' => 'Some of orders are placed successfully']);
-            }
+            return $this->asJson(['status' => true, 'success' => reset($success), 'errors' => $errors]);
         } else {
             $errors = $model->getErrorSummary(true);
             $error = reset($errors);

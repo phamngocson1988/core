@@ -145,6 +145,7 @@ $orderTable = Order::tableName();
               <td>Tổng đơn: <?=number_format($search->getCommand()->count());?></td>
               <td colspan="5"></td>
               <td><?=StringHelper::numberFormat($search->getCommand()->sum("IF({$orderSupplierTable}.supplier_id, {$orderSupplierTable}.doing, {$orderTable}.quantity)"), 2);?></td>
+              <td></td>
               <td><?=StringHelper::numberFormat($search->getCommand()->sum("IF({$orderSupplierTable}.supplier_id, {$orderTable}.total_price * {$orderTable}.rate_usd * {$orderSupplierTable}.doing / {$orderTable}.quantity, {$orderTable}.total_price * {$orderTable}.rate_usd)"));?></td>
               <td></td>
               <td><?=StringHelper::numberFormat($search->getCommand()->sum("COALESCE({$orderSupplierTable}.total_price, 0)"));?></td>

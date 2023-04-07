@@ -78,6 +78,10 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
                 Game::INSTOCK => 'Còn hàng',
             ], ['prompt' => 'Chọn trạng thái kho'])->label('Trạng thái kho');?>
 
+            <?=$form->field($search, 'method', [
+              'options' => ['class' => 'form-group col-md-4 col-lg-3'],
+              'inputOptions' => ['class' => 'bs-select form-control', 'name' => 'method']
+            ])->dropDownList($search->fetchMethod(), ['prompt' => 'Chọn phương thức nạp'])->label('Phương thức nạp');?>
 
             <div class="form-group col-md-4 col-lg-3">
               <button type="submit" class="btn btn-success table-group-action-submit" style="margin-top: 25px;">
@@ -118,7 +122,7 @@ $this->registerJsFile('vendor/assets/pages/scripts/components-bootstrap-select.m
               <tr>
                 <td class="center"><?=$model->id;?></td>
                 <td class="center"><img src="<?=$model->getImageUrl('50x50');?>" width="50px;" /></td>
-                <td class="left"><?=$model->title;?></td>
+                <td class="left"><?=sprintf("%s (%s-%s-%s)", $model->title, $model->method_title, $model->version_title, $model->package_title);?></td>
                 <td  class="center">
                   <?php if ($model->status == 'Y') :  ?>
                   <span class="label label-success"><?=Yii::t('app', 'visible');?></span>

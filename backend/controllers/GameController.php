@@ -51,7 +51,8 @@ class GameController extends Controller
             'q' => $request->get('q'),
             'status' => $request->get('status'),
             'auto_dispatcher' => $request->get('auto_dispatcher'),
-            'soldout' => $request->get('soldout')
+            'soldout' => $request->get('soldout'),
+            'method' => $request->get('method'),
         ]);
         $command = $form->getCommand();
         $command->orderBy(['updated_at' => SORT_DESC]);
@@ -114,7 +115,7 @@ class GameController extends Controller
         $this->view->params['main_menu_active'] = 'game.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new \backend\forms\CreateGameForm();
+        $model = new \backend\forms\CreateGameForm(['canUpdateProfit' => Yii::$app->user->can('admin')]);
         if ($model->load($request->post())) {
             if ($model->validate() && $model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));
@@ -135,7 +136,7 @@ class GameController extends Controller
         $this->view->params['main_menu_active'] = 'game.index';
         $this->view->params['body_class'] = 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white';
         $request = Yii::$app->request;
-        $model = new \backend\forms\EditGameForm(['id' => $id]);
+        $model = new \backend\forms\EditGameForm(['id' => $id, 'canUpdateProfit' => Yii::$app->user->can('admin')]);
         if ($model->load($request->post())) {
             if ($model->validate() && $model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'success'));

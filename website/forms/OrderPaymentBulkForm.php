@@ -21,7 +21,9 @@ class OrderPaymentBulkForm extends Model
     {
         return [
             [['id', 'items'], 'required'],
-            ['items', 'validateWallet'],
+            ['items', 'validateWallet', 'when' => function($model) {
+                return $model->paygate == 'kinggems';
+            }],
             ['items', 'validateItems']
         ];
     }
@@ -78,10 +80,9 @@ class OrderPaymentBulkForm extends Model
                 'paygate' => $this->paygate
             ]);
             if ($checkoutForm->validate() && $id = $checkoutForm->purchase()) {
-                $this->successList[] = $index;
                 $paygate = $checkoutForm->getPaygate();
                 $order = Order::findOne($id);
-                $paygate->createCharge($order, $user);
+                $this->successList[$index] = $paygate->createCharge($order, $user);
             } else {
                 $messages = $model->getErrorSummary(true);
                 $message = reset($messages);

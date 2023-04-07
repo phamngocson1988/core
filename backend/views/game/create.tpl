@@ -89,7 +89,13 @@
 
         {$form->field($model, 'number_supplier', [
           'options' => ['class' => 'list-separated profile-stat']
+        ])->textInput()->label('Lợi nhuận mong đợi')}
+
+        {if $model->canUpdateProfit}
+        {$form->field($model, 'expected_profit', [
+          'options' => ['class' => 'list-separated profile-stat']
         ])->textInput()}
+        {/if}
 
         {$form->field($model, 'remark', [
           'options' => ['class' => 'list-separated profile-stat'],

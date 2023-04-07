@@ -19,6 +19,7 @@ class AppAsset extends AssetBundle
         'css/aos.css',
         'css/main.css',
         'css/jquery.fancybox.min.css',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css',
         'css/theme.css',
     ];
     public $js = [
@@ -29,6 +30,7 @@ class AppAsset extends AssetBundle
         'js/vendor/slimselect.min.js',
         'js/vendor/aos.js',
         'js/vendor/main.js',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js',
         'js/jquery.fancybox.min.js',
         'js/ajax_action.js',
         'js/function.js',
