@@ -21,7 +21,9 @@ class OrderPaymentBulkForm extends Model
     {
         return [
             [['id', 'items'], 'required'],
-            ['items', 'validateWallet'],
+            ['items', 'validateWallet', 'when' => function($model) {
+                return $model->paygate == 'kinggems';
+            }],
             ['items', 'validateItems']
         ];
     }
