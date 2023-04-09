@@ -59,18 +59,17 @@ class CreateAffiliateCommissionForm extends ActionForm
         $totalPrice = $order->price * $order->quantity;
         $affiliateType = Yii::$app->settings->get('AffiliateProgramForm', 'type', 'fix');
         $affiliateValue = Yii::$app->settings->get('AffiliateProgramForm', 'value', 0);
-        $commissionValue = $affiliateType === "percent" ? $totalPrice * $affiliateValue : $affiliateValue;
+        $affiliateCommissionDuration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 0);
+        $commissionValue = $affiliateType === "percent" ? ($totalPrice * $affiliateValue) / 100 : $affiliateValue;
         $commssion = new AffiliateCommission([
             'user_id' => $user->affiliated_by,
             'commission' => $commissionValue,
             'order_id' => $order->id,
             'member_id' => $user->id,
-            'description' => 'Affiliate commssion from ' . $user->getName(),
+            'description' => sprintf('Affiliate commssion from %s (%s)', $user->getName(), $user->id),
             'created_at' => $now,
-            'valid_from_date' => date(strtotime("+" . Yii::$app->settings->get('AffiliateProgramForm', 'duration', 30) . ' days')),
-            'valid_to_date' => $now,
+            'valid_from_date' => date('Y-m-d H:i:s', strtotime(sprintf("+%s days", $affiliateCommissionDuration))),
             'status' => AffiliateCommission::STATUS_VALID
-        // $duration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 30);
         ]);
         return $commssion->save();
     }

@@ -24,7 +24,7 @@ class UpdateOrderJob extends BaseObject implements \yii\queue\JobInterface
         // The first task is handle affiliate commission
         $oldOrder = $this->getOldOrder();
         $order = $this->order;
-        if ($order->isPendingOrder() && !$oldOrder->isPendingOrder()) {
+        if ($order->isPendingOrder() && $oldOrder->isVerifyingOrder()) {
             // Run update affiliate
             $form = new \common\forms\CreateAffiliateCommissionForm(['order_id' => $order->id]);
             $form->setOrder($order);
