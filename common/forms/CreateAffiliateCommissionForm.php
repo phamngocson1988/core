@@ -4,6 +4,7 @@ namespace common\forms;
 use Yii;
 use common\models\AffiliateCommission;
 use common\models\Order;
+use common\models\User;
 
 class CreateAffiliateCommissionForm extends ActionForm
 {
@@ -29,12 +30,23 @@ class CreateAffiliateCommissionForm extends ActionForm
         if (!$order->isPendingOrder()) {
             return $this->addError($attribute, 'Order is not valid');
         }
+        $affiliateStatus = Yii::$app->settings->get('AffiliateProgramForm', 'status', 0);
+        if (!$affiliateStatus) {
+            return $this->addError($attribute, 'Affiliate program is disabled');
+        }
 
         // find affiliate
         $user = $order->customer;
-        if (!$user->affiliated_by) {
+        if (!$user->affiliated_with) {
             return $this->addError($attribute, 'The order does not belong to affiliate');
         }
+
+        $affiliateMinMember = Yii::$app->settings->get('AffiliateProgramForm', 'min_member', 0);
+        $countAffiliate = User::find()->where(['affiliated_with' => $user->affiliated_with])->count();
+        if ($affiliateMinMember && $countAffiliate < $affiliateMinMember) {
+            return $this->addError($attribute, "User need to have at least $affiliateMinMember to start affiliate program");
+        }
+        
     }
 
     public function setOrder($order) 
@@ -60,9 +72,9 @@ class CreateAffiliateCommissionForm extends ActionForm
         $affiliateType = Yii::$app->settings->get('AffiliateProgramForm', 'type', 'fix');
         $affiliateValue = Yii::$app->settings->get('AffiliateProgramForm', 'value', 0);
         $affiliateCommissionDuration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 0);
-        $commissionValue = $affiliateType === "percent" ? ($totalPrice * $affiliateValue) / 100 : $affiliateValue;
+        $commissionValue = $affiliateType === "percent" ? ($totalPrice * $affiliateValue) / 100 : $affiliateValue * $order->quantity;
         $commssion = new AffiliateCommission([
-            'user_id' => $user->affiliated_by,
+            'user_id' => $user->affiliated_with,
             'commission' => $commissionValue,
             'order_id' => $order->id,
             'member_id' => $user->id,
