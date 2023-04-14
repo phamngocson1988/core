@@ -15,7 +15,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
         <div class="card-body">
           <h4 class="card-title"><?=$user->name;?></h4>
           <p class="card-text">@<?=$user->username;?></p>
-          <p class="font-weight-bold text-red">Balance: <?=number_format($user->walletBalance());?> KCOIN</p>
+          <p class="font-weight-bold text-red">Balance: <?=number_format($user->affiliateBalance());?> KCOIN</p>
           <a href="#" class="btn btn-green" data-toggle="modal" data-target="#choosePayment">
             WITHDRAW
           </a>

@@ -4,6 +4,8 @@ namespace common\behaviors;
 use yii\behaviors\AttributeBehavior;
 use common\models\User;
 use common\models\Affiliate;
+use common\models\AffiliateCommission;
+use common\models\AffiliateCommissionWithdraw;
 
 class AffiliateBehavior extends AttributeBehavior
 {
@@ -36,5 +38,22 @@ class AffiliateBehavior extends AttributeBehavior
 		$owner = $this->owner;
 		$affiliate = $owner->affiliate;
 		return $affiliate->code;
+	}
+
+	public function affiliateBalance()
+	{
+		$owner = $this->owner;
+		$now = date('Y-m-d H:i:s');
+		$income = AffiliateCommission::find()->where([
+			'user_id' => $owner->id, 
+			'status' => AffiliateCommission::STATUS_VALID, 
+		])
+		->andWhere(['<=', 'valid_from_date', $now])
+		->sum('commission');
+		$outcome = AffiliateCommissionWithdraw::find()->where([
+			'user_id' => $owner->id, 
+			'status' => AffiliateCommissionWithdraw::STATUS_EXECUTED
+		])->sum('amount');
+		return $income - $outcome;
 	}
 }
