@@ -8,6 +8,7 @@ use yii\base\Model;
 class AffiliateProgramForm extends Model
 {
     public $value;
+    public $reseller_value; // The value applied for reseller in case the type is "FIX"
     public $type;
     public $content;
     public $min_member;
@@ -21,7 +22,7 @@ class AffiliateProgramForm extends Model
             ['status', 'default', 'value' => 0],
             ['type', 'in', 'range' => ['fix', 'percent']],
             ['type', 'default', 'value' => 'fix'],
-            [['value', 'duration'], 'number'],
+            [['value', 'duration', 'reseller_value'], 'number'],
             ['duration', 'default', 'value' => 30],
             ['min_member', 'safe']
         ];

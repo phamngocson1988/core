@@ -27,7 +27,7 @@ class CreateAffiliateCommissionForm extends ActionForm
         if (!$order) {
             return $this->addError($attribute, 'Order is not exist');
         }
-        if (!$order->isPendingOrder()) {
+        if (!$order->isCompletedOrder()) {
             return $this->addError($attribute, 'Order is not valid');
         }
         $affiliateStatus = Yii::$app->settings->get('AffiliateProgramForm', 'status', 0);
@@ -70,9 +70,18 @@ class CreateAffiliateCommissionForm extends ActionForm
         $now = date('Y-m-d H:i:s');
         $totalPrice = $order->price * $order->quantity;
         $affiliateType = Yii::$app->settings->get('AffiliateProgramForm', 'type', 'fix');
-        $affiliateValue = Yii::$app->settings->get('AffiliateProgramForm', 'value', 0);
+        $regularCommissionValue = Yii::$app->settings->get('AffiliateProgramForm', 'value', 0);
+        $resellerCommissionValue = Yii::$app->settings->get('AffiliateProgramForm', 'reseller_value', 0);
         $affiliateCommissionDuration = Yii::$app->settings->get('AffiliateProgramForm', 'duration', 0);
-        $commissionValue = $affiliateType === "percent" ? ($totalPrice * $affiliateValue) / 100 : $affiliateValue * $order->quantity;
+
+        // If affiliate commission type is percent, apply regular commission value
+        // If affiliate commission type is fix, apply commission value for corresponding user type (reseller or non-reseller)
+        $commissionValue = 0;
+        if ($affiliateType === "percent") {
+            $commissionValue = ($totalPrice * $regularCommissionValue) / 100;
+        } else {
+            $commissionValue = $user->isReseller() ? $resellerCommissionValue * $order->quantity : $regularCommissionValue * $order->quantity;
+        }
         $commssion = new AffiliateCommission([
             'user_id' => $user->affiliated_with,
             'commission' => $commissionValue,

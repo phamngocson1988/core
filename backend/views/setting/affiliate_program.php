@@ -56,7 +56,13 @@ use yii\widgets\ActiveForm;
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
                   'inputOptions' => ['class' => 'form-control'],
                   'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
-                ])->textInput()->label('Giá trị nhận được cho một đơn hàng');?>
+                ])->textInput()->label('Giá trị nhận được cho một gói (cho người dùng thường');?>
+
+                <?=$form->field($model, 'reseller_value', [
+                  'labelOptions' => ['class' => 'col-md-2 control-label'],
+                  'inputOptions' => ['class' => 'form-control'],
+                  'template' => '{label}<div class="col-md-10">{input}{hint}{error}</div>'
+                ])->textInput()->label('Giá trị nhận được cho một gói (cho reseller - chỉ apply với loại FIX)');?>
 
                 <?=$form->field($model, 'type', [
                   'labelOptions' => ['class' => 'col-md-2 control-label'],
