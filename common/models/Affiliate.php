@@ -32,7 +32,7 @@ class Affiliate extends ActiveRecord
             ],
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'updated_by',
+                'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
                 'value' => date('Y-m-d H:i:s')
             ],

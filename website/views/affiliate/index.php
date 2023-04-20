@@ -15,7 +15,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
         <div class="card-body">
           <h4 class="card-title"><?=$user->name;?></h4>
           <p class="card-text">@<?=$user->username;?></p>
-          <p class="font-weight-bold text-red">Balance: <?=number_format($user->walletBalance());?> KCOIN</p>
+          <p class="font-weight-bold text-red">Balance: <?=number_format($user->affiliateBalance());?> KCOIN</p>
           <a href="#" class="btn btn-green" data-toggle="modal" data-target="#choosePayment">
             WITHDRAW
           </a>
@@ -173,7 +173,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
           <thead>
             <tr>
               <th scope="col">ID</th>
-              <th class="text-center" scope="col">Amount ($)</th>
+              <th class="text-center" scope="col">Quantity</th>
               <th class="text-center" scope="col">Commission ($)</th>
               <th class="text-center" scope="col">Status</th>
               <th class="text-center" scope="col">Details</th>
@@ -192,7 +192,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
                 <a href="javascript:;">#<?=$order->id;?></a>
                 <span class="date-time"><?=$order->created_at;?></span>
               </th>
-              <td class="text-center"><?=number_format($order->sub_total_price, 1);?>$</td>
+              <td class="text-center"><?=number_format($order->quantity, 1);?></td>
               <td class="text-center"><?=number_format($commission->commission, 1);?>$</td>
               <td class="text-center"><?=$commission->getStatusLabel();?></td>
               <td class="text-center"><span href="javascript:;" class="text-green"><?=$commission->description;?></span></td>

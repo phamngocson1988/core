@@ -462,11 +462,22 @@ var app = new Vue({
   },
   watch: {
     method() {
-      this.version = this.versionOptions.length ? this.versionOptions[0].value : '';
-      this.package = this.packageOptions.length ? this.packageOptions[0].value : '';
+      const version = this.versionOptions.length ? this.versionOptions[0].value : '';
+      const package = this.packageOptions.length ? this.packageOptions[0].value : '';
+      if (version != this.version || package != this.package) {
+        this.version = version;
+        this.package = package;
+      } else {
+        this.getGameInfor();
+      }
     },
     version() {
-      this.package = this.packageOptions.length ? this.packageOptions[0].value : '';
+      const package = this.packageOptions.length ? this.packageOptions[0].value : '';
+      if (package != this.package) {
+        this.package = package;
+      } else {
+        this.getGameInfor();
+      }
     },
     package() {
       this.getGameInfor();

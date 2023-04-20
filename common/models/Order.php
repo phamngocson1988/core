@@ -302,4 +302,16 @@ class Order extends ActiveRecord
         $this->status = self::STATUS_DELETED;
         return $this->save();
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        // Hook message queue to EVENT_AFTER_UPDATE
+        $this->on(self::EVENT_AFTER_UPDATE, function ($event) {
+            Yii::$app->queue->push(new \common\queue\UpdateOrderJob([
+                'order' => $event->sender->toArray(),
+                'changedAttributes' => $event->changedAttributes
+            ]));
+        });
+        parent::afterSave($insert, $changedAttributes);
+    }
 }
