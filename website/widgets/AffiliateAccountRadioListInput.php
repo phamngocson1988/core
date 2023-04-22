@@ -19,7 +19,7 @@ class AffiliateAccountRadioListInput extends InputWidget
         $options['item'] = function($index, $label, $name, $checked, $value) use ($encode) {
             $opts['value'] = $value;
             $deleteUrl = Url::to(['affiliate/delete-account', 'id' => $value]);
-            $actions = sprintf('<div class="action">
+            $actions = $value === 'kinggems' ? '' : sprintf('<div class="action">
                                 <div class="del icon-del">
                                   <a href="%s" class="delete-account-link"><img src="/images/icon/trash-can.svg"/></a>
                                 </div>

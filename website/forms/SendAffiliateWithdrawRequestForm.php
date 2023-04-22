@@ -88,8 +88,9 @@ class SendAffiliateWithdrawRequestForm extends Model
     public function fetchAccounts()
     {
         $accounts = AffiliateAccount::find()->where(['user_id' => $this->user_id])->limit(4)->all();
-        return ArrayHelper::map($accounts, 'id', function($obj) {
+        $accounts = ArrayHelper::map($accounts, 'id', function($obj) {
             return sprintf("%s<br/>%s", $obj->account_name, $obj->payment_method);
         });
+        return array_merge(['kinggems' => sprintf("%s<br/>%s", 'Kinggems', 'Wallet')], $accounts);
     }
 }

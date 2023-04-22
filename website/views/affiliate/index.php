@@ -6,6 +6,7 @@ use website\widgets\LinkPager;
 $user = Yii::$app->user->getIdentity();
 $affiliateLink = Url::to(['site/signup', 'affiliate' => $user->getAffiliateCode()], true);
 $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js', ['position' => \yii\web\View::POS_HEAD]);
+$balance = $user->affiliateBalance();
 ?>
 <div class="container profile profile-affiliate my-5">
   <div class="row">
@@ -15,7 +16,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
         <div class="card-body">
           <h4 class="card-title"><?=$user->name;?></h4>
           <p class="card-text">@<?=$user->username;?></p>
-          <p class="font-weight-bold text-red">Balance: <?=number_format($user->affiliateBalance());?> KCOIN</p>
+          <p class="font-weight-bold text-red">Balance: <?=number_format($balance);?> KCOIN</p>
           <a href="#" class="btn btn-green" data-toggle="modal" data-target="#choosePayment">
             WITHDRAW
           </a>
@@ -29,7 +30,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="">Choose beneficiary account</h5>
+              <h5 class="modal-title">Choose beneficiary account</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -41,6 +42,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
                 </button>
                 <span class="align-self-center text-muted">(Maximum 4 accounts)</span>
               </div>
+              
               <?php $form = ActiveForm::begin(['action' => Url::to(['affiliate/send-withdraw-request']), 'options' => ['id' => 'withdraw-form']]);?>
               <?= $form->field($withdrawForm, 'account_id', [
                 'options' => ['class' => 'btn-group-toggle multi-choose d-flex beneficiary', 'data-toggle' => 'buttons'],
@@ -48,16 +50,21 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Cha
                 'items' => $withdrawForm->fetchAccounts(),
                 'options' => ['tag' => false]
               ])->label(false);?>
+              <?php if ($user->hasAffiliateCommissionRequest()) : ?>
+              <div class="input-group mt-4" style="color: red; font-weight: bold">You have 1 waiting request</div>
+              <?php else : ?>
               <div class="input-group mt-4" style="max-width:300px">
                 <?= $form->field($withdrawForm, 'amount', [
                   'template' => '{input}',
                   'options' => ['tag' => false],
-                  'inputOptions' => ['class' => 'form-control', 'placeholder' => 'Withdraw Amount', 'aria-label' => 'Withdraw Amount', 'aria-describedby' => 'button-addon2', 'type' => 'number']
+                  'inputOptions' => ['class' => 'form-control', 'placeholder' => 'Withdraw Amount', 'aria-label' => 'Withdraw Amount', 'aria-describedby' => 'button-addon2', 'type' => 'number', 'max' => (int)$balance]
                 ])->textInput()->label(false) ?>
                 <div class="input-group-append">
                   <button class="btn btn-warning text-white" type="submit" id="button-addon2">Submit</button>
                 </div>
               </div>
+              <p class="help-block" style="color: grey; font-style: italic; font-size: small;"><?=sprintf("Max amount: %s", (int)$balance);?></p>
+              <?php endif;?>
               <?php ActiveForm::end();?>
               <div class="note py-5">
                 <p class="lead">Withdraw Policy</p>

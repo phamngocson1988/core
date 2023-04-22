@@ -56,4 +56,13 @@ class AffiliateBehavior extends AttributeBehavior
 		])->sum('amount');
 		return $income - $outcome;
 	}
+
+	public function hasAffiliateCommissionRequest()
+	{
+		$owner = $this->owner;
+		return AffiliateCommissionWithdraw::find()
+		->where(['user_id' => $owner->id])
+		->andWhere(['status' => AffiliateCommissionWithdraw::STATUS_REQUEST])
+		->exists();
+	}
 }

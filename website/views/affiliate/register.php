@@ -10,7 +10,7 @@ $this->title = 'Register Affiliate';
     <div class="intro text-center">
       <h2 class="display-3">Become An Affiliate</h2>
       <p class="lead mb-3">Join an affiliate network for easy money – passive income</p>
-      <span class="mb-5 text-hight-light">GET 20% COMMISSION ON EACH SALES</span>
+      <span class="mb-5 text-hight-light">EARN UP TO 05USD ON EACH PACKAGE.</span>
       <div class="text-center">
         <a id="btn-bap" href="#" class="btn text-uppercase">BECOME A PARTNER</a>
       </div>
