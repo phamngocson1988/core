@@ -251,7 +251,8 @@ $surveyAnswers = ArrayHelper::index($surveyAnswers, null, 'lead_tracker_id');
 $script = <<< JS
 $('#myTable').DataTable({
   order: [],
-  scrollY: 500
+  scrollY: 500,
+  scrollX: true,
 });
 
 $(".ajax-link").ajax_action({
