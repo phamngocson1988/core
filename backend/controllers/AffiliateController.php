@@ -11,7 +11,7 @@ use yii\helpers\Url;
 use backend\models\User;
 use backend\models\UserAffiliate;
 use backend\models\UserCommission;
-use backend\models\UserCommissionWithdraw;
+use backend\models\AffiliateCommissionWithdraw;
 use backend\forms\FetchAffiliateForm;
 use backend\forms\FetchAffiliateCommissionForm;
 use backend\forms\FetchCommissionWithdrawForm;
@@ -163,7 +163,7 @@ class AffiliateController extends Controller
         $request = Yii::$app->request;
         $form = new FetchCommissionWithdrawForm([
             'user_id' => $request->get('user_id'), 
-            'status' => UserCommissionWithdraw::STATUS_EXECUTED, 
+            'status' => AffiliateCommissionWithdraw::STATUS_EXECUTED, 
             'created_start_date' => $request->get('created_start_date'),
             'created_end_date' => $request->get('created_end_date'),
         ]);
@@ -229,24 +229,11 @@ class AffiliateController extends Controller
     public function actionExecuteWithdraw($id)
     {
         $request = Yii::$app->request;
-        $action = $request->get('action');
-        $model = UserCommissionWithdraw::findOne($id);
-        if (!$model) throw new NotFoundHttpException("Not found", 1);
-        
-        switch ($action) {
-            case 'approve':
-                return $this->asJson(['status' => $model->approve()]);
-                break;
-            case 'disapprove':
-                return $this->asJson(['status' => $model->disapprove()]);
-                break;
-            case 'execute':
-                $model->note = $request->post('note');
-                return $this->asJson(['status' => $model->execute()]);
-                break;
-            default:
-                # code...
-                break;
-        }
+        $model = new \backend\forms\ExecuteAffiliateCommissionWithdrawForm([
+            'id' => $id,
+            'action' => $request->get('action'),
+            'note' => $request->post('note')
+        ]);
+        return $this->asJson(['status' => $model->run()]);
     }
 }

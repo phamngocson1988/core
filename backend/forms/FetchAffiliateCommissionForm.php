@@ -8,7 +8,6 @@ use yii\helpers\ArrayHelper;
 use backend\models\User;
 use backend\models\UserAffiliate;
 use backend\models\UserCommission;
-use backend\models\UserCommissionWithdraw;
 use backend\models\Order;
 
 class FetchAffiliateCommissionForm extends Model

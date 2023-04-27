@@ -19,11 +19,11 @@ class AffiliateAccountRadioListInput extends InputWidget
         $options['item'] = function($index, $label, $name, $checked, $value) use ($encode) {
             $opts['value'] = $value;
             $deleteUrl = Url::to(['affiliate/delete-account', 'id' => $value]);
-            $actions = $value === 'kinggems' ? '' : sprintf('<div class="action">
+            $actions = (int)$value ? sprintf('<div class="action">
                                 <div class="del icon-del">
                                   <a href="%s" class="delete-account-link"><img src="/images/icon/trash-can.svg"/></a>
                                 </div>
-                              </div>', $deleteUrl);
+                              </div>', $deleteUrl) : '';
             $input = sprintf('<label class="btn flex-fill w-25 mr-2">%s%s%s</label>', Html::radio($name, $checked, $opts), $label, $actions);
             return $input;
         };

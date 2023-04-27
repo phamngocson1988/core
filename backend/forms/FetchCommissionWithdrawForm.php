@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use backend\models\User;
 use backend\models\UserAffiliate;
 use backend\models\UserCommission;
-use backend\models\UserCommissionWithdraw;
+use backend\models\AffiliateCommissionWithdraw;
 use backend\models\Order;
 
 class FetchCommissionWithdrawForm extends Model
@@ -28,7 +28,7 @@ class FetchCommissionWithdrawForm extends Model
 
     protected function createCommand()
     {
-        $command = UserCommissionWithdraw::find();
+        $command = AffiliateCommissionWithdraw::find();
         if ($this->user_id) {
             $command->andWhere(["user_id" => $this->user_id]);
         }
