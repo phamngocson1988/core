@@ -21,7 +21,9 @@ class SendAffiliateWithdrawRequestForm extends Model
     {
         return [
             [['account_id', 'amount', 'user_id'], 'required'],
-            ['account_id', 'validateAccount'],
+            ['account_id', 'validateAccount', 'when' => function($model) {
+                return (int)$model->account_id;
+            }]
             // ['amount', 'validateAmount'],
         ];
     }
@@ -80,7 +82,8 @@ class SendAffiliateWithdrawRequestForm extends Model
         $request = new AffiliateCommissionWithdraw();
         $request->user_id = $this->user_id;
         $request->amount = $this->amount;
-        $request->note = sprintf("Payment Method: %s\nAccount ID: %s\nAccount Name: %s\nRegion: %s", $account->payment_method, $account->account_number, $account->account_name, $account->region);
+        $request->affiliate_account = $this->account_id;
+        $request->note = (int)$this->account_id ? sprintf("Payment Method: %s\nAccount ID: %s\nAccount Name: %s\nRegion: %s", $account->payment_method, $account->account_number, $account->account_name, $account->region) : 'Kinggems Wallet';
         $request->status = AffiliateCommissionWithdraw::STATUS_REQUEST;
         return $request->save();
     }
@@ -91,6 +94,6 @@ class SendAffiliateWithdrawRequestForm extends Model
         $accounts = ArrayHelper::map($accounts, 'id', function($obj) {
             return sprintf("%s<br/>%s", $obj->account_name, $obj->payment_method);
         });
-        return array_merge(['kinggems' => sprintf("%s<br/>%s", 'Kinggems', 'Wallet')], $accounts);
+        return array_merge(['0' => sprintf("%s<br/>%s", 'Kinggems', 'Wallet')], $accounts);
     }
 }

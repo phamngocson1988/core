@@ -60,6 +60,7 @@ class m200613_083530_affiliate extends Migration
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
             'amount' => $this->float()->notNull()->defaultValue(0),
+            'affiliate_account' => $this->integer()->notNull()->defaultValue(0),
             'created_at' => $this->dateTime()->notNull(),
             'approved_at' => $this->dateTime(),
             'approved_by' => $this->integer(),

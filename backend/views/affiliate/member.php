@@ -12,7 +12,6 @@ use common\models\User;
 use common\components\helpers\FormatConverter;
 use backend\behaviors\UserAffiliateBehavior;
 use backend\behaviors\UserCommissionBehavior;
-use backend\models\UserCommissionWithdraw;
 
 ?>
 <!-- BEGIN PAGE BAR -->

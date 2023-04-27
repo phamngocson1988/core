@@ -5,7 +5,7 @@ use Yii;
 use common\components\Controller as BaseController;
 use yii\web\Response;
 use backend\models\Affiliate;
-use backend\models\UserCommissionWithdraw;
+use backend\models\AffiliateCommissionWithdraw;
 use backend\models\Order;
 use backend\forms\FetchTransactionForm;
 /**
@@ -52,7 +52,7 @@ class Controller extends BaseController
             $this->view->params['new_affiliate_request'] = $affiliateTotal ? $affiliateTotal : '';
 
             // Show number of new commission withdraw
-            $command = UserCommissionWithdraw::find()->where(['status' => UserCommissionWithdraw::STATUS_REQUEST]);
+            $command = AffiliateCommissionWithdraw::find()->where(['status' => AffiliateCommissionWithdraw::STATUS_REQUEST]);
 	        $commissionTotal = $command->count();
             $this->view->params['new_commission_withdraw'] = $commissionTotal ? $commissionTotal : '';
 

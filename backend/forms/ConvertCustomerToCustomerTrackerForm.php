@@ -88,15 +88,6 @@ class ConvertCustomerToCustomerTrackerForm extends Model
               'country_code' => $user->country_code,
               'phone' => $user->phone,
               'email' => $user->email,
-              'question_1' => true,
-              'question_2' => true,
-              'question_3' => true,
-              'question_4' => true,
-              'question_5' => true,
-              'question_6' => true,
-              'question_7' => true,
-              'question_8' => true,
-              'question_9' => true,
             ]);
             $createForm->setScenario(\backend\forms\CreateLeadTrackerForm::SCENARIO_CONVERT);
 
