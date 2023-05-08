@@ -126,6 +126,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', function($item) {
                     <a class="btn btn-sm blue tooltips" target="_blank" href="<?=Url::to(['user/edit', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Chỉnh sửa"><i class="fa fa-pencil"></i></a>
                     <?php endif;?>
 
+                    <?php if (Yii::$app->user->can('admin')) : ?>
                     <a href="<?=Url::to(['reseller/delete', 'id' => $model->user_id]);?>" class="btn btn-sm purple link-action tooltips action-link" data-container="body" data-original-title="Bỏ tư cách nhà bán lẻ"><i class="fa fa-times"></i></a>
                     <?php if ($model->user->reseller_level != User::RESELLER_LEVEL_3) : ?>
                     <a href='#change-level<?=$model->user_id;?>' class="btn btn-sm red link-action tooltips" data-container="body" data-original-title="Nâng cấp nhà bán lẻ"data-toggle="modal" data-level="up" ><i class="fa fa-arrow-up"></i></a>
@@ -134,8 +135,12 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', function($item) {
                     <a href='#change-level<?=$model->user_id;?>' class="btn btn-sm default link-action tooltips" data-container="body" data-original-title="Giảm cấp nhà bán lẻ"data-toggle="modal" data-level="down" ><i class="fa fa-arrow-down"></i></a>
                     <?php endif; ?>
                     <a href='#assign<?=$model->user_id;?>' class="btn btn-sm default tooltips" data-container="body" data-original-title="Chọn nhân viên quản lý"data-toggle="modal" ><i class="fa fa-exchange"></i></a>
+                    <?php endif;?>
+                    
+                    <?php if (Yii::$app->user->can('saler')) : ?>
                     <a class="btn btn-sm green tooltips generate-code" href="<?=Url::to(['reseller/generate-code', 'id' => $model->user_id]);?>" data-container="body" data-original-title="Copy mã thanh toán" data-name="<?=$model->user->name;?>"><i class="fa fa-files-o"></i></a>
                     <a href="<?=Url::to(['customer-tracker/convert', 'id' => $model->user_id]);?>" class="btn btn-sm purple tooltips" data-container="body" data-original-title="Kích hoạt customer tracker"><i class="fa fa-certificate"></i> </a>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -211,7 +216,7 @@ $salerTeams = ArrayHelper::map($salerTeamObjects, 'id', function($item) {
 <?php
 $hiddenColumns = [];
 if (Yii::$app->user->isRole('admin')) $hiddenColumns = [];
-elseif (Yii::$app->user->isRole('saler')) array_push($hiddenColumns, 'action');
+// elseif (Yii::$app->user->isRole('saler')) array_push($hiddenColumns, 'action');
 $hiddenColumnString = implode(',', $hiddenColumns);
 
 $script = <<< JS
