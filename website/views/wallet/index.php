@@ -6,6 +6,8 @@ use yii\bootstrap\ActiveForm;
 use website\widgets\LinkPager;
 use common\components\helpers\StringHelper;
 use yii\widgets\Pjax;
+$this->registerCssFile('https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css', ['depends' => [\website\assets\AppAsset::className()]]);
+$this->registerJsFile('https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
 $user = Yii::$app->user->getIdentity();
 $setting = Yii::$app->settings;
 $kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/sidebar-ads.jpg');
@@ -92,6 +94,43 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
           </div>
           <!-- END SUMMARY -->
         </div>
+        
+        <!-- Wallet history -->
+        <div class="col-md-12 mt-3">
+          <p class="lead py-2">Wallet history</p>
+          <div class="table-wrapper table-responsive bg-white">
+            <table class="table table-hover table-transaction" id="wallet-table">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Total KC</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (!$wallets) : ?>
+                <tr><td colspan="4" class="text-center">No data found</td></tr>
+                <?php endif;?>
+                <?php foreach ($wallets as $no => $wallet) : ?>
+                <tr>
+                  <td scope="row">
+                    <?=$no + 1;?>
+                  </td>
+                  <td><span class="text-red"><?=StringHelper::numberFormat($wallet->coin, 2);?> KC</span></td>
+                  <td><?=$wallet->getTypeLabel();?></td>
+                  <td>
+                    <?=$wallet->description;?>
+                    <span class="date-time"><?=$wallet->created_at;?></span>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+              </tbody>
+            </table>
+          </div>
+          <!-- END TABLE -->
+        </div>
+        <!-- End wallet history -->
         <div class="col-md-12 mt-3">
           <p class="lead py-2">Pending transaction</p>
           <div class="table-wrapper table-responsive bg-white">
@@ -413,6 +452,13 @@ $('#paymentGame').on('click', '#update-payment-button', function(e) {
 $(".view-detail").on('click', function() {
   var id = $(this).data('id');
   ShowTransaction(id); 
+});
+
+// Wallet table
+$('#wallet-table').DataTable({
+  order: [],
+  scrollY: 500,
+  scrollX: true,
 });
 JS;
 $this->registerJs($script);
