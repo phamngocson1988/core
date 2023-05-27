@@ -64,12 +64,16 @@ class WalletController extends Controller
         $pages = new Pagination(['totalCount' => $command->count()]);
         $transactions = $command->offset($pages->offset)->limit($pages->limit)->all();
 
+        // Wallet
+        $wallets = \common\models\UserWallet::find()->where(['user_id' => Yii::$app->user->id])->orderBy('id desc')->all();
+
     	return $this->render('index', [
             'paygates' => $paygates,
             'pendings' => $pendings,
             'transactions' => $transactions,
             'pages' => $pages,
             'search' => $form,
+            'wallets' => $wallets,
         ]);
     }
 

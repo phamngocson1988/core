@@ -32,7 +32,14 @@ class Game extends \common\models\Game
     {
         $flashsale = $this->getFlashSalePrice();
         if ($flashsale) return $flashsale->price;
-        return parent::getResellerPrice($level);
+
+        $resellerPrice = ResellerPrice::find()
+            ->select(['price'])
+            ->where([
+                'reseller_id' => Yii::$app->user->id,
+                'game_id' => $this->id
+            ])->one();
+        return $resellerPrice ? max(0, $resellerPrice->price + (float)$this->reseller_price_amplitude) : 0;
     }
 
     public function getFlashSalePrice() 
