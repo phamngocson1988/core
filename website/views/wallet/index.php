@@ -7,7 +7,7 @@ use website\widgets\LinkPager;
 use common\components\helpers\StringHelper;
 use yii\widgets\Pjax;
 $this->registerCssFile('https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css', ['depends' => [\website\assets\AppAsset::className()]]);
-$this->registerJsFile('https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js', ['depends' => ['\yii\web\JqueryAsset']]);
+$this->registerJsFile('https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js', ['depends' => [\website\assets\AppAsset::className()]]);
 $user = Yii::$app->user->getIdentity();
 $setting = Yii::$app->settings;
 $kCoinBanner = $setting->get('ApplicationSettingForm', 'kcoin_banner', '/images/sidebar-ads.jpg');
@@ -98,7 +98,7 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
         <!-- Wallet history -->
         <div class="col-md-12 mt-3">
           <p class="lead py-2">Wallet history</p>
-          <div class="table-wrapper table-responsive bg-white">
+          <div class="table-wrapper table-responsive bg-white" style="padding: 10px">
             <table class="table table-hover table-transaction" id="wallet-table">
               <thead>
                 <tr>
@@ -133,8 +133,8 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
         <!-- End wallet history -->
         <div class="col-md-12 mt-3">
           <p class="lead py-2">Pending transaction</p>
-          <div class="table-wrapper table-responsive bg-white">
-            <table class="table table-hover table-transaction">
+          <div class="table-wrapper table-responsive bg-white" style="padding: 10px">
+            <table class="table table-hover table-transaction" id="pending-table">
               <thead>
                 <tr>
                   <th scope="col">No</th>
@@ -456,6 +456,13 @@ $(".view-detail").on('click', function() {
 
 // Wallet table
 $('#wallet-table').DataTable({
+  order: [],
+  scrollY: 500,
+  scrollX: true,
+});
+
+// Pending table
+$('#pending-table').DataTable({
   order: [],
   scrollY: 500,
   scrollX: true,
