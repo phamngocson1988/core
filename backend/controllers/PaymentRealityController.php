@@ -20,6 +20,15 @@ class PaymentRealityController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => false,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],

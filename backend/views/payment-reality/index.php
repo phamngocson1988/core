@@ -44,7 +44,9 @@ $now = date('Y-m-d H:i:s');
           <div class="btn-group btn-group-devided">
             <a class="btn default" href="<?=Url::to(['payment-reality/deleted-items']);?>">Xem thùng rác</a>
             <a role="button" class="btn btn-warning" href="<?=Url::current(['mode' => 'export'])?>"><i class="fa fa-file-excel-o"></i> Export</a>
+            <?php if (Yii::$app->user->can('admin')) : ?>
             <a class="btn green" href="<?=Url::to(['payment-reality/create']);?>"><?=Yii::t('app', 'add_new');?></a>
+            <?php endif;?>
           </div>
         </div>
       </div>
