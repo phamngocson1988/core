@@ -48,6 +48,8 @@ class m200613_083530_affiliate extends Migration
             'user_id' => $this->integer()->notNull(),
             'commission' => $this->float()->notNull()->defaultValue(0),
             'order_id' => $this->integer()->notNull(),
+            'customer_name' => $this->string(255),
+            'game_title' => $this->string(255),
             'member_id' => $this->integer()->notNull(),
             'description' => $this->string(255),
             'created_at' => $this->date(),
